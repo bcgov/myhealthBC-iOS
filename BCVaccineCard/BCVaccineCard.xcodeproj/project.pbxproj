@@ -1,0 +1,615 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
+		7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67A26F12613006B9444 /* SceneDelegate.swift */; };
+		7944F67D26F12613006B9444 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67C26F12613006B9444 /* ViewController.swift */; };
+		7944F68026F12613006B9444 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
+		7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */; };
+		7944F68526F1261B006B9444 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7944F68426F1261B006B9444 /* Assets.xcassets */; };
+		7944F68826F1261B006B9444 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F68626F1261B006B9444 /* LaunchScreen.storyboard */; };
+		7944F69326F1261B006B9444 /* BCVaccineCardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F69226F1261B006B9444 /* BCVaccineCardTests.swift */; };
+		7944F69E26F1261B006B9444 /* BCVaccineCardUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F69D26F1261B006B9444 /* BCVaccineCardUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7944F68F26F1261B006B9444 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7944F66D26F12613006B9444 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7944F67426F12613006B9444;
+			remoteInfo = BCVaccineCard;
+		};
+		7944F69A26F1261B006B9444 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7944F66D26F12613006B9444 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7944F67426F12613006B9444;
+			remoteInfo = BCVaccineCard;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7944F67526F12613006B9444 /* BCVaccineCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BCVaccineCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7944F67826F12613006B9444 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7944F67A26F12613006B9444 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		7944F67C26F12613006B9444 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7944F67F26F12613006B9444 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7944F68226F12614006B9444 /* BCVaccineCard.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BCVaccineCard.xcdatamodel; sourceTree = "<group>"; };
+		7944F68426F1261B006B9444 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7944F68726F1261B006B9444 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		7944F68926F1261B006B9444 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7944F68E26F1261B006B9444 /* BCVaccineCardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BCVaccineCardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7944F69226F1261B006B9444 /* BCVaccineCardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCVaccineCardTests.swift; sourceTree = "<group>"; };
+		7944F69426F1261B006B9444 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7944F69926F1261B006B9444 /* BCVaccineCardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BCVaccineCardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7944F69D26F1261B006B9444 /* BCVaccineCardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCVaccineCardUITests.swift; sourceTree = "<group>"; };
+		7944F69F26F1261B006B9444 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7944F67226F12613006B9444 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7944F68B26F1261B006B9444 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7944F69626F1261B006B9444 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7944F66C26F12613006B9444 = {
+			isa = PBXGroup;
+			children = (
+				7944F67726F12613006B9444 /* BCVaccineCard */,
+				7944F69126F1261B006B9444 /* BCVaccineCardTests */,
+				7944F69C26F1261B006B9444 /* BCVaccineCardUITests */,
+				7944F67626F12613006B9444 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7944F67626F12613006B9444 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7944F67526F12613006B9444 /* BCVaccineCard.app */,
+				7944F68E26F1261B006B9444 /* BCVaccineCardTests.xctest */,
+				7944F69926F1261B006B9444 /* BCVaccineCardUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7944F67726F12613006B9444 /* BCVaccineCard */ = {
+			isa = PBXGroup;
+			children = (
+				7944F67826F12613006B9444 /* AppDelegate.swift */,
+				7944F67A26F12613006B9444 /* SceneDelegate.swift */,
+				7944F67C26F12613006B9444 /* ViewController.swift */,
+				7944F67E26F12613006B9444 /* Main.storyboard */,
+				7944F68426F1261B006B9444 /* Assets.xcassets */,
+				7944F68626F1261B006B9444 /* LaunchScreen.storyboard */,
+				7944F68926F1261B006B9444 /* Info.plist */,
+				7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */,
+			);
+			path = BCVaccineCard;
+			sourceTree = "<group>";
+		};
+		7944F69126F1261B006B9444 /* BCVaccineCardTests */ = {
+			isa = PBXGroup;
+			children = (
+				7944F69226F1261B006B9444 /* BCVaccineCardTests.swift */,
+				7944F69426F1261B006B9444 /* Info.plist */,
+			);
+			path = BCVaccineCardTests;
+			sourceTree = "<group>";
+		};
+		7944F69C26F1261B006B9444 /* BCVaccineCardUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7944F69D26F1261B006B9444 /* BCVaccineCardUITests.swift */,
+				7944F69F26F1261B006B9444 /* Info.plist */,
+			);
+			path = BCVaccineCardUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7944F67426F12613006B9444 /* BCVaccineCard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7944F6A226F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCard" */;
+			buildPhases = (
+				7944F67126F12613006B9444 /* Sources */,
+				7944F67226F12613006B9444 /* Frameworks */,
+				7944F67326F12613006B9444 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BCVaccineCard;
+			productName = BCVaccineCard;
+			productReference = 7944F67526F12613006B9444 /* BCVaccineCard.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7944F68D26F1261B006B9444 /* BCVaccineCardTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7944F6A526F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCardTests" */;
+			buildPhases = (
+				7944F68A26F1261B006B9444 /* Sources */,
+				7944F68B26F1261B006B9444 /* Frameworks */,
+				7944F68C26F1261B006B9444 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7944F69026F1261B006B9444 /* PBXTargetDependency */,
+			);
+			name = BCVaccineCardTests;
+			productName = BCVaccineCardTests;
+			productReference = 7944F68E26F1261B006B9444 /* BCVaccineCardTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7944F69826F1261B006B9444 /* BCVaccineCardUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7944F6A826F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCardUITests" */;
+			buildPhases = (
+				7944F69526F1261B006B9444 /* Sources */,
+				7944F69626F1261B006B9444 /* Frameworks */,
+				7944F69726F1261B006B9444 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7944F69B26F1261B006B9444 /* PBXTargetDependency */,
+			);
+			name = BCVaccineCardUITests;
+			productName = BCVaccineCardUITests;
+			productReference = 7944F69926F1261B006B9444 /* BCVaccineCardUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7944F66D26F12613006B9444 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					7944F67426F12613006B9444 = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					7944F68D26F1261B006B9444 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 7944F67426F12613006B9444;
+					};
+					7944F69826F1261B006B9444 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 7944F67426F12613006B9444;
+					};
+				};
+			};
+			buildConfigurationList = 7944F67026F12613006B9444 /* Build configuration list for PBXProject "BCVaccineCard" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7944F66C26F12613006B9444;
+			productRefGroup = 7944F67626F12613006B9444 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7944F67426F12613006B9444 /* BCVaccineCard */,
+				7944F68D26F1261B006B9444 /* BCVaccineCardTests */,
+				7944F69826F1261B006B9444 /* BCVaccineCardUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7944F67326F12613006B9444 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7944F68826F1261B006B9444 /* LaunchScreen.storyboard in Resources */,
+				7944F68526F1261B006B9444 /* Assets.xcassets in Resources */,
+				7944F68026F12613006B9444 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7944F68C26F1261B006B9444 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7944F69726F1261B006B9444 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7944F67126F12613006B9444 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7944F67D26F12613006B9444 /* ViewController.swift in Sources */,
+				7944F67926F12613006B9444 /* AppDelegate.swift in Sources */,
+				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
+				7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7944F68A26F1261B006B9444 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7944F69326F1261B006B9444 /* BCVaccineCardTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7944F69526F1261B006B9444 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7944F69E26F1261B006B9444 /* BCVaccineCardUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7944F69026F1261B006B9444 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7944F67426F12613006B9444 /* BCVaccineCard */;
+			targetProxy = 7944F68F26F1261B006B9444 /* PBXContainerItemProxy */;
+		};
+		7944F69B26F1261B006B9444 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7944F67426F12613006B9444 /* BCVaccineCard */;
+			targetProxy = 7944F69A26F1261B006B9444 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		7944F67E26F12613006B9444 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7944F67F26F12613006B9444 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		7944F68626F1261B006B9444 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7944F68726F1261B006B9444 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7944F6A026F1261B006B9444 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7944F6A126F1261B006B9444 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7944F6A326F1261B006B9444 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
+				INFOPLIST_FILE = BCVaccineCard/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7944F6A426F1261B006B9444 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
+				INFOPLIST_FILE = BCVaccineCard/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7944F6A626F1261B006B9444 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
+				INFOPLIST_FILE = BCVaccineCardTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCardTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BCVaccineCard.app/BCVaccineCard";
+			};
+			name = Debug;
+		};
+		7944F6A726F1261B006B9444 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
+				INFOPLIST_FILE = BCVaccineCardTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCardTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BCVaccineCard.app/BCVaccineCard";
+			};
+			name = Release;
+		};
+		7944F6A926F1261B006B9444 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
+				INFOPLIST_FILE = BCVaccineCardUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCardUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BCVaccineCard;
+			};
+			name = Debug;
+		};
+		7944F6AA26F1261B006B9444 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
+				INFOPLIST_FILE = BCVaccineCardUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCardUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BCVaccineCard;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7944F67026F12613006B9444 /* Build configuration list for PBXProject "BCVaccineCard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7944F6A026F1261B006B9444 /* Debug */,
+				7944F6A126F1261B006B9444 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7944F6A226F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7944F6A326F1261B006B9444 /* Debug */,
+				7944F6A426F1261B006B9444 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7944F6A526F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCardTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7944F6A626F1261B006B9444 /* Debug */,
+				7944F6A726F1261B006B9444 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7944F6A826F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCardUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7944F6A926F1261B006B9444 /* Debug */,
+				7944F6AA26F1261B006B9444 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7944F68226F12614006B9444 /* BCVaccineCard.xcdatamodel */,
+			);
+			currentVersion = 7944F68226F12614006B9444 /* BCVaccineCard.xcdatamodel */;
+			path = BCVaccineCard.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 7944F66D26F12613006B9444 /* Project object */;
+}
