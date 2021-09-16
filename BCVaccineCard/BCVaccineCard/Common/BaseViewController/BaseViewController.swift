@@ -33,18 +33,20 @@ class BaseViewController: UIViewController, NavigationSetupProtocol {
 // MARK: Navigation setup
 extension BaseViewController {
     private func navigationSetup() {
-        navigationItem.backItemTitle(with: "")
+        navigationItem.setHidesBackButton(true, animated: true)
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.red]
-        navigationController?.navigationBar.tintColor = .red
-//        navigationController?.navigationBar.barTintColor = .white
+//        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: AppColours.appBlue]
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: AppColours.appBlue]
+        navigationController?.navigationBar.tintColor = AppColours.appBlue
+        navigationController?.navigationBar.barTintColor = .white
         self.navDelegate = self
     }
     
     func setNavigationBarWith(title: String, andImage image: UIImage?, action: Selector?) {
         navigationItem.title = title
-        let rightButton = UIBarButtonItem(image: image, style: .plain, target: self, action: action)
-//        let rightButton = UIBarButtonItem(title: "+", style: .plain, target: self, action: action)
+//        let rightButton = UIBarButtonItem(image: image, style: .plain, target: self, action: action)
+        let rightButton = UIBarButtonItem(title: "+", style: .plain, target: self, action: action)
         navigationItem.rightBarButtonItem = rightButton
         
         

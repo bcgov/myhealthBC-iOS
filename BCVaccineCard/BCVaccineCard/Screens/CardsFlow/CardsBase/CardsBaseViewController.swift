@@ -53,9 +53,8 @@ extension CardsBaseViewController {
     }
     
     private func goToAddCardOptionScreen() {
-        // TODO Open the qr retrieval option screen here
-        //        let vc = construct
-//        self.navigationController?.pushViewController(vc, animated: true)
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -85,6 +84,9 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
         guard type != .addCard else {
             goToAddCardOptionScreen()
             return
+        }
+        if type == .done {
+            Defaults.vaccinePassports = dataSource
         }
         expandedIndexRow = 0
         inEditMode = type == .manageCards

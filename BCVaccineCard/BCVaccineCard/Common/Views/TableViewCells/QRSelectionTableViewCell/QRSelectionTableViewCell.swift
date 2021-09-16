@@ -8,12 +8,12 @@
 import UIKit
 
 enum QRRetrievalMethod {
-    case scanWithCamera, scanWithImage, enterGatewayInfo
+    case scanWithCamera, uploadImage, enterGatewayInfo
     
     var getTitle: String {
         switch self {
         case .scanWithCamera: return "Scan a vaccine card QR code"
-        case .scanWithImage: return "Use an image of your QR code"
+        case .uploadImage: return "Use an image of your QR code"
         case .enterGatewayInfo: return "Enter info to get your card"
         }
     }
@@ -21,9 +21,32 @@ enum QRRetrievalMethod {
     var getImage: UIImage {
         switch self {
         case .scanWithCamera: return #imageLiteral(resourceName: "camera")
-        case .scanWithImage: return #imageLiteral(resourceName: "arrow-to-top")
+        case .uploadImage: return #imageLiteral(resourceName: "arrow-to-top")
         case .enterGatewayInfo: return #imageLiteral(resourceName: "address-card")
         }
+    }
+    
+    var goToFunction: () {
+        switch self {
+        case .scanWithCamera:
+            scanWithCameraFunc()
+        case .uploadImage:
+            uploadImageFunc()
+        case .enterGatewayInfo:
+            enterGatewayInfoFunc()
+        }
+    }
+    
+    func scanWithCameraFunc() {
+        print("TODO: scan with camera here")
+    }
+    
+    func uploadImageFunc() {
+        print("TODO: upload image func here")
+    }
+    
+    func enterGatewayInfoFunc() {
+        print("TODO: Enter gateway here")
     }
 }
 
