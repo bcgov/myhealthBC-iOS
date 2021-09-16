@@ -16,7 +16,6 @@ class GatewayFormViewController: UIViewController {
         return GatewayFormViewController()
     }
     
-    @IBOutlet weak var headerHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var shadowContainerView: UIView!
     @IBOutlet weak var roundedContainerView: UIView!

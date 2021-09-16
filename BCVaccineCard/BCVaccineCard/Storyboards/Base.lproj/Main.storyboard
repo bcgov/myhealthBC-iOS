@@ -31,28 +31,35 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hAi-rJ-sZy">
+                                                        <rect key="frame" x="20" y="63" width="340" height="3"/>
+                                                        <color key="backgroundColor" red="0.94916433099999997" green="0.74197298290000002" blue="0.27435126900000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="3" id="u1C-7c-xHo"/>
+                                                        </constraints>
+                                                    </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="To access your BC Vaccine Card, please provide:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YZz-De-IXP">
-                                                        <rect key="frame" x="16" y="82.5" width="348" height="41"/>
+                                                        <rect key="frame" x="20" y="82.5" width="344" height="41"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="2Of-4J-ymX">
-                                                        <rect key="frame" x="16" y="151.5" width="348" height="324"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" distribution="fillEqually" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="2Of-4J-ymX">
+                                                        <rect key="frame" x="20" y="151.5" width="340" height="321"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ZB7-Et-5DD">
-                                                                <rect key="frame" x="0.0" y="0.0" width="348" height="141"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="340" height="90.5"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Personal Health Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uu5-F4-XpD">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="348" height="95"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="340" height="44.5"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Za9-bW-gKl">
-                                                                        <rect key="frame" x="0.0" y="103" width="348" height="38"/>
+                                                                        <rect key="frame" x="0.0" y="52.5" width="340" height="38"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="38" id="ikT-Id-AOh"/>
+                                                                            <constraint firstAttribute="height" constant="38" id="Frg-wl-FY8"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
@@ -60,18 +67,18 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="dbU-0p-EWl">
-                                                                <rect key="frame" x="0.0" y="166" width="348" height="66.5"/>
+                                                                <rect key="frame" x="0.0" y="115.5" width="340" height="90"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Date of birth" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1LK-Px-r8q">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="348" height="20.5"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="340" height="44"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fxi-1a-348">
-                                                                        <rect key="frame" x="0.0" y="28.5" width="348" height="38"/>
+                                                                        <rect key="frame" x="0.0" y="52" width="340" height="38"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="38" id="FHV-uW-WjV"/>
+                                                                            <constraint firstAttribute="height" constant="38" id="EyA-XH-gxr"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <textInputTraits key="textInputTraits" returnKeyType="next"/>
@@ -79,18 +86,18 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="v11-UU-l18">
-                                                                <rect key="frame" x="0.0" y="257.5" width="348" height="66.5"/>
+                                                                <rect key="frame" x="0.0" y="230.5" width="340" height="90.5"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Date of vaccination (Dose 1 or Dose 2)" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ryC-M4-NJY">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="348" height="20.5"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="340" height="44.5"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <textField opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ePs-LR-6L4">
-                                                                        <rect key="frame" x="0.0" y="28.5" width="348" height="38"/>
+                                                                        <rect key="frame" x="0.0" y="52.5" width="340" height="38"/>
                                                                         <constraints>
-                                                                            <constraint firstAttribute="height" constant="38" id="4pS-bx-Lgu"/>
+                                                                            <constraint firstAttribute="height" constant="38" id="oTx-eA-vtv"/>
                                                                         </constraints>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <textInputTraits key="textInputTraits" returnKeyType="done"/>
@@ -99,15 +106,8 @@
                                                             </stackView>
                                                         </subviews>
                                                     </stackView>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hAi-rJ-sZy">
-                                                        <rect key="frame" x="16" y="63.5" width="348" height="3"/>
-                                                        <color key="backgroundColor" red="0.94916433099999997" green="0.74197298290000002" blue="0.27435126900000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="3" id="u1C-7c-xHo"/>
-                                                        </constraints>
-                                                    </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5wj-xt-O71" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                                        <rect key="frame" x="12" y="561" width="135" height="50"/>
+                                                        <rect key="frame" x="16" y="561" width="135" height="50"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="50" id="cmj-QR-ics"/>
@@ -115,13 +115,13 @@
                                                         </constraints>
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Privacy Statement" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uQP-G3-1K3">
-                                                        <rect key="frame" x="16" y="505.5" width="352" height="20.5"/>
+                                                        <rect key="frame" x="20" y="505.5" width="348" height="20.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CUv-lm-WRD" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                                        <rect key="frame" x="233" y="561" width="135" height="50"/>
+                                                        <rect key="frame" x="229" y="561" width="135" height="50"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     </view>
                                                 </subviews>
@@ -135,8 +135,8 @@
                                                     <constraint firstItem="YZz-De-IXP" firstAttribute="top" secondItem="hAi-rJ-sZy" secondAttribute="bottom" constant="16" id="PZE-Zf-HAc"/>
                                                     <constraint firstItem="5wj-xt-O71" firstAttribute="leading" secondItem="hAi-rJ-sZy" secondAttribute="leading" constant="-4" id="PiM-a6-ZKz"/>
                                                     <constraint firstItem="CUv-lm-WRD" firstAttribute="trailing" secondItem="hAi-rJ-sZy" secondAttribute="trailing" constant="4" id="TJZ-Dr-uB3"/>
-                                                    <constraint firstAttribute="trailing" secondItem="hAi-rJ-sZy" secondAttribute="trailing" constant="16" id="U7o-o4-Ygz"/>
-                                                    <constraint firstItem="hAi-rJ-sZy" firstAttribute="top" secondItem="BBJ-eg-nf7" secondAttribute="bottom" constant="12" id="Usb-sg-G9Z"/>
+                                                    <constraint firstAttribute="trailing" secondItem="hAi-rJ-sZy" secondAttribute="trailing" constant="20" id="U7o-o4-Ygz"/>
+                                                    <constraint firstItem="hAi-rJ-sZy" firstAttribute="top" secondItem="BBJ-eg-nf7" secondAttribute="bottom" constant="20" id="Usb-sg-G9Z"/>
                                                     <constraint firstItem="CUv-lm-WRD" firstAttribute="centerY" secondItem="5wj-xt-O71" secondAttribute="centerY" id="WYw-bY-QRb"/>
                                                     <constraint firstItem="2Of-4J-ymX" firstAttribute="leading" secondItem="hAi-rJ-sZy" secondAttribute="leading" id="agg-La-9UL"/>
                                                     <constraint firstItem="uQP-G3-1K3" firstAttribute="leading" secondItem="2Of-4J-ymX" secondAttribute="leading" id="oEU-ba-aGe"/>
@@ -146,8 +146,8 @@
                                                     <constraint firstItem="2Of-4J-ymX" firstAttribute="top" secondItem="YZz-De-IXP" secondAttribute="bottom" constant="28" id="utE-wZ-Dr3"/>
                                                     <constraint firstItem="YZz-De-IXP" firstAttribute="leading" secondItem="hAi-rJ-sZy" secondAttribute="leading" id="uud-2r-DjV"/>
                                                     <constraint firstItem="5wj-xt-O71" firstAttribute="top" secondItem="uQP-G3-1K3" secondAttribute="bottom" constant="35" id="xiS-yS-sBI"/>
-                                                    <constraint firstItem="hAi-rJ-sZy" firstAttribute="leading" secondItem="6YK-Z4-xZK" secondAttribute="leading" constant="16" id="xio-GN-brd"/>
-                                                    <constraint firstItem="BBJ-eg-nf7" firstAttribute="top" secondItem="6YK-Z4-xZK" secondAttribute="top" constant="30" id="zBl-kp-ILi"/>
+                                                    <constraint firstItem="hAi-rJ-sZy" firstAttribute="leading" secondItem="6YK-Z4-xZK" secondAttribute="leading" constant="20" id="xio-GN-brd"/>
+                                                    <constraint firstItem="BBJ-eg-nf7" firstAttribute="top" secondItem="6YK-Z4-xZK" secondAttribute="top" constant="25" id="zBl-kp-ILi"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
