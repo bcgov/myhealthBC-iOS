@@ -137,22 +137,27 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             print("Card Delete Action Called here")
-            // TODO: Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
         }
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .destructive, title: "Unlink") { action, view, completion in
+        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             print("Unlink button is clicked")
+            // TODO: Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
         }
+        delete.image = UIImage(named: "unlink")
+        delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
         return config
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .destructive, title: "Unlink") { action, view, completion in
+        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             print("Unlink button is clicked")
+            // TODO: Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
         }
+        delete.image = UIImage(named: "unlink")
+        delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
         return config
     }
