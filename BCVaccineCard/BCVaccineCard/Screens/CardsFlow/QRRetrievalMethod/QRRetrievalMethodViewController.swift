@@ -89,7 +89,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
             }
         case .method(type: let type):
             if let cell = tableView.dequeueReusableCell(withIdentifier: "QRSelectionTableViewCell", for: indexPath) as? QRSelectionTableViewCell {
-                cell.configure(method: type)
+                cell.configure(method: type, delegateOwner: self)
                 return cell
             }
         }
@@ -97,10 +97,29 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch dataSource[indexPath.row] {
+        let item = dataSource[indexPath.row]
+        switch item {
         case .text: return
         case .method(type: let type):
-            type.goToFunction
+            if let cell = tableView.cellForRow(at: indexPath) as? QRSelectionTableViewCell {
+                cell.callDelegate(fromMethod: type)
+            }
         }
     }
+}
+
+extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
+    func goToEnterGateway() {
+        let vc = GatewayFormViewController.constructGatewayFormViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func goToCameraScan() {
+        print("Go to camera scan")
+    }
+    
+    func goToUploadImage() {
+        print("Go to upload image")
+    }
+
 }

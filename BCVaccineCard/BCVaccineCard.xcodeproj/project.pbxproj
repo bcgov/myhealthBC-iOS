@@ -32,7 +32,7 @@
 		7944F6DC26F12C00006B9444 /* ShadowCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6D026F12C00006B9444 /* ShadowCardView.xib */; };
 		7944F6DD26F12C00006B9444 /* NavigationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6D226F12C00006B9444 /* NavigationHeaderView.swift */; };
 		7944F6DE26F12C00006B9444 /* NavigationHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6D326F12C00006B9444 /* NavigationHeaderView.xib */; };
-		7944F6E726F12C4E006B9444 /* FormVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E026F12C4E006B9444 /* FormVC.swift */; };
+		7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */; };
 		7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E326F12C4E006B9444 /* ZoomedInPopUpVC.swift */; };
 		7944F6E926F12C4E006B9444 /* VaccinePassportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E426F12C4E006B9444 /* VaccinePassportVC.swift */; };
 		7944F6EA26F12C4E006B9444 /* VaccineStorageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E626F12C4E006B9444 /* VaccineStorageVC.swift */; };
@@ -106,7 +106,7 @@
 		7944F6D026F12C00006B9444 /* ShadowCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShadowCardView.xib; sourceTree = "<group>"; };
 		7944F6D226F12C00006B9444 /* NavigationHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationHeaderView.swift; sourceTree = "<group>"; };
 		7944F6D326F12C00006B9444 /* NavigationHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NavigationHeaderView.xib; sourceTree = "<group>"; };
-		7944F6E026F12C4E006B9444 /* FormVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormVC.swift; sourceTree = "<group>"; };
+		7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatewayFormViewController.swift; sourceTree = "<group>"; };
 		7944F6E326F12C4E006B9444 /* ZoomedInPopUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomedInPopUpVC.swift; sourceTree = "<group>"; };
 		7944F6E426F12C4E006B9444 /* VaccinePassportVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaccinePassportVC.swift; sourceTree = "<group>"; };
 		7944F6E626F12C4E006B9444 /* VaccineStorageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaccineStorageVC.swift; sourceTree = "<group>"; };
@@ -365,14 +365,6 @@
 			path = NavigationHeaderView;
 			sourceTree = "<group>";
 		};
-		7944F6DF26F12C4E006B9444 /* FormInputScreen */ = {
-			isa = PBXGroup;
-			children = (
-				7944F6E026F12C4E006B9444 /* FormVC.swift */,
-			);
-			path = FormInputScreen;
-			sourceTree = "<group>";
-		};
 		7944F6E126F12C4E006B9444 /* VaccinePassportScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -410,6 +402,7 @@
 			children = (
 				7944F6F326F30273006B9444 /* CardsBase */,
 				7944F70C26F3A09A006B9444 /* QRRetrievalMethod */,
+				7944F71B26F3CC36006B9444 /* RetrievalOptions */,
 			);
 			path = CardsFlow;
 			sourceTree = "<group>";
@@ -462,7 +455,6 @@
 		7944F70626F390CB006B9444 /* Old */ = {
 			isa = PBXGroup;
 			children = (
-				7944F6DF26F12C4E006B9444 /* FormInputScreen */,
 				7944F6E126F12C4E006B9444 /* VaccinePassportScreen */,
 				7944F6E526F12C4E006B9444 /* VaccineStorageScreen */,
 			);
@@ -509,6 +501,14 @@
 				7944F71826F3B59B006B9444 /* TextTableViewCell.xib */,
 			);
 			path = TextTableViewCell;
+			sourceTree = "<group>";
+		};
+		7944F71B26F3CC36006B9444 /* RetrievalOptions */ = {
+			isa = PBXGroup;
+			children = (
+				7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */,
+			);
+			path = RetrievalOptions;
 			sourceTree = "<group>";
 		};
 		95BA81E170E18F38F168CAC6 /* Pods */ = {
@@ -772,7 +772,7 @@
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
-				7944F6E726F12C4E006B9444 /* FormVC.swift in Sources */,
+				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

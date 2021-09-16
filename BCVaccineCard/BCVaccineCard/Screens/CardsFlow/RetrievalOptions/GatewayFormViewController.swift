@@ -7,7 +7,14 @@
 
 import UIKit
 
-class FormVC: UIViewController {
+class GatewayFormViewController: UIViewController {
+    
+    class func constructGatewayFormViewController() -> GatewayFormViewController {
+        if let vc = Storyboard.main.instantiateViewController(withIdentifier: "GatewayFormViewController") as? GatewayFormViewController {
+            return vc
+        }
+        return GatewayFormViewController()
+    }
     
     @IBOutlet weak var headerHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -19,7 +26,6 @@ class FormVC: UIViewController {
     @IBOutlet weak var privacyStatementLabelPlaceholder: UILabel!
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var enterButton: AppStyleButton!
-    @IBOutlet weak var loginWithBCServicesCardAppButtonPlaceholderView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,18 +41,11 @@ class FormVC: UIViewController {
         containerUISetup()
         textFieldSetup()
         setupButtons()
-        uiTempHacks()
     }
     
     private func setupButtons() {
         cancelButton.configure(withStyle: .white, buttonType: .cancel, delegateOwner: self, enabled: true)
         enterButton.configure(withStyle: .blue, buttonType: .enter, delegateOwner: self, enabled: false)
-    }
-    
-    private func uiTempHacks() {
-        // TODO: Need to do privacy label here
-        loginWithBCServicesCardAppButtonPlaceholderView.layer.cornerRadius = 5
-        loginWithBCServicesCardAppButtonPlaceholderView.layer.masksToBounds = true
     }
 
     private func containerUISetup() {
@@ -80,7 +79,7 @@ class FormVC: UIViewController {
 }
 
 // MARK: For UITextFieldDelegate
-extension FormVC: UITextFieldDelegate {
+extension GatewayFormViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentString: NSString = textField.text! as NSString
         let newString: String = currentString.replacingCharacters(in: range, with: string) as String
@@ -113,7 +112,7 @@ extension FormVC: UITextFieldDelegate {
 }
 
 // MARK: QR Vaccine Validation check
-extension FormVC {
+extension GatewayFormViewController {
     func checkForPHN(phnString: String) {
         var vaccinePassportModel: VaccinePassportModel
         let phn = phnString.trimWhiteSpacesAndNewLines
@@ -141,14 +140,14 @@ extension FormVC {
 }
 
 // MARK: To go to cards tab
-extension FormVC: GoToCardsDelegate {
+extension GatewayFormViewController: GoToCardsDelegate {
     func goToCardsTab() {
         self.tabBarController?.selectedIndex = 1
     }
 }
 
 // MARK: Cancel button logic
-extension FormVC {
+extension GatewayFormViewController {
     func clearTextFields() {
         phnTextField.text = ""
         dobTextField.text = ""
@@ -157,7 +156,7 @@ extension FormVC {
 }
 
 // MARK: For Button tap events
-extension FormVC: AppStyleButtonDelegate {
+extension GatewayFormViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .cancel {
             clearTextFields()

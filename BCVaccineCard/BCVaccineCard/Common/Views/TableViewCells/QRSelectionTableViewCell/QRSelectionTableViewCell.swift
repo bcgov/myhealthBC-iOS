@@ -7,6 +7,12 @@
 
 import UIKit
 
+protocol GoToQRRetrievalMethodDelegate: class {
+    func goToEnterGateway()
+    func goToCameraScan()
+    func goToUploadImage()
+}
+
 enum QRRetrievalMethod {
     case scanWithCamera, uploadImage, enterGatewayInfo
     
@@ -26,28 +32,28 @@ enum QRRetrievalMethod {
         }
     }
     
-    var goToFunction: () {
-        switch self {
-        case .scanWithCamera:
-            scanWithCameraFunc()
-        case .uploadImage:
-            uploadImageFunc()
-        case .enterGatewayInfo:
-            enterGatewayInfoFunc()
-        }
-    }
-    
-    func scanWithCameraFunc() {
-        print("TODO: scan with camera here")
-    }
-    
-    func uploadImageFunc() {
-        print("TODO: upload image func here")
-    }
-    
-    func enterGatewayInfoFunc() {
-        print("TODO: Enter gateway here")
-    }
+//    var goToFunction: () {
+//        switch self {
+//        case .scanWithCamera:
+//            scanWithCameraFunc()
+//        case .uploadImage:
+//            uploadImageFunc()
+//        case .enterGatewayInfo:
+//            enterGatewayInfoFunc()
+//        }
+//    }
+//        
+//    func scanWithCameraFunc() {
+//        print("TODO: scan with camera here")
+//    }
+//    
+//    func uploadImageFunc() {
+//        print("TODO: upload image func here")
+//    }
+//    
+//    func enterGatewayInfoFunc() {
+//        print("TODO: go to form here")
+//    }
 }
 
 class QRSelectionTableViewCell: UITableViewCell {
@@ -55,6 +61,8 @@ class QRSelectionTableViewCell: UITableViewCell {
     @IBOutlet weak private var roundedView: UIView!
     @IBOutlet weak private var optionTitleLabel: UILabel!
     @IBOutlet weak private var optionImageView: UIImageView!
+    
+    weak var delegate: GoToQRRetrievalMethodDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -66,9 +74,21 @@ class QRSelectionTableViewCell: UITableViewCell {
         roundedView.layer.masksToBounds = true
     }
     
-    func configure(method: QRRetrievalMethod) {
+    func configure(method: QRRetrievalMethod, delegateOwner owner: UIViewController) {
+        delegate = owner as? GoToQRRetrievalMethodDelegate
         optionTitleLabel.text = method.getTitle
         optionImageView.image = method.getImage
+    }
+    
+    func callDelegate(fromMethod method: QRRetrievalMethod) {
+        switch method {
+        case .scanWithCamera:
+            delegate?.goToCameraScan()
+        case .uploadImage:
+            delegate?.goToUploadImage()
+        case .enterGatewayInfo:
+            delegate?.goToEnterGateway()
+        }
     }
     
 }
