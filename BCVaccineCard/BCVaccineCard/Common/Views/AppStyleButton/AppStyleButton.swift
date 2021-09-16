@@ -29,6 +29,7 @@ class AppStyleButton: UIView {
         case done
         case saveACopy
         case close
+        case manageCards
         
         var getTitle: String {
             switch self {
@@ -37,6 +38,7 @@ class AppStyleButton: UIView {
             case .done: return "Done"
             case .saveACopy: return "Save A Copy"
             case .close: return "Close"
+            case .manageCards: return "Manage Cards"
             }
         }
     }

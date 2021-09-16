@@ -10,7 +10,7 @@ import UIKit
 class CardsBaseViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
-    @IBOutlet weak private var bottomButton: UIButton!
+    @IBOutlet weak private var bottomButton: AppStyleButton!
     
     private var expandedIndexRow = 0
     
@@ -22,7 +22,9 @@ class CardsBaseViewController: BaseViewController {
     
     private var inEditMode = false {
         didSet {
+            tableView.isEditing = inEditMode
             adjustButtonName()
+            tableView.reloadData()
         }
     }
     
@@ -51,6 +53,8 @@ extension CardsBaseViewController {
     
     private func goToAddCardOptionScreen() {
         // TODO Open the qr retrieval option screen here
+        //        let vc = construct
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -69,9 +73,18 @@ extension CardsBaseViewController {
     }
     private func adjustButtonName() {
         guard !self.dataSource.isEmpty else { return }
-        let buttonTitle = inEditMode ? "Done" : "Manage Cards"
-        bottomButton.setTitle(buttonTitle, for: .normal)
+        let buttonType: AppStyleButton.ButtonType = inEditMode ? .done : .manageCards
+        bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true)
     }
+}
+
+// MARK: Bottom Button Tapped Delegate
+extension CardsBaseViewController: AppStyleButtonDelegate {
+    func buttonTapped(type: AppStyleButton.ButtonType) {
+        expandedIndexRow = 0
+        inEditMode = type == .manageCards
+    }
+
 }
 
 // MARK: Table View Logic
@@ -80,7 +93,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.register(UINib.init(nibName: "VaccineCardTableViewCell", bundle: .main), forCellReuseIdentifier: "VaccineCardTableViewCell")
         tableView.register(UINib.init(nibName: "NoCardsTableViewCell", bundle: .main), forCellReuseIdentifier: "NoCardsTableViewCell")
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 200
+        tableView.estimatedRowHeight = 300
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -98,7 +111,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         if let cell = tableView.dequeueReusableCell(withIdentifier: "VaccineCardTableViewCell", for: indexPath) as? VaccineCardTableViewCell {
-            let expanded = indexPath.row == expandedIndexRow
+            let expanded = indexPath.row == expandedIndexRow && !inEditMode
             cell.configure(model: dataSource[indexPath.row], expanded: expanded)
             return cell
         }
@@ -110,6 +123,26 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
         self.expandedIndexRow = requestedExpandedIndex.row
         self.tableView.reloadRows(at: [currentExpandedIndex, requestedExpandedIndex], with: .automatic)
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // TODO: Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
+        }
+    }
+    
+//    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+//        return false
+//    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let movedObject = dataSource[sourceIndexPath.row]
+        dataSource.remove(at: sourceIndexPath.row)
+        dataSource.insert(movedObject, at: destinationIndexPath.row)
     }
 }
 
