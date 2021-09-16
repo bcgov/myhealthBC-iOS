@@ -11,19 +11,19 @@
         <!--Form-->
         <scene sceneID="47C-Am-80v">
             <objects>
-                <viewController storyboardIdentifier="FormVC" id="H7g-7w-Cg5" customClass="FormVC" customModule="ClientVaxPass_POC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FormVC" id="H7g-7w-Cg5" customClass="FormVC" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cht-Ad-EvO">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="901"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QiN-1u-4Fg">
-                                <rect key="frame" x="12" y="92" width="390" height="726"/>
+                                <rect key="frame" x="12" y="92" width="390" height="775"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GIq-ZQ-f91">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="726"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="775"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6YK-Z4-xZK">
-                                                <rect key="frame" x="5" y="5" width="380" height="716"/>
+                                                <rect key="frame" x="5" y="5" width="380" height="765"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Access your BC Vaccine Card" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BBJ-eg-nf7">
                                                         <rect key="frame" x="64.5" y="30" width="251.5" height="21.5"/>
@@ -97,7 +97,7 @@
                                                             <constraint firstAttribute="height" constant="3" id="u1C-7c-xHo"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5wj-xt-O71" customClass="AppStyleButton" customModule="ClientVaxPass_POC" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5wj-xt-O71" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
                                                         <rect key="frame" x="12" y="474.5" width="135" height="50"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
@@ -134,7 +134,7 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CUv-lm-WRD" customClass="AppStyleButton" customModule="ClientVaxPass_POC" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CUv-lm-WRD" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
                                                         <rect key="frame" x="233" y="474.5" width="135" height="50"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     </view>
@@ -227,7 +227,7 @@
                                 <viewLayoutGuide key="contentLayoutGuide" id="QUZ-zT-CMs"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="nTW-t0-vli"/>
                             </scrollView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XVP-lO-tC0" customClass="NavigationHeaderView" customModule="ClientVaxPass_POC" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XVP-lO-tC0" customClass="NavigationHeaderView" customModule="BCVaccineCard" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -265,17 +265,17 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZRe-xK-17j" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-275" y="-261"/>
+            <point key="canvasLocation" x="-1235" y="-283"/>
         </scene>
         <!--Vaccine PassportVC-->
         <scene sceneID="BzN-Wq-oxj">
             <objects>
-                <viewController storyboardIdentifier="VaccinePassportVC" id="VO0-CA-uJP" customClass="VaccinePassportVC" customModule="ClientVaxPass_POC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VaccinePassportVC" id="VO0-CA-uJP" customClass="VaccinePassportVC" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ezT-zr-KaA">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ygN-ct-Kbu" customClass="NavigationHeaderView" customModule="ClientVaxPass_POC" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ygN-ct-Kbu" customClass="NavigationHeaderView" customModule="BCVaccineCard" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -412,7 +412,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bpe-eq-6a5">
                                                 <rect key="frame" x="0.0" y="639.5" width="390" height="130.5"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aSH-vk-K6Q" customClass="AppStyleButton" customModule="ClientVaxPass_POC" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aSH-vk-K6Q" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
                                                         <rect key="frame" x="16" y="40.5" width="135" height="50"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
@@ -420,7 +420,7 @@
                                                             <constraint firstAttribute="width" constant="135" id="mh4-X3-bLd"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3po-Ha-L6t" customClass="AppStyleButton" customModule="ClientVaxPass_POC" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3po-Ha-L6t" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
                                                         <rect key="frame" x="199" y="40.5" width="175" height="50"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
@@ -499,17 +499,33 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nu1-yC-Spe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="412" y="433"/>
+            <point key="canvasLocation" x="-361" y="-282"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="wVL-dy-fwP">
+            <objects>
+                <viewController id="CTU-P9-39N" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="NvA-Ln-WsM">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="fhj-Jd-QLm"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="SlU-tU-ekx"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ggD-j1-Hc1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1106" y="560"/>
         </scene>
         <!--Zoomed In Pop UpVC-->
         <scene sceneID="w2T-kR-qh3">
             <objects>
-                <viewController storyboardIdentifier="ZoomedInPopUpVC" id="LMM-aE-Qx0" customClass="ZoomedInPopUpVC" customModule="ClientVaxPass_POC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ZoomedInPopUpVC" id="LMM-aE-Qx0" customClass="ZoomedInPopUpVC" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0Cz-gd-hE4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KrC-SW-G2h" customClass="VaxQRZoomedInView" customModule="ClientVaxPass_POC" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KrC-SW-G2h" customClass="VaxQRZoomedInView" customModule="BCVaccineCard" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="384" width="414" height="128"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
@@ -528,7 +544,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z8F-fq-BvI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="412" y="1170"/>
+            <point key="canvasLocation" x="-1239" y="440"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="KpE-DL-QZC">
@@ -539,24 +555,20 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
-                    <connections>
-                        <segue destination="H7g-7w-Cg5" kind="relationship" relationship="viewControllers" id="fV6-EK-Ois"/>
-                        <segue destination="iQF-97-S1s" kind="relationship" relationship="viewControllers" id="nya-6V-THG"/>
-                    </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OkX-ck-BVX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="412" y="-1038"/>
+            <point key="canvasLocation" x="1107" y="-960"/>
         </scene>
         <!--Cards-->
         <scene sceneID="0MY-bU-YDf">
             <objects>
-                <viewController storyboardIdentifier="VaccineStorageVC" id="iQF-97-S1s" customClass="VaccineStorageVC" customModule="ClientVaxPass_POC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VaccineStorageVC" id="iQF-97-S1s" customClass="VaccineStorageVC" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nXo-kM-MwK">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ct9-zs-S8v" customClass="NavigationHeaderView" customModule="ClientVaxPass_POC" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ct9-zs-S8v" customClass="NavigationHeaderView" customModule="BCVaccineCard" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -564,7 +576,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rWm-FY-VMY">
-                                <rect key="frame" x="12" y="92" width="390" height="721"/>
+                                <rect key="frame" x="12" y="92" width="390" height="770"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Saved Vaccine Passports" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qcg-Bb-TCd">
                                         <rect key="frame" x="12" y="30" width="366" height="21.5"/>
@@ -580,7 +592,7 @@
                                         </constraints>
                                     </view>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7G7-Er-gXO">
-                                        <rect key="frame" x="20" y="86.5" width="350" height="614.5"/>
+                                        <rect key="frame" x="20" y="86.5" width="350" height="663.5"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="RgC-iW-VvY">
                                             <size key="itemSize" width="128" height="128"/>
@@ -641,7 +653,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8xg-sF-e2a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1059" y="-261"/>
+            <point key="canvasLocation" x="-1238" y="-959"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="8iI-MZ-k7t">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZK3-oA-dZG" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="aSx-fh-mpj">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="CTU-P9-39N" kind="relationship" relationship="rootViewController" id="OGw-Q8-yIe"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T9t-UW-gxy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1106" y="-177"/>
         </scene>
     </scenes>
     <resources>

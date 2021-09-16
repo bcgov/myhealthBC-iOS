@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
 		7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67A26F12613006B9444 /* SceneDelegate.swift */; };
-		7944F67D26F12613006B9444 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67C26F12613006B9444 /* ViewController.swift */; };
 		7944F68026F12613006B9444 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
 		7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */; };
 		7944F68526F1261B006B9444 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7944F68426F1261B006B9444 /* Assets.xcassets */; };
@@ -37,6 +36,13 @@
 		7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E326F12C4E006B9444 /* ZoomedInPopUpVC.swift */; };
 		7944F6E926F12C4E006B9444 /* VaccinePassportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E426F12C4E006B9444 /* VaccinePassportVC.swift */; };
 		7944F6EA26F12C4E006B9444 /* VaccineStorageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E626F12C4E006B9444 /* VaccineStorageVC.swift */; };
+		7944F6F526F30293006B9444 /* CardsBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6F426F30293006B9444 /* CardsBaseViewController.swift */; };
+		7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6F726F302DF006B9444 /* BaseViewController.swift */; };
+		7944F6FA26F30413006B9444 /* UINavigationItem+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6F926F30413006B9444 /* UINavigationItem+Ext.swift */; };
+		7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6FD26F3141A006B9444 /* VaccineCardTableViewCell.swift */; };
+		7944F70026F3141A006B9444 /* VaccineCardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6FE26F3141A006B9444 /* VaccineCardTableViewCell.xib */; };
+		7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F70226F31451006B9444 /* NoCardsTableViewCell.swift */; };
+		7944F70526F31451006B9444 /* NoCardsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F70326F31451006B9444 /* NoCardsTableViewCell.xib */; };
 		9546C28739E626D7D7A60896 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835B02C2C4FA0862B326DDC5 /* Pods_BCVaccineCardTests.framework */; };
 		9DAF232264AA1CF2B55907A2 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05EB7652EC6BE3F7ECAA70D /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */; };
 		FFC4DD0E1F01F7FB7EEF1E76 /* Pods_BCVaccineCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBD04D2372996911897ACE5 /* Pods_BCVaccineCard.framework */; };
@@ -66,7 +72,6 @@
 		7944F67526F12613006B9444 /* BCVaccineCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BCVaccineCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944F67826F12613006B9444 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7944F67A26F12613006B9444 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		7944F67C26F12613006B9444 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7944F67F26F12613006B9444 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7944F68226F12614006B9444 /* BCVaccineCard.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BCVaccineCard.xcdatamodel; sourceTree = "<group>"; };
 		7944F68426F1261B006B9444 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -99,6 +104,13 @@
 		7944F6E326F12C4E006B9444 /* ZoomedInPopUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomedInPopUpVC.swift; sourceTree = "<group>"; };
 		7944F6E426F12C4E006B9444 /* VaccinePassportVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaccinePassportVC.swift; sourceTree = "<group>"; };
 		7944F6E626F12C4E006B9444 /* VaccineStorageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaccineStorageVC.swift; sourceTree = "<group>"; };
+		7944F6F426F30293006B9444 /* CardsBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsBaseViewController.swift; sourceTree = "<group>"; };
+		7944F6F726F302DF006B9444 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		7944F6F926F30413006B9444 /* UINavigationItem+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Ext.swift"; sourceTree = "<group>"; };
+		7944F6FD26F3141A006B9444 /* VaccineCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineCardTableViewCell.swift; sourceTree = "<group>"; };
+		7944F6FE26F3141A006B9444 /* VaccineCardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VaccineCardTableViewCell.xib; sourceTree = "<group>"; };
+		7944F70226F31451006B9444 /* NoCardsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoCardsTableViewCell.swift; sourceTree = "<group>"; };
+		7944F70326F31451006B9444 /* NoCardsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoCardsTableViewCell.xib; sourceTree = "<group>"; };
 		835B02C2C4FA0862B326DDC5 /* Pods_BCVaccineCardTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCardTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A05EB7652EC6BE3F7ECAA70D /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_BCVaccineCardUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9FD1E568D657877F1A46EDF /* Pods-BCVaccineCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard.release.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard.release.xcconfig"; sourceTree = "<group>"; };
@@ -169,7 +181,6 @@
 				7944F6B226F12AB3006B9444 /* Screens */,
 				7944F67826F12613006B9444 /* AppDelegate.swift */,
 				7944F67A26F12613006B9444 /* SceneDelegate.swift */,
-				7944F67C26F12613006B9444 /* ViewController.swift */,
 				7944F68426F1261B006B9444 /* Assets.xcassets */,
 				7944F68926F1261B006B9444 /* Info.plist */,
 				7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */,
@@ -232,6 +243,8 @@
 		7944F6B126F12AAA006B9444 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				7944F6F626F302C0006B9444 /* BaseViewController */,
+				7944F6F126F2D07C006B9444 /* NavigationBar */,
 				7944F6C226F12C00006B9444 /* Views */,
 			);
 			path = Common;
@@ -240,6 +253,7 @@
 		7944F6B226F12AB3006B9444 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				7944F6F226F30262006B9444 /* CardsFlow */,
 				7944F6DF26F12C4E006B9444 /* FormInputScreen */,
 				7944F6E126F12C4E006B9444 /* VaccinePassportScreen */,
 				7944F6E526F12C4E006B9444 /* VaccineStorageScreen */,
@@ -260,6 +274,7 @@
 			children = (
 				7944F6B826F12BC3006B9444 /* UIButton+EXT.swift */,
 				7944F6B926F12BC3006B9444 /* String+EXT.swift */,
+				7944F6F926F30413006B9444 /* UINavigationItem+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -275,6 +290,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7944F6FB26F313EF006B9444 /* TableViewCells */,
 				7944F6C326F12C00006B9444 /* AppStyleButton */,
 				7944F6C626F12C00006B9444 /* AlertVC */,
 				7944F6C826F12C00006B9444 /* VaxQRZoomedInView */,
@@ -369,6 +385,64 @@
 				7944F6E626F12C4E006B9444 /* VaccineStorageVC.swift */,
 			);
 			path = VaccineStorageScreen;
+			sourceTree = "<group>";
+		};
+		7944F6F126F2D07C006B9444 /* NavigationBar */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NavigationBar;
+			sourceTree = "<group>";
+		};
+		7944F6F226F30262006B9444 /* CardsFlow */ = {
+			isa = PBXGroup;
+			children = (
+				7944F6F326F30273006B9444 /* CardsBase */,
+			);
+			path = CardsFlow;
+			sourceTree = "<group>";
+		};
+		7944F6F326F30273006B9444 /* CardsBase */ = {
+			isa = PBXGroup;
+			children = (
+				7944F6F426F30293006B9444 /* CardsBaseViewController.swift */,
+			);
+			path = CardsBase;
+			sourceTree = "<group>";
+		};
+		7944F6F626F302C0006B9444 /* BaseViewController */ = {
+			isa = PBXGroup;
+			children = (
+				7944F6F726F302DF006B9444 /* BaseViewController.swift */,
+			);
+			path = BaseViewController;
+			sourceTree = "<group>";
+		};
+		7944F6FB26F313EF006B9444 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				7944F70126F31425006B9444 /* NoCardsTableViewCell */,
+				7944F6FC26F313F7006B9444 /* VaccineCardTableViewCell */,
+			);
+			path = TableViewCells;
+			sourceTree = "<group>";
+		};
+		7944F6FC26F313F7006B9444 /* VaccineCardTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				7944F6FD26F3141A006B9444 /* VaccineCardTableViewCell.swift */,
+				7944F6FE26F3141A006B9444 /* VaccineCardTableViewCell.xib */,
+			);
+			path = VaccineCardTableViewCell;
+			sourceTree = "<group>";
+		};
+		7944F70126F31425006B9444 /* NoCardsTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				7944F70226F31451006B9444 /* NoCardsTableViewCell.swift */,
+				7944F70326F31451006B9444 /* NoCardsTableViewCell.xib */,
+			);
+			path = NoCardsTableViewCell;
 			sourceTree = "<group>";
 		};
 		95BA81E170E18F38F168CAC6 /* Pods */ = {
@@ -503,6 +577,8 @@
 				7944F68826F1261B006B9444 /* LaunchScreen.storyboard in Resources */,
 				7944F6D426F12C00006B9444 /* AppStyleButton.xib in Resources */,
 				7944F6DC26F12C00006B9444 /* ShadowCardView.xib in Resources */,
+				7944F70026F3141A006B9444 /* VaccineCardTableViewCell.xib in Resources */,
+				7944F70526F31451006B9444 /* NoCardsTableViewCell.xib in Resources */,
 				7944F68526F1261B006B9444 /* Assets.xcassets in Resources */,
 				7944F6DA26F12C00006B9444 /* PassportCollectionCell.xib in Resources */,
 				7944F6DE26F12C00006B9444 /* NavigationHeaderView.xib in Resources */,
@@ -602,14 +678,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				7944F6BE26F12BD5006B9444 /* VaccinePassportModel.swift in Sources */,
-				7944F67D26F12613006B9444 /* ViewController.swift in Sources */,
 				7944F6B426F12BA2006B9444 /* Storyboard.swift in Sources */,
 				7944F67926F12613006B9444 /* AppDelegate.swift in Sources */,
 				7944F6EA26F12C4E006B9444 /* VaccineStorageVC.swift in Sources */,
 				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
+				7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */,
 				7944F6D926F12C00006B9444 /* PassportCollectionCell.swift in Sources */,
 				7944F6DB26F12C00006B9444 /* ShadowCardView.swift in Sources */,
+				7944F6F526F30293006B9444 /* CardsBaseViewController.swift in Sources */,
 				7944F6D526F12C00006B9444 /* AppStyleButton.swift in Sources */,
+				7944F6FA26F30413006B9444 /* UINavigationItem+Ext.swift in Sources */,
 				7944F6BB26F12BC3006B9444 /* UIButton+EXT.swift in Sources */,
 				7944F6DD26F12C00006B9444 /* NavigationHeaderView.swift in Sources */,
 				7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */,
@@ -617,7 +695,9 @@
 				7944F6D826F12C00006B9444 /* VaxQRZoomedInView.swift in Sources */,
 				7944F6D626F12C00006B9444 /* AlertVC.swift in Sources */,
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
+				7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */,
 				7944F6E926F12C4E006B9444 /* VaccinePassportVC.swift in Sources */,
+				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* FormVC.swift in Sources */,
