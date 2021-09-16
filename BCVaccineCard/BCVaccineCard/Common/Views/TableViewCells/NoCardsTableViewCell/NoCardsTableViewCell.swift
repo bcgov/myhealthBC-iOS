@@ -7,13 +7,9 @@
 
 import UIKit
 
-protocol NoCardsTableViewCellDelegate: AnyObject {
-    func addCardButtonFromEmptyDataSet()
-}
-
 class NoCardsTableViewCell: UITableViewCell {
     
-    weak var delegate: NoCardsTableViewCellDelegate?
+    @IBOutlet weak private var addButton: AppStyleButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,8 +22,8 @@ class NoCardsTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    @IBAction private func addCardButtonTapped(_ sender: UIButton) {
-        self.delegate?.addCardButtonFromEmptyDataSet()
+    func configure(withOwner vc: UIViewController) {
+        addButton.configure(withStyle: .blue, buttonType: .addCard, delegateOwner: vc, enabled: true)
     }
     
 }

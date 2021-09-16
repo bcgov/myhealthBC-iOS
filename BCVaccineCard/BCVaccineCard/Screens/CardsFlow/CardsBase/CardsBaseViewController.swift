@@ -44,8 +44,8 @@ class CardsBaseViewController: BaseViewController {
 // MARK: Navigation setup
 extension CardsBaseViewController {
     private func navSetup() {
-        // TODO: Create a plus icon and add it to xcassets
-        self.navDelegate?.setNavigationBarWith(title: "My Cards", andImage: UIImage(named: "PlusIcon"), action: #selector(self.addCardButton))
+        // TODO: Get actual icon from figma - ask denise
+        self.navDelegate?.setNavigationBarWith(title: "My Cards", andImage: UIImage(named: "plus-icon"), action: #selector(self.addCardButton))
     }
     
     @objc private func addCardButton() {
@@ -82,6 +82,10 @@ extension CardsBaseViewController {
 // MARK: Bottom Button Tapped Delegate
 extension CardsBaseViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
+        guard type != .addCard else {
+            goToAddCardOptionScreen()
+            return
+        }
         expandedIndexRow = 0
         inEditMode = type == .manageCards
     }
@@ -94,7 +98,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.register(UINib.init(nibName: "VaccineCardTableViewCell", bundle: .main), forCellReuseIdentifier: "VaccineCardTableViewCell")
         tableView.register(UINib.init(nibName: "NoCardsTableViewCell", bundle: .main), forCellReuseIdentifier: "NoCardsTableViewCell")
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 300
+        tableView.estimatedRowHeight = 330
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -106,7 +110,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !dataSource.isEmpty else {
             if let cell = tableView.dequeueReusableCell(withIdentifier: "NoCardsTableViewCell", for: indexPath) as? NoCardsTableViewCell {
-                cell.delegate = self
+                cell.configure(withOwner: self)
                 return cell
             }
             return UITableViewCell()
@@ -132,25 +136,30 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            print("Card Delete Action Called here")
             // TODO: Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
         }
     }
     
-//    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-//        return false
-//    }
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "Unlink") { action, view, completion in
+            print("Unlink button is clicked")
+        }
+        let config = UISwipeActionsConfiguration(actions: [delete])
+        return config
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "Unlink") { action, view, completion in
+            print("Unlink button is clicked")
+        }
+        let config = UISwipeActionsConfiguration(actions: [delete])
+        return config
+    }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let movedObject = dataSource[sourceIndexPath.row]
         dataSource.remove(at: sourceIndexPath.row)
         dataSource.insert(movedObject, at: destinationIndexPath.row)
     }
-}
-
-// MARK: Delegate for adding card from empty data set
-extension CardsBaseViewController: NoCardsTableViewCellDelegate {
-    func addCardButtonFromEmptyDataSet() {
-        goToAddCardOptionScreen()
-    }
-
 }

@@ -34,12 +34,20 @@ class BaseViewController: UIViewController, NavigationSetupProtocol {
 extension BaseViewController {
     private func navigationSetup() {
         navigationItem.backItemTitle(with: "")
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.red]
+        navigationController?.navigationBar.tintColor = .red
+//        navigationController?.navigationBar.barTintColor = .white
         self.navDelegate = self
     }
     
     func setNavigationBarWith(title: String, andImage image: UIImage?, action: Selector?) {
-        let rightButton = UIBarButtonItem(image: image, style: .plain, target: self, action: action)
+        navigationItem.title = title
+//        let rightButton = UIBarButtonItem(image: image, style: .plain, target: self, action: action)
+        let rightButton = UIBarButtonItem(title: "+", style: .plain, target: self, action: action)
         navigationItem.rightBarButtonItem = rightButton
+        
+        
     }
 }
 
