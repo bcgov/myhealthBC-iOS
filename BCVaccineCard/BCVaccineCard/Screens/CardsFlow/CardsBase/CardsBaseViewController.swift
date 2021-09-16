@@ -44,6 +44,7 @@ class CardsBaseViewController: BaseViewController {
 // MARK: Navigation setup
 extension CardsBaseViewController {
     private func navSetup() {
+        // TODO: Create a plus icon and add it to xcassets
         self.navDelegate?.setNavigationBarWith(title: "My Cards", andImage: UIImage(named: "PlusIcon"), action: #selector(self.addCardButton))
     }
     
