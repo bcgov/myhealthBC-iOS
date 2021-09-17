@@ -155,7 +155,7 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
 
 // MARK: For Form Field Validation
 extension GatewayFormViewController {
-    // TODO: Regex form validation here
+    // TODO: Regex form validation here - seeing as we don't have to check dates due to picker, we just need to check if field is empty or not (should throw in a check to make sure it's a valid date though, just in case someone copy and pastes. For PHN, we know it will be number due to keypad, just need to check if digit count is 10 (after trimming white space and new lines). We should throw in number regex check though just in case someone copy pastes
 }
 
 
