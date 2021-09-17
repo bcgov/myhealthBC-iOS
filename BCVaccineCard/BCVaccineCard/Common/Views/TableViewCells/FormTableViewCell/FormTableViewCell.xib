@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,57 +17,28 @@
                 <rect key="frame" x="0.0" y="0.0" width="330" height="122"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dwG-t9-obC">
-                        <rect key="frame" x="0.0" y="15" width="330" height="22.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s5X-uI-Bza">
-                        <rect key="frame" x="0.0" y="49.5" width="330" height="43"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="43" id="QlN-f7-9JW"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                        <textInputTraits key="textInputTraits"/>
-                    </textField>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KDi-xn-Mg7">
-                        <rect key="frame" x="300" y="61" width="18" height="20"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="20" id="4aq-TO-hCs"/>
-                            <constraint firstAttribute="width" constant="18" id="MDi-b9-z4B"/>
-                        </constraints>
-                    </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpH-bh-XL7">
-                        <rect key="frame" x="0.0" y="97.5" width="330" height="14.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aon-sA-hlF" customClass="FormTextFieldView" customModule="BCVaccineCard" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="330" height="122"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="xpH-bh-XL7" firstAttribute="leading" secondItem="s5X-uI-Bza" secondAttribute="leading" id="3wz-3p-3sZ"/>
-                    <constraint firstItem="xpH-bh-XL7" firstAttribute="top" secondItem="s5X-uI-Bza" secondAttribute="bottom" constant="5" id="4KQ-zX-bwn"/>
-                    <constraint firstAttribute="trailing" secondItem="s5X-uI-Bza" secondAttribute="trailing" id="DSU-Tr-sOK"/>
-                    <constraint firstItem="s5X-uI-Bza" firstAttribute="top" secondItem="dwG-t9-obC" secondAttribute="bottom" constant="12" id="KKU-D8-xmy"/>
-                    <constraint firstAttribute="bottom" secondItem="xpH-bh-XL7" secondAttribute="bottom" constant="10" id="Kf1-rm-hyh"/>
-                    <constraint firstAttribute="trailing" secondItem="dwG-t9-obC" secondAttribute="trailing" id="OWX-aT-7RL"/>
-                    <constraint firstItem="s5X-uI-Bza" firstAttribute="trailing" secondItem="KDi-xn-Mg7" secondAttribute="trailing" constant="12" id="RdT-uv-YTv"/>
-                    <constraint firstItem="KDi-xn-Mg7" firstAttribute="centerY" secondItem="s5X-uI-Bza" secondAttribute="centerY" id="SqG-MR-fGx"/>
-                    <constraint firstItem="dwG-t9-obC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="XdN-cJ-fib"/>
-                    <constraint firstItem="xpH-bh-XL7" firstAttribute="trailing" secondItem="s5X-uI-Bza" secondAttribute="trailing" id="pF9-mf-I0y"/>
-                    <constraint firstItem="dwG-t9-obC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="uom-HH-YXo"/>
-                    <constraint firstItem="s5X-uI-Bza" firstAttribute="leading" secondItem="dwG-t9-obC" secondAttribute="leading" id="wy9-tk-GXC"/>
+                    <constraint firstAttribute="trailing" secondItem="Aon-sA-hlF" secondAttribute="trailing" id="a45-NU-tHh"/>
+                    <constraint firstItem="Aon-sA-hlF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="kSk-aG-yeF"/>
+                    <constraint firstAttribute="bottom" secondItem="Aon-sA-hlF" secondAttribute="bottom" id="qd7-JA-lwg"/>
+                    <constraint firstItem="Aon-sA-hlF" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="u1f-Nk-Hwf"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="formTextField" destination="s5X-uI-Bza" id="Ovt-1l-Uop"/>
-                <outlet property="formTextFieldErrorLabel" destination="xpH-bh-XL7" id="jHF-ug-kIN"/>
-                <outlet property="formTextFieldRightImageView" destination="KDi-xn-Mg7" id="3R6-Kl-cty"/>
-                <outlet property="formTextFieldTitleLabel" destination="dwG-t9-obC" id="s6q-93-ONf"/>
+                <outlet property="formTextFieldView" destination="Aon-sA-hlF" id="drX-Xs-7c3"/>
             </connections>
             <point key="canvasLocation" x="147.82608695652175" y="97.098214285714278"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

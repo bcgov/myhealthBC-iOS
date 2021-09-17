@@ -54,9 +54,9 @@ class GatewayFormViewController: UIViewController {
     private func setupDataSource() {
         dataSource = [
             GatewayFormData(type: .text(type: .plainText), cellStringData: Constants.Strings.MyCardFlow.Form.description),
-            GatewayFormData(type: .form(type: .personalHealthNumber), cellStringData: nil, isFormDataValid: false),
-            GatewayFormData(type: .form(type: .dateOfBirth), cellStringData: nil, isFormDataValid: false),
-            GatewayFormData(type: .form(type: .dateOfVaccination), cellStringData: nil, isFormDataValid: false),
+            GatewayFormData(type: .form(type: .personalHealthNumber), cellStringData: nil),
+            GatewayFormData(type: .form(type: .dateOfBirth), cellStringData: nil),
+            GatewayFormData(type: .form(type: .dateOfVaccination), cellStringData: nil),
             GatewayFormData(type: .text(type: .underlinedWithImage), cellStringData: Constants.Strings.MyCardFlow.Form.privacyStatement)
         ]
     }
@@ -89,7 +89,7 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
             return UITableViewCell()
         case .form(type: let type):
             if let cell = tableView.dequeueReusableCell(withIdentifier: "FormTableViewCell", for: indexPath) as? FormTableViewCell {
-                cell.configure(formType: type, delegateOwner: self, indexPath: indexPath)
+                cell.configure(formType: type, delegateOwner: self)
                 return cell
             }
             return UITableViewCell()
@@ -99,77 +99,45 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO: If cell is form data, then open keyboard on text field, otherwise, check if cell is clickable for text cell
         if let cell = tableView.cellForRow(at: indexPath) as? FormTableViewCell {
-            cell.openKeyboardAction()
+            cell.formTextFieldView.openKeyboardAction()
         }
     }
 }
 
 // MARK: Update data source
 extension GatewayFormViewController {
-    func updateDataSource(text: String?, indexPath: IndexPath, isDataValid: Bool) {
-        self.dataSource[indexPath.row].cellStringData = text
-        self.dataSource[indexPath.row].isFormDataValid = isDataValid
+    func updateDataSource(formField: FormTableViewCellField, text: String?) {
+        guard let index = getIndexInDataSource(formField: formField, dataSource: self.dataSource) else { return }
+        self.dataSource[index].cellStringData = text
         
     }
+    
+    private func getIndexInDataSource(formField: FormTableViewCellField, dataSource: [GatewayFormData]) -> Int? {
+        return dataSource.firstIndex { $0.type == .form(type: formField) }
+    }
 }
 
-extension GatewayFormViewController: FormTableViewCellDelegate {
-    func doneEditing(formField: FormTableViewCellField, indexPath: IndexPath, text: String?, isDataValid: Bool) {
-        // TODO: This is where we would show/resign proper responders
-        updateDataSource(text: text, indexPath: indexPath, isDataValid: isDataValid)
+// MARK: Custom Text Field Delegates
+extension GatewayFormViewController: FormTextFieldViewDelegate {
+    func resignFirstResponderUI(formField: FormTableViewCellField) {
+        self.view.endEditing(true)
     }
     
-    func textChanged(formField: FormTableViewCellField, text: String, indexPath: IndexPath) {
-        // NOT IMPLEMENTING THIS YET - Baby steps
+    func didFinishEditing(formField: FormTableViewCellField, text: String?) {
+        updateDataSource(formField: formField, text: text)
     }
     
+    func textFieldTextDidChange(formField: FormTableViewCellField, newText: String) {
+        updateDataSource(formField: formField, text: newText)
+    }
     
-//    func textFieldValidation() -> Bool {
-//        let validated = newString.count > 0
-//        switch textField {
-//        case phnTextField:
-//            return (dobTextField.text?.count ?? 0 > 0) && (dateOfVaxTextField.text?.count ?? 0 > 0) && validated
-//        case dobTextField:
-//            return (phnTextField.text?.count ?? 0 > 0) && (dateOfVaxTextField.text?.count ?? 0 > 0) && validated
-//        case dateOfVaxTextField:
-//            return (phnTextField.text?.count ?? 0 > 0) && (dobTextField.text?.count ?? 0 > 0) && validated
-//        default: return false
-//        }
-//    }
 }
 
-// MARK: For UITextFieldDelegate
-//extension GatewayFormViewController: UITextFieldDelegate {
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        let currentString: NSString = textField.text! as NSString
-//        let newString: String = currentString.replacingCharacters(in: range, with: string) as String
-//        let validated = textFieldValidation(textField: textField, newString: newString)
-//        enterButton.enabled = validated
-//        return true
-//    }
-//
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        switch textField {
-//        case phnTextField: dobTextField.becomeFirstResponder()
-//        case dobTextField: dateOfVaxTextField.becomeFirstResponder()
-//        default: textField.resignFirstResponder()
-//        }
-//        return true
-//    }
-//
-//    func textFieldValidation(textField: UITextField, newString: String) -> Bool {
-//        let validated = newString.count > 0
-//        switch textField {
-//        case phnTextField:
-//            return (dobTextField.text?.count ?? 0 > 0) && (dateOfVaxTextField.text?.count ?? 0 > 0) && validated
-//        case dobTextField:
-//            return (phnTextField.text?.count ?? 0 > 0) && (dateOfVaxTextField.text?.count ?? 0 > 0) && validated
-//        case dateOfVaxTextField:
-//            return (phnTextField.text?.count ?? 0 > 0) && (dobTextField.text?.count ?? 0 > 0) && validated
-//        default: return false
-//        }
-//    }
-//}
+// MARK: For Form Field Validation
+extension GatewayFormViewController {
+    // TODO: Regex form validation here
+}
+
 
 //// MARK: QR Vaccine Validation check
 //extension GatewayFormViewController {
@@ -206,7 +174,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             self.dismiss(animated: true, completion: nil)
         } else if type == .enter {
 //            checkForPHN(phnString: self.phnTextField.text ?? "")
-            // TODO: Check phn logic here
+            // TODO: Check phn logic here, then would pop back to base card screen
         }
     }
 }
