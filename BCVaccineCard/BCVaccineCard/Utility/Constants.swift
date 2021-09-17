@@ -71,6 +71,7 @@ struct Constants {
                 static let privacyStatement = "Privacy Statement"
                 static let cancelButtonTitle = "Cancel"
                 static let enterButtonTitle = "Enter"
+                static let nextText = "Next"
                 
             }
         }

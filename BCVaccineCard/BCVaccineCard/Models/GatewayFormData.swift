@@ -9,10 +9,17 @@ import UIKit
 
 struct GatewayFormData: Equatable {
     enum CellType: Equatable {
-        case text(type: TextCellType), form(type: FormTableViewCellField)
+        case text(type: TextCellType), form(type: FormTextFieldType)
     }
     
     let type: CellType
     var cellStringData: String?
+    
+    func isTextField() -> Bool {
+        switch type {
+        case .text: return false
+        case .form: return true
+        }
+    }
 }
 

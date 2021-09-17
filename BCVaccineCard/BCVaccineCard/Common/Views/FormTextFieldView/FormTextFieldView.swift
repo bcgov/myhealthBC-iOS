@@ -7,11 +7,11 @@
 
 import UIKit
 
-enum FormTableViewCellTextFieldType {
+enum FormTextFieldKeyboardStyle {
     case number, date
 }
 
-enum FormTableViewCellField {
+enum FormTextFieldType {
     case personalHealthNumber, dateOfBirth, dateOfVaccination
     
     var getFieldTitle: String {
@@ -38,7 +38,7 @@ enum FormTableViewCellField {
         }
     }
     
-    var getFieldType: FormTableViewCellTextFieldType {
+    var getFieldType: FormTextFieldKeyboardStyle {
         switch self {
         case .personalHealthNumber: return .number
         case .dateOfBirth: return .date
@@ -48,9 +48,10 @@ enum FormTableViewCellField {
 }
 
 protocol FormTextFieldViewDelegate: AnyObject {
-    func didFinishEditing(formField: FormTableViewCellField, text: String?)
-    func textFieldTextDidChange(formField: FormTableViewCellField, newText: String)
-    func resignFirstResponderUI(formField: FormTableViewCellField)
+    func didFinishEditing(formField: FormTextFieldType, text: String?)
+    func textFieldTextDidChange(formField: FormTextFieldType, newText: String)
+    func resignFirstResponderUI(formField: FormTextFieldType)
+    func goToNextFormTextField(formField: FormTextFieldType)
 }
 
 class FormTextFieldView: UIView {
@@ -62,7 +63,7 @@ class FormTextFieldView: UIView {
     @IBOutlet weak private var formTextFieldRightImageView: UIImageView!
     
     weak var delegate: FormTextFieldViewDelegate?
-    private var formField: FormTableViewCellField!
+    private var formField: FormTextFieldType!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -104,7 +105,7 @@ class FormTextFieldView: UIView {
         formTextFieldErrorLabel.isHidden = true
     }
     
-    func configure(formType: FormTableViewCellField, delegateOwner: UIViewController) {
+    func configure(formType: FormTextFieldType, delegateOwner: UIViewController) {
         self.delegate = delegateOwner as? FormTextFieldViewDelegate
         self.formField = formType
         formTextFieldRightImageView.isHidden = formType.getFieldType == .number
@@ -127,7 +128,7 @@ class FormTextFieldView: UIView {
 // MARK: Date picker logic
 extension FormTextFieldView {
     
-    private func createKeyboardForType(type: FormTableViewCellTextFieldType) {
+    private func createKeyboardForType(type: FormTextFieldKeyboardStyle) {
         switch type {
         case .number:
             formTextField.keyboardType = .numberPad
@@ -146,8 +147,11 @@ extension FormTextFieldView {
         // bar button 'done'
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
         
+        // bar button 'next
+        let nextButton = UIBarButtonItem(title: Constants.Strings.MyCardFlow.Form.nextText, style: .done, target: self, action: #selector(nextButtonTapped))
+        
         // add buttons to toolbar
-        toolbar.setItems([doneButton], animated: true)
+        toolbar.setItems([doneButton, nextButton], animated: true)
         
         // assign toolbar
         formTextField.inputAccessoryView = toolbar
@@ -169,6 +173,10 @@ extension FormTextFieldView {
         delegate?.resignFirstResponderUI(formField: self.formField)
     }
     
+    @objc func nextButtonTapped() {
+        delegate?.goToNextFormTextField(formField: self.formField)
+    }
+    
     @objc func datePickerChanged(datePicker: UIDatePicker) {
         adjustTextFieldWithDatePickerSpin(datePicker: datePicker)
     }
@@ -183,28 +191,40 @@ extension FormTextFieldView {
 // MARK: Basic text field logic
 extension FormTextFieldView: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print("CONNOR: SHOULD CHANGE CHAR CALLED")
         if formField == .personalHealthNumber {
             let currentString: NSString = textField.text! as NSString
             let newString: String = currentString.replacingCharacters(in: range, with: string) as String
-            print("CONNOR: SHOULD CHANGE CHAR CALLED FOR PHN")
             self.delegate?.textFieldTextDidChange(formField: self.formField, newText: newString)
         }
         return true
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("CONNOR: DID FINISH EDITING CALLED")
         self.delegate?.didFinishEditing(formField: self.formField, text: textField.text)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print("CONNOR: TEXT FIELD SHOULD RETURN CALLED")
         return true
     }
 }
 
 // MARK: TextField Validation Error Message Handling
 extension FormTextFieldView {
+    // TODO Here
     
+    
+    // This is called when we have a regex error
+//    private func adjustValidationError(error: String?) {
+//        self.formTextFieldErrorLabel.isHidden = error == nil
+//        self.formTextFieldErrorLabel.text = error
+//    }
+//
+//    private func regexCheck(text: String?) -> Bool {
+//        // TODO: Regex check here
+//        guard let text = text else { return false }
+//        // TODO: Apply regex to text
+//        var validationError: String? = nil
+//        adjustValidationError(error: validationError)
+//        return validationError == nil
+//    }
 }

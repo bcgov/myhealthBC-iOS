@@ -106,29 +106,49 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
 
 // MARK: Update data source
 extension GatewayFormViewController {
-    func updateDataSource(formField: FormTableViewCellField, text: String?) {
+    func updateDataSource(formField: FormTextFieldType, text: String?) {
         guard let index = getIndexInDataSource(formField: formField, dataSource: self.dataSource) else { return }
         self.dataSource[index].cellStringData = text
         
     }
     
-    private func getIndexInDataSource(formField: FormTableViewCellField, dataSource: [GatewayFormData]) -> Int? {
+    private func getIndexInDataSource(formField: FormTextFieldType, dataSource: [GatewayFormData]) -> Int? {
         return dataSource.firstIndex { $0.type == .form(type: formField) }
     }
 }
 
 // MARK: Custom Text Field Delegates
 extension GatewayFormViewController: FormTextFieldViewDelegate {
-    func resignFirstResponderUI(formField: FormTableViewCellField) {
+    func resignFirstResponderUI(formField: FormTextFieldType) {
         self.view.endEditing(true)
     }
     
-    func didFinishEditing(formField: FormTableViewCellField, text: String?) {
+    func goToNextFormTextField(formField: FormTextFieldType) {
+        goToNextTextField(formField: formField)
+    }
+    
+    func didFinishEditing(formField: FormTextFieldType, text: String?) {
         updateDataSource(formField: formField, text: text)
     }
     
-    func textFieldTextDidChange(formField: FormTableViewCellField, newText: String) {
+    func textFieldTextDidChange(formField: FormTextFieldType, newText: String) {
         updateDataSource(formField: formField, text: newText)
+    }
+    
+    private func goToNextTextField(formField: FormTextFieldType) {
+        guard let index = self.getIndexInDataSource(formField: formField, dataSource: self.dataSource), index < (dataSource.count - 1) else { return }
+        let newIndex = index + 1
+        let newIndexPath = IndexPath(row: newIndex, section: 0)
+        if dataSource[newIndex].isTextField(), let cell = self.tableView.cellForRow(at: newIndexPath) as? FormTableViewCell {
+            // Go to this cell
+            cell.formTextFieldView.openKeyboardAction()
+        } else if let firstIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: dataSource) {
+            // find first index of text field in data source (Note: This is hardcorded as PHN - if the order changes, then this will have to change too
+            let firstIndexPath = IndexPath(row: firstIndex, section: 0)
+            if let firstCell = self.tableView.cellForRow(at: firstIndexPath) as? FormTableViewCell {
+                firstCell.formTextFieldView.openKeyboardAction()
+            }
+        }
     }
     
 }
