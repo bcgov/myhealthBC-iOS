@@ -64,5 +64,12 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>BCSans-Bold.otf</string>
+		<string>BCSans-BoldItalic.otf</string>
+		<string>BCSans-Italic.otf</string>
+		<string>BCSans-Regular.otf</string>
+	</array>
 </dict>
 </plist>
