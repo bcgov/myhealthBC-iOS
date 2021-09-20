@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "finger-point@1x.png",
+      "filename" : "lock-alt@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "finger-point@2x.png",
+      "filename" : "lock-alt@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "finger-point@3x.png",
+      "filename" : "lock-alt@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
