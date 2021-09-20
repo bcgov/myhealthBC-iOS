@@ -424,7 +424,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="KpE-DL-QZC">
             <objects>
-                <tabBarController id="YHi-sk-2JH" sceneMemberID="viewController">
+                <tabBarController id="YHi-sk-2JH" customClass="TabBarController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="97X-fv-Hae">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -538,7 +538,7 @@
         <scene sceneID="8iI-MZ-k7t">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZK3-oA-dZG" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="My Cards" id="KIO-gm-Zyv"/>
+                    <tabBarItem key="tabBarItem" title="My Cards" image="my-cards-tab" selectedImage="my-cards-tab" id="KIO-gm-Zyv"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aSx-fh-mpj">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -569,11 +569,11 @@
             </objects>
             <point key="canvasLocation" x="3147.826086956522" y="-165.40178571428569"/>
         </scene>
-        <!--Setting-->
+        <!--Settings-->
         <scene sceneID="iCW-WW-7iV">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bp9-Lg-RvQ" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Setting" id="bqm-CU-u40"/>
+                    <tabBarItem key="tabBarItem" title="Settings" image="settings-tab" selectedImage="settings-tab" id="bqm-CU-u40"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Hjj-bN-0tM">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -592,6 +592,8 @@
     <resources>
         <image name="check-mark-circle" width="512" height="512"/>
         <image name="finger-point" width="10" height="12.5"/>
+        <image name="my-cards-tab" width="21.5" height="21"/>
+        <image name="settings-tab" width="23" height="24"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
