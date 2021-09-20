@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "BCVaccineValidator",
+        "repositoryURL": "https://github.com/FreshworksStudio/BCVaccineValidator",
+        "state": {
+          "branch": null,
+          "revision": "6906630da7d94a88083057fe0c33bb5ca24f736c",
+          "version": "1.0.2"
+        }
+      },
+      {
+        "package": "JOSESwift",
+        "repositoryURL": "https://github.com/airsidemobile/JOSESwift",
+        "state": {
+          "branch": null,
+          "revision": "10ed3b6736def7c26eb87135466b1cb46ea7e37f",
+          "version": "2.4.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

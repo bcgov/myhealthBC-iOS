@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 2912313A26F93FB900CF5F3B /* BCVaccineValidator */; };
 		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
 		7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67A26F12613006B9444 /* SceneDelegate.swift */; };
 		7944F68026F12613006B9444 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
@@ -142,6 +143,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,6 +547,9 @@
 			dependencies = (
 			);
 			name = BCVaccineCard;
+			packageProductDependencies = (
+				2912313A26F93FB900CF5F3B /* BCVaccineValidator */,
+			);
 			productName = BCVaccineCard;
 			productReference = 7944F67526F12613006B9444 /* BCVaccineCard.app */;
 			productType = "com.apple.product-type.application";
@@ -616,6 +621,9 @@
 				Base,
 			);
 			mainGroup = 7944F66C26F12613006B9444;
+			packageReferences = (
+				2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */,
+			);
 			productRefGroup = 7944F67626F12613006B9444 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1037,6 +1045,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/FreshworksStudio/BCVaccineValidator";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2912313A26F93FB900CF5F3B /* BCVaccineValidator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
+			productName = BCVaccineValidator;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */ = {
