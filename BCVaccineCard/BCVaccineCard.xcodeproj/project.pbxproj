@@ -386,7 +386,6 @@
 		7944F6E126F12C4E006B9444 /* VaccinePassportScreen */ = {
 			isa = PBXGroup;
 			children = (
-				7944F6E226F12C4E006B9444 /* ZoomedInPopUpVC */,
 				7944F6E426F12C4E006B9444 /* VaccinePassportVC.swift */,
 			);
 			path = VaccinePassportScreen;
@@ -429,6 +428,7 @@
 			isa = PBXGroup;
 			children = (
 				7944F6F426F30293006B9444 /* CardsBaseViewController.swift */,
+				7944F6E226F12C4E006B9444 /* ZoomedInPopUpVC */,
 			);
 			path = CardsBase;
 			sourceTree = "<group>";

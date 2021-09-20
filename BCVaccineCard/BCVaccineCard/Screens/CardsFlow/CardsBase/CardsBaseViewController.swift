@@ -125,6 +125,14 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard !self.inEditMode else { return }
+        guard self.expandedIndexRow != indexPath.row else {
+            // TODO: This will need to be refactored to fetch an image from data
+            let image = UIImage(named: dataSource[indexPath.row].imageName)
+            let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image)
+            self.present(vc, animated: true, completion: nil)
+            return
+        }
         let requestedExpandedIndex = indexPath
         let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
         self.expandedIndexRow = requestedExpandedIndex.row

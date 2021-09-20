@@ -315,7 +315,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nu1-yC-Spe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-361" y="-282"/>
+            <point key="canvasLocation" x="-3229" y="-360"/>
         </scene>
         <!--Cards Base View Controller-->
         <scene sceneID="wVL-dy-fwP">
@@ -399,14 +399,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KrC-SW-G2h" customClass="VaxQRZoomedInView" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="384" width="414" height="128"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KrC-SW-G2h" customClass="VaxQRZoomedInView" customModule="BCVaccineCard" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="69" width="414" height="758"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Va3-Ln-76Z"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="KrC-SW-G2h" firstAttribute="top" secondItem="Va3-Ln-76Z" secondAttribute="top" priority="250" constant="25" id="45u-9O-yr7"/>
                             <constraint firstItem="KrC-SW-G2h" firstAttribute="centerY" secondItem="0Cz-gd-hE4" secondAttribute="centerY" id="ON6-r4-mez"/>
                             <constraint firstItem="KrC-SW-G2h" firstAttribute="leading" secondItem="0Cz-gd-hE4" secondAttribute="leading" id="bQI-Fn-YRm"/>
                             <constraint firstAttribute="trailing" secondItem="KrC-SW-G2h" secondAttribute="trailing" id="wWh-OX-9vk"/>
@@ -418,7 +419,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z8F-fq-BvI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1239" y="440"/>
+            <point key="canvasLocation" x="133" y="560"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="KpE-DL-QZC">
@@ -531,7 +532,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8xg-sF-e2a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1238" y="-959"/>
+            <point key="canvasLocation" x="-3232" y="-1026"/>
         </scene>
         <!--My Cards-->
         <scene sceneID="8iI-MZ-k7t">
@@ -590,7 +591,7 @@
     </scenes>
     <resources>
         <image name="check-mark-circle" width="512" height="512"/>
-        <image name="finger-point" width="11" height="13"/>
+        <image name="finger-point" width="10" height="12.5"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

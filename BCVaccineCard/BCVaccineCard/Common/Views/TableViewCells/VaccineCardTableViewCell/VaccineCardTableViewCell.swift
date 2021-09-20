@@ -14,6 +14,7 @@ class VaccineCardTableViewCell: UITableViewCell {
     @IBOutlet weak var vaccineStatusLabel: UILabel!
     @IBOutlet weak var issuedOnLabel: UILabel!
     @IBOutlet weak var qrCodeImage: UIImageView!
+    @IBOutlet weak var tapToZoomInLabel: UILabel!
     @IBOutlet weak var statusBackgroundView: UIView!
     @IBOutlet weak var expandableBackgroundView: UIView!
 
