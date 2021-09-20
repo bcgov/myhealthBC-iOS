@@ -10,7 +10,7 @@ import UIKit
 class ZoomedInPopUpVC: UIViewController {
     
     class func constructZoomedInPopUpVC(withQRImage image: UIImage?) -> ZoomedInPopUpVC {
-        if let vc = Storyboard.main.instantiateViewController(withIdentifier: "ZoomedInPopUpVC") as? ZoomedInPopUpVC {
+        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: ZoomedInPopUpVC.self)) as? ZoomedInPopUpVC {
             vc.image = image
             vc.modalPresentationStyle = .overCurrentContext
             return vc

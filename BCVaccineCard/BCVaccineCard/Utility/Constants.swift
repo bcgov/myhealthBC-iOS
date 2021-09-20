@@ -39,8 +39,18 @@ struct Constants {
             static let settings = "Settings"
         }
         
+        struct ButtonTitles {
+            static let cancel = "Cancel"
+            static let enter = "Enter"
+            static let done = "Done"
+            static let saveACopy = "Save A Copy"
+            static let close = "Close"
+            static let manageCards = "Manage Cards"
+            static let addCard = "+ Add Card"
+        }
+        
         struct MyCardFlow {
-            static let navHeader = "My Card"
+            static let navHeader = "My Cards"
             
             struct NoCards {
                 static let buttonTitle = "Add Card"
@@ -52,7 +62,10 @@ struct Constants {
                 static let doneButtonTitle = "Done"
                 static let fullyVaccinated = "VACCINATED"
                 static let partiallyVaccinated = "PARTIALLY VACCINATED"
-                static let issuedOn = "Issued on"
+                static let noRecordFound = "NO RECORD FOUND"
+                static let issuedOn = "Issued on "
+                static let tapToZoomIn = "Tap to zoom in"
+                static let presentForScanning = "PresentForScanning"
             }
             
             struct QRMethodSelection {

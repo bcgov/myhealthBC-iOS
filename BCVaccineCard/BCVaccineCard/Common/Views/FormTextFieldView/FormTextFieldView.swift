@@ -80,7 +80,7 @@ class FormTextFieldView: UIView {
     }
     
     private func commonInit() {
-        Bundle.main.loadNibNamed("FormTextFieldView", owner: self, options: nil)
+        Bundle.main.loadNibNamed(FormTextFieldView.getName, owner: self, options: nil)
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]

@@ -9,11 +9,16 @@ import UIKit
 
 class NoCardsTableViewCell: UITableViewCell {
     
+    @IBOutlet weak private var noCardsLabel: UILabel!
     @IBOutlet weak private var addButton: AppStyleButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        setup()
+    }
+    
+    private func setup() {
+        noCardsLabel.text = Constants.Strings.MyCardFlow.NoCards.description
     }
     
     func configure(withOwner vc: UIViewController) {

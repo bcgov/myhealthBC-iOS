@@ -10,7 +10,7 @@ import UIKit
 class GatewayFormViewController: UIViewController {
     
     class func constructGatewayFormViewController() -> GatewayFormViewController {
-        if let vc = Storyboard.main.instantiateViewController(withIdentifier: "GatewayFormViewController") as? GatewayFormViewController {
+        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
             return vc
         }
         return GatewayFormViewController()
@@ -66,8 +66,8 @@ class GatewayFormViewController: UIViewController {
 // MARK: Table View Logic
 extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
-        tableView.register(UINib.init(nibName: "TextTableViewCell", bundle: .main), forCellReuseIdentifier: "TextTableViewCell")
-        tableView.register(UINib.init(nibName: "FormTableViewCell", bundle: .main), forCellReuseIdentifier: "FormTableViewCell")
+        tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
+        tableView.register(UINib.init(nibName: FormTableViewCell.getName, bundle: .main), forCellReuseIdentifier: FormTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         tableView.delegate = self
@@ -82,13 +82,13 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
         let data = dataSource[indexPath.row]
         switch data.type {
         case .text(type: let type):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "TextTableViewCell", for: indexPath) as? TextTableViewCell, let text = data.cellStringData {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell, let text = data.cellStringData {
                 cell.configure(forType: type, text: text)
                 return cell
             }
             return UITableViewCell()
         case .form(type: let type):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "FormTableViewCell", for: indexPath) as? FormTableViewCell {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: FormTableViewCell.getName, for: indexPath) as? FormTableViewCell {
                 cell.configure(formType: type, delegateOwner: self)
                 return cell
             }

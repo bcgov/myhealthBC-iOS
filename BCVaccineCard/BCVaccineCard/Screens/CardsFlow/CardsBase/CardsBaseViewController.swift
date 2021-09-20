@@ -44,7 +44,7 @@ class CardsBaseViewController: BaseViewController {
 // MARK: Navigation setup
 extension CardsBaseViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: "My Cards", andImage: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton))
+        self.navDelegate?.setNavigationBarWith(title: Constants.Strings.MyCardFlow.navHeader, andImage: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton))
     }
     
     @objc private func addCardButton() {
@@ -96,8 +96,8 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
 // MARK: Table View Logic
 extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
-        tableView.register(UINib.init(nibName: "VaccineCardTableViewCell", bundle: .main), forCellReuseIdentifier: "VaccineCardTableViewCell")
-        tableView.register(UINib.init(nibName: "NoCardsTableViewCell", bundle: .main), forCellReuseIdentifier: "NoCardsTableViewCell")
+        tableView.register(UINib.init(nibName: VaccineCardTableViewCell.getName, bundle: .main), forCellReuseIdentifier: VaccineCardTableViewCell.getName)
+        tableView.register(UINib.init(nibName: NoCardsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: NoCardsTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 330
         tableView.delegate = self
@@ -110,13 +110,13 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard !dataSource.isEmpty else {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "NoCardsTableViewCell", for: indexPath) as? NoCardsTableViewCell {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: NoCardsTableViewCell.getName, for: indexPath) as? NoCardsTableViewCell {
                 cell.configure(withOwner: self)
                 return cell
             }
             return UITableViewCell()
         }
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "VaccineCardTableViewCell", for: indexPath) as? VaccineCardTableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
             let expanded = indexPath.row == expandedIndexRow && !inEditMode
             cell.configure(model: dataSource[indexPath.row], expanded: expanded)
             return cell

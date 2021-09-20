@@ -17,22 +17,24 @@ class VaccineCardTableViewCell: UITableViewCell {
     @IBOutlet weak var tapToZoomInLabel: UILabel!
     @IBOutlet weak var statusBackgroundView: UIView!
     @IBOutlet weak var expandableBackgroundView: UIView!
+    
+    // TODO: Will need this information from metadata
+    private let placeholderDate = "September-09-2012, 14:27"
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        setup()
     }
 
-//    override func setSelected(_ selected: Bool, animated: Bool) {
-//        super.setSelected(selected, animated: animated)
-//
-//        // Configure the view for the selected state
-//    }
+    private func setup() {
+        tapToZoomInLabel.text = Constants.Strings.MyCardFlow.HasCards.tapToZoomIn
+    }
     
     func configure(model: VaccinePassportModel, expanded: Bool) {
         nameLabel.text = model.name
         checkmarkImageView.isHidden = model.status != .fully
         vaccineStatusLabel.text = model.status.getTitle
+        issuedOnLabel.text = Constants.Strings.MyCardFlow.HasCards.issuedOn + placeholderDate
         statusBackgroundView.backgroundColor = model.status.getColor
         expandableBackgroundView.backgroundColor = model.status.getColor
         qrCodeImage.image = UIImage(named: model.imageName)
