@@ -39,7 +39,6 @@ class QRRetrievalMethodViewController: BaseViewController {
 // MARK: Navigation setup
 extension QRRetrievalMethodViewController {
     private func navSetup() {
-        // TODO: Get actual icon from figma - ask denise - need close icon
         self.navDelegate?.setNavigationBarWith(title: "My Cards", andImage: UIImage(named: "close-icon"), action: #selector(self.closeButtonAction))
     }
     

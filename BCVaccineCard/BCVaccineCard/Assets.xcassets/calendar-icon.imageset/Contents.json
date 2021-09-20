@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "ic_insert_invitation_24px.png",
+      "filename" : "calendar-icon@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "calendar-icon@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "calendar-icon@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

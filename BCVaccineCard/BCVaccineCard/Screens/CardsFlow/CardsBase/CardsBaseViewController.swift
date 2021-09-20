@@ -44,8 +44,7 @@ class CardsBaseViewController: BaseViewController {
 // MARK: Navigation setup
 extension CardsBaseViewController {
     private func navSetup() {
-        // TODO: Get actual icon from figma - ask denise
-        self.navDelegate?.setNavigationBarWith(title: "My Cards", andImage: UIImage(named: "plus-icon"), action: #selector(self.addCardButton))
+        self.navDelegate?.setNavigationBarWith(title: "My Cards", andImage: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton))
     }
     
     @objc private func addCardButton() {

@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "ic info outline 24px.png",
+      "filename" : "ic info outline 24px@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "ic info outline 24px@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "ic info outline 24px@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

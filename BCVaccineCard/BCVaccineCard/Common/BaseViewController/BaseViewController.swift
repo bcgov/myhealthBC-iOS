@@ -45,11 +45,8 @@ extension BaseViewController {
     
     func setNavigationBarWith(title: String, andImage image: UIImage?, action: Selector?) {
         navigationItem.title = title
-//        let rightButton = UIBarButtonItem(image: image, style: .plain, target: self, action: action)
-        let rightButton = UIBarButtonItem(title: "+", style: .plain, target: self, action: action)
+        let rightButton = UIBarButtonItem(image: image, style: .plain, target: self, action: action)
         navigationItem.rightBarButtonItem = rightButton
-        
-        
     }
 }
 
