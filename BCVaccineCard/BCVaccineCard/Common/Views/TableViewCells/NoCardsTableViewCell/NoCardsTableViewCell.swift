@@ -15,12 +15,6 @@ class NoCardsTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
     
     func configure(withOwner vc: UIViewController) {
         addButton.configure(withStyle: .blue, buttonType: .addCard, delegateOwner: vc, enabled: true)

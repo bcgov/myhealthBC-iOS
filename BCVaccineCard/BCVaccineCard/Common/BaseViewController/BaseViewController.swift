@@ -45,6 +45,7 @@ extension BaseViewController {
     
     func setNavigationBarWith(title: String, andImage image: UIImage?, action: Selector?) {
         navigationItem.title = title
+        guard let action = action else { return }
         let rightButton = UIBarButtonItem(image: image, style: .plain, target: self, action: action)
         navigationItem.rightBarButtonItem = rightButton
     }

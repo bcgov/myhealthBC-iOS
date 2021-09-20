@@ -126,6 +126,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard !self.inEditMode else { return }
+        guard let _ = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
         guard self.expandedIndexRow != indexPath.row else {
             // TODO: This will need to be refactored to fetch an image from data
             let image = UIImage(named: dataSource[indexPath.row].imageName)
@@ -152,7 +153,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             print("Unlink button is clicked")
-            // TODO: Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
+            // TODO: Add Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
         }
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
@@ -163,7 +164,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             print("Unlink button is clicked")
-            // TODO: Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
+            // TODO: Add Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
         }
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white

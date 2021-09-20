@@ -45,6 +45,7 @@
                 <outlet property="imageViewWidthConstraint" destination="0pz-5Q-rJ6" id="rNF-e1-C3F"/>
                 <outlet property="leadingImageView" destination="P53-p4-1Sg" id="cgh-0v-Ubu"/>
                 <outlet property="textLabelLeadingConstraint" destination="s4B-fi-YF1" id="gj3-tp-7xe"/>
+                <outlet property="textLabelTrailingConstraint" destination="xwZ-oo-ch7" id="bK2-bh-7OO"/>
             </connections>
             <point key="canvasLocation" x="139" y="135"/>
         </tableViewCell>

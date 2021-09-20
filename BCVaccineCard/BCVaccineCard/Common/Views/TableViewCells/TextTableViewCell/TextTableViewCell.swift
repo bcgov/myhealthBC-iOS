@@ -24,14 +24,17 @@ class TextTableViewCell: UITableViewCell {
     @IBOutlet weak private var leadingImageView: UIImageView!
     @IBOutlet weak private var imageViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak private var textLabelLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var textLabelTrailingConstraint: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
-    func configure(forType type: TextCellType, text: String) {
+    func configure(forType type: TextCellType, text: String, labelSpacingAdjustment: CGFloat? = nil) {
         formatCell(type: type, text: text)
+        guard let constant = labelSpacingAdjustment else { return }
+        adjustLabelSpacing(by: constant)
         
     }
     
@@ -53,6 +56,11 @@ class TextTableViewCell: UITableViewCell {
         let underlineAttributedString = NSAttributedString(string: text, attributes: underlineAttribute)
         // TODO: Add font and colour to the attributed string
         cellTextLabel.attributedText = underlineAttributedString
+    }
+    
+    private func adjustLabelSpacing(by constant: CGFloat) {
+        textLabelLeadingConstraint.constant = constant
+        textLabelTrailingConstraint.constant = constant
     }
     
 }
