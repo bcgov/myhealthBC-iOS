@@ -95,10 +95,11 @@ class FormTextFieldView: UIView {
     }
     
     private func setupUI() {
-        // TODO: Setup label fonts and colors here
         formTextField.textColor = AppColours.textBlack
         formTextFieldTitleLabel.textColor = AppColours.textBlack
+        formTextFieldTitleLabel.font = UIFont.bcSansRegularWithSize(size: 16)
         formTextFieldErrorLabel.textColor = AppColours.appRed
+        formTextFieldErrorLabel.font = UIFont.bcSansItalicWithSize(size: 12)
     }
     
     private func baseSetup() {

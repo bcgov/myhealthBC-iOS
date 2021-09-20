@@ -7,10 +7,6 @@
 
 import UIKit
 
-enum BarButtonType {
-    case none, back, search, edit, done, close, clearAll, viewOptions
-}
-
 protocol NavigationSetupProtocol: AnyObject {
     func setNavigationBarWith(title: String, andImage image: UIImage?, action: Selector?)
 }

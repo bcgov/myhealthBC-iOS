@@ -83,7 +83,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         switch data {
         case .text(text: let text):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .plainText, text: text)
+                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 16))
                 return cell
             }
         case .method(type: let type):

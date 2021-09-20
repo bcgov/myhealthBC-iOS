@@ -83,7 +83,7 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
         switch data.type {
         case .text(type: let type):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell, let text = data.cellStringData {
-                cell.configure(forType: type, text: text)
+                cell.configure(forType: type, text: text, withFont: UIFont.bcSansRegularWithSize(size: 16))
                 return cell
             }
             return UITableViewCell()

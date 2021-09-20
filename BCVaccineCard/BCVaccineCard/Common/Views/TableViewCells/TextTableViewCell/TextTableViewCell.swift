@@ -31,31 +31,35 @@ class TextTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    func configure(forType type: TextCellType, text: String, labelSpacingAdjustment: CGFloat? = nil) {
-        formatCell(type: type, text: text)
+    func configure(forType type: TextCellType, text: String, withFont font: UIFont, labelSpacingAdjustment: CGFloat? = nil) {
+        formatCell(type: type, text: text, font: font)
         guard let constant = labelSpacingAdjustment else { return }
         adjustLabelSpacing(by: constant)
         
     }
     
-    private func formatCell(type: TextCellType, text: String) {
+    private func formatCell(type: TextCellType, text: String, font: UIFont) {
         leadingImageView.isHidden = type == .plainText
         imageViewWidthConstraint.constant = type == .plainText ? 0 : 14
         textLabelLeadingConstraint.constant = type == .plainText ? 0 : 3
         if type == .underlinedWithImage {
-            formatUnderlinedText(text: text)
+            formatUnderlinedText(text: text, font: font)
             leadingImageView.image = type.getImage
         } else {
             cellTextLabel.text = text
-            // TODO: Set font and colour here
+            cellTextLabel.font = font
+            cellTextLabel.textColor = AppColours.textBlack
         }
     }
     
-    private func formatUnderlinedText(text: String) {
-        let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
-        let underlineAttributedString = NSAttributedString(string: text, attributes: underlineAttribute)
-        // TODO: Add font and colour to the attributed string
-        cellTextLabel.attributedText = underlineAttributedString
+    private func formatUnderlinedText(text: String, font: UIFont) {
+        let attributes: [NSAttributedString.Key : Any] = [
+            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue,
+            NSAttributedString.Key.foregroundColor: AppColours.appBlue,
+            NSAttributedString.Key.font: font
+        ]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        cellTextLabel.attributedText = attributedString
     }
     
     private func adjustLabelSpacing(by constant: CGFloat) {

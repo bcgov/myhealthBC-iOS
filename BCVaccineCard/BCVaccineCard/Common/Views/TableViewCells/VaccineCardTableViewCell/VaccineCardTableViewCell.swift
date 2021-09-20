@@ -27,6 +27,14 @@ class VaccineCardTableViewCell: UITableViewCell {
     }
 
     private func setup() {
+        nameLabel.textColor = .white
+        nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
+        vaccineStatusLabel.textColor = .white
+        vaccineStatusLabel.font = UIFont.bcSansRegularWithSize(size: 18)
+        issuedOnLabel.textColor = .white
+        issuedOnLabel.font = UIFont.bcSansRegularWithSize(size: 11)
+        tapToZoomInLabel.textColor = .white
+        tapToZoomInLabel.font = UIFont.bcSansBoldWithSize(size: 12)
         tapToZoomInLabel.text = Constants.Strings.MyCardFlow.HasCards.tapToZoomIn
     }
     

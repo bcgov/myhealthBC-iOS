@@ -87,6 +87,7 @@ class AppStyleButton: UIView {
         contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
         contentView.layer.shadowOpacity = 0.05
         contentView.layer.shadowRadius = 10.0
+        roundedButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 18)
     }
     
     @IBAction func buttonTappedAction(_ sender: UIButton) {

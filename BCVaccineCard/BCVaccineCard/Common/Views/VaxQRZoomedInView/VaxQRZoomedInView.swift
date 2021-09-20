@@ -41,6 +41,8 @@ class VaxQRZoomedInView: UIView {
         contentView.layer.cornerRadius = 12
         contentView.layer.masksToBounds = true
         presentForScanningLabel.text = Constants.Strings.MyCardFlow.HasCards.presentForScanning
+        presentForScanningLabel.textColor = AppColours.appBlue
+        presentForScanningLabel.font = UIFont.bcSansBoldWithSize(size: 20)
     }
     
     func configure(qrImage: UIImage?, closeButtonDelegateOwner: UIViewController) {

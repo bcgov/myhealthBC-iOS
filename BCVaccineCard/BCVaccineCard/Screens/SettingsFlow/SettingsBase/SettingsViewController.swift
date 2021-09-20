@@ -65,7 +65,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         switch cellType {
         case .text(text: let text):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .plainText, text: text, labelSpacingAdjustment: 36)
+                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 14), labelSpacingAdjustment: 36)
                 return cell
             }
         case .setting(text: let text, image: let image):

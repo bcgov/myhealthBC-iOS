@@ -49,6 +49,7 @@ class QRSelectionTableViewCell: UITableViewCell {
     private func setup() {
         roundedView.layer.cornerRadius = 4.0
         roundedView.layer.masksToBounds = true
+        optionTitleLabel.font = UIFont.bcSansRegularWithSize(size: 16)
     }
     
     func configure(method: QRRetrievalMethod, delegateOwner owner: UIViewController) {
