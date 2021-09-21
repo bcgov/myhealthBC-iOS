@@ -8,10 +8,11 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VaxQRZoomedInView" customModule="ClientVaxPass_POC" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VaxQRZoomedInView" customModule="BCVaccineCard" customModuleProvider="target">
             <connections>
                 <outlet property="closeButton" destination="hl5-F0-eKx" id="fIo-0V-9PG"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="mV3-gQ-52j"/>
+                <outlet property="presentForScanningLabel" destination="Q8c-dR-AVZ" id="Vc0-VW-ltW"/>
                 <outlet property="qrCodeZoomedInImageView" destination="Qmi-DM-LaH" id="GfE-z0-lbb"/>
             </connections>
         </placeholder>
@@ -32,7 +33,7 @@
                         <constraint firstAttribute="width" secondItem="Qmi-DM-LaH" secondAttribute="height" multiplier="1:1" id="0k3-y0-Jjp"/>
                     </constraints>
                 </imageView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hl5-F0-eKx" customClass="AppStyleButton" customModule="ClientVaxPass_POC" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hl5-F0-eKx" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
                     <rect key="frame" x="122.5" y="524" width="135" height="50"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>

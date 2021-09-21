@@ -26,12 +26,6 @@
 		7944F6D626F12C00006B9444 /* AlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6C726F12C00006B9444 /* AlertVC.swift */; };
 		7944F6D726F12C00006B9444 /* VaxQRZoomedInView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6C926F12C00006B9444 /* VaxQRZoomedInView.xib */; };
 		7944F6D826F12C00006B9444 /* VaxQRZoomedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6CA26F12C00006B9444 /* VaxQRZoomedInView.swift */; };
-		7944F6D926F12C00006B9444 /* PassportCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6CC26F12C00006B9444 /* PassportCollectionCell.swift */; };
-		7944F6DA26F12C00006B9444 /* PassportCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6CD26F12C00006B9444 /* PassportCollectionCell.xib */; };
-		7944F6DB26F12C00006B9444 /* ShadowCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6CF26F12C00006B9444 /* ShadowCardView.swift */; };
-		7944F6DC26F12C00006B9444 /* ShadowCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6D026F12C00006B9444 /* ShadowCardView.xib */; };
-		7944F6DD26F12C00006B9444 /* NavigationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6D226F12C00006B9444 /* NavigationHeaderView.swift */; };
-		7944F6DE26F12C00006B9444 /* NavigationHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6D326F12C00006B9444 /* NavigationHeaderView.xib */; };
 		7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */; };
 		7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E326F12C4E006B9444 /* ZoomedInPopUpVC.swift */; };
 		7944F6F526F30293006B9444 /* CardsBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6F426F30293006B9444 /* CardsBaseViewController.swift */; };
@@ -63,6 +57,7 @@
 		7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74E26F9145600EEF510 /* BCSans-BoldItalic.otf */; };
 		7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74F26F9145600EEF510 /* BCSans-Italic.otf */; };
 		7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75526F9155700EEF510 /* UIFont+Ext.swift */; };
+		7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
 		9546C28739E626D7D7A60896 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835B02C2C4FA0862B326DDC5 /* Pods_BCVaccineCardTests.framework */; };
 		9DAF232264AA1CF2B55907A2 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05EB7652EC6BE3F7ECAA70D /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */; };
 		FFC4DD0E1F01F7FB7EEF1E76 /* Pods_BCVaccineCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBD04D2372996911897ACE5 /* Pods_BCVaccineCard.framework */; };
@@ -114,12 +109,6 @@
 		7944F6C726F12C00006B9444 /* AlertVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertVC.swift; sourceTree = "<group>"; };
 		7944F6C926F12C00006B9444 /* VaxQRZoomedInView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VaxQRZoomedInView.xib; sourceTree = "<group>"; };
 		7944F6CA26F12C00006B9444 /* VaxQRZoomedInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaxQRZoomedInView.swift; sourceTree = "<group>"; };
-		7944F6CC26F12C00006B9444 /* PassportCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PassportCollectionCell.swift; sourceTree = "<group>"; };
-		7944F6CD26F12C00006B9444 /* PassportCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PassportCollectionCell.xib; sourceTree = "<group>"; };
-		7944F6CF26F12C00006B9444 /* ShadowCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowCardView.swift; sourceTree = "<group>"; };
-		7944F6D026F12C00006B9444 /* ShadowCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShadowCardView.xib; sourceTree = "<group>"; };
-		7944F6D226F12C00006B9444 /* NavigationHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationHeaderView.swift; sourceTree = "<group>"; };
-		7944F6D326F12C00006B9444 /* NavigationHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NavigationHeaderView.xib; sourceTree = "<group>"; };
 		7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatewayFormViewController.swift; sourceTree = "<group>"; };
 		7944F6E326F12C4E006B9444 /* ZoomedInPopUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomedInPopUpVC.swift; sourceTree = "<group>"; };
 		7944F6F426F30293006B9444 /* CardsBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardsBaseViewController.swift; sourceTree = "<group>"; };
@@ -151,6 +140,7 @@
 		7967E74E26F9145600EEF510 /* BCSans-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BCSans-BoldItalic.otf"; sourceTree = "<group>"; };
 		7967E74F26F9145600EEF510 /* BCSans-Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BCSans-Italic.otf"; sourceTree = "<group>"; };
 		7967E75526F9155700EEF510 /* UIFont+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Ext.swift"; sourceTree = "<group>"; };
+		7967E75926F930E200EEF510 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		835B02C2C4FA0862B326DDC5 /* Pods_BCVaccineCardTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCardTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A05EB7652EC6BE3F7ECAA70D /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_BCVaccineCardUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9FD1E568D657877F1A46EDF /* Pods-BCVaccineCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard.release.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard.release.xcconfig"; sourceTree = "<group>"; };
@@ -320,6 +310,7 @@
 				7944F6F926F30413006B9444 /* UINavigationItem+Ext.swift */,
 				7967E73726F502E800EEF510 /* Date+Ext.swift */,
 				7967E75526F9155700EEF510 /* UIFont+Ext.swift */,
+				7967E75926F930E200EEF510 /* UIView+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -340,9 +331,6 @@
 				7944F6C326F12C00006B9444 /* AppStyleButton */,
 				7944F6C626F12C00006B9444 /* AlertVC */,
 				7944F6C826F12C00006B9444 /* VaxQRZoomedInView */,
-				7944F6CB26F12C00006B9444 /* PassportCollectionCell */,
-				7944F6CE26F12C00006B9444 /* ShadowCardView */,
-				7944F6D126F12C00006B9444 /* NavigationHeaderView */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -371,33 +359,6 @@
 				7944F6CA26F12C00006B9444 /* VaxQRZoomedInView.swift */,
 			);
 			path = VaxQRZoomedInView;
-			sourceTree = "<group>";
-		};
-		7944F6CB26F12C00006B9444 /* PassportCollectionCell */ = {
-			isa = PBXGroup;
-			children = (
-				7944F6CC26F12C00006B9444 /* PassportCollectionCell.swift */,
-				7944F6CD26F12C00006B9444 /* PassportCollectionCell.xib */,
-			);
-			path = PassportCollectionCell;
-			sourceTree = "<group>";
-		};
-		7944F6CE26F12C00006B9444 /* ShadowCardView */ = {
-			isa = PBXGroup;
-			children = (
-				7944F6CF26F12C00006B9444 /* ShadowCardView.swift */,
-				7944F6D026F12C00006B9444 /* ShadowCardView.xib */,
-			);
-			path = ShadowCardView;
-			sourceTree = "<group>";
-		};
-		7944F6D126F12C00006B9444 /* NavigationHeaderView */ = {
-			isa = PBXGroup;
-			children = (
-				7944F6D226F12C00006B9444 /* NavigationHeaderView.swift */,
-				7944F6D326F12C00006B9444 /* NavigationHeaderView.xib */,
-			);
-			path = NavigationHeaderView;
 			sourceTree = "<group>";
 		};
 		7944F6E226F12C4E006B9444 /* ZoomedInPopUpVC */ = {
@@ -712,14 +673,11 @@
 				7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */,
 				7967E74826F9071A00EEF510 /* SettingsTableViewCell.xib in Resources */,
 				7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */,
-				7944F6DC26F12C00006B9444 /* ShadowCardView.xib in Resources */,
 				7944F70026F3141A006B9444 /* VaccineCardTableViewCell.xib in Resources */,
 				7944F70526F31451006B9444 /* NoCardsTableViewCell.xib in Resources */,
 				7967E75126F9145700EEF510 /* BCSans-Bold.otf in Resources */,
 				7944F68526F1261B006B9444 /* Assets.xcassets in Resources */,
-				7944F6DA26F12C00006B9444 /* PassportCollectionCell.xib in Resources */,
 				7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */,
-				7944F6DE26F12C00006B9444 /* NavigationHeaderView.xib in Resources */,
 				7944F6D726F12C00006B9444 /* VaxQRZoomedInView.xib in Resources */,
 				7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
@@ -818,6 +776,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */,
 				7944F6BE26F12BD5006B9444 /* VaccinePassportModel.swift in Sources */,
 				7967E73D26F536AF00EEF510 /* FormTextFieldView.swift in Sources */,
 				7944F6B426F12BA2006B9444 /* Storyboard.swift in Sources */,
@@ -826,15 +785,12 @@
 				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
 				7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */,
-				7944F6D926F12C00006B9444 /* PassportCollectionCell.swift in Sources */,
-				7944F6DB26F12C00006B9444 /* ShadowCardView.swift in Sources */,
 				7944F70B26F39128006B9444 /* SettingsViewController.swift in Sources */,
 				7944F6F526F30293006B9444 /* CardsBaseViewController.swift in Sources */,
 				7944F6D526F12C00006B9444 /* AppStyleButton.swift in Sources */,
 				7944F6FA26F30413006B9444 /* UINavigationItem+Ext.swift in Sources */,
 				7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */,
 				7944F6BB26F12BC3006B9444 /* UIButton+EXT.swift in Sources */,
-				7944F6DD26F12C00006B9444 /* NavigationHeaderView.swift in Sources */,
 				7967E73A26F517F600EEF510 /* GatewayFormData.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */,

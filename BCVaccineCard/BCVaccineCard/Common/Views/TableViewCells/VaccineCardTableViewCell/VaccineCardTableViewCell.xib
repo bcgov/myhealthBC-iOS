@@ -46,7 +46,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="HDy-H0-AHt">
                                         <rect key="frame" x="86" y="13" width="148" height="24"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check-mark-circle" translatesAutoresizingMaskIntoConstraints="NO" id="lvd-T8-40n">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check-mark" translatesAutoresizingMaskIntoConstraints="NO" id="lvd-T8-40n">
                                                 <rect key="frame" x="0.0" y="0.0" width="24" height="24"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="24" id="Lw8-b8-fc7"/>
@@ -146,7 +146,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="check-mark-circle" width="512" height="512"/>
+        <image name="check-mark" width="24" height="24"/>
         <image name="finger-point" width="10" height="12.5"/>
     </resources>
 </document>

@@ -24,7 +24,7 @@ enum FormTextFieldType {
     
     var getPlaceholderText: String {
         switch self {
-        case .personalHealthNumber: return "973 7364 347"
+        case .personalHealthNumber: return "9737 364 347"
         case .dateOfBirth: return "1967-01-21"
         case .dateOfVaccination: return "2021-01-02"
         }
@@ -80,7 +80,7 @@ class FormTextFieldView: UIView {
     }
     
     private func commonInit() {
-        Bundle.main.loadNibNamed("FormTextFieldView", owner: self, options: nil)
+        Bundle.main.loadNibNamed(FormTextFieldView.getName, owner: self, options: nil)
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -95,10 +95,11 @@ class FormTextFieldView: UIView {
     }
     
     private func setupUI() {
-        // TODO: Setup label fonts and colors here
         formTextField.textColor = AppColours.textBlack
         formTextFieldTitleLabel.textColor = AppColours.textBlack
+        formTextFieldTitleLabel.font = UIFont.bcSansRegularWithSize(size: 16)
         formTextFieldErrorLabel.textColor = AppColours.appRed
+        formTextFieldErrorLabel.font = UIFont.bcSansItalicWithSize(size: 12)
     }
     
     private func baseSetup() {
@@ -192,9 +193,19 @@ extension FormTextFieldView {
 extension FormTextFieldView: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if formField == .personalHealthNumber {
-            let currentString: NSString = textField.text! as NSString
-            let newString: String = currentString.replacingCharacters(in: range, with: string) as String
+//            let currentString: NSString = textField.text! as NSString
+//            let newString: String = currentString.replacingCharacters(in: range, with: string) as String
+//            self.delegate?.textFieldTextDidChange(formField: self.formField, newText: newString)
+            var fullString = textField.text ?? ""
+                fullString.append(string)
+                if range.length == 1 {
+                    textField.text = format(phn: fullString, shouldRemoveLastDigit: true)
+                } else {
+                    textField.text = format(phn: fullString)
+                }
+            let newString = textField.text?.trimWhiteSpacesAndNewLines ?? ""
             self.delegate?.textFieldTextDidChange(formField: self.formField, newText: newString)
+                return false
         }
         return true
     }
@@ -205,6 +216,39 @@ extension FormTextFieldView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return true
+    }
+}
+
+// MARK: Formatting for UITextField PHN
+extension FormTextFieldView {
+    func format(phn: String, shouldRemoveLastDigit: Bool = false) -> String {
+        guard !phn.isEmpty else { return "" }
+        guard let regex = try? NSRegularExpression(pattern: "[\\s-\\(\\)]", options: .caseInsensitive) else { return "" }
+        let r = NSString(string: phn).range(of: phn)
+        var number = regex.stringByReplacingMatches(in: phn, options: .init(rawValue: 0), range: r, withTemplate: "")
+
+        if number.count > 10 {
+            let tenthDigitIndex = number.index(number.startIndex, offsetBy: 10)
+            number = String(number[number.startIndex..<tenthDigitIndex])
+        }
+
+        if shouldRemoveLastDigit {
+            let end = number.index(number.startIndex, offsetBy: number.count-1)
+            number = String(number[number.startIndex..<end])
+        }
+
+        if number.count < 8 {
+            let end = number.index(number.startIndex, offsetBy: number.count)
+            let range = number.startIndex..<end
+            number = number.replacingOccurrences(of: "(\\d{4})(\\d+)", with: "$1 $2", options: .regularExpression, range: range)
+
+        } else {
+            let end = number.index(number.startIndex, offsetBy: number.count)
+            let range = number.startIndex..<end
+            number = number.replacingOccurrences(of: "(\\d{4})(\\d{3})(\\d+)", with: "$1 $2 $3", options: .regularExpression, range: range)
+        }
+
+        return number
     }
 }
 

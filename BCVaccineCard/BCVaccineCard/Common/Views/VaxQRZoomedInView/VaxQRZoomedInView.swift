@@ -10,6 +10,7 @@ import UIKit
 class VaxQRZoomedInView: UIView {
     
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var presentForScanningLabel: UILabel!
     @IBOutlet weak var closeButton: AppStyleButton!
     @IBOutlet weak var qrCodeZoomedInImageView: UIImageView!
     
@@ -28,7 +29,7 @@ class VaxQRZoomedInView: UIView {
     }
     
     private func commonInit() {
-        Bundle.main.loadNibNamed("VaxQRZoomedInView", owner: self, options: nil)
+        Bundle.main.loadNibNamed(VaxQRZoomedInView.getName, owner: self, options: nil)
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -39,6 +40,9 @@ class VaxQRZoomedInView: UIView {
         self.backgroundColor = .clear
         contentView.layer.cornerRadius = 12
         contentView.layer.masksToBounds = true
+        presentForScanningLabel.text = Constants.Strings.MyCardFlow.HasCards.presentForScanning
+        presentForScanningLabel.textColor = AppColours.appBlue
+        presentForScanningLabel.font = UIFont.bcSansBoldWithSize(size: 20)
     }
     
     func configure(qrImage: UIImage?, closeButtonDelegateOwner: UIViewController) {

@@ -19,6 +19,7 @@ class SettingsTableViewCell: UITableViewCell {
     
     private func setup() {
         settingLabel.textColor = AppColours.appBlue
+        settingLabel.font = UIFont.bcSansRegularWithSize(size: 14)
     }
     
     func configure(text: String, image: UIImage) {

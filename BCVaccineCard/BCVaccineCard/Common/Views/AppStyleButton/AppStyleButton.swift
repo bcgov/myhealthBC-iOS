@@ -34,13 +34,13 @@ class AppStyleButton: UIView {
         
         var getTitle: String {
             switch self {
-            case .cancel: return "Cancel"
-            case .enter: return "Enter"
-            case .done: return "Done"
-            case .saveACopy: return "Save A Copy"
-            case .close: return "Close"
-            case .manageCards: return "Manage Cards"
-            case .addCard: return "+ Add Card"
+            case .cancel: return Constants.Strings.ButtonTitles.cancel
+            case .enter: return Constants.Strings.ButtonTitles.enter
+            case .done: return Constants.Strings.ButtonTitles.done
+            case .saveACopy: return Constants.Strings.ButtonTitles.saveACopy
+            case .close: return Constants.Strings.ButtonTitles.close
+            case .manageCards: return Constants.Strings.ButtonTitles.manageCards
+            case .addCard: return Constants.Strings.ButtonTitles.addCard
             }
         }
     }
@@ -73,7 +73,7 @@ class AppStyleButton: UIView {
     }
     
     private func commonInit() {
-        Bundle.main.loadNibNamed("AppStyleButton", owner: self, options: nil)
+        Bundle.main.loadNibNamed(AppStyleButton.getName, owner: self, options: nil)
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -87,6 +87,7 @@ class AppStyleButton: UIView {
         contentView.layer.shadowOffset = CGSize(width: 0, height: 0)
         contentView.layer.shadowOpacity = 0.05
         contentView.layer.shadowRadius = 10.0
+        roundedButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 18)
     }
     
     @IBAction func buttonTappedAction(_ sender: UIButton) {

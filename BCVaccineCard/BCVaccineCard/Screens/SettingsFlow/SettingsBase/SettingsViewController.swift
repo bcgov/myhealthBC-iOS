@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-09-16.
-//
+// 
 
 import UIKit
 
@@ -47,8 +47,8 @@ extension SettingsViewController {
 // MARK: TableView setup
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
-        tableView.register(UINib.init(nibName: "SettingsTableViewCell", bundle: .main), forCellReuseIdentifier: "SettingsTableViewCell")
-        tableView.register(UINib.init(nibName: "TextTableViewCell", bundle: .main), forCellReuseIdentifier: "TextTableViewCell")
+        tableView.register(UINib.init(nibName: SettingsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsTableViewCell.getName)
+        tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         tableView.delegate = self
@@ -64,12 +64,12 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         let cellType = dataSource[indexPath.row].cell
         switch cellType {
         case .text(text: let text):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "TextTableViewCell", for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .plainText, text: text, labelSpacingAdjustment: 36)
+            if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
+                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 14), labelSpacingAdjustment: 36)
                 return cell
             }
         case .setting(text: let text, image: let image):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsTableViewCell", for: indexPath) as? SettingsTableViewCell {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.getName, for: indexPath) as? SettingsTableViewCell {
                 cell.configure(text: text, image: image)
                 return cell
             }

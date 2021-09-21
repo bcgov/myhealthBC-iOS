@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol GoToQRRetrievalMethodDelegate: class {
+protocol GoToQRRetrievalMethodDelegate: AnyObject {
     func goToEnterGateway()
     func goToCameraScan()
     func goToUploadImage()
@@ -18,9 +18,9 @@ enum QRRetrievalMethod {
     
     var getTitle: String {
         switch self {
-        case .scanWithCamera: return "Scan a vaccine card QR code"
-        case .uploadImage: return "Use an image of your QR code"
-        case .enterGatewayInfo: return "Enter info to get your card"
+        case .scanWithCamera: return Constants.Strings.MyCardFlow.QRMethodSelection.cameraScanOption
+        case .uploadImage: return Constants.Strings.MyCardFlow.QRMethodSelection.imageUploadOption
+        case .enterGatewayInfo: return Constants.Strings.MyCardFlow.QRMethodSelection.healthGatewayOption
         }
     }
     
@@ -31,29 +31,6 @@ enum QRRetrievalMethod {
         case .enterGatewayInfo: return #imageLiteral(resourceName: "address-card")
         }
     }
-    
-//    var goToFunction: () {
-//        switch self {
-//        case .scanWithCamera:
-//            scanWithCameraFunc()
-//        case .uploadImage:
-//            uploadImageFunc()
-//        case .enterGatewayInfo:
-//            enterGatewayInfoFunc()
-//        }
-//    }
-//        
-//    func scanWithCameraFunc() {
-//        print("TODO: scan with camera here")
-//    }
-//    
-//    func uploadImageFunc() {
-//        print("TODO: upload image func here")
-//    }
-//    
-//    func enterGatewayInfoFunc() {
-//        print("TODO: go to form here")
-//    }
 }
 
 class QRSelectionTableViewCell: UITableViewCell {
@@ -72,6 +49,7 @@ class QRSelectionTableViewCell: UITableViewCell {
     private func setup() {
         roundedView.layer.cornerRadius = 4.0
         roundedView.layer.masksToBounds = true
+        optionTitleLabel.font = UIFont.bcSansRegularWithSize(size: 16)
     }
     
     func configure(method: QRRetrievalMethod, delegateOwner owner: UIViewController) {
