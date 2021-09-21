@@ -72,6 +72,6 @@
 		<string>BCSans-Regular.otf</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>todo</string>
+	<string>We need permission to access your camera to be able to scan QR codes</string>
 </dict>
 </plist>
