@@ -71,5 +71,7 @@
 		<string>BCSans-Italic.otf</string>
 		<string>BCSans-Regular.otf</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>todo</string>
 </dict>
 </plist>

@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 2912313A26F93FB900CF5F3B /* BCVaccineValidator */; };
+		2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912313D26F93FEB00CF5F3B /* QRScannerView.swift */; };
+		2912314126F942CC00CF5F3B /* UIViewController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */; };
+		2912314326F9433600CF5F3B /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314226F9433600CF5F3B /* UIConstants.swift */; };
+		2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314426F9440600CF5F3B /* UIColor+EXT.swift */; };
+		29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */; };
 		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
 		7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67A26F12613006B9444 /* SceneDelegate.swift */; };
 		7944F68026F12613006B9444 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
@@ -79,6 +84,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2912313D26F93FEB00CF5F3B /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+EXT.swift"; sourceTree = "<group>"; };
+		2912314226F9433600CF5F3B /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
+		2912314426F9440600CF5F3B /* UIColor+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+EXT.swift"; sourceTree = "<group>"; };
+		29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+EXT.swift"; sourceTree = "<group>"; };
 		7944F67526F12613006B9444 /* BCVaccineCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BCVaccineCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944F67826F12613006B9444 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7944F67A26F12613006B9444 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -164,6 +174,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2912313C26F93FD900CF5F3B /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				2912313D26F93FEB00CF5F3B /* QRScannerView.swift */,
+			);
+			path = Scanner;
+			sourceTree = "<group>";
+		};
 		7944F66C26F12613006B9444 = {
 			isa = PBXGroup;
 			children = (
@@ -256,6 +274,7 @@
 			children = (
 				7944F6B326F12BA1006B9444 /* Storyboard.swift */,
 				7967E73526F40DB100EEF510 /* Constants.swift */,
+				2912314226F9433600CF5F3B /* UIConstants.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -291,12 +310,15 @@
 		7944F6B726F12BC3006B9444 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				2912314426F9440600CF5F3B /* UIColor+EXT.swift */,
+				2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */,
 				7944F6B826F12BC3006B9444 /* UIButton+EXT.swift */,
 				7944F6B926F12BC3006B9444 /* String+EXT.swift */,
 				7944F6F926F30413006B9444 /* UINavigationItem+Ext.swift */,
 				7967E73726F502E800EEF510 /* Date+Ext.swift */,
 				7967E75526F9155700EEF510 /* UIFont+Ext.swift */,
 				7967E75926F930E200EEF510 /* UIView+Ext.swift */,
+				29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -312,6 +334,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2912313C26F93FD900CF5F3B /* Scanner */,
 				7944F6FB26F313EF006B9444 /* TableViewCells */,
 				7967E73B26F535EB00EEF510 /* FormTextFieldView */,
 				7944F6C326F12C00006B9444 /* AppStyleButton */,
@@ -691,14 +714,18 @@
 				7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */,
 				7944F70B26F39128006B9444 /* SettingsViewController.swift in Sources */,
 				7944F6F526F30293006B9444 /* CardsBaseViewController.swift in Sources */,
+				2912314326F9433600CF5F3B /* UIConstants.swift in Sources */,
 				7944F6D526F12C00006B9444 /* AppStyleButton.swift in Sources */,
 				7944F6FA26F30413006B9444 /* UINavigationItem+Ext.swift in Sources */,
 				7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */,
+				2912314126F942CC00CF5F3B /* UIViewController+EXT.swift in Sources */,
 				7944F6BB26F12BC3006B9444 /* UIButton+EXT.swift in Sources */,
 				7967E73A26F517F600EEF510 /* GatewayFormData.swift in Sources */,
+				2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */,
 				7944F6C126F12BF2006B9444 /* Defaults.swift in Sources */,
+				2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */,
 				7944F6D826F12C00006B9444 /* VaxQRZoomedInView.swift in Sources */,
 				7944F70E26F3A0C1006B9444 /* QRRetrievalMethodViewController.swift in Sources */,
 				7944F6D626F12C00006B9444 /* AlertVC.swift in Sources */,
@@ -711,6 +738,7 @@
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
+				29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */,
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
 			);

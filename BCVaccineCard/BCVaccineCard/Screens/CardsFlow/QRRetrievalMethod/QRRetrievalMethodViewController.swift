@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BCVaccineValidator
 
 class QRRetrievalMethodViewController: BaseViewController {
     
@@ -22,6 +23,9 @@ class QRRetrievalMethodViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     private var dataSource: [CellType] = []
+    
+    private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
+    private weak var imagePicker: UIImagePickerController? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,11 +119,65 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
     }
     
     func goToCameraScan() {
-        print("Go to camera scan")
+        let scanView: QRScannerView = QRScannerView()
+        scanView.present(on: self, completion: { [weak self] result in
+            guard let `self` = self, let data = result else {return}
+            self.storeValidatedQRCode(data: data)
+        })
     }
     
     func goToUploadImage() {
-        print("Go to upload image")
+        showImagePicker { [weak self] image in
+            guard let `self` = self, let image = image else {return}
+            guard let codes = image.findQRCodes(), !codes.isEmpty else {
+                self.alert(title: "No QR found", message: "") // TODO: Better text / from constants
+                return
+            }
+            guard codes.count == 1, let code = codes.first else {
+                self.alert(title: "Multiple QR codes", message: "image must have only 1 code") // TODO: Better text / from constants
+                return
+            }
+            
+            BCVaccineValidator.shared.validate(code: code) { [weak self] result in
+                guard let `self` = self, let data = result.result else {return}
+                self.storeValidatedQRCode(data: data)
+            }
+        }
     }
 
+    func storeValidatedQRCode(data: ScanResultModel) {
+        
+    }
+    
+}
+
+// MARK: Image Picker
+extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func showImagePicker(selected: @escaping(_ image: UIImage?)-> Void) {
+        self.ImagePickerCallback = selected
+        let picker = UIImagePickerController()
+        imagePicker = picker
+        picker.modalPresentationStyle = UIModalPresentationStyle.currentContext
+        picker.delegate = self
+        self.present(picker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let listener = ImagePickerCallback else {return}
+        var newImage: UIImage? = nil
+
+        if let possibleImage = info[.editedImage] as? UIImage {
+            newImage = possibleImage
+        } else if let possibleImage = info[.originalImage] as? UIImage {
+            newImage = possibleImage
+        }
+        
+        listener(newImage)
+        self.ImagePickerCallback = nil
+        self.imagePicker?.dismiss(animated: true, completion: { [weak self] in
+            guard let `self` = self else {return}
+            self.imagePicker = nil
+        })
+        return
+    }
 }
