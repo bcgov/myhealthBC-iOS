@@ -14,24 +14,24 @@ struct Constants {
 //        static let scanAgain = "Scan Next"
         
         struct Errors {
-//            struct CameraAccessIsNecessary {
-//                static let title = "No Camera Access"
-//                static let message = "Camera access is necessary to use this app."
-//            }
-//            struct MultipleQRCodes {
-//                static let message = "There are multiple QR codes in view"
-//            }
-//            struct InvalidCode {
-//                static let message = "Invalid QR Code"
-//            }
-//            struct VideoNotSupported {
-//                static let title = "Unsupported Device"
-//                static let message = "Please use a device that supports video capture."
-//            }
-//            struct QRScanningNotSupported {
-//                static let title = "Unsupported Device"
-//                static let message = "Your device does not support QR code scanning."
-//            }
+            struct CameraAccessIsNecessary {
+                static let title = "No Camera Access"
+                static let message = "Camera access is necessary to use this app."
+            }
+            struct MultipleQRCodes {
+                static let message = "There are multiple QR codes in view"
+            }
+            struct InvalidCode {
+                static let message = "Invalid QR Code"
+            }
+            struct VideoNotSupported {
+                static let title = "Unsupported Device"
+                static let message = "Please use a device that supports video capture."
+            }
+            struct QRScanningNotSupported {
+                static let title = "Unsupported Device"
+                static let message = "Your device does not support QR code scanning."
+            }
         }
         
         struct TabBar {

@@ -71,5 +71,7 @@
 		<string>BCSans-Italic.otf</string>
 		<string>BCSans-Regular.otf</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>We need permission to access your camera to be able to scan QR codes</string>
 </dict>
 </plist>

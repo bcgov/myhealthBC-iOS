@@ -3,10 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 2912313A26F93FB900CF5F3B /* BCVaccineValidator */; };
+		2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912313D26F93FEB00CF5F3B /* QRScannerView.swift */; };
+		2912314126F942CC00CF5F3B /* UIViewController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */; };
+		2912314326F9433600CF5F3B /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314226F9433600CF5F3B /* UIConstants.swift */; };
+		2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314426F9440600CF5F3B /* UIColor+EXT.swift */; };
+		29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */; };
 		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
 		7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67A26F12613006B9444 /* SceneDelegate.swift */; };
 		7944F68026F12613006B9444 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
@@ -58,9 +64,6 @@
 		7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74F26F9145600EEF510 /* BCSans-Italic.otf */; };
 		7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75526F9155700EEF510 /* UIFont+Ext.swift */; };
 		7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
-		9546C28739E626D7D7A60896 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835B02C2C4FA0862B326DDC5 /* Pods_BCVaccineCardTests.framework */; };
-		9DAF232264AA1CF2B55907A2 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05EB7652EC6BE3F7ECAA70D /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */; };
-		FFC4DD0E1F01F7FB7EEF1E76 /* Pods_BCVaccineCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBD04D2372996911897ACE5 /* Pods_BCVaccineCard.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,9 +84,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		22CC9502C9D3E22D82962D6E /* Pods-BCVaccineCardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCardTests.release.xcconfig"; path = "Target Support Files/Pods-BCVaccineCardTests/Pods-BCVaccineCardTests.release.xcconfig"; sourceTree = "<group>"; };
-		53570F92CBD6DF6859403D73 /* Pods-BCVaccineCardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCardTests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCardTests/Pods-BCVaccineCardTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5911A9FDF63511EB5F472758 /* Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig"; sourceTree = "<group>"; };
+		2912313D26F93FEB00CF5F3B /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
+		2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+EXT.swift"; sourceTree = "<group>"; };
+		2912314226F9433600CF5F3B /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
+		2912314426F9440600CF5F3B /* UIColor+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+EXT.swift"; sourceTree = "<group>"; };
+		29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+EXT.swift"; sourceTree = "<group>"; };
 		7944F67526F12613006B9444 /* BCVaccineCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BCVaccineCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944F67826F12613006B9444 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7944F67A26F12613006B9444 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -141,12 +146,6 @@
 		7967E74F26F9145600EEF510 /* BCSans-Italic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BCSans-Italic.otf"; sourceTree = "<group>"; };
 		7967E75526F9155700EEF510 /* UIFont+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Ext.swift"; sourceTree = "<group>"; };
 		7967E75926F930E200EEF510 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
-		835B02C2C4FA0862B326DDC5 /* Pods_BCVaccineCardTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCardTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A05EB7652EC6BE3F7ECAA70D /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_BCVaccineCardUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B9FD1E568D657877F1A46EDF /* Pods-BCVaccineCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard.release.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard.release.xcconfig"; sourceTree = "<group>"; };
-		BBBD04D2372996911897ACE5 /* Pods_BCVaccineCard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF4242F38B990712D13A4526 /* Pods-BCVaccineCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard.debug.xcconfig"; sourceTree = "<group>"; };
-		C0AEE6E3A4791CF9E9005A99 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,7 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFC4DD0E1F01F7FB7EEF1E76 /* Pods_BCVaccineCard.framework in Frameworks */,
+				2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,7 +161,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9546C28739E626D7D7A60896 /* Pods_BCVaccineCardTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,13 +168,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9DAF232264AA1CF2B55907A2 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2912313C26F93FD900CF5F3B /* Scanner */ = {
+			isa = PBXGroup;
+			children = (
+				2912313D26F93FEB00CF5F3B /* QRScannerView.swift */,
+			);
+			path = Scanner;
+			sourceTree = "<group>";
+		};
 		7944F66C26F12613006B9444 = {
 			isa = PBXGroup;
 			children = (
@@ -185,7 +190,6 @@
 				7944F69C26F1261B006B9444 /* BCVaccineCardUITests */,
 				7944F67626F12613006B9444 /* Products */,
 				95BA81E170E18F38F168CAC6 /* Pods */,
-				DCFF91F7DE26F761749DD7CC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -270,6 +274,7 @@
 			children = (
 				7944F6B326F12BA1006B9444 /* Storyboard.swift */,
 				7967E73526F40DB100EEF510 /* Constants.swift */,
+				2912314226F9433600CF5F3B /* UIConstants.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -305,12 +310,15 @@
 		7944F6B726F12BC3006B9444 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				2912314426F9440600CF5F3B /* UIColor+EXT.swift */,
+				2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */,
 				7944F6B826F12BC3006B9444 /* UIButton+EXT.swift */,
 				7944F6B926F12BC3006B9444 /* String+EXT.swift */,
 				7944F6F926F30413006B9444 /* UINavigationItem+Ext.swift */,
 				7967E73726F502E800EEF510 /* Date+Ext.swift */,
 				7967E75526F9155700EEF510 /* UIFont+Ext.swift */,
 				7967E75926F930E200EEF510 /* UIView+Ext.swift */,
+				29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -326,6 +334,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2912313C26F93FD900CF5F3B /* Scanner */,
 				7944F6FB26F313EF006B9444 /* TableViewCells */,
 				7967E73B26F535EB00EEF510 /* FormTextFieldView */,
 				7944F6C326F12C00006B9444 /* AppStyleButton */,
@@ -541,24 +550,8 @@
 		95BA81E170E18F38F168CAC6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BF4242F38B990712D13A4526 /* Pods-BCVaccineCard.debug.xcconfig */,
-				B9FD1E568D657877F1A46EDF /* Pods-BCVaccineCard.release.xcconfig */,
-				C0AEE6E3A4791CF9E9005A99 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */,
-				5911A9FDF63511EB5F472758 /* Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig */,
-				53570F92CBD6DF6859403D73 /* Pods-BCVaccineCardTests.debug.xcconfig */,
-				22CC9502C9D3E22D82962D6E /* Pods-BCVaccineCardTests.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		DCFF91F7DE26F761749DD7CC /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				BBBD04D2372996911897ACE5 /* Pods_BCVaccineCard.framework */,
-				A05EB7652EC6BE3F7ECAA70D /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */,
-				835B02C2C4FA0862B326DDC5 /* Pods_BCVaccineCardTests.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -568,7 +561,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7944F6A226F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCard" */;
 			buildPhases = (
-				057E2A075C13872D0BB7F642 /* [CP] Check Pods Manifest.lock */,
 				7944F67126F12613006B9444 /* Sources */,
 				7944F67226F12613006B9444 /* Frameworks */,
 				7944F67326F12613006B9444 /* Resources */,
@@ -578,6 +570,9 @@
 			dependencies = (
 			);
 			name = BCVaccineCard;
+			packageProductDependencies = (
+				2912313A26F93FB900CF5F3B /* BCVaccineValidator */,
+			);
 			productName = BCVaccineCard;
 			productReference = 7944F67526F12613006B9444 /* BCVaccineCard.app */;
 			productType = "com.apple.product-type.application";
@@ -586,7 +581,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7944F6A526F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCardTests" */;
 			buildPhases = (
-				FA5B22CC3624ADC04163FDDD /* [CP] Check Pods Manifest.lock */,
 				7944F68A26F1261B006B9444 /* Sources */,
 				7944F68B26F1261B006B9444 /* Frameworks */,
 				7944F68C26F1261B006B9444 /* Resources */,
@@ -605,7 +599,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7944F6A826F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCardUITests" */;
 			buildPhases = (
-				16F60EEC54A855B48F27E8AD /* [CP] Check Pods Manifest.lock */,
 				7944F69526F1261B006B9444 /* Sources */,
 				7944F69626F1261B006B9444 /* Frameworks */,
 				7944F69726F1261B006B9444 /* Resources */,
@@ -651,6 +644,9 @@
 				Base,
 			);
 			mainGroup = 7944F66C26F12613006B9444;
+			packageReferences = (
+				2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */,
+			);
 			productRefGroup = 7944F67626F12613006B9444 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -702,75 +698,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		057E2A075C13872D0BB7F642 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BCVaccineCard-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		16F60EEC54A855B48F27E8AD /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BCVaccineCard-BCVaccineCardUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FA5B22CC3624ADC04163FDDD /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BCVaccineCardTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		7944F67126F12613006B9444 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -787,14 +714,18 @@
 				7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */,
 				7944F70B26F39128006B9444 /* SettingsViewController.swift in Sources */,
 				7944F6F526F30293006B9444 /* CardsBaseViewController.swift in Sources */,
+				2912314326F9433600CF5F3B /* UIConstants.swift in Sources */,
 				7944F6D526F12C00006B9444 /* AppStyleButton.swift in Sources */,
 				7944F6FA26F30413006B9444 /* UINavigationItem+Ext.swift in Sources */,
 				7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */,
+				2912314126F942CC00CF5F3B /* UIViewController+EXT.swift in Sources */,
 				7944F6BB26F12BC3006B9444 /* UIButton+EXT.swift in Sources */,
 				7967E73A26F517F600EEF510 /* GatewayFormData.swift in Sources */,
+				2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				7944F67B26F12613006B9444 /* SceneDelegate.swift in Sources */,
 				7944F6C126F12BF2006B9444 /* Defaults.swift in Sources */,
+				2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */,
 				7944F6D826F12C00006B9444 /* VaxQRZoomedInView.swift in Sources */,
 				7944F70E26F3A0C1006B9444 /* QRRetrievalMethodViewController.swift in Sources */,
 				7944F6D626F12C00006B9444 /* AlertVC.swift in Sources */,
@@ -807,6 +738,7 @@
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
+				29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */,
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
 			);
@@ -981,7 +913,6 @@
 		};
 		7944F6A326F1261B006B9444 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BF4242F38B990712D13A4526 /* Pods-BCVaccineCard.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1001,7 +932,6 @@
 		};
 		7944F6A426F1261B006B9444 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B9FD1E568D657877F1A46EDF /* Pods-BCVaccineCard.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1021,7 +951,6 @@
 		};
 		7944F6A626F1261B006B9444 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53570F92CBD6DF6859403D73 /* Pods-BCVaccineCardTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1044,7 +973,6 @@
 		};
 		7944F6A726F1261B006B9444 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22CC9502C9D3E22D82962D6E /* Pods-BCVaccineCardTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1067,7 +995,6 @@
 		};
 		7944F6A926F1261B006B9444 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0AEE6E3A4791CF9E9005A99 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1088,7 +1015,6 @@
 		};
 		7944F6AA26F1261B006B9444 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5911A9FDF63511EB5F472758 /* Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1147,6 +1073,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/FreshworksStudio/BCVaccineValidator";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2912313A26F93FB900CF5F3B /* BCVaccineValidator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
+			productName = BCVaccineValidator;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */ = {
