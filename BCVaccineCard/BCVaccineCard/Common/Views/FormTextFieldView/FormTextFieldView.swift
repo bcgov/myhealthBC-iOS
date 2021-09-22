@@ -45,6 +45,23 @@ enum FormTextFieldType {
         case .dateOfVaccination: return .date
         }
     }
+    
+    func setErrorValidationMessage(text: String) -> String? {
+        switch self {
+        case .personalHealthNumber:
+            guard text.isValidNumber else { return Constants.Strings.Errors.GatewayFormValidation.phnNumber }
+            guard text.removeWhiteSpaceFormatting.isValidLength(length: 10) else { return Constants.Strings.Errors.GatewayFormValidation.phnLength }
+            return nil
+        case .dateOfBirth:
+            guard text.isValidDate(withFormatter: Date.Formatter.longDate) else { return Constants.Strings.Errors.GatewayFormValidation.validDate }
+            guard text.isValidDateRange(withFormatter: Date.Formatter.longDate, latestDate: Date()) else { return Constants.Strings.Errors.GatewayFormValidation.dobRange }
+            return nil
+        case .dateOfVaccination:
+            guard text.isValidDate(withFormatter: Date.Formatter.longDate) else { return Constants.Strings.Errors.GatewayFormValidation.validDate }
+            guard text.isValidDateRange(withFormatter: Date.Formatter.longDate, earliestDate: Constants.DateConstants.firstVaxDate, latestDate: Date()) else { return Constants.Strings.Errors.GatewayFormValidation.dovRange }
+            return nil
+        }
+    }
 }
 
 protocol FormTextFieldViewDelegate: AnyObject {
@@ -53,7 +70,7 @@ protocol FormTextFieldViewDelegate: AnyObject {
     func resignFirstResponderUI(formField: FormTextFieldType)
     func goToNextFormTextField(formField: FormTextFieldType)
 }
-
+// NOTE: Date Formatter is of type longType
 class FormTextFieldView: UIView {
     
     @IBOutlet weak private var contentView: UIView!
@@ -64,6 +81,12 @@ class FormTextFieldView: UIView {
     
     weak var delegate: FormTextFieldViewDelegate?
     private var formField: FormTextFieldType!
+    // Set this from view controller
+    var validationError: String? = nil {
+        didSet {
+            self.showValidationMessage(message: validationError)
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -133,7 +156,7 @@ extension FormTextFieldView {
         switch type {
         case .number:
             formTextField.keyboardType = .numberPad
-            createKeyboardToolbar() // Need to test this, may need to delete
+            createKeyboardToolbar()
         case .date:
             let datePicker = UIDatePicker()
             createDatePicker(datePicker: datePicker)
@@ -193,9 +216,6 @@ extension FormTextFieldView {
 extension FormTextFieldView: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if formField == .personalHealthNumber {
-//            let currentString: NSString = textField.text! as NSString
-//            let newString: String = currentString.replacingCharacters(in: range, with: string) as String
-//            self.delegate?.textFieldTextDidChange(formField: self.formField, newText: newString)
             var fullString = textField.text ?? ""
                 fullString.append(string)
                 if range.length == 1 {
@@ -203,7 +223,7 @@ extension FormTextFieldView: UITextFieldDelegate {
                 } else {
                     textField.text = format(phn: fullString)
                 }
-            let newString = textField.text?.trimWhiteSpacesAndNewLines ?? ""
+            let newString = textField.text ?? ""
             self.delegate?.textFieldTextDidChange(formField: self.formField, newText: newString)
                 return false
         }
@@ -212,6 +232,11 @@ extension FormTextFieldView: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.delegate?.didFinishEditing(formField: self.formField, text: textField.text)
+        guard let text = textField.text else {
+            self.validationError = nil
+            return
+        }
+        self.validationError = formField.setErrorValidationMessage(text: text)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -254,21 +279,9 @@ extension FormTextFieldView {
 
 // MARK: TextField Validation Error Message Handling
 extension FormTextFieldView {
-    // TODO Here
-    
-    
-    // This is called when we have a regex error
-//    private func adjustValidationError(error: String?) {
-//        self.formTextFieldErrorLabel.isHidden = error == nil
-//        self.formTextFieldErrorLabel.text = error
-//    }
-//
-//    private func regexCheck(text: String?) -> Bool {
-//        // TODO: Regex check here
-//        guard let text = text else { return false }
-//        // TODO: Apply regex to text
-//        var validationError: String? = nil
-//        adjustValidationError(error: validationError)
-//        return validationError == nil
-//    }
+    private func showValidationMessage(message: String?) {
+        formTextFieldErrorLabel.isHidden = message == nil
+        guard let message = message else { return }
+        formTextFieldErrorLabel.text = message
+    }
 }

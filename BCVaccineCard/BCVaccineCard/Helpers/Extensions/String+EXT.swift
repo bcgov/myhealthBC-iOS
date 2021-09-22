@@ -7,13 +7,39 @@
 
 import UIKit
 
+// Validation checks on strings
 extension String {
     
-//    var isValidPHN: Bool {
-//        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-//        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-//        return emailTest.evaluate(with: self.trimWhiteSpacesAndNewLines)
-//    }
+    var isValidNumber: Bool {
+        let numberRegEx = "^[0-9]+$"
+        let numberTest = NSPredicate(format: "SELF MATCHES %@", numberRegEx)
+        return numberTest.evaluate(with: self.removeWhiteSpaceFormatting)
+    }
+    
+    func isValidLength(length: Int) -> Bool {
+        return self.removeWhiteSpaceFormatting.count == length
+    }
+    
+    func isValidDate(withFormatter formatter: DateFormatter) -> Bool {
+        guard formatter.date(from: self) != nil else { return false }
+        return true
+    }
+    
+    func isValidDateRange(withFormatter formatter: DateFormatter, earliestDate: Date? = nil, latestDate: Date? = nil) -> Bool {
+        guard let date = formatter.date(from: self) else { return false }
+        if let earliest = earliestDate, let latest = latestDate {
+            return date >= earliest && date <= latest
+        } else if let earliest = earliestDate {
+            return date >= earliest
+        } else if let latest = latestDate {
+            return date <= latest
+        }
+        return true
+    }
+    
+    var removeWhiteSpaceFormatting: String {
+        return self.replacingOccurrences(of: " ", with: "")
+    }
     
     var trimWhiteSpacesAndNewLines: String {
         return self.trimmingCharacters(in: .whitespacesAndNewlines)

@@ -21,5 +21,18 @@ struct GatewayFormData: Equatable {
         case .form: return true
         }
     }
+    
+    func transform() -> TextFieldData? {
+        switch self.type {
+        case .text: return nil
+        case .form(type: let type):
+            return TextFieldData(type: type, text: self.cellStringData)
+        }
+    }
+}
+
+struct TextFieldData: Equatable {
+    let type: FormTextFieldType
+    let text: String?
 }
 

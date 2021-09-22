@@ -23,7 +23,12 @@ class GatewayFormViewController: UIViewController {
     @IBOutlet weak var enterButton: AppStyleButton!
     
     private var dataSource: [GatewayFormData] = []
-//    private var validationCheck
+    private var formTrackingDataSource: [(type: FormTextFieldType, text: String?)] = []
+    private var enterButtonEnabled: Bool = false {
+        didSet {
+            enterButton.enabled = enterButtonEnabled
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,10 +134,14 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     
     func didFinishEditing(formField: FormTextFieldType, text: String?) {
         updateDataSource(formField: formField, text: text)
+//        enterButtonEnabled = shouldButtonBeEnabled(formField: formField, text: text)
+        enterButtonEnabled = shouldButtonBeEnabled()
     }
     
     func textFieldTextDidChange(formField: FormTextFieldType, newText: String) {
         updateDataSource(formField: formField, text: newText)
+//        enterButtonEnabled = shouldButtonBeEnabled(formField: formField, text: newText)
+        enterButtonEnabled = shouldButtonBeEnabled()
     }
     
     private func goToNextTextField(formField: FormTextFieldType) {
@@ -153,9 +162,19 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     
 }
 
-// MARK: For Form Field Validation
-extension GatewayFormViewController {
-    // TODO: Regex form validation here - seeing as we don't have to check dates due to picker, we just need to check if field is empty or not (should throw in a check to make sure it's a valid date though, just in case someone copy and pastes. For PHN, we know it will be number due to keypad, just need to check if digit count is 10 (after trimming white space and new lines). We should throw in number regex check though just in case someone copy pastes
+// MARK: For enabling enter button
+extension GatewayFormViewController {    
+    func shouldButtonBeEnabled() -> Bool {
+        let formData = dataSource.compactMap { $0.transform() }
+        let countArray: [Bool] = formData.map { textFieldData in
+            guard let text = textFieldData.text else {
+                return false
+            }
+            let error = textFieldData.type.setErrorValidationMessage(text: text)
+            return error == nil
+        }
+        return countArray.filter { $0 == true }.count == 3
+    }
 }
 
 

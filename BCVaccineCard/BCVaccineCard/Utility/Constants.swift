@@ -32,6 +32,13 @@ struct Constants {
                 static let title = "Unsupported Device"
                 static let message = "Your device does not support QR code scanning."
             }
+            struct GatewayFormValidation {
+                static let phnLength = "PHN should be 10 characters."
+                static let phnNumber = "PHN must be numbers only."
+                static let validDate = "Please choose a valid date from the date picker."
+                static let dobRange = "Birthday cannot be in the future."
+                static let dovRange = "Vaccination date must be in valid range."
+            }
         }
         
         struct TabBar {
@@ -97,5 +104,9 @@ struct Constants {
             
         }
         
+    }
+    
+    struct DateConstants {
+        static let firstVaxDate = Date.Formatter.longDate.date(from: "January 1, 2020")
     }
 }
