@@ -26,6 +26,7 @@ class QRRetrievalMethodViewController: BaseViewController {
     
     private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
     private weak var imagePicker: UIImagePickerController? = nil
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +38,18 @@ class QRRetrievalMethodViewController: BaseViewController {
         setupDataSource()
         setupTableView()
     }
-
+    
+    // MARK: - Navigation
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Going to camera
+        if let destination = segue.destination as? CameraViewController {
+            destination.setup { [weak self] result in
+                guard let `self` = self, let data = result else {return}
+                self.storeValidatedQRCode(data: data)
+            }
+        }
+    }
 }
 
 // MARK: Navigation setup
@@ -121,11 +133,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
     }
     
     func goToCameraScan() {
-        let scanView: QRScannerView = QRScannerView()
-        scanView.present(on: self, completion: { [weak self] result in
-            guard let `self` = self, let data = result else {return}
-            self.storeValidatedQRCode(data: data)
-        })
+        performSegue(withIdentifier: "showCamera", sender: self)
     }
     
     func goToUploadImage() {
@@ -150,6 +158,11 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
     private func storeValidatedQRCode(data: ScanResultModel) {
         let model = convertScanResultModelIntoLocalData(data: data)
         appendModelToLocalStorage(model: model)
+        alert(title: "Saved", message: "Todo") {[weak self] in
+            guard let `self` = self else {return}
+            self.navigationController?.popViewController(animated: true)
+        }
+        
     }
 }
 
