@@ -23,7 +23,6 @@ class GatewayFormViewController: UIViewController {
     @IBOutlet weak var enterButton: AppStyleButton!
     
     private var dataSource: [GatewayFormData] = []
-    private var formTrackingDataSource: [(type: FormTextFieldType, text: String?)] = []
     private var enterButtonEnabled: Bool = false {
         didSet {
             enterButton.enabled = enterButtonEnabled
@@ -102,7 +101,6 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: If cell is form data, then open keyboard on text field, otherwise, check if cell is clickable for text cell
         if let cell = tableView.cellForRow(at: indexPath) as? FormTableViewCell {
             cell.formTextFieldView.openKeyboardAction()
         }
@@ -163,7 +161,7 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
 }
 
 // MARK: For enabling enter button
-extension GatewayFormViewController {    
+extension GatewayFormViewController {
     func shouldButtonBeEnabled() -> Bool {
         let formData = dataSource.compactMap { $0.transform() }
         let countArray: [Bool] = formData.map { textFieldData in

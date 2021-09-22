@@ -138,7 +138,7 @@ class FormTextFieldView: UIView {
         if let image = formType.getImage {
             formTextFieldRightImageView.image = image
         }
-        createKeyboardForType(type: formType.getFieldType)
+        createKeyboardForType(type: formType.getFieldType, formField: formType)
         formTextField.delegate = self
     }
     
@@ -152,14 +152,14 @@ class FormTextFieldView: UIView {
 // MARK: Date picker logic
 extension FormTextFieldView {
     
-    private func createKeyboardForType(type: FormTextFieldKeyboardStyle) {
+    private func createKeyboardForType(type: FormTextFieldKeyboardStyle, formField: FormTextFieldType) {
         switch type {
         case .number:
             formTextField.keyboardType = .numberPad
             createKeyboardToolbar()
         case .date:
             let datePicker = UIDatePicker()
-            createDatePicker(datePicker: datePicker)
+            createDatePicker(datePicker: datePicker, formField: formField)
         }
     }
     
@@ -181,7 +181,7 @@ extension FormTextFieldView {
         formTextField.inputAccessoryView = toolbar
     }
     
-    private func createDatePicker(datePicker: UIDatePicker) {
+    private func createDatePicker(datePicker: UIDatePicker, formField: FormTextFieldType) {
         createKeyboardToolbar()
         
         // assign date picker to text field
@@ -191,6 +191,12 @@ extension FormTextFieldView {
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .wheels
         datePicker.addTarget(self, action: #selector(datePickerChanged(datePicker:)), for: .valueChanged)
+        
+        // date picker min and max values
+        datePicker.maximumDate = Date()
+        if formField == .dateOfVaccination {
+            datePicker.minimumDate = Constants.DateConstants.firstVaxDate
+        }
     }
     
     @objc func doneButtonTapped() {
