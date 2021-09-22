@@ -27,7 +27,7 @@ class QRRetrievalMethodViewController: BaseViewController {
     private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
     private weak var imagePicker: UIImagePickerController? = nil
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -146,21 +146,22 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
             }
             
             BCVaccineValidator.shared.validate(code: code) { [weak self] result in
-                guard let `self` = self, let data = result.result else {return}
+                guard let `self` = self else { return }
+                guard let data = result.result else {
+                    self.alert(title: "Invalid QR Code", message: "") // TODO: Better text / from constants
+                    return
+                }
                 self.storeValidatedQRCode(data: data)
             }
         }
     }
-
+    
     private func storeValidatedQRCode(data: ScanResultModel) {
         let model = convertScanResultModelIntoLocalData(data: data)
         appendModelToLocalStorage(model: model)
         // TODO: text from constants
-        alert(title: "Your proof of vaccination has been added", message: "") {[weak self] in
-            guard let `self` = self else {return}
-            self.navigationController?.popViewController(animated: true)
-        }
-        
+        self.navigationController?.showBanner(message: "Your proof of vaccination has been added", style: .Top)
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -178,7 +179,7 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let listener = ImagePickerCallback else {return}
         var newImage: UIImage? = nil
-
+        
         if let possibleImage = info[.editedImage] as? UIImage {
             newImage = possibleImage
         } else if let possibleImage = info[.originalImage] as? UIImage {

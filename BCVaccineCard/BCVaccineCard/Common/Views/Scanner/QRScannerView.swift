@@ -241,7 +241,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
             validate(code: stringValue)
         } else {
             // Show message
-            self.parentViewController?.showBanner(message: Constants.Strings.Errors.InvalidCode.message)
+            self.parentViewController?.showBanner(message: Constants.Strings.Errors.InvalidCode.message, style: .Bottom)
             // Show code location
             showQRCodeLocation(for: metadataObject, isInValid: false, tag: Constants.UI.QRCodeHighlighter.tag)
         }
@@ -262,12 +262,8 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
                     switch result.status {
                     case .ValidCode:
                         break
-                    case .InvalidCode:
-                        self.parentViewController?.showBanner(message: Constants.Strings.Errors.InvalidCode.message)
-                    case .ForgedCode:
-                        self.parentViewController?.showBanner(message: Constants.Strings.Errors.InvalidCode.message)
-                    case .MissingData:
-                        self.parentViewController?.showBanner(message: Constants.Strings.Errors.InvalidCode.message)
+                    case .InvalidCode, .ForgedCode, .MissingData:
+                        self.parentViewController?.showBanner(message: Constants.Strings.Errors.InvalidCode.message, style: .Bottom)
                     }
                     self.startCamera()
                     self.invalidScannedCodes.append(code)
@@ -292,7 +288,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         for (index, item) in metadataObjects.enumerated() {
             showQRCodeLocation(for: item, isInValid: true, tag: 1000 + index)
         }
-        self.parentViewController?.showBanner(message: Constants.Strings.Errors.MultipleQRCodes.message)
+        self.parentViewController?.showBanner(message: Constants.Strings.Errors.MultipleQRCodes.message, style: .Bottom)
     }
     
     fileprivate func showQRCodeLocation(for object: AVMetadataObject, isInValid: Bool, tag: Int) {
