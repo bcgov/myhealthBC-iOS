@@ -155,6 +155,11 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
     private func storeValidatedQRCode(data: ScanResultModel) {
         let model = convertScanResultModelIntoLocalData(data: data)
         appendModelToLocalStorage(model: model)
+        alert(title: "Saved", message: "Todo") {[weak self] in
+            guard let `self` = self else {return}
+            self.navigationController?.popViewController(animated: true)
+        }
+        
     }
 }
 
