@@ -14,7 +14,7 @@ class CardsBaseViewController: BaseViewController {
     
     private var expandedIndexRow = 0
     
-    private var dataSource: [VaccinePassportModel] = [] {
+    private var dataSource: [AppVaccinePassportModel] = [] {
         didSet {
             buttonHiddenStatus()
         }
@@ -38,6 +38,13 @@ class CardsBaseViewController: BaseViewController {
         retrieveDataSource()
         setupTableView()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // Note: This refreshes the data source. Should find a better way to do this once gateway is working - will use a completion handler or something like that, as this is inefficient
+        retrieveDataSource()
+        
+    }
     
 }
 
@@ -60,7 +67,7 @@ extension CardsBaseViewController {
 // MARK: DataSource Management
 extension CardsBaseViewController {
     private func retrieveDataSource() {
-        self.dataSource = Defaults.vaccinePassports ?? []
+        fetchFromDefaults()
         inEditMode = false
     }
 }
@@ -85,7 +92,7 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
             return
         }
         if type == .done {
-            Defaults.vaccinePassports = dataSource
+            saveToDefaults()
         }
         expandedIndexRow = 0
         inEditMode = type == .manageCards
@@ -128,8 +135,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         guard !self.inEditMode else { return }
         guard let _ = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
         guard self.expandedIndexRow != indexPath.row else {
-            // TODO: This will need to be refactored to fetch an image from data
-            let image = UIImage(named: dataSource[indexPath.row].imageName)
+            guard let image = dataSource[indexPath.row].image else { return }
             let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image)
             self.present(vc, animated: true, completion: nil)
             return
@@ -146,14 +152,13 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            print("Card Delete Action Called here")
+            self.deleteCardAt(indexPath: indexPath)
         }
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
-            print("Unlink button is clicked")
-            // TODO: Add Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
+            self.deleteCardAt(indexPath: indexPath)
         }
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
@@ -163,8 +168,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
-            print("Unlink button is clicked")
-            // TODO: Add Alert Action here to confirm if user want's to remove this card, if so, then dataSource.remove(at: indexPath.row), then reload table view if we have to
+            self.deleteCardAt(indexPath: indexPath)
         }
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
@@ -176,5 +180,33 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         let movedObject = dataSource[sourceIndexPath.row]
         dataSource.remove(at: sourceIndexPath.row)
         dataSource.insert(movedObject, at: destinationIndexPath.row)
+        saveToDefaults()
+    }
+}
+
+// MARK: Adjusting data source functions
+extension CardsBaseViewController {
+    private func deleteCardAt(indexPath: IndexPath) {
+        alert(title: Constants.Strings.MyCardFlow.MyCardsConfirmations.removeTitle, message: Constants.Strings.MyCardFlow.MyCardsConfirmations.removeDescription, buttonOneTitle: Constants.Strings.GenericText.cancel, buttonOneCompletion: {
+            // Do Nothing here
+        }, buttonTwoTitle: Constants.Strings.GenericText.yes) { [weak self] in
+            guard let `self` = self else {return}
+            guard self.dataSource.count > indexPath.row else { return }
+            self.dataSource.remove(at: indexPath.row)
+            self.saveToDefaults()
+            self.tableView.reloadData()
+        }
+    }
+}
+
+// MARK: Fetching and Saving conversions between local data source and app data source
+extension CardsBaseViewController {
+    private func saveToDefaults() {
+        Defaults.vaccinePassports = dataSource.map({ $0.transform() })
+    }
+    
+    private func fetchFromDefaults() {
+        let localDS = Defaults.vaccinePassports ?? []
+        self.dataSource = localDS.map({ $0.transform() })
     }
 }

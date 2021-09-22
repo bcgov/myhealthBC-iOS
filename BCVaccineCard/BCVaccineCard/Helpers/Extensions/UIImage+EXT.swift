@@ -32,3 +32,18 @@ extension UIImage {
         return result
     }
 }
+
+// MARK: Converting image to string code
+extension UIImage {
+    // Note: Not sure if we need either of these, as the BCVaccineValidator may provide this for us
+    func toPngString() -> String? {
+        let data = self.pngData()
+        return data?.base64EncodedString(options: .endLineWithLineFeed)
+    }
+    
+    func toJpegString(compressionQuality cq: CGFloat) -> String? {
+        let data = self.jpegData(compressionQuality: cq)
+        return data?.base64EncodedString(options: .endLineWithLineFeed)
+    }
+    
+}

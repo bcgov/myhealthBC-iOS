@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import BCVaccineValidator
 
 extension UIViewController {
     func alert(title: String, message: String) {
@@ -22,6 +23,21 @@ extension UIViewController {
         controller.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
             return completion()
         }))
+        DispatchQueue.main.async {
+            self.present(controller, animated: true)
+        }
+    }
+    
+    func alert(title: String, message: String, buttonOneTitle: String, buttonOneCompletion: @escaping()->Void, buttonTwoTitle: String?, buttonTwoCompletion: @escaping()->Void) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.addAction(UIAlertAction(title: buttonOneTitle, style: .default, handler: { action in
+            return buttonOneCompletion()
+        }))
+        if let buttonTitle = buttonTwoTitle {
+            controller.addAction(UIAlertAction(title: buttonTitle, style: .default, handler: { action in
+                return buttonTwoCompletion()
+            }))
+        }
         DispatchQueue.main.async {
             self.present(controller, animated: true)
         }
@@ -97,5 +113,48 @@ extension UIViewController {
             banner.removeFromSuperview()
         }
 
+    }
+}
+
+//MARK: Pop-back functions
+extension UIViewController {
+    //Position in stack popback
+    func popBackBy(_ x: Int) {
+        if let viewControllers: [UIViewController] = self.navigationController?.viewControllers {
+            guard viewControllers.count < x else {
+                self.navigationController?.popToViewController(viewControllers[viewControllers.count - x], animated: true)
+                return
+            }
+        }
+    }
+    
+    //Specific VC in stack
+    func popBack<T: UIViewController>(toControllerType: T.Type) {
+        if var viewControllers: [UIViewController] = self.navigationController?.viewControllers {
+            viewControllers = viewControllers.reversed()
+            for currentViewController in viewControllers {
+                if currentViewController .isKind(of: toControllerType) {
+                    self.navigationController?.popToViewController(currentViewController, animated: true)
+                    break
+                }
+            }
+        }
+    }
+}
+
+// MARK: For Local Storage - FIXME: Should find a better spot for this
+extension UIViewController {
+    func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
+        if Defaults.vaccinePassports == nil {
+            Defaults.vaccinePassports = []
+            Defaults.vaccinePassports?.append(model)
+        } else {
+            Defaults.vaccinePassports?.append(model)
+        }
+    }
+    
+    func convertScanResultModelIntoLocalData(data: ScanResultModel) -> LocallyStoredVaccinePassportModel {
+        let status = VaccineStatus.init(rawValue: data.status.rawValue) ?? .notVaxed
+        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, name: data.name, status: status)
     }
 }

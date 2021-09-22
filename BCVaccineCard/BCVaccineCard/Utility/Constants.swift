@@ -13,6 +13,12 @@ struct Constants {
 //        static let vaccinationStatusHeader = "BC Vaccine Card Verifier"
 //        static let scanAgain = "Scan Next"
         
+        struct GenericText {
+            static let ok = "OK"
+            static let cancel = "Cancel"
+            static let yes = "Yes"
+        }
+        
         struct Errors {
             struct CameraAccessIsNecessary {
                 static let title = "No Camera Access"
@@ -31,6 +37,13 @@ struct Constants {
             struct QRScanningNotSupported {
                 static let title = "Unsupported Device"
                 static let message = "Your device does not support QR code scanning."
+            }
+            struct GatewayFormValidation {
+                static let phnLength = "PHN should be 10 characters."
+                static let phnNumber = "PHN must be numbers only."
+                static let validDate = "Please choose a valid date from the date picker."
+                static let dobRange = "Birthday cannot be in the future."
+                static let dovRange = "Vaccination date must be in valid range."
             }
         }
         
@@ -68,6 +81,11 @@ struct Constants {
                 static let presentForScanning = "PresentForScanning"
             }
             
+            struct MyCardsConfirmations {
+                static let removeTitle = "Unlink Card"
+                static let removeDescription = "Are you sure you want to unlink this card from your wallet?"
+            }
+            
             struct QRMethodSelection {
                 static let description = "Scan, upload or get access to your proof of vaccination."
                 static let cameraScanOption = "Scan a vaccine card QR code"
@@ -97,5 +115,9 @@ struct Constants {
             
         }
         
+    }
+    
+    struct DateConstants {
+        static let firstVaxDate = Date.Formatter.longDate.date(from: "January 1, 2020")
     }
 }

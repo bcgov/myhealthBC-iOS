@@ -29,7 +29,6 @@
 		7944F6C126F12BF2006B9444 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6C026F12BF2006B9444 /* Defaults.swift */; };
 		7944F6D426F12C00006B9444 /* AppStyleButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6C426F12C00006B9444 /* AppStyleButton.xib */; };
 		7944F6D526F12C00006B9444 /* AppStyleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6C526F12C00006B9444 /* AppStyleButton.swift */; };
-		7944F6D626F12C00006B9444 /* AlertVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6C726F12C00006B9444 /* AlertVC.swift */; };
 		7944F6D726F12C00006B9444 /* VaxQRZoomedInView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6C926F12C00006B9444 /* VaxQRZoomedInView.xib */; };
 		7944F6D826F12C00006B9444 /* VaxQRZoomedInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6CA26F12C00006B9444 /* VaxQRZoomedInView.swift */; };
 		7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */; };
@@ -111,7 +110,6 @@
 		7944F6C026F12BF2006B9444 /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		7944F6C426F12C00006B9444 /* AppStyleButton.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppStyleButton.xib; sourceTree = "<group>"; };
 		7944F6C526F12C00006B9444 /* AppStyleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStyleButton.swift; sourceTree = "<group>"; };
-		7944F6C726F12C00006B9444 /* AlertVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertVC.swift; sourceTree = "<group>"; };
 		7944F6C926F12C00006B9444 /* VaxQRZoomedInView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VaxQRZoomedInView.xib; sourceTree = "<group>"; };
 		7944F6CA26F12C00006B9444 /* VaxQRZoomedInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VaxQRZoomedInView.swift; sourceTree = "<group>"; };
 		7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GatewayFormViewController.swift; sourceTree = "<group>"; };
@@ -338,7 +336,6 @@
 				7944F6FB26F313EF006B9444 /* TableViewCells */,
 				7967E73B26F535EB00EEF510 /* FormTextFieldView */,
 				7944F6C326F12C00006B9444 /* AppStyleButton */,
-				7944F6C626F12C00006B9444 /* AlertVC */,
 				7944F6C826F12C00006B9444 /* VaxQRZoomedInView */,
 			);
 			path = Views;
@@ -351,14 +348,6 @@
 				7944F6C526F12C00006B9444 /* AppStyleButton.swift */,
 			);
 			path = AppStyleButton;
-			sourceTree = "<group>";
-		};
-		7944F6C626F12C00006B9444 /* AlertVC */ = {
-			isa = PBXGroup;
-			children = (
-				7944F6C726F12C00006B9444 /* AlertVC.swift */,
-			);
-			path = AlertVC;
 			sourceTree = "<group>";
 		};
 		7944F6C826F12C00006B9444 /* VaxQRZoomedInView */ = {
@@ -728,7 +717,6 @@
 				2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */,
 				7944F6D826F12C00006B9444 /* VaxQRZoomedInView.swift in Sources */,
 				7944F70E26F3A0C1006B9444 /* QRRetrievalMethodViewController.swift in Sources */,
-				7944F6D626F12C00006B9444 /* AlertVC.swift in Sources */,
 				7967E74326F900E400EEF510 /* TabBarController.swift in Sources */,
 				7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */,
 				7967E74A26F908E400EEF510 /* Setting.swift in Sources */,
