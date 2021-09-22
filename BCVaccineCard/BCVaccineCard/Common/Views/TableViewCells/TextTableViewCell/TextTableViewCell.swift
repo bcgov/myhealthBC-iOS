@@ -25,6 +25,8 @@ class TextTableViewCell: UITableViewCell {
     @IBOutlet weak private var imageViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak private var textLabelLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak private var textLabelTrailingConstraint: NSLayoutConstraint!
+    
+    var type: TextCellType?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -32,6 +34,7 @@ class TextTableViewCell: UITableViewCell {
     }
 
     func configure(forType type: TextCellType, text: String, withFont font: UIFont, labelSpacingAdjustment: CGFloat? = nil) {
+        self.type = type
         formatCell(type: type, text: text, font: font)
         guard let constant = labelSpacingAdjustment else { return }
         adjustLabelSpacing(by: constant)

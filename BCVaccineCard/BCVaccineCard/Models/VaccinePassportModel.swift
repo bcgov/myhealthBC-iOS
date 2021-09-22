@@ -41,7 +41,11 @@ struct LocallyStoredVaccinePassportModel: Codable, Equatable {
 struct AppVaccinePassportModel: Equatable {
     let codableModel: LocallyStoredVaccinePassportModel
     var image: UIImage? {
-        return codableModel.code.generateQRCode()
+        // TODO: After testing has been completed, can remove the default value - this is just for the locally stored values
+        return codableModel.code.generateQRCode() ?? codableModel.code.toImage()
+    }
+    var id: String? {
+        return codableModel.name + codableModel.birthdate
     }
     
     func transform() -> LocallyStoredVaccinePassportModel {

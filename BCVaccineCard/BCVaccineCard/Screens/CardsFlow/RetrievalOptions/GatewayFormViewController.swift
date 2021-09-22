@@ -22,6 +22,7 @@ class GatewayFormViewController: UIViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var enterButton: AppStyleButton!
     
+    var completionHandler: (() -> Void)?
     private var dataSource: [GatewayFormData] = []
     private var enterButtonEnabled: Bool = false {
         didSet {
@@ -101,6 +102,8 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? FormTableViewCell {
             cell.formTextFieldView.openKeyboardAction()
+        } else if let cell = tableView.cellForRow(at: indexPath) as? TextTableViewCell, cell.type == .underlinedWithImage {
+            self.openPrivacyPolicy()
         }
     }
 }
@@ -173,29 +176,25 @@ extension GatewayFormViewController {
 
 // MARK: FIXME: This is just temporary so that we can test UI with local data
 extension GatewayFormViewController {
-    func checkForPHN(phnString: String) {
+    func checkForPHN(phnString: String, birthday: String) {
         var model: AppVaccinePassportModel
         let phn = phnString.trimWhiteSpacesAndNewLines.removeWhiteSpaceFormatting
         let name: String
         let image: UIImage?
-        let birthday: String
         
         var status: VaccineStatus
         if phn == "1111111111" {
             status = .fully
             name = "WILLIE BEAMEN"
             image = UIImage(named: "full")
-            birthday = "September 15, 1980"
         } else if phn == "2222222222" {
             status = .partially
             name = "RON BERGUNDY"
             image = UIImage(named: "partial")
-            birthday = "December 15, 1964"
         } else {
             status = .notVaxed
             name = "BRICK TAMLAND"
             image = nil
-            birthday = "October 12, 1945"
         }
         guard let img = image else {
             alert(title: "Error", message: "Invalid PHN number, no QR code associated with this number")
@@ -203,9 +202,20 @@ extension GatewayFormViewController {
         }
         let code = img.toPngString() ?? ""
         model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, status: status))
-        alert(title: "Success", message: "Congrats! You have successfully fetched your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "Yes", buttonOneCompletion: {
+        guard isCardAlreadyInWallet(modelToAdd: model) == false else {
+            alert(title: "Duplicate", message: "This card is already saved in your wallet.") { [weak self] in
+                guard let `self` = self else {return}
+                self.dismiss(animated: true) {
+                    self.completionHandler?()
+                }
+            }
+            return
+        }
+        alert(title: "Success", message: "Congrats! You have successfully fetched your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
+            guard let `self` = self else { return }
             self.dismiss(animated: true) {
                 self.appendModelToLocalStorage(model: model.transform())
+                self.completionHandler?()
             }
         }, buttonTwoTitle: "No") { [weak self] in
             guard let `self` = self else { return }
@@ -223,9 +233,11 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
         if type == .cancel {
             self.dismiss(animated: true, completion: nil)
         } else if type == .enter {
-            guard let index = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
-            guard let phn = dataSource[index].cellStringData else { return }
-            checkForPHN(phnString: phn)
+            guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
+            guard let phn = dataSource[phnIndex].cellStringData else { return }
+            guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
+            guard let birthday = dataSource[dobIndex].cellStringData else { return }
+            checkForPHN(phnString: phn, birthday: birthday)
         }
     }
 }
