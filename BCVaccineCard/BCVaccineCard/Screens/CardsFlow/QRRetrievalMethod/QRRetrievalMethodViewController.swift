@@ -126,7 +126,8 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
     func goToEnterGateway() {
         let vc = GatewayFormViewController.constructGatewayFormViewController()
-        vc.completionHandler = {
+        vc.completionHandler = { [weak self] in
+            guard let `self` = self else { return }
             self.navigationController?.popViewController(animated: true)
         }
         self.present(vc, animated: true, completion: nil)
