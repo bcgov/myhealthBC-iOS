@@ -43,6 +43,9 @@ struct AppVaccinePassportModel: Equatable {
     var image: UIImage? {
         return codableModel.code.toImage()
     }
+    var id: String? {
+        return codableModel.name + codableModel.birthdate
+    }
     
     func transform() -> LocallyStoredVaccinePassportModel {
         return self.codableModel

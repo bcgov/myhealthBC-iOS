@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import BCVaccineValidator
+import SafariServices
 
 extension UIViewController {
     func alert(title: String, message: String) {
@@ -163,7 +164,21 @@ extension UIViewController {
 extension UIViewController {
     func openPrivacyPolicy() {
         if let url = URL(string: Constants.PrivacyPolicy.urlString) {
-            UIApplication.shared.open(url)
+            guard UIApplication.shared.canOpenURL(url) else {return}
+            let vc = SFSafariViewController(url: url)
+            present(vc, animated: true)
         }
+    }
+}
+
+// MARK: Check for duplicates - again, should probably find a better spot for this
+extension UIViewController {
+    func isCardAlreadyInWallet(modelToAdd model: AppVaccinePassportModel) -> Bool {
+        guard let localDS = Defaults.vaccinePassports, !localDS.isEmpty else { return false }
+        let appDS = localDS.map { $0.transform() }
+        let idArray = appDS.compactMap({ $0.id })
+        guard let id = model.id else { return false } // May need some form of error handling here, as this just means the new model is incomplete
+        guard idArray.firstIndex(where: { $0 == id }) == nil else { return true }
+        return false
     }
 }
