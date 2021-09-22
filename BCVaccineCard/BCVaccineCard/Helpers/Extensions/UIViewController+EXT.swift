@@ -158,3 +158,12 @@ extension UIViewController {
         return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, name: data.name, status: status)
     }
 }
+
+// MARK: To Open Privacy Policy - keep it simple for now, just open in safari
+extension UIViewController {
+    func openPrivacyPolicy() {
+        if let url = URL(string: Constants.PrivacyPolicy.urlString) {
+            UIApplication.shared.open(url)
+        }
+    }
+}

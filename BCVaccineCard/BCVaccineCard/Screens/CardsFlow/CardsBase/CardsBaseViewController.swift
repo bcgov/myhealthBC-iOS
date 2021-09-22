@@ -94,6 +94,10 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
         if type == .done {
             saveToDefaults()
         }
+        // Note: This is a fix for when a user may swipe to edit, then while editing, taps manage cards
+        if type == .manageCards {
+            inEditMode = false
+        }
         expandedIndexRow = 0
         inEditMode = type == .manageCards
     }

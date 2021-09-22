@@ -102,6 +102,8 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? FormTableViewCell {
             cell.formTextFieldView.openKeyboardAction()
+        } else if let cell = tableView.cellForRow(at: indexPath) as? TextTableViewCell, cell.type == .underlinedWithImage {
+            self.openPrivacyPolicy()
         }
     }
 }
