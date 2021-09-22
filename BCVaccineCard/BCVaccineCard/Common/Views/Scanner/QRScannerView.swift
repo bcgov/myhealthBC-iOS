@@ -12,8 +12,7 @@ import BCVaccineValidator
 
 class QRScannerView: UIView {
     // MARK: Constants
-    private let flashOnIcon = UIImage(named: "flashOn")
-    private let flashOffIcon = UIImage(named: "flashOff")
+    static let viewTag = 414125
    
     // MARK: Variables
     private var captureSession: AVCaptureSession?
@@ -39,7 +38,6 @@ class QRScannerView: UIView {
             guard let `self` = self else {return}
             self.setup()
         }
-        
     }
     
     private func setup() {
@@ -63,7 +61,15 @@ class QRScannerView: UIView {
     // MARK: Presentation
     private func present(on parentViewController: UIViewController, then: @escaping() -> Void) {
         self.frame = parentViewController.view.bounds
+        self.tag = QRScannerView.viewTag
         parentViewController.view.addSubview(self)
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.heightAnchor.constraint(equalTo: parentViewController.view.heightAnchor, constant: 0).isActive = true
+        self.widthAnchor.constraint(equalTo: parentViewController.view.widthAnchor, constant: 0).isActive = true
+        self.leadingAnchor.constraint(equalTo: parentViewController.view.leadingAnchor, constant: 0).isActive = true
+        self.trailingAnchor.constraint(equalTo: parentViewController.view.trailingAnchor, constant: 0).isActive = true
+        self.centerXAnchor.constraint(equalTo: parentViewController.view.centerXAnchor, constant: 0).isActive = true
+        self.centerYAnchor.constraint(equalTo: parentViewController.view.centerYAnchor, constant: 0).isActive = true
         then()
     }
     
@@ -108,13 +114,13 @@ class QRScannerView: UIView {
         completion(card)
     }
 }
+
 // MARK: Camera
 extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
     
     private func showCamera() {
         DispatchQueue.main.async {
             self.setupCaptureSession()
-            self.addFlashlightButton()
         }
     }
     
@@ -184,10 +190,12 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         captureSession.startRunning()
         
         // Set orientation
-        guard let connection = preview.connection, connection.isVideoOrientationSupported, let orientation = windowInterfaceOrientation else {
+        guard let connection = preview.connection,
+              connection.isVideoOrientationSupported,
+              let orientation = windowInterfaceOrientation
+        else {
             return
         }
-        
         switch orientation {
         case .unknown:
             connection.videoOrientation = .portrait
@@ -243,7 +251,6 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         self.parentViewController?.hideBanner()
         self.startLoadingIndicator()
         // Validate
-//        BCVaccineValidator.shared.validate(code: <#T##String#>, completion: <#T##(CodeValidationResult) -> Void#>)
         BCVaccineValidator.shared.validate(code: code) { [weak self] result in
             guard let `self` = self else {return}
             // Validation is done on background thread. This moves us back to main thread
@@ -278,7 +285,6 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
     }
     
     public func pauseCamera() {
-        setFlash(on: false)
         captureSession?.stopRunning()
     }
     
@@ -323,69 +329,5 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
             }
         }
     }
-    
-    func setFlash(on: Bool) {
-        guard
-            let device = AVCaptureDevice.default(for: AVMediaType.video),
-            device.hasTorch
-        else { return }
-        
-        do {
-            try device.lockForConfiguration()
-            device.torchMode = on ? .on : .off
-            device.unlockForConfiguration()
-        } catch {
-            print("Flash could not be used")
-        }
-        
-        guard let btn = self.viewWithTag(Constants.UI.TorchButton.tag) as? UIButton else {
-            return
-        }
-        if on {
-            btn.setImage(flashOnIcon, for: .normal)
-//            btn.accessibilityLabel = AccessibilityLabels.scannerView.turnOffFlash
-        } else {
-            btn.setImage(flashOffIcon, for: .normal)
-//            btn.accessibilityLabel = AccessibilityLabels.scannerView.turnOnFlash
-        }
-    }
-    
-    fileprivate func addFlashlightButton() {
-        if let existing = self.viewWithTag(Constants.UI.TorchButton.tag) {
-            existing.removeFromSuperview()
-        }
-        guard let device = AVCaptureDevice.default(for: .video) else { return }
-        if !device.hasTorch && !device.hasFlash { return }
-        
-        let btnSize: CGFloat = Constants.UI.TorchButton.buttonSize
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: btnSize, height: btnSize))
-        
-        button.tag = Constants.UI.TorchButton.tag
-        self.addSubview(button)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.heightAnchor.constraint(equalToConstant: btnSize).isActive = true
-        button.widthAnchor.constraint(equalToConstant: btnSize).isActive = true
-        button.topAnchor.constraint(equalTo: self.topAnchor, constant: 32).isActive = true
-        button.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
-        button.backgroundColor = .lightGray
-        button.setImage(flashOffIcon, for: .normal)
-//        button.accessibilityLabel = AccessibilityLabels.scannerView.turnOnFlash
-        
-        button.addTarget(self, action: #selector(flashTapped), for: .touchUpInside)
-        button.layer.cornerRadius = btnSize/2
-        
-        button.imageView?.contentMode = .scaleAspectFit
-    }
-    
-    @objc func flashTapped(sender: UIButton?) {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        guard let btn = self.viewWithTag(Constants.UI.TorchButton.tag) as? UIButton else {
-            return
-        }
-        let isOn = btn.imageView?.image == flashOnIcon
-        setFlash(on: !isOn)
-    }
-    
-    
 }
 
