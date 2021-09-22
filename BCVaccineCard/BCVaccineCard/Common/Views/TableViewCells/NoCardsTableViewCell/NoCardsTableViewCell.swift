@@ -21,7 +21,6 @@ class NoCardsTableViewCell: UITableViewCell {
         noCardsLabel.text = Constants.Strings.MyCardFlow.NoCards.description
         noCardsLabel.font = UIFont.bcSansRegularWithSize(size: 14)
         noCardsLabel.textColor = AppColours.textBlack
-        
     }
     
     func configure(withOwner vc: UIViewController) {

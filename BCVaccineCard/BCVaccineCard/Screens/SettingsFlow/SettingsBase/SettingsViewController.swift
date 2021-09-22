@@ -38,8 +38,9 @@ extension SettingsViewController {
     private func setupDataSource() {
         self.dataSource = [
             Setting(cell: .text(text: Constants.Strings.Settings.openingText), isClickable: false),
-            Setting(cell: .setting(text: Constants.Strings.Settings.privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true),
-            Setting(cell: .setting(text: Constants.Strings.Settings.help, image: #imageLiteral(resourceName: "question-icon")), isClickable: true)
+            Setting(cell: .setting(text: Constants.Strings.Settings.privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true)
+            // TODO: Unhide this cell once we have some details surrounding the help option
+//            Setting(cell: .setting(text: Constants.Strings.Settings.help, image: #imageLiteral(resourceName: "question-icon")), isClickable: true)
         ]
     }
 }
@@ -80,7 +81,8 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let type = dataSource[indexPath.row]
         guard type.isClickable else { return }
-        // TODO: Show alert here to show that this feature has not yet been implemented
+        // FIXME: Once other features are added, will need a way to distinguish which cell is tapped and where it's going.
+        self.openPrivacyPolicy()
     }
     
 }
