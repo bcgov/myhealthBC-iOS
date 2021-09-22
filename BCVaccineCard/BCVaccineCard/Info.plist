@@ -20,6 +20,15 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We need permission to access your camera to be able to scan QR codes</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>BCSans-Bold.otf</string>
+		<string>BCSans-BoldItalic.otf</string>
+		<string>BCSans-Italic.otf</string>
+		<string>BCSans-Regular.otf</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -52,8 +61,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -64,14 +71,5 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>BCSans-Bold.otf</string>
-		<string>BCSans-BoldItalic.otf</string>
-		<string>BCSans-Italic.otf</string>
-		<string>BCSans-Regular.otf</string>
-	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>We need permission to access your camera to be able to scan QR codes</string>
 </dict>
 </plist>
