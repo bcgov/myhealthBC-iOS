@@ -123,6 +123,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         guard !dataSource.isEmpty else {
             if let cell = tableView.dequeueReusableCell(withIdentifier: NoCardsTableViewCell.getName, for: indexPath) as? NoCardsTableViewCell {
                 cell.configure(withOwner: self)
+                tableView.isEditing = false
                 return cell
             }
             return UITableViewCell()
@@ -151,6 +152,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        guard !dataSource.isEmpty else { return .none }
         return .delete
     }
     
@@ -161,6 +163,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard !dataSource.isEmpty else { return nil }
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             self.deleteCardAt(indexPath: indexPath)
         }
@@ -171,6 +174,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard !dataSource.isEmpty else { return nil }
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             self.deleteCardAt(indexPath: indexPath)
         }
@@ -181,6 +185,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        guard !dataSource.isEmpty, dataSource.count > sourceIndexPath.row, dataSource.count > destinationIndexPath.row else { return }
         let movedObject = dataSource[sourceIndexPath.row]
         dataSource.remove(at: sourceIndexPath.row)
         dataSource.insert(movedObject, at: destinationIndexPath.row)
@@ -198,7 +203,11 @@ extension CardsBaseViewController {
             guard self.dataSource.count > indexPath.row else { return }
             self.dataSource.remove(at: indexPath.row)
             self.saveToDefaults()
-            self.tableView.reloadData()
+            if self.dataSource.isEmpty {
+                self.inEditMode = false
+            } else {
+                self.tableView.reloadData()
+            }
         }
     }
 }
