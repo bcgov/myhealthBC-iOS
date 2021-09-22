@@ -166,7 +166,8 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
             return
         }
         appendModelToLocalStorage(model: model)
-        alert(title: "Saved", message: "Todo") {[weak self] in
+        // TODO: text from constants
+        alert(title: "Your proof of vaccination has been added", message: "") {[weak self] in
             guard let `self` = self else {return}
             self.navigationController?.popViewController(animated: true)
         }
