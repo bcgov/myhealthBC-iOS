@@ -22,6 +22,7 @@ class GatewayFormViewController: UIViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var enterButton: AppStyleButton!
     
+    var completionHandler: (() -> Void)?
     private var dataSource: [GatewayFormData] = []
     private var enterButtonEnabled: Bool = false {
         didSet {
@@ -206,6 +207,7 @@ extension GatewayFormViewController {
         alert(title: "Success", message: "Congrats! You have successfully fetched your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "Yes", buttonOneCompletion: {
             self.dismiss(animated: true) {
                 self.appendModelToLocalStorage(model: model.transform())
+                self.completionHandler?()
             }
         }, buttonTwoTitle: "No") { [weak self] in
             guard let `self` = self else { return }

@@ -38,8 +38,9 @@ extension SettingsViewController {
     private func setupDataSource() {
         self.dataSource = [
             Setting(cell: .text(text: Constants.Strings.Settings.openingText), isClickable: false),
-            Setting(cell: .setting(text: Constants.Strings.Settings.privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true),
-            Setting(cell: .setting(text: Constants.Strings.Settings.help, image: #imageLiteral(resourceName: "question-icon")), isClickable: true)
+            Setting(cell: .setting(text: Constants.Strings.Settings.privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true)
+            // TODO: Unhide this cell once we have some details surrounding the help option
+//            Setting(cell: .setting(text: Constants.Strings.Settings.help, image: #imageLiteral(resourceName: "question-icon")), isClickable: true)
         ]
     }
 }
