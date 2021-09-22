@@ -34,10 +34,6 @@ class GatewayFormViewController: UIViewController {
         setup()
     }
     
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
-//    }
-    
     private func setup() {
         setupUI()
         setupButtons()
@@ -46,7 +42,9 @@ class GatewayFormViewController: UIViewController {
     }
     
     private func setupUI() {
-        // TODO: Font setup here, and separator color
+        separatorView.backgroundColor = AppColours.barYellow
+        formTitleLabel.font = UIFont.bcSansBoldWithSize(size: 18)
+        formTitleLabel.textColor = AppColours.textBlack
         formTitleLabel.text = Constants.Strings.MyCardFlow.Form.title
     }
     
@@ -132,13 +130,11 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     
     func didFinishEditing(formField: FormTextFieldType, text: String?) {
         updateDataSource(formField: formField, text: text)
-//        enterButtonEnabled = shouldButtonBeEnabled(formField: formField, text: text)
         enterButtonEnabled = shouldButtonBeEnabled()
     }
     
     func textFieldTextDidChange(formField: FormTextFieldType, newText: String) {
         updateDataSource(formField: formField, text: newText)
-//        enterButtonEnabled = shouldButtonBeEnabled(formField: formField, text: newText)
         enterButtonEnabled = shouldButtonBeEnabled()
     }
     
@@ -175,34 +171,51 @@ extension GatewayFormViewController {
     }
 }
 
+// MARK: FIXME: This is just temporary so that we can test UI with local data
+extension GatewayFormViewController {
+    func checkForPHN(phnString: String) {
+        var model: AppVaccinePassportModel
+        let phn = phnString.trimWhiteSpacesAndNewLines.removeWhiteSpaceFormatting
+        let name: String
+        let image: UIImage?
+        let birthday: String
+        
+        var status: VaccineStatus
+        if phn == "1111111111" {
+            status = .fully
+            name = "WILLIE BEAMEN"
+            image = UIImage(named: "full")
+            birthday = "September 15, 1980"
+        } else if phn == "2222222222" {
+            status = .partially
+            name = "RON BERGUNDY"
+            image = UIImage(named: "partial")
+            birthday = "December 15, 1964"
+        } else {
+            status = .notVaxed
+            name = "BRICK TAMLAND"
+            image = nil
+            birthday = "October 12, 1945"
+        }
+        guard let img = image else {
+            alert(title: "Error", message: "Invalid PHN number, no QR code associated with this number")
+            return
+        }
+        let code = img.toPngString() ?? ""
+        model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, status: status))
+        alert(title: "Success", message: "Congrats! You have successfully fetched your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "Yes", buttonOneCompletion: {
+            self.dismiss(animated: true) {
+                self.appendModelToLocalStorage(model: model.transform())
+            }
+        }, buttonTwoTitle: "No") { [weak self] in
+            guard let `self` = self else { return }
+            self.dismiss(animated: true, completion: nil)
+            // No Nothing, just dismiss
+        }
+    }
+}
 
-//// MARK: QR Vaccine Validation check
-//extension GatewayFormViewController {
-//    func checkForPHN(phnString: String) {
-//        var vaccinePassportModel: VaccinePassportModel
-//        let phn = phnString.trimWhiteSpacesAndNewLines
-//        let name: String
-//        let imageName: String
-//
-//        var status: VaccineStatus
-//        if phn == "1111111111" {
-//            status = .fully
-//            name = "WILLIE BEAMEN"
-//            imageName = "full"
-//        } else if phn == "2222222222" {
-//            status = .partially
-//            name = "RON BERGUNDY"
-//            imageName = "partial"
-//        } else {
-//            status = .notVaxed
-//            name = "BRICK TAMLAND"
-//            imageName = ""
-//        }
-//        vaccinePassportModel = VaccinePassportModel(imageName: imageName, phn: phn, name: name, status: status)
-//        let vc = VaccinePassportVC.constructVaccinePassportVC(withModel: vaccinePassportModel, delegateOwner: self)
-//        self.present(vc, animated: true, completion: nil)
-//    }
-//}
+
 
 // MARK: For Button tap events
 extension GatewayFormViewController: AppStyleButtonDelegate {
@@ -210,8 +223,9 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
         if type == .cancel {
             self.dismiss(animated: true, completion: nil)
         } else if type == .enter {
-//            checkForPHN(phnString: self.phnTextField.text ?? "")
-            // TODO: Check phn logic here, then would pop back to base card screen
+            guard let index = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
+            guard let phn = dataSource[index].cellStringData else { return }
+            checkForPHN(phnString: phn)
         }
     }
 }

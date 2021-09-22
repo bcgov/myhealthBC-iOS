@@ -144,10 +144,10 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         }
     }
 
-    func storeValidatedQRCode(data: ScanResultModel) {
-        
+    private func storeValidatedQRCode(data: ScanResultModel) {
+        let model = convertScanResultModelIntoLocalData(data: data)
+        appendModelToLocalStorage(model: model)
     }
-    
 }
 
 // MARK: Image Picker

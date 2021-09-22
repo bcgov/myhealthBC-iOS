@@ -8,7 +8,7 @@
 import UIKit
 
 enum VaccineStatus: String, Codable {
-    case fully = "fully", partially, notVaxed
+    case fully = "fully", partially = "partially", notVaxed = "none"
     
     var getTitle: String {
         switch self {
@@ -27,9 +27,24 @@ enum VaccineStatus: String, Codable {
     }
 }
 
-struct VaccinePassportModel: Codable, Equatable {
-    let imageName: String
-    let phn: String
+struct LocallyStoredVaccinePassportModel: Codable, Equatable {
+    let code: String
+    let birthdate: String
     let name: String
     let status: VaccineStatus
+    
+    func transform() -> AppVaccinePassportModel {
+        return AppVaccinePassportModel(codableModel: self)
+    }
+}
+
+struct AppVaccinePassportModel: Equatable {
+    let codableModel: LocallyStoredVaccinePassportModel
+    var image: UIImage? {
+        return codableModel.code.toImage()
+    }
+    
+    func transform() -> LocallyStoredVaccinePassportModel {
+        return self.codableModel
+    }
 }

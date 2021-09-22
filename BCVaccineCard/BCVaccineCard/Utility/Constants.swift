@@ -13,6 +13,12 @@ struct Constants {
 //        static let vaccinationStatusHeader = "BC Vaccine Card Verifier"
 //        static let scanAgain = "Scan Next"
         
+        struct GenericText {
+            static let ok = "OK"
+            static let cancel = "Cancel"
+            static let yes = "Yes"
+        }
+        
         struct Errors {
             struct CameraAccessIsNecessary {
                 static let title = "No Camera Access"
@@ -73,6 +79,11 @@ struct Constants {
                 static let issuedOn = "Issued on "
                 static let tapToZoomIn = "Tap to zoom in"
                 static let presentForScanning = "PresentForScanning"
+            }
+            
+            struct MyCardsConfirmations {
+                static let removeTitle = "Unlink Card"
+                static let removeDescription = "Are you sure you want to unlink this card from your wallet?"
             }
             
             struct QRMethodSelection {

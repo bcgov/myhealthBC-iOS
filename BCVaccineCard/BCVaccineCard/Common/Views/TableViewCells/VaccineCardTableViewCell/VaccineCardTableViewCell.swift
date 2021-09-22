@@ -38,14 +38,14 @@ class VaccineCardTableViewCell: UITableViewCell {
         tapToZoomInLabel.text = Constants.Strings.MyCardFlow.HasCards.tapToZoomIn
     }
     
-    func configure(model: VaccinePassportModel, expanded: Bool) {
-        nameLabel.text = model.name
-        checkmarkImageView.isHidden = model.status != .fully
-        vaccineStatusLabel.text = model.status.getTitle
+    func configure(model: AppVaccinePassportModel, expanded: Bool) {
+        nameLabel.text = model.codableModel.name
+        checkmarkImageView.isHidden = model.codableModel.status != .fully
+        vaccineStatusLabel.text = model.codableModel.status.getTitle
         issuedOnLabel.text = Constants.Strings.MyCardFlow.HasCards.issuedOn + placeholderDate
-        statusBackgroundView.backgroundColor = model.status.getColor
-        expandableBackgroundView.backgroundColor = model.status.getColor
-        qrCodeImage.image = UIImage(named: model.imageName)
+        statusBackgroundView.backgroundColor = model.codableModel.status.getColor
+        expandableBackgroundView.backgroundColor = model.codableModel.status.getColor
+        qrCodeImage.image = model.image
         expandableBackgroundView.isHidden = !expanded
     }
     
