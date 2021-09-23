@@ -117,7 +117,11 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         case .text: return
         case .method(type: let type):
             if let cell = tableView.cellForRow(at: indexPath) as? QRSelectionTableViewCell {
-                cell.callDelegate(fromMethod: type)
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                // The delay is necessary for the haptic feedback to occur immediately.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    cell.callDelegate(fromMethod: type)
+                }
             }
         }
     }
