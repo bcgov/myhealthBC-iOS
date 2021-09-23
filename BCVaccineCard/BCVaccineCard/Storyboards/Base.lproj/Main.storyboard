@@ -92,7 +92,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XiM-Gy-dcz">
-                                <rect key="frame" x="0.0" y="88" width="414" height="655"/>
+                                <rect key="frame" x="24" y="88" width="366" height="655"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
@@ -108,9 +108,9 @@
                         <viewLayoutGuide key="safeArea" id="fhj-Jd-QLm"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="fhj-Jd-QLm" firstAttribute="trailing" secondItem="XiM-Gy-dcz" secondAttribute="trailing" id="2bR-vl-zui"/>
+                            <constraint firstItem="fhj-Jd-QLm" firstAttribute="trailing" secondItem="XiM-Gy-dcz" secondAttribute="trailing" constant="24" id="2bR-vl-zui"/>
                             <constraint firstItem="QAa-04-c9i" firstAttribute="top" secondItem="XiM-Gy-dcz" secondAttribute="bottom" constant="20" id="UKp-8k-VWS"/>
-                            <constraint firstItem="XiM-Gy-dcz" firstAttribute="leading" secondItem="fhj-Jd-QLm" secondAttribute="leading" id="d6G-ub-YdN"/>
+                            <constraint firstItem="XiM-Gy-dcz" firstAttribute="leading" secondItem="fhj-Jd-QLm" secondAttribute="leading" constant="24" id="d6G-ub-YdN"/>
                             <constraint firstItem="QAa-04-c9i" firstAttribute="centerX" secondItem="NvA-Ln-WsM" secondAttribute="centerX" id="ieT-aB-D5A"/>
                             <constraint firstItem="XiM-Gy-dcz" firstAttribute="top" secondItem="fhj-Jd-QLm" secondAttribute="top" id="nxM-ue-BZu"/>
                             <constraint firstItem="fhj-Jd-QLm" firstAttribute="bottom" secondItem="QAa-04-c9i" secondAttribute="bottom" constant="10" id="vwF-W9-9zN"/>

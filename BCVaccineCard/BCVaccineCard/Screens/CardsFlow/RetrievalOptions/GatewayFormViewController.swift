@@ -201,7 +201,7 @@ extension GatewayFormViewController {
             return
         }
         let code = img.toPngString() ?? ""
-        model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, status: status))
+        model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, issueDate: 1632413161, status: status))
         guard isCardAlreadyInWallet(modelToAdd: model) == false else {
             alert(title: "Duplicate", message: "This card is already saved in your wallet.") { [weak self] in
                 guard let `self` = self else {return}

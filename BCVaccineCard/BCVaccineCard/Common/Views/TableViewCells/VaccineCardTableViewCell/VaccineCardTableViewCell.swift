@@ -19,7 +19,7 @@ class VaccineCardTableViewCell: UITableViewCell {
     @IBOutlet weak var expandableBackgroundView: UIView!
     
     // TODO: Will need this information from metadata
-    private let placeholderDate = "September-09-2012, 14:27"
+//    private let placeholderDate = "September-09-2012, 14:27"
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -42,7 +42,10 @@ class VaccineCardTableViewCell: UITableViewCell {
         nameLabel.text = model.codableModel.name
         checkmarkImageView.isHidden = model.codableModel.status != .fully
         vaccineStatusLabel.text = model.codableModel.status.getTitle
-        issuedOnLabel.text = Constants.Strings.MyCardFlow.HasCards.issuedOn + placeholderDate
+        if let issuedOnDate = model.issueDate {
+            issuedOnLabel.text = Constants.Strings.MyCardFlow.HasCards.issuedOn + issuedOnDate
+        }
+        issuedOnLabel.isHidden = model.issueDate == nil
         statusBackgroundView.backgroundColor = model.codableModel.status.getColor
         expandableBackgroundView.backgroundColor = model.codableModel.status.getColor
         qrCodeImage.image = model.image
