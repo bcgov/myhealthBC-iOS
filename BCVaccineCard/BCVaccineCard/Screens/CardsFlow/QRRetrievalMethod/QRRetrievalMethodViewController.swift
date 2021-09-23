@@ -171,14 +171,18 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
     private func storeValidatedQRCode(data: ScanResultModel) {
         let model = convertScanResultModelIntoLocalData(data: data)
         let appModel = model.transform()
-        guard isCardAlreadyInWallet(modelToAdd: appModel) == false else {
-            alert(title: "Duplicate", message: "This QR code is already saved in your wallet.") { [weak self] in
-                guard let `self` = self else {return}
-                self.navigationController?.popViewController(animated: true)
+        if doesCardNeedToBeUpdated(modelToUpdate: appModel) {
+            updateCardInLocalStorage(model: model)
+        } else {
+            guard isCardAlreadyInWallet(modelToAdd: appModel) == false else {
+                alert(title: "Duplicate", message: "This QR code is already saved in your wallet.") { [weak self] in
+                    guard let `self` = self else {return}
+                    self.navigationController?.popViewController(animated: true)
+                }
+                return
             }
-            return
+            appendModelToLocalStorage(model: model)
         }
-        appendModelToLocalStorage(model: model)
         // TODO: text from constants
         self.navigationController?.showBanner(message: "Your proof of vaccination has been added", style: .Top)
         self.navigationController?.popViewController(animated: true)
