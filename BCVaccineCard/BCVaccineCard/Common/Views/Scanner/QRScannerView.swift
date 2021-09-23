@@ -31,10 +31,10 @@ class QRScannerView: UIView {
     }
     
     // MARK: Initialization
-    public func present(on parentViewController: UIViewController, completion: @escaping(_ result: ScanResultModel?) -> Void) {
+    public func present(on parentViewController: UIViewController, container: UIView, completion: @escaping(_ result: ScanResultModel?) -> Void) {
         self.completionHandler = completion
         self.parentViewController = parentViewController
-        present(on: parentViewController) { [weak self] in
+        present(in: container) { [weak self] in
             guard let `self` = self else {return}
             self.setup()
         }
@@ -49,7 +49,11 @@ class QRScannerView: UIView {
                     self.showCamera()
                     return
                 }
-                self.alertCameraAccessIsNecessary()
+                guard let callback = self.completionHandler else {
+                    self.alertCameraAccessIsNecessary()
+                    return
+                }
+                callback(nil)
             }
         } else if status == .denied {
             self.alertCameraAccessIsNecessary()
@@ -59,17 +63,17 @@ class QRScannerView: UIView {
     }
     
     // MARK: Presentation
-    private func present(on parentViewController: UIViewController, then: @escaping() -> Void) {
-        self.frame = parentViewController.view.bounds
+    private func present(in container: UIView, then: @escaping() -> Void) {
+        self.frame = container.bounds
         self.tag = QRScannerView.viewTag
-        parentViewController.view.addSubview(self)
+        container.addSubview(self)
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.heightAnchor.constraint(equalTo: parentViewController.view.heightAnchor, constant: 0).isActive = true
-        self.widthAnchor.constraint(equalTo: parentViewController.view.widthAnchor, constant: 0).isActive = true
-        self.leadingAnchor.constraint(equalTo: parentViewController.view.leadingAnchor, constant: 0).isActive = true
-        self.trailingAnchor.constraint(equalTo: parentViewController.view.trailingAnchor, constant: 0).isActive = true
-        self.centerXAnchor.constraint(equalTo: parentViewController.view.centerXAnchor, constant: 0).isActive = true
-        self.centerYAnchor.constraint(equalTo: parentViewController.view.centerYAnchor, constant: 0).isActive = true
+        self.heightAnchor.constraint(equalTo: container.heightAnchor, constant: 0).isActive = true
+        self.widthAnchor.constraint(equalTo: container.widthAnchor, constant: 0).isActive = true
+        self.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 0).isActive = true
+        self.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 0).isActive = true
+        self.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: 0).isActive = true
+        self.centerYAnchor.constraint(equalTo: container.centerYAnchor, constant: 0).isActive = true
         then()
     }
     
@@ -96,8 +100,7 @@ class QRScannerView: UIView {
     func showCameraPermissionsSettings() {
         self.removeFromSuperview()
         if let url = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(url, options: [:], completionHandler: { _ in
-            })
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     
@@ -189,6 +192,8 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         // Begin Capture Session
         captureSession.startRunning()
         
+        addCameraCutout()
+        
         // Set orientation
         guard let connection = preview.connection,
               connection.isVideoOrientationSupported,
@@ -236,14 +241,14 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
             // Pause camera
             pauseCamera()
             // Show code location
-            showQRCodeLocation(for: metadataObject, isInValid: false, tag: Constants.UI.QRCodeHighlighter.tag)
+            showQRCodeLocation(for: metadataObject, isInValid: false, tag: Constants.UI.CameraView.QRCodeHighlighter.tag)
             // Validate QR code
             validate(code: stringValue)
         } else {
             // Show message
             self.parentViewController?.showBanner(message: Constants.Strings.Errors.InvalidCode.message, style: .Bottom)
             // Show code location
-            showQRCodeLocation(for: metadataObject, isInValid: false, tag: Constants.UI.QRCodeHighlighter.tag)
+            showQRCodeLocation(for: metadataObject, isInValid: false, tag: Constants.UI.CameraView.QRCodeHighlighter.tag)
         }
     }
     
@@ -300,9 +305,9 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         }
         let container = UIView(frame: metadataLocation.bounds)
         container.tag = tag
-        container.layer.borderWidth =  Constants.UI.QRCodeHighlighter.borderWidth
-        container.layer.borderColor = isInValid ? Constants.UI.QRCodeHighlighter.borderColorInvalid : Constants.UI.QRCodeHighlighter.borderColor
-        container.layer.cornerRadius =  Constants.UI.QRCodeHighlighter.cornerRadius
+        container.layer.borderWidth =  Constants.UI.CameraView.QRCodeHighlighter.borderWidth
+        container.layer.borderColor = isInValid ? Constants.UI.CameraView.QRCodeHighlighter.borderColorInvalid : Constants.UI.CameraView.QRCodeHighlighter.borderColor
+        container.layer.cornerRadius =  Constants.UI.CameraView.QRCodeHighlighter.cornerRadius
         container.backgroundColor = .clear
         
         codeHighlightTags.append(tag)
@@ -315,7 +320,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         else {
             return
         }
-        container.layer.borderColor = Constants.UI.QRCodeHighlighter.borderColorInvalid
+        container.layer.borderColor = Constants.UI.CameraView.QRCodeHighlighter.borderColorInvalid
     }
     
     fileprivate func clearQRCodeLocations() {
@@ -324,6 +329,71 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
                 box.removeFromSuperview()
             }
         }
+    }
+    
+    fileprivate func addCameraCutout() {
+        // Constants
+        let fillLayerName = Constants.UI.CameraView.CameraCutout.fillLayerName
+        let bornerLayerName = Constants.UI.CameraView.CameraCutout.bornerLayerName
+        
+        let width: CGFloat = Constants.UI.CameraView.CameraCutout.width
+        let height: CGFloat = Constants.UI.CameraView.CameraCutout.height
+        let colour = Constants.UI.CameraView.CameraCutout.colour
+        let opacity: Float = Constants.UI.CameraView.CameraCutout.opacity
+        let cornerRadius: CGFloat = Constants.UI.CameraView.CameraCutout.cornerRadius
+        
+        self.removeCameraCutout()
+        
+        // positioning
+        let horizontalDistance = (self.bounds.size.height - height) / 2
+        let verticalDistance = (self.bounds.size.width - width) / 2
+        
+        // Outer
+        let path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: self.bounds.size.width, height: self.bounds.size.height), cornerRadius: 0)
+        // middle cutout
+        let middlePart = UIBezierPath(roundedRect: CGRect(x: verticalDistance, y: horizontalDistance, width: width, height: height), cornerRadius: cornerRadius)
+        path.append(middlePart)
+        path.usesEvenOddFillRule = true
+        let fillLayer = CAShapeLayer()
+        fillLayer.path = path.cgPath
+        fillLayer.fillRule = .evenOdd
+        fillLayer.fillColor = colour
+        fillLayer.opacity = opacity
+        
+        fillLayer.name = fillLayerName
+        self.layer.addSublayer(fillLayer)
+        
+        // Add border
+        let borderLayer = CAShapeLayer()
+        let borderOuterPath = UIBezierPath(roundedRect: CGRect(x: verticalDistance, y: horizontalDistance, width: width, height: height), cornerRadius: cornerRadius)
+        borderLayer.path = borderOuterPath.cgPath
+        borderLayer.fillColor = UIColor.clear.cgColor
+        borderLayer.strokeColor = UIColor.white.cgColor
+        borderLayer.lineWidth = 0.5
+        
+        borderLayer.name = bornerLayerName
+        self.layer.addSublayer(borderLayer)
+    }
+    
+    fileprivate func removeCameraCutout() {
+        let fillLayerName = Constants.UI.CameraView.CameraCutout.fillLayerName
+        let bornerLayerName = Constants.UI.CameraView.CameraCutout.bornerLayerName
+        
+        self.layer.sublayers?
+            .filter { layer in return layer.name == fillLayerName }
+            .forEach { layer in
+                layer.removeFromSuperlayer()
+                layer.removeAllAnimations()
+            }
+        
+        self.layer.sublayers?
+            .filter { layer in return layer.name == bornerLayerName }
+            .forEach { layer in
+                layer.removeFromSuperlayer()
+                layer.removeAllAnimations()
+            }
+        
+        self.layer.layoutIfNeeded()
     }
 }
 

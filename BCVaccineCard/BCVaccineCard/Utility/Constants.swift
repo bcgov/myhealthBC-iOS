@@ -10,9 +10,6 @@ import UIKit
 
 struct Constants {
     struct Strings {
-//        static let vaccinationStatusHeader = "BC Vaccine Card Verifier"
-//        static let scanAgain = "Scan Next"
-        
         struct GenericText {
             static let ok = "OK"
             static let cancel = "Cancel"
@@ -22,7 +19,7 @@ struct Constants {
         struct Errors {
             struct CameraAccessIsNecessary {
                 static let title = "No Camera Access"
-                static let message = "Camera access is necessary to use this app."
+                static let message = "Camera access is necessary for this feature."
             }
             struct MultipleQRCodes {
                 static let message = "There are multiple QR codes in view"
