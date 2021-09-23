@@ -9,38 +9,6 @@ import Foundation
 import UIKit
 
 extension Constants {
-    
-//    struct Strings {
-//        static let vaccinationStatusHeader = "BC Vaccine Card Verifier"
-//        static let scanAgain = "Scan Next"
-//
-//        struct shouldUpdate {
-//            static let title = "Please Update"
-//            static let message = "A new version of this app is available on the app store"
-//        }
-//
-//        struct Errors {
-//            struct CameraAccessIsNecessary {
-//                static let title = "No Camera Access"
-//                static let message = "Camera access is necessary to use this app."
-//            }
-//            struct MultipleQRCodes {
-//                static let message = "There are multiple QR codes in view"
-//            }
-//            struct InvalidCode {
-//                static let message = "Invalid QR Code"
-//            }
-//            struct VideoNotSupported {
-//                static let title = "Unsupported Device"
-//                static let message = "Please use a device that supports video capture."
-//            }
-//            struct QRScanningNotSupported {
-//                static let title = "Unsupported Device"
-//                static let message = "Your device does not support QR code scanning."
-//            }
-//        }
-//    }
-    
     struct UI {
         struct Theme {
             static let primaryColor = UIColor(hexString: "#003366")
@@ -55,12 +23,41 @@ extension Constants {
             static let buttonSize: CGFloat = 42
         }
         
-        struct QRCodeHighlighter {
-            static let tag = 72192376
-            static let cornerRadius: CGFloat = Constants.UI.Theme.cornerRadius
-            static let borderWidth: CGFloat = 6
-            static let borderColor = Constants.UI.Theme.secondaryColor.cgColor
-            static let borderColorInvalid = UIColor.red.cgColor
+        struct CameraView {
+            struct CameraCutout {
+                static let fillLayerName = "cutout-fill-layer"
+                static let bornerLayerName = "border-layer"
+                
+                static let colour = UIColor(hexString: "313132").cgColor
+                static let opacity: Float = 0.7
+                static let cornerRadius: CGFloat = 10
+                
+                static var width: CGFloat {
+                    switch (UIScreen.main.traitCollection.userInterfaceIdiom) {
+                    case .pad:
+                        return 506
+                    default:
+                        return 247
+                    }
+                }
+                
+                static var height: CGFloat {
+                    switch (UIScreen.main.traitCollection.userInterfaceIdiom) {
+                    case .pad:
+                        return 469
+                    default:
+                        return 293
+                    }
+                }
+            }
+            
+            struct QRCodeHighlighter {
+                static let tag = 72192376
+                static let cornerRadius: CGFloat = Constants.UI.Theme.cornerRadius
+                static let borderWidth: CGFloat = 6
+                static let borderColor = Constants.UI.Theme.secondaryColor.cgColor
+                static let borderColorInvalid = UIColor.red.cgColor
+            }
         }
         
         struct LoadingIndicator {
