@@ -194,9 +194,16 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
         picker.modalPresentationStyle = UIModalPresentationStyle.currentContext
         picker.delegate = self
         if let tabBarVC = self.navigationController?.parent as? UITabBarController {
-            tabBarVC.present(picker, animated: true, completion: nil)
+            tabBarVC.view.startLoadingIndicator()
+            tabBarVC.present(picker, animated: true, completion: {
+                tabBarVC.view.endLoadingIndicator()
+            })
         } else {
-            self.present(picker, animated: true, completion: nil)
+            view.startLoadingIndicator()
+            self.present(picker, animated: true, completion: { [weak self] in
+                guard let `self` = self else {return}
+                self.view.endLoadingIndicator()
+            })
         }
        
     }
