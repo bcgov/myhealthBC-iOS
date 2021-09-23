@@ -52,7 +52,7 @@ extension UIViewController {
         let textPadding: CGFloat = Constants.UI.Banner.labelPadding
         let containerPadding: CGFloat = Constants.UI.Banner.containerPadding
         let messageHeight = label.text?.heightForView(font: Constants.UI.Banner.labelFont, width: container.bounds.width) ?? 32
-        let bannerHeight = messageHeight + (textPadding * 2) + 60
+        let bannerHeight = messageHeight + (textPadding * 2) + 45
         let closedTopAnchor = 0 - bannerHeight
         let openTopAnchor: CGFloat = 0
         
@@ -69,10 +69,9 @@ extension UIViewController {
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.topAnchor.constraint(greaterThanOrEqualTo: container.topAnchor, constant: textPadding).isActive = true
-        label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 0 - textPadding).isActive = true
+        label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 0 - textPadding * 2).isActive = true
         label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: textPadding).isActive = true
         label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 0 - textPadding).isActive = true
-        
         
         // Style
         label.textAlignment = .center
@@ -90,16 +89,21 @@ extension UIViewController {
         
         // Remove banner after x seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.UI.Banner.displayDuration) {[weak self] in
-            guard let `self` = self,
-                  let container = self.view.viewWithTag(Constants.UI.Banner.tag),
-                  container.viewWithTag(labelTAG) != nil
-                  else {return}
+            guard let `self` = self else {return}
             /*
              We Randomly generated labelTAG.
              here we check if after the display duration, the same label is still displayed.
              this helps us avoid removing a banner that was just displayed
              */
-            container.removeFromSuperview()
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {[weak self] in
+                guard let `self` = self,
+                      let container = self.view.viewWithTag(Constants.UI.Banner.tag),
+                      container.viewWithTag(labelTAG) != nil
+                      else {return}
+                container.alpha = 0
+            } completion: { done in
+                container.removeFromSuperview()
+            }
         }
     }
     

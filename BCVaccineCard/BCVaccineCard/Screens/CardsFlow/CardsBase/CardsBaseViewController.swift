@@ -141,7 +141,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         guard let _ = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
         guard self.expandedIndexRow != indexPath.row else {
             guard let image = dataSource[indexPath.row].image else { return }
-            let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image)
+            let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController)
             self.present(vc, animated: true, completion: nil)
             return
         }

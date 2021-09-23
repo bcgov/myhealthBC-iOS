@@ -155,7 +155,11 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
                     self.alert(title: "Invalid QR Code", message: "") // TODO: Better text / from constants
                     return
                 }
-                self.storeValidatedQRCode(data: data)
+                DispatchQueue.main.async { [weak self] in
+                    guard let `self` = self else {return}
+                    self.storeValidatedQRCode(data: data)
+                }
+               
             }
         }
     }
@@ -185,7 +189,12 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
         imagePicker = picker
         picker.modalPresentationStyle = UIModalPresentationStyle.currentContext
         picker.delegate = self
-        self.present(picker, animated: true, completion: nil)
+        if let tabBarVC = self.navigationController?.parent as? UITabBarController {
+            tabBarVC.present(picker, animated: true, completion: nil)
+        } else {
+            self.present(picker, animated: true, completion: nil)
+        }
+       
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
