@@ -229,9 +229,16 @@ extension UIViewController {
         }
     }
     
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel) {
+        guard let defaultsPassports = Defaults.vaccinePassports else { return }
+        if let index = Defaults.vaccinePassports?.firstIndex(where: { $0.name == model.name && $0.birthdate == model.birthdate }), defaultsPassports.count > index {
+            Defaults.vaccinePassports?[index] = model
+        }
+    }
+    
     func convertScanResultModelIntoLocalData(data: ScanResultModel) -> LocallyStoredVaccinePassportModel {
         let status = VaccineStatus.init(rawValue: data.status.rawValue) ?? .notVaxed
-        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, name: data.name, status: status)
+        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, name: data.name, issueDate: data.issueDate, status: status)
     }
 }
 
@@ -248,12 +255,22 @@ extension UIViewController {
 
 // MARK: Check for duplicates - again, should probably find a better spot for this
 extension UIViewController {
+    // Need to think about how to handle this... will likely need two functions
     func isCardAlreadyInWallet(modelToAdd model: AppVaccinePassportModel) -> Bool {
         guard let localDS = Defaults.vaccinePassports, !localDS.isEmpty else { return false }
         let appDS = localDS.map { $0.transform() }
         let idArray = appDS.compactMap({ $0.id })
         guard let id = model.id else { return false } // May need some form of error handling here, as this just means the new model is incomplete
         guard idArray.firstIndex(where: { $0 == id }) == nil else { return true }
+        return false
+    }
+    // TODO: When we move these functions to it's own class, we should refactor how these are done as there is a fair amount of duplication.. just not doing it now as we are close to release
+    func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel) -> Bool {
+        guard let localDS = Defaults.vaccinePassports, !localDS.isEmpty else { return false }
+        guard model.codableModel.status == .fully else { return false }
+        if let _ = Defaults.vaccinePassports?.firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && $0.status == .partially }) {
+            return true
+        }
         return false
     }
 }

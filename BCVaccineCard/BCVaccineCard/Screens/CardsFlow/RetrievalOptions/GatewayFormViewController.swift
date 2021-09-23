@@ -201,26 +201,41 @@ extension GatewayFormViewController {
             return
         }
         let code = img.toPngString() ?? ""
-        model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, status: status))
-        guard isCardAlreadyInWallet(modelToAdd: model) == false else {
-            alert(title: "Duplicate", message: "This card is already saved in your wallet.") { [weak self] in
-                guard let `self` = self else {return}
+        model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, issueDate: 1632413161, status: status))
+        // This obviously needs to be refactored, but not going to bother, being that we are going to be removing it and hitting an endpoint.
+        if doesCardNeedToBeUpdated(modelToUpdate: model) {
+            alert(title: "Success", message: "Congrats! You have successfully updated your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
+                guard let `self` = self else { return }
                 self.dismiss(animated: true) {
+                    self.updateCardInLocalStorage(model: model.transform())
                     self.completionHandler?()
                 }
+            }, buttonTwoTitle: "No") { [weak self] in
+                guard let `self` = self else { return }
+                self.dismiss(animated: true, completion: nil)
+                // No Nothing, just dismiss
             }
-            return
-        }
-        alert(title: "Success", message: "Congrats! You have successfully fetched your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
-            guard let `self` = self else { return }
-            self.dismiss(animated: true) {
-                self.appendModelToLocalStorage(model: model.transform())
-                self.completionHandler?()
+        } else {
+            guard isCardAlreadyInWallet(modelToAdd: model) == false else {
+                alert(title: "Duplicate", message: "This card is already saved in your wallet.") { [weak self] in
+                    guard let `self` = self else {return}
+                    self.dismiss(animated: true) {
+                        self.completionHandler?()
+                    }
+                }
+                return
             }
-        }, buttonTwoTitle: "No") { [weak self] in
-            guard let `self` = self else { return }
-            self.dismiss(animated: true, completion: nil)
-            // No Nothing, just dismiss
+            alert(title: "Success", message: "Congrats! You have successfully fetched your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
+                guard let `self` = self else { return }
+                self.dismiss(animated: true) {
+                    self.appendModelToLocalStorage(model: model.transform())
+                    self.completionHandler?()
+                }
+            }, buttonTwoTitle: "No") { [weak self] in
+                guard let `self` = self else { return }
+                self.dismiss(animated: true, completion: nil)
+                // No Nothing, just dismiss
+            }
         }
     }
 }
