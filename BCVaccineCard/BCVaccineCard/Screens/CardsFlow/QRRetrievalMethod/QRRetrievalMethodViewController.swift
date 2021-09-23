@@ -27,7 +27,7 @@ class QRRetrievalMethodViewController: BaseViewController {
     private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
     private weak var imagePicker: UIImagePickerController? = nil
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -117,7 +117,11 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         case .text: return
         case .method(type: let type):
             if let cell = tableView.cellForRow(at: indexPath) as? QRSelectionTableViewCell {
-                cell.callDelegate(fromMethod: type)
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                // The delay is necessary for the haptic feedback to occur immediately.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    cell.callDelegate(fromMethod: type)
+                }
             }
         }
     }
@@ -150,12 +154,20 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
             }
             
             BCVaccineValidator.shared.validate(code: code) { [weak self] result in
-                guard let `self` = self, let data = result.result else {return}
-                self.storeValidatedQRCode(data: data)
+                guard let `self` = self else { return }
+                guard let data = result.result else {
+                    self.alert(title: "Invalid QR Code", message: "") // TODO: Better text / from constants
+                    return
+                }
+                DispatchQueue.main.async { [weak self] in
+                    guard let `self` = self else {return}
+                    self.storeValidatedQRCode(data: data)
+                }
+               
             }
         }
     }
-
+    
     private func storeValidatedQRCode(data: ScanResultModel) {
         let model = convertScanResultModelIntoLocalData(data: data)
         let appModel = model.transform()
@@ -168,11 +180,8 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         }
         appendModelToLocalStorage(model: model)
         // TODO: text from constants
-        alert(title: "Your proof of vaccination has been added", message: "") {[weak self] in
-            guard let `self` = self else {return}
-            self.navigationController?.popViewController(animated: true)
-        }
-        
+        self.navigationController?.showBanner(message: "Your proof of vaccination has been added", style: .Top)
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -184,13 +193,25 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
         imagePicker = picker
         picker.modalPresentationStyle = UIModalPresentationStyle.currentContext
         picker.delegate = self
-        self.present(picker, animated: true, completion: nil)
+        if let tabBarVC = self.navigationController?.parent as? UITabBarController {
+            tabBarVC.view.startLoadingIndicator()
+            tabBarVC.present(picker, animated: true, completion: {
+                tabBarVC.view.endLoadingIndicator()
+            })
+        } else {
+            view.startLoadingIndicator()
+            self.present(picker, animated: true, completion: { [weak self] in
+                guard let `self` = self else {return}
+                self.view.endLoadingIndicator()
+            })
+        }
+       
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let listener = ImagePickerCallback else {return}
         var newImage: UIImage? = nil
-
+        
         if let possibleImage = info[.editedImage] as? UIImage {
             newImage = possibleImage
         } else if let possibleImage = info[.originalImage] as? UIImage {

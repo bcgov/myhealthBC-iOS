@@ -9,34 +9,58 @@ import UIKit
 
 class ZoomedInPopUpVC: UIViewController {
     
-    class func constructZoomedInPopUpVC(withQRImage image: UIImage?) -> ZoomedInPopUpVC {
+    class func constructZoomedInPopUpVC(withQRImage image: UIImage?, parentVC: UIViewController?) -> ZoomedInPopUpVC {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: ZoomedInPopUpVC.self)) as? ZoomedInPopUpVC {
             vc.image = image
             vc.modalPresentationStyle = .overCurrentContext
+            vc.parentVC = parentVC
             return vc
         }
         return ZoomedInPopUpVC()
     }
-    
+    private let coverTag = 419231
     @IBOutlet weak var zoomedInView: VaxQRZoomedInView!
     private var image: UIImage?
+    private var parentVC: UIViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        view.layoutIfNeeded()
+    }
+    
     func setup() {
         view.isOpaque = false
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
+        view.backgroundColor = .clear
         zoomedInView.configure(qrImage: self.image, closeButtonDelegateOwner: self)
+        if let parentVC = parentVC {
+            let cover = UIView(frame: .zero)
+            cover.tag = coverTag
+            cover.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
+            parentVC.view.addSubview(cover)
+            cover.alpha = 0
+            cover.addEqualSizeContraints(to: parentVC.view)
+            parentVC.view.layoutIfNeeded()
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn) {
+                cover.alpha = 1
+                parentVC.view.layoutIfNeeded()
+            }
+        }
     }
 
 }
 
 extension ZoomedInPopUpVC: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
+        
         if type == .close {
+            if let parentVC = parentVC, let cover = parentVC.view.viewWithTag(coverTag) {
+                cover.removeFromSuperview()
+            }
             self.dismiss(animated: true, completion: nil)
         }
     }
