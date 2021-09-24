@@ -120,6 +120,8 @@
                     <connections>
                         <outlet property="bottomButton" destination="QAa-04-c9i" id="XJu-Ud-8ja"/>
                         <outlet property="tableView" destination="XiM-Gy-dcz" id="MG0-Su-9H2"/>
+                        <outlet property="tableViewLeadingConstraint" destination="d6G-ub-YdN" id="ewh-jZ-fEn"/>
+                        <outlet property="tableViewTrailingConstraint" destination="2bR-vl-zui" id="Gdf-JY-hs1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ggD-j1-Hc1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

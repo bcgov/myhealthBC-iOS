@@ -12,6 +12,9 @@ let cardAddedNotification = Notification.Name("cardAddedNotification")
 class CardsBaseViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
+    // NOTE: This is for fixing the indentation of table view when in edit mode
+    @IBOutlet weak private var tableViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var tableViewTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak private var bottomButton: AppStyleButton!
     
     private var expandedIndexRow = 0
@@ -24,6 +27,8 @@ class CardsBaseViewController: BaseViewController {
     
     private var inEditMode = false {
         didSet {
+            tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 24.0
+            tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 24.0
             tableView.isEditing = inEditMode
             adjustButtonName()
             tableView.reloadData()
@@ -53,11 +58,18 @@ extension CardsBaseViewController {
     @objc func onNotification(notification:Notification) {
         fetchFromDefaults()
         guard let id = notification.userInfo?["id"] as? String else { return }
+        var indexPath: IndexPath?
         if let index = self.dataSource.firstIndex(where: { $0.id == id }) {
             expandedIndexRow = index
+            indexPath = IndexPath(row: expandedIndexRow, section: 0)
         }
         inEditMode = false
-        
+        if let indexPath = indexPath {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
+                self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+            }
+        }
     }
 }
 
@@ -212,7 +224,10 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
 extension CardsBaseViewController {
     private func deleteCardAt(indexPath: IndexPath) {
         alert(title: Constants.Strings.MyCardFlow.MyCardsConfirmations.removeTitle, message: Constants.Strings.MyCardFlow.MyCardsConfirmations.removeDescription, buttonOneTitle: Constants.Strings.GenericText.cancel, buttonOneCompletion: {
-            // Do Nothing here
+            // This logic is so that a swipe to delete that is cancelled, gets reloaded and isn't showing a swiped state after cancelled
+            self.tableView.isEditing = self.inEditMode
+            // Note: Have to reload the entire table view here, not just the one cell, as it causes issues
+            self.tableView.reloadData()
         }, buttonTwoTitle: Constants.Strings.GenericText.yes) { [weak self] in
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
