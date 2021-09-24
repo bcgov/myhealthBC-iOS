@@ -85,9 +85,9 @@ struct Constants {
             
             struct QRMethodSelection {
                 static let description = "Scan, upload or get access to your proof of vaccination."
-                static let cameraScanOption = "Scan a vaccine card QR code"
-                static let imageUploadOption = "Use an image of your QR code"
-                static let healthGatewayOption = "Enter info to get your card"
+                static let cameraScanOption = "Scan a vaccine QR code"
+                static let imageUploadOption = "Upload your vaccine QR code"
+                static let healthGatewayOption = "Access your vaccine QR code"
             }
             
             struct Form {
