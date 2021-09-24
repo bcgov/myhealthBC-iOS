@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,13 +23,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Present for scanning" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q8c-dR-AVZ">
-                    <rect key="frame" x="12" y="30" width="356" height="58"/>
+                    <rect key="frame" x="12" y="30" width="356" height="68"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                     <color key="textColor" red="0.10080841929999999" green="0.1957546771" blue="0.37256795170000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Qmi-DM-LaH">
-                    <rect key="frame" x="0.0" y="116" width="380" height="380"/>
+                    <rect key="frame" x="5" y="126" width="370" height="370"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="Qmi-DM-LaH" secondAttribute="height" multiplier="1:1" id="0k3-y0-Jjp"/>
                     </constraints>
@@ -50,8 +51,8 @@
                 <constraint firstItem="Q8c-dR-AVZ" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="Bag-Fq-Ehk"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="hl5-F0-eKx" secondAttribute="bottom" constant="24" id="I4t-EH-8GX"/>
                 <constraint firstAttribute="trailing" secondItem="Q8c-dR-AVZ" secondAttribute="trailing" constant="12" id="KmN-X6-BZn"/>
-                <constraint firstItem="Qmi-DM-LaH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="PCY-nI-iLC"/>
-                <constraint firstAttribute="trailing" secondItem="Qmi-DM-LaH" secondAttribute="trailing" id="gz0-pE-ij5"/>
+                <constraint firstItem="Qmi-DM-LaH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="5" id="PCY-nI-iLC"/>
+                <constraint firstAttribute="trailing" secondItem="Qmi-DM-LaH" secondAttribute="trailing" constant="5" id="gz0-pE-ij5"/>
                 <constraint firstItem="hl5-F0-eKx" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="qT8-fT-65P"/>
                 <constraint firstItem="Q8c-dR-AVZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="wiU-C0-nty"/>
                 <constraint firstItem="Qmi-DM-LaH" firstAttribute="top" secondItem="Q8c-dR-AVZ" secondAttribute="bottom" constant="28" id="yQe-Nx-eXH"/>
