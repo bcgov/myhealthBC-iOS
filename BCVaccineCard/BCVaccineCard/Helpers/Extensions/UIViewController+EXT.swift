@@ -274,3 +274,10 @@ extension UIViewController {
         return false
     }
 }
+
+// MARK: Notification Center posting
+extension UIViewController {
+    func postCardAddedNotification(id: String) {
+        NotificationCenter.default.post(name: cardAddedNotification, object: nil, userInfo: ["id": id])
+    }
+}

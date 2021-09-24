@@ -7,6 +7,8 @@
 
 import UIKit
 
+let cardAddedNotification = Notification.Name("cardAddedNotification")
+
 class CardsBaseViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
@@ -34,18 +36,29 @@ class CardsBaseViewController: BaseViewController {
     }
     
     private func setup() {
+        cardChangedObservableSetup()
         navSetup()
         retrieveDataSource()
         setupTableView()
     }
+    
+}
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // Note: This refreshes the data source. Should find a better way to do this once gateway is working - will use a completion handler or something like that, as this is inefficient
-        retrieveDataSource()
-        
+// MARK: Card change observable setup
+extension CardsBaseViewController {
+    private func cardChangedObservableSetup() {
+        NotificationCenter.default.addObserver(self, selector: #selector(onNotification(notification:)), name: cardAddedNotification, object: nil)
     }
     
+    @objc func onNotification(notification:Notification) {
+        fetchFromDefaults()
+        guard let id = notification.userInfo?["id"] as? String else { return }
+        if let index = self.dataSource.firstIndex(where: { $0.id == id }) {
+            expandedIndexRow = index
+        }
+        inEditMode = false
+        
+    }
 }
 
 // MARK: Navigation setup
