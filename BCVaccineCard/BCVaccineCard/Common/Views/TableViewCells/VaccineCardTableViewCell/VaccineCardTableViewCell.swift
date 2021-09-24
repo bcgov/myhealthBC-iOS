@@ -36,7 +36,7 @@ class VaccineCardTableViewCell: UITableViewCell {
     }
     
     func configure(model: AppVaccinePassportModel, expanded: Bool) {
-        nameLabel.text = model.codableModel.name
+        nameLabel.text = model.codableModel.name.uppercased()
         checkmarkImageView.isHidden = model.codableModel.status != .fully
         vaccineStatusLabel.text = model.codableModel.status.getTitle
         if let issuedOnDate = model.issueDate {

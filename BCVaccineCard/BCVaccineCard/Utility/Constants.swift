@@ -75,7 +75,7 @@ struct Constants {
                 static let noRecordFound = "NO RECORD FOUND"
                 static let issuedOn = "Issued on "
                 static let tapToZoomIn = "Tap to zoom in"
-                static let presentForScanning = "PresentForScanning"
+                static let presentForScanning = "Present For Scanning"
             }
             
             struct MyCardsConfirmations {

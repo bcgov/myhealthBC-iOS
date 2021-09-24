@@ -173,6 +173,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         let appModel = model.transform()
         if doesCardNeedToBeUpdated(modelToUpdate: appModel) {
             updateCardInLocalStorage(model: model)
+            postCardAddedNotification(id: appModel.id ?? "")
         } else {
             guard isCardAlreadyInWallet(modelToAdd: appModel) == false else {
                 alert(title: "Duplicate", message: "This QR code is already saved in your wallet.") { [weak self] in
@@ -182,6 +183,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
                 return
             }
             appendModelToLocalStorage(model: model)
+            postCardAddedNotification(id: appModel.id ?? "")
         }
         // TODO: text from constants
         self.navigationController?.showBanner(message: "Your proof of vaccination has been added", style: .Top)
