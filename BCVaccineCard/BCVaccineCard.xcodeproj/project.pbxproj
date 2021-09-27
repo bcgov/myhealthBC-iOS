@@ -46,6 +46,7 @@
 		7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F71326F3A26D006B9444 /* QRSelectionTableViewCell.xib */; };
 		7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F71726F3B59B006B9444 /* TextTableViewCell.swift */; };
 		7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F71826F3B59B006B9444 /* TextTableViewCell.xib */; };
+		794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD61B270235430084ADA8 /* AccessibilityLabels.swift */; };
 		7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
 		7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */; };
 		7967E73626F40DB100EEF510 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73526F40DB100EEF510 /* Constants.swift */; };
@@ -130,6 +131,7 @@
 		7944F71326F3A26D006B9444 /* QRSelectionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QRSelectionTableViewCell.xib; sourceTree = "<group>"; };
 		7944F71726F3B59B006B9444 /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
 		7944F71826F3B59B006B9444 /* TextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextTableViewCell.xib; sourceTree = "<group>"; };
+		794BD61B270235430084ADA8 /* AccessibilityLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityLabels.swift; sourceTree = "<group>"; };
 		7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableViewCell.swift; sourceTree = "<group>"; };
 		7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormTableViewCell.xib; sourceTree = "<group>"; };
 		7967E73526F40DB100EEF510 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 				7944F6B326F12BA1006B9444 /* Storyboard.swift */,
 				7967E73526F40DB100EEF510 /* Constants.swift */,
 				2912314226F9433600CF5F3B /* UIConstants.swift */,
+				794BD61B270235430084ADA8 /* AccessibilityLabels.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -738,6 +741,7 @@
 				7967E74326F900E400EEF510 /* TabBarController.swift in Sources */,
 				7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */,
 				7967E74A26F908E400EEF510 /* Setting.swift in Sources */,
+				794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */,
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
 				7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */,
 				7944F71426F3A26D006B9444 /* QRSelectionTableViewCell.swift in Sources */,

@@ -52,5 +52,7 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>UIStatusBarHidden</key>
+	<true/>
 </dict>
 </plist>
