@@ -56,4 +56,9 @@ struct AppVaccinePassportModel: Equatable {
     func transform() -> LocallyStoredVaccinePassportModel {
         return self.codableModel
     }
+    
+    func getFormattedIssueDate() -> String {
+        guard let issueDate = issueDate else { return "" }
+        return Constants.Strings.MyCardFlow.HasCards.issuedOn + issueDate
+    }
 }

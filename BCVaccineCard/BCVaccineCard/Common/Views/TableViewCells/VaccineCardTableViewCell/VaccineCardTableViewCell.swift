@@ -70,5 +70,4 @@ class VaccineCardTableViewCell: UITableViewCell {
         expandableBackgroundView.isHidden = !expanded
         adjustShadow(expanded: expanded)
     }
-    
 }

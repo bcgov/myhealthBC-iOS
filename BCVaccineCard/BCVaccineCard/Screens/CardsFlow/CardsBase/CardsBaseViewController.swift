@@ -49,6 +49,7 @@ class CardsBaseViewController: BaseViewController {
         cardChangedObservableSetup()
         retrieveDataSource()
         setupTableView()
+        applyAccessibility()
     }
     
 }
@@ -111,7 +112,10 @@ extension CardsBaseViewController {
     private func adjustButtonName() {
         guard !self.dataSource.isEmpty else { return }
         let buttonType: AppStyleButton.ButtonType = inEditMode ? .done : .manageCards
-        bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true)
+        let value = self.inEditMode ? AppStyleButton.ButtonType.done.getTitle : AppStyleButton.ButtonType.manageCards.getTitle
+        let hint = self.inEditMode ? "Tapping 'done' will stop the editing of cards and save any changes." : "Tapping 'manage cards' will allow you to edit the order of your cards, and remove any cards you no longer want in your wallet."
+        bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true, accessibilityValue: value, accessibilityHint: hint)
+        
     }
 }
 
@@ -131,6 +135,13 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
         }
         expandedIndexRow = 0
         inEditMode = type == .manageCards
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            guard !self.dataSource.isEmpty else { return }
+            let indexPath = IndexPath(row: self.dataSource.count - 1, section: 0)
+            let cell = self.tableView.cellForRow(at: indexPath)
+            UIAccessibility.setFocusTo(cell)
+        }
+        
     }
 
 }
@@ -161,7 +172,14 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         }
         if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
             let expanded = indexPath.row == expandedIndexRow && !inEditMode
-            cell.configure(model: dataSource[indexPath.row], expanded: expanded)
+            let model = dataSource[indexPath.row]
+            cell.configure(model: model, expanded: expanded)
+            cell.isAccessibilityElement = true
+            let accessibilityLabel = expanded ? "Vaccination Card Expanded" : "Vaccination Card Collapsed"
+            cell.accessibilityLabel = accessibilityLabel
+            let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
+            cell.accessibilityValue = accessibilityValue
+            cell.accessibilityHint = expanded ? "Action Available: Tap to zoom in QR code" : "Action Available: Tap to expand Vaccination Card"
             return cell
         }
         return UITableViewCell()
@@ -200,6 +218,9 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             self.deleteCardAt(indexPath: indexPath)
         }
+        delete.isAccessibilityElement = true
+        delete.accessibilityTraits = .button
+        delete.accessibilityLabel = "Unlink button"
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
@@ -211,6 +232,9 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             self.deleteCardAt(indexPath: indexPath)
         }
+        delete.isAccessibilityElement = true
+        delete.accessibilityTraits = .button
+        delete.accessibilityLabel = "Unlink button"
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
@@ -269,5 +293,13 @@ extension CardsBaseViewController: ZoomedInPopUpVCDelegate {
 
 // MARK: Accessibility
 extension CardsBaseViewController {
-    
+    private func applyAccessibility() {
+        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButton() {
+            rightNavButton.accessibilityTraits = .button
+            rightNavButton.accessibilityLabel = "Add Card"
+            rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+        }
+    }
 }
+
+

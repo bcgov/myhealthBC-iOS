@@ -88,18 +88,26 @@ class AppStyleButton: UIView {
         contentView.layer.shadowOpacity = 0.05
         contentView.layer.shadowRadius = 10.0
         roundedButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 18)
+        self.roundedButton.isAccessibilityElement = true
+        self.roundedButton.accessibilityTraits = .button
     }
     
     @IBAction func buttonTappedAction(_ sender: UIButton) {
         self.delegate?.buttonTapped(type: self.buttonType)
     }
     
-    func configure(withStyle style: ButtonStyle, buttonType: ButtonType, delegateOwner: UIViewController, enabled: Bool) {
+    func configure(withStyle style: ButtonStyle, buttonType: ButtonType, delegateOwner: UIViewController, enabled: Bool, accessibilityValue: String? = nil, accessibilityHint: String? = nil) {
         roundedButton.backgroundColor = style.getColorScheme.backgroundColor
         roundedButton.setTitleColor(style.getColorScheme.titleColor, for: .normal)
         roundedButton.setTitle(buttonType.getTitle, for: .normal)
         self.delegate = delegateOwner as? AppStyleButtonDelegate
         self.buttonType = buttonType
         self.enabled = enabled
+        if let accessibilityValue = accessibilityValue {
+            self.roundedButton.accessibilityLabel = accessibilityValue
+        }
+        if let accessibilityHint = accessibilityHint {
+            self.roundedButton.accessibilityHint = accessibilityHint
+        }
     }
 }

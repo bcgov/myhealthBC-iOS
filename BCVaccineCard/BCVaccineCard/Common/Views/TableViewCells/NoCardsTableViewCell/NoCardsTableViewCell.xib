@@ -55,6 +55,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="addButton" destination="Sdk-pe-gBe" id="dU2-nh-SYJ"/>
+                <outlet property="noCardsImageView" destination="Ol8-gm-SFU" id="afB-Jk-4HV"/>
                 <outlet property="noCardsLabel" destination="GMe-5n-F1d" id="obg-Qs-Ubh"/>
             </connections>
             <point key="canvasLocation" x="28.985507246376812" y="181.13839285714286"/>
