@@ -39,6 +39,7 @@ extension BaseViewController {
         nav.setImageAndTarget(image: image, action: action, target: self)
     }
     
+    // NOTE: This function needs to be called every time you push another VC onto the stack (or when you pop a VC), in order to eliminate the case where the right nav bar button would have multiple targets
     func removeRightButtonTarget(action: Selector) {
         guard let nav = self.navigationController as? CustomNavigationController else { return }
         let subviews = nav.navigationBar.subviews
