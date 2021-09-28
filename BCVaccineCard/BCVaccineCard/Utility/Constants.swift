@@ -70,9 +70,9 @@ struct Constants {
             struct HasCards {
                 static let manageCardsButtonTitle = "Manage Cards"
                 static let doneButtonTitle = "Done"
-                static let fullyVaccinated = "VACCINATED"
-                static let partiallyVaccinated = "PARTIALLY VACCINATED"
-                static let noRecordFound = "NO RECORD FOUND"
+                static let fullyVaccinated = "Vaccinated"
+                static let partiallyVaccinated = "Partially Vaccinated"
+                static let noRecordFound = "No Record Found"
                 static let issuedOn = "Issued on "
                 static let tapToZoomIn = "Tap to zoom in"
                 static let presentForScanning = "Present For Scanning"

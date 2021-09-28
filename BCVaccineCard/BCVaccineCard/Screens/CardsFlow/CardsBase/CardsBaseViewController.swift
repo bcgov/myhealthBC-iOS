@@ -27,8 +27,8 @@ class CardsBaseViewController: BaseViewController {
     
     private var inEditMode = false {
         didSet {
-            tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 24.0
-            tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 24.0
+            tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
+            tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
             tableView.isEditing = inEditMode
             adjustButtonName()
             tableView.reloadData()
