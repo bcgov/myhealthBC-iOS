@@ -18,8 +18,12 @@ class SettingsViewController: BaseViewController {
         setup()
     }
     
-    private func setup() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navSetup()
+    }
+    
+    private func setup() {
         setupDataSource()
         setupTableView()
     }

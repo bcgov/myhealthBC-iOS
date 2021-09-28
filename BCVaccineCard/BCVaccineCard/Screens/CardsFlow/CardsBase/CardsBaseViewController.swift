@@ -40,9 +40,13 @@ class CardsBaseViewController: BaseViewController {
         setup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navSetup()
+    }
+    
     private func setup() {
         cardChangedObservableSetup()
-        navSetup()
         retrieveDataSource()
         setupTableView()
     }
@@ -86,6 +90,7 @@ extension CardsBaseViewController {
     
     private func goToAddCardOptionScreen() {
         let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+        self.removeRightButtonTarget(action: #selector(addCardButton))
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

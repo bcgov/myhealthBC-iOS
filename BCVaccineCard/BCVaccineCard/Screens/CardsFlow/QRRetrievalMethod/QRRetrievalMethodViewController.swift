@@ -35,11 +35,11 @@ class QRRetrievalMethodViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navSetup()
         self.tableView.contentInsetAdjustmentBehavior = .never
     }
     
     private func setup() {
-        navSetup()
         setupDataSource()
         setupTableView()
     }
@@ -68,6 +68,7 @@ extension QRRetrievalMethodViewController {
     }
     
     private func dismissMethodSelectionScreen() {
+        self.removeRightButtonTarget(action: #selector(closeButtonAction))
         self.navigationController?.popViewController(animated: true)
     }
 }

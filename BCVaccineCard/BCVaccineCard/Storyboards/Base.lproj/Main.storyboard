@@ -283,7 +283,7 @@
         <!--My Cards-->
         <scene sceneID="8iI-MZ-k7t">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZK3-oA-dZG" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZK3-oA-dZG" customClass="CustomNavigationController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="My Cards" image="my-cards-tab" selectedImage="my-cards-tab" id="KIO-gm-Zyv"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aSx-fh-mpj">
@@ -333,7 +333,7 @@
         <!--Settings-->
         <scene sceneID="iCW-WW-7iV">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bp9-Lg-RvQ" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bp9-Lg-RvQ" customClass="CustomNavigationController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="settings-tab" selectedImage="settings-tab" id="bqm-CU-u40"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Hjj-bN-0tM">
