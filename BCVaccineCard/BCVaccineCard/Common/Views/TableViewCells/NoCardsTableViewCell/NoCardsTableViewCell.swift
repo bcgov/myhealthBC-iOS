@@ -24,7 +24,7 @@ class NoCardsTableViewCell: UITableViewCell {
     }
     
     func configure(withOwner vc: UIViewController) {
-        addButton.configure(withStyle: .blue, buttonType: .addCard, delegateOwner: vc, enabled: true)
+        addButton.configure(withStyle: .white, buttonType: .addCard, delegateOwner: vc, enabled: true)
     }
     
 }

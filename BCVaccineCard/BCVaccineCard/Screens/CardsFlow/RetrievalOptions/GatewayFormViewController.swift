@@ -56,11 +56,11 @@ class GatewayFormViewController: UIViewController {
     
     private func setupDataSource() {
         dataSource = [
-            GatewayFormData(type: .text(type: .plainText), cellStringData: Constants.Strings.MyCardFlow.Form.description),
+            GatewayFormData(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: Constants.Strings.MyCardFlow.Form.description),
             GatewayFormData(type: .form(type: .personalHealthNumber), cellStringData: nil),
             GatewayFormData(type: .form(type: .dateOfBirth), cellStringData: nil),
             GatewayFormData(type: .form(type: .dateOfVaccination), cellStringData: nil),
-            GatewayFormData(type: .text(type: .underlinedWithImage), cellStringData: Constants.Strings.MyCardFlow.Form.privacyStatement)
+            GatewayFormData(type: .text(type: .underlinedWithImage, font: UIFont.bcSansBoldWithSize(size: 14)), cellStringData: Constants.Strings.MyCardFlow.Form.privacyStatement)
         ]
     }
 
@@ -84,9 +84,9 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let data = dataSource[indexPath.row]
         switch data.type {
-        case .text(type: let type):
+        case .text(type: let type, font: let font):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell, let text = data.cellStringData {
-                cell.configure(forType: type, text: text, withFont: UIFont.bcSansRegularWithSize(size: 16))
+                cell.configure(forType: type, text: text, withFont: font)
                 return cell
             }
             return UITableViewCell()

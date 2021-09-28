@@ -92,16 +92,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XiM-Gy-dcz">
-                                <rect key="frame" x="24" y="88" width="366" height="655"/>
+                                <rect key="frame" x="24" y="88" width="366" height="651"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QAa-04-c9i" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="126" y="763" width="162" height="40"/>
+                                <rect key="frame" x="126" y="759" width="162" height="44"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="162" id="JP0-Pn-rbO"/>
-                                    <constraint firstAttribute="height" constant="40" id="mCQ-hn-NTE"/>
+                                    <constraint firstAttribute="height" constant="44" id="mCQ-hn-NTE"/>
                                 </constraints>
                             </view>
                         </subviews>

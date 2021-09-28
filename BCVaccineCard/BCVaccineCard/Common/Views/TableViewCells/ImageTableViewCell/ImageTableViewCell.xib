@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ImageTableViewCell" rowHeight="280" id="KGk-i7-Jjw" customClass="ImageTableViewCell" customModule="BCVaccineCard" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="346" height="212"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="346" height="212"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CDY-SD-rop">
+                        <rect key="frame" x="129" y="42" width="88" height="128"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="88" id="4I1-GD-iC1"/>
+                            <constraint firstAttribute="height" constant="128" id="4k3-j7-vfA"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="CDY-SD-rop" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="2Rg-z3-5qL"/>
+                    <constraint firstItem="CDY-SD-rop" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="3pg-0v-156"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CDY-SD-rop" secondAttribute="trailing" constant="10" id="DUO-ju-nPO"/>
+                    <constraint firstItem="CDY-SD-rop" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="42" id="RPR-TA-9qS"/>
+                    <constraint firstAttribute="bottom" secondItem="CDY-SD-rop" secondAttribute="bottom" constant="42" id="Z9M-zw-xyP"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="cellImageView" destination="CDY-SD-rop" id="9c8-P0-wuT"/>
+            </connections>
+            <point key="canvasLocation" x="156.52173913043478" y="154.6875"/>
+        </tableViewCell>
+    </objects>
+</document>
