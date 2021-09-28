@@ -20,10 +20,6 @@ class BaseViewController: UIViewController, NavigationSetupProtocol {
         navigationSetup()
     }
     
-    private func setup() {
-        navigationSetup()
-    }
-    
 }
 
 // MARK: Navigation setup
@@ -31,7 +27,8 @@ extension BaseViewController {
     private func navigationSetup() {
         navigationItem.setHidesBackButton(true, animated: true)
         navigationController?.navigationBar.prefersLargeTitles = true
-//        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.sizeToFit()
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: AppColours.appBlue]
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: AppColours.appBlue]
         navigationController?.navigationBar.tintColor = AppColours.appBlue

@@ -33,6 +33,11 @@ class QRRetrievalMethodViewController: BaseViewController {
         setup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.contentInsetAdjustmentBehavior = .never
+    }
+    
     private func setup() {
         navSetup()
         setupDataSource()
