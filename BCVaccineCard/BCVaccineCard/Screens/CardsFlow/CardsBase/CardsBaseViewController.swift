@@ -266,3 +266,8 @@ extension CardsBaseViewController: ZoomedInPopUpVCDelegate {
         self.tabBarController?.tabBar.isHidden = false
     }
 }
+
+// MARK: Accessibility
+extension CardsBaseViewController {
+    
+}
