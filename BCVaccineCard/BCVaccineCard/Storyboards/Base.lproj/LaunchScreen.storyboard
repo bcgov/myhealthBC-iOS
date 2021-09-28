@@ -46,22 +46,13 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-footer" translatesAutoresizingMaskIntoConstraints="NO" id="wcg-jL-2KM">
-                                <rect key="frame" x="0.0" y="856" width="414" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="Ad3-C6-saE"/>
-                                </constraints>
-                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.10080841929999999" green="0.1957546771" blue="0.37256795170000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="RyC-yp-6y3" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="2Bo-75-1ur"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="wcg-jL-2KM" secondAttribute="trailing" id="AgM-YM-8Ca"/>
                             <constraint firstItem="mc3-P6-FEs" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="P2l-y2-UTm"/>
                             <constraint firstItem="mc3-P6-FEs" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="T1z-nA-Q41"/>
-                            <constraint firstAttribute="bottom" secondItem="wcg-jL-2KM" secondAttribute="bottom" id="cyo-Ve-8TX"/>
-                            <constraint firstItem="wcg-jL-2KM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="man-ga-QVp"/>
                             <constraint firstItem="RyC-yp-6y3" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="rZd-DY-dhj"/>
                         </constraints>
                     </view>
@@ -73,7 +64,6 @@
     </scenes>
     <resources>
         <image name="bc-logo" width="100" height="25.5"/>
-        <image name="splash-footer" width="375" height="39"/>
         <image name="splash-logo" width="163.5" height="129"/>
     </resources>
 </document>
