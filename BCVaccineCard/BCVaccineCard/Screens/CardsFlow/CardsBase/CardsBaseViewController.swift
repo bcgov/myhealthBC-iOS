@@ -49,7 +49,6 @@ class CardsBaseViewController: BaseViewController {
         cardChangedObservableSetup()
         retrieveDataSource()
         setupTableView()
-        applyAccessibility()
     }
     
 }
@@ -73,6 +72,8 @@ extension CardsBaseViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                let cell = self.tableView.cellForRow(at: indexPath)
+                UIAccessibility.setFocusTo(cell)
             }
         }
     }
@@ -82,6 +83,7 @@ extension CardsBaseViewController {
 extension CardsBaseViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: Constants.Strings.MyCardFlow.navHeader, andImage: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton))
+        applyNavAccessibility()
     }
     
     @objc private func addCardButton() {
@@ -293,7 +295,7 @@ extension CardsBaseViewController: ZoomedInPopUpVCDelegate {
 
 // MARK: Accessibility
 extension CardsBaseViewController {
-    private func applyAccessibility() {
+    private func applyNavAccessibility() {
         if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButton() {
             rightNavButton.accessibilityTraits = .button
             rightNavButton.accessibilityLabel = "Add Card"

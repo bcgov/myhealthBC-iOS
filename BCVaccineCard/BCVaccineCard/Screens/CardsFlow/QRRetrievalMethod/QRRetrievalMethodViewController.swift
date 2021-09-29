@@ -61,6 +61,7 @@ class QRRetrievalMethodViewController: BaseViewController {
 extension QRRetrievalMethodViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: Constants.Strings.MyCardFlow.navHeader, andImage: UIImage(named: "close-icon"), action: #selector(self.closeButtonAction))
+        applyNavAccessibility()
     }
     
     @objc private func closeButtonAction() {
@@ -106,11 +107,18 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         case .image(image: let image):
             if let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.getName, for: indexPath) as? ImageTableViewCell {
                 cell.configure(image: image)
+                cell.isAccessibilityElement = true
+                cell.accessibilityTraits = .image
+                cell.accessibilityLabel = "Artwork"
                 return cell
             }
         case .method(type: let type):
             if let cell = tableView.dequeueReusableCell(withIdentifier: QRSelectionTableViewCell.getName, for: indexPath) as? QRSelectionTableViewCell {
                 cell.configure(method: type, delegateOwner: self)
+                cell.isAccessibilityElement = true
+                cell.accessibilityTraits = .button
+                cell.accessibilityLabel = "\(type.getTitle)"
+                cell.accessibilityHint = "\(type.accessibilityHint)"
                 return cell
             }
         }
@@ -237,5 +245,16 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
             self.imagePicker = nil
         })
         return
+    }
+}
+
+// MARK: Accessibility
+extension QRRetrievalMethodViewController {
+    private func applyNavAccessibility() {
+        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButton() {
+            rightNavButton.accessibilityTraits = .button
+            rightNavButton.accessibilityLabel = "Close"
+            rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
+        }
     }
 }
