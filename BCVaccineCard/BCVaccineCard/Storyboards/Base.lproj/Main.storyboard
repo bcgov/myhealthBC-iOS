@@ -151,6 +151,14 @@
                                             <action selector="closeButtonAction:" destination="anv-QO-EJI" eventType="touchUpInside" id="cLB-2v-vA9"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bcw-70-49F">
+                                        <rect key="frame" x="5" y="5" width="5" height="5"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="5" id="K0i-Le-009"/>
+                                            <constraint firstAttribute="width" constant="5" id="V28-r2-TBX"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -158,7 +166,9 @@
                                     <constraint firstAttribute="height" constant="55" id="682-yw-l74"/>
                                     <constraint firstItem="cP3-ZW-Gek" firstAttribute="centerY" secondItem="Z4N-aP-BGA" secondAttribute="centerY" id="Lxb-m1-o3W"/>
                                     <constraint firstAttribute="trailing" secondItem="cP3-ZW-Gek" secondAttribute="trailing" constant="16" id="OTG-vG-LsZ"/>
+                                    <constraint firstItem="Bcw-70-49F" firstAttribute="leading" secondItem="Z4N-aP-BGA" secondAttribute="leading" constant="5" id="VwU-ER-TlO"/>
                                     <constraint firstAttribute="bottom" secondItem="cP3-ZW-Gek" secondAttribute="bottom" constant="8" id="bPu-va-gTA"/>
+                                    <constraint firstItem="Bcw-70-49F" firstAttribute="top" secondItem="Z4N-aP-BGA" secondAttribute="top" constant="5" id="nz0-nQ-Qw3"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ahX-5H-4GF">
@@ -190,6 +200,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="accessibilityViewForNotifyingUser" destination="Bcw-70-49F" id="ksO-G9-fud"/>
                         <outlet property="cameraContainer" destination="ecD-A6-FOf" id="ImJ-1B-X6j"/>
                         <outlet property="closeButton" destination="cP3-ZW-Gek" id="kSQ-vC-kv7"/>
                         <outlet property="divider" destination="ahX-5H-4GF" id="r6J-j6-1VC"/>

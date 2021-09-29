@@ -73,6 +73,7 @@ extension CardsBaseViewController {
                 guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 let cell = self.tableView.cellForRow(at: indexPath)
+//                cell.
                 UIAccessibility.setFocusTo(cell)
             }
         }
@@ -140,7 +141,8 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             guard !self.dataSource.isEmpty else { return }
             let indexPath = IndexPath(row: self.dataSource.count - 1, section: 0)
-            let cell = self.tableView.cellForRow(at: indexPath)
+            guard let cell = self.tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
+            cell.accessibilityLabel = "Your proof of vaccination has been added to your wallet. Vaccination Card Expanded"
             UIAccessibility.setFocusTo(cell)
         }
         

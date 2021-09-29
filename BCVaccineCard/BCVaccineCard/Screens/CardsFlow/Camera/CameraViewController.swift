@@ -10,6 +10,7 @@ import BCVaccineValidator
 
 class CameraViewController: UIViewController {
 
+    @IBOutlet weak var accessibilityViewForNotifyingUser: UIView! //NOTE: This is just a clear view needed due to view heirarchy to let the user know the camera has been opened, before the closeButton is selected. Using other views (navBarView, etc...) didn't work due to view heirarchy (close button was then ignored)
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var divider: UIView!
     @IBOutlet weak var navBarView: UIView!
@@ -18,6 +19,7 @@ class CameraViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        applyNavAccessibility()
         style()
         showScanner { [weak self] result in
             guard let `self` = self else {return}
@@ -50,6 +52,24 @@ class CameraViewController: UIViewController {
         divider.backgroundColor = Constants.UI.Theme.secondaryColor
         closeButton.tintColor = Constants.UI.Theme.primaryConstractColor
         closeButton.setTitle("", for: .normal)
+    }
+
+}
+
+// MARK: Accessibility
+extension CameraViewController {
+    private func applyNavAccessibility() {
+//        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButton() {
+//            rightNavButton.accessibilityTraits = .button
+//            rightNavButton.accessibilityLabel = "Add Card"
+//            rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+//        }
+        self.accessibilityViewForNotifyingUser.isAccessibilityElement = true
+        self.accessibilityViewForNotifyingUser.accessibilityLabel = "Camera has been opened to scan a QR code"
+        self.closeButton.isAccessibilityElement = true
+        self.closeButton.accessibilityTraits = .button
+        self.closeButton.accessibilityLabel = "Close"
+        self.closeButton.accessibilityHint = "Tapping the close button will dismiss the camera and return you to the previous screen"
     }
 
 }
