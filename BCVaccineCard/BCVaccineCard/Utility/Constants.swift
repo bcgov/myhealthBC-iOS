@@ -106,7 +106,7 @@ struct Constants {
         
         struct Settings {
             static let navHeader = "Settings"
-            static let openingText = "BC Vaccine Card app is the official mobile application from the Government of British Columbia which allow you to store and organze the proof of vaccination of you and your family members."
+            static let openingText = "My Health BC app is the official mobile application from the Government of British Columbia which allow you to store and organze the proof of vaccination of you and your family members."
             static let privacyStatement = "Privacy Statement"
             static let help = "Help"
             
