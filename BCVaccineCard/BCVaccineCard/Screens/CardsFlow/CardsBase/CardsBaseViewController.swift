@@ -31,7 +31,12 @@ class CardsBaseViewController: BaseViewController {
             tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
             tableView.isEditing = inEditMode
             adjustButtonName()
-            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.tableView.layoutSubviews()
+            }
+            
+            
         }
     }
     
@@ -134,7 +139,7 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
         }
         // Note: This is a fix for when a user may swipe to edit, then while editing, taps manage cards
         if type == .manageCards {
-            inEditMode = false
+            tableView.isEditing = false
         }
         expandedIndexRow = 0
         inEditMode = type == .manageCards
