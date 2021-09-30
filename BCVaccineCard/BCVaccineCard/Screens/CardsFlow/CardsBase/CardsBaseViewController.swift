@@ -195,7 +195,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         let requestedExpandedIndex = indexPath
         let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
         self.expandedIndexRow = requestedExpandedIndex.row
-        self.tableView.reloadRows(at: [currentExpandedIndex, requestedExpandedIndex], with: .none)
+        self.tableView.reloadRows(at: [currentExpandedIndex, requestedExpandedIndex], with: .automatic)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
