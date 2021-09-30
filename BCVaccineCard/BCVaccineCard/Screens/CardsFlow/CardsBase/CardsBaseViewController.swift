@@ -176,12 +176,6 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
             let expanded = indexPath.row == expandedIndexRow && !inEditMode
             let model = dataSource[indexPath.row]
             cell.configure(model: model, expanded: expanded, editMode: inEditMode)
-//            cell.isAccessibilityElement = true
-//            let accessibilityLabel = expanded ? "Vaccination Card Expanded" : "Vaccination Card Collapsed"
-//            cell.accessibilityLabel = accessibilityLabel
-//            let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-//            cell.accessibilityValue = accessibilityValue
-//            cell.accessibilityHint = expanded ? "Action Available: Tap to zoom in QR code" : "Action Available: Tap to expand Vaccination Card"
             return cell
         }
         return UITableViewCell()
