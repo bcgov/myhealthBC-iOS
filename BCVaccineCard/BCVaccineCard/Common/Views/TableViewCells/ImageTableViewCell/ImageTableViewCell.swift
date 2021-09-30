@@ -14,6 +14,12 @@ class ImageTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        setup()
+    }
+    
+    private func setup() {
+        self.isAccessibilityElement = false
+        self.accessibilityElementsHidden = true
     }
 
     func configure(image: UIImage) {

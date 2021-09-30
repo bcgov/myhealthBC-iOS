@@ -90,7 +90,7 @@ extension UIViewController {
             self.view.layoutIfNeeded()
         }
         
-        UIAccessibility.setFocusTo(label)
+//        UIAccessibility.setFocusTo(label)
         
         // Remove banner after x seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.UI.Banner.displayDuration) {[weak self] in
@@ -163,9 +163,13 @@ extension UIViewController {
         // Create label and container
         let container = UIView(frame: .zero)
         let label = UILabel(frame: .zero)
-        label.isAccessibilityElement = true
-        label.accessibilityTraits = .staticText
-        label.accessibilityValue = "\(message)"
+        
+        if style == .Bottom {
+            label.isAccessibilityElement = true
+            label.accessibilityTraits = .staticText
+            label.accessibilityValue = "\(message)"
+        }
+        
         
         // Remove existing Banner / Container
         if let existing = view.viewWithTag(Constants.UI.Banner.tag) {

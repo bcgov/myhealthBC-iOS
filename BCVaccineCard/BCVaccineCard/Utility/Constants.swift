@@ -95,7 +95,7 @@ struct Constants {
                 static let description = "To access your BC Vaccine Card, please provide:"
                 static let personalHealthNumber = "Personal Health Number"
                 static let dateOfBirth = "Date of birth"
-                static let dateOfVaccine = "Date of vaccination (Dose 1 or Dose 2"
+                static let dateOfVaccine = "Date of vaccination (Dose 1 or Dose 2)"
                 static let privacyStatement = "Privacy Statement"
                 static let cancelButtonTitle = "Cancel"
                 static let enterButtonTitle = "Enter"
