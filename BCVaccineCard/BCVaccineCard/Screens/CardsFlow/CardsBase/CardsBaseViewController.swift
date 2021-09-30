@@ -31,10 +31,8 @@ class CardsBaseViewController: BaseViewController {
             tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
             tableView.isEditing = inEditMode
             adjustButtonName()
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.tableView.layoutSubviews()
-            }
+            self.tableView.reloadData()
+            self.tableView.layoutSubviews()
         }
     }
     
@@ -72,14 +70,10 @@ extension CardsBaseViewController {
         }
         inEditMode = false
         if let indexPath = indexPath {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
-                UIView.animate(withDuration: 0.5) {
-                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-                    let cell = self.tableView.cellForRow(at: indexPath)
-                    UIAccessibility.setFocusTo(cell)
-                }
-            }
+            guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
+            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            let cell = self.tableView.cellForRow(at: indexPath)
+            UIAccessibility.setFocusTo(cell)
         }
     }
 }
