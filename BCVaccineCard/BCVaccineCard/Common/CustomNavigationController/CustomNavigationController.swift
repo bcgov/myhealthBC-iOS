@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-09-27.
-//
+// TODO: remove non-native buttons being added and scaled and create a more reusable nav controller for the whole app
 
 import UIKit
 
