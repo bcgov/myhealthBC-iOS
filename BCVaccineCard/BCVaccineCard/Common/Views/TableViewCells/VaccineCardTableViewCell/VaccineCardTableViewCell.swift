@@ -50,13 +50,16 @@ class VaccineCardTableViewCell: UITableViewCell {
         
         roundedView.layer.cornerRadius = 3
         roundedView.layer.masksToBounds = true
+        
+        self.isAccessibilityElement = true
+        
     }
     
     private func adjustShadow(expanded: Bool) {
         shadowView.layer.shadowOpacity = expanded ? 0.7 : 0.0
     }
     
-    func configure(model: AppVaccinePassportModel, expanded: Bool) {
+    func configure(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool) {
         nameLabel.text = model.codableModel.name.uppercased()
         checkmarkImageView.isHidden = model.codableModel.status != .fully
         vaccineStatusLabel.text = model.codableModel.status.getTitle
@@ -69,5 +72,14 @@ class VaccineCardTableViewCell: UITableViewCell {
         qrCodeImage.image = model.image
         expandableBackgroundView.isHidden = !expanded
         adjustShadow(expanded: expanded)
+        setupAccessibility(model: model, expanded: expanded, editMode: editMode)
+    }
+    
+    private func setupAccessibility(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool) {
+        let accessibilityLabel = expanded ? "Vaccination Card Expanded" : "Vaccination Card Collapsed"
+        self.accessibilityLabel = accessibilityLabel
+        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
+        self.accessibilityValue = accessibilityValue
+        self.accessibilityHint = editMode ? "In edit mode: Swipe up or down for special actions, and you can unlink a card or adjust the order of your cards" : (expanded ? "Action Available: Tap to zoom in QR code" : "Action Available: Tap to expand Vaccination Card")
     }
 }

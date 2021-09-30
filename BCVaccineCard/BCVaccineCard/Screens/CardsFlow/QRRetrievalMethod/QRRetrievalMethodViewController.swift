@@ -107,9 +107,6 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         case .image(image: let image):
             if let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.getName, for: indexPath) as? ImageTableViewCell {
                 cell.configure(image: image)
-                cell.isAccessibilityElement = true
-                cell.accessibilityTraits = .image
-                cell.accessibilityLabel = "Artwork"
                 return cell
             }
         case .method(type: let type):

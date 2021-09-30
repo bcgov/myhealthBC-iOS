@@ -72,7 +72,8 @@ extension CardsBaseViewController {
         if let indexPath = indexPath {
             guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
-            let cell = self.tableView.cellForRow(at: indexPath)
+            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
+            cell.accessibilityLabel = "Your proof of vaccination has been added to your wallet. Vaccination Card Expanded"
             UIAccessibility.setFocusTo(cell)
         }
     }
@@ -139,8 +140,7 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             guard !self.dataSource.isEmpty else { return }
             let indexPath = IndexPath(row: self.dataSource.count - 1, section: 0)
-            guard let cell = self.tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
-            cell.accessibilityLabel = "Your proof of vaccination has been added to your wallet. Vaccination Card Expanded"
+            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
             UIAccessibility.setFocusTo(cell)
         }
         
@@ -175,13 +175,13 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
             let expanded = indexPath.row == expandedIndexRow && !inEditMode
             let model = dataSource[indexPath.row]
-            cell.configure(model: model, expanded: expanded)
-            cell.isAccessibilityElement = true
-            let accessibilityLabel = expanded ? "Vaccination Card Expanded" : "Vaccination Card Collapsed"
-            cell.accessibilityLabel = accessibilityLabel
-            let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-            cell.accessibilityValue = accessibilityValue
-            cell.accessibilityHint = expanded ? "Action Available: Tap to zoom in QR code" : "Action Available: Tap to expand Vaccination Card"
+            cell.configure(model: model, expanded: expanded, editMode: inEditMode)
+//            cell.isAccessibilityElement = true
+//            let accessibilityLabel = expanded ? "Vaccination Card Expanded" : "Vaccination Card Collapsed"
+//            cell.accessibilityLabel = accessibilityLabel
+//            let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
+//            cell.accessibilityValue = accessibilityValue
+//            cell.accessibilityHint = expanded ? "Action Available: Tap to zoom in QR code" : "Action Available: Tap to expand Vaccination Card"
             return cell
         }
         return UITableViewCell()
