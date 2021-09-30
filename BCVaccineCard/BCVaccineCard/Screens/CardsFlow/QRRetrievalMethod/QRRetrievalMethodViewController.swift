@@ -18,7 +18,7 @@ class QRRetrievalMethodViewController: BaseViewController {
     }
     
     enum CellType {
-        case text(text: String), method(type: QRRetrievalMethod)
+        case image(image: UIImage), method(type: QRRetrievalMethod)
     }
     
     @IBOutlet weak private var tableView: UITableView!
@@ -33,8 +33,13 @@ class QRRetrievalMethodViewController: BaseViewController {
         setup()
     }
     
-    private func setup() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navSetup()
+        self.tableView.contentInsetAdjustmentBehavior = .never
+    }
+    
+    private func setup() {
         setupDataSource()
         setupTableView()
     }
@@ -56,6 +61,7 @@ class QRRetrievalMethodViewController: BaseViewController {
 extension QRRetrievalMethodViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: Constants.Strings.MyCardFlow.navHeader, andImage: UIImage(named: "close-icon"), action: #selector(self.closeButtonAction))
+        applyNavAccessibility()
     }
     
     @objc private func closeButtonAction() {
@@ -63,6 +69,7 @@ extension QRRetrievalMethodViewController {
     }
     
     private func dismissMethodSelectionScreen() {
+        self.removeRightButtonTarget(action: #selector(closeButtonAction))
         self.navigationController?.popViewController(animated: true)
     }
 }
@@ -71,7 +78,7 @@ extension QRRetrievalMethodViewController {
 extension QRRetrievalMethodViewController {
     private func setupDataSource() {
         self.dataSource = [
-            .text(text: Constants.Strings.MyCardFlow.QRMethodSelection.description),
+            .image(image: #imageLiteral(resourceName: "options-screen-image")),
             .method(type: .scanWithCamera),
             .method(type: .uploadImage),
             .method(type: .enterGatewayInfo)
@@ -82,7 +89,7 @@ extension QRRetrievalMethodViewController {
 // MARK: Table View Logic
 extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
-        tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
+        tableView.register(UINib.init(nibName: ImageTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ImageTableViewCell.getName)
         tableView.register(UINib.init(nibName: QRSelectionTableViewCell.getName, bundle: .main), forCellReuseIdentifier: QRSelectionTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
@@ -97,14 +104,21 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let data = dataSource[indexPath.row]
         switch data {
-        case .text(text: let text):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 16))
+        case .image(image: let image):
+            if let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.getName, for: indexPath) as? ImageTableViewCell {
+                cell.configure(image: image)
+                cell.isAccessibilityElement = true
+                cell.accessibilityTraits = .image
+                cell.accessibilityLabel = "Artwork"
                 return cell
             }
         case .method(type: let type):
             if let cell = tableView.dequeueReusableCell(withIdentifier: QRSelectionTableViewCell.getName, for: indexPath) as? QRSelectionTableViewCell {
                 cell.configure(method: type, delegateOwner: self)
+                cell.isAccessibilityElement = true
+                cell.accessibilityTraits = .button
+                cell.accessibilityLabel = "\(type.getTitle)"
+                cell.accessibilityHint = "\(type.accessibilityHint)"
                 return cell
             }
         }
@@ -114,7 +128,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = dataSource[indexPath.row]
         switch item {
-        case .text: return
+        case .image: return
         case .method(type: let type):
             if let cell = tableView.cellForRow(at: indexPath) as? QRSelectionTableViewCell {
                 UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -231,5 +245,16 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
             self.imagePicker = nil
         })
         return
+    }
+}
+
+// MARK: Accessibility
+extension QRRetrievalMethodViewController {
+    private func applyNavAccessibility() {
+        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButton() {
+            rightNavButton.accessibilityTraits = .button
+            rightNavButton.accessibilityLabel = "Close"
+            rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
+        }
     }
 }

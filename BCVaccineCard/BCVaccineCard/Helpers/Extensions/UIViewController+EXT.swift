@@ -17,6 +17,7 @@ extension UIViewController {
     }
     func alert(title: String, message: String) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.isAccessibilityElement = true
         controller.addAction(UIAlertAction(title: "OK", style: .default))
         DispatchQueue.main.async {
             self.present(controller, animated: true)
@@ -25,6 +26,7 @@ extension UIViewController {
     
     func alert(title: String, message: String, completion: @escaping()->Void) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.isAccessibilityElement = true
         controller.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
             return completion()
         }))
@@ -35,6 +37,7 @@ extension UIViewController {
     
     func alert(title: String, message: String, buttonOneTitle: String, buttonOneCompletion: @escaping()->Void, buttonTwoTitle: String?, buttonTwoCompletion: @escaping()->Void) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.isAccessibilityElement = true
         controller.addAction(UIAlertAction(title: buttonOneTitle, style: .default, handler: { action in
             return buttonOneCompletion()
         }))
@@ -87,6 +90,8 @@ extension UIViewController {
             self.view.layoutIfNeeded()
         }
         
+        UIAccessibility.setFocusTo(label)
+        
         // Remove banner after x seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.UI.Banner.displayDuration) {[weak self] in
             guard let `self` = self else {return}
@@ -137,6 +142,8 @@ extension UIViewController {
         
         self.view.layoutIfNeeded()
         
+        UIAccessibility.setFocusTo(label)
+        
         // Remove banner after x seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.UI.Banner.displayDuration) {[weak self] in
             guard let `self` = self,
@@ -156,6 +163,9 @@ extension UIViewController {
         // Create label and container
         let container = UIView(frame: .zero)
         let label = UILabel(frame: .zero)
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
+        label.accessibilityValue = "\(message)"
         
         // Remove existing Banner / Container
         if let existing = view.viewWithTag(Constants.UI.Banner.tag) {

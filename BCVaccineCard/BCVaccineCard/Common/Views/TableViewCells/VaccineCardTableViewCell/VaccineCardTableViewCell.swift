@@ -9,6 +9,8 @@ import UIKit
 
 class VaccineCardTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var shadowView: UIView!
+    @IBOutlet weak var roundedView: UIView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var checkmarkImageView: UIImageView!
     @IBOutlet weak var vaccineStatusLabel: UILabel!
@@ -24,6 +26,11 @@ class VaccineCardTableViewCell: UITableViewCell {
     }
 
     private func setup() {
+        viewSetup()
+        labelSetup()
+    }
+    
+    private func labelSetup() {
         nameLabel.textColor = .white
         nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
         vaccineStatusLabel.textColor = .white
@@ -33,6 +40,20 @@ class VaccineCardTableViewCell: UITableViewCell {
         tapToZoomInLabel.textColor = .white
         tapToZoomInLabel.font = UIFont.bcSansBoldWithSize(size: 12)
         tapToZoomInLabel.text = Constants.Strings.MyCardFlow.HasCards.tapToZoomIn
+    }
+    
+    private func viewSetup() {
+        shadowView.backgroundColor = UIColor.clear
+        shadowView.layer.shadowColor = UIColor.black.cgColor
+        shadowView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        shadowView.layer.shadowRadius = 6.0
+        
+        roundedView.layer.cornerRadius = 3
+        roundedView.layer.masksToBounds = true
+    }
+    
+    private func adjustShadow(expanded: Bool) {
+        shadowView.layer.shadowOpacity = expanded ? 0.7 : 0.0
     }
     
     func configure(model: AppVaccinePassportModel, expanded: Bool) {
@@ -47,6 +68,6 @@ class VaccineCardTableViewCell: UITableViewCell {
         expandableBackgroundView.backgroundColor = model.codableModel.status.getColor
         qrCodeImage.image = model.image
         expandableBackgroundView.isHidden = !expanded
+        adjustShadow(expanded: expanded)
     }
-    
 }

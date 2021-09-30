@@ -174,8 +174,11 @@ extension FormTextFieldView {
         // bar button 'next
         let nextButton = UIBarButtonItem(title: Constants.Strings.MyCardFlow.Form.nextText, style: .done, target: self, action: #selector(nextButtonTapped))
         
+        // spacer between buttons
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
         // add buttons to toolbar
-        toolbar.setItems([doneButton, nextButton], animated: true)
+        toolbar.setItems([nextButton, spacer, doneButton], animated: true)
         
         // assign toolbar
         formTextField.inputAccessoryView = toolbar

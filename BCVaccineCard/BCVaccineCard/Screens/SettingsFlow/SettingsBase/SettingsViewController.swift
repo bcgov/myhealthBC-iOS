@@ -18,8 +18,12 @@ class SettingsViewController: BaseViewController {
         setup()
     }
     
-    private func setup() {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         navSetup()
+    }
+    
+    private func setup() {
         setupDataSource()
         setupTableView()
     }
@@ -72,6 +76,9 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         case .setting(text: let text, image: let image):
             if let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.getName, for: indexPath) as? SettingsTableViewCell {
                 cell.configure(text: text, image: image)
+                cell.isAccessibilityElement = true
+                cell.accessibilityLabel = "Privacy Statement Link"
+                cell.accessibilityHint = "Action Available: Tapping the privacy statement link will take you to the privacy statement web page"
                 return cell
             }
         }

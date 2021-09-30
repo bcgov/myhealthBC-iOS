@@ -7,13 +7,18 @@
 
 import UIKit
 
+protocol ZoomedInPopUpVCDelegate: AnyObject {
+    func closeButtonTapped()
+}
+
 class ZoomedInPopUpVC: UIViewController {
     
-    class func constructZoomedInPopUpVC(withQRImage image: UIImage?, parentVC: UIViewController?) -> ZoomedInPopUpVC {
+    class func constructZoomedInPopUpVC(withQRImage image: UIImage?, parentVC: UIViewController?, delegateOwner: UIViewController) -> ZoomedInPopUpVC {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: ZoomedInPopUpVC.self)) as? ZoomedInPopUpVC {
             vc.image = image
             vc.modalPresentationStyle = .overCurrentContext
             vc.parentVC = parentVC
+            vc.delegate = delegateOwner as? ZoomedInPopUpVCDelegate
             return vc
         }
         return ZoomedInPopUpVC()
@@ -22,6 +27,7 @@ class ZoomedInPopUpVC: UIViewController {
     @IBOutlet weak var zoomedInView: VaxQRZoomedInView!
     private var image: UIImage?
     private var parentVC: UIViewController?
+    private weak var delegate: ZoomedInPopUpVCDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +67,7 @@ extension ZoomedInPopUpVC: AppStyleButtonDelegate {
             if let parentVC = parentVC, let cover = parentVC.view.viewWithTag(coverTag) {
                 cover.removeFromSuperview()
             }
+            delegate?.closeButtonTapped()
             self.dismiss(animated: true, completion: nil)
         }
     }

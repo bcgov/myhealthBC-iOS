@@ -92,25 +92,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XiM-Gy-dcz">
-                                <rect key="frame" x="24" y="88" width="366" height="655"/>
+                                <rect key="frame" x="8" y="88" width="398" height="651"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QAa-04-c9i" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="126" y="763" width="162" height="40"/>
+                                <rect key="frame" x="126" y="759" width="162" height="44"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="162" id="JP0-Pn-rbO"/>
-                                    <constraint firstAttribute="height" constant="40" id="mCQ-hn-NTE"/>
+                                    <constraint firstAttribute="height" constant="44" id="mCQ-hn-NTE"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fhj-Jd-QLm"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="fhj-Jd-QLm" firstAttribute="trailing" secondItem="XiM-Gy-dcz" secondAttribute="trailing" constant="24" id="2bR-vl-zui"/>
+                            <constraint firstItem="fhj-Jd-QLm" firstAttribute="trailing" secondItem="XiM-Gy-dcz" secondAttribute="trailing" constant="8" id="2bR-vl-zui"/>
                             <constraint firstItem="QAa-04-c9i" firstAttribute="top" secondItem="XiM-Gy-dcz" secondAttribute="bottom" constant="20" id="UKp-8k-VWS"/>
-                            <constraint firstItem="XiM-Gy-dcz" firstAttribute="leading" secondItem="fhj-Jd-QLm" secondAttribute="leading" constant="24" id="d6G-ub-YdN"/>
+                            <constraint firstItem="XiM-Gy-dcz" firstAttribute="leading" secondItem="fhj-Jd-QLm" secondAttribute="leading" constant="8" id="d6G-ub-YdN"/>
                             <constraint firstItem="QAa-04-c9i" firstAttribute="centerX" secondItem="NvA-Ln-WsM" secondAttribute="centerX" id="ieT-aB-D5A"/>
                             <constraint firstItem="XiM-Gy-dcz" firstAttribute="top" secondItem="fhj-Jd-QLm" secondAttribute="top" id="nxM-ue-BZu"/>
                             <constraint firstItem="fhj-Jd-QLm" firstAttribute="bottom" secondItem="QAa-04-c9i" secondAttribute="bottom" constant="10" id="vwF-W9-9zN"/>
@@ -151,6 +151,14 @@
                                             <action selector="closeButtonAction:" destination="anv-QO-EJI" eventType="touchUpInside" id="cLB-2v-vA9"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bcw-70-49F">
+                                        <rect key="frame" x="5" y="5" width="5" height="5"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="5" id="K0i-Le-009"/>
+                                            <constraint firstAttribute="width" constant="5" id="V28-r2-TBX"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.20000000000000001" blue="0.40000000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -158,7 +166,9 @@
                                     <constraint firstAttribute="height" constant="55" id="682-yw-l74"/>
                                     <constraint firstItem="cP3-ZW-Gek" firstAttribute="centerY" secondItem="Z4N-aP-BGA" secondAttribute="centerY" id="Lxb-m1-o3W"/>
                                     <constraint firstAttribute="trailing" secondItem="cP3-ZW-Gek" secondAttribute="trailing" constant="16" id="OTG-vG-LsZ"/>
+                                    <constraint firstItem="Bcw-70-49F" firstAttribute="leading" secondItem="Z4N-aP-BGA" secondAttribute="leading" constant="5" id="VwU-ER-TlO"/>
                                     <constraint firstAttribute="bottom" secondItem="cP3-ZW-Gek" secondAttribute="bottom" constant="8" id="bPu-va-gTA"/>
+                                    <constraint firstItem="Bcw-70-49F" firstAttribute="top" secondItem="Z4N-aP-BGA" secondAttribute="top" constant="5" id="nz0-nQ-Qw3"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ahX-5H-4GF">
@@ -190,6 +200,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="accessibilityViewForNotifyingUser" destination="Bcw-70-49F" id="ksO-G9-fud"/>
                         <outlet property="cameraContainer" destination="ecD-A6-FOf" id="ImJ-1B-X6j"/>
                         <outlet property="closeButton" destination="cP3-ZW-Gek" id="kSQ-vC-kv7"/>
                         <outlet property="divider" destination="ahX-5H-4GF" id="r6J-j6-1VC"/>
@@ -283,7 +294,7 @@
         <!--My Cards-->
         <scene sceneID="8iI-MZ-k7t">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZK3-oA-dZG" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZK3-oA-dZG" customClass="CustomNavigationController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="My Cards" image="my-cards-tab" selectedImage="my-cards-tab" id="KIO-gm-Zyv"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="aSx-fh-mpj">
@@ -333,7 +344,7 @@
         <!--Settings-->
         <scene sceneID="iCW-WW-7iV">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bp9-Lg-RvQ" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bp9-Lg-RvQ" customClass="CustomNavigationController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="settings-tab" selectedImage="settings-tab" id="bqm-CU-u40"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Hjj-bN-0tM">

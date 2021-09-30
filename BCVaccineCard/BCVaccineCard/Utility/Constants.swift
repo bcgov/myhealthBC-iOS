@@ -70,9 +70,9 @@ struct Constants {
             struct HasCards {
                 static let manageCardsButtonTitle = "Manage Cards"
                 static let doneButtonTitle = "Done"
-                static let fullyVaccinated = "VACCINATED"
-                static let partiallyVaccinated = "PARTIALLY VACCINATED"
-                static let noRecordFound = "NO RECORD FOUND"
+                static let fullyVaccinated = "Vaccinated"
+                static let partiallyVaccinated = "Partially Vaccinated"
+                static let noRecordFound = "No Record Found"
                 static let issuedOn = "Issued on "
                 static let tapToZoomIn = "Tap to zoom in"
                 static let presentForScanning = "Present For Scanning"
@@ -106,7 +106,7 @@ struct Constants {
         
         struct Settings {
             static let navHeader = "Settings"
-            static let openingText = "BC Vaccine Card app is the official mobile application from the Government of British Columbia which allow you to store and organze the proof of vaccination of you and your family members."
+            static let openingText = "My Health BC app is the official mobile application from the Government of British Columbia which allow you to store and organze the proof of vaccination of you and your family members."
             static let privacyStatement = "Privacy Statement"
             static let help = "Help"
             
@@ -120,5 +120,24 @@ struct Constants {
     
     struct PrivacyPolicy {
         static let urlString = "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/proof/businesses#app-privacy-policy"
+    }
+    
+    struct NavBarConstants {
+        /// Image height/width for Large NavBar state
+        static let ImageSizeForLargeState: CGFloat = 40
+        /// Margin from right anchor of safe area to right anchor of Image
+        static let ImageRightMargin: CGFloat = 16
+        /// Margin from bottom anchor of NavBar to bottom anchor of Image for Large NavBar state
+        static let ImageBottomMarginForLargeState: CGFloat = 12
+        /// Margin from bottom anchor of NavBar to bottom anchor of Image for Small NavBar state
+        static let ImageBottomMarginForSmallState: CGFloat = 6
+        /// Image height/width for Small NavBar state
+        static let ImageSizeForSmallState: CGFloat = 32
+        /// Height of NavBar for Small state. Usually it's just 44
+        static let NavBarHeightSmallState: CGFloat = 44
+        /// Height of NavBar for Large state. Usually it's just 96.5 but if you have a custom font for the title, please make sure to edit this value since it changes the height for Large state of NavBar
+        static let NavBarHeightLargeState: CGFloat = 96.5
+        /// Tag for the right bar button
+        static let buttonTag: Int = 34863
     }
 }

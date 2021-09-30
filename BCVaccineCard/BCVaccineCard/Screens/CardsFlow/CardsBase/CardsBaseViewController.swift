@@ -27,11 +27,16 @@ class CardsBaseViewController: BaseViewController {
     
     private var inEditMode = false {
         didSet {
-            tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 24.0
-            tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 24.0
+            tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
+            tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
             tableView.isEditing = inEditMode
             adjustButtonName()
-            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.tableView.layoutSubviews()
+            }
+            
+            
         }
     }
     
@@ -40,9 +45,13 @@ class CardsBaseViewController: BaseViewController {
         setup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navSetup()
+    }
+    
     private func setup() {
         cardChangedObservableSetup()
-        navSetup()
         retrieveDataSource()
         setupTableView()
     }
@@ -68,6 +77,9 @@ extension CardsBaseViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
                 self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                let cell = self.tableView.cellForRow(at: indexPath)
+//                cell.
+                UIAccessibility.setFocusTo(cell)
             }
         }
     }
@@ -77,6 +89,7 @@ extension CardsBaseViewController {
 extension CardsBaseViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: Constants.Strings.MyCardFlow.navHeader, andImage: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton))
+        applyNavAccessibility()
     }
     
     @objc private func addCardButton() {
@@ -86,6 +99,7 @@ extension CardsBaseViewController {
     
     private func goToAddCardOptionScreen() {
         let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+        self.removeRightButtonTarget(action: #selector(addCardButton))
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -106,7 +120,10 @@ extension CardsBaseViewController {
     private func adjustButtonName() {
         guard !self.dataSource.isEmpty else { return }
         let buttonType: AppStyleButton.ButtonType = inEditMode ? .done : .manageCards
-        bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true)
+        let value = self.inEditMode ? AppStyleButton.ButtonType.done.getTitle : AppStyleButton.ButtonType.manageCards.getTitle
+        let hint = self.inEditMode ? "Tapping 'done' will stop the editing of cards and save any changes." : "Tapping 'manage cards' will allow you to edit the order of your cards, and remove any cards you no longer want in your wallet."
+        bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true, accessibilityValue: value, accessibilityHint: hint)
+        
     }
 }
 
@@ -122,10 +139,18 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
         }
         // Note: This is a fix for when a user may swipe to edit, then while editing, taps manage cards
         if type == .manageCards {
-            inEditMode = false
+            tableView.isEditing = false
         }
         expandedIndexRow = 0
         inEditMode = type == .manageCards
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            guard !self.dataSource.isEmpty else { return }
+            let indexPath = IndexPath(row: self.dataSource.count - 1, section: 0)
+            guard let cell = self.tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
+            cell.accessibilityLabel = "Your proof of vaccination has been added to your wallet. Vaccination Card Expanded"
+            UIAccessibility.setFocusTo(cell)
+        }
+        
     }
 
 }
@@ -156,7 +181,14 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         }
         if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
             let expanded = indexPath.row == expandedIndexRow && !inEditMode
-            cell.configure(model: dataSource[indexPath.row], expanded: expanded)
+            let model = dataSource[indexPath.row]
+            cell.configure(model: model, expanded: expanded)
+            cell.isAccessibilityElement = true
+            let accessibilityLabel = expanded ? "Vaccination Card Expanded" : "Vaccination Card Collapsed"
+            cell.accessibilityLabel = accessibilityLabel
+            let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
+            cell.accessibilityValue = accessibilityValue
+            cell.accessibilityHint = expanded ? "Action Available: Tap to zoom in QR code" : "Action Available: Tap to expand Vaccination Card"
             return cell
         }
         return UITableViewCell()
@@ -168,8 +200,9 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         guard self.expandedIndexRow != indexPath.row else {
             guard let image = dataSource[indexPath.row].image else { return }
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
-            let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController)
+            let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
             self.present(vc, animated: true, completion: nil)
+            self.tabBarController?.tabBar.isHidden = true
             return
         }
         let requestedExpandedIndex = indexPath
@@ -194,6 +227,9 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             self.deleteCardAt(indexPath: indexPath)
         }
+        delete.isAccessibilityElement = true
+        delete.accessibilityTraits = .button
+        delete.accessibilityLabel = "Unlink button"
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
@@ -205,6 +241,9 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             self.deleteCardAt(indexPath: indexPath)
         }
+        delete.isAccessibilityElement = true
+        delete.accessibilityTraits = .button
+        delete.accessibilityLabel = "Unlink button"
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
@@ -253,3 +292,23 @@ extension CardsBaseViewController {
         self.dataSource = localDS.map({ $0.transform() })
     }
 }
+
+// MARK: Zoomed in pop up QR delegate
+extension CardsBaseViewController: ZoomedInPopUpVCDelegate {
+    func closeButtonTapped() {
+        self.tabBarController?.tabBar.isHidden = false
+    }
+}
+
+// MARK: Accessibility
+extension CardsBaseViewController {
+    private func applyNavAccessibility() {
+        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButton() {
+            rightNavButton.accessibilityTraits = .button
+            rightNavButton.accessibilityLabel = "Add Card"
+            rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+        }
+    }
+}
+
+

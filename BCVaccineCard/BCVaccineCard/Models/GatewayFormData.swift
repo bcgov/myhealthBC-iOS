@@ -9,7 +9,7 @@ import UIKit
 
 struct GatewayFormData: Equatable {
     enum CellType: Equatable {
-        case text(type: TextCellType), form(type: FormTextFieldType)
+        case text(type: TextCellType, font: UIFont), form(type: FormTextFieldType)
     }
     
     let type: CellType
