@@ -35,8 +35,6 @@ class CardsBaseViewController: BaseViewController {
                 self.tableView.reloadData()
                 self.tableView.layoutSubviews()
             }
-            
-            
         }
     }
     
@@ -76,10 +74,11 @@ extension CardsBaseViewController {
         if let indexPath = indexPath {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
-                self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-                let cell = self.tableView.cellForRow(at: indexPath)
-//                cell.
-                UIAccessibility.setFocusTo(cell)
+                UIView.animate(withDuration: 0.5) {
+                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+                    let cell = self.tableView.cellForRow(at: indexPath)
+                    UIAccessibility.setFocusTo(cell)
+                }
             }
         }
     }
@@ -208,7 +207,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
         let requestedExpandedIndex = indexPath
         let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
         self.expandedIndexRow = requestedExpandedIndex.row
-        self.tableView.reloadRows(at: [currentExpandedIndex, requestedExpandedIndex], with: .automatic)
+        self.tableView.reloadRows(at: [currentExpandedIndex, requestedExpandedIndex], with: .none)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {

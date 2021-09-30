@@ -226,18 +226,27 @@ extension GatewayFormViewController {
                 }
                 return
             }
-            alert(title: "Success", message: "Congrats! You have successfully fetched your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "No", buttonOneCompletion: { [weak self] in
-                guard let `self` = self else { return }
-                self.dismiss(animated: true, completion: nil)
-                // No Nothing, just dismiss
-            }, buttonTwoTitle: "Yes") { [weak self] in
-                guard let `self` = self else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.dismiss(animated: true) {
                     self.appendModelToLocalStorage(model: model.transform())
                     self.postCardAddedNotification(id: model.id ?? "")
                     self.completionHandler?()
                 }
             }
+            
+            
+//            alert(title: "Success", message: "Congrats! You have successfully fetched your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "No", buttonOneCompletion: { [weak self] in
+//                guard let `self` = self else { return }
+//                self.dismiss(animated: true, completion: nil)
+//                // No Nothing, just dismiss
+//            }, buttonTwoTitle: "Yes") { [weak self] in
+//                guard let `self` = self else { return }
+//                self.dismiss(animated: true) {
+//                    self.appendModelToLocalStorage(model: model.transform())
+//                    self.postCardAddedNotification(id: model.id ?? "")
+//                    self.completionHandler?()
+//                }
+//            }
         }
     }
 }
