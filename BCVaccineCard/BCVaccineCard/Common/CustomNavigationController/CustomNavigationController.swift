@@ -31,15 +31,15 @@ class CustomNavigationController: UINavigationController {
     private func buttonSetup() {
         self.rightNavButton = UIButton()
         guard let rightNavButton = rightNavButton else { return }
-        rightNavButton.tag = Constants.NavBarConstants.buttonTag
+        rightNavButton.tag = Constants.UI.NavBarConstants.buttonTag
         navigationBar.addSubview(rightNavButton)
-        rightNavButton.layer.cornerRadius = Constants.NavBarConstants.ImageSizeForLargeState / 2
+        rightNavButton.layer.cornerRadius = Constants.UI.NavBarConstants.ImageSizeForLargeState / 2
         rightNavButton.clipsToBounds = true
         rightNavButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            rightNavButton.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -Constants.NavBarConstants.ImageRightMargin),
-            rightNavButton.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -Constants.NavBarConstants.ImageBottomMarginForLargeState),
-            rightNavButton.heightAnchor.constraint(equalToConstant: Constants.NavBarConstants.ImageSizeForLargeState),
+            rightNavButton.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -Constants.UI.NavBarConstants.ImageRightMargin),
+            rightNavButton.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -Constants.UI.NavBarConstants.ImageBottomMarginForLargeState),
+            rightNavButton.heightAnchor.constraint(equalToConstant: Constants.UI.NavBarConstants.ImageSizeForLargeState),
             rightNavButton.widthAnchor.constraint(equalTo: rightNavButton.heightAnchor)
         ])
     }

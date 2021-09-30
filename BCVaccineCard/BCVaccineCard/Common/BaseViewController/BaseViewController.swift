@@ -44,7 +44,7 @@ extension BaseViewController {
         guard let nav = self.navigationController as? CustomNavigationController else { return }
         let subviews = nav.navigationBar.subviews
         for view in subviews{
-            if view.tag == Constants.NavBarConstants.buttonTag, let button = view as? UIButton {
+            if view.tag == Constants.UI.NavBarConstants.buttonTag, let button = view as? UIButton {
                 button.removeTarget(self, action: action, for: .touchUpInside)
             }
         }
@@ -53,12 +53,12 @@ extension BaseViewController {
     private func moveAndResizeImage(for height: CGFloat) {
         guard let nav = self.navigationController as? CustomNavigationController else { return }
         let coeff: CGFloat = {
-            let delta = height - Constants.NavBarConstants.NavBarHeightSmallState
-            let heightDifferenceBetweenStates = (Constants.NavBarConstants.NavBarHeightLargeState - Constants.NavBarConstants.NavBarHeightSmallState)
+            let delta = height - Constants.UI.NavBarConstants.NavBarHeightSmallState
+            let heightDifferenceBetweenStates = (Constants.UI.NavBarConstants.NavBarHeightLargeState - Constants.UI.NavBarConstants.NavBarHeightSmallState)
             return delta / heightDifferenceBetweenStates
         }()
 
-        let factor = Constants.NavBarConstants.ImageSizeForSmallState / Constants.NavBarConstants.ImageSizeForLargeState
+        let factor = Constants.UI.NavBarConstants.ImageSizeForSmallState / Constants.UI.NavBarConstants.ImageSizeForLargeState
 
         let scale: CGFloat = {
             let sizeAddendumFactor = coeff * (1.0 - factor)
@@ -66,11 +66,11 @@ extension BaseViewController {
         }()
 
         // Value of difference between icons for large and small states
-        let sizeDiff = Constants.NavBarConstants.ImageSizeForLargeState * (1.0 - factor) // 8.0
+        let sizeDiff = Constants.UI.NavBarConstants.ImageSizeForLargeState * (1.0 - factor) // 8.0
         let yTranslation: CGFloat = {
             /// This value = 14. It equals to difference of 12 and 6 (bottom margin for large and small states). Also it adds 8.0 (size difference when the image gets smaller size)
-            let maxYTranslation = Constants.NavBarConstants.ImageBottomMarginForLargeState - Constants.NavBarConstants.ImageBottomMarginForSmallState + sizeDiff
-            return max(0, min(maxYTranslation, (maxYTranslation - coeff * (Constants.NavBarConstants.ImageBottomMarginForSmallState + sizeDiff))))
+            let maxYTranslation = Constants.UI.NavBarConstants.ImageBottomMarginForLargeState - Constants.UI.NavBarConstants.ImageBottomMarginForSmallState + sizeDiff
+            return max(0, min(maxYTranslation, (maxYTranslation - coeff * (Constants.UI.NavBarConstants.ImageBottomMarginForSmallState + sizeDiff))))
         }()
 
         let xTranslation = max(0, sizeDiff - coeff * sizeDiff)
