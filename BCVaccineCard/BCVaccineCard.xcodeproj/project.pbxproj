@@ -136,6 +136,16 @@
 		79BDA074270CB72800FF30AB /* Checker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA073270CB72800FF30AB /* Checker.storyboard */; };
 		79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA075270CB73800FF30AB /* Booking.storyboard */; };
 		79BDA078270CB74800FF30AB /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA077270CB74800FF30AB /* Notifications.storyboard */; };
+		79BDA07B270CB89900FF30AB /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA07A270CB89900FF30AB /* Strings.swift */; };
+		79BDA07E270CB8F300FF30AB /* String+Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA07D270CB8F300FF30AB /* String+Localizable.swift */; };
+		79BDA083270CEE4700FF30AB /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA07A270CB89900FF30AB /* Strings.swift */; };
+		79BDA084270CEE5A00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
+		79BDA085270CEE5E00FF30AB /* Records.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA071270CB71D00FF30AB /* Records.storyboard */; };
+		79BDA086270CEE6100FF30AB /* Checker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA073270CB72800FF30AB /* Checker.storyboard */; };
+		79BDA087270CEE6400FF30AB /* Booking.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA075270CB73800FF30AB /* Booking.storyboard */; };
+		79BDA088270CEE6700FF30AB /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA077270CB74800FF30AB /* Notifications.storyboard */; };
+		79BDA089270CEE8000FF30AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA08C270CEE8000FF30AB /* Localizable.strings */; };
+		79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA08C270CEE8000FF30AB /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -230,6 +240,9 @@
 		79BDA073270CB72800FF30AB /* Checker.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Checker.storyboard; sourceTree = "<group>"; };
 		79BDA075270CB73800FF30AB /* Booking.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Booking.storyboard; sourceTree = "<group>"; };
 		79BDA077270CB74800FF30AB /* Notifications.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Notifications.storyboard; sourceTree = "<group>"; };
+		79BDA07A270CB89900FF30AB /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
+		79BDA07D270CB8F300FF30AB /* String+Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Localizable.swift"; sourceTree = "<group>"; };
+		79BDA08B270CEE8000FF30AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -383,10 +396,8 @@
 		7944F6B026F12A9D006B9444 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				79BDA079270CB87600FF30AB /* Constants */,
 				7944F6B326F12BA1006B9444 /* Storyboard.swift */,
-				7967E73526F40DB100EEF510 /* Constants.swift */,
-				2912314226F9433600CF5F3B /* UIConstants.swift */,
-				794BD61B270235430084ADA8 /* AccessibilityLabels.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -422,6 +433,7 @@
 		7944F6B726F12BC3006B9444 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				79BDA07C270CB8D500FF30AB /* Foundation */,
 				2912314426F9440600CF5F3B /* UIColor+EXT.swift */,
 				2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */,
 				7944F6B826F12BC3006B9444 /* UIButton+EXT.swift */,
@@ -663,6 +675,34 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		79BDA079270CB87600FF30AB /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				79BDA07F270CEDF000FF30AB /* Strings */,
+				794BD61B270235430084ADA8 /* AccessibilityLabels.swift */,
+				2912314226F9433600CF5F3B /* UIConstants.swift */,
+				7967E73526F40DB100EEF510 /* Constants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		79BDA07C270CB8D500FF30AB /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				79BDA07D270CB8F300FF30AB /* String+Localizable.swift */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
+		79BDA07F270CEDF000FF30AB /* Strings */ = {
+			isa = PBXGroup;
+			children = (
+				79BDA07A270CB89900FF30AB /* Strings.swift */,
+				79BDA08C270CEE8000FF30AB /* Localizable.strings */,
+			);
+			path = Strings;
+			sourceTree = "<group>";
+		};
 		95BA81E170E18F38F168CAC6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -818,6 +858,7 @@
 				7967E75126F9145700EEF510 /* BCSans-Bold.otf in Resources */,
 				79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */,
 				794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */,
+				79BDA089270CEE8000FF30AB /* Localizable.strings in Resources */,
 				7944F68526F1261B006B9444 /* Assets.xcassets in Resources */,
 				7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */,
 				7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */,
@@ -852,16 +893,22 @@
 				794BD65B2702EEC00084ADA8 /* LaunchScreen.storyboard in Resources */,
 				794BD65C2702EEC00084ADA8 /* AppStyleButton.xib in Resources */,
 				794BD65D2702EEC00084ADA8 /* BCSans-Regular.otf in Resources */,
+				79BDA086270CEE6100FF30AB /* Checker.storyboard in Resources */,
 				794BD65E2702EEC00084ADA8 /* TextTableViewCell.xib in Resources */,
 				794BD65F2702EEC00084ADA8 /* SettingsTableViewCell.xib in Resources */,
+				79BDA088270CEE6700FF30AB /* Notifications.storyboard in Resources */,
 				794BD6602702EEC00084ADA8 /* BCSans-Italic.otf in Resources */,
 				794BD6612702EEC00084ADA8 /* VaccineCardTableViewCell.xib in Resources */,
 				794BD6622702EEC00084ADA8 /* NoCardsTableViewCell.xib in Resources */,
 				794BD6632702EEC00084ADA8 /* BCSans-Bold.otf in Resources */,
+				79BDA087270CEE6400FF30AB /* Booking.storyboard in Resources */,
 				794BD6642702EEC00084ADA8 /* Assets.xcassets in Resources */,
 				794BD6652702EEC00084ADA8 /* QRSelectionTableViewCell.xib in Resources */,
 				794BD6662702EEC00084ADA8 /* GoogleService-Info.plist in Resources */,
 				794BD6672702EEC00084ADA8 /* VaxQRZoomedInView.xib in Resources */,
+				79BDA084270CEE5A00FF30AB /* HealthPass.storyboard in Resources */,
+				79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */,
+				79BDA085270CEE5E00FF30AB /* Records.storyboard in Resources */,
 				794BD6682702EEC00084ADA8 /* FormTableViewCell.xib in Resources */,
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
@@ -899,6 +946,7 @@
 				2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				7944F6C126F12BF2006B9444 /* Defaults.swift in Sources */,
+				79BDA07E270CB8F300FF30AB /* String+Localizable.swift in Sources */,
 				2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */,
 				7944F6D826F12C00006B9444 /* VaxQRZoomedInView.swift in Sources */,
 				7944F70E26F3A0C1006B9444 /* QRRetrievalMethodViewController.swift in Sources */,
@@ -910,6 +958,7 @@
 				7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */,
 				7944F71426F3A26D006B9444 /* QRSelectionTableViewCell.swift in Sources */,
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
+				79BDA07B270CB89900FF30AB /* Strings.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
@@ -972,6 +1021,7 @@
 				794BD64B2702EEC00084ADA8 /* AccessibilityLabels.swift in Sources */,
 				794BD64C2702EEC00084ADA8 /* ZoomedInPopUpVC.swift in Sources */,
 				794BD64D2702EEC00084ADA8 /* NoCardsTableViewCell.swift in Sources */,
+				79BDA083270CEE4700FF30AB /* Strings.swift in Sources */,
 				794BD64E2702EEC00084ADA8 /* QRSelectionTableViewCell.swift in Sources */,
 				794BD64F2702EEC00084ADA8 /* TextTableViewCell.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
@@ -1013,6 +1063,14 @@
 				7944F68726F1261B006B9444 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		79BDA08C270CEE8000FF30AB /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				79BDA08B270CEE8000FF30AB /* en */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
