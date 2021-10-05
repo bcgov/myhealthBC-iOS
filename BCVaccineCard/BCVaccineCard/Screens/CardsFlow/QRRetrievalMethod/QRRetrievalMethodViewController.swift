@@ -11,7 +11,7 @@ import BCVaccineValidator
 class QRRetrievalMethodViewController: BaseViewController {
     
     class func constructQRRetrievalMethodViewController() -> QRRetrievalMethodViewController {
-        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: QRRetrievalMethodViewController.self)) as? QRRetrievalMethodViewController {
+        if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: QRRetrievalMethodViewController.self)) as? QRRetrievalMethodViewController {
             return vc
         }
         return QRRetrievalMethodViewController()

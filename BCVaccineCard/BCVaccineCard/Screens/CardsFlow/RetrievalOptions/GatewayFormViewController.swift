@@ -10,7 +10,7 @@ import UIKit
 class GatewayFormViewController: UIViewController {
     
     class func constructGatewayFormViewController() -> GatewayFormViewController {
-        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
+        if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
             return vc
         }
         return GatewayFormViewController()

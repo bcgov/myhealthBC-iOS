@@ -14,7 +14,7 @@ protocol ZoomedInPopUpVCDelegate: AnyObject {
 class ZoomedInPopUpVC: UIViewController {
     
     class func constructZoomedInPopUpVC(withQRImage image: UIImage?, parentVC: UIViewController?, delegateOwner: UIViewController) -> ZoomedInPopUpVC {
-        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: ZoomedInPopUpVC.self)) as? ZoomedInPopUpVC {
+        if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: ZoomedInPopUpVC.self)) as? ZoomedInPopUpVC {
             vc.image = image
             vc.modalPresentationStyle = .overCurrentContext
             vc.parentVC = parentVC

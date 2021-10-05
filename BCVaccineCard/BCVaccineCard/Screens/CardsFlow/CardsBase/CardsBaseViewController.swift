@@ -12,7 +12,7 @@ let cardAddedNotification = Notification.Name("cardAddedNotification")
 class CardsBaseViewController: BaseViewController {
     
     class func constructCardsBaseViewController() -> CardsBaseViewController {
-        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: CardsBaseViewController.self)) as? CardsBaseViewController {
+        if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: CardsBaseViewController.self)) as? CardsBaseViewController {
             return vc
         }
         return CardsBaseViewController()
