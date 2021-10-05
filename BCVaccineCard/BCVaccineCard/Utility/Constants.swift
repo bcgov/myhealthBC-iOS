@@ -61,6 +61,7 @@ struct Constants {
         
         struct MyCardFlow {
             static let navHeader = "My Cards"
+            static let tabBarTitle = "Health Pass"
             
             struct NoCards {
                 static let buttonTitle = "Add Card"

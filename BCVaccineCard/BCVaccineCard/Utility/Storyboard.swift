@@ -9,4 +9,5 @@ import UIKit
 
 enum Storyboard {
     static var main: UIStoryboard { return UIStoryboard(name: "Main", bundle: nil) }
+    static var healthPass: UIStoryboard { return UIStoryboard(name: "HealthPass", bundle: nil) }
 }

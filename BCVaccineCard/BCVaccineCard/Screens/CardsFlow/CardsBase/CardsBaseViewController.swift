@@ -11,6 +11,13 @@ let cardAddedNotification = Notification.Name("cardAddedNotification")
 
 class CardsBaseViewController: BaseViewController {
     
+    class func constructCardsBaseViewController() -> CardsBaseViewController {
+        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: CardsBaseViewController.self)) as? CardsBaseViewController {
+            return vc
+        }
+        return CardsBaseViewController()
+    }
+    
     @IBOutlet weak private var tableView: UITableView!
     // NOTE: This is for fixing the indentation of table view when in edit mode
     @IBOutlet weak private var tableViewLeadingConstraint: NSLayoutConstraint!
