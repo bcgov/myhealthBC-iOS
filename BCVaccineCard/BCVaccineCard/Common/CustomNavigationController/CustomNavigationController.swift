@@ -7,6 +7,44 @@
 
 import UIKit
 
+struct NavButton {
+    let image: UIImage?
+    let action: Selector
+}
+// Note: Using switch statements here instead of a ternary operation in the event designs change and we have more than two styles - easier to adjust logic with a switch statment
+enum NavStyle {
+    case large, small
+    
+    var largeTitles: Bool {
+        switch self {
+        case .large: return true
+        case .small: return false
+        }
+    }
+    
+    var itemTintColor: UIColor {
+        switch self {
+        case .large: return AppColours.appBlue
+        case .small: return .white
+        }
+    }
+    
+    var navBarColor: UIColor {
+        switch self {
+        case .large: return .white
+        case .small: return AppColours.appBlue
+        }
+    }
+    
+    var textColor: UIColor {
+        switch self {
+        case .large: return AppColours.appBlue
+        case .small: return .white
+        }
+    }
+    
+}
+
 class CustomNavigationController: UINavigationController {
     
     override func viewDidLoad() {
@@ -17,26 +55,53 @@ class CustomNavigationController: UINavigationController {
 
     private func setup() {
         navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
         navigationBar.sizeToFit()
-        navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: AppColours.appBlue]
-        navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: AppColours.appBlue]
-        navigationBar.tintColor = AppColours.appBlue
-        navigationController?.navigationBar.barTintColor = .white
     }
     
-    func setImageAndTarget(image: UIImage?, action: Selector, target: UIViewController?) {
-        guard let vc = target else { return }
-        vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: target, action: action)
+    private func setupAppearance(navStyle: NavStyle) {
+        if #available(iOS 13.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = navStyle.navBarColor
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+            navigationBar.standardAppearance = appearance
+            navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
+        } else {
+            // FIXME: Find a safe way to change color of status bar background color (just stays white here)
+            navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+            navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+            navigationBar.backgroundColor = navStyle.navBarColor
+        }
+
+    }
+    
+    func setupNavigation(leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController) {
+        vc.navigationItem.largeTitleDisplayMode = navStyle.largeTitles ? .always : .never
+        setupAppearance(navStyle: navStyle)
+        navigationBar.tintColor = navStyle.itemTintColor
+        if let right = right {
+            vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: right.image, style: .plain, target: vc, action: right.action)
+        }
+        if let left = left {
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
+        }
+        vc.navigationItem.backButtonTitle = ""
     }
     
     func getRightBarButtonItem() -> UIBarButtonItem? {
         return self.navigationItem.rightBarButtonItem
     }
     
-    func hideRightBarButtonItem() {
-        self.navigationItem.rightBarButtonItem = nil
+    func getLeftBarButtonItem() -> UIBarButtonItem? {
+        return self.navigationItem.leftBarButtonItem
     }
+    
+}
 
+extension CustomNavigationController {
+   open override var preferredStatusBarStyle: UIStatusBarStyle {
+      return topViewController?.preferredStatusBarStyle ?? .default
+   }
 }
 

@@ -9,6 +9,13 @@ import UIKit
 
 class SettingsViewController: BaseViewController {
     
+    class func constructSettingsViewController() -> SettingsViewController {
+        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: SettingsViewController.self)) as? SettingsViewController {
+            return vc
+        }
+        return SettingsViewController()
+    }
+    
     @IBOutlet weak private var tableView: UITableView!
     
     private var dataSource: [Setting] = []
@@ -20,7 +27,12 @@ class SettingsViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
         navSetup()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     private func setup() {
@@ -33,7 +45,11 @@ class SettingsViewController: BaseViewController {
 // MARK: Navigation setup
 extension SettingsViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .settings, andImage: nil, action: nil)
+        self.navDelegate?.setNavigationBarWith(title: .settings,
+                                               leftNavButton: nil,
+                                               rightNavButton: nil,
+                                               navStyle: .small,
+                                               targetVC: self)
     }
 }
 

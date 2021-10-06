@@ -50,7 +50,16 @@ class CardsBaseViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
         navSetup()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if #available(iOS 13.0, *) {
+            return UIStatusBarStyle.darkContent
+        } else {
+            return UIStatusBarStyle.default
+        }
     }
     
     private func setup() {
@@ -89,8 +98,22 @@ extension CardsBaseViewController {
 // MARK: Navigation setup
 extension CardsBaseViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .myCards, andImage: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton))
+        self.navDelegate?.setNavigationBarWith(title: .myCards,
+                                               leftNavButton: NavButton(image: UIImage(named: "settings-tab"), action: #selector(self.settingsButton)),
+                                               rightNavButton: NavButton(image: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton)),
+                                               navStyle: .large,
+                                               targetVC: self)
         applyNavAccessibility()
+    }
+    
+    @objc private func settingsButton() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        goToSettingsScreen()
+    }
+    
+    private func goToSettingsScreen() {
+        // TODO: Go to settings screen here
+        print("CONNOR: WENT TO SETTINGS SCREEN TAPPED")
     }
     
     @objc private func addCardButton() {
@@ -297,11 +320,18 @@ extension CardsBaseViewController: ZoomedInPopUpVCDelegate {
 // MARK: Accessibility
 extension CardsBaseViewController {
     private func applyNavAccessibility() {
-        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButtonItem() {
-            rightNavButton.accessibilityTraits = .button
-            rightNavButton.accessibilityLabel = "Add Card"
-            rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+        if let nav = self.navigationController as? CustomNavigationController {
+            if let rightNavButton = nav.getRightBarButtonItem() {
+                rightNavButton.accessibilityTraits = .button
+                rightNavButton.accessibilityLabel = "Add Card"
+                rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+            }
+            if let leftNavButton = nav.getLeftBarButtonItem() {
+                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
+            }
         }
+            
+        
     }
 }
 

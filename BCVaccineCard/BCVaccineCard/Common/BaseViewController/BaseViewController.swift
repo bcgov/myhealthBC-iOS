@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NavigationSetupProtocol: AnyObject {
-    func setNavigationBarWith(title: String, andImage image: UIImage?, action: Selector?)
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController)
 }
 
 class BaseViewController: UIViewController, NavigationSetupProtocol {
@@ -26,17 +26,12 @@ class BaseViewController: UIViewController, NavigationSetupProtocol {
 extension BaseViewController {
     private func navigationSetup() {
         self.navDelegate = self
-        navigationItem.setHidesBackButton(true, animated: true)
     }
     
-    func setNavigationBarWith(title: String, andImage image: UIImage?, action: Selector?) {
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController) {
         navigationItem.title = title
         guard let nav = self.navigationController as? CustomNavigationController else { return }
-        guard let action = action else {
-                nav.hideRightBarButtonItem()
-            return
-        }
-        nav.setImageAndTarget(image: image, action: action, target: self)
+        nav.setupNavigation(leftNavButton: left, rightNavButton: right, navStyle: navStyle, targetVC: vc)
     }
 }
 

@@ -35,8 +35,13 @@ class QRRetrievalMethodViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
         navSetup()
         self.tableView.contentInsetAdjustmentBehavior = .never
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     private func setup() {
@@ -60,7 +65,11 @@ class QRRetrievalMethodViewController: BaseViewController {
 // MARK: Navigation setup
 extension QRRetrievalMethodViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .myCards, andImage: UIImage(named: "close-icon"), action: #selector(self.closeButtonAction))
+        self.navDelegate?.setNavigationBarWith(title: .addCard,
+                                               leftNavButton: nil,
+                                               rightNavButton: nil,
+                                               navStyle: .small,
+                                               targetVC: self)
         applyNavAccessibility()
     }
     
@@ -69,7 +78,6 @@ extension QRRetrievalMethodViewController {
     }
     
     private func dismissMethodSelectionScreen() {
-//        self.removeRightButtonTarget(action: #selector(closeButtonAction))
         self.navigationController?.popViewController(animated: true)
     }
 }
@@ -266,10 +274,15 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
 // MARK: Accessibility
 extension QRRetrievalMethodViewController {
     private func applyNavAccessibility() {
-        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButtonItem() {
-            rightNavButton.accessibilityTraits = .button
-            rightNavButton.accessibilityLabel = "Close"
-            rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
+        if let nav = self.navigationController as? CustomNavigationController {
+            if let rightNavButton = nav.getRightBarButtonItem() {
+                rightNavButton.accessibilityTraits = .button
+                rightNavButton.accessibilityLabel = "Close"
+                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
+            }
+            if let leftNavButton = nav.getLeftBarButtonItem() {
+                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
+            }
         }
     }
 }
