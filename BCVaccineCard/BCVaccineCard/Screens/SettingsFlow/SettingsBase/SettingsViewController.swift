@@ -33,7 +33,7 @@ class SettingsViewController: BaseViewController {
 // MARK: Navigation setup
 extension SettingsViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: Constants.Strings.Settings.navHeader, andImage: nil, action: nil)
+        self.navDelegate?.setNavigationBarWith(title: .settings, andImage: nil, action: nil)
     }
 }
 
@@ -41,8 +41,8 @@ extension SettingsViewController {
 extension SettingsViewController {
     private func setupDataSource() {
         self.dataSource = [
-            Setting(cell: .text(text: Constants.Strings.Settings.openingText), isClickable: false),
-            Setting(cell: .setting(text: Constants.Strings.Settings.privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true)
+            Setting(cell: .text(text: .settingsOpeningText), isClickable: false),
+            Setting(cell: .setting(text: .privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true)
             // TODO: Unhide this cell once we have some details surrounding the help option
 //            Setting(cell: .setting(text: Constants.Strings.Settings.help, image: #imageLiteral(resourceName: "question-icon")), isClickable: true)
         ]

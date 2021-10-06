@@ -18,9 +18,9 @@ enum QRRetrievalMethod {
     
     var getTitle: String {
         switch self {
-        case .scanWithCamera: return Constants.Strings.MyCardFlow.QRMethodSelection.cameraScanOption
-        case .uploadImage: return Constants.Strings.MyCardFlow.QRMethodSelection.imageUploadOption
-        case .enterGatewayInfo: return Constants.Strings.MyCardFlow.QRMethodSelection.healthGatewayOption
+        case .scanWithCamera: return .cameraScanOption
+        case .uploadImage: return .imageUploadOption
+        case .enterGatewayInfo: return .healthGatewayOption
         }
     }
     

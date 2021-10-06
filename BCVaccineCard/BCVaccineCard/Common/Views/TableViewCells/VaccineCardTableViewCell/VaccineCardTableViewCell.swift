@@ -39,7 +39,7 @@ class VaccineCardTableViewCell: UITableViewCell {
         issuedOnLabel.font = UIFont.bcSansRegularWithSize(size: 11)
         tapToZoomInLabel.textColor = .white
         tapToZoomInLabel.font = UIFont.bcSansBoldWithSize(size: 12)
-        tapToZoomInLabel.text = Constants.Strings.MyCardFlow.HasCards.tapToZoomIn
+        tapToZoomInLabel.text = .tapToZoomIn
     }
     
     private func viewSetup() {
@@ -64,7 +64,7 @@ class VaccineCardTableViewCell: UITableViewCell {
         checkmarkImageView.isHidden = model.codableModel.status != .fully
         vaccineStatusLabel.text = model.codableModel.status.getTitle
         if let issuedOnDate = model.issueDate {
-            issuedOnLabel.text = Constants.Strings.MyCardFlow.HasCards.issuedOn + issuedOnDate
+            issuedOnLabel.text = .issuedOn + issuedOnDate
         }
         issuedOnLabel.isHidden = model.issueDate == nil
         statusBackgroundView.backgroundColor = model.codableModel.status.getColor

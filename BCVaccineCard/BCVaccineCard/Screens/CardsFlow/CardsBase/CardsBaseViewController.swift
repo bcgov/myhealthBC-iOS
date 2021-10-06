@@ -89,7 +89,7 @@ extension CardsBaseViewController {
 // MARK: Navigation setup
 extension CardsBaseViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: Constants.Strings.MyCardFlow.navHeader, andImage: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton))
+        self.navDelegate?.setNavigationBarWith(title: .myCards, andImage: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton))
         applyNavAccessibility()
     }
     
@@ -256,12 +256,12 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: Adjusting data source functions
 extension CardsBaseViewController {
     private func deleteCardAt(indexPath: IndexPath) {
-        alert(title: Constants.Strings.MyCardFlow.MyCardsConfirmations.removeTitle, message: Constants.Strings.MyCardFlow.MyCardsConfirmations.removeDescription, buttonOneTitle: Constants.Strings.GenericText.cancel, buttonOneCompletion: {
+        alert(title: .unlinkCardTitle, message: .unlinkCardMessage, buttonOneTitle: .cancel, buttonOneCompletion: {
             // This logic is so that a swipe to delete that is cancelled, gets reloaded and isn't showing a swiped state after cancelled
             self.tableView.isEditing = self.inEditMode
             // Note: Have to reload the entire table view here, not just the one cell, as it causes issues
             self.tableView.reloadData()
-        }, buttonTwoTitle: Constants.Strings.GenericText.yes) { [weak self] in
+        }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
             self.dataSource.remove(at: indexPath.row)

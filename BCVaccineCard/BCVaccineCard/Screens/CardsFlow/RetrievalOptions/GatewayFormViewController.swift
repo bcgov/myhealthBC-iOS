@@ -46,7 +46,7 @@ class GatewayFormViewController: UIViewController {
         separatorView.backgroundColor = AppColours.barYellow
         formTitleLabel.font = UIFont.bcSansBoldWithSize(size: 18)
         formTitleLabel.textColor = AppColours.textBlack
-        formTitleLabel.text = Constants.Strings.MyCardFlow.Form.title
+        formTitleLabel.text = .formTitle
     }
     
     private func setupButtons() {
@@ -56,11 +56,11 @@ class GatewayFormViewController: UIViewController {
     
     private func setupDataSource() {
         dataSource = [
-            GatewayFormData(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: Constants.Strings.MyCardFlow.Form.description),
+            GatewayFormData(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription),
             GatewayFormData(type: .form(type: .personalHealthNumber), cellStringData: nil),
             GatewayFormData(type: .form(type: .dateOfBirth), cellStringData: nil),
             GatewayFormData(type: .form(type: .dateOfVaccination), cellStringData: nil),
-            GatewayFormData(type: .text(type: .underlinedWithImage, font: UIFont.bcSansBoldWithSize(size: 14)), cellStringData: Constants.Strings.MyCardFlow.Form.privacyStatement)
+            GatewayFormData(type: .text(type: .underlinedWithImage, font: UIFont.bcSansBoldWithSize(size: 14)), cellStringData: .privacyStatement)
         ]
     }
 

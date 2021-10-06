@@ -19,7 +19,7 @@ class NoCardsTableViewCell: UITableViewCell {
     }
     
     private func setup() {
-        noCardsLabel.text = Constants.Strings.MyCardFlow.NoCards.description
+        noCardsLabel.text = .noCardsYet
         noCardsLabel.font = UIFont.bcSansRegularWithSize(size: 14)
         noCardsLabel.textColor = AppColours.textBlack
         
@@ -29,7 +29,7 @@ class NoCardsTableViewCell: UITableViewCell {
         
         noCardsLabel.isAccessibilityElement = true
         noCardsLabel.accessibilityTraits = .staticText
-        noCardsLabel.accessibilityValue = Constants.Strings.MyCardFlow.NoCards.description
+        noCardsLabel.accessibilityValue = .noCardsYet
         
         addButton.isAccessibilityElement = true
         addButton.accessibilityTraits = .button

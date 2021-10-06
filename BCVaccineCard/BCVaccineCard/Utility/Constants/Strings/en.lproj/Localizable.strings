@@ -48,7 +48,7 @@
 "PresentForScanning" = "Present For Scanning";
 "UnlinkCardTitle" = "Unlink Card";
 "UnlinkCardMessage" = "Are you sure you want to unlink this card from your wallet?";
-"QRDescriptionText" = "Scan, upload or get access to your proof of vaccination.";
+//"QRDescriptionText" = "Scan, upload or get access to your proof of vaccination.";
 "CameraScanOption" = "Scan a vaccine QR code";
 "ImageUploadOption" = "Upload your vaccine QR code";
 "HealthGatewayOption" = "Access your vaccine QR code";

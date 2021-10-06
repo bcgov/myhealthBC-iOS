@@ -12,9 +12,9 @@ enum VaccineStatus: String, Codable {
     
     var getTitle: String {
         switch self {
-        case .fully: return Constants.Strings.MyCardFlow.HasCards.fullyVaccinated
-        case .partially: return Constants.Strings.MyCardFlow.HasCards.partiallyVaccinated
-        case .notVaxed: return Constants.Strings.MyCardFlow.HasCards.noRecordFound
+        case .fully: return .vaccinated
+        case .partially: return .partiallyVaccinated
+        case .notVaxed: return .noRecordFound
         }
     }
     
@@ -59,6 +59,6 @@ struct AppVaccinePassportModel: Equatable {
     
     func getFormattedIssueDate() -> String {
         guard let issueDate = issueDate else { return "" }
-        return Constants.Strings.MyCardFlow.HasCards.issuedOn + issueDate
+        return .issuedOn + issueDate
     }
 }

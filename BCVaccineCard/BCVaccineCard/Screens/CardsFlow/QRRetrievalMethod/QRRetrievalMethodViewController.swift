@@ -60,7 +60,7 @@ class QRRetrievalMethodViewController: BaseViewController {
 // MARK: Navigation setup
 extension QRRetrievalMethodViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: Constants.Strings.MyCardFlow.navHeader, andImage: UIImage(named: "close-icon"), action: #selector(self.closeButtonAction))
+        self.navDelegate?.setNavigationBarWith(title: .myCards, andImage: UIImage(named: "close-icon"), action: #selector(self.closeButtonAction))
         applyNavAccessibility()
     }
     

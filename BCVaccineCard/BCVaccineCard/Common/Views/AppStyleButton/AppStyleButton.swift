@@ -34,13 +34,13 @@ class AppStyleButton: UIView {
         
         var getTitle: String {
             switch self {
-            case .cancel: return Constants.Strings.ButtonTitles.cancel
-            case .enter: return Constants.Strings.ButtonTitles.enter
-            case .done: return Constants.Strings.ButtonTitles.done
-            case .saveACopy: return Constants.Strings.ButtonTitles.saveACopy
-            case .close: return Constants.Strings.ButtonTitles.close
-            case .manageCards: return Constants.Strings.ButtonTitles.manageCards
-            case .addCard: return Constants.Strings.ButtonTitles.addCard
+            case .cancel: return .cancel
+            case .enter: return .enter
+            case .done: return .done
+            case .saveACopy: return .saveACopy
+            case .close: return .close
+            case .manageCards: return .manageCards
+            case .addCard: return .plusAddCard
             }
         }
     }

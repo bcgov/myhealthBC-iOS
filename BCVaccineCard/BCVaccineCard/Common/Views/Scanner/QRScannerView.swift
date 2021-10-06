@@ -105,7 +105,7 @@ class QRScannerView: UIView {
     }
     
     func alertCameraAccessIsNecessary() {
-        self.parentViewController?.alert(title: Constants.Strings.Errors.CameraAccessIsNecessary.title, message: Constants.Strings.Errors.CameraAccessIsNecessary.message, completion: { [weak self] in
+        self.parentViewController?.alert(title: .noCameraAccessTitle, message: .noCameraAccessMessage, completion: { [weak self] in
             guard let `self` = self else {return}
             self.showCameraPermissionsSettings()
         })
@@ -163,8 +163,8 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         if (captureSession.canAddInput(videoInput)) {
             captureSession.addInput(videoInput)
         } else {
-            self.parentViewController?.alert(title: Constants.Strings.Errors.VideoNotSupported.title,
-                       message: Constants.Strings.Errors.VideoNotSupported.message)
+            self.parentViewController?.alert(title: .unsupportedDeviceTitle,
+                                             message: .unsupportedDeviceVideoMessage)
             return
         }
         
@@ -175,8 +175,8 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
             metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             metadataOutput.metadataObjectTypes = [.qr]
         } else {
-            self.parentViewController?.alert(title: Constants.Strings.Errors.QRScanningNotSupported.title,
-                       message: Constants.Strings.Errors.QRScanningNotSupported.message)
+            self.parentViewController?.alert(title: .unsupportedDeviceTitle,
+                                             message: .unsupportedDeviceQRMessage)
             return
         }
         
@@ -246,7 +246,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
             validate(code: stringValue)
         } else {
             // Show message
-            self.parentViewController?.showBanner(message: Constants.Strings.Errors.InvalidCode.message, style: .Bottom)
+            self.parentViewController?.showBanner(message: .invalidQRCodeMessage, style: .Bottom)
             // Show code location
             showQRCodeLocation(for: metadataObject, isInValid: false, tag: Constants.UI.CameraView.QRCodeHighlighter.tag)
         }
@@ -268,7 +268,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
                     case .ValidCode:
                         break
                     case .InvalidCode, .ForgedCode, .MissingData:
-                        self.parentViewController?.showBanner(message: Constants.Strings.Errors.InvalidCode.message, style: .Bottom)
+                        self.parentViewController?.showBanner(message: .invalidQRCodeMessage, style: .Bottom)
                     }
                     self.startCamera()
                     self.invalidScannedCodes.append(code)
@@ -293,7 +293,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         for (index, item) in metadataObjects.enumerated() {
             showQRCodeLocation(for: item, isInValid: true, tag: 1000 + index)
         }
-        self.parentViewController?.showBanner(message: Constants.Strings.Errors.MultipleQRCodes.message, style: .Bottom)
+        self.parentViewController?.showBanner(message: .multipleQRCodesMessage, style: .Bottom)
     }
     
     fileprivate func showQRCodeLocation(for object: AVMetadataObject, isInValid: Bool, tag: Int) {
