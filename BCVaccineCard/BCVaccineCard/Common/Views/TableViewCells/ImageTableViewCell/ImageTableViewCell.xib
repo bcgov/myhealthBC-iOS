@@ -13,12 +13,12 @@
         <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ImageTableViewCell" rowHeight="463" id="KGk-i7-Jjw" customClass="ImageTableViewCell" customModule="BCVaccineCard" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="342" height="395"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="342" height="395"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CDY-SD-rop">
-                        <rect key="frame" x="90" y="75" width="133" height="195"/>
+                        <rect key="frame" x="90" y="90" width="133" height="195"/>
                         <accessibility key="accessibilityConfiguration">
                             <accessibilityTraits key="traits" notEnabled="YES"/>
                         </accessibility>
@@ -29,11 +29,10 @@
                     </imageView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="CDY-SD-rop" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" constant="-10" id="0xk-ui-qdG"/>
                     <constraint firstItem="CDY-SD-rop" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" constant="-14.5" id="2Rg-z3-5qL"/>
                     <constraint firstItem="CDY-SD-rop" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="3pg-0v-156"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="CDY-SD-rop" secondAttribute="trailing" constant="10" id="DUO-ju-nPO"/>
-                    <constraint firstItem="CDY-SD-rop" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="75" id="RPR-TA-9qS"/>
-                    <constraint firstAttribute="bottom" secondItem="CDY-SD-rop" secondAttribute="bottom" constant="95" id="Z9M-zw-xyP"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -41,9 +40,7 @@
                 <accessibilityTraits key="traits" notEnabled="YES"/>
             </accessibility>
             <connections>
-                <outlet property="bottomConstraint" destination="Z9M-zw-xyP" id="xdr-xK-PP0"/>
                 <outlet property="cellImageView" destination="CDY-SD-rop" id="9c8-P0-wuT"/>
-                <outlet property="topConstraint" destination="RPR-TA-9qS" id="tyy-1K-0Qw"/>
             </connections>
             <point key="canvasLocation" x="150.72463768115944" y="215.95982142857142"/>
         </tableViewCell>

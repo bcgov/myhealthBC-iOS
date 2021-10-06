@@ -93,8 +93,8 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: ImageTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ImageTableViewCell.getName)
         tableView.register(UINib.init(nibName: QRSelectionTableViewCell.getName, bundle: .main), forCellReuseIdentifier: QRSelectionTableViewCell.getName)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 100
+//        tableView.rowHeight = UITableView.automaticDimension
+//        tableView.estimatedRowHeight = 100
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -113,11 +113,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
             }
         case .image(image: let image):
             if let cell = tableView.dequeueReusableCell(withIdentifier: ImageTableViewCell.getName, for: indexPath) as? ImageTableViewCell {
-                print("CONNOR", UIScreen.main.bounds, tableView.bounds)
-                // TODO: put this into a device function - detect device on app delegate launch, then get screen size accordingly - have an enum with various properties to return constraints from there - or just use fixed cell sizes and use table view.bounds and do math that way... yeah, bettr to do that
-                // FIXME: This is garb
-                let bottomConstraint: CGFloat = UIScreen.main.bounds.height <= 700 ? 10 : (UIScreen.main.bounds.height <= 736 ? 40 : (UIScreen.main.bounds.height <= 844 ? 60 : 95))
-                cell.configure(image: image, bottomConstraint: bottomConstraint)
+                cell.configure(image: image)
                 return cell
             }
         case .method(type: let type):
@@ -131,6 +127,17 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
             }
         }
         return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let data = dataSource[indexPath.row]
+        switch data {
+        case .text: return Constants.UI.CellSpacing.QROptionsScreen.staticText
+        case .image:
+            let occupied = Constants.UI.CellSpacing.QROptionsScreen.staticText + (3 * Constants.UI.CellSpacing.QROptionsScreen.optionButtonHeight)
+            return tableView.bounds.height - occupied
+        case .method: return Constants.UI.CellSpacing.QROptionsScreen.optionButtonHeight
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

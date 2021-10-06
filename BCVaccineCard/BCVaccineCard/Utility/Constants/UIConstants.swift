@@ -79,8 +79,10 @@ extension Constants {
         }
         
         struct CellSpacing {
-            static let qrOptionTopToBottomRatio: CGFloat = 74/97
-            static let qrOptionBottomToScreenRatio = 0.106
+            struct QROptionsScreen {
+                static let optionButtonHeight: CGFloat = 74
+                static let staticText: CGFloat = 70
+            }
         }
     }
 }
