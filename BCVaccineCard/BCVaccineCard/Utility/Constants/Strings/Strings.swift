@@ -65,7 +65,7 @@ extension String {
     static var unlinkCardMessage: String { return "UnlinkCardMessage".localized }
     
     // QR Method Selection screen
-//    static var qrDescriptionText: String { return "QRDescriptionText".localized }
+    static var qrDescriptionText: String { return "QRDescriptionText".localized }
     static var cameraScanOption: String { return "CameraScanOption".localized }
     static var imageUploadOption: String { return "ImageUploadOption".localized }
     static var healthGatewayOption: String { return "HealthGatewayOption".localized }

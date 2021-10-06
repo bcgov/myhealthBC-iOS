@@ -10,6 +10,8 @@ import UIKit
 class ImageTableViewCell: UITableViewCell {
     
     @IBOutlet weak private var cellImageView: UIImageView!
+    @IBOutlet weak private var topConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var bottomConstraint: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,8 +24,10 @@ class ImageTableViewCell: UITableViewCell {
         self.accessibilityElementsHidden = true
     }
 
-    func configure(image: UIImage) {
+    func configure(image: UIImage, bottomConstraint: CGFloat) {
         cellImageView.image = image
+        self.topConstraint.constant = bottomConstraint * Constants.UI.CellSpacing.qrOptionTopToBottomRatio
+        self.bottomConstraint.constant = bottomConstraint
     }
     
 }
