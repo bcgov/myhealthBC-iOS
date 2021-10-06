@@ -100,7 +100,7 @@ extension CardsBaseViewController {
     
     private func goToAddCardOptionScreen() {
         let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
-        self.removeRightButtonTarget(action: #selector(addCardButton))
+//        self.removeRightButtonTarget(action: #selector(addCardButton))
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -297,7 +297,7 @@ extension CardsBaseViewController: ZoomedInPopUpVCDelegate {
 // MARK: Accessibility
 extension CardsBaseViewController {
     private func applyNavAccessibility() {
-        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButton() {
+        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButtonItem() {
             rightNavButton.accessibilityTraits = .button
             rightNavButton.accessibilityLabel = "Add Card"
             rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"

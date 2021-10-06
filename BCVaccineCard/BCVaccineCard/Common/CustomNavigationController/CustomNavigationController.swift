@@ -9,8 +9,6 @@ import UIKit
 
 class CustomNavigationController: UINavigationController {
     
-    private var rightNavButton: UIButton?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -25,37 +23,19 @@ class CustomNavigationController: UINavigationController {
         navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: AppColours.appBlue]
         navigationBar.tintColor = AppColours.appBlue
         navigationController?.navigationBar.barTintColor = .white
-        buttonSetup()
     }
     
-    private func buttonSetup() {
-        self.rightNavButton = UIButton()
-        guard let rightNavButton = rightNavButton else { return }
-        rightNavButton.tag = Constants.UI.NavBarConstants.buttonTag
-        navigationBar.addSubview(rightNavButton)
-        rightNavButton.layer.cornerRadius = Constants.UI.NavBarConstants.ImageSizeForLargeState / 2
-        rightNavButton.clipsToBounds = true
-        rightNavButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            rightNavButton.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -Constants.UI.NavBarConstants.ImageRightMargin),
-            rightNavButton.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -Constants.UI.NavBarConstants.ImageBottomMarginForLargeState),
-            rightNavButton.heightAnchor.constraint(equalToConstant: Constants.UI.NavBarConstants.ImageSizeForLargeState),
-            rightNavButton.widthAnchor.constraint(equalTo: rightNavButton.heightAnchor)
-        ])
+    func setImageAndTarget(image: UIImage?, action: Selector, target: UIViewController?) {
+        guard let vc = target else { return }
+        vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: target, action: action)
     }
     
-    func setImageAndTarget(image: UIImage?, action: Selector, target: Any?) {
-        guard let rightNavButton = rightNavButton else { return }
-        rightNavButton.setImage(image, for: .normal)
-        rightNavButton.addTarget(target, action: action, for: .touchUpInside)
+    func getRightBarButtonItem() -> UIBarButtonItem? {
+        return self.navigationItem.rightBarButtonItem
     }
     
-    func hideRightBarButton() {
-        self.rightNavButton?.isHidden = true
-    }
-    
-    func getRightBarButton() -> UIButton? {
-        return self.rightNavButton
+    func hideRightBarButtonItem() {
+        self.navigationItem.rightBarButtonItem = nil
     }
 
 }

@@ -69,7 +69,7 @@ extension QRRetrievalMethodViewController {
     }
     
     private func dismissMethodSelectionScreen() {
-        self.removeRightButtonTarget(action: #selector(closeButtonAction))
+//        self.removeRightButtonTarget(action: #selector(closeButtonAction))
         self.navigationController?.popViewController(animated: true)
     }
 }
@@ -248,7 +248,7 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
 // MARK: Accessibility
 extension QRRetrievalMethodViewController {
     private func applyNavAccessibility() {
-        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButton() {
+        if let nav = self.navigationController as? CustomNavigationController, let rightNavButton = nav.getRightBarButtonItem() {
             rightNavButton.accessibilityTraits = .button
             rightNavButton.accessibilityLabel = "Close"
             rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
