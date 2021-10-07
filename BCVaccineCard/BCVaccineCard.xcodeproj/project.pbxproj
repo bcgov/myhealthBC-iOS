@@ -146,6 +146,10 @@
 		79BDA088270CEE6700FF30AB /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA077270CB74800FF30AB /* Notifications.storyboard */; };
 		79BDA089270CEE8000FF30AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA08C270CEE8000FF30AB /* Localizable.strings */; };
 		79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA08C270CEE8000FF30AB /* Localizable.strings */; };
+		79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA08E270E9E0800FF30AB /* VaccineCardView.swift */; };
+		79BDA090270E9E0A00FF30AB /* VaccineCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA08E270E9E0800FF30AB /* VaccineCardView.swift */; };
+		79BDA092270E9E2800FF30AB /* VaccineCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA091270E9E2800FF30AB /* VaccineCardView.xib */; };
+		79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA091270E9E2800FF30AB /* VaccineCardView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -243,6 +247,8 @@
 		79BDA07A270CB89900FF30AB /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		79BDA07D270CB8F300FF30AB /* String+Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Localizable.swift"; sourceTree = "<group>"; };
 		79BDA08B270CEE8000FF30AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		79BDA08E270E9E0800FF30AB /* VaccineCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineCardView.swift; sourceTree = "<group>"; };
+		79BDA091270E9E2800FF30AB /* VaccineCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VaccineCardView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -461,6 +467,7 @@
 			children = (
 				2912313C26F93FD900CF5F3B /* Scanner */,
 				7944F6FB26F313EF006B9444 /* TableViewCells */,
+				79BDA08D270E9DD100FF30AB /* VaccineCardView */,
 				7967E73B26F535EB00EEF510 /* FormTextFieldView */,
 				7944F6C326F12C00006B9444 /* AppStyleButton */,
 				7944F6C826F12C00006B9444 /* VaxQRZoomedInView */,
@@ -480,8 +487,8 @@
 		7944F6C826F12C00006B9444 /* VaxQRZoomedInView */ = {
 			isa = PBXGroup;
 			children = (
-				7944F6C926F12C00006B9444 /* VaxQRZoomedInView.xib */,
 				7944F6CA26F12C00006B9444 /* VaxQRZoomedInView.swift */,
+				7944F6C926F12C00006B9444 /* VaxQRZoomedInView.xib */,
 			);
 			path = VaxQRZoomedInView;
 			sourceTree = "<group>";
@@ -703,6 +710,15 @@
 			path = Strings;
 			sourceTree = "<group>";
 		};
+		79BDA08D270E9DD100FF30AB /* VaccineCardView */ = {
+			isa = PBXGroup;
+			children = (
+				79BDA08E270E9E0800FF30AB /* VaccineCardView.swift */,
+				79BDA091270E9E2800FF30AB /* VaccineCardView.xib */,
+			);
+			path = VaccineCardView;
+			sourceTree = "<group>";
+		};
 		95BA81E170E18F38F168CAC6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -866,6 +882,7 @@
 				7944F6D726F12C00006B9444 /* VaxQRZoomedInView.xib in Resources */,
 				79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */,
 				7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */,
+				79BDA092270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
 				7944F68026F12613006B9444 /* Main.storyboard in Resources */,
@@ -900,6 +917,7 @@
 				794BD6602702EEC00084ADA8 /* BCSans-Italic.otf in Resources */,
 				794BD6612702EEC00084ADA8 /* VaccineCardTableViewCell.xib in Resources */,
 				794BD6622702EEC00084ADA8 /* NoCardsTableViewCell.xib in Resources */,
+				79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				794BD6632702EEC00084ADA8 /* BCSans-Bold.otf in Resources */,
 				79BDA087270CEE6400FF30AB /* Booking.storyboard in Resources */,
 				794BD6642702EEC00084ADA8 /* Assets.xcassets in Resources */,
@@ -933,6 +951,7 @@
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
 				7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */,
 				7944F70B26F39128006B9444 /* SettingsViewController.swift in Sources */,
+				79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				7944F6F526F30293006B9444 /* CardsBaseViewController.swift in Sources */,
 				2912314326F9433600CF5F3B /* UIConstants.swift in Sources */,
 				794BD6272702E0E90084ADA8 /* CustomNavigationController.swift in Sources */,
@@ -1009,6 +1028,7 @@
 				794BD63F2702EEC00084ADA8 /* UIViewController+EXT.swift in Sources */,
 				794BD6402702EEC00084ADA8 /* UIButton+EXT.swift in Sources */,
 				794BD6412702EEC00084ADA8 /* GatewayFormData.swift in Sources */,
+				79BDA090270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				794BD6422702EEC00084ADA8 /* QRScannerView.swift in Sources */,
 				794BD6432702EEC00084ADA8 /* SettingsTableViewCell.swift in Sources */,
 				794BD6442702EEC00084ADA8 /* Defaults.swift in Sources */,
