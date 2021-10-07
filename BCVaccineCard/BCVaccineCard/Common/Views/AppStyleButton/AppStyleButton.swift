@@ -25,7 +25,7 @@ class AppStyleButton: UIView {
     
     enum ButtonType {
         case cancel
-        case enter
+        case submit
         case done
         case saveACopy
         case close
@@ -36,7 +36,7 @@ class AppStyleButton: UIView {
         var getTitle: String {
             switch self {
             case .cancel: return .cancel
-            case .enter: return .enter
+            case .submit: return .submit
             case .done: return .done
             case .saveACopy: return .saveACopy
             case .close: return .close

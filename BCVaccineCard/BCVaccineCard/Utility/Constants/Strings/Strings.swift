@@ -20,7 +20,8 @@ extension String {
     static var healthPass: String { return "HealthPass".localized }
     /// Button titles
     static var cancel: String { return "Cancel".localized }
-    static var enter: String { return "Enter".localized }
+//    static var enter: String { return "Enter".localized }
+    static var submit: String { return "Submit".localized }
     static var done: String { return "Done".localized }
     static var saveACopy: String { return "SaveACopy".localized }
     static var close: String { return "Close".localized }

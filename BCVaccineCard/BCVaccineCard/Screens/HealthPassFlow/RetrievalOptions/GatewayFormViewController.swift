@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GatewayFormViewController: UIViewController {
+class GatewayFormViewController: BaseViewController {
     
     class func constructGatewayFormViewController() -> GatewayFormViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
@@ -20,19 +20,28 @@ class GatewayFormViewController: UIViewController {
     @IBOutlet private weak var separatorView: UIView! // colour it yellow
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet weak var cancelButton: AppStyleButton!
-    @IBOutlet weak var enterButton: AppStyleButton!
+    @IBOutlet weak var submitButton: AppStyleButton!
     
     var completionHandler: (() -> Void)?
     private var dataSource: [GatewayFormData] = []
-    private var enterButtonEnabled: Bool = false {
+    private var submitButtonEnabled: Bool = false {
         didSet {
-            enterButton.enabled = enterButtonEnabled
+            submitButton.enabled = submitButtonEnabled
         }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navSetup()
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     private func setup() {
@@ -51,7 +60,7 @@ class GatewayFormViewController: UIViewController {
     
     private func setupButtons() {
         cancelButton.configure(withStyle: .white, buttonType: .cancel, delegateOwner: self, enabled: true)
-        enterButton.configure(withStyle: .blue, buttonType: .enter, delegateOwner: self, enabled: false)
+        submitButton.configure(withStyle: .blue, buttonType: .submit, delegateOwner: self, enabled: false)
     }
     
     private func setupDataSource() {
@@ -64,6 +73,18 @@ class GatewayFormViewController: UIViewController {
         ]
     }
 
+}
+
+// MARK: Navigation setup
+extension GatewayFormViewController {
+    private func navSetup() {
+        self.navDelegate?.setNavigationBarWith(title: .addCard,
+                                               leftNavButton: nil,
+                                               rightNavButton: nil,
+                                               navStyle: .small,
+                                               targetVC: self)
+        applyNavAccessibility()
+    }
 }
 
 // MARK: Table View Logic
@@ -133,12 +154,12 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     
     func didFinishEditing(formField: FormTextFieldType, text: String?) {
         updateDataSource(formField: formField, text: text)
-        enterButtonEnabled = shouldButtonBeEnabled()
+        submitButtonEnabled = shouldButtonBeEnabled()
     }
     
     func textFieldTextDidChange(formField: FormTextFieldType, newText: String) {
         updateDataSource(formField: formField, text: newText)
-        enterButtonEnabled = shouldButtonBeEnabled()
+        submitButtonEnabled = shouldButtonBeEnabled()
     }
     
     private func goToNextTextField(formField: FormTextFieldType) {
@@ -258,12 +279,28 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .cancel {
             self.dismiss(animated: true, completion: nil)
-        } else if type == .enter {
+        } else if type == .submit {
             guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
             guard let phn = dataSource[phnIndex].cellStringData else { return }
             guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
             guard let birthday = dataSource[dobIndex].cellStringData else { return }
             checkForPHN(phnString: phn, birthday: birthday)
+        }
+    }
+}
+
+// MARK: Accessibility
+extension GatewayFormViewController {
+    private func applyNavAccessibility() {
+        if let nav = self.navigationController as? CustomNavigationController {
+            if let rightNavButton = nav.getRightBarButtonItem() {
+                rightNavButton.accessibilityTraits = .button
+                rightNavButton.accessibilityLabel = "Close"
+                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
+            }
+            if let leftNavButton = nav.getLeftBarButtonItem() {
+                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
+            }
         }
     }
 }

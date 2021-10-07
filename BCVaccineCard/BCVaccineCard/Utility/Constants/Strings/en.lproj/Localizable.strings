@@ -13,7 +13,8 @@
 "Settings" = "Settings";
 "HealthPass" = "Health Pass";
 "Cancel" = "Cancel";
-"Enter" = "Enter";
+//"Enter" = "Enter";
+"Submit" = "Submit";
 "Done" = "Done";
 "SaveACopy" = "Save A Copy";
 "Close" = "Close";

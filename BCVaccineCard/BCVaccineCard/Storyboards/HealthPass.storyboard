@@ -73,9 +73,9 @@
                     <tabBarItem key="tabBarItem" title="Form" id="awA-tf-wl5"/>
                     <connections>
                         <outlet property="cancelButton" destination="ctc-IE-rt0" id="eXQ-f5-N3D"/>
-                        <outlet property="enterButton" destination="GkU-ng-FTF" id="52t-Rf-TsH"/>
                         <outlet property="formTitleLabel" destination="TkE-GG-MA3" id="lfJ-On-nPM"/>
                         <outlet property="separatorView" destination="9IN-xh-ehX" id="UnI-zg-8zS"/>
+                        <outlet property="submitButton" destination="GkU-ng-FTF" id="52t-Rf-TsH"/>
                         <outlet property="tableView" destination="h4T-id-Mwi" id="XtS-Pw-rhw"/>
                     </connections>
                 </viewController>

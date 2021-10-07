@@ -72,14 +72,6 @@ extension QRRetrievalMethodViewController {
                                                targetVC: self)
         applyNavAccessibility()
     }
-    
-    @objc private func closeButtonAction() {
-        dismissMethodSelectionScreen()
-    }
-    
-    private func dismissMethodSelectionScreen() {
-        self.navigationController?.popViewController(animated: true)
-    }
 }
 
 // MARK: Data Source Setup
@@ -171,7 +163,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
             guard let `self` = self else { return }
             self.navigationController?.popViewController(animated: true)
         }
-        self.present(vc, animated: true, completion: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func goToCameraScan() {
