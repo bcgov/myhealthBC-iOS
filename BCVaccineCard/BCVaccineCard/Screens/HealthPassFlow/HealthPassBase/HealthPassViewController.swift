@@ -45,6 +45,7 @@ class HealthPassViewController: BaseViewController {
     private func setup() {
         retrieveDataSource()
         setupTableView()
+        self.tableView.reloadData()
     }
 
 }
@@ -66,8 +67,14 @@ extension HealthPassViewController {
     }
     
     private func goToSettingsScreen() {
-        // TODO: Go to settings screen here
-        print("CONNOR: WENT TO SETTINGS SCREEN TAPPED")
+        let vc = SettingsViewController.constructSettingsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func goToAddCardOptionScreen() {
+        // NOTE: Not sure if I should add UIImpactFeedbackGenerator here or not??
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -81,8 +88,9 @@ extension HealthPassViewController {
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension HealthPassViewController {
     private func fetchFromDefaults() {
-        guard let localDS = Defaults.vaccinePassports else {
+        guard let localDS = Defaults.vaccinePassports, localDS.count > 0 else {
             self.dataSource = nil
+            self.savedCardsCount = 0
             return
         }
         self.savedCardsCount = localDS.count
@@ -110,7 +118,8 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let card = dataSource else {
             if let cell = tableView.dequeueReusableCell(withIdentifier: NoCardsTableViewCell.getName, for: indexPath) as? NoCardsTableViewCell {
-                cell.configure(withOwner: self)
+                let height = tableView.bounds.height - 50
+                cell.configure(withOwner: self, height: height)
                 return cell
             }
             return UITableViewCell()
@@ -148,6 +157,9 @@ extension HealthPassViewController: AppStyleButtonDelegate {
         if type == .viewAll {
             let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
             self.navigationController?.pushViewController(vc, animated: true)
+        }
+        if type == .addCard {
+            goToAddCardOptionScreen()
         }
     }
 }

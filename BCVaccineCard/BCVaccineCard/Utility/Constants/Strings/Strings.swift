@@ -26,7 +26,7 @@ extension String {
     static var saveACopy: String { return "SaveACopy".localized }
     static var close: String { return "Close".localized }
     static var manageCards: String { return "ManageCards".localized }
-    static var plusAddCard: String { return "PlusAddCard".localized }
+//    static var plusAddCard: String { return "PlusAddCard".localized }
     static var addCard: String { return "AddCard".localized }
     static var next: String { return "Next".localized }
     static var viewAll: String { return "ViewAll".localized }
@@ -63,6 +63,7 @@ extension String {
     
     // My Cards screen
     static var noCardsYet: String { return "NoCardsYet".localized }
+    static var noCardsIntroText: String { return "NoCardsIntroText".localized }
     static var vaccinated: String { return "Vaccinated".localized }
     static var partiallyVaccinated: String { return "PartiallyVaccinated".localized }
     static var noRecordFound: String { return "NoRecordFound".localized }

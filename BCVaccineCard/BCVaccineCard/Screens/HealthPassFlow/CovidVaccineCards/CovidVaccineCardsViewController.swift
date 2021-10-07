@@ -138,10 +138,10 @@ extension CovidVaccineCardsViewController {
 // MARK: Bottom Button Tapped Delegate
 extension CovidVaccineCardsViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
-        guard type != .addCard else {
-            goToAddCardOptionScreen()
-            return
-        }
+//        guard type != .addCard else {
+//            goToAddCardOptionScreen()
+//            return
+//        }
         if type == .done {
             saveToDefaults()
         }

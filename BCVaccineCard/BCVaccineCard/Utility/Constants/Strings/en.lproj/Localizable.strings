@@ -19,7 +19,7 @@
 "SaveACopy" = "Save A Copy";
 "Close" = "Close";
 "ManageCards" = "Manage Cards";
-"PlusAddCard" = "+ Add Card";
+//"PlusAddCard" = "+ Add Card";
 "AddCard" = "Add Card";
 "Next" = "Next";
 "ViewAll" = "View All";
@@ -43,7 +43,8 @@
 "PrivacyStatement" = "Privacy Statement";
 "CovidVaccineCards" = "COVID-19 Vaccine Cards";
 "AddedDate" = "Added %@ days ago";
-"NoCardsYet" = "You don't have any vaccine card yet";
+"NoCardsYet" = "You don't have any cards yet";
+"NoCardsIntroText" = "The easiest way to show proof is using the BC Vaccine Card. Add your cards here for easy access.";
 "Vaccinated" = "Vaccinated";
 "PartiallyVaccinated" = "Partially Vaccinated";
 "NoRecordFound" = "No Record Found";

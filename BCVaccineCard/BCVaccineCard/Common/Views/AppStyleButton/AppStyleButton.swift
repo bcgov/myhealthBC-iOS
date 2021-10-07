@@ -41,7 +41,7 @@ class AppStyleButton: UIView {
             case .saveACopy: return .saveACopy
             case .close: return .close
             case .manageCards: return .manageCards
-            case .addCard: return .plusAddCard
+            case .addCard: return .addCard
             case .viewAll: return .viewAll
             }
         }
