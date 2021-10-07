@@ -81,7 +81,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LNe-UX-65N" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2158" y="1288"/>
+            <point key="canvasLocation" x="2219" y="1926"/>
         </scene>
         <!--Covid Vaccine Cards View Controller-->
         <scene sceneID="zD9-Xd-EZU">
@@ -92,7 +92,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="yFp-YB-xyv">
-                                <rect key="frame" x="8" y="88" width="398" height="700"/>
+                                <rect key="frame" x="8" y="44" width="398" height="744"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
@@ -126,7 +126,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Jg-Pc-OC4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1106" y="560"/>
+            <point key="canvasLocation" x="1106" y="1191"/>
         </scene>
         <!--Camera View Controller-->
         <scene sceneID="usP-RA-kn0">
@@ -209,7 +209,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Y9e-go-yMw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="95.652173913043484" y="1281.6964285714284"/>
+            <point key="canvasLocation" x="22" y="1926"/>
         </scene>
         <!--Retrieval Method View Controller-->
         <scene sceneID="jbg-L5-x5L">
@@ -241,7 +241,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4yy-ws-rLM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1123" y="1269"/>
+            <point key="canvasLocation" x="1106" y="1926"/>
         </scene>
         <!--Zoomed In Pop UpVC-->
         <scene sceneID="LnS-Tn-MxV">
@@ -271,7 +271,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j6C-Jf-MM8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="133" y="560"/>
+            <point key="canvasLocation" x="22" y="1191"/>
         </scene>
         <!--My Cards-->
         <scene sceneID="DT0-As-fqs">
@@ -285,12 +285,43 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="5dM-a0-M5C" kind="relationship" relationship="rootViewController" id="KdD-Ta-NKU"/>
+                        <segue destination="1HD-Et-7sF" kind="relationship" relationship="rootViewController" id="ax3-PQ-Dmm"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="l7X-5I-woz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1106" y="-177"/>
+        </scene>
+        <!--Health Pass View Controller-->
+        <scene sceneID="FQb-RL-PMd">
+            <objects>
+                <viewController storyboardIdentifier="HealthPassViewController" id="1HD-Et-7sF" customClass="HealthPassViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eRu-4N-pgp">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="yx0-vA-sEt">
+                                <rect key="frame" x="8" y="88" width="398" height="764"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="G9z-Tr-ZIe"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="G9z-Tr-ZIe" firstAttribute="trailing" secondItem="yx0-vA-sEt" secondAttribute="trailing" constant="8" id="3mB-ib-eAq"/>
+                            <constraint firstItem="yx0-vA-sEt" firstAttribute="leading" secondItem="G9z-Tr-ZIe" secondAttribute="leading" constant="8" id="WoB-F4-fIf"/>
+                            <constraint firstItem="G9z-Tr-ZIe" firstAttribute="bottom" secondItem="yx0-vA-sEt" secondAttribute="bottom" constant="10" id="gan-Pz-bjN"/>
+                            <constraint firstItem="yx0-vA-sEt" firstAttribute="top" secondItem="G9z-Tr-ZIe" secondAttribute="top" id="uph-B4-InT"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="SCm-sq-BcB"/>
+                    <connections>
+                        <outlet property="tableView" destination="yx0-vA-sEt" id="qLz-vl-YDQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GhC-gd-ncx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1106" y="516"/>
         </scene>
     </scenes>
     <resources>

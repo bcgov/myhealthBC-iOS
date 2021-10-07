@@ -152,6 +152,10 @@
 		79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA091270E9E2800FF30AB /* VaccineCardView.xib */; };
 		79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA095270EA44D00FF30AB /* HealthPassViewController.swift */; };
 		79BDA097270EA44D00FF30AB /* HealthPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA095270EA44D00FF30AB /* HealthPassViewController.swift */; };
+		79BDA09B270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA099270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.swift */; };
+		79BDA09C270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA099270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.swift */; };
+		79BDA09D270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA09A270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.xib */; };
+		79BDA09E270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA09A270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -252,6 +256,8 @@
 		79BDA08E270E9E0800FF30AB /* VaccineCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineCardView.swift; sourceTree = "<group>"; };
 		79BDA091270E9E2800FF30AB /* VaccineCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VaccineCardView.xib; sourceTree = "<group>"; };
 		79BDA095270EA44D00FF30AB /* HealthPassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthPassViewController.swift; sourceTree = "<group>"; };
+		79BDA099270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryVaccineCardTableViewCell.swift; sourceTree = "<group>"; };
+		79BDA09A270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrimaryVaccineCardTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -542,6 +548,7 @@
 				7944F71626F3B589006B9444 /* TextTableViewCell */,
 				7944F70F26F3A20E006B9444 /* QRSelectionTableViewCell */,
 				7944F70126F31425006B9444 /* NoCardsTableViewCell */,
+				79BDA098270EE0E500FF30AB /* PrimaryVaccineCardTableViewCell */,
 				7944F6FC26F313F7006B9444 /* VaccineCardTableViewCell */,
 			);
 			path = TableViewCells;
@@ -731,6 +738,15 @@
 			path = HealthPassBase;
 			sourceTree = "<group>";
 		};
+		79BDA098270EE0E500FF30AB /* PrimaryVaccineCardTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				79BDA099270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.swift */,
+				79BDA09A270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.xib */,
+			);
+			path = PrimaryVaccineCardTableViewCell;
+			sourceTree = "<group>";
+		};
 		95BA81E170E18F38F168CAC6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -895,6 +911,7 @@
 				79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */,
 				7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */,
 				79BDA092270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
+				79BDA09D270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.xib in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
 				7944F68026F12613006B9444 /* Main.storyboard in Resources */,
@@ -943,6 +960,7 @@
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
 				794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */,
+				79BDA09E270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -991,6 +1009,7 @@
 				7944F71426F3A26D006B9444 /* QRSelectionTableViewCell.swift in Sources */,
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
 				79BDA07B270CB89900FF30AB /* Strings.swift in Sources */,
+				79BDA09B270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
@@ -1059,6 +1078,7 @@
 				794BD64E2702EEC00084ADA8 /* QRSelectionTableViewCell.swift in Sources */,
 				794BD64F2702EEC00084ADA8 /* TextTableViewCell.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
+				79BDA09C270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.swift in Sources */,
 				794BD6512702EEC00084ADA8 /* String+EXT.swift in Sources */,
 				794BD6522702EEC00084ADA8 /* UIImage+EXT.swift in Sources */,
 				794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */,

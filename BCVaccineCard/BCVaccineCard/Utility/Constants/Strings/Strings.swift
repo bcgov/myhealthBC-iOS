@@ -28,6 +28,7 @@ extension String {
     static var plusAddCard: String { return "PlusAddCard".localized }
     static var addCard: String { return "AddCard".localized }
     static var next: String { return "Next".localized }
+    static var viewAll: String { return "ViewAll".localized }
     
     // Errors
     static var noCameraAccessTitle: String { return "NoCameraAccessTitle".localized }
@@ -52,6 +53,12 @@ extension String {
     static var dateOfBirth: String { return "DateOfBirth".localized }
     static var dateOfVaccine: String { return "DateOfVaccine".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
+    
+    // Health Pass Home screen
+    static var covidVaccineCards: String { return "CovidVaccineCards".localized }
+    static func addedDate(days: String) -> String {
+        return String(format: "AddedDate".localized, days)
+    }
     
     // My Cards screen
     static var noCardsYet: String { return "NoCardsYet".localized }

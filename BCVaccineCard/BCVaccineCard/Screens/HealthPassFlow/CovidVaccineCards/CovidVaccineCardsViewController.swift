@@ -55,11 +55,7 @@ class CovidVaccineCardsViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        if #available(iOS 13.0, *) {
-            return UIStatusBarStyle.darkContent
-        } else {
-            return UIStatusBarStyle.default
-        }
+        return .lightContent
     }
     
     private func setup() {
@@ -98,22 +94,12 @@ extension CovidVaccineCardsViewController {
 // MARK: Navigation setup
 extension CovidVaccineCardsViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .myCards,
-                                               leftNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton)),
-                                               rightNavButton: NavButton(image: UIImage(named: "nav-notifications"), action: #selector(self.addCardButton)),
-                                               navStyle: .large,
+        self.navDelegate?.setNavigationBarWith(title: .covidVaccineCards,
+                                               leftNavButton: nil,
+                                               rightNavButton: NavButton(image: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton)),
+                                               navStyle: .small,
                                                targetVC: self)
         applyNavAccessibility()
-    }
-    
-    @objc private func settingsButton() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        goToSettingsScreen()
-    }
-    
-    private func goToSettingsScreen() {
-        // TODO: Go to settings screen here
-        print("CONNOR: WENT TO SETTINGS SCREEN TAPPED")
     }
     
     @objc private func addCardButton() {
@@ -123,7 +109,6 @@ extension CovidVaccineCardsViewController {
     
     private func goToAddCardOptionScreen() {
         let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
-//        self.removeRightButtonTarget(action: #selector(addCardButton))
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -147,7 +132,6 @@ extension CovidVaccineCardsViewController {
         let value = self.inEditMode ? AppStyleButton.ButtonType.done.getTitle : AppStyleButton.ButtonType.manageCards.getTitle
         let hint = self.inEditMode ? "Tapping 'done' will stop the editing of cards and save any changes." : "Tapping 'manage cards' will allow you to edit the order of your cards, and remove any cards you no longer want in your wallet."
         bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true, accessibilityValue: value, accessibilityHint: hint)
-        
     }
 }
 
@@ -182,7 +166,6 @@ extension CovidVaccineCardsViewController: AppStyleButtonDelegate {
 extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: VaccineCardTableViewCell.getName, bundle: .main), forCellReuseIdentifier: VaccineCardTableViewCell.getName)
-        tableView.register(UINib.init(nibName: NoCardsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: NoCardsTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 330
         tableView.delegate = self
@@ -190,18 +173,11 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return max(self.dataSource.count, 1)
+        return self.dataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard !dataSource.isEmpty else {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: NoCardsTableViewCell.getName, for: indexPath) as? NoCardsTableViewCell {
-                cell.configure(withOwner: self)
-                tableView.isEditing = false
-                return cell
-            }
-            return UITableViewCell()
-        }
+        guard !dataSource.isEmpty else { return UITableViewCell() }
         if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
             let expanded = indexPath.row == expandedIndexRow && !inEditMode
             let model = dataSource[indexPath.row]

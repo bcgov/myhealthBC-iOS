@@ -19,7 +19,7 @@ enum TabBarVCs {
     var properties: Properties? {
         switch self {
         case .healthPass:
-            return Properties(title: .healthPass, tabBarImage: #imageLiteral(resourceName: "my-cards-tab"), baseViewController: CovidVaccineCardsViewController.constructCovidVaccineCardsViewController())
+            return Properties(title: .healthPass, tabBarImage: #imageLiteral(resourceName: "my-cards-tab"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .records:
             return nil
         case .checker:

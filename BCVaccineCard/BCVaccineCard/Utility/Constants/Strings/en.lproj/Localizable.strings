@@ -21,6 +21,7 @@
 "PlusAddCard" = "+ Add Card";
 "AddCard" = "Add Card";
 "Next" = "Next";
+"ViewAll" = "View All";
 "NoCameraAccessTitle" = "No Camera Access";
 "NoCameraAccessMessage" = "Camera access is necessary for this feature.";
 "MultipleQRCodesMessage" = "There are multiple QR codes in view";
@@ -39,6 +40,8 @@
 "DateOfBirth" = "Date of birth";
 "DateOfVaccine" = "Date of vaccination (Dose 1 or Dose 2)";
 "PrivacyStatement" = "Privacy Statement";
+"CovidVaccineCards" = "COVID-19 Vaccine Cards";
+"AddedDate" = "Added %@ days ago";
 "NoCardsYet" = "You don't have any vaccine card yet";
 "Vaccinated" = "Vaccinated";
 "PartiallyVaccinated" = "Partially Vaccinated";
