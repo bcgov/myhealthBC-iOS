@@ -1,5 +1,5 @@
 //
-//  CardsBaseViewController.swift
+//  CovidVaccineCardsViewController.swift
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-09-15.
@@ -9,13 +9,13 @@ import UIKit
 
 let cardAddedNotification = Notification.Name("cardAddedNotification")
 
-class CardsBaseViewController: BaseViewController {
+class CovidVaccineCardsViewController: BaseViewController {
     
-    class func constructCardsBaseViewController() -> CardsBaseViewController {
-        if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: CardsBaseViewController.self)) as? CardsBaseViewController {
+    class func constructCovidVaccineCardsViewController() -> CovidVaccineCardsViewController {
+        if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: CovidVaccineCardsViewController.self)) as? CovidVaccineCardsViewController {
             return vc
         }
-        return CardsBaseViewController()
+        return CovidVaccineCardsViewController()
     }
     
     @IBOutlet weak private var tableView: UITableView!
@@ -71,7 +71,7 @@ class CardsBaseViewController: BaseViewController {
 }
 
 // MARK: Card change observable setup
-extension CardsBaseViewController {
+extension CovidVaccineCardsViewController {
     private func cardChangedObservableSetup() {
         NotificationCenter.default.addObserver(self, selector: #selector(onNotification(notification:)), name: cardAddedNotification, object: nil)
     }
@@ -96,11 +96,11 @@ extension CardsBaseViewController {
 }
 
 // MARK: Navigation setup
-extension CardsBaseViewController {
+extension CovidVaccineCardsViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .myCards,
-                                               leftNavButton: NavButton(image: UIImage(named: "settings-tab"), action: #selector(self.settingsButton)),
-                                               rightNavButton: NavButton(image: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton)),
+                                               leftNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton)),
+                                               rightNavButton: NavButton(image: UIImage(named: "nav-notifications"), action: #selector(self.addCardButton)),
                                                navStyle: .large,
                                                targetVC: self)
         applyNavAccessibility()
@@ -129,7 +129,7 @@ extension CardsBaseViewController {
 }
 
 // MARK: DataSource Management
-extension CardsBaseViewController {
+extension CovidVaccineCardsViewController {
     private func retrieveDataSource() {
         fetchFromDefaults()
         inEditMode = false
@@ -137,7 +137,7 @@ extension CardsBaseViewController {
 }
 
 // MARK: Bottom Button Functionalty
-extension CardsBaseViewController {
+extension CovidVaccineCardsViewController {
     private func buttonHiddenStatus() {
         bottomButton.isHidden = self.dataSource.isEmpty
     }
@@ -152,7 +152,7 @@ extension CardsBaseViewController {
 }
 
 // MARK: Bottom Button Tapped Delegate
-extension CardsBaseViewController: AppStyleButtonDelegate {
+extension CovidVaccineCardsViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         guard type != .addCard else {
             goToAddCardOptionScreen()
@@ -179,7 +179,7 @@ extension CardsBaseViewController: AppStyleButtonDelegate {
 }
 
 // MARK: Table View Logic
-extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
+extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: VaccineCardTableViewCell.getName, bundle: .main), forCellReuseIdentifier: VaccineCardTableViewCell.getName)
         tableView.register(UINib.init(nibName: NoCardsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: NoCardsTableViewCell.getName)
@@ -277,7 +277,7 @@ extension CardsBaseViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 // MARK: Adjusting data source functions
-extension CardsBaseViewController {
+extension CovidVaccineCardsViewController {
     private func deleteCardAt(indexPath: IndexPath) {
         alert(title: .unlinkCardTitle, message: .unlinkCardMessage, buttonOneTitle: .cancel, buttonOneCompletion: {
             // This logic is so that a swipe to delete that is cancelled, gets reloaded and isn't showing a swiped state after cancelled
@@ -299,7 +299,7 @@ extension CardsBaseViewController {
 }
 
 // MARK: Fetching and Saving conversions between local data source and app data source
-extension CardsBaseViewController {
+extension CovidVaccineCardsViewController {
     private func saveToDefaults() {
         Defaults.vaccinePassports = dataSource.map({ $0.transform() })
     }
@@ -311,14 +311,14 @@ extension CardsBaseViewController {
 }
 
 // MARK: Zoomed in pop up QR delegate
-extension CardsBaseViewController: ZoomedInPopUpVCDelegate {
+extension CovidVaccineCardsViewController: ZoomedInPopUpVCDelegate {
     func closeButtonTapped() {
         self.tabBarController?.tabBar.isHidden = false
     }
 }
 
 // MARK: Accessibility
-extension CardsBaseViewController {
+extension CovidVaccineCardsViewController {
     private func applyNavAccessibility() {
         if let nav = self.navigationController as? CustomNavigationController {
             if let rightNavButton = nav.getRightBarButtonItem() {

@@ -83,10 +83,10 @@
             </objects>
             <point key="canvasLocation" x="2158" y="1288"/>
         </scene>
-        <!--Cards Base View Controller-->
+        <!--Covid Vaccine Cards View Controller-->
         <scene sceneID="zD9-Xd-EZU">
             <objects>
-                <viewController storyboardIdentifier="CardsBaseViewController" id="5dM-a0-M5C" customClass="CardsBaseViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CovidVaccineCardsViewController" id="5dM-a0-M5C" customClass="CovidVaccineCardsViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jYM-de-ydS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
