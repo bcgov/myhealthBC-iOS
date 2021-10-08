@@ -23,7 +23,7 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var submitButton: AppStyleButton!
     
     var completionHandler: (() -> Void)?
-    private var dataSource: [GatewayFormData] = []
+    private var dataSource: [FormDataSource] = []
     private var submitButtonEnabled: Bool = false {
         didSet {
             submitButton.enabled = submitButtonEnabled
@@ -65,11 +65,11 @@ class GatewayFormViewController: BaseViewController {
     
     private func setupDataSource() {
         dataSource = [
-            GatewayFormData(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription),
-            GatewayFormData(type: .form(type: .personalHealthNumber), cellStringData: nil),
-            GatewayFormData(type: .form(type: .dateOfBirth), cellStringData: nil),
-            GatewayFormData(type: .form(type: .dateOfVaccination), cellStringData: nil),
-            GatewayFormData(type: .text(type: .underlinedWithImage, font: UIFont.bcSansBoldWithSize(size: 14)), cellStringData: .privacyStatement)
+            FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription),
+            FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil),
+            FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil),
+            FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil),
+            FormDataSource(type: .text(type: .underlinedWithImage, font: UIFont.bcSansBoldWithSize(size: 14)), cellStringData: .privacyStatement)
         ]
     }
 
@@ -137,7 +137,7 @@ extension GatewayFormViewController {
         
     }
     
-    private func getIndexInDataSource(formField: FormTextFieldType, dataSource: [GatewayFormData]) -> Int? {
+    private func getIndexInDataSource(formField: FormTextFieldType, dataSource: [FormDataSource]) -> Int? {
         return dataSource.firstIndex { $0.type == .form(type: formField) }
     }
 }

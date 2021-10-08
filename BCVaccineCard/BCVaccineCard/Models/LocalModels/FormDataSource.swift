@@ -7,7 +7,8 @@
 
 import UIKit
 
-struct GatewayFormData: Equatable {
+// MARK: This model is for the table view data source of the gateway screen
+struct FormDataSource: Equatable {
     enum CellType: Equatable {
         case text(type: TextCellType, font: UIFont), form(type: FormTextFieldType)
     }
