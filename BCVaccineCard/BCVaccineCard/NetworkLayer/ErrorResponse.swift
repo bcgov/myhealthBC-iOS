@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2021-10-08.
 //
-// TODO: Clean this up for our purposes
+// TODO: Clean this up for our purposes - Not using currently
 import Foundation
 
 protocol UnknownCaseRepresentable: RawRepresentable, CaseIterable where RawValue: Equatable {

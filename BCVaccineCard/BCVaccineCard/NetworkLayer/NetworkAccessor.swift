@@ -15,7 +15,8 @@ typealias Headers = HTTPHeaders
 typealias RequestParameters = Parameters
 typealias JsonEncoding = JSONEncoding
 typealias UrlEncoding = URLEncoding
-typealias NetworkRequestCompletion<T: Decodable> = ((Result<T, ErrorResponse>) -> Void)
+// FIXME: Will need to edit error response and use that as the response object instead, using ResultError for now as it is the only request
+typealias NetworkRequestCompletion<T: Decodable> = ((Result<T, ResultError>) -> Void)
 
 protocol RemoteAccessor {
     func authorizationHeader(fromToken token: String) -> Headers
@@ -85,10 +86,9 @@ final class NetworkAccessor {
             case .failure(let error):
                 guard
                     let responseData = response.data,
-                    let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: responseData) else {
-                        let errorMessage = error.errorDescription.unwrapped
-                        let unexpectedErrorResponse = ErrorResponse(errorType: .unexpectedError,
-                                                                    errorMessage: errorMessage, errorDetails: nil)
+                    let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
+//                        let errorMessage = error.errorDescription.unwrapped
+                        let unexpectedErrorResponse = ResultError(resultMessage: "Unknown", errorCode: "Unknown Code", traceID: "Unknown Trace", actionCode: "Unknown action code")
                         return completion(.failure(unexpectedErrorResponse))
                 }
                 completion(.failure(errorResponse))

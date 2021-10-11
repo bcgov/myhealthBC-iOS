@@ -28,17 +28,22 @@ struct GatewayVaccineCardResponse: Codable {
             let mediaType, encoding, data: String
         }
     }
-    
-    // MARK: - ResultError
-    struct ResultError: Codable {
-        let resultMessage, errorCode, traceID, actionCode: String
+}
 
-        enum CodingKeys: String, CodingKey {
-            case resultMessage, errorCode
-            case traceID = "traceId"
-            case actionCode
-        }
+// MARK: - ResultError
+// For now this can go here
+struct ResultError: Codable {
+    let resultMessage, errorCode, traceID, actionCode: String
+
+    enum CodingKeys: String, CodingKey {
+        case resultMessage, errorCode
+        case traceID = "traceId"
+        case actionCode
     }
+}
+
+extension ResultError: Error {
+    
 }
 
 
