@@ -7,13 +7,10 @@
 
 import Foundation
 
-struct GatewayPersonalDetailsModel: Codable {
+// MARK: GatewayVaccineCardRequest
+
+struct GatewayVaccineCardRequest: Codable {
     let phn: String
     let dateOfBirth: String /// yyyy-MM-dd
     let dateOfVaccine: String /// yyyy-MM-dd
-    
-    // TODO: Come up with a protocol or extension to fetch the key (without using coding keys)... though that may be the only way to go about it
-//    var getKey: String {
-//
-//    }
 }

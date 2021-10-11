@@ -11,6 +11,7 @@ class GatewayFormViewController: BaseViewController {
     
     class func constructGatewayFormViewController() -> GatewayFormViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
+            vc.healthGateway = GatewayAccess.factory.makeHealthGatewayBCGateway()
             return vc
         }
         return GatewayFormViewController()
@@ -22,6 +23,7 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
     
+    private var healthGateway: HealthGatewayBCGateway!
     var completionHandler: (() -> Void)?
     private var dataSource: [FormDataSource] = []
     private var submitButtonEnabled: Bool = false {
@@ -268,6 +270,21 @@ extension GatewayFormViewController {
 //                    self.completionHandler?()
 //                }
 //            }
+        }
+    }
+    
+    // TODO: Call this function in the checkForPHN above, remove local logic
+    private func createVaccineCardRequest(model: GatewayVaccineCardRequest) {
+        self.healthGateway.requestVaccineCard(model) { [weak self] result in
+            guard let `self` = self else {return}
+            switch result {
+            case .success(let vaccineCard):
+                // TODO: Handle logic with duplicates etc here
+                print(vaccineCard)
+            case .failure(let error):
+                print(error)
+                // TODO: Show error here
+            }
         }
     }
 }
