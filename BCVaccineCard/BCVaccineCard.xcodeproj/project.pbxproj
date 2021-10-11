@@ -7,13 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 2912313A26F93FB900CF5F3B /* BCVaccineValidator */; };
+		2912313B26F93FB900CF5F3B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 2912313A26F93FB900CF5F3B /* SwiftPackageProductDependency */; };
 		2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912313D26F93FEB00CF5F3B /* QRScannerView.swift */; };
 		2912314126F942CC00CF5F3B /* UIViewController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */; };
 		2912314326F9433600CF5F3B /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314226F9433600CF5F3B /* UIConstants.swift */; };
 		2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314426F9440600CF5F3B /* UIColor+EXT.swift */; };
 		29B23B3F26FB88BB00A3AC79 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B23B3E26FB88BB00A3AC79 /* CameraViewController.swift */; };
 		29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */; };
+		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
+		5E04D95F28DEE00EAF8EF434 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */; };
+		65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */; };
+		65649CF2147EF54DEEA617D4 /* Pods_BCVaccineCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF2F1BABD4F59F68F534ADA9 /* Pods_BCVaccineCard.framework */; };
 		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
 		7944F68026F12613006B9444 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
 		7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */; };
@@ -87,9 +91,9 @@
 		794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B23B3E26FB88BB00A3AC79 /* CameraViewController.swift */; };
 		794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6B626F12BC3006B9444 /* AppColours.swift */; };
 		794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */; };
-		794BD6572702EEC00084ADA8 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62D2702EEC00084ADA8 /* FirebaseCrashlytics */; };
-		794BD6582702EEC00084ADA8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62B2702EEC00084ADA8 /* FirebaseAnalytics */; };
-		794BD6592702EEC00084ADA8 /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD6292702EEC00084ADA8 /* BCVaccineValidator */; };
+		794BD6572702EEC00084ADA8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62D2702EEC00084ADA8 /* SwiftPackageProductDependency */; };
+		794BD6582702EEC00084ADA8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62B2702EEC00084ADA8 /* SwiftPackageProductDependency */; };
+		794BD6592702EEC00084ADA8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD6292702EEC00084ADA8 /* SwiftPackageProductDependency */; };
 		794BD65B2702EEC00084ADA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F68626F1261B006B9444 /* LaunchScreen.storyboard */; };
 		794BD65C2702EEC00084ADA8 /* AppStyleButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6C426F12C00006B9444 /* AppStyleButton.xib */; };
 		794BD65D2702EEC00084ADA8 /* BCSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74C26F9145600EEF510 /* BCSans-Regular.otf */; };
@@ -109,8 +113,8 @@
 		794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
 		794BD6762703A3DB0084ADA8 /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD6742703A3DA0084ADA8 /* ImageTableViewCell.swift */; };
 		794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 794BD6752703A3DA0084ADA8 /* ImageTableViewCell.xib */; };
-		795AA71B270F8F6C00E59FF1 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA71A270F8F6C00E59FF1 /* Alamofire */; };
-		795AA721271083F100E59FF1 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA720271083F100E59FF1 /* SwiftyJSON */; };
+		795AA71B270F8F6C00E59FF1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA71A270F8F6C00E59FF1 /* SwiftPackageProductDependency */; };
+		795AA721271083F100E59FF1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA720271083F100E59FF1 /* SwiftPackageProductDependency */; };
 		795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		795AA72F27108C1C00E59FF1 /* GatewayVaccineCardRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72E27108C1C00E59FF1 /* GatewayVaccineCardRequest.swift */; };
@@ -151,8 +155,8 @@
 		7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75526F9155700EEF510 /* UIFont+Ext.swift */; };
 		7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
 		7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */; };
-		7967E76126FBDE0100EEF510 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76026FBDE0100EEF510 /* FirebaseAnalytics */; };
-		7967E76326FBDE0100EEF510 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */; };
+		7967E76126FBDE0100EEF510 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76026FBDE0100EEF510 /* SwiftPackageProductDependency */; };
+		7967E76326FBDE0100EEF510 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76226FBDE0100EEF510 /* SwiftPackageProductDependency */; };
 		79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
 		79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA071270CB71D00FF30AB /* Records.storyboard */; };
 		79BDA074270CB72800FF30AB /* Checker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA073270CB72800FF30AB /* Checker.storyboard */; };
@@ -198,12 +202,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		09418C1F3903EEE20020F71A /* Pods-BCVaccineCardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCardTests.release.xcconfig"; path = "Target Support Files/Pods-BCVaccineCardTests/Pods-BCVaccineCardTests.release.xcconfig"; sourceTree = "<group>"; };
 		2912313D26F93FEB00CF5F3B /* QRScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerView.swift; sourceTree = "<group>"; };
 		2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+EXT.swift"; sourceTree = "<group>"; };
 		2912314226F9433600CF5F3B /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		2912314426F9440600CF5F3B /* UIColor+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+EXT.swift"; sourceTree = "<group>"; };
 		29B23B3E26FB88BB00A3AC79 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+EXT.swift"; sourceTree = "<group>"; };
+		3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_Prod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_BCVaccineCardUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944F67526F12613006B9444 /* BCVaccineCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BCVaccineCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944F67826F12613006B9444 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7944F67F26F12613006B9444 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -290,6 +298,14 @@
 		79BDA095270EA44D00FF30AB /* HealthPassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthPassViewController.swift; sourceTree = "<group>"; };
 		79BDA099270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryVaccineCardTableViewCell.swift; sourceTree = "<group>"; };
 		79BDA09A270EE12300FF30AB /* PrimaryVaccineCardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PrimaryVaccineCardTableViewCell.xib; sourceTree = "<group>"; };
+		84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCardTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A02A347723159EA83D4D4ADB /* Pods-BCVaccineCard-Prod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-Prod.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-Prod/Pods-BCVaccineCard-Prod.debug.xcconfig"; sourceTree = "<group>"; };
+		C19B3F729BC58E916A40A414 /* Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig"; sourceTree = "<group>"; };
+		DC3FCBFE058D4858B22CC0D3 /* Pods-BCVaccineCardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCardTests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCardTests/Pods-BCVaccineCardTests.debug.xcconfig"; sourceTree = "<group>"; };
+		DF2F1BABD4F59F68F534ADA9 /* Pods_BCVaccineCard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0FE22887828FB5EC586B5A2 /* Pods-BCVaccineCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard.debug.xcconfig"; sourceTree = "<group>"; };
+		E38F12B73661A7DD93ACAE77 /* Pods-BCVaccineCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard.release.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard.release.xcconfig"; sourceTree = "<group>"; };
+		F042FC713FDEF36794F54A00 /* Pods-BCVaccineCard-Prod.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-Prod.release.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-Prod/Pods-BCVaccineCard-Prod.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -297,11 +313,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7967E76326FBDE0100EEF510 /* FirebaseCrashlytics in Frameworks */,
-				795AA71B270F8F6C00E59FF1 /* Alamofire in Frameworks */,
-				7967E76126FBDE0100EEF510 /* FirebaseAnalytics in Frameworks */,
-				795AA721271083F100E59FF1 /* SwiftyJSON in Frameworks */,
-				2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */,
+				7967E76326FBDE0100EEF510 /* BuildFile in Frameworks */,
+				795AA71B270F8F6C00E59FF1 /* BuildFile in Frameworks */,
+				7967E76126FBDE0100EEF510 /* BuildFile in Frameworks */,
+				795AA721271083F100E59FF1 /* BuildFile in Frameworks */,
+				2912313B26F93FB900CF5F3B /* BuildFile in Frameworks */,
+				65649CF2147EF54DEEA617D4 /* Pods_BCVaccineCard.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,6 +326,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +334,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E04D95F28DEE00EAF8EF434 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,9 +342,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				794BD6572702EEC00084ADA8 /* FirebaseCrashlytics in Frameworks */,
-				794BD6582702EEC00084ADA8 /* FirebaseAnalytics in Frameworks */,
-				794BD6592702EEC00084ADA8 /* BCVaccineValidator in Frameworks */,
+				794BD6572702EEC00084ADA8 /* BuildFile in Frameworks */,
+				794BD6582702EEC00084ADA8 /* BuildFile in Frameworks */,
+				794BD6592702EEC00084ADA8 /* BuildFile in Frameworks */,
+				65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,6 +376,7 @@
 				7944F69C26F1261B006B9444 /* BCVaccineCardUITests */,
 				7944F67626F12613006B9444 /* Products */,
 				95BA81E170E18F38F168CAC6 /* Pods */,
+				F17FC2636491B027961F5048 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -834,8 +855,27 @@
 		95BA81E170E18F38F168CAC6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				E0FE22887828FB5EC586B5A2 /* Pods-BCVaccineCard.debug.xcconfig */,
+				E38F12B73661A7DD93ACAE77 /* Pods-BCVaccineCard.release.xcconfig */,
+				4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */,
+				C19B3F729BC58E916A40A414 /* Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig */,
+				A02A347723159EA83D4D4ADB /* Pods-BCVaccineCard-Prod.debug.xcconfig */,
+				F042FC713FDEF36794F54A00 /* Pods-BCVaccineCard-Prod.release.xcconfig */,
+				DC3FCBFE058D4858B22CC0D3 /* Pods-BCVaccineCardTests.debug.xcconfig */,
+				09418C1F3903EEE20020F71A /* Pods-BCVaccineCardTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		F17FC2636491B027961F5048 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DF2F1BABD4F59F68F534ADA9 /* Pods_BCVaccineCard.framework */,
+				7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */,
+				3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */,
+				84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -845,9 +885,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7944F6A226F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCard" */;
 			buildPhases = (
+				04FBB0B6BF41C76CF72CD4C7 /* [CP] Check Pods Manifest.lock */,
 				7944F67126F12613006B9444 /* Sources */,
 				7944F67226F12613006B9444 /* Frameworks */,
 				7944F67326F12613006B9444 /* Resources */,
+				09C5EBDF840533C0DBC0743D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -855,11 +897,11 @@
 			);
 			name = BCVaccineCard;
 			packageProductDependencies = (
-				2912313A26F93FB900CF5F3B /* BCVaccineValidator */,
-				7967E76026FBDE0100EEF510 /* FirebaseAnalytics */,
-				7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */,
-				795AA71A270F8F6C00E59FF1 /* Alamofire */,
-				795AA720271083F100E59FF1 /* SwiftyJSON */,
+				2912313A26F93FB900CF5F3B /* SwiftPackageProductDependency */,
+				7967E76026FBDE0100EEF510 /* SwiftPackageProductDependency */,
+				7967E76226FBDE0100EEF510 /* SwiftPackageProductDependency */,
+				795AA71A270F8F6C00E59FF1 /* SwiftPackageProductDependency */,
+				795AA720271083F100E59FF1 /* SwiftPackageProductDependency */,
 			);
 			productName = BCVaccineCard;
 			productReference = 7944F67526F12613006B9444 /* BCVaccineCard.app */;
@@ -869,6 +911,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7944F6A526F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCardTests" */;
 			buildPhases = (
+				E156E291CC26ECC0D1D268A0 /* [CP] Check Pods Manifest.lock */,
 				7944F68A26F1261B006B9444 /* Sources */,
 				7944F68B26F1261B006B9444 /* Frameworks */,
 				7944F68C26F1261B006B9444 /* Resources */,
@@ -887,9 +930,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7944F6A826F1261B006B9444 /* Build configuration list for PBXNativeTarget "BCVaccineCardUITests" */;
 			buildPhases = (
+				5731308A8417AFBF235F1968 /* [CP] Check Pods Manifest.lock */,
 				7944F69526F1261B006B9444 /* Sources */,
 				7944F69626F1261B006B9444 /* Frameworks */,
 				7944F69726F1261B006B9444 /* Resources */,
+				C287B50578A73A0016443F6C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -905,9 +950,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 794BD66C2702EEC00084ADA8 /* Build configuration list for PBXNativeTarget "BCVaccineCard-Prod" */;
 			buildPhases = (
+				04C4A8E099B206AB00B7EB01 /* [CP] Check Pods Manifest.lock */,
 				794BD62E2702EEC00084ADA8 /* Sources */,
 				794BD6562702EEC00084ADA8 /* Frameworks */,
 				794BD65A2702EEC00084ADA8 /* Resources */,
+				D5EB638715DC9CC046725E6D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -915,9 +962,9 @@
 			);
 			name = "BCVaccineCard-Prod";
 			packageProductDependencies = (
-				794BD6292702EEC00084ADA8 /* BCVaccineValidator */,
-				794BD62B2702EEC00084ADA8 /* FirebaseAnalytics */,
-				794BD62D2702EEC00084ADA8 /* FirebaseCrashlytics */,
+				794BD6292702EEC00084ADA8 /* SwiftPackageProductDependency */,
+				794BD62B2702EEC00084ADA8 /* SwiftPackageProductDependency */,
+				794BD62D2702EEC00084ADA8 /* SwiftPackageProductDependency */,
 			);
 			productName = BCVaccineCard;
 			productReference = 794BD66F2702EEC00084ADA8 /* BCVaccineCard-Prod.app */;
@@ -955,10 +1002,10 @@
 			);
 			mainGroup = 7944F66C26F12613006B9444;
 			packageReferences = (
-				2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */,
-				7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				795AA719270F8F6C00E59FF1 /* XCRemoteSwiftPackageReference "Alamofire" */,
-				795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				2912313926F93FB900CF5F3B /* RemoteSwiftPackageReference */,
+				7967E75F26FBDE0100EEF510 /* RemoteSwiftPackageReference */,
+				795AA719270F8F6C00E59FF1 /* RemoteSwiftPackageReference */,
+				795AA71F271083F100E59FF1 /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = 7944F67626F12613006B9444 /* Products */;
 			projectDirPath = "";
@@ -1053,6 +1100,148 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		04C4A8E099B206AB00B7EB01 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BCVaccineCard-Prod-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		04FBB0B6BF41C76CF72CD4C7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BCVaccineCard-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		09C5EBDF840533C0DBC0743D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5731308A8417AFBF235F1968 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BCVaccineCard-BCVaccineCardUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C287B50578A73A0016443F6C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D5EB638715DC9CC046725E6D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard-Prod/Pods-BCVaccineCard-Prod-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard-Prod/Pods-BCVaccineCard-Prod-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard-Prod/Pods-BCVaccineCard-Prod-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E156E291CC26ECC0D1D268A0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BCVaccineCardTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7944F67126F12613006B9444 /* Sources */ = {
@@ -1356,6 +1545,7 @@
 		};
 		7944F6A326F1261B006B9444 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E0FE22887828FB5EC586B5A2 /* Pods-BCVaccineCard.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1379,6 +1569,7 @@
 		};
 		7944F6A426F1261B006B9444 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E38F12B73661A7DD93ACAE77 /* Pods-BCVaccineCard.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1402,6 +1593,7 @@
 		};
 		7944F6A626F1261B006B9444 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC3FCBFE058D4858B22CC0D3 /* Pods-BCVaccineCardTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1424,6 +1616,7 @@
 		};
 		7944F6A726F1261B006B9444 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 09418C1F3903EEE20020F71A /* Pods-BCVaccineCardTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1446,6 +1639,7 @@
 		};
 		7944F6A926F1261B006B9444 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1466,6 +1660,7 @@
 		};
 		7944F6AA26F1261B006B9444 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C19B3F729BC58E916A40A414 /* Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1486,6 +1681,7 @@
 		};
 		794BD66D2702EEC00084ADA8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A02A347723159EA83D4D4ADB /* Pods-BCVaccineCard-Prod.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1509,6 +1705,7 @@
 		};
 		794BD66E2702EEC00084ADA8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F042FC713FDEF36794F54A00 /* Pods-BCVaccineCard-Prod.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1581,7 +1778,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */ = {
+		2912313926F93FB900CF5F3B /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/FreshworksStudio/BCVaccineValidator";
 			requirement = {
@@ -1589,7 +1786,7 @@
 				minimumVersion = 1.0.2;
 			};
 		};
-		794BD62A2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "BCVaccineValidator" */ = {
+		794BD62A2702EEC00084ADA8 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/FreshworksStudio/BCVaccineValidator";
 			requirement = {
@@ -1597,7 +1794,7 @@
 				minimumVersion = 1.0.2;
 			};
 		};
-		794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		794BD62C2702EEC00084ADA8 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -1605,7 +1802,7 @@
 				minimumVersion = 8.7.0;
 			};
 		};
-		795AA719270F8F6C00E59FF1 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		795AA719270F8F6C00E59FF1 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -1613,7 +1810,7 @@
 				minimumVersion = 5.4.0;
 			};
 		};
-		795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+		795AA71F271083F100E59FF1 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
 			requirement = {
@@ -1621,7 +1818,7 @@
 				minimumVersion = 4.0.0;
 			};
 		};
-		7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		7967E75F26FBDE0100EEF510 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -1632,44 +1829,44 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2912313A26F93FB900CF5F3B /* BCVaccineValidator */ = {
+		2912313A26F93FB900CF5F3B /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
+			package = 2912313926F93FB900CF5F3B /* RemoteSwiftPackageReference */;
 			productName = BCVaccineValidator;
 		};
-		794BD6292702EEC00084ADA8 /* BCVaccineValidator */ = {
+		794BD6292702EEC00084ADA8 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 794BD62A2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
+			package = 794BD62A2702EEC00084ADA8 /* RemoteSwiftPackageReference */;
 			productName = BCVaccineValidator;
 		};
-		794BD62B2702EEC00084ADA8 /* FirebaseAnalytics */ = {
+		794BD62B2702EEC00084ADA8 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 794BD62C2702EEC00084ADA8 /* RemoteSwiftPackageReference */;
 			productName = FirebaseAnalytics;
 		};
-		794BD62D2702EEC00084ADA8 /* FirebaseCrashlytics */ = {
+		794BD62D2702EEC00084ADA8 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 794BD62C2702EEC00084ADA8 /* RemoteSwiftPackageReference */;
 			productName = FirebaseCrashlytics;
 		};
-		795AA71A270F8F6C00E59FF1 /* Alamofire */ = {
+		795AA71A270F8F6C00E59FF1 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 795AA719270F8F6C00E59FF1 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 795AA719270F8F6C00E59FF1 /* RemoteSwiftPackageReference */;
 			productName = Alamofire;
 		};
-		795AA720271083F100E59FF1 /* SwiftyJSON */ = {
+		795AA720271083F100E59FF1 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			package = 795AA71F271083F100E59FF1 /* RemoteSwiftPackageReference */;
 			productName = SwiftyJSON;
 		};
-		7967E76026FBDE0100EEF510 /* FirebaseAnalytics */ = {
+		7967E76026FBDE0100EEF510 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 7967E75F26FBDE0100EEF510 /* RemoteSwiftPackageReference */;
 			productName = FirebaseAnalytics;
 		};
-		7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */ = {
+		7967E76226FBDE0100EEF510 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 7967E75F26FBDE0100EEF510 /* RemoteSwiftPackageReference */;
 			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
