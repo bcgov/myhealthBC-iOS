@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2912313B26F93FB900CF5F3B /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 2912313A26F93FB900CF5F3B /* SwiftPackageProductDependency */; };
+		2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 2912313A26F93FB900CF5F3B /* BCVaccineValidator */; };
 		2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912313D26F93FEB00CF5F3B /* QRScannerView.swift */; };
 		2912314126F942CC00CF5F3B /* UIViewController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */; };
 		2912314326F9433600CF5F3B /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314226F9433600CF5F3B /* UIConstants.swift */; };
@@ -91,9 +91,9 @@
 		794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B23B3E26FB88BB00A3AC79 /* CameraViewController.swift */; };
 		794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6B626F12BC3006B9444 /* AppColours.swift */; };
 		794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */; };
-		794BD6572702EEC00084ADA8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62D2702EEC00084ADA8 /* SwiftPackageProductDependency */; };
-		794BD6582702EEC00084ADA8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62B2702EEC00084ADA8 /* SwiftPackageProductDependency */; };
-		794BD6592702EEC00084ADA8 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD6292702EEC00084ADA8 /* SwiftPackageProductDependency */; };
+		794BD6572702EEC00084ADA8 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62D2702EEC00084ADA8 /* FirebaseCrashlytics */; };
+		794BD6582702EEC00084ADA8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62B2702EEC00084ADA8 /* FirebaseAnalytics */; };
+		794BD6592702EEC00084ADA8 /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD6292702EEC00084ADA8 /* BCVaccineValidator */; };
 		794BD65B2702EEC00084ADA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F68626F1261B006B9444 /* LaunchScreen.storyboard */; };
 		794BD65C2702EEC00084ADA8 /* AppStyleButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6C426F12C00006B9444 /* AppStyleButton.xib */; };
 		794BD65D2702EEC00084ADA8 /* BCSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74C26F9145600EEF510 /* BCSans-Regular.otf */; };
@@ -113,8 +113,8 @@
 		794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
 		794BD6762703A3DB0084ADA8 /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD6742703A3DA0084ADA8 /* ImageTableViewCell.swift */; };
 		794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 794BD6752703A3DA0084ADA8 /* ImageTableViewCell.xib */; };
-		795AA71B270F8F6C00E59FF1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA71A270F8F6C00E59FF1 /* SwiftPackageProductDependency */; };
-		795AA721271083F100E59FF1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA720271083F100E59FF1 /* SwiftPackageProductDependency */; };
+		795AA71B270F8F6C00E59FF1 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA71A270F8F6C00E59FF1 /* Alamofire */; };
+		795AA721271083F100E59FF1 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA720271083F100E59FF1 /* SwiftyJSON */; };
 		795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		795AA72F27108C1C00E59FF1 /* GatewayVaccineCardRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72E27108C1C00E59FF1 /* GatewayVaccineCardRequest.swift */; };
@@ -135,6 +135,12 @@
 		795AA7492713FFF800E59FF1 /* WorkerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7472713FFF800E59FF1 /* WorkerFactory.swift */; };
 		795AA74C2714018600E59FF1 /* HealthGatewayBCWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA74B2714018600E59FF1 /* HealthGatewayBCWorker.swift */; };
 		795AA74D2714018600E59FF1 /* HealthGatewayBCWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA74B2714018600E59FF1 /* HealthGatewayBCWorker.swift */; };
+		795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */; };
+		795AA751271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */; };
+		795AA7542715189C00E59FF1 /* InitialOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */; };
+		795AA7552715189C00E59FF1 /* InitialOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */; };
+		795AA757271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */; };
+		795AA758271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */; };
 		795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
 		795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
 		7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
@@ -155,8 +161,8 @@
 		7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75526F9155700EEF510 /* UIFont+Ext.swift */; };
 		7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
 		7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */; };
-		7967E76126FBDE0100EEF510 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76026FBDE0100EEF510 /* SwiftPackageProductDependency */; };
-		7967E76326FBDE0100EEF510 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76226FBDE0100EEF510 /* SwiftPackageProductDependency */; };
+		7967E76126FBDE0100EEF510 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76026FBDE0100EEF510 /* FirebaseAnalytics */; };
+		7967E76326FBDE0100EEF510 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */; };
 		79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
 		79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA071270CB71D00FF30AB /* Records.storyboard */; };
 		79BDA074270CB72800FF30AB /* Checker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA073270CB72800FF30AB /* Checker.storyboard */; };
@@ -266,6 +272,9 @@
 		795AA7442713FFEB00E59FF1 /* RemoteFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFactory.swift; sourceTree = "<group>"; };
 		795AA7472713FFF800E59FF1 /* WorkerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerFactory.swift; sourceTree = "<group>"; };
 		795AA74B2714018600E59FF1 /* HealthGatewayBCWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthGatewayBCWorker.swift; sourceTree = "<group>"; };
+		795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingViewController.swift; path = BCVaccineCard/NetworkLayer/GatewaysAndWorkers/InitialOnboardingViewController.swift; sourceTree = SOURCE_ROOT; };
+		795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingView.swift; path = BCVaccineCard/NetworkLayer/GatewaysAndWorkers/InitialOnboardingView.swift; sourceTree = SOURCE_ROOT; };
+		795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = InitialOnboardingView.xib; path = BCVaccineCard/NetworkLayer/GatewaysAndWorkers/InitialOnboardingView.xib; sourceTree = SOURCE_ROOT; };
 		795E68252703DBA100948502 /* UIAccessibility+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAccessibility+EXT.swift"; sourceTree = "<group>"; };
 		7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableViewCell.swift; sourceTree = "<group>"; };
 		7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormTableViewCell.xib; sourceTree = "<group>"; };
@@ -313,11 +322,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7967E76326FBDE0100EEF510 /* BuildFile in Frameworks */,
-				795AA71B270F8F6C00E59FF1 /* BuildFile in Frameworks */,
-				7967E76126FBDE0100EEF510 /* BuildFile in Frameworks */,
-				795AA721271083F100E59FF1 /* BuildFile in Frameworks */,
-				2912313B26F93FB900CF5F3B /* BuildFile in Frameworks */,
+				7967E76326FBDE0100EEF510 /* FirebaseCrashlytics in Frameworks */,
+				795AA71B270F8F6C00E59FF1 /* Alamofire in Frameworks */,
+				7967E76126FBDE0100EEF510 /* FirebaseAnalytics in Frameworks */,
+				795AA721271083F100E59FF1 /* SwiftyJSON in Frameworks */,
+				2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */,
 				65649CF2147EF54DEEA617D4 /* Pods_BCVaccineCard.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -342,9 +351,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				794BD6572702EEC00084ADA8 /* BuildFile in Frameworks */,
-				794BD6582702EEC00084ADA8 /* BuildFile in Frameworks */,
-				794BD6592702EEC00084ADA8 /* BuildFile in Frameworks */,
+				794BD6572702EEC00084ADA8 /* FirebaseCrashlytics in Frameworks */,
+				794BD6582702EEC00084ADA8 /* FirebaseAnalytics in Frameworks */,
+				794BD6592702EEC00084ADA8 /* BCVaccineValidator in Frameworks */,
 				65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -486,6 +495,7 @@
 		7944F6B226F12AB3006B9444 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				795AA74E2715149100E59FF1 /* OnboardingFlow */,
 				7944F70726F390E4006B9444 /* SettingsFlow */,
 				7944F6F226F30262006B9444 /* HealthPassFlow */,
 			);
@@ -529,6 +539,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				795AA7522715187F00E59FF1 /* InitialOnboardingView */,
 				2912313C26F93FD900CF5F3B /* Scanner */,
 				7944F6FB26F313EF006B9444 /* TableViewCells */,
 				79BDA08D270E9DD100FF30AB /* VaccineCardView */,
@@ -743,6 +754,23 @@
 			path = GatewaysAndWorkers;
 			sourceTree = "<group>";
 		};
+		795AA74E2715149100E59FF1 /* OnboardingFlow */ = {
+			isa = PBXGroup;
+			children = (
+				795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */,
+			);
+			path = OnboardingFlow;
+			sourceTree = "<group>";
+		};
+		795AA7522715187F00E59FF1 /* InitialOnboardingView */ = {
+			isa = PBXGroup;
+			children = (
+				795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */,
+				795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */,
+			);
+			path = InitialOnboardingView;
+			sourceTree = "<group>";
+		};
 		7967E73026F3DC5F00EEF510 /* FormTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -897,11 +925,11 @@
 			);
 			name = BCVaccineCard;
 			packageProductDependencies = (
-				2912313A26F93FB900CF5F3B /* SwiftPackageProductDependency */,
-				7967E76026FBDE0100EEF510 /* SwiftPackageProductDependency */,
-				7967E76226FBDE0100EEF510 /* SwiftPackageProductDependency */,
-				795AA71A270F8F6C00E59FF1 /* SwiftPackageProductDependency */,
-				795AA720271083F100E59FF1 /* SwiftPackageProductDependency */,
+				2912313A26F93FB900CF5F3B /* BCVaccineValidator */,
+				7967E76026FBDE0100EEF510 /* FirebaseAnalytics */,
+				7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */,
+				795AA71A270F8F6C00E59FF1 /* Alamofire */,
+				795AA720271083F100E59FF1 /* SwiftyJSON */,
 			);
 			productName = BCVaccineCard;
 			productReference = 7944F67526F12613006B9444 /* BCVaccineCard.app */;
@@ -962,9 +990,9 @@
 			);
 			name = "BCVaccineCard-Prod";
 			packageProductDependencies = (
-				794BD6292702EEC00084ADA8 /* SwiftPackageProductDependency */,
-				794BD62B2702EEC00084ADA8 /* SwiftPackageProductDependency */,
-				794BD62D2702EEC00084ADA8 /* SwiftPackageProductDependency */,
+				794BD6292702EEC00084ADA8 /* BCVaccineValidator */,
+				794BD62B2702EEC00084ADA8 /* FirebaseAnalytics */,
+				794BD62D2702EEC00084ADA8 /* FirebaseCrashlytics */,
 			);
 			productName = BCVaccineCard;
 			productReference = 794BD66F2702EEC00084ADA8 /* BCVaccineCard-Prod.app */;
@@ -1002,10 +1030,10 @@
 			);
 			mainGroup = 7944F66C26F12613006B9444;
 			packageReferences = (
-				2912313926F93FB900CF5F3B /* RemoteSwiftPackageReference */,
-				7967E75F26FBDE0100EEF510 /* RemoteSwiftPackageReference */,
-				795AA719270F8F6C00E59FF1 /* RemoteSwiftPackageReference */,
-				795AA71F271083F100E59FF1 /* RemoteSwiftPackageReference */,
+				2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */,
+				7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				795AA719270F8F6C00E59FF1 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = 7944F67626F12613006B9444 /* Products */;
 			projectDirPath = "";
@@ -1030,6 +1058,7 @@
 				79BDA074270CB72800FF30AB /* Checker.storyboard in Resources */,
 				7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */,
 				7967E74826F9071A00EEF510 /* SettingsTableViewCell.xib in Resources */,
+				795AA757271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
 				79BDA078270CB74800FF30AB /* Notifications.storyboard in Resources */,
 				7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */,
 				7944F70026F3141A006B9444 /* VaccineCardTableViewCell.xib in Resources */,
@@ -1091,6 +1120,7 @@
 				79BDA084270CEE5A00FF30AB /* HealthPass.storyboard in Resources */,
 				79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */,
 				79BDA085270CEE5E00FF30AB /* Records.storyboard in Resources */,
+				795AA758271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
 				794BD6682702EEC00084ADA8 /* FormTableViewCell.xib in Resources */,
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
@@ -1294,11 +1324,13 @@
 				795AA7412713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */,
 				7944F71426F3A26D006B9444 /* QRSelectionTableViewCell.swift in Sources */,
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
+				795AA7542715189C00E59FF1 /* InitialOnboardingView.swift in Sources */,
 				795AA7452713FFEB00E59FF1 /* RemoteFactory.swift in Sources */,
 				79BDA07B270CB89900FF30AB /* Strings.swift in Sources */,
 				79BDA09B270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
+				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
 				29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */,
 				29B23B3F26FB88BB00A3AC79 /* CameraViewController.swift in Sources */,
@@ -1349,6 +1381,7 @@
 				794BD63C2702EEC00084ADA8 /* AppStyleButton.swift in Sources */,
 				795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				794BD63D2702EEC00084ADA8 /* UINavigationItem+Ext.swift in Sources */,
+				795AA7552715189C00E59FF1 /* InitialOnboardingView.swift in Sources */,
 				794BD63E2702EEC00084ADA8 /* UIFont+Ext.swift in Sources */,
 				794BD63F2702EEC00084ADA8 /* UIViewController+EXT.swift in Sources */,
 				795AA73027108C1C00E59FF1 /* GatewayVaccineCardRequest.swift in Sources */,
@@ -1373,6 +1406,7 @@
 				79BDA083270CEE4700FF30AB /* Strings.swift in Sources */,
 				794BD64E2702EEC00084ADA8 /* QRSelectionTableViewCell.swift in Sources */,
 				794BD64F2702EEC00084ADA8 /* TextTableViewCell.swift in Sources */,
+				795AA751271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
 				79BDA09C270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.swift in Sources */,
@@ -1778,7 +1812,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		2912313926F93FB900CF5F3B /* RemoteSwiftPackageReference */ = {
+		2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/FreshworksStudio/BCVaccineValidator";
 			requirement = {
@@ -1786,7 +1820,7 @@
 				minimumVersion = 1.0.2;
 			};
 		};
-		794BD62A2702EEC00084ADA8 /* RemoteSwiftPackageReference */ = {
+		794BD62A2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "BCVaccineValidator" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/FreshworksStudio/BCVaccineValidator";
 			requirement = {
@@ -1794,7 +1828,7 @@
 				minimumVersion = 1.0.2;
 			};
 		};
-		794BD62C2702EEC00084ADA8 /* RemoteSwiftPackageReference */ = {
+		794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -1802,7 +1836,7 @@
 				minimumVersion = 8.7.0;
 			};
 		};
-		795AA719270F8F6C00E59FF1 /* RemoteSwiftPackageReference */ = {
+		795AA719270F8F6C00E59FF1 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -1810,7 +1844,7 @@
 				minimumVersion = 5.4.0;
 			};
 		};
-		795AA71F271083F100E59FF1 /* RemoteSwiftPackageReference */ = {
+		795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
 			requirement = {
@@ -1818,7 +1852,7 @@
 				minimumVersion = 4.0.0;
 			};
 		};
-		7967E75F26FBDE0100EEF510 /* RemoteSwiftPackageReference */ = {
+		7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -1829,44 +1863,44 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2912313A26F93FB900CF5F3B /* SwiftPackageProductDependency */ = {
+		2912313A26F93FB900CF5F3B /* BCVaccineValidator */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2912313926F93FB900CF5F3B /* RemoteSwiftPackageReference */;
+			package = 2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
 			productName = BCVaccineValidator;
 		};
-		794BD6292702EEC00084ADA8 /* SwiftPackageProductDependency */ = {
+		794BD6292702EEC00084ADA8 /* BCVaccineValidator */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 794BD62A2702EEC00084ADA8 /* RemoteSwiftPackageReference */;
+			package = 794BD62A2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
 			productName = BCVaccineValidator;
 		};
-		794BD62B2702EEC00084ADA8 /* SwiftPackageProductDependency */ = {
+		794BD62B2702EEC00084ADA8 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 794BD62C2702EEC00084ADA8 /* RemoteSwiftPackageReference */;
+			package = 794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
 		};
-		794BD62D2702EEC00084ADA8 /* SwiftPackageProductDependency */ = {
+		794BD62D2702EEC00084ADA8 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 794BD62C2702EEC00084ADA8 /* RemoteSwiftPackageReference */;
+			package = 794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
 		};
-		795AA71A270F8F6C00E59FF1 /* SwiftPackageProductDependency */ = {
+		795AA71A270F8F6C00E59FF1 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 795AA719270F8F6C00E59FF1 /* RemoteSwiftPackageReference */;
+			package = 795AA719270F8F6C00E59FF1 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		795AA720271083F100E59FF1 /* SwiftPackageProductDependency */ = {
+		795AA720271083F100E59FF1 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 795AA71F271083F100E59FF1 /* RemoteSwiftPackageReference */;
+			package = 795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
 		};
-		7967E76026FBDE0100EEF510 /* SwiftPackageProductDependency */ = {
+		7967E76026FBDE0100EEF510 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7967E75F26FBDE0100EEF510 /* RemoteSwiftPackageReference */;
+			package = 7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
 		};
-		7967E76226FBDE0100EEF510 /* SwiftPackageProductDependency */ = {
+		7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 7967E75F26FBDE0100EEF510 /* RemoteSwiftPackageReference */;
+			package = 7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
