@@ -87,13 +87,13 @@ extension AppDelegate {
 extension AppDelegate {
     // TODO: Check if initial onboarding screen has been shown here or not
     private func setupRootViewController() {
-        if Defaults.hasSeenInitialOnboardingScreens {
-            let vc = TabBarController.constructTabBarController()
-            self.window?.rootViewController = vc
-        } else {
+//        if Defaults.hasSeenInitialOnboardingScreens {
+//            let vc = TabBarController.constructTabBarController()
+//            self.window?.rootViewController = vc
+//        } else {
             let vc = InitialOnboardingViewController.constructInitialOnboardingViewController()
             self.window?.rootViewController = vc
-        }
+//        }
         
     }
 }

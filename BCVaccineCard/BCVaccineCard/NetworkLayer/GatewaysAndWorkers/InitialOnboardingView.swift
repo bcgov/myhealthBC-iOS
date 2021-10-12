@@ -169,7 +169,7 @@ extension InitialOnboardingView {
         case .one:
             let relativeView: UIImageView = phoneImageDotsCollection[0]
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
-            let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference)
+            let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
             let relatedImageLeadingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
             let leadingConstraint = imageView.leadingAnchor.constraint(equalTo: relatedImageLeadingReference, constant: -12)
             let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 133)
@@ -182,7 +182,7 @@ extension InitialOnboardingView {
             }
             let relativeView: UIImageView = phoneImageDotsCollection[1]
             let relatedImageXReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-            let horizontalConstraint = imageView.centerXAnchor.constraint(equalTo: relatedImageXReference)
+            let horizontalConstraint = imageView.centerXAnchor.constraint(equalTo: relatedImageXReference, constant: 1)
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.topAnchor
             let bottomConstraint = imageView.bottomAnchor.constraint(equalTo: relatedImageYReference, constant: 0)
             let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 124)
@@ -195,7 +195,7 @@ extension InitialOnboardingView {
             }
             let relativeView: UIImageView = phoneImageDotsCollection[2]
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
-            let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference)
+            let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
             let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
             let trailingConstraint = imageView.trailingAnchor.constraint(equalTo: relatedImageTrailingReference, constant: 14)
             let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 132)
