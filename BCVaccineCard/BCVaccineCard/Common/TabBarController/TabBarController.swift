@@ -33,6 +33,13 @@ enum TabBarVCs {
 }
 
 class TabBarController: UITabBarController {
+    
+    class func constructTabBarController() -> TabBarController {
+        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: TabBarController.self)) as? TabBarController {
+            return vc
+        }
+        return TabBarController()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

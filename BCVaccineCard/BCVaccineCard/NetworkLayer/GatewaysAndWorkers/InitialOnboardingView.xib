@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="InitialOnboardingView" customModule="BCVaccineCard" customModuleProvider="target">
             <connections>
                 <outlet property="bottomButton" destination="QGx-T6-Lhh" id="5G5-uo-cPV"/>
+                <outlet property="bottomButtonWidthConstraint" destination="flX-rd-bRs" id="GJd-qq-ZB1"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="NaF-B3-qoF"/>
                 <outlet property="onboardingDescriptionLabel" destination="vDU-sf-kcD" id="oyf-nL-d39"/>
                 <outlet property="onboardingTitleLabel" destination="A0i-So-4gP" id="29A-ag-gdH"/>

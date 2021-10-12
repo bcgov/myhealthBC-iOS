@@ -55,6 +55,17 @@ class InitialOnboardingView: UIView {
                 return 2
             }
         }
+        
+        func increment() -> ScreenNumber? {
+            switch self {
+            case .one:
+                return .two
+            case .two:
+                return .three
+            case .three:
+                return nil
+            }
+        }
     }
     
     @IBOutlet weak private var contentView: UIView!
@@ -65,6 +76,7 @@ class InitialOnboardingView: UIView {
     @IBOutlet private var screenProgressImageDotsCollection: [UIImageView]!
     @IBOutlet private var screenProgressImageDotsWidthConstraintCollection: [NSLayoutConstraint]!
     @IBOutlet weak private var bottomButton: AppStyleButton!
+    @IBOutlet weak private var bottomButtonWidthConstraint: NSLayoutConstraint!
     
     private var rotatingImageView: UIImageView?
     private var rotatingImageViewConstraints: [NSLayoutConstraint]?
@@ -109,16 +121,48 @@ class InitialOnboardingView: UIView {
         guard let rotatingImageView = rotatingImageView else { return }
         self.contentView.addSubview(rotatingImageView)
         rotatingImageView.translatesAutoresizingMaskIntoConstraints = false
-        let widthConstraint = rotatingImageView.widthAnchor.constraint(equalToConstant: 124)
-        let heightConstraint = rotatingImageView.heightAnchor.constraint(equalToConstant: 107)
-        contentView.addConstraints([widthConstraint, heightConstraint])
+//        let widthConstraint = rotatingImageView.widthAnchor.constraint(equalToConstant: 124)
+//        let heightConstraint = rotatingImageView.heightAnchor.constraint(equalToConstant: 107)
+//        contentView.addConstraints([widthConstraint, heightConstraint])
+    }
+    
+    func initialConfigure(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
+        commonConfigurationAndUpdates(screenNumber: screenNumber, delegateOwner: delegateOwner)
+    }
+    
+    func adjustUI(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
+        adjustPhoneImageDots(screenNumber: screenNumber)
+        adjustProgressImageDotsUI(screenNumber: screenNumber)
+        commonConfigurationAndUpdates(screenNumber: screenNumber, delegateOwner: delegateOwner)
+    }
+    
+    private func commonConfigurationAndUpdates(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
+        adjustText(screenNumber: screenNumber)
+        adjustRotatingImageViewConstraints(screenNumber: screenNumber)
+        updateRotatingImage(screenNumber: screenNumber)
+        adjustBottomButton(screenNumber: screenNumber, delegateOwner: delegateOwner)
+        self.contentView.layoutIfNeeded()
+    }
+}
+
+// MARK: Adjusting functions
+extension InitialOnboardingView {
+    
+    private func adjustPhoneImageDots(screenNumber: ScreenNumber) {
+        for (index, imageView) in phoneImageDotsCollection.enumerated() {
+            imageView.image = screenNumber.getSelectedImageIndex == index ? UIImage(named: "selected-dot-small") : UIImage(named: "unselected-dot-small")
+        }
+    }
+    
+    private func adjustProgressImageDotsUI(screenNumber: ScreenNumber) {
+        guard screenProgressImageDotsWidthConstraintCollection.count == screenProgressImageDotsCollection.count else { return }
+        for (index, imageView) in screenProgressImageDotsCollection.enumerated() {
+            screenProgressImageDotsWidthConstraintCollection[index].constant = screenNumber.getSelectedImageIndex == index ? 20 : 10
+            imageView.image = screenNumber.getSelectedImageIndex == index ? UIImage(named: "selected-dot-large") : UIImage(named: "unselected-dot-large")
+        }
     }
     
     private func adjustRotatingImageViewConstraints(screenNumber: ScreenNumber) {
-        
-    }
-    
-    private func getNewConstraintsArray(screenNumber: ScreenNumber) {
         guard let imageView = self.rotatingImageView else { return }
         
         switch screenNumber {
@@ -127,9 +171,11 @@ class InitialOnboardingView: UIView {
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference)
             let relatedImageLeadingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-            let leadingConstraint = imageView.leadingAnchor.constraint(equalTo: relatedImageLeadingReference)
-            self.rotatingImageViewConstraints = [verticalConstraint, leadingConstraint]
-            contentView.addConstraints([verticalConstraint, leadingConstraint])
+            let leadingConstraint = imageView.leadingAnchor.constraint(equalTo: relatedImageLeadingReference, constant: -12)
+            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 133)
+            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
+            self.rotatingImageViewConstraints = [verticalConstraint, leadingConstraint, widthConstraint, heightConstraint]
+            contentView.addConstraints([verticalConstraint, leadingConstraint, widthConstraint, heightConstraint])
         case .two:
             if let constraintsToRemove = self.rotatingImageViewConstraints {
                 contentView.removeConstraints(constraintsToRemove)
@@ -138,9 +184,11 @@ class InitialOnboardingView: UIView {
             let relatedImageXReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
             let horizontalConstraint = imageView.centerXAnchor.constraint(equalTo: relatedImageXReference)
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.topAnchor
-            let bottomConstraint = imageView.bottomAnchor.constraint(equalTo: relatedImageYReference, constant: 9)
-            self.rotatingImageViewConstraints = [horizontalConstraint, bottomConstraint]
-            contentView.addConstraints([horizontalConstraint, bottomConstraint])
+            let bottomConstraint = imageView.bottomAnchor.constraint(equalTo: relatedImageYReference, constant: 0)
+            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 124)
+            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 107)
+            self.rotatingImageViewConstraints = [horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint]
+            contentView.addConstraints([horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint])
         case .three:
             if let constraintsToRemove = self.rotatingImageViewConstraints {
                 contentView.removeConstraints(constraintsToRemove)
@@ -149,16 +197,24 @@ class InitialOnboardingView: UIView {
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference)
             let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-            let trailingConstraint = imageView.trailingAnchor.constraint(equalTo: relatedImageTrailingReference)
-            self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint]
-            contentView.addConstraints([verticalConstraint, trailingConstraint])
+            let trailingConstraint = imageView.trailingAnchor.constraint(equalTo: relatedImageTrailingReference, constant: 14)
+            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 132)
+            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
+            self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
+            contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
         }
     }
     
-    private func adjustImageDotsCollection(screenNumber: ScreenNumber) {
-        // LEFT OFF HERE...
+    private func updateRotatingImage(screenNumber: ScreenNumber) {
+        guard let imageView = self.rotatingImageView else { return }
+        imageView.image = screenNumber.getRotatingImage
     }
-    
+
+    private func adjustText(screenNumber: ScreenNumber) {
+        onboardingTitleLabel.text = screenNumber.getTitle
+        onboardingDescriptionLabel.text = screenNumber.getDescription
+    }
+
     private func adjustBottomButton(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
         let buttonType: AppStyleButton.ButtonType
         let accessibilityValue: String = "To do later"
@@ -170,11 +226,8 @@ class InitialOnboardingView: UIView {
             buttonType = .next
         case .three:
             buttonType = .getStarted
+            bottomButtonWidthConstraint.constant = 162
         }
         bottomButton.configure(withStyle: .blue, buttonType: buttonType, delegateOwner: delegateOwner, enabled: true, accessibilityValue: accessibilityValue, accessibilityHint: accessibilityHint)
-    }
-    
-    func configure(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
-        
     }
 }
