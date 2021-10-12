@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire.git",
+        "state": {
+          "branch": null,
+          "revision": "d120af1e8638c7da36c8481fd61a66c0c08dc4fc",
+          "version": "5.4.4"
+        }
+      },
+      {
         "package": "BCVaccineValidator",
         "repositoryURL": "https://github.com/FreshworksStudio/BCVaccineValidator",
         "state": {
@@ -125,6 +134,15 @@
           "branch": null,
           "revision": "1f62db409f2c9b0223a3f68567b4a01333aae778",
           "version": "1.17.0"
+        }
+      },
+      {
+        "package": "SwiftyJSON",
+        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
+        "state": {
+          "branch": null,
+          "revision": "2b6054efa051565954e1d2b9da831680026cd768",
+          "version": "4.3.0"
         }
       }
     ]

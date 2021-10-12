@@ -12,51 +12,72 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="NoCardsTableViewCell" rowHeight="395" id="KGk-i7-Jjw" customClass="NoCardsTableViewCell" customModule="BCVaccineCard" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="395"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="700"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="395"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="700"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have any vaccine card yet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GMe-5n-F1d">
-                        <rect key="frame" x="10" y="155" width="300" height="136"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sdk-pe-gBe" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                        <rect key="frame" x="99" y="321" width="122" height="44"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" alignment="center" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="5iY-VH-sDn">
+                        <rect key="frame" x="0.0" y="20" width="320" height="660"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="suA-XY-yq6">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="W72-1F-gEs">
+                                <rect key="frame" x="71" y="250.5" width="178.5" height="142"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no-cards" translatesAutoresizingMaskIntoConstraints="NO" id="Ol8-gm-SFU">
+                                        <rect key="frame" x="36.5" y="0.0" width="105" height="105"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="105" id="Gmd-Ng-3b8"/>
+                                            <constraint firstAttribute="height" constant="105" id="NQD-Qg-jje"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You don't have any card yet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GMe-5n-F1d">
+                                        <rect key="frame" x="0.0" y="125" width="178.5" height="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sdk-pe-gBe" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="606" width="320" height="54"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="s3J-0d-s4f"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <constraints>
-                            <constraint firstAttribute="width" constant="122" id="CUL-fz-kQ0"/>
-                            <constraint firstAttribute="height" constant="44" id="s3J-0d-s4f"/>
+                            <constraint firstItem="Sdk-pe-gBe" firstAttribute="leading" secondItem="5iY-VH-sDn" secondAttribute="leading" id="Kbc-uv-5Rk"/>
+                            <constraint firstAttribute="height" constant="660" id="fSN-Ix-fyv"/>
+                            <constraint firstAttribute="bottom" secondItem="Sdk-pe-gBe" secondAttribute="bottom" id="gzL-yI-aU6"/>
+                            <constraint firstItem="suA-XY-yq6" firstAttribute="leading" secondItem="5iY-VH-sDn" secondAttribute="leading" id="hGz-V2-tGT"/>
+                            <constraint firstAttribute="trailing" secondItem="suA-XY-yq6" secondAttribute="trailing" id="i6F-Bp-VKw"/>
+                            <constraint firstItem="suA-XY-yq6" firstAttribute="top" secondItem="5iY-VH-sDn" secondAttribute="top" id="iok-NN-lre"/>
+                            <constraint firstAttribute="trailing" secondItem="Sdk-pe-gBe" secondAttribute="trailing" id="upd-w9-ZR4"/>
                         </constraints>
-                    </view>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no-cards" translatesAutoresizingMaskIntoConstraints="NO" id="Ol8-gm-SFU">
-                        <rect key="frame" x="107.5" y="20" width="105" height="105"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="105" id="Gmd-Ng-3b8"/>
-                            <constraint firstAttribute="height" constant="105" id="NQD-Qg-jje"/>
-                        </constraints>
-                    </imageView>
+                    </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="GMe-5n-F1d" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="5wY-kX-Mye"/>
-                    <constraint firstItem="Ol8-gm-SFU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="8D1-cq-TQK"/>
-                    <constraint firstItem="Sdk-pe-gBe" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="B15-eF-lO9"/>
-                    <constraint firstAttribute="trailing" secondItem="GMe-5n-F1d" secondAttribute="trailing" constant="10" id="QcV-oI-y1H"/>
-                    <constraint firstItem="Sdk-pe-gBe" firstAttribute="top" secondItem="GMe-5n-F1d" secondAttribute="bottom" constant="30" id="dYW-T2-9jY"/>
-                    <constraint firstAttribute="bottom" secondItem="Sdk-pe-gBe" secondAttribute="bottom" constant="30" id="dg1-AA-Y8I"/>
-                    <constraint firstItem="Ol8-gm-SFU" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="lZf-FN-neS"/>
-                    <constraint firstItem="GMe-5n-F1d" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="pBF-nt-COx"/>
-                    <constraint firstItem="GMe-5n-F1d" firstAttribute="top" secondItem="Ol8-gm-SFU" secondAttribute="bottom" constant="30" id="wci-d0-dPy"/>
+                    <constraint firstAttribute="trailing" secondItem="5iY-VH-sDn" secondAttribute="trailing" id="1Rj-bf-TZ8"/>
+                    <constraint firstAttribute="bottom" secondItem="5iY-VH-sDn" secondAttribute="bottom" constant="20" id="ADE-Ng-21f"/>
+                    <constraint firstItem="5iY-VH-sDn" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="lJ3-4K-CRS"/>
+                    <constraint firstItem="5iY-VH-sDn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="zZK-bl-BDN"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="addButton" destination="Sdk-pe-gBe" id="dU2-nh-SYJ"/>
+                <outlet property="introTextLabel" destination="suA-XY-yq6" id="ugc-nc-Cjg"/>
                 <outlet property="noCardsImageView" destination="Ol8-gm-SFU" id="afB-Jk-4HV"/>
                 <outlet property="noCardsLabel" destination="GMe-5n-F1d" id="obg-Qs-Ubh"/>
+                <outlet property="stackViewViewHeight" destination="fSN-Ix-fyv" id="D6A-NK-lCT"/>
             </connections>
             <point key="canvasLocation" x="28.985507246376812" y="181.13839285714286"/>
         </tableViewCell>

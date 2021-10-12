@@ -16,4 +16,5 @@ class AppColours {
     static let appRed = UIColor.red
     static let barYellow = UIColor(red: 252/255, green: 186/255, blue: 25/255, alpha: 1.0)
     static let textBlack = UIColor.black
+    static let textGray = UIColor(red: 96/255, green: 96/255, blue: 96/255, alpha: 1.0)
 }

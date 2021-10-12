@@ -25,22 +25,24 @@ class AppStyleButton: UIView {
     
     enum ButtonType {
         case cancel
-        case enter
+        case submit
         case done
         case saveACopy
         case close
         case manageCards
         case addCard
+        case viewAll
         
         var getTitle: String {
             switch self {
-            case .cancel: return Constants.Strings.ButtonTitles.cancel
-            case .enter: return Constants.Strings.ButtonTitles.enter
-            case .done: return Constants.Strings.ButtonTitles.done
-            case .saveACopy: return Constants.Strings.ButtonTitles.saveACopy
-            case .close: return Constants.Strings.ButtonTitles.close
-            case .manageCards: return Constants.Strings.ButtonTitles.manageCards
-            case .addCard: return Constants.Strings.ButtonTitles.addCard
+            case .cancel: return .cancel
+            case .submit: return .submit
+            case .done: return .done
+            case .saveACopy: return .saveACopy
+            case .close: return .close
+            case .manageCards: return .manageCards
+            case .addCard: return .addCard
+            case .viewAll: return .viewAll
             }
         }
     }

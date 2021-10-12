@@ -1,0 +1,1224 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 52;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0769331E5D70F1D4730EB625D3C63D1B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		0CA10EB3BF0C9F869737A18D5AB50E9D /* Pods-BCVaccineCard-BCVaccineCardUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F1F43054F24925AF8FD214E053989EB /* Pods-BCVaccineCard-BCVaccineCardUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0CE307319E3DDBF5378C47A662B8FF39 /* Pods-BCVaccineCard-BCVaccineCardUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C5BF3AC42706A41613CE9CB6EA8AA50F /* Pods-BCVaccineCard-BCVaccineCardUITests-dummy.m */; };
+		14C0C3EC71BF82A45D105E1C4AD9DA30 /* QueuePassedInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 927C501A3F79CC60D307B1A3D988F7AE /* QueuePassedInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1A3DBE81B20687F025B8085A177B0752 /* QueueService_NSURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = FE4CBEE6B6DC225CC6565CD19E2772B2 /* QueueService_NSURLConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		21EBFAA7F109E6C49FFE6FD5CDB99FDE /* QueueITEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = A1CCB8696B3E220FB862B4B2767C7B16 /* QueueITEngine.m */; };
+		22B05FDCEBF5B25B1C22E21555DCC7F1 /* QueueITLibrary-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F948B4721747E9ECE93C7D1633D93B /* QueueITLibrary-dummy.m */; };
+		2A9C542D655E6ABA9CBC3A20287D5275 /* QueueService.h in Headers */ = {isa = PBXBuildFile; fileRef = E730330E998621085342C290D4AEA56D /* QueueService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		31A8C5E3E08845F08402766B06987E3F /* QueueService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C905B9AF69A4054E4FEFC7F259FE33E /* QueueService.m */; };
+		4A934A41A8ED60274B2B6EBE0D182498 /* QueueStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D51BD7935D37977AC093C264F6CDCA /* QueueStatus.m */; };
+		511F5E16F7BC879728936ACDBB26C736 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		5C8905EDB68E6EE3CBEC99EFB4DD499B /* Pods-BCVaccineCard-Prod-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9302B667504C0F99ED73C324B0EFA21D /* Pods-BCVaccineCard-Prod-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		671C5C362074E0542F94C6C1E3BA50DA /* QueueService_NSURLConnectionRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = F515DEAE30DE3D0DDC4BDE474F9E9D91 /* QueueService_NSURLConnectionRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		684187E607AC9774C2F12C03370A69B3 /* Pods-BCVaccineCardTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BB10A3BB75311D74BE50C946A14535A /* Pods-BCVaccineCardTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6E6920FA99C4B386B63587BF7F74B4F2 /* Pods-BCVaccineCardTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 606DC4148686973AF64694217A3B9368 /* Pods-BCVaccineCardTests-dummy.m */; };
+		7678023E023B5095DBA0AAE360B7E023 /* QueueITWKViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 328FCE00C9839490FB3B5FFC05B7830B /* QueueITWKViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8B0EF196285162773C3C2DD9B2EF5393 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		99E06DAADF373A1A4699B7A05DDF34BC /* Pods-BCVaccineCard-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A3663B435915E6E0F94F9A1430C4605 /* Pods-BCVaccineCard-dummy.m */; };
+		9D424B9E4E4AAFA37E81267BCF03D28D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		9D7D0327EF3C9E6D54E04E5835D998D5 /* QueueITEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = AA60652700F6863D83EA1A254726E137 /* QueueITEngine.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A0FE9FA7D3865CA1DFD834D18F98FEF2 /* QueuePassedInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3618507AC568837F66669BF862B9630D /* QueuePassedInfo.m */; };
+		A5C4C24DD99C8CC0EB687839E66D0EEB /* Reachability.h in Headers */ = {isa = PBXBuildFile; fileRef = 89BB2C7ACBF1C15AA3ADC80C8B503E30 /* Reachability.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AB556ACA986A2AB4A0AA2C87A6EF7C2E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		ADBC3A7ADE25F8AFED7D32AED7DB3953 /* QueueService_NSURLConnectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4971E97CA0068C5153D77220D5EDA946 /* QueueService_NSURLConnectionRequest.m */; };
+		B69D54029CBA072E695D076CFE45DA38 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 219E83055322039E2F862238F6965B02 /* Reachability.m */; };
+		BC24161D356A8A240B71550AF23A0554 /* QueueCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AB8E4FA188DEAC63450BA898D793E8B /* QueueCache.m */; };
+		CAAC02B3D03EE141571F15C6193F254B /* QueueITWKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C8A41DC89EAB73B633FE67637981118 /* QueueITWKViewController.m */; };
+		D152638948638E020C23B25E9258898A /* IOSUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E6141042B9FDA45F9A625A5C5F4D483 /* IOSUtils.m */; };
+		D1F0E550CAAB2CC741DAE8A553836A61 /* QueueCache.h in Headers */ = {isa = PBXBuildFile; fileRef = F53F16EFA0F1F69DC210441CBB61A3C4 /* QueueCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D5BE35A04843DC6A4A011043A92C11E4 /* Pods-BCVaccineCard-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EA04039A8CB0DD4F311B8114884564C8 /* Pods-BCVaccineCard-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DA97BD0A25C83FD85094D05EC2DC0EBB /* Pods-BCVaccineCard-Prod-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A35ECAA3A0E8236B0C9871FA586A48FE /* Pods-BCVaccineCard-Prod-dummy.m */; };
+		DAA4A81A5470187BEC0AF8CE187D3907 /* IOSUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = D2BE2D537CF1C3DF0200CB16FEB0CF59 /* IOSUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E7E6CB97B4EE2E856F03DBAEC83F8AD4 /* QueueStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = F0C701F1073F55DEA163B21A25A8D7FB /* QueueStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E83E518917D884B903776821839B5D55 /* QueueService_NSURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = B3DD266BEA74FB4936CFC0C8DD2F5E77 /* QueueService_NSURLConnection.m */; };
+		F77A9E2C5871B073CA08AE4F15BF49A5 /* QueueConsts.h in Headers */ = {isa = PBXBuildFile; fileRef = E269B540CA312DCA3EEB912E515CBB60 /* QueueConsts.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FAC4F6E506C52744AC2422A60C861AE9 /* QueueITLibrary-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 03D917721BC8CF848A3A142E10A70C3D /* QueueITLibrary-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0489E8062C99743C700ADF1CD5764689 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 565DEF16402D7E0C76AA52EFA3C519B3;
+			remoteInfo = "Pods-BCVaccineCard";
+		};
+		CFB23E8621F7578F0A0CBA789CBB2CE9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBC71AB538C0ACFDE56A1131EA495025;
+			remoteInfo = QueueITLibrary;
+		};
+		ED6C7E7FCBDBAFE55A2FFE6F0CA949ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBC71AB538C0ACFDE56A1131EA495025;
+			remoteInfo = QueueITLibrary;
+		};
+		FAA5D8EE50E6237BEEBD34D34C4FAB95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBC71AB538C0ACFDE56A1131EA495025;
+			remoteInfo = QueueITLibrary;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0351FC55D61B3F5A21F4F211D4BCB4B3 /* Pods_BCVaccineCardTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BCVaccineCardTests.framework; path = "Pods-BCVaccineCardTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		03B456FE0792C5128DB333FB6F4A77DD /* Pods-BCVaccineCard-BCVaccineCardUITests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BCVaccineCard-BCVaccineCardUITests-Info.plist"; sourceTree = "<group>"; };
+		03D917721BC8CF848A3A142E10A70C3D /* QueueITLibrary-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "QueueITLibrary-umbrella.h"; sourceTree = "<group>"; };
+		060CFAD81C51BA84A9E8CEEF3F7883B8 /* Pods-BCVaccineCard-Prod-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BCVaccineCard-Prod-acknowledgements.markdown"; sourceTree = "<group>"; };
+		0768C4CA8B894AD8A5F79F82F59D5852 /* Pods-BCVaccineCard-Prod.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-BCVaccineCard-Prod.modulemap"; sourceTree = "<group>"; };
+		0A4C11A32D5ABC51DE89151AAC654E15 /* Pods-BCVaccineCard-Prod.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BCVaccineCard-Prod.release.xcconfig"; sourceTree = "<group>"; };
+		1315CE3900D87F0C3471AAC3FB03C4B6 /* Pods-BCVaccineCardTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BCVaccineCardTests-acknowledgements.plist"; sourceTree = "<group>"; };
+		1EC6550349F36B8D3BFE53B4119A0FC6 /* Pods-BCVaccineCard-BCVaccineCardUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BCVaccineCard-BCVaccineCardUITests-acknowledgements.plist"; sourceTree = "<group>"; };
+		219E83055322039E2F862238F6965B02 /* Reachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = QueueITLib/Reachability.m; sourceTree = "<group>"; };
+		2714CB5B11361E194B2C98D70BF338C6 /* QueueITLibrary.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = QueueITLibrary.modulemap; sourceTree = "<group>"; };
+		2AB8E4FA188DEAC63450BA898D793E8B /* QueueCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QueueCache.m; path = QueueITLib/QueueCache.m; sourceTree = "<group>"; };
+		2F1F43054F24925AF8FD214E053989EB /* Pods-BCVaccineCard-BCVaccineCardUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BCVaccineCard-BCVaccineCardUITests-umbrella.h"; sourceTree = "<group>"; };
+		328FCE00C9839490FB3B5FFC05B7830B /* QueueITWKViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QueueITWKViewController.h; path = QueueITLib/QueueITWKViewController.h; sourceTree = "<group>"; };
+		3618507AC568837F66669BF862B9630D /* QueuePassedInfo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QueuePassedInfo.m; path = QueueITLib/QueuePassedInfo.m; sourceTree = "<group>"; };
+		407722E66397D64642232B26F059CBBE /* Pods-BCVaccineCard-Prod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BCVaccineCard-Prod.debug.xcconfig"; sourceTree = "<group>"; };
+		43952F5D6D65B9DADD3B0CAB3CEC2952 /* QueueITLibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = QueueITLibrary.framework; path = QueueITLibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4971E97CA0068C5153D77220D5EDA946 /* QueueService_NSURLConnectionRequest.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QueueService_NSURLConnectionRequest.m; path = QueueITLib/QueueService_NSURLConnectionRequest.m; sourceTree = "<group>"; };
+		4A3663B435915E6E0F94F9A1430C4605 /* Pods-BCVaccineCard-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BCVaccineCard-dummy.m"; sourceTree = "<group>"; };
+		4E6141042B9FDA45F9A625A5C5F4D483 /* IOSUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = IOSUtils.m; path = QueueITLib/IOSUtils.m; sourceTree = "<group>"; };
+		5C905B9AF69A4054E4FEFC7F259FE33E /* QueueService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QueueService.m; path = QueueITLib/QueueService.m; sourceTree = "<group>"; };
+		606DC4148686973AF64694217A3B9368 /* Pods-BCVaccineCardTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BCVaccineCardTests-dummy.m"; sourceTree = "<group>"; };
+		60F0D23CB74D11A4689AFECF6D78118F /* Pods-BCVaccineCardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BCVaccineCardTests.debug.xcconfig"; sourceTree = "<group>"; };
+		68BE55F4A3F1EF923D7C51246A06F7BD /* Pods_BCVaccineCard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BCVaccineCard.framework; path = "Pods-BCVaccineCard.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CC04893CFFC2B2393350FEFD32DCA29 /* QueueITLibrary-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "QueueITLibrary-Info.plist"; sourceTree = "<group>"; };
+		6DDDF382A60214817A1E1F85653593EB /* QueueITLibrary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = QueueITLibrary.debug.xcconfig; sourceTree = "<group>"; };
+		714CE99E258C924E4DDC688F5CFB2333 /* Pods-BCVaccineCard-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BCVaccineCard-acknowledgements.plist"; sourceTree = "<group>"; };
+		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		78F948B4721747E9ECE93C7D1633D93B /* QueueITLibrary-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "QueueITLibrary-dummy.m"; sourceTree = "<group>"; };
+		79880ED444A2280EE120F9092F61A0F9 /* Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig"; sourceTree = "<group>"; };
+		79FC0A27281B2DEA0A00336D6888D843 /* Pods-BCVaccineCardTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-BCVaccineCardTests.modulemap"; sourceTree = "<group>"; };
+		7A684A1208D173261B97F03130D53CA2 /* Pods-BCVaccineCardTests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BCVaccineCardTests-Info.plist"; sourceTree = "<group>"; };
+		801D2F13DAEE51A83D9BEDAD807D4AD3 /* Pods-BCVaccineCard-Prod-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BCVaccineCard-Prod-frameworks.sh"; sourceTree = "<group>"; };
+		86EB6AFE0065E821F5545A4C4430BB21 /* Pods-BCVaccineCard-Prod-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BCVaccineCard-Prod-acknowledgements.plist"; sourceTree = "<group>"; };
+		89BB2C7ACBF1C15AA3ADC80C8B503E30 /* Reachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = QueueITLib/Reachability.h; sourceTree = "<group>"; };
+		8BB10A3BB75311D74BE50C946A14535A /* Pods-BCVaccineCardTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BCVaccineCardTests-umbrella.h"; sourceTree = "<group>"; };
+		905C792B20CBC02D6A31C5410CF600A8 /* QueueITLibrary.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = QueueITLibrary.release.xcconfig; sourceTree = "<group>"; };
+		927C501A3F79CC60D307B1A3D988F7AE /* QueuePassedInfo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QueuePassedInfo.h; path = QueueITLib/QueuePassedInfo.h; sourceTree = "<group>"; };
+		9302B667504C0F99ED73C324B0EFA21D /* Pods-BCVaccineCard-Prod-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BCVaccineCard-Prod-umbrella.h"; sourceTree = "<group>"; };
+		94AF7CAF12C07B0CF7A5D53FE6ED8271 /* Pods-BCVaccineCard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BCVaccineCard.release.xcconfig"; sourceTree = "<group>"; };
+		9B4B418B2547271A567581B489AD6E81 /* Pods-BCVaccineCard-Prod-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BCVaccineCard-Prod-Info.plist"; sourceTree = "<group>"; };
+		9C8A41DC89EAB73B633FE67637981118 /* QueueITWKViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QueueITWKViewController.m; path = QueueITLib/QueueITWKViewController.m; sourceTree = "<group>"; };
+		9D91B5E7F239113174408B206063C9E4 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BCVaccineCard_BCVaccineCardUITests.framework; path = "Pods-BCVaccineCard-BCVaccineCardUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A1CCB8696B3E220FB862B4B2767C7B16 /* QueueITEngine.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QueueITEngine.m; path = QueueITLib/QueueITEngine.m; sourceTree = "<group>"; };
+		A35ECAA3A0E8236B0C9871FA586A48FE /* Pods-BCVaccineCard-Prod-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BCVaccineCard-Prod-dummy.m"; sourceTree = "<group>"; };
+		A4048A3564962EAE452EB374402D1154 /* Pods-BCVaccineCard.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-BCVaccineCard.modulemap"; sourceTree = "<group>"; };
+		A407D151FB230A5CA954C1AD9138FA92 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		A912A34B4659AE45C7E6FDFBCF365BB2 /* Pods_BCVaccineCard_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BCVaccineCard_Prod.framework; path = "Pods-BCVaccineCard-Prod.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA60652700F6863D83EA1A254726E137 /* QueueITEngine.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QueueITEngine.h; path = QueueITLib/QueueITEngine.h; sourceTree = "<group>"; };
+		AEBC45D0401FEA16153CD7B46ECE4382 /* Pods-BCVaccineCard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BCVaccineCard.debug.xcconfig"; sourceTree = "<group>"; };
+		B3DD266BEA74FB4936CFC0C8DD2F5E77 /* QueueService_NSURLConnection.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QueueService_NSURLConnection.m; path = QueueITLib/QueueService_NSURLConnection.m; sourceTree = "<group>"; };
+		B7562FF6C1D5507C97AAC42DC79FAA0B /* QueueITLibrary-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "QueueITLibrary-prefix.pch"; sourceTree = "<group>"; };
+		BC2DB2197797DA3E11671AB6DAB157F5 /* Pods-BCVaccineCard-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BCVaccineCard-frameworks.sh"; sourceTree = "<group>"; };
+		BD8DCB37B0FA33C91C67A6D7F3CCA057 /* Pods-BCVaccineCard-BCVaccineCardUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BCVaccineCard-BCVaccineCardUITests-frameworks.sh"; sourceTree = "<group>"; };
+		BE66EAEA340E6756D6CC3500236687C4 /* Pods-BCVaccineCardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BCVaccineCardTests.release.xcconfig"; sourceTree = "<group>"; };
+		BEE1A27C39E6DBC3930775673CBE4CDB /* Pods-BCVaccineCard-BCVaccineCardUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BCVaccineCard-BCVaccineCardUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		C5BF3AC42706A41613CE9CB6EA8AA50F /* Pods-BCVaccineCard-BCVaccineCardUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BCVaccineCard-BCVaccineCardUITests-dummy.m"; sourceTree = "<group>"; };
+		CD76110C3D22003F7A52D32B4C7A1A2A /* Pods-BCVaccineCard-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BCVaccineCard-acknowledgements.markdown"; sourceTree = "<group>"; };
+		D2BE2D537CF1C3DF0200CB16FEB0CF59 /* IOSUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IOSUtils.h; path = QueueITLib/IOSUtils.h; sourceTree = "<group>"; };
+		E269B540CA312DCA3EEB912E515CBB60 /* QueueConsts.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QueueConsts.h; path = QueueITLib/QueueConsts.h; sourceTree = "<group>"; };
+		E69058A0CD54E165768A13F905A66D5F /* Pods-BCVaccineCard-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BCVaccineCard-Info.plist"; sourceTree = "<group>"; };
+		E730330E998621085342C290D4AEA56D /* QueueService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QueueService.h; path = QueueITLib/QueueService.h; sourceTree = "<group>"; };
+		EA04039A8CB0DD4F311B8114884564C8 /* Pods-BCVaccineCard-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BCVaccineCard-umbrella.h"; sourceTree = "<group>"; };
+		F0C701F1073F55DEA163B21A25A8D7FB /* QueueStatus.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QueueStatus.h; path = QueueITLib/QueueStatus.h; sourceTree = "<group>"; };
+		F26093B27ADD26869ABBBA8E42155E3B /* Pods-BCVaccineCardTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BCVaccineCardTests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		F515DEAE30DE3D0DDC4BDE474F9E9D91 /* QueueService_NSURLConnectionRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QueueService_NSURLConnectionRequest.h; path = QueueITLib/QueueService_NSURLConnectionRequest.h; sourceTree = "<group>"; };
+		F53F16EFA0F1F69DC210441CBB61A3C4 /* QueueCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QueueCache.h; path = QueueITLib/QueueCache.h; sourceTree = "<group>"; };
+		F6D51BD7935D37977AC093C264F6CDCA /* QueueStatus.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = QueueStatus.m; path = QueueITLib/QueueStatus.m; sourceTree = "<group>"; };
+		F737DE855D5625E7062DADDE01E00BB3 /* Pods-BCVaccineCard-BCVaccineCardUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-BCVaccineCard-BCVaccineCardUITests.modulemap"; sourceTree = "<group>"; };
+		FE4CBEE6B6DC225CC6565CD19E2772B2 /* QueueService_NSURLConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QueueService_NSURLConnection.h; path = QueueITLib/QueueService_NSURLConnection.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3B03E7E680684844F63F6E463F973FD7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0769331E5D70F1D4730EB625D3C63D1B /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		64FB1FBFB54146A12A5DB5BC199C1CFA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				511F5E16F7BC879728936ACDBB26C736 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B6CAE60190D0A5DD6DAE9A7E6D620DFC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B0EF196285162773C3C2DD9B2EF5393 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B932AB13AF2F57E916F02DC6CBBEE59D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB556ACA986A2AB4A0AA2C87A6EF7C2E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CC6471117CBD6D9C4F9A6B53C38B44BE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D424B9E4E4AAFA37E81267BCF03D28D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		047F11A713507ACB6E672DE27C761BD3 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				C27FE9CE7D384FE735543BC1EFDBF161 /* Pods-BCVaccineCard */,
+				D9429EDDD44CA83E5A3A0047D03137EA /* Pods-BCVaccineCard-BCVaccineCardUITests */,
+				DF7AF283E166A840AD93D7F50C94AB22 /* Pods-BCVaccineCard-Prod */,
+				2AB1991CEB002EA8A3DE352BD39891A5 /* Pods-BCVaccineCardTests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		0D31B7C75EFDD2EF6D147DEF54B132C4 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				2714CB5B11361E194B2C98D70BF338C6 /* QueueITLibrary.modulemap */,
+				78F948B4721747E9ECE93C7D1633D93B /* QueueITLibrary-dummy.m */,
+				6CC04893CFFC2B2393350FEFD32DCA29 /* QueueITLibrary-Info.plist */,
+				B7562FF6C1D5507C97AAC42DC79FAA0B /* QueueITLibrary-prefix.pch */,
+				03D917721BC8CF848A3A142E10A70C3D /* QueueITLibrary-umbrella.h */,
+				6DDDF382A60214817A1E1F85653593EB /* QueueITLibrary.debug.xcconfig */,
+				905C792B20CBC02D6A31C5410CF600A8 /* QueueITLibrary.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/QueueITLibrary";
+			sourceTree = "<group>";
+		};
+		2AB1991CEB002EA8A3DE352BD39891A5 /* Pods-BCVaccineCardTests */ = {
+			isa = PBXGroup;
+			children = (
+				79FC0A27281B2DEA0A00336D6888D843 /* Pods-BCVaccineCardTests.modulemap */,
+				F26093B27ADD26869ABBBA8E42155E3B /* Pods-BCVaccineCardTests-acknowledgements.markdown */,
+				1315CE3900D87F0C3471AAC3FB03C4B6 /* Pods-BCVaccineCardTests-acknowledgements.plist */,
+				606DC4148686973AF64694217A3B9368 /* Pods-BCVaccineCardTests-dummy.m */,
+				7A684A1208D173261B97F03130D53CA2 /* Pods-BCVaccineCardTests-Info.plist */,
+				8BB10A3BB75311D74BE50C946A14535A /* Pods-BCVaccineCardTests-umbrella.h */,
+				60F0D23CB74D11A4689AFECF6D78118F /* Pods-BCVaccineCardTests.debug.xcconfig */,
+				BE66EAEA340E6756D6CC3500236687C4 /* Pods-BCVaccineCardTests.release.xcconfig */,
+			);
+			name = "Pods-BCVaccineCardTests";
+			path = "Target Support Files/Pods-BCVaccineCardTests";
+			sourceTree = "<group>";
+		};
+		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		6139C5B234E245BA5B1B4FFF149F02E8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				68BE55F4A3F1EF923D7C51246A06F7BD /* Pods_BCVaccineCard.framework */,
+				9D91B5E7F239113174408B206063C9E4 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */,
+				A912A34B4659AE45C7E6FDFBCF365BB2 /* Pods_BCVaccineCard_Prod.framework */,
+				0351FC55D61B3F5A21F4F211D4BCB4B3 /* Pods_BCVaccineCardTests.framework */,
+				43952F5D6D65B9DADD3B0CAB3CEC2952 /* QueueITLibrary.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9DA4E2353EF1ACDC9D82189E80C9F80C /* QueueITLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				D2BE2D537CF1C3DF0200CB16FEB0CF59 /* IOSUtils.h */,
+				4E6141042B9FDA45F9A625A5C5F4D483 /* IOSUtils.m */,
+				F53F16EFA0F1F69DC210441CBB61A3C4 /* QueueCache.h */,
+				2AB8E4FA188DEAC63450BA898D793E8B /* QueueCache.m */,
+				E269B540CA312DCA3EEB912E515CBB60 /* QueueConsts.h */,
+				AA60652700F6863D83EA1A254726E137 /* QueueITEngine.h */,
+				A1CCB8696B3E220FB862B4B2767C7B16 /* QueueITEngine.m */,
+				328FCE00C9839490FB3B5FFC05B7830B /* QueueITWKViewController.h */,
+				9C8A41DC89EAB73B633FE67637981118 /* QueueITWKViewController.m */,
+				927C501A3F79CC60D307B1A3D988F7AE /* QueuePassedInfo.h */,
+				3618507AC568837F66669BF862B9630D /* QueuePassedInfo.m */,
+				E730330E998621085342C290D4AEA56D /* QueueService.h */,
+				5C905B9AF69A4054E4FEFC7F259FE33E /* QueueService.m */,
+				FE4CBEE6B6DC225CC6565CD19E2772B2 /* QueueService_NSURLConnection.h */,
+				B3DD266BEA74FB4936CFC0C8DD2F5E77 /* QueueService_NSURLConnection.m */,
+				F515DEAE30DE3D0DDC4BDE474F9E9D91 /* QueueService_NSURLConnectionRequest.h */,
+				4971E97CA0068C5153D77220D5EDA946 /* QueueService_NSURLConnectionRequest.m */,
+				F0C701F1073F55DEA163B21A25A8D7FB /* QueueStatus.h */,
+				F6D51BD7935D37977AC093C264F6CDCA /* QueueStatus.m */,
+				89BB2C7ACBF1C15AA3ADC80C8B503E30 /* Reachability.h */,
+				219E83055322039E2F862238F6965B02 /* Reachability.m */,
+				0D31B7C75EFDD2EF6D147DEF54B132C4 /* Support Files */,
+			);
+			name = QueueITLibrary;
+			path = QueueITLibrary;
+			sourceTree = "<group>";
+		};
+		C27FE9CE7D384FE735543BC1EFDBF161 /* Pods-BCVaccineCard */ = {
+			isa = PBXGroup;
+			children = (
+				A4048A3564962EAE452EB374402D1154 /* Pods-BCVaccineCard.modulemap */,
+				CD76110C3D22003F7A52D32B4C7A1A2A /* Pods-BCVaccineCard-acknowledgements.markdown */,
+				714CE99E258C924E4DDC688F5CFB2333 /* Pods-BCVaccineCard-acknowledgements.plist */,
+				4A3663B435915E6E0F94F9A1430C4605 /* Pods-BCVaccineCard-dummy.m */,
+				BC2DB2197797DA3E11671AB6DAB157F5 /* Pods-BCVaccineCard-frameworks.sh */,
+				E69058A0CD54E165768A13F905A66D5F /* Pods-BCVaccineCard-Info.plist */,
+				EA04039A8CB0DD4F311B8114884564C8 /* Pods-BCVaccineCard-umbrella.h */,
+				AEBC45D0401FEA16153CD7B46ECE4382 /* Pods-BCVaccineCard.debug.xcconfig */,
+				94AF7CAF12C07B0CF7A5D53FE6ED8271 /* Pods-BCVaccineCard.release.xcconfig */,
+			);
+			name = "Pods-BCVaccineCard";
+			path = "Target Support Files/Pods-BCVaccineCard";
+			sourceTree = "<group>";
+		};
+		CA4DE229B4C22C7B431A46755CD6257B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9DA4E2353EF1ACDC9D82189E80C9F80C /* QueueITLibrary */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
+				CA4DE229B4C22C7B431A46755CD6257B /* Pods */,
+				6139C5B234E245BA5B1B4FFF149F02E8 /* Products */,
+				047F11A713507ACB6E672DE27C761BD3 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				578452D2E740E91742655AC8F1636D1F /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D9429EDDD44CA83E5A3A0047D03137EA /* Pods-BCVaccineCard-BCVaccineCardUITests */ = {
+			isa = PBXGroup;
+			children = (
+				F737DE855D5625E7062DADDE01E00BB3 /* Pods-BCVaccineCard-BCVaccineCardUITests.modulemap */,
+				BEE1A27C39E6DBC3930775673CBE4CDB /* Pods-BCVaccineCard-BCVaccineCardUITests-acknowledgements.markdown */,
+				1EC6550349F36B8D3BFE53B4119A0FC6 /* Pods-BCVaccineCard-BCVaccineCardUITests-acknowledgements.plist */,
+				C5BF3AC42706A41613CE9CB6EA8AA50F /* Pods-BCVaccineCard-BCVaccineCardUITests-dummy.m */,
+				BD8DCB37B0FA33C91C67A6D7F3CCA057 /* Pods-BCVaccineCard-BCVaccineCardUITests-frameworks.sh */,
+				03B456FE0792C5128DB333FB6F4A77DD /* Pods-BCVaccineCard-BCVaccineCardUITests-Info.plist */,
+				2F1F43054F24925AF8FD214E053989EB /* Pods-BCVaccineCard-BCVaccineCardUITests-umbrella.h */,
+				A407D151FB230A5CA954C1AD9138FA92 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */,
+				79880ED444A2280EE120F9092F61A0F9 /* Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig */,
+			);
+			name = "Pods-BCVaccineCard-BCVaccineCardUITests";
+			path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests";
+			sourceTree = "<group>";
+		};
+		DF7AF283E166A840AD93D7F50C94AB22 /* Pods-BCVaccineCard-Prod */ = {
+			isa = PBXGroup;
+			children = (
+				0768C4CA8B894AD8A5F79F82F59D5852 /* Pods-BCVaccineCard-Prod.modulemap */,
+				060CFAD81C51BA84A9E8CEEF3F7883B8 /* Pods-BCVaccineCard-Prod-acknowledgements.markdown */,
+				86EB6AFE0065E821F5545A4C4430BB21 /* Pods-BCVaccineCard-Prod-acknowledgements.plist */,
+				A35ECAA3A0E8236B0C9871FA586A48FE /* Pods-BCVaccineCard-Prod-dummy.m */,
+				801D2F13DAEE51A83D9BEDAD807D4AD3 /* Pods-BCVaccineCard-Prod-frameworks.sh */,
+				9B4B418B2547271A567581B489AD6E81 /* Pods-BCVaccineCard-Prod-Info.plist */,
+				9302B667504C0F99ED73C324B0EFA21D /* Pods-BCVaccineCard-Prod-umbrella.h */,
+				407722E66397D64642232B26F059CBBE /* Pods-BCVaccineCard-Prod.debug.xcconfig */,
+				0A4C11A32D5ABC51DE89151AAC654E15 /* Pods-BCVaccineCard-Prod.release.xcconfig */,
+			);
+			name = "Pods-BCVaccineCard-Prod";
+			path = "Target Support Files/Pods-BCVaccineCard-Prod";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5E7CFFB8191C0CF4602DC5C24ECDBE66 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAA4A81A5470187BEC0AF8CE187D3907 /* IOSUtils.h in Headers */,
+				D1F0E550CAAB2CC741DAE8A553836A61 /* QueueCache.h in Headers */,
+				F77A9E2C5871B073CA08AE4F15BF49A5 /* QueueConsts.h in Headers */,
+				9D7D0327EF3C9E6D54E04E5835D998D5 /* QueueITEngine.h in Headers */,
+				FAC4F6E506C52744AC2422A60C861AE9 /* QueueITLibrary-umbrella.h in Headers */,
+				7678023E023B5095DBA0AAE360B7E023 /* QueueITWKViewController.h in Headers */,
+				14C0C3EC71BF82A45D105E1C4AD9DA30 /* QueuePassedInfo.h in Headers */,
+				2A9C542D655E6ABA9CBC3A20287D5275 /* QueueService.h in Headers */,
+				1A3DBE81B20687F025B8085A177B0752 /* QueueService_NSURLConnection.h in Headers */,
+				671C5C362074E0542F94C6C1E3BA50DA /* QueueService_NSURLConnectionRequest.h in Headers */,
+				E7E6CB97B4EE2E856F03DBAEC83F8AD4 /* QueueStatus.h in Headers */,
+				A5C4C24DD99C8CC0EB687839E66D0EEB /* Reachability.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7E57A94C9FCDCAF7ACD4DA26F483EFF6 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5BE35A04843DC6A4A011043A92C11E4 /* Pods-BCVaccineCard-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		919B3E4985B4D138599C76CB739CD0B8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C8905EDB68E6EE3CBEC99EFB4DD499B /* Pods-BCVaccineCard-Prod-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A2EDDAC299F4398E568B4A94C46E0CBE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				684187E607AC9774C2F12C03370A69B3 /* Pods-BCVaccineCardTests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC300CD2F54C705DEDF04946261D84A4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0CA10EB3BF0C9F869737A18D5AB50E9D /* Pods-BCVaccineCard-BCVaccineCardUITests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		08CEE8BD1F87B89EB48DAAD132C99870 /* Pods-BCVaccineCard-BCVaccineCardUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0FACF49A5846E53F52A16C8FAD60F9BA /* Build configuration list for PBXNativeTarget "Pods-BCVaccineCard-BCVaccineCardUITests" */;
+			buildPhases = (
+				AC300CD2F54C705DEDF04946261D84A4 /* Headers */,
+				115724C7863678AEEFA887370632F6BC /* Sources */,
+				3B03E7E680684844F63F6E463F973FD7 /* Frameworks */,
+				D543E7DC184310608A329B7C4AEEA91E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0B6E89BC9EC1639110E952F2A76B10DB /* PBXTargetDependency */,
+			);
+			name = "Pods-BCVaccineCard-BCVaccineCardUITests";
+			productName = "Pods-BCVaccineCard-BCVaccineCardUITests";
+			productReference = 9D91B5E7F239113174408B206063C9E4 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		43B4FD6B86916B946096E60FC894C89B /* Pods-BCVaccineCard-Prod */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FC4B84F7570931DC9EFEB34FE32B0B4B /* Build configuration list for PBXNativeTarget "Pods-BCVaccineCard-Prod" */;
+			buildPhases = (
+				919B3E4985B4D138599C76CB739CD0B8 /* Headers */,
+				605625408A07CBD88151748BC3F69787 /* Sources */,
+				B6CAE60190D0A5DD6DAE9A7E6D620DFC /* Frameworks */,
+				6EFFB3602175C966C6FDE6EA48EF95A3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2597D7650766BF9E58E1DAFE07B99DD0 /* PBXTargetDependency */,
+			);
+			name = "Pods-BCVaccineCard-Prod";
+			productName = "Pods-BCVaccineCard-Prod";
+			productReference = A912A34B4659AE45C7E6FDFBCF365BB2 /* Pods_BCVaccineCard_Prod.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		565DEF16402D7E0C76AA52EFA3C519B3 /* Pods-BCVaccineCard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 14950F8E776B0F898950A2027DAA17BC /* Build configuration list for PBXNativeTarget "Pods-BCVaccineCard" */;
+			buildPhases = (
+				7E57A94C9FCDCAF7ACD4DA26F483EFF6 /* Headers */,
+				6DC29C47AA4C0CBDBBE24ED4A8E33B41 /* Sources */,
+				64FB1FBFB54146A12A5DB5BC199C1CFA /* Frameworks */,
+				BB6B0D9E22FB14683B890BF98E36F401 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F56641E72B808CD3C7C7A366D314E478 /* PBXTargetDependency */,
+			);
+			name = "Pods-BCVaccineCard";
+			productName = "Pods-BCVaccineCard";
+			productReference = 68BE55F4A3F1EF923D7C51246A06F7BD /* Pods_BCVaccineCard.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B2D5DD295367E5F832CB94EAAD815AD4 /* Pods-BCVaccineCardTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 037375937A699257D100047150E1486A /* Build configuration list for PBXNativeTarget "Pods-BCVaccineCardTests" */;
+			buildPhases = (
+				A2EDDAC299F4398E568B4A94C46E0CBE /* Headers */,
+				B2A4666C87D4A189F02E01EFF7F38E3E /* Sources */,
+				B932AB13AF2F57E916F02DC6CBBEE59D /* Frameworks */,
+				60A641DB4B64063AF446B8F78B93ED7B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9EBBB02FF0EAFF2A219E9B425F954ADC /* PBXTargetDependency */,
+			);
+			name = "Pods-BCVaccineCardTests";
+			productName = "Pods-BCVaccineCardTests";
+			productReference = 0351FC55D61B3F5A21F4F211D4BCB4B3 /* Pods_BCVaccineCardTests.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		DBC71AB538C0ACFDE56A1131EA495025 /* QueueITLibrary */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9105B3C9515E16D2841F2A480775C3DD /* Build configuration list for PBXNativeTarget "QueueITLibrary" */;
+			buildPhases = (
+				5E7CFFB8191C0CF4602DC5C24ECDBE66 /* Headers */,
+				99A5EAA384CFB50958A2E038C4BA9662 /* Sources */,
+				CC6471117CBD6D9C4F9A6B53C38B44BE /* Frameworks */,
+				77232D81B13B762FA8F1DF9D159ED0E1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QueueITLibrary;
+			productName = QueueITLibrary;
+			productReference = 43952F5D6D65B9DADD3B0CAB3CEC2952 /* QueueITLibrary.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 11.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 6139C5B234E245BA5B1B4FFF149F02E8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				565DEF16402D7E0C76AA52EFA3C519B3 /* Pods-BCVaccineCard */,
+				08CEE8BD1F87B89EB48DAAD132C99870 /* Pods-BCVaccineCard-BCVaccineCardUITests */,
+				43B4FD6B86916B946096E60FC894C89B /* Pods-BCVaccineCard-Prod */,
+				B2D5DD295367E5F832CB94EAAD815AD4 /* Pods-BCVaccineCardTests */,
+				DBC71AB538C0ACFDE56A1131EA495025 /* QueueITLibrary */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		60A641DB4B64063AF446B8F78B93ED7B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6EFFB3602175C966C6FDE6EA48EF95A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77232D81B13B762FA8F1DF9D159ED0E1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB6B0D9E22FB14683B890BF98E36F401 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D543E7DC184310608A329B7C4AEEA91E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		115724C7863678AEEFA887370632F6BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0CE307319E3DDBF5378C47A662B8FF39 /* Pods-BCVaccineCard-BCVaccineCardUITests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		605625408A07CBD88151748BC3F69787 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA97BD0A25C83FD85094D05EC2DC0EBB /* Pods-BCVaccineCard-Prod-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6DC29C47AA4C0CBDBBE24ED4A8E33B41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99E06DAADF373A1A4699B7A05DDF34BC /* Pods-BCVaccineCard-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		99A5EAA384CFB50958A2E038C4BA9662 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D152638948638E020C23B25E9258898A /* IOSUtils.m in Sources */,
+				BC24161D356A8A240B71550AF23A0554 /* QueueCache.m in Sources */,
+				21EBFAA7F109E6C49FFE6FD5CDB99FDE /* QueueITEngine.m in Sources */,
+				22B05FDCEBF5B25B1C22E21555DCC7F1 /* QueueITLibrary-dummy.m in Sources */,
+				CAAC02B3D03EE141571F15C6193F254B /* QueueITWKViewController.m in Sources */,
+				A0FE9FA7D3865CA1DFD834D18F98FEF2 /* QueuePassedInfo.m in Sources */,
+				31A8C5E3E08845F08402766B06987E3F /* QueueService.m in Sources */,
+				E83E518917D884B903776821839B5D55 /* QueueService_NSURLConnection.m in Sources */,
+				ADBC3A7ADE25F8AFED7D32AED7DB3953 /* QueueService_NSURLConnectionRequest.m in Sources */,
+				4A934A41A8ED60274B2B6EBE0D182498 /* QueueStatus.m in Sources */,
+				B69D54029CBA072E695D076CFE45DA38 /* Reachability.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2A4666C87D4A189F02E01EFF7F38E3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E6920FA99C4B386B63587BF7F74B4F2 /* Pods-BCVaccineCardTests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0B6E89BC9EC1639110E952F2A76B10DB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = QueueITLibrary;
+			target = DBC71AB538C0ACFDE56A1131EA495025 /* QueueITLibrary */;
+			targetProxy = ED6C7E7FCBDBAFE55A2FFE6F0CA949ED /* PBXContainerItemProxy */;
+		};
+		2597D7650766BF9E58E1DAFE07B99DD0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = QueueITLibrary;
+			target = DBC71AB538C0ACFDE56A1131EA495025 /* QueueITLibrary */;
+			targetProxy = CFB23E8621F7578F0A0CBA789CBB2CE9 /* PBXContainerItemProxy */;
+		};
+		9EBBB02FF0EAFF2A219E9B425F954ADC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-BCVaccineCard";
+			target = 565DEF16402D7E0C76AA52EFA3C519B3 /* Pods-BCVaccineCard */;
+			targetProxy = 0489E8062C99743C700ADF1CD5764689 /* PBXContainerItemProxy */;
+		};
+		F56641E72B808CD3C7C7A366D314E478 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = QueueITLibrary;
+			target = DBC71AB538C0ACFDE56A1131EA495025 /* QueueITLibrary */;
+			targetProxy = FAA5D8EE50E6237BEEBD34D34C4FAB95 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		216468F172AEA5ECDF00BD06958758AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 905C792B20CBC02D6A31C5410CF600A8 /* QueueITLibrary.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/QueueITLibrary/QueueITLibrary-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/QueueITLibrary/QueueITLibrary-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/QueueITLibrary/QueueITLibrary.modulemap";
+				PRODUCT_MODULE_NAME = QueueITLibrary;
+				PRODUCT_NAME = QueueITLibrary;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		4C7286CB48FE0676C09C22E54B41AF08 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AEBC45D0401FEA16153CD7B46ECE4382 /* Pods-BCVaccineCard.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		5E37C29FE83AE568DE3410F2C77FC8EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A4C11A32D5ABC51DE89151AAC654E15 /* Pods-BCVaccineCard-Prod.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-BCVaccineCard-Prod/Pods-BCVaccineCard-Prod-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-BCVaccineCard-Prod/Pods-BCVaccineCard-Prod.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		639FCD1B2DB76E869450E66C1F791963 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 407722E66397D64642232B26F059CBBE /* Pods-BCVaccineCard-Prod.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-BCVaccineCard-Prod/Pods-BCVaccineCard-Prod-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-BCVaccineCard-Prod/Pods-BCVaccineCard-Prod.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		698883A500E9CD63C61008A324F6AC10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 94AF7CAF12C07B0CF7A5D53FE6ED8271 /* Pods-BCVaccineCard.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-BCVaccineCard/Pods-BCVaccineCard.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7D4929A0F3660739FD6AAFBE6EF9F57C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6DDDF382A60214817A1E1F85653593EB /* QueueITLibrary.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/QueueITLibrary/QueueITLibrary-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/QueueITLibrary/QueueITLibrary-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MODULEMAP_FILE = "Target Support Files/QueueITLibrary/QueueITLibrary.modulemap";
+				PRODUCT_MODULE_NAME = QueueITLibrary;
+				PRODUCT_NAME = QueueITLibrary;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		89B7497056817CA5C090C81C38D48AA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79880ED444A2280EE120F9092F61A0F9 /* Pods-BCVaccineCard-BCVaccineCardUITests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		903A0004D3E6651EFD5D2E16214D101B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		96588507017CDDB04EBF3D118F030305 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE66EAEA340E6756D6CC3500236687C4 /* Pods-BCVaccineCardTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-BCVaccineCardTests/Pods-BCVaccineCardTests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-BCVaccineCardTests/Pods-BCVaccineCardTests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		A6591FFF41CAEDD5EAAC0663EFEEDDDB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 60F0D23CB74D11A4689AFECF6D78118F /* Pods-BCVaccineCardTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-BCVaccineCardTests/Pods-BCVaccineCardTests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-BCVaccineCardTests/Pods-BCVaccineCardTests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B4EFE046ACF8F37157F6E322C7FCFC28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		C033D0BAAD2F9D7A05EDC3F6E8C98695 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A407D151FB230A5CA954C1AD9138FA92 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		037375937A699257D100047150E1486A /* Build configuration list for PBXNativeTarget "Pods-BCVaccineCardTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A6591FFF41CAEDD5EAAC0663EFEEDDDB /* Debug */,
+				96588507017CDDB04EBF3D118F030305 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0FACF49A5846E53F52A16C8FAD60F9BA /* Build configuration list for PBXNativeTarget "Pods-BCVaccineCard-BCVaccineCardUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C033D0BAAD2F9D7A05EDC3F6E8C98695 /* Debug */,
+				89B7497056817CA5C090C81C38D48AA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		14950F8E776B0F898950A2027DAA17BC /* Build configuration list for PBXNativeTarget "Pods-BCVaccineCard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C7286CB48FE0676C09C22E54B41AF08 /* Debug */,
+				698883A500E9CD63C61008A324F6AC10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B4EFE046ACF8F37157F6E322C7FCFC28 /* Debug */,
+				903A0004D3E6651EFD5D2E16214D101B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9105B3C9515E16D2841F2A480775C3DD /* Build configuration list for PBXNativeTarget "QueueITLibrary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7D4929A0F3660739FD6AAFBE6EF9F57C /* Debug */,
+				216468F172AEA5ECDF00BD06958758AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FC4B84F7570931DC9EFEB34FE32B0B4B /* Build configuration list for PBXNativeTarget "Pods-BCVaccineCard-Prod" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				639FCD1B2DB76E869450E66C1F791963 /* Debug */,
+				5E37C29FE83AE568DE3410F2C77FC8EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}

@@ -16,9 +16,9 @@ enum FormTextFieldType {
     
     var getFieldTitle: String {
         switch self {
-        case .personalHealthNumber: return Constants.Strings.MyCardFlow.Form.personalHealthNumber
-        case .dateOfBirth: return Constants.Strings.MyCardFlow.Form.dateOfBirth
-        case .dateOfVaccination: return Constants.Strings.MyCardFlow.Form.dateOfVaccine
+        case .personalHealthNumber: return .personalHealthNumber
+        case .dateOfBirth: return .dateOfBirth
+        case .dateOfVaccination: return .dateOfVaccine
         }
     }
     
@@ -49,16 +49,16 @@ enum FormTextFieldType {
     func setErrorValidationMessage(text: String) -> String? {
         switch self {
         case .personalHealthNumber:
-            guard text.isValidNumber else { return Constants.Strings.Errors.GatewayFormValidation.phnNumber }
-            guard text.removeWhiteSpaceFormatting.isValidLength(length: 10) else { return Constants.Strings.Errors.GatewayFormValidation.phnLength }
+            guard text.isValidNumber else { return .phnNumber }
+            guard text.removeWhiteSpaceFormatting.isValidLength(length: 10) else { return .phnLength }
             return nil
         case .dateOfBirth:
-            guard text.isValidDate(withFormatter: Date.Formatter.longDate) else { return Constants.Strings.Errors.GatewayFormValidation.validDate }
-            guard text.isValidDateRange(withFormatter: Date.Formatter.longDate, latestDate: Date()) else { return Constants.Strings.Errors.GatewayFormValidation.dobRange }
+            guard text.isValidDate(withFormatter: Date.Formatter.longDate) else { return .validDate }
+            guard text.isValidDateRange(withFormatter: Date.Formatter.longDate, latestDate: Date()) else { return .dobRange }
             return nil
         case .dateOfVaccination:
-            guard text.isValidDate(withFormatter: Date.Formatter.longDate) else { return Constants.Strings.Errors.GatewayFormValidation.validDate }
-            guard text.isValidDateRange(withFormatter: Date.Formatter.longDate, earliestDate: Constants.DateConstants.firstVaxDate, latestDate: Date()) else { return Constants.Strings.Errors.GatewayFormValidation.dovRange }
+            guard text.isValidDate(withFormatter: Date.Formatter.longDate) else { return .validDate }
+            guard text.isValidDateRange(withFormatter: Date.Formatter.longDate, earliestDate: Constants.DateConstants.firstVaxDate, latestDate: Date()) else { return .dovRange }
             return nil
         }
     }
@@ -172,7 +172,7 @@ extension FormTextFieldView {
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
         
         // bar button 'next
-        let nextButton = UIBarButtonItem(title: Constants.Strings.MyCardFlow.Form.nextText, style: .done, target: self, action: #selector(nextButtonTapped))
+        let nextButton = UIBarButtonItem(title: .next, style: .done, target: self, action: #selector(nextButtonTapped))
         
         // spacer between buttons
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
