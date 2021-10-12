@@ -54,8 +54,8 @@ class HealthPassViewController: BaseViewController {
 extension HealthPassViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .healthPass,
-                                               leftNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton)),
-                                               rightNavButton: nil,
+                                               leftNavButton: nil,
+                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton)),
                                                navStyle: .large,
                                                targetVC: self)
         applyNavAccessibility()

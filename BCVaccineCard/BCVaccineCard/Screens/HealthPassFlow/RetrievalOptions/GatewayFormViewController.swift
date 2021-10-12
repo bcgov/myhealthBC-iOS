@@ -295,7 +295,7 @@ extension GatewayFormViewController {
 extension GatewayFormViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .cancel {
-            self.dismiss(animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
             guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
             guard let phn = dataSource[phnIndex].cellStringData else { return }
