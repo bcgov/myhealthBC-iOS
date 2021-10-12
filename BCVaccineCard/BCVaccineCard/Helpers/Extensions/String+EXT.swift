@@ -45,6 +45,11 @@ extension String {
         return self.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
+    /// This returns whether or not the string is empty by trimming whitespaces and new lines characters.
+    var isBlank: Bool {
+        return self.trimWhiteSpacesAndNewLines.isEmpty
+    }
+    
 }
 
 extension String {
@@ -83,6 +88,21 @@ extension String {
         }
         return nil
     }
+}
+
+extension Optional where Wrapped == String {
+    
+    /// This computable property unwraps an optional string value to empty string.
+    var unwrapped: String {
+        return self ?? ""
+    }
+    
+    /// This computable property checks if the optional string is nil or blank.
+    var isBlank: Bool {
+        guard let castedSelf = self else { return true }
+        return castedSelf.isBlank
+    }
+    
 }
 
 

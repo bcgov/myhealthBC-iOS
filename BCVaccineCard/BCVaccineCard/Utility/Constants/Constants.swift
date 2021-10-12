@@ -17,4 +17,7 @@ struct Constants {
     struct PrivacyPolicy {
         static let urlString = "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/proof/businesses#app-privacy-policy"
     }
+    
+    /// Authorization Header Key
+    static let authorizationHeaderKey = "Authorization"
 }

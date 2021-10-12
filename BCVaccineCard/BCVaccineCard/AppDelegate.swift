@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-09-14.
-//
+// GatewayAccess.initialize(withFactory: WorkerFactory(localFactory: localFactory, remoteFactory: RemoteFactory()))
 
 import UIKit
 import CoreData
@@ -18,8 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 //         BCVaccineValidator.testMode = true
-        FirebaseApp.configure()
+        configure()
         return true
+    }
+    
+    private func configure() {
+        FirebaseApp.configure()
+        setupGatewayFactory()
     }
     
     // MARK: - Core Data stack
@@ -66,5 +71,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+}
+
+// Gateway setup
+extension AppDelegate {
+    private func setupGatewayFactory() {
+        GatewayAccess.initialize(withFactory: WorkerFactory(remoteFactory: RemoteFactory()))
+    }
+    
 }
 
