@@ -134,6 +134,50 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // No action here right now
     }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard savedCardsCount == 1 else { return nil }
+        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
+            self.deleteCard()
+        }
+        delete.isAccessibilityElement = true
+        delete.accessibilityTraits = .button
+        delete.accessibilityLabel = "Unlink button"
+        delete.image = UIImage(named: "unlink")
+        delete.backgroundColor = .white
+        let config = UISwipeActionsConfiguration(actions: [delete])
+        return config
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard savedCardsCount == 1 else { return nil }
+        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
+            self.deleteCard()
+        }
+        delete.isAccessibilityElement = true
+        delete.accessibilityTraits = .button
+        delete.accessibilityLabel = "Unlink button"
+        delete.image = UIImage(named: "unlink")
+        delete.backgroundColor = .white
+        let config = UISwipeActionsConfiguration(actions: [delete])
+        return config
+    }
+    
+    private func deleteCard() {
+        alert(title: .unlinkCardTitle, message: .unlinkCardMessage, buttonOneTitle: .cancel, buttonOneCompletion: {
+            // This logic is so that a swipe to delete that is cancelled, gets reloaded and isn't showing a swiped state after cancelled
+            self.tableView.isEditing = false
+            self.tableView.reloadData()
+        }, buttonTwoTitle: .yes) { [weak self] in
+            guard let `self` = self else {return}
+            self.savedCardsCount = 0
+            self.dataSource = nil
+            Defaults.vaccinePassports = nil
+            self.tableView.reloadData()
+        }
+
+        
+    }
 }
 
  // MARK: Primary Vaccine Card button delegates here

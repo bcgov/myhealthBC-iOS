@@ -73,11 +73,11 @@ class PrimaryVaccineCardTableViewCell: UITableViewCell {
         subtextLabel.text = .addedDate(days: "2")
         vaccineCardView.configure(model: card, expanded: true, editMode: false)
         self.delegate = delegateOwner as? PrimaryVaccineCardTableViewCellDelegate
-        guard !hideViewAllButton else {
-            viewAllButton.isHidden = true
-            return
+        viewAllButton.isHidden = hideViewAllButton
+        if !hideViewAllButton {
+            viewAllButton.configure(withStyle: .white, buttonType: .viewAll, delegateOwner: delegateOwner, enabled: true, accessibilityValue: "View All", accessibilityHint: "Tapping this button will show you all of your saved covid 19 vaccine cards")
         }
-        viewAllButton.configure(withStyle: .white, buttonType: .viewAll, delegateOwner: delegateOwner, enabled: true, accessibilityValue: "View All", accessibilityHint: "Tapping this button will show you all of your saved covid 19 vaccine cards")
+        
     }
     
     

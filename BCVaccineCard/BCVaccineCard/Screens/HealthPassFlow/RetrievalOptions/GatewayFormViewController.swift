@@ -229,32 +229,32 @@ extension GatewayFormViewController {
         if doesCardNeedToBeUpdated(modelToUpdate: model) {
             alert(title: "Success", message: "Congrats! You have successfully updated your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "No", buttonOneCompletion: { [weak self] in
                 guard let `self` = self else { return }
-                self.dismiss(animated: true, completion: nil)
+                self.navigationController?.popViewController(animated: true)
                 // No Nothing, just dismiss
             }, buttonTwoTitle: "Yes") { [weak self] in
                 guard let `self` = self else { return }
-                self.dismiss(animated: true) {
-                    self.updateCardInLocalStorage(model: model.transform())
-                    self.postCardAddedNotification(id: model.id ?? "")
-                    self.completionHandler?()
-                }
+                self.navigationController?.popViewController(animated: true)
+                self.updateCardInLocalStorage(model: model.transform())
+                self.postCardAddedNotification(id: model.id ?? "")
+                self.completionHandler?()
+                
             }
         } else {
             guard isCardAlreadyInWallet(modelToAdd: model) == false else {
                 alert(title: "Duplicate", message: "This card is already saved in your wallet.") { [weak self] in
                     guard let `self` = self else {return}
-                    self.dismiss(animated: true) {
-                        self.completionHandler?()
-                    }
+                    self.navigationController?.popViewController(animated: true)
+                    self.completionHandler?()
+                    
                 }
                 return
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.dismiss(animated: true) {
-                    self.appendModelToLocalStorage(model: model.transform())
-                    self.postCardAddedNotification(id: model.id ?? "")
-                    self.completionHandler?()
-                }
+                self.navigationController?.popViewController(animated: true)
+                self.appendModelToLocalStorage(model: model.transform())
+                self.postCardAddedNotification(id: model.id ?? "")
+                self.completionHandler?()
+                
             }
             
             

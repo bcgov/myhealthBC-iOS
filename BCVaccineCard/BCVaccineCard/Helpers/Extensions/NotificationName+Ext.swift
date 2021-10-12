@@ -10,4 +10,5 @@ import Foundation
 extension Notification.Name {
     static let tabChanged = Notification.Name("TabChanged")
     static let reloadNewsFeed = Notification.Name("ReloadNewsFeed")
+    static let cardAddedNotification = Notification.Name("cardAddedNotification")
 }
