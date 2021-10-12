@@ -66,3 +66,7 @@
 "HealthGatewayOption" = "Access your vaccine QR code";
 "SettingsOpeningText" = "My Health BC app is the official mobile application from the Government of British Columbia which allow you to store and organize the proof of vaccination of you and your family members.";
 "Help" = "Help";
+"Resource" = "Resource";
+"ResourceDescriptionText" = "Find information about where and how to get a COVID-19 testing.";
+"CovidTestLocationText" = "Where to get your COVID-19 Testing?";
+"CovidTestKitText" = "Where to get your COVID-19 Rapid Testing Kit?";

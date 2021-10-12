@@ -8,7 +8,7 @@
 import UIKit
 
 enum TabBarVCs {
-    case healthPass, records, checker, booking, notifications
+    case healthPass, records, resource, booking, newsFeed
     
     struct Properties {
         let title: String
@@ -22,12 +22,12 @@ enum TabBarVCs {
             return Properties(title: .healthPass, tabBarImage: #imageLiteral(resourceName: "my-cards-tab"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .records:
             return nil
-        case .checker:
-            return nil
+        case .resource:
+            return Properties(title: .resource, tabBarImage: #imageLiteral(resourceName: "resource-tab"), baseViewController: ResourceViewController.constructResourceViewController())
         case .booking:
             return nil
-        case .notifications:
-            return nil
+        case .newsFeed:
+            return Properties(title: .newsFeed, tabBarImage: #imageLiteral(resourceName: "news-feed-tab"), baseViewController: NewsFeedViewController.constructNewsFeedViewController())
         }
     }
 }
@@ -51,7 +51,7 @@ class TabBarController: UITabBarController {
         self.tabBar.tintColor = AppColours.appBlue
         self.tabBar.barTintColor = .white
         self.delegate = self
-        self.viewControllers = setViewControllers(withVCs: [.healthPass])
+        self.viewControllers = setViewControllers(withVCs: [.healthPass, .resource, .newsFeed])
         self.selectedIndex = 0
     }
     

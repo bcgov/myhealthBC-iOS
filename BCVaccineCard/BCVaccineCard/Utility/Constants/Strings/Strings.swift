@@ -93,8 +93,15 @@ extension String {
     static var settingsOpeningText: String { return "SettingsOpeningText".localized }
     static var help: String { return "Help".localized }
     
+    // Resource screen
+    static var resource: String { return "Resource".localized }
+    static var resourceDescriptionText: String { return "ResourceDescriptionText".localized }
+    static var covidTestLocationText: String { return "CovidTestLocationText".localized }
+    static var covidTestKitText: String { return "CovidTestKitText".localized }
     
     
+    // News Feed screen
+    /// Already have newsFeed string from onboarding flow
     
     
 }

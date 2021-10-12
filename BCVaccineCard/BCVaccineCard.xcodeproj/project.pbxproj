@@ -141,6 +141,26 @@
 		795AA7552715189C00E59FF1 /* InitialOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */; };
 		795AA757271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */; };
 		795AA758271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */; };
+		795AA75C27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA75B27155EDE00E59FF1 /* NewsFeedViewController.swift */; };
+		795AA75D27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA75B27155EDE00E59FF1 /* NewsFeedViewController.swift */; };
+		795AA76127155F0900E59FF1 /* ResourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA76027155F0900E59FF1 /* ResourceViewController.swift */; };
+		795AA76227155F0900E59FF1 /* ResourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA76027155F0900E59FF1 /* ResourceViewController.swift */; };
+		795AA76427155F6300E59FF1 /* NewsFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 795AA76327155F6300E59FF1 /* NewsFeed.storyboard */; };
+		795AA76527155F6300E59FF1 /* NewsFeed.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 795AA76327155F6300E59FF1 /* NewsFeed.storyboard */; };
+		795AA76727155F7100E59FF1 /* Resource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 795AA76627155F7100E59FF1 /* Resource.storyboard */; };
+		795AA76827155F7100E59FF1 /* Resource.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 795AA76627155F7100E59FF1 /* Resource.storyboard */; };
+		795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA769271560F100E59FF1 /* NewsFeedResponse.swift */; };
+		795AA76B271560F100E59FF1 /* NewsFeedResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA769271560F100E59FF1 /* NewsFeedResponse.swift */; };
+		795AA76D271563C600E59FF1 /* ResourceDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA76C271563C500E59FF1 /* ResourceDataSource.swift */; };
+		795AA76E271563C600E59FF1 /* ResourceDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA76C271563C500E59FF1 /* ResourceDataSource.swift */; };
+		795AA7732715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7712715650900E59FF1 /* NewsFeedTableViewCell.swift */; };
+		795AA7742715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7712715650900E59FF1 /* NewsFeedTableViewCell.swift */; };
+		795AA7752715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA7722715650900E59FF1 /* NewsFeedTableViewCell.xib */; };
+		795AA7762715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA7722715650900E59FF1 /* NewsFeedTableViewCell.xib */; };
+		795AA7792715652C00E59FF1 /* ResourceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7772715652C00E59FF1 /* ResourceTableViewCell.swift */; };
+		795AA77A2715652C00E59FF1 /* ResourceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7772715652C00E59FF1 /* ResourceTableViewCell.swift */; };
+		795AA77B2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA7782715652C00E59FF1 /* ResourceTableViewCell.xib */; };
+		795AA77C2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA7782715652C00E59FF1 /* ResourceTableViewCell.xib */; };
 		795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
 		795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
 		7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
@@ -165,17 +185,13 @@
 		7967E76326FBDE0100EEF510 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */; };
 		79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
 		79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA071270CB71D00FF30AB /* Records.storyboard */; };
-		79BDA074270CB72800FF30AB /* Checker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA073270CB72800FF30AB /* Checker.storyboard */; };
 		79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA075270CB73800FF30AB /* Booking.storyboard */; };
-		79BDA078270CB74800FF30AB /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA077270CB74800FF30AB /* Notifications.storyboard */; };
 		79BDA07B270CB89900FF30AB /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA07A270CB89900FF30AB /* Strings.swift */; };
 		79BDA07E270CB8F300FF30AB /* String+Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA07D270CB8F300FF30AB /* String+Localizable.swift */; };
 		79BDA083270CEE4700FF30AB /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA07A270CB89900FF30AB /* Strings.swift */; };
 		79BDA084270CEE5A00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
 		79BDA085270CEE5E00FF30AB /* Records.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA071270CB71D00FF30AB /* Records.storyboard */; };
-		79BDA086270CEE6100FF30AB /* Checker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA073270CB72800FF30AB /* Checker.storyboard */; };
 		79BDA087270CEE6400FF30AB /* Booking.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA075270CB73800FF30AB /* Booking.storyboard */; };
-		79BDA088270CEE6700FF30AB /* Notifications.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA077270CB74800FF30AB /* Notifications.storyboard */; };
 		79BDA089270CEE8000FF30AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA08C270CEE8000FF30AB /* Localizable.strings */; };
 		79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA08C270CEE8000FF30AB /* Localizable.strings */; };
 		79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA08E270E9E0800FF30AB /* VaccineCardView.swift */; };
@@ -275,6 +291,16 @@
 		795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingViewController.swift; path = BCVaccineCard/NetworkLayer/GatewaysAndWorkers/InitialOnboardingViewController.swift; sourceTree = SOURCE_ROOT; };
 		795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingView.swift; path = BCVaccineCard/NetworkLayer/GatewaysAndWorkers/InitialOnboardingView.swift; sourceTree = SOURCE_ROOT; };
 		795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = InitialOnboardingView.xib; path = BCVaccineCard/NetworkLayer/GatewaysAndWorkers/InitialOnboardingView.xib; sourceTree = SOURCE_ROOT; };
+		795AA75B27155EDE00E59FF1 /* NewsFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewsFeedViewController.swift; path = BCVaccineCard/Screens/NewsFeedFlow/NewsFeedBase/NewsFeedViewController.swift; sourceTree = SOURCE_ROOT; };
+		795AA76027155F0900E59FF1 /* ResourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewController.swift; sourceTree = "<group>"; };
+		795AA76327155F6300E59FF1 /* NewsFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NewsFeed.storyboard; sourceTree = "<group>"; };
+		795AA76627155F7100E59FF1 /* Resource.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Resource.storyboard; sourceTree = "<group>"; };
+		795AA769271560F100E59FF1 /* NewsFeedResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedResponse.swift; sourceTree = "<group>"; };
+		795AA76C271563C500E59FF1 /* ResourceDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceDataSource.swift; sourceTree = "<group>"; };
+		795AA7712715650900E59FF1 /* NewsFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewsFeedTableViewCell.swift; path = BCVaccineCard/Models/LocalModels/NewsFeedTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		795AA7722715650900E59FF1 /* NewsFeedTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NewsFeedTableViewCell.xib; path = BCVaccineCard/Models/LocalModels/NewsFeedTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		795AA7772715652C00E59FF1 /* ResourceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResourceTableViewCell.swift; path = BCVaccineCard/Models/LocalModels/ResourceTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		795AA7782715652C00E59FF1 /* ResourceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ResourceTableViewCell.xib; path = BCVaccineCard/Models/LocalModels/ResourceTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		795E68252703DBA100948502 /* UIAccessibility+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAccessibility+EXT.swift"; sourceTree = "<group>"; };
 		7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableViewCell.swift; sourceTree = "<group>"; };
 		7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormTableViewCell.xib; sourceTree = "<group>"; };
@@ -296,9 +322,7 @@
 		7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HealthPass.storyboard; sourceTree = "<group>"; };
 		79BDA071270CB71D00FF30AB /* Records.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Records.storyboard; sourceTree = "<group>"; };
-		79BDA073270CB72800FF30AB /* Checker.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Checker.storyboard; sourceTree = "<group>"; };
 		79BDA075270CB73800FF30AB /* Booking.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Booking.storyboard; sourceTree = "<group>"; };
-		79BDA077270CB74800FF30AB /* Notifications.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Notifications.storyboard; sourceTree = "<group>"; };
 		79BDA07A270CB89900FF30AB /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		79BDA07D270CB8F300FF30AB /* String+Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Localizable.swift"; sourceTree = "<group>"; };
 		79BDA08B270CEE8000FF30AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -446,10 +470,10 @@
 				7944F67E26F12613006B9444 /* Main.storyboard */,
 				79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */,
 				79BDA071270CB71D00FF30AB /* Records.storyboard */,
-				79BDA073270CB72800FF30AB /* Checker.storyboard */,
+				795AA76627155F7100E59FF1 /* Resource.storyboard */,
 				79BDA075270CB73800FF30AB /* Booking.storyboard */,
-				79BDA077270CB74800FF30AB /* Notifications.storyboard */,
 				7944F68626F1261B006B9444 /* LaunchScreen.storyboard */,
+				795AA76327155F6300E59FF1 /* NewsFeed.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -498,6 +522,8 @@
 				795AA74E2715149100E59FF1 /* OnboardingFlow */,
 				7944F70726F390E4006B9444 /* SettingsFlow */,
 				7944F6F226F30262006B9444 /* HealthPassFlow */,
+				795AA75A27155E0F00E59FF1 /* ResourceFlow */,
+				795AA75927155E0300E59FF1 /* NewsFeedFlow */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -608,6 +634,8 @@
 		7944F6FB26F313EF006B9444 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				795AA770271564ED00E59FF1 /* NewsFeedTableViewCell */,
+				795AA76F271564DD00E59FF1 /* ResourceTableViewCell */,
 				794BD6732703A3AF0084ADA8 /* ImageTableViewCell */,
 				7967E74426F906FB00EEF510 /* SettingsTableViewCell */,
 				7967E73026F3DC5F00EEF510 /* FormTableViewCell */,
@@ -722,6 +750,7 @@
 			isa = PBXGroup;
 			children = (
 				795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */,
+				795AA769271560F100E59FF1 /* NewsFeedResponse.swift */,
 			);
 			path = NetworkModels;
 			sourceTree = "<group>";
@@ -733,6 +762,7 @@
 				7967E73926F517F600EEF510 /* FormDataSource.swift */,
 				7967E74926F908E400EEF510 /* Setting.swift */,
 				795AA72E27108C1C00E59FF1 /* GatewayVaccineCardRequest.swift */,
+				795AA76C271563C500E59FF1 /* ResourceDataSource.swift */,
 			);
 			path = LocalModels;
 			sourceTree = "<group>";
@@ -769,6 +799,56 @@
 				795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */,
 			);
 			path = InitialOnboardingView;
+			sourceTree = "<group>";
+		};
+		795AA75927155E0300E59FF1 /* NewsFeedFlow */ = {
+			isa = PBXGroup;
+			children = (
+				795AA75E27155EED00E59FF1 /* NewsFeedBase */,
+			);
+			path = NewsFeedFlow;
+			sourceTree = "<group>";
+		};
+		795AA75A27155E0F00E59FF1 /* ResourceFlow */ = {
+			isa = PBXGroup;
+			children = (
+				795AA75F27155EF900E59FF1 /* ResourceBase */,
+			);
+			path = ResourceFlow;
+			sourceTree = "<group>";
+		};
+		795AA75E27155EED00E59FF1 /* NewsFeedBase */ = {
+			isa = PBXGroup;
+			children = (
+				795AA75B27155EDE00E59FF1 /* NewsFeedViewController.swift */,
+			);
+			path = NewsFeedBase;
+			sourceTree = "<group>";
+		};
+		795AA75F27155EF900E59FF1 /* ResourceBase */ = {
+			isa = PBXGroup;
+			children = (
+				795AA76027155F0900E59FF1 /* ResourceViewController.swift */,
+			);
+			path = ResourceBase;
+			sourceTree = "<group>";
+		};
+		795AA76F271564DD00E59FF1 /* ResourceTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				795AA7772715652C00E59FF1 /* ResourceTableViewCell.swift */,
+				795AA7782715652C00E59FF1 /* ResourceTableViewCell.xib */,
+			);
+			path = ResourceTableViewCell;
+			sourceTree = "<group>";
+		};
+		795AA770271564ED00E59FF1 /* NewsFeedTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				795AA7712715650900E59FF1 /* NewsFeedTableViewCell.swift */,
+				795AA7722715650900E59FF1 /* NewsFeedTableViewCell.xib */,
+			);
+			path = NewsFeedTableViewCell;
 			sourceTree = "<group>";
 		};
 		7967E73026F3DC5F00EEF510 /* FormTableViewCell */ = {
@@ -1055,13 +1135,13 @@
 				7944F68826F1261B006B9444 /* LaunchScreen.storyboard in Resources */,
 				7944F6D426F12C00006B9444 /* AppStyleButton.xib in Resources */,
 				7967E75026F9145700EEF510 /* BCSans-Regular.otf in Resources */,
-				79BDA074270CB72800FF30AB /* Checker.storyboard in Resources */,
 				7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */,
 				7967E74826F9071A00EEF510 /* SettingsTableViewCell.xib in Resources */,
 				795AA757271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
-				79BDA078270CB74800FF30AB /* Notifications.storyboard in Resources */,
+				795AA7752715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
 				7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */,
 				7944F70026F3141A006B9444 /* VaccineCardTableViewCell.xib in Resources */,
+				795AA77B2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */,
 				7944F70526F31451006B9444 /* NoCardsTableViewCell.xib in Resources */,
 				7967E75126F9145700EEF510 /* BCSans-Bold.otf in Resources */,
 				79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */,
@@ -1073,10 +1153,12 @@
 				79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */,
 				7944F6D726F12C00006B9444 /* VaxQRZoomedInView.xib in Resources */,
 				79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */,
+				795AA76427155F6300E59FF1 /* NewsFeed.storyboard in Resources */,
 				7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */,
 				79BDA092270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				79BDA09D270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.xib in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
+				795AA76727155F7100E59FF1 /* Resource.storyboard in Resources */,
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
 				7944F68026F12613006B9444 /* Main.storyboard in Resources */,
 			);
@@ -1101,14 +1183,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				794BD65B2702EEC00084ADA8 /* LaunchScreen.storyboard in Resources */,
+				795AA77C2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */,
 				794BD65C2702EEC00084ADA8 /* AppStyleButton.xib in Resources */,
+				795AA76827155F7100E59FF1 /* Resource.storyboard in Resources */,
 				794BD65D2702EEC00084ADA8 /* BCSans-Regular.otf in Resources */,
-				79BDA086270CEE6100FF30AB /* Checker.storyboard in Resources */,
 				794BD65E2702EEC00084ADA8 /* TextTableViewCell.xib in Resources */,
 				794BD65F2702EEC00084ADA8 /* SettingsTableViewCell.xib in Resources */,
-				79BDA088270CEE6700FF30AB /* Notifications.storyboard in Resources */,
 				794BD6602702EEC00084ADA8 /* BCSans-Italic.otf in Resources */,
 				794BD6612702EEC00084ADA8 /* VaccineCardTableViewCell.xib in Resources */,
+				795AA7762715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
 				794BD6622702EEC00084ADA8 /* NoCardsTableViewCell.xib in Resources */,
 				79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				794BD6632702EEC00084ADA8 /* BCSans-Bold.otf in Resources */,
@@ -1123,6 +1206,7 @@
 				795AA758271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
 				794BD6682702EEC00084ADA8 /* FormTableViewCell.xib in Resources */,
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
+				795AA76527155F6300E59FF1 /* NewsFeed.storyboard in Resources */,
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
 				794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */,
 				79BDA09E270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.xib in Resources */,
@@ -1279,6 +1363,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */,
+				795AA7792715652C00E59FF1 /* ResourceTableViewCell.swift in Sources */,
 				7944F6BE26F12BD5006B9444 /* VaccinePassportModel.swift in Sources */,
 				7967E73D26F536AF00EEF510 /* FormTextFieldView.swift in Sources */,
 				7944F6B426F12BA2006B9444 /* Storyboard.swift in Sources */,
@@ -1292,6 +1377,7 @@
 				79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				7944F6F526F30293006B9444 /* CovidVaccineCardsViewController.swift in Sources */,
 				2912314326F9433600CF5F3B /* UIConstants.swift in Sources */,
+				795AA7732715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
 				79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				794BD6272702E0E90084ADA8 /* CustomNavigationController.swift in Sources */,
 				795AA7482713FFF800E59FF1 /* WorkerFactory.swift in Sources */,
@@ -1319,15 +1405,19 @@
 				7967E74A26F908E400EEF510 /* Setting.swift in Sources */,
 				795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */,
+				795AA76D271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
 				7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */,
 				795AA7412713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */,
 				7944F71426F3A26D006B9444 /* QRSelectionTableViewCell.swift in Sources */,
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
 				795AA7542715189C00E59FF1 /* InitialOnboardingView.swift in Sources */,
+				795AA75C27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
 				795AA7452713FFEB00E59FF1 /* RemoteFactory.swift in Sources */,
 				79BDA07B270CB89900FF30AB /* Strings.swift in Sources */,
+				795AA76127155F0900E59FF1 /* ResourceViewController.swift in Sources */,
 				79BDA09B270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.swift in Sources */,
+				795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
@@ -1363,6 +1453,7 @@
 				794BD62F2702EEC00084ADA8 /* UIView+Ext.swift in Sources */,
 				794BD6302702EEC00084ADA8 /* VaccinePassportModel.swift in Sources */,
 				794BD6312702EEC00084ADA8 /* FormTextFieldView.swift in Sources */,
+				795AA7742715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
 				794BD6322702EEC00084ADA8 /* Storyboard.swift in Sources */,
 				795AA73327108F5900E59FF1 /* NetworkAccessor.swift in Sources */,
 				794BD6332702EEC00084ADA8 /* Date+Ext.swift in Sources */,
@@ -1377,6 +1468,7 @@
 				794BD6382702EEC00084ADA8 /* SettingsViewController.swift in Sources */,
 				794BD6392702EEC00084ADA8 /* CovidVaccineCardsViewController.swift in Sources */,
 				794BD63A2702EEC00084ADA8 /* UIConstants.swift in Sources */,
+				795AA77A2715652C00E59FF1 /* ResourceTableViewCell.swift in Sources */,
 				794BD63B2702EEC00084ADA8 /* CustomNavigationController.swift in Sources */,
 				794BD63C2702EEC00084ADA8 /* AppStyleButton.swift in Sources */,
 				795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
@@ -1392,6 +1484,7 @@
 				794BD6422702EEC00084ADA8 /* QRScannerView.swift in Sources */,
 				794BD6432702EEC00084ADA8 /* SettingsTableViewCell.swift in Sources */,
 				794BD6442702EEC00084ADA8 /* Defaults.swift in Sources */,
+				795AA76E271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
 				794BD6452702EEC00084ADA8 /* UIColor+EXT.swift in Sources */,
 				794BD6462702EEC00084ADA8 /* VaxQRZoomedInView.swift in Sources */,
 				794BD6472702EEC00084ADA8 /* QRRetrievalMethodViewController.swift in Sources */,
@@ -1400,12 +1493,15 @@
 				794BD6492702EEC00084ADA8 /* FormTableViewCell.swift in Sources */,
 				794BD64A2702EEC00084ADA8 /* Setting.swift in Sources */,
 				794BD64B2702EEC00084ADA8 /* AccessibilityLabels.swift in Sources */,
+				795AA76B271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
+				795AA75D27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
 				794BD64C2702EEC00084ADA8 /* ZoomedInPopUpVC.swift in Sources */,
 				795AA73C271092D500E59FF1 /* MIMEType.swift in Sources */,
 				794BD64D2702EEC00084ADA8 /* NoCardsTableViewCell.swift in Sources */,
 				79BDA083270CEE4700FF30AB /* Strings.swift in Sources */,
 				794BD64E2702EEC00084ADA8 /* QRSelectionTableViewCell.swift in Sources */,
 				794BD64F2702EEC00084ADA8 /* TextTableViewCell.swift in Sources */,
+				795AA76227155F0900E59FF1 /* ResourceViewController.swift in Sources */,
 				795AA751271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
