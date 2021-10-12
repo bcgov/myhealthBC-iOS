@@ -113,7 +113,6 @@
 		794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
 		794BD6762703A3DB0084ADA8 /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD6742703A3DA0084ADA8 /* ImageTableViewCell.swift */; };
 		794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 794BD6752703A3DA0084ADA8 /* ImageTableViewCell.xib */; };
-		795AA71B270F8F6C00E59FF1 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA71A270F8F6C00E59FF1 /* Alamofire */; };
 		795AA721271083F100E59FF1 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 795AA720271083F100E59FF1 /* SwiftyJSON */; };
 		795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
@@ -350,7 +349,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7967E76326FBDE0100EEF510 /* FirebaseCrashlytics in Frameworks */,
-				795AA71B270F8F6C00E59FF1 /* Alamofire in Frameworks */,
 				7967E76126FBDE0100EEF510 /* FirebaseAnalytics in Frameworks */,
 				795AA721271083F100E59FF1 /* SwiftyJSON in Frameworks */,
 				2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */,
@@ -1020,7 +1018,6 @@
 				2912313A26F93FB900CF5F3B /* BCVaccineValidator */,
 				7967E76026FBDE0100EEF510 /* FirebaseAnalytics */,
 				7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */,
-				795AA71A270F8F6C00E59FF1 /* Alamofire */,
 				795AA720271083F100E59FF1 /* SwiftyJSON */,
 			);
 			productName = BCVaccineCard;
@@ -1124,7 +1121,6 @@
 			packageReferences = (
 				2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */,
 				7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				795AA719270F8F6C00E59FF1 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = 7944F67626F12613006B9444 /* Products */;
@@ -1946,14 +1942,6 @@
 				minimumVersion = 8.7.0;
 			};
 		};
-		795AA719270F8F6C00E59FF1 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.4.0;
-			};
-		};
 		795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
@@ -1992,11 +1980,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
-		};
-		795AA71A270F8F6C00E59FF1 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 795AA719270F8F6C00E59FF1 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
 		};
 		795AA720271083F100E59FF1 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;

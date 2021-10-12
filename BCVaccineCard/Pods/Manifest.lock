@@ -1,16 +1,24 @@
 PODS:
+  - Alamofire (5.4.1)
+  - AlamofireRSSParser (2.4.0):
+    - Alamofire (~> 5.0)
   - QueueITLibrary (3.0.7)
 
 DEPENDENCIES:
+  - AlamofireRSSParser
   - QueueITLibrary (~> 3.0.3)
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - AlamofireRSSParser
     - QueueITLibrary
 
 SPEC CHECKSUMS:
+  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
+  AlamofireRSSParser: dab86644d4d220b313767c33ef09e7acf11f641a
   QueueITLibrary: 9840861051bd5b99dbf88700dd1a12ff71786b62
 
-PODFILE CHECKSUM: 7ee3a23f22936d098faa53a1021fe08ea3da92fd
+PODFILE CHECKSUM: 69785c84b526794681d6bfdbbcb27ef28f44b2e1
 
 COCOAPODS: 1.10.1

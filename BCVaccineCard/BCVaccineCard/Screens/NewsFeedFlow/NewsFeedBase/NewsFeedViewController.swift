@@ -6,9 +6,11 @@
 // https://news.gov.bc.ca/news-subscribe/covid-19/feed
 
 import UIKit
+import AlamofireRSSParser
 import Alamofire
 
 // TODO: Refactor so that this screen uses networking layer instead of separate implementation
+// Leaving commented code for now as we may be using that later, once refactoring begins
 
 class NewsFeedViewController: BaseViewController {
 
@@ -63,15 +65,21 @@ extension NewsFeedViewController {
 extension NewsFeedViewController {
     private func fetchDataSource() {
         guard let url = URL(string: "https://news.gov.bc.ca/news-subscribe/covid-19/feed") else { return }
-        AF.request(url, method: .get, parameters: nil).response { response in
-            guard let xmlData = response.data else { return }
-            guard let xmlString = String(data: xmlData, encoding: .utf8) as? String else { return }
-            let jsonString = ParseXMLData(xml: xmlString).parseXML()
-            guard let jsonData = jsonString.data(using: .utf8) else {return}
-//            guard let jsonResponse = (try? JSONSerialization.jsonObject(with: jsonData)) as? [[String:Any]] else {return}
-//            print("CONNOR RESPONSE: ", jsonResponse)
-            let newsFeed = try? JSONDecoder().decode(NewsFeedData.self, from: jsonData)
-            print("CONNOR: ", newsFeed)
+//        AF.request(url, method: .get, parameters: nil).response { response in
+//            guard let xmlData = response.data else { return }
+//            guard let xmlString = String(data: xmlData, encoding: .utf8) as? String else { return }
+//            let jsonString = ParseXMLData(xml: xmlString).parseXML()
+//            guard let jsonData = jsonString.data(using: .utf8) else {return}
+////            guard let jsonResponse = (try? JSONSerialization.jsonObject(with: jsonData)) as? [[String:Any]] else {return}
+////            print("CONNOR RESPONSE: ", jsonResponse)
+//            let newsFeed = try? JSONDecoder().decode(NewsFeedData.self, from: jsonData)
+//            print("CONNOR: ", newsFeed)
+//        }
+        AF.request(url).responseRSS() { (response) -> Void in
+            if let feed: RSSFeed = response.value {
+                self.dataSource = feed.items.map { Item(link: $0.link, title: $0.title, itemDescription: $0.itemDescription, pubDate: $0.pubDate) }
+                self.tableView.reloadData()
+            }
         }
     }
 }
@@ -110,7 +118,7 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
 //        guard let dataSource = self.dataSource else { return }
 //        let link = dataSource.channel.item[indexPath.row].link
 //        self.openURLInSafariVC(withURL: link)
-        let link = dataSource[indexPath.row].link
+        guard let link = dataSource[indexPath.row].link else { return }
         self.openURLInSafariVC(withURL: link)
     }
     

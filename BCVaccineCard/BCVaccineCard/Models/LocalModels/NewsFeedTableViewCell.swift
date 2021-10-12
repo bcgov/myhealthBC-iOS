@@ -34,9 +34,16 @@ class NewsFeedTableViewCell: UITableViewCell {
 //    }
     
     func configure(item: Item) {
+        newsTitleLabel.isHidden = item.title == nil
         newsTitleLabel.text = item.title
+        newsDetailsLabel.isHidden = item.itemDescription == nil
         newsDetailsLabel.text = item.itemDescription
-        newsDateLabel.text = item.pubDate
+        guard let date = item.pubDate else {
+            newsDateLabel.isHidden = true
+            return
+        }
+        let dateString = Date.Formatter.yearMonthDay.string(from: date)
+        newsDateLabel.text = dateString
     }
     
 }
