@@ -162,6 +162,8 @@
 		795AA77C2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA7782715652C00E59FF1 /* ResourceTableViewCell.xib */; };
 		795AA77F2715FC9B00E59FF1 /* ParseXMLData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA77E2715FC9B00E59FF1 /* ParseXMLData.swift */; };
 		795AA7802715FC9B00E59FF1 /* ParseXMLData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA77E2715FC9B00E59FF1 /* ParseXMLData.swift */; };
+		795AA78527162AAA00E59FF1 /* NotificationName+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA78427162AA900E59FF1 /* NotificationName+Ext.swift */; };
+		795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA78427162AA900E59FF1 /* NotificationName+Ext.swift */; };
 		795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
 		795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
 		7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
@@ -303,6 +305,7 @@
 		795AA7772715652C00E59FF1 /* ResourceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResourceTableViewCell.swift; path = BCVaccineCard/Models/LocalModels/ResourceTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		795AA7782715652C00E59FF1 /* ResourceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ResourceTableViewCell.xib; path = BCVaccineCard/Models/LocalModels/ResourceTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		795AA77E2715FC9B00E59FF1 /* ParseXMLData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseXMLData.swift; sourceTree = "<group>"; };
+		795AA78427162AA900E59FF1 /* NotificationName+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Ext.swift"; sourceTree = "<group>"; };
 		795E68252703DBA100948502 /* UIAccessibility+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAccessibility+EXT.swift"; sourceTree = "<group>"; };
 		7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableViewCell.swift; sourceTree = "<group>"; };
 		7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormTableViewCell.xib; sourceTree = "<group>"; };
@@ -552,6 +555,7 @@
 				7967E75926F930E200EEF510 /* UIView+Ext.swift */,
 				29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */,
 				795E68252703DBA100948502 /* UIAccessibility+EXT.swift */,
+				795AA78427162AA900E59FF1 /* NotificationName+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1415,6 +1419,7 @@
 				795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */,
 				795AA76D271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
+				795AA78527162AAA00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
 				7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */,
 				795AA7412713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */,
@@ -1515,6 +1520,7 @@
 				795AA751271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
+				795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				79BDA09C270EE12400FF30AB /* PrimaryVaccineCardTableViewCell.swift in Sources */,
 				794BD6512702EEC00084ADA8 /* String+EXT.swift in Sources */,
 				794BD6522702EEC00084ADA8 /* UIImage+EXT.swift in Sources */,

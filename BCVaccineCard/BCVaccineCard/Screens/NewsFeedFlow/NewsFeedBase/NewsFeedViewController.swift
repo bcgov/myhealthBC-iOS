@@ -28,7 +28,7 @@ class NewsFeedViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        setup()
+        observerSetup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,11 +42,22 @@ class NewsFeedViewController: BaseViewController {
         return .lightContent
     }
     
+    private func observerSetup() {
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadNewsFeed), name: .reloadNewsFeed, object: nil)
+    }
+    
     private func setup() {
         fetchDataSource()
         setupTableView()
     }
 
+}
+
+// MARK: Reload news feed and table view on tab changed
+extension NewsFeedViewController {
+    @objc private func reloadNewsFeed() {
+        self.setup()
+    }
 }
 
 // MARK: Navigation setup
@@ -75,10 +86,12 @@ extension NewsFeedViewController {
 //            let newsFeed = try? JSONDecoder().decode(NewsFeedData.self, from: jsonData)
 //            print("CONNOR: ", newsFeed)
 //        }
+        self.tableView.startLoadingIndicator(backgroundColor: .clear)
         AF.request(url).responseRSS() { (response) -> Void in
             if let feed: RSSFeed = response.value {
                 self.dataSource = feed.items.map { Item(link: $0.link, title: $0.title, itemDescription: $0.itemDescription, pubDate: $0.pubDate) }
                 self.tableView.reloadData()
+                self.tableView.endLoadingIndicator()
             }
         }
     }

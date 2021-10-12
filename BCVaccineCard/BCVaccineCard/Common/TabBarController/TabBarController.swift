@@ -53,6 +53,7 @@ class TabBarController: UITabBarController {
         self.delegate = self
         self.viewControllers = setViewControllers(withVCs: [.healthPass, .resource, .newsFeed])
         self.selectedIndex = 0
+        setupObserver()
     }
     
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {
@@ -69,12 +70,23 @@ class TabBarController: UITabBarController {
         }
         return viewControllers
     }
+    
+    private func setupObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
+    }
+    
+    @objc private func tabChanged(_ notification: Notification) {
+        guard let viewController = (notification.userInfo?["viewController"] as? CustomNavigationController)?.visibleViewController else { return }
+        if viewController is NewsFeedViewController {
+            NotificationCenter.default.post(name: .reloadNewsFeed, object: nil, userInfo: nil)
+        }
+    }
 
 }
 
 extension TabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        // Tab Bar tab was tapped here
+        NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
     }
     
 }
