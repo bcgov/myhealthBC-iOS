@@ -40,6 +40,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         }
         if type == .getStarted {
             // TODO: adjust user defaults to show that screen has been shown
+            Defaults.hasSeenInitialOnboardingScreens = true
             let transition = CATransition()
             transition.type = .fade
             transition.duration = 0.3

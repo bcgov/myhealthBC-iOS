@@ -363,3 +363,16 @@ class JSONAny: Codable {
         }
     }
 }
+
+// MARK: FOR NOW, USING THIS AS XML FROM RSS FEED IS TRASH
+
+// MARK: - Item
+struct Item: Codable {
+    let link, title, itemDescription, pubDate: String
+
+    enum CodingKeys: String, CodingKey {
+        case link, title
+        case itemDescription = "description"
+        case pubDate
+    }    
+}

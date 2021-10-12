@@ -161,6 +161,8 @@
 		795AA77A2715652C00E59FF1 /* ResourceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7772715652C00E59FF1 /* ResourceTableViewCell.swift */; };
 		795AA77B2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA7782715652C00E59FF1 /* ResourceTableViewCell.xib */; };
 		795AA77C2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 795AA7782715652C00E59FF1 /* ResourceTableViewCell.xib */; };
+		795AA77F2715FC9B00E59FF1 /* ParseXMLData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA77E2715FC9B00E59FF1 /* ParseXMLData.swift */; };
+		795AA7802715FC9B00E59FF1 /* ParseXMLData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA77E2715FC9B00E59FF1 /* ParseXMLData.swift */; };
 		795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
 		795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
 		7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
@@ -301,6 +303,7 @@
 		795AA7722715650900E59FF1 /* NewsFeedTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = NewsFeedTableViewCell.xib; path = BCVaccineCard/Models/LocalModels/NewsFeedTableViewCell.xib; sourceTree = SOURCE_ROOT; };
 		795AA7772715652C00E59FF1 /* ResourceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResourceTableViewCell.swift; path = BCVaccineCard/Models/LocalModels/ResourceTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		795AA7782715652C00E59FF1 /* ResourceTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ResourceTableViewCell.xib; path = BCVaccineCard/Models/LocalModels/ResourceTableViewCell.xib; sourceTree = SOURCE_ROOT; };
+		795AA77E2715FC9B00E59FF1 /* ParseXMLData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseXMLData.swift; sourceTree = "<group>"; };
 		795E68252703DBA100948502 /* UIAccessibility+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAccessibility+EXT.swift"; sourceTree = "<group>"; };
 		7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableViewCell.swift; sourceTree = "<group>"; };
 		7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormTableViewCell.xib; sourceTree = "<group>"; };
@@ -490,6 +493,7 @@
 		7944F6AF26F12A95006B9444 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				795AA77D2715FC7D00E59FF1 /* XMLConverter */,
 				7944F6B526F12BC3006B9444 /* Colors */,
 				7944F6B726F12BC3006B9444 /* Extensions */,
 			);
@@ -849,6 +853,14 @@
 				795AA7722715650900E59FF1 /* NewsFeedTableViewCell.xib */,
 			);
 			path = NewsFeedTableViewCell;
+			sourceTree = "<group>";
+		};
+		795AA77D2715FC7D00E59FF1 /* XMLConverter */ = {
+			isa = PBXGroup;
+			children = (
+				795AA77E2715FC9B00E59FF1 /* ParseXMLData.swift */,
+			);
+			path = XMLConverter;
 			sourceTree = "<group>";
 		};
 		7967E73026F3DC5F00EEF510 /* FormTableViewCell */ = {
@@ -1402,6 +1414,7 @@
 				7967E74326F900E400EEF510 /* TabBarController.swift in Sources */,
 				7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */,
 				795AA74C2714018600E59FF1 /* HealthGatewayBCWorker.swift in Sources */,
+				795AA77F2715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
 				7967E74A26F908E400EEF510 /* Setting.swift in Sources */,
 				795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */,
@@ -1490,6 +1503,7 @@
 				794BD6472702EEC00084ADA8 /* QRRetrievalMethodViewController.swift in Sources */,
 				794BD6482702EEC00084ADA8 /* TabBarController.swift in Sources */,
 				795AA7422713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */,
+				795AA7802715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
 				794BD6492702EEC00084ADA8 /* FormTableViewCell.swift in Sources */,
 				794BD64A2702EEC00084ADA8 /* Setting.swift in Sources */,
 				794BD64B2702EEC00084ADA8 /* AccessibilityLabels.swift in Sources */,

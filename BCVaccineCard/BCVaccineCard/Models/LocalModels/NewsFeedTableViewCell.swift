@@ -27,7 +27,13 @@ class NewsFeedTableViewCell: UITableViewCell {
         newsDateLabel.textColor = AppColours.textGray
     }
 
-    func configure(item: NewsFeedData.Channel.Item) {
+//    func configure(item: NewsFeedData.Channel.Item) {
+//        newsTitleLabel.text = item.title
+//        newsDetailsLabel.text = item.itemDescription
+//        newsDateLabel.text = item.pubDate
+//    }
+    
+    func configure(item: Item) {
         newsTitleLabel.text = item.title
         newsDetailsLabel.text = item.itemDescription
         newsDateLabel.text = item.pubDate
