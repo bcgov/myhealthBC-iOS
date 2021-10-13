@@ -21,11 +21,12 @@ extension RemoteRequestAccessor: HealthGatewayBCAccessor {
     
     func requestVaccineCard(_ model: GatewayVaccineCardRequest, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
         let url = self.endpointsAccessor.getVaccineCard
+        let interceptor = NetworkRequestInterceptor()
         let headerParameters: Headers = [
             "phn": model.phn,
             "dateOfBirth": model.dateOfBirth,
             "dateOfVaccine": model.dateOfVaccine
         ]
-        self.accessor.request(withURL: url, method: .get, headers: headerParameters, andCompletion: completion)
+        self.accessor.request(withURL: url, method: .get, headers: headerParameters, interceptor: interceptor, andCompletion: completion)
     }    
 }

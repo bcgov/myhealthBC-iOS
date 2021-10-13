@@ -15,19 +15,21 @@ typealias Headers = HTTPHeaders
 typealias RequestParameters = Parameters
 typealias JsonEncoding = JSONEncoding
 typealias UrlEncoding = URLEncoding
+typealias Interceptor = RequestInterceptor
 // FIXME: Will need to edit error response and use that as the response object instead, using ResultError for now as it is the only request
 typealias NetworkRequestCompletion<T: Decodable> = ((Result<T, ResultError>) -> Void)
 
 protocol RemoteAccessor {
     func authorizationHeader(fromToken token: String) -> Headers
     func request<T: Decodable>(withURL url: URL, method: MethodType, encoding: Encoding,
-                               headers: Headers?, parameters: RequestParameters?,
+                               headers: Headers?, parameters: RequestParameters?, interceptor: Interceptor?,
                                andCompletion completion: @escaping NetworkRequestCompletion<T>)
     func request<Parameters: Encodable, T: Decodable>(withURL url: URL, method: MethodType,
                                                       headers: Headers?, encoder: ParameterEncoder, parameters: Parameters?,
+                                                      interceptor: Interceptor?,
                                                       andCompletionHandler completion: @escaping NetworkRequestCompletion<T>)
     func uploadRequest<T: Decodable>(withURL url: URL, method: MethodType, mediaType: MIMEType?,
-                                     headers: Headers, parameters: RequestParameters,
+                                     headers: Headers, parameters: RequestParameters, interceptor: Interceptor?,
                                      andCompletion completion: @escaping NetworkRequestCompletion<T>)
 }
 
@@ -37,9 +39,10 @@ extension RemoteAccessor {
                                encoding: Encoding = JsonEncoding.default,
                                headers: Headers? = nil,
                                parameters: RequestParameters? = nil,
+                               interceptor: Interceptor? = nil,
                                andCompletion completion: @escaping NetworkRequestCompletion<T>) {
         return request(withURL: url, method: method, encoding: encoding, headers: headers,
-                       parameters: parameters, andCompletion: completion)
+                       parameters: parameters, interceptor: interceptor, andCompletion: completion)
     }
     
     func request<Parameters: Encodable, T: Decodable>(
@@ -48,6 +51,7 @@ extension RemoteAccessor {
         headers: Headers? = nil,
         encoder: ParameterEncoder? = nil,
         parameters: Parameters,
+        interceptor: Interceptor? = nil,
         andCompletionHandler completion: @escaping NetworkRequestCompletion<T>) {
         
         let defaultEncoder: ParameterEncoder
@@ -66,6 +70,7 @@ extension RemoteAccessor {
                        headers: headers,
                        encoder: defaultEncoder,
                        parameters: parameters,
+                       interceptor: interceptor,
                        andCompletionHandler: completion)
     }
     
@@ -105,9 +110,9 @@ extension NetworkAccessor: RemoteAccessor {
     }
     
     func request<T: Decodable>(withURL url: URL, method: MethodType, encoding: Encoding,
-                               headers: Headers?, parameters: RequestParameters?,
+                               headers: Headers?, parameters: RequestParameters?, interceptor: Interceptor?,
                                andCompletion completion: @escaping NetworkRequestCompletion<T>) {
-        let request = AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
+        let request = AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor)
         self.execute(request: request, withCompletion: completion)
     }
     
@@ -117,6 +122,7 @@ extension NetworkAccessor: RemoteAccessor {
         headers: Headers?,
         encoder: ParameterEncoder,
         parameters: Parameters?,
+        interceptor: Interceptor?,
         andCompletionHandler completion: @escaping NetworkRequestCompletion<T>) {
         
         let request = AF.request(url, method: method, parameters: parameters, encoder: encoder, headers: headers)
@@ -124,7 +130,7 @@ extension NetworkAccessor: RemoteAccessor {
     }
     
     func uploadRequest<T: Decodable>(withURL url: URL, method: MethodType, mediaType: MIMEType?,
-                                     headers: Headers, parameters: RequestParameters,
+                                     headers: Headers, parameters: RequestParameters, interceptor: Interceptor?,
                                      andCompletion completion: @escaping NetworkRequestCompletion<T>) {
         let request = AF.upload(multipartFormData: { multipartFormData in
             parameters.forEach({ (key, value) in
@@ -138,8 +144,8 @@ extension NetworkAccessor: RemoteAccessor {
         self.execute(request: request, withCompletion: completion)
     }
     
-    func setSessionExpiredObserver(_ observer: @escaping (() -> Void)) {
-        self.sessionExpiredObserver = observer
-    }
+//    func setSessionExpiredObserver(_ observer: @escaping (() -> Void)) {
+//        self.sessionExpiredObserver = observer
+//    }
     
 }
