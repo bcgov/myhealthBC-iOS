@@ -13,6 +13,7 @@ import Firebase
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+    static let sharedInstance = UIApplication.shared.delegate as? AppDelegate
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -25,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func configure() {
         FirebaseApp.configure()
         setupGatewayFactory()
+        setupRootViewController()
     }
     
     // MARK: - Core Data stack
@@ -73,11 +75,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-// Gateway setup
+// MARK: Gateway setup
 extension AppDelegate {
     private func setupGatewayFactory() {
         GatewayAccess.initialize(withFactory: WorkerFactory(remoteFactory: RemoteFactory()))
     }
     
+}
+
+// MARK: Root setup
+extension AppDelegate {
+    private func setupRootViewController() {
+        if Defaults.hasSeenInitialOnboardingScreens {
+            let vc = TabBarController.constructTabBarController()
+            self.window?.rootViewController = vc
+        } else {
+            let vc = InitialOnboardingViewController.constructInitialOnboardingViewController()
+            self.window?.rootViewController = vc
+        }
+        
+    }
 }
 

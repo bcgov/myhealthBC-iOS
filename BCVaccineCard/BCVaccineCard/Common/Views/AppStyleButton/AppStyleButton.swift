@@ -32,6 +32,8 @@ class AppStyleButton: UIView {
         case manageCards
         case addCard
         case viewAll
+        case next
+        case getStarted
         
         var getTitle: String {
             switch self {
@@ -43,6 +45,8 @@ class AppStyleButton: UIView {
             case .manageCards: return .manageCards
             case .addCard: return .addCard
             case .viewAll: return .viewAll
+            case .next: return .next
+            case .getStarted: return .getStarted
             }
         }
     }

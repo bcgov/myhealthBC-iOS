@@ -174,6 +174,7 @@ extension Date {
     var customDateTimeString: String { return Formatter.customDateTime.string(from: self) }
     var monthAndDayString: String { return Formatter.monthAndDay.string(from: self) }
     var monthAndYearString: String { return Formatter.monthAndYear.string(from: self) }
+    var yearMonthDayString: String { return Formatter.yearMonthDay.string(from: self) }
     var customHeaderDateAndTime: String { return Formatter.customHeaderDateAndTime.string(from: self) }
     var customHeaderDateAndTimeShort: String { return Formatter.customHeaderDateAndTimeShort.string(from: self) }
     var issuedOnDateTime: String { return Formatter.issuedOnDateTime.string(from: self) }

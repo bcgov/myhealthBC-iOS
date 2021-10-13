@@ -1,2 +1,4 @@
 ${PODS_ROOT}/Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests-frameworks.sh
+${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/AlamofireRSSParser/AlamofireRSSParser.framework
 ${BUILT_PRODUCTS_DIR}/QueueITLibrary/QueueITLibrary.framework

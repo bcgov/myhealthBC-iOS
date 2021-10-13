@@ -25,21 +25,21 @@ enum NavStyle {
     var itemTintColor: UIColor {
         switch self {
         case .large: return AppColours.appBlue
-        case .small: return .white
+        case .small: return AppColours.appBlue
         }
     }
     
     var navBarColor: UIColor {
         switch self {
         case .large: return .white
-        case .small: return AppColours.appBlue
+        case .small: return .white
         }
     }
     
     var textColor: UIColor {
         switch self {
         case .large: return AppColours.appBlue
-        case .small: return .white
+        case .small: return AppColours.appBlue
         }
     }
     

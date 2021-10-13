@@ -15,7 +15,7 @@ extension UIView {
 }
 
 extension UIView {
-    func startLoadingIndicator() {
+    func startLoadingIndicator(backgroundColor: UIColor = Constants.UI.LoadingIndicator.backdropColor) {
         if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
             existing.removeFromSuperview()
         }
@@ -29,7 +29,7 @@ extension UIView {
         backdrop.addSubview(loadingContainer)
         loadingContainer.addSubview(indicator)
         
-        backdrop.backgroundColor = Constants.UI.LoadingIndicator.backdropColor
+        backdrop.backgroundColor = backgroundColor
         loadingContainer.backgroundColor = Constants.UI.LoadingIndicator.containerColor
         loadingContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadius
         

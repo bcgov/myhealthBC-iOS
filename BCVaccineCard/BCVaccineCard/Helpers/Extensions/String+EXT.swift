@@ -105,4 +105,26 @@ extension Optional where Wrapped == String {
     
 }
 
+// MARK: For XML Parsing
+extension String{
+    // remove amp; from string
+    func removeAMPSemicolon() -> String{
+        return replacingOccurrences(of: "amp;", with: "")
+    }
+    
+    // replace "&" with "And" from string
+    func replaceAnd() -> String{
+        return replacingOccurrences(of: "&", with: "And")
+    }
+    
+    // replace "\n" with "" from string
+    func removeNewLine() -> String{
+        return replacingOccurrences(of: "\n", with: "")
+    }
+    
+    func replaceAposWithApos() -> String{
+        return replacingOccurrences(of: "Andapos;", with: "'")
+    }
+}
+
 

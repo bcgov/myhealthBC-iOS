@@ -7,8 +7,6 @@
 
 import UIKit
 
-let cardAddedNotification = Notification.Name("cardAddedNotification")
-
 class CovidVaccineCardsViewController: BaseViewController {
     
     class func constructCovidVaccineCardsViewController() -> CovidVaccineCardsViewController {
@@ -69,7 +67,7 @@ class CovidVaccineCardsViewController: BaseViewController {
 // MARK: Card change observable setup
 extension CovidVaccineCardsViewController {
     private func cardChangedObservableSetup() {
-        NotificationCenter.default.addObserver(self, selector: #selector(onNotification(notification:)), name: cardAddedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onNotification(notification:)), name: .cardAddedNotification, object: nil)
     }
     
     @objc func onNotification(notification:Notification) {

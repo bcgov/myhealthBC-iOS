@@ -30,6 +30,7 @@ extension String {
     static var addCard: String { return "AddCard".localized }
     static var next: String { return "Next".localized }
     static var viewAll: String { return "ViewAll".localized }
+    static var getStarted: String { return "GetStarted".localized }
     
     // Errors
     static var noCameraAccessTitle: String { return "NoCameraAccessTitle".localized }
@@ -39,6 +40,15 @@ extension String {
     static var unsupportedDeviceTitle: String { return "UnsupportedDeviceTitle".localized }
     static var unsupportedDeviceVideoMessage: String { return "UnsupportedDeviceVideoMessage".localized }
     static var unsupportedDeviceQRMessage: String { return "UnsupportedDeviceQRMessage".localized }
+    
+    // Onboarding flow
+    /// initial onboarding screen
+    static var healthPasses: String { return "HealthPasses".localized }
+    static var healthResource: String { return "HealthResource".localized }
+    static var newsFeed: String { return "NewsFeed".localized }
+    static var initialOnboardingOneDescription: String { return "InitialOnboardingOneDescription".localized }
+    static var initialOnboardingTwoDescription: String { return "InitialOnboardingTwoDescription".localized }
+    static var initialOnboardingThreeDescription: String { return "InitialOnboardingThreeDescription".localized }
     
     // Gateway screen
     /// Validation
@@ -83,8 +93,15 @@ extension String {
     static var settingsOpeningText: String { return "SettingsOpeningText".localized }
     static var help: String { return "Help".localized }
     
+    // Resource screen
+    static var resource: String { return "Resource".localized }
+    static var resourceDescriptionText: String { return "ResourceDescriptionText".localized }
+    static var covidTestLocationText: String { return "CovidTestLocationText".localized }
+    static var covidTestKitText: String { return "CovidTestKitText".localized }
     
     
+    // News Feed screen
+    /// Already have newsFeed string from onboarding flow
     
     
 }

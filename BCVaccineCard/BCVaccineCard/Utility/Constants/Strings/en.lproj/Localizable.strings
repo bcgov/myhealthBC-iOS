@@ -23,6 +23,7 @@
 "AddCard" = "Add Card";
 "Next" = "Next";
 "ViewAll" = "View All";
+"GetStarted" = "Get Started";
 "NoCameraAccessTitle" = "No Camera Access";
 "NoCameraAccessMessage" = "Camera access is necessary for this feature.";
 "MultipleQRCodesMessage" = "There are multiple QR codes in view";
@@ -30,6 +31,12 @@
 "UnsupportedDeviceTitle" = "Unsupported Device";
 "UnsupportedDeviceVideoMessage" = "Please use a device that supports video capture.";
 "UnsupportedDeviceQRMessage" = "Your device does not support QR code scanning.";
+"HealthPasses" = "Health Passes";
+"HealthResource" = "Health Resource";
+"NewsFeed" = "News Feed";
+"InitialOnboardingOneDescription" = "All of your vaccine documents and booking confirmations stored in a single place";
+"InitialOnboardingTwoDescription" = "Find health and COVID test";
+"InitialOnboardingThreeDescription" = "Stay updated on COVID-19 news";
 "PHNLength" = "PHN should be 10 characters.";
 "PHNNumber" = "PHN must be numbers only.";
 "ValidDate" = "Please choose a valid date from the date picker.";
@@ -59,3 +66,7 @@
 "HealthGatewayOption" = "Access your vaccine QR code";
 "SettingsOpeningText" = "My Health BC app is the official mobile application from the Government of British Columbia which allow you to store and organize the proof of vaccination of you and your family members.";
 "Help" = "Help";
+"Resource" = "Resource";
+"ResourceDescriptionText" = "Find information about where and how to get a COVID-19 testing.";
+"CovidTestLocationText" = "Where to get your COVID-19 Testing?";
+"CovidTestKitText" = "Where to get your COVID-19 Rapid Testing Kit?";

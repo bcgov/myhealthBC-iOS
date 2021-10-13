@@ -267,6 +267,17 @@ extension UIViewController {
     }
 }
 
+// MARK: To open a specific URL - for now, keep it simple
+extension UIViewController {
+    func openURLInSafariVC(withURL link: String) {
+        if let url = URL(string: link) {
+            guard UIApplication.shared.canOpenURL(url) else {return}
+            let vc = SFSafariViewController(url: url)
+            present(vc, animated: true)
+        }
+    }
+}
+
 // MARK: Check for duplicates - again, should probably find a better spot for this
 extension UIViewController {
     // Need to think about how to handle this... will likely need two functions
@@ -292,6 +303,6 @@ extension UIViewController {
 // MARK: Notification Center posting
 extension UIViewController {
     func postCardAddedNotification(id: String) {
-        NotificationCenter.default.post(name: cardAddedNotification, object: nil, userInfo: ["id": id])
+        NotificationCenter.default.post(name: .cardAddedNotification, object: nil, userInfo: ["id": id])
     }
 }

@@ -161,7 +161,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         let vc = GatewayFormViewController.constructGatewayFormViewController()
         vc.completionHandler = { [weak self] in
             guard let `self` = self else { return }
-            self.navigationController?.popViewController(animated: true)
+            self.popBackToProperViewController()
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -216,6 +216,35 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         }
         // TODO: text from constants
         self.navigationController?.showBanner(message: "Your proof of vaccination has been added", style: .Top)
+        self.popBackToProperViewController()
+    }
+}
+
+// MARK: Logic for handling what screen to go back to
+extension QRRetrievalMethodViewController {
+    func popBackToProperViewController() {
+        // If we only have one card (or no cards), then go back to health pass with popBackTo
+        // If we have more than one card, we should check if 2nd controller in stack is CovidVaccineCardsViewController, if so, pop back, if not, instantiate, insert at 1, then pop back
+        guard let cards = Defaults.vaccinePassports, cards.count > 1 else {
+            self.popBack(toControllerType: HealthPassViewController.self)
+            return
+        }
+        // check for controller in stack
+        guard let viewControllerStack = self.navigationController?.viewControllers else { return }
+        var containsCovidVaxCardsVC = false
+        for (index, vc) in viewControllerStack.enumerated() {
+            if vc is CovidVaccineCardsViewController {
+                containsCovidVaxCardsVC = true
+            }
+        }
+        guard containsCovidVaxCardsVC == false else {
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
+        guard viewControllerStack.count > 0 else { return }
+        guard viewControllerStack[0] is HealthPassViewController else { return }
+        let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
+        self.navigationController?.viewControllers.insert(vc, at: 1)
         self.navigationController?.popViewController(animated: true)
     }
 }
