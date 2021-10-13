@@ -291,9 +291,9 @@
 		795AA7442713FFEB00E59FF1 /* RemoteFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFactory.swift; sourceTree = "<group>"; };
 		795AA7472713FFF800E59FF1 /* WorkerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerFactory.swift; sourceTree = "<group>"; };
 		795AA74B2714018600E59FF1 /* HealthGatewayBCWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthGatewayBCWorker.swift; sourceTree = "<group>"; };
-		795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingViewController.swift; path = BCVaccineCard/NetworkLayer/GatewaysAndWorkers/InitialOnboardingViewController.swift; sourceTree = SOURCE_ROOT; };
-		795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingView.swift; path = BCVaccineCard/NetworkLayer/GatewaysAndWorkers/InitialOnboardingView.swift; sourceTree = SOURCE_ROOT; };
-		795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = InitialOnboardingView.xib; path = BCVaccineCard/NetworkLayer/GatewaysAndWorkers/InitialOnboardingView.xib; sourceTree = SOURCE_ROOT; };
+		795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingViewController.swift; path = BCVaccineCard/Screens/OnboardingFlow/InitialOnboardingViewController.swift; sourceTree = SOURCE_ROOT; };
+		795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingView.swift; path = BCVaccineCard/Common/Views/InitialOnboardingView/InitialOnboardingView.swift; sourceTree = SOURCE_ROOT; };
+		795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = InitialOnboardingView.xib; path = BCVaccineCard/Common/Views/InitialOnboardingView/InitialOnboardingView.xib; sourceTree = SOURCE_ROOT; };
 		795AA75B27155EDE00E59FF1 /* NewsFeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewsFeedViewController.swift; path = BCVaccineCard/Screens/NewsFeedFlow/NewsFeedBase/NewsFeedViewController.swift; sourceTree = SOURCE_ROOT; };
 		795AA76027155F0900E59FF1 /* ResourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewController.swift; sourceTree = "<group>"; };
 		795AA76327155F6300E59FF1 /* NewsFeed.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = NewsFeed.storyboard; sourceTree = "<group>"; };
@@ -403,6 +403,23 @@
 				29B23B3E26FB88BB00A3AC79 /* CameraViewController.swift */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		791C27A427174712001A6E12 /* InitialOnboardingView */ = {
+			isa = PBXGroup;
+			children = (
+				795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */,
+				795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */,
+			);
+			path = InitialOnboardingView;
+			sourceTree = "<group>";
+		};
+		791C27A52717472C001A6E12 /* OnboardingFlow */ = {
+			isa = PBXGroup;
+			children = (
+				795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */,
+			);
+			path = OnboardingFlow;
 			sourceTree = "<group>";
 		};
 		7944F66C26F12613006B9444 = {
@@ -524,7 +541,7 @@
 		7944F6B226F12AB3006B9444 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				795AA74E2715149100E59FF1 /* OnboardingFlow */,
+				791C27A52717472C001A6E12 /* OnboardingFlow */,
 				7944F70726F390E4006B9444 /* SettingsFlow */,
 				7944F6F226F30262006B9444 /* HealthPassFlow */,
 				795AA75A27155E0F00E59FF1 /* ResourceFlow */,
@@ -571,7 +588,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				795AA7522715187F00E59FF1 /* InitialOnboardingView */,
+				791C27A427174712001A6E12 /* InitialOnboardingView */,
 				2912313C26F93FD900CF5F3B /* Scanner */,
 				7944F6FB26F313EF006B9444 /* TableViewCells */,
 				79BDA08D270E9DD100FF30AB /* VaccineCardView */,
@@ -788,23 +805,6 @@
 				795AA74B2714018600E59FF1 /* HealthGatewayBCWorker.swift */,
 			);
 			path = GatewaysAndWorkers;
-			sourceTree = "<group>";
-		};
-		795AA74E2715149100E59FF1 /* OnboardingFlow */ = {
-			isa = PBXGroup;
-			children = (
-				795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */,
-			);
-			path = OnboardingFlow;
-			sourceTree = "<group>";
-		};
-		795AA7522715187F00E59FF1 /* InitialOnboardingView */ = {
-			isa = PBXGroup;
-			children = (
-				795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */,
-				795AA756271518AB00E59FF1 /* InitialOnboardingView.xib */,
-			);
-			path = InitialOnboardingView;
 			sourceTree = "<group>";
 		};
 		795AA75927155E0300E59FF1 /* NewsFeedFlow */ = {
