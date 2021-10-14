@@ -24,7 +24,7 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var submitButton: AppStyleButton!
     
     private var healthGateway: HealthGatewayBCGateway!
-    var completionHandler: (() -> Void)?
+    var completionHandler: ((String) -> Void)?
     private var dataSource: [FormDataSource] = []
     private var submitButtonEnabled: Bool = false {
         didSet {
@@ -240,8 +240,8 @@ extension GatewayFormViewController {
                 guard let `self` = self else { return }
                 self.navigationController?.popViewController(animated: true)
                 self.updateCardInLocalStorage(model: model.transform())
-                self.postCardAddedNotification(id: model.id ?? "")
-                self.completionHandler?()
+//                self.postCardAddedNotification(id: model.id ?? "")
+                self.completionHandler?(model.id ?? "")
                 
             }
         } else {
@@ -249,7 +249,7 @@ extension GatewayFormViewController {
                 alert(title: "Duplicate", message: "This card is already saved in your wallet.") { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
-                    self.completionHandler?()
+                    self.completionHandler?(model.id ?? "")
                     
                 }
                 return
@@ -257,8 +257,8 @@ extension GatewayFormViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.navigationController?.popViewController(animated: true)
                 self.appendModelToLocalStorage(model: model.transform())
-                self.postCardAddedNotification(id: model.id ?? "")
-                self.completionHandler?()
+//                self.postCardAddedNotification(id: model.id ?? "")
+                self.completionHandler?(model.id ?? "")
                 
             }
             
