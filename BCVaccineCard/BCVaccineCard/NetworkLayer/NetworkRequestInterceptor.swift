@@ -19,6 +19,7 @@ class NetworkRequestInterceptor: Interceptor {
 //    if let token = TokenManager.shared.fetchAccessToken() {
 //      urlRequest.setValue("token \(token)", forHTTPHeaderField: "Authorization")
 //    }
+//      urlRequest.addValue(<#T##value: String##String#>, forHTTPHeaderField: <#T##String#>)
     completion(.success(urlRequest))
   }
   //3

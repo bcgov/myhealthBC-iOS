@@ -29,8 +29,8 @@ class GatewayFormViewController: BaseViewController {
     private var engine: QueueITEngine?
     // These aren't randomly generated, need to find out where to get this from then
     // FIXME: Find out what these are
-    let customerID = "9000201422"
-    let eventAlias = String(UUID().uuidString.prefix(18))
+    var customerID: String?
+    var eventAlias: String?
     
     private var healthGateway: HealthGatewayBCGateway!
     var completionHandler: (() -> Void)?
@@ -303,14 +303,17 @@ extension GatewayFormViewController {
         }
     }
     
-//    private func testCreateVaccineCardRequest(model: GatewayVaccineCardRequest) {
-//        let interceptor = NetworkRequestInterceptor()
-//        let headerParameters: HTTPHeaders = [
-//            "phn": model.phn,
-//            "dateOfBirth": model.dateOfBirth,
-//            "dateOfVaccine": model.dateOfVaccine
-//        ]
-//        AF.request(URL(string: "https://healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
+    private func testCreateVaccineCardRequest(model: GatewayVaccineCardRequest) {
+        let interceptor = NetworkRequestInterceptor()
+        let headerParameters: HTTPHeaders = [
+            "phn": model.phn,
+            "dateOfBirth": model.dateOfBirth,
+            "dateOfVaccine": model.dateOfVaccine
+        ]
+        AF.request(URL(string: "https://healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
+            if let url = response.response?.url {
+                self.getURLComponents(url: url)
+            }
 //            switch response.result {
 //            case .success(let data):
 //                // TODO: Handle logic with duplicates etc here
@@ -320,8 +323,16 @@ extension GatewayFormViewController {
 //                print(error)
 //                // TODO: Show error here
 //            }
-//        }
-//    }
+        }
+    }
+    
+    private func getURLComponents(url: URL) {
+        guard let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return }
+        self.customerID = items.first(where: { $0.name == "c" })?.value
+        self.eventAlias = items.first(where: { $0.name == "e" })?.value
+        queueItSetup()
+        runQueueIt()
+    }
 
 }
 
@@ -334,7 +345,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
             let staticModel = GatewayVaccineCardRequest(phn: "9000201422", dateOfBirth: "1989-12-12", dateOfVaccine: "2021-05-15")
-            createVaccineCardRequest(model: staticModel)
+            testCreateVaccineCardRequest(model: staticModel)
             guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
             guard let phn = dataSource[phnIndex].cellStringData else { return }
             guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
@@ -382,7 +393,8 @@ extension GatewayFormViewController: QueuePassedDelegate, QueueViewWillOpenDeleg
     // This callback will be triggered when the user has been through the queue.
     // Here you should store session information, so user will only be sent to queue again if the session has timed out.
     private func queueItSetup() {
-        self.engine = QueueITEngine.init(host: self, customerId: self.customerID, eventOrAliasId: self.eventAlias, layoutName: nil, language: nil)
+        guard let customerID = self.customerID, let eventAlias = self.eventAlias else { return }
+        self.engine = QueueITEngine.init(host: self, customerId: customerID, eventOrAliasId: eventAlias, layoutName: nil, language: nil)
         self.engine?.queuePassedDelegate = self // Invoked once the user is passed the queue
         self.engine?.queueViewWillOpenDelegate = self // Invoked to notify that Queue-It UIWebView or WKWebview will open
         self.engine?.queueDisabledDelegate = self // Invoked to notify that queue is disabled
@@ -405,6 +417,8 @@ extension GatewayFormViewController: QueuePassedDelegate, QueueViewWillOpenDeleg
     // Here you can change some relevant UI elements.
     func notifyYourTurn(_ queuePassedInfo: QueuePassedInfo!) {
         print("CONNOR QUEUE IT: ", queuePassedInfo)
+        guard let queueitToken = queuePassedInfo?.queueitToken else { return }
+        // TODO: Make another request here, appending queueit token to the original request
     }
     
     // This callback will be triggered when the queue used (event alias ID) is in the 'disabled' state.
