@@ -62,7 +62,7 @@ class QRRetrievalMethodViewController: BaseViewController {
         if let destination = segue.destination as? CameraViewController {
             destination.setup { [weak self] result in
                 guard let `self` = self, let data = result else {return}
-                self.storeValidatedQRCode(data: data)
+                self.storeValidatedQRCode(data: data, source: .scanner)
             }
         }
     }
@@ -197,15 +197,15 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
                 }
                 DispatchQueue.main.async { [weak self] in
                     guard let `self` = self else {return}
-                    self.storeValidatedQRCode(data: data)
+                    self.storeValidatedQRCode(data: data, source: .imported)
                 }
                
             }
         }
     }
     
-    private func storeValidatedQRCode(data: ScanResultModel) {
-        let model = convertScanResultModelIntoLocalData(data: data)
+    private func storeValidatedQRCode(data: ScanResultModel, source: Source) {
+        let model = convertScanResultModelIntoLocalData(data: data, source: source)
         let appModel = model.transform()
         if doesCardNeedToBeUpdated(modelToUpdate: appModel) {
             updateCardInLocalStorage(model: model)

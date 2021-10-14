@@ -81,7 +81,6 @@ extension String {
         return nil
     }
     
-    // TODO: This is for the static data for testing purposes - once health gateway is actually working, we can remove this
     func toImage() -> UIImage? {
         if let data = Data(base64Encoded: self, options: .ignoreUnknownCharacters){
             return UIImage(data: data)

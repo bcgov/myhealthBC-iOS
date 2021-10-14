@@ -20,6 +20,10 @@
                 <outlet property="statusBackgroundView" destination="4ms-5I-FbB" id="jRw-td-Qls"/>
                 <outlet property="tapToZoomInLabel" destination="F72-Qr-Qk7" id="x2w-wV-Gr4"/>
                 <outlet property="vaccineStatusLabel" destination="pYe-9w-iNe" id="2To-QZ-uhL"/>
+                <outletCollection property="qrImageConstraints" destination="mH5-Mv-qU8" collectionClass="NSMutableArray" id="4ah-I7-Wth"/>
+                <outletCollection property="qrImageConstraints" destination="f9k-Vy-F6m" collectionClass="NSMutableArray" id="tMX-hA-ur2"/>
+                <outletCollection property="qrImageConstraints" destination="YmA-2H-Lw9" collectionClass="NSMutableArray" id="bVn-UM-toL"/>
+                <outletCollection property="qrImageConstraints" destination="trI-8T-twK" collectionClass="NSMutableArray" id="Srg-C4-S55"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

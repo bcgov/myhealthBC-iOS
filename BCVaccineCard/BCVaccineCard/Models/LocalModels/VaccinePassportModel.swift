@@ -27,12 +27,17 @@ enum VaccineStatus: String, Codable {
     }
 }
 
+enum Source: String, Codable {
+    case healthGateway = "healthGateway", scanner = "scanner", imported = "imported"
+}
+
 struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     let code: String
     let birthdate: String
     let name: String
     let issueDate: Double
     let status: VaccineStatus
+    let source: Source
     
     func transform() -> AppVaccinePassportModel {
         return AppVaccinePassportModel(codableModel: self)
