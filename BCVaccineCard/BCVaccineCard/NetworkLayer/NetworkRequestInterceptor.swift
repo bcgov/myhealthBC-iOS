@@ -19,7 +19,8 @@ class NetworkRequestInterceptor: Interceptor {
 //    if let token = TokenManager.shared.fetchAccessToken() {
 //      urlRequest.setValue("token \(token)", forHTTPHeaderField: "Authorization")
 //    }
-//      urlRequest.addValue(<#T##value: String##String#>, forHTTPHeaderField: <#T##String#>)
+      guard let urlString = urlRequest.url?.absoluteString else { return }
+      urlRequest.addValue(urlString, forHTTPHeaderField: "x-queueit-ajaxpageurl")
     completion(.success(urlRequest))
   }
   //3

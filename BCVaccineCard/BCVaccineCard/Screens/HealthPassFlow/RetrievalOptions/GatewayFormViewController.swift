@@ -31,6 +31,8 @@ class GatewayFormViewController: BaseViewController {
     // FIXME: Find out what these are
     var customerID: String?
     var eventAlias: String?
+    var queueitToken: String?
+    var model: GatewayVaccineCardRequest?
     
     private var healthGateway: HealthGatewayBCGateway!
     var completionHandler: (() -> Void)?
@@ -289,8 +291,81 @@ extension GatewayFormViewController {
 //    }
     
     // TODO: Call this function in the checkForPHN above, remove local logic
-    private func createVaccineCardRequest(model: GatewayVaccineCardRequest) {
-        self.healthGateway.requestVaccineCard(model) { [weak self] result in
+//    private func createVaccineCardRequest(model: GatewayVaccineCardRequest) {
+//        self.healthGateway.requestVaccineCard(model) { [weak self] result in
+//            guard let `self` = self else {return}
+//            switch result {
+//            case .success(let vaccineCard):
+//                // TODO: Handle logic with duplicates etc here
+//                print(vaccineCard)
+//            case .failure(let error):
+//                print(error)
+//                // TODO: Show error here
+//            }
+//        }
+//    }
+    
+    private func createInitialVaccineCardRequest(model: GatewayVaccineCardRequest) {
+        let interceptor = NetworkRequestInterceptor()
+        let headerParameters: HTTPHeaders = [
+            "phn": model.phn,
+            "dateOfBirth": model.dateOfBirth,
+            "dateOfVaccine": model.dateOfVaccine
+        ]
+        AF.request(URL(string: "https://test.healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
+            // Check for queue it cookie here, if it's there, set the cookie and make actual request
+            if let cookie = response.response?.allHeaderFields["Set-Cookie"] as? String, cookie.contains("QueueITAccepted") {
+                guard let model = self.model else { return }
+                self.getActualVaccineCard(model: model, token: nil)
+            } else if let redirectURLStringEndcoded = response.response?.allHeaderFields["x-queueit-redirect"] as? String,
+                      let decodedURLString = redirectURLStringEndcoded.removingPercentEncoding,
+                      let url = URL(string: decodedURLString),
+                      let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems {
+                self.customerID = items.first(where: { $0.name == "c" })?.value
+                self.eventAlias = items.first(where: { $0.name == "e" })?.value
+                self.queueItSetup()
+                self.runQueueIt()
+            }
+        }
+    }
+    
+//    private func createTokenVaccineCardRequest(model: GatewayVaccineCardRequest, token: String) {
+//        let interceptor = NetworkRequestInterceptor()
+////        var url = URL(string: "https://healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!
+//        let queryItems = [URLQueryItem(name: "queueittoken", value: token)]
+//        var urlComps = URLComponents(string: "https://healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")
+//        urlComps?.queryItems = queryItems
+//        guard let url = urlComps?.url else { return }
+//        let headerParameters: HTTPHeaders = [
+//            "phn": model.phn,
+//            "dateOfBirth": model.dateOfBirth,
+//            "dateOfVaccine": model.dateOfVaccine
+//        ]
+//        AF.request(url, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
+//            // Check for queue it cookie here, if it's there, set the cookie and make actual request
+//            print("CONNOR: Response: ", response)
+//            if let header = response.response?.allHeaderFields as? [String: String], let url = response.request?.url {
+//                let cookies = HTTPCookie.cookies(withResponseHeaderFields: header, for: url)
+//                AF.session.configuration.httpCookieStorage?.setCookies(cookies, for: url, mainDocumentURL: nil)
+//                // Normal request here
+//            } else if let redirectURLStringEndcoded = response.response?.allHeaderFields["x-queueit-redirect"] as? String,
+//                      let decodedURLString = redirectURLStringEndcoded.removingPercentEncoding,
+//                      let url = URL(string: decodedURLString),
+//                      let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems {
+//                self.customerID = items.first(where: { $0.name == "c" })?.value
+//                self.eventAlias = items.first(where: { $0.name == "e" })?.value
+//                self.queueItSetup()
+//                self.runQueueIt()
+//            }
+//        }
+//    }
+    
+//    private func getActualVaccineCard(model: GatewayVaccineCardRequest, token: String, cookies: [HTTPCookie]) {
+//
+//    }
+    
+    private func getActualVaccineCard(model: GatewayVaccineCardRequest, token: String?) {
+        self.healthGateway.requestVaccineCard(model, token: token) { [weak self ] result in
             guard let `self` = self else {return}
             switch result {
             case .success(let vaccineCard):
@@ -302,38 +377,6 @@ extension GatewayFormViewController {
             }
         }
     }
-    
-    private func testCreateVaccineCardRequest(model: GatewayVaccineCardRequest) {
-        let interceptor = NetworkRequestInterceptor()
-        let headerParameters: HTTPHeaders = [
-            "phn": model.phn,
-            "dateOfBirth": model.dateOfBirth,
-            "dateOfVaccine": model.dateOfVaccine
-        ]
-        AF.request(URL(string: "https://healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
-            if let url = response.response?.url {
-                self.getURLComponents(url: url)
-            }
-//            switch response.result {
-//            case .success(let data):
-//                // TODO: Handle logic with duplicates etc here
-//                guard let data = data else { return }
-//                print("CONNOR: data string: ", String(data: data, encoding: .utf8) as? String)
-//            case .failure(let error):
-//                print(error)
-//                // TODO: Show error here
-//            }
-        }
-    }
-    
-    private func getURLComponents(url: URL) {
-        guard let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems else { return }
-        self.customerID = items.first(where: { $0.name == "c" })?.value
-        self.eventAlias = items.first(where: { $0.name == "e" })?.value
-        queueItSetup()
-        runQueueIt()
-    }
-
 }
 
 
@@ -345,15 +388,16 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
             let staticModel = GatewayVaccineCardRequest(phn: "9000201422", dateOfBirth: "1989-12-12", dateOfVaccine: "2021-05-15")
-            testCreateVaccineCardRequest(model: staticModel)
-            guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
-            guard let phn = dataSource[phnIndex].cellStringData else { return }
-            guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
-            guard let birthday = dataSource[dobIndex].cellStringData else { return }
-            guard let dovIndex = getIndexInDataSource(formField: .dateOfVaccination, dataSource: self.dataSource) else { return }
-            guard let vaxDate = dataSource[dovIndex].cellStringData else { return }
-            guard let model = formatGatewatData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
-            createVaccineCardRequest(model: model)
+            self.model = staticModel
+            createInitialVaccineCardRequest(model: staticModel)
+//            guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
+//            guard let phn = dataSource[phnIndex].cellStringData else { return }
+//            guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
+//            guard let birthday = dataSource[dobIndex].cellStringData else { return }
+//            guard let dovIndex = getIndexInDataSource(formField: .dateOfVaccination, dataSource: self.dataSource) else { return }
+//            guard let vaxDate = dataSource[dovIndex].cellStringData else { return }
+//            guard let model = formatGatewatData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
+//            createInitialVaccineCardRequest(model: model)
         }
     }
 }
@@ -417,8 +461,10 @@ extension GatewayFormViewController: QueuePassedDelegate, QueueViewWillOpenDeleg
     // Here you can change some relevant UI elements.
     func notifyYourTurn(_ queuePassedInfo: QueuePassedInfo!) {
         print("CONNOR QUEUE IT: ", queuePassedInfo)
-        guard let queueitToken = queuePassedInfo?.queueitToken else { return }
-        // TODO: Make another request here, appending queueit token to the original request
+        self.queueitToken = queuePassedInfo?.queueitToken
+        guard let model = self.model, let token = self.queueitToken else { return }
+//        createTokenVaccineCardRequest(model: model, token: token)
+        getActualVaccineCard(model: model, token: token)
     }
     
     // This callback will be triggered when the queue used (event alias ID) is in the 'disabled' state.

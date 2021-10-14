@@ -91,12 +91,12 @@ final class NetworkAccessor {
             case .failure(let error):
                 guard
                     let responseData = response.data,
-                    let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
+                    let errorResponse = try? JSONDecoder().decode(GatewayVaccineCardResponse.self, from: responseData) else {
 //                        let errorMessage = error.errorDescription.unwrapped
                         let unexpectedErrorResponse = ResultError(resultMessage: "Unknown", errorCode: "Unknown Code", traceID: "Unknown Trace", actionCode: "Unknown action code")
                         return completion(.failure(unexpectedErrorResponse))
                 }
-                completion(.failure(errorResponse))
+                completion(.failure(errorResponse.resultError ?? ResultError(resultMessage: "No value", errorCode: "No value", traceID: "No value", actionCode: "No value")))
             }
         }
     }

@@ -9,23 +9,23 @@ import Foundation
 
 // MARK: - GatewayVaccineCardResponse
 struct GatewayVaccineCardResponse: Codable {
-    let resourcePayload: ResourcePayload
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int
-    let resultError: ResultError
+    let resourcePayload: ResourcePayload?
+    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    let resultError: ResultError?
     
     // MARK: - ResourcePayload
     struct ResourcePayload: Codable {
-        let id: String
-        let loaded: Bool
-        let retryin: Int
-        let personalhealthnumber, firstname, lastname, birthdate: String
-        let vaccinedate: String
-        let doses, state: Int
-        let qrCode: QrCode
+        let id: String?
+        let loaded: Bool?
+        let retryin: Int?
+        let personalhealthnumber, firstname, lastname, birthdate: String?
+        let vaccinedate: String?
+        let doses, state: Int?
+        let qrCode: QrCode?
         
         // MARK: - QrCode
         struct QrCode: Codable {
-            let mediaType, encoding, data: String
+            let mediaType, encoding, data: String?
         }
     }
 }
@@ -33,7 +33,7 @@ struct GatewayVaccineCardResponse: Codable {
 // MARK: - ResultError
 // For now this can go here
 struct ResultError: Codable {
-    let resultMessage, errorCode, traceID, actionCode: String
+    let resultMessage, errorCode, traceID, actionCode: String?
 
     enum CodingKeys: String, CodingKey {
         case resultMessage, errorCode

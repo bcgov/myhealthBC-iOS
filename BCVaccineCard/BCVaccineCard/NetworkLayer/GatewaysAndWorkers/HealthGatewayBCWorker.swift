@@ -9,6 +9,7 @@ import Foundation
 
 protocol HealthGatewayBCGateway {
     func requestVaccineCard(_ model: GatewayVaccineCardRequest,
+                            token: String?,
                             completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>)
 }
 
@@ -18,7 +19,7 @@ struct HealthGatewayBCWorker {
 }
 
 extension HealthGatewayBCWorker: HealthGatewayBCGateway {
-    func requestVaccineCard(_ model: GatewayVaccineCardRequest, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
-        self.remoteAccess.requestVaccineCard(model, completion: completion)
+    func requestVaccineCard(_ model: GatewayVaccineCardRequest, token: String?, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
+        self.remoteAccess.requestVaccineCard(model, token: token, completion: completion)
     }
 }

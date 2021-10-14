@@ -14,7 +14,7 @@ protocol EndpointsAccessor {
 
 struct UrlAccessor {
     #if DEBUG
-    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
+    let baseUrl = URL(string: "https://test.healthgateway.gov.bc.ca/api/")!
     #else
     let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
     #endif
