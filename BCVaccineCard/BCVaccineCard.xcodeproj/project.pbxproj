@@ -18,8 +18,6 @@
 		5E04D95F28DEE00EAF8EF434 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */; };
 		65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */; };
 		65649CF2147EF54DEEA617D4 /* Pods_BCVaccineCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF2F1BABD4F59F68F534ADA9 /* Pods_BCVaccineCard.framework */; };
-		791C27A82717526C001A6E12 /* QueueItWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C27A72717526C001A6E12 /* QueueItWrapper.swift */; };
-		791C27A92717526C001A6E12 /* QueueItWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C27A72717526C001A6E12 /* QueueItWrapper.swift */; };
 		791C27B127179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C27B027179076001A6E12 /* NetworkRequestInterceptor.swift */; };
 		791C27B227179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C27B027179076001A6E12 /* NetworkRequestInterceptor.swift */; };
 		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
@@ -241,7 +239,6 @@
 		3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_Prod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_BCVaccineCardUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		791C27A72717526C001A6E12 /* QueueItWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueItWrapper.swift; sourceTree = "<group>"; };
 		791C27B027179076001A6E12 /* NetworkRequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequestInterceptor.swift; sourceTree = "<group>"; };
 		7944F67526F12613006B9444 /* BCVaccineCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BCVaccineCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944F67826F12613006B9444 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -428,22 +425,6 @@
 			path = OnboardingFlow;
 			sourceTree = "<group>";
 		};
-		791C27A62717522D001A6E12 /* QueueIt */ = {
-			isa = PBXGroup;
-			children = (
-				791C27AA271754BC001A6E12 /* Library */,
-				791C27A72717526C001A6E12 /* QueueItWrapper.swift */,
-			);
-			path = QueueIt;
-			sourceTree = "<group>";
-		};
-		791C27AA271754BC001A6E12 /* Library */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Library;
-			sourceTree = "<group>";
-		};
 		7944F66C26F12613006B9444 = {
 			isa = PBXGroup;
 			children = (
@@ -533,7 +514,6 @@
 		7944F6AF26F12A95006B9444 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				791C27A62717522D001A6E12 /* QueueIt */,
 				795AA77D2715FC7D00E59FF1 /* XMLConverter */,
 				7944F6B526F12BC3006B9444 /* Colors */,
 				7944F6B726F12BC3006B9444 /* Extensions */,
@@ -1423,7 +1403,6 @@
 				795AA7482713FFF800E59FF1 /* WorkerFactory.swift in Sources */,
 				795AA72F27108C1C00E59FF1 /* GatewayVaccineCardRequest.swift in Sources */,
 				7944F6D526F12C00006B9444 /* AppStyleButton.swift in Sources */,
-				791C27A82717526C001A6E12 /* QueueItWrapper.swift in Sources */,
 				795AA73B271092D500E59FF1 /* MIMEType.swift in Sources */,
 				7944F6FA26F30413006B9444 /* UINavigationItem+Ext.swift in Sources */,
 				795AA7382710920600E59FF1 /* ErrorResponse.swift in Sources */,
@@ -1549,7 +1528,6 @@
 				794BD64F2702EEC00084ADA8 /* TextTableViewCell.swift in Sources */,
 				795AA76227155F0900E59FF1 /* ResourceViewController.swift in Sources */,
 				795AA751271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
-				791C27A92717526C001A6E12 /* QueueItWrapper.swift in Sources */,
 				795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
 				795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */,
