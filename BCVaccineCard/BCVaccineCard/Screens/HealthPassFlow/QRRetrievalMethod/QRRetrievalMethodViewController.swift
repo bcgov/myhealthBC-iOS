@@ -41,7 +41,12 @@ class QRRetrievalMethodViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+//        return .lightContent
+        if #available(iOS 13.0, *) {
+            return UIStatusBarStyle.darkContent
+        } else {
+            return UIStatusBarStyle.default
+        }
     }
     
     private func setup() {

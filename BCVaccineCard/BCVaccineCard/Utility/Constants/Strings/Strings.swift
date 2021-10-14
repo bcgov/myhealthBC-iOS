@@ -67,8 +67,8 @@ extension String {
     
     // Health Pass Home screen
     static var covidVaccineCards: String { return "CovidVaccineCards".localized }
-    static func addedDate(days: String) -> String {
-        return String(format: "AddedDate".localized, days)
+    static func passCount(count: String) -> String {
+        return String(format: "PassCount".localized, count)
     }
     
     // My Cards screen

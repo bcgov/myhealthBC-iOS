@@ -53,7 +53,12 @@ class CovidVaccineCardsViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+//        return .lightContent
+        if #available(iOS 13.0, *) {
+            return UIStatusBarStyle.darkContent
+        } else {
+            return UIStatusBarStyle.default
+        }
     }
     
     private func setup() {
@@ -94,7 +99,7 @@ extension CovidVaccineCardsViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .covidVaccineCards,
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "add-card-icon"), action: #selector(self.addCardButton)),
+                                               rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton)),
                                                navStyle: .small,
                                                targetVC: self)
         applyNavAccessibility()

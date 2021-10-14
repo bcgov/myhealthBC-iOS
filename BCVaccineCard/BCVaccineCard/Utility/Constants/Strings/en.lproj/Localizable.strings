@@ -49,7 +49,7 @@
 "DateOfVaccine" = "Date of vaccination (Dose 1 or Dose 2)";
 "PrivacyStatement" = "Privacy Statement";
 "CovidVaccineCards" = "COVID-19 Vaccine Cards";
-"AddedDate" = "Added %@ days ago";
+"PassCount" = "%@ passes";
 "NoCardsYet" = "You don't have any cards yet";
 "NoCardsIntroText" = "The easiest way to show proof is using the BC Vaccine Card. Add your cards here for easy access.";
 "Vaccinated" = "Vaccinated";

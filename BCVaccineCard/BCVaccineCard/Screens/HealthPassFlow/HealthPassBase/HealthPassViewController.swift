@@ -102,7 +102,9 @@ extension HealthPassViewController {
 extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         //TODO: Note: Need a new table view cell created here as per designs
-        tableView.register(UINib.init(nibName: PrimaryVaccineCardTableViewCell.getName, bundle: .main), forCellReuseIdentifier: PrimaryVaccineCardTableViewCell.getName)
+        tableView.register(UINib.init(nibName: VaccineCardTableViewCell.getName, bundle: .main), forCellReuseIdentifier: VaccineCardTableViewCell.getName)
+        tableView.register(UINib.init(nibName: AddCardsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: AddCardsTableViewCell.getName)
+        tableView.register(UINib.init(nibName: ButtonTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ButtonTableViewCell.getName)
         tableView.register(UINib.init(nibName: NoCardsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: NoCardsTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 330
@@ -112,7 +114,8 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // TODO: Once we have the other pass section, we will need to adjust this logic (along with the data source though)
-        return 1
+        guard self.dataSource != nil else { return 1 }
+        return savedCardsCount > 1 ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -124,19 +127,37 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
             }
             return UITableViewCell()
         }
-        if let cell = tableView.dequeueReusableCell(withIdentifier: PrimaryVaccineCardTableViewCell.getName, for: indexPath) as? PrimaryVaccineCardTableViewCell {
-            cell.configure(card: card, delegateOwner: self, hideViewAllButton: savedCardsCount < 2)
-            return cell
+        // NOTE: Obviously this will be refactored when future features are built with different sections - just no point doing it now until we know what it will look like
+        if indexPath.row == 0 {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: AddCardsTableViewCell.getName, for: indexPath) as? AddCardsTableViewCell {
+                cell.configure(savedCards: self.savedCardsCount, delegateOwner: self)
+                return cell
+            }
+        } else if indexPath.row == 1 {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
+                cell.configure(model: card, expanded: true, editMode: false)
+                return cell
+            }
+        } else if indexPath.row == 2 {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: ButtonTableViewCell.getName, for: indexPath) as? ButtonTableViewCell {
+                cell.configure(savedCards: self.savedCardsCount, delegateOwner: self)
+                return cell
+            }
         }
         return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // No action here right now
+        guard let image = dataSource?.image else { return }
+        guard indexPath.row == 1 else { return }
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
+        self.present(vc, animated: true, completion: nil)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard savedCardsCount == 1 else { return nil }
+        guard savedCardsCount == 1, dataSource != nil, indexPath.row == 1 else { return nil }
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             self.deleteCard()
         }
@@ -150,7 +171,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard savedCardsCount == 1 else { return nil }
+        guard savedCardsCount == 1, dataSource != nil, indexPath.row == 1  else { return nil }
         let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
             self.deleteCard()
         }
@@ -180,21 +201,28 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
- // MARK: Primary Vaccine Card button delegates here
-extension HealthPassViewController: PrimaryVaccineCardTableViewCellDelegate {
+// MARK: Add card button table view cell delegate here
+extension HealthPassViewController: AddCardsTableViewCellDelegate {
     func addCardButtonTapped() {
         let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
-    
-    func tapToZoomInButtonTapped() {
-        guard let image = dataSource?.image else { return }
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
-        self.present(vc, animated: true, completion: nil)
-        self.tabBarController?.tabBar.isHidden = true
-    }
 }
+ // MARK: Primary Vaccine Card button delegates here
+//extension HealthPassViewController: PrimaryVaccineCardTableViewCellDelegate {
+//    func addCardButtonTapped() {
+//        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+//        self.navigationController?.pushViewController(vc, animated: true)
+//    }
+//
+//    func tapToZoomInButtonTapped() {
+//        guard let image = dataSource?.image else { return }
+//        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+//        let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
+//        self.present(vc, animated: true, completion: nil)
+//        self.tabBarController?.tabBar.isHidden = true
+//    }
+//}
 
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
