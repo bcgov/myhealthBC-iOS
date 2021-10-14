@@ -96,8 +96,10 @@ extension String {
     // Resource screen
     static var resource: String { return "Resource".localized }
     static var resourceDescriptionText: String { return "ResourceDescriptionText".localized }
-    static var covidTestLocationText: String { return "CovidTestLocationText".localized }
-    static var covidTestKitText: String { return "CovidTestKitText".localized }
+    static var getVaccinatedResource: String { return "GetVaccinatedResource".localized }
+    static var getTestedResource: String { return "GetTestedResource".localized }
+    static var getTestkitResource: String { return "GetTestkitResource".localized }
+    
     
     
     // News Feed screen

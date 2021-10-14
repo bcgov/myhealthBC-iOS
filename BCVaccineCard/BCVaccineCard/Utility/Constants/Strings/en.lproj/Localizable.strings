@@ -68,5 +68,6 @@
 "Help" = "Help";
 "Resource" = "Resource";
 "ResourceDescriptionText" = "Find information about where and how to get a COVID-19 testing.";
-"CovidTestLocationText" = "Where to get your COVID-19 Testing?";
-"CovidTestKitText" = "Where to get your COVID-19 Rapid Testing Kit?";
+"GetVaccinatedResource" = "Get vaccinated for COVID-19";
+"GetTestedResource" = "Get tested for COVID-19";
+"GetTestkitResource" = "Get a COVID-19 Rapid Test Kit";

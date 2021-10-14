@@ -61,11 +61,12 @@ extension ResourceViewController {
 // MARK: Data Source Setup
 extension ResourceViewController {
     private func setupDataSource() {
-        // TODO: Get actual links for resources
+        // TODO: Get actual links for resources http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc
         self.dataSource = [
             ResourceDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 17)), cellStringData: .resourceDescriptionText),
-            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "covid-testing-location")!, text: .covidTestLocationText, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc"))),
-            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "covid-testing-kit")!, text: .covidTestKitText, link: "https://www.google.com")))
+            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-vaccinated-resource")!, text: .getVaccinatedResource, link: "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/register"))),
+            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-tested-resource")!, text: .getTestedResource, link: "https://www.google.com"))),
+            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-testkit-resource")!, text: .getTestkitResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc")))
         ]
     }
 }
