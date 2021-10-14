@@ -65,15 +65,29 @@ class CustomNavigationController: UINavigationController {
             appearance.backgroundColor = navStyle.navBarColor
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
             appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+            if let image = UIImage(named: "app-back-arrow") {
+                appearance.setBackIndicatorImage(image, transitionMaskImage: image)
+            }
+//            appearance.shadowImage = nil
             navigationBar.standardAppearance = appearance
+//            if navStyle == .small {
+//                navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
+//            } else {
+//                navigationBar.scrollEdgeAppearance = navigationBar.scrollEdgeAppearance
+//            }
             navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
         } else {
             // FIXME: Find a safe way to change color of status bar background color (just stays white here)
             navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
             navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
             navigationBar.backgroundColor = navStyle.navBarColor
+            if let image = UIImage(named: "app-back-arrow") {
+                navigationBar.backIndicatorImage = image
+                navigationBar.backIndicatorTransitionMaskImage = image
+            }
+//            navigationBar.shadowImage = UIImage()
         }
-
+        
     }
     
     func setupNavigation(leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController) {

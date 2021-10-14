@@ -7,6 +7,7 @@
 
 import UIKit
 import BCVaccineValidator
+import SwiftUI
 
 class QRRetrievalMethodViewController: BaseViewController {
     
@@ -41,7 +42,12 @@ class QRRetrievalMethodViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+//        return .lightContent
+        if #available(iOS 13.0, *) {
+            return UIStatusBarStyle.darkContent
+        } else {
+            return UIStatusBarStyle.default
+        }
     }
     
     private func setup() {
@@ -65,7 +71,7 @@ class QRRetrievalMethodViewController: BaseViewController {
 // MARK: Navigation setup
 extension QRRetrievalMethodViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .addCard,
+        self.navDelegate?.setNavigationBarWith(title: .addABCVaccineCard,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
@@ -134,7 +140,8 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         switch data {
         case .text: return Constants.UI.CellSpacing.QROptionsScreen.staticText
         case .image:
-            let occupied = Constants.UI.CellSpacing.QROptionsScreen.staticText + (3 * Constants.UI.CellSpacing.QROptionsScreen.optionButtonHeight)
+            let buffer: CGFloat = 20
+            let occupied = Constants.UI.CellSpacing.QROptionsScreen.staticText + (3 * Constants.UI.CellSpacing.QROptionsScreen.optionButtonHeight) + buffer
             return tableView.bounds.height - occupied
         case .method: return Constants.UI.CellSpacing.QROptionsScreen.optionButtonHeight
         }
@@ -159,9 +166,9 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
     func goToEnterGateway() {
         let vc = GatewayFormViewController.constructGatewayFormViewController()
-        vc.completionHandler = { [weak self] in
+        vc.completionHandler = { [weak self] id in
             guard let `self` = self else { return }
-            self.popBackToProperViewController()
+            self.popBackToProperViewController(id: id)
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -202,27 +209,27 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         let appModel = model.transform()
         if doesCardNeedToBeUpdated(modelToUpdate: appModel) {
             updateCardInLocalStorage(model: model)
-            postCardAddedNotification(id: appModel.id ?? "")
+//            postCardAddedNotification(id: appModel.id ?? "")
         } else {
             guard isCardAlreadyInWallet(modelToAdd: appModel) == false else {
-                alert(title: "Duplicate", message: "This QR code is already saved in your wallet.") { [weak self] in
+                alert(title: "Duplicate", message: "This QR code is already saved in your list of passes.") { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
                 }
                 return
             }
             appendModelToLocalStorage(model: model)
-            postCardAddedNotification(id: appModel.id ?? "")
+//            postCardAddedNotification(id: appModel.id ?? "")
         }
         // TODO: text from constants
         self.navigationController?.showBanner(message: "Your proof of vaccination has been added", style: .Top)
-        self.popBackToProperViewController()
+        self.popBackToProperViewController(id: appModel.id ?? "")
     }
 }
 
 // MARK: Logic for handling what screen to go back to
 extension QRRetrievalMethodViewController {
-    func popBackToProperViewController() {
+    func popBackToProperViewController(id: String) {
         // If we only have one card (or no cards), then go back to health pass with popBackTo
         // If we have more than one card, we should check if 2nd controller in stack is CovidVaccineCardsViewController, if so, pop back, if not, instantiate, insert at 1, then pop back
         guard let cards = Defaults.vaccinePassports, cards.count > 1 else {
@@ -238,6 +245,7 @@ extension QRRetrievalMethodViewController {
             }
         }
         guard containsCovidVaxCardsVC == false else {
+            postCardAddedNotification(id: id)
             self.navigationController?.popViewController(animated: true)
             return
         }
@@ -245,6 +253,10 @@ extension QRRetrievalMethodViewController {
         guard viewControllerStack[0] is HealthPassViewController else { return }
         let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
         self.navigationController?.viewControllers.insert(vc, at: 1)
+        // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.postCardAddedNotification(id: id)
+        }
         self.navigationController?.popViewController(animated: true)
     }
 }
@@ -299,7 +311,7 @@ extension QRRetrievalMethodViewController {
             if let rightNavButton = nav.getRightBarButtonItem() {
                 rightNavButton.accessibilityTraits = .button
                 rightNavButton.accessibilityLabel = "Close"
-                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
+                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards screen"
             }
             if let leftNavButton = nav.getLeftBarButtonItem() {
                 // TODO: Need to investigate here - not a priority right now though, as designs will likely change

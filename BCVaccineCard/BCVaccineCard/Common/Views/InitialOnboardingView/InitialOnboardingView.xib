@@ -40,7 +40,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vDU-sf-kcD">
-                    <rect key="frame" x="75" y="468.5" width="264" height="20.5"/>
+                    <rect key="frame" x="50" y="468.5" width="314" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -119,9 +119,9 @@
                 <constraint firstItem="IB0-wM-pU6" firstAttribute="centerX" secondItem="fPV-Wc-CDh" secondAttribute="centerX" id="4Nr-rb-YQi"/>
                 <constraint firstItem="QGx-T6-Lhh" firstAttribute="top" secondItem="BGQ-hp-g5F" secondAttribute="bottom" constant="36" id="8AG-gA-Zfw"/>
                 <constraint firstItem="fPV-Wc-CDh" firstAttribute="bottom" secondItem="IB0-wM-pU6" secondAttribute="bottom" constant="12" id="CrM-o8-AOT"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="vDU-sf-kcD" secondAttribute="trailing" constant="75" id="F4f-hu-Mrm"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="vDU-sf-kcD" secondAttribute="trailing" constant="50" id="F4f-hu-Mrm"/>
                 <constraint firstItem="A0i-So-4gP" firstAttribute="top" secondItem="fPV-Wc-CDh" secondAttribute="bottom" constant="105" id="HJh-7T-mh8"/>
-                <constraint firstItem="vDU-sf-kcD" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="75" id="OPR-08-oyY"/>
+                <constraint firstItem="vDU-sf-kcD" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="50" id="OPR-08-oyY"/>
                 <constraint firstAttribute="bottom" secondItem="QGx-T6-Lhh" secondAttribute="bottom" constant="80" id="Oh0-H3-vWM"/>
                 <constraint firstItem="BGQ-hp-g5F" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="SPP-zT-QAC"/>
                 <constraint firstItem="QGx-T6-Lhh" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="U0k-fC-zEe"/>

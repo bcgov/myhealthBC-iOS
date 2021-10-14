@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-10-07.
-//
+// TODO: Delete this cell - don't need anymore, just holding on until after testing
 
 import UIKit
 
@@ -70,7 +70,7 @@ class PrimaryVaccineCardTableViewCell: UITableViewCell {
     
     func configure(card: AppVaccinePassportModel, delegateOwner: UIViewController, hideViewAllButton: Bool) {
         // FIXME: Need to start tracking when we saved the card - also, will need to adjust localized logic like we did in espri (1 day vs 2 days). Finally, need to iron out the data shown by this label - "3 passes . Added 2 days ago". What exactly was added 2 days ago, most recent?
-        subtextLabel.text = .addedDate(days: "2")
+        subtextLabel.text = .passCount(count: "2")
         vaccineCardView.configure(model: card, expanded: true, editMode: false)
         self.delegate = delegateOwner as? PrimaryVaccineCardTableViewCellDelegate
         viewAllButton.isHidden = hideViewAllButton

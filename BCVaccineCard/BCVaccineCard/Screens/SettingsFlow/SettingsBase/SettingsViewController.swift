@@ -32,7 +32,12 @@ class SettingsViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+//        return .lightContent
+        if #available(iOS 13.0, *) {
+            return UIStatusBarStyle.darkContent
+        } else {
+            return UIStatusBarStyle.default
+        }
     }
     
     private func setup() {
@@ -57,7 +62,7 @@ extension SettingsViewController {
 extension SettingsViewController {
     private func setupDataSource() {
         self.dataSource = [
-            Setting(cell: .text(text: .settingsOpeningText), isClickable: false),
+//            Setting(cell: .text(text: .settingsOpeningText), isClickable: false),
             Setting(cell: .setting(text: .privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true)
             // TODO: Unhide this cell once we have some details surrounding the help option
 //            Setting(cell: .setting(text: Constants.Strings.Settings.help, image: #imageLiteral(resourceName: "question-icon")), isClickable: true)
