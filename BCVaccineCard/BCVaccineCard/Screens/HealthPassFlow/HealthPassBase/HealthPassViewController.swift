@@ -53,7 +53,7 @@ class HealthPassViewController: BaseViewController {
 // MARK: Navigation setup
 extension HealthPassViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .healthPass,
+        self.navDelegate?.setNavigationBarWith(title: .healthPasses,
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton)),
                                                navStyle: .large,

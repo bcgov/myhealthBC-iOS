@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "link_off@1x.png",
+      "filename" : "campaign@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "link_off@2x.png",
+      "filename" : "campaign@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "link_off@3x.png",
+      "filename" : "campaign@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

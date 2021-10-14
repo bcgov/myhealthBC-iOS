@@ -110,7 +110,7 @@ class InitialOnboardingView: UIView {
     }
     
     private func labelSetup() {
-        onboardingTitleLabel.font = UIFont.bcSansRegularWithSize(size: 24)
+        onboardingTitleLabel.font = UIFont.bcSansBoldWithSize(size: 24)
         onboardingTitleLabel.textColor = AppColours.appBlue
         onboardingDescriptionLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         onboardingDescriptionLabel.textColor = AppColours.textBlack

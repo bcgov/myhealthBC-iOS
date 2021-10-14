@@ -12,22 +12,23 @@ enum TabBarVCs {
     
     struct Properties {
         let title: String
-        let tabBarImage: UIImage
+        let selectedTabBarImage: UIImage
+        let unselectedTabBarImage: UIImage
         let baseViewController: UIViewController
     }
     
     var properties: Properties? {
         switch self {
         case .healthPass:
-            return Properties(title: .healthPass, tabBarImage: #imageLiteral(resourceName: "my-cards-tab"), baseViewController: HealthPassViewController.constructHealthPassViewController())
+            return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .records:
             return nil
         case .resource:
-            return Properties(title: .resource, tabBarImage: #imageLiteral(resourceName: "resource-tab"), baseViewController: ResourceViewController.constructResourceViewController())
+            return Properties(title: .resource, selectedTabBarImage: #imageLiteral(resourceName: "resource-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "resource-tab-unselected"), baseViewController: ResourceViewController.constructResourceViewController())
         case .booking:
             return nil
         case .newsFeed:
-            return Properties(title: .newsFeed, tabBarImage: #imageLiteral(resourceName: "news-feed-tab"), baseViewController: NewsFeedViewController.constructNewsFeedViewController())
+            return Properties(title: .newsFeed, selectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-unselected"), baseViewController: NewsFeedViewController.constructNewsFeedViewController())
         }
     }
 }
@@ -60,7 +61,7 @@ class TabBarController: UITabBarController {
         var viewControllers: [UIViewController] = []
         vcs.forEach { vc in
             guard let properties = vc.properties else { return }
-            let tabBarItem = UITabBarItem(title: properties.title, image: properties.tabBarImage, selectedImage: properties.tabBarImage)
+            let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
             tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
             let viewController = properties.baseViewController
             viewController.tabBarItem = tabBarItem

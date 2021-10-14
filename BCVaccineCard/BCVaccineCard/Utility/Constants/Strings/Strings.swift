@@ -18,6 +18,7 @@ extension String {
     static var myCards: String { return "MyCards".localized }
     static var settings: String { return "Settings".localized }
     static var healthPass: String { return "HealthPass".localized }
+    static var passes: String { return "Passes".localized }
     /// Button titles
     static var cancel: String { return "Cancel".localized }
 //    static var enter: String { return "Enter".localized }

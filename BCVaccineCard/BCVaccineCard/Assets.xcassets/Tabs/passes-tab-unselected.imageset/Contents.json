@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "cog@1x.png",
+      "filename" : "qr_code@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "cog@2x.png",
+      "filename" : "qr_code@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "cog@3x.png",
+      "filename" : "qr_code@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
