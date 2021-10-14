@@ -212,7 +212,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
 //            postCardAddedNotification(id: appModel.id ?? "")
         } else {
             guard isCardAlreadyInWallet(modelToAdd: appModel) == false else {
-                alert(title: "Duplicate", message: "This QR code is already saved in your wallet.") { [weak self] in
+                alert(title: "Duplicate", message: "This QR code is already saved in your list of passes.") { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -311,7 +311,7 @@ extension QRRetrievalMethodViewController {
             if let rightNavButton = nav.getRightBarButtonItem() {
                 rightNavButton.accessibilityTraits = .button
                 rightNavButton.accessibilityLabel = "Close"
-                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
+                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards screen"
             }
             if let leftNavButton = nav.getLeftBarButtonItem() {
                 // TODO: Need to investigate here - not a priority right now though, as designs will likely change

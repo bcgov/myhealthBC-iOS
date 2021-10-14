@@ -232,25 +232,16 @@ extension GatewayFormViewController {
         model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, issueDate: 1632413161, status: status))
         // This obviously needs to be refactored, but not going to bother, being that we are going to be removing it and hitting an endpoint.
         if doesCardNeedToBeUpdated(modelToUpdate: model) {
-            alert(title: "Success", message: "Congrats! You have successfully updated your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "No", buttonOneCompletion: { [weak self] in
-                guard let `self` = self else { return }
-                self.navigationController?.popViewController(animated: true)
-                // No Nothing, just dismiss
-            }, buttonTwoTitle: "Yes") { [weak self] in
-                guard let `self` = self else { return }
-                self.navigationController?.popViewController(animated: true)
-                self.updateCardInLocalStorage(model: model.transform())
+            self.navigationController?.popViewController(animated: true)
+            self.updateCardInLocalStorage(model: model.transform())
 //                self.postCardAddedNotification(id: model.id ?? "")
-                self.completionHandler?(model.id ?? "")
-                
-            }
+            self.completionHandler?(model.id ?? "")
         } else {
             guard isCardAlreadyInWallet(modelToAdd: model) == false else {
-                alert(title: "Duplicate", message: "This card is already saved in your wallet.") { [weak self] in
+                alert(title: "Duplicate", message: "This vaccine pass is already saved in your list of passes.") { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
                     self.completionHandler?(model.id ?? "")
-                    
                 }
                 return
             }
@@ -318,7 +309,7 @@ extension GatewayFormViewController {
             if let rightNavButton = nav.getRightBarButtonItem() {
                 rightNavButton.accessibilityTraits = .button
                 rightNavButton.accessibilityLabel = "Close"
-                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
+                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to your passes screen"
             }
             if let leftNavButton = nav.getLeftBarButtonItem() {
                 // TODO: Need to investigate here - not a priority right now though, as designs will likely change

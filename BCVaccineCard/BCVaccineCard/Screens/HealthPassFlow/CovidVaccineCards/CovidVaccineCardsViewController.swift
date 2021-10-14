@@ -88,7 +88,7 @@ extension CovidVaccineCardsViewController {
             guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
             guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
-            cell.accessibilityLabel = "Your proof of vaccination has been added to your wallet. Vaccination Card Expanded"
+            cell.accessibilityLabel = "Your proof of vaccination has been added to your passes. Vaccination Card Expanded"
             UIAccessibility.setFocusTo(cell)
         }
     }
@@ -133,7 +133,7 @@ extension CovidVaccineCardsViewController {
         guard !self.dataSource.isEmpty else { return }
         let buttonType: AppStyleButton.ButtonType = inEditMode ? .done : .manageCards
         let value = self.inEditMode ? AppStyleButton.ButtonType.done.getTitle : AppStyleButton.ButtonType.manageCards.getTitle
-        let hint = self.inEditMode ? "Tapping 'done' will stop the editing of cards and save any changes." : "Tapping 'manage cards' will allow you to edit the order of your cards, and remove any cards you no longer want in your wallet."
+        let hint = self.inEditMode ? "Tapping 'done' will stop the editing of cards and save any changes." : "Tapping 'manage cards' will allow you to edit the order of your cards, and remove any cards you no longer want in your list of passes."
         bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true, accessibilityValue: value, accessibilityHint: hint)
     }
 }
