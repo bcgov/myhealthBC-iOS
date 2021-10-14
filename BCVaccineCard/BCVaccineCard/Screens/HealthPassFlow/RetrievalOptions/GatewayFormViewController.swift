@@ -17,14 +17,12 @@ class GatewayFormViewController: BaseViewController {
         return GatewayFormViewController()
     }
     
-    @IBOutlet private weak var formTitleLabel: UILabel!
-    @IBOutlet private weak var separatorView: UIView! // colour it yellow
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
     
     private var healthGateway: HealthGatewayBCGateway!
-    var completionHandler: (() -> Void)?
+    var completionHandler: ((String) -> Void)?
     private var dataSource: [FormDataSource] = []
     private var submitButtonEnabled: Bool = false {
         didSet {
@@ -43,21 +41,18 @@ class GatewayFormViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+//        return .lightContent
+        if #available(iOS 13.0, *) {
+            return UIStatusBarStyle.darkContent
+        } else {
+            return UIStatusBarStyle.default
+        }
     }
     
     private func setup() {
-        setupUI()
         setupButtons()
         setupDataSource()
         setupTableView()
-    }
-    
-    private func setupUI() {
-        separatorView.backgroundColor = AppColours.barYellow
-        formTitleLabel.font = UIFont.bcSansBoldWithSize(size: 18)
-        formTitleLabel.textColor = AppColours.textBlack
-        formTitleLabel.text = .formTitle
     }
     
     private func setupButtons() {
@@ -80,7 +75,7 @@ class GatewayFormViewController: BaseViewController {
 // MARK: Navigation setup
 extension GatewayFormViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .addCard,
+        self.navDelegate?.setNavigationBarWith(title: .addABCVaccineCard,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
@@ -227,33 +222,24 @@ extension GatewayFormViewController {
         model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, issueDate: 1632413161, status: status))
         // This obviously needs to be refactored, but not going to bother, being that we are going to be removing it and hitting an endpoint.
         if doesCardNeedToBeUpdated(modelToUpdate: model) {
-            alert(title: "Success", message: "Congrats! You have successfully updated your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "No", buttonOneCompletion: { [weak self] in
-                guard let `self` = self else { return }
-                self.navigationController?.popViewController(animated: true)
-                // No Nothing, just dismiss
-            }, buttonTwoTitle: "Yes") { [weak self] in
-                guard let `self` = self else { return }
-                self.navigationController?.popViewController(animated: true)
-                self.updateCardInLocalStorage(model: model.transform())
-                self.postCardAddedNotification(id: model.id ?? "")
-                self.completionHandler?()
-                
-            }
+            self.navigationController?.popViewController(animated: true)
+            self.updateCardInLocalStorage(model: model.transform())
+//                self.postCardAddedNotification(id: model.id ?? "")
+            self.completionHandler?(model.id ?? "")
         } else {
             guard isCardAlreadyInWallet(modelToAdd: model) == false else {
-                alert(title: "Duplicate", message: "This card is already saved in your wallet.") { [weak self] in
+                alert(title: "Duplicate", message: "This vaccine pass is already saved in your list of passes.") { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
-                    self.completionHandler?()
-                    
+                    self.completionHandler?(model.id ?? "")
                 }
                 return
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.navigationController?.popViewController(animated: true)
                 self.appendModelToLocalStorage(model: model.transform())
-                self.postCardAddedNotification(id: model.id ?? "")
-                self.completionHandler?()
+//                self.postCardAddedNotification(id: model.id ?? "")
+                self.completionHandler?(model.id ?? "")
                 
             }
             
@@ -313,7 +299,7 @@ extension GatewayFormViewController {
             if let rightNavButton = nav.getRightBarButtonItem() {
                 rightNavButton.accessibilityTraits = .button
                 rightNavButton.accessibilityLabel = "Close"
-                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards wallet screen"
+                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to your passes screen"
             }
             if let leftNavButton = nav.getLeftBarButtonItem() {
                 // TODO: Need to investigate here - not a priority right now though, as designs will likely change

@@ -7,11 +7,6 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="BCSans-Bold.otf">
-            <string>BCSans-Bold</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -22,38 +17,27 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bc-logo" translatesAutoresizingMaskIntoConstraints="NO" id="RyC-yp-6y3">
-                                <rect key="frame" x="157" y="84" width="100" height="25"/>
+                                <rect key="frame" x="157" y="803" width="100" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="P4Z-sC-Hw6"/>
                                     <constraint firstAttribute="width" constant="100" id="bcu-Sc-IDc"/>
                                 </constraints>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="mc3-P6-FEs">
-                                <rect key="frame" x="125" y="351.5" width="164" height="193"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-logo" translatesAutoresizingMaskIntoConstraints="NO" id="IAU-GL-6vc">
-                                        <rect key="frame" x="0.0" y="0.0" width="164" height="130"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="130" id="CJe-9T-yze"/>
-                                            <constraint firstAttribute="width" constant="164" id="dq2-bw-3U6"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Health BC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XBu-HO-e5d">
-                                        <rect key="frame" x="1.5" y="160" width="161" height="33"/>
-                                        <fontDescription key="fontDescription" name="BCSans-Bold" family="BC Sans" pointSize="24"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                            </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash-logo-with-title" translatesAutoresizingMaskIntoConstraints="NO" id="IAU-GL-6vc">
+                                <rect key="frame" x="126.5" y="380" width="161" height="136"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="136" id="CJe-9T-yze"/>
+                                    <constraint firstAttribute="width" constant="161" id="dq2-bw-3U6"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.10080841929999999" green="0.1957546771" blue="0.37256795170000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="RyC-yp-6y3" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="2Bo-75-1ur"/>
-                            <constraint firstItem="mc3-P6-FEs" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="P2l-y2-UTm"/>
-                            <constraint firstItem="mc3-P6-FEs" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="T1z-nA-Q41"/>
-                            <constraint firstItem="RyC-yp-6y3" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="rZd-DY-dhj"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="RyC-yp-6y3" secondAttribute="bottom" constant="34" id="EcV-Da-YXJ"/>
+                            <constraint firstItem="IAU-GL-6vc" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="JuZ-6h-CRP"/>
+                            <constraint firstItem="IAU-GL-6vc" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="SBK-he-waY"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -64,6 +48,6 @@
     </scenes>
     <resources>
         <image name="bc-logo" width="100" height="25.5"/>
-        <image name="splash-logo" width="163.5" height="129"/>
+        <image name="splash-logo-with-title" width="161" height="136"/>
     </resources>
 </document>

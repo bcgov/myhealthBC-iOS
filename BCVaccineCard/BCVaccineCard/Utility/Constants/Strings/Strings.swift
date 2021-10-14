@@ -18,6 +18,7 @@ extension String {
     static var myCards: String { return "MyCards".localized }
     static var settings: String { return "Settings".localized }
     static var healthPass: String { return "HealthPass".localized }
+    static var passes: String { return "Passes".localized }
     /// Button titles
     static var cancel: String { return "Cancel".localized }
 //    static var enter: String { return "Enter".localized }
@@ -59,19 +60,22 @@ extension String {
     static var dovRange: String { return "DOVRange".localized }
     /// Labels and other text
     static var formTitle: String { return "FormTitle".localized }
+    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
     static var formDescription: String { return "FormDescription".localized }
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
     static var dateOfBirth: String { return "DateOfBirth".localized }
     static var dateOfVaccine: String { return "DateOfVaccine".localized }
+    static var dose1OrDose2: String { return "Dose1OrDose2".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
     
     // Health Pass Home screen
     static var covidVaccineCards: String { return "CovidVaccineCards".localized }
-    static func addedDate(days: String) -> String {
-        return String(format: "AddedDate".localized, days)
+    static func passCount(count: String) -> String {
+        return String(format: "PassCount".localized, count)
     }
     
     // My Cards screen
+    static var bcVaccineCards: String { return "BCVaccineCards".localized }
     static var noCardsYet: String { return "NoCardsYet".localized }
     static var noCardsIntroText: String { return "NoCardsIntroText".localized }
     static var vaccinated: String { return "Vaccinated".localized }
@@ -96,8 +100,10 @@ extension String {
     // Resource screen
     static var resource: String { return "Resource".localized }
     static var resourceDescriptionText: String { return "ResourceDescriptionText".localized }
-    static var covidTestLocationText: String { return "CovidTestLocationText".localized }
-    static var covidTestKitText: String { return "CovidTestKitText".localized }
+    static var getVaccinatedResource: String { return "GetVaccinatedResource".localized }
+    static var getTestedResource: String { return "GetTestedResource".localized }
+    static var getTestkitResource: String { return "GetTestkitResource".localized }
+    
     
     
     // News Feed screen

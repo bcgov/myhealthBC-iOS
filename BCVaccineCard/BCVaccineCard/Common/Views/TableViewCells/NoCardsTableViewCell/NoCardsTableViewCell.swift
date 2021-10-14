@@ -35,7 +35,7 @@ class NoCardsTableViewCell: UITableViewCell {
         
         noCardsImageView.isAccessibilityElement = true
         noCardsImageView.accessibilityTraits = .image
-        noCardsImageView.accessibilityLabel = "Empty vaccine wallet image"
+        noCardsImageView.accessibilityLabel = "Empty vaccine pass image"
         
         noCardsLabel.isAccessibilityElement = true
         noCardsLabel.accessibilityTraits = .staticText
