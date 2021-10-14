@@ -60,10 +60,12 @@ extension String {
     static var dovRange: String { return "DOVRange".localized }
     /// Labels and other text
     static var formTitle: String { return "FormTitle".localized }
+    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
     static var formDescription: String { return "FormDescription".localized }
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
     static var dateOfBirth: String { return "DateOfBirth".localized }
     static var dateOfVaccine: String { return "DateOfVaccine".localized }
+    static var dose1OrDose2: String { return "Dose1OrDose2".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
     
     // Health Pass Home screen
@@ -73,6 +75,7 @@ extension String {
     }
     
     // My Cards screen
+    static var bcVaccineCards: String { return "BCVaccineCards".localized }
     static var noCardsYet: String { return "NoCardsYet".localized }
     static var noCardsIntroText: String { return "NoCardsIntroText".localized }
     static var vaccinated: String { return "Vaccinated".localized }

@@ -97,7 +97,7 @@ extension CovidVaccineCardsViewController {
 // MARK: Navigation setup
 extension CovidVaccineCardsViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .covidVaccineCards,
+        self.navDelegate?.setNavigationBarWith(title: .bcVaccineCards,
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton)),
                                                navStyle: .small,

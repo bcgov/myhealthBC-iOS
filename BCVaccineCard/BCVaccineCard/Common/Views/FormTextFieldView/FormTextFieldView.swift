@@ -22,11 +22,19 @@ enum FormTextFieldType {
         }
     }
     
+    var getFieldSubtitle: String? {
+        switch self {
+        case .personalHealthNumber: return nil
+        case .dateOfBirth: return nil
+        case .dateOfVaccination: return .dose1OrDose2
+        }
+    }
+    
     var getPlaceholderText: String {
         switch self {
-        case .personalHealthNumber: return "9737 364 347"
-        case .dateOfBirth: return "1967-01-21"
-        case .dateOfVaccination: return "2021-01-02"
+        case .personalHealthNumber: return "xxxx xxx xxx"
+        case .dateOfBirth: return "yyyy-mm-dd"
+        case .dateOfVaccination: return "yyyy-mm-dd"
         }
     }
     
@@ -53,12 +61,12 @@ enum FormTextFieldType {
             guard text.removeWhiteSpaceFormatting.isValidLength(length: 10) else { return .phnLength }
             return nil
         case .dateOfBirth:
-            guard text.isValidDate(withFormatter: Date.Formatter.longDate) else { return .validDate }
-            guard text.isValidDateRange(withFormatter: Date.Formatter.longDate, latestDate: Date()) else { return .dobRange }
+            guard text.isValidDate(withFormatter: Date.Formatter.yearMonthDay) else { return .validDate }
+            guard text.isValidDateRange(withFormatter: Date.Formatter.yearMonthDay, latestDate: Date()) else { return .dobRange }
             return nil
         case .dateOfVaccination:
-            guard text.isValidDate(withFormatter: Date.Formatter.longDate) else { return .validDate }
-            guard text.isValidDateRange(withFormatter: Date.Formatter.longDate, earliestDate: Constants.DateConstants.firstVaxDate, latestDate: Date()) else { return .dovRange }
+            guard text.isValidDate(withFormatter: Date.Formatter.yearMonthDay) else { return .validDate }
+            guard text.isValidDateRange(withFormatter: Date.Formatter.yearMonthDay, earliestDate: Constants.DateConstants.firstVaxDate, latestDate: Date()) else { return .dovRange }
             return nil
         }
     }
@@ -75,6 +83,7 @@ class FormTextFieldView: UIView {
     
     @IBOutlet weak private var contentView: UIView!
     @IBOutlet weak private var formTextFieldTitleLabel: UILabel!
+    @IBOutlet weak private var formTextFieldSubtitleLabel: UILabel!
     @IBOutlet weak private var formTextField: UITextField!
     @IBOutlet weak private var formTextFieldErrorLabel: UILabel!
     @IBOutlet weak private var formTextFieldRightImageView: UIImageView!
@@ -120,7 +129,9 @@ class FormTextFieldView: UIView {
     private func setupUI() {
         formTextField.textColor = AppColours.textBlack
         formTextFieldTitleLabel.textColor = AppColours.textBlack
-        formTextFieldTitleLabel.font = UIFont.bcSansRegularWithSize(size: 16)
+        formTextFieldTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+        formTextFieldSubtitleLabel.textColor = AppColours.textGray
+        formTextFieldSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         formTextFieldErrorLabel.textColor = AppColours.appRed
         formTextFieldErrorLabel.font = UIFont.bcSansItalicWithSize(size: 12)
     }
@@ -134,6 +145,8 @@ class FormTextFieldView: UIView {
         self.formField = formType
         formTextFieldRightImageView.isHidden = formType.getFieldType == .number
         formTextFieldTitleLabel.text = formType.getFieldTitle
+        formTextFieldSubtitleLabel.isHidden = formType.getFieldSubtitle == nil
+        formTextFieldSubtitleLabel.text = formType.getFieldSubtitle
         formTextField.placeholder = formType.getPlaceholderText
         if let image = formType.getImage {
             formTextFieldRightImageView.image = image
@@ -217,7 +230,7 @@ extension FormTextFieldView {
     }
 
     private func adjustTextFieldWithDatePickerSpin(datePicker: UIDatePicker) {
-        let text = Date.Formatter.longDate.string(from: datePicker.date)
+        let text = Date.Formatter.yearMonthDay.string(from: datePicker.date)
         self.formTextField.text = text
         self.delegate?.textFieldTextDidChange(formField: self.formField, newText: text)
     }

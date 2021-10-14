@@ -17,8 +17,6 @@ class GatewayFormViewController: BaseViewController {
         return GatewayFormViewController()
     }
     
-    @IBOutlet private weak var formTitleLabel: UILabel!
-    @IBOutlet private weak var separatorView: UIView! // colour it yellow
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
@@ -52,17 +50,9 @@ class GatewayFormViewController: BaseViewController {
     }
     
     private func setup() {
-        setupUI()
         setupButtons()
         setupDataSource()
         setupTableView()
-    }
-    
-    private func setupUI() {
-        separatorView.backgroundColor = AppColours.barYellow
-        formTitleLabel.font = UIFont.bcSansBoldWithSize(size: 18)
-        formTitleLabel.textColor = AppColours.textBlack
-        formTitleLabel.text = .formTitle
     }
     
     private func setupButtons() {
@@ -85,7 +75,7 @@ class GatewayFormViewController: BaseViewController {
 // MARK: Navigation setup
 extension GatewayFormViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .addCard,
+        self.navDelegate?.setNavigationBarWith(title: .addABCVaccineCard,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
