@@ -12,6 +12,8 @@ import Foundation
 protocol QueueItWorkerDefaultsDelegate: AnyObject {
     func handleVaccineCard(localModel: LocallyStoredVaccinePassportModel)
     func handleError(error: ResultError)
+    func showLoader()
+    func hideLoader()
 }
 
 class QueueItWorker: NSObject {
@@ -30,29 +32,6 @@ class QueueItWorker: NSObject {
         self.delegateOwner = delegateOwner
         self.healthGateway = healthGateway
         self.delegate = delegate
-    }
-}
-
-// MARK: Set properties
-extension QueueItWorker {
-    func setEngineProperty() {
-        
-    }
-    
-    func setModelProperty() {
-        
-    }
-    
-    func setcustomerIDProperty() {
-        
-    }
-    
-    func seteventAliasProperty() {
-        
-    }
-    
-    func setqueueitTokenProperty() {
-        
     }
 }
 
@@ -79,6 +58,7 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
             // TODO: Handle reasons for not being able to start queue it here
             print("CONNOR FAILED TO RUN: ", err)
             print("CONNOR ERROR CODE: ", (err as NSError).code)
+            self.delegate?.hideLoader()
         }
     }
     
@@ -87,8 +67,10 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
     func notifyYourTurn(_ queuePassedInfo: QueuePassedInfo!) {
         print("CONNOR QUEUE IT: ", queuePassedInfo)
         self.queueitToken = queuePassedInfo?.queueitToken
-        guard let model = self.model, let token = self.queueitToken else { return }
-//        createTokenVaccineCardRequest(model: model, token: token)
+        guard let model = self.model, let token = self.queueitToken else {
+            self.delegate?.hideLoader()
+            return
+        }
         getActualVaccineCard(model: model, token: token)
     }
     
@@ -111,6 +93,7 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
     // and closes the webview.
     func notifyQueueITUnavailable(_ errorMessage: String!) {
         print("CONNOR QUEUE IT: errorMessage: ", errorMessage)
+        self.delegate?.hideLoader()
     }
     
     func notifyUserExited() {
@@ -127,6 +110,7 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
 extension QueueItWorker {
     func createInitialVaccineCardRequest(model: GatewayVaccineCardRequest) {
         self.model = model
+        self.delegate?.showLoader()
         let interceptor = NetworkRequestInterceptor()
         let headerParameters: HTTPHeaders = [
             "phn": model.phn,
@@ -137,7 +121,10 @@ extension QueueItWorker {
         AF.request(URL(string: "https://test.healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
             // Check for queue it cookie here, if it's there, set the cookie and make actual request
             if let cookie = response.response?.allHeaderFields["Set-Cookie"] as? String, cookie.contains("QueueITAccepted") {
-                guard let model = self.model else { return }
+                guard let model = self.model else {
+                    self.delegate?.hideLoader()
+                    return
+                }
                 self.getActualVaccineCard(model: model, token: nil)
             } else if let redirectURLStringEndcoded = response.response?.allHeaderFields["x-queueit-redirect"] as? String,
                       let decodedURLString = redirectURLStringEndcoded.removingPercentEncoding,
@@ -147,6 +134,8 @@ extension QueueItWorker {
                 self.eventAlias = items.first(where: { $0.name == "e" })?.value
                 self.queueItSetup()
                 self.runQueueIt()
+            } else {
+                self.delegate?.hideLoader()
             }
         }
     }
@@ -157,10 +146,12 @@ extension QueueItWorker {
             switch result {
             case .success(let vaccineCard):
                 print(vaccineCard)
+                self.delegate?.hideLoader()
                 guard let localVaccineCard = vaccineCard.transformResponseIntoLocallyStoredVaccinePassportModel() else { return }
                 self.delegate?.handleVaccineCard(localModel: localVaccineCard)
             case .failure(let error):
                 print(error)
+                self.delegate?.hideLoader()
                 self.delegate?.handleError(error: error)
             }
         }

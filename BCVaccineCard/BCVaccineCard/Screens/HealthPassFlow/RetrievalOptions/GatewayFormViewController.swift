@@ -23,13 +23,8 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
     
-    // MARK: Queue It properties
-//    private var engine: QueueITEngine?
-//    var customerID: String?
-//    var eventAlias: String?
-//    var queueitToken: String?
-    var model: GatewayVaccineCardRequest?
-    var worker: QueueItWorker?
+    private var model: GatewayVaccineCardRequest?
+    private var worker: QueueItWorker?
     private var healthGateway: HealthGatewayBCGateway!
     
     var completionHandler: ((String) -> Void)?
@@ -49,8 +44,6 @@ class GatewayFormViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navSetup()
-        // TODO: Delete this after testings
-        submitButton.enabled = true
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -210,170 +203,21 @@ extension GatewayFormViewController {
     }
 }
 
-// MARK: FIXME: This is just temporary so that we can test UI with local data
-// TODO: Strip out alert handling for what we will use in the response object
-extension GatewayFormViewController {
-//    func checkForPHN(phnString: String, birthday: String) {
-//        var model: AppVaccinePassportModel
-//        let phn = phnString.trimWhiteSpacesAndNewLines.removeWhiteSpaceFormatting
-//        let name: String
-//        let image: UIImage?
-//
-//        var status: VaccineStatus
-//        if phn == "1111111111" {
-//            status = .fully
-//            name = "WILLIE BEAMEN"
-//            image = UIImage(named: "full")
-//        } else if phn == "2222222222" {
-//            status = .partially
-//            name = "RON BERGUNDY"
-//            image = UIImage(named: "partial")
-//        } else {
-//            status = .notVaxed
-//            name = "BRICK TAMLAND"
-//            image = nil
-//        }
-//        guard let img = image else {
-//            alert(title: "Error", message: "Invalid PHN number, no QR code associated with this number")
-//            return
-//        }
-//        let code = img.toPngString() ?? ""
-//        model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, issueDate: 1632413161, status: status))
-//        // This obviously needs to be refactored, but not going to bother, being that we are going to be removing it and hitting an endpoint.
-//        if doesCardNeedToBeUpdated(modelToUpdate: model) {
-//            self.navigationController?.popViewController(animated: true)
-//            self.updateCardInLocalStorage(model: model.transform())
-////                self.postCardAddedNotification(id: model.id ?? "")
-//            self.completionHandler?(model.id ?? "")
-//        } else {
-//            guard isCardAlreadyInWallet(modelToAdd: model) == false else {
-//                alert(title: "Duplicate", message: "This vaccine pass is already saved in your list of passes.") { [weak self] in
-//                    guard let `self` = self else {return}
-//                    self.navigationController?.popViewController(animated: true)
-//                    self.completionHandler?(model.id ?? "")
-//                }
-//                return
-//            }
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                self.navigationController?.popViewController(animated: true)
-//                self.appendModelToLocalStorage(model: model.transform())
-////                self.postCardAddedNotification(id: model.id ?? "")
-//                self.completionHandler?(model.id ?? "")
-//
-//            }
-//        }
-//    }
-
-    
-    // TODO: Call this function in the checkForPHN above, remove local logic
-//    private func createVaccineCardRequest(model: GatewayVaccineCardRequest) {
-//        self.healthGateway.requestVaccineCard(model) { [weak self] result in
-//            guard let `self` = self else {return}
-//            switch result {
-//            case .success(let vaccineCard):
-//                // TODO: Handle logic with duplicates etc here
-//                print(vaccineCard)
-//            case .failure(let error):
-//                print(error)
-//                // TODO: Show error here
-//            }
-//        }
-//    }
-    
-//    private func createInitialVaccineCardRequest(model: GatewayVaccineCardRequest) {
-//        let interceptor = NetworkRequestInterceptor()
-//        let headerParameters: HTTPHeaders = [
-//            "phn": model.phn,
-//            "dateOfBirth": model.dateOfBirth,
-//            "dateOfVaccine": model.dateOfVaccine
-//        ]
-//        AF.request(URL(string: "https://test.healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
-//            // Check for queue it cookie here, if it's there, set the cookie and make actual request
-//            if let cookie = response.response?.allHeaderFields["Set-Cookie"] as? String, cookie.contains("QueueITAccepted") {
-//                guard let model = self.model else { return }
-//                self.getActualVaccineCard(model: model, token: nil)
-//            } else if let redirectURLStringEndcoded = response.response?.allHeaderFields["x-queueit-redirect"] as? String,
-//                      let decodedURLString = redirectURLStringEndcoded.removingPercentEncoding,
-//                      let url = URL(string: decodedURLString),
-//                      let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems {
-//                self.customerID = items.first(where: { $0.name == "c" })?.value
-//                self.eventAlias = items.first(where: { $0.name == "e" })?.value
-//                self.queueItSetup()
-//                self.runQueueIt()
-//            }
-//        }
-//    }
-    
-//    private func createTokenVaccineCardRequest(model: GatewayVaccineCardRequest, token: String) {
-//        let interceptor = NetworkRequestInterceptor()
-////        var url = URL(string: "https://healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!
-//        let queryItems = [URLQueryItem(name: "queueittoken", value: token)]
-//        var urlComps = URLComponents(string: "https://healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")
-//        urlComps?.queryItems = queryItems
-//        guard let url = urlComps?.url else { return }
-//        let headerParameters: HTTPHeaders = [
-//            "phn": model.phn,
-//            "dateOfBirth": model.dateOfBirth,
-//            "dateOfVaccine": model.dateOfVaccine
-//        ]
-//        AF.request(url, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
-//            // Check for queue it cookie here, if it's there, set the cookie and make actual request
-//            print("CONNOR: Response: ", response)
-//            if let header = response.response?.allHeaderFields as? [String: String], let url = response.request?.url {
-//                let cookies = HTTPCookie.cookies(withResponseHeaderFields: header, for: url)
-//                AF.session.configuration.httpCookieStorage?.setCookies(cookies, for: url, mainDocumentURL: nil)
-//                // Normal request here
-//            } else if let redirectURLStringEndcoded = response.response?.allHeaderFields["x-queueit-redirect"] as? String,
-//                      let decodedURLString = redirectURLStringEndcoded.removingPercentEncoding,
-//                      let url = URL(string: decodedURLString),
-//                      let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems {
-//                self.customerID = items.first(where: { $0.name == "c" })?.value
-//                self.eventAlias = items.first(where: { $0.name == "e" })?.value
-//                self.queueItSetup()
-//                self.runQueueIt()
-//            }
-//        }
-//    }
-    
-//    private func getActualVaccineCard(model: GatewayVaccineCardRequest, token: String, cookies: [HTTPCookie]) {
-//
-//    }
-    
-//    private func getActualVaccineCard(model: GatewayVaccineCardRequest, token: String?) {
-//        self.healthGateway.requestVaccineCard(model, token: token) { [weak self ] result in
-//            guard let `self` = self else {return}
-//            switch result {
-//            case .success(let vaccineCard):
-//                // TODO: Handle logic with duplicates etc here
-//                print(vaccineCard)
-//            case .failure(let error):
-//                print(error)
-//                // TODO: Show error here
-//            }
-//        }
-//    }
-}
-
-
-
 // MARK: For Button tap events
 extension GatewayFormViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .cancel {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
-            let staticModel = GatewayVaccineCardRequest(phn: "9000201422", dateOfBirth: "1989-12-12", dateOfVaccine: "2021-05-15")
-            self.model = staticModel
-//            createInitialVaccineCardRequest(model: staticModel)
-            worker?.createInitialVaccineCardRequest(model: staticModel)
-//            guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
-//            guard let phn = dataSource[phnIndex].cellStringData else { return }
-//            guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
-//            guard let birthday = dataSource[dobIndex].cellStringData else { return }
-//            guard let dovIndex = getIndexInDataSource(formField: .dateOfVaccination, dataSource: self.dataSource) else { return }
-//            guard let vaxDate = dataSource[dovIndex].cellStringData else { return }
-//            guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
-//            createInitialVaccineCardRequest(model: model)
+            guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
+            guard let phn = dataSource[phnIndex].cellStringData else { return }
+            guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
+            guard let birthday = dataSource[dobIndex].cellStringData else { return }
+            guard let dovIndex = getIndexInDataSource(formField: .dateOfVaccination, dataSource: self.dataSource) else { return }
+            guard let vaxDate = dataSource[dovIndex].cellStringData else { return }
+            guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
+            self.model = model
+            worker?.createInitialVaccineCardRequest(model: model)
         }
     }
 }
@@ -417,6 +261,14 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
         
     }
     
+    func showLoader() {
+        self.view.startLoadingIndicator(backgroundColor: .clear)
+    }
+    
+    func hideLoader() {
+        self.view.startLoadingIndicator()
+    }
+    
     func handleCardInDefaults(localModel: LocallyStoredVaccinePassportModel) {
         let model = localModel.transform()
         if doesCardNeedToBeUpdated(modelToUpdate: model) {
@@ -441,71 +293,4 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
         }
     }
 }
-
-// MARK: QueueIt testing
-//extension GatewayFormViewController: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDisabledDelegate, QueueITUnavailableDelegate, QueueUserExitedDelegate, QueueViewClosedDelegate {
-//
-//    // This callback will be triggered when the user has been through the queue.
-//    // Here you should store session information, so user will only be sent to queue again if the session has timed out.
-//    private func queueItSetup() {
-//        guard let customerID = self.customerID, let eventAlias = self.eventAlias else { return }
-//        self.engine = QueueITEngine.init(host: self, customerId: customerID, eventOrAliasId: eventAlias, layoutName: nil, language: nil)
-//        self.engine?.queuePassedDelegate = self // Invoked once the user is passed the queue
-//        self.engine?.queueViewWillOpenDelegate = self // Invoked to notify that Queue-It UIWebView or WKWebview will open
-//        self.engine?.queueDisabledDelegate = self // Invoked to notify that queue is disabled
-//        self.engine?.queueITUnavailableDelegate = self // Invoked in case QueueIT is unavailable (500 errors)
-//        self.engine?.queueUserExitedDelegate = self // Invoked when user chooses to leave the queue
-//    }
-//
-//    private func runQueueIt() {
-//        do {
-//            try engine?.run()
-//        }
-//        catch let err {
-//            // TODO: Handle reasons for not being able to start queue it here
-//            print("CONNOR FAILED TO RUN: ", err)
-//            print("CONNOR ERROR CODE: ", (err as NSError).code)
-//        }
-//    }
-//
-//    // This callback will be triggered just before the webview (hosting the queue page) will be shown.
-//    // Here you can change some relevant UI elements.
-//    func notifyYourTurn(_ queuePassedInfo: QueuePassedInfo!) {
-//        print("CONNOR QUEUE IT: ", queuePassedInfo)
-//        self.queueitToken = queuePassedInfo?.queueitToken
-//        guard let model = self.model, let token = self.queueitToken else { return }
-////        createTokenVaccineCardRequest(model: model, token: token)
-//        getActualVaccineCard(model: model, token: token)
-//    }
-//
-//    // This callback will be triggered when the queue used (event alias ID) is in the 'disabled' state.
-//    // Most likely the application should still function, but the queue's 'disabled' state can be changed at any time,
-//    // so session handling is important.
-//    func notifyQueueViewWillOpen() {
-//        print("CONNOR QUEUE IT: notifyQueueViewWillOpen")
-//    }
-//
-//    // This callback will be triggered when the mobile application can't reach Queue-it's servers.
-//    // Most likely because the mobile device has no internet connection.
-//    // Here you decide if the application should function or not now that is has no queue-it protection.
-//    func notifyQueueDisabled() {
-//        print("CONNOR QUEUE IT: notifyQueueDisabled")
-//    }
-//
-//    // This callback will be triggered after a user clicks a close link in the layout and the WebView closes.
-//    // The close link is "queueit://close". Whenever the user navigates to this link, the SDK intercepts the navigation
-//    // and closes the webview.
-//    func notifyQueueITUnavailable(_ errorMessage: String!) {
-//        print("CONNOR QUEUE IT: errorMessage: ", errorMessage)
-//    }
-//
-//    func notifyUserExited() {
-//        print("CONNOR QUEUE IT: notifyUserExited")
-//    }
-//
-//    func notifyViewClosed() {
-//        print("CONNOR QUEUE IT: notifyViewClosed")
-//    }
-//
-//}
 
