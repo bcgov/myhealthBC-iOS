@@ -67,8 +67,8 @@ extension ResourceViewController {
             ResourceDataSourceSection(sectionTitle: nil, section: [
                 ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-vaccinated-resource")!, text: .getVaccinatedResource, link: "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/register"))),
                 ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-tested-resource")!, text: .getTestedResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc"))),
-                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "symptom-checker-resource")!, text: .covid19SymptomCheckerResource, link: "https://bc.thrive.health/covid19/en"))),
-                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "school-resource")!, text: .schoolRelatedResource, link: "http://www.google.com")))
+                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "symptom-checker-resource")!, text: .covid19SymptomCheckerResource, link: "https://bc.thrive.health/covid19/en")))
+//                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "school-resource")!, text: .schoolRelatedResource, link: "http://www.google.com")))
             ])
         ]
     }
