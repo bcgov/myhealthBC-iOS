@@ -28,7 +28,7 @@ class InitialOnboardingView: UIView {
             case .one:
                 return .healthPasses
             case .two:
-                return .healthResource
+                return .healthResources
             case .three:
                 return .newsFeed
             }

@@ -45,7 +45,7 @@ extension String {
     // Onboarding flow
     /// initial onboarding screen
     static var healthPasses: String { return "HealthPasses".localized }
-    static var healthResource: String { return "HealthResource".localized }
+    static var healthResources: String { return "HealthResources".localized }
     static var newsFeed: String { return "NewsFeed".localized }
     static var initialOnboardingOneDescription: String { return "InitialOnboardingOneDescription".localized }
     static var initialOnboardingTwoDescription: String { return "InitialOnboardingTwoDescription".localized }
@@ -53,8 +53,11 @@ extension String {
     
     // Gateway screen
     /// Validation
+    static var phnRequired: String { return "PHNRequired".localized }
     static var phnLength: String { return "PHNLength".localized }
     static var phnNumber: String { return "PHNNumber".localized }
+    static var dobRequired: String { return "DOBRequired".localized }
+    static var dovRequired: String { return "DOVRequired".localized }
     static var validDate: String { return "ValidDate".localized }
     static var dobRange: String { return "DOBRange".localized }
     static var dovRange: String { return "DOVRange".localized }

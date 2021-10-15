@@ -37,6 +37,8 @@ class QRRetrievalMethodViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        // Calling this again, just in case - don't want any users to be stuck in a weird state where the tab bar isn't shown
+        self.tabBarController?.tabBar.isHidden = false
         navSetup()
         self.tableView.contentInsetAdjustmentBehavior = .never
     }
@@ -170,6 +172,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
             guard let `self` = self else { return }
             self.popBackToProperViewController(id: id)
         }
+        self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

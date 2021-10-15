@@ -230,7 +230,7 @@ extension HealthPassViewController: AppStyleButtonDelegate {
             let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
             self.navigationController?.pushViewController(vc, animated: true)
         }
-        if type == .addCard {
+        if type == .addABCVaccineCard {
             goToAddCardOptionScreen()
         }
     }

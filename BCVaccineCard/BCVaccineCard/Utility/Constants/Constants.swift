@@ -11,11 +11,15 @@ import UIKit
 struct Constants {
     
     struct DateConstants {
-        static let firstVaxDate = Date.Formatter.yearMonthDay.date(from: "January 1, 2020")
+        static let firstVaxDate = Date.Formatter.yearMonthDay.date(from: "2020-01-01")
     }
     
     struct PrivacyPolicy {
         static let urlString = "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/proof/businesses#app-privacy-policy"
+    }
+    
+    struct Help {
+        static let urlString = "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/proof#help"
     }
     
     /// Authorization Header Key
