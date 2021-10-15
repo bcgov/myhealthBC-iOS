@@ -18,7 +18,7 @@ class ResourceViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     
-    private var dataSource: [ResourceDataSource] = []
+    private var dataSource: [ResourceDataSourceSection] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,10 +63,12 @@ extension ResourceViewController {
     private func setupDataSource() {
         // TODO: Get actual links for resources http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc
         self.dataSource = [
-            ResourceDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 17)), cellStringData: .resourceDescriptionText),
-            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-vaccinated-resource")!, text: .getVaccinatedResource, link: "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/register"))),
-            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-tested-resource")!, text: .getTestedResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc"))),
-            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-testkit-resource")!, text: .getTestkitResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/rapid-covid-19-point-of-care-screening-program")))
+            ResourceDataSourceSection(sectionTitle: nil, section: [ResourceDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 17)), cellStringData: .resourceDescriptionText)]),
+            ResourceDataSourceSection(sectionTitle: nil, section: [
+                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-vaccinated-resource")!, text: .getVaccinatedResource, link: "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/register"))),
+                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-tested-resource")!, text: .getTestedResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc"))),
+                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-testkit-resource")!, text: .getTestkitResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/rapid-covid-19-point-of-care-screening-program")))
+            ])
         ]
     }
 }
@@ -83,15 +85,19 @@ extension ResourceViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.tableFooterView = UIView()
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource.count
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource[section].section.count
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellType = dataSource[indexPath.row].type
+        let cellType = dataSource[indexPath.section].section[indexPath.row].type
         switch cellType {
         case .text(type: let type, font: let font):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell, let text = dataSource[indexPath.row].cellStringData {
+            if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell, let text = dataSource[indexPath.section].section[indexPath.row].cellStringData {
                 cell.configure(forType: type, text: text, withFont: font, labelSpacingAdjustment: 0)
                 return cell
             }
@@ -105,12 +111,32 @@ extension ResourceViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let type = dataSource[indexPath.row].type
+        let type = dataSource[indexPath.section].section[indexPath.row].type
         switch type {
         case .text: return
         case .resource(type: let resource):
             self.openURLInSafariVC(withURL: resource.link)
         }
     }
+    
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        guard let title = dataSource[section].sectionTitle else { return nil }
+//        let headerView = UIView()
+//        headerView.backgroundColor = .white
+//
+//        let sectionLabel = UILabel(frame: CGRect(x: 8, y: 28, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+//        sectionLabel.font = UIFont.bcSansBoldWithSize(size: 15)
+//        sectionLabel.textColor = AppColours.textBlack
+//        sectionLabel.text = title
+//        sectionLabel.sizeToFit()
+//        headerView.addSubview(sectionLabel)
+//
+//        return headerView
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        guard dataSource[section].sectionTitle != nil else { return 0 }
+//        return 50
+//    }
     
 }

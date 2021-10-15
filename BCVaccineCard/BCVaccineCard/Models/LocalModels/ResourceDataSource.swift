@@ -21,3 +21,8 @@ struct Resource: Equatable {
     let text: String
     let link: String
 }
+
+struct ResourceDataSourceSection: Equatable {
+    let sectionTitle: String?
+    let section: [ResourceDataSource]
+}
