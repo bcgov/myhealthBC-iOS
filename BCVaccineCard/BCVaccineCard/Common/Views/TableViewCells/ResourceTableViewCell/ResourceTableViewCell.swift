@@ -20,7 +20,7 @@ class ResourceTableViewCell: UITableViewCell {
     }
     
     private func setup() {
-        resourceLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+        resourceLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         resourceLabel.textColor = AppColours.appBlue
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear

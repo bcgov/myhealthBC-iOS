@@ -79,3 +79,5 @@
 "GetVaccinatedResource" = "Get vaccinated for COVID-19";
 "GetTestedResource" = "Get tested for COVID-19";
 "GetTestkitResource" = "Get a COVID-19 Rapid Test Kit";
+"Covid19SymptomCheckerResource" = "Covid-19 symptom checker";
+"SchoolRelatedResource" = "School related";

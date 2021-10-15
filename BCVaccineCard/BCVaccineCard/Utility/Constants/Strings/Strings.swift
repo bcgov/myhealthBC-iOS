@@ -107,6 +107,8 @@ extension String {
     static var getVaccinatedResource: String { return "GetVaccinatedResource".localized }
     static var getTestedResource: String { return "GetTestedResource".localized }
     static var getTestkitResource: String { return "GetTestkitResource".localized }
+    static var covid19SymptomCheckerResource: String { return "Covid19SymptomCheckerResource".localized }
+    static var schoolRelatedResource: String { return "SchoolRelatedResource".localized }
     
     
     
