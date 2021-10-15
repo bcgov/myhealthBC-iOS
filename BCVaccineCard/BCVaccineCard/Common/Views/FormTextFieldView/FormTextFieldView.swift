@@ -191,7 +191,7 @@ extension FormTextFieldView {
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
         // add buttons to toolbar
-        toolbar.setItems([nextButton, spacer, doneButton], animated: true)
+        toolbar.setItems([doneButton, spacer, nextButton], animated: true)
         
         // assign toolbar
         formTextField.inputAccessoryView = toolbar

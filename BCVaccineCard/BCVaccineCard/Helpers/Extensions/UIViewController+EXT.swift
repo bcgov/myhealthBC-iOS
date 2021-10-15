@@ -265,6 +265,14 @@ extension UIViewController {
             present(vc, animated: true)
         }
     }
+    
+    func openHelpScreen() {
+        if let url = URL(string: Constants.Help.urlString) {
+            guard UIApplication.shared.canOpenURL(url) else {return}
+            let vc = SFSafariViewController(url: url)
+            present(vc, animated: true)
+        }
+    }
 }
 
 // MARK: To open a specific URL - for now, keep it simple

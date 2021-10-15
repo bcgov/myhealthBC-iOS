@@ -18,12 +18,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="h4T-id-Mwi">
-                                <rect key="frame" x="24" y="64" width="366" height="664"/>
+                                <rect key="frame" x="24" y="64" width="366" height="710"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ctc-IE-rt0" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="24" y="748" width="115" height="44"/>
+                                <rect key="frame" x="24" y="794" width="115" height="44"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="115" id="bwZ-HX-O2y"/>
@@ -31,7 +31,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GkU-ng-FTF" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="255" y="745" width="135" height="50"/>
+                                <rect key="frame" x="255" y="791" width="135" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
@@ -39,7 +39,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="ctc-IE-rt0" firstAttribute="leading" secondItem="h4T-id-Mwi" secondAttribute="leading" id="5j6-Ue-QVi"/>
-                            <constraint firstItem="gMB-cr-hwm" firstAttribute="bottom" secondItem="ctc-IE-rt0" secondAttribute="bottom" constant="70" id="BNv-fP-tyB"/>
+                            <constraint firstItem="gMB-cr-hwm" firstAttribute="bottom" secondItem="ctc-IE-rt0" secondAttribute="bottom" constant="24" id="BNv-fP-tyB"/>
                             <constraint firstItem="h4T-id-Mwi" firstAttribute="top" secondItem="gMB-cr-hwm" secondAttribute="top" constant="20" id="E4H-7e-LJ4"/>
                             <constraint firstItem="GkU-ng-FTF" firstAttribute="trailing" secondItem="h4T-id-Mwi" secondAttribute="trailing" id="J4p-oL-g7I"/>
                             <constraint firstItem="GkU-ng-FTF" firstAttribute="width" secondItem="ctc-IE-rt0" secondAttribute="width" multiplier="1.17391" id="Mlp-Cb-koh"/>

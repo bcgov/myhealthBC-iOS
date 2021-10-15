@@ -45,7 +45,7 @@ extension String {
     // Onboarding flow
     /// initial onboarding screen
     static var healthPasses: String { return "HealthPasses".localized }
-    static var healthResource: String { return "HealthResource".localized }
+    static var healthResources: String { return "HealthResources".localized }
     static var newsFeed: String { return "NewsFeed".localized }
     static var initialOnboardingOneDescription: String { return "InitialOnboardingOneDescription".localized }
     static var initialOnboardingTwoDescription: String { return "InitialOnboardingTwoDescription".localized }

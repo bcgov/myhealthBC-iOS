@@ -46,6 +46,11 @@ class GatewayFormViewController: BaseViewController {
         navSetup()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
 //        return .lightContent
         if #available(iOS 13.0, *) {
@@ -88,10 +93,14 @@ extension GatewayFormViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .addABCVaccineCard,
                                                leftNavButton: nil,
-                                               rightNavButton: nil,
+                                               rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton)),
                                                navStyle: .small,
                                                targetVC: self)
         applyNavAccessibility()
+    }
+    
+    @objc private func helpIconButton() {
+        self.openHelpScreen()
     }
 }
 

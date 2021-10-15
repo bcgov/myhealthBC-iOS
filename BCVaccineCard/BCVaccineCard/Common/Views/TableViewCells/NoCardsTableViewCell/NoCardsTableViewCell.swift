@@ -49,7 +49,7 @@ class NoCardsTableViewCell: UITableViewCell {
     }
     
     func configure(withOwner vc: UIViewController, height: CGFloat) {
-        addButton.configure(withStyle: .blue, buttonType: .addCard, delegateOwner: vc, enabled: true)
+        addButton.configure(withStyle: .blue, buttonType: .addABCVaccineCard, delegateOwner: vc, enabled: true)
         stackViewViewHeight.constant = height
     }
     

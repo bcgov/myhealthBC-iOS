@@ -30,7 +30,7 @@ class AddCardsTableViewCell: UITableViewCell {
     
     private func labelSetup() {
         boldTextLabel.font = UIFont.boldSystemFont(ofSize: 17)
-        boldTextLabel.text = .covidVaccineCards
+        boldTextLabel.text = .bcVaccineCards
         boldTextLabel.textColor = .black
         subtextLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         subtextLabel.textColor = AppColours.textGray

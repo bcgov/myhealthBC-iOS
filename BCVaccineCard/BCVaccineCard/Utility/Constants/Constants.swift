@@ -18,6 +18,10 @@ struct Constants {
         static let urlString = "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/proof/businesses#app-privacy-policy"
     }
     
+    struct Help {
+        static let urlString = "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/proof#help"
+    }
+    
     /// Authorization Header Key
     static let authorizationHeaderKey = "Authorization"
 }

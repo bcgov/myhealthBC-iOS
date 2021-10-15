@@ -50,7 +50,7 @@ class ResourceViewController: BaseViewController {
 // MARK: Navigation setup
 extension ResourceViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .resource,
+        self.navDelegate?.setNavigationBarWith(title: .healthResources,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .large,
@@ -65,8 +65,8 @@ extension ResourceViewController {
         self.dataSource = [
             ResourceDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 17)), cellStringData: .resourceDescriptionText),
             ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-vaccinated-resource")!, text: .getVaccinatedResource, link: "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/register"))),
-            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-tested-resource")!, text: .getTestedResource, link: "https://www.google.com"))),
-            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-testkit-resource")!, text: .getTestkitResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc")))
+            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-tested-resource")!, text: .getTestedResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc"))),
+            ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-testkit-resource")!, text: .getTestkitResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/rapid-covid-19-point-of-care-screening-program")))
         ]
     }
 }
