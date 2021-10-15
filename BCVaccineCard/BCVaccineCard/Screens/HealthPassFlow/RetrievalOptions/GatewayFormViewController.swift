@@ -43,6 +43,8 @@ class GatewayFormViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // Putting this here in case user goes to help screen
+        self.tabBarController?.tabBar.isHidden = true
         navSetup()
     }
     
