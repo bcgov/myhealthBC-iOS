@@ -13,7 +13,6 @@ protocol EndpointsAccessor {
 }
 
 struct UrlAccessor {
-//    https://dev.api.saas.th.freshworks.club
     #if DEBUG
     let baseUrl = URL(string: "https://test.healthgateway.gov.bc.ca/api/")!
     #else

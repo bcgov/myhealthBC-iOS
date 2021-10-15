@@ -18,6 +18,7 @@ class VaccineCardView: UIView {
     @IBOutlet weak var tapToZoomInLabel: UILabel!
     @IBOutlet weak var statusBackgroundView: UIView!
     @IBOutlet weak var expandableBackgroundView: UIView!
+    @IBOutlet var qrImageConstraints: [NSLayoutConstraint]!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,6 +78,7 @@ class VaccineCardView: UIView {
         issuedOnLabel.isHidden = model.issueDate == nil
         statusBackgroundView.backgroundColor = model.codableModel.status.getColor
         expandableBackgroundView.backgroundColor = model.codableModel.status.getColor
+        qrImageConstraints.forEach { $0.constant = model.codableModel.source == .healthGateway ? 0 : 6 }
         qrCodeImage.image = model.image
         expandableBackgroundView.isHidden = !expanded
         setupAccessibility(model: model, expanded: expanded, editMode: editMode)

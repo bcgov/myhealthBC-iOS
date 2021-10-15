@@ -11,7 +11,7 @@ import UIKit
 struct Constants {
     
     struct DateConstants {
-        static let firstVaxDate = Date.Formatter.longDate.date(from: "January 1, 2020")
+        static let firstVaxDate = Date.Formatter.yearMonthDay.date(from: "January 1, 2020")
     }
     
     struct PrivacyPolicy {

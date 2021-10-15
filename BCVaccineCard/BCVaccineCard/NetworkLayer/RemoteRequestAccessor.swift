@@ -9,6 +9,7 @@ import Foundation
 
 protocol HealthGatewayBCAccessor {
     func requestVaccineCard(_ model: GatewayVaccineCardRequest,
+                            token: String?,
                             completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>)
 }
 
@@ -19,13 +20,24 @@ struct RemoteRequestAccessor {
 
 extension RemoteRequestAccessor: HealthGatewayBCAccessor {
     
-    func requestVaccineCard(_ model: GatewayVaccineCardRequest, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
-        let url = self.endpointsAccessor.getVaccineCard
+    func requestVaccineCard(_ model: GatewayVaccineCardRequest, token: String?, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
+        let interceptor = NetworkRequestInterceptor()
+        var url: URL?
+        if let token = token {
+            let queryItems = [URLQueryItem(name: "queueittoken", value: token)]
+            var urlComps = URLComponents(string: self.endpointsAccessor.getVaccineCard.absoluteString)
+            urlComps?.queryItems = queryItems
+            url = urlComps?.url
+        } else {
+            url = self.endpointsAccessor.getVaccineCard
+        }
+
         let headerParameters: Headers = [
             "phn": model.phn,
             "dateOfBirth": model.dateOfBirth,
             "dateOfVaccine": model.dateOfVaccine
         ]
-        self.accessor.request(withURL: url, method: .get, headers: headerParameters, andCompletion: completion)
+        guard let unwrappedURL = url else { return }
+        self.accessor.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, andCompletion: completion)
     }    
 }

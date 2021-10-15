@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import QueueITLibrary
+import Alamofire
 
 class GatewayFormViewController: BaseViewController {
     
@@ -21,7 +23,10 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
     
+    private var model: GatewayVaccineCardRequest?
+    private var worker: QueueItWorker?
     private var healthGateway: HealthGatewayBCGateway!
+    
     var completionHandler: ((String) -> Void)?
     private var dataSource: [FormDataSource] = []
     private var submitButtonEnabled: Bool = false {
@@ -33,6 +38,7 @@ class GatewayFormViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,6 +59,7 @@ class GatewayFormViewController: BaseViewController {
         setupButtons()
         setupDataSource()
         setupTableView()
+        setupQueueItWorker()
     }
     
     private func setupButtons() {
@@ -68,6 +75,10 @@ class GatewayFormViewController: BaseViewController {
             FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil),
             FormDataSource(type: .text(type: .underlinedWithImage, font: UIFont.bcSansBoldWithSize(size: 14)), cellStringData: .privacyStatement)
         ]
+    }
+    
+    private func setupQueueItWorker() {
+        self.worker = QueueItWorker(delegateOwner: self, healthGateway: self.healthGateway, delegate: self)
     }
 
 }
@@ -192,91 +203,6 @@ extension GatewayFormViewController {
     }
 }
 
-// MARK: FIXME: This is just temporary so that we can test UI with local data
-extension GatewayFormViewController {
-    func checkForPHN(phnString: String, birthday: String) {
-        var model: AppVaccinePassportModel
-        let phn = phnString.trimWhiteSpacesAndNewLines.removeWhiteSpaceFormatting
-        let name: String
-        let image: UIImage?
-        
-        var status: VaccineStatus
-        if phn == "1111111111" {
-            status = .fully
-            name = "WILLIE BEAMEN"
-            image = UIImage(named: "full")
-        } else if phn == "2222222222" {
-            status = .partially
-            name = "RON BERGUNDY"
-            image = UIImage(named: "partial")
-        } else {
-            status = .notVaxed
-            name = "BRICK TAMLAND"
-            image = nil
-        }
-        guard let img = image else {
-            alert(title: "Error", message: "Invalid PHN number, no QR code associated with this number")
-            return
-        }
-        let code = img.toPngString() ?? ""
-        model = AppVaccinePassportModel(codableModel: LocallyStoredVaccinePassportModel(code: code, birthdate: birthday, name: name, issueDate: 1632413161, status: status))
-        // This obviously needs to be refactored, but not going to bother, being that we are going to be removing it and hitting an endpoint.
-        if doesCardNeedToBeUpdated(modelToUpdate: model) {
-            self.navigationController?.popViewController(animated: true)
-            self.updateCardInLocalStorage(model: model.transform())
-//                self.postCardAddedNotification(id: model.id ?? "")
-            self.completionHandler?(model.id ?? "")
-        } else {
-            guard isCardAlreadyInWallet(modelToAdd: model) == false else {
-                alert(title: "Duplicate", message: "This vaccine pass is already saved in your list of passes.") { [weak self] in
-                    guard let `self` = self else {return}
-                    self.navigationController?.popViewController(animated: true)
-                    self.completionHandler?(model.id ?? "")
-                }
-                return
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.navigationController?.popViewController(animated: true)
-                self.appendModelToLocalStorage(model: model.transform())
-//                self.postCardAddedNotification(id: model.id ?? "")
-                self.completionHandler?(model.id ?? "")
-                
-            }
-            
-            
-//            alert(title: "Success", message: "Congrats! You have successfully fetched your vaxine QR code. Would you like to save this card to your list of cards?", buttonOneTitle: "No", buttonOneCompletion: { [weak self] in
-//                guard let `self` = self else { return }
-//                self.dismiss(animated: true, completion: nil)
-//                // No Nothing, just dismiss
-//            }, buttonTwoTitle: "Yes") { [weak self] in
-//                guard let `self` = self else { return }
-//                self.dismiss(animated: true) {
-//                    self.appendModelToLocalStorage(model: model.transform())
-//                    self.postCardAddedNotification(id: model.id ?? "")
-//                    self.completionHandler?()
-//                }
-//            }
-        }
-    }
-    
-    // TODO: Call this function in the checkForPHN above, remove local logic
-    private func createVaccineCardRequest(model: GatewayVaccineCardRequest) {
-        self.healthGateway.requestVaccineCard(model) { [weak self] result in
-            guard let `self` = self else {return}
-            switch result {
-            case .success(let vaccineCard):
-                // TODO: Handle logic with duplicates etc here
-                print(vaccineCard)
-            case .failure(let error):
-                print(error)
-                // TODO: Show error here
-            }
-        }
-    }
-}
-
-
-
 // MARK: For Button tap events
 extension GatewayFormViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
@@ -287,8 +213,20 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             guard let phn = dataSource[phnIndex].cellStringData else { return }
             guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
             guard let birthday = dataSource[dobIndex].cellStringData else { return }
-            checkForPHN(phnString: phn, birthday: birthday)
+            guard let dovIndex = getIndexInDataSource(formField: .dateOfVaccination, dataSource: self.dataSource) else { return }
+            guard let vaxDate = dataSource[dovIndex].cellStringData else { return }
+            guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
+            self.model = model
+            worker?.createInitialVaccineCardRequest(model: model)
         }
+    }
+}
+
+// MARK: Data Formatting
+extension GatewayFormViewController {
+    private func formatGatewayData(phn: String, birthday: String, vax: String) -> GatewayVaccineCardRequest? {
+        let formattedPHN = phn.removeWhiteSpaceFormatting
+        return GatewayVaccineCardRequest(phn: formattedPHN, dateOfBirth: birthday, dateOfVaccine: vax)
     }
 }
 
@@ -303,6 +241,54 @@ extension GatewayFormViewController {
             }
             if let leftNavButton = nav.getLeftBarButtonItem() {
                 // TODO: Need to investigate here - not a priority right now though, as designs will likely change
+            }
+        }
+    }
+}
+
+// MARK: QueueItWorkerDefaultsDelegate
+extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
+    func handleVaccineCard(localModel: LocallyStoredVaccinePassportModel) {
+        handleCardInDefaults(localModel: localModel)
+    }
+    
+    func handleError(error: ResultError) {
+        if error.resultMessage == "Unknown" {
+            alert(title: "Error", message: "Unknown error has occured. Please try again.")
+        } else {
+            alert(title: "Error", message: error.resultMessage ?? "Health Gateway error")
+        }
+        
+    }
+    
+    func showLoader() {
+        self.view.startLoadingIndicator(backgroundColor: .clear)
+    }
+    
+    func hideLoader() {
+        self.view.startLoadingIndicator()
+    }
+    
+    func handleCardInDefaults(localModel: LocallyStoredVaccinePassportModel) {
+        let model = localModel.transform()
+        if doesCardNeedToBeUpdated(modelToUpdate: model) {
+            self.navigationController?.popViewController(animated: true)
+            self.updateCardInLocalStorage(model: model.transform())
+            self.completionHandler?(model.id ?? "")
+        } else {
+            guard isCardAlreadyInWallet(modelToAdd: model) == false else {
+                alert(title: "Duplicate", message: "This vaccine pass is already saved in your list of passes.") { [weak self] in
+                    guard let `self` = self else {return}
+                    self.navigationController?.popViewController(animated: true)
+                    self.completionHandler?(model.id ?? "")
+                }
+                return
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.navigationController?.popViewController(animated: true)
+                self.appendModelToLocalStorage(model: model.transform())
+                self.completionHandler?(model.id ?? "")
+                
             }
         }
     }
