@@ -68,13 +68,13 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
             } else if errorCode == RequestAlreadyInProgress.rawValue {
                 // Need to fetch locally stored Cookie and token
                 self.fetchValueFromDefaults()
-                guard let model = self.model, let url = self.url, let token = self.queueitToken, let cookieHeadString = self.cookieHeader else {
+                guard let model = self.model, let url = self.url, let cookieHeadString = self.cookieHeader else {
                     self.delegate?.handleError(title: "In Progress Error", error: ResultError(resultMessage: "There was an error with your in progress request, please try again later."))
                     return
                 }
                 let cookies = HTTPCookie.cookies(withResponseHeaderFields: cookieHeadString, for: url)
                 AF.session.configuration.httpCookieStorage?.setCookies(cookies, for: url, mainDocumentURL: nil)
-                self.getActualVaccineCard(model: model, token: token)
+                self.getActualVaccineCard(model: model, token: self.queueitToken)
             } else {
                 self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: "An unknown error occured."))
             }
