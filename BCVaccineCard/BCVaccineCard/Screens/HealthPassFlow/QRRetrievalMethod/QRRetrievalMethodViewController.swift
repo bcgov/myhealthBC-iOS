@@ -88,9 +88,10 @@ extension QRRetrievalMethodViewController {
         self.dataSource = [
             .text(text: .qrDescriptionText),
             .image(image: #imageLiteral(resourceName: "options-screen-image")),
+            .method(type: .enterGatewayInfo),
             .method(type: .scanWithCamera),
-            .method(type: .uploadImage),
-            .method(type: .enterGatewayInfo)
+            .method(type: .uploadImage)
+            
         ]
     }
 }
