@@ -57,14 +57,17 @@ enum FormTextFieldType {
     func setErrorValidationMessage(text: String) -> String? {
         switch self {
         case .personalHealthNumber:
+            guard text.trimWhiteSpacesAndNewLines.count > 0 else { return .phnRequired }
             guard text.isValidNumber else { return .phnNumber }
             guard text.removeWhiteSpaceFormatting.isValidLength(length: 10) else { return .phnLength }
             return nil
         case .dateOfBirth:
+            guard text.trimWhiteSpacesAndNewLines.count > 0 else { return .dobRequired }
             guard text.isValidDate(withFormatter: Date.Formatter.yearMonthDay) else { return .validDate }
             guard text.isValidDateRange(withFormatter: Date.Formatter.yearMonthDay, latestDate: Date()) else { return .dobRange }
             return nil
         case .dateOfVaccination:
+            guard text.trimWhiteSpacesAndNewLines.count > 0 else { return .dovRequired }
             guard text.isValidDate(withFormatter: Date.Formatter.yearMonthDay) else { return .validDate }
             guard text.isValidDateRange(withFormatter: Date.Formatter.yearMonthDay, earliestDate: Constants.DateConstants.firstVaxDate, latestDate: Date()) else { return .dovRange }
             return nil
