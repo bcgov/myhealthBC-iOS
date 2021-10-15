@@ -70,6 +70,7 @@ extension String {
     static var dateOfVaccine: String { return "DateOfVaccine".localized }
     static var dose1OrDose2: String { return "Dose1OrDose2".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
+    static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }
     
     // Health Pass Home screen
     static var covidVaccineCards: String { return "CovidVaccineCards".localized }

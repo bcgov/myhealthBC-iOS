@@ -143,7 +143,7 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
         if let cell = tableView.cellForRow(at: indexPath) as? FormTableViewCell {
             cell.formTextFieldView.openKeyboardAction()
         } else if let cell = tableView.cellForRow(at: indexPath) as? TextTableViewCell, cell.type == .underlinedWithImage {
-            self.openPrivacyPolicy()
+            alert(title: .privacyStatement, message: .gatewayPrivacyStatementDescription)
         }
     }
 }
