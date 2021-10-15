@@ -18,7 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-//         BCVaccineValidator.testMode = true
+//         use .Prod or .Test for different endpoints for keys
+        BCVaccineValidator.shared.setup(mode: .Prod)
         configure()
         return true
     }
