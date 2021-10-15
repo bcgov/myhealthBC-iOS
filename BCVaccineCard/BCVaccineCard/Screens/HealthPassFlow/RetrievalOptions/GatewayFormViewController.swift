@@ -263,11 +263,11 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
         handleCardInDefaults(localModel: localModel)
     }
     
-    func handleError(error: ResultError) {
+    func handleError(title: String, error: ResultError) {
         if error.resultMessage == "Unknown" {
-            alert(title: "Error", message: "Unknown error has occured. Please try again.")
+            alert(title: title, message: "Unknown error has occured. Please try again.")
         } else {
-            alert(title: "Error", message: error.resultMessage ?? "Health Gateway error")
+            alert(title: title, message: error.resultMessage ?? "Health Gateway error")
         }
         
     }
@@ -277,7 +277,7 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
     }
     
     func hideLoader() {
-        self.view.startLoadingIndicator()
+        self.view.endLoadingIndicator()
     }
     
     func handleCardInDefaults(localModel: LocallyStoredVaccinePassportModel) {

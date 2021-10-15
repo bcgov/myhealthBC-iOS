@@ -181,8 +181,17 @@ extension QueueItWorker {
             switch result {
             case .success(let vaccineCard):
                 print(vaccineCard)
+                // Note: Have to add error handling here, because whoever set up this response didn't do it correctly - error is part of ths success response object
+                // Noticed: Errors seem to be very inconsistent in terms of the response object
                 self.delegate?.hideLoader()
-                guard let localVaccineCard = vaccineCard.transformResponseIntoLocallyStoredVaccinePassportModel() else { return }
+                if let resultMessage = vaccineCard.resultError?.resultMessage {
+                    let adjustedMessage = resultMessage == "Error parsing phn" ? "There was an error with your Personal Health Number. Please check that it is correct and try again." : resultMessage
+                    self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: adjustedMessage))
+                }
+                guard let localVaccineCard = vaccineCard.transformResponseIntoLocallyStoredVaccinePassportModel() else {
+                    self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: "There was an issue with your request, please check your information and try again."))
+                    return
+                }
                 self.delegate?.handleVaccineCard(localModel: localVaccineCard)
             case .failure(let error):
                 print(error)
