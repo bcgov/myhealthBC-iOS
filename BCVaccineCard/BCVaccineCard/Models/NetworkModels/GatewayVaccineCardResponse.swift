@@ -32,16 +32,15 @@ struct GatewayVaccineCardResponse: Codable {
     func transformResponseIntoLocallyStoredVaccinePassportModel() -> LocallyStoredVaccinePassportModel? {
         guard let code = self.resourcePayload?.qrCode?.data,
               let birthdateInitialString = self.resourcePayload?.birthdate,
-              let birthdateDate = Date.Formatter.gatewayDateAndTime.date(from: birthdateInitialString),
-              let vaxDateString = self.resourcePayload?.vaccinedate,
-              let vaxDate = Date.Formatter.gatewayDateAndTime.date(from: vaxDateString),
               let doses = self.resourcePayload?.doses else {
                   return nil
               }
+        // Just adding this here instead of unwrapping, as I don't want a date format issue to prevent a user from getting their QR code - worst case, they are able to get a duplicate QR code, which isn't the end of the world
+        let birthdateDate = Date.Formatter.gatewayDateAndTime.date(from: birthdateInitialString) ?? Date()
         let birthdate = Date.Formatter.yearMonthDay.string(from: birthdateDate)
         let initialName = (self.resourcePayload?.firstname ?? "") + " " + (self.resourcePayload?.lastname ?? "")
         let name = initialName.trimWhiteSpacesAndNewLines.count > 0 ? initialName : "No Name"
-        let issueDate = vaxDate.timeIntervalSince1970
+        let issueDate = Date().timeIntervalSince1970
         let status: VaccineStatus = doses > 0 ? (doses > 1 ? .fully : .partially) : .notVaxed
         return LocallyStoredVaccinePassportModel(code: code, birthdate: birthdate, name: name, issueDate: issueDate, status: status, source: .healthGateway)
     }
