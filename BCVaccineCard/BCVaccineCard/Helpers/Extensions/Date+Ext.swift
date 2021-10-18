@@ -60,7 +60,7 @@ extension Date {
         static let gatewayDateAndTime: DateFormatter = {
             let formatter = DateFormatter()
 //            September-09-2012, 14:27
-            formatter.dateFormat = "yyyy-mm-dd'T'HH:mm:ss"
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
             return formatter
         }()
         

@@ -31,12 +31,14 @@ struct GatewayVaccineCardResponse: Codable {
     
     func transformResponseIntoLocallyStoredVaccinePassportModel() -> LocallyStoredVaccinePassportModel? {
         guard let code = self.resourcePayload?.qrCode?.data,
-              let birthdate = self.resourcePayload?.birthdate,
+              let birthdateInitialString = self.resourcePayload?.birthdate,
+              let birthdateDate = Date.Formatter.gatewayDateAndTime.date(from: birthdateInitialString),
               let vaxDateString = self.resourcePayload?.vaccinedate,
               let vaxDate = Date.Formatter.gatewayDateAndTime.date(from: vaxDateString),
               let doses = self.resourcePayload?.doses else {
                   return nil
               }
+        let birthdate = Date.Formatter.yearMonthDay.string(from: birthdateDate)
         let initialName = (self.resourcePayload?.firstname ?? "") + " " + (self.resourcePayload?.lastname ?? "")
         let name = initialName.trimWhiteSpacesAndNewLines.count > 0 ? initialName : "No Name"
         let issueDate = vaxDate.timeIntervalSince1970
