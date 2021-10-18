@@ -30,11 +30,13 @@ class QueueItWorker: NSObject {
     private var delegateOwner: UIViewController
     private var healthGateway: HealthGatewayBCGateway
     private weak var delegate: QueueItWorkerDefaultsDelegate?
+    private var endpoint: URL
     
-    init(delegateOwner: UIViewController, healthGateway: HealthGatewayBCGateway, delegate: QueueItWorkerDefaultsDelegate) {
+    init(delegateOwner: UIViewController, healthGateway: HealthGatewayBCGateway, delegate: QueueItWorkerDefaultsDelegate, endpoint: URL) {
         self.delegateOwner = delegateOwner
         self.healthGateway = healthGateway
         self.delegate = delegate
+        self.endpoint = endpoint
     }
 }
 
@@ -141,7 +143,7 @@ extension QueueItWorker {
             "dateOfVaccine": model.dateOfVaccine
         ]
         // TODO: Need to find a better way to get URL - ran out of time
-        AF.request(URL(string: "https://healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
+        AF.request(endpoint, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
             // Check for queue it cookie here, if it's there, set the cookie and make actual request
             self.url = response.request?.url
             if let cookie = response.response?.allHeaderFields["Set-Cookie"] as? String, cookie.contains("QueueITAccepted") {
