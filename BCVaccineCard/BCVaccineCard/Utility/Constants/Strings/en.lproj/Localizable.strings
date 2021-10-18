@@ -75,6 +75,7 @@
 "SettingsOpeningText" = "My Health BC app is the official mobile application from the Government of British Columbia which allow you to store and organize the proof of vaccination of you and your family members.";
 "Help" = "Help";
 "Resource" = "Resource";
+"Resources" = "Resources";
 "ResourceDescriptionText" = "Find useful information and learn how to get vaccinated or tested for COVID-19";
 "GetVaccinatedResource" = "Get vaccinated for COVID-19";
 "GetTestedResource" = "Get tested for COVID-19";

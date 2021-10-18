@@ -103,6 +103,7 @@ extension String {
     
     // Resource screen
     static var resource: String { return "Resource".localized }
+    static var resources: String { return "Resources".localized }
     static var resourceDescriptionText: String { return "ResourceDescriptionText".localized }
     static var getVaccinatedResource: String { return "GetVaccinatedResource".localized }
     static var getTestedResource: String { return "GetTestedResource".localized }
