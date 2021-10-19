@@ -228,6 +228,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             guard let vaxDate = dataSource[dovIndex].cellStringData else { return }
             guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
             self.model = model
+            worker?.createInitialVaccineCardRequest(model: model)
         }
     }
 }
