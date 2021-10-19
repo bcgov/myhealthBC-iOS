@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "icon Resources_symptom@1x.png",
+      "filename" : "Component 9@1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon Resources_symptom@2x.png",
+      "filename" : "Component 9@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon Resources_symptom@3x.png",
+      "filename" : "Component 9@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

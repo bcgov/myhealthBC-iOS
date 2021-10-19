@@ -39,7 +39,6 @@ class GatewayFormViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
