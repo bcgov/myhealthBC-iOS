@@ -60,9 +60,7 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
             try engine?.run()
         }
         catch let err {
-            // TODO: Handle reasons for not being able to start queue it here
-            print("CONNOR FAILED TO RUN: ", err)
-            print("CONNOR ERROR CODE: ", (err as NSError).code)
+            // Handle reasons for not being able to start the queue here
             self.delegate?.hideLoader()
             let errorCode = (err as NSError).code
             if errorCode == NetworkUnavailable.rawValue {
@@ -87,7 +85,9 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
     // This callback will be triggered just before the webview (hosting the queue page) will be shown.
     // Here you can change some relevant UI elements.
     func notifyYourTurn(_ queuePassedInfo: QueuePassedInfo!) {
-        print("CONNOR QUEUE IT: ", queuePassedInfo)
+        #if DEBUG
+            print("notifyQueueViewWillOpen: ", queuePassedInfo ?? "Info")
+        #endif
         self.queueitToken = queuePassedInfo?.queueitToken
         self.saveValueToDefaults(queueitToken: self.queueitToken)
         guard let model = self.model, let token = self.queueitToken else {
@@ -103,9 +103,11 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
     // so session handling is important.
     // QueueITWKViewController will be shown here
     func notifyQueueViewWillOpen() {
-        print("CONNOR QUEUE IT: notifyQueueViewWillOpen")
+        #if DEBUG
+            print("notifyQueueViewWillOpen")
+        #endif
         // Delay interval is 0 by default, so we can add a button on the main queue, going to add a delay to be safe
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             if let webViewController = self.delegateOwner.presentedViewController as? QueueITWKViewController {
                 // add close button
                 self.addCloseButton(viewController: webViewController)
@@ -117,24 +119,32 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
     // Most likely because the mobile device has no internet connection.
     // Here you decide if the application should function or not now that is has no queue-it protection.
     func notifyQueueDisabled() {
-        print("CONNOR QUEUE IT: notifyQueueDisabled")
+        #if DEBUG
+            print("notifyQueueDisabled")
+        #endif
     }
     
     // This callback will be triggered after a user clicks a close link in the layout and the WebView closes.
     // The close link is "queueit://close". Whenever the user navigates to this link, the SDK intercepts the navigation
     // and closes the webview.
     func notifyQueueITUnavailable(_ errorMessage: String!) {
-        print("CONNOR QUEUE IT: errorMessage: ", errorMessage)
+        #if DEBUG
+            print("notifyQueueITUnavailable: ", errorMessage ?? "Error")
+        #endif
         self.delegate?.hideLoader()
         self.delegate?.handleError(title: "QueueIt Waiting Room Closed", error: ResultError(resultMessage: errorMessage ?? "You have closed the QueueIt waiting room"))
     }
     
     func notifyUserExited() {
-        print("CONNOR QUEUE IT: notifyUserExited")
+        #if DEBUG
+            print("notifyUserExited")
+        #endif
     }
     
     func notifyViewClosed() {
-        print("CONNOR QUEUE IT: notifyViewClosed")
+        #if DEBUG
+            print("notifyViewClosed")
+        #endif
     }
     
 }
@@ -263,16 +273,23 @@ extension QueueItWorker {
         let button = UIButton()
         button.setImage(closeImage, for: .normal)
         button.setTitle(nil, for: .normal)
-        // TODO: Need to test out this logic
-        button.frame = CGRect(x: 5, y: 5, width: 24, height: 24)
+        let statusBarHeight: CGFloat
+        if #available(iOS 13.0, *) {
+            statusBarHeight = AppDelegate.sharedInstance?.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 48.0
+        } else {
+            statusBarHeight = UIApplication.shared.statusBarFrame.height
+        }
+        let y: CGFloat = statusBarHeight + 10
+        button.frame = CGRect(x: 12, y: y, width: 24, height: 24)
         button.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
-        button.addTarget(viewController, action: #selector(closeWebView), for: .touchUpInside)
+        button.addTarget(self, action: #selector(closeWebView), for: .touchUpInside)
         viewController.view.addSubview(button)
     }
     
     @objc func closeWebView() {
         if let webViewController = self.delegateOwner.presentedViewController as? QueueITWKViewController {
             webViewController.close(nil)
+            self.delegate?.hideLoader()
         }
     }
 }
