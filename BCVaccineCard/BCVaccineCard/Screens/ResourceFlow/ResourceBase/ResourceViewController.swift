@@ -116,6 +116,7 @@ extension ResourceViewController: UITableViewDelegate, UITableViewDataSource {
         switch type {
         case .text: return
         case .resource(type: let resource):
+            AnalyticsService.shared.track(action: .ResoruceLinkSelected, text: resource.link)
             self.openURLInSafariVC(withURL: resource.link)
         }
     }
