@@ -102,7 +102,6 @@ extension CovidVaccineCardsViewController {
                                                rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconHint)),
                                                navStyle: .small,
                                                targetVC: self)
-//        applyNavAccessibility()
     }
     
     @objc private func addCardButton() {

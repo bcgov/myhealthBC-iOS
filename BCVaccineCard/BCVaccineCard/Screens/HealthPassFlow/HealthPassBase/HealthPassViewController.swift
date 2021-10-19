@@ -30,14 +30,12 @@ class HealthPassViewController: BaseViewController {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
         navSetup()
-        self.navigationController?.navigationBar.accessibilityElementsHidden = true
         // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.accessibilityElementsHidden = false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -64,7 +62,6 @@ extension HealthPassViewController {
                                                rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
                                                targetVC: self)
-            applyNavAccessibility()
         
         
     }
@@ -252,21 +249,3 @@ extension HealthPassViewController: ZoomedInPopUpVCDelegate {
     }
 }
 
-// MARK: Accessibility
-// FIXME: Need to fix these values
-extension HealthPassViewController {
-    private func applyNavAccessibility() {
-        if let nav = self.navigationController as? CustomNavigationController {
-            if let rightNavButton = nav.getRightBarButtonItem() {
-                rightNavButton.accessibilityTraits = .button
-                rightNavButton.accessibilityLabel = AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle
-                rightNavButton.accessibilityHint = AccessibilityLabels.MyHealthPassesScreen.navRightIconHint
-            }
-//            nav.navigationItem.titleView?.accessibilityTraits = .staticText
-//            nav.navigationItem.titleView?.accessibilityLabel = AccessibilityLabels.MyHealthPassesScreen.navTitle
-//            UIAccessibility.setFocusTo(nav.navigationItem.titleView)
-        }
-            
-        
-    }
-}
