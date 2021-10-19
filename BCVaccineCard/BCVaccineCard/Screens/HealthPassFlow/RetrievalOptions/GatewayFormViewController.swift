@@ -95,10 +95,10 @@ extension GatewayFormViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .addABCVaccineCard,
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton)),
+                                               rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthGatewayScreen.navRightIconTitle, hint: AccessibilityLabels.HealthGatewayScreen.navRightIconHint)),
                                                navStyle: .small,
                                                targetVC: self)
-        applyNavAccessibility()
+//        applyNavAccessibility()
     }
     
     @objc private func helpIconButton() {
@@ -241,21 +241,21 @@ extension GatewayFormViewController {
     }
 }
 
-// MARK: Accessibility
-extension GatewayFormViewController {
-    private func applyNavAccessibility() {
-        if let nav = self.navigationController as? CustomNavigationController {
-            if let rightNavButton = nav.getRightBarButtonItem() {
-                rightNavButton.accessibilityTraits = .button
-                rightNavButton.accessibilityLabel = "Close"
-                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to your passes screen"
-            }
-            if let leftNavButton = nav.getLeftBarButtonItem() {
-                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
-            }
-        }
-    }
-}
+//// MARK: Accessibility
+//extension GatewayFormViewController {
+//    private func applyNavAccessibility() {
+//        if let nav = self.navigationController as? CustomNavigationController {
+//            if let rightNavButton = nav.getRightBarButtonItem() {
+//                rightNavButton.accessibilityTraits = .button
+//                rightNavButton.accessibilityLabel = "Close"
+//                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to your passes screen"
+//            }
+//            if let leftNavButton = nav.getLeftBarButtonItem() {
+//                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
+//            }
+//        }
+//    }
+//}
 
 // MARK: QueueItWorkerDefaultsDelegate
 extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {

@@ -37,10 +37,20 @@ class QRRetrievalMethodViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        self.view.accessibilityElementsHidden = true
         // Calling this again, just in case - don't want any users to be stuck in a weird state where the tab bar isn't shown
         self.tabBarController?.tabBar.isHidden = false
         navSetup()
+        self.navigationController?.navigationBar.accessibilityElementsHidden = true
         self.tableView.contentInsetAdjustmentBehavior = .never
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.navigationBar.accessibilityElementsHidden = false
+//        UIAccessibility.setFocusTo(self.navigationController?.navigationBar.items?[1])
+        UIAccessibility.post(notification: .layoutChanged, argument: self.navigationController?.navigationBar.items?[1])
+//        self.view.accessibilityElementsHidden = false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -78,7 +88,7 @@ extension QRRetrievalMethodViewController {
                                                rightNavButton: nil,
                                                navStyle: .small,
                                                targetVC: self)
-        applyNavAccessibility()
+//        applyNavAccessibility()
     }
 }
 
@@ -317,18 +327,18 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
     }
 }
 
-// MARK: Accessibility
-extension QRRetrievalMethodViewController {
-    private func applyNavAccessibility() {
-        if let nav = self.navigationController as? CustomNavigationController {
-            if let rightNavButton = nav.getRightBarButtonItem() {
-                rightNavButton.accessibilityTraits = .button
-                rightNavButton.accessibilityLabel = "Close"
-                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards screen"
-            }
-            if let leftNavButton = nav.getLeftBarButtonItem() {
-                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
-            }
-        }
-    }
-}
+//// MARK: Accessibility
+//extension QRRetrievalMethodViewController {
+//    private func applyNavAccessibility() {
+//        if let nav = self.navigationController as? CustomNavigationController {
+//            if let rightNavButton = nav.getRightBarButtonItem() {
+//                rightNavButton.accessibilityTraits = .button
+//                rightNavButton.accessibilityLabel = "Close"
+//                rightNavButton.accessibilityHint = "Tapping this button will close this screen and return you to the my cards screen"
+//            }
+//            if let leftNavButton = nav.getLeftBarButtonItem() {
+//                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
+//            }
+//        }
+//    }
+//}

@@ -99,10 +99,10 @@ extension CovidVaccineCardsViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .bcVaccineCards,
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton)),
+                                               rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconHint)),
                                                navStyle: .small,
                                                targetVC: self)
-        applyNavAccessibility()
+//        applyNavAccessibility()
     }
     
     @objc private func addCardButton() {
@@ -293,22 +293,22 @@ extension CovidVaccineCardsViewController: ZoomedInPopUpVCDelegate {
     }
 }
 
-// MARK: Accessibility
-extension CovidVaccineCardsViewController {
-    private func applyNavAccessibility() {
-        if let nav = self.navigationController as? CustomNavigationController {
-            if let rightNavButton = nav.getRightBarButtonItem() {
-                rightNavButton.accessibilityTraits = .button
-                rightNavButton.accessibilityLabel = "Add Card"
-                rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
-            }
-            if let leftNavButton = nav.getLeftBarButtonItem() {
-                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
-            }
-        }
-            
-        
-    }
-}
+//// MARK: Accessibility
+//extension CovidVaccineCardsViewController {
+//    private func applyNavAccessibility() {
+//        if let nav = self.navigationController as? CustomNavigationController {
+//            if let rightNavButton = nav.getRightBarButtonItem() {
+//                rightNavButton.accessibilityTraits = .button
+//                rightNavButton.accessibilityLabel = "Add Card"
+//                rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+//            }
+//            if let leftNavButton = nav.getLeftBarButtonItem() {
+//                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
+//            }
+//        }
+//            
+//        
+//    }
+//}
 
 

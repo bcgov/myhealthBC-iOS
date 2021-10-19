@@ -7,9 +7,16 @@
 
 import UIKit
 
+struct Accessibility {
+    let traits: UIAccessibilityTraits?
+    let label: String?
+    let hint: String?
+}
+
 struct NavButton {
     let image: UIImage?
     let action: Selector
+    let accessibility: Accessibility
 }
 // Note: Using switch statements here instead of a ternary operation in the event designs change and we have more than two styles - easier to adjust logic with a switch statment
 enum NavStyle {
@@ -96,9 +103,19 @@ class CustomNavigationController: UINavigationController {
         navigationBar.tintColor = navStyle.itemTintColor
         if let right = right {
             vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: right.image, style: .plain, target: vc, action: right.action)
+            if let trait = right.accessibility.traits {
+                vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
+            }
+            vc.navigationItem.rightBarButtonItem?.accessibilityLabel = right.accessibility.label
+            vc.navigationItem.rightBarButtonItem?.accessibilityHint = right.accessibility.hint
         }
         if let left = left {
             vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
+            if let trait = left.accessibility.traits {
+                vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
+            }
+            vc.navigationItem.rightBarButtonItem?.accessibilityLabel = left.accessibility.label
+            vc.navigationItem.rightBarButtonItem?.accessibilityHint = left.accessibility.hint
         }
         vc.navigationItem.backButtonTitle = ""
     }

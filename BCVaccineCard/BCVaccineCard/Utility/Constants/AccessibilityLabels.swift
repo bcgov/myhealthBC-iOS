@@ -9,11 +9,19 @@ import Foundation
 
 struct AccessibilityLabels {
     
-    struct MyCardsScreen {
-//        static let onboardingView = "On Boarding View"
-//        static let startScanningButton = "Allow Camera Access" // Constants.Strings.onBoarding.buttonTitle
-//        static let title = "BC Vaccine Card Verifier" // Constants.Strings.onBoarding.title
-//        static let subtitle = "Businesses can scan official digital or paper BC vaccine cards" // Constants.Strings.onBoarding.subtitle
-//        static let phoneImage = "Phone Image"
+    struct MyHealthPassesScreen {
+        static let navRightIconTitle = "Settings Icon"
+        static let navRightIconHint = "Tapping this button will bring you to the settings screen"
+    }
+    
+    struct HealthGatewayScreen {
+        static let navRightIconTitle = "Help Icon"
+        static let navRightIconHint = "Tapping this button will bring you to a help screen to assist you with the Health Gateway vaccine card retrieval method"
+    }
+    
+    struct CovidVaccineCardsScreen {
+        static let navRightIconTitle = "Add Card"
+        static let navRightIconHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
     }
 }
+

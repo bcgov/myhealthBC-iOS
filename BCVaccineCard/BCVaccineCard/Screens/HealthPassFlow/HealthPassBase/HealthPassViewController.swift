@@ -30,8 +30,14 @@ class HealthPassViewController: BaseViewController {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
         navSetup()
+        self.navigationController?.navigationBar.accessibilityElementsHidden = true
         // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.navigationBar.accessibilityElementsHidden = false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -55,10 +61,12 @@ extension HealthPassViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .healthPasses,
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton)),
+                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
                                                targetVC: self)
-        applyNavAccessibility()
+            applyNavAccessibility()
+        
+        
     }
     
     @objc private func settingsButton() {
@@ -251,12 +259,12 @@ extension HealthPassViewController {
         if let nav = self.navigationController as? CustomNavigationController {
             if let rightNavButton = nav.getRightBarButtonItem() {
                 rightNavButton.accessibilityTraits = .button
-                rightNavButton.accessibilityLabel = "Add Card"
-                rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+                rightNavButton.accessibilityLabel = AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle
+                rightNavButton.accessibilityHint = AccessibilityLabels.MyHealthPassesScreen.navRightIconHint
             }
-            if let leftNavButton = nav.getLeftBarButtonItem() {
-                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
-            }
+//            nav.navigationItem.titleView?.accessibilityTraits = .staticText
+//            nav.navigationItem.titleView?.accessibilityLabel = AccessibilityLabels.MyHealthPassesScreen.navTitle
+//            UIAccessibility.setFocusTo(nav.navigationItem.titleView)
         }
             
         
