@@ -34,6 +34,10 @@ class HealthPassViewController: BaseViewController {
         setup()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
@@ -55,10 +59,11 @@ extension HealthPassViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .healthPasses,
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton)),
+                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
                                                targetVC: self)
-        applyNavAccessibility()
+        
+        
     }
     
     @objc private func settingsButton() {
@@ -244,21 +249,3 @@ extension HealthPassViewController: ZoomedInPopUpVCDelegate {
     }
 }
 
-// MARK: Accessibility
-// FIXME: Need to fix these values
-extension HealthPassViewController {
-    private func applyNavAccessibility() {
-        if let nav = self.navigationController as? CustomNavigationController {
-            if let rightNavButton = nav.getRightBarButtonItem() {
-                rightNavButton.accessibilityTraits = .button
-                rightNavButton.accessibilityLabel = "Add Card"
-                rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
-            }
-            if let leftNavButton = nav.getLeftBarButtonItem() {
-                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
-            }
-        }
-            
-        
-    }
-}
