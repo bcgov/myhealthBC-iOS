@@ -44,6 +44,32 @@ class NewsFeedTableViewCell: UITableViewCell {
         }
         let dateString = Date.Formatter.yearMonthDay.string(from: date)
         newsDateLabel.text = dateString
+        
+        setupAccessibility()
+    }
+    
+    func setupAccessibility() {
+        newsDateLabel.isAccessibilityElement = false
+        newsTitleLabel.isAccessibilityElement = false
+        newsDetailsLabel.isAccessibilityElement = false
+        
+        var label = ""
+        if let date = newsDateLabel.text, !date.isEmpty {
+            label = "Published on: \(date), \n"
+        }
+        if let title = newsTitleLabel.text, !title.isEmpty {
+            label += "Title: \(title), \n"
+        }
+        
+        if let detail = newsDetailsLabel.text, !detail.isEmpty {
+            label += "Details: \(detail), \n"
+        }
+        
+        self.accessibilityLabel = label
+        self.accessibilityHint = AccessibilityLabels.openWebLinkHint
+        self.accessibilityTraits = [.selected, .link]
+        
+        
     }
     
 }

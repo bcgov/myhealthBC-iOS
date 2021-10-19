@@ -32,6 +32,12 @@ class ResourceTableViewCell: UITableViewCell {
     func configure(resource: Resource) {
         resourceImageView.image = resource.image
         resourceLabel.text = resource.text
+        
+        resourceImageView.isAccessibilityElement = false
+        resourceLabel.isAccessibilityElement = false
+        self.accessibilityLabel = resource.text
+        self.accessibilityHint = AccessibilityLabels.openWebLinkHint
+        self.accessibilityTraits = [.selected, .link]
     }
 
 }
