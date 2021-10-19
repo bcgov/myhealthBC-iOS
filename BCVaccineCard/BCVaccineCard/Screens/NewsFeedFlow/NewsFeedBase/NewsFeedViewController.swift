@@ -137,6 +137,7 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
 //        let link = dataSource.channel.item[indexPath.row].link
 //        self.openURLInSafariVC(withURL: link)
         guard let link = dataSource[indexPath.row].link else { return }
+        AnalyticsService.shared.track(action: .NewsLinkSelected, text: link)
         self.openURLInSafariVC(withURL: link)
     }
     

@@ -2,23 +2,33 @@ PODS:
   - Alamofire (5.4.1)
   - AlamofireRSSParser (2.4.0):
     - Alamofire (~> 5.0)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - QueueITLibrary (3.0.7)
+  - SnowplowTracker (2.2.2):
+    - FMDB (~> 2.7)
 
 DEPENDENCIES:
   - AlamofireRSSParser
   - QueueITLibrary (~> 3.0.3)
+  - SnowplowTracker (~> 2.0)
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - AlamofireRSSParser
+    - FMDB
     - QueueITLibrary
+    - SnowplowTracker
 
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   AlamofireRSSParser: dab86644d4d220b313767c33ef09e7acf11f641a
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   QueueITLibrary: 9840861051bd5b99dbf88700dd1a12ff71786b62
+  SnowplowTracker: 2eee2d6606a60db98f7c4e1515499bb216b6c8ad
 
-PODFILE CHECKSUM: 69785c84b526794681d6bfdbbcb27ef28f44b2e1
+PODFILE CHECKSUM: b9bdc5991776c1073ec1df45784ae9003b35ddaf
 
 COCOAPODS: 1.10.1

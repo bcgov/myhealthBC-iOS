@@ -17,14 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-//         use .Prod or .Test for different endpoints for keys
-        BCVaccineValidator.shared.setup(mode: .Prod)
         configure()
         return true
     }
     
     private func configure() {
+        //use .Prod or .Test for different endpoints for keys
+        BCVaccineValidator.shared.setup(mode: .Prod)
+        AnalyticsService.shared.setup()
         FirebaseApp.configure()
         setupGatewayFactory()
         setupRootViewController()

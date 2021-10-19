@@ -8,6 +8,7 @@ target 'BCVaccineCard' do
   # Pods for BCVaccineCard
   pod 'QueueITLibrary', '~> 3.0.3'
   pod "AlamofireRSSParser"
+  pod 'SnowplowTracker', '~> 2.0'
 
   target 'BCVaccineCardTests' do
     inherit! :search_paths
@@ -27,4 +28,5 @@ target 'BCVaccineCard-Prod' do
   # Pods for BCVaccineCard-Prod
   pod 'QueueITLibrary', '~> 3.0.3'
   pod "AlamofireRSSParser"
+  pod 'SnowplowTracker', '~> 2.0'
 end

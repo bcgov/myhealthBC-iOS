@@ -209,6 +209,14 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
     }
     
     private func storeValidatedQRCode(data: ScanResultModel, source: Source) {
+        switch source {
+        case .healthGateway:
+            AnalyticsService.shared.track(action: .AddQR, text: .Get)
+        case .scanner:
+            AnalyticsService.shared.track(action: .AddQR, text: .Scan)
+        case .imported:
+            AnalyticsService.shared.track(action: .AddQR, text: .Upload)
+        }
         let model = convertScanResultModelIntoLocalData(data: data, source: source)
         let appModel = model.transform()
         if doesCardNeedToBeUpdated(modelToUpdate: appModel) {

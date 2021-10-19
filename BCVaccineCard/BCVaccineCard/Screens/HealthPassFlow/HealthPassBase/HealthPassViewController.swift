@@ -194,6 +194,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
             self.savedCardsCount = 0
             self.dataSource = nil
             Defaults.vaccinePassports = nil
+            AnalyticsService.shared.track(action: .RemoveCard)
             self.tableView.reloadData()
         }
 
