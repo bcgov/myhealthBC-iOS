@@ -38,6 +38,13 @@ class NewsFeedViewController: BaseViewController {
         setup()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Set Accessibility element to be the Navigation heading
+        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: navigationController)
+    }
+    
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
 //        return .lightContent
         if #available(iOS 13.0, *) {
