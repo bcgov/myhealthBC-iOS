@@ -171,6 +171,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         let vc = GatewayFormViewController.constructGatewayFormViewController()
         vc.completionHandler = { [weak self] id in
             guard let `self` = self else { return }
+            AnalyticsService.shared.track(action: .AddQR, text: .Get)
             self.popBackToProperViewController(id: id)
         }
         self.tabBarController?.tabBar.isHidden = true
