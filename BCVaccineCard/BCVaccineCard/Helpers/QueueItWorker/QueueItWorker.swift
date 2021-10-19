@@ -7,7 +7,7 @@
 
 import QueueITLibrary
 import Alamofire
-import Foundation
+import UIKit
 
 protocol QueueItWorkerDefaultsDelegate: AnyObject {
     func handleVaccineCard(localModel: LocallyStoredVaccinePassportModel)
@@ -30,11 +30,13 @@ class QueueItWorker: NSObject {
     private var delegateOwner: UIViewController
     private var healthGateway: HealthGatewayBCGateway
     private weak var delegate: QueueItWorkerDefaultsDelegate?
+    private var endpoint: URL
     
-    init(delegateOwner: UIViewController, healthGateway: HealthGatewayBCGateway, delegate: QueueItWorkerDefaultsDelegate) {
+    init(delegateOwner: UIViewController, healthGateway: HealthGatewayBCGateway, delegate: QueueItWorkerDefaultsDelegate, endpoint: URL) {
         self.delegateOwner = delegateOwner
         self.healthGateway = healthGateway
         self.delegate = delegate
+        self.endpoint = endpoint
     }
 }
 
@@ -99,8 +101,16 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
     // This callback will be triggered when the queue used (event alias ID) is in the 'disabled' state.
     // Most likely the application should still function, but the queue's 'disabled' state can be changed at any time,
     // so session handling is important.
+    // QueueITWKViewController will be shown here
     func notifyQueueViewWillOpen() {
         print("CONNOR QUEUE IT: notifyQueueViewWillOpen")
+        // Delay interval is 0 by default, so we can add a button on the main queue, going to add a delay to be safe
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if let webViewController = self.delegateOwner.presentedViewController as? QueueITWKViewController {
+                // add close button
+                self.addCloseButton(viewController: webViewController)
+            }
+        }
     }
     
     // This callback will be triggered when the mobile application can't reach Queue-it's servers.
@@ -141,7 +151,7 @@ extension QueueItWorker {
             "dateOfVaccine": model.dateOfVaccine
         ]
         // TODO: Need to find a better way to get URL - ran out of time
-        AF.request(URL(string: "https://healthgateway.gov.bc.ca/api/immunizationservice/v1/api/VaccineStatus")!, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
+        AF.request(endpoint, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
             // Check for queue it cookie here, if it's there, set the cookie and make actual request
             self.url = response.request?.url
             if let cookie = response.response?.allHeaderFields["Set-Cookie"] as? String, cookie.contains("QueueITAccepted") {
@@ -243,5 +253,26 @@ extension QueueItWorker {
         self.eventAlias = cached.eventAlias
         self.queueitToken = cached.queueitToken
         self.cookieHeader = cached.cookieHeader
+    }
+}
+
+// MARK: Queue It Add close button hack - NOTE: This has not been tested yet
+extension QueueItWorker {
+    private func addCloseButton(viewController: QueueITWKViewController) {
+        let closeImage = UIImage(named: "close-icon")
+        let button = UIButton()
+        button.setImage(closeImage, for: .normal)
+        button.setTitle(nil, for: .normal)
+        // TODO: Need to test out this logic
+        button.frame = CGRect(x: 5, y: 5, width: 24, height: 24)
+        button.autoresizingMask = [.flexibleRightMargin, .flexibleBottomMargin]
+        button.addTarget(viewController, action: #selector(closeWebView), for: .touchUpInside)
+        viewController.view.addSubview(button)
+    }
+    
+    @objc func closeWebView() {
+        if let webViewController = self.delegateOwner.presentedViewController as? QueueITWKViewController {
+            webViewController.close(nil)
+        }
     }
 }

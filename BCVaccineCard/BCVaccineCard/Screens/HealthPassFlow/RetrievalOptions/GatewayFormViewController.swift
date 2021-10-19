@@ -26,6 +26,7 @@ class GatewayFormViewController: BaseViewController {
     private var model: GatewayVaccineCardRequest?
     private var worker: QueueItWorker?
     private var healthGateway: HealthGatewayBCGateway!
+    private var endpoint = UrlAccessor().getVaccineCard
     
     var completionHandler: ((String) -> Void)?
     private var dataSource: [FormDataSource] = []
@@ -85,7 +86,7 @@ class GatewayFormViewController: BaseViewController {
     }
     
     private func setupQueueItWorker() {
-        self.worker = QueueItWorker(delegateOwner: self, healthGateway: self.healthGateway, delegate: self)
+        self.worker = QueueItWorker(delegateOwner: self, healthGateway: self.healthGateway, delegate: self, endpoint: self.endpoint)
     }
 
 }

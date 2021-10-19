@@ -12,4 +12,5 @@ struct QueueItCachedObject: Codable {
     var eventAlias: String?
     var queueitToken: String?
     var cookieHeader: [String: String]?
+//    var existingRequest: GatewayVaccineCardRequest?
 }
