@@ -293,22 +293,4 @@ extension CovidVaccineCardsViewController: ZoomedInPopUpVCDelegate {
     }
 }
 
-//// MARK: Accessibility
-//extension CovidVaccineCardsViewController {
-//    private func applyNavAccessibility() {
-//        if let nav = self.navigationController as? CustomNavigationController {
-//            if let rightNavButton = nav.getRightBarButtonItem() {
-//                rightNavButton.accessibilityTraits = .button
-//                rightNavButton.accessibilityLabel = "Add Card"
-//                rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
-//            }
-//            if let leftNavButton = nav.getLeftBarButtonItem() {
-//                // TODO: Need to investigate here - not a priority right now though, as designs will likely change
-//            }
-//        }
-//            
-//        
-//    }
-//}
-
 
