@@ -25,6 +25,12 @@ class ResourceViewController: BaseViewController {
         setup()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Set Accessibility element to be the Navigation heading
+        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: navigationController)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()

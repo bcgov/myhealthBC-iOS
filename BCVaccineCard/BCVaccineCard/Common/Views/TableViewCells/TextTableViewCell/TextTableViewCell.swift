@@ -38,6 +38,7 @@ class TextTableViewCell: UITableViewCell {
         formatCell(type: type, text: text, font: font)
         guard let constant = labelSpacingAdjustment else { return }
         adjustLabelSpacing(by: constant)
+        self.accessibilityTraits = [.staticText]
         
     }
     
