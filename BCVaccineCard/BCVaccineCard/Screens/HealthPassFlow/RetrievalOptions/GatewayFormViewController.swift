@@ -97,7 +97,7 @@ extension GatewayFormViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthGatewayScreen.navRightIconTitle, hint: AccessibilityLabels.HealthGatewayScreen.navRightIconHint)),
                                                navStyle: .small,
-                                               targetVC: self)
+                                               targetVC: self, backButtonHintString: "the QR Retrieval Methods")
     }
     
     @objc private func helpIconButton() {
@@ -126,6 +126,7 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
         case .text(type: let type, font: let font):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell, let text = data.cellStringData {
                 cell.configure(forType: type, text: text, withFont: font)
+                cell.accessibilityTraits = .button
                 return cell
             }
             return UITableViewCell()

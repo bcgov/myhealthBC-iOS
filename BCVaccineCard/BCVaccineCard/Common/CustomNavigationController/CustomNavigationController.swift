@@ -65,7 +65,7 @@ class CustomNavigationController: UINavigationController {
         navigationBar.sizeToFit()
     }
     
-    private func setupAppearance(navStyle: NavStyle) {
+    private func setupAppearance(navStyle: NavStyle, backButtonHintString: String?) {
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
@@ -83,6 +83,14 @@ class CustomNavigationController: UINavigationController {
 //                navigationBar.scrollEdgeAppearance = navigationBar.scrollEdgeAppearance
 //            }
             navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
+            if let hint = backButtonHintString {
+                // NOTE: This logic isn't working, but I'm leaving it in here for now, just in case QA pushes it back
+                navigationBar.standardAppearance.backIndicatorImage.isAccessibilityElement = true
+                navigationBar.standardAppearance.backIndicatorImage.accessibilityTraits = .button
+                navigationBar.standardAppearance.backIndicatorImage.accessibilityLabel = "Navigation bar back button"
+                navigationBar.standardAppearance.backIndicatorImage.accessibilityHint = "Tapping this button will take you back to \(hint)"
+            }
+            
         } else {
             // FIXME: Find a safe way to change color of status bar background color (just stays white here)
             navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
@@ -91,15 +99,21 @@ class CustomNavigationController: UINavigationController {
             if let image = UIImage(named: "app-back-arrow") {
                 navigationBar.backIndicatorImage = image
                 navigationBar.backIndicatorTransitionMaskImage = image
+                if let hint = backButtonHintString {
+                    navigationBar.backIndicatorImage?.isAccessibilityElement = true
+                    navigationBar.backIndicatorImage?.accessibilityTraits = .button
+                    navigationBar.backIndicatorImage?.accessibilityLabel = "Navigation bar back button"
+                    navigationBar.backIndicatorImage?.accessibilityHint = "Tapping this button will take you back to \(hint)"
+                }
             }
 //            navigationBar.shadowImage = UIImage()
         }
         
     }
     
-    func setupNavigation(leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController) {
+    func setupNavigation(leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
         vc.navigationItem.largeTitleDisplayMode = navStyle.largeTitles ? .always : .never
-        setupAppearance(navStyle: navStyle)
+        setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString)
         navigationBar.tintColor = navStyle.itemTintColor
         if let right = right {
             vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: right.image, style: .plain, target: vc, action: right.action)

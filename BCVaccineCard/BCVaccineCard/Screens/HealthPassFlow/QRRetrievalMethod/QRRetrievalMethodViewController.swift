@@ -11,8 +11,9 @@ import SwiftUI
 
 class QRRetrievalMethodViewController: BaseViewController {
     
-    class func constructQRRetrievalMethodViewController() -> QRRetrievalMethodViewController {
+    class func constructQRRetrievalMethodViewController(backScreenString: String) -> QRRetrievalMethodViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: QRRetrievalMethodViewController.self)) as? QRRetrievalMethodViewController {
+            vc.backScreenString = backScreenString
             return vc
         }
         return QRRetrievalMethodViewController()
@@ -24,6 +25,7 @@ class QRRetrievalMethodViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     private var dataSource: [CellType] = []
+    private var backScreenString: String!
     
     private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
     private weak var imagePicker: UIImagePickerController? = nil
@@ -32,6 +34,8 @@ class QRRetrievalMethodViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+//        self.view.accessibilityElementsHidden = true
+//        self.view.accessibilityElements = [self.navigationController, self.tableView]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,11 +45,13 @@ class QRRetrievalMethodViewController: BaseViewController {
         self.tabBarController?.tabBar.isHidden = false
         navSetup()
         self.tableView.contentInsetAdjustmentBehavior = .never
+//        self.view.accessibilityElementsHidden = false
+//        UIAccessibility.post(notification: .screenChanged, argument: self.view)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -82,7 +88,8 @@ extension QRRetrievalMethodViewController {
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
-                                               targetVC: self)
+                                               targetVC: self,
+                                               backButtonHintString: backScreenString)
     }
 }
 
@@ -175,6 +182,10 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         let vc = GatewayFormViewController.constructGatewayFormViewController()
         vc.completionHandler = { [weak self] id in
             guard let `self` = self else { return }
+            self.view.accessibilityElementsHidden = true
+            self.tableView.accessibilityElementsHidden = true
+            self.view.isAccessibilityElement = false
+            self.tableView.isAccessibilityElement = false
             AnalyticsService.shared.track(action: .AddQR, text: .Get)
             self.popBackToProperViewController(id: id)
         }

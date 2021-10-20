@@ -87,8 +87,12 @@ extension CovidVaccineCardsViewController {
         if let indexPath = indexPath {
             guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
-            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
+            guard let cell = self.tableView.cellForRow(at: indexPath), self.dataSource.count > indexPath.row else { return }
+            let model = self.dataSource[indexPath.row]
             cell.accessibilityLabel = "Your proof of vaccination has been added to your passes. Vaccination Card Expanded"
+            let accessibilityValue = "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image"
+            cell.accessibilityValue = accessibilityValue
+            cell.accessibilityHint = "Action Available: Tap to zoom in QR code"
             UIAccessibility.setFocusTo(cell)
         }
     }
@@ -101,7 +105,8 @@ extension CovidVaccineCardsViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconHint)),
                                                navStyle: .small,
-                                               targetVC: self)
+                                               targetVC: self,
+                                               backButtonHintString: "Health Passes")
     }
     
     @objc private func addCardButton() {
@@ -110,7 +115,7 @@ extension CovidVaccineCardsViewController {
     }
     
     private func goToAddCardOptionScreen() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Your Covid Vaccine Cards")
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -200,7 +205,10 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         let requestedExpandedIndex = indexPath
         let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
         self.expandedIndexRow = requestedExpandedIndex.row
-        self.tableView.reloadRows(at: [currentExpandedIndex, requestedExpandedIndex], with: .automatic)
+        self.tableView.reloadRows(at: [requestedExpandedIndex, currentExpandedIndex], with: .automatic)
+        let cell = self.tableView.cellForRow(at: requestedExpandedIndex)
+        UIAccessibility.setFocusTo(cell)
+        
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {

@@ -61,7 +61,8 @@ extension HealthPassViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
-                                               targetVC: self)
+                                               targetVC: self,
+                                               backButtonHintString: nil)
         
         
     }
@@ -78,7 +79,7 @@ extension HealthPassViewController {
     
     private func goToAddCardOptionScreen() {
         // NOTE: Not sure if I should add UIImpactFeedbackGenerator here or not??
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Health Passes")
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -140,6 +141,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
             }
         } else if indexPath.row == 1 {
             if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
+                cell.isAccessibilityElement = false
                 cell.configure(model: card, expanded: true, editMode: false)
                 return cell
             }
@@ -210,7 +212,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: Add card button table view cell delegate here
 extension HealthPassViewController: AddCardsTableViewCellDelegate {
     func addCardButtonTapped() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Health Passes")
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

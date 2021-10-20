@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NavigationSetupProtocol: AnyObject {
-    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController)
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
 }
 
 class BaseViewController: UIViewController, NavigationSetupProtocol {
@@ -28,11 +28,11 @@ extension BaseViewController {
         self.navDelegate = self
     }
     
-    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController) {
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
         navigationItem.title = title
        
         guard let nav = self.navigationController as? CustomNavigationController else { return }
-        nav.setupNavigation(leftNavButton: left, rightNavButton: right, navStyle: navStyle, targetVC: vc)
+        nav.setupNavigation(leftNavButton: left, rightNavButton: right, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString)
     }
 }
 
