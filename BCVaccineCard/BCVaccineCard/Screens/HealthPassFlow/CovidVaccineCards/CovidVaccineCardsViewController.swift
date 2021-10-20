@@ -87,8 +87,12 @@ extension CovidVaccineCardsViewController {
         if let indexPath = indexPath {
             guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
-            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
+            guard let cell = self.tableView.cellForRow(at: indexPath), self.dataSource.count > indexPath.row else { return }
+            let model = self.dataSource[indexPath.row]
             cell.accessibilityLabel = "Your proof of vaccination has been added to your passes. Vaccination Card Expanded"
+            let accessibilityValue = "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image"
+            cell.accessibilityValue = accessibilityValue
+            cell.accessibilityHint = "Action Available: Tap to zoom in QR code"
             UIAccessibility.setFocusTo(cell)
         }
     }

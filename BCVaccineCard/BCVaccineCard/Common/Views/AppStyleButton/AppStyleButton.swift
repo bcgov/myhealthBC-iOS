@@ -61,6 +61,7 @@ class AppStyleButton: UIView {
         didSet {
             self.roundedButton.isEnabled = enabled
             self.roundedButton.alpha = enabled ? 1.0 : 0.3
+            self.roundedButton.accessibilityTraits = enabled ? [.button] : [.button, .notEnabled]
         }
     }
     
@@ -109,6 +110,7 @@ class AppStyleButton: UIView {
         self.delegate = delegateOwner as? AppStyleButtonDelegate
         self.buttonType = buttonType
         self.enabled = enabled
+        self.roundedButton.accessibilityTraits = enabled ? [.button] : [.button, .notEnabled]
         if let accessibilityValue = accessibilityValue {
             self.roundedButton.accessibilityLabel = accessibilityValue
         }
