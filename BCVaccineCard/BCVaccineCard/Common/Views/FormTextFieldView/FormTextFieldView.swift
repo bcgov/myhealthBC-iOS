@@ -105,6 +105,7 @@ class FormTextFieldView: UIView {
     var validationError: String? = nil {
         didSet {
             self.showValidationMessage(message: validationError)
+            self.formTextField.accessibilityHint = validationError == nil ? "Required" : validationError
         }
     }
     
