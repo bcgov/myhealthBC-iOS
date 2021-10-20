@@ -37,7 +37,6 @@ class QRRetrievalMethodViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-        self.view.accessibilityElementsHidden = true
         // Calling this again, just in case - don't want any users to be stuck in a weird state where the tab bar isn't shown
         self.tabBarController?.tabBar.isHidden = false
         navSetup()

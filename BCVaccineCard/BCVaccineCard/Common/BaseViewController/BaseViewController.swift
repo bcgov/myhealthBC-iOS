@@ -30,6 +30,7 @@ extension BaseViewController {
     
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController) {
         navigationItem.title = title
+       
         guard let nav = self.navigationController as? CustomNavigationController else { return }
         nav.setupNavigation(leftNavButton: left, rightNavButton: right, navStyle: navStyle, targetVC: vc)
     }

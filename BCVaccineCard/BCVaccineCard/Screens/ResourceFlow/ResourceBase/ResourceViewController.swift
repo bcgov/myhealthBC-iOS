@@ -28,7 +28,9 @@ class ResourceViewController: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Set Accessibility element to be the Navigation heading
-        UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: navigationController)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: self.navigationController)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
