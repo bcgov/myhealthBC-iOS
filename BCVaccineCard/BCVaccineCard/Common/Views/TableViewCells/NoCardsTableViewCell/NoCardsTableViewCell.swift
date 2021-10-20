@@ -31,20 +31,20 @@ class NoCardsTableViewCell: UITableViewCell {
         
         introTextLabel.isAccessibilityElement = true
         introTextLabel.accessibilityTraits = .staticText
-        introTextLabel.accessibilityValue = .noCardsIntroText
+        introTextLabel.accessibilityLabel = .noCardsIntroText
         
-        noCardsImageView.isAccessibilityElement = true
-        noCardsImageView.accessibilityTraits = .image
-        noCardsImageView.accessibilityLabel = "Empty vaccine pass image"
+        noCardsImageView.isAccessibilityElement = false
         
         noCardsLabel.isAccessibilityElement = true
         noCardsLabel.accessibilityTraits = .staticText
-        noCardsLabel.accessibilityValue = .noCardsYet
+        noCardsLabel.accessibilityLabel = .noCardsYet
         
         addButton.isAccessibilityElement = true
         addButton.accessibilityTraits = .button
         addButton.accessibilityLabel = "Add Card"
-        addButton.accessibilityHint = "Tapping this button will also bring you to a new screen with different options to retrieve your QR code"
+        addButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+        
+        self.accessibilityElements = [introTextLabel, noCardsLabel, addButton]
         
     }
     

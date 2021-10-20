@@ -32,6 +32,8 @@ class QRRetrievalMethodViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+//        self.view.accessibilityElementsHidden = true
+//        self.view.accessibilityElements = [self.navigationController, self.tableView]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,11 +43,13 @@ class QRRetrievalMethodViewController: BaseViewController {
         self.tabBarController?.tabBar.isHidden = false
         navSetup()
         self.tableView.contentInsetAdjustmentBehavior = .never
+//        self.view.accessibilityElementsHidden = false
+//        UIAccessibility.post(notification: .screenChanged, argument: self.view)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

@@ -140,6 +140,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
             }
         } else if indexPath.row == 1 {
             if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
+                cell.isAccessibilityElement = false
                 cell.configure(model: card, expanded: true, editMode: false)
                 return cell
             }
