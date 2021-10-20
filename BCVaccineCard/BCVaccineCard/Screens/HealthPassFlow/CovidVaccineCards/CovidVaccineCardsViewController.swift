@@ -101,7 +101,8 @@ extension CovidVaccineCardsViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconHint)),
                                                navStyle: .small,
-                                               targetVC: self)
+                                               targetVC: self,
+                                               backButtonHintString: "Health Passes")
     }
     
     @objc private func addCardButton() {
@@ -110,7 +111,7 @@ extension CovidVaccineCardsViewController {
     }
     
     private func goToAddCardOptionScreen() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Your Covid Vaccine Cards")
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -200,7 +201,10 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         let requestedExpandedIndex = indexPath
         let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
         self.expandedIndexRow = requestedExpandedIndex.row
-        self.tableView.reloadRows(at: [currentExpandedIndex, requestedExpandedIndex], with: .automatic)
+        self.tableView.reloadRows(at: [requestedExpandedIndex, currentExpandedIndex], with: .automatic)
+        let cell = self.tableView.cellForRow(at: requestedExpandedIndex)
+        UIAccessibility.setFocusTo(cell)
+        
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {

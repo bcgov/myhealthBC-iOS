@@ -38,6 +38,14 @@ enum FormTextFieldType {
         }
     }
     
+    var getPlaceholderAccessibilityText: String {
+        switch self {
+        case .personalHealthNumber: return "Number Format"
+        case .dateOfBirth: return "Date Format"
+        case .dateOfVaccination: return "Date Format"
+        }
+    }
+    
     var getImage: UIImage? {
         switch self {
         case .personalHealthNumber: return nil
@@ -137,6 +145,10 @@ class FormTextFieldView: UIView {
         formTextFieldSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         formTextFieldErrorLabel.textColor = AppColours.appRed
         formTextFieldErrorLabel.font = UIFont.bcSansItalicWithSize(size: 12)
+        formTextFieldTitleLabel.isAccessibilityElement = false
+        formTextFieldSubtitleLabel.isAccessibilityElement = false
+        formTextFieldErrorLabel.isAccessibilityElement = false
+        formTextFieldRightImageView.isAccessibilityElement = false
     }
     
     private func baseSetup() {
@@ -156,6 +168,14 @@ class FormTextFieldView: UIView {
         }
         createKeyboardForType(type: formType.getFieldType, formField: formType)
         formTextField.delegate = self
+        setupAccessibility(formType: formType)
+    }
+    
+    private func setupAccessibility(formType: FormTextFieldType) {
+        self.formTextField.isAccessibilityElement = true
+        self.formTextField.accessibilityLabel = formType.getFieldTitle + " " + (formType.getFieldSubtitle ?? "")
+        self.formTextField.accessibilityValue = formType.getPlaceholderAccessibilityText
+        self.formTextField.accessibilityHint = "Required"
     }
     
     // This is called from didSelectRow to open the keyboard

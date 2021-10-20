@@ -81,7 +81,8 @@ extension NewsFeedViewController {
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .large,
-                                               targetVC: self)
+                                               targetVC: self,
+                                               backButtonHintString: nil)
     }
 }
 

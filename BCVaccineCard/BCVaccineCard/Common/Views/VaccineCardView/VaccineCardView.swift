@@ -57,10 +57,10 @@ class VaccineCardView: UIView {
         tapToZoomInLabel.textColor = .white
         tapToZoomInLabel.font = UIFont.bcSansBoldWithSize(size: 12)
         tapToZoomInLabel.text = .tapToZoomIn
-        self.isAccessibilityElement = true
     }
     
     private func setupAccessibility(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool) {
+        self.isAccessibilityElement = true
         let accessibilityLabel = expanded ? "Vaccination Card Expanded" : "Vaccination Card Collapsed"
         self.accessibilityLabel = accessibilityLabel
         let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
@@ -69,6 +69,7 @@ class VaccineCardView: UIView {
     }
     
     func configure(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool) {
+        self.isAccessibilityElement = false
         nameLabel.text = model.codableModel.name.uppercased()
         checkmarkImageView.isHidden = model.codableModel.status != .fully
         vaccineStatusLabel.text = model.codableModel.status.getTitle

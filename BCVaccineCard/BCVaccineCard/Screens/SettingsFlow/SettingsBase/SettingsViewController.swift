@@ -54,7 +54,8 @@ extension SettingsViewController {
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
-                                               targetVC: self)
+                                               targetVC: self,
+                                               backButtonHintString: "Health Passes")
     }
 }
 
