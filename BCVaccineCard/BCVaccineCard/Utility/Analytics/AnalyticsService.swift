@@ -14,6 +14,7 @@ class AnalyticsService: NSObject, RequestCallback {
     fileprivate let endPoint = "spt.apps.gov.bc.ca"
     fileprivate let appID = "Snowplow_standalone_HApp_dev"
     fileprivate let namespace = "iOS"
+    fileprivate let schema = "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0"
     
     var tracker : TrackerController?
     
@@ -24,24 +25,33 @@ class AnalyticsService: NSObject, RequestCallback {
     
     public func setup() {}
     
-    /// Track an action event
-    /// - Parameter action: String describing the action
+    
+    /// Track an Action with a custom string. eg: a url
+    /// - Parameters:
+    ///   - action: AnalyticsAction enum describing the event
+    ///   - text: String destribing the action
     public func track(action: AnalyticsAction, text: String) {
         let actionString = action.rawValue
-        let event = SelfDescribing(schema: "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0", payload: ["action": actionString as NSObject, "text": text as NSObject])
+        let event = SelfDescribing(schema: schema, payload: ["action": actionString as NSObject, "text": text as NSObject])
         tracker?.track(event)
     }
     
+    /// Track an action with a pre-defined text in AnalyticsText
+    /// - Parameters:
+    ///   - action: AnalyticsAction enum describing the event
+    ///   - text: AnalyticsText enum destribing the action
     public func track(action: AnalyticsAction, text: AnalyticsText) {
         let actionString = action.rawValue
         let actionTextString = text.rawValue
-        let event = SelfDescribing(schema: "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0", payload: ["action": actionString as NSObject, "text": actionTextString as NSObject])
+        let event = SelfDescribing(schema: schema, payload: ["action": actionString as NSObject, "text": actionTextString as NSObject])
         tracker?.track(event)
     }
     
+    /// Track an Action only
+    /// - Parameter action: AnalyticsAction enum describing the event
     public func track(action: AnalyticsAction) {
         let actionString = action.rawValue
-        let event = SelfDescribing(schema: "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0", payload: ["action": actionString as NSObject])
+        let event = SelfDescribing(schema: schema, payload: ["action": actionString as NSObject])
         tracker?.track(event)
     }
     
