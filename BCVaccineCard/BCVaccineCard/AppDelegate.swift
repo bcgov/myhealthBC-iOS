@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-09-14.
-// GatewayAccess.initialize(withFactory: WorkerFactory(localFactory: localFactory, remoteFactory: RemoteFactory()))
+//
 
 import UIKit
 import CoreData
