@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/FreshworksStudio/BCVaccineValidator",
         "state": {
           "branch": null,
-          "revision": "9cba85acf4516857437162675512a6b1addcac5b",
-          "version": "1.2.14"
+          "revision": "3c0a60405bccdc611231976505fb1c314eb00268",
+          "version": "1.2.16"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/google/GoogleDataTransport.git",
         "state": {
           "branch": null,
-          "revision": "7fb27ea49414b9c5483503cd06baa821c8654d1e",
-          "version": "9.1.1"
+          "revision": "15ccdfd25ac55b9239b82809531ff26605e7556e",
+          "version": "9.1.2"
         }
       },
       {
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/google/GoogleUtilities.git",
         "state": {
           "branch": null,
-          "revision": "616fac2626b6b2d1424d79a6f786b4e2ed1cfb49",
-          "version": "7.5.2"
+          "revision": "797005ad8a1f0614063933e2fa010a5d13cb09d0",
+          "version": "7.6.0"
         }
       },
       {
