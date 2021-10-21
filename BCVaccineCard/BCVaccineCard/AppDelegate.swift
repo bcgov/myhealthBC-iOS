@@ -1,7 +1,7 @@
 //
 //  AppDelegate.swift
 //  BCVaccineCard
-//
+// 
 //  Created by Connor Ogilvie on 2021-09-14.
 //
 
