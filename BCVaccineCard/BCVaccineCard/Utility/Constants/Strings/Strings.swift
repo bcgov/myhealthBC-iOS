@@ -90,6 +90,7 @@ extension String {
     static var presentForScanning: String { return "PresentForScanning".localized }
     static var unlinkCardTitle: String { return "UnlinkCardTitle".localized }
     static var unlinkCardMessage: String { return "UnlinkCardMessage".localized }
+    static var noName: String { return "NoName".localized }
     
     // QR Method Selection screen
     static var qrDescriptionText: String { return "QRDescriptionText".localized }

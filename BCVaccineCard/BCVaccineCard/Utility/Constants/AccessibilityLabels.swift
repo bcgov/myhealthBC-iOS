@@ -23,5 +23,19 @@ struct AccessibilityLabels {
         static let navRightIconTitle = "Add Card"
         static let navRightIconHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
     }
+    
+    struct Navigation {
+        static let backButtonTitle = "Navigation bar back button"
+        static let backButtonHint = "Tapping this button will take you back to "
+    }
+    
+    struct Onboarding {
+        static let buttonNextTitle = "Next"
+        static let buttonNextHint = "Tapping this button will take you to the introduction of the next feature"
+        static let buttonGetStartedTitle = "Get Started"
+        static let buttonGetStartedHint = "Tapping this button will take you to the Health Passes home screen"
+        static let buttonOkTitle = "Okay"
+        static let buttonOkHint = "Tapping this button will take you to the Health Passes home screen"
+    }
 }
 

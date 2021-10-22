@@ -217,16 +217,22 @@ extension InitialOnboardingView {
 
     private func adjustBottomButton(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
         let buttonType: AppStyleButton.ButtonType
-        let accessibilityValue: String = "To do later"
-        let accessibilityHint: String = "To do value later"
+        let accessibilityValue: String
+        let accessibilityHint: String
         switch screenNumber {
         case .one:
             buttonType = .next
+            accessibilityValue = AccessibilityLabels.Onboarding.buttonNextTitle
+            accessibilityHint = AccessibilityLabels.Onboarding.buttonNextHint
         case .two:
             buttonType = .next
+            accessibilityValue = AccessibilityLabels.Onboarding.buttonNextTitle
+            accessibilityHint = AccessibilityLabels.Onboarding.buttonNextHint
         case .three:
             buttonType = .getStarted
             bottomButtonWidthConstraint.constant = 162
+            accessibilityValue = AccessibilityLabels.Onboarding.buttonGetStartedTitle
+            accessibilityHint = AccessibilityLabels.Onboarding.buttonGetStartedHint
         }
         bottomButton.configure(withStyle: .blue, buttonType: buttonType, delegateOwner: delegateOwner, enabled: true, accessibilityValue: accessibilityValue, accessibilityHint: accessibilityHint)
     }
