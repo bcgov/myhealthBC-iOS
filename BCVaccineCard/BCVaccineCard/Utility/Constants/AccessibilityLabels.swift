@@ -37,5 +37,26 @@ struct AccessibilityLabels {
         static let buttonOkTitle = "Okay"
         static let buttonOkHint = "Tapping this button will take you to the Health Passes home screen"
     }
+    
+    struct QRMethods {
+        static let scanWithCamera = "Tapping this button will open your camera to scan a QR code."
+        static let uploadImage = "Tapping this button will open your camera roll to select a QR code that you've saved."
+        static let enterGatewayInfo = "Tapping this button will take you to a new screen where you can enter your personal health information to fetch your vaccine card from health gateway"
+    }
+    
+    struct NoCards {
+        static let addCardLabel = "Add Card"
+        static let addCardHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+    }
+    
+    struct AddCard {
+        static let addCardLabel = "Add Card"
+        static let addCardHint = "Tap this button to add a vaccine card"
+    }
+    
+    struct ViewAllButton {
+        static let viewAllLabel = "View All"
+        static let viewAllHint = "Tapping this button will show you all of your saved covid 19 vaccine cards"
+    }
 }
 

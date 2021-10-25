@@ -39,8 +39,8 @@ class AddCardsTableViewCell: UITableViewCell {
         } else {
             addCardButton.setTitle(nil, for: .normal)
         }
-        addCardButton.accessibilityLabel = "Add Card"
-        addCardButton.accessibilityHint = "Tap this button to add a vaccine card"
+        addCardButton.accessibilityLabel = AccessibilityLabels.AddCard.addCardLabel
+        addCardButton.accessibilityHint = AccessibilityLabels.AddCard.addCardHint
     }
     
     @IBAction func addCardButtonTapped(_ sender: UIButton) {

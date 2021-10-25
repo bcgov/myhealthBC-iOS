@@ -216,21 +216,6 @@ extension HealthPassViewController: AddCardsTableViewCellDelegate {
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
- // MARK: Primary Vaccine Card button delegates here
-//extension HealthPassViewController: PrimaryVaccineCardTableViewCellDelegate {
-//    func addCardButtonTapped() {
-//        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-//
-//    func tapToZoomInButtonTapped() {
-//        guard let image = dataSource?.image else { return }
-//        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-//        let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
-//        self.present(vc, animated: true, completion: nil)
-//        self.tabBarController?.tabBar.isHidden = true
-//    }
-//}
 
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {

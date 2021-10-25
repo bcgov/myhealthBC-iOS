@@ -34,9 +34,9 @@ enum QRRetrievalMethod {
     
     var accessibilityHint: String {
         switch self {
-        case .scanWithCamera: return "Tapping this button will open your camera to scan a QR code."
-        case .uploadImage: return "Tapping this button will open your camera roll to select a QR code that you've saved."
-        case .enterGatewayInfo: return "Tapping this button will take you to a new screen where you can enter your personal health information to fetch your vaccine card from health gateway"
+        case .scanWithCamera: return AccessibilityLabels.QRMethods.scanWithCamera
+        case .uploadImage: return AccessibilityLabels.QRMethods.uploadImage
+        case .enterGatewayInfo: return AccessibilityLabels.QRMethods.enterGatewayInfo
         }
     }
 }
