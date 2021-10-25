@@ -8,6 +8,7 @@
 import UIKit
 import QueueITLibrary
 import Alamofire
+import BCVaccineValidator
 
 class GatewayFormViewController: BaseViewController {
     
@@ -243,8 +244,9 @@ extension GatewayFormViewController {
 
 // MARK: QueueItWorkerDefaultsDelegate
 extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
-    func handleVaccineCard(localModel: LocallyStoredVaccinePassportModel) {
-        handleCardInDefaults(localModel: localModel)
+    func handleVaccineCard(scanResult: ScanResultModel) {
+        let model = convertScanResultModelIntoLocalData(data: scanResult, source: .healthGateway)
+        handleCardInDefaults(localModel: model)        
     }
     
     func handleError(title: String, error: ResultError) {
