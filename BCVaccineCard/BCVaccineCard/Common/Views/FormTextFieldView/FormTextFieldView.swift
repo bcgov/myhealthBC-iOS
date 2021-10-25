@@ -40,9 +40,9 @@ enum FormTextFieldType {
     
     var getPlaceholderAccessibilityText: String {
         switch self {
-        case .personalHealthNumber: return "Number Format"
-        case .dateOfBirth: return "Date Format"
-        case .dateOfVaccination: return "Date Format"
+        case .personalHealthNumber: return AccessibilityLabels.FormTextField.numberFormat
+        case .dateOfBirth: return AccessibilityLabels.FormTextField.dateFormat
+        case .dateOfVaccination: return AccessibilityLabels.FormTextField.dateFormat
         }
     }
     
@@ -105,7 +105,7 @@ class FormTextFieldView: UIView {
     var validationError: String? = nil {
         didSet {
             self.showValidationMessage(message: validationError)
-            self.formTextField.accessibilityHint = validationError == nil ? "Required" : validationError
+            self.formTextField.accessibilityHint = validationError == nil ? AccessibilityLabels.FormTextField.required : validationError
         }
     }
     
@@ -176,7 +176,7 @@ class FormTextFieldView: UIView {
         self.formTextField.isAccessibilityElement = true
         self.formTextField.accessibilityLabel = formType.getFieldTitle + " " + (formType.getFieldSubtitle ?? "")
         self.formTextField.accessibilityValue = formType.getPlaceholderAccessibilityText
-        self.formTextField.accessibilityHint = "Required"
+        self.formTextField.accessibilityHint = AccessibilityLabels.FormTextField.required
     }
     
     // This is called from didSelectRow to open the keyboard

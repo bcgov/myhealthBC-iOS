@@ -170,7 +170,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
         }
         delete.isAccessibilityElement = true
         delete.accessibilityTraits = .button
-        delete.accessibilityLabel = "Unlink button"
+        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
@@ -184,7 +184,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
         }
         delete.isAccessibilityElement = true
         delete.accessibilityTraits = .button
-        delete.accessibilityLabel = "Unlink button"
+        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
@@ -212,7 +212,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: Add card button table view cell delegate here
 extension HealthPassViewController: AddCardsTableViewCellDelegate {
     func addCardButtonTapped() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Health Passes")
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
