@@ -208,8 +208,6 @@
 		7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75526F9155700EEF510 /* UIFont+Ext.swift */; };
 		7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
 		7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */; };
-		7967E76126FBDE0100EEF510 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76026FBDE0100EEF510 /* FirebaseAnalytics */; };
-		7967E76326FBDE0100EEF510 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */; };
 		79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
 		79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA071270CB71D00FF30AB /* Records.storyboard */; };
 		79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA075270CB73800FF30AB /* Booking.storyboard */; };
@@ -386,8 +384,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7967E76326FBDE0100EEF510 /* FirebaseCrashlytics in Frameworks */,
-				7967E76126FBDE0100EEF510 /* FirebaseAnalytics in Frameworks */,
 				795AA721271083F100E59FF1 /* SwiftyJSON in Frameworks */,
 				2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */,
 				65649CF2147EF54DEEA617D4 /* Pods_BCVaccineCard.framework in Frameworks */,
@@ -1098,8 +1094,6 @@
 			name = BCVaccineCard;
 			packageProductDependencies = (
 				2912313A26F93FB900CF5F3B /* BCVaccineValidator */,
-				7967E76026FBDE0100EEF510 /* FirebaseAnalytics */,
-				7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */,
 				795AA720271083F100E59FF1 /* SwiftyJSON */,
 			);
 			productName = BCVaccineCard;
@@ -2109,16 +2103,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
-		};
-		7967E76026FBDE0100EEF510 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		7967E76226FBDE0100EEF510 /* FirebaseCrashlytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 

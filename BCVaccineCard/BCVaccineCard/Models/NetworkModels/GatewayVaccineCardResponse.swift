@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BCVaccineValidator
 
 // MARK: - GatewayVaccineCardResponse
 struct GatewayVaccineCardResponse: Codable {
@@ -29,20 +30,20 @@ struct GatewayVaccineCardResponse: Codable {
         }
     }
     
-    func transformResponseIntoLocallyStoredVaccinePassportModel() -> LocallyStoredVaccinePassportModel? {
-        guard let code = self.resourcePayload?.qrCode?.data,
-              let birthdateInitialString = self.resourcePayload?.birthdate,
-              let doses = self.resourcePayload?.doses else {
-                  return nil
+    func transformResponseIntoQRCode() -> (qrString: String?, error: String?) {
+        guard let qrCode = self.resourcePayload?.qrCode?.data,
+              let image = qrCode.toImage() else {
+                  return (nil, "There was an error with your request")
               }
-        // Just adding this here instead of unwrapping, as I don't want a date format issue to prevent a user from getting their QR code - worst case, they are able to get a duplicate QR code, which isn't the end of the world
-        let birthdateDate = Date.Formatter.gatewayDateAndTime.date(from: birthdateInitialString) ?? Date()
-        let birthdate = Date.Formatter.yearMonthDay.string(from: birthdateDate)
-        let initialName = (self.resourcePayload?.firstname ?? "") + " " + (self.resourcePayload?.lastname ?? "")
-        let name = initialName.trimWhiteSpacesAndNewLines.count > 0 ? initialName : .noName
-        let issueDate = Date().timeIntervalSince1970
-        let status: VaccineStatus = doses > 0 ? (doses > 1 ? .fully : .partially) : .notVaxed
-        return LocallyStoredVaccinePassportModel(code: code, birthdate: birthdate, name: name, issueDate: issueDate, status: status, source: .healthGateway)
+        guard let codes = image.findQRCodes(),
+              !codes.isEmpty else {
+                  return (nil, "No QR found")
+              }
+        guard codes.count == 1,
+              let code = codes.first else {
+                  return (nil, "Multiple QR codes. Image must have only 1 code")
+              }
+        return (code, nil)
     }
 }
 
