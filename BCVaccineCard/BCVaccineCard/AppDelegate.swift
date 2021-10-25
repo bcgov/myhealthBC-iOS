@@ -1,14 +1,14 @@
 //
 //  AppDelegate.swift
 //  BCVaccineCard
-//
+// 
 //  Created by Connor Ogilvie on 2021-09-14.
-// GatewayAccess.initialize(withFactory: WorkerFactory(localFactory: localFactory, remoteFactory: RemoteFactory()))
+//
 
 import UIKit
 import CoreData
 import BCVaccineValidator
-import Firebase
+//import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //use .Prod or .Test for different endpoints for keys
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
         AnalyticsService.shared.setup()
-        FirebaseApp.configure()
+//        FirebaseApp.configure()
         setupGatewayFactory()
         setupRootViewController()
     }
