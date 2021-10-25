@@ -61,7 +61,7 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
             try engine?.run()
         }
         catch let err {
-            // Handle reasons for not being able to start the queue here
+            // Handle reasons for not being able to start the queue here.
             self.delegate?.hideLoader()
             let errorCode = (err as NSError).code
             if errorCode == NetworkUnavailable.rawValue {
