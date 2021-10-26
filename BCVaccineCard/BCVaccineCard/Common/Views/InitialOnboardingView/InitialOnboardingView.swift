@@ -6,10 +6,33 @@
 //
 
 import UIKit
+// TODO: Update UI for 4th screen. Steps:
+/// First, update image assets, get logic working for 3 initial screens, make sure that data saves (Need to get image assets from the girls)
+///  Second, update UI to contain 4 dots (in phone and above get started - maybe look at setting this up so that the UI is created programatically for the dot views...yeah, do that
+///  Third, Add in UI constraints for health records, adjust health resourcs and news feed (health will now have same constraints as news feed, and news feed will be the same as what resources was, just with a different reference dot)
+///   Fourth, adjust UI to have option to hide lower dots, adjust button title (based on what has been shown or not), have 'NEW' label showing'
+///   Fifth - test it out thoroughly
+enum OnboardingScreenType: String, Codable, CaseIterable {
+    case healthPasses = "Health Passes"
+//    case healthRecords = "Health Records"
+    case healthResources = "Health Resources"
+    case newsFeed = "News Feed"
+    
+    var getStartScreenNumber: InitialOnboardingView.ScreenNumber {
+        switch self {
+        case .healthPasses:
+            return .one
+        case .healthResources:
+            return .two
+        case .newsFeed:
+            return .three
+        }
+    }
+}
 
 class InitialOnboardingView: UIView {
     
-    enum ScreenNumber {
+    enum ScreenNumber: CaseIterable {
         case one, two, three
         
         var getRotatingImage: UIImage? {
@@ -24,6 +47,17 @@ class InitialOnboardingView: UIView {
         }
         
         var getTitle: String {
+            switch self {
+            case .one:
+                return .healthPasses
+            case .two:
+                return .healthResources
+            case .three:
+                return .newsFeed
+            }
+        }
+        
+        var getType: OnboardingScreenType {
             switch self {
             case .one:
                 return .healthPasses
@@ -126,7 +160,8 @@ class InitialOnboardingView: UIView {
 //        contentView.addConstraints([widthConstraint, heightConstraint])
     }
     
-    func initialConfigure(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
+    func initialConfigure(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
+        // TODO: Update UI for modified logic
         commonConfigurationAndUpdates(screenNumber: screenNumber, delegateOwner: delegateOwner)
     }
     
@@ -215,6 +250,7 @@ extension InitialOnboardingView {
         onboardingDescriptionLabel.text = screenNumber.getDescription
     }
 
+    // TODO: Need to have provision in here for if screens have been shown before, and this is an updated screen or not
     private func adjustBottomButton(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
         let buttonType: AppStyleButton.ButtonType
         let accessibilityValue: String
@@ -235,5 +271,15 @@ extension InitialOnboardingView {
             accessibilityHint = AccessibilityLabels.Onboarding.buttonGetStartedHint
         }
         bottomButton.configure(withStyle: .blue, buttonType: buttonType, delegateOwner: delegateOwner, enabled: true, accessibilityValue: accessibilityValue, accessibilityHint: accessibilityHint)
+    }
+}
+
+// MARK: Defaults helper
+extension InitialOnboardingView {
+    func getAllScreensForDefaults() -> [OnboardingScreenType] {
+        let one = ScreenNumber.one.getType
+        let two = ScreenNumber.two.getType
+        let three = ScreenNumber.three.getType
+        return [one, two, three]
     }
 }

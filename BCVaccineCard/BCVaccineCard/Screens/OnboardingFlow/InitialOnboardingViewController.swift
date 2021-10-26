@@ -8,10 +8,11 @@
 import UIKit
 
 class InitialOnboardingViewController: UIViewController {
-    
-    class func constructInitialOnboardingViewController() -> InitialOnboardingViewController {
+    // TODO: Use the new screensToShow functionality
+    class func constructInitialOnboardingViewController(startScreenNumber: InitialOnboardingView.ScreenNumber, screensToShow: [InitialOnboardingView.ScreenNumber]) -> InitialOnboardingViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: InitialOnboardingViewController.self)) as? InitialOnboardingViewController {
-            vc.screenNumber = .one
+            vc.screenNumber = startScreenNumber
+            vc.screensToShow = screensToShow
             return vc
         }
         return InitialOnboardingViewController()
@@ -19,6 +20,7 @@ class InitialOnboardingViewController: UIViewController {
     
     @IBOutlet weak var initialOnboardingView: InitialOnboardingView!
     
+    private var screensToShow: [InitialOnboardingView.ScreenNumber]! // NEED TO USE THIS NOW
     private var screenNumber: InitialOnboardingView.ScreenNumber!
 
     override func viewDidLoad() {
@@ -27,7 +29,7 @@ class InitialOnboardingViewController: UIViewController {
     }
     
     private func setup() {
-        initialOnboardingView.initialConfigure(screenNumber: screenNumber, delegateOwner: self)
+        initialOnboardingView.initialConfigure(screenNumber: screenNumber, screensToShow: self.screensToShow, delegateOwner: self)
     }
 
 }
@@ -38,15 +40,20 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
             self.screenNumber = newScreenNumber
             self.initialOnboardingView.adjustUI(screenNumber: self.screenNumber, delegateOwner: self)
         }
-        if type == .getStarted {
-            // TODO: adjust user defaults to show that screen has been shown
-            Defaults.hasSeenInitialOnboardingScreens = true
-            let transition = CATransition()
-            transition.type = .fade
-            transition.duration = 0.3
-            AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-            let vc = TabBarController.constructTabBarController()
-            AppDelegate.sharedInstance?.window?.rootViewController = vc
+        if type == .getStarted || type == .ok {
+            Defaults.initialOnboardingScreensSeen = self.initialOnboardingView.getAllScreensForDefaults()
+            goToHomeTransition()
         }
     }
+    
+    private func goToHomeTransition() {
+        let transition = CATransition()
+        transition.type = .fade
+        transition.duration = 0.3
+        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
+        let vc = TabBarController.constructTabBarController()
+        AppDelegate.sharedInstance?.window?.rootViewController = vc
+    }
 }
+
+
