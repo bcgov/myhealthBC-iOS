@@ -18,7 +18,7 @@ extension UIViewController {
     func alert(title: String, message: String) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.isAccessibilityElement = true
-        controller.addAction(UIAlertAction(title: "OK", style: .default))
+        controller.addAction(UIAlertAction(title: .ok, style: .default))
         DispatchQueue.main.async {
             self.present(controller, animated: true)
         }
@@ -27,7 +27,7 @@ extension UIViewController {
     func alert(title: String, message: String, completion: @escaping()->Void) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.isAccessibilityElement = true
-        controller.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+        controller.addAction(UIAlertAction(title: .ok, style: .default, handler: { action in
             return completion()
         }))
         DispatchQueue.main.async {

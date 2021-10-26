@@ -87,8 +87,8 @@ class CustomNavigationController: UINavigationController {
                 // NOTE: This logic isn't working, but I'm leaving it in here for now, just in case QA pushes it back
                 navigationBar.standardAppearance.backIndicatorImage.isAccessibilityElement = true
                 navigationBar.standardAppearance.backIndicatorImage.accessibilityTraits = .button
-                navigationBar.standardAppearance.backIndicatorImage.accessibilityLabel = "Navigation bar back button"
-                navigationBar.standardAppearance.backIndicatorImage.accessibilityHint = "Tapping this button will take you back to \(hint)"
+                navigationBar.standardAppearance.backIndicatorImage.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
+                navigationBar.standardAppearance.backIndicatorImage.accessibilityHint = AccessibilityLabels.Navigation.backButtonHint + "\(hint)"
             }
             
         } else {
@@ -102,8 +102,8 @@ class CustomNavigationController: UINavigationController {
                 if let hint = backButtonHintString {
                     navigationBar.backIndicatorImage?.isAccessibilityElement = true
                     navigationBar.backIndicatorImage?.accessibilityTraits = .button
-                    navigationBar.backIndicatorImage?.accessibilityLabel = "Navigation bar back button"
-                    navigationBar.backIndicatorImage?.accessibilityHint = "Tapping this button will take you back to \(hint)"
+                    navigationBar.backIndicatorImage?.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
+                    navigationBar.backIndicatorImage?.accessibilityHint = AccessibilityLabels.Navigation.backButtonHint + "\(hint)"
                 }
             }
 //            navigationBar.shadowImage = UIImage()

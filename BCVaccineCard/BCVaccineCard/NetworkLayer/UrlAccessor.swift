@@ -13,14 +13,12 @@ protocol EndpointsAccessor {
 }
 
 struct UrlAccessor {
-//    #if DEBUG
-//    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
-//    #else
-//    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
-//    #endif
-    
+    #if PROD
     let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
-            
+    #elseif DEV
+    let baseUrl = URL(string: "https://test.healthgateway.gov.bc.ca/api/")!
+    #endif
+    
     private var immunizationBaseUrl: URL {
         return self.baseUrl.appendingPathComponent("immunizationservice")
     }

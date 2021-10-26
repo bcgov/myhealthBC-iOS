@@ -201,18 +201,18 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         showImagePicker { [weak self] image in
             guard let `self` = self, let image = image else {return}
             guard let codes = image.findQRCodes(), !codes.isEmpty else {
-                self.alert(title: "No QR found", message: "") // TODO: Better text / from constants
+                self.alert(title: .noQRFound, message: "") // TODO: Better text / from constants
                 return
             }
             guard codes.count == 1, let code = codes.first else {
-                self.alert(title: "Multiple QR codes", message: "image must have only 1 code") // TODO: Better text / from constants
+                self.alert(title: .multipleQRCodesTitle, message: .multipleQRCodesMessage) // TODO: Better text / from constants
                 return
             }
             
             BCVaccineValidator.shared.validate(code: code) { [weak self] result in
                 guard let `self` = self else { return }
                 guard let data = result.result else {
-                    self.alert(title: "Invalid QR Code", message: "") // TODO: Better text / from constants
+                    self.alert(title: .invalidQRCodeMessage, message: "") // TODO: Better text / from constants
                     return
                 }
                 DispatchQueue.main.async { [weak self] in
@@ -240,7 +240,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
 //            postCardAddedNotification(id: appModel.id ?? "")
         } else {
             guard isCardAlreadyInWallet(modelToAdd: appModel) == false else {
-                alert(title: "Duplicate", message: "This QR code is already saved in your list of passes.") { [weak self] in
+                alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -250,7 +250,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
 //            postCardAddedNotification(id: appModel.id ?? "")
         }
         // TODO: text from constants
-        self.navigationController?.showBanner(message: "Your proof of vaccination has been added", style: .Top)
+        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
         self.popBackToProperViewController(id: appModel.id ?? "")
     }
 }

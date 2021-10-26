@@ -89,10 +89,10 @@ extension CovidVaccineCardsViewController {
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
             guard let cell = self.tableView.cellForRow(at: indexPath), self.dataSource.count > indexPath.row else { return }
             let model = self.dataSource[indexPath.row]
-            cell.accessibilityLabel = "Your proof of vaccination has been added to your passes. Vaccination Card Expanded"
-            let accessibilityValue = "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image"
+            cell.accessibilityLabel = AccessibilityLabels.CovidVaccineCardsScreen.proofOfVaccineCardAdded
+            let accessibilityValue = "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)"
             cell.accessibilityValue = accessibilityValue
-            cell.accessibilityHint = "Action Available: Tap to zoom in QR code"
+            cell.accessibilityHint = AccessibilityLabels.VaccineCardView.expandedAction
             UIAccessibility.setFocusTo(cell)
         }
     }
@@ -106,7 +106,7 @@ extension CovidVaccineCardsViewController {
                                                rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconHint)),
                                                navStyle: .small,
                                                targetVC: self,
-                                               backButtonHintString: "Health Passes")
+                                               backButtonHintString: .healthPasses)
     }
     
     @objc private func addCardButton() {
@@ -115,7 +115,7 @@ extension CovidVaccineCardsViewController {
     }
     
     private func goToAddCardOptionScreen() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Your Covid Vaccine Cards")
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: AccessibilityLabels.CovidVaccineCardsScreen.navHint)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -137,7 +137,7 @@ extension CovidVaccineCardsViewController {
         guard !self.dataSource.isEmpty else { return }
         let buttonType: AppStyleButton.ButtonType = inEditMode ? .done : .manageCards
         let value = self.inEditMode ? AppStyleButton.ButtonType.done.getTitle : AppStyleButton.ButtonType.manageCards.getTitle
-        let hint = self.inEditMode ? "Tapping 'done' will stop the editing of cards and save any changes." : "Tapping 'manage cards' will allow you to edit the order of your cards, and remove any cards you no longer want in your list of passes."
+        let hint = self.inEditMode ? AccessibilityLabels.CovidVaccineCardsScreen.inEditMode : AccessibilityLabels.CovidVaccineCardsScreen.notInEditMode
         bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true, accessibilityValue: value, accessibilityHint: hint)
     }
 }
@@ -229,7 +229,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         }
         delete.isAccessibilityElement = true
         delete.accessibilityTraits = .button
-        delete.accessibilityLabel = "Unlink button"
+        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
@@ -243,7 +243,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         }
         delete.isAccessibilityElement = true
         delete.accessibilityTraits = .button
-        delete.accessibilityLabel = "Unlink button"
+        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])

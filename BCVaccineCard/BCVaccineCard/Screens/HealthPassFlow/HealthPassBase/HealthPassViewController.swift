@@ -170,7 +170,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
         }
         delete.isAccessibilityElement = true
         delete.accessibilityTraits = .button
-        delete.accessibilityLabel = "Unlink button"
+        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
@@ -184,7 +184,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
         }
         delete.isAccessibilityElement = true
         delete.accessibilityTraits = .button
-        delete.accessibilityLabel = "Unlink button"
+        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
         delete.image = UIImage(named: "unlink")
         delete.backgroundColor = .white
         let config = UISwipeActionsConfiguration(actions: [delete])
@@ -212,25 +212,10 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: Add card button table view cell delegate here
 extension HealthPassViewController: AddCardsTableViewCellDelegate {
     func addCardButtonTapped() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Health Passes")
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
- // MARK: Primary Vaccine Card button delegates here
-//extension HealthPassViewController: PrimaryVaccineCardTableViewCellDelegate {
-//    func addCardButtonTapped() {
-//        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-//
-//    func tapToZoomInButtonTapped() {
-//        guard let image = dataSource?.image else { return }
-//        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-//        let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
-//        self.present(vc, animated: true, completion: nil)
-//        self.tabBarController?.tabBar.isHidden = true
-//    }
-//}
 
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {

@@ -41,8 +41,8 @@ class NoCardsTableViewCell: UITableViewCell {
         
         addButton.isAccessibilityElement = true
         addButton.accessibilityTraits = .button
-        addButton.accessibilityLabel = "Add Card"
-        addButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+        addButton.accessibilityLabel = AccessibilityLabels.NoCards.addCardLabel
+        addButton.accessibilityHint = AccessibilityLabels.NoCards.addCardHint
         
         self.accessibilityElements = [introTextLabel, noCardsLabel, addButton]
         

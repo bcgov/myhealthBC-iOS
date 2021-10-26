@@ -8,6 +8,7 @@
 import UIKit
 import QueueITLibrary
 import Alamofire
+import BCVaccineValidator
 
 class GatewayFormViewController: BaseViewController {
     
@@ -97,7 +98,7 @@ extension GatewayFormViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthGatewayScreen.navRightIconTitle, hint: AccessibilityLabels.HealthGatewayScreen.navRightIconHint)),
                                                navStyle: .small,
-                                               targetVC: self, backButtonHintString: "the QR Retrieval Methods")
+                                               targetVC: self, backButtonHintString: AccessibilityLabels.GatewayForm.navHint)
     }
     
     @objc private func helpIconButton() {
@@ -243,15 +244,16 @@ extension GatewayFormViewController {
 
 // MARK: QueueItWorkerDefaultsDelegate
 extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
-    func handleVaccineCard(localModel: LocallyStoredVaccinePassportModel) {
-        handleCardInDefaults(localModel: localModel)
+    func handleVaccineCard(scanResult: ScanResultModel) {
+        let model = convertScanResultModelIntoLocalData(data: scanResult, source: .healthGateway)
+        handleCardInDefaults(localModel: model)        
     }
     
     func handleError(title: String, error: ResultError) {
         if error.resultMessage == "Unknown" {
-            alert(title: title, message: "Unknown error has occured. Please try again.")
+            alert(title: title, message: .unknownErrorMessage)
         } else {
-            alert(title: title, message: error.resultMessage ?? "Health Gateway error")
+            alert(title: title, message: error.resultMessage ?? .healthGatewayError)
         }
         
     }
@@ -272,7 +274,7 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
             self.completionHandler?(model.id ?? "")
         } else {
             guard isCardAlreadyInWallet(modelToAdd: model) == false else {
-                alert(title: "Duplicate", message: "This vaccine pass is already saved in your list of passes.") { [weak self] in
+                alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
                     self.completionHandler?(model.id ?? "")

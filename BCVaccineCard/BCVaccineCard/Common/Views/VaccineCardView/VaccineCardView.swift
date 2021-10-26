@@ -61,11 +61,11 @@ class VaccineCardView: UIView {
     
     private func setupAccessibility(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool) {
         self.isAccessibilityElement = true
-        let accessibilityLabel = expanded ? "Vaccination Card Expanded" : "Vaccination Card Collapsed"
+        let accessibilityLabel = expanded ? AccessibilityLabels.VaccineCardView.vaccineCardExpanded : AccessibilityLabels.VaccineCardView.vaccineCardCollapsed
         self.accessibilityLabel = accessibilityLabel
-        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), QR code image" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
+        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
         self.accessibilityValue = accessibilityValue
-        self.accessibilityHint = editMode ? "In edit mode: Swipe up or down for special actions, and you can unlink a card or adjust the order of your cards" : (expanded ? "Action Available: Tap to zoom in QR code" : "Action Available: Tap to expand Vaccination Card")
+        self.accessibilityHint = editMode ? AccessibilityLabels.VaccineCardView.inEditMode : (expanded ? AccessibilityLabels.VaccineCardView.expandedAction : AccessibilityLabels.VaccineCardView.collapsedAction)
     }
     
     func configure(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool) {
@@ -79,7 +79,7 @@ class VaccineCardView: UIView {
         issuedOnLabel.isHidden = model.issueDate == nil
         statusBackgroundView.backgroundColor = model.codableModel.status.getColor
         expandableBackgroundView.backgroundColor = model.codableModel.status.getColor
-        qrImageConstraints.forEach { $0.constant = model.codableModel.source == .healthGateway ? 0 : 6 }
+//        qrImageConstraints.forEach { $0.constant = model.codableModel.source == .healthGateway ? 0 : 6 }
         qrCodeImage.image = model.image
         expandableBackgroundView.isHidden = !expanded
         setupAccessibility(model: model, expanded: expanded, editMode: editMode)

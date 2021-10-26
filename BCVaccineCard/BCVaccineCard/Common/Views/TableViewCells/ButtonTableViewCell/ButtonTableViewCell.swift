@@ -19,7 +19,7 @@ class ButtonTableViewCell: UITableViewCell {
     func configure(savedCards: Int?, delegateOwner: UIViewController) {
         viewAllButton.isHidden = !(savedCards ?? 0 > 1)
         if let savedCards = savedCards, savedCards > 1 {
-            viewAllButton.configure(withStyle: .white, buttonType: .viewAll, delegateOwner: delegateOwner, enabled: true, accessibilityValue: "View All", accessibilityHint: "Tapping this button will show you all of your saved covid 19 vaccine cards")
+            viewAllButton.configure(withStyle: .white, buttonType: .viewAll, delegateOwner: delegateOwner, enabled: true, accessibilityValue: AccessibilityLabels.ViewAllButton.viewAllLabel, accessibilityHint: AccessibilityLabels.ViewAllButton.viewAllHint)
         }
     }
     

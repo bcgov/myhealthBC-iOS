@@ -10,6 +10,9 @@ import UIKit
 
 struct Constants {
     
+    /// Authorization Header Key
+    static let authorizationHeaderKey = "Authorization"
+    
     struct DateConstants {
         static let firstVaxDate = Date.Formatter.yearMonthDay.date(from: "2020-01-01")
     }
@@ -22,6 +25,13 @@ struct Constants {
         static let urlString = "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/proof#help"
     }
     
-    /// Authorization Header Key
-    static let authorizationHeaderKey = "Authorization"
+    struct QueueItStrings {
+        static let queueittoken = "queueittoken"
+    }
+    
+    struct GatewayVaccineCardRequestParameters {
+        static let phn = "phn"
+        static let dateOfBirth = "dateOfBirth"
+        static let dateOfVaccine = "dateOfVaccine"
+    }
 }

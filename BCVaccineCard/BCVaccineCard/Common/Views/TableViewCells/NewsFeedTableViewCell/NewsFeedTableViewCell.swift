@@ -66,7 +66,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         }
         
         self.accessibilityLabel = label
-        self.accessibilityHint = AccessibilityLabels.openWebLinkHint
+        self.accessibilityHint = AccessibilityLabels.OpenWebLink.openWebLinkHint
         self.accessibilityTraits = [.selected, .link]
         
         

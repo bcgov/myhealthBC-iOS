@@ -38,9 +38,30 @@ extension String {
     static var noCameraAccessMessage: String { return "NoCameraAccessMessage".localized }
     static var multipleQRCodesMessage: String { return "MultipleQRCodesMessage".localized }
     static var invalidQRCodeMessage: String { return "InvalidQRCodeMessage".localized }
+    static var noQRFound: String { return "NoQRFound".localized }
+    static var multipleQRCodesTitle: String { return "MultipleQRCodesTitle".localized }
+    static var onlyOneQRCodeMessage: String { return "OnlyOneQRCodeMessage".localized }
     static var unsupportedDeviceTitle: String { return "UnsupportedDeviceTitle".localized }
     static var unsupportedDeviceVideoMessage: String { return "UnsupportedDeviceVideoMessage".localized }
     static var unsupportedDeviceQRMessage: String { return "UnsupportedDeviceQRMessage".localized }
+    static var error: String { return "Error".localized }
+    static var networkUnavailableTitle: String { return "NetworkUnavailableTitle".localized }
+    static var networkUnavailableMessage: String { return "NetworkUnavailableMessage".localized }
+    static var inProgressErrorTitle: String { return "InProgressErrorTitle".localized }
+    static var inProgressErrorMessage: String { return "InProgressErrorMessage".localized }
+    static var unknownErrorMessage: String { return "UnknownErrorMessage".localized }
+    static var genericErrorMessage: String { return "GenericErrorMessage".localized }
+    static var queueItClosedTitle: String { return "QueueItClosedTitle".localized }
+    static var queueItClosedMessage: String { return "QueueItClosedMessage".localized }
+    static var errorParsingPHNFromHG: String { return "ErrorParsingPHNFromHG".localized }
+    static var errorParsingPHNMessage: String { return "ErrorParsingPHNMessage".localized }
+    static var duplicateTitle: String { return "DuplicateTitle".localized }
+    static var duplicateMessage: String { return "DuplicateMessage".localized }
+    static var healthGatewayError: String { return "HealthGatewayError".localized }
+    
+    // Alert
+    static var vaxAddedBannerAlert: String { return "VaxAddedBannerAlert".localized }
+    
     
     // Onboarding flow
     /// initial onboarding screen
@@ -90,6 +111,7 @@ extension String {
     static var presentForScanning: String { return "PresentForScanning".localized }
     static var unlinkCardTitle: String { return "UnlinkCardTitle".localized }
     static var unlinkCardMessage: String { return "UnlinkCardMessage".localized }
+    static var noName: String { return "NoName".localized }
     
     // QR Method Selection screen
     static var qrDescriptionText: String { return "QRDescriptionText".localized }

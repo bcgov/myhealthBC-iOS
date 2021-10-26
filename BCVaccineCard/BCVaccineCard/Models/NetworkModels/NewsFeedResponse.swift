@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-10-11.
-//
+// TODO: Check to see if we are even using this, or how this can be cleaned up - way too big
 
 import Foundation
 

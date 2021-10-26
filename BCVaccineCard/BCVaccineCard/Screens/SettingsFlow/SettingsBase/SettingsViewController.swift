@@ -55,7 +55,7 @@ extension SettingsViewController {
                                                rightNavButton: nil,
                                                navStyle: .small,
                                                targetVC: self,
-                                               backButtonHintString: "Health Passes")
+                                               backButtonHintString: .healthPasses)
     }
 }
 
@@ -99,8 +99,8 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             if let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.getName, for: indexPath) as? SettingsTableViewCell {
                 cell.configure(text: text, image: image)
                 cell.isAccessibilityElement = true
-                cell.accessibilityLabel = "Privacy Statement Link"
-                cell.accessibilityHint = "Action Available: Tapping the privacy statement link will take you to the privacy statement web page"
+                cell.accessibilityLabel = AccessibilityLabels.Settings.privacyStatementLink
+                cell.accessibilityHint = AccessibilityLabels.Settings.privacyStatementHint
                 return cell
             }
         }

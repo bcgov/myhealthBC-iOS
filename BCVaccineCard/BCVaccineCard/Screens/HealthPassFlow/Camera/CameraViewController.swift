@@ -65,11 +65,11 @@ extension CameraViewController {
 //            rightNavButton.accessibilityHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
 //        }
         self.accessibilityViewForNotifyingUser.isAccessibilityElement = true
-        self.accessibilityViewForNotifyingUser.accessibilityLabel = "Camera has been opened to scan a QR code"
+        self.accessibilityViewForNotifyingUser.accessibilityLabel = AccessibilityLabels.Camera.notifyUserCameraOpened
         self.closeButton.isAccessibilityElement = true
         self.closeButton.accessibilityTraits = .button
-        self.closeButton.accessibilityLabel = "Close"
-        self.closeButton.accessibilityHint = "Tapping the close button will dismiss the camera and return you to the previous screen"
+        self.closeButton.accessibilityLabel = AccessibilityLabels.Camera.closeText
+        self.closeButton.accessibilityHint = AccessibilityLabels.Camera.closeHint
     }
 
 }
