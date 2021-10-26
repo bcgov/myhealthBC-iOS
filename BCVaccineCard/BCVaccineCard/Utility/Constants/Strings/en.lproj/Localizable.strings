@@ -51,11 +51,14 @@
 "HealthGatewayError" = "Health Gateway error";
 "VaxAddedBannerAlert" = "Your proof of vaccination has been added";
 "HealthPasses" = "Health Passes";
+"HealthRecords" = "Health Records";
 "HealthResources" = "Health Resources";
 "NewsFeed" = "News Feed";
-"InitialOnboardingOneDescription" = "All of your vaccine cards and booking confirmations stored in a single place";
-"InitialOnboardingTwoDescription" = "Find health information and COVID-19 tests";
-"InitialOnboardingThreeDescription" = "Stay updated on COVID-19 news";
+"InitialOnboardingHealthPassesDescription" = "All of your COVID-19 vaccine cards and test results available in a single place";
+"InitialOnboardingHealthRecordsDescription" = "Easily access all of your COVID-19 health records";
+"InitialOnboardingHealthResourcesDescription" = "Find COVID-19 health information and testing resources";
+"InitialOnboardingNewsFeedDescription" = "Get the latest BC government COVID-19 news";
+"NEW" = "NEW";
 "PHNRequired" = "Personal Health Number is required";
 "PHNLength" = "PHN should be 10 characters";
 "PHNNumber" = "PHN must be numbers only";

@@ -14,6 +14,7 @@
                 <outlet property="bottomButton" destination="QGx-T6-Lhh" id="5G5-uo-cPV"/>
                 <outlet property="bottomButtonWidthConstraint" destination="flX-rd-bRs" id="GJd-qq-ZB1"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="NaF-B3-qoF"/>
+                <outlet property="newTextLabel" destination="fze-fc-kKW" id="3Eu-0t-mWe"/>
                 <outlet property="onboardingDescriptionLabel" destination="vDU-sf-kcD" id="oyf-nL-d39"/>
                 <outlet property="onboardingTitleLabel" destination="A0i-So-4gP" id="29A-ag-gdH"/>
                 <outlet property="phoneImageDotsStackView" destination="IB0-wM-pU6" id="4HR-fb-VUT"/>
@@ -69,6 +70,12 @@
                         <constraint firstAttribute="width" constant="50" id="miw-M3-6dg"/>
                     </constraints>
                 </stackView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fze-fc-kKW">
+                    <rect key="frame" x="186.5" y="413" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -82,7 +89,9 @@
                 <constraint firstAttribute="bottom" secondItem="QGx-T6-Lhh" secondAttribute="bottom" constant="80" id="Oh0-H3-vWM"/>
                 <constraint firstItem="BGQ-hp-g5F" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="SPP-zT-QAC"/>
                 <constraint firstItem="QGx-T6-Lhh" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="U0k-fC-zEe"/>
+                <constraint firstItem="fze-fc-kKW" firstAttribute="leading" secondItem="A0i-So-4gP" secondAttribute="leading" id="aGV-VO-hcU"/>
                 <constraint firstItem="fPV-Wc-CDh" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="bLe-We-rZP"/>
+                <constraint firstItem="A0i-So-4gP" firstAttribute="top" secondItem="fze-fc-kKW" secondAttribute="bottom" constant="4" id="bLr-Tu-YBE"/>
                 <constraint firstItem="A0i-So-4gP" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="sDb-ST-6ne"/>
                 <constraint firstItem="A0i-So-4gP" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="uLz-9h-gdw"/>
                 <constraint firstItem="vDU-sf-kcD" firstAttribute="top" secondItem="A0i-So-4gP" secondAttribute="bottom" constant="10" id="uYm-yP-qRM"/>

@@ -38,11 +38,11 @@ class InitialOnboardingView: UIView {
         var getRotatingImage: UIImage? {
             switch self {
             case .one:
-                return UIImage(named: "bubble-one")
+                return UIImage(named: "bubble-passes")
             case .two:
-                return UIImage(named: "bubble-two")
+                return UIImage(named: "bubble-resources")
             case .three:
-                return UIImage(named: "bubble-three")
+                return UIImage(named: "bubble-news")
             }
         }
         
@@ -71,11 +71,11 @@ class InitialOnboardingView: UIView {
         var getDescription: String {
             switch self {
             case .one:
-                return .initialOnboardingOneDescription
+                return .initialOnboardingHealthPassesDescription
             case .two:
-                return .initialOnboardingTwoDescription
+                return .initialOnboardingHealthResourcesDescription
             case .three:
-                return .initialOnboardingThreeDescription
+                return .initialOnboardingNewsFeedDescription
             }
         }
         
@@ -89,18 +89,6 @@ class InitialOnboardingView: UIView {
                 return 2
             }
         }
-        
-//        // TODO: Will need to fix this function
-//        func increment() -> ScreenNumber? {
-//            switch self {
-//            case .one:
-//                return .two
-//            case .two:
-//                return .three
-//            case .three:
-//                return nil
-//            }
-//        }
     }
     
     enum ImageCollectionType {
@@ -112,6 +100,7 @@ class InitialOnboardingView: UIView {
     @IBOutlet weak private var phoneImageView: UIImageView!
     @IBOutlet weak private var phoneImageDotsStackView: UIStackView!
     @IBOutlet weak private var phoneImageDotsStackViewWidthConstraintToDelete: NSLayoutConstraint!
+    @IBOutlet weak private var newTextLabel: UILabel!
     @IBOutlet weak private var onboardingTitleLabel: UILabel!
     @IBOutlet weak private var onboardingDescriptionLabel: UILabel!
     @IBOutlet weak private var screenProgressImageDotsStackView: UIStackView!
@@ -155,6 +144,9 @@ class InitialOnboardingView: UIView {
     }
     
     private func labelSetup() {
+        newTextLabel.font = UIFont.bcSansBoldWithSize(size: 13)
+        newTextLabel.textColor = AppColours.appBlue
+        newTextLabel.text = .new
         onboardingTitleLabel.font = UIFont.bcSansBoldWithSize(size: 24)
         onboardingTitleLabel.textColor = AppColours.appBlue
         onboardingDescriptionLabel.font = UIFont.bcSansRegularWithSize(size: 17)
@@ -181,8 +173,42 @@ class InitialOnboardingView: UIView {
     func initialConfigure(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
         configureScreenProgressDots(screenNumber: screenNumber, screensToShow: screensToShow)
         configurePhoneDots(screenNumber: screenNumber)
-        commonConfigurationAndUpdates(screenNumber: screenNumber, delegateOwner: delegateOwner)
+        showNewTextIfScreensAreNew(screensToShow: screensToShow)
+        commonConfigurationAndUpdates(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner)
     }
+    
+    func adjustUI(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
+        adjustPhoneImageDots(screenNumber: screenNumber)
+        commonConfigurationAndUpdates(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner)
+        if screensToShow.count > 1 {
+            adjustProgressImageDotsUI(screenNumber: screenNumber)
+        }
+    }
+    
+    func increment(screenNumber: ScreenNumber, screensToShow: [ScreenNumber]) -> ScreenNumber? {
+        guard screensToShow.count > 1 else { return nil }
+        if let index = screensToShow.firstIndex(of: screenNumber), screensToShow.count > index + 1 {
+            return screensToShow[index + 1]
+        } else {
+            return nil
+        }
+    }
+    
+    private func commonConfigurationAndUpdates(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
+        adjustText(screenNumber: screenNumber)
+        adjustRotatingImageViewConstraints(screenNumber: screenNumber)
+        updateRotatingImage(screenNumber: screenNumber)
+        adjustBottomButton(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner)
+        self.contentView.layoutIfNeeded()
+    }
+    
+    private func showNewTextIfScreensAreNew(screensToShow: [ScreenNumber]) {
+        newTextLabel.isHidden = screensToShow.count == OnboardingScreenType.allCases.count
+    }
+}
+
+// MARK: Dot functions
+extension InitialOnboardingView {
     
     private func configurePhoneDots(screenNumber: ScreenNumber) {
         let count = OnboardingScreenType.allCases.count
@@ -230,31 +256,6 @@ class InitialOnboardingView: UIView {
                 self.screenProgressImageDotsWidthConstraintCollection.append(width)
             }
         }
-    }
-    
-    func adjustUI(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
-        adjustPhoneImageDots(screenNumber: screenNumber)
-        commonConfigurationAndUpdates(screenNumber: screenNumber, delegateOwner: delegateOwner)
-        if screensToShow.count > 1 {
-            adjustProgressImageDotsUI(screenNumber: screenNumber)
-        }
-    }
-    
-    func increment(screenNumber: ScreenNumber, screensToShow: [ScreenNumber]) -> ScreenNumber? {
-        guard screensToShow.count > 1 else { return nil }
-        if let index = screensToShow.firstIndex(of: screenNumber), screensToShow.count > index + 1 {
-            return screensToShow[index + 1]
-        } else {
-            return nil
-        }
-    }
-    
-    private func commonConfigurationAndUpdates(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
-        adjustText(screenNumber: screenNumber)
-        adjustRotatingImageViewConstraints(screenNumber: screenNumber)
-        updateRotatingImage(screenNumber: screenNumber)
-        adjustBottomButton(screenNumber: screenNumber, delegateOwner: delegateOwner)
-        self.contentView.layoutIfNeeded()
     }
 }
 
@@ -326,25 +327,39 @@ extension InitialOnboardingView {
         onboardingDescriptionLabel.text = screenNumber.getDescription
     }
 
-    // TODO: Need to have provision in here for if screens have been shown before, and this is an updated screen or not
-    private func adjustBottomButton(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
+    private func adjustBottomButton(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
         let buttonType: AppStyleButton.ButtonType
         let accessibilityValue: String
         let accessibilityHint: String
-        switch screenNumber {
-        case .one:
-            buttonType = .next
-            accessibilityValue = AccessibilityLabels.Onboarding.buttonNextTitle
-            accessibilityHint = AccessibilityLabels.Onboarding.buttonNextHint
-        case .two:
-            buttonType = .next
-            accessibilityValue = AccessibilityLabels.Onboarding.buttonNextTitle
-            accessibilityHint = AccessibilityLabels.Onboarding.buttonNextHint
-        case .three:
-            buttonType = .getStarted
-            bottomButtonWidthConstraint.constant = 162
-            accessibilityValue = AccessibilityLabels.Onboarding.buttonGetStartedTitle
-            accessibilityHint = AccessibilityLabels.Onboarding.buttonGetStartedHint
+        
+        if screensToShow.count == 1 {
+            // user has seen screens before, only one new one to show, only show ok button
+            buttonType = .ok
+            accessibilityValue = AccessibilityLabels.Onboarding.buttonOkTitle
+            accessibilityHint = AccessibilityLabels.Onboarding.buttonOkHint
+        } else if screensToShow.count == OnboardingScreenType.allCases.count {
+            // brand new user - first count - 1 buttons are next, last one is 'getStarted'
+            if let index = screensToShow.firstIndex(of: screenNumber), index == screensToShow.count - 1 {
+                buttonType = .getStarted
+                bottomButtonWidthConstraint.constant = 162
+                accessibilityValue = AccessibilityLabels.Onboarding.buttonGetStartedTitle
+                accessibilityHint = AccessibilityLabels.Onboarding.buttonGetStartedHint
+            } else {
+                buttonType = .next
+                accessibilityValue = AccessibilityLabels.Onboarding.buttonNextTitle
+                accessibilityHint = AccessibilityLabels.Onboarding.buttonNextHint
+            }
+        } else {
+            // there are more than one screen to show, but user has still seen some before
+            if let index = screensToShow.firstIndex(of: screenNumber), index == screensToShow.count - 1 {
+                buttonType = .ok
+                accessibilityValue = AccessibilityLabels.Onboarding.buttonOkTitle
+                accessibilityHint = AccessibilityLabels.Onboarding.buttonOkHint
+            } else {
+                buttonType = .next
+                accessibilityValue = AccessibilityLabels.Onboarding.buttonNextTitle
+                accessibilityHint = AccessibilityLabels.Onboarding.buttonNextHint
+            }
         }
         bottomButton.configure(withStyle: .blue, buttonType: buttonType, delegateOwner: delegateOwner, enabled: true, accessibilityValue: accessibilityValue, accessibilityHint: accessibilityHint)
     }
@@ -353,9 +368,6 @@ extension InitialOnboardingView {
 // MARK: Defaults helper
 extension InitialOnboardingView {
     func getAllScreensForDefaults() -> [OnboardingScreenType] {
-        let one = ScreenNumber.one.getType
-        let two = ScreenNumber.two.getType
-        let three = ScreenNumber.three.getType
-        return [one, two, three]
+        return OnboardingScreenType.allCases
     }
 }
