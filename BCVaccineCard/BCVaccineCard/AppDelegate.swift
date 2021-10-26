@@ -108,15 +108,12 @@ extension AppDelegate {
             guard let firstScreen = unseenScreens.first else {
                 let vc = TabBarController.constructTabBarController()
                 self.window?.rootViewController = vc
+                return
             }
             let screensToShow = unseenScreens.map { $0.getStartScreenNumber }
             let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: firstScreen.getStartScreenNumber, screensToShow: screensToShow)
+            self.window?.rootViewController = vc
         }
-//        else {
-//            let vc = InitialOnboardingViewController.constructInitialOnboardingViewController()
-//            self.window?.rootViewController = vc
-//        }
-        
     }
 }
 

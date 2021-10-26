@@ -90,28 +90,38 @@ class InitialOnboardingView: UIView {
             }
         }
         
-        func increment() -> ScreenNumber? {
-            switch self {
-            case .one:
-                return .two
-            case .two:
-                return .three
-            case .three:
-                return nil
-            }
-        }
+//        // TODO: Will need to fix this function
+//        func increment() -> ScreenNumber? {
+//            switch self {
+//            case .one:
+//                return .two
+//            case .two:
+//                return .three
+//            case .three:
+//                return nil
+//            }
+//        }
+    }
+    
+    enum ImageCollectionType {
+        case phoneDotCollection
+        case screenProgressCollection
     }
     
     @IBOutlet weak private var contentView: UIView!
     @IBOutlet weak private var phoneImageView: UIImageView!
-    @IBOutlet private var phoneImageDotsCollection: [UIImageView]!
+    @IBOutlet weak private var phoneImageDotsStackView: UIStackView!
+    @IBOutlet weak private var phoneImageDotsStackViewWidthConstraintToDelete: NSLayoutConstraint!
     @IBOutlet weak private var onboardingTitleLabel: UILabel!
     @IBOutlet weak private var onboardingDescriptionLabel: UILabel!
-    @IBOutlet private var screenProgressImageDotsCollection: [UIImageView]!
-    @IBOutlet private var screenProgressImageDotsWidthConstraintCollection: [NSLayoutConstraint]!
+    @IBOutlet weak private var screenProgressImageDotsStackView: UIStackView!
+    @IBOutlet weak private var screenProgressImageDotsStackViewWidthConstraintToDelete: NSLayoutConstraint!
     @IBOutlet weak private var bottomButton: AppStyleButton!
     @IBOutlet weak private var bottomButtonWidthConstraint: NSLayoutConstraint!
     
+    private var phoneImageDotsCollection: [UIImageView] = []
+    private var screenProgressImageDotsCollection: [UIImageView] = []
+    private var screenProgressImageDotsWidthConstraintCollection: [NSLayoutConstraint] = []
     private var rotatingImageView: UIImageView?
     private var rotatingImageViewConstraints: [NSLayoutConstraint]?
         
@@ -140,6 +150,7 @@ class InitialOnboardingView: UIView {
     private func setup() {
         self.backgroundColor = .clear
         labelSetup()
+        stackViewSetup()
         createInitialRotatingImageView()
     }
     
@@ -150,25 +161,92 @@ class InitialOnboardingView: UIView {
         onboardingDescriptionLabel.textColor = AppColours.textBlack
     }
     
+    private func stackViewSetup() {
+        phoneImageDotsStackView.axis = .horizontal
+        phoneImageDotsStackView.alignment = .fill
+        phoneImageDotsStackView.distribution = .fill
+        screenProgressImageDotsStackView.axis = .horizontal
+        screenProgressImageDotsStackView.alignment = .fill
+        screenProgressImageDotsStackView.distribution = .fill
+        screenProgressImageDotsStackView.spacing = 10
+    }
+    
     private func createInitialRotatingImageView() {
         self.rotatingImageView = UIImageView()
         guard let rotatingImageView = rotatingImageView else { return }
         self.contentView.addSubview(rotatingImageView)
         rotatingImageView.translatesAutoresizingMaskIntoConstraints = false
-//        let widthConstraint = rotatingImageView.widthAnchor.constraint(equalToConstant: 124)
-//        let heightConstraint = rotatingImageView.heightAnchor.constraint(equalToConstant: 107)
-//        contentView.addConstraints([widthConstraint, heightConstraint])
     }
     
     func initialConfigure(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
-        // TODO: Update UI for modified logic
+        configureScreenProgressDots(screenNumber: screenNumber, screensToShow: screensToShow)
+        configurePhoneDots(screenNumber: screenNumber)
         commonConfigurationAndUpdates(screenNumber: screenNumber, delegateOwner: delegateOwner)
     }
     
-    func adjustUI(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
+    private func configurePhoneDots(screenNumber: ScreenNumber) {
+        let count = OnboardingScreenType.allCases.count
+        reusableImageCreationFunction(count: count, imageName: "unselected-dot-small", size: 8, collectionType: .phoneDotCollection)
+        guard phoneImageDotsCollection.count > screenNumber.getSelectedImageIndex else { return }
+        phoneImageDotsCollection[screenNumber.getSelectedImageIndex].image = UIImage(named: "selected-dot-small")
+        addConfigurePhoneDotsToStackView(count: phoneImageDotsCollection.count)
+    }
+    
+    private func addConfigurePhoneDotsToStackView(count: Int) {
+        let spacing: CGFloat = count >= 4 ? 6 : 8
+        phoneImageDotsStackView.spacing = spacing
+        phoneImageDotsCollection.forEach { phoneImageDotsStackView.addArrangedSubview($0) }
+        // This constraint is just used to satisfy autolayout complaints - not necessary once views are added
+        phoneImageDotsStackView.removeConstraint(phoneImageDotsStackViewWidthConstraintToDelete)
+    }
+    
+    private func configureScreenProgressDots(screenNumber: ScreenNumber, screensToShow: [ScreenNumber]) {
+        let count = screensToShow.count
+        guard count > 1 else {
+            screenProgressImageDotsStackView.isHidden = true
+            return
+        }
+        reusableImageCreationFunction(count: count, imageName: "unselected-dot-large", size: 10, collectionType: .screenProgressCollection)
+        screenProgressImageDotsCollection[0].image = UIImage(named: "selected-dot-large")
+        screenProgressImageDotsWidthConstraintCollection[0].constant = 20
+        addConfigureScreenDotsToStackView()
+    }
+    
+    private func addConfigureScreenDotsToStackView() {
+        screenProgressImageDotsCollection.forEach { screenProgressImageDotsStackView.addArrangedSubview($0) }
+        // This constraint is just used to satisfy autolayout complaints - not necessary once views are added
+        screenProgressImageDotsStackView.removeConstraint(screenProgressImageDotsStackViewWidthConstraintToDelete)
+    }
+    
+    private func reusableImageCreationFunction(count: Int, imageName: String, size: CGFloat, collectionType: ImageCollectionType) {
+        for _ in 1...count {
+            let imageView = UIImageView(image: UIImage(named: imageName))
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            let width = imageView.widthAnchor.constraint(equalToConstant: size)
+            let height = imageView.heightAnchor.constraint(equalToConstant: size)
+            imageView.addConstraints([width, height])
+            collectionType == .phoneDotCollection ? self.phoneImageDotsCollection.append(imageView) : self.screenProgressImageDotsCollection.append(imageView)
+            if collectionType == .screenProgressCollection {
+                self.screenProgressImageDotsWidthConstraintCollection.append(width)
+            }
+        }
+    }
+    
+    func adjustUI(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
         adjustPhoneImageDots(screenNumber: screenNumber)
-        adjustProgressImageDotsUI(screenNumber: screenNumber)
         commonConfigurationAndUpdates(screenNumber: screenNumber, delegateOwner: delegateOwner)
+        if screensToShow.count > 1 {
+            adjustProgressImageDotsUI(screenNumber: screenNumber)
+        }
+    }
+    
+    func increment(screenNumber: ScreenNumber, screensToShow: [ScreenNumber]) -> ScreenNumber? {
+        guard screensToShow.count > 1 else { return nil }
+        if let index = screensToShow.firstIndex(of: screenNumber), screensToShow.count > index + 1 {
+            return screensToShow[index + 1]
+        } else {
+            return nil
+        }
     }
     
     private func commonConfigurationAndUpdates(screenNumber: ScreenNumber, delegateOwner: UIViewController) {
@@ -199,10 +277,10 @@ extension InitialOnboardingView {
     
     private func adjustRotatingImageViewConstraints(screenNumber: ScreenNumber) {
         guard let imageView = self.rotatingImageView else { return }
-        
+        guard phoneImageDotsCollection.count > screenNumber.getSelectedImageIndex else { return }
+        let relativeView: UIImageView = phoneImageDotsCollection[screenNumber.getSelectedImageIndex]
         switch screenNumber {
         case .one:
-            let relativeView: UIImageView = phoneImageDotsCollection[0]
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
             let relatedImageLeadingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
@@ -215,20 +293,6 @@ extension InitialOnboardingView {
             if let constraintsToRemove = self.rotatingImageViewConstraints {
                 contentView.removeConstraints(constraintsToRemove)
             }
-            let relativeView: UIImageView = phoneImageDotsCollection[1]
-            let relatedImageXReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-            let horizontalConstraint = imageView.centerXAnchor.constraint(equalTo: relatedImageXReference, constant: 1)
-            let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.topAnchor
-            let bottomConstraint = imageView.bottomAnchor.constraint(equalTo: relatedImageYReference, constant: 0)
-            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 124)
-            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 107)
-            self.rotatingImageViewConstraints = [horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint]
-            contentView.addConstraints([horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint])
-        case .three:
-            if let constraintsToRemove = self.rotatingImageViewConstraints {
-                contentView.removeConstraints(constraintsToRemove)
-            }
-            let relativeView: UIImageView = phoneImageDotsCollection[2]
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
             let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
@@ -237,6 +301,18 @@ extension InitialOnboardingView {
             let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
             self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
             contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
+        case .three:
+            if let constraintsToRemove = self.rotatingImageViewConstraints {
+                contentView.removeConstraints(constraintsToRemove)
+            }
+            let relatedImageXReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
+            let horizontalConstraint = imageView.centerXAnchor.constraint(equalTo: relatedImageXReference, constant: 1)
+            let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.topAnchor
+            let bottomConstraint = imageView.bottomAnchor.constraint(equalTo: relatedImageYReference, constant: 0)
+            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 124)
+            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 107)
+            self.rotatingImageViewConstraints = [horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint]
+            contentView.addConstraints([horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint])
         }
     }
     
