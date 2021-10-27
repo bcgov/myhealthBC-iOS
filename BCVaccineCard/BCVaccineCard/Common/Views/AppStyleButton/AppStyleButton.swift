@@ -34,6 +34,7 @@ class AppStyleButton: UIView {
         case viewAll
         case next
         case getStarted
+        case ok
         
         var getTitle: String {
             switch self {
@@ -47,6 +48,7 @@ class AppStyleButton: UIView {
             case .viewAll: return .viewAll
             case .next: return .next
             case .getStarted: return .getStarted
+            case .ok: return .ok.capitalized
             }
         }
     }

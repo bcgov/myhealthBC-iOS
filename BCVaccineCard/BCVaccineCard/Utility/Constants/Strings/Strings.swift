@@ -66,11 +66,14 @@ extension String {
     // Onboarding flow
     /// initial onboarding screen
     static var healthPasses: String { return "HealthPasses".localized }
+    static var healthRecords: String { return "HealthRecords".localized }
     static var healthResources: String { return "HealthResources".localized }
     static var newsFeed: String { return "NewsFeed".localized }
-    static var initialOnboardingOneDescription: String { return "InitialOnboardingOneDescription".localized }
-    static var initialOnboardingTwoDescription: String { return "InitialOnboardingTwoDescription".localized }
-    static var initialOnboardingThreeDescription: String { return "InitialOnboardingThreeDescription".localized }
+    static var initialOnboardingHealthPassesDescription: String { return "InitialOnboardingHealthPassesDescription".localized }
+    static var initialOnboardingHealthRecordsDescription: String { return "InitialOnboardingHealthRecordsDescription".localized }
+    static var initialOnboardingHealthResourcesDescription: String { return "InitialOnboardingHealthResourcesDescription".localized }
+    static var initialOnboardingNewsFeedDescription: String { return "InitialOnboardingNewsFeedDescription".localized }
+    static var new: String { return "NEW".localized }
     
     // Gateway screen
     /// Validation
