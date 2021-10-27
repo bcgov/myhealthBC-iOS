@@ -14,7 +14,7 @@ import UIKit
 ///   Fifth - test it out thoroughly
 enum OnboardingScreenType: String, Codable, CaseIterable {
     case healthPasses = "Health Passes"
-//    case healthRecords = "Health Records"
+    case healthRecords = "Health Records"
     case healthResources = "Health Resources"
     case newsFeed = "News Feed"
     
@@ -22,10 +22,13 @@ enum OnboardingScreenType: String, Codable, CaseIterable {
         switch self {
         case .healthPasses:
             return .one
-        case .healthResources:
+        case .healthRecords:
             return .two
-        case .newsFeed:
+        case .healthResources:
             return .three
+        case .newsFeed:
+            return .four
+        
         }
     }
 }
@@ -33,15 +36,17 @@ enum OnboardingScreenType: String, Codable, CaseIterable {
 class InitialOnboardingView: UIView {
     
     enum ScreenNumber: CaseIterable {
-        case one, two, three
+        case one, two, three, four
         
         var getRotatingImage: UIImage? {
             switch self {
             case .one:
                 return UIImage(named: "bubble-passes")
             case .two:
-                return UIImage(named: "bubble-resources")
+                return UIImage(named: "bubble-records")
             case .three:
+                return UIImage(named: "bubble-resources")
+            case .four:
                 return UIImage(named: "bubble-news")
             }
         }
@@ -51,8 +56,10 @@ class InitialOnboardingView: UIView {
             case .one:
                 return .healthPasses
             case .two:
-                return .healthResources
+                return .healthRecords
             case .three:
+                return .healthResources
+            case .four:
                 return .newsFeed
             }
         }
@@ -62,8 +69,10 @@ class InitialOnboardingView: UIView {
             case .one:
                 return .healthPasses
             case .two:
-                return .healthResources
+                return .healthRecords
             case .three:
+                return .healthResources
+            case .four:
                 return .newsFeed
             }
         }
@@ -73,8 +82,10 @@ class InitialOnboardingView: UIView {
             case .one:
                 return .initialOnboardingHealthPassesDescription
             case .two:
-                return .initialOnboardingHealthResourcesDescription
+                return .initialOnboardingHealthRecordsDescription
             case .three:
+                return .initialOnboardingHealthResourcesDescription
+            case .four:
                 return .initialOnboardingNewsFeedDescription
             }
         }
@@ -87,6 +98,8 @@ class InitialOnboardingView: UIView {
                 return 1
             case .three:
                 return 2
+            case .four:
+                return 3
             }
         }
     }
@@ -294,6 +307,18 @@ extension InitialOnboardingView {
             if let constraintsToRemove = self.rotatingImageViewConstraints {
                 contentView.removeConstraints(constraintsToRemove)
             }
+            let relatedImageXReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
+            let horizontalConstraint = imageView.centerXAnchor.constraint(equalTo: relatedImageXReference, constant: 1)
+            let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.topAnchor
+            let bottomConstraint = imageView.bottomAnchor.constraint(equalTo: relatedImageYReference, constant: 0)
+            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 124)
+            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 107)
+            self.rotatingImageViewConstraints = [horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint]
+            contentView.addConstraints([horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint])
+        case .three:
+            if let constraintsToRemove = self.rotatingImageViewConstraints {
+                contentView.removeConstraints(constraintsToRemove)
+            }
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
             let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
@@ -302,7 +327,7 @@ extension InitialOnboardingView {
             let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
             self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
             contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
-        case .three:
+        case .four:
             if let constraintsToRemove = self.rotatingImageViewConstraints {
                 contentView.removeConstraints(constraintsToRemove)
             }
