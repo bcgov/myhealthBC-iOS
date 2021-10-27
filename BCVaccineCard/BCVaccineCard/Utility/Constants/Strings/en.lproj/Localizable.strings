@@ -69,6 +69,7 @@
 "DOVRange" = "Vaccination date must be in valid range";
 "FormTitle" = "Add BC Vaccine Card";
 "AddABCVaccineCard" = "Add a BC Vaccine Card";
+"AddAHealthPass" = "Add a Health Pass";
 "FormDescription" = "To access your BC Vaccine Card, please provide the following information:";
 "PersonalHealthNumber" = "Personal Health Number";
 "DateOfBirth" = "Date of Birth";
@@ -80,7 +81,10 @@
 "PassCount" = "%@ passes";
 "BCVaccineCards" = "BC Vaccine Cards";
 "NoCardsYet" = "You don't have any cards yet";
-"NoCardsIntroText" = "You need proof of vaccination to access many businesses, events and services. Add your BC Vaccine Cards here for easy access.";
+"NoCardsIntroText" = "The easiest way to show proof is using a Vaccine Pass.\n\nAdd a BC Vaccine Pass and Federal Travel Pass here for easy access.";
+"VaccinePass" = "Vaccine Pass";
+"BCVaccinePass" = "BC Vaccine Pass";
+"FederalTravelPass" = "Federal Travel Pass";
 "Vaccinated" = "Vaccinated";
 "PartiallyVaccinated" = "Partially Vaccinated";
 "NoRecordFound" = "No Record Found";

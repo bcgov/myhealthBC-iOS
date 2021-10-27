@@ -21,9 +21,10 @@ class NoCardsTableViewCell: UITableViewCell {
     }
     
     private func setup() {
-        introTextLabel.text = .noCardsIntroText
-        introTextLabel.textColor = AppColours.textBlack
-        introTextLabel.font = UIFont.bcSansRegularWithSize(size: 17)
+//        introTextLabel.text = .noCardsIntroText
+        introTextLabel.attributedText = attributedText(withString: .noCardsIntroText, boldStrings: [.vaccinePass, .bcVaccinePass, .federalTravelPass], normalFont: UIFont.bcSansRegularWithSize(size: 17), boldFont: UIFont.bcSansBoldWithSize(size: 17), textColor: AppColours.textBlack)
+//        introTextLabel.textColor = AppColours.textBlack
+//        introTextLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         
         noCardsLabel.text = .noCardsYet
         noCardsLabel.font = UIFont.bcSansBoldWithSize(size: 13)
@@ -48,8 +49,18 @@ class NoCardsTableViewCell: UITableViewCell {
         
     }
     
+    func attributedText(withString string: String, boldStrings: [String], normalFont: UIFont, boldFont: UIFont, textColor: UIColor) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: string, attributes: [NSAttributedString.Key.font: normalFont, NSAttributedString.Key.foregroundColor: textColor])
+        let boldFontAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: boldFont]
+        for boldString in boldStrings {
+            let range = (string as NSString).range(of: boldString)
+            attributedString.addAttributes(boldFontAttribute, range: range)
+        }
+        return attributedString
+    }
+    
     func configure(withOwner vc: UIViewController, height: CGFloat) {
-        addButton.configure(withStyle: .blue, buttonType: .addABCVaccineCard, delegateOwner: vc, enabled: true)
+        addButton.configure(withStyle: .blue, buttonType: .addAHealthPass, delegateOwner: vc, enabled: true)
         stackViewViewHeight.constant = height
     }
     

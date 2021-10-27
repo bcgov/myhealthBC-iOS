@@ -30,7 +30,7 @@ class AppStyleButton: UIView {
         case saveACopy
         case close
         case manageCards
-        case addABCVaccineCard
+        case addAHealthPass
         case viewAll
         case next
         case getStarted
@@ -44,7 +44,7 @@ class AppStyleButton: UIView {
             case .saveACopy: return .saveACopy
             case .close: return .close
             case .manageCards: return .manageCards
-            case .addABCVaccineCard: return .addABCVaccineCard
+            case .addAHealthPass: return .addAHealthPass
             case .viewAll: return .viewAll
             case .next: return .next
             case .getStarted: return .getStarted
