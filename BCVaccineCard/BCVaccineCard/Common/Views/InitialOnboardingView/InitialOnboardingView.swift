@@ -295,6 +295,9 @@ extension InitialOnboardingView {
         let relativeView: UIImageView = phoneImageDotsCollection[screenNumber.getSelectedImageIndex]
         switch screenNumber {
         case .one:
+            if let constraintsToRemove = self.rotatingImageViewConstraints {
+                contentView.removeConstraints(constraintsToRemove)
+            }
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
             let relatedImageLeadingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
