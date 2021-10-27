@@ -290,9 +290,7 @@ extension InitialOnboardingView {
         let relativeView: UIImageView = phoneImageDotsCollection[screenNumber.getSelectedImageIndex]
         switch screenNumber {
         case .one:
-            if let constraintsToRemove = self.rotatingImageViewConstraints {
-                contentView.removeConstraints(constraintsToRemove)
-            }
+            removeOldConstraints()
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
             let relatedImageLeadingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
@@ -302,21 +300,10 @@ extension InitialOnboardingView {
             self.rotatingImageViewConstraints = [verticalConstraint, leadingConstraint, widthConstraint, heightConstraint]
             contentView.addConstraints([verticalConstraint, leadingConstraint, widthConstraint, heightConstraint])
         case .two:
-            if let constraintsToRemove = self.rotatingImageViewConstraints {
-                contentView.removeConstraints(constraintsToRemove)
-            }
-            let relatedImageXReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-            let horizontalConstraint = imageView.centerXAnchor.constraint(equalTo: relatedImageXReference, constant: 1)
-            let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.topAnchor
-            let bottomConstraint = imageView.bottomAnchor.constraint(equalTo: relatedImageYReference, constant: 0)
-            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 124)
-            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 107)
-            self.rotatingImageViewConstraints = [horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint]
-            contentView.addConstraints([horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint])
+            removeOldConstraints()
+            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
         case .three:
-            if let constraintsToRemove = self.rotatingImageViewConstraints {
-                contentView.removeConstraints(constraintsToRemove)
-            }
+            removeOldConstraints()
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
             let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
@@ -326,18 +313,26 @@ extension InitialOnboardingView {
             self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
             contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
         case .four:
-            if let constraintsToRemove = self.rotatingImageViewConstraints {
-                contentView.removeConstraints(constraintsToRemove)
-            }
-            let relatedImageXReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-            let horizontalConstraint = imageView.centerXAnchor.constraint(equalTo: relatedImageXReference, constant: 1)
-            let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.topAnchor
-            let bottomConstraint = imageView.bottomAnchor.constraint(equalTo: relatedImageYReference, constant: 0)
-            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 124)
-            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 107)
-            self.rotatingImageViewConstraints = [horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint]
-            contentView.addConstraints([horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint])
+            removeOldConstraints()
+            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
         }
+    }
+    
+    private func removeOldConstraints() {
+        if let constraintsToRemove = self.rotatingImageViewConstraints {
+            contentView.removeConstraints(constraintsToRemove)
+        }
+    }
+    
+    private func constraintsForBubbleAtTop(relativeView: UIImageView, imageView: UIImageView) {
+        let relatedImageXReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
+        let horizontalConstraint = imageView.centerXAnchor.constraint(equalTo: relatedImageXReference, constant: 1)
+        let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.topAnchor
+        let bottomConstraint = imageView.bottomAnchor.constraint(equalTo: relatedImageYReference, constant: 0)
+        let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 124)
+        let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 107)
+        self.rotatingImageViewConstraints = [horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint]
+        contentView.addConstraints([horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint])
     }
     
     private func updateRotatingImage(screenNumber: ScreenNumber) {
