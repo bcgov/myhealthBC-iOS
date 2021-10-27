@@ -88,6 +88,7 @@ extension String {
     /// Labels and other text
     static var formTitle: String { return "FormTitle".localized }
     static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
+    static var addAHealthPass: String { return "AddAHealthPass".localized }
     static var formDescription: String { return "FormDescription".localized }
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
     static var dateOfBirth: String { return "DateOfBirth".localized }
@@ -106,6 +107,9 @@ extension String {
     static var bcVaccineCards: String { return "BCVaccineCards".localized }
     static var noCardsYet: String { return "NoCardsYet".localized }
     static var noCardsIntroText: String { return "NoCardsIntroText".localized }
+    static var vaccinePass: String { return "VaccinePass".localized }
+    static var bcVaccinePass: String { return "BCVaccinePass".localized }
+    static var federalTravelPass: String { return "FederalTravelPass".localized }
     static var vaccinated: String { return "Vaccinated".localized }
     static var partiallyVaccinated: String { return "PartiallyVaccinated".localized }
     static var noRecordFound: String { return "NoRecordFound".localized }
