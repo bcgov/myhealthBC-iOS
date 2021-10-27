@@ -6,12 +6,7 @@
 //
 
 import UIKit
-// TODO: Update UI for 4th screen. Steps:
-/// First, update image assets, get logic working for 3 initial screens, make sure that data saves (Need to get image assets from the girls)
-///  Second, update UI to contain 4 dots (in phone and above get started - maybe look at setting this up so that the UI is created programatically for the dot views...yeah, do that
-///  Third, Add in UI constraints for health records, adjust health resourcs and news feed (health will now have same constraints as news feed, and news feed will be the same as what resources was, just with a different reference dot)
-///   Fourth, adjust UI to have option to hide lower dots, adjust button title (based on what has been shown or not), have 'NEW' label showing'
-///   Fifth - test it out thoroughly
+
 enum OnboardingScreenType: String, Codable, CaseIterable {
     case healthPasses = "Health Passes"
     case healthRecords = "Health Records"
