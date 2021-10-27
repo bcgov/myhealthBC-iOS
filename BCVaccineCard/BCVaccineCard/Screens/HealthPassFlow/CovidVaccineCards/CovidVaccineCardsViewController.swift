@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BCVaccineValidator
 
 class CovidVaccineCardsViewController: BaseViewController {
     
@@ -284,12 +285,17 @@ extension CovidVaccineCardsViewController {
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension CovidVaccineCardsViewController {
     private func saveToDefaults() {
-        Defaults.vaccinePassports = dataSource.map({ $0.transform() })
+        StorageService.shared.storeVaccineCardsForCurrentUser(cards: dataSource)
+//        Defaults.vaccinePassports = dataSource.map({ $0.transform() })
     }
     
     private func fetchFromDefaults() {
-        let localDS = Defaults.vaccinePassports ?? []
-        self.dataSource = localDS.map({ $0.transform() })
+        StorageService.shared.getVaccineCardsForCurrentUser { [weak self] cards in
+            guard let `self` = self else {return}
+            self.dataSource = cards
+        }
+//        let localDS = Defaults.vaccinePassports ?? []
+//        self.dataSource = localDS.map({ $0.transform() })
     }
 }
 

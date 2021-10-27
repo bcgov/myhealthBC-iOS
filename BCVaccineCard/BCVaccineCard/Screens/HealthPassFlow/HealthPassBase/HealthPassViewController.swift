@@ -23,7 +23,6 @@ class HealthPassViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,13 +93,17 @@ extension HealthPassViewController {
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension HealthPassViewController {
     private func fetchFromDefaults() {
-        guard let localDS = Defaults.vaccinePassports, localDS.count > 0 else {
-            self.dataSource = nil
-            self.savedCardsCount = 0
-            return
+        StorageService.shared.getVaccineCardsForCurrentUser { [weak self] cards in
+            guard let `self` = self else {return}
+            guard cards.count > 0 else {
+                self.dataSource = nil
+                self.savedCardsCount = 0
+                return
+            }
+            self.savedCardsCount = cards.count
+            self.dataSource = cards.first
+            self.tableView.reloadData()
         }
-        self.savedCardsCount = localDS.count
-        self.dataSource = localDS.first?.transform()
     }
 }
 
@@ -198,6 +201,9 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
             self.tableView.reloadData()
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
+            if let card = self.dataSource {
+                StorageService.shared.deleteVaccineCard(vaccineQR: card.transform().code)
+            }
             self.savedCardsCount = 0
             self.dataSource = nil
             Defaults.vaccinePassports = nil

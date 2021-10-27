@@ -235,23 +235,28 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         }
         let model = convertScanResultModelIntoLocalData(data: data, source: source)
         let appModel = model.transform()
-        if doesCardNeedToBeUpdated(modelToUpdate: appModel) {
-            updateCardInLocalStorage(model: model)
-//            postCardAddedNotification(id: appModel.id ?? "")
-        } else {
-            guard isCardAlreadyInWallet(modelToAdd: appModel) == false else {
-                alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
+        doesCardNeedToBeUpdated(modelToUpdate: appModel) {[weak self] needsToBeUpdated in
+            guard let `self` = self else {return}
+            if needsToBeUpdated {
+                self.updateCardInLocalStorage(model: model)
+            } else {
+                self.isCardAlreadyInWallet(modelToAdd: appModel) {[weak self] isAlreadyInWallet in
                     guard let `self` = self else {return}
-                    self.navigationController?.popViewController(animated: true)
+                    if isAlreadyInWallet {
+                        self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
+                            guard let `self` = self else {return}
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                        return
+                    } else {
+                        self.appendModelToLocalStorage(model: model)
+                    }
+                    // TODO: text from constants
+                    self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                    self.popBackToProperViewController(id: appModel.id ?? "")
                 }
-                return
             }
-            appendModelToLocalStorage(model: model)
-//            postCardAddedNotification(id: appModel.id ?? "")
         }
-        // TODO: text from constants
-        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-        self.popBackToProperViewController(id: appModel.id ?? "")
     }
 }
 
