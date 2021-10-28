@@ -34,8 +34,6 @@ class QRRetrievalMethodViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-//        self.view.accessibilityElementsHidden = true
-//        self.view.accessibilityElements = [self.navigationController, self.tableView]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,7 +51,6 @@ class QRRetrievalMethodViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
         } else {
@@ -110,8 +107,6 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: ImageTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ImageTableViewCell.getName)
         tableView.register(UINib.init(nibName: QRSelectionTableViewCell.getName, bundle: .main), forCellReuseIdentifier: QRSelectionTableViewCell.getName)
-//        tableView.rowHeight = UITableView.automaticDimension
-//        tableView.estimatedRowHeight = 100
         tableView.delegate = self
         tableView.dataSource = self
     }
