@@ -14,10 +14,26 @@ enum Defaults {
     }
     
     static var hasSeenInitialOnboardingScreens: Bool {
+        case initialOnboardingScreensSeen
+        case cachedQueueItObject
+    }
+    
+    static var vaccinePassports: [LocallyStoredVaccinePassportModel]? {
         get {
-            return UserDefaults.standard.bool(forKey: self.Key.hasSeenInitialOnboardingScreens.rawValue)
+            guard let data = UserDefaults.standard.value(forKey: self.Key.vaccinePassports.rawValue) as? Data else { return nil }
+            let order = try? PropertyListDecoder().decode([LocallyStoredVaccinePassportModel].self, from: data)
+            return order
         }
-        set { UserDefaults.standard.set(newValue, forKey: self.Key.hasSeenInitialOnboardingScreens.rawValue) }
+        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.vaccinePassports.rawValue) }
+    }
+    
+    static var initialOnboardingScreensSeen: [OnboardingScreenType]? {
+        get {
+            guard let data = UserDefaults.standard.value(forKey: self.Key.initialOnboardingScreensSeen.rawValue) as? Data else { return nil }
+            let order = try? PropertyListDecoder().decode([OnboardingScreenType].self, from: data)
+            return order
+        }
+        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.initialOnboardingScreensSeen.rawValue) }
     }
     
     static var cachedQueueItObject: QueueItCachedObject? {

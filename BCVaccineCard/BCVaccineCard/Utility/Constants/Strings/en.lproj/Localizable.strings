@@ -51,11 +51,14 @@
 "HealthGatewayError" = "Health Gateway error";
 "VaxAddedBannerAlert" = "Your proof of vaccination has been added";
 "HealthPasses" = "Health Passes";
+"HealthRecords" = "Health Records";
 "HealthResources" = "Health Resources";
 "NewsFeed" = "News Feed";
-"InitialOnboardingOneDescription" = "All of your vaccine cards and booking confirmations stored in a single place";
-"InitialOnboardingTwoDescription" = "Find health information and COVID-19 tests";
-"InitialOnboardingThreeDescription" = "Stay updated on COVID-19 news";
+"InitialOnboardingHealthPassesDescription" = "All of your COVID-19 vaccine cards and test results available in a single place";
+"InitialOnboardingHealthRecordsDescription" = "Easily access all of your COVID-19 health records";
+"InitialOnboardingHealthResourcesDescription" = "Find COVID-19 health information and testing resources";
+"InitialOnboardingNewsFeedDescription" = "Get the latest BC government COVID-19 news";
+"NEW" = "NEW";
 "PHNRequired" = "Personal Health Number is required";
 "PHNLength" = "PHN should be 10 characters";
 "PHNNumber" = "PHN must be numbers only";
@@ -66,6 +69,7 @@
 "DOVRange" = "Vaccination date must be in valid range";
 "FormTitle" = "Add BC Vaccine Card";
 "AddABCVaccineCard" = "Add a BC Vaccine Card";
+"AddAHealthPass" = "Add a Health Pass";
 "FormDescription" = "To access your BC Vaccine Card, please provide the following information:";
 "PersonalHealthNumber" = "Personal Health Number";
 "DateOfBirth" = "Date of Birth";
@@ -77,7 +81,10 @@
 "PassCount" = "%@ passes";
 "BCVaccineCards" = "BC Vaccine Cards";
 "NoCardsYet" = "You don't have any cards yet";
-"NoCardsIntroText" = "You need proof of vaccination to access many businesses, events and services. Add your BC Vaccine Cards here for easy access.";
+"NoCardsIntroText" = "The easiest way to show proof is using a Vaccine Pass.\n\nAdd a BC Vaccine Pass and Federal Travel Pass here for easy access.";
+"VaccinePass" = "Vaccine Pass";
+"BCVaccinePass" = "BC Vaccine Pass";
+"FederalTravelPass" = "Federal Travel Pass";
 "Vaccinated" = "Vaccinated";
 "PartiallyVaccinated" = "Partially Vaccinated";
 "NoRecordFound" = "No Record Found";
@@ -90,7 +97,7 @@
 "QRDescriptionText" = "Please select one of the following options to add a BC Vaccine Card";
 "CameraScanOption" = "Scan a QR code";
 "ImageUploadOption" = "Upload a QR code";
-"HealthGatewayOption" = "Get a QR code";
+"HealthGatewayOption" = "Enter information";
 "SettingsOpeningText" = "My Health BC app is the official mobile application from the Government of British Columbia which allow you to store and organize the proof of vaccination of you and your family members.";
 "Help" = "Help";
 "Resource" = "Resource";
