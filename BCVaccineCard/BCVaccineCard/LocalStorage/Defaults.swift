@@ -9,11 +9,7 @@ import Foundation
 
 enum Defaults {
     enum Key: String {
-        case hasSeenInitialOnboardingScreens
-        case cachedQueueItObject
-    }
-    
-    static var hasSeenInitialOnboardingScreens: Bool {
+        case vaccinePassports
         case initialOnboardingScreensSeen
         case cachedQueueItObject
     }
