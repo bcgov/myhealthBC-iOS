@@ -7,10 +7,6 @@
 
 import UIKit
 
-//protocol TableViewButtonViewDelegate: AnyObject {
-//    func buttonTapped(type: TableViewButtonView.ButtonType)
-//}
-
 class TableViewButtonView: UIView {
     
     enum ButtonStyle {
@@ -58,10 +54,7 @@ class TableViewButtonView: UIView {
     @IBOutlet weak private var roundedView: UIView!
     @IBOutlet weak private var optionTitleLabel: UILabel!
     @IBOutlet weak private var optionImageView: UIImageView!
-    
-//    weak var delegate: TableViewButtonViewDelegate?
-    private var buttonType: ButtonType!
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -95,10 +88,6 @@ class TableViewButtonView: UIView {
         optionTitleLabel.font = UIFont.bcSansRegularWithSize(size: 16)
     }
     
-//    @IBAction func buttonTappedAction(_ sender: UIButton) {
-//        self.delegate?.buttonTapped(type: self.buttonType)
-//    }
-    
     func configure(withStyle style: ButtonStyle, buttonType: ButtonType) {
         roundedView.backgroundColor = style.getColorScheme.backgroundColor
         optionTitleLabel.textColor = style.getColorScheme.titleColor
@@ -109,7 +98,5 @@ class TableViewButtonView: UIView {
             optionImageView.image = buttonType.getImage
             optionImageView.tintColor = style.getColorScheme.titleColor
         }
-//        self.delegate = delegateOwner as? TableViewButtonViewDelegate
-        self.buttonType = buttonType
     }
 }
