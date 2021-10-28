@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 import BCVaccineValidator
-import Firebase
+//import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
         #elseif DEV
         BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
-        FirebaseApp.configure()
+//        FirebaseApp.configure()
         #endif
         AnalyticsService.shared.setup()
         setupGatewayFactory()

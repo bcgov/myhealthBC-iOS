@@ -235,23 +235,28 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         }
         let model = convertScanResultModelIntoLocalData(data: data, source: source)
         let appModel = model.transform()
-        if doesCardNeedToBeUpdated(modelToUpdate: appModel) {
-            updateCardInLocalStorage(model: model)
-//            postCardAddedNotification(id: appModel.id ?? "")
-        } else {
-            guard isCardAlreadyInWallet(modelToAdd: appModel) == false else {
-                alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
+        doesCardNeedToBeUpdated(modelToUpdate: appModel) {[weak self] needsToBeUpdated in
+            guard let `self` = self else {return}
+            if needsToBeUpdated {
+                self.updateCardInLocalStorage(model: model)
+            } else {
+                self.isCardAlreadyInWallet(modelToAdd: appModel) {[weak self] isAlreadyInWallet in
                     guard let `self` = self else {return}
-                    self.navigationController?.popViewController(animated: true)
+                    if isAlreadyInWallet {
+                        self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
+                            guard let `self` = self else {return}
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                        return
+                    } else {
+                        self.appendModelToLocalStorage(model: model)
+                    }
+                    // TODO: text from constants
+                    self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                    self.popBackToProperViewController(id: appModel.id ?? "")
                 }
-                return
             }
-            appendModelToLocalStorage(model: model)
-//            postCardAddedNotification(id: appModel.id ?? "")
         }
-        // TODO: text from constants
-        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-        self.popBackToProperViewController(id: appModel.id ?? "")
     }
 }
 
@@ -260,7 +265,7 @@ extension QRRetrievalMethodViewController {
     func popBackToProperViewController(id: String) {
         // If we only have one card (or no cards), then go back to health pass with popBackTo
         // If we have more than one card, we should check if 2nd controller in stack is CovidVaccineCardsViewController, if so, pop back, if not, instantiate, insert at 1, then pop back
-        guard let cards = Defaults.vaccinePassports, cards.count > 1 else {
+        guard StorageService.shared.fetchVaccineCards(for: AuthManager().userId()).count > 1 else {
             self.popBack(toControllerType: HealthPassViewController.self)
             return
         }
