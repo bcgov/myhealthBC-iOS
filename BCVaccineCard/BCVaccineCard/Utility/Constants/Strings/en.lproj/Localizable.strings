@@ -97,7 +97,7 @@
 "QRDescriptionText" = "Please select one of the following options to add a BC Vaccine Card";
 "CameraScanOption" = "Scan a QR code";
 "ImageUploadOption" = "Upload a QR code";
-"HealthGatewayOption" = "Get a QR code";
+"HealthGatewayOption" = "Enter information";
 "SettingsOpeningText" = "My Health BC app is the official mobile application from the Government of British Columbia which allow you to store and organize the proof of vaccination of you and your family members.";
 "Help" = "Help";
 "Resource" = "Resource";
