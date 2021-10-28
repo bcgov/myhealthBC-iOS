@@ -20,7 +20,7 @@ class QRRetrievalMethodViewController: BaseViewController {
     }
     
     enum CellType {
-        case text(text: String), image(image: UIImage), method(type: QRRetrievalMethod)
+        case text(text: String), image(image: UIImage), method(type: TableViewButtonView.ButtonType, style: TableViewButtonView.ButtonStyle)
     }
     
     @IBOutlet weak private var tableView: UITableView!
@@ -45,8 +45,6 @@ class QRRetrievalMethodViewController: BaseViewController {
         self.tabBarController?.tabBar.isHidden = false
         navSetup()
         self.tableView.contentInsetAdjustmentBehavior = .never
-//        self.view.accessibilityElementsHidden = false
-//        UIAccessibility.post(notification: .screenChanged, argument: self.view)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -99,10 +97,9 @@ extension QRRetrievalMethodViewController {
         self.dataSource = [
             .text(text: .qrDescriptionText),
             .image(image: #imageLiteral(resourceName: "options-screen-image")),
-            .method(type: .enterGatewayInfo),
-            .method(type: .scanWithCamera),
-            .method(type: .uploadImage)
-            
+            .method(type: .goToEnterGateway, style: .blue),
+            .method(type: .goToCameraScan, style: .white),
+            .method(type: .goToUploadImage, style: .white)
         ]
     }
 }
@@ -136,9 +133,9 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
                 cell.configure(image: image)
                 return cell
             }
-        case .method(type: let type):
+        case .method(type: let type, style: let style):
             if let cell = tableView.dequeueReusableCell(withIdentifier: QRSelectionTableViewCell.getName, for: indexPath) as? QRSelectionTableViewCell {
-                cell.configure(method: type, delegateOwner: self)
+                cell.configure(withStyle: style, buttonType: type)
                 cell.isAccessibilityElement = true
                 cell.accessibilityTraits = .button
                 cell.accessibilityLabel = "\(type.getTitle)"
@@ -165,19 +162,26 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         let item = dataSource[indexPath.row]
         switch item {
         case .text, .image: return
-        case .method(type: let type):
-            if let cell = tableView.cellForRow(at: indexPath) as? QRSelectionTableViewCell {
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                // The delay is necessary for the haptic feedback to occur immediately.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    cell.callDelegate(fromMethod: type)
+        case .method(type: let type, style: _):
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            // The delay is necessary for the haptic feedback to occur immediately.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                switch type {
+                case .goToEnterGateway:
+                    self.goToEnterGateway()
+                case .goToCameraScan:
+                    self.goToCameraScan()
+                case .goToUploadImage:
+                    self.goToUploadImage()
                 }
             }
+            
         }
     }
 }
 
-extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
+// MARK: Table View Button Methods
+extension QRRetrievalMethodViewController {
     func goToEnterGateway() {
         let vc = GatewayFormViewController.constructGatewayFormViewController()
         vc.completionHandler = { [weak self] id in
