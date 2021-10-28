@@ -268,24 +268,31 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
     
     func handleCardInDefaults(localModel: LocallyStoredVaccinePassportModel) {
         let model = localModel.transform()
-        if doesCardNeedToBeUpdated(modelToUpdate: model) {
-            self.navigationController?.popViewController(animated: true)
-            self.updateCardInLocalStorage(model: model.transform())
-            self.completionHandler?(model.id ?? "")
-        } else {
-            guard isCardAlreadyInWallet(modelToAdd: model) == false else {
-                alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
-                    guard let `self` = self else {return}
-                    self.navigationController?.popViewController(animated: true)
-                    self.completionHandler?(model.id ?? "")
-                }
-                return
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        doesCardNeedToBeUpdated(modelToUpdate: model) {[weak self] needsUpdate in
+            guard let `self` = self else {return}
+            if needsUpdate {
                 self.navigationController?.popViewController(animated: true)
-                self.appendModelToLocalStorage(model: model.transform())
+                self.updateCardInLocalStorage(model: model.transform())
                 self.completionHandler?(model.id ?? "")
-                
+            } else {
+                self.isCardAlreadyInWallet(modelToAdd: model) {[weak self] isAlreadyInWallet in
+                    guard let `self` = self else {return}
+                    if isAlreadyInWallet {
+                        self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
+                            guard let `self` = self else {return}
+                            self.navigationController?.popViewController(animated: true)
+                            self.completionHandler?(model.id ?? "")
+                        }
+                        return
+                    } else {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.navigationController?.popViewController(animated: true)
+                            self.appendModelToLocalStorage(model: model.transform())
+                            self.completionHandler?(model.id ?? "")
+                            
+                        }
+                    }
+                }
             }
         }
     }

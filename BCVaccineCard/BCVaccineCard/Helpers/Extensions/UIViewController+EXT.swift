@@ -235,19 +235,11 @@ extension UIViewController {
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        if Defaults.vaccinePassports == nil {
-            Defaults.vaccinePassports = []
-            Defaults.vaccinePassports?.append(model)
-        } else {
-            Defaults.vaccinePassports?.append(model)
-        }
+        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId())
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        guard let defaultsPassports = Defaults.vaccinePassports else { return }
-        if let index = Defaults.vaccinePassports?.firstIndex(where: { $0.name == model.name && $0.birthdate == model.birthdate }), defaultsPassports.count > index {
-            Defaults.vaccinePassports?[index] = model
-        }
+        StorageService.shared.updateVaccineCard(newData: model)
     }
     
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
@@ -289,22 +281,24 @@ extension UIViewController {
 // MARK: Check for duplicates - again, should probably find a better spot for this
 extension UIViewController {
     // Need to think about how to handle this... will likely need two functions
-    func isCardAlreadyInWallet(modelToAdd model: AppVaccinePassportModel) -> Bool {
-        guard let localDS = Defaults.vaccinePassports, !localDS.isEmpty else { return false }
-        let appDS = localDS.map { $0.transform() }
-        let idArray = appDS.compactMap({ $0.id })
-        guard let id = model.id else { return false } // May need some form of error handling here, as this just means the new model is incomplete
-        guard idArray.firstIndex(where: { $0 == id }) == nil else { return true }
-        return false
+    func isCardAlreadyInWallet(modelToAdd model: AppVaccinePassportModel, completion: @escaping(Bool)->Void){
+        StorageService.shared.getVaccineCardsForCurrentUser { appDS in
+            let idArray = appDS.compactMap({ $0.id })
+            guard let id = model.id else { return completion(false) } // May need some form of error handling here, as this just means the new model is incomplete
+            guard idArray.firstIndex(where: { $0 == id }) == nil else { return completion(true) }
+            return completion(false)
+        }
     }
     // TODO: When we move these functions to it's own class, we should refactor how these are done as there is a fair amount of duplication.. just not doing it now as we are close to release
-    func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel) -> Bool {
-        guard let localDS = Defaults.vaccinePassports, !localDS.isEmpty else { return false }
-        guard model.codableModel.status == .fully else { return false }
-        if let _ = Defaults.vaccinePassports?.firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && $0.status == .partially }) {
-            return true
+    func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel, completion: @escaping(Bool) -> Void) {
+        StorageService.shared.getVaccineCardsForCurrentUser { localDS in
+            guard !localDS.isEmpty else { return completion(false) }
+            guard model.codableModel.status == .fully else { return completion(false) }
+            if let _ = localDS.map({$0.transform()}).firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && $0.status == .partially }) {
+                return completion(true)
+            }
+            return completion(false)
         }
-        return false
     }
 }
 

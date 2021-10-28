@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BCVaccineValidator
 
 class CovidVaccineCardsViewController: BaseViewController {
     
@@ -76,7 +77,7 @@ extension CovidVaccineCardsViewController {
     }
     
     @objc func onNotification(notification:Notification) {
-        fetchFromDefaults()
+        fetchFromStorage()
         guard let id = notification.userInfo?["id"] as? String else { return }
         var indexPath: IndexPath?
         if let index = self.dataSource.firstIndex(where: { $0.id == id }) {
@@ -123,7 +124,7 @@ extension CovidVaccineCardsViewController {
 // MARK: DataSource Management
 extension CovidVaccineCardsViewController {
     private func retrieveDataSource() {
-        fetchFromDefaults()
+        fetchFromStorage()
         inEditMode = false
     }
 }
@@ -131,7 +132,11 @@ extension CovidVaccineCardsViewController {
 // MARK: Bottom Button Functionalty
 extension CovidVaccineCardsViewController {
     private func buttonHiddenStatus() {
-        bottomButton.isHidden = self.dataSource.isEmpty
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else {return}
+            self.bottomButton.isHidden = self.dataSource.isEmpty
+        }
+        
     }
     private func adjustButtonName() {
         guard !self.dataSource.isEmpty else { return }
@@ -145,10 +150,6 @@ extension CovidVaccineCardsViewController {
 // MARK: Bottom Button Tapped Delegate
 extension CovidVaccineCardsViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
-
-        if type == .done {
-            saveToDefaults()
-        }
         // Note: This is a fix for when a user may swipe to edit, then while editing, taps manage cards
         if type == .manageCards {
             tableView.isEditing = false
@@ -255,7 +256,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         let movedObject = dataSource[sourceIndexPath.row]
         dataSource.remove(at: sourceIndexPath.row)
         dataSource.insert(movedObject, at: destinationIndexPath.row)
-        saveToDefaults()
+        StorageService.shared.changeVaccineCardSortOrder(cardQR: movedObject.codableModel.code, newPosition: destinationIndexPath.row)
     }
 }
 
@@ -270,8 +271,9 @@ extension CovidVaccineCardsViewController {
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
+            let item = self.dataSource[indexPath.row]
+            StorageService.shared.deleteVaccineCard(vaccineQR: item.codableModel.code)
             self.dataSource.remove(at: indexPath.row)
-            self.saveToDefaults()
             if self.dataSource.isEmpty {
                 self.inEditMode = false
             } else {
@@ -283,13 +285,17 @@ extension CovidVaccineCardsViewController {
 
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension CovidVaccineCardsViewController {
-    private func saveToDefaults() {
-        Defaults.vaccinePassports = dataSource.map({ $0.transform() })
-    }
     
-    private func fetchFromDefaults() {
-        let localDS = Defaults.vaccinePassports ?? []
-        self.dataSource = localDS.map({ $0.transform() })
+    private func fetchFromStorage() {
+        StorageService.shared.getVaccineCardsForCurrentUser { [weak self] cards in
+            guard let `self` = self else {return}
+            DispatchQueue.main.async { [weak self] in
+                guard let `self` = self else {return}
+                self.dataSource = cards
+                self.adjustButtonName()
+                self.tableView.reloadData()
+            }
+        }
     }
 }
 
