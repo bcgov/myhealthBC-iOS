@@ -9,7 +9,6 @@ import Foundation
 
 enum Defaults {
     enum Key: String {
-        case vaccinePassports
         case hasSeenInitialOnboardingScreens
         case cachedQueueItObject
     }
