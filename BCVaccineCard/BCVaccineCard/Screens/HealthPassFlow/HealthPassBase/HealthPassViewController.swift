@@ -87,13 +87,13 @@ extension HealthPassViewController {
 // MARK: DataSource Management
 extension HealthPassViewController {
     private func retrieveDataSource() {
-        fetchFromDefaults()
+        fetchFromStorage()
     }
 }
 
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension HealthPassViewController {
-    private func fetchFromDefaults() {
+    private func fetchFromStorage() {
         StorageService.shared.getVaccineCardsForCurrentUser { [weak self] cards in
             guard let `self` = self else {return}
             guard cards.count > 0 else {
@@ -208,6 +208,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
                 StorageService.shared.deleteVaccineCard(vaccineQR: card.transform().code)
             }
             self.savedCardsCount = 0
+            self.dataSource = nil
             AnalyticsService.shared.track(action: .RemoveCard)
             self.tableView.reloadData()
         }

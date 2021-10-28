@@ -77,7 +77,7 @@ extension CovidVaccineCardsViewController {
     }
     
     @objc func onNotification(notification:Notification) {
-        fetchFromDefaults()
+        fetchFromStorage()
         guard let id = notification.userInfo?["id"] as? String else { return }
         var indexPath: IndexPath?
         if let index = self.dataSource.firstIndex(where: { $0.id == id }) {
@@ -124,7 +124,7 @@ extension CovidVaccineCardsViewController {
 // MARK: DataSource Management
 extension CovidVaccineCardsViewController {
     private func retrieveDataSource() {
-        fetchFromDefaults()
+        fetchFromStorage()
         inEditMode = false
     }
 }
@@ -150,11 +150,6 @@ extension CovidVaccineCardsViewController {
 // MARK: Bottom Button Tapped Delegate
 extension CovidVaccineCardsViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
-
-        if type == .done {
-//        TODO: is this needed??
-//         saveToDefaults()
-        }
         // Note: This is a fix for when a user may swipe to edit, then while editing, taps manage cards
         if type == .manageCards {
             tableView.isEditing = false
@@ -291,7 +286,7 @@ extension CovidVaccineCardsViewController {
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension CovidVaccineCardsViewController {
     
-    private func fetchFromDefaults() {
+    private func fetchFromStorage() {
         StorageService.shared.getVaccineCardsForCurrentUser { [weak self] cards in
             guard let `self` = self else {return}
             DispatchQueue.main.async { [weak self] in
