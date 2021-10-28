@@ -6,6 +6,7 @@
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="VaccineCard" inverseName="user" inverseEntity="VaccineCard"/>
     </entity>
     <entity name="VaccineCard" representedClassName="VaccineCard" syncable="YES">
+        <attribute name="birthdate" optional="YES" attributeType="String"/>
         <attribute name="code" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="sortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -13,6 +14,6 @@
     </entity>
     <elements>
         <element name="User" positionX="-54" positionY="0" width="128" height="74"/>
-        <element name="VaccineCard" positionX="-63" positionY="-18" width="128" height="89"/>
+        <element name="VaccineCard" positionX="-63" positionY="-18" width="128" height="104"/>
     </elements>
 </model>

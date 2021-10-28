@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2021-10-27.
+//  Created by Amir Shayegh on 2021-10-28.
 //
 //
 
@@ -19,7 +19,7 @@ extension User {
     @NSManaged public var id: String?
     @NSManaged public var name: String?
     @NSManaged public var vaccineCard: NSSet?
-    
+
     public var userId: String {
         return id ?? ""
     }
@@ -27,13 +27,9 @@ extension User {
     public var vaccineCardArray: [VaccineCard] {
         let set = vaccineCard as? Set<VaccineCard> ?? []
         return set.sorted {
-            $0.name ?? "" < $1.name ?? ""
+            $0.sortOrder < $1.sortOrder
         }
-//        return set.sorted {
-//            $0.sortOrder ?? 99 < $1.sortOrder ?? 99
-//        }
     }
-
 }
 
 // MARK: Generated accessors for vaccineCard

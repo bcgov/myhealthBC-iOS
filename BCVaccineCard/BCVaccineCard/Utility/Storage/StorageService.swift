@@ -84,12 +84,14 @@ class StorageService {
     ///   - name: card holder name: NOT the name of the user storing data
     ///   - userId: User id under which this card is to be stored
     /// - Returns: boolean indicating success or failure
-    func saveVaccineVard(vaccineQR: String, name: String, userId: String) -> Bool {
+    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, userId: String) -> Bool {
         guard let context = managedContext, let user = fetchUser(id: userId) else {return false}
         let card = VaccineCard(context: context)
         card.code = vaccineQR
         card.name = name
         card.user = user
+        card.birthdate = birthdate
+        card.sortOrder = Int64(fetchVaccineCards(for: userId).count)
         do {
             try context.save()
             return true
@@ -103,8 +105,9 @@ class StorageService {
         guard let context = managedContext else {return}
         do {
             let cards = try context.fetch(VaccineCard.createFetchRequest())
-            guard let filtered = cards.filter({$0.code == code}).first else {return}
-            context.delete(filtered)
+            guard let item = cards.filter({$0.code == code}).first else {return}
+            context.delete(item)
+            try context.save()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
             return
@@ -126,43 +129,70 @@ class StorageService {
         }
     }
     
-    public func getVaccineCardsForCurrentUser(completion: @escaping([AppVaccinePassportModel]) -> Void) {
-        let userId = AuthManager().userId()
-        let cards = fetchVaccineCards(for: userId)
-        let dispatchGroup = DispatchGroup()
-        var models: [AppVaccinePassportModel] = []
-        for vaxCard in cards where vaxCard.code != nil {
-            dispatchGroup.enter()
-            let code = vaxCard.code!
-            BCVaccineValidator.shared.validate(code: code) { result in
-                if let processed = result.result {
-                    var status: VaccineStatus
-                    switch processed.status {
-                    case .Fully:
-                        status = .fully
-                    case .Partially:
-                        status = .partially
-                    case .None:
-                        status = .notVaxed
-                    }
-                    let model = LocallyStoredVaccinePassportModel(code: code, birthdate: processed.birthdate, name: processed.name, issueDate: processed.issueDate, status: status, source: .imported)
-                    models.append(AppVaccinePassportModel(codableModel: model))
-                }
-                dispatchGroup.leave()
+    func changeVaccineCardSortOrder(cardQR code: String, newPosition: Int) {
+        guard let context = managedContext else {return}
+        do {
+            var cards = try context.fetch(VaccineCard.createFetchRequest()).sorted {
+                $0.sortOrder < $1.sortOrder
             }
-        }
-        
-        dispatchGroup.notify(queue: DispatchQueue.main) {
-            return completion(models)
+            guard let cardToMove = cards.filter({$0.code == code}).first else {return}
+            cards.move(cardToMove, to: newPosition)
+            for (index, card) in cards.enumerated() {
+                card.sortOrder = Int64(index)
+            }
+            try context.save()
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return
         }
     }
     
-    public func storeVaccineCardsForCurrentUser(cards: [AppVaccinePassportModel]) {
-        cards.forEach { card in
-            let code = card.codableModel.code
-            let name = card.codableModel.name
-            let userId = AuthManager().userId()
-            _ = StorageService.shared.saveVaccineVard(vaccineQR: code, name: name, userId: userId)
+    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel) {
+        guard let context = managedContext else {return}
+        do {
+            let cards = try context.fetch(VaccineCard.createFetchRequest())
+            guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
+            card.code = model.code
+            try context.save()
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return
+        }
+    }
+    
+    public func getVaccineCardsForCurrentUser(completion: @escaping([AppVaccinePassportModel]) -> Void) {
+        let userId = AuthManager().userId()
+        let cards = fetchVaccineCards(for: userId)
+        recursivelyProcessStored(cards: cards, processed: []) { processed in
+            return completion(processed)
+        }
+    }
+    
+    private func recursivelyProcessStored(cards: [VaccineCard], processed: [AppVaccinePassportModel], completion: @escaping([AppVaccinePassportModel]) -> Void) {
+        if cards.isEmpty {
+            return completion(processed)
+        }
+        var processedCards = processed
+        var remainingCards = cards
+        guard let cardToProcess = remainingCards.popLast(),
+              let code = cardToProcess.code else {
+            return recursivelyProcessStored(cards: remainingCards, processed: processed, completion: completion)
+        }
+        BCVaccineValidator.shared.validate(code: code) { result in
+            if let processed = result.result {
+                var status: VaccineStatus
+                switch processed.status {
+                case .Fully:
+                    status = .fully
+                case .Partially:
+                    status = .partially
+                case .None:
+                    status = .notVaxed
+                }
+                let model = LocallyStoredVaccinePassportModel(code: code, birthdate: processed.birthdate, name: processed.name, issueDate: processed.issueDate, status: status, source: .imported)
+                processedCards.append(AppVaccinePassportModel(codableModel: model))
+                self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
+            }
         }
     }
 }

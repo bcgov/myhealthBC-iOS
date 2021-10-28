@@ -2,18 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/amir/Developer/Work/covid/fw/v3/myhealthBC-iOS/BCVaccineCard/BCVaccineCard/Utility/Storage/User+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/amir/Developer/Work/covid/fw/v3/myhealthBC-iOS/BCVaccineCard/BCVaccineCard/Utility/Storage/User+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/amir/Developer/Work/covid/fw/v3/myhealthBC-iOS/BCVaccineCard/BCVaccineCard/Utility/Storage/VaccineCard+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
-      location = "group:/Users/amir/Developer/Work/covid/fw/v3/myhealthBC-iOS/BCVaccineCard/BCVaccineCard/Utility/Storage/VaccineCard+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
       location = "group:BCVaccineCard.xcodeproj">
    </FileRef>
    <FileRef

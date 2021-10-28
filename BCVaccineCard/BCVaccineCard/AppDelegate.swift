@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func configure() {
         //use .Prod or .Test for different endpoints for keys
         #if PROD
-        BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
+        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
         #elseif DEV
         BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
 //        FirebaseApp.configure()

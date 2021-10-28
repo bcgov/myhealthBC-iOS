@@ -31,6 +31,7 @@ class HealthPassViewController: BaseViewController {
         navSetup()
         // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -102,7 +103,9 @@ extension HealthPassViewController {
             }
             self.savedCardsCount = cards.count
             self.dataSource = cards.first
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
 }
@@ -205,8 +208,6 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
                 StorageService.shared.deleteVaccineCard(vaccineQR: card.transform().code)
             }
             self.savedCardsCount = 0
-            self.dataSource = nil
-            Defaults.vaccinePassports = nil
             AnalyticsService.shared.track(action: .RemoveCard)
             self.tableView.reloadData()
         }

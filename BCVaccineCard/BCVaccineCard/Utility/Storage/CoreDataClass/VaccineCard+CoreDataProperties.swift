@@ -2,7 +2,7 @@
 //  VaccineCard+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2021-10-27.
+//  Created by Amir Shayegh on 2021-10-28.
 //
 //
 
@@ -19,6 +19,7 @@ extension VaccineCard {
     @NSManaged public var code: String?
     @NSManaged public var name: String?
     @NSManaged public var sortOrder: Int64
+    @NSManaged public var birthdate: String?
     @NSManaged public var user: User?
 
 }

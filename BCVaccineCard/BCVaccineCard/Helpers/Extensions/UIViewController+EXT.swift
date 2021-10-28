@@ -235,21 +235,11 @@ extension UIViewController {
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, userId: AuthManager().userId())
-//        if Defaults.vaccinePassports == nil {
-//            Defaults.vaccinePassports = []
-//            Defaults.vaccinePassports?.append(model)
-//        } else {
-//            Defaults.vaccinePassports?.append(model)
-//        }
+        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId())
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        // TODO: NEW STORAGE
-        guard let defaultsPassports = Defaults.vaccinePassports else { return }
-        if let index = Defaults.vaccinePassports?.firstIndex(where: { $0.name == model.name && $0.birthdate == model.birthdate }), defaultsPassports.count > index {
-            Defaults.vaccinePassports?[index] = model
-        }
+        StorageService.shared.updateVaccineCard(newData: model)
     }
     
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
@@ -301,11 +291,10 @@ extension UIViewController {
     }
     // TODO: When we move these functions to it's own class, we should refactor how these are done as there is a fair amount of duplication.. just not doing it now as we are close to release
     func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel, completion: @escaping(Bool) -> Void) {
-        // TODO: NEW STORAGE
         StorageService.shared.getVaccineCardsForCurrentUser { localDS in
             guard !localDS.isEmpty else { return completion(false) }
             guard model.codableModel.status == .fully else { return completion(false) }
-            if let _ = Defaults.vaccinePassports?.firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && $0.status == .partially }) {
+            if let _ = localDS.map({$0.transform()}).firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && $0.status == .partially }) {
                 return completion(true)
             }
             return completion(false)
