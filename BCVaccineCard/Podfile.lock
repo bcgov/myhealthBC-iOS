@@ -8,11 +8,13 @@ PODS:
   - QueueITLibrary (3.0.7)
   - SnowplowTracker (2.2.2):
     - FMDB (~> 2.7)
+  - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
   - AlamofireRSSParser
   - QueueITLibrary (~> 3.0.3)
   - SnowplowTracker (~> 2.0)
+  - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   trunk:
@@ -21,6 +23,7 @@ SPEC REPOS:
     - FMDB
     - QueueITLibrary
     - SnowplowTracker
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
   Alamofire: e447a2774a40c996748296fa2c55112fdbbc42f9
@@ -28,7 +31,8 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   QueueITLibrary: 9840861051bd5b99dbf88700dd1a12ff71786b62
   SnowplowTracker: 2eee2d6606a60db98f7c4e1515499bb216b6c8ad
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: 0c7a7e3e43bef13407ae67c33f51753e89e8a5a0
+PODFILE CHECKSUM: 2a4a6262ff3cee9b17524ad5411d3ecbad4cf54c
 
 COCOAPODS: 1.10.1

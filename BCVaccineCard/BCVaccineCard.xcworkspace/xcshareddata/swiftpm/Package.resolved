@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/FreshworksStudio/BCVaccineValidator",
         "state": {
           "branch": null,
-          "revision": "f03181ad9dd66b0efe14be1c1ead0646cc8f3f43",
-          "version": "1.2.18"
+          "revision": "f8b8b2b2c13287f624cfee5515334ab6d16c5588",
+          "version": "1.2.20"
         }
       },
       {
@@ -134,15 +134,6 @@
           "branch": null,
           "revision": "7e2c5f3cbbeea68e004915e3a8961e20bd11d824",
           "version": "1.18.0"
-        }
-      },
-      {
-        "package": "SwiftyJSON",
-        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
-        "state": {
-          "branch": null,
-          "revision": "2b6054efa051565954e1d2b9da831680026cd768",
-          "version": "4.3.0"
         }
       }
     ]

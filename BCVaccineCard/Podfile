@@ -9,6 +9,7 @@ target 'BCVaccineCard' do
   pod 'QueueITLibrary', '~> 3.0.3'
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
+  pod 'SwiftyJSON', '~> 4.0'
 
   target 'BCVaccineCardTests' do
     inherit! :search_paths
@@ -29,6 +30,7 @@ target 'BCVaccineCard-Prod' do
   pod 'QueueITLibrary', '~> 3.0.3'
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
+  pod 'SwiftyJSON', '~> 4.0'
 end
 
 post_install do |installer|
