@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-xcodebuild -workspace BCVaccineCard.xcworkspace \
+xcodebuild -workspace BCVaccineCard/BCVaccineCard.xcworkspace \
             -scheme BCVaccineCard-Prod\ iOS \
             -sdk iphoneos \
             -configuration AppStoreDistribution \
