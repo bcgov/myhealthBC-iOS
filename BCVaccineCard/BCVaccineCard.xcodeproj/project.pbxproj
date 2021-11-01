@@ -26,6 +26,7 @@
 		2940A3512728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		296519A5272995680002B778 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296519A4272995680002B778 /* AuthManager.swift */; };
 		296519A6272995680002B778 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296519A4272995680002B778 /* AuthManager.swift */; };
+		29712448273077760044357A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 29712447273077760044357A /* SwiftyJSON */; };
 		29A12AF4271F699000A106B5 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A12AF3271F699000A106B5 /* AnalyticsService.swift */; };
 		29A12AF7271F69D700A106B5 /* AnalyticsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A12AF6271F69D700A106B5 /* AnalyticsAction.swift */; };
 		29A12AF8271F6B1C00A106B5 /* AnalyticsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A12AF6271F69D700A106B5 /* AnalyticsAction.swift */; };
@@ -132,8 +133,6 @@
 		794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B23B3E26FB88BB00A3AC79 /* CameraViewController.swift */; };
 		794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6B626F12BC3006B9444 /* AppColours.swift */; };
 		794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */; };
-		794BD6572702EEC00084ADA8 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62D2702EEC00084ADA8 /* FirebaseCrashlytics */; };
-		794BD6582702EEC00084ADA8 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD62B2702EEC00084ADA8 /* FirebaseAnalytics */; };
 		794BD6592702EEC00084ADA8 /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD6292702EEC00084ADA8 /* BCVaccineValidator */; };
 		794BD65B2702EEC00084ADA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F68626F1261B006B9444 /* LaunchScreen.storyboard */; };
 		794BD65C2702EEC00084ADA8 /* AppStyleButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6C426F12C00006B9444 /* AppStyleButton.xib */; };
@@ -429,8 +428,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				794BD6572702EEC00084ADA8 /* FirebaseCrashlytics in Frameworks */,
-				794BD6582702EEC00084ADA8 /* FirebaseAnalytics in Frameworks */,
+				29712448273077760044357A /* SwiftyJSON in Frameworks */,
 				794BD6592702EEC00084ADA8 /* BCVaccineValidator in Frameworks */,
 				65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */,
 			);
@@ -1197,8 +1195,7 @@
 			name = "BCVaccineCard-Prod";
 			packageProductDependencies = (
 				794BD6292702EEC00084ADA8 /* BCVaccineValidator */,
-				794BD62B2702EEC00084ADA8 /* FirebaseAnalytics */,
-				794BD62D2702EEC00084ADA8 /* FirebaseCrashlytics */,
+				29712447273077760044357A /* SwiftyJSON */,
 			);
 			productName = BCVaccineCard;
 			productReference = 794BD66F2702EEC00084ADA8 /* BCVaccineCard-Prod.app */;
@@ -1995,7 +1992,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -2022,7 +2019,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -2106,14 +2103,6 @@
 				minimumVersion = 1.0.2;
 			};
 		};
-		794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.7.0;
-			};
-		};
 		795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
@@ -2138,20 +2127,15 @@
 			package = 2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
 			productName = BCVaccineValidator;
 		};
+		29712447273077760044357A /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
 		794BD6292702EEC00084ADA8 /* BCVaccineValidator */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 794BD62A2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
 			productName = BCVaccineValidator;
-		};
-		794BD62B2702EEC00084ADA8 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		794BD62D2702EEC00084ADA8 /* FirebaseCrashlytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 794BD62C2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCrashlytics;
 		};
 		795AA720271083F100E59FF1 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
