@@ -26,7 +26,7 @@
 		2940A3512728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		296519A5272995680002B778 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296519A4272995680002B778 /* AuthManager.swift */; };
 		296519A6272995680002B778 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296519A4272995680002B778 /* AuthManager.swift */; };
-		29712448273077760044357A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 29712447273077760044357A /* SwiftyJSON */; };
+		29712446273046460044357A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 29712445273046460044357A /* SwiftyJSON */; };
 		29A12AF4271F699000A106B5 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A12AF3271F699000A106B5 /* AnalyticsService.swift */; };
 		29A12AF7271F69D700A106B5 /* AnalyticsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A12AF6271F69D700A106B5 /* AnalyticsAction.swift */; };
 		29A12AF8271F6B1C00A106B5 /* AnalyticsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A12AF6271F69D700A106B5 /* AnalyticsAction.swift */; };
@@ -428,8 +428,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29712448273077760044357A /* SwiftyJSON in Frameworks */,
 				794BD6592702EEC00084ADA8 /* BCVaccineValidator in Frameworks */,
+				29712446273046460044357A /* SwiftyJSON in Frameworks */,
 				65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1195,7 +1195,7 @@
 			name = "BCVaccineCard-Prod";
 			packageProductDependencies = (
 				794BD6292702EEC00084ADA8 /* BCVaccineValidator */,
-				29712447273077760044357A /* SwiftyJSON */,
+				29712445273046460044357A /* SwiftyJSON */,
 			);
 			productName = BCVaccineCard;
 			productReference = 794BD66F2702EEC00084ADA8 /* BCVaccineCard-Prod.app */;
@@ -2127,7 +2127,7 @@
 			package = 2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
 			productName = BCVaccineValidator;
 		};
-		29712447273077760044357A /* SwiftyJSON */ = {
+		29712445273046460044357A /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 795AA71F271083F100E59FF1 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
