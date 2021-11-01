@@ -4,42 +4,61 @@
 //
 //  Created by Connor Ogilvie on 2021-10-18.
 //
-// TODO: Adjust User Default logic below for Keychain Access - will need to be a little more in-depth than this:
 //https://stackoverflow.com/questions/37539997/save-and-load-from-keychain-swift
-// This one is likely better: https://www.advancedswift.com/secure-private-data-keychain-swift/
+// Another reference: https://www.advancedswift.com/secure-private-data-keychain-swift/
 
+import UIKit
+import Security
 
-//import Foundation
-//
-//enum Keychain {
-//    enum Key: String {
-//        case vaccinePassports
-//        case hasSeenInitialOnboardingScreens
-//        case cachedQueueItObject
-//    }
-//
-//    static var vaccinePassports: [LocallyStoredVaccinePassportModel]? {
-//        get {
-//            guard let data = UserDefaults.standard.value(forKey: self.Key.vaccinePassports.rawValue) as? Data else { return nil }
-//            let order = try? PropertyListDecoder().decode([LocallyStoredVaccinePassportModel].self, from: data)
-//            return order
-//        }
-//        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.vaccinePassports.rawValue) }
-//    }
-//
-//    static var hasSeenInitialOnboardingScreens: Bool {
-//        get {
-//            return UserDefaults.standard.bool(forKey: self.Key.hasSeenInitialOnboardingScreens.rawValue)
-//        }
-//        set { UserDefaults.standard.set(newValue, forKey: self.Key.hasSeenInitialOnboardingScreens.rawValue) }
-//    }
-//
-//    static var cachedQueueItObject: QueueItCachedObject? {
-//        get {
-//            guard let data = UserDefaults.standard.value(forKey: self.Key.cachedQueueItObject.rawValue) as? Data else { return nil }
-//            let cached = try? PropertyListDecoder().decode(QueueItCachedObject.self, from: data)
-//            return cached
-//        }
-//        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.cachedQueueItObject.rawValue) }
-//    }
-//}
+class KeyChain {
+
+    class func save(key: String, data: Data) -> OSStatus {
+        let query = [
+            kSecClass as String       : kSecClassGenericPassword as String,
+            kSecAttrAccount as String : key,
+            kSecValueData as String   : data ] as [String : Any]
+
+        SecItemDelete(query as CFDictionary)
+
+        return SecItemAdd(query as CFDictionary, nil)
+    }
+
+    class func load(key: String) -> Data? {
+        let query = [
+            kSecClass as String       : kSecClassGenericPassword,
+            kSecAttrAccount as String : key,
+            kSecReturnData as String  : kCFBooleanTrue!,
+            kSecMatchLimit as String  : kSecMatchLimitOne ] as [String : Any]
+
+        var dataTypeRef: AnyObject? = nil
+
+        let status: OSStatus = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
+
+        if status == noErr {
+            return dataTypeRef as! Data?
+        } else {
+            return nil
+        }
+    }
+
+    class func createUniqueID() -> String {
+        let uuid: CFUUID = CFUUIDCreate(nil)
+        let cfStr: CFString = CFUUIDCreateString(nil, uuid)
+
+        let swiftString: String = cfStr as String
+        return swiftString
+    }
+}
+
+extension Data {
+
+    init<T>(from value: T) {
+        var value = value
+        self.init(buffer: UnsafeBufferPointer(start: &value, count: 1))
+    }
+
+    func to<T>(type: T.Type) -> T {
+        return self.withUnsafeBytes { $0.load(as: T.self) }
+    }
+}
+

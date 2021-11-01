@@ -94,9 +94,9 @@ extension QRRetrievalMethodViewController {
         self.dataSource = [
             .text(text: .qrDescriptionText),
             .image(image: #imageLiteral(resourceName: "options-screen-image")),
-            .method(type: .goToEnterGateway, style: .blue),
+            .method(type: .goToUploadImage, style: .blue),
             .method(type: .goToCameraScan, style: .white),
-            .method(type: .goToUploadImage, style: .white)
+            .method(type: .goToEnterGateway, style: .white)
         ]
     }
 }
@@ -120,7 +120,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         switch data {
         case .text(text: let text):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
+                cell.configure(forType: .partiallyBoldedText(boldTexts: [.officialHealthPass], boldFont: UIFont.bcSansBoldWithSize(size: 17)), text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
                 return cell
             }
         case .image(image: let image):

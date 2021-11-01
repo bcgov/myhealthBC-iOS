@@ -122,6 +122,7 @@ extension String {
     
     // QR Method Selection screen
     static var qrDescriptionText: String { return "QRDescriptionText".localized }
+    static var officialHealthPass: String { return "OfficialHealthPass".localized }
     static var cameraScanOption: String { return "CameraScanOption".localized }
     static var imageUploadOption: String { return "ImageUploadOption".localized }
     static var healthGatewayOption: String { return "HealthGatewayOption".localized }

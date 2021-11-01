@@ -7,13 +7,14 @@
 
 import UIKit
 
-enum TextCellType {
-    case plainText, underlinedWithImage
+enum TextCellType: Equatable {
+    case plainText, underlinedWithImage, partiallyBoldedText(boldTexts: [String], boldFont: UIFont)
     
     var getImage: UIImage? {
         switch self {
         case .plainText: return nil
         case .underlinedWithImage: return #imageLiteral(resourceName: "info-icon")
+        case .partiallyBoldedText: return nil
         }
     }
 }
@@ -43,16 +44,19 @@ class TextTableViewCell: UITableViewCell {
     }
     
     private func formatCell(type: TextCellType, text: String, font: UIFont) {
-        leadingImageView.isHidden = type == .plainText
-        imageViewWidthConstraint.constant = type == .plainText ? 0 : 14
-        textLabelLeadingConstraint.constant = type == .plainText ? 0 : 3
-        if type == .underlinedWithImage {
-            formatUnderlinedText(text: text, font: font)
-            leadingImageView.image = type.getImage
-        } else {
+        leadingImageView.isHidden = type != .underlinedWithImage
+        imageViewWidthConstraint.constant = type != .underlinedWithImage ? 0 : 14
+        textLabelLeadingConstraint.constant = type != .underlinedWithImage ? 0 : 3
+        switch type {
+        case .plainText:
             cellTextLabel.text = text
             cellTextLabel.font = font
             cellTextLabel.textColor = AppColours.textBlack
+        case .underlinedWithImage:
+            formatUnderlinedText(text: text, font: font)
+            leadingImageView.image = type.getImage
+        case .partiallyBoldedText(let boldTexts, let boldFont):
+            cellTextLabel.attributedText = attributedText(withString: text, boldStrings: boldTexts, normalFont: font, boldFont: boldFont, textColor: AppColours.textBlack)
         }
     }
     
@@ -69,6 +73,16 @@ class TextTableViewCell: UITableViewCell {
     private func adjustLabelSpacing(by constant: CGFloat) {
         textLabelLeadingConstraint.constant = constant
         textLabelTrailingConstraint.constant = constant
+    }
+    
+    private func attributedText(withString string: String, boldStrings: [String], normalFont: UIFont, boldFont: UIFont, textColor: UIColor) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: string, attributes: [NSAttributedString.Key.font: normalFont, NSAttributedString.Key.foregroundColor: textColor])
+        let boldFontAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: boldFont]
+        for boldString in boldStrings {
+            let range = (string as NSString).range(of: boldString)
+            attributedString.addAttributes(boldFontAttribute, range: range)
+        }
+        return attributedString
     }
     
 }

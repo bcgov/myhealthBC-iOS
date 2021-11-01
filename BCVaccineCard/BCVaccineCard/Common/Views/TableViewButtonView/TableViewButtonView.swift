@@ -85,7 +85,7 @@ class TableViewButtonView: UIView {
         borderRoundedView.backgroundColor = AppColours.appBlue
         roundedView.layer.cornerRadius = 4.0
         roundedView.layer.masksToBounds = true
-        optionTitleLabel.font = UIFont.bcSansRegularWithSize(size: 16)
+        optionTitleLabel.font = UIFont.bcSansBoldWithSize(size: 16)
     }
     
     func configure(withStyle style: ButtonStyle, buttonType: ButtonType) {
