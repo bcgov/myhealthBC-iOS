@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 2912313A26F93FB900CF5F3B /* BCVaccineValidator */; };
 		2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912313D26F93FEB00CF5F3B /* QRScannerView.swift */; };
 		2912314126F942CC00CF5F3B /* UIViewController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314026F942CC00CF5F3B /* UIViewController+EXT.swift */; };
 		2912314326F9433600CF5F3B /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314226F9433600CF5F3B /* UIConstants.swift */; };
@@ -132,7 +131,6 @@
 		794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B23B3E26FB88BB00A3AC79 /* CameraViewController.swift */; };
 		794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6B626F12BC3006B9444 /* AppColours.swift */; };
 		794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */; };
-		794BD6592702EEC00084ADA8 /* BCVaccineValidator in Frameworks */ = {isa = PBXBuildFile; productRef = 794BD6292702EEC00084ADA8 /* BCVaccineValidator */; };
 		794BD65B2702EEC00084ADA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F68626F1261B006B9444 /* LaunchScreen.storyboard */; };
 		794BD65C2702EEC00084ADA8 /* AppStyleButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7944F6C426F12C00006B9444 /* AppStyleButton.xib */; };
 		794BD65D2702EEC00084ADA8 /* BCSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74C26F9145600EEF510 /* BCSans-Regular.otf */; };
@@ -400,7 +398,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2912313B26F93FB900CF5F3B /* BCVaccineValidator in Frameworks */,
 				65649CF2147EF54DEEA617D4 /* Pods_BCVaccineCard.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,7 +422,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				794BD6592702EEC00084ADA8 /* BCVaccineValidator in Frameworks */,
 				65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1128,7 +1124,6 @@
 			);
 			name = BCVaccineCard;
 			packageProductDependencies = (
-				2912313A26F93FB900CF5F3B /* BCVaccineValidator */,
 			);
 			productName = BCVaccineCard;
 			productReference = 7944F67526F12613006B9444 /* BCVaccineCard.app */;
@@ -1189,7 +1184,6 @@
 			);
 			name = "BCVaccineCard-Prod";
 			packageProductDependencies = (
-				794BD6292702EEC00084ADA8 /* BCVaccineValidator */,
 			);
 			productName = BCVaccineCard;
 			productReference = 794BD66F2702EEC00084ADA8 /* BCVaccineCard-Prod.app */;
@@ -1231,8 +1225,6 @@
 			);
 			mainGroup = 7944F66C26F12613006B9444;
 			packageReferences = (
-				2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */,
-				7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 7944F67626F12613006B9444 /* Products */;
 			projectDirPath = "";
@@ -2078,46 +2070,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/FreshworksStudio/BCVaccineValidator";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
-			};
-		};
-		794BD62A2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "BCVaccineValidator" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/FreshworksStudio/BCVaccineValidator";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
-			};
-		};
-		7967E75F26FBDE0100EEF510 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.7.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		2912313A26F93FB900CF5F3B /* BCVaccineValidator */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2912313926F93FB900CF5F3B /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
-			productName = BCVaccineValidator;
-		};
-		794BD6292702EEC00084ADA8 /* BCVaccineValidator */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 794BD62A2702EEC00084ADA8 /* XCRemoteSwiftPackageReference "BCVaccineValidator" */;
-			productName = BCVaccineValidator;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */ = {
