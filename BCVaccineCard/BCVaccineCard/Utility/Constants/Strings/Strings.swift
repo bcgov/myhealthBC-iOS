@@ -94,6 +94,7 @@ extension String {
     static var dateOfBirth: String { return "DateOfBirth".localized }
     static var dateOfVaccine: String { return "DateOfVaccine".localized }
     static var dose1OrDose2: String { return "Dose1OrDose2".localized }
+    static var phnFooter: String { return "PHNFooter".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
     static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }
     static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }

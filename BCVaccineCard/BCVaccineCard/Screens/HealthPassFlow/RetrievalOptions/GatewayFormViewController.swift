@@ -205,6 +205,7 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     func didFinishEditing(formField: FormTextFieldType, text: String?) {
         updateDataSource(formField: formField, text: text)
         submitButtonEnabled = shouldButtonBeEnabled()
+        self.tableView.layoutIfNeeded()
     }
     
     func textFieldTextDidChange(formField: FormTextFieldType, newText: String) {
@@ -237,9 +238,14 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     private func handleDropDownView() {
         if let dropDownView = self.dropDownView {
             // Dismiss drop down view
+            dismissDropDownView(dropDownView: dropDownView)
         } else {
             // Configure and present drop down view
         }
+    }
+    
+    private func dismissDropDownView(dropDownView: DropDownView) {
+        
     }
     
 }

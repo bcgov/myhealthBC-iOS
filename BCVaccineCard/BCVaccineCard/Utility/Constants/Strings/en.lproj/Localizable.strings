@@ -75,6 +75,7 @@
 "DateOfBirth" = "Date of Birth";
 "DateOfVaccine" = "Date of Vaccination";
 "Dose1OrDose2" = "Dose 1 or Dose 2";
+"PHNFooter" = "Find PHN on care card or the back of driver's license.";
 "PrivacyStatement" = "Privacy Statement";
 "GatewayPrivacyStatementDescription" = "Your information is being collected to provide you with your COVID-19 vaccination status under s. 26(c) of the Freedom of Information and Protection of Privacy Act. Contact the Ministry Privacy Officer at MOH.Privacy.Officer@gov.bc.ca if you have any questions about this collection.";
 "PrivacyPolicyStatement" = "Your information is being collected to provide you with your COVID-19 vaccination status under s. 26(c) of the Freedom of Information and Protection of Privacy Act. Contact the Ministry Privacy Officer at MOH.Privacy.Officer@gov.bc.ca or 778-698-5849 if you have any questions about this collection.";

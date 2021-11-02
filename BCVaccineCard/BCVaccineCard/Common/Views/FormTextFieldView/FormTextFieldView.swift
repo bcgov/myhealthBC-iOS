@@ -30,6 +30,14 @@ enum FormTextFieldType {
         }
     }
     
+    var getFieldFooter: String? {
+        switch self {
+        case .personalHealthNumber: return .phnFooter
+        case .dateOfBirth: return nil
+        case .dateOfVaccination: return nil
+        }
+    }
+    
     var getPlaceholderText: String {
         switch self {
         case .personalHealthNumber: return "xxxx xxx xxx"
@@ -106,6 +114,7 @@ class FormTextFieldView: UIView {
     @IBOutlet weak private var formTextFieldSubtitleLabel: UILabel!
     @IBOutlet weak private var formTextField: UITextField!
     @IBOutlet weak private var formTextFieldErrorLabel: UILabel!
+    @IBOutlet weak private var formTextFieldFooterLabel: UILabel!
     @IBOutlet weak private var formTextFieldRightButton: UIButton!
     
     weak var delegate: FormTextFieldViewDelegate?
@@ -154,10 +163,13 @@ class FormTextFieldView: UIView {
         formTextFieldSubtitleLabel.textColor = AppColours.textGray
         formTextFieldSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         formTextFieldErrorLabel.textColor = AppColours.appRed
-        formTextFieldErrorLabel.font = UIFont.bcSansItalicWithSize(size: 12)
+        formTextFieldErrorLabel.font = UIFont.bcSansItalicWithSize(size: 13)
+        formTextFieldFooterLabel.textColor = AppColours.lightGray
+        formTextFieldFooterLabel.font = UIFont.bcSansItalicWithSize(size: 13)
         formTextFieldTitleLabel.isAccessibilityElement = false
         formTextFieldSubtitleLabel.isAccessibilityElement = false
         formTextFieldErrorLabel.isAccessibilityElement = false
+        formTextFieldFooterLabel.isAccessibilityElement = false
         formTextFieldRightButton.isAccessibilityElement = false
     }
     
@@ -173,6 +185,8 @@ class FormTextFieldView: UIView {
         formTextFieldTitleLabel.text = formType.getFieldTitle
         formTextFieldSubtitleLabel.isHidden = formType.getFieldSubtitle == nil
         formTextFieldSubtitleLabel.text = formType.getFieldSubtitle
+        formTextFieldFooterLabel.isHidden = formType.getFieldFooter == nil
+        formTextFieldFooterLabel.text = formType.getFieldFooter
         formTextField.placeholder = formType.getPlaceholderText
         if let image = formType.getImage {
             formTextFieldRightButton.setImage(image, for: .normal)
