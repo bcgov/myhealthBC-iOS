@@ -179,9 +179,13 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 extension QRRetrievalMethodViewController {
     func goToEnterGateway() {
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
-        if let receivedData = KeyChain.load(key: Constants.KeychainPHNKey.key) {
-            let result = receivedData.to(type: RememberedGatewayDetails.self)
-            rememberDetails = result
+        // NOTE: Having issues with keychain, using user defaults for now
+//        if let receivedData = KeyChain.load(key: Constants.KeychainPHNKey.key) {
+//            let result = receivedData.to(type: RememberedGatewayDetails.self)
+//            rememberDetails = result
+//        }
+        if let details = Defaults.rememberGatewayDetails {
+            rememberDetails = details
         }
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCard)
         vc.completionHandler = { [weak self] id in

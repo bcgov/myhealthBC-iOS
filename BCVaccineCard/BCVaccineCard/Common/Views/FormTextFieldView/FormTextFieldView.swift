@@ -179,17 +179,20 @@ class FormTextFieldView: UIView {
         formTextFieldErrorLabel.isHidden = true
     }
     
-    func configure(formType: FormTextFieldType, delegateOwner: UIViewController, rememberedDetails: RememberedGatewayDetails) {
+    func configure(formType: FormTextFieldType, delegateOwner: UIViewController, rememberedDetails: RememberedGatewayDetails, text: String?) {
         self.delegate = delegateOwner as? FormTextFieldViewDelegate
         self.formField = formType
         formTextFieldRightButton.isUserInteractionEnabled = formType.isRightButtonClickable
-        formTextFieldRightButton.isHidden = (formType.getFieldType == .number) && (rememberedDetails.storageArray == nil)
+        formTextFieldRightButton.isHidden = (formType.getFieldType == .number) && (rememberedDetails.storageArray == nil || rememberedDetails.storageArray?.count == 0)
         formTextFieldTitleLabel.text = formType.getFieldTitle
         formTextFieldSubtitleLabel.isHidden = formType.getFieldSubtitle == nil
         formTextFieldSubtitleLabel.text = formType.getFieldSubtitle
         formTextFieldFooterLabel.isHidden = formType.getFieldFooter == nil
         formTextFieldFooterLabel.text = formType.getFieldFooter
         formTextField.placeholder = formType.getPlaceholderText
+        if let text = text {
+            formTextField.text = text
+        }
         if let image = formType.getImage {
             formTextFieldRightButton.setImage(image, for: .normal)
         }

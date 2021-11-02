@@ -15,8 +15,8 @@ class FormTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func configure(formType: FormTextFieldType, delegateOwner: UIViewController, rememberedDetails: RememberedGatewayDetails) {
-        formTextFieldView.configure(formType: formType, delegateOwner: delegateOwner, rememberedDetails: rememberedDetails)
+    func configure(formType: FormTextFieldType, delegateOwner: UIViewController, rememberedDetails: RememberedGatewayDetails, text: String?) {
+        formTextFieldView.configure(formType: formType, delegateOwner: delegateOwner, rememberedDetails: rememberedDetails, text: text)
     }
 }
 

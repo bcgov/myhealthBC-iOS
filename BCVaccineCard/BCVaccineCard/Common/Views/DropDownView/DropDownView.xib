@@ -23,13 +23,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bO4-rb-DEG">
-                    <rect key="frame" x="0.0" y="0.0" width="328" height="53"/>
+                    <rect key="frame" x="12" y="0.0" width="304" height="41"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DML-E5-NUG">
-                            <rect key="frame" x="0.0" y="0.0" width="328" height="53"/>
+                            <rect key="frame" x="1" y="1" width="302" height="39"/>
                             <subviews>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="izQ-A1-JpJ">
-                                    <rect key="frame" x="0.0" y="0.0" width="328" height="53"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="302" height="39"/>
                                 </tableView>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -43,20 +43,20 @@
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
-                        <constraint firstItem="DML-E5-NUG" firstAttribute="leading" secondItem="bO4-rb-DEG" secondAttribute="leading" id="3qi-2A-lG9"/>
-                        <constraint firstAttribute="bottom" secondItem="DML-E5-NUG" secondAttribute="bottom" id="9en-2R-fHQ"/>
-                        <constraint firstItem="DML-E5-NUG" firstAttribute="top" secondItem="bO4-rb-DEG" secondAttribute="top" id="Hl2-au-ybl"/>
-                        <constraint firstAttribute="trailing" secondItem="DML-E5-NUG" secondAttribute="trailing" id="WGm-1E-UL6"/>
+                        <constraint firstItem="DML-E5-NUG" firstAttribute="leading" secondItem="bO4-rb-DEG" secondAttribute="leading" constant="1" id="3qi-2A-lG9"/>
+                        <constraint firstAttribute="bottom" secondItem="DML-E5-NUG" secondAttribute="bottom" constant="1" id="9en-2R-fHQ"/>
+                        <constraint firstItem="DML-E5-NUG" firstAttribute="top" secondItem="bO4-rb-DEG" secondAttribute="top" constant="1" id="Hl2-au-ybl"/>
+                        <constraint firstAttribute="trailing" secondItem="DML-E5-NUG" secondAttribute="trailing" constant="1" id="WGm-1E-UL6"/>
                     </constraints>
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="bO4-rb-DEG" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="AoX-Pp-9xH"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bO4-rb-DEG" secondAttribute="trailing" id="Hd9-Nd-VaL"/>
+                <constraint firstItem="bO4-rb-DEG" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="12" id="AoX-Pp-9xH"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bO4-rb-DEG" secondAttribute="trailing" constant="12" id="Hd9-Nd-VaL"/>
                 <constraint firstItem="bO4-rb-DEG" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="cDC-IF-hCk"/>
-                <constraint firstAttribute="bottom" secondItem="bO4-rb-DEG" secondAttribute="bottom" id="lrA-pj-6fe"/>
+                <constraint firstAttribute="bottom" secondItem="bO4-rb-DEG" secondAttribute="bottom" constant="12" id="lrA-pj-6fe"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="139" y="108"/>

@@ -50,20 +50,27 @@ class DropDownView: UIView {
     private func viewSetup() {
         self.backgroundColor = .clear
         contentView.backgroundColor = .clear
+        // NOTE: For now, shadow not working - don't spend too much time on it, just use a border
+//        shadowView.backgroundColor = UIColor.clear
+//        shadowView.layer.shadowColor = UIColor.black.cgColor
+//        shadowView.layer.shadowOffset = CGSize(width: 2, height: 2)
+//        shadowView.layer.shadowRadius = 6.0
         
-        shadowView.backgroundColor = UIColor.clear
-        shadowView.layer.shadowColor = UIColor.black.cgColor
-        shadowView.layer.shadowOffset = CGSize(width: 2, height: 2)
-        shadowView.layer.shadowRadius = 6.0
+        shadowView.backgroundColor = UIColor.black
+        shadowView.layer.cornerRadius = 3
+        shadowView.layer.masksToBounds = true
+
         
         roundedView.layer.cornerRadius = 3
         roundedView.layer.masksToBounds = true
+        
+        tableView.backgroundColor = .clear
     }
     
     private func tableViewSetup() {
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = Constants.RememberPHNDropDownRowHeight.height
+        tableView.estimatedRowHeight = Constants.UI.RememberPHNDropDownRowHeight.height
         tableView.delegate = self
         tableView.dataSource = self
     }

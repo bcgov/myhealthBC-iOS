@@ -84,5 +84,9 @@ extension Constants {
                 static let staticText: CGFloat = 100
             }
         }
+        
+        struct RememberPHNDropDownRowHeight {
+            static let height: CGFloat = 50
+        }
     }
 }

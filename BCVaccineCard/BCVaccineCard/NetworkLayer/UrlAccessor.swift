@@ -16,7 +16,8 @@ struct UrlAccessor {
     #if PROD
     let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
     #elseif DEV
-    let baseUrl = URL(string: "https://test.healthgateway.gov.bc.ca/api/")!
+//    let baseUrl = URL(string: "https://test.healthgateway.gov.bc.ca/api/")!
+    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
     #endif
     
     private var immunizationBaseUrl: URL {
@@ -28,7 +29,7 @@ struct UrlAccessor {
 extension UrlAccessor: EndpointsAccessor {
     
     var getVaccineCard: URL {
-        return self.immunizationBaseUrl.appendingPathComponent("v1/api/VaccineStatus")
+        return self.immunizationBaseUrl.appendingPathComponent("v1/api/PublicVaccineStatus")
     }
 }
 

@@ -38,8 +38,4 @@ struct Constants {
     struct KeychainPHNKey {
         static let key = "PHNKey" // Note: Data should be an array of 
     }
-    
-    struct RememberPHNDropDownRowHeight {
-        static let height: CGFloat = 50
-    }
 }
