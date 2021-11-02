@@ -10,6 +10,8 @@ target 'BCVaccineCard' do
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
   pod 'SwiftyJSON', '~> 4.0'
+  pod 'Firebase/AppDistribution'
+  pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
 
   target 'BCVaccineCardTests' do
     inherit! :search_paths
@@ -31,6 +33,8 @@ target 'BCVaccineCard-Prod' do
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
   pod 'SwiftyJSON', '~> 4.0'
+  pod 'Firebase/AppDistribution'
+  pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
 end
 
 post_install do |installer|
