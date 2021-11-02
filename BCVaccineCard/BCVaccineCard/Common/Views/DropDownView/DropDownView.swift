@@ -13,10 +13,10 @@ protocol DropDownViewDelegate: AnyObject {
 
 class DropDownView: UIView {
     
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var shadowView: UIView!
-    @IBOutlet weak var roundedView: UIView!
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var contentView: UIView!
+    @IBOutlet private weak var shadowView: UIView!
+    @IBOutlet private weak var roundedView: UIView!
+    @IBOutlet private weak var tableView: UITableView!
     
     private var dataSource: [GatewayStorageProperties]!
     private weak var delegate: DropDownViewDelegate?

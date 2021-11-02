@@ -48,9 +48,17 @@ enum FormTextFieldType {
     
     var getImage: UIImage? {
         switch self {
-        case .personalHealthNumber: return nil
+        case .personalHealthNumber: return #imageLiteral(resourceName: "dropdown-arrow")
         case .dateOfBirth: return #imageLiteral(resourceName: "calendar-icon")
         case .dateOfVaccination: return #imageLiteral(resourceName: "calendar-icon")
+        }
+    }
+    
+    var isRightButtonClickable: Bool {
+        switch self {
+        case .personalHealthNumber: return true
+        case .dateOfBirth: return false
+        case .dateOfVaccination: return false
         }
     }
     
@@ -88,6 +96,7 @@ protocol FormTextFieldViewDelegate: AnyObject {
     func textFieldTextDidChange(formField: FormTextFieldType, newText: String)
     func resignFirstResponderUI(formField: FormTextFieldType)
     func goToNextFormTextField(formField: FormTextFieldType)
+    func rightTextFieldButtonTapped(formField: FormTextFieldType)
 }
 // NOTE: Date Formatter is of type longType
 class FormTextFieldView: UIView {
@@ -97,7 +106,7 @@ class FormTextFieldView: UIView {
     @IBOutlet weak private var formTextFieldSubtitleLabel: UILabel!
     @IBOutlet weak private var formTextField: UITextField!
     @IBOutlet weak private var formTextFieldErrorLabel: UILabel!
-    @IBOutlet weak private var formTextFieldRightImageView: UIImageView!
+    @IBOutlet weak private var formTextFieldRightButton: UIButton!
     
     weak var delegate: FormTextFieldViewDelegate?
     private var formField: FormTextFieldType!
@@ -149,23 +158,24 @@ class FormTextFieldView: UIView {
         formTextFieldTitleLabel.isAccessibilityElement = false
         formTextFieldSubtitleLabel.isAccessibilityElement = false
         formTextFieldErrorLabel.isAccessibilityElement = false
-        formTextFieldRightImageView.isAccessibilityElement = false
+        formTextFieldRightButton.isAccessibilityElement = false
     }
     
     private func baseSetup() {
         formTextFieldErrorLabel.isHidden = true
     }
     
-    func configure(formType: FormTextFieldType, delegateOwner: UIViewController) {
+    func configure(formType: FormTextFieldType, delegateOwner: UIViewController, rememberedDetails: RememberedGatewayDetails) {
         self.delegate = delegateOwner as? FormTextFieldViewDelegate
         self.formField = formType
-        formTextFieldRightImageView.isHidden = formType.getFieldType == .number
+        formTextFieldRightButton.isUserInteractionEnabled = formType.isRightButtonClickable
+        formTextFieldRightButton.isHidden = (formType.getFieldType == .number) && (rememberedDetails.storageArray == nil)
         formTextFieldTitleLabel.text = formType.getFieldTitle
         formTextFieldSubtitleLabel.isHidden = formType.getFieldSubtitle == nil
         formTextFieldSubtitleLabel.text = formType.getFieldSubtitle
         formTextField.placeholder = formType.getPlaceholderText
         if let image = formType.getImage {
-            formTextFieldRightImageView.image = image
+            formTextFieldRightButton.setImage(image, for: .normal)
         }
         createKeyboardForType(type: formType.getFieldType, formField: formType)
         formTextField.delegate = self
@@ -182,6 +192,10 @@ class FormTextFieldView: UIView {
     // This is called from didSelectRow to open the keyboard
     func openKeyboardAction() {
         self.formTextField.becomeFirstResponder()
+    }
+    
+    @IBAction func textFieldRightButtonTapped(_ sender: UIButton) {
+        self.delegate?.rightTextFieldButtonTapped(formField: self.formField)
     }
     
 }

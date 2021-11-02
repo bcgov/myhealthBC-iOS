@@ -24,6 +24,8 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
     
+    private var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+    private var dropDownView: DropDownView?
     private var model: GatewayVaccineCardRequest?
     private var worker: QueueItWorker?
     private var healthGateway: HealthGatewayBCGateway!
@@ -136,7 +138,7 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
             return UITableViewCell()
         case .form(type: let type):
             if let cell = tableView.dequeueReusableCell(withIdentifier: FormTableViewCell.getName, for: indexPath) as? FormTableViewCell {
-                cell.configure(formType: type, delegateOwner: self)
+                cell.configure(formType: type, delegateOwner: self, rememberedDetails: self.rememberDetails)
                 return cell
             }
             return UITableViewCell()
@@ -210,6 +212,12 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
         submitButtonEnabled = shouldButtonBeEnabled()
     }
     
+    func rightTextFieldButtonTapped(formField: FormTextFieldType) {
+        if formField == .personalHealthNumber {
+            handleDropDownView()
+        }
+    }
+    
     private func goToNextTextField(formField: FormTextFieldType) {
         guard let index = self.getIndexInDataSource(formField: formField, dataSource: self.dataSource), index < (dataSource.count - 1) else { return }
         let newIndex = index + 1
@@ -223,6 +231,14 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
             if let firstCell = self.tableView.cellForRow(at: firstIndexPath) as? FormTableViewCell {
                 firstCell.formTextFieldView.openKeyboardAction()
             }
+        }
+    }
+    
+    private func handleDropDownView() {
+        if let dropDownView = self.dropDownView {
+            // Dismiss drop down view
+        } else {
+            // Configure and present drop down view
         }
     }
     
