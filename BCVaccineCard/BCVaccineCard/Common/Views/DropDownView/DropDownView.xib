@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DropDownView" customModule="BCVaccineCard" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="iN0-l3-epB" id="Pgz-h0-p3g"/>
+                <outlet property="roundedView" destination="DML-E5-NUG" id="Ua5-VC-KVZ"/>
+                <outlet property="shadowView" destination="bO4-rb-DEG" id="989-3E-rcu"/>
+                <outlet property="tableView" destination="izQ-A1-JpJ" id="DMr-8e-X4Z"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="328" height="53"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bO4-rb-DEG">
+                    <rect key="frame" x="12" y="0.0" width="304" height="41"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DML-E5-NUG">
+                            <rect key="frame" x="1" y="1" width="302" height="39"/>
+                            <subviews>
+                                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="izQ-A1-JpJ">
+                                    <rect key="frame" x="0.0" y="0.0" width="302" height="39"/>
+                                </tableView>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="izQ-A1-JpJ" firstAttribute="leading" secondItem="DML-E5-NUG" secondAttribute="leading" id="ERy-NG-SwS"/>
+                                <constraint firstAttribute="trailing" secondItem="izQ-A1-JpJ" secondAttribute="trailing" id="Elw-82-iz4"/>
+                                <constraint firstItem="izQ-A1-JpJ" firstAttribute="top" secondItem="DML-E5-NUG" secondAttribute="top" id="pfh-L0-JJ2"/>
+                                <constraint firstAttribute="bottom" secondItem="izQ-A1-JpJ" secondAttribute="bottom" id="qmG-fr-odC"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="DML-E5-NUG" firstAttribute="leading" secondItem="bO4-rb-DEG" secondAttribute="leading" constant="1" id="3qi-2A-lG9"/>
+                        <constraint firstAttribute="bottom" secondItem="DML-E5-NUG" secondAttribute="bottom" constant="1" id="9en-2R-fHQ"/>
+                        <constraint firstItem="DML-E5-NUG" firstAttribute="top" secondItem="bO4-rb-DEG" secondAttribute="top" constant="1" id="Hl2-au-ybl"/>
+                        <constraint firstAttribute="trailing" secondItem="DML-E5-NUG" secondAttribute="trailing" constant="1" id="WGm-1E-UL6"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="bO4-rb-DEG" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="12" id="AoX-Pp-9xH"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="bO4-rb-DEG" secondAttribute="trailing" constant="12" id="Hd9-Nd-VaL"/>
+                <constraint firstItem="bO4-rb-DEG" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="cDC-IF-hCk"/>
+                <constraint firstAttribute="bottom" secondItem="bO4-rb-DEG" secondAttribute="bottom" constant="12" id="lrA-pj-6fe"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="139" y="108"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

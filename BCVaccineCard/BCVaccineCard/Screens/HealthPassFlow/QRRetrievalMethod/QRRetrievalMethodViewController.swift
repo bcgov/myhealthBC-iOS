@@ -94,9 +94,9 @@ extension QRRetrievalMethodViewController {
         self.dataSource = [
             .text(text: .qrDescriptionText),
             .image(image: #imageLiteral(resourceName: "options-screen-image")),
-            .method(type: .goToEnterGateway, style: .blue),
+            .method(type: .goToUploadImage, style: .blue),
             .method(type: .goToCameraScan, style: .white),
-            .method(type: .goToUploadImage, style: .white)
+            .method(type: .goToEnterGateway, style: .white)
         ]
     }
 }
@@ -120,7 +120,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         switch data {
         case .text(text: let text):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
+                cell.configure(forType: .partiallyBoldedText(boldTexts: [.officialHealthPass], boldFont: UIFont.bcSansBoldWithSize(size: 17)), text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
                 return cell
             }
         case .image(image: let image):
@@ -178,7 +178,16 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 // MARK: Table View Button Methods
 extension QRRetrievalMethodViewController {
     func goToEnterGateway() {
-        let vc = GatewayFormViewController.constructGatewayFormViewController()
+        var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+        // NOTE: Having issues with keychain, using user defaults for now
+//        if let receivedData = KeyChain.load(key: Constants.KeychainPHNKey.key) {
+//            let result = receivedData.to(type: RememberedGatewayDetails.self)
+//            rememberDetails = result
+//        }
+        if let details = Defaults.rememberGatewayDetails {
+            rememberDetails = details
+        }
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCard)
         vc.completionHandler = { [weak self] id in
             guard let `self` = self else { return }
             self.view.accessibilityElementsHidden = true

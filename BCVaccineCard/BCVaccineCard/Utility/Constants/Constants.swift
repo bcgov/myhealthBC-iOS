@@ -34,4 +34,8 @@ struct Constants {
         static let dateOfBirth = "dateOfBirth"
         static let dateOfVaccine = "dateOfVaccine"
     }
+    
+    struct KeychainPHNKey {
+        static let key = "PHNKey" // Note: Data should be an array of 
+    }
 }

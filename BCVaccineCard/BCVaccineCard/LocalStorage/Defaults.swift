@@ -12,6 +12,7 @@ enum Defaults {
         case vaccinePassports
         case initialOnboardingScreensSeen
         case cachedQueueItObject
+        case rememberGatewayDetails
     }
     
     static var vaccinePassports: [LocallyStoredVaccinePassportModel]? {
@@ -40,4 +41,14 @@ enum Defaults {
         }
         set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.cachedQueueItObject.rawValue) }
     }
+    // Temporary measure until I can get keychain working properly
+    static var rememberGatewayDetails: RememberedGatewayDetails? {
+        get {
+            guard let data = UserDefaults.standard.value(forKey: self.Key.rememberGatewayDetails.rawValue) as? Data else { return nil }
+            let details = try? PropertyListDecoder().decode(RememberedGatewayDetails.self, from: data)
+            return details
+        }
+        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.rememberGatewayDetails.rawValue) }
+    }
+    
 }
