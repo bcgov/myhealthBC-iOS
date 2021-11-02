@@ -24,7 +24,7 @@ struct FormDataSource: Equatable {
 //        }
         case text(type: TextCellType, font: UIFont)
         case form(type: FormTextFieldType)
-        case checkbox(text: String, selected: Bool)
+        case checkbox(text: String)
         case clickableText(text: String, linkedStrings: [LinkedStrings])
     }
     

@@ -178,7 +178,12 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 // MARK: Table View Button Methods
 extension QRRetrievalMethodViewController {
     func goToEnterGateway() {
-        let vc = GatewayFormViewController.constructGatewayFormViewController()
+        var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+        if let receivedData = KeyChain.load(key: Constants.KeychainPHNKey.key) {
+            let result = receivedData.to(type: RememberedGatewayDetails.self)
+            rememberDetails = result
+        }
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCard)
         vc.completionHandler = { [weak self] id in
             guard let `self` = self else { return }
             self.view.accessibilityElementsHidden = true

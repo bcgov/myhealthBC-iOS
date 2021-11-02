@@ -10,11 +10,19 @@ import QueueITLibrary
 import Alamofire
 import BCVaccineValidator
 
+enum GatewayFormViewControllerFetchType {
+    case bcVaccineCard
+    case federalPass
+    case vaccinationRecord
+}
+
 class GatewayFormViewController: BaseViewController {
     
-    class func constructGatewayFormViewController() -> GatewayFormViewController {
+    class func constructGatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType) -> GatewayFormViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
             vc.healthGateway = GatewayAccess.factory.makeHealthGatewayBCGateway()
+            vc.rememberDetails = rememberDetails
+            vc.fetchType = fetchType
             return vc
         }
         return GatewayFormViewController()
@@ -24,7 +32,14 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
     
-    private var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+    private var rememberDetails: RememberedGatewayDetails!
+    private var fetchType: GatewayFormViewControllerFetchType!
+    private var rememberedPHNSelected: Bool = false {
+        didSet {
+            // TODO: Need to find a more reusable way of doing this - probably with a getter property (isCheckboxCell)
+            tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: .automatic)
+        }
+    }
     private var dropDownView: DropDownView?
     private var model: GatewayVaccineCardRequest?
     private var worker: QueueItWorker?
@@ -83,7 +98,7 @@ class GatewayFormViewController: BaseViewController {
             FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil),
             FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil),
             FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil),
-            FormDataSource(type: .checkbox(text: .rememberePHNandDOB, selected: false), cellStringData: nil),
+            FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil),
             FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil)
         ]
     }
@@ -142,9 +157,9 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
                 return cell
             }
             return UITableViewCell()
-        case .checkbox(text: let text, selected: let selected):
+        case .checkbox(text: let text):
             if let cell = tableView.dequeueReusableCell(withIdentifier: CheckboxTableViewCell.getName, for: indexPath) as? CheckboxTableViewCell {
-                cell.configure(selected: selected, text: text, delegateOwner: self)
+                cell.configure(selected: self.rememberedPHNSelected, text: text, delegateOwner: self)
                 return cell
             }
             return UITableViewCell()
@@ -167,16 +182,43 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
 // MARK: Remember PHN and DOB
 extension GatewayFormViewController: CheckboxTableViewCellDelegate {
     func checkboxTapped(selected: Bool) {
-        if selected {
-            // Save phn for next time
-            print("CONNOR: SAVE PHN AND DOB HERE")
-        } else {
-            // remove phn if it's already selected
-            print("CONNOR: REMOVE PHN AND DOB HERE PERHAPS")
-        }
+        self.rememberedPHNSelected = selected
     }
     
+    private func storePHNDetails() {
+        guard let model = self.model else { return }
+        let rememberProperties = GatewayStorageProperties(phn: model.phn, dob: model.dateOfBirth)
+        guard rememberProperties.phn != self.rememberDetails.storageArray?.first?.phn else { return }
+        // NOTE: This is where we can append data to existing storage for abilitly to store multiple pieces of data
+        let rememberKeychainStorage = RememberedGatewayDetails(storageArray: [rememberProperties])
+        let data = Data(from: rememberKeychainStorage)
+        let status = KeyChain.save(key: Constants.KeychainPHNKey.key, data: data)
+        // TODO: Error handling here for keychain
+        print("CONNOR: SAVE STATUS")
+    }
     
+    private func removePHNDetails() {
+        // TODO: Come up with a better method here
+        let rememberKeychainStorage = RememberedGatewayDetails(storageArray: nil)
+        let data = Data(from: rememberKeychainStorage)
+        let status = KeyChain.save(key: Constants.KeychainPHNKey.key, data: data)
+        // TODO: Error handling here for keychain
+        print("CONNOR: 'DELETE' STATUS")
+    }
+    
+}
+
+// MARK: Drop down delegate
+extension GatewayFormViewController: DropDownViewDelegate {
+    func didChooseStoragePHN(details: GatewayStorageProperties) {
+        if details.phn == self.rememberDetails.storageArray?.first?.phn {
+            self.rememberedPHNSelected = true
+        }
+        if let dropDownView = dropDownView {
+            self.dismissDropDownView(dropDownView: dropDownView)
+        }
+    }
+
 }
 
 // MARK: Update data source
@@ -184,6 +226,12 @@ extension GatewayFormViewController {
     func updateDataSource(formField: FormTextFieldType, text: String?) {
         guard let index = getIndexInDataSource(formField: formField, dataSource: self.dataSource) else { return }
         self.dataSource[index].cellStringData = text
+        if formField == .personalHealthNumber {
+            // Basically - if the user updates the text and it is not equal to the stored PHN, then remove the data
+            if text != self.rememberDetails.storageArray?.first?.phn {
+                self.rememberedPHNSelected = false
+            }
+        }
         
     }
     
@@ -205,7 +253,6 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     func didFinishEditing(formField: FormTextFieldType, text: String?) {
         updateDataSource(formField: formField, text: text)
         submitButtonEnabled = shouldButtonBeEnabled()
-        self.tableView.layoutIfNeeded()
     }
     
     func textFieldTextDidChange(formField: FormTextFieldType, newText: String) {
@@ -217,6 +264,11 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
         if formField == .personalHealthNumber {
             handleDropDownView()
         }
+    }
+    
+    func resizeForm(formField: FormTextFieldType) {
+        self.tableView.beginUpdates()
+        self.tableView.endUpdates()
     }
     
     private func goToNextTextField(formField: FormTextFieldType) {
@@ -241,11 +293,24 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
             dismissDropDownView(dropDownView: dropDownView)
         } else {
             // Configure and present drop down view
+            self.dropDownView = DropDownView()
+            self.tableView.addSubview(dropDownView!)
+            self.dropDownView?.translatesAutoresizingMaskIntoConstraints = false
+            let row = self.getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) ?? 1
+//            let rect = view.convert(tableView.rectForRow(at: IndexPath(row: row, section: 0)), from: self.tableView)
+            guard let relativeView = tableView.cellForRow(at: IndexPath(row: row, section: 0)) else { return }
+            let leadingConstraint = dropDownView!.leadingAnchor.constraint(equalTo: relativeView.leadingAnchor)
+            let trailingConstraint = dropDownView!.trailingAnchor.constraint(equalTo: relativeView.trailingAnchor)
+            let count = rememberDetails.storageArray?.count ?? 1
+            let heightConstraint = dropDownView!.heightAnchor.constraint(equalToConstant: CGFloat(count * 50))
+            let topConstraint = dropDownView!.topAnchor.constraint(equalTo: relativeView.topAnchor, constant: 70)
+            self.tableView.addConstraints([leadingConstraint, trailingConstraint, heightConstraint, topConstraint])
+            self.dropDownView?.configure(rememberGatewayDetails: self.rememberDetails, delegateOwner: self)
         }
     }
     
     private func dismissDropDownView(dropDownView: DropDownView) {
-        
+        dropDownView.removeFromSuperview()
     }
     
 }
@@ -296,6 +361,8 @@ extension GatewayFormViewController {
 extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
     func handleVaccineCard(scanResult: ScanResultModel) {
         let model = convertScanResultModelIntoLocalData(data: scanResult, source: .healthGateway)
+        // store prefered PHN if needed here
+        self.rememberedPHNSelected ? storePHNDetails() : removePHNDetails()
         handleCardInDefaults(localModel: model)        
     }
     

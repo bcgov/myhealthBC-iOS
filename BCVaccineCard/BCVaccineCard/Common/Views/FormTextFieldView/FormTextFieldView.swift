@@ -105,6 +105,7 @@ protocol FormTextFieldViewDelegate: AnyObject {
     func resignFirstResponderUI(formField: FormTextFieldType)
     func goToNextFormTextField(formField: FormTextFieldType)
     func rightTextFieldButtonTapped(formField: FormTextFieldType)
+    func resizeForm(formField: FormTextFieldType)
 }
 // NOTE: Date Formatter is of type longType
 class FormTextFieldView: UIView {
@@ -123,6 +124,7 @@ class FormTextFieldView: UIView {
     var validationError: String? = nil {
         didSet {
             self.showValidationMessage(message: validationError)
+            self.delegate?.resizeForm(formField: self.formField)
             self.formTextField.accessibilityHint = validationError == nil ? AccessibilityLabels.FormTextField.required : validationError
         }
     }
