@@ -238,6 +238,8 @@
 		7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75526F9155700EEF510 /* UIFont+Ext.swift */; };
 		7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75926F930E200EEF510 /* UIView+Ext.swift */; };
 		7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */; };
+		79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
+		79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
 		79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA071270CB71D00FF30AB /* Records.storyboard */; };
 		79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA075270CB73800FF30AB /* Booking.storyboard */; };
@@ -399,6 +401,7 @@
 		7967E75526F9155700EEF510 /* UIFont+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Ext.swift"; sourceTree = "<group>"; };
 		7967E75926F930E200EEF510 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargerTouchAreaButton.swift; sourceTree = "<group>"; };
 		79A63D032722172900F7C919 /* PROD Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PROD Info.plist"; sourceTree = "<group>"; };
 		79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HealthPass.storyboard; sourceTree = "<group>"; };
 		79BDA071270CB71D00FF30AB /* Records.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Records.storyboard; sourceTree = "<group>"; };
@@ -778,6 +781,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				79A2582C2731FF260067DD50 /* LargerTouchAreaButton */,
 				7928346827311C3D00EE2710 /* DropDownView */,
 				792834562730E51200EE2710 /* InteractiveLinkLabel */,
 				791C27A427174712001A6E12 /* InitialOnboardingView */,
@@ -1098,6 +1102,14 @@
 				7967E74B26F9140400EEF510 /* Fonts */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		79A2582C2731FF260067DD50 /* LargerTouchAreaButton */ = {
+			isa = PBXGroup;
+			children = (
+				79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */,
+			);
+			path = LargerTouchAreaButton;
 			sourceTree = "<group>";
 		};
 		79BDA079270CB87600FF30AB /* Constants */ = {
@@ -1596,6 +1608,7 @@
 				29128F12272AEFA600358014 /* VaccineCard+CoreDataProperties.swift in Sources */,
 				29128F17272AF41F00358014 /* Array+EXT.swift in Sources */,
 				2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */,
+				79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				792834642731016600EE2710 /* CheckboxTableViewCell.swift in Sources */,
 				7944F6C126F12BF2006B9444 /* Defaults.swift in Sources */,
@@ -1705,6 +1718,7 @@
 				29128F13272AEFA600358014 /* VaccineCard+CoreDataProperties.swift in Sources */,
 				29128F18272AF41F00358014 /* Array+EXT.swift in Sources */,
 				794BD6412702EEC00084ADA8 /* FormDataSource.swift in Sources */,
+				79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				795AA7392710920600E59FF1 /* ErrorResponse.swift in Sources */,
 				792834652731016600EE2710 /* CheckboxTableViewCell.swift in Sources */,
 				79BDA090270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
@@ -1949,7 +1963,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
@@ -1961,7 +1975,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-Dev";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEV;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
