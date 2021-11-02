@@ -81,7 +81,8 @@ class GatewayFormViewController: BaseViewController {
             FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil),
             FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil),
             FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil),
-            FormDataSource(type: .text(type: .underlinedWithImage, font: UIFont.bcSansBoldWithSize(size: 14)), cellStringData: .privacyStatement)
+//            FormDataSource(type: .text(type: .underlinedWithImage, font: UIFont.bcSansBoldWithSize(size: 14)), cellStringData: .privacyStatement),
+            FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil)
         ]
     }
     
@@ -111,6 +112,7 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     private func setupTableView() {
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: FormTableViewCell.getName, bundle: .main), forCellReuseIdentifier: FormTableViewCell.getName)
+        tableView.register(UINib.init(nibName: InteractiveLabelTableViewCell.getName, bundle: .main), forCellReuseIdentifier: InteractiveLabelTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         tableView.delegate = self
@@ -137,14 +139,18 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
                 return cell
             }
             return UITableViewCell()
+        case .clickableText(text: let text, linkedStrings: let linkedStrings):
+            if let cell = tableView.dequeueReusableCell(withIdentifier: InteractiveLabelTableViewCell.getName, for: indexPath) as? InteractiveLabelTableViewCell {
+                cell.configure(string: text, linkedStrings: linkedStrings, textColor: AppColours.textBlack, font: UIFont.bcSansRegularWithSize(size: 13))
+                return cell
+            }
+            return UITableViewCell()
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) as? FormTableViewCell {
             cell.formTextFieldView.openKeyboardAction()
-        } else if let cell = tableView.cellForRow(at: indexPath) as? TextTableViewCell, cell.type == .underlinedWithImage {
-            alert(title: .privacyStatement, message: .gatewayPrivacyStatementDescription)
         }
     }
 }

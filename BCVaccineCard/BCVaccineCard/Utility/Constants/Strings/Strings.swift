@@ -96,6 +96,12 @@ extension String {
     static var dose1OrDose2: String { return "Dose1OrDose2".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
     static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }
+    static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
+    static var privacyPolicyStatementEmail: String { return "PrivacyPolicyStatementEmail".localized }
+    static var privacyPolicyStatementEmailLink: String { return "PrivacyPolicyStatementEmailLink".localized }
+    static var privacyPolicyStatementPhoneNumber: String { return "PrivacyPolicyStatementPhoneNumber".localized }
+    static var privacyPolicyStatementPhoneNumberLink: String { return "PrivacyPolicyStatementPhoneNumberLink".localized }
+    
     
     // Health Pass Home screen
     static var covidVaccineCards: String { return "CovidVaccineCards".localized }

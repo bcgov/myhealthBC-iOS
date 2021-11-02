@@ -80,7 +80,8 @@ class InteractiveLinkLabel: UILabel {
         let attributeValue = self.attributedText?.attribute(attributeName, at: characterIndex, effectiveRange: nil)
         
         if let value = attributeValue {
-            if let url = value as? URL {
+            // determin URL type here (phone number or email)
+            if let url = value as? URL, UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url)
             }
         }
