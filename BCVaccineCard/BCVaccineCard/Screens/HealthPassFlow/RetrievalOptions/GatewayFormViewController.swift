@@ -81,7 +81,7 @@ class GatewayFormViewController: BaseViewController {
             FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil),
             FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil),
             FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil),
-//            FormDataSource(type: .text(type: .underlinedWithImage, font: UIFont.bcSansBoldWithSize(size: 14)), cellStringData: .privacyStatement),
+            FormDataSource(type: .checkbox(text: .rememberePHNandDOB, selected: false), cellStringData: nil),
             FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil)
         ]
     }
@@ -112,6 +112,7 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     private func setupTableView() {
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: FormTableViewCell.getName, bundle: .main), forCellReuseIdentifier: FormTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CheckboxTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CheckboxTableViewCell.getName)
         tableView.register(UINib.init(nibName: InteractiveLabelTableViewCell.getName, bundle: .main), forCellReuseIdentifier: InteractiveLabelTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
@@ -139,6 +140,12 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
                 return cell
             }
             return UITableViewCell()
+        case .checkbox(text: let text, selected: let selected):
+            if let cell = tableView.dequeueReusableCell(withIdentifier: CheckboxTableViewCell.getName, for: indexPath) as? CheckboxTableViewCell {
+                cell.configure(selected: selected, text: text, delegateOwner: self)
+                return cell
+            }
+            return UITableViewCell()
         case .clickableText(text: let text, linkedStrings: let linkedStrings):
             if let cell = tableView.dequeueReusableCell(withIdentifier: InteractiveLabelTableViewCell.getName, for: indexPath) as? InteractiveLabelTableViewCell {
                 cell.configure(string: text, linkedStrings: linkedStrings, textColor: AppColours.textBlack, font: UIFont.bcSansRegularWithSize(size: 13))
@@ -153,6 +160,21 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
             cell.formTextFieldView.openKeyboardAction()
         }
     }
+}
+
+// MARK: Remember PHN and DOB
+extension GatewayFormViewController: CheckboxTableViewCellDelegate {
+    func checkboxTapped(selected: Bool) {
+        if selected {
+            // Save phn for next time
+            print("CONNOR: SAVE PHN AND DOB HERE")
+        } else {
+            // remove phn if it's already selected
+            print("CONNOR: REMOVE PHN AND DOB HERE PERHAPS")
+        }
+    }
+    
+    
 }
 
 // MARK: Update data source

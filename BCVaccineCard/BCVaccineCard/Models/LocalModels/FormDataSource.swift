@@ -24,6 +24,7 @@ struct FormDataSource: Equatable {
 //        }
         case text(type: TextCellType, font: UIFont)
         case form(type: FormTextFieldType)
+        case checkbox(text: String, selected: Bool)
         case clickableText(text: String, linkedStrings: [LinkedStrings])
     }
     
@@ -34,6 +35,7 @@ struct FormDataSource: Equatable {
         switch type {
         case .text: return false
         case .form: return true
+        case .checkbox: return false
         case .clickableText: return false
         }
     }
@@ -43,6 +45,7 @@ struct FormDataSource: Equatable {
         case .text: return nil
         case .form(type: let type):
             return TextFieldData(type: type, text: self.cellStringData)
+        case .checkbox: return nil
         case .clickableText: return nil
         }
     }

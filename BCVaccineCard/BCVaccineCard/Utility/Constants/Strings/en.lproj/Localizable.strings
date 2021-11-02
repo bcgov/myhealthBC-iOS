@@ -82,6 +82,7 @@
 "PrivacyPolicyStatementEmailLink" = "mailto:MOH.Privacy.Officer@gov.bc.ca";
 "PrivacyPolicyStatementPhoneNumber" = "778-698-5849";
 "PrivacyPolicyStatementPhoneNumberLink" = "tel://7786985849";
+"RememberPHNandDOB" = "Remember my PHN and DoB for next time.";
 "CovidVaccineCards" = "COVID-19 Vaccine Cards";
 "PassCount" = "%@ passes";
 "BCVaccineCards" = "BC Vaccine Cards";

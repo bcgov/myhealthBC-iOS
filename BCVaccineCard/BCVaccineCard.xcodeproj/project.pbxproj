@@ -67,6 +67,10 @@
 		7928345E2730E63A00EE2710 /* InteractiveLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928345B2730E63A00EE2710 /* InteractiveLabelTableViewCell.swift */; };
 		7928345F2730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7928345C2730E63A00EE2710 /* InteractiveLabelTableViewCell.xib */; };
 		792834602730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7928345C2730E63A00EE2710 /* InteractiveLabelTableViewCell.xib */; };
+		792834642731016600EE2710 /* CheckboxTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792834622731016500EE2710 /* CheckboxTableViewCell.swift */; };
+		792834652731016600EE2710 /* CheckboxTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792834622731016500EE2710 /* CheckboxTableViewCell.swift */; };
+		792834662731016600EE2710 /* CheckboxTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 792834632731016500EE2710 /* CheckboxTableViewCell.xib */; };
+		792834672731016600EE2710 /* CheckboxTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 792834632731016500EE2710 /* CheckboxTableViewCell.xib */; };
 		7944F67926F12613006B9444 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F67826F12613006B9444 /* AppDelegate.swift */; };
 		7944F68026F12613006B9444 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
 		7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */; };
@@ -303,6 +307,8 @@
 		792834572730E53100EE2710 /* InteractiveLinkLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveLinkLabel.swift; sourceTree = "<group>"; };
 		7928345B2730E63A00EE2710 /* InteractiveLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractiveLabelTableViewCell.swift; sourceTree = "<group>"; };
 		7928345C2730E63A00EE2710 /* InteractiveLabelTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InteractiveLabelTableViewCell.xib; sourceTree = "<group>"; };
+		792834622731016500EE2710 /* CheckboxTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxTableViewCell.swift; sourceTree = "<group>"; };
+		792834632731016500EE2710 /* CheckboxTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CheckboxTableViewCell.xib; sourceTree = "<group>"; };
 		7944F67526F12613006B9444 /* BCVaccineCard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BCVaccineCard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7944F67826F12613006B9444 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7944F67F26F12613006B9444 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -583,6 +589,15 @@
 			path = InteractiveLabelTableViewCell;
 			sourceTree = "<group>";
 		};
+		792834612731014400EE2710 /* CheckboxTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				792834622731016500EE2710 /* CheckboxTableViewCell.swift */,
+				792834632731016500EE2710 /* CheckboxTableViewCell.xib */,
+			);
+			path = CheckboxTableViewCell;
+			sourceTree = "<group>";
+		};
 		7944F66C26F12613006B9444 = {
 			isa = PBXGroup;
 			children = (
@@ -825,6 +840,7 @@
 		7944F6FB26F313EF006B9444 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				792834612731014400EE2710 /* CheckboxTableViewCell */,
 				7928345A2730E59900EE2710 /* InteractiveLabelTableViewCell */,
 				791C27B4271830C3001A6E12 /* ResourceTableViewCell */,
 				791C27B3271830B0001A6E12 /* NewsFeedTableViewCell */,
@@ -1297,6 +1313,7 @@
 				7944F6D426F12C00006B9444 /* AppStyleButton.xib in Resources */,
 				7967E75026F9145700EEF510 /* BCSans-Regular.otf in Resources */,
 				79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */,
+				792834662731016600EE2710 /* CheckboxTableViewCell.xib in Resources */,
 				7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */,
 				7967E74826F9071A00EEF510 /* SettingsTableViewCell.xib in Resources */,
 				795AA757271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
@@ -1350,6 +1367,7 @@
 				791C27BC27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
 				795AA77C2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */,
 				79283452272A880900EE2710 /* TableViewButtonView.xib in Resources */,
+				792834672731016600EE2710 /* CheckboxTableViewCell.xib in Resources */,
 				794BD65C2702EEC00084ADA8 /* AppStyleButton.xib in Resources */,
 				795AA76827155F7100E59FF1 /* Resource.storyboard in Resources */,
 				794BD65D2702EEC00084ADA8 /* BCSans-Regular.otf in Resources */,
@@ -1571,6 +1589,7 @@
 				29128F17272AF41F00358014 /* Array+EXT.swift in Sources */,
 				2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
+				792834642731016600EE2710 /* CheckboxTableViewCell.swift in Sources */,
 				7944F6C126F12BF2006B9444 /* Defaults.swift in Sources */,
 				795AA73227108F5900E59FF1 /* NetworkAccessor.swift in Sources */,
 				79BDA07E270CB8F300FF30AB /* String+Localizable.swift in Sources */,
@@ -1678,6 +1697,7 @@
 				29128F18272AF41F00358014 /* Array+EXT.swift in Sources */,
 				794BD6412702EEC00084ADA8 /* FormDataSource.swift in Sources */,
 				795AA7392710920600E59FF1 /* ErrorResponse.swift in Sources */,
+				792834652731016600EE2710 /* CheckboxTableViewCell.swift in Sources */,
 				79BDA090270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				794BD6422702EEC00084ADA8 /* QRScannerView.swift in Sources */,
 				794BD6432702EEC00084ADA8 /* SettingsTableViewCell.swift in Sources */,

@@ -101,6 +101,7 @@ extension String {
     static var privacyPolicyStatementEmailLink: String { return "PrivacyPolicyStatementEmailLink".localized }
     static var privacyPolicyStatementPhoneNumber: String { return "PrivacyPolicyStatementPhoneNumber".localized }
     static var privacyPolicyStatementPhoneNumberLink: String { return "PrivacyPolicyStatementPhoneNumberLink".localized }
+    static var rememberePHNandDOB: String { return "RememberPHNandDOB".localized }
     
     
     // Health Pass Home screen
