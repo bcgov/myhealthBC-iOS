@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>app-store</string>
+	<key>uploadBitcode</key>
+	<true/>
+	<key>compileBitcode</key>
+	<true/>
+	<key>uploadSymbols</key>
+	<true/>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>provisioningProfiles</key>
 	<dict>
-		<key>method</key>
-		<string>app-store</string>
-		<key>uploadBitcode</key>
-		<true/>
-		<key>compileBitcode</key>
-		<true/>
-		<key>uploadSymbols</key>
-		<true/>
-		<key>signingStyle</key>
-		<string>manual</string>
-		<key>provisioningProfiles</key>
-		<dict>
-			<key>ca.bc.gov.myhealth</key>
-			<string>ca.bc.gov.myhealth</string>
-		</dict>
+		<key>App bundle id</key>
+		<string>ca.bc.gov.myhealth</string>
 	</dict>
+</dict>
 </plist>
