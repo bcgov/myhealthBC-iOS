@@ -22,7 +22,7 @@ class NoCardsTableViewCell: UITableViewCell {
     
     private func setup() {
 //        introTextLabel.text = .noCardsIntroText
-        introTextLabel.attributedText = attributedText(withString: .noCardsIntroText, boldStrings: [.vaccinePass, .bcVaccinePass, .federalTravelPass], normalFont: UIFont.bcSansRegularWithSize(size: 17), boldFont: UIFont.bcSansBoldWithSize(size: 17), textColor: AppColours.textBlack)
+        introTextLabel.attributedText = attributedText(withString: .noCardsIntroText, boldStrings: [.bcVaccineCard, .federalProofOfVaccination], normalFont: UIFont.bcSansRegularWithSize(size: 17), boldFont: UIFont.bcSansBoldWithSize(size: 17), textColor: AppColours.textBlack)
 //        introTextLabel.textColor = AppColours.textBlack
 //        introTextLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         

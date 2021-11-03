@@ -116,7 +116,7 @@ class FormTextFieldView: UIView {
     @IBOutlet weak private var formTextField: UITextField!
     @IBOutlet weak private var formTextFieldErrorLabel: UILabel!
     @IBOutlet weak private var formTextFieldFooterLabel: UILabel!
-    @IBOutlet weak private var formTextFieldRightButton: UIButton!
+    @IBOutlet weak private var formTextFieldRightButton: LargerTouchAreaButton!
     
     weak var delegate: FormTextFieldViewDelegate?
     private var formField: FormTextFieldType!

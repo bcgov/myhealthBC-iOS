@@ -201,12 +201,15 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
         }
     }
     
-    private func removePHNDetails() {
+    private func removePHNDetailsIfNeccessary() {
         // TODO: Come up with a better method here
         let rememberKeychainStorage = RememberedGatewayDetails(storageArray: nil)
 //        let data = Data(from: rememberKeychainStorage)
 //        let status = KeyChain.save(key: Constants.KeychainPHNKey.key, data: data)
-        Defaults.rememberGatewayDetails = rememberKeychainStorage
+        // Note: If remember details is unchecked, and the phn used is not the same as the remembered phn, then we do nothing
+        if self.model?.phn.removeWhiteSpaceFormatting == self.rememberDetails.storageArray?.first?.phn.removeWhiteSpaceFormatting {
+            Defaults.rememberGatewayDetails = rememberKeychainStorage
+        }
         // TODO: Error handling here for keychain
         print("CONNOR: 'DELETE' STATUS")
     }
@@ -380,7 +383,7 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
     func handleVaccineCard(scanResult: ScanResultModel) {
         let model = convertScanResultModelIntoLocalData(data: scanResult, source: .healthGateway)
         // store prefered PHN if needed here
-        self.rememberedPHNSelected ? storePHNDetails() : removePHNDetails()
+        self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
         handleCardInDefaults(localModel: model)        
     }
     

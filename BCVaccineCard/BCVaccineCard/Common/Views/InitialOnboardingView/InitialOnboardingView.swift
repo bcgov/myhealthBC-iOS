@@ -7,11 +7,15 @@
 
 import UIKit
 
-enum OnboardingScreenType: String, Codable, CaseIterable {
-    case healthPasses = "Health Passes"
-    case healthRecords = "Health Records"
-    case healthResources = "Health Resources"
-    case newsFeed = "News Feed"
+enum OnboardingScreenType: Codable, CaseIterable, Equatable {
+    static var allCases: [OnboardingScreenType] {
+        return [.healthPasses(version: 1), .healthRecords(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
+    }
+    
+    case healthPasses(version: Int)
+    case healthRecords(version: Int)
+    case healthResources(version: Int)
+    case newsFeed(version: Int)
     
     var getStartScreenNumber: InitialOnboardingView.ScreenNumber {
         switch self {
@@ -62,13 +66,13 @@ class InitialOnboardingView: UIView {
         var getType: OnboardingScreenType {
             switch self {
             case .one:
-                return .healthPasses
+                return .healthPasses(version: 1)
             case .two:
-                return .healthRecords
+                return .healthRecords(version: 1)
             case .three:
-                return .healthResources
+                return .healthResources(version: 1)
             case .four:
-                return .newsFeed
+                return .newsFeed(version: 1)
             }
         }
         
