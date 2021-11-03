@@ -4,8 +4,6 @@
 	<dict>
 		<key>method</key>
 		<string>app-store</string>
-		<key>teamID</key>
-		<string>L796QSLV3E</string>
 		<key>uploadBitcode</key>
 		<true/>
 		<key>compileBitcode</key>
@@ -14,8 +12,6 @@
 		<true/>
 		<key>signingStyle</key>
 		<string>manual</string>
-		<key>signingCertificate</key>
-		<string>iOS Distribution: POSSIBLE Mobile</string>
 		<key>provisioningProfiles</key>
 		<dict>
 			<key>ca.bc.gov.myhealth</key>
