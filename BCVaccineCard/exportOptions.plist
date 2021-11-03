@@ -4,8 +4,8 @@
 <dict>
 	<key>provisioningProfiles</key>
 	<dict>
-		<key>MyHealth BC</key>
-		<string>ca.bc.gov.myhealth</string>
+		<key>ca.bc.gov.myhealth</key>
+		<string>MyHealth BC</string>
 	</dict>
 	<key>method</key>
 	<string>app-store</string>
