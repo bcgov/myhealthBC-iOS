@@ -22,10 +22,11 @@ struct GatewayVaccineCardResponse: Codable {
         let personalhealthnumber, firstname, lastname, birthdate: String?
         let vaccinedate: String?
         let doses, state: Int?
-        let qrCode: QrCode?
+        let qrCode: QrPayload?
+        let federalVaccineProof: QrPayload?
         
-        // MARK: - QrCode
-        struct QrCode: Codable {
+        // MARK: - QR Payload
+        struct QrPayload: Codable {
             let mediaType, encoding, data: String?
         }
     }
