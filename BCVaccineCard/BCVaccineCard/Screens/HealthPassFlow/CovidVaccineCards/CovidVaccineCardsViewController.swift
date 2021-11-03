@@ -186,7 +186,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
             let expanded = indexPath.row == expandedIndexRow && !inEditMode
             let model = dataSource[indexPath.row]
-            cell.configure(model: model, expanded: expanded, editMode: inEditMode)
+            cell.configure(model: model, expanded: expanded, editMode: inEditMode, delegateOwner: self)
             return cell
         }
         return UITableViewCell()
@@ -258,6 +258,20 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         dataSource.insert(movedObject, at: destinationIndexPath.row)
         StorageService.shared.changeVaccineCardSortOrder(cardQR: movedObject.codableModel.code, newPosition: destinationIndexPath.row)
     }
+}
+
+// MARK: Federal pass action button delegate
+extension CovidVaccineCardsViewController: FederalPassViewDelegate {
+    func federalPassButtonTapped(hasPass: Bool) {
+        if hasPass {
+            // TODO: Open pass here
+        } else {
+            // TODO: Go To health gateway to fetch pass - will need to configure so that HG can get DOB and DOV from BC Vaccine card and we hide the last two HG form cells
+            // NOTE: Will need to refactor HG a bit to adjust for this logic (in terms of remembering, and index references, need to make safe)
+            
+        }
+    }
+
 }
 
 // MARK: Adjusting data source functions

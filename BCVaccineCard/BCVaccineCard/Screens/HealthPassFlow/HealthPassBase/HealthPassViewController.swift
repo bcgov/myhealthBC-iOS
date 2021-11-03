@@ -148,7 +148,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.row == 1 {
             if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
                 cell.isAccessibilityElement = false
-                cell.configure(model: card, expanded: true, editMode: false)
+                cell.configure(model: card, expanded: true, editMode: false, delegateOwner: self)
                 return cell
             }
         } else if indexPath.row == 2 {
@@ -215,6 +215,20 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
 
         
     }
+}
+
+// MARK: Federal pass action button delegate
+extension HealthPassViewController: FederalPassViewDelegate {
+    func federalPassButtonTapped(hasPass: Bool) {
+        if hasPass {
+            // TODO: Open pass here
+        } else {
+            // TODO: Go To health gateway to fetch pass - will need to configure so that HG can get DOB and DOV from BC Vaccine card and we hide the last two HG form cells
+            // NOTE: Will need to refactor HG a bit to adjust for this logic (in terms of remembering, and index references, need to make safe)
+            
+        }
+    }
+
 }
 
 // MARK: Add card button table view cell delegate here
