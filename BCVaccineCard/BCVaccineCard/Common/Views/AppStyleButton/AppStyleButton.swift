@@ -48,7 +48,7 @@ class AppStyleButton: UIView {
             case .viewAll: return .viewAll
             case .next: return .next
             case .getStarted: return .getStarted
-            case .ok: return .ok.capitalized
+            case .ok: return String.ok.capitalized
             }
         }
     }
