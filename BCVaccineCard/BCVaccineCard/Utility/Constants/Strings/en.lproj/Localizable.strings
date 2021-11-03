@@ -88,10 +88,10 @@
 "PassCount" = "%@ passes";
 "BCVaccineCards" = "BC Vaccine Cards";
 "NoCardsYet" = "You don't have any cards yet";
-"NoCardsIntroText" = "The easiest way to show proof is using a Vaccine Pass.\n\nAdd a BC Vaccine Pass and Federal Travel Pass here for easy access.";
-"VaccinePass" = "Vaccine Pass";
-"BCVaccinePass" = "BC Vaccine Pass";
-"FederalTravelPass" = "Federal Travel Pass";
+"NoCardsIntroText" = "Use Health Passes as an easy way to access and show your proof of vaccination.\n\nSave a BC Vaccine Card and Federal Proof of Vaccination here.";
+//"VaccinePass" = "Vaccine Pass";
+"BCVaccineCard" = "BC Vaccine Card";
+"FederalProofOfVaccination" = "Federal Proof of Vaccination";
 "Vaccinated" = "Vaccinated";
 "PartiallyVaccinated" = "Partially Vaccinated";
 "NoRecordFound" = "No Record Found";

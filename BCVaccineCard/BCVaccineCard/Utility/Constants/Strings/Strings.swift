@@ -115,9 +115,9 @@ extension String {
     static var bcVaccineCards: String { return "BCVaccineCards".localized }
     static var noCardsYet: String { return "NoCardsYet".localized }
     static var noCardsIntroText: String { return "NoCardsIntroText".localized }
-    static var vaccinePass: String { return "VaccinePass".localized }
-    static var bcVaccinePass: String { return "BCVaccinePass".localized }
-    static var federalTravelPass: String { return "FederalTravelPass".localized }
+//    static var vaccinePass: String { return "VaccinePass".localized }
+    static var bcVaccineCard: String { return "BCVaccineCard".localized }
+    static var federalProofOfVaccination: String { return "FederalProofOfVaccination".localized }
     static var vaccinated: String { return "Vaccinated".localized }
     static var partiallyVaccinated: String { return "PartiallyVaccinated".localized }
     static var noRecordFound: String { return "NoRecordFound".localized }
