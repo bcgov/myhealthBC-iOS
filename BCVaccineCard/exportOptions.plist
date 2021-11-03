@@ -15,7 +15,7 @@
 		<key>provisioningProfiles</key>
 		<dict>
 			<key>ca.bc.gov.myhealth</key>
-			<string>Client App Release</string>
+			<string>ca.bc.gov.myhealth</string>
 		</dict>
 	</dict>
 </plist>
