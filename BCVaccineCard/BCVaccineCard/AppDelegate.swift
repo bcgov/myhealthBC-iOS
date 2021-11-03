@@ -92,13 +92,13 @@ extension AppDelegate {
 extension AppDelegate {
     private func setupRootViewController() {
         
-        if Defaults.initialOnboardingScreensSeen?.count == OnboardingScreenType.allCases.count {
+        if Defaults.initialOnboardingScreensSeen == OnboardingScreenType.allCases {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
         } else if Defaults.initialOnboardingScreensSeen == nil || Defaults.initialOnboardingScreensSeen?.count == 0 {
             let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: .one, screensToShow: InitialOnboardingView.ScreenNumber.allCases)
             self.window?.rootViewController = vc
-        } else if let screensSeen = Defaults.initialOnboardingScreensSeen, (screensSeen.count > 0 && screensSeen.count < OnboardingScreenType.allCases.count) {
+        } else if let screensSeen = Defaults.initialOnboardingScreensSeen, (screensSeen.count > 0 && (screensSeen.count < OnboardingScreenType.allCases.count || Defaults.initialOnboardingScreensSeen != OnboardingScreenType.allCases )) {
             var unseenScreens: [OnboardingScreenType] = []
             OnboardingScreenType.allCases.forEach { screen in
                 if !screensSeen.contains(screen) {
