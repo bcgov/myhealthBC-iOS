@@ -161,34 +161,37 @@ extension UIViewController {
     
     func showBanner(message: String, style: BannerStyle) {
         // Create label and container
-        let container = UIView(frame: .zero)
-        let label = UILabel(frame: .zero)
-        
-        if style == .Bottom {
-            label.isAccessibilityElement = true
-            label.accessibilityTraits = .staticText
-            label.accessibilityValue = "\(message)"
-        }
-        
-        
-        // Remove existing Banner / Container
-        if let existing = view.viewWithTag(Constants.UI.Banner.tag) {
-            existing.removeFromSuperview()
-        }
-        
-        // Add subviews
-        container.tag = Constants.UI.Banner.tag
-        let labelTAG = Int.random(in: 4000..<9000)
-        label.tag = labelTAG
-        self.view.addSubview(container)
-        container.addSubview(label)
-        label.text = message
-        
-        switch style {
-        case .Top:
-            presentBannerFromTop(container: container, label: label, labelTAG: labelTAG)
-        case .Bottom:
-            presentBannerAtBottom(container: container, label: label, labelTAG: labelTAG)
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else {return}
+            let container = UIView(frame: .zero)
+            let label = UILabel(frame: .zero)
+            
+            if style == .Bottom {
+                label.isAccessibilityElement = true
+                label.accessibilityTraits = .staticText
+                label.accessibilityValue = "\(message)"
+            }
+            
+            
+            // Remove existing Banner / Container
+            if let existing = self.view.viewWithTag(Constants.UI.Banner.tag) {
+                existing.removeFromSuperview()
+            }
+            
+            // Add subviews
+            container.tag = Constants.UI.Banner.tag
+            let labelTAG = Int.random(in: 4000..<9000)
+            label.tag = labelTAG
+            self.view.addSubview(container)
+            container.addSubview(label)
+            label.text = message
+            
+            switch style {
+            case .Top:
+                self.presentBannerFromTop(container: container, label: label, labelTAG: labelTAG)
+            case .Bottom:
+                self.presentBannerAtBottom(container: container, label: label, labelTAG: labelTAG)
+            }
         }
     }
     

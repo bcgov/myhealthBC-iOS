@@ -260,8 +260,11 @@ extension QRRetrievalMethodViewController {
                         self.appendModelToLocalStorage(model: model)
                     }
                     // TODO: text from constants
-                    self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                    self.popBackToProperViewController(id: appModel.id ?? "")
+                    DispatchQueue.main.async { [weak self] in
+                        guard let `self` = self else {return}
+                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                        self.popBackToProperViewController(id: appModel.id ?? "")
+                    }
                 }
             }
         }
