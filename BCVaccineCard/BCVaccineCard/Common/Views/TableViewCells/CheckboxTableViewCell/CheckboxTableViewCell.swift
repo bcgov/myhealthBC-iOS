@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-11-01.
-//
+// TODO: If there is a screen with multiple checkboxes, then we'll need to add a type enum to distinguish
 
 import UIKit
 
