@@ -123,4 +123,9 @@ extension DecodedQRPayload {
         }
         return birthDate
     }
+    
+    func vaxes() -> [Resource] {
+        return self.vc.credentialSubject.fhirBundle.entry
+            .compactMap({$0.resource}).filter({$0.resourceType.lowercased() == "Immunization".lowercased()})
+    }
 }

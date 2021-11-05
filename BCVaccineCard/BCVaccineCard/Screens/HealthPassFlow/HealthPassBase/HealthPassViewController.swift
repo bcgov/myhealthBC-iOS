@@ -148,7 +148,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.row == 1 {
             if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
                 cell.isAccessibilityElement = false
-                cell.configure(model: card, expanded: true, editMode: false)
+                cell.configure(model: card, expanded: true, editMode: false, delegateOwner: self)
                 return cell
             }
         } else if indexPath.row == 2 {
@@ -214,6 +214,31 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
         }
 
         
+    }
+}
+
+// MARK: Federal pass action button delegate
+extension HealthPassViewController: FederalPassViewDelegate {
+    func federalPassButtonTapped(model: AppVaccinePassportModel?) {
+        if let pass = model?.codableModel.fedCode {
+            guard let data = Data(base64URLEncoded: pass) else {
+                return
+            }
+            let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
+            pdfView.delegate = self
+            pdfView.show(data: data, in: self.parent ?? self)
+        } else {
+            guard let model = model else { return }
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .healthPassHomeScreen)
+        }
+    }
+
+}
+
+// MARK: Federal Pass PDF View Delegate
+extension HealthPassViewController: FederalPassPDFViewDelegate {
+    func viewDismissed() {
+        self.tabBarController?.tabBar.isHidden = false
     }
 }
 

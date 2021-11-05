@@ -12,6 +12,8 @@ class VaccineCardTableViewCell: UITableViewCell {
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var roundedView: UIView!
     @IBOutlet weak var vaccineCardView: VaccineCardView!
+    @IBOutlet weak var federalPassView: FederalPassView!
+    @IBOutlet weak var federalPassViewHeightConstraint: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,8 +38,13 @@ class VaccineCardTableViewCell: UITableViewCell {
         shadowView.layer.shadowOpacity = expanded ? 0.7 : 0.0
     }
     
-    func configure(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool) {
+    func configure(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool, delegateOwner: UIViewController) {
         vaccineCardView.configure(model: model, expanded: expanded, editMode: editMode)
+        federalPassView.isHidden = !expanded
+        federalPassViewHeightConstraint.constant = expanded ? 94.0 : 0.0
+        if expanded {
+            federalPassView.configure(model: model, delegateOwner: delegateOwner)
+        }
         adjustShadow(expanded: expanded)
     }
 

@@ -1,12 +1,12 @@
 {
-  "publishDateTime": "2021-10-05T06:31:14.6109848+00:00",
+  "publishDateTime": "2021-10-18T23:47:24.3740183+00:00",
   "ruleSet": [
     {
-      "mixTypesAllowed": false,
-      "mixTypesRuRequired": 3,
+      "mixTypesAllowed": true,
+      "mixTypesRuRequired": 2,
       "ruRequired": 2,
-      "intervalRequired": true,
-      "daysSinceLastInterval": 21,
+      "intervalRequired": false,
+      "daysSinceLastInterval": 14,
       "ruleTarget": "https://phsasmarthealthcard-dev.azurewebsites.net/v1/trusted/.well-known/issuers.json",
       "version": "V1",
       "vaccinationRules": [
@@ -22,17 +22,22 @@
         },
         {
           "cvxCode": "210",
-          "type": 2,
+          "type": 1,
           "ru": 1
         },
         {
           "cvxCode": "212",
-          "type": 2,
+          "type": 1,
           "ru": 2
         },
         {
-          "cvxCode": "211",
-          "type": 2,
+          "cvxCode": "511",
+          "type": 1,
+          "ru": 1
+        },
+        {
+          "cvxCode": "510",
+          "type": 1,
           "ru": 1
         }
       ]
@@ -73,5 +78,6 @@
         }
       ]
     }
-  ]
+  ],
+  "ruleSetVersion": "V1"
 }

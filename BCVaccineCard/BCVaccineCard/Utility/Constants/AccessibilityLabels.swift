@@ -76,6 +76,13 @@ struct AccessibilityLabels {
         static let collapsedAction = "Action Available: Tap to expand Vaccination Card"
     }
     
+    struct FederalPassView {
+        static let fedPassDescriptionHasPass = "This is your federal proof of vaccination link. Double tap to show your proof."
+        static let fedPassDescriptionDoesNotHavePass = "This is your federal proof of vaccination link. Double tap to get your proof from Health Gateway."
+        static let hasPassHint = "Double tapping this button will open your federal proof of vaccination PDF."
+        static let noPassHint = "Double tapping this button will take you to health gateway where you can provide your personal health number to retrieve your federal proof of vaccination."
+    }
+    
     struct FormTextField {
         static let numberFormat = "Number Format"
         static let dateFormat = "Date Format"

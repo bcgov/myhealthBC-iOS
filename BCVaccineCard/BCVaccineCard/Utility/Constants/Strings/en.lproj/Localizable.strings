@@ -101,6 +101,9 @@
 "UnlinkCardTitle" = "Unlink Card";
 "UnlinkCardMessage" = "Are you sure you want to unlink this pass?";
 "NoName" = "No Name";
+"ShowFederalProof" = "Show Federal Proof of Vaccination";
+"GetFederalProof" = "Get Federal Proof of Vaccination";
+"FederalProofSubtitle" = "Domestic and International Travel";
 "QRDescriptionText" = "Please select one of the following options to add an official Health Pass containing a QR code";
 "OfficialHealthPass" = "official Health Pass";
 "CameraScanOption" = "Scan using your camera";

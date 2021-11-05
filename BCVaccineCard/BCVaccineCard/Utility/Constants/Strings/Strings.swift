@@ -127,6 +127,9 @@ extension String {
     static var unlinkCardTitle: String { return "UnlinkCardTitle".localized }
     static var unlinkCardMessage: String { return "UnlinkCardMessage".localized }
     static var noName: String { return "NoName".localized }
+    static var showFederalProof: String { return "ShowFederalProof".localized }
+    static var getFederalProof: String { return "GetFederalProof".localized }
+    static var federalProofSubtitle: String { return "FederalProofSubtitle".localized }
     
     // QR Method Selection screen
     static var qrDescriptionText: String { return "QRDescriptionText".localized }

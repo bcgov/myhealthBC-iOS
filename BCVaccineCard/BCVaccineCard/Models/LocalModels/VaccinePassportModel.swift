@@ -34,10 +34,13 @@ enum Source: String, Codable {
 struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     let code: String
     let birthdate: String
+    var vaxDates: [String]
     let name: String
     let issueDate: Double
     let status: VaccineStatus
     let source: Source
+    var fedCode: String?
+    let phn: String?
     
     func transform() -> AppVaccinePassportModel {
         return AppVaccinePassportModel(codableModel: self)

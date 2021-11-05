@@ -178,16 +178,12 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 // MARK: Table View Button Methods
 extension QRRetrievalMethodViewController {
     func goToEnterGateway() {
+        // TODO: Should look at refactoring this a bit
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
-        // NOTE: Having issues with keychain, using user defaults for now
-//        if let receivedData = KeyChain.load(key: Constants.KeychainPHNKey.key) {
-//            let result = receivedData.to(type: RememberedGatewayDetails.self)
-//            rememberDetails = result
-//        }
         if let details = Defaults.rememberGatewayDetails {
             rememberDetails = details
         }
-        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCard)
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass)
         vc.completionHandler = { [weak self] id in
             guard let `self` = self else { return }
             self.view.accessibilityElementsHidden = true
@@ -259,9 +255,9 @@ extension QRRetrievalMethodViewController {
                     } else {
                         self.appendModelToLocalStorage(model: model)
                     }
-                    // TODO: text from constants
-                    DispatchQueue.main.async { [weak self] in
-                        guard let `self` = self else {return}
+                    
+                    DispatchQueue.main.async {[weak self] in
+                        guard let self = self else {return}
                         self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
                         self.popBackToProperViewController(id: appModel.id ?? "")
                     }
