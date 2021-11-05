@@ -174,6 +174,7 @@ class StorageService {
             let cards = try context.fetch(VaccineCard.createFetchRequest())
             guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
             card.code = model.code
+            card.federalPass = model.fedCode
             try context.save()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
