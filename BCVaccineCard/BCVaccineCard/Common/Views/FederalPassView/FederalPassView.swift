@@ -22,7 +22,6 @@ class FederalPassView: UIView {
     @IBOutlet weak private var passButtonForAction: UIButton!
     
     weak var delegate: FederalPassViewDelegate?
-    private var hasPass: Bool!
     private var federalPassString: String?
     
     override init(frame: CGRect) {
@@ -78,7 +77,6 @@ class FederalPassView: UIView {
     func configure(model: AppVaccinePassportModel, delegateOwner: UIViewController) {
         self.isAccessibilityElement = false
         self.federalPassString = model.codableModel.fedCode
-        self.hasPass = model.codableModel.fedCode != nil
         passTitleLabel.text = model.codableModel.fedCode != nil ? .showFederalProof : .getFederalProof
         passSubtitleLabel.text = .federalProofSubtitle
         let image = model.codableModel.fedCode != nil ? UIImage(named: "arrow-right-black") : UIImage(named: "add-icon-black")
