@@ -20,6 +20,13 @@ extension VaccineCard {
     @NSManaged public var name: String?
     @NSManaged public var sortOrder: Int64
     @NSManaged public var birthdate: String?
+    @NSManaged public var federalPass: String?
     @NSManaged public var user: User?
+    
+    
+    public var federalPassData: Data? {
+        guard let stringData = federalPass else { return nil}
+        return Data(base64URLEncoded: stringData)
+    }
 
 }

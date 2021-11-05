@@ -84,7 +84,7 @@ class StorageService {
     ///   - name: card holder name: NOT the name of the user storing data
     ///   - userId: User id under which this card is to be stored
     /// - Returns: boolean indicating success or failure
-    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, userId: String) -> Bool {
+    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, userId: String, federalPass: String? = nil) -> Bool {
         guard let context = managedContext, let user = fetchUser(id: userId) else {return false}
         let card = VaccineCard(context: context)
         card.code = vaccineQR
@@ -92,6 +92,9 @@ class StorageService {
         card.user = user
         card.birthdate = birthdate
         card.sortOrder = Int64(fetchVaccineCards(for: userId).count)
+        if let fp = federalPass {
+            card.federalPass = fp
+        }
         do {
             try context.save()
             return true
@@ -189,7 +192,7 @@ class StorageService {
                 case .None:
                     status = .notVaxed
                 }
-                let model = LocallyStoredVaccinePassportModel(code: code, birthdate: processed.birthdate, name: processed.name, issueDate: processed.issueDate, status: status, source: .imported)
+                let model = LocallyStoredVaccinePassportModel(code: code, birthdate: processed.birthdate, name: processed.name, issueDate: processed.issueDate, status: status, source: .imported, fedCode: cardToProcess.federalPass)
                 processedCards.append(AppVaccinePassportModel(codableModel: model))
                 self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
             }

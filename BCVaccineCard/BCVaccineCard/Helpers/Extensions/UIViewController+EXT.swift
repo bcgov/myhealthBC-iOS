@@ -90,7 +90,7 @@ extension UIViewController {
             self.view.layoutIfNeeded()
         }
         
-//        UIAccessibility.setFocusTo(label)
+        //        UIAccessibility.setFocusTo(label)
         
         // Remove banner after x seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.UI.Banner.displayDuration) {[weak self] in
@@ -104,7 +104,7 @@ extension UIViewController {
                 guard let `self` = self,
                       let container = self.view.viewWithTag(Constants.UI.Banner.tag),
                       container.viewWithTag(labelTAG) != nil
-                      else {return}
+                else {return}
                 container.alpha = 0
             } completion: { done in
                 container.removeFromSuperview()
@@ -149,7 +149,7 @@ extension UIViewController {
             guard let `self` = self,
                   let container = self.view.viewWithTag(Constants.UI.Banner.tag),
                   container.viewWithTag(labelTAG) != nil
-                  else {return}
+            else {return}
             /*
              We Randomly generated labelTAG.
              here we check if after the display duration, the same label is still displayed.
@@ -161,34 +161,37 @@ extension UIViewController {
     
     func showBanner(message: String, style: BannerStyle) {
         // Create label and container
-        let container = UIView(frame: .zero)
-        let label = UILabel(frame: .zero)
-        
-        if style == .Bottom {
-            label.isAccessibilityElement = true
-            label.accessibilityTraits = .staticText
-            label.accessibilityValue = "\(message)"
-        }
-        
-        
-        // Remove existing Banner / Container
-        if let existing = view.viewWithTag(Constants.UI.Banner.tag) {
-            existing.removeFromSuperview()
-        }
-        
-        // Add subviews
-        container.tag = Constants.UI.Banner.tag
-        let labelTAG = Int.random(in: 4000..<9000)
-        label.tag = labelTAG
-        self.view.addSubview(container)
-        container.addSubview(label)
-        label.text = message
-        
-        switch style {
-        case .Top:
-            presentBannerFromTop(container: container, label: label, labelTAG: labelTAG)
-        case .Bottom:
-            presentBannerAtBottom(container: container, label: label, labelTAG: labelTAG)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            let container = UIView(frame: .zero)
+            let label = UILabel(frame: .zero)
+            
+            if style == .Bottom {
+                label.isAccessibilityElement = true
+                label.accessibilityTraits = .staticText
+                label.accessibilityValue = "\(message)"
+            }
+            
+            
+            // Remove existing Banner / Container
+            if let existing = self.view.viewWithTag(Constants.UI.Banner.tag) {
+                existing.removeFromSuperview()
+            }
+            
+            // Add subviews
+            container.tag = Constants.UI.Banner.tag
+            let labelTAG = Int.random(in: 4000..<9000)
+            label.tag = labelTAG
+            self.view.addSubview(container)
+            container.addSubview(label)
+            label.text = message
+            
+            switch style {
+            case .Top:
+                self.presentBannerFromTop(container: container, label: label, labelTAG: labelTAG)
+            case .Bottom:
+                self.presentBannerAtBottom(container: container, label: label, labelTAG: labelTAG)
+            }
         }
     }
     
@@ -202,7 +205,7 @@ extension UIViewController {
         } completion: { done in
             banner.removeFromSuperview()
         }
-
+        
     }
 }
 
@@ -235,7 +238,7 @@ extension UIViewController {
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId())
+        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), federalPass: model.fedCode)
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel) {
@@ -244,7 +247,7 @@ extension UIViewController {
     
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
         let status = VaccineStatus.init(rawValue: data.status.rawValue) ?? .notVaxed
-        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, name: data.name, issueDate: data.issueDate, status: status, source: source)
+        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, name: data.name, issueDate: data.issueDate, status: status, source: source, fedCode: Constants.samplePDF) // TODO: REMOVE SAMPLE_PDF
     }
 }
 
