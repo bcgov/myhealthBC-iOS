@@ -199,11 +199,12 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
+        return dataSource.filter { $0.isFieldVisible }.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let formData = dataSource[indexPath.row]
+        let shownDS = dataSource.filter { $0.isFieldVisible }
+        let formData = shownDS[indexPath.row]
         let config = formData.configuration
         switch formData.specificCell.getCellType {
         case .text(type: let type):
@@ -448,18 +449,19 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             let error = textFieldData.type.setErrorValidationMessage(text: text)
             return error == nil
         }
-        return countArray.filter { $0 == true }.count == dataSource.map({ $0.specificCell.isTextField && $0.isFieldVisible }).count
+        return countArray.filter { $0 == true }.count == dataSource.filter({ $0.specificCell.isTextField && $0.isFieldVisible }).count
     }
 
 }
 
 // MARK: QueueIt
 extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
-    func handleVaccineCard(scanResult: ScanResultModel) {
-        let model = convertScanResultModelIntoLocalData(data: scanResult, source: .healthGateway)
+    func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?) {
+        var model = convertScanResultModelIntoLocalData(data: scanResult, source: .healthGateway)
+        model.fedCode = fedCode
         // store prefered PHN if needed here
         self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
-        handleCardInDefaults(localModel: model)        
+        handleCardInCoreData(localModel: model)
     }
     
     func handleError(title: String, error: ResultError) {
@@ -479,7 +481,7 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
         self.view.endLoadingIndicator()
     }
     
-    func handleCardInDefaults(localModel: LocallyStoredVaccinePassportModel) {
+    func handleCardInCoreData(localModel: LocallyStoredVaccinePassportModel) {
         let model = localModel.transform()
         doesCardNeedToBeUpdated(modelToUpdate: model) {[weak self] needsUpdate in
             guard let `self` = self else {return}

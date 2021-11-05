@@ -11,7 +11,7 @@ import UIKit
 import BCVaccineValidator
 
 protocol QueueItWorkerDefaultsDelegate: AnyObject {
-    func handleVaccineCard(scanResult: ScanResultModel)
+    func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?)
     func handleError(title: String, error: ResultError)
     func showLoader()
     func hideLoader()
@@ -224,7 +224,7 @@ extension QueueItWorker {
                     }
                     DispatchQueue.main.async { [weak self] in
                         guard let `self` = self else {return}
-                        self.delegate?.handleVaccineCard(scanResult: data)
+                        self.delegate?.handleVaccineCard(scanResult: data, fedCode: vaccineCard.resourcePayload?.federalVaccineProof?.data)
                         self.delegate?.hideLoader()
                     }
                     

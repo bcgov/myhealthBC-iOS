@@ -297,7 +297,7 @@ extension UIViewController {
         StorageService.shared.getVaccineCardsForCurrentUser { localDS in
             guard !localDS.isEmpty else { return completion(false) }
             guard model.codableModel.status == .fully else { return completion(false) }
-            if let _ = localDS.map({$0.transform()}).firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && $0.status == .partially }) {
+            if let _ = localDS.map({$0.transform()}).firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && ($0.status == .partially || $0.fedCode != model.codableModel.fedCode) }) {
                 return completion(true)
             }
             return completion(false)

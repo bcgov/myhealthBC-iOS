@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if PROD
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
         #elseif DEV
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
+        BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
 //        FirebaseApp.configure()
         #endif
         AnalyticsService.shared.setup()
