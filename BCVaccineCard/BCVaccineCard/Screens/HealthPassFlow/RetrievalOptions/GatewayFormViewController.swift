@@ -139,7 +139,6 @@ class GatewayFormViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
         } else {
@@ -149,7 +148,6 @@ class GatewayFormViewController: BaseViewController {
     
     private func setup() {
         setupButtons()
-//        setupDataSource()
         setupTableView()
         setupQueueItWorker()
     }
@@ -158,17 +156,6 @@ class GatewayFormViewController: BaseViewController {
         cancelButton.configure(withStyle: .white, buttonType: .cancel, delegateOwner: self, enabled: true)
         submitButton.configure(withStyle: .blue, buttonType: .submit, delegateOwner: self, enabled: false)
     }
-    
-//    private func setupDataSource() {
-//        dataSource = [
-//            FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
-//            FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
-//            FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil, specificCell: .dobForm),
-//            FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil, specificCell: .dovForm),
-//            FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil, specificCell: .rememberCheckbox),
-//            FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
-//        ]
-//    }
     
     private func setupQueueItWorker() {
         self.worker = QueueItWorker(delegateOwner: self, healthGateway: self.healthGateway, delegate: self, endpoint: self.endpoint)
@@ -251,7 +238,7 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
     func checkboxTapped(selected: Bool) {
         self.rememberedPHNSelected = selected
     }
-    // NOTE: Having issues with keychain right now, so will be using user defaults in the meantime
+    
     private func storePHNDetails() {
         guard let model = self.model else { return }
         if self.model?.phn == self.whiteSpaceFormattedPHN?.removeWhiteSpaceFormatting, self.whiteSpaceFormattedPHN != nil {
@@ -259,30 +246,21 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
             guard rememberProperties.phn != self.rememberDetails.storageArray?.first?.phn else { return }
             // NOTE: This is where we can append data to existing storage for abilitly to store multiple pieces of data
             let rememberKeychainStorage = RememberedGatewayDetails(storageArray: [rememberProperties])
-    //        let data = Data(from: rememberKeychainStorage)
-    //        let status = KeyChain.save(key: Constants.KeychainPHNKey.key, data: data)
             Defaults.rememberGatewayDetails = rememberKeychainStorage
-            // TODO: Error handling here for keychain
-            print("CONNOR: SAVE STATUS")
         }
     }
     
     private func removePHNDetailsIfNeccessary() {
-        // TODO: Come up with a better method here
         let rememberKeychainStorage = RememberedGatewayDetails(storageArray: nil)
-//        let data = Data(from: rememberKeychainStorage)
-//        let status = KeyChain.save(key: Constants.KeychainPHNKey.key, data: data)
         // Note: If remember details is unchecked, and the phn used is not the same as the remembered phn, then we do nothing
         if self.model?.phn.removeWhiteSpaceFormatting == self.rememberDetails.storageArray?.first?.phn.removeWhiteSpaceFormatting {
             Defaults.rememberGatewayDetails = rememberKeychainStorage
         }
-        // TODO: Error handling here for keychain
-        print("CONNOR: 'DELETE' STATUS")
     }
     
 }
 
-// MARK: Helper function to return index path of a given cell type
+// MARK: Helper functions
 extension GatewayFormViewController {
     private func getIndexPathForSpecificCell(_ specificCell: FormDataSource.SpecificCell, inDS ds: [FormDataSource]) -> IndexPath? {
         var indexPath: IndexPath?
@@ -291,9 +269,13 @@ extension GatewayFormViewController {
         }
         return indexPath
     }
+    
+    private func getIndexInDataSource(formField: FormTextFieldType, dataSource: [FormDataSource]) -> Int? {
+        return dataSource.firstIndex { $0.type == .form(type: formField) }
+    }
 }
 
-// MARK: Drop down delegate
+// MARK: Drop down
 extension GatewayFormViewController: DropDownViewDelegate {
     func didChooseStoragePHN(details: GatewayStorageProperties) {
         if details.phn == self.rememberDetails.storageArray?.first?.phn {
@@ -315,7 +297,57 @@ extension GatewayFormViewController: DropDownViewDelegate {
             self.dismissDropDownView(dropDownView: dropDownView)
         }
     }
+    
+    private func handleDropDownView() {
+        if let dropDownView = self.dropDownView {
+            // Dismiss drop down view
+            dismissDropDownView(dropDownView: dropDownView)
+        } else {
+            // Configure and present drop down view
+            self.dropDownView = DropDownView()
+            self.tableView.addSubview(dropDownView!)
+            self.dropDownView?.translatesAutoresizingMaskIntoConstraints = false
+            // TODO: Make this safer - don't like default value here
+            let row = self.getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) ?? 0
+            guard let relativeView = tableView.cellForRow(at: IndexPath(row: row, section: 0)) else { return }
+            let padding: CGFloat = 12.0
+            let leadingConstraint = dropDownView!.leadingAnchor.constraint(equalTo: relativeView.leadingAnchor, constant: -padding)
+            let trailingConstraint = dropDownView!.trailingAnchor.constraint(equalTo: relativeView.trailingAnchor, constant: padding)
+            let count: CGFloat = CGFloat(rememberDetails.storageArray?.count ?? 1)
+            let heightConstraint = dropDownView!.heightAnchor.constraint(equalToConstant: (count * Constants.UI.RememberPHNDropDownRowHeight.height) + padding)
+            let topConstraint = dropDownView!.topAnchor.constraint(equalTo: relativeView.topAnchor, constant: 80)
+            self.tableView.addConstraints([leadingConstraint, trailingConstraint, heightConstraint, topConstraint])
+            self.dropDownView?.configure(rememberGatewayDetails: self.rememberDetails, delegateOwner: self)
+        }
+    }
+    
+    private func dismissDropDownView(dropDownView: DropDownView) {
+        dropDownView.removeFromSuperview()
+        self.dropDownView = nil
+    }
 
+}
+
+// MARK: Request formatting
+extension GatewayFormViewController {
+    
+    private func prepareRequest() {
+        guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
+        guard let phn = dataSource[phnIndex].cellStringData else { return }
+        guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
+        guard let birthday = dataSource[dobIndex].cellStringData else { return }
+        guard let dovIndex = getIndexInDataSource(formField: .dateOfVaccination, dataSource: self.dataSource) else { return }
+        guard let vaxDate = dataSource[dovIndex].cellStringData else { return }
+        guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
+        self.whiteSpaceFormattedPHN = phn
+        self.model = model
+        worker?.createInitialVaccineCardRequest(model: model)
+    }
+    
+    private func formatGatewayData(phn: String, birthday: String, vax: String) -> GatewayVaccineCardRequest? {
+        let formattedPHN = phn.removeWhiteSpaceFormatting
+        return GatewayVaccineCardRequest(phn: formattedPHN, dateOfBirth: birthday, dateOfVaccine: vax)
+    }
 }
 
 // MARK: Update data source
@@ -332,10 +364,6 @@ extension GatewayFormViewController {
             }
         }
         
-    }
-    
-    private func getIndexInDataSource(formField: FormTextFieldType, dataSource: [FormDataSource]) -> Int? {
-        return dataSource.firstIndex { $0.type == .form(type: formField) }
     }
 }
 
@@ -390,39 +418,18 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
             }
         }
     }
-    
-    private func handleDropDownView() {
-        if let dropDownView = self.dropDownView {
-            // Dismiss drop down view
-            dismissDropDownView(dropDownView: dropDownView)
-        } else {
-            // Configure and present drop down view
-            self.dropDownView = DropDownView()
-            self.tableView.addSubview(dropDownView!)
-            self.dropDownView?.translatesAutoresizingMaskIntoConstraints = false
-            // TODO: Make this safer - don't like default value here
-            let row = self.getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) ?? 0
-            guard let relativeView = tableView.cellForRow(at: IndexPath(row: row, section: 0)) else { return }
-            let padding: CGFloat = 12.0
-            let leadingConstraint = dropDownView!.leadingAnchor.constraint(equalTo: relativeView.leadingAnchor, constant: -padding)
-            let trailingConstraint = dropDownView!.trailingAnchor.constraint(equalTo: relativeView.trailingAnchor, constant: padding)
-            let count: CGFloat = CGFloat(rememberDetails.storageArray?.count ?? 1)
-            let heightConstraint = dropDownView!.heightAnchor.constraint(equalToConstant: (count * Constants.UI.RememberPHNDropDownRowHeight.height) + padding)
-            let topConstraint = dropDownView!.topAnchor.constraint(equalTo: relativeView.topAnchor, constant: 80)
-            self.tableView.addConstraints([leadingConstraint, trailingConstraint, heightConstraint, topConstraint])
-            self.dropDownView?.configure(rememberGatewayDetails: self.rememberDetails, delegateOwner: self)
+}
+
+// MARK: For Button tap and enabling
+extension GatewayFormViewController: AppStyleButtonDelegate {
+    func buttonTapped(type: AppStyleButton.ButtonType) {
+        if type == .cancel {
+            self.navigationController?.popViewController(animated: true)
+        } else if type == .submit {
+            prepareRequest()
         }
     }
     
-    private func dismissDropDownView(dropDownView: DropDownView) {
-        dropDownView.removeFromSuperview()
-        self.dropDownView = nil
-    }
-    
-}
-
-// MARK: For enabling enter button
-extension GatewayFormViewController {
     func shouldButtonBeEnabled() -> Bool {
         let formData = dataSource.compactMap { $0.transform() }
         let countArray: [Bool] = formData.map { textFieldData in
@@ -434,37 +441,10 @@ extension GatewayFormViewController {
         }
         return countArray.filter { $0 == true }.count == 3
     }
+
 }
 
-// MARK: For Button tap events
-extension GatewayFormViewController: AppStyleButtonDelegate {
-    func buttonTapped(type: AppStyleButton.ButtonType) {
-        if type == .cancel {
-            self.navigationController?.popViewController(animated: true)
-        } else if type == .submit {
-            guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
-            guard let phn = dataSource[phnIndex].cellStringData else { return }
-            guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
-            guard let birthday = dataSource[dobIndex].cellStringData else { return }
-            guard let dovIndex = getIndexInDataSource(formField: .dateOfVaccination, dataSource: self.dataSource) else { return }
-            guard let vaxDate = dataSource[dovIndex].cellStringData else { return }
-            guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
-            self.whiteSpaceFormattedPHN = phn
-            self.model = model
-            worker?.createInitialVaccineCardRequest(model: model)
-        }
-    }
-}
-
-// MARK: Data Formatting
-extension GatewayFormViewController {
-    private func formatGatewayData(phn: String, birthday: String, vax: String) -> GatewayVaccineCardRequest? {
-        let formattedPHN = phn.removeWhiteSpaceFormatting
-        return GatewayVaccineCardRequest(phn: formattedPHN, dateOfBirth: birthday, dateOfVaccine: vax)
-    }
-}
-
-// MARK: QueueItWorkerDefaultsDelegate
+// MARK: QueueIt
 extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
     func handleVaccineCard(scanResult: ScanResultModel) {
         let model = convertScanResultModelIntoLocalData(data: scanResult, source: .healthGateway)
