@@ -4,7 +4,7 @@
 //
 //  Created by Amir Shayegh on 2021-10-28.
 //
-//
+// TODO: Will need to add vaxDates as an NSManaged property
 
 import Foundation
 import CoreData

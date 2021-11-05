@@ -92,6 +92,7 @@ class StorageService {
         card.name = name
         card.user = user
         card.birthdate = birthdate
+        // TODO: Will need to add vaxDates
         card.federalPass = federalPass
         card.phn = phn
         card.sortOrder = sortOrder
@@ -173,6 +174,7 @@ class StorageService {
             let cards = try context.fetch(VaccineCard.createFetchRequest())
             guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
             card.code = model.code
+            // TODO: Will need to add vaxDates
             card.federalPass = model.fedCode
             card.phn = model.phn
             try context.save()

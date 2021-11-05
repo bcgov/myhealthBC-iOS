@@ -15,12 +15,29 @@ import QueueITLibrary
 import Alamofire
 import BCVaccineValidator
 
+enum GatewayFormSource: Equatable {
+    case healthPassHomeScreen
+    case vaccineCardsScreen
+    case qrMethodSelectionScreen
+    
+    var getVC: UIViewController {
+        switch self {
+        case .healthPassHomeScreen:
+            return HealthPassViewController()
+        case .vaccineCardsScreen:
+            return CovidVaccineCardsViewController()
+        case .qrMethodSelectionScreen:
+            return QRRetrievalMethodViewController()
+        }
+    }
+}
+
 enum GatewayFormViewControllerFetchType: Equatable {
     case bcVaccineCardAndFederalPass
     case federalPassOnly(dob: String, dov: String)
     case vaccinationRecord
     
-    var ds: [FormData] {
+    var getDataSource: [FormData] {
         switch self {
         case .bcVaccineCardAndFederalPass:
             return [
@@ -28,7 +45,10 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dobForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
-                FormData(specificCell: .clickablePrivacyPolicy, configuration: FormData.Configuration(text: .privacyPolicyStatementEmail, linkedStrings: [
+                FormData(specificCell: .clickablePrivacyPolicy, configuration:
+                            FormData.Configuration(text: .privacyPolicyStatementEmail,
+                                                   font: UIFont.bcSansRegularWithSize(size: 13),
+                                                   linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
                     LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
         case .federalPassOnly(let dob, let dov):
@@ -36,7 +56,10 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: dob, isTextField: true), isFieldVisible: false),
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(text: dov, isTextField: true), isFieldVisible: false),
-                FormData(specificCell: .clickablePrivacyPolicy, configuration: FormData.Configuration(text: .privacyPolicyStatementEmail, linkedStrings: [
+                FormData(specificCell: .clickablePrivacyPolicy, configuration:
+                            FormData.Configuration(text: .privacyPolicyStatementEmail,
+                                                   font: UIFont.bcSansRegularWithSize(size: 13),
+                                                   linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
                     LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
         case .vaccinationRecord:
@@ -45,40 +68,18 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dobForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
-                FormData(specificCell: .clickablePrivacyPolicy, configuration: FormData.Configuration(text: .privacyPolicyStatementEmail, linkedStrings: [
+                FormData(specificCell: .clickablePrivacyPolicy, configuration:
+                            FormData.Configuration(text: .privacyPolicyStatementEmail,
+                                                   font: UIFont.bcSansRegularWithSize(size: 13),
+                                                   linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
                     LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
         }
     }
     
-    var getDataSource: [FormDataSource] {
-        switch self {
-        case .bcVaccineCardAndFederalPass:
-            return [
+    //NOTE: Leaving this here to show what we used to have for intro text, as designs are changing daily
+
 //                FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
-                FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
-                FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil, specificCell: .dobForm),
-                FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil, specificCell: .dovForm),
-                FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil, specificCell: .rememberCheckbox),
-                FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
-            ]
-        case .federalPassOnly:
-            return [
-//                FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
-                FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
-                FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
-            ]
-        case .vaccinationRecord:
-            return [
-//                FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
-                FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
-                FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil, specificCell: .dobForm),
-                FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil, specificCell: .dovForm),
-                FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil, specificCell: .rememberCheckbox),
-                FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
-            ]
-        }
-    }
 }
 
 class GatewayFormViewController: BaseViewController {
@@ -98,8 +99,18 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
     
-    private var rememberDetails: RememberedGatewayDetails!
+    // Form setup
+    private var dataSource: [FormData] = []
     private var fetchType: GatewayFormViewControllerFetchType!
+    private var submitButtonEnabled: Bool = false {
+        didSet {
+            submitButton.enabled = submitButtonEnabled
+        }
+    }
+    
+    // For Remembering PHN and DOB
+    private var rememberDetails: RememberedGatewayDetails!
+    private var dropDownView: DropDownView?
     private var whiteSpaceFormattedPHN: String?
     private var rememberedPHNSelected: Bool = false {
         didSet {
@@ -107,19 +118,15 @@ class GatewayFormViewController: BaseViewController {
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
-    private var dropDownView: DropDownView?
+    
+    // For Request
     private var model: GatewayVaccineCardRequest?
     private var worker: QueueItWorker?
     private var healthGateway: HealthGatewayBCGateway!
     private var endpoint = UrlAccessor().getVaccineCard
     
+    // Completion
     var completionHandler: ((String) -> Void)?
-    private var dataSource: [FormDataSource] = []
-    private var submitButtonEnabled: Bool = false {
-        didSet {
-            submitButton.enabled = submitButtonEnabled
-        }
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -196,30 +203,31 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = dataSource[indexPath.row]
-        switch data.type {
-        case .text(type: let type, font: let font):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell, let text = data.cellStringData {
+        let formData = dataSource[indexPath.row]
+        let config = formData.configuration
+        switch formData.specificCell.getCellType {
+        case .text(type: let type):
+            if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell, let text = config.text, let font = config.font {
                 cell.configure(forType: type, text: text, withFont: font)
-                cell.accessibilityTraits = .button
+                cell.accessibilityTraits = .staticText
                 return cell
             }
             return UITableViewCell()
         case .form(type: let type):
             if let cell = tableView.dequeueReusableCell(withIdentifier: FormTableViewCell.getName, for: indexPath) as? FormTableViewCell {
-                cell.configure(formType: type, delegateOwner: self, rememberedDetails: self.rememberDetails, text: data.cellStringData)
+                cell.configure(formType: type, delegateOwner: self, rememberedDetails: self.rememberDetails, text: config.text)
                 return cell
             }
             return UITableViewCell()
-        case .checkbox(text: let text):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: CheckboxTableViewCell.getName, for: indexPath) as? CheckboxTableViewCell {
+        case .checkbox:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: CheckboxTableViewCell.getName, for: indexPath) as? CheckboxTableViewCell, let text = config.text {
                 cell.configure(selected: self.rememberedPHNSelected, text: text, delegateOwner: self)
                 return cell
             }
             return UITableViewCell()
-        case .clickableText(text: let text, linkedStrings: let linkedStrings):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: InteractiveLabelTableViewCell.getName, for: indexPath) as? InteractiveLabelTableViewCell {
-                cell.configure(string: text, linkedStrings: linkedStrings, textColor: AppColours.textBlack, font: UIFont.bcSansRegularWithSize(size: 13))
+        case .clickableText:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: InteractiveLabelTableViewCell.getName, for: indexPath) as? InteractiveLabelTableViewCell, let text = config.text, let linkedStrings = config.linkedStrings, let font = config.font {
+                cell.configure(string: text, linkedStrings: linkedStrings, textColor: AppColours.textBlack, font: font)
                 return cell
             }
             return UITableViewCell()
@@ -262,7 +270,7 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
 
 // MARK: Helper functions
 extension GatewayFormViewController {
-    private func getIndexPathForSpecificCell(_ specificCell: FormDataSource.SpecificCell, inDS ds: [FormDataSource]) -> IndexPath? {
+    private func getIndexPathForSpecificCell(_ specificCell: FormData.SpecificCell, inDS ds: [FormData]) -> IndexPath? {
         var indexPath: IndexPath?
         if let index = ds.firstIndex(where: { $0.specificCell == specificCell }) {
             indexPath = IndexPath(row: index, section: 0)
@@ -270,9 +278,9 @@ extension GatewayFormViewController {
         return indexPath
     }
     
-    private func getIndexInDataSource(formField: FormTextFieldType, dataSource: [FormDataSource]) -> Int? {
-        return dataSource.firstIndex { $0.type == .form(type: formField) }
-    }
+//    private func getIndexInDataSource(formField: FormTextFieldType, dataSource: [FormData]) -> Int? {
+//        return dataSource.firstIndex { $0.type == .form(type: formField) }
+//    }
 }
 
 // MARK: Drop down
@@ -283,13 +291,13 @@ extension GatewayFormViewController: DropDownViewDelegate {
             var indexPaths: [IndexPath] = []
             guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource) else { return }
             indexPaths.append(firstIP)
-            dataSource[firstIP.row].cellStringData = details.phn
+            dataSource[firstIP.row].configuration.text = details.phn
             if fetchType == .bcVaccineCardAndFederalPass {
                 guard let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource) else {
                     return
                 }
                 indexPaths.append(secondIP)
-                dataSource[secondIP.row].cellStringData = details.dob
+                dataSource[secondIP.row].configuration.text = details.dob
             }
             self.tableView.reloadRows(at: indexPaths, with: .automatic)
         }
@@ -308,8 +316,8 @@ extension GatewayFormViewController: DropDownViewDelegate {
             self.tableView.addSubview(dropDownView!)
             self.dropDownView?.translatesAutoresizingMaskIntoConstraints = false
             // TODO: Make this safer - don't like default value here
-            let row = self.getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) ?? 0
-            guard let relativeView = tableView.cellForRow(at: IndexPath(row: row, section: 0)) else { return }
+            guard let indexPath = self.getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource) else { return }
+            guard let relativeView = tableView.cellForRow(at: indexPath) else { return }
             let padding: CGFloat = 12.0
             let leadingConstraint = dropDownView!.leadingAnchor.constraint(equalTo: relativeView.leadingAnchor, constant: -padding)
             let trailingConstraint = dropDownView!.trailingAnchor.constraint(equalTo: relativeView.trailingAnchor, constant: padding)
@@ -332,12 +340,12 @@ extension GatewayFormViewController: DropDownViewDelegate {
 extension GatewayFormViewController {
     
     private func prepareRequest() {
-        guard let phnIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) else { return }
-        guard let phn = dataSource[phnIndex].cellStringData else { return }
-        guard let dobIndex = getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) else { return }
-        guard let birthday = dataSource[dobIndex].cellStringData else { return }
-        guard let dovIndex = getIndexInDataSource(formField: .dateOfVaccination, dataSource: self.dataSource) else { return }
-        guard let vaxDate = dataSource[dovIndex].cellStringData else { return }
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource) else { return }
+        guard let phn = dataSource[phnIndexPath.row].configuration.text else { return }
+        guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource) else { return }
+        guard let birthday = dataSource[dobIndexPath.row].configuration.text else { return }
+        guard let dovIndexPath = getIndexPathForSpecificCell(.dovForm, inDS: self.dataSource) else { return }
+        guard let vaxDate = dataSource[dovIndexPath.row].configuration.text else { return }
         guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
         self.whiteSpaceFormattedPHN = phn
         self.model = model
@@ -353,8 +361,9 @@ extension GatewayFormViewController {
 // MARK: Update data source
 extension GatewayFormViewController {
     func updateDataSource(formField: FormTextFieldType, text: String?) {
-        guard let index = getIndexInDataSource(formField: formField, dataSource: self.dataSource) else { return }
-        self.dataSource[index].cellStringData = text
+        let specificCell = FormData.getSpecificCellFromFormTextField(formField)
+        guard let indexPath = getIndexPathForSpecificCell(specificCell, inDS: self.dataSource) else { return }
+        self.dataSource[indexPath.row].configuration.text = text
         if formField == .personalHealthNumber {
             // Basically - if the user updates the text and it is not equal to the stored PHN, then remove the data
             if text != self.rememberDetails.storageArray?.first?.phn {
@@ -379,7 +388,6 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
         } else {
             self.view.endEditing(true)
         }
-        
     }
     
     func didFinishEditing(formField: FormTextFieldType, text: String?) {
@@ -404,15 +412,16 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     }
     
     private func goToNextTextField(formField: FormTextFieldType) {
-        guard let index = self.getIndexInDataSource(formField: formField, dataSource: self.dataSource), index < (dataSource.count - 1) else { return }
-        let newIndex = index + 1
-        let newIndexPath = IndexPath(row: newIndex, section: 0)
-        if dataSource[newIndex].isTextField(), let cell = self.tableView.cellForRow(at: newIndexPath) as? FormTableViewCell {
+        let specificCell = FormData.getSpecificCellFromFormTextField(formField)
+        guard var indexPath = getIndexPathForSpecificCell(specificCell, inDS: self.dataSource), indexPath.row < (dataSource.count - 1) else { return }
+//        guard let index = self.getIndexInDataSource(formField: formField, dataSource: self.dataSource), index < (dataSource.count - 1) else { return }
+        let newRow = indexPath.row + 1
+        indexPath.row = newRow
+        if dataSource[indexPath.row].specificCell.isTextField, let cell = self.tableView.cellForRow(at: indexPath) as? FormTableViewCell {
             // Go to this cell
             cell.formTextFieldView.openKeyboardAction()
-        } else if let firstIndex = getIndexInDataSource(formField: .personalHealthNumber, dataSource: dataSource) {
+        } else if let firstIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource) {
             // find first index of text field in data source (Note: This is hardcorded as PHN - if the order changes, then this will have to change too
-            let firstIndexPath = IndexPath(row: firstIndex, section: 0)
             if let firstCell = self.tableView.cellForRow(at: firstIndexPath) as? FormTableViewCell {
                 firstCell.formTextFieldView.openKeyboardAction()
             }
@@ -439,7 +448,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             let error = textFieldData.type.setErrorValidationMessage(text: text)
             return error == nil
         }
-        return countArray.filter { $0 == true }.count == 3
+        return countArray.filter { $0 == true }.count == dataSource.map({ $0.specificCell.isTextField && $0.isFieldVisible }).count
     }
 
 }

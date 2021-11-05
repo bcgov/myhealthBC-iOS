@@ -8,59 +8,53 @@
 import UIKit
 
 // MARK: This model is for the table view data source of the gateway screen
-struct FormDataSource: Equatable {
-    enum SpecificCell {
-        case introText
-        case phnForm
-        case dobForm
-        case dovForm
-        case rememberCheckbox
-        case clickablePrivacyPolicy
-    }
-    enum CellType: Equatable {
-        case text(type: TextCellType, font: UIFont)
-        case form(type: FormTextFieldType)
-        case checkbox(text: String)
-        case clickableText(text: String, linkedStrings: [LinkedStrings])
-    }
-    
-    let type: CellType
-    var cellStringData: String?
-    let specificCell: SpecificCell
-    
-    func isTextField() -> Bool {
-        switch type {
-        case .text: return false
-        case .form: return true
-        case .checkbox: return false
-        case .clickableText: return false
-        }
-    }
-    
-    func transform() -> TextFieldData? {
-        switch self.type {
-        case .text: return nil
-        case .form(type: let type):
-            return TextFieldData(type: type, text: self.cellStringData)
-        case .checkbox: return nil
-        case .clickableText: return nil
-        }
-    }
-}
+//struct FormDataSource: Equatable {
+//    enum SpecificCell {
+//        case introText
+//        case phnForm
+//        case dobForm
+//        case dovForm
+//        case rememberCheckbox
+//        case clickablePrivacyPolicy
+//    }
+//    enum CellType: Equatable {
+//        case text(type: TextCellType, font: UIFont)
+//        case form(type: FormTextFieldType)
+//        case checkbox(text: String)
+//        case clickableText(text: String, linkedStrings: [LinkedStrings])
+//    }
+//
+//    let type: CellType
+//    var cellStringData: String?
+//    let specificCell: SpecificCell
+//
+//    func isTextField() -> Bool {
+//        switch type {
+//        case .text: return false
+//        case .form: return true
+//        case .checkbox: return false
+//        case .clickableText: return false
+//        }
+//    }
+//
+//    func transform() -> TextFieldData? {
+//        switch self.type {
+//        case .text: return nil
+//        case .form(type: let type):
+//            return TextFieldData(type: type, text: self.cellStringData)
+//        case .checkbox: return nil
+//        case .clickableText: return nil
+//        }
+//    }
+//}
 
-struct TextFieldData: Equatable {
-    let type: FormTextFieldType
-    let text: String?
-}
-
-
+//struct TextFieldData: Equatable {
+//    let type: FormTextFieldType
+//    let text: String?
+//}
 
 
 
-
-
-
-// TESTING AREA
 struct FormData: Equatable {
     struct Configuration: Equatable {
         var text: String? = nil
@@ -98,8 +92,40 @@ struct FormData: Equatable {
                 return .clickableText
             }
         }
+        
+        var isTextField: Bool {
+            switch self {
+            case .phnForm: return true
+            case .dobForm: return true
+            case .dovForm: return true
+            default: return false
+            }
+        }
     }
+    
+    func transform() -> TextFieldData? {
+        switch self.specificCell {
+        case .phnForm: return TextFieldData(type: .personalHealthNumber, text: self.configuration.text)
+        case .dobForm: return TextFieldData(type: .dateOfBirth, text: self.configuration.text)
+        case .dovForm: return TextFieldData(type: .dateOfVaccination, text: self.configuration.text)
+        default: return nil
+        }
+    }
+    
+    static func getSpecificCellFromFormTextField(_ formTextField: FormTextFieldType) -> SpecificCell {
+        switch formTextField {
+        case .personalHealthNumber: return .phnForm
+        case .dateOfBirth: return .dobForm
+        case .dateOfVaccination: return .dovForm
+        }
+    }
+    
     var specificCell: SpecificCell
     var configuration: Configuration
     var isFieldVisible: Bool
+}
+
+struct TextFieldData: Equatable {
+    let type: FormTextFieldType
+    let text: String?
 }

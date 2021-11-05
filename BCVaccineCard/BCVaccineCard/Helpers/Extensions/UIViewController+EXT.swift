@@ -311,3 +311,26 @@ extension UIViewController {
         NotificationCenter.default.post(name: .cardAddedNotification, object: nil, userInfo: ["id": id])
     }
 }
+
+// MARK: GoTo Health Gateway Logic
+extension UIViewController {
+    func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource) {
+        var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+        if let details = Defaults.rememberGatewayDetails {
+            rememberDetails = details
+        }
+        
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass)
+        if source == .vaccineCardsScreen {
+            vc.completionHandler = { [weak self] id in
+                guard let `self` = self else { return }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.postCardAddedNotification(id: id)
+                }
+                
+            }
+        }
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+}

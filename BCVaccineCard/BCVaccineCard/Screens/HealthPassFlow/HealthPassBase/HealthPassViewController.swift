@@ -219,17 +219,17 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: Federal pass action button delegate
 extension HealthPassViewController: FederalPassViewDelegate {
-    func federalPassButtonTapped(pass: String?) {
-        if let pass = pass {
+    func federalPassButtonTapped(model: AppVaccinePassportModel?) {
+        if let pass = model?.codableModel.fedCode {
             guard let data = Data(base64URLEncoded: pass) else {
                 return
             }
             let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
             pdfView.show(data: data, in: self.parent ?? self)
         } else {
-            // TODO: Go To health gateway to fetch pass - will need to configure so that HG can get DOB and DOV from BC Vaccine card and we hide the last two HG form cells
-            // NOTE: Will need to refactor HG a bit to adjust for this logic (in terms of remembering, and index references, need to make safe)
-            print("Push GatewayVC to stack with fed pass only config")
+            guard let model = model else { return }
+            //TODO: - create function to fetch vax dates - maybe check last?
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.first ?? "2021-05-23"), source: .healthPassHomeScreen)
         }
     }
 
