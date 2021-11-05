@@ -114,7 +114,7 @@ class GatewayFormViewController: BaseViewController {
     private var whiteSpaceFormattedPHN: String?
     private var rememberedPHNSelected: Bool = false {
         didSet {
-            guard let indexPath = getIndexPathForSpecificCell(.rememberCheckbox, inDS: self.dataSource) else { return }
+            guard let indexPath = getIndexPathForSpecificCell(.rememberCheckbox, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
@@ -271,7 +271,11 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
 
 // MARK: Helper functions
 extension GatewayFormViewController {
-    private func getIndexPathForSpecificCell(_ specificCell: FormData.SpecificCell, inDS ds: [FormData]) -> IndexPath? {
+    private func getIndexPathForSpecificCell(_ specificCell: FormData.SpecificCell, inDS dataSource: [FormData], usingOnlyShownCells: Bool) -> IndexPath? {
+        var ds = dataSource
+        if usingOnlyShownCells {
+            ds = dataSource.filter({ $0.isFieldVisible })
+        }
         var indexPath: IndexPath?
         if let index = ds.firstIndex(where: { $0.specificCell == specificCell }) {
             indexPath = IndexPath(row: index, section: 0)
@@ -290,11 +294,11 @@ extension GatewayFormViewController: DropDownViewDelegate {
         if details.phn == self.rememberDetails.storageArray?.first?.phn {
             self.rememberedPHNSelected = true
             var indexPaths: [IndexPath] = []
-            guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource) else { return }
+            guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
             indexPaths.append(firstIP)
             dataSource[firstIP.row].configuration.text = details.phn
             if fetchType == .bcVaccineCardAndFederalPass {
-                guard let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource) else {
+                guard let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: true) else {
                     return
                 }
                 indexPaths.append(secondIP)
@@ -317,7 +321,7 @@ extension GatewayFormViewController: DropDownViewDelegate {
             self.tableView.addSubview(dropDownView!)
             self.dropDownView?.translatesAutoresizingMaskIntoConstraints = false
             // TODO: Make this safer - don't like default value here
-            guard let indexPath = self.getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource) else { return }
+            guard let indexPath = self.getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
             guard let relativeView = tableView.cellForRow(at: indexPath) else { return }
             let padding: CGFloat = 12.0
             let leadingConstraint = dropDownView!.leadingAnchor.constraint(equalTo: relativeView.leadingAnchor, constant: -padding)
@@ -341,11 +345,11 @@ extension GatewayFormViewController: DropDownViewDelegate {
 extension GatewayFormViewController {
     
     private func prepareRequest() {
-        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource) else { return }
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
         guard let phn = dataSource[phnIndexPath.row].configuration.text else { return }
-        guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource) else { return }
+        guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
         guard let birthday = dataSource[dobIndexPath.row].configuration.text else { return }
-        guard let dovIndexPath = getIndexPathForSpecificCell(.dovForm, inDS: self.dataSource) else { return }
+        guard let dovIndexPath = getIndexPathForSpecificCell(.dovForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
         guard let vaxDate = dataSource[dovIndexPath.row].configuration.text else { return }
         guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
         self.whiteSpaceFormattedPHN = phn
@@ -363,7 +367,7 @@ extension GatewayFormViewController {
 extension GatewayFormViewController {
     func updateDataSource(formField: FormTextFieldType, text: String?) {
         let specificCell = FormData.getSpecificCellFromFormTextField(formField)
-        guard let indexPath = getIndexPathForSpecificCell(specificCell, inDS: self.dataSource) else { return }
+        guard let indexPath = getIndexPathForSpecificCell(specificCell, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
         self.dataSource[indexPath.row].configuration.text = text
         if formField == .personalHealthNumber {
             // Basically - if the user updates the text and it is not equal to the stored PHN, then remove the data
@@ -414,14 +418,15 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     
     private func goToNextTextField(formField: FormTextFieldType) {
         let specificCell = FormData.getSpecificCellFromFormTextField(formField)
-        guard var indexPath = getIndexPathForSpecificCell(specificCell, inDS: self.dataSource), indexPath.row < (dataSource.count - 1) else { return }
+        let shownDS = dataSource.filter { $0.isFieldVisible }
+        guard var indexPath = getIndexPathForSpecificCell(specificCell, inDS: self.dataSource, usingOnlyShownCells: true), indexPath.row < (shownDS.count - 1) else { return }
 //        guard let index = self.getIndexInDataSource(formField: formField, dataSource: self.dataSource), index < (dataSource.count - 1) else { return }
         let newRow = indexPath.row + 1
         indexPath.row = newRow
-        if dataSource[indexPath.row].specificCell.isTextField, let cell = self.tableView.cellForRow(at: indexPath) as? FormTableViewCell {
+        if shownDS[indexPath.row].specificCell.isTextField, let cell = self.tableView.cellForRow(at: indexPath) as? FormTableViewCell {
             // Go to this cell
             cell.formTextFieldView.openKeyboardAction()
-        } else if let firstIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource) {
+        } else if let firstIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: true) {
             // find first index of text field in data source (Note: This is hardcorded as PHN - if the order changes, then this will have to change too
             if let firstCell = self.tableView.cellForRow(at: firstIndexPath) as? FormTableViewCell {
                 firstCell.formTextFieldView.openKeyboardAction()
