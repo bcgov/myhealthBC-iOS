@@ -262,10 +262,15 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
 
 // MARK: Federal pass action button delegate
 extension CovidVaccineCardsViewController: FederalPassViewDelegate {
-    func federalPassButtonTapped(hasPass: Bool) {
-        if hasPass {
+    func federalPassButtonTapped(pass: String?) {
+        if let pass =  pass {
             // TODO: Open pass here
             print("Pass opened here")
+            guard let data = Data(base64URLEncoded: pass) else {
+                return
+            }
+            let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
+            pdfView.show(data: data, in: self.parent ?? self)
         } else {
             // TODO: Go To health gateway to fetch pass - will need to configure so that HG can get DOB and DOV from BC Vaccine card and we hide the last two HG form cells
             // NOTE: Will need to refactor HG a bit to adjust for this logic (in terms of remembering, and index references, need to make safe)

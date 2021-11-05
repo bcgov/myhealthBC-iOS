@@ -8,7 +8,7 @@
 import UIKit
 
 protocol FederalPassViewDelegate: AnyObject {
-    func federalPassButtonTapped(hasPass: Bool)
+    func federalPassButtonTapped(pass: String?)
 }
 
 class FederalPassView: UIView {
@@ -22,7 +22,7 @@ class FederalPassView: UIView {
     @IBOutlet weak private var passButtonForAction: UIButton!
     
     weak var delegate: FederalPassViewDelegate?
-    private var hasPass: Bool!
+    private var federalPassString: String?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,7 +76,7 @@ class FederalPassView: UIView {
     
     func configure(model: AppVaccinePassportModel, delegateOwner: UIViewController) {
         self.isAccessibilityElement = false
-        self.hasPass = model.codableModel.fedCode != nil
+        self.federalPassString = model.codableModel.fedCode
         passTitleLabel.text = model.codableModel.fedCode != nil ? .showFederalProof : .getFederalProof
         passSubtitleLabel.text = .federalProofSubtitle
         let image = model.codableModel.fedCode != nil ? UIImage(named: "arrow-right-black") : UIImage(named: "add-icon-black")
@@ -87,6 +87,6 @@ class FederalPassView: UIView {
     }
     
     @IBAction func fedPassButtonTapped(_ sender: UIButton) {
-        self.delegate?.federalPassButtonTapped(hasPass: self.hasPass)
+        self.delegate?.federalPassButtonTapped(pass: federalPassString)
     }
 }

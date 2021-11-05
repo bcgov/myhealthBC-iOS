@@ -27,7 +27,7 @@ extension User {
     public var vaccineCardArray: [VaccineCard] {
         let set = vaccineCard as? Set<VaccineCard> ?? []
         return set.sorted {
-            $0.sortOrder < $1.sortOrder
+            $0.sortOrder > $1.sortOrder
         }
     }
 }
