@@ -84,7 +84,7 @@ class StorageService {
     ///   - name: card holder name: NOT the name of the user storing data
     ///   - userId: User id under which this card is to be stored
     /// - Returns: boolean indicating success or failure
-    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, userId: String, federalPass: String? = nil) -> Bool {
+    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, userId: String, phn: String? = nil, federalPass: String? = nil) -> Bool {
         guard let context = managedContext, let user = fetchUser(id: userId) else {return false}
         let sortOrder = Int64(fetchVaccineCards(for: userId).count)
         let card = VaccineCard(context: context)
@@ -92,9 +92,8 @@ class StorageService {
         card.name = name
         card.user = user
         card.birthdate = birthdate
-        if let fp = federalPass {
-            card.federalPass = fp
-        }
+        card.federalPass = federalPass
+        card.phn = phn
         card.sortOrder = sortOrder
         do {
             try context.save()
@@ -175,6 +174,7 @@ class StorageService {
             guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
             card.code = model.code
             card.federalPass = model.fedCode
+            card.phn = model.phn
             try context.save()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -211,7 +211,7 @@ class StorageService {
                 case .None:
                     status = .notVaxed
                 }
-                let model = LocallyStoredVaccinePassportModel(code: code, birthdate: processed.birthdate, name: processed.name, issueDate: processed.issueDate, status: status, source: .imported, fedCode: cardToProcess.federalPass)
+                let model = LocallyStoredVaccinePassportModel(code: code, birthdate: processed.birthdate, name: processed.name, issueDate: processed.issueDate, status: status, source: .imported, fedCode: cardToProcess.federalPass, phn: cardToProcess.phn)
                 processedCards.append(AppVaccinePassportModel(codableModel: model))
                 self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
             }

@@ -21,6 +21,7 @@ extension VaccineCard {
     @NSManaged public var sortOrder: Int64
     @NSManaged public var birthdate: String?
     @NSManaged public var federalPass: String?
+    @NSManaged public var phn: String?
     @NSManaged public var user: User?
     
     

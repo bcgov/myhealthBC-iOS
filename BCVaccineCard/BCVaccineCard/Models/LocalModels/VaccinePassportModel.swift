@@ -39,6 +39,7 @@ struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     let status: VaccineStatus
     let source: Source
     var fedCode: String?
+    let phn: String?
     
     func transform() -> AppVaccinePassportModel {
         return AppVaccinePassportModel(codableModel: self)
