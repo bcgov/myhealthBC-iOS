@@ -6,7 +6,6 @@
 // initial
 
 import UIKit
-import PDFKit
 
 class HealthPassViewController: BaseViewController {
     

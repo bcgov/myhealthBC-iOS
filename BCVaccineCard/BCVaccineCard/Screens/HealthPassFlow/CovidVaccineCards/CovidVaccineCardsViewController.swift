@@ -7,7 +7,6 @@
 
 import UIKit
 import BCVaccineValidator
-import PDFKit
 
 class CovidVaccineCardsViewController: BaseViewController {
     
