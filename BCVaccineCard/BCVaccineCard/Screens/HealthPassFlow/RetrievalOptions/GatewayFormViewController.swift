@@ -10,10 +10,39 @@ import QueueITLibrary
 import Alamofire
 import BCVaccineValidator
 
-enum GatewayFormViewControllerFetchType {
-    case bcVaccineCard
-    case federalPass
+enum GatewayFormViewControllerFetchType: Equatable {
+    case bcVaccineCardAndFederalPass
+    case federalPassOnly(dob: String, dov: String)
     case vaccinationRecord
+    
+    var getDataSource: [FormDataSource] {
+        switch self {
+        case .bcVaccineCardAndFederalPass:
+            return [
+//                FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
+                FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
+                FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil, specificCell: .dobForm),
+                FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil, specificCell: .dovForm),
+                FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil, specificCell: .rememberCheckbox),
+                FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
+            ]
+        case .federalPassOnly:
+            return [
+//                FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
+                FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
+                FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
+            ]
+        case .vaccinationRecord:
+            return [
+//                FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
+                FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
+                FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil, specificCell: .dobForm),
+                FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil, specificCell: .dovForm),
+                FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil, specificCell: .rememberCheckbox),
+                FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
+            ]
+        }
+    }
 }
 
 class GatewayFormViewController: BaseViewController {
@@ -23,6 +52,7 @@ class GatewayFormViewController: BaseViewController {
             vc.healthGateway = GatewayAccess.factory.makeHealthGatewayBCGateway()
             vc.rememberDetails = rememberDetails
             vc.fetchType = fetchType
+            vc.dataSource = fetchType.getDataSource
             return vc
         }
         return GatewayFormViewController()
@@ -37,8 +67,8 @@ class GatewayFormViewController: BaseViewController {
     private var whiteSpaceFormattedPHN: String?
     private var rememberedPHNSelected: Bool = false {
         didSet {
-            // TODO: Need to find a more reusable way of doing this - probably with a getter property (isCheckboxCell)
-            tableView.reloadRows(at: [IndexPath(row: 4, section: 0)], with: .automatic)
+            guard let indexPath = getIndexPathForSpecificCell(.rememberCheckbox, inDS: self.dataSource) else { return }
+            tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
     private var dropDownView: DropDownView?
@@ -83,7 +113,7 @@ class GatewayFormViewController: BaseViewController {
     
     private func setup() {
         setupButtons()
-        setupDataSource()
+//        setupDataSource()
         setupTableView()
         setupQueueItWorker()
     }
@@ -93,16 +123,16 @@ class GatewayFormViewController: BaseViewController {
         submitButton.configure(withStyle: .blue, buttonType: .submit, delegateOwner: self, enabled: false)
     }
     
-    private func setupDataSource() {
-        dataSource = [
-            FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
-            FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
-            FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil, specificCell: .dobForm),
-            FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil, specificCell: .dovForm),
-            FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil, specificCell: .rememberCheckbox),
-            FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
-        ]
-    }
+//    private func setupDataSource() {
+//        dataSource = [
+//            FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
+//            FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
+//            FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil, specificCell: .dobForm),
+//            FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil, specificCell: .dovForm),
+//            FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil, specificCell: .rememberCheckbox),
+//            FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
+//        ]
+//    }
     
     private func setupQueueItWorker() {
         self.worker = QueueItWorker(delegateOwner: self, healthGateway: self.healthGateway, delegate: self, endpoint: self.endpoint)
@@ -232,13 +262,17 @@ extension GatewayFormViewController: DropDownViewDelegate {
     func didChooseStoragePHN(details: GatewayStorageProperties) {
         if details.phn == self.rememberDetails.storageArray?.first?.phn {
             self.rememberedPHNSelected = true
-            guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource),
-                  let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource) else {
-                return
+            var indexPaths: [IndexPath] = []
+            guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource) else { return }
+            indexPaths.append(firstIP)
+            dataSource[firstIP.row].cellStringData = details.phn
+            if fetchType == .bcVaccineCardAndFederalPass {
+                guard let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource) else {
+                    return
+                }
+                indexPaths.append(secondIP)
+                dataSource[secondIP.row].cellStringData = details.dob
             }
-            let indexPaths: [IndexPath] = [firstIP, secondIP]
-            dataSource[indexPaths[0].row].cellStringData = details.phn
-            dataSource[indexPaths[1].row].cellStringData = details.dob
             self.tableView.reloadRows(at: indexPaths, with: .automatic)
         }
         if let dropDownView = dropDownView {
@@ -276,7 +310,12 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     }
     
     func goToNextFormTextField(formField: FormTextFieldType) {
-        goToNextTextField(formField: formField)
+        if fetchType == .bcVaccineCardAndFederalPass {
+            goToNextTextField(formField: formField)
+        } else {
+            self.view.endEditing(true)
+        }
+        
     }
     
     func didFinishEditing(formField: FormTextFieldType, text: String?) {
@@ -325,8 +364,8 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
             self.dropDownView = DropDownView()
             self.tableView.addSubview(dropDownView!)
             self.dropDownView?.translatesAutoresizingMaskIntoConstraints = false
-            let row = self.getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) ?? 1
-//            let rect = view.convert(tableView.rectForRow(at: IndexPath(row: row, section: 0)), from: self.tableView)
+            // TODO: Make this safer - don't like default value here
+            let row = self.getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) ?? 0
             guard let relativeView = tableView.cellForRow(at: IndexPath(row: row, section: 0)) else { return }
             let padding: CGFloat = 12.0
             let leadingConstraint = dropDownView!.leadingAnchor.constraint(equalTo: relativeView.leadingAnchor, constant: -padding)

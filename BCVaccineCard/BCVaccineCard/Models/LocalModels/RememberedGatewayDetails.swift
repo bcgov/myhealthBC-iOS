@@ -9,6 +9,11 @@ import Foundation
 
 struct RememberedGatewayDetails: Codable {
     var storageArray: [GatewayStorageProperties]?
+    
+    func getIndexOfPHN(_ phn: String) -> Int? {
+        guard let storageArray = storageArray else { return nil }
+        return storageArray.firstIndex { $0.phn == phn }
+    }
 }
 
 struct GatewayStorageProperties: Codable {
