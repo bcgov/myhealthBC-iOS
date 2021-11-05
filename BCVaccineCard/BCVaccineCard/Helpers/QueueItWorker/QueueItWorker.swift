@@ -204,33 +204,32 @@ extension QueueItWorker {
                 print(vaccineCard)
                 // Note: Have to add error handling here, because whoever set up this response didn't do it correctly - error is part of ths success response object
                 // Noticed: Errors seem to be very inconsistent in terms of the response object
-                if let resultMessage = vaccineCard.resultError?.resultMessage {
+                if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode == nil && vaccineCard.resourcePayload?.federalVaccineProof == nil) {
                     let adjustedMessage = resultMessage == .errorParsingPHNFromHG ? .errorParsingPHNMessage : resultMessage
                     self.delegate?.handleError(title: .error, error: ResultError(resultMessage: adjustedMessage))
                     self.delegate?.hideLoader()
-                }
-                let qrResult = vaccineCard.transformResponseIntoQRCode()
-                guard let code = qrResult.qrString else {
-                    self.delegate?.handleError(title: .error, error: ResultError(resultMessage: qrResult.error))
-                    self.delegate?.hideLoader()
-                    return
-                }
-                BCVaccineValidator.shared.validate(code: code) { [weak self] result in
-                    guard let `self` = self else { return }
-                    guard let data = result.result else {
-                        self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .invalidQRCodeMessage))
+                } else {
+                    let qrResult = vaccineCard.transformResponseIntoQRCode()
+                    guard let code = qrResult.qrString else {
+                        self.delegate?.handleError(title: .error, error: ResultError(resultMessage: qrResult.error))
                         self.delegate?.hideLoader()
                         return
                     }
-                    DispatchQueue.main.async { [weak self] in
-                        guard let `self` = self else {return}
-                        self.delegate?.handleVaccineCard(scanResult: data, fedCode: vaccineCard.resourcePayload?.federalVaccineProof?.data)
-                        self.delegate?.hideLoader()
+                    BCVaccineValidator.shared.validate(code: code) { [weak self] result in
+                        guard let `self` = self else { return }
+                        guard let data = result.result else {
+                            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .invalidQRCodeMessage))
+                            self.delegate?.hideLoader()
+                            return
+                        }
+                        DispatchQueue.main.async { [weak self] in
+                            guard let `self` = self else {return}
+                            self.delegate?.handleVaccineCard(scanResult: data, fedCode: vaccineCard.resourcePayload?.federalVaccineProof?.data)
+                            self.delegate?.hideLoader()
+                        }
+                        
                     }
-                    
                 }
-
-                
             case .failure(let error):
                 print(error)
                 self.delegate?.hideLoader()
