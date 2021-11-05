@@ -84,7 +84,7 @@ class StorageService {
     ///   - name: card holder name: NOT the name of the user storing data
     ///   - userId: User id under which this card is to be stored
     /// - Returns: boolean indicating success or failure
-    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, userId: String, phn: String? = nil, federalPass: String? = nil) -> Bool {
+    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, userId: String, phn: String? = nil, federalPass: String? = nil, vaxDates: [String]? = nil) -> Bool {
         guard let context = managedContext, let user = fetchUser(id: userId) else {return false}
         let sortOrder = Int64(fetchVaccineCards(for: userId).count)
         let card = VaccineCard(context: context)
@@ -92,8 +92,8 @@ class StorageService {
         card.name = name
         card.user = user
         card.birthdate = birthdate
-        // TODO: Will need to add vaxDates
         card.federalPass = federalPass
+        card.vaxDates = vaxDates
         card.phn = phn
         card.sortOrder = sortOrder
         do {
@@ -174,7 +174,7 @@ class StorageService {
             let cards = try context.fetch(VaccineCard.createFetchRequest())
             guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
             card.code = model.code
-            // TODO: Will need to add vaxDates
+            card.vaxDates = model.vaxDates
             card.federalPass = model.fedCode
             card.phn = model.phn
             try context.save()
@@ -202,6 +202,7 @@ class StorageService {
               let code = cardToProcess.code else {
             return recursivelyProcessStored(cards: remainingCards, processed: processed, completion: completion)
         }
+        // TODO: Will need to get vax dates from the processed result and add to model below
         BCVaccineValidator.shared.validate(code: code) { result in
             if let processed = result.result {
                 var status: VaccineStatus

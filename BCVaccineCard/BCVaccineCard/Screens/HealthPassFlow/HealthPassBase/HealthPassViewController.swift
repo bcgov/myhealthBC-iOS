@@ -225,14 +225,21 @@ extension HealthPassViewController: FederalPassViewDelegate {
                 return
             }
             let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
+            pdfView.delegate = self
             pdfView.show(data: data, in: self.parent ?? self)
         } else {
             guard let model = model else { return }
-            //TODO: - create function to fetch vax dates - maybe check last?
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.first ?? "2021-05-23"), source: .healthPassHomeScreen)
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .healthPassHomeScreen)
         }
     }
 
+}
+
+// MARK: Federal Pass PDF View Delegate
+extension HealthPassViewController: FederalPassPDFViewDelegate {
+    func viewDismissed() {
+        self.tabBarController?.tabBar.isHidden = false
+    }
 }
 
 // MARK: Add card button table view cell delegate here

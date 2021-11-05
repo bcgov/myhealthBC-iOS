@@ -46,7 +46,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatementEmail,
+                            FormData.Configuration(text: .privacyPolicyStatement,
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -57,7 +57,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: dob, isTextField: true), isFieldVisible: false),
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(text: dov, isTextField: true), isFieldVisible: false),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatementEmail,
+                            FormData.Configuration(text: .privacyPolicyStatement,
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -69,7 +69,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatementEmail,
+                            FormData.Configuration(text: .privacyPolicyStatement,
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -305,6 +305,7 @@ extension GatewayFormViewController: DropDownViewDelegate {
                 dataSource[secondIP.row].configuration.text = details.dob
             }
             self.tableView.reloadRows(at: indexPaths, with: .automatic)
+            submitButtonEnabled = shouldButtonBeEnabled()
         }
         if let dropDownView = dropDownView {
             self.dismissDropDownView(dropDownView: dropDownView)
@@ -454,7 +455,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             let error = textFieldData.type.setErrorValidationMessage(text: text)
             return error == nil
         }
-        return countArray.filter { $0 == true }.count == dataSource.filter({ $0.specificCell.isTextField && $0.isFieldVisible }).count
+        return countArray.filter { $0 == true }.count == dataSource.filter({ $0.specificCell.isTextField }).count
     }
 
 }
@@ -491,7 +492,9 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
         doesCardNeedToBeUpdated(modelToUpdate: model) {[weak self] needsUpdate in
             guard let `self` = self else {return}
             if needsUpdate {
-                self.navigationController?.popViewController(animated: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.navigationController?.popViewController(animated: true)
+                }
                 self.updateCardInLocalStorage(model: model.transform())
                 self.completionHandler?(model.id ?? "")
             } else {
@@ -500,7 +503,9 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
                     if isAlreadyInWallet {
                         self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                             guard let `self` = self else {return}
-                            self.navigationController?.popViewController(animated: true)
+                            DispatchQueue.main.async {
+                                self.navigationController?.popViewController(animated: true)
+                            }
                             self.completionHandler?(model.id ?? "")
                         }
                         return

@@ -7,6 +7,7 @@
 
 import UIKit
 import BCVaccineValidator
+import PDFKit
 
 class CovidVaccineCardsViewController: BaseViewController {
     
@@ -269,14 +270,21 @@ extension CovidVaccineCardsViewController: FederalPassViewDelegate {
                 return
             }
             let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
+            pdfView.delegate = self
             pdfView.show(data: data, in: self.parent ?? self)
         } else {
             guard let model = model else { return }
-            //TODO: - create function to fetch vax dates - maybe check last?
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.first ?? "2021-05-23"), source: .vaccineCardsScreen)
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .vaccineCardsScreen)
         }
     }
 
+}
+
+// MARK: Federal Pass PDF View Delegate
+extension CovidVaccineCardsViewController: FederalPassPDFViewDelegate {
+    func viewDismissed() {
+        self.tabBarController?.tabBar.isHidden = false
+    }
 }
 
 // MARK: Adjusting data source functions

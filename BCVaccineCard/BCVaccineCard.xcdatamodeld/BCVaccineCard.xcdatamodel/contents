@@ -12,10 +12,11 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <attribute name="sortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="vaxDates" optional="YES" attributeType="Transformable"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="vaccineCard" inverseEntity="User"/>
     </entity>
     <elements>
         <element name="User" positionX="-54" positionY="0" width="128" height="74"/>
-        <element name="VaccineCard" positionX="-63" positionY="-18" width="128" height="134"/>
+        <element name="VaccineCard" positionX="-63" positionY="-18" width="128" height="149"/>
     </elements>
 </model>
