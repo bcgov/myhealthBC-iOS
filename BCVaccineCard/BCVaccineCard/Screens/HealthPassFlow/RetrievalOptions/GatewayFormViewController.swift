@@ -95,12 +95,12 @@ class GatewayFormViewController: BaseViewController {
     
     private func setupDataSource() {
         dataSource = [
-            FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription),
-            FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil),
-            FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil),
-            FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil),
-            FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil),
-            FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil)
+            FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
+            FormDataSource(type: .form(type: .personalHealthNumber), cellStringData: nil, specificCell: .phnForm),
+            FormDataSource(type: .form(type: .dateOfBirth), cellStringData: nil, specificCell: .dobForm),
+            FormDataSource(type: .form(type: .dateOfVaccination), cellStringData: nil, specificCell: .dovForm),
+            FormDataSource(type: .checkbox(text: .rememberePHNandDOB), cellStringData: nil, specificCell: .rememberCheckbox),
+            FormDataSource(type: .clickableText(text: .privacyPolicyStatement, linkedStrings: [LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink), LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)]), cellStringData: nil, specificCell: .clickablePrivacyPolicy)
         ]
     }
     
@@ -216,16 +216,27 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
     
 }
 
+// MARK: Helper function to return index path of a given cell type
+extension GatewayFormViewController {
+    private func getIndexPathForSpecificCell(_ specificCell: FormDataSource.SpecificCell, inDS ds: [FormDataSource]) -> IndexPath? {
+        var indexPath: IndexPath?
+        if let index = ds.firstIndex(where: { $0.specificCell == specificCell }) {
+            indexPath = IndexPath(row: index, section: 0)
+        }
+        return indexPath
+    }
+}
+
 // MARK: Drop down delegate
 extension GatewayFormViewController: DropDownViewDelegate {
     func didChooseStoragePHN(details: GatewayStorageProperties) {
         if details.phn == self.rememberDetails.storageArray?.first?.phn {
             self.rememberedPHNSelected = true
-            // TODO: Should find a better way to unwrapp this than to use default value
-            let indexPaths: [IndexPath] = [
-                IndexPath(row: getIndexInDataSource(formField: .personalHealthNumber, dataSource: self.dataSource) ?? 1, section: 0),
-                IndexPath(row: getIndexInDataSource(formField: .dateOfBirth, dataSource: self.dataSource) ?? 2, section: 0)
-            ]
+            guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource),
+                  let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource) else {
+                return
+            }
+            let indexPaths: [IndexPath] = [firstIP, secondIP]
             dataSource[indexPaths[0].row].cellStringData = details.phn
             dataSource[indexPaths[1].row].cellStringData = details.dob
             self.tableView.reloadRows(at: indexPaths, with: .automatic)

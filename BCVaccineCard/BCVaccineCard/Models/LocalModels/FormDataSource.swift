@@ -9,19 +9,15 @@ import UIKit
 
 // MARK: This model is for the table view data source of the gateway screen
 struct FormDataSource: Equatable {
+    enum SpecificCell {
+        case introText
+        case phnForm
+        case dobForm
+        case dovForm
+        case rememberCheckbox
+        case clickablePrivacyPolicy
+    }
     enum CellType: Equatable {
-//        static func == (lhs: FormDataSource.CellType, rhs: FormDataSource.CellType) -> Bool {
-//            switch (lhs, rhs) {
-//            case (let .text(lhsType, _), let .text(rhsType, _)):
-//                return (lhsType) == (rhsType)
-//            case (let .form(lhsType), let .form(rhsType)):
-//                return (lhsType) == (rhsType)
-//            case (let .clickableText(lhsLinkedStrings), let .clickableText(rhsLinkedStrings)):
-//                return (lhsLinkedStrings) == (rhsLinkedStrings)
-//            default:
-//                return false
-//            }
-//        }
         case text(type: TextCellType, font: UIFont)
         case form(type: FormTextFieldType)
         case checkbox(text: String)
@@ -30,6 +26,7 @@ struct FormDataSource: Equatable {
     
     let type: CellType
     var cellStringData: String?
+    let specificCell: SpecificCell
     
     func isTextField() -> Bool {
         switch type {
