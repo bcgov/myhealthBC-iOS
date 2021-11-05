@@ -214,7 +214,7 @@ class StorageService {
                 case .None:
                     status = .notVaxed
                 }
-                let model = LocallyStoredVaccinePassportModel(code: code, birthdate: processed.birthdate, name: processed.name, issueDate: processed.issueDate, status: status, source: .imported, fedCode: cardToProcess.federalPass, phn: cardToProcess.phn)
+                let model = LocallyStoredVaccinePassportModel(code: code, birthdate: processed.birthdate, vaxDates: processed.immunizations.compactMap({$0.date}), name: processed.name, issueDate: processed.issueDate, status: status, source: .imported, fedCode: cardToProcess.federalPass, phn: cardToProcess.phn)
                 processedCards.append(AppVaccinePassportModel(codableModel: model))
                 self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
             }

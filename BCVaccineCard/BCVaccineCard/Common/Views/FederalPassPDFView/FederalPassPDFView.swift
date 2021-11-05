@@ -21,6 +21,7 @@ class FederalPassPDFView: UIView {
     
     private var pdfView: PDFView?
     private var parent: UIViewController?
+    private var pdfData: Data?
     var delegate: FederalPassPDFViewDelegate?
     
     public func show(data: Data, in parent: UIViewController) {
@@ -28,6 +29,7 @@ class FederalPassPDFView: UIView {
             return
         }
         self.parent = parent
+        self.pdfData = data
         self.frame = .zero
         parent.view.addSubview(self)
         self.addEqualSizeContraints(to: parent.view)
@@ -47,7 +49,9 @@ class FederalPassPDFView: UIView {
     }
     
     @IBAction func shareButtonTapped(_ sender: Any) {
-        // TODO
+        let ac = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
+        parent?.present(ac, animated: true)
+
     }
     
     private func style() {
