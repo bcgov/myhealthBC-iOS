@@ -247,7 +247,7 @@ extension UIViewController {
     
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
         let status = VaccineStatus.init(rawValue: data.status.rawValue) ?? .notVaxed
-        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, name: data.name, issueDate: data.issueDate, status: status, source: source, phn: nil)
+        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, vaxDates: data.immunizations.compactMap({$0.date}), name: data.name, issueDate: data.issueDate, status: status, source: source, phn: nil)
     }
 }
 

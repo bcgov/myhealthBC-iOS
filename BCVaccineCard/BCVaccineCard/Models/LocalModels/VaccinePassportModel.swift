@@ -34,7 +34,7 @@ enum Source: String, Codable {
 struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     let code: String
     let birthdate: String
-    var vaxDates: [String] = []
+    var vaxDates: [String]
     let name: String
     let issueDate: Double
     let status: VaccineStatus
