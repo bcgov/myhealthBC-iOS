@@ -53,3 +53,53 @@ struct TextFieldData: Equatable {
     let text: String?
 }
 
+
+
+
+
+
+
+
+// TESTING AREA
+struct FormData: Equatable {
+    struct Configuration: Equatable {
+        var text: String? = nil
+        var font: UIFont? = nil
+        var linkedStrings: [LinkedStrings]? = nil
+        let isTextField: Bool
+    }
+    enum TableViewCellType {
+        case text(type: TextCellType)
+        case form(type: FormTextFieldType)
+        case checkbox
+        case clickableText
+    }
+    enum SpecificCell {
+        case introText
+        case phnForm
+        case dobForm
+        case dovForm
+        case rememberCheckbox
+        case clickablePrivacyPolicy
+        
+        var getCellType: TableViewCellType {
+            switch self {
+            case .introText:
+                return .text(type: .plainText)
+            case .phnForm:
+                return .form(type: .personalHealthNumber)
+            case .dobForm:
+                return .form(type: .dateOfBirth)
+            case .dovForm:
+                return .form(type: .dateOfVaccination)
+            case .rememberCheckbox:
+                return .checkbox
+            case .clickablePrivacyPolicy:
+                return .clickableText
+            }
+        }
+    }
+    var specificCell: SpecificCell
+    var configuration: Configuration
+    var isFieldVisible: Bool
+}

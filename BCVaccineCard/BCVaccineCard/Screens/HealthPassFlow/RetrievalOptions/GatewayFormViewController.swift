@@ -3,7 +3,12 @@
 //  ClientVaxPass-POC
 //
 //  Created by Connor Ogilvie on 2021-09-09.
-//
+// TODO: Steps:
+/// 1.) Organize file better so things are easier to find and more structured
+/// 2.) Rethink how form data source is structured (perhaps have the enum have the same associated type, which is a struct. Or a protocol which implements a property which is a struct ) Basically just need to rethink the "FormDataSource" structure
+/// 3.) Should implement a "Configuration" protocol of some sort, or a getter that returns configuration specific for each type of TBV cell that will be used here
+/// 4.) Make sure functions, such as prepopulating the cell, updating the data source, etc.. are as extracted as possible to the struct or whatever model type is decided
+/// 5.) Reduce redundancies in code where possible (indexOf functions, for example)
 
 import UIKit
 import QueueITLibrary
@@ -14,6 +19,37 @@ enum GatewayFormViewControllerFetchType: Equatable {
     case bcVaccineCardAndFederalPass
     case federalPassOnly(dob: String, dov: String)
     case vaccinationRecord
+    
+    var ds: [FormData] {
+        switch self {
+        case .bcVaccineCardAndFederalPass:
+            return [
+                FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dobForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
+                FormData(specificCell: .clickablePrivacyPolicy, configuration: FormData.Configuration(text: .privacyPolicyStatementEmail, linkedStrings: [
+                    LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
+                    LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
+        case .federalPassOnly(let dob, let dov):
+            return [
+                FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: dob, isTextField: true), isFieldVisible: false),
+                FormData(specificCell: .dovForm, configuration: FormData.Configuration(text: dov, isTextField: true), isFieldVisible: false),
+                FormData(specificCell: .clickablePrivacyPolicy, configuration: FormData.Configuration(text: .privacyPolicyStatementEmail, linkedStrings: [
+                    LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
+                    LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
+        case .vaccinationRecord:
+            return [
+                FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dobForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
+                FormData(specificCell: .clickablePrivacyPolicy, configuration: FormData.Configuration(text: .privacyPolicyStatementEmail, linkedStrings: [
+                    LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
+                    LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
+        }
+    }
     
     var getDataSource: [FormDataSource] {
         switch self {
