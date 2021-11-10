@@ -50,7 +50,7 @@ class VaccineCardTableViewCell: UITableViewCell {
             return
         }
         self.code = vaxCode
-        self.contentView.startLoadingIndicator()
+        self.contentView.startLoadingIndicator(backgroundColor: .white)
         BCVaccineValidator.shared.validate(code: vaxCode) { [weak self] result in
             guard let `self` = self, self.code == vaxCode else {return}
             let localModel = result.toLocal(federalPass: model.federalPass ?? "", phn: model.phn ?? "")
