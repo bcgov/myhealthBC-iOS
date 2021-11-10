@@ -11,6 +11,7 @@ target 'BCVaccineCard' do
   pod 'SnowplowTracker', '~> 2.0'
   pod 'SwiftyJSON', '~> 4.0'
   pod 'Firebase/AppDistribution'
+  pod 'SwipeCellKit'
   pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
 
   target 'BCVaccineCardTests' do
@@ -33,7 +34,7 @@ target 'BCVaccineCard-Prod' do
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
   pod 'SwiftyJSON', '~> 4.0'
-  pod 'Firebase/AppDistribution'
+  pod 'SwipeCellKit'
   pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
 end
 
