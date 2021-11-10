@@ -314,21 +314,10 @@ extension CovidVaccineCardsViewController {
 extension CovidVaccineCardsViewController {
     
     private func fetchFromStorage() {
-        let userId = AuthManager().userId()
-        let cards = StorageService.shared.fetchVaccineCards(for: userId)
+        let cards = StorageService.shared.fetchVaccineCards(for: AuthManager().userId())
         self.dataSource = cards
         self.adjustButtonName()
         self.tableView.reloadData()
-        
-//        StorageService.shared.getVaccineCardsForCurrentUser { [weak self] cards in
-//            guard let `self` = self else {return}
-//            DispatchQueue.main.async { [weak self] in
-//                guard let `self` = self else {return}
-//                self.dataSource = cards
-//                self.adjustButtonName()
-//                self.tableView.reloadData()
-//            }
-//        }
     }
 }
 
