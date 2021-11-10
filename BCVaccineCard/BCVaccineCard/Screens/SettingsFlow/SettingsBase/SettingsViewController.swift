@@ -32,7 +32,6 @@ class SettingsViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
         } else {
@@ -64,7 +63,8 @@ extension SettingsViewController {
     private func setupDataSource() {
         self.dataSource = [
 //            Setting(cell: .text(text: .settingsOpeningText), isClickable: false),
-            Setting(cell: .setting(text: .privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true)
+            Setting(cell: .analytics(title: "Enable Analytics", subtitle: "Anonymized behavioural data is used to help improve the user experience", isOn: AnalyticsService.shared.isEnabled), isClickable: false),
+            Setting(cell: .privacy(text: .privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true)
             // TODO: Unhide this cell once we have some details surrounding the help option
 //            Setting(cell: .setting(text: Constants.Strings.Settings.help, image: #imageLiteral(resourceName: "question-icon")), isClickable: true)
         ]
@@ -76,6 +76,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: SettingsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsTableViewCell.getName)
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
+        tableView.register(UINib.init(nibName: ToggleSettingsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ToggleSettingsTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100
         tableView.delegate = self
@@ -95,9 +96,24 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 14), labelSpacingAdjustment: 36)
                 return cell
             }
-        case .setting(text: let text, image: let image):
+        case .privacy(text: let text, image: let image):
             if let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.getName, for: indexPath) as? SettingsTableViewCell {
                 cell.configure(text: text, image: image)
+                cell.isAccessibilityElement = true
+                cell.accessibilityLabel = AccessibilityLabels.Settings.privacyStatementLink
+                cell.accessibilityHint = AccessibilityLabels.Settings.privacyStatementHint
+                return cell
+            }
+        case .analytics(title: let title, subtitle: let subtitle, let isOn):
+            if let cell = tableView.dequeueReusableCell(withIdentifier: ToggleSettingsTableViewCell.getName, for: indexPath) as? ToggleSettingsTableViewCell {
+                cell.configure(title: title, subTitle: subtitle, isOn: isOn, onToggle: { isOn in
+                    if isOn {
+                        AnalyticsService.shared.enable()
+                    } else {
+                        AnalyticsService.shared.disable()
+                    }
+                })
+                
                 cell.isAccessibilityElement = true
                 cell.accessibilityLabel = AccessibilityLabels.Settings.privacyStatementLink
                 cell.accessibilityHint = AccessibilityLabels.Settings.privacyStatementHint
