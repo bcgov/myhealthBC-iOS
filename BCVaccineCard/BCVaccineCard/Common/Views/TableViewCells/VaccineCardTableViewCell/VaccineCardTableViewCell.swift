@@ -7,8 +7,9 @@
 
 import UIKit
 import BCVaccineValidator
+import SwipeCellKit
 
-class VaccineCardTableViewCell: UITableViewCell {
+class VaccineCardTableViewCell: SwipeTableViewCell {
     
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var roundedView: UIView!
