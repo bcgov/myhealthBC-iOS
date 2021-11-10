@@ -26,7 +26,7 @@ class CovidVaccineCardsViewController: BaseViewController {
     
     private var expandedIndexRow = 0
     
-    private var dataSource: [AppVaccinePassportModel] = [] {
+    private var dataSource: [VaccineCard] = [] {
         didSet {
             buttonHiddenStatus()
         }
@@ -92,7 +92,7 @@ extension CovidVaccineCardsViewController {
             guard let cell = self.tableView.cellForRow(at: indexPath), self.dataSource.count > indexPath.row else { return }
             let model = self.dataSource[indexPath.row]
             cell.accessibilityLabel = AccessibilityLabels.CovidVaccineCardsScreen.proofOfVaccineCardAdded
-            let accessibilityValue = "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)"
+            let accessibilityValue = "\(model.name ?? ""), \(AccessibilityLabels.VaccineCardView.qrCodeImage)"
             cell.accessibilityValue = accessibilityValue
             cell.accessibilityHint = AccessibilityLabels.VaccineCardView.expandedAction
             UIAccessibility.setFocusTo(cell)
@@ -197,7 +197,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         guard !self.inEditMode else { return }
         guard let _ = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
         guard self.expandedIndexRow != indexPath.row else {
-            guard let image = dataSource[indexPath.row].image else { return }
+            guard let image = dataSource[indexPath.row].code?.generateQRCode() else { return }
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
             self.present(vc, animated: true, completion: nil)
@@ -257,7 +257,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         let movedObject = dataSource[sourceIndexPath.row]
         dataSource.remove(at: sourceIndexPath.row)
         dataSource.insert(movedObject, at: destinationIndexPath.row)
-        StorageService.shared.changeVaccineCardSortOrder(cardQR: movedObject.codableModel.code, newPosition: destinationIndexPath.row)
+        StorageService.shared.changeVaccineCardSortOrder(cardQR: movedObject.code ?? "", newPosition: destinationIndexPath.row)
     }
 }
 
@@ -299,7 +299,7 @@ extension CovidVaccineCardsViewController {
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
             let item = self.dataSource[indexPath.row]
-            StorageService.shared.deleteVaccineCard(vaccineQR: item.codableModel.code)
+            StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "")
             self.dataSource.remove(at: indexPath.row)
             if self.dataSource.isEmpty {
                 self.inEditMode = false
@@ -314,15 +314,21 @@ extension CovidVaccineCardsViewController {
 extension CovidVaccineCardsViewController {
     
     private func fetchFromStorage() {
-        StorageService.shared.getVaccineCardsForCurrentUser { [weak self] cards in
-            guard let `self` = self else {return}
-            DispatchQueue.main.async { [weak self] in
-                guard let `self` = self else {return}
-                self.dataSource = cards
-                self.adjustButtonName()
-                self.tableView.reloadData()
-            }
-        }
+        let userId = AuthManager().userId()
+        let cards = StorageService.shared.fetchVaccineCards(for: userId)
+        self.dataSource = cards
+        self.adjustButtonName()
+        self.tableView.reloadData()
+        
+//        StorageService.shared.getVaccineCardsForCurrentUser { [weak self] cards in
+//            guard let `self` = self else {return}
+//            DispatchQueue.main.async { [weak self] in
+//                guard let `self` = self else {return}
+//                self.dataSource = cards
+//                self.adjustButtonName()
+//                self.tableView.reloadData()
+//            }
+//        }
     }
 }
 

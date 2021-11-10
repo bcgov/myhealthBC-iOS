@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BCVaccineValidator
 
 class VaccineCardTableViewCell: UITableViewCell {
     
@@ -14,6 +15,8 @@ class VaccineCardTableViewCell: UITableViewCell {
     @IBOutlet weak var vaccineCardView: VaccineCardView!
     @IBOutlet weak var federalPassView: FederalPassView!
     @IBOutlet weak var federalPassViewHeightConstraint: NSLayoutConstraint!
+    
+    private var code: String = ""
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,7 +41,31 @@ class VaccineCardTableViewCell: UITableViewCell {
         shadowView.layer.shadowOpacity = expanded ? 0.7 : 0.0
     }
     
-    func configure(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool, delegateOwner: UIViewController) {
+    func configure(model: VaccineCard, expanded: Bool, editMode: Bool, delegateOwner: UIViewController) {
+        guard let vaxCode = model.code else {return}
+        self.code = vaxCode
+        self.contentView.startLoadingIndicator()
+        BCVaccineValidator.shared.validate(code: vaxCode) { [weak self] result in
+            guard let `self` = self, self.code == vaxCode,let card = result.result else {
+                return
+            }
+            var status: VaccineStatus
+            switch card.status {
+            case .Fully:
+                status = .fully
+            case .Partially:
+                status = .partially
+            case .None:
+                status = .notVaxed
+            }
+            let localModel = LocallyStoredVaccinePassportModel(code: vaxCode, birthdate: card.birthdate, vaxDates: card.immunizations.compactMap({$0.date}), name: card.name, issueDate: card.issueDate, status: status, source: .imported, fedCode: model.federalPass, phn: model.phn)
+            self.config(model: localModel.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
+            self.contentView.endLoadingIndicator()
+        }
+        
+    }
+    
+    private func config(model: AppVaccinePassportModel, expanded: Bool, editMode: Bool, delegateOwner: UIViewController) {
         vaccineCardView.configure(model: model, expanded: expanded, editMode: editMode)
         federalPassView.isHidden = !expanded
         federalPassViewHeightConstraint.constant = expanded ? 94.0 : 0.0

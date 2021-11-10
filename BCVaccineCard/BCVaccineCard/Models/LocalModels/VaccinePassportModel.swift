@@ -31,7 +31,7 @@ enum Source: String, Codable {
     case healthGateway = "healthGateway", scanner = "scanner", imported = "imported"
 }
 
-struct LocallyStoredVaccinePassportModel: Codable, Equatable {
+public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     let code: String
     let birthdate: String
     var vaxDates: [String]
