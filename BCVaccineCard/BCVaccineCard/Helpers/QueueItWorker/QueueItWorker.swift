@@ -186,9 +186,14 @@ extension QueueItWorker {
             } else {
                 self.delegate?.hideLoader()
                 switch response.result {
-                case .success(_):
+                case .success(let data):
                     // This shouldn't happen, but putting this here in case
-                    self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+                    guard data != nil else {
+                        self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+                        return
+                    }
+                    self.delegate?.showLoader()
+                    self.getActualVaccineCard(model: model, token: nil)
                 case .failure(let error):
                     self.delegate?.handleError(title: .error, error: ResultError(resultMessage: error.errorDescription))
                 }
