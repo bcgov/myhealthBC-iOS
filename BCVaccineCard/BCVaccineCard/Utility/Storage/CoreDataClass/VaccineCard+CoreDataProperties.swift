@@ -30,5 +30,9 @@ extension VaccineCard {
         guard let stringData = federalPass else { return nil}
         return Data(base64URLEncoded: stringData)
     }
+    
+    var id: String? {
+        return (name ?? "") + (birthdate ?? "")
+    }
 
 }
