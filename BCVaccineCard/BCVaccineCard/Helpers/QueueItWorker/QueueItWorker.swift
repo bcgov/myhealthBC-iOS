@@ -192,6 +192,7 @@ extension QueueItWorker {
                         self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
                         return
                     }
+                    // TODO: For now, could just partse data response instead of calling request again - only did this as it was a quick solution for Dev
                     self.delegate?.showLoader()
                     self.getActualVaccineCard(model: model, token: nil)
                 case .failure(let error):

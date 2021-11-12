@@ -247,6 +247,14 @@
 		799050AF27365111006CD726 /* FederalPassPDFView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B446AD27357F1700E0F967 /* FederalPassPDFView.xib */; };
 		799050B3273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
 		799050B4273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
+		799050BD273C8330006CD726 /* GetRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050BC273C832F006CD726 /* GetRecordsView.swift */; };
+		799050BE273C8330006CD726 /* GetRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050BC273C832F006CD726 /* GetRecordsView.swift */; };
+		799050C0273C8344006CD726 /* GetRecordsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799050BF273C8344006CD726 /* GetRecordsView.xib */; };
+		799050C1273C8344006CD726 /* GetRecordsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799050BF273C8344006CD726 /* GetRecordsView.xib */; };
+		799050C4273C8558006CD726 /* UserRecordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050C3273C8558006CD726 /* UserRecordListView.swift */; };
+		799050C5273C8558006CD726 /* UserRecordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050C3273C8558006CD726 /* UserRecordListView.swift */; };
+		799050C7273C8567006CD726 /* UserRecordListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799050C6273C8567006CD726 /* UserRecordListView.xib */; };
+		799050C8273C8567006CD726 /* UserRecordListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799050C6273C8567006CD726 /* UserRecordListView.xib */; };
 		79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
@@ -420,6 +428,10 @@
 		7967E75926F930E200EEF510 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsViewController.swift; sourceTree = "<group>"; };
+		799050BC273C832F006CD726 /* GetRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecordsView.swift; sourceTree = "<group>"; };
+		799050BF273C8344006CD726 /* GetRecordsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GetRecordsView.xib; sourceTree = "<group>"; };
+		799050C3273C8558006CD726 /* UserRecordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecordListView.swift; sourceTree = "<group>"; };
+		799050C6273C8567006CD726 /* UserRecordListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserRecordListView.xib; sourceTree = "<group>"; };
 		79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargerTouchAreaButton.swift; sourceTree = "<group>"; };
 		79A63D032722172900F7C919 /* PROD Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PROD Info.plist"; sourceTree = "<group>"; };
 		79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HealthPass.storyboard; sourceTree = "<group>"; };
@@ -833,6 +845,7 @@
 				7928344C272A878200EE2710 /* TableViewButtonView */,
 				7944F6C326F12C00006B9444 /* AppStyleButton */,
 				7944F6C826F12C00006B9444 /* VaxQRZoomedInView */,
+				799050B5273C6908006CD726 /* HealthRecordsViews */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1162,6 +1175,73 @@
 			path = HealthRecordsBase;
 			sourceTree = "<group>";
 		};
+		799050B5273C6908006CD726 /* HealthRecordsViews */ = {
+			isa = PBXGroup;
+			children = (
+				799050C2273C835B006CD726 /* AddHealthRecordView */,
+				799050BB273C69D4006CD726 /* RecordsUserView */,
+				799050B8273C697D006CD726 /* UserRecordDetailView */,
+				799050B7273C694F006CD726 /* UserRecordListView */,
+				799050B6273C6918006CD726 /* GetRecordsView */,
+			);
+			path = HealthRecordsViews;
+			sourceTree = "<group>";
+		};
+		799050B6273C6918006CD726 /* GetRecordsView */ = {
+			isa = PBXGroup;
+			children = (
+				799050BC273C832F006CD726 /* GetRecordsView.swift */,
+				799050BF273C8344006CD726 /* GetRecordsView.xib */,
+			);
+			path = GetRecordsView;
+			sourceTree = "<group>";
+		};
+		799050B7273C694F006CD726 /* UserRecordListView */ = {
+			isa = PBXGroup;
+			children = (
+				799050C3273C8558006CD726 /* UserRecordListView.swift */,
+				799050C6273C8567006CD726 /* UserRecordListView.xib */,
+			);
+			path = UserRecordListView;
+			sourceTree = "<group>";
+		};
+		799050B8273C697D006CD726 /* UserRecordDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				799050BA273C6996006CD726 /* UserRecordDetailDoesDetailsView */,
+				799050B9273C698A006CD726 /* UserRecordDetailCardView */,
+			);
+			path = UserRecordDetailView;
+			sourceTree = "<group>";
+		};
+		799050B9273C698A006CD726 /* UserRecordDetailCardView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UserRecordDetailCardView;
+			sourceTree = "<group>";
+		};
+		799050BA273C6996006CD726 /* UserRecordDetailDoesDetailsView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UserRecordDetailDoesDetailsView;
+			sourceTree = "<group>";
+		};
+		799050BB273C69D4006CD726 /* RecordsUserView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = RecordsUserView;
+			sourceTree = "<group>";
+		};
+		799050C2273C835B006CD726 /* AddHealthRecordView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AddHealthRecordView;
+			sourceTree = "<group>";
+		};
 		79A2582C2731FF260067DD50 /* LargerTouchAreaButton */ = {
 			isa = PBXGroup;
 			children = (
@@ -1420,11 +1500,13 @@
 				79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */,
 				795AA76427155F6300E59FF1 /* NewsFeed.storyboard in Resources */,
 				7928345F2730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */,
+				799050C0273C8344006CD726 /* GetRecordsView.xib in Resources */,
 				7928346D27311C9000EE2710 /* DropDownView.xib in Resources */,
 				7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */,
 				79BDA092270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				29B07E0A2732109E007ABB46 /* exportOptions.plist in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
+				799050C7273C8567006CD726 /* UserRecordListView.xib in Resources */,
 				795AA76727155F7100E59FF1 /* Resource.storyboard in Resources */,
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
 				7944F68026F12613006B9444 /* Main.storyboard in Resources */,
@@ -1476,6 +1558,7 @@
 				794BD6672702EEC00084ADA8 /* VaxQRZoomedInView.xib in Resources */,
 				79BDA084270CEE5A00FF30AB /* HealthPass.storyboard in Resources */,
 				79FDE427273335DC00DAD988 /* FederalPassView.xib in Resources */,
+				799050C8273C8567006CD726 /* UserRecordListView.xib in Resources */,
 				79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */,
 				79BDA085270CEE5E00FF30AB /* Records.storyboard in Resources */,
 				792834602730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */,
@@ -1485,6 +1568,7 @@
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
 				795AA76527155F6300E59FF1 /* NewsFeed.storyboard in Resources */,
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
+				799050C1273C8344006CD726 /* GetRecordsView.xib in Resources */,
 				794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1638,6 +1722,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				799050BD273C8330006CD726 /* GetRecordsView.swift in Sources */,
 				7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */,
 				795AA7792715652C00E59FF1 /* ResourceTableViewCell.swift in Sources */,
 				7944F6BE26F12BD5006B9444 /* VaccinePassportModel.swift in Sources */,
@@ -1679,6 +1764,7 @@
 				29128F12272AEFA600358014 /* VaccineCard+CoreDataProperties.swift in Sources */,
 				29128F17272AF41F00358014 /* Array+EXT.swift in Sources */,
 				2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */,
+				799050C4273C8558006CD726 /* UserRecordListView.swift in Sources */,
 				79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				2942AC56273AC30900A4A466 /* ToggleSettingsTableViewCell.swift in Sources */,
@@ -1752,6 +1838,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				799050BE273C8330006CD726 /* GetRecordsView.swift in Sources */,
 				795AA7462713FFEB00E59FF1 /* RemoteFactory.swift in Sources */,
 				794BD62F2702EEC00084ADA8 /* UIView+Ext.swift in Sources */,
 				791C27BA27183149001A6E12 /* ButtonTableViewCell.swift in Sources */,
@@ -1793,6 +1880,7 @@
 				29128F13272AEFA600358014 /* VaccineCard+CoreDataProperties.swift in Sources */,
 				29128F18272AF41F00358014 /* Array+EXT.swift in Sources */,
 				794BD6412702EEC00084ADA8 /* FormDataSource.swift in Sources */,
+				799050C5273C8558006CD726 /* UserRecordListView.swift in Sources */,
 				79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				795AA7392710920600E59FF1 /* ErrorResponse.swift in Sources */,
 				2942AC58273AC4CA00A4A466 /* ToggleSettingsTableViewCell.swift in Sources */,
