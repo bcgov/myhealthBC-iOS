@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BCVaccineValidator
 
 enum VaccineStatus: String, Codable {
     case fully = "fully", partially = "partially", notVaxed = "none"
@@ -31,7 +32,7 @@ enum Source: String, Codable {
     case healthGateway = "healthGateway", scanner = "scanner", imported = "imported"
 }
 
-struct LocallyStoredVaccinePassportModel: Codable, Equatable {
+public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     let code: String
     let birthdate: String
     var vaxDates: [String]
@@ -68,5 +69,30 @@ struct AppVaccinePassportModel: Equatable {
     func getFormattedIssueDate() -> String {
         guard let issueDate = issueDate else { return "" }
         return .issuedOn + issueDate
+    }
+}
+
+
+extension CodeValidationResult {
+    func toLocal(federalPass: String, phn: String) -> LocallyStoredVaccinePassportModel {
+        var status: VaccineStatus
+        switch result?.status {
+        case .Fully:
+            status = .fully
+        case .Partially:
+            status = .partially
+        case .None:
+            status = .notVaxed
+        case .none:
+            status = .notVaxed
+        }
+        let vadDates: [String]
+        if let imms = result?.immunizations {
+            vadDates = imms.compactMap({$0.date})
+        } else {
+            vadDates = []
+        }
+        return LocallyStoredVaccinePassportModel(code: result?.code ?? "", birthdate: result?.birthdate ?? "", vaxDates: vadDates, name: result?.name ?? "", issueDate: result?.issueDate ?? 0, status: status, source: .imported, fedCode: federalPass, phn: phn)
+        
     }
 }
