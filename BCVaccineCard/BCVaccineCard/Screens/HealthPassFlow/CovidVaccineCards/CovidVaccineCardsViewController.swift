@@ -38,7 +38,7 @@ class CovidVaccineCardsViewController: BaseViewController {
             tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
             tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
             tableView.beginUpdates()
-            self.tableView.setEditing(inEditMode, animated: true)
+            self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
             tableView.endUpdates()
             adjustButtonName()
@@ -222,7 +222,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        guard !dataSource.isEmpty else { return .none }
+        guard !dataSource.isEmpty || !inEditMode else { return .none }
         return .delete
     }
 
@@ -234,7 +234,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
         self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
-        return "Delete"
+        return "Unlink"
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -247,7 +247,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else {return nil}
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+        let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { action, indexPath in
             self.deleteCardAt(indexPath: indexPath, reInitEditMode: false)
         }
         deleteAction.hidesWhenSelected = true
