@@ -79,7 +79,7 @@ class QRRetrievalMethodViewController: BaseViewController {
 // MARK: Navigation setup
 extension QRRetrievalMethodViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .addABCVaccineCard,
+        self.navDelegate?.setNavigationBarWith(title: .addAHealthPass,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,

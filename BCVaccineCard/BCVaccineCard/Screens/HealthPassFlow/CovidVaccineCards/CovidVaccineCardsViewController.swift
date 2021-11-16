@@ -111,7 +111,7 @@ extension CovidVaccineCardsViewController {
                                                     image: nil, action: #selector(self.editButton),
                                                     accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightEditIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightEditIconHint))
         let rightNavButton = hasCards ? editModeNavButton : nil
-        self.navDelegate?.setNavigationBarWith(title: .bcVaccineCards,
+        self.navDelegate?.setNavigationBarWith(title: .bcVaccinePasses,
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,

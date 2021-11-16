@@ -68,8 +68,8 @@
 "ValidDate" = "Please choose a valid date from the date picker";
 "DOBRange" = "Birthday cannot be in the future";
 "DOVRange" = "Vaccination date must be in valid range";
-"FormTitle" = "Add BC Vaccine Card";
-"AddABCVaccineCard" = "Add a BC Vaccine Card";
+//"FormTitle" = "Add a Health Pass";
+//"AddABCVaccineCard" = "Add a BC Vaccine Card";
 "AddAHealthPass" = "Add a Health Pass";
 "FormDescription" = "To access your BC Vaccine Card, please provide the following information:";
 "PersonalHealthNumber" = "Personal Health Number";
@@ -88,10 +88,13 @@
 "CovidVaccineCards" = "COVID-19 Vaccine Cards";
 "PassCount" = "%@ passes";
 "BCVaccineCards" = "BC Vaccine Cards";
+"BCVaccinePasses" = "BC Vaccine Passes";
+"GetFederalTravelPass" = "Get Federal Travel Pass";
 "NoCardsYet" = "You don't have any cards yet";
 "NoCardsIntroText" = "Use Health Passes as an easy way to access and show your proof of vaccination.\n\nSave a BC Vaccine Card and Federal Proof of Vaccination here.";
 //"VaccinePass" = "Vaccine Pass";
 "BCVaccineCard" = "BC Vaccine Card";
+"BCVaccinePass" = "BC Vaccine Pass";
 "FederalProofOfVaccination" = "Federal Proof of Vaccination";
 "Vaccinated" = "Vaccinated";
 "PartiallyVaccinated" = "Partially Vaccinated";
