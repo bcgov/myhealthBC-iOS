@@ -242,7 +242,13 @@ extension QRRetrievalMethodViewController {
         doesCardNeedToBeUpdated(modelToUpdate: appModel) {[weak self] needsToBeUpdated in
             guard let `self` = self else {return}
             if needsToBeUpdated {
-                self.updateCardInLocalStorage(model: model)
+                self.updateCardInLocalStorage(model: model, completion: {[weak self] success in
+                    guard let `self` = self else {return}
+                    if success {
+                        self.navigationController?.popViewController(animated: true)
+                        self.postCardAddedNotification(id: appModel.id ?? "")
+                    }
+                })
             } else {
                 self.isCardAlreadyInWallet(modelToAdd: appModel) {[weak self] isAlreadyInWallet in
                     guard let `self` = self else {return}
