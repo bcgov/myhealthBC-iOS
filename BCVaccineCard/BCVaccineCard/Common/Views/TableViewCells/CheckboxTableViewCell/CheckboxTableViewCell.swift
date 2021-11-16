@@ -26,7 +26,7 @@ class CheckboxTableViewCell: UITableViewCell {
     
     private func setup() {
         checkboxTextLabel.textColor = AppColours.textBlack
-        checkboxTextLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+        checkboxTextLabel.font = UIFont.bcSansRegularWithSize(size: 13)
     }
 
     func configure(selected: Bool, text: String, delegateOwner: UIViewController) {

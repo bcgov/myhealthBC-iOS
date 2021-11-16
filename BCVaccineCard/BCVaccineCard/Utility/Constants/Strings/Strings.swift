@@ -14,6 +14,7 @@ extension String {
     static var ok: String { return "OK".localized }
     static var yes: String { return "Yes".localized }
     static var no: String { return "No".localized }
+    static var edit: String { return "Edit".localized }
     /// Text used throughout app
     static var myCards: String { return "MyCards".localized }
     static var settings: String { return "Settings".localized }

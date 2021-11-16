@@ -14,6 +14,7 @@ struct Accessibility {
 }
 
 struct NavButton {
+    var title: String? = nil
     let image: UIImage?
     let action: Selector
     let accessibility: Accessibility
@@ -116,7 +117,11 @@ class CustomNavigationController: UINavigationController {
         setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString)
         navigationBar.tintColor = navStyle.itemTintColor
         if let right = right {
-            vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: right.image, style: .plain, target: vc, action: right.action)
+            if let title = right.title {
+                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: right.action)
+            } else {
+                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: right.image, style: .plain, target: vc, action: right.action)
+            }
             if let trait = right.accessibility.traits {
                 vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
             }
@@ -124,9 +129,11 @@ class CustomNavigationController: UINavigationController {
             vc.navigationItem.rightBarButtonItem?.accessibilityHint = right.accessibility.hint
         }
         if let left = left {
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
-            // TODO: Adjust logic here to allow for text...
-//            let test = UIBarButtonItem(title: "", image: left.image, style: .plain, target: vc, action: left.action)
+            if let title = left.title {
+                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: left.action)
+            } else {
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
+            }
             if let trait = left.accessibility.traits {
                 vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
             }

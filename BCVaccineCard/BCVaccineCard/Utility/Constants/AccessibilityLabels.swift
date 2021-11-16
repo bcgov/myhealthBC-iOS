@@ -22,6 +22,10 @@ struct AccessibilityLabels {
     }
     
     struct CovidVaccineCardsScreen {
+        static let navRightDoneIconTitle = "Done"
+        static let navRightDoneIconHint = "Tapping this button will finish editing"
+        static let navRightEditIconTitle = "Edit"
+        static let navRightEditIconHint = "Tapping this button will allow you to edit your list of cards, by reordering your list or removing cards from your device"
         static let navRightIconTitle = "Add Card"
         static let navRightIconHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
         static let inEditMode = "Tapping 'done' will stop the editing of cards and save any changes."

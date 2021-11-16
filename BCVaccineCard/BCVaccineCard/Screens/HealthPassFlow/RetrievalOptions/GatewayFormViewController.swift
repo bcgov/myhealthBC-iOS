@@ -174,14 +174,10 @@ class GatewayFormViewController: BaseViewController {
 extension GatewayFormViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .addABCVaccineCard,
-                                               leftNavButton: NavButton(image: UIImage(named: "close-icon-blue"), action: #selector(self.closeIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthGatewayScreen.navLeftIconTitle, hint: AccessibilityLabels.HealthGatewayScreen.navLeftIconHint)),
+                                               leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthGatewayScreen.navRightIconTitle, hint: AccessibilityLabels.HealthGatewayScreen.navRightIconHint)),
                                                navStyle: .small,
                                                targetVC: self, backButtonHintString: AccessibilityLabels.GatewayForm.navHint)
-    }
-    
-    @objc private func closeIconButton() {
-        self.navigationController?.popViewController(animated: true)
     }
     
     @objc private func helpIconButton() {
