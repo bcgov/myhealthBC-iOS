@@ -74,7 +74,7 @@ struct AppVaccinePassportModel: Equatable {
 
 
 extension CodeValidationResult {
-    func toLocal(federalPass: String, phn: String) -> LocallyStoredVaccinePassportModel {
+    func toLocal(federalPass: String?, phn: String?) -> LocallyStoredVaccinePassportModel {
         var status: VaccineStatus
         switch result?.status {
         case .Fully:
