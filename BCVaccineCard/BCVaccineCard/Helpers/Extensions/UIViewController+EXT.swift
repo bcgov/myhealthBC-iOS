@@ -163,6 +163,14 @@ extension UIViewController {
         // Create label and container
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {return}
+            if let parent = self.parent as? CustomNavigationController {
+                parent.showBanner(message: message, style: style)
+                return
+            }
+            if let parent = self.parent as? TabBarController {
+                parent.showBanner(message: message, style: style)
+                return
+            }
             let container = UIView(frame: .zero)
             let label = UILabel(frame: .zero)
             
@@ -241,8 +249,16 @@ extension UIViewController {
         _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), federalPass: model.fedCode, vaxDates: model.vaxDates)
     }
     
-    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        StorageService.shared.updateVaccineCard(newData: model)
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] success in
+            guard let `self` = self else {return}
+            if success {
+                self.showBanner(message: "Your proof of vaccination has been updated", style: .Top)
+            } else {
+                self.alert(title: "Update failed", message: "We couldn't update your vaccine card")
+            }
+            completion(success)
+        })
     }
     
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
