@@ -23,7 +23,6 @@ class CovidVaccineCardsViewController: BaseViewController {
     // NOTE: This is for fixing the indentation of table view when in edit mode
     @IBOutlet weak private var tableViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak private var tableViewTrailingConstraint: NSLayoutConstraint!
-//    @IBOutlet weak private var bottomButton: AppStyleButton!
     
     private var expandedIndexRow = 0
     
@@ -142,16 +141,7 @@ extension CovidVaccineCardsViewController {
         }
 
     }
-    
-//    @objc private func addCardButton() {
-//        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-//        goToAddCardOptionScreen()
-//    }
-//
-//    private func goToAddCardOptionScreen() {
-//        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: AccessibilityLabels.CovidVaccineCardsScreen.navHint)
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
+
 }
 
 // MARK: DataSource Management
@@ -174,35 +164,9 @@ extension CovidVaccineCardsViewController {
         
     }
     private func adjustNavBar() {
-//        guard !self.dataSource.isEmpty else { return }
-//        let buttonType: AppStyleButton.ButtonType = inEditMode ? .done : .manageCards
-//        let value = self.inEditMode ? AppStyleButton.ButtonType.done.getTitle : AppStyleButton.ButtonType.manageCards.getTitle
-//        let hint = self.inEditMode ? AccessibilityLabels.CovidVaccineCardsScreen.inEditMode : AccessibilityLabels.CovidVaccineCardsScreen.notInEditMode
-//        bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true, accessibilityValue: value, accessibilityHint: hint)
         self.navSetup()
     }
 }
-
-// MARK: Bottom Button Tapped Delegate
-// TODO: Move this logic to nav bar
-//extension CovidVaccineCardsViewController: AppStyleButtonDelegate {
-//    func buttonTapped(type: AppStyleButton.ButtonType) {
-//        // Note: This is a fix for when a user may swipe to edit, then while editing, taps manage cards
-//        if type == .manageCards {
-//            tableView.isEditing = false
-//        }
-//        expandedIndexRow = 0
-//        inEditMode = type == .manageCards
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//            guard !self.dataSource.isEmpty else { return }
-//            let indexPath = IndexPath(row: self.dataSource.count - 1, section: 0)
-//            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
-//            UIAccessibility.setFocusTo(cell)
-//        }
-//        
-//    }
-//
-//}
 
 // MARK: Table View Logic
 extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
