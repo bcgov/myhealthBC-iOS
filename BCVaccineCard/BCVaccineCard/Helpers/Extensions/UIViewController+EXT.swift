@@ -312,8 +312,8 @@ extension UIViewController {
     func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel, completion: @escaping(Bool) -> Void) {
         StorageService.shared.getVaccineCardsForCurrentUser { localDS in
             guard !localDS.isEmpty else { return completion(false) }
-            if let _ = localDS.map({$0.transform()}).firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && ($0.status == .partially || $0.fedCode != model.codableModel.fedCode) }) {
-                return completion(true)
+            if let existing = localDS.map({$0.transform()}).first(where: {$0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && ($0.status == .partially || $0.fedCode != model.codableModel.fedCode) }) {
+                return completion(model.codableModel.isNewer(than: existing))
             }
             return completion(false)
         }

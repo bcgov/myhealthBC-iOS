@@ -46,6 +46,13 @@ public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     func transform() -> AppVaccinePassportModel {
         return AppVaccinePassportModel(codableModel: self)
     }
+    
+    func isNewer(than other: LocallyStoredVaccinePassportModel) -> Bool {
+        let currentIssueDate = Date.init(timeIntervalSince1970: issueDate)
+        let otherIssueDate = Date.init(timeIntervalSince1970: other.issueDate)
+        
+        return currentIssueDate > otherIssueDate
+    }
 }
 
 struct AppVaccinePassportModel: Equatable {
