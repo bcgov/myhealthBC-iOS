@@ -13,6 +13,7 @@ class AnalyticsService: NSObject, RequestCallback {
     
     fileprivate let endPoint = "spt.apps.gov.bc.ca"
     fileprivate let appID = "Snowplow_standalone_HApp_dev"
+    // TODO: For store release, change to Snowplow_standalone_HApp_prod
     fileprivate let namespace = "iOS"
     fileprivate let schema = "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0"
     fileprivate let userDefaultsKey = "analyticsEnabled"
@@ -36,7 +37,12 @@ class AnalyticsService: NSObject, RequestCallback {
     }
     
     public func enable() {
-        tracker = initTracker(endPoint, method: .post)
+        if tracker == nil {
+            tracker = initTracker(endPoint, method: .post)
+        } else {
+            tracker?.resume()
+        }
+        
         UserDefaults.standard.set(true, forKey: userDefaultsKey)
     }
     
