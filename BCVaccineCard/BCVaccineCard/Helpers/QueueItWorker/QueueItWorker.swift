@@ -161,7 +161,7 @@ extension QueueItWorker {
             Constants.GatewayVaccineCardRequestParameters.dateOfBirth: model.dateOfBirth,
             Constants.GatewayVaccineCardRequestParameters.dateOfVaccine: model.dateOfVaccine
         ]
-        // TODO: Need to find a better way to get URL - ran out of time
+        
         AF.request(endpoint, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
             // Check for queue it cookie here, if it's there, set the cookie and make actual request
             self.url = response.request?.url
@@ -184,12 +184,13 @@ extension QueueItWorker {
                 self.queueItSetup()
                 self.runQueueIt()
             } else {
-                self.delegate?.hideLoader()
                 switch response.result {
                 case .success(_):
                     // This shouldn't happen, but putting this here in case
-                    self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+//                    self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+                    self.getActualVaccineCard(model: model, token: nil)
                 case .failure(let error):
+                    self.delegate?.hideLoader()
                     self.delegate?.handleError(title: .error, error: ResultError(resultMessage: error.errorDescription))
                 }
             }
