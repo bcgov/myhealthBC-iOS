@@ -15,6 +15,8 @@ struct AccessibilityLabels {
     }
     
     struct HealthGatewayScreen {
+        static let navLeftIconTitle = "Close Icon"
+        static let navLeftIconHint = "Tapping this button will return you to the previous screen"
         static let navRightIconTitle = "Help Icon"
         static let navRightIconHint = "Tapping this button will bring you to a help screen to assist you with the Health Gateway vaccine card retrieval method"
     }
