@@ -125,6 +125,7 @@ class CustomNavigationController: UINavigationController {
         }
         if let left = left {
             vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
+            // TODO: Adjust logic here to allow for text...
 //            let test = UIBarButtonItem(title: "", image: left.image, style: .plain, target: vc, action: left.action)
             if let trait = left.accessibility.traits {
                 vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
