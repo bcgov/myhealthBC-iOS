@@ -495,8 +495,11 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.navigationController?.popViewController(animated: true)
                 }
-                self.updateCardInLocalStorage(model: model.transform())
-                self.completionHandler?(model.id ?? "")
+                self.updateCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
+                    guard let `self` = self else {return}
+                    self.completionHandler?(model.id ?? "")
+                })
+                
             } else {
                 self.isCardAlreadyInWallet(modelToAdd: model) {[weak self] isAlreadyInWallet in
                     guard let `self` = self else {return}

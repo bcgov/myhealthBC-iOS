@@ -163,6 +163,14 @@ extension UIViewController {
         // Create label and container
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {return}
+            if let parent = self.parent as? CustomNavigationController {
+                parent.showBanner(message: message, style: style)
+                return
+            }
+            if let parent = self.parent as? TabBarController {
+                parent.showBanner(message: message, style: style)
+                return
+            }
             let container = UIView(frame: .zero)
             let label = UILabel(frame: .zero)
             
@@ -241,8 +249,16 @@ extension UIViewController {
         _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), federalPass: model.fedCode, vaxDates: model.vaxDates)
     }
     
-    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        StorageService.shared.updateVaccineCard(newData: model)
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] success in
+            guard let `self` = self else {return}
+            if success {
+                self.showBanner(message: .updatedCard, style: .Top)
+            } else {
+                self.alert(title: .error, message: .updateCardFailed)
+            }
+            completion(success)
+        })
     }
     
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
@@ -296,8 +312,11 @@ extension UIViewController {
     func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel, completion: @escaping(Bool) -> Void) {
         StorageService.shared.getVaccineCardsForCurrentUser { localDS in
             guard !localDS.isEmpty else { return completion(false) }
-            if let _ = localDS.map({$0.transform()}).firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && ($0.status == .partially || $0.fedCode != model.codableModel.fedCode) }) {
-                return completion(true)
+            if let existing = localDS.map({$0.transform()}).first(where: {$0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate }) {
+                let shouldUpdate = (existing.status == .partially) || (existing.fedCode ?? "" != model.codableModel.fedCode ?? "")
+                // || model.codableModel.isNewer(than: existing)
+                // NOTE: uncomment code above to enable validation by issue date
+                return completion(shouldUpdate)
             }
             return completion(false)
         }

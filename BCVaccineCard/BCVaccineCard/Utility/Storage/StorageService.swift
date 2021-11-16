@@ -168,7 +168,7 @@ class StorageService {
         }
     }
     
-    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel) {
+    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
         guard let context = managedContext else {return}
         do {
             let cards = try context.fetch(VaccineCard.createFetchRequest())
@@ -178,9 +178,14 @@ class StorageService {
             card.federalPass = model.fedCode
             card.phn = model.phn
             try context.save()
+            DispatchQueue.main.async {
+                return completion(true)
+            }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
-            return
+            DispatchQueue.main.async {
+                return completion(false)
+            }
         }
     }
     
