@@ -123,5 +123,5 @@
 "GetTestkitResource" = "Get a COVID-19 Rapid Test Kit";
 "Covid19SymptomCheckerResource" = "Covid-19 symptom checker";
 "SchoolRelatedResource" = "K-12 Daily Check";
-"updatedCard" =" Your proof of vaccination has been updated";
-"updateCardFailed" = "We couldn't update your vaccine card";
+"UpdatedCard" =" Your proof of vaccination has been updated";
+"UpdateCardFailed" = "We couldn't update your vaccine card";

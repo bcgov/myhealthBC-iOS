@@ -62,8 +62,8 @@ extension String {
     
     // Alert
     static var vaxAddedBannerAlert: String { return "VaxAddedBannerAlert".localized }
-    static var updatedCard: String {return "updatedCard".localized}
-    static var updateCardFailed: String {return "updateCardFailed".localized}
+    static var updatedCard: String {return "UpdatedCard".localized}
+    static var updateCardFailed: String {return "UpdateCardFailed".localized}
     
     // Onboarding flow
     /// initial onboarding screen
