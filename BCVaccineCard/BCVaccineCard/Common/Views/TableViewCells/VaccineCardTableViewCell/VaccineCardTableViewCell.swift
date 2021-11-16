@@ -7,8 +7,9 @@
 
 import UIKit
 import BCVaccineValidator
+import SwipeCellKit
 
-class VaccineCardTableViewCell: UITableViewCell {
+class VaccineCardTableViewCell: SwipeTableViewCell {
     
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var roundedView: UIView!
@@ -53,7 +54,7 @@ class VaccineCardTableViewCell: UITableViewCell {
         self.contentView.startLoadingIndicator(backgroundColor: .white)
         BCVaccineValidator.shared.validate(code: vaxCode) { [weak self] result in
             guard let `self` = self, self.code == vaxCode else {return}
-            let localModel = result.toLocal(federalPass: model.federalPass ?? "", phn: model.phn ?? "")
+            let localModel = result.toLocal(federalPass: model.federalPass, phn: model.phn)
             DispatchQueue.main.async {[weak self] in
                 guard let `self` = self else {return}
                 self.config(model: localModel.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)

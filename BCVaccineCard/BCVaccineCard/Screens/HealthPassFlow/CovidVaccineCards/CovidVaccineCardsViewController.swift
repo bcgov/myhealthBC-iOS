@@ -8,6 +8,7 @@
 import UIKit
 import BCVaccineValidator
 import PDFKit
+import SwipeCellKit
 
 class CovidVaccineCardsViewController: BaseViewController {
     
@@ -36,9 +37,9 @@ class CovidVaccineCardsViewController: BaseViewController {
         didSet {
             tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
             tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
-            tableView.isEditing = inEditMode
-            adjustButtonName()
+            self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
+            adjustButtonName()
             self.tableView.layoutSubviews()
         }
     }
@@ -169,7 +170,8 @@ extension CovidVaccineCardsViewController: AppStyleButtonDelegate {
 }
 
 // MARK: Table View Logic
-extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataSource {
+extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
+    
     private func setupTableView() {
         tableView.register(UINib.init(nibName: VaccineCardTableViewCell.getName, bundle: .main), forCellReuseIdentifier: VaccineCardTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
@@ -183,14 +185,18 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard !dataSource.isEmpty else { return UITableViewCell() }
-        if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
-            let expanded = indexPath.row == expandedIndexRow && !inEditMode
-            let model = dataSource[indexPath.row]
-            cell.configure(model: model, expanded: expanded, editMode: inEditMode, delegateOwner: self)
-            return cell
+        guard !dataSource.isEmpty,
+              let cell = tableView.dequeueReusableCell(
+                withIdentifier: VaccineCardTableViewCell.getName,
+                for: indexPath) as? VaccineCardTableViewCell
+        else {
+            return UITableViewCell()
         }
-        return UITableViewCell()
+        let expanded = indexPath.row == expandedIndexRow && !inEditMode
+        let model = dataSource[indexPath.row]
+        cell.configure(model: model, expanded: expanded, editMode: inEditMode, delegateOwner: self)
+        cell.delegate = self
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -214,42 +220,22 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        guard !dataSource.isEmpty else { return .none }
+        guard !dataSource.isEmpty || !inEditMode else { return .none }
         return .delete
     }
-    
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            self.deleteCardAt(indexPath: indexPath)
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
         }
     }
     
-    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard !dataSource.isEmpty else { return nil }
-        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
-            self.deleteCardAt(indexPath: indexPath)
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        if inEditMode {
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
         }
-        delete.isAccessibilityElement = true
-        delete.accessibilityTraits = .button
-        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
-        delete.image = UIImage(named: "unlink")
-        delete.backgroundColor = .white
-        let config = UISwipeActionsConfiguration(actions: [delete])
-        return config
-    }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard !dataSource.isEmpty else { return nil }
-        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
-            self.deleteCardAt(indexPath: indexPath)
-        }
-        delete.isAccessibilityElement = true
-        delete.accessibilityTraits = .button
-        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
-        delete.image = UIImage(named: "unlink")
-        delete.backgroundColor = .white
-        let config = UISwipeActionsConfiguration(actions: [delete])
-        return config
+        return "Unlink"
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -258,6 +244,22 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         dataSource.remove(at: sourceIndexPath.row)
         dataSource.insert(movedObject, at: destinationIndexPath.row)
         StorageService.shared.changeVaccineCardSortOrder(cardQR: movedObject.code ?? "", newPosition: destinationIndexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else {return nil}
+        let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
+            guard let `self` = self else {return}
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: false)
+        }
+        deleteAction.hidesWhenSelected = true
+        deleteAction.image = UIImage(named: "unlink")
+        deleteAction.backgroundColor = .white
+        deleteAction.textColor = Constants.UI.Theme.primaryColor
+        deleteAction.isAccessibilityElement = true
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityTraits = .button
+        return [deleteAction]
     }
 }
 
@@ -289,12 +291,13 @@ extension CovidVaccineCardsViewController: FederalPassPDFViewDelegate {
 
 // MARK: Adjusting data source functions
 extension CovidVaccineCardsViewController {
-    private func deleteCardAt(indexPath: IndexPath) {
-        alert(title: .unlinkCardTitle, message: .unlinkCardMessage, buttonOneTitle: .cancel, buttonOneCompletion: {
-            // This logic is so that a swipe to delete that is cancelled, gets reloaded and isn't showing a swiped state after cancelled
-            self.tableView.isEditing = self.inEditMode
-            // Note: Have to reload the entire table view here, not just the one cell, as it causes issues
-            self.tableView.reloadData()
+    private func deleteCardAt(indexPath: IndexPath, reInitEditMode: Bool) {
+        alert(title: .unlinkCardTitle, message: .unlinkCardMessage,
+              buttonOneTitle: .cancel, buttonOneCompletion: {
+            if reInitEditMode {
+                self.tableView.setEditing(false, animated: true)
+                self.tableView.setEditing(true, animated: true)
+            }
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
