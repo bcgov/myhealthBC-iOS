@@ -37,10 +37,8 @@ class CovidVaccineCardsViewController: BaseViewController {
         didSet {
             tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
             tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
-            tableView.beginUpdates()
             self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
-            tableView.endUpdates()
             adjustButtonName()
             self.tableView.layoutSubviews()
         }
