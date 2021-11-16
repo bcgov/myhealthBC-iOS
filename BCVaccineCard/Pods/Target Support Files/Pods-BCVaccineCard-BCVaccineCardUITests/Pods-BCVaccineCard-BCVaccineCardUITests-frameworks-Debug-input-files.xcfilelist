@@ -14,4 +14,5 @@ ${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework
 ${BUILT_PRODUCTS_DIR}/QueueITLibrary/QueueITLibrary.framework
 ${BUILT_PRODUCTS_DIR}/SnowplowTracker/SnowplowTracker.framework
 ${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework
+${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework
 ${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework

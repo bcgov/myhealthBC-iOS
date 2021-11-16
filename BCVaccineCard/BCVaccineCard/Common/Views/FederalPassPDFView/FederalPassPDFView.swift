@@ -39,6 +39,8 @@ class FederalPassPDFView: UIView {
         pdfContainer.addSubview(pdfView)
         pdfView.addEqualSizeContraints(to: pdfContainer)
         pdfView.document = doc
+        pdfView.minScaleFactor = pdfView.scaleFactorForSizeToFit
+        pdfView.autoScales = true
         style()
         self.parent?.tabBarController?.tabBar.isHidden = true
     }
