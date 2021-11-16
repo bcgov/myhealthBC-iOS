@@ -51,6 +51,8 @@
 "DuplicateMessage" = "This QR code is already saved in your list of passes.";
 "HealthGatewayError" = "Health Gateway error";
 "VaxAddedBannerAlert" = "Your proof of vaccination has been added";
+"UpdatedCard" =" Your proof of vaccination has been updated";
+"UpdateCardFailed" = "We couldn't update your vaccine card";
 "HealthPasses" = "Health Passes";
 "HealthRecords" = "Health Records";
 "HealthResources" = "Health Resources";
@@ -123,5 +125,3 @@
 "GetTestkitResource" = "Get a COVID-19 Rapid Test Kit";
 "Covid19SymptomCheckerResource" = "Covid-19 symptom checker";
 "SchoolRelatedResource" = "K-12 Daily Check";
-"UpdatedCard" =" Your proof of vaccination has been updated";
-"UpdateCardFailed" = "We couldn't update your vaccine card";
