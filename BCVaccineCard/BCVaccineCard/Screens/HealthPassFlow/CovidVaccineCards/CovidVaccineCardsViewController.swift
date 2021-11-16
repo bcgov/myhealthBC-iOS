@@ -231,7 +231,10 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
+        if inEditMode {
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
+        }
+    
         return "Unlink"
     }
     
@@ -245,7 +248,8 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else {return nil}
-        let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { action, indexPath in
+        let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
+            guard let `self` = self else {return}
             self.deleteCardAt(indexPath: indexPath, reInitEditMode: false)
         }
         deleteAction.hidesWhenSelected = true
