@@ -313,7 +313,10 @@ extension UIViewController {
         StorageService.shared.getVaccineCardsForCurrentUser { localDS in
             guard !localDS.isEmpty else { return completion(false) }
             if let existing = localDS.map({$0.transform()}).first(where: {$0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && ($0.status == .partially || $0.fedCode != model.codableModel.fedCode) }) {
-                return completion(model.codableModel.isNewer(than: existing))
+                // TODO: Uncomment the code below to also validate based on issue date
+                // return completion(model.codableModel.isNewer(than: existing))
+                
+                return completion(true)
             }
             return completion(false)
         }
