@@ -253,9 +253,9 @@ extension UIViewController {
         StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] success in
             guard let `self` = self else {return}
             if success {
-                self.showBanner(message: "Your proof of vaccination has been updated", style: .Top)
+                self.showBanner(message: .updatedCard, style: .Top)
             } else {
-                self.alert(title: "Update failed", message: "We couldn't update your vaccine card")
+                self.alert(title: .error, message: .updateCardFailed)
             }
             completion(success)
         })
