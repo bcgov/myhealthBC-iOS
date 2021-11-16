@@ -72,6 +72,7 @@ extension String {
         let data = self.data(using: String.Encoding.ascii)
         if let filter = CIFilter(name: "CIQRCodeGenerator") {
             filter.setValue(data, forKey: "inputMessage")
+            filter.setValue("L", forKey:"inputCorrectionLevel")
             let transform = CGAffineTransform(scaleX: 10, y: 10)
 
             if let output = filter.outputImage?.transformed(by: transform) {
