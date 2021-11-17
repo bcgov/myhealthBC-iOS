@@ -28,6 +28,8 @@ class QueueItWorker: NSObject {
     
     private var url: URL?
     
+    private var retryOnEmptyPDFCount: Int = 0
+    
     private var delegateOwner: UIViewController
     private var healthGateway: HealthGatewayBCGateway
     private weak var delegate: QueueItWorkerDefaultsDelegate?
@@ -75,6 +77,7 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
                 }
                 let cookies = HTTPCookie.cookies(withResponseHeaderFields: cookieHeadString, for: url)
                 AF.session.configuration.httpCookieStorage?.setCookies(cookies, for: url, mainDocumentURL: nil)
+                self.delegate?.showLoader()
                 self.getActualVaccineCard(model: model, token: self.queueitToken)
             } else {
                 self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .unknownErrorMessage))
@@ -153,6 +156,7 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
 // MARK: Alamofire requests
 extension QueueItWorker {
     func createInitialVaccineCardRequest(model: GatewayVaccineCardRequest) {
+        self.retryOnEmptyPDFCount = 0
         self.model = model
         self.delegate?.showLoader()
         let interceptor = NetworkRequestInterceptor()
@@ -173,6 +177,8 @@ extension QueueItWorker {
                     self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
                     return
                 }
+                // Resetting this here as I want to make sure retry uses the same logic
+                self.queueitToken = nil
                 self.getActualVaccineCard(model: model, token: nil)
             } else if let redirectURLStringEndcoded = response.response?.allHeaderFields["x-queueit-redirect"] as? String,
                       let decodedURLString = redirectURLStringEndcoded.removingPercentEncoding,
@@ -186,8 +192,8 @@ extension QueueItWorker {
             } else {
                 switch response.result {
                 case .success(_):
-                    // This shouldn't happen, but putting this here in case
-//                    self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+                    // Resetting this here as I want to make sure retry uses the same logic
+                    self.queueitToken = nil
                     self.getActualVaccineCard(model: model, token: nil)
                 case .failure(let error):
                     self.delegate?.hideLoader()
@@ -195,6 +201,15 @@ extension QueueItWorker {
                 }
             }
         }
+    }
+    
+    @objc private func retryGetActualVaccineCardRequest() {
+        guard let model = self.model else {
+            self.delegate?.hideLoader()
+            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            return
+        }
+        self.getActualVaccineCard(model: model, token: self.queueitToken)
     }
     
     private func getActualVaccineCard(model: GatewayVaccineCardRequest, token: String?) {
@@ -205,10 +220,15 @@ extension QueueItWorker {
                 print(vaccineCard)
                 // Note: Have to add error handling here, because whoever set up this response didn't do it correctly - error is part of ths success response object
                 // Noticed: Errors seem to be very inconsistent in terms of the response object
-                if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode == nil && vaccineCard.resourcePayload?.federalVaccineProof == nil) {
+                if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode?.data == nil && vaccineCard.resourcePayload?.federalVaccineProof?.data == nil) {
                     let adjustedMessage = resultMessage == .errorParsingPHNFromHG ? .errorParsingPHNMessage : resultMessage
                     self.delegate?.handleError(title: .error, error: ResultError(resultMessage: adjustedMessage))
                     self.delegate?.hideLoader()
+                } else if vaccineCard.resourcePayload?.qrCode != nil && vaccineCard.resourcePayload?.loaded == false && (vaccineCard.resourcePayload?.federalVaccineProof?.data ?? "").isEmpty && self.retryOnEmptyPDFCount < 3, let retryinMS = vaccineCard.resourcePayload?.retryin {
+                    // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+                    self.retryOnEmptyPDFCount += 1
+                    let retryInSeconds = Double(retryinMS/1000)
+                    self.perform(#selector(self.retryGetActualVaccineCardRequest), with: nil, afterDelay: retryInSeconds)
                 } else {
                     let qrResult = vaccineCard.transformResponseIntoQRCode()
                     guard let code = qrResult.qrString else {
