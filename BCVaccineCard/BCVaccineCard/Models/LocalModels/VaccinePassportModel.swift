@@ -66,8 +66,9 @@ struct AppVaccinePassportModel: Equatable {
         let date = Date.init(timeIntervalSince1970: codableModel.issueDate)
         return Date.Formatter.issuedOnDateTime.string(from: date)
     }
+    
     var id: String? {
-        return codableModel.name + codableModel.birthdate
+        return codableModel.hash
     }
     
     func transform() -> LocallyStoredVaccinePassportModel {
