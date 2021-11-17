@@ -346,13 +346,6 @@ extension UIViewController {
                 if let fedPass = fedPass {
                     self?.openFederalPass(pass: fedPass, vc: owner, id: id, completion: completion)
                 }
-//                source == .vaccineCardsScreen
-                // NOTE: This is required for vaccineCardsScreenOnly
-//                guard let `self` = self else { return }
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                    self.postCardAddedNotification(id: id)
-//                }
-                
             }
         }
         self.tabBarController?.tabBar.isHidden = true
