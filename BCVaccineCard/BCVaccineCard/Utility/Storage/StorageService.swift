@@ -24,7 +24,7 @@ class StorageService {
     public static let shared = StorageService()
     
     fileprivate var managedContext: NSManagedObjectContext?
-
+    
     
     init() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
@@ -168,7 +168,7 @@ class StorageService {
         }
     }
     
-    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel) {
+    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
         guard let context = managedContext else {return}
         do {
             let cards = try context.fetch(VaccineCard.createFetchRequest())
@@ -178,9 +178,14 @@ class StorageService {
             card.federalPass = model.fedCode
             card.phn = model.phn
             try context.save()
+            DispatchQueue.main.async {
+                return completion(true)
+            }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
-            return
+            DispatchQueue.main.async {
+                return completion(false)
+            }
         }
     }
     
@@ -200,24 +205,13 @@ class StorageService {
         var remainingCards = cards
         guard let cardToProcess = remainingCards.popLast(),
               let code = cardToProcess.code else {
-            return recursivelyProcessStored(cards: remainingCards, processed: processed, completion: completion)
-        }
+                  return recursivelyProcessStored(cards: remainingCards, processed: processed, completion: completion)
+              }
         // TODO: Will need to get vax dates from the processed result and add to model below
         BCVaccineValidator.shared.validate(code: code) { result in
-            if let processed = result.result {
-                var status: VaccineStatus
-                switch processed.status {
-                case .Fully:
-                    status = .fully
-                case .Partially:
-                    status = .partially
-                case .None:
-                    status = .notVaxed
-                }
-                let model = LocallyStoredVaccinePassportModel(code: code, birthdate: processed.birthdate, vaxDates: processed.immunizations.compactMap({$0.date}), name: processed.name, issueDate: processed.issueDate, status: status, source: .imported, fedCode: cardToProcess.federalPass, phn: cardToProcess.phn)
-                processedCards.append(AppVaccinePassportModel(codableModel: model))
-                self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
-            }
+            let model = result.toLocal(federalPass: cardToProcess.federalPass ?? "", phn: cardToProcess.phn ?? "")
+            processedCards.append(AppVaccinePassportModel(codableModel: model))
+            self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
         }
     }
 }

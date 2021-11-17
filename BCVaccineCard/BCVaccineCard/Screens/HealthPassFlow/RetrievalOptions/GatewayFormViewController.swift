@@ -37,6 +37,14 @@ enum GatewayFormViewControllerFetchType: Equatable {
     case federalPassOnly(dob: String, dov: String)
     case vaccinationRecord
     
+    var getNavTitle: String {
+        switch self {
+        case .bcVaccineCardAndFederalPass: return .addAHealthPass
+        case .federalPassOnly: return .getFederalTravelPass
+        case .vaccinationRecord: return .addAHealthPass // TODO: Will need to update this when we implement it
+        }
+    }
+    
     var getDataSource: [FormData] {
         switch self {
         case .bcVaccineCardAndFederalPass:
@@ -89,6 +97,7 @@ class GatewayFormViewController: BaseViewController {
             vc.healthGateway = GatewayAccess.factory.makeHealthGatewayBCGateway()
             vc.rememberDetails = rememberDetails
             vc.fetchType = fetchType
+            vc.navTitle = fetchType.getNavTitle
             vc.dataSource = fetchType.getDataSource
             return vc
         }
@@ -102,6 +111,7 @@ class GatewayFormViewController: BaseViewController {
     // Form setup
     private var dataSource: [FormData] = []
     private var fetchType: GatewayFormViewControllerFetchType!
+    private var navTitle: String!
     private var submitButtonEnabled: Bool = false {
         didSet {
             submitButton.enabled = submitButtonEnabled
@@ -173,7 +183,7 @@ class GatewayFormViewController: BaseViewController {
 // MARK: Navigation setup
 extension GatewayFormViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .addABCVaccineCard,
+        self.navDelegate?.setNavigationBarWith(title: self.navTitle,
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthGatewayScreen.navRightIconTitle, hint: AccessibilityLabels.HealthGatewayScreen.navRightIconHint)),
                                                navStyle: .small,
@@ -495,8 +505,11 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.navigationController?.popViewController(animated: true)
                 }
-                self.updateCardInLocalStorage(model: model.transform())
-                self.completionHandler?(model.id ?? "")
+                self.updateCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
+                    guard let `self` = self else {return}
+                    self.completionHandler?(model.id ?? "")
+                })
+                
             } else {
                 self.isCardAlreadyInWallet(modelToAdd: model) {[weak self] isAlreadyInWallet in
                     guard let `self` = self else {return}

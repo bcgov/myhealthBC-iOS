@@ -8,6 +8,7 @@
 import UIKit
 import BCVaccineValidator
 import PDFKit
+import SwipeCellKit
 
 class CovidVaccineCardsViewController: BaseViewController {
     
@@ -22,11 +23,10 @@ class CovidVaccineCardsViewController: BaseViewController {
     // NOTE: This is for fixing the indentation of table view when in edit mode
     @IBOutlet weak private var tableViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak private var tableViewTrailingConstraint: NSLayoutConstraint!
-    @IBOutlet weak private var bottomButton: AppStyleButton!
     
     private var expandedIndexRow = 0
     
-    private var dataSource: [AppVaccinePassportModel] = [] {
+    private var dataSource: [VaccineCard] = [] {
         didSet {
             buttonHiddenStatus()
         }
@@ -36,9 +36,9 @@ class CovidVaccineCardsViewController: BaseViewController {
         didSet {
             tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
             tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
-            tableView.isEditing = inEditMode
-            adjustButtonName()
+            self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
+            adjustNavBar()
             self.tableView.layoutSubviews()
         }
     }
@@ -92,7 +92,7 @@ extension CovidVaccineCardsViewController {
             guard let cell = self.tableView.cellForRow(at: indexPath), self.dataSource.count > indexPath.row else { return }
             let model = self.dataSource[indexPath.row]
             cell.accessibilityLabel = AccessibilityLabels.CovidVaccineCardsScreen.proofOfVaccineCardAdded
-            let accessibilityValue = "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)"
+            let accessibilityValue = "\(model.name ?? ""), \(AccessibilityLabels.VaccineCardView.qrCodeImage)"
             cell.accessibilityValue = accessibilityValue
             cell.accessibilityHint = AccessibilityLabels.VaccineCardView.expandedAction
             UIAccessibility.setFocusTo(cell)
@@ -103,23 +103,45 @@ extension CovidVaccineCardsViewController {
 // MARK: Navigation setup
 extension CovidVaccineCardsViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .bcVaccineCards,
+        let hasCards = !self.dataSource.isEmpty
+        let editModeNavButton = inEditMode ? NavButton(title: .done,
+                                                    image: nil, action: #selector(self.doneButton),
+                                                    accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightDoneIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightDoneIconHint)) :
+                                          NavButton(title: .edit,
+                                                    image: nil, action: #selector(self.editButton),
+                                                    accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightEditIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightEditIconHint))
+        let rightNavButton = hasCards ? editModeNavButton : nil
+        self.navDelegate?.setNavigationBarWith(title: .bcVaccinePasses,
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconHint)),
+                                               rightNavButton: rightNavButton,
                                                navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: .healthPasses)
     }
     
-    @objc private func addCardButton() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        goToAddCardOptionScreen()
+    @objc private func doneButton() {
+        expandedIndexRow = 0
+        inEditMode = false
+        accessibilityFocusForEditing()
     }
     
-    private func goToAddCardOptionScreen() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: AccessibilityLabels.CovidVaccineCardsScreen.navHint)
-        self.navigationController?.pushViewController(vc, animated: true)
+    @objc private func editButton() {
+        tableView.isEditing = false
+        expandedIndexRow = 0
+        inEditMode = true
+        accessibilityFocusForEditing()
     }
+    
+    private func accessibilityFocusForEditing() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            guard !self.dataSource.isEmpty else { return }
+            let indexPath = IndexPath(row: self.dataSource.count - 1, section: 0)
+            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
+            UIAccessibility.setFocusTo(cell)
+        }
+
+    }
+
 }
 
 // MARK: DataSource Management
@@ -135,41 +157,20 @@ extension CovidVaccineCardsViewController {
     private func buttonHiddenStatus() {
         DispatchQueue.main.async { [weak self] in
             guard let `self` = self else {return}
-            self.bottomButton.isHidden = self.dataSource.isEmpty
+//            self.bottomButton.isHidden = self.dataSource.isEmpty
+            self.adjustNavBar()
+            
         }
         
     }
-    private func adjustButtonName() {
-        guard !self.dataSource.isEmpty else { return }
-        let buttonType: AppStyleButton.ButtonType = inEditMode ? .done : .manageCards
-        let value = self.inEditMode ? AppStyleButton.ButtonType.done.getTitle : AppStyleButton.ButtonType.manageCards.getTitle
-        let hint = self.inEditMode ? AccessibilityLabels.CovidVaccineCardsScreen.inEditMode : AccessibilityLabels.CovidVaccineCardsScreen.notInEditMode
-        bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true, accessibilityValue: value, accessibilityHint: hint)
+    private func adjustNavBar() {
+        self.navSetup()
     }
-}
-
-// MARK: Bottom Button Tapped Delegate
-extension CovidVaccineCardsViewController: AppStyleButtonDelegate {
-    func buttonTapped(type: AppStyleButton.ButtonType) {
-        // Note: This is a fix for when a user may swipe to edit, then while editing, taps manage cards
-        if type == .manageCards {
-            tableView.isEditing = false
-        }
-        expandedIndexRow = 0
-        inEditMode = type == .manageCards
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            guard !self.dataSource.isEmpty else { return }
-            let indexPath = IndexPath(row: self.dataSource.count - 1, section: 0)
-            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
-            UIAccessibility.setFocusTo(cell)
-        }
-        
-    }
-
 }
 
 // MARK: Table View Logic
-extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataSource {
+extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
+    
     private func setupTableView() {
         tableView.register(UINib.init(nibName: VaccineCardTableViewCell.getName, bundle: .main), forCellReuseIdentifier: VaccineCardTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
@@ -183,21 +184,25 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard !dataSource.isEmpty else { return UITableViewCell() }
-        if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
-            let expanded = indexPath.row == expandedIndexRow && !inEditMode
-            let model = dataSource[indexPath.row]
-            cell.configure(model: model, expanded: expanded, editMode: inEditMode, delegateOwner: self)
-            return cell
+        guard !dataSource.isEmpty,
+              let cell = tableView.dequeueReusableCell(
+                withIdentifier: VaccineCardTableViewCell.getName,
+                for: indexPath) as? VaccineCardTableViewCell
+        else {
+            return UITableViewCell()
         }
-        return UITableViewCell()
+        let expanded = indexPath.row == expandedIndexRow && !inEditMode
+        let model = dataSource[indexPath.row]
+        cell.configure(model: model, expanded: expanded, editMode: inEditMode, delegateOwner: self)
+        cell.delegate = self
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard !self.inEditMode else { return }
         guard let _ = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
         guard self.expandedIndexRow != indexPath.row else {
-            guard let image = dataSource[indexPath.row].image else { return }
+            guard let image = dataSource[indexPath.row].code?.generateQRCode() else { return }
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
             self.present(vc, animated: true, completion: nil)
@@ -214,42 +219,22 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        guard !dataSource.isEmpty else { return .none }
+        guard !dataSource.isEmpty || !inEditMode else { return .none }
         return .delete
     }
-    
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            self.deleteCardAt(indexPath: indexPath)
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
         }
     }
     
-    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard !dataSource.isEmpty else { return nil }
-        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
-            self.deleteCardAt(indexPath: indexPath)
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        if inEditMode {
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
         }
-        delete.isAccessibilityElement = true
-        delete.accessibilityTraits = .button
-        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
-        delete.image = UIImage(named: "unlink")
-        delete.backgroundColor = .white
-        let config = UISwipeActionsConfiguration(actions: [delete])
-        return config
-    }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard !dataSource.isEmpty else { return nil }
-        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
-            self.deleteCardAt(indexPath: indexPath)
-        }
-        delete.isAccessibilityElement = true
-        delete.accessibilityTraits = .button
-        delete.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
-        delete.image = UIImage(named: "unlink")
-        delete.backgroundColor = .white
-        let config = UISwipeActionsConfiguration(actions: [delete])
-        return config
+        return "Unlink"
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -257,7 +242,23 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         let movedObject = dataSource[sourceIndexPath.row]
         dataSource.remove(at: sourceIndexPath.row)
         dataSource.insert(movedObject, at: destinationIndexPath.row)
-        StorageService.shared.changeVaccineCardSortOrder(cardQR: movedObject.codableModel.code, newPosition: destinationIndexPath.row)
+        StorageService.shared.changeVaccineCardSortOrder(cardQR: movedObject.code ?? "", newPosition: destinationIndexPath.row)
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else {return nil}
+        let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
+            guard let `self` = self else {return}
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: false)
+        }
+        deleteAction.hidesWhenSelected = true
+        deleteAction.image = UIImage(named: "unlink")
+        deleteAction.backgroundColor = .white
+        deleteAction.textColor = Constants.UI.Theme.primaryColor
+        deleteAction.isAccessibilityElement = true
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityTraits = .button
+        return [deleteAction]
     }
 }
 
@@ -289,17 +290,18 @@ extension CovidVaccineCardsViewController: FederalPassPDFViewDelegate {
 
 // MARK: Adjusting data source functions
 extension CovidVaccineCardsViewController {
-    private func deleteCardAt(indexPath: IndexPath) {
-        alert(title: .unlinkCardTitle, message: .unlinkCardMessage, buttonOneTitle: .cancel, buttonOneCompletion: {
-            // This logic is so that a swipe to delete that is cancelled, gets reloaded and isn't showing a swiped state after cancelled
-            self.tableView.isEditing = self.inEditMode
-            // Note: Have to reload the entire table view here, not just the one cell, as it causes issues
-            self.tableView.reloadData()
+    private func deleteCardAt(indexPath: IndexPath, reInitEditMode: Bool) {
+        alert(title: .unlinkCardTitle, message: .unlinkCardMessage,
+              buttonOneTitle: .cancel, buttonOneCompletion: {
+            if reInitEditMode {
+                self.tableView.setEditing(false, animated: true)
+                self.tableView.setEditing(true, animated: true)
+            }
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
             let item = self.dataSource[indexPath.row]
-            StorageService.shared.deleteVaccineCard(vaccineQR: item.codableModel.code)
+            StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "")
             self.dataSource.remove(at: indexPath.row)
             if self.dataSource.isEmpty {
                 self.inEditMode = false
@@ -314,15 +316,10 @@ extension CovidVaccineCardsViewController {
 extension CovidVaccineCardsViewController {
     
     private func fetchFromStorage() {
-        StorageService.shared.getVaccineCardsForCurrentUser { [weak self] cards in
-            guard let `self` = self else {return}
-            DispatchQueue.main.async { [weak self] in
-                guard let `self` = self else {return}
-                self.dataSource = cards
-                self.adjustButtonName()
-                self.tableView.reloadData()
-            }
-        }
+        let cards = StorageService.shared.fetchVaccineCards(for: AuthManager().userId())
+        self.dataSource = cards
+        self.adjustNavBar()
+        self.tableView.reloadData()
     }
 }
 

@@ -14,6 +14,7 @@ extension String {
     static var ok: String { return "OK".localized }
     static var yes: String { return "Yes".localized }
     static var no: String { return "No".localized }
+    static var edit: String { return "Edit".localized }
     /// Text used throughout app
     static var myCards: String { return "MyCards".localized }
     static var settings: String { return "Settings".localized }
@@ -62,7 +63,8 @@ extension String {
     
     // Alert
     static var vaxAddedBannerAlert: String { return "VaxAddedBannerAlert".localized }
-    
+    static var updatedCard: String {return "UpdatedCard".localized}
+    static var updateCardFailed: String {return "UpdateCardFailed".localized}
     
     // Onboarding flow
     /// initial onboarding screen
@@ -87,8 +89,8 @@ extension String {
     static var dobRange: String { return "DOBRange".localized }
     static var dovRange: String { return "DOVRange".localized }
     /// Labels and other text
-    static var formTitle: String { return "FormTitle".localized }
-    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
+//    static var formTitle: String { return "FormTitle".localized }
+//    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
     static var addAHealthPass: String { return "AddAHealthPass".localized }
     static var formDescription: String { return "FormDescription".localized }
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
@@ -114,10 +116,13 @@ extension String {
     
     // My Cards screen
     static var bcVaccineCards: String { return "BCVaccineCards".localized }
+    static var bcVaccinePasses: String { return "BCVaccinePasses".localized }
+    static var getFederalTravelPass: String { return "GetFederalTravelPass".localized }
     static var noCardsYet: String { return "NoCardsYet".localized }
     static var noCardsIntroText: String { return "NoCardsIntroText".localized }
 //    static var vaccinePass: String { return "VaccinePass".localized }
     static var bcVaccineCard: String { return "BCVaccineCard".localized }
+    static var bcVaccinePass: String { return "BCVaccinePass".localized }
     static var federalProofOfVaccination: String { return "FederalProofOfVaccination".localized }
     static var vaccinated: String { return "Vaccinated".localized }
     static var partiallyVaccinated: String { return "PartiallyVaccinated".localized }

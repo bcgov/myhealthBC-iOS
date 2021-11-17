@@ -3,17 +3,19 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-10-11.
-//
+// NOTE: leaving code commented as it will be uncommented (and replacing respective current code) when health records are shown
+// TODO: Uncomment code and remove code in its place for when Health Records are included in the release
 
 import UIKit
 
 enum OnboardingScreenType: Codable, CaseIterable, Equatable {
     static var allCases: [OnboardingScreenType] {
-        return [.healthPasses(version: 1), .healthRecords(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
+//        return [.healthPasses(version: 1), .healthRecords(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
+        return [.healthPasses(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
     }
     
     case healthPasses(version: Int)
-    case healthRecords(version: Int)
+//    case healthRecords(version: Int)
     case healthResources(version: Int)
     case newsFeed(version: Int)
     
@@ -21,12 +23,14 @@ enum OnboardingScreenType: Codable, CaseIterable, Equatable {
         switch self {
         case .healthPasses:
             return .one
-        case .healthRecords:
-            return .two
+//        case .healthRecords:
+//            return .two
         case .healthResources:
-            return .three
+//            return .three
+            return .two
         case .newsFeed:
-            return .four
+//            return .four
+            return .three
         
         }
     }
@@ -35,18 +39,21 @@ enum OnboardingScreenType: Codable, CaseIterable, Equatable {
 class InitialOnboardingView: UIView {
     
     enum ScreenNumber: CaseIterable {
-        case one, two, three, four
+//        case one, two, three, four
+        case one, two, three
         
         var getRotatingImage: UIImage? {
             switch self {
             case .one:
                 return UIImage(named: "bubble-passes")
             case .two:
-                return UIImage(named: "bubble-records")
-            case .three:
+//                return UIImage(named: "bubble-records")
                 return UIImage(named: "bubble-resources")
-            case .four:
+            case .three:
+//                return UIImage(named: "bubble-resources")
                 return UIImage(named: "bubble-news")
+//            case .four:
+//                return UIImage(named: "bubble-news")
             }
         }
         
@@ -55,11 +62,13 @@ class InitialOnboardingView: UIView {
             case .one:
                 return .healthPasses
             case .two:
-                return .healthRecords
-            case .three:
+//                return .healthRecords
                 return .healthResources
-            case .four:
+            case .three:
+//                return .healthResources
                 return .newsFeed
+//            case .four:
+//                return .newsFeed
             }
         }
         
@@ -68,11 +77,13 @@ class InitialOnboardingView: UIView {
             case .one:
                 return .healthPasses(version: 1)
             case .two:
-                return .healthRecords(version: 1)
-            case .three:
+//                return .healthRecords(version: 1)
                 return .healthResources(version: 1)
-            case .four:
+            case .three:
+//                return .healthResources(version: 1)
                 return .newsFeed(version: 1)
+//            case .four:
+//                return .newsFeed(version: 1)
             }
         }
         
@@ -81,11 +92,13 @@ class InitialOnboardingView: UIView {
             case .one:
                 return .initialOnboardingHealthPassesDescription
             case .two:
-                return .initialOnboardingHealthRecordsDescription
-            case .three:
+//                return .initialOnboardingHealthRecordsDescription
                 return .initialOnboardingHealthResourcesDescription
-            case .four:
+            case .three:
+//                return .initialOnboardingHealthResourcesDescription
                 return .initialOnboardingNewsFeedDescription
+//            case .four:
+//                return .initialOnboardingNewsFeedDescription
             }
         }
         
@@ -97,8 +110,8 @@ class InitialOnboardingView: UIView {
                 return 1
             case .three:
                 return 2
-            case .four:
-                return 3
+//            case .four:
+//                return 3
             }
         }
     }
@@ -304,9 +317,9 @@ extension InitialOnboardingView {
             self.rotatingImageViewConstraints = [verticalConstraint, leadingConstraint, widthConstraint, heightConstraint]
             contentView.addConstraints([verticalConstraint, leadingConstraint, widthConstraint, heightConstraint])
         case .two:
-            removeOldConstraints()
-            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
-        case .three:
+//            removeOldConstraints()
+//            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
+            
             removeOldConstraints()
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
@@ -316,9 +329,22 @@ extension InitialOnboardingView {
             let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
             self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
             contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
-        case .four:
+        case .three:
+//            removeOldConstraints()
+//            let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
+//            let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
+//            let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
+//            let trailingConstraint = imageView.trailingAnchor.constraint(equalTo: relatedImageTrailingReference, constant: 14)
+//            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 132)
+//            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
+//            self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
+//            contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
+            
             removeOldConstraints()
             constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
+//        case .four:
+//            removeOldConstraints()
+//            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
         }
     }
     
