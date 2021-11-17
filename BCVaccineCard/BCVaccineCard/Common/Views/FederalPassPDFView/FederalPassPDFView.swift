@@ -18,15 +18,17 @@ class FederalPassPDFView: UIView {
     private var pdfView: PDFView?
     private var parent: UIViewController?
     private var pdfData: Data?
+    private var id: String?
     // Completion
-    var completionHandler: (() -> Void)?
+    var completionHandler: ((String?) -> Void)?
     
-    public func show(data: Data, in parent: UIViewController) {
+    public func show(data: Data, in parent: UIViewController, id: String?) {
         guard let doc = PDFDocument(data: data) else {
             return
         }
         self.parent = parent
         self.pdfData = data
+        self.id = id
         self.frame = .zero
         parent.view.addSubview(self)
         self.addEqualSizeContraints(to: parent.view)
@@ -43,7 +45,7 @@ class FederalPassPDFView: UIView {
     }
     
     @IBAction func closeButtonTapped(_ sender: Any) {
-        self.completionHandler?()
+        self.completionHandler?(self.id)
         self.removeFromSuperview()
     }
     

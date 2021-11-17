@@ -184,7 +184,7 @@ extension QRRetrievalMethodViewController {
             rememberDetails = details
         }
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass)
-        vc.completionHandler = { [weak self] id in
+        vc.completionHandler = { [weak self] (id, _) in
             guard let `self` = self else { return }
             self.view.accessibilityElementsHidden = true
             self.tableView.accessibilityElementsHidden = true

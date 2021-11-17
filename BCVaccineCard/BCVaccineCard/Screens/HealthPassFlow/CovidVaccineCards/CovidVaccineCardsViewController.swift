@@ -266,13 +266,18 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
 extension CovidVaccineCardsViewController: FederalPassViewDelegate {
     func federalPassButtonTapped(model: AppVaccinePassportModel?) {
         if let pass =  model?.codableModel.fedCode {
-            self.openFederalPass(pass: pass, delegateOwner: self, completion: { [weak self] in
+            self.openFederalPass(pass: pass, vc: self, id: nil, completion: { [weak self] _ in
                 guard let `self` = self else { return }
                 self.tabBarController?.tabBar.isHidden = false
             })
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .vaccineCardsScreen)
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .vaccineCardsScreen, owner: self, completion: { [weak self] id in
+                guard let `self` = self else { return }
+                self.tabBarController?.tabBar.isHidden = false
+                guard let id = id else { return }
+                self.postCardAddedNotification(id: id)
+            })
         }
     }
 
