@@ -45,6 +45,13 @@ enum GatewayFormViewControllerFetchType: Equatable {
         }
     }
     
+    var isFedPassOnly: Bool {
+        switch self {
+        case .federalPassOnly: return true
+        default: return false
+        }
+    }
+    
     var getDataSource: [FormData] {
         switch self {
         case .bcVaccineCardAndFederalPass:
@@ -135,8 +142,8 @@ class GatewayFormViewController: BaseViewController {
     private var healthGateway: HealthGatewayBCGateway!
     private var endpoint = UrlAccessor().getVaccineCard
     
-    // Completion
-    var completionHandler: ((String) -> Void)?
+    // Completion - first string is for the ID for core data, second string is optional for fed pass only
+    var completionHandler: ((String, String?) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -507,7 +514,8 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
                 }
                 self.updateCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
                     guard let `self` = self else {return}
-                    self.completionHandler?(model.id ?? "")
+                    let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
+                    self.completionHandler?(model.id ?? "", fedCode)
                 })
                 
             } else {
@@ -519,14 +527,15 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
                             DispatchQueue.main.async {
                                 self.navigationController?.popViewController(animated: true)
                             }
-                            self.completionHandler?(model.id ?? "")
+                            self.completionHandler?(model.id ?? "", nil)
                         }
                         return
                     } else {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             self.navigationController?.popViewController(animated: true)
                             self.appendModelToLocalStorage(model: model.transform())
-                            self.completionHandler?(model.id ?? "")
+                            let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
+                            self.completionHandler?(model.id ?? "", fedCode)
                             
                         }
                     }

@@ -184,7 +184,7 @@ extension QRRetrievalMethodViewController {
             rememberDetails = details
         }
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass)
-        vc.completionHandler = { [weak self] id in
+        vc.completionHandler = { [weak self] (id, _) in
             guard let `self` = self else { return }
             self.view.accessibilityElementsHidden = true
             self.tableView.accessibilityElementsHidden = true
@@ -205,18 +205,18 @@ extension QRRetrievalMethodViewController {
         showImagePicker { [weak self] image in
             guard let `self` = self, let image = image else {return}
             guard let codes = image.findQRCodes(), !codes.isEmpty else {
-                self.alert(title: .noQRFound, message: "") // TODO: Better text / from constants
+                self.alert(title: .noQRFound, message: "")
                 return
             }
             guard codes.count == 1, let code = codes.first else {
-                self.alert(title: .multipleQRCodesTitle, message: .multipleQRCodesMessage) // TODO: Better text / from constants
+                self.alert(title: .multipleQRCodesTitle, message: .multipleQRCodesMessage)
                 return
             }
             
             BCVaccineValidator.shared.validate(code: code) { [weak self] result in
                 guard let `self` = self else { return }
                 guard let data = result.result else {
-                    self.alert(title: .invalidQRCodeMessage, message: "") // TODO: Better text / from constants
+                    self.alert(title: .invalidQRCodeMessage, message: "")
                     return
                 }
                 DispatchQueue.main.async { [weak self] in
@@ -227,7 +227,7 @@ extension QRRetrievalMethodViewController {
             }
         }
     }
-    
+    // TODO: Need to verify this logic here
     private func storeValidatedQRCode(data: ScanResultModel, source: Source) {
         switch source {
         case .healthGateway:
@@ -245,8 +245,7 @@ extension QRRetrievalMethodViewController {
                 self.updateCardInLocalStorage(model: model, completion: {[weak self] success in
                     guard let `self` = self else {return}
                     if success {
-                        self.navigationController?.popViewController(animated: true)
-                        self.postCardAddedNotification(id: appModel.id ?? "")
+                        self.popBackToProperViewController(id: appModel.id ?? "")
                     }
                 })
             } else {
@@ -300,7 +299,7 @@ extension QRRetrievalMethodViewController {
         let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
         self.navigationController?.viewControllers.insert(vc, at: 1)
         // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.postCardAddedNotification(id: id)
         }
         self.navigationController?.popViewController(animated: true)

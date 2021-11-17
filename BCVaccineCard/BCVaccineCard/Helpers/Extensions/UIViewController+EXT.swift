@@ -246,7 +246,7 @@ extension UIViewController {
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), federalPass: model.fedCode, vaxDates: model.vaxDates)
+        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
@@ -329,23 +329,35 @@ extension UIViewController {
 
 // MARK: GoTo Health Gateway Logic
 extension UIViewController {
-    func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource) {
+    // Note: This is currently only being used for fetching fed pass only
+    // TODO: May need to be refactored in the future if we use this function anywhere else
+    func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, completion: ((String?) -> Void)?) {
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
         if let details = Defaults.rememberGatewayDetails {
             rememberDetails = details
         }
         
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
-        if source == .vaccineCardsScreen {
-            vc.completionHandler = { [weak self] id in
-                guard let `self` = self else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.postCardAddedNotification(id: id)
+        if fetchType.isFedPassOnly {
+            vc.completionHandler = { [weak self] (id, fedPass) in
+                if let fedPass = fedPass {
+                    self?.openFederalPass(pass: fedPass, vc: owner, id: id, completion: completion)
                 }
-                
             }
         }
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: Open federal pass
+extension UIViewController {
+    func openFederalPass(pass: String, vc: UIViewController, id: String?, completion: ((String?) -> Void)?) {
+        guard let data = Data(base64URLEncoded: pass) else {
+            return
+        }
+        let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
+        pdfView.show(data: data, in: vc.parent ?? vc, id: id)
+        pdfView.completionHandler = completion
     }
 }

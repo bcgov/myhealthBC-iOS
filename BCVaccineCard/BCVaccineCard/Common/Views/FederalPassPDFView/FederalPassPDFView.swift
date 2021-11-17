@@ -9,10 +9,6 @@ import Foundation
 import UIKit
 import PDFKit
 
-protocol FederalPassPDFViewDelegate: AnyObject {
-    func viewDismissed()
-}
-
 class FederalPassPDFView: UIView {
     @IBOutlet weak var pdfContainer: UIView!
     @IBOutlet weak var navContainer: UIView!
@@ -23,36 +19,33 @@ class FederalPassPDFView: UIView {
     private var pdfView: PDFView?
     private var parent: UIViewController?
     private var pdfData: Data?
-    var delegate: FederalPassPDFViewDelegate?
+    private var id: String?
+    // Completion
+    var completionHandler: ((String?) -> Void)?
     
-    public func show(data: Data, in parent: UIViewController) {
+    public func show(data: Data, in parent: UIViewController, id: String?) {
         guard let doc = PDFDocument(data: data) else {
             return
         }
         self.parent = parent
         self.pdfData = data
+        self.id = id
         present(in: parent.view)
         display(document: doc)
         style()
         setupAccessibility()
     }
     
-    @IBAction func closeButtonTapped(_ sender: Any) {
-        UIAccessibility.post(notification: .screenChanged, argument: self.parent)
-        self.delegate?.viewDismissed()
-        self.removeFromSuperview()
-    }
-    
-    @IBAction func shareButtonTapped(_ sender: Any) {
-        guard let data = pdfData else {return}
-        let ac = UIActivityViewController(activityItems: [data], applicationActivities: nil)
-        parent?.present(ac, animated: true)
-    }
-    
     private func present(in parent: UIView) {
         self.frame = .zero
+        self.alpha = 0
         parent.addSubview(self)
         self.addEqualSizeContraints(to: parent)
+        UIView.animate(withDuration: 0.2) {[weak self] in
+            guard let `self` = self else {return}
+            self.alpha = 1
+            self.parent?.view.layoutIfNeeded()
+        }
     }
     
     private func display(document: PDFDocument) {
@@ -65,6 +58,26 @@ class FederalPassPDFView: UIView {
         pdfView.document = document
         pdfView.minScaleFactor = pdfView.scaleFactorForSizeToFit
         pdfView.autoScales = true
+    }
+    
+    @IBAction func closeButtonTapped(_ sender: Any) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) { [weak self] in
+            guard let `self` = self else {return}
+            self.alpha = 0
+            self.parent?.tabBarController?.tabBar.isHidden = false
+            self.parent?.view.layoutIfNeeded()
+        } completion: { [weak self] done in
+            guard let `self` = self else {return}
+            UIAccessibility.post(notification: .screenChanged, argument: self.parent)
+            self.completionHandler?(self.id)
+            self.removeFromSuperview()
+        }
+    }
+    
+    @IBAction func shareButtonTapped(_ sender: Any) {
+        guard let data = pdfData else {return}
+        let ac = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+        parent?.present(ac, animated: true)
     }
     
     private func style() {
@@ -80,6 +93,7 @@ class FederalPassPDFView: UIView {
         closeButton.setTitle(.done, for: .normal)
     }
     
+    // TODO: Put these in accessibility constants file (Amir - lol)
     private func setupAccessibility() {
         closeButton.accessibilityLabel = "Done"
         closeButton.accessibilityHint = "Tapping this closes your federal proof of vaccination"
@@ -95,8 +109,6 @@ class FederalPassPDFView: UIView {
         self.accessibilityElements = [shareButton, closeButton, pdfView, closeButton]
         UIAccessibility.post(notification: .screenChanged, argument: self)
         UIAccessibility.setFocusTo(pdfView)
-        
-        
     }
     
 }

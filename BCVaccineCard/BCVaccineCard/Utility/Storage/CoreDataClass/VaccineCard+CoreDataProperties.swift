@@ -24,6 +24,7 @@ extension VaccineCard {
     @NSManaged public var vaxDates: [String]?
     @NSManaged public var phn: String?
     @NSManaged public var user: User?
+    @NSManaged public var firHash: String?
     
     
     public var federalPassData: Data? {
@@ -32,7 +33,7 @@ extension VaccineCard {
     }
     
     var id: String? {
-        return (name ?? "") + (birthdate ?? "")
+        return firHash
     }
 
 }
