@@ -36,18 +36,6 @@ class FederalPassPDFView: UIView {
         setupAccessibility()
     }
     
-    @IBAction func closeButtonTapped(_ sender: Any) {
-        UIAccessibility.post(notification: .screenChanged, argument: self.parent)
-        self.delegate?.viewDismissed()
-        self.removeFromSuperview()
-    }
-    
-    @IBAction func shareButtonTapped(_ sender: Any) {
-        guard let data = pdfData else {return}
-        let ac = UIActivityViewController(activityItems: [data], applicationActivities: nil)
-        parent?.present(ac, animated: true)
-    }
-    
     private func present(in parent: UIView) {
         self.frame = .zero
         parent.addSubview(self)
@@ -69,14 +57,15 @@ class FederalPassPDFView: UIView {
     }
     
     @IBAction func closeButtonTapped(_ sender: Any) {
+        UIAccessibility.post(notification: .screenChanged, argument: self.parent)
         self.completionHandler?(self.id)
         self.removeFromSuperview()
     }
     
     @IBAction func shareButtonTapped(_ sender: Any) {
-        let ac = UIActivityViewController(activityItems: [pdfData], applicationActivities: nil)
+        guard let data = pdfData else {return}
+        let ac = UIActivityViewController(activityItems: [data], applicationActivities: nil)
         parent?.present(ac, animated: true)
-
     }
     
     private func style() {
@@ -92,6 +81,7 @@ class FederalPassPDFView: UIView {
         closeButton.setTitle(.done, for: .normal)
     }
     
+    // TODO: Put these in accessibility constants file (Amir - lol)
     private func setupAccessibility() {
         closeButton.accessibilityLabel = "Done"
         closeButton.accessibilityHint = "Tapping this closes your federal proof of vaccination"
