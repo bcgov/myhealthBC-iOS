@@ -9,10 +9,6 @@ import Foundation
 import UIKit
 import PDFKit
 
-protocol FederalPassPDFViewDelegate: AnyObject {
-    func viewDismissed()
-}
-
 class FederalPassPDFView: UIView {
     @IBOutlet weak var pdfContainer: UIView!
     @IBOutlet weak var navContainer: UIView!
@@ -22,7 +18,8 @@ class FederalPassPDFView: UIView {
     private var pdfView: PDFView?
     private var parent: UIViewController?
     private var pdfData: Data?
-    var delegate: FederalPassPDFViewDelegate?
+    // Completion
+    var completionHandler: (() -> Void)?
     
     public func show(data: Data, in parent: UIViewController) {
         guard let doc = PDFDocument(data: data) else {
@@ -46,7 +43,7 @@ class FederalPassPDFView: UIView {
     }
     
     @IBAction func closeButtonTapped(_ sender: Any) {
-        self.delegate?.viewDismissed()
+        self.completionHandler?()
         self.removeFromSuperview()
     }
     

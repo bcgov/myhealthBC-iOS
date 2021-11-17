@@ -45,6 +45,13 @@ enum GatewayFormViewControllerFetchType: Equatable {
         }
     }
     
+    var isFedPassOnly: Bool {
+        switch self {
+        case .federalPassOnly: return true
+        default: return false
+        }
+    }
+    
     var getDataSource: [FormData] {
         switch self {
         case .bcVaccineCardAndFederalPass:

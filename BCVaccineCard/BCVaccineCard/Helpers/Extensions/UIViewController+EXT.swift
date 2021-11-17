@@ -332,7 +332,7 @@ extension UIViewController {
 
 // MARK: GoTo Health Gateway Logic
 extension UIViewController {
-    // TODO: Update this to have similar pop-back logic
+    // Note: This is currently only being used for fetching fed pass only
     func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource) {
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
         if let details = Defaults.rememberGatewayDetails {
@@ -344,7 +344,7 @@ extension UIViewController {
             vc.completionHandler = { [weak self] id in
                 // TODO: This should be for vaccine cards screen or health pass screen, then on success, user should open the federal pass, and on completion there, we can call the popBackToProperViewController logic below, which will need updating.
                 guard let `self` = self else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.postCardAddedNotification(id: id)
                 }
                 
@@ -383,9 +383,22 @@ extension UIViewController {
         let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
         self.navigationController?.viewControllers.insert(vc, at: 1)
         // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.postCardAddedNotification(id: id)
         }
         self.navigationController?.popViewController(animated: true)
+    }
+}
+
+// MARK: Open federal pass
+extension UIViewController {
+    func openFederalPass(pass: String, delegateOwner: UIViewController, completion: (() -> Void)?) {
+        guard let data = Data(base64URLEncoded: pass) else {
+            return
+        }
+        let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
+//        pdfView.delegate = delegateOwner as? FederalPassPDFViewDelegate
+        pdfView.show(data: data, in: delegateOwner.parent ?? delegateOwner)
+        pdfView.completionHandler = completion
     }
 }
