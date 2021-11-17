@@ -15,11 +15,17 @@ struct AccessibilityLabels {
     }
     
     struct HealthGatewayScreen {
+        static let navLeftIconTitle = "Close Icon"
+        static let navLeftIconHint = "Tapping this button will return you to the previous screen"
         static let navRightIconTitle = "Help Icon"
         static let navRightIconHint = "Tapping this button will bring you to a help screen to assist you with the Health Gateway vaccine card retrieval method"
     }
     
     struct CovidVaccineCardsScreen {
+        static let navRightDoneIconTitle = "Done"
+        static let navRightDoneIconHint = "Tapping this button will finish editing"
+        static let navRightEditIconTitle = "Edit"
+        static let navRightEditIconHint = "Tapping this button will allow you to edit your list of cards, by reordering your list or removing cards from your device"
         static let navRightIconTitle = "Add Card"
         static let navRightIconHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
         static let inEditMode = "Tapping 'done' will stop the editing of cards and save any changes."

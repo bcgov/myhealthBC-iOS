@@ -91,7 +91,7 @@ extension AppDelegate {
 // MARK: Root setup
 extension AppDelegate {
     private func setupRootViewController() {
-        
+        // Note: Added the last else statement as we've removed health records from the initial release, so for those who installed the app previously, we don't want to have any issues - basically, if all of this fails, at least the user can use the app normally
         if Defaults.initialOnboardingScreensSeen == OnboardingScreenType.allCases {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
@@ -112,6 +112,9 @@ extension AppDelegate {
             }
             let screensToShow = unseenScreens.map { $0.getStartScreenNumber }
             let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: firstScreen.getStartScreenNumber, screensToShow: screensToShow)
+            self.window?.rootViewController = vc
+        } else {
+            let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
         }
     }

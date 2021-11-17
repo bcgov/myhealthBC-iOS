@@ -23,7 +23,6 @@ class CovidVaccineCardsViewController: BaseViewController {
     // NOTE: This is for fixing the indentation of table view when in edit mode
     @IBOutlet weak private var tableViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak private var tableViewTrailingConstraint: NSLayoutConstraint!
-    @IBOutlet weak private var bottomButton: AppStyleButton!
     
     private var expandedIndexRow = 0
     
@@ -39,7 +38,7 @@ class CovidVaccineCardsViewController: BaseViewController {
             tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
             self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
-            adjustButtonName()
+            adjustNavBar()
             self.tableView.layoutSubviews()
         }
     }
@@ -104,23 +103,45 @@ extension CovidVaccineCardsViewController {
 // MARK: Navigation setup
 extension CovidVaccineCardsViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .bcVaccineCards,
+        let hasCards = !self.dataSource.isEmpty
+        let editModeNavButton = inEditMode ? NavButton(title: .done,
+                                                    image: nil, action: #selector(self.doneButton),
+                                                    accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightDoneIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightDoneIconHint)) :
+                                          NavButton(title: .edit,
+                                                    image: nil, action: #selector(self.editButton),
+                                                    accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightEditIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightEditIconHint))
+        let rightNavButton = hasCards ? editModeNavButton : nil
+        self.navDelegate?.setNavigationBarWith(title: .bcVaccinePasses,
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "add-plus"), action: #selector(self.addCardButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconTitle, hint: AccessibilityLabels.CovidVaccineCardsScreen.navRightIconHint)),
+                                               rightNavButton: rightNavButton,
                                                navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: .healthPasses)
     }
     
-    @objc private func addCardButton() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        goToAddCardOptionScreen()
+    @objc private func doneButton() {
+        expandedIndexRow = 0
+        inEditMode = false
+        accessibilityFocusForEditing()
     }
     
-    private func goToAddCardOptionScreen() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: AccessibilityLabels.CovidVaccineCardsScreen.navHint)
-        self.navigationController?.pushViewController(vc, animated: true)
+    @objc private func editButton() {
+        tableView.isEditing = false
+        expandedIndexRow = 0
+        inEditMode = true
+        accessibilityFocusForEditing()
     }
+    
+    private func accessibilityFocusForEditing() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            guard !self.dataSource.isEmpty else { return }
+            let indexPath = IndexPath(row: self.dataSource.count - 1, section: 0)
+            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
+            UIAccessibility.setFocusTo(cell)
+        }
+
+    }
+
 }
 
 // MARK: DataSource Management
@@ -136,37 +157,15 @@ extension CovidVaccineCardsViewController {
     private func buttonHiddenStatus() {
         DispatchQueue.main.async { [weak self] in
             guard let `self` = self else {return}
-            self.bottomButton.isHidden = self.dataSource.isEmpty
+//            self.bottomButton.isHidden = self.dataSource.isEmpty
+            self.adjustNavBar()
+            
         }
         
     }
-    private func adjustButtonName() {
-        guard !self.dataSource.isEmpty else { return }
-        let buttonType: AppStyleButton.ButtonType = inEditMode ? .done : .manageCards
-        let value = self.inEditMode ? AppStyleButton.ButtonType.done.getTitle : AppStyleButton.ButtonType.manageCards.getTitle
-        let hint = self.inEditMode ? AccessibilityLabels.CovidVaccineCardsScreen.inEditMode : AccessibilityLabels.CovidVaccineCardsScreen.notInEditMode
-        bottomButton.configure(withStyle: .white, buttonType: buttonType, delegateOwner: self, enabled: true, accessibilityValue: value, accessibilityHint: hint)
+    private func adjustNavBar() {
+        self.navSetup()
     }
-}
-
-// MARK: Bottom Button Tapped Delegate
-extension CovidVaccineCardsViewController: AppStyleButtonDelegate {
-    func buttonTapped(type: AppStyleButton.ButtonType) {
-        // Note: This is a fix for when a user may swipe to edit, then while editing, taps manage cards
-        if type == .manageCards {
-            tableView.isEditing = false
-        }
-        expandedIndexRow = 0
-        inEditMode = type == .manageCards
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            guard !self.dataSource.isEmpty else { return }
-            let indexPath = IndexPath(row: self.dataSource.count - 1, section: 0)
-            guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
-            UIAccessibility.setFocusTo(cell)
-        }
-        
-    }
-
 }
 
 // MARK: Table View Logic
@@ -319,7 +318,7 @@ extension CovidVaccineCardsViewController {
     private func fetchFromStorage() {
         let cards = StorageService.shared.fetchVaccineCards(for: AuthManager().userId())
         self.dataSource = cards
-        self.adjustButtonName()
+        self.adjustNavBar()
         self.tableView.reloadData()
     }
 }
