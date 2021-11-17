@@ -54,7 +54,7 @@ class CodeValidationService {
                     let lot: String? = vax.lotNumber
                     immunizations.append(immunizationRecord(vaccineCode: vaxCode, date: date, provider: provider, lotNumber: lot))
                 }
-                let result = ScanResultModel(code: code, issueDate: Double(payload.nbf), name: payload.getName(), birthdate: birthdate, status: status, immunizations: immunizations)
+                let result = ScanResultModel(code: code, issueDate: Double(payload.nbf), name: payload.getName(), birthdate: birthdate, status: status, immunizations: immunizations, payload: payload)
                 
                 VerificationService.shared.verify(jwkSigned: compactjws, iss: payload.iss, kid: header.kid) { isVerified in
                     guard isVerified else {
