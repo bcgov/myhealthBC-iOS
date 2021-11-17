@@ -125,3 +125,5 @@
 "GetTestkitResource" = "Get a COVID-19 Rapid Test Kit";
 "Covid19SymptomCheckerResource" = "Covid-19 symptom checker";
 "SchoolRelatedResource" = "K-12 Daily Check";
+"TravelPass" = "Travel Pass";
+
