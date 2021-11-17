@@ -157,6 +157,8 @@ extension String {
     static var covid19SymptomCheckerResource: String { return "Covid19SymptomCheckerResource".localized }
     static var schoolRelatedResource: String { return "SchoolRelatedResource".localized }
     
+    // Federal Paaa pdf
+    static var travelPass: String { return "TravelPass".localized }
     
     
     // News Feed screen
