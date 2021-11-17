@@ -332,6 +332,7 @@ extension UIViewController {
 
 // MARK: GoTo Health Gateway Logic
 extension UIViewController {
+    // TODO: Update this to have similar pop-back logic
     func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource) {
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
         if let details = Defaults.rememberGatewayDetails {
@@ -341,6 +342,7 @@ extension UIViewController {
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
         if source == .vaccineCardsScreen {
             vc.completionHandler = { [weak self] id in
+                // TODO: This should be for vaccine cards screen or health pass screen, then on success, user should open the federal pass, and on completion there, we can call the popBackToProperViewController logic below, which will need updating.
                 guard let `self` = self else { return }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.postCardAddedNotification(id: id)
@@ -350,5 +352,40 @@ extension UIViewController {
         }
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: Pop back functionality for adding cards and going to proper screen
+extension UIViewController {
+    // FIXME: Need to update this properly
+    func popBackToProperViewControllerForFederalPass(id: String) {
+        // If we only have one card (or no cards), then go back to health pass with popBackTo
+        // If we have more than one card, we should check if 2nd controller in stack is CovidVaccineCardsViewController, if so, pop back, if not, instantiate, insert at 1, then pop back
+        guard StorageService.shared.fetchVaccineCards(for: AuthManager().userId()).count > 1 else {
+            self.popBack(toControllerType: HealthPassViewController.self)
+            return
+        }
+        // check for controller in stack
+        guard let viewControllerStack = self.navigationController?.viewControllers else { return }
+        var containsCovidVaxCardsVC = false
+        for (index, vc) in viewControllerStack.enumerated() {
+            if vc is CovidVaccineCardsViewController {
+                containsCovidVaxCardsVC = true
+            }
+        }
+        guard containsCovidVaxCardsVC == false else {
+            postCardAddedNotification(id: id)
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
+        guard viewControllerStack.count > 0 else { return }
+        guard viewControllerStack[0] is HealthPassViewController else { return }
+        let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
+        self.navigationController?.viewControllers.insert(vc, at: 1)
+        // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.postCardAddedNotification(id: id)
+        }
+        self.navigationController?.popViewController(animated: true)
     }
 }

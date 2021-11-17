@@ -227,7 +227,7 @@ extension QRRetrievalMethodViewController {
             }
         }
     }
-    
+    // TODO: Need to verify this logic here
     private func storeValidatedQRCode(data: ScanResultModel, source: Source) {
         switch source {
         case .healthGateway:
@@ -245,6 +245,7 @@ extension QRRetrievalMethodViewController {
                 self.updateCardInLocalStorage(model: model, completion: {[weak self] success in
                     guard let `self` = self else {return}
                     if success {
+                        // TODO: Need to potentially insert view controllers here to show appropriate VC (view all cards or health passes)
                         self.navigationController?.popViewController(animated: true)
                         self.postCardAddedNotification(id: appModel.id ?? "")
                     }
