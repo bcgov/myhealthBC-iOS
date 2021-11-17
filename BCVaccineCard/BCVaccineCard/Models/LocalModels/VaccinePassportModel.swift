@@ -35,6 +35,7 @@ enum Source: String, Codable {
 public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     let code: String
     let birthdate: String
+    let hash: String
     var vaxDates: [String]
     let name: String
     let issueDate: Double
@@ -81,25 +82,27 @@ struct AppVaccinePassportModel: Equatable {
 
 
 extension CodeValidationResult {
-    func toLocal(federalPass: String?, phn: String?) -> LocallyStoredVaccinePassportModel {
+    func toLocal(federalPass: String? = nil, phn: String? = nil, source: Source? = .imported) -> LocallyStoredVaccinePassportModel? {
+        return result?.toLocal(federalPass: federalPass, phn: phn, source: source)
+    }
+}
+
+extension ScanResultModel {
+    func toLocal(federalPass: String? = nil, phn: String? = nil, source: Source? = .imported) -> LocallyStoredVaccinePassportModel {
         var status: VaccineStatus
-        switch result?.status {
+        switch self.status {
         case .Fully:
             status = .fully
         case .Partially:
             status = .partially
         case .None:
             status = .notVaxed
-        case .none:
-            status = .notVaxed
         }
-        let vadDates: [String]
-        if let imms = result?.immunizations {
-            vadDates = imms.compactMap({$0.date})
-        } else {
-            vadDates = []
-        }
-        return LocallyStoredVaccinePassportModel(code: result?.code ?? "", birthdate: result?.birthdate ?? "", vaxDates: vadDates, name: result?.name ?? "", issueDate: result?.issueDate ?? 0, status: status, source: .imported, fedCode: federalPass, phn: phn)
+        let vadDates: [String] = immunizations.compactMap({$0.date})
+        
+        let hash = payload.fhirBundleHash() ?? "\(name)-\(birthdate)"
+      
+        return LocallyStoredVaccinePassportModel(code: code, birthdate: birthdate, hash: hash, vaxDates: vadDates, name: name, issueDate: issueDate, status: status, source: source ?? .imported, fedCode: federalPass, phn: phn)
         
     }
 }

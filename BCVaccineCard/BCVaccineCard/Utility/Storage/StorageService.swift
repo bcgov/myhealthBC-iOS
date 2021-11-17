@@ -209,9 +209,12 @@ class StorageService {
               }
         // TODO: Will need to get vax dates from the processed result and add to model below
         BCVaccineValidator.shared.validate(code: code) { result in
-            let model = result.toLocal(federalPass: cardToProcess.federalPass ?? "", phn: cardToProcess.phn ?? "")
-            processedCards.append(AppVaccinePassportModel(codableModel: model))
-            self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
+            if let model = result.toLocal(federalPass: cardToProcess.federalPass, phn: cardToProcess.phn) {
+                processedCards.append(AppVaccinePassportModel(codableModel: model))
+                self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
+            } else {
+                self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
+            }
         }
     }
 }
