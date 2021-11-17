@@ -262,8 +262,7 @@ extension UIViewController {
     }
     
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
-        let status = VaccineStatus.init(rawValue: data.status.rawValue) ?? .notVaxed
-        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, vaxDates: data.immunizations.compactMap({$0.date}), name: data.name, issueDate: data.issueDate, status: status, source: source, phn: nil)
+        return data.toLocal(source: source)
     }
 }
 
@@ -312,10 +311,8 @@ extension UIViewController {
     func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel, completion: @escaping(Bool) -> Void) {
         StorageService.shared.getVaccineCardsForCurrentUser { localDS in
             guard !localDS.isEmpty else { return completion(false) }
-            if let existing = localDS.map({$0.transform()}).first(where: {$0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate }) {
-                let shouldUpdate = (existing.status == .partially) || (existing.fedCode ?? "" != model.codableModel.fedCode ?? "")
-                // || model.codableModel.isNewer(than: existing)
-                // NOTE: uncomment code above to enable validation by issue date
+            if let existing = localDS.map({$0.transform()}).first(where: {$0.hash == model.codableModel.hash }) {
+                let shouldUpdate = model.codableModel.isNewer(than: existing)
                 return completion(shouldUpdate)
             }
             return completion(false)

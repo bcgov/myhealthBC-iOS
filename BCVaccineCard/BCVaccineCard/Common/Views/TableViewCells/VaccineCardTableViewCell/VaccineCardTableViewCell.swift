@@ -57,7 +57,9 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
             let localModel = result.toLocal(federalPass: model.federalPass, phn: model.phn)
             DispatchQueue.main.async {[weak self] in
                 guard let `self` = self else {return}
-                self.config(model: localModel.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
+                if let lm = localModel {
+                    self.config(model: lm.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
+                }
                 self.contentView.endLoadingIndicator()
             }
         }
