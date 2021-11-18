@@ -330,6 +330,8 @@ extension UIViewController {
             vc.completionHandler = { [weak self] (id, fedPass) in
                 if let fedPass = fedPass {
                     self?.openFederalPass(pass: fedPass, vc: owner, id: id, completion: completion)
+                } else {
+                    self?.navigationController?.popViewController(animated: true)
                 }
             }
         }
