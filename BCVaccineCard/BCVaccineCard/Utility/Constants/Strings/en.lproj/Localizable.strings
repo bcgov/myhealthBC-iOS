@@ -127,3 +127,5 @@
 "SchoolRelatedResource" = "K-12 Daily Check";
 "TravelPass" = "Travel Pass";
 
+"UpdateCard" = "Update Card";
+"UpdateCardFor" = "Would you like to replace the card for";
