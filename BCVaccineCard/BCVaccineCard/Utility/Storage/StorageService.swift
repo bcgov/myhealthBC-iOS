@@ -259,7 +259,7 @@ class StorageService {
                 if addedFederalCode(to: existing.transform()) {
                     return completion(.UpdatedFederalPass)
                 }
-                return completion(isNewer ? .exists : .isOutdated)
+                return completion(isNewer ? .canUpdateExisting : .isOutdated)
             }
             
             // Check if card for with the same name and dob exist
