@@ -505,9 +505,6 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
     }
     
     func updateCardInLocalStorage(model: AppVaccinePassportModel) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//            self.navigationController?.popViewController(animated: true)
-        }
         self.updateCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
             guard let `self` = self else {return}
             let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
@@ -517,7 +514,6 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
     
     func storeCardInLocalStorage(model: AppVaccinePassportModel) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//            self.navigationController?.popViewController(animated: true)
             self.appendModelToLocalStorage(model: model.transform())
             let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
             self.completionHandler?(model.id ?? "", fedCode)
@@ -527,7 +523,6 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
     
     func updateFederalPassInLocalStorge(model: AppVaccinePassportModel) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//            self.navigationController?.popViewController(animated: true)
             guard let fedCode = model.codableModel.fedCode else {
                 return
             }
