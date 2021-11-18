@@ -215,6 +215,7 @@ extension HealthPassViewController: FederalPassViewDelegate {
             self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .healthPassHomeScreen, owner: self, completion: { [weak self] _ in
                 guard let `self` = self else { return }
                 self.tabBarController?.tabBar.isHidden = false
+                self.navigationController?.popViewController(animated: true)
             })
         }
     }

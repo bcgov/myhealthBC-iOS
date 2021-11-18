@@ -275,6 +275,7 @@ extension CovidVaccineCardsViewController: FederalPassViewDelegate {
             self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .vaccineCardsScreen, owner: self, completion: { [weak self] id in
                 guard let `self` = self else { return }
                 self.tabBarController?.tabBar.isHidden = false
+                self.navigationController?.popViewController(animated: true)
                 guard let id = id else { return }
                 self.postCardAddedNotification(id: id)
             })
