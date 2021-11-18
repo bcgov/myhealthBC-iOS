@@ -261,6 +261,18 @@ extension UIViewController {
         })
     }
     
+    func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCardFedCode(newData: model, completion: {[weak self] success in
+            guard let `self` = self else {return}
+            if success {
+                self.showBanner(message: .updatedCard, style: .Top)
+            } else {
+                self.alert(title: .error, message: .updateCardFailed)
+            }
+            completion(success)
+        })
+    }
+    
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
         return data.toLocal(source: source)
     }
