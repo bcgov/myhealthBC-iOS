@@ -159,8 +159,9 @@ extension String {
     
     // Federal Paaa pdf
     static var travelPass: String { return "TravelPass".localized }
-    
-    
+
+    static var updateCard: String { return "UpdateCard".localized }
+    static var updateCardFor: String { return "UpdateCardFor".localized }
     // News Feed screen
     /// Already have newsFeed string from onboarding flow
     

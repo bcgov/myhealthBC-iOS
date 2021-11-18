@@ -541,7 +541,7 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
             case .isNew:
                 self.storeCardInLocalStorage(model: model)
             case .canUpdateExisting:
-                self.alert(title: "Update Card", message: "Would you like to replace the card for \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
+                self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}
                     self.updateCardInLocalStorage(model: model)
                 }, buttonTwoTitle: "No") { [weak self] in

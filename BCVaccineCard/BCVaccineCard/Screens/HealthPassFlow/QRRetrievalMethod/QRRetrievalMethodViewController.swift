@@ -254,7 +254,7 @@ extension QRRetrievalMethodViewController {
                     self.popBackToProperViewController(id: model.id ?? "")
                 }
             case .canUpdateExisting:
-                self.alert(title: "Update Card", message: "Would you like to replace the card for \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
+                self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}
                     self.updateCardInLocalStorage(model: model.transform(), completion: {[weak self] success in
                         guard let `self` = self else {return}
