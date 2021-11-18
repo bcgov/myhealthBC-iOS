@@ -536,8 +536,6 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
                 let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
                 self.completionHandler?(model.id ?? "", fedCode)
             })
-            self.completionHandler?(model.id ?? "", fedCode)
-            
         }
     }
     

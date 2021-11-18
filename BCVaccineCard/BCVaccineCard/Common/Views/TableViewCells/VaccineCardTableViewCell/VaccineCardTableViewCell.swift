@@ -46,7 +46,7 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
     func configure(model: VaccineCard, expanded: Bool, editMode: Bool, delegateOwner: UIViewController) {
         guard let vaxCode = model.code else {return}
         adjustExpansion(expanded: expanded)
-        if let current = self.model, current.codableModel.code == vaxCode {
+        if let current = self.model, current.codableModel.code == vaxCode && current.codableModel.fedCode == model.federalPass {
             config(model: current, expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
             return
         }
