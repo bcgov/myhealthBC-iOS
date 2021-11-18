@@ -223,7 +223,7 @@ extension QueueItWorker {
                     let adjustedMessage = resultMessage == .errorParsingPHNFromHG ? .errorParsingPHNMessage : resultMessage
                     self.delegate?.handleError(title: .error, error: ResultError(resultMessage: adjustedMessage))
                     self.delegate?.hideLoader()
-                } else if vaccineCard.resourcePayload?.loaded == false && self.retryOnEmptyPDFCount < 3, let retryinMS = vaccineCard.resourcePayload?.retryin {
+                } else if vaccineCard.resourcePayload?.loaded == false && self.retryOnEmptyPDFCount < Constants.NetworkRetryAttempts.publicVaccineStatusRetryMaxForFedPass, let retryinMS = vaccineCard.resourcePayload?.retryin {
                     // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
                     self.retryOnEmptyPDFCount += 1
                     let retryInSeconds = Double(retryinMS/1000)
