@@ -82,7 +82,7 @@ extension HealthPassViewController {
     
     private func goToAddCardOptionScreen() {
         // NOTE: Not sure if I should add UIImpactFeedbackGenerator here or not??
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Health Passes")
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

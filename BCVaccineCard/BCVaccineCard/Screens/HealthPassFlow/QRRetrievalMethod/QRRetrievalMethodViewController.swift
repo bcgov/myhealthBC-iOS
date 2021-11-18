@@ -264,7 +264,7 @@ extension QRRetrievalMethodViewController {
                     })
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
-                    self.navigationController?.popViewController(animated: true)
+//                    self.navigationController?.popViewController(animated: true)
                     self.popBackToProperViewController(id: model.id ?? "")
                 }
             case .UpdatedFederalPass:
@@ -301,7 +301,8 @@ extension QRRetrievalMethodViewController {
         }
         guard containsCovidVaxCardsVC == false else {
             postCardAddedNotification(id: id)
-            self.navigationController?.popViewController(animated: true)
+//            self.navigationController?.popViewController(animated: true)
+            self.popBack(toControllerType: CovidVaccineCardsViewController.self)
             return
         }
         guard viewControllerStack.count > 0 else { return }
@@ -312,7 +313,7 @@ extension QRRetrievalMethodViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.postCardAddedNotification(id: id)
         }
-        self.navigationController?.popViewController(animated: true)
+        self.popBack(toControllerType: CovidVaccineCardsViewController.self)
     }
 }
 
