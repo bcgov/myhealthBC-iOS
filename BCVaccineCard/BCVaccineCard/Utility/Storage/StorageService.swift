@@ -178,6 +178,7 @@ class StorageService {
             card.vaxDates = model.vaxDates
             card.federalPass = model.fedCode
             card.phn = model.phn
+            card.firHash = model.hash
             try context.save()
             DispatchQueue.main.async {
                 return completion(true)
