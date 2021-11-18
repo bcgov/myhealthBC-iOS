@@ -296,30 +296,6 @@ extension UIViewController {
     }
 }
 
-// MARK: Check for duplicates - again, should probably find a better spot for this
-extension UIViewController {
-    // Need to think about how to handle this... will likely need two functions
-    func isCardAlreadyInWallet(modelToAdd model: AppVaccinePassportModel, completion: @escaping(Bool)->Void){
-        StorageService.shared.getVaccineCardsForCurrentUser { appDS in
-            let idArray = appDS.compactMap({ $0.id })
-            guard let id = model.id else { return completion(false) } // May need some form of error handling here, as this just means the new model is incomplete
-            guard idArray.firstIndex(where: { $0 == id }) == nil else { return completion(true) }
-            return completion(false)
-        }
-    }
-    // TODO: When we move these functions to it's own class, we should refactor how these are done as there is a fair amount of duplication.. just not doing it now as we are close to release
-    func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel, completion: @escaping(Bool) -> Void) {
-        StorageService.shared.getVaccineCardsForCurrentUser { localDS in
-            guard !localDS.isEmpty else { return completion(false) }
-            if let existing = localDS.map({$0.transform()}).first(where: {$0.hash == model.codableModel.hash }) {
-                let shouldUpdate = model.codableModel.isNewer(than: existing)
-                return completion(shouldUpdate)
-            }
-            return completion(false)
-        }
-    }
-}
-
 // MARK: Notification Center posting
 extension UIViewController {
     func postCardAddedNotification(id: String) {

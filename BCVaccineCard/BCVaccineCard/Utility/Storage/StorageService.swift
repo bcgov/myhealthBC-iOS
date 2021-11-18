@@ -218,4 +218,39 @@ class StorageService {
             }
         }
     }
+    
+    fileprivate func getState(of card: AppVaccinePassportModel, completion: @escaping(AppVaccinePassportModel.CardState) -> Void) {
+        StorageService.shared.getVaccineCardsForCurrentUser { localDS in
+            guard !localDS.isEmpty else { return completion(.isNew) }
+            
+            // Check if card is duplicate
+            if let existing = localDS.map({$0.transform()}).first(where: {$0.hash == card.codableModel.hash}) {
+                let isNewer = card.codableModel.isNewer(than: existing)
+                return completion(isNewer ? .exists : .isOutdated)
+            }
+            
+            // Check if card for with the same name and dob exist
+            if let existing = localDS.map({$0.transform()}).first(where: {$0.name == card.codableModel.name && $0.birthdate == card.codableModel.birthdate}) {
+                let isNewer = card.codableModel.isNewer(than: existing)
+                return completion(isNewer ? .canUpdateExisting : .isOutdated)
+            }
+            
+            return completion(.isNew)
+        }
+    }
+    
 }
+
+
+extension AppVaccinePassportModel {
+    enum CardState {
+        case exists
+        case isNew
+        case canUpdateExisting
+        case isOutdated
+    }
+    func state(completion: @escaping(CardState) -> Void) {
+        StorageService.shared.getState(of: self, completion: completion)
+    }
+}
+

@@ -237,35 +237,35 @@ extension QRRetrievalMethodViewController {
         case .imported:
             AnalyticsService.shared.track(action: .AddQR, text: .Upload)
         }
-        let model = convertScanResultModelIntoLocalData(data: data, source: source)
-        let appModel = model.transform()
-        doesCardNeedToBeUpdated(modelToUpdate: appModel) {[weak self] needsToBeUpdated in
+        let model = convertScanResultModelIntoLocalData(data: data, source: source).transform()
+        model.state { [weak self] state in
             guard let `self` = self else {return}
-            if needsToBeUpdated {
-                self.updateCardInLocalStorage(model: model, completion: {[weak self] success in
+            switch state {
+            case .exists, .isOutdated:
+                self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                     guard let `self` = self else {return}
-                    if success {
-                        self.popBackToProperViewController(id: appModel.id ?? "")
-                    }
-                })
-            } else {
-                self.isCardAlreadyInWallet(modelToAdd: appModel) {[weak self] isAlreadyInWallet in
+                    self.navigationController?.popViewController(animated: true)
+                }
+            case .isNew:
+                self.appendModelToLocalStorage(model: model.transform())
+                DispatchQueue.main.async {[weak self] in
+                    guard let self = self else {return}
+                    self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                    self.popBackToProperViewController(id: model.id ?? "")
+                }
+            case .canUpdateExisting:
+                self.alert(title: "Update Card", message: "Would you like to replace the card for \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}
-                    if isAlreadyInWallet {
-                        self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
-                            guard let `self` = self else {return}
-                            self.navigationController?.popViewController(animated: true)
+                    self.updateCardInLocalStorage(model: model.transform(), completion: {[weak self] success in
+                        guard let `self` = self else {return}
+                        if success {
+                            self.popBackToProperViewController(id: model.id ?? "")
                         }
-                        return
-                    } else {
-                        self.appendModelToLocalStorage(model: model)
-                    }
-                    
-                    DispatchQueue.main.async {[weak self] in
-                        guard let self = self else {return}
-                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                        self.popBackToProperViewController(id: appModel.id ?? "")
-                    }
+                    })
+                }, buttonTwoTitle: "No") { [weak self] in
+                    guard let `self` = self else {return}
+                    self.navigationController?.popViewController(animated: true)
+                    self.popBackToProperViewController(id: model.id ?? "")
                 }
             }
         }

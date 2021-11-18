@@ -504,41 +504,49 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
         self.view.endLoadingIndicator()
     }
     
+    func updateCardInLocalStorage(model: AppVaccinePassportModel) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.navigationController?.popViewController(animated: true)
+        }
+        self.updateCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
+            guard let `self` = self else {return}
+            let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
+            self.completionHandler?(model.id ?? "", fedCode)
+        })
+    }
+    
+    func storeCardInLocalStorage(model: AppVaccinePassportModel) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.navigationController?.popViewController(animated: true)
+            self.appendModelToLocalStorage(model: model.transform())
+            let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
+            self.completionHandler?(model.id ?? "", fedCode)
+            
+        }
+    }
+    
     func handleCardInCoreData(localModel: LocallyStoredVaccinePassportModel) {
         let model = localModel.transform()
-        doesCardNeedToBeUpdated(modelToUpdate: model) {[weak self] needsUpdate in
+        model.state { [weak self] state in
             guard let `self` = self else {return}
-            if needsUpdate {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.navigationController?.popViewController(animated: true)
-                }
-                self.updateCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
+            switch state {
+            case .exists, .isOutdated:
+                self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                     guard let `self` = self else {return}
-                    let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-                    self.completionHandler?(model.id ?? "", fedCode)
-                })
-                
-            } else {
-                self.isCardAlreadyInWallet(modelToAdd: model) {[weak self] isAlreadyInWallet in
-                    guard let `self` = self else {return}
-                    if isAlreadyInWallet {
-                        self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
-                            guard let `self` = self else {return}
-                            DispatchQueue.main.async {
-                                self.navigationController?.popViewController(animated: true)
-                            }
-                            self.completionHandler?(model.id ?? "", nil)
-                        }
-                        return
-                    } else {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.navigationController?.popViewController(animated: true)
-                            self.appendModelToLocalStorage(model: model.transform())
-                            let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-                            self.completionHandler?(model.id ?? "", fedCode)
-                            
-                        }
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
                     }
+                    self.completionHandler?(model.id ?? "", nil)
+                }
+            case .isNew:
+                self.storeCardInLocalStorage(model: model)
+            case .canUpdateExisting:
+                self.alert(title: "Update Card", message: "Would you like to replace the card for \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
+                    guard let `self` = self else {return}
+                    self.updateCardInLocalStorage(model: model)
+                }, buttonTwoTitle: "No") { [weak self] in
+                    guard let `self` = self else {return}
+                    self.completionHandler?(model.id ?? "", nil)
                 }
             }
         }
