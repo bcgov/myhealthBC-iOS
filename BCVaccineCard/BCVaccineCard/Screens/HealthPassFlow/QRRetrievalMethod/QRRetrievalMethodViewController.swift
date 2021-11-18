@@ -267,6 +267,16 @@ extension QRRetrievalMethodViewController {
                     self.navigationController?.popViewController(animated: true)
                     self.popBackToProperViewController(id: model.id ?? "")
                 }
+            case .UpdatedFederalPass:
+                self.updateFedCodeForCardInLocalStorage(model: model.transform()) {[weak self] _ in
+                    guard let self = self else {return}
+                    DispatchQueue.main.async {[weak self] in
+                        guard let self = self else {return}
+                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                        self.popBackToProperViewController(id: model.id ?? "")
+                    }
+                }
+            
             }
         }
     }

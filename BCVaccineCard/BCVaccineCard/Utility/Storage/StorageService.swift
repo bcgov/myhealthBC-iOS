@@ -190,6 +190,27 @@ class StorageService {
         }
     }
     
+    func updateVaccineCardFedCode(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
+        guard let context = managedContext else {return}
+        do {
+            let cards = try context.fetch(VaccineCard.createFetchRequest())
+            guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
+            card.federalPass = model.fedCode
+            if card.phn == nil || card.phn?.count ?? 0 < 1 {
+                card.phn = model.phn
+            }
+            try context.save()
+            DispatchQueue.main.async {
+                return completion(true)
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            DispatchQueue.main.async {
+                return completion(false)
+            }
+        }
+    }
+    
     public func getVaccineCardsForCurrentUser(completion: @escaping([AppVaccinePassportModel]) -> Void) {
         let userId = AuthManager().userId()
         let cards = fetchVaccineCards(for: userId)
@@ -220,18 +241,32 @@ class StorageService {
     }
     
     fileprivate func getState(of card: AppVaccinePassportModel, completion: @escaping(AppVaccinePassportModel.CardState) -> Void) {
+        
+        func addedFederalCode(to otherCard: AppVaccinePassportModel) -> Bool {
+            if let newFedCode = card.transform().fedCode, newFedCode.count > 1, otherCard.transform().fedCode?.count ?? 0 < 1 {
+                return true
+            } else {
+                return false
+            }
+        }
         StorageService.shared.getVaccineCardsForCurrentUser { localDS in
             guard !localDS.isEmpty else { return completion(.isNew) }
             
             // Check if card is duplicate
             if let existing = localDS.map({$0.transform()}).first(where: {$0.hash == card.codableModel.hash}) {
                 let isNewer = card.codableModel.isNewer(than: existing)
+                if addedFederalCode(to: existing.transform()) {
+                    return completion(.UpdatedFederalPass)
+                }
                 return completion(isNewer ? .exists : .isOutdated)
             }
             
             // Check if card for with the same name and dob exist
             if let existing = localDS.map({$0.transform()}).first(where: {$0.name == card.codableModel.name && $0.birthdate == card.codableModel.birthdate}) {
                 let isNewer = card.codableModel.isNewer(than: existing)
+                if addedFederalCode(to: existing.transform()) {
+                    return completion(.canUpdateExisting)
+                }
                 return completion(isNewer ? .canUpdateExisting : .isOutdated)
             }
             
@@ -248,6 +283,7 @@ extension AppVaccinePassportModel {
         case isNew
         case canUpdateExisting
         case isOutdated
+        case UpdatedFederalPass
     }
     func state(completion: @escaping(CardState) -> Void) {
         StorageService.shared.getState(of: self, completion: completion)
