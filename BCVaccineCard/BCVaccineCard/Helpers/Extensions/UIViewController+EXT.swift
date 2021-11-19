@@ -246,7 +246,7 @@ extension UIViewController {
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), federalPass: model.fedCode, vaxDates: model.vaxDates)
+        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
@@ -261,9 +261,20 @@ extension UIViewController {
         })
     }
     
+    func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCardFedCode(newData: model, completion: {[weak self] success in
+            guard let `self` = self else {return}
+            if success {
+                self.showBanner(message: .updatedCard, style: .Top)
+            } else {
+                self.alert(title: .error, message: .updateCardFailed)
+            }
+            completion(success)
+        })
+    }
+    
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
-        let status = VaccineStatus.init(rawValue: data.status.rawValue) ?? .notVaxed
-        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, vaxDates: data.immunizations.compactMap({$0.date}), name: data.name, issueDate: data.issueDate, status: status, source: source, phn: nil)
+        return data.toLocal(source: source)
     }
 }
 
@@ -297,32 +308,6 @@ extension UIViewController {
     }
 }
 
-// MARK: Check for duplicates - again, should probably find a better spot for this
-extension UIViewController {
-    // Need to think about how to handle this... will likely need two functions
-    func isCardAlreadyInWallet(modelToAdd model: AppVaccinePassportModel, completion: @escaping(Bool)->Void){
-        StorageService.shared.getVaccineCardsForCurrentUser { appDS in
-            let idArray = appDS.compactMap({ $0.id })
-            guard let id = model.id else { return completion(false) } // May need some form of error handling here, as this just means the new model is incomplete
-            guard idArray.firstIndex(where: { $0 == id }) == nil else { return completion(true) }
-            return completion(false)
-        }
-    }
-    // TODO: When we move these functions to it's own class, we should refactor how these are done as there is a fair amount of duplication.. just not doing it now as we are close to release
-    func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel, completion: @escaping(Bool) -> Void) {
-        StorageService.shared.getVaccineCardsForCurrentUser { localDS in
-            guard !localDS.isEmpty else { return completion(false) }
-            if let existing = localDS.map({$0.transform()}).first(where: {$0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate }) {
-                let shouldUpdate = (existing.status == .partially) || (existing.fedCode ?? "" != model.codableModel.fedCode ?? "")
-                // || model.codableModel.isNewer(than: existing)
-                // NOTE: uncomment code above to enable validation by issue date
-                return completion(shouldUpdate)
-            }
-            return completion(false)
-        }
-    }
-}
-
 // MARK: Notification Center posting
 extension UIViewController {
     func postCardAddedNotification(id: String) {
@@ -332,23 +317,37 @@ extension UIViewController {
 
 // MARK: GoTo Health Gateway Logic
 extension UIViewController {
-    func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource) {
+    // Note: This is currently only being used for fetching fed pass only
+    // TODO: May need to be refactored in the future if we use this function anywhere else
+    func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, completion: ((String?) -> Void)?) {
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
         if let details = Defaults.rememberGatewayDetails {
             rememberDetails = details
         }
         
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
-        if source == .vaccineCardsScreen {
-            vc.completionHandler = { [weak self] id in
-                guard let `self` = self else { return }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.postCardAddedNotification(id: id)
+        if fetchType.isFedPassOnly {
+            vc.completionHandler = { [weak self] (id, fedPass) in
+                if let fedPass = fedPass {
+                    self?.openFederalPass(pass: fedPass, vc: owner, id: id, completion: completion)
+                } else {
+                    self?.navigationController?.popViewController(animated: true)
                 }
-                
             }
         }
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: Open federal pass
+extension UIViewController {
+    func openFederalPass(pass: String, vc: UIViewController, id: String?, completion: ((String?) -> Void)?) {
+        guard let data = Data(base64URLEncoded: pass) else {
+            return
+        }
+        let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
+        pdfView.show(data: data, in: vc.parent ?? vc, id: id)
+        pdfView.completionHandler = completion
     }
 }

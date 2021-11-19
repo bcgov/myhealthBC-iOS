@@ -19,6 +19,7 @@ public struct ScanResultModel {
     public let birthdate: String
     public let status: ImmunizationStatus
     public let immunizations: [immunizationRecord]
+    public let payload: DecodedQRPayload
 }
 
 public struct immunizationRecord {

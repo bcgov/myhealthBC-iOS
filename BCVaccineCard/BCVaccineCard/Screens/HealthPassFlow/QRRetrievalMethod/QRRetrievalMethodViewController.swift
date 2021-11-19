@@ -184,7 +184,7 @@ extension QRRetrievalMethodViewController {
             rememberDetails = details
         }
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass)
-        vc.completionHandler = { [weak self] id in
+        vc.completionHandler = { [weak self] (id, _) in
             guard let `self` = self else { return }
             self.view.accessibilityElementsHidden = true
             self.tableView.accessibilityElementsHidden = true
@@ -205,18 +205,18 @@ extension QRRetrievalMethodViewController {
         showImagePicker { [weak self] image in
             guard let `self` = self, let image = image else {return}
             guard let codes = image.findQRCodes(), !codes.isEmpty else {
-                self.alert(title: .noQRFound, message: "") // TODO: Better text / from constants
+                self.alert(title: .noQRFound, message: "")
                 return
             }
             guard codes.count == 1, let code = codes.first else {
-                self.alert(title: .multipleQRCodesTitle, message: .multipleQRCodesMessage) // TODO: Better text / from constants
+                self.alert(title: .multipleQRCodesTitle, message: .multipleQRCodesMessage)
                 return
             }
             
             BCVaccineValidator.shared.validate(code: code) { [weak self] result in
                 guard let `self` = self else { return }
                 guard let data = result.result else {
-                    self.alert(title: .invalidQRCodeMessage, message: "") // TODO: Better text / from constants
+                    self.alert(title: .invalidQRCodeMessage, message: "")
                     return
                 }
                 DispatchQueue.main.async { [weak self] in
@@ -227,7 +227,7 @@ extension QRRetrievalMethodViewController {
             }
         }
     }
-    
+    // TODO: Need to verify this logic here
     private func storeValidatedQRCode(data: ScanResultModel, source: Source) {
         switch source {
         case .healthGateway:
@@ -237,37 +237,46 @@ extension QRRetrievalMethodViewController {
         case .imported:
             AnalyticsService.shared.track(action: .AddQR, text: .Upload)
         }
-        let model = convertScanResultModelIntoLocalData(data: data, source: source)
-        let appModel = model.transform()
-        doesCardNeedToBeUpdated(modelToUpdate: appModel) {[weak self] needsToBeUpdated in
+        let model = convertScanResultModelIntoLocalData(data: data, source: source).transform()
+        model.state { [weak self] state in
             guard let `self` = self else {return}
-            if needsToBeUpdated {
-                self.updateCardInLocalStorage(model: model, completion: {[weak self] success in
+            switch state {
+            case .exists, .isOutdated:
+                self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                     guard let `self` = self else {return}
-                    if success {
-                        self.navigationController?.popViewController(animated: true)
-                        self.postCardAddedNotification(id: appModel.id ?? "")
-                    }
-                })
-            } else {
-                self.isCardAlreadyInWallet(modelToAdd: appModel) {[weak self] isAlreadyInWallet in
+                    self.navigationController?.popViewController(animated: true)
+                }
+            case .isNew:
+                self.appendModelToLocalStorage(model: model.transform())
+                DispatchQueue.main.async {[weak self] in
+                    guard let self = self else {return}
+                    self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                    self.popBackToProperViewController(id: model.id ?? "")
+                }
+            case .canUpdateExisting:
+                self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}
-                    if isAlreadyInWallet {
-                        self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
-                            guard let `self` = self else {return}
-                            self.navigationController?.popViewController(animated: true)
+                    self.updateCardInLocalStorage(model: model.transform(), completion: {[weak self] success in
+                        guard let `self` = self else {return}
+                        if success {
+                            self.popBackToProperViewController(id: model.id ?? "")
                         }
-                        return
-                    } else {
-                        self.appendModelToLocalStorage(model: model)
-                    }
-                    
+                    })
+                }, buttonTwoTitle: "No") { [weak self] in
+                    guard let `self` = self else {return}
+//                    self.navigationController?.popViewController(animated: true)
+                    self.popBackToProperViewController(id: model.id ?? "")
+                }
+            case .UpdatedFederalPass:
+                self.updateFedCodeForCardInLocalStorage(model: model.transform()) {[weak self] _ in
+                    guard let self = self else {return}
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
                         self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                        self.popBackToProperViewController(id: appModel.id ?? "")
+                        self.popBackToProperViewController(id: model.id ?? "")
                     }
                 }
+            
             }
         }
     }
@@ -292,7 +301,8 @@ extension QRRetrievalMethodViewController {
         }
         guard containsCovidVaxCardsVC == false else {
             postCardAddedNotification(id: id)
-            self.navigationController?.popViewController(animated: true)
+//            self.navigationController?.popViewController(animated: true)
+            self.popBack(toControllerType: CovidVaccineCardsViewController.self)
             return
         }
         guard viewControllerStack.count > 0 else { return }
@@ -300,10 +310,10 @@ extension QRRetrievalMethodViewController {
         let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
         self.navigationController?.viewControllers.insert(vc, at: 1)
         // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.postCardAddedNotification(id: id)
         }
-        self.navigationController?.popViewController(animated: true)
+        self.popBack(toControllerType: CovidVaccineCardsViewController.self)
     }
 }
 

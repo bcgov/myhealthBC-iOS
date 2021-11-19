@@ -18,7 +18,7 @@ struct Constants {
     }
     
     struct PrivacyPolicy {
-        static let urlString = "https://www.healthgateway.gov.bc.ca/termsofservice"
+        static let urlString = "https://www2.gov.bc.ca/gov/content/health/managing-your-health/health-gateway/myhealth-app-privacy"
     }
     
     struct Help {
@@ -37,5 +37,9 @@ struct Constants {
     
     struct KeychainPHNKey {
         static let key = "PHNKey" // Note: Data should be an array of 
+    }
+    
+    struct NetworkRetryAttempts {
+        static let publicVaccineStatusRetryMaxForFedPass = 3
     }
 }

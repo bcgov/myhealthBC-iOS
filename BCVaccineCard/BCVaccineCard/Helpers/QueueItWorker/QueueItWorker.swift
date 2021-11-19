@@ -218,13 +218,12 @@ extension QueueItWorker {
             switch result {
             case .success(let vaccineCard):
                 print(vaccineCard)
-                // Note: Have to add error handling here, because whoever set up this response didn't do it correctly - error is part of ths success response object
-                // Noticed: Errors seem to be very inconsistent in terms of the response object
+                // Note: Have to check for error here because error is being sent back on a 200 response
                 if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode?.data == nil && vaccineCard.resourcePayload?.federalVaccineProof?.data == nil) {
                     let adjustedMessage = resultMessage == .errorParsingPHNFromHG ? .errorParsingPHNMessage : resultMessage
                     self.delegate?.handleError(title: .error, error: ResultError(resultMessage: adjustedMessage))
                     self.delegate?.hideLoader()
-                } else if vaccineCard.resourcePayload?.qrCode != nil && vaccineCard.resourcePayload?.loaded == false && (vaccineCard.resourcePayload?.federalVaccineProof?.data ?? "").isEmpty && self.retryOnEmptyPDFCount < 3, let retryinMS = vaccineCard.resourcePayload?.retryin {
+                } else if vaccineCard.resourcePayload?.loaded == false && self.retryOnEmptyPDFCount < Constants.NetworkRetryAttempts.publicVaccineStatusRetryMaxForFedPass, let retryinMS = vaccineCard.resourcePayload?.retryin {
                     // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
                     self.retryOnEmptyPDFCount += 1
                     let retryInSeconds = Double(retryinMS/1000)

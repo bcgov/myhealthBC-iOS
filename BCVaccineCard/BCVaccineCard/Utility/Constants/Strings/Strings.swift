@@ -158,8 +158,11 @@ extension String {
     static var covid19SymptomCheckerResource: String { return "Covid19SymptomCheckerResource".localized }
     static var schoolRelatedResource: String { return "SchoolRelatedResource".localized }
     
-    
-    
+    // Federal Paaa pdf
+    static var travelPass: String { return "TravelPass".localized }
+
+    static var updateCard: String { return "UpdateCard".localized }
+    static var updateCardFor: String { return "UpdateCardFor".localized }
     // News Feed screen
     /// Already have newsFeed string from onboarding flow
     

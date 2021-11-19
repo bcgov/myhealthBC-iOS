@@ -46,7 +46,7 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
     func configure(model: VaccineCard, expanded: Bool, editMode: Bool, delegateOwner: UIViewController) {
         guard let vaxCode = model.code else {return}
         adjustExpansion(expanded: expanded)
-        if let current = self.model, current.codableModel.code == vaxCode {
+        if let current = self.model, current.codableModel.code == vaxCode && current.codableModel.fedCode == model.federalPass {
             config(model: current, expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
             return
         }
@@ -57,7 +57,9 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
             let localModel = result.toLocal(federalPass: model.federalPass, phn: model.phn)
             DispatchQueue.main.async {[weak self] in
                 guard let `self` = self else {return}
-                self.config(model: localModel.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
+                if let lm = localModel {
+                    self.config(model: lm.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
+                }
                 self.contentView.endLoadingIndicator()
             }
         }

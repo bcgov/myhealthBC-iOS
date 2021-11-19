@@ -82,7 +82,7 @@ extension HealthPassViewController {
     
     private func goToAddCardOptionScreen() {
         // NOTE: Not sure if I should add UIImpactFeedbackGenerator here or not??
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Health Passes")
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -206,25 +206,20 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
 extension HealthPassViewController: FederalPassViewDelegate {
     func federalPassButtonTapped(model: AppVaccinePassportModel?) {
         if let pass = model?.codableModel.fedCode {
-            guard let data = Data(base64URLEncoded: pass) else {
-                return
-            }
-            let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
-            pdfView.delegate = self
-            pdfView.show(data: data, in: self.parent ?? self)
+            self.openFederalPass(pass: pass, vc: self, id: nil, completion: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.tabBarController?.tabBar.isHidden = false
+            })
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .healthPassHomeScreen)
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .healthPassHomeScreen, owner: self, completion: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.tabBarController?.tabBar.isHidden = false
+                self.navigationController?.popViewController(animated: true)
+            })
         }
     }
 
-}
-
-// MARK: Federal Pass PDF View Delegate
-extension HealthPassViewController: FederalPassPDFViewDelegate {
-    func viewDismissed() {
-        self.tabBarController?.tabBar.isHidden = false
-    }
 }
 
 // MARK: Add card button table view cell delegate here
