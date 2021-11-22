@@ -1,0 +1,29 @@
+name: Build and deploy to TestFlight
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    name: Deploying to TestFlight
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      - name: Install gpg
+        run: brew install gnupg
+      - name: Setup provisioning profile
+        env:
+          IOS_KEYS: ${{ secrets.IOS_KEYS }}
+        run: ./.github/secrets/decrypt_secrets.sh
+      - name: Archiving project
+        env:
+          PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+        run: ./.github/scripts/archive_adhoc.sh
+      - name: Exporting .ipa
+        run: ./.github/scripts/export_adhoc_ipa.sh
+      - name: Uploading .ipa
+        if: success()
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: ./.github/scripts/publish_testflight.sh
