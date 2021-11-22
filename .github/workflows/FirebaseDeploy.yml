@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - dev
+env:
+  DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
 jobs:
   deploy:
     name: Deploying to Firebase
