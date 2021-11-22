@@ -24,7 +24,7 @@ extension RemoteRequestAccessor: HealthGatewayBCAccessor {
         let interceptor = NetworkRequestInterceptor()
         var url: URL?
         if let token = token {
-            let queryItems = [URLQueryItem(name: "queueittoken", value: token)]
+            let queryItems = [URLQueryItem(name: Constants.QueueItStrings.queueittoken, value: token)]
             var urlComps = URLComponents(string: self.endpointsAccessor.getVaccineCard.absoluteString)
             urlComps?.queryItems = queryItems
             url = urlComps?.url
@@ -33,9 +33,9 @@ extension RemoteRequestAccessor: HealthGatewayBCAccessor {
         }
 
         let headerParameters: Headers = [
-            "phn": model.phn,
-            "dateOfBirth": model.dateOfBirth,
-            "dateOfVaccine": model.dateOfVaccine
+            Constants.GatewayVaccineCardRequestParameters.phn: model.phn,
+            Constants.GatewayVaccineCardRequestParameters.dateOfBirth: model.dateOfBirth,
+            Constants.GatewayVaccineCardRequestParameters.dateOfVaccine: model.dateOfVaccine
         ]
         guard let unwrappedURL = url else { return }
         self.accessor.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, andCompletion: completion)

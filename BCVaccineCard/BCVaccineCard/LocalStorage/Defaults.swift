@@ -10,8 +10,9 @@ import Foundation
 enum Defaults {
     enum Key: String {
         case vaccinePassports
-        case hasSeenInitialOnboardingScreens
+        case initialOnboardingScreensSeen
         case cachedQueueItObject
+        case rememberGatewayDetails
     }
     
     static var vaccinePassports: [LocallyStoredVaccinePassportModel]? {
@@ -23,11 +24,13 @@ enum Defaults {
         set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.vaccinePassports.rawValue) }
     }
     
-    static var hasSeenInitialOnboardingScreens: Bool {
+    static var initialOnboardingScreensSeen: [OnboardingScreenType]? {
         get {
-            return UserDefaults.standard.bool(forKey: self.Key.hasSeenInitialOnboardingScreens.rawValue)
+            guard let data = UserDefaults.standard.value(forKey: self.Key.initialOnboardingScreensSeen.rawValue) as? Data else { return nil }
+            let order = try? PropertyListDecoder().decode([OnboardingScreenType].self, from: data)
+            return order
         }
-        set { UserDefaults.standard.set(newValue, forKey: self.Key.hasSeenInitialOnboardingScreens.rawValue) }
+        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.initialOnboardingScreensSeen.rawValue) }
     }
     
     static var cachedQueueItObject: QueueItCachedObject? {
@@ -38,4 +41,14 @@ enum Defaults {
         }
         set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.cachedQueueItObject.rawValue) }
     }
+    // Temporary measure until I can get keychain working properly
+    static var rememberGatewayDetails: RememberedGatewayDetails? {
+        get {
+            guard let data = UserDefaults.standard.value(forKey: self.Key.rememberGatewayDetails.rawValue) as? Data else { return nil }
+            let details = try? PropertyListDecoder().decode(RememberedGatewayDetails.self, from: data)
+            return details
+        }
+        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.rememberGatewayDetails.rawValue) }
+    }
+    
 }

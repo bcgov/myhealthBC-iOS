@@ -1,14 +1,14 @@
 //
 //  AppDelegate.swift
 //  BCVaccineCard
-// 
+//
 //  Created by Connor Ogilvie on 2021-09-14.
 //
 
 import UIKit
 import CoreData
 import BCVaccineValidator
-//import Firebase
+//import Firebase 
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,9 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func configure() {
         //use .Prod or .Test for different endpoints for keys
+        #if PROD
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
-        AnalyticsService.shared.setup()
+        #elseif DEV
+        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
 //        FirebaseApp.configure()
+        #endif
+        AnalyticsService.shared.setup()
         setupGatewayFactory()
         setupRootViewController()
     }
@@ -87,14 +91,32 @@ extension AppDelegate {
 // MARK: Root setup
 extension AppDelegate {
     private func setupRootViewController() {
-        if Defaults.hasSeenInitialOnboardingScreens {
+        // Note: Added the last else statement as we've removed health records from the initial release, so for those who installed the app previously, we don't want to have any issues - basically, if all of this fails, at least the user can use the app normally
+        if Defaults.initialOnboardingScreensSeen == OnboardingScreenType.allCases {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
+        } else if Defaults.initialOnboardingScreensSeen == nil || Defaults.initialOnboardingScreensSeen?.count == 0 {
+            let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: .one, screensToShow: InitialOnboardingView.ScreenNumber.allCases)
+            self.window?.rootViewController = vc
+        } else if let screensSeen = Defaults.initialOnboardingScreensSeen, (screensSeen.count > 0 && (screensSeen.count < OnboardingScreenType.allCases.count || Defaults.initialOnboardingScreensSeen != OnboardingScreenType.allCases )) {
+            var unseenScreens: [OnboardingScreenType] = []
+            OnboardingScreenType.allCases.forEach { screen in
+                if !screensSeen.contains(screen) {
+                    unseenScreens.append(screen)
+                }
+            }
+            guard let firstScreen = unseenScreens.first else {
+                let vc = TabBarController.constructTabBarController()
+                self.window?.rootViewController = vc
+                return
+            }
+            let screensToShow = unseenScreens.map { $0.getStartScreenNumber }
+            let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: firstScreen.getStartScreenNumber, screensToShow: screensToShow)
+            self.window?.rootViewController = vc
         } else {
-            let vc = InitialOnboardingViewController.constructInitialOnboardingViewController()
+            let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
         }
-        
     }
 }
 

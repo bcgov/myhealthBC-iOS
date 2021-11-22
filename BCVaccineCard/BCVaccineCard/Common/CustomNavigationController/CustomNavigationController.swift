@@ -14,6 +14,7 @@ struct Accessibility {
 }
 
 struct NavButton {
+    var title: String? = nil
     let image: UIImage?
     let action: Selector
     let accessibility: Accessibility
@@ -87,8 +88,8 @@ class CustomNavigationController: UINavigationController {
                 // NOTE: This logic isn't working, but I'm leaving it in here for now, just in case QA pushes it back
                 navigationBar.standardAppearance.backIndicatorImage.isAccessibilityElement = true
                 navigationBar.standardAppearance.backIndicatorImage.accessibilityTraits = .button
-                navigationBar.standardAppearance.backIndicatorImage.accessibilityLabel = "Navigation bar back button"
-                navigationBar.standardAppearance.backIndicatorImage.accessibilityHint = "Tapping this button will take you back to \(hint)"
+                navigationBar.standardAppearance.backIndicatorImage.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
+                navigationBar.standardAppearance.backIndicatorImage.accessibilityHint = AccessibilityLabels.Navigation.backButtonHint + "\(hint)"
             }
             
         } else {
@@ -102,8 +103,8 @@ class CustomNavigationController: UINavigationController {
                 if let hint = backButtonHintString {
                     navigationBar.backIndicatorImage?.isAccessibilityElement = true
                     navigationBar.backIndicatorImage?.accessibilityTraits = .button
-                    navigationBar.backIndicatorImage?.accessibilityLabel = "Navigation bar back button"
-                    navigationBar.backIndicatorImage?.accessibilityHint = "Tapping this button will take you back to \(hint)"
+                    navigationBar.backIndicatorImage?.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
+                    navigationBar.backIndicatorImage?.accessibilityHint = AccessibilityLabels.Navigation.backButtonHint + "\(hint)"
                 }
             }
 //            navigationBar.shadowImage = UIImage()
@@ -116,7 +117,11 @@ class CustomNavigationController: UINavigationController {
         setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString)
         navigationBar.tintColor = navStyle.itemTintColor
         if let right = right {
-            vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: right.image, style: .plain, target: vc, action: right.action)
+            if let title = right.title {
+                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: right.action)
+            } else {
+                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: right.image, style: .plain, target: vc, action: right.action)
+            }
             if let trait = right.accessibility.traits {
                 vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
             }
@@ -124,7 +129,11 @@ class CustomNavigationController: UINavigationController {
             vc.navigationItem.rightBarButtonItem?.accessibilityHint = right.accessibility.hint
         }
         if let left = left {
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
+            if let title = left.title {
+                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: left.action)
+            } else {
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
+            }
             if let trait = left.accessibility.traits {
                 vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
             }

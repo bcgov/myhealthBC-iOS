@@ -13,18 +13,43 @@ class AnalyticsService: NSObject, RequestCallback {
     
     fileprivate let endPoint = "spt.apps.gov.bc.ca"
     fileprivate let appID = "Snowplow_standalone_HApp_dev"
+    // TODO: For store release, change to Snowplow_standalone_HApp_prod
     fileprivate let namespace = "iOS"
     fileprivate let schema = "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0"
+    fileprivate let userDefaultsKey = "analyticsEnabled"
+    
+    var isEnabled: Bool {
+        return UserDefaults.standard.value(forKey: userDefaultsKey) as? Bool ?? false
+    }
     
     var tracker : TrackerController?
     
     override init() {
         super.init()
-        tracker = initTracker(endPoint, method: .post)
     }
     
-    public func setup() {}
+    public func setup() {
+        if isEnabled {
+            enable()
+        } else {
+            disable()
+        }
+    }
     
+    public func enable() {
+        if tracker == nil {
+            tracker = initTracker(endPoint, method: .post)
+        } else {
+            tracker?.resume()
+        }
+        
+        UserDefaults.standard.set(true, forKey: userDefaultsKey)
+    }
+    
+    public func disable() {
+        tracker?.pause()
+        UserDefaults.standard.set(false, forKey: userDefaultsKey)
+    }
     
     /// Track an Action with a custom string. eg: a url
     /// - Parameters:

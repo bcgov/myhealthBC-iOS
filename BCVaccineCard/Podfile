@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
- platform :ios, '11.0'
+platform :ios, '11.0'
 
 target 'BCVaccineCard' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -9,6 +9,10 @@ target 'BCVaccineCard' do
   pod 'QueueITLibrary', '~> 3.0.3'
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
+  pod 'SwiftyJSON', '~> 4.0'
+  pod 'Firebase/AppDistribution'
+  pod 'SwipeCellKit'
+  pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
 
   target 'BCVaccineCardTests' do
     inherit! :search_paths
@@ -29,4 +33,15 @@ target 'BCVaccineCard-Prod' do
   pod 'QueueITLibrary', '~> 3.0.3'
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
+  pod 'SwiftyJSON', '~> 4.0'
+  pod 'SwipeCellKit'
+  pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
+end
+
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+      end
+    end
 end

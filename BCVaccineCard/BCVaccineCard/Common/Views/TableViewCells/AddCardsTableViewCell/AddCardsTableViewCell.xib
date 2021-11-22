@@ -41,10 +41,8 @@
                             <constraint firstAttribute="width" secondItem="1mf-CA-gyz" secondAttribute="height" multiplier="1:1" id="w4z-0p-k3O"/>
                         </constraints>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="plain">
-                            <backgroundConfiguration key="background" image="add-card-icon"/>
-                        </buttonConfiguration>
+                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        <state key="normal" title="Button" backgroundImage="add-card-icon"/>
                         <connections>
                             <action selector="addCardButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="wqz-2x-T46"/>
                         </connections>
