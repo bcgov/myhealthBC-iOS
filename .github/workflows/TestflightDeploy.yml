@@ -19,11 +19,12 @@ jobs:
       - name: Archiving project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        run: ./.github/scripts/archive_adhoc.sh
+        run: ./.github/scripts/archive_app.sh
       - name: Exporting .ipa
-        run: ./.github/scripts/export_adhoc_ipa.sh
-      - name: Uploading .ipa
+        run: ./.github/scripts/export_ipa.sh
+      - name: Publishing app
         if: success()
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
+          APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
         run: ./.github/scripts/publish_testflight.sh

@@ -5,7 +5,7 @@ on:
       - dev
 jobs:
   deploy:
-    name: Deploying to TestFlight
+    name: Deploying to Firebase
     runs-on: macOS-latest
     steps:
       - name: Checkout repository
@@ -19,12 +19,12 @@ jobs:
       - name: Archiving project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        run: ./.github/scripts/archive_app.sh
+        run: ./.github/scripts/archive_adhoc.sh
       - name: Exporting .ipa
-        run: ./.github/scripts/export_ipa.sh
-      - name: Publishing app
+        run: ./.github/scripts/export_adhoc_ipa.sh
+      - name: Uploading .ipa
         if: success()
         env:
-          APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
-          APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
-        run: ./.github/scripts/publish_testflight.sh
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: ./.github/scripts/publish_firebase.sh
+
