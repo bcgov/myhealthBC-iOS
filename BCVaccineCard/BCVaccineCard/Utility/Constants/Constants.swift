@@ -13,6 +13,17 @@ struct Constants {
     /// Authorization Header Key
     static let authorizationHeaderKey = "Authorization"
     
+    static func onBoardingScreenLatestVersion(for type: OnboardingScreenType) -> Int {
+        switch type {
+        case .healthPasses:
+            return 1
+        case .healthResources:
+            return 1
+        case .newsFeed:
+            return 1
+        }
+    }
+    
     struct DateConstants {
         static let firstVaxDate = Date.Formatter.yearMonthDay.date(from: "2020-01-01")
     }
