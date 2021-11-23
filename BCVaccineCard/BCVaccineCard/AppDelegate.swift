@@ -91,8 +91,6 @@ extension AppDelegate {
 // MARK: Root setup
 extension AppDelegate {
     private func setupRootViewController() {
-        // Note: Added the last else statement as we've removed health records from the initial release, so for those who installed the app previously, we don't want to have any issues - basically, if all of this fails, at least the user can use the app normally
-        
         let unseen = Defaults.unseenOnBoardingScreens(version: Constants.OnBoardingScreenVersion)
         guard let first = unseen.first else {
             let vc = TabBarController.constructTabBarController()

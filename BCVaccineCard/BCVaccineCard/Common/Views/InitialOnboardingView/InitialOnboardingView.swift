@@ -25,34 +25,6 @@ enum OnboardingScreenType: Int, CaseIterable {
     case newsFeed
 }
 
-//enum OnboardingScreenType: Codable, CaseIterable, Equatable {
-//    static var allCases: [OnboardingScreenType] {
-////        return [.healthPasses(version: 1), .healthRecords(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
-//        return [.healthPasses(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
-//    }
-//
-//    case healthPasses(version: Int)
-////    case healthRecords(version: Int)
-//    case healthResources(version: Int)
-//    case newsFeed(version: Int)
-//
-//    var getStartScreenNumber: InitialOnboardingView.ScreenNumber {
-//        switch self {
-//        case .healthPasses:
-//            return .one
-////        case .healthRecords:
-////            return .two
-//        case .healthResources:
-////            return .three
-//            return .twob
-//        case .newsFeed:
-////            return .four
-//            return .three
-//
-//        }
-//    }
-//}
-
 class InitialOnboardingView: UIView {
     
     
@@ -88,85 +60,6 @@ class InitialOnboardingView: UIView {
             return .initialOnboardingNewsFeedDescription
         }
     }
-    
-    
-    //    enum ScreenNumber: CaseIterable {
-    ////        case one, two, three, four
-    //        case one, two, three
-    //
-    //        var getRotatingImage: UIImage? {
-    //            switch self {
-    //            case .one:
-    //                return UIImage(named: "bubble-passes")
-    //            case .two:
-    ////                return UIImage(named: "bubble-records")
-    //                return UIImage(named: "bubble-resources")
-    //            case .three:
-    ////                return UIImage(named: "bubble-resources")
-    //                return UIImage(named: "bubble-news")
-    ////            case .four:
-    ////                return UIImage(named: "bubble-news")
-    //            }
-    //        }
-    //
-    //        var getTitle: String {
-    //            switch self {
-    //            case .one:
-    //                return .healthPasses
-    //            case .two:
-    ////                return .healthRecords
-    //                return .healthResources
-    //            case .three:
-    ////                return .healthResources
-    //                return .newsFeed
-    ////            case .four:
-    ////                return .newsFeed
-    //            }
-    //        }
-    //
-    //        var getType: OnboardingScreenType {
-    //            switch self {
-    //            case .one:
-    //                return .healthPasses(version: 1)
-    //            case .two:
-    ////                return .healthRecords(version: 1)
-    //                return .healthResources(version: 1)
-    //            case .three:
-    ////                return .healthResources(version: 1)
-    //                return .newsFeed(version: 1)
-    ////            case .four:
-    ////                return .newsFeed(version: 1)
-    //            }
-    //        }
-    //
-    //        var getDescription: String {
-    //            switch self {
-    //            case .one:
-    //                return .initialOnboardingHealthPassesDescription
-    //            case .two:
-    ////                return .initialOnboardingHealthRecordsDescription
-    //                return .initialOnboardingHealthResourcesDescription
-    //            case .three:
-    ////                return .initialOnboardingHealthResourcesDescription
-    //                return .initialOnboardingNewsFeedDescription
-    ////            case .four:
-    ////                return .initialOnboardingNewsFeedDescription
-    //            }
-    //        }
-    //
-    //        var getSelectedImageIndex: Int {
-    //            switch self {
-    //            case .one:
-    //                return 0
-    //            case .two:
-    //                return 1
-    //            case .three:
-    //                return 2
-    ////            case .four:
-    ////                return 3
-    //            }
-    //        }
-    //    }
     
     enum ImageCollectionType {
         case phoneDotCollection
@@ -382,48 +275,6 @@ extension InitialOnboardingView {
             removeOldConstraints()
             constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
         }
-        /*
-         switch screenNumber {
-         case .one:
-         removeOldConstraints()
-         let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
-         let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
-         let relatedImageLeadingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-         let leadingConstraint = imageView.leadingAnchor.constraint(equalTo: relatedImageLeadingReference, constant: -12)
-         let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 133)
-         let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
-         self.rotatingImageViewConstraints = [verticalConstraint, leadingConstraint, widthConstraint, heightConstraint]
-         contentView.addConstraints([verticalConstraint, leadingConstraint, widthConstraint, heightConstraint])
-         case .two:
-         //            removeOldConstraints()
-         //            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
-         
-         removeOldConstraints()
-         let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
-         let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
-         let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-         let trailingConstraint = imageView.trailingAnchor.constraint(equalTo: relatedImageTrailingReference, constant: 14)
-         let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 132)
-         let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
-         self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
-         contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
-         case .three:
-         //            removeOldConstraints()
-         //            let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
-         //            let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
-         //            let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-         //            let trailingConstraint = imageView.trailingAnchor.constraint(equalTo: relatedImageTrailingReference, constant: 14)
-         //            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 132)
-         //            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
-         //            self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
-         //            contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
-         
-         removeOldConstraints()
-         constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
-         //        case .four:
-         //            removeOldConstraints()
-         //            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
-         }*/
     }
     
     private func removeOldConstraints() {
