@@ -22,6 +22,7 @@ struct VisitedOnboardingScreen: Encodable, Decodable {
 /**
  To add a new screen, add the new case here, build and follow the errors
  To update a screen version, go to Constants. -> onBoardingScreenLatestVersion()
+ Check UI constraint logic in the adjustRotatingImageViewConstraints function, as constraints/assets may need to be updated
  */
 enum OnboardingScreenType: Int, CaseIterable {
     case healthPasses = 0
