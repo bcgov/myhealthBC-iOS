@@ -24,7 +24,7 @@
                         </accessibility>
                         <constraints>
                             <constraint firstAttribute="width" constant="133" id="4I1-GD-iC1"/>
-                            <constraint firstAttribute="height" constant="195" id="4k3-j7-vfA"/>
+                            <constraint firstAttribute="height" priority="750" constant="195" id="4k3-j7-vfA"/>
                         </constraints>
                     </imageView>
                 </subviews>

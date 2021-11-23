@@ -16,6 +16,7 @@
                 <outlet property="optionImageView" destination="WL6-bo-MV6" id="PKu-Ey-ehW"/>
                 <outlet property="optionTitleLabel" destination="5Yx-LO-6Qq" id="RRQ-1f-VVA"/>
                 <outlet property="roundedView" destination="OmK-ou-KuG" id="vkc-Wm-Wk4"/>
+                <outlet property="titleLabelHorizontalCenterContraint" destination="NqR-Y0-ezd" id="Ow8-l4-stI"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

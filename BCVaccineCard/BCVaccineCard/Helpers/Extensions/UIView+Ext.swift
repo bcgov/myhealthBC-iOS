@@ -14,6 +14,17 @@ extension UIView {
     }
 }
 
+
+extension UIView {
+    func isSmallScreen() -> Bool {
+        let bounds = UIScreen.main.bounds
+        let height = bounds.size.height
+        let iPhone5ScreenHeight = 568.0
+        
+        return height <= iPhone5ScreenHeight
+    }
+}
+
 extension UIView {
     func startLoadingIndicator(backgroundColor: UIColor = Constants.UI.LoadingIndicator.backdropColor) {
         if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
@@ -23,6 +34,7 @@ extension UIView {
         let backdrop = UIView(frame: .zero)
         backdrop.tag = Constants.UI.LoadingIndicator.backdropTag
         let indicator = UIActivityIndicatorView(frame: .zero)
+        indicator.tintColor = AppColours.appBlue
         let loadingContainer = UIView(frame:.zero)
         
         self.addSubview(backdrop)
