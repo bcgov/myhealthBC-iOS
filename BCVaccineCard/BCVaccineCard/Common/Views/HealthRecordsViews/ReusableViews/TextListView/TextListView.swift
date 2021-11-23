@@ -1,13 +1,14 @@
 //
-//  GetRecordsView.swift
+//  TextListView.swift
 //  BCVaccineCard
 //
-//  Created by Connor Ogilvie on 2021-11-10.
-// https://www.figma.com/file/ga1F6q5Kvi6CD6FLS27fXq/My-Health-BC?node-id=2411%3A24207
-// NOTE: This is for the initial view on an empty health records screen (Get Vaccination Records, Get COVID-19 Test Results)
+//  Created by Connor Ogilvie on 2021-11-19.
+// https://www.figma.com/file/ga1F6q5Kvi6CD6FLS27fXq/My-Health-BC?node-id=3275%3A42965
+// This is just the text component
+
 import UIKit
 
-class GetRecordsView: UIView {
+class TextListView: UIView {
     
     @IBOutlet weak var contentView: UIView!
     
@@ -26,7 +27,7 @@ class GetRecordsView: UIView {
     }
     
     private func commonInit() {
-        Bundle.main.loadNibNamed(GetRecordsView.getName, owner: self, options: nil)
+        Bundle.main.loadNibNamed(TextListView.getName, owner: self, options: nil)
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -57,5 +58,3 @@ class GetRecordsView: UIView {
         self.accessibilityHint = ""
     }
 }
-
-

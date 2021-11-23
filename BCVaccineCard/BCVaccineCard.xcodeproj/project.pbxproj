@@ -43,6 +43,10 @@
 		5E04D95F28DEE00EAF8EF434 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */; };
 		65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */; };
 		65649CF2147EF54DEEA617D4 /* Pods_BCVaccineCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF2F1BABD4F59F68F534ADA9 /* Pods_BCVaccineCard.framework */; };
+		7918A8C727482E0C00D19D1C /* TextListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7918A8C627482E0C00D19D1C /* TextListView.swift */; };
+		7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7918A8C627482E0C00D19D1C /* TextListView.swift */; };
+		7918A8CA27482E1900D19D1C /* TextListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7918A8C927482E1900D19D1C /* TextListView.xib */; };
+		7918A8CB27482E1900D19D1C /* TextListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7918A8C927482E1900D19D1C /* TextListView.xib */; };
 		791C27B127179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C27B027179076001A6E12 /* NetworkRequestInterceptor.swift */; };
 		791C27B227179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C27B027179076001A6E12 /* NetworkRequestInterceptor.swift */; };
 		791C27B927183149001A6E12 /* ButtonTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C27B727183149001A6E12 /* ButtonTableViewCell.swift */; };
@@ -322,6 +326,8 @@
 		3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_Prod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_BCVaccineCardUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7918A8C627482E0C00D19D1C /* TextListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextListView.swift; sourceTree = "<group>"; };
+		7918A8C927482E1900D19D1C /* TextListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextListView.xib; sourceTree = "<group>"; };
 		791C27B027179076001A6E12 /* NetworkRequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequestInterceptor.swift; sourceTree = "<group>"; };
 		791C27B727183149001A6E12 /* ButtonTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTableViewCell.swift; sourceTree = "<group>"; };
 		791C27B827183149001A6E12 /* ButtonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ButtonTableViewCell.xib; sourceTree = "<group>"; };
@@ -552,6 +558,23 @@
 				29B446AD27357F1700E0F967 /* FederalPassPDFView.xib */,
 			);
 			path = FederalPassPDFView;
+			sourceTree = "<group>";
+		};
+		7918A8C427482CB500D19D1C /* ReusableViews */ = {
+			isa = PBXGroup;
+			children = (
+				7918A8C527482DE300D19D1C /* TextListView */,
+			);
+			path = ReusableViews;
+			sourceTree = "<group>";
+		};
+		7918A8C527482DE300D19D1C /* TextListView */ = {
+			isa = PBXGroup;
+			children = (
+				7918A8C627482E0C00D19D1C /* TextListView.swift */,
+				7918A8C927482E1900D19D1C /* TextListView.xib */,
+			);
+			path = TextListView;
 			sourceTree = "<group>";
 		};
 		791C27A427174712001A6E12 /* InitialOnboardingView */ = {
@@ -1178,9 +1201,7 @@
 		799050B5273C6908006CD726 /* HealthRecordsViews */ = {
 			isa = PBXGroup;
 			children = (
-				799050C2273C835B006CD726 /* AddHealthRecordView */,
-				799050BB273C69D4006CD726 /* RecordsUserView */,
-				799050B8273C697D006CD726 /* UserRecordDetailView */,
+				7918A8C427482CB500D19D1C /* ReusableViews */,
 				799050B7273C694F006CD726 /* UserRecordListView */,
 				799050B6273C6918006CD726 /* GetRecordsView */,
 			);
@@ -1203,43 +1224,6 @@
 				799050C6273C8567006CD726 /* UserRecordListView.xib */,
 			);
 			path = UserRecordListView;
-			sourceTree = "<group>";
-		};
-		799050B8273C697D006CD726 /* UserRecordDetailView */ = {
-			isa = PBXGroup;
-			children = (
-				799050BA273C6996006CD726 /* UserRecordDetailDoesDetailsView */,
-				799050B9273C698A006CD726 /* UserRecordDetailCardView */,
-			);
-			path = UserRecordDetailView;
-			sourceTree = "<group>";
-		};
-		799050B9273C698A006CD726 /* UserRecordDetailCardView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UserRecordDetailCardView;
-			sourceTree = "<group>";
-		};
-		799050BA273C6996006CD726 /* UserRecordDetailDoesDetailsView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UserRecordDetailDoesDetailsView;
-			sourceTree = "<group>";
-		};
-		799050BB273C69D4006CD726 /* RecordsUserView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = RecordsUserView;
-			sourceTree = "<group>";
-		};
-		799050C2273C835B006CD726 /* AddHealthRecordView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = AddHealthRecordView;
 			sourceTree = "<group>";
 		};
 		79A2582C2731FF260067DD50 /* LargerTouchAreaButton */ = {
@@ -1507,6 +1491,7 @@
 				29B07E0A2732109E007ABB46 /* exportOptions.plist in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
 				799050C7273C8567006CD726 /* UserRecordListView.xib in Resources */,
+				7918A8CA27482E1900D19D1C /* TextListView.xib in Resources */,
 				795AA76727155F7100E59FF1 /* Resource.storyboard in Resources */,
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
 				7944F68026F12613006B9444 /* Main.storyboard in Resources */,
@@ -1544,6 +1529,7 @@
 				794BD6602702EEC00084ADA8 /* BCSans-Italic.otf in Resources */,
 				794BD6612702EEC00084ADA8 /* VaccineCardTableViewCell.xib in Resources */,
 				795AA7762715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
+				7918A8CB27482E1900D19D1C /* TextListView.xib in Resources */,
 				794BD6622702EEC00084ADA8 /* NoCardsTableViewCell.xib in Resources */,
 				79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				794BD6632702EEC00084ADA8 /* BCSans-Bold.otf in Resources */,
@@ -1789,6 +1775,7 @@
 				794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */,
 				79FDE423273335D000DAD988 /* FederalPassView.swift in Sources */,
 				795AA76D271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
+				7918A8C727482E0C00D19D1C /* TextListView.swift in Sources */,
 				795AA78527162AAA00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
 				7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */,
@@ -1905,6 +1892,7 @@
 				794BD64B2702EEC00084ADA8 /* AccessibilityLabels.swift in Sources */,
 				79FDE424273335D000DAD988 /* FederalPassView.swift in Sources */,
 				795AA76B271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
+				7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */,
 				795AA75D27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
 				29A12AF9271F6B2100A106B5 /* AnalyticsService.swift in Sources */,
 				794BD64C2702EEC00084ADA8 /* ZoomedInPopUpVC.swift in Sources */,
