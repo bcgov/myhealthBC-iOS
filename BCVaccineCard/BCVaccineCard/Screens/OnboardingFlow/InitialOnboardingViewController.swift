@@ -9,10 +9,10 @@ import UIKit
 
 class InitialOnboardingViewController: UIViewController {
     
-    class func constructInitialOnboardingViewController(startScreenNumber: InitialOnboardingView.ScreenNumber, screensToShow: [InitialOnboardingView.ScreenNumber]) -> InitialOnboardingViewController {
+    class func constructInitialOnboardingViewController(startScreenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType]) -> InitialOnboardingViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: InitialOnboardingViewController.self)) as? InitialOnboardingViewController {
-            vc.screenNumber = startScreenNumber
             vc.screensToShow = screensToShow
+            vc.screenNumber = startScreenNumber
             return vc
         }
         return InitialOnboardingViewController()
@@ -41,7 +41,8 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
             self.initialOnboardingView.adjustUI(screenNumber: self.screenNumber, screensToShow: self.screensToShow, delegateOwner: self)
         }
         if type == .getStarted || type == .ok {
-            Defaults.initialOnboardingScreensSeen = self.initialOnboardingView.getAllScreensForDefaults()
+            // TODO: version
+            Defaults.storeInitialOnboardingScreensSeen(types: screensToShow, version: Constants.OnBoardingScreenVersion)
             goToHomeTransition()
         }
     }
