@@ -22,7 +22,7 @@ class InitialOnboardingViewController: UIViewController {
     
     private var screensToShow: [OnboardingScreenType] = []
     private var screenNumber: OnboardingScreenType = .healthPasses
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -31,7 +31,7 @@ class InitialOnboardingViewController: UIViewController {
     private func setup() {
         initialOnboardingView.initialConfigure(screenNumber: screenNumber, screensToShow: self.screensToShow, delegateOwner: self)
     }
-
+    
 }
 
 extension InitialOnboardingViewController: AppStyleButtonDelegate {

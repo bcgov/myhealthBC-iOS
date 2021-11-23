@@ -14,7 +14,7 @@ struct Defaults {
         case cachedQueueItObject
         case rememberGatewayDetails
     }
-
+    
     static var cachedQueueItObject: QueueItCachedObject? {
         get {
             guard let data = UserDefaults.standard.value(forKey: self.Key.cachedQueueItObject.rawValue) as? Data else { return nil }
@@ -55,7 +55,7 @@ struct Defaults {
             print(error)
             return []
         }
-       
+        
     }
     
     static func storeInitialOnboardingScreensSeen(types: [OnboardingScreenType], version: Int) {
