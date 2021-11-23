@@ -19,7 +19,7 @@ extension UIView {
     func isSmallScreen() -> Bool {
         let bounds = UIScreen.main.bounds
         let height = bounds.size.height
-        let iPhone5ScreenHeight = 568.0
+        let iPhone5ScreenHeight: CGFloat = 568.0
         
         return height <= iPhone5ScreenHeight
     }
