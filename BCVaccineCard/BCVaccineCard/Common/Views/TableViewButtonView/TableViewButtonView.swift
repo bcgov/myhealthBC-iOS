@@ -95,7 +95,7 @@ class TableViewButtonView: UIView {
         if #available(iOS 13.0, *) {
             optionImageView.image = buttonType.getImage.withTintColor(style.getColorScheme.titleColor)
         } else {
-            optionImageView.image = buttonType.getImage
+            optionImageView.image = buttonType.getImage.withRenderingMode(.alwaysTemplate)
             optionImageView.tintColor = style.getColorScheme.titleColor
         }
     }
