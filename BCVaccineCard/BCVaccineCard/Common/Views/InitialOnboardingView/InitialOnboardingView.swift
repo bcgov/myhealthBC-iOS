@@ -8,113 +8,165 @@
 
 import UIKit
 
-enum OnboardingScreenType: Codable, CaseIterable, Equatable {
-    static var allCases: [OnboardingScreenType] {
-//        return [.healthPasses(version: 1), .healthRecords(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
-        return [.healthPasses(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
-    }
+// TODO: Mpve
+struct VisitedOnboardingScreen: Encodable, Decodable {
+    let type: Int
+    let version: Int
     
-    case healthPasses(version: Int)
-//    case healthRecords(version: Int)
-    case healthResources(version: Int)
-    case newsFeed(version: Int)
-    
-    var getStartScreenNumber: InitialOnboardingView.ScreenNumber {
-        switch self {
-        case .healthPasses:
-            return .one
-//        case .healthRecords:
-//            return .two
-        case .healthResources:
-//            return .three
-            return .two
-        case .newsFeed:
-//            return .four
-            return .three
-        
-        }
+    func geTypeEnum() -> OnboardingScreenType? {
+        return OnboardingScreenType.init(rawValue: type) ?? nil
     }
 }
 
+// TODO: Move
+enum OnboardingScreenType: Int, CaseIterable {
+    case healthPasses = 0
+    case healthResources
+    case newsFeed
+}
+
+//enum OnboardingScreenType: Codable, CaseIterable, Equatable {
+//    static var allCases: [OnboardingScreenType] {
+////        return [.healthPasses(version: 1), .healthRecords(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
+//        return [.healthPasses(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
+//    }
+//
+//    case healthPasses(version: Int)
+////    case healthRecords(version: Int)
+//    case healthResources(version: Int)
+//    case newsFeed(version: Int)
+//
+//    var getStartScreenNumber: InitialOnboardingView.ScreenNumber {
+//        switch self {
+//        case .healthPasses:
+//            return .one
+////        case .healthRecords:
+////            return .two
+//        case .healthResources:
+////            return .three
+//            return .twob
+//        case .newsFeed:
+////            return .four
+//            return .three
+//
+//        }
+//    }
+//}
+
 class InitialOnboardingView: UIView {
     
-    enum ScreenNumber: CaseIterable {
-//        case one, two, three, four
-        case one, two, three
-        
-        var getRotatingImage: UIImage? {
-            switch self {
-            case .one:
-                return UIImage(named: "bubble-passes")
-            case .two:
-//                return UIImage(named: "bubble-records")
-                return UIImage(named: "bubble-resources")
-            case .three:
-//                return UIImage(named: "bubble-resources")
-                return UIImage(named: "bubble-news")
-//            case .four:
-//                return UIImage(named: "bubble-news")
-            }
-        }
-        
-        var getTitle: String {
-            switch self {
-            case .one:
-                return .healthPasses
-            case .two:
-//                return .healthRecords
-                return .healthResources
-            case .three:
-//                return .healthResources
-                return .newsFeed
-//            case .four:
-//                return .newsFeed
-            }
-        }
-        
-        var getType: OnboardingScreenType {
-            switch self {
-            case .one:
-                return .healthPasses(version: 1)
-            case .two:
-//                return .healthRecords(version: 1)
-                return .healthResources(version: 1)
-            case .three:
-//                return .healthResources(version: 1)
-                return .newsFeed(version: 1)
-//            case .four:
-//                return .newsFeed(version: 1)
-            }
-        }
-        
-        var getDescription: String {
-            switch self {
-            case .one:
-                return .initialOnboardingHealthPassesDescription
-            case .two:
-//                return .initialOnboardingHealthRecordsDescription
-                return .initialOnboardingHealthResourcesDescription
-            case .three:
-//                return .initialOnboardingHealthResourcesDescription
-                return .initialOnboardingNewsFeedDescription
-//            case .four:
-//                return .initialOnboardingNewsFeedDescription
-            }
-        }
-        
-        var getSelectedImageIndex: Int {
-            switch self {
-            case .one:
-                return 0
-            case .two:
-                return 1
-            case .three:
-                return 2
-//            case .four:
-//                return 3
-            }
+    
+    func getRotatingImage(for screen: OnboardingScreenType) -> UIImage? {
+        switch screen {
+        case .healthPasses:
+            return UIImage(named: "bubble-passes")
+        case .healthResources:
+            return UIImage(named: "bubble-resources")
+        case .newsFeed:
+            return UIImage(named: "bubble-news")
         }
     }
+    
+    func getTitle(for screen: OnboardingScreenType) -> String {
+        switch screen {
+        case .healthPasses:
+            return .healthPasses
+        case .healthResources:
+            return .healthResources
+        case .newsFeed:
+            return .newsFeed
+        }
+    }
+    
+    func getDescription(for screen: OnboardingScreenType) -> String {
+        switch screen {
+        case .healthPasses:
+            return .initialOnboardingHealthPassesDescription
+        case .healthResources:
+            return .initialOnboardingHealthResourcesDescription
+        case .newsFeed:
+            return .initialOnboardingNewsFeedDescription
+        }
+    }
+    
+    
+    //    enum ScreenNumber: CaseIterable {
+    ////        case one, two, three, four
+    //        case one, two, three
+    //
+    //        var getRotatingImage: UIImage? {
+    //            switch self {
+    //            case .one:
+    //                return UIImage(named: "bubble-passes")
+    //            case .two:
+    ////                return UIImage(named: "bubble-records")
+    //                return UIImage(named: "bubble-resources")
+    //            case .three:
+    ////                return UIImage(named: "bubble-resources")
+    //                return UIImage(named: "bubble-news")
+    ////            case .four:
+    ////                return UIImage(named: "bubble-news")
+    //            }
+    //        }
+    //
+    //        var getTitle: String {
+    //            switch self {
+    //            case .one:
+    //                return .healthPasses
+    //            case .two:
+    ////                return .healthRecords
+    //                return .healthResources
+    //            case .three:
+    ////                return .healthResources
+    //                return .newsFeed
+    ////            case .four:
+    ////                return .newsFeed
+    //            }
+    //        }
+    //
+    //        var getType: OnboardingScreenType {
+    //            switch self {
+    //            case .one:
+    //                return .healthPasses(version: 1)
+    //            case .two:
+    ////                return .healthRecords(version: 1)
+    //                return .healthResources(version: 1)
+    //            case .three:
+    ////                return .healthResources(version: 1)
+    //                return .newsFeed(version: 1)
+    ////            case .four:
+    ////                return .newsFeed(version: 1)
+    //            }
+    //        }
+    //
+    //        var getDescription: String {
+    //            switch self {
+    //            case .one:
+    //                return .initialOnboardingHealthPassesDescription
+    //            case .two:
+    ////                return .initialOnboardingHealthRecordsDescription
+    //                return .initialOnboardingHealthResourcesDescription
+    //            case .three:
+    ////                return .initialOnboardingHealthResourcesDescription
+    //                return .initialOnboardingNewsFeedDescription
+    ////            case .four:
+    ////                return .initialOnboardingNewsFeedDescription
+    //            }
+    //        }
+    //
+    //        var getSelectedImageIndex: Int {
+    //            switch self {
+    //            case .one:
+    //                return 0
+    //            case .two:
+    //                return 1
+    //            case .three:
+    //                return 2
+    ////            case .four:
+    ////                return 3
+    //            }
+    //        }
+    //    }
     
     enum ImageCollectionType {
         case phoneDotCollection
@@ -138,7 +190,7 @@ class InitialOnboardingView: UIView {
     private var screenProgressImageDotsWidthConstraintCollection: [NSLayoutConstraint] = []
     private var rotatingImageView: UIImageView?
     private var rotatingImageViewConstraints: [NSLayoutConstraint]?
-        
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -195,14 +247,14 @@ class InitialOnboardingView: UIView {
         rotatingImageView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func initialConfigure(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
+    func initialConfigure(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController) {
         configureScreenProgressDots(screenNumber: screenNumber, screensToShow: screensToShow)
         configurePhoneDots(screenNumber: screenNumber)
         showNewTextIfScreensAreNew(screensToShow: screensToShow)
         commonConfigurationAndUpdates(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner)
     }
     
-    func adjustUI(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
+    func adjustUI(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController) {
         adjustPhoneImageDots(screenNumber: screenNumber)
         commonConfigurationAndUpdates(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner)
         if screensToShow.count > 1 {
@@ -210,7 +262,7 @@ class InitialOnboardingView: UIView {
         }
     }
     
-    func increment(screenNumber: ScreenNumber, screensToShow: [ScreenNumber]) -> ScreenNumber? {
+    func increment(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType]) -> OnboardingScreenType? {
         guard screensToShow.count > 1 else { return nil }
         if let index = screensToShow.firstIndex(of: screenNumber), screensToShow.count > index + 1 {
             return screensToShow[index + 1]
@@ -219,7 +271,7 @@ class InitialOnboardingView: UIView {
         }
     }
     
-    private func commonConfigurationAndUpdates(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
+    private func commonConfigurationAndUpdates(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController) {
         adjustText(screenNumber: screenNumber)
         adjustRotatingImageViewConstraints(screenNumber: screenNumber)
         updateRotatingImage(screenNumber: screenNumber)
@@ -227,7 +279,7 @@ class InitialOnboardingView: UIView {
         self.contentView.layoutIfNeeded()
     }
     
-    private func showNewTextIfScreensAreNew(screensToShow: [ScreenNumber]) {
+    private func showNewTextIfScreensAreNew(screensToShow: [OnboardingScreenType]) {
         newTextLabel.isHidden = screensToShow.count == OnboardingScreenType.allCases.count
     }
 }
@@ -235,11 +287,11 @@ class InitialOnboardingView: UIView {
 // MARK: Dot functions
 extension InitialOnboardingView {
     
-    private func configurePhoneDots(screenNumber: ScreenNumber) {
+    private func configurePhoneDots(screenNumber: OnboardingScreenType) {
         let count = OnboardingScreenType.allCases.count
         reusableImageCreationFunction(count: count, imageName: "unselected-dot-small", size: 8, collectionType: .phoneDotCollection)
-        guard phoneImageDotsCollection.count > screenNumber.getSelectedImageIndex else { return }
-        phoneImageDotsCollection[screenNumber.getSelectedImageIndex].image = UIImage(named: "selected-dot-small")
+        guard phoneImageDotsCollection.count > screenNumber.rawValue else { return }
+        phoneImageDotsCollection[screenNumber.rawValue].image = UIImage(named: "selected-dot-small")
         addConfigurePhoneDotsToStackView(count: phoneImageDotsCollection.count)
     }
     
@@ -251,7 +303,7 @@ extension InitialOnboardingView {
         phoneImageDotsStackView.removeConstraint(phoneImageDotsStackViewWidthConstraintToDelete)
     }
     
-    private func configureScreenProgressDots(screenNumber: ScreenNumber, screensToShow: [ScreenNumber]) {
+    private func configureScreenProgressDots(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType]) {
         let count = screensToShow.count
         guard count > 1 else {
             screenProgressImageDotsStackView.isHidden = true
@@ -287,26 +339,26 @@ extension InitialOnboardingView {
 // MARK: Adjusting functions
 extension InitialOnboardingView {
     
-    private func adjustPhoneImageDots(screenNumber: ScreenNumber) {
+    private func adjustPhoneImageDots(screenNumber: OnboardingScreenType) {
         for (index, imageView) in phoneImageDotsCollection.enumerated() {
-            imageView.image = screenNumber.getSelectedImageIndex == index ? UIImage(named: "selected-dot-small") : UIImage(named: "unselected-dot-small")
+            imageView.image = screenNumber.rawValue == index ? UIImage(named: "selected-dot-small") : UIImage(named: "unselected-dot-small")
         }
     }
     
-    private func adjustProgressImageDotsUI(screenNumber: ScreenNumber) {
+    private func adjustProgressImageDotsUI(screenNumber: OnboardingScreenType) {
         guard screenProgressImageDotsWidthConstraintCollection.count == screenProgressImageDotsCollection.count else { return }
         for (index, imageView) in screenProgressImageDotsCollection.enumerated() {
-            screenProgressImageDotsWidthConstraintCollection[index].constant = screenNumber.getSelectedImageIndex == index ? 20 : 10
-            imageView.image = screenNumber.getSelectedImageIndex == index ? UIImage(named: "selected-dot-large") : UIImage(named: "unselected-dot-large")
+            screenProgressImageDotsWidthConstraintCollection[index].constant = screenNumber.rawValue == index ? 20 : 10
+            imageView.image = screenNumber.rawValue == index ? UIImage(named: "selected-dot-large") : UIImage(named: "unselected-dot-large")
         }
     }
     
-    private func adjustRotatingImageViewConstraints(screenNumber: ScreenNumber) {
+    private func adjustRotatingImageViewConstraints(screenNumber: OnboardingScreenType) {
         guard let imageView = self.rotatingImageView else { return }
-        guard phoneImageDotsCollection.count > screenNumber.getSelectedImageIndex else { return }
-        let relativeView: UIImageView = phoneImageDotsCollection[screenNumber.getSelectedImageIndex]
+        guard phoneImageDotsCollection.count > screenNumber.rawValue else { return }
+        let relativeView: UIImageView = phoneImageDotsCollection[screenNumber.rawValue]
         switch screenNumber {
-        case .one:
+        case .healthPasses:
             removeOldConstraints()
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
@@ -316,10 +368,7 @@ extension InitialOnboardingView {
             let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
             self.rotatingImageViewConstraints = [verticalConstraint, leadingConstraint, widthConstraint, heightConstraint]
             contentView.addConstraints([verticalConstraint, leadingConstraint, widthConstraint, heightConstraint])
-        case .two:
-//            removeOldConstraints()
-//            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
-            
+        case .healthResources:
             removeOldConstraints()
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
             let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
@@ -329,23 +378,52 @@ extension InitialOnboardingView {
             let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
             self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
             contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
-        case .three:
-//            removeOldConstraints()
-//            let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
-//            let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
-//            let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
-//            let trailingConstraint = imageView.trailingAnchor.constraint(equalTo: relatedImageTrailingReference, constant: 14)
-//            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 132)
-//            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
-//            self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
-//            contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
-            
+        case .newsFeed:
             removeOldConstraints()
             constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
-//        case .four:
-//            removeOldConstraints()
-//            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
         }
+        /*
+         switch screenNumber {
+         case .one:
+         removeOldConstraints()
+         let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
+         let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
+         let relatedImageLeadingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
+         let leadingConstraint = imageView.leadingAnchor.constraint(equalTo: relatedImageLeadingReference, constant: -12)
+         let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 133)
+         let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
+         self.rotatingImageViewConstraints = [verticalConstraint, leadingConstraint, widthConstraint, heightConstraint]
+         contentView.addConstraints([verticalConstraint, leadingConstraint, widthConstraint, heightConstraint])
+         case .two:
+         //            removeOldConstraints()
+         //            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
+         
+         removeOldConstraints()
+         let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
+         let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
+         let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
+         let trailingConstraint = imageView.trailingAnchor.constraint(equalTo: relatedImageTrailingReference, constant: 14)
+         let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 132)
+         let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
+         self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
+         contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
+         case .three:
+         //            removeOldConstraints()
+         //            let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor
+         //            let verticalConstraint = imageView.centerYAnchor.constraint(equalTo: relatedImageYReference, constant: 1)
+         //            let relatedImageTrailingReference: NSLayoutAnchor<NSLayoutXAxisAnchor> = relativeView.centerXAnchor
+         //            let trailingConstraint = imageView.trailingAnchor.constraint(equalTo: relatedImageTrailingReference, constant: 14)
+         //            let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 132)
+         //            let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
+         //            self.rotatingImageViewConstraints = [verticalConstraint, trailingConstraint, widthConstraint, heightConstraint]
+         //            contentView.addConstraints([verticalConstraint, trailingConstraint, widthConstraint, heightConstraint])
+         
+         removeOldConstraints()
+         constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
+         //        case .four:
+         //            removeOldConstraints()
+         //            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
+         }*/
     }
     
     private func removeOldConstraints() {
@@ -365,17 +443,17 @@ extension InitialOnboardingView {
         contentView.addConstraints([horizontalConstraint, bottomConstraint, widthConstraint, heightConstraint])
     }
     
-    private func updateRotatingImage(screenNumber: ScreenNumber) {
+    private func updateRotatingImage(screenNumber: OnboardingScreenType) {
         guard let imageView = self.rotatingImageView else { return }
-        imageView.image = screenNumber.getRotatingImage
+        imageView.image = getRotatingImage(for: screenNumber)
     }
-
-    private func adjustText(screenNumber: ScreenNumber) {
-        onboardingTitleLabel.text = screenNumber.getTitle
-        onboardingDescriptionLabel.text = screenNumber.getDescription
+    
+    private func adjustText(screenNumber: OnboardingScreenType) {
+        onboardingTitleLabel.text = getTitle(for: screenNumber)
+        onboardingDescriptionLabel.text = getDescription(for: screenNumber)
     }
-
-    private func adjustBottomButton(screenNumber: ScreenNumber, screensToShow: [ScreenNumber], delegateOwner: UIViewController) {
+    
+    private func adjustBottomButton(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController) {
         let buttonType: AppStyleButton.ButtonType
         let accessibilityValue: String
         let accessibilityHint: String

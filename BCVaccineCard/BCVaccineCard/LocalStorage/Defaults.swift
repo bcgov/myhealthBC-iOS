@@ -7,32 +7,14 @@
 
 import Foundation
 
-enum Defaults {
+struct Defaults {
     enum Key: String {
         case vaccinePassports
         case initialOnboardingScreensSeen
         case cachedQueueItObject
         case rememberGatewayDetails
     }
-    
-    static var vaccinePassports: [LocallyStoredVaccinePassportModel]? {
-        get {
-            guard let data = UserDefaults.standard.value(forKey: self.Key.vaccinePassports.rawValue) as? Data else { return nil }
-            let order = try? PropertyListDecoder().decode([LocallyStoredVaccinePassportModel].self, from: data)
-            return order
-        }
-        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.vaccinePassports.rawValue) }
-    }
-    
-    static var initialOnboardingScreensSeen: [OnboardingScreenType]? {
-        get {
-            guard let data = UserDefaults.standard.value(forKey: self.Key.initialOnboardingScreensSeen.rawValue) as? Data else { return nil }
-            let order = try? PropertyListDecoder().decode([OnboardingScreenType].self, from: data)
-            return order
-        }
-        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.initialOnboardingScreensSeen.rawValue) }
-    }
-    
+
     static var cachedQueueItObject: QueueItCachedObject? {
         get {
             guard let data = UserDefaults.standard.value(forKey: self.Key.cachedQueueItObject.rawValue) as? Data else { return nil }
@@ -49,6 +31,44 @@ enum Defaults {
             return details
         }
         set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.rememberGatewayDetails.rawValue) }
+    }
+    
+    static func unseenOnBoardingScreens(version: Int) -> [OnboardingScreenType] {
+        let allSeen = getStoredOnBoardingScreensSeen()
+        var unseen: [OnboardingScreenType] = []
+        for each in OnboardingScreenType.allCases {
+            if !allSeen.contains(where: ({$0.version == version && $0.geTypeEnum() == each})) {
+                unseen.append(each)
+            }
+        }
+        return unseen.sorted(by: {$0.rawValue < $1.rawValue})
+    }
+    
+    static func getStoredOnBoardingScreensSeen() -> [VisitedOnboardingScreen] {
+        guard let data = UserDefaults.standard.value(forKey: self.Key.initialOnboardingScreensSeen.rawValue) as? Data else {
+            return []
+        }
+        do {
+            let decoded = try PropertyListDecoder().decode([VisitedOnboardingScreen].self, from: data)
+            return decoded
+        } catch {
+            print(error)
+            return []
+        }
+       
+    }
+    
+    static func storeInitialOnboardingScreensSeen(types: [OnboardingScreenType], version: Int) {
+        let newVisits = types.map({VisitedOnboardingScreen(type: $0.rawValue, version: version)})
+        var allVisits = getStoredOnBoardingScreensSeen()
+        allVisits.append(contentsOf: newVisits)
+        do {
+            let encoded = try PropertyListEncoder().encode(allVisits)
+            UserDefaults.standard.set(encoded, forKey: self.Key.initialOnboardingScreensSeen.rawValue)
+        } catch {
+            print(error)
+            return
+        }
     }
     
 }
