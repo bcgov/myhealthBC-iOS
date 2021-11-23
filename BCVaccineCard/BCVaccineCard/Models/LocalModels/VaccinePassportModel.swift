@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import BCVaccineValidator
 
 enum VaccineStatus: String, Codable {
     case fully = "fully", partially = "partially", notVaxed = "none"
@@ -31,16 +32,27 @@ enum Source: String, Codable {
     case healthGateway = "healthGateway", scanner = "scanner", imported = "imported"
 }
 
-struct LocallyStoredVaccinePassportModel: Codable, Equatable {
+public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     let code: String
     let birthdate: String
+    let hash: String
+    var vaxDates: [String]
     let name: String
     let issueDate: Double
     let status: VaccineStatus
     let source: Source
+    var fedCode: String?
+    let phn: String?
     
     func transform() -> AppVaccinePassportModel {
         return AppVaccinePassportModel(codableModel: self)
+    }
+    
+    func isNewer(than other: LocallyStoredVaccinePassportModel) -> Bool {
+        let currentIssueDate = Date.init(timeIntervalSince1970: issueDate)
+        let otherIssueDate = Date.init(timeIntervalSince1970: other.issueDate)
+        
+        return currentIssueDate > otherIssueDate
     }
 }
 
@@ -54,8 +66,9 @@ struct AppVaccinePassportModel: Equatable {
         let date = Date.init(timeIntervalSince1970: codableModel.issueDate)
         return Date.Formatter.issuedOnDateTime.string(from: date)
     }
+    
     var id: String? {
-        return codableModel.name + codableModel.birthdate
+        return codableModel.hash
     }
     
     func transform() -> LocallyStoredVaccinePassportModel {
@@ -65,5 +78,32 @@ struct AppVaccinePassportModel: Equatable {
     func getFormattedIssueDate() -> String {
         guard let issueDate = issueDate else { return "" }
         return .issuedOn + issueDate
+    }
+}
+
+
+extension CodeValidationResult {
+    func toLocal(federalPass: String? = nil, phn: String? = nil, source: Source? = .imported) -> LocallyStoredVaccinePassportModel? {
+        return result?.toLocal(federalPass: federalPass, phn: phn, source: source)
+    }
+}
+
+extension ScanResultModel {
+    func toLocal(federalPass: String? = nil, phn: String? = nil, source: Source? = .imported) -> LocallyStoredVaccinePassportModel {
+        var status: VaccineStatus
+        switch self.status {
+        case .Fully:
+            status = .fully
+        case .Partially:
+            status = .partially
+        case .None:
+            status = .notVaxed
+        }
+        let vadDates: [String] = immunizations.compactMap({$0.date})
+        
+        let hash = payload.fhirBundleHash() ?? "\(name)-\(birthdate)"
+      
+        return LocallyStoredVaccinePassportModel(code: code, birthdate: birthdate, hash: hash, vaxDates: vadDates, name: name, issueDate: issueDate, status: status, source: source ?? .imported, fedCode: federalPass, phn: phn)
+        
     }
 }

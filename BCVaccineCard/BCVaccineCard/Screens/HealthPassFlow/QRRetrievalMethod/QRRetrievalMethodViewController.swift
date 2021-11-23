@@ -20,7 +20,7 @@ class QRRetrievalMethodViewController: BaseViewController {
     }
     
     enum CellType {
-        case text(text: String), image(image: UIImage), method(type: QRRetrievalMethod)
+        case text(text: String), image(image: UIImage), method(type: TableViewButtonView.ButtonType, style: TableViewButtonView.ButtonStyle)
     }
     
     @IBOutlet weak private var tableView: UITableView!
@@ -34,8 +34,6 @@ class QRRetrievalMethodViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-//        self.view.accessibilityElementsHidden = true
-//        self.view.accessibilityElements = [self.navigationController, self.tableView]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,8 +43,6 @@ class QRRetrievalMethodViewController: BaseViewController {
         self.tabBarController?.tabBar.isHidden = false
         navSetup()
         self.tableView.contentInsetAdjustmentBehavior = .never
-//        self.view.accessibilityElementsHidden = false
-//        UIAccessibility.post(notification: .screenChanged, argument: self.view)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -55,7 +51,6 @@ class QRRetrievalMethodViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
         } else {
@@ -84,7 +79,7 @@ class QRRetrievalMethodViewController: BaseViewController {
 // MARK: Navigation setup
 extension QRRetrievalMethodViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .addABCVaccineCard,
+        self.navDelegate?.setNavigationBarWith(title: .addAHealthPass,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
@@ -99,10 +94,9 @@ extension QRRetrievalMethodViewController {
         self.dataSource = [
             .text(text: .qrDescriptionText),
             .image(image: #imageLiteral(resourceName: "options-screen-image")),
-            .method(type: .enterGatewayInfo),
-            .method(type: .scanWithCamera),
-            .method(type: .uploadImage)
-            
+            .method(type: .goToUploadImage, style: .blue),
+            .method(type: .goToCameraScan, style: .white),
+            .method(type: .goToEnterGateway, style: .white)
         ]
     }
 }
@@ -113,8 +107,6 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: ImageTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ImageTableViewCell.getName)
         tableView.register(UINib.init(nibName: QRSelectionTableViewCell.getName, bundle: .main), forCellReuseIdentifier: QRSelectionTableViewCell.getName)
-//        tableView.rowHeight = UITableView.automaticDimension
-//        tableView.estimatedRowHeight = 100
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -128,7 +120,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         switch data {
         case .text(text: let text):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
+                cell.configure(forType: .partiallyBoldedText(boldTexts: [.officialHealthPass], boldFont: UIFont.bcSansBoldWithSize(size: 17)), text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
                 return cell
             }
         case .image(image: let image):
@@ -136,9 +128,9 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
                 cell.configure(image: image)
                 return cell
             }
-        case .method(type: let type):
+        case .method(type: let type, style: let style):
             if let cell = tableView.dequeueReusableCell(withIdentifier: QRSelectionTableViewCell.getName, for: indexPath) as? QRSelectionTableViewCell {
-                cell.configure(method: type, delegateOwner: self)
+                cell.configure(withStyle: style, buttonType: type)
                 cell.isAccessibilityElement = true
                 cell.accessibilityTraits = .button
                 cell.accessibilityLabel = "\(type.getTitle)"
@@ -165,22 +157,34 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         let item = dataSource[indexPath.row]
         switch item {
         case .text, .image: return
-        case .method(type: let type):
-            if let cell = tableView.cellForRow(at: indexPath) as? QRSelectionTableViewCell {
-                UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                // The delay is necessary for the haptic feedback to occur immediately.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    cell.callDelegate(fromMethod: type)
+        case .method(type: let type, style: _):
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            // The delay is necessary for the haptic feedback to occur immediately.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                switch type {
+                case .goToEnterGateway:
+                    self.goToEnterGateway()
+                case .goToCameraScan:
+                    self.goToCameraScan()
+                case .goToUploadImage:
+                    self.goToUploadImage()
                 }
             }
+            
         }
     }
 }
 
-extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
+// MARK: Table View Button Methods
+extension QRRetrievalMethodViewController {
     func goToEnterGateway() {
-        let vc = GatewayFormViewController.constructGatewayFormViewController()
-        vc.completionHandler = { [weak self] id in
+        // TODO: Should look at refactoring this a bit
+        var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+        if let details = Defaults.rememberGatewayDetails {
+            rememberDetails = details
+        }
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass)
+        vc.completionHandler = { [weak self] (id, _) in
             guard let `self` = self else { return }
             self.view.accessibilityElementsHidden = true
             self.tableView.accessibilityElementsHidden = true
@@ -201,18 +205,18 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         showImagePicker { [weak self] image in
             guard let `self` = self, let image = image else {return}
             guard let codes = image.findQRCodes(), !codes.isEmpty else {
-                self.alert(title: "No QR found", message: "") // TODO: Better text / from constants
+                self.alert(title: .noQRFound, message: "")
                 return
             }
             guard codes.count == 1, let code = codes.first else {
-                self.alert(title: "Multiple QR codes", message: "image must have only 1 code") // TODO: Better text / from constants
+                self.alert(title: .multipleQRCodesTitle, message: .multipleQRCodesMessage)
                 return
             }
             
             BCVaccineValidator.shared.validate(code: code) { [weak self] result in
                 guard let `self` = self else { return }
                 guard let data = result.result else {
-                    self.alert(title: "Invalid QR Code", message: "") // TODO: Better text / from constants
+                    self.alert(title: .invalidQRCodeMessage, message: "")
                     return
                 }
                 DispatchQueue.main.async { [weak self] in
@@ -223,7 +227,7 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
             }
         }
     }
-    
+    // TODO: Need to verify this logic here
     private func storeValidatedQRCode(data: ScanResultModel, source: Source) {
         switch source {
         case .healthGateway:
@@ -233,25 +237,48 @@ extension QRRetrievalMethodViewController: GoToQRRetrievalMethodDelegate {
         case .imported:
             AnalyticsService.shared.track(action: .AddQR, text: .Upload)
         }
-        let model = convertScanResultModelIntoLocalData(data: data, source: source)
-        let appModel = model.transform()
-        if doesCardNeedToBeUpdated(modelToUpdate: appModel) {
-            updateCardInLocalStorage(model: model)
-//            postCardAddedNotification(id: appModel.id ?? "")
-        } else {
-            guard isCardAlreadyInWallet(modelToAdd: appModel) == false else {
-                alert(title: "Duplicate", message: "This QR code is already saved in your list of passes.") { [weak self] in
+        let model = convertScanResultModelIntoLocalData(data: data, source: source).transform()
+        model.state { [weak self] state in
+            guard let `self` = self else {return}
+            switch state {
+            case .exists, .isOutdated:
+                self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
                 }
-                return
+            case .isNew:
+                self.appendModelToLocalStorage(model: model.transform())
+                DispatchQueue.main.async {[weak self] in
+                    guard let self = self else {return}
+                    self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                    self.popBackToProperViewController(id: model.id ?? "")
+                }
+            case .canUpdateExisting:
+                self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
+                    guard let `self` = self else {return}
+                    self.updateCardInLocalStorage(model: model.transform(), completion: {[weak self] success in
+                        guard let `self` = self else {return}
+                        if success {
+                            self.popBackToProperViewController(id: model.id ?? "")
+                        }
+                    })
+                }, buttonTwoTitle: "No") { [weak self] in
+                    guard let `self` = self else {return}
+//                    self.navigationController?.popViewController(animated: true)
+                    self.popBackToProperViewController(id: model.id ?? "")
+                }
+            case .UpdatedFederalPass:
+                self.updateFedCodeForCardInLocalStorage(model: model.transform()) {[weak self] _ in
+                    guard let self = self else {return}
+                    DispatchQueue.main.async {[weak self] in
+                        guard let self = self else {return}
+                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                        self.popBackToProperViewController(id: model.id ?? "")
+                    }
+                }
+            
             }
-            appendModelToLocalStorage(model: model)
-//            postCardAddedNotification(id: appModel.id ?? "")
         }
-        // TODO: text from constants
-        self.navigationController?.showBanner(message: "Your proof of vaccination has been added", style: .Top)
-        self.popBackToProperViewController(id: appModel.id ?? "")
     }
 }
 
@@ -260,7 +287,7 @@ extension QRRetrievalMethodViewController {
     func popBackToProperViewController(id: String) {
         // If we only have one card (or no cards), then go back to health pass with popBackTo
         // If we have more than one card, we should check if 2nd controller in stack is CovidVaccineCardsViewController, if so, pop back, if not, instantiate, insert at 1, then pop back
-        guard let cards = Defaults.vaccinePassports, cards.count > 1 else {
+        guard StorageService.shared.fetchVaccineCards(for: AuthManager().userId()).count > 1 else {
             self.popBack(toControllerType: HealthPassViewController.self)
             return
         }
@@ -274,7 +301,8 @@ extension QRRetrievalMethodViewController {
         }
         guard containsCovidVaxCardsVC == false else {
             postCardAddedNotification(id: id)
-            self.navigationController?.popViewController(animated: true)
+//            self.navigationController?.popViewController(animated: true)
+            self.popBack(toControllerType: CovidVaccineCardsViewController.self)
             return
         }
         guard viewControllerStack.count > 0 else { return }
@@ -282,10 +310,10 @@ extension QRRetrievalMethodViewController {
         let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
         self.navigationController?.viewControllers.insert(vc, at: 1)
         // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.postCardAddedNotification(id: id)
         }
-        self.navigationController?.popViewController(animated: true)
+        self.popBack(toControllerType: CovidVaccineCardsViewController.self)
     }
 }
 

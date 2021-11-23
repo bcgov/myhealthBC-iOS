@@ -11,7 +11,7 @@ import UIKit
 import BCVaccineValidator
 
 protocol QueueItWorkerDefaultsDelegate: AnyObject {
-    func handleVaccineCard(scanResult: ScanResultModel)
+    func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?)
     func handleError(title: String, error: ResultError)
     func showLoader()
     func hideLoader()
@@ -27,6 +27,8 @@ class QueueItWorker: NSObject {
     private var cookieHeader: [String: String]?
     
     private var url: URL?
+    
+    private var retryOnEmptyPDFCount: Int = 0
     
     private var delegateOwner: UIViewController
     private var healthGateway: HealthGatewayBCGateway
@@ -65,19 +67,20 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
             self.delegate?.hideLoader()
             let errorCode = (err as NSError).code
             if errorCode == NetworkUnavailable.rawValue {
-                self.delegate?.handleError(title: "Network Unavailable", error: ResultError(resultMessage: "The network is currently unavailable, please try again later"))
+                self.delegate?.handleError(title: .networkUnavailableTitle, error: ResultError(resultMessage: .networkUnavailableMessage))
             } else if errorCode == RequestAlreadyInProgress.rawValue {
                 // Need to fetch locally stored Cookie and token
                 self.fetchValueFromDefaults()
                 guard let model = self.model, let url = self.url, let cookieHeadString = self.cookieHeader else {
-                    self.delegate?.handleError(title: "In Progress Error", error: ResultError(resultMessage: "There was an error with your in progress request, please try again later."))
+                    self.delegate?.handleError(title: .inProgressErrorTitle, error: ResultError(resultMessage: .inProgressErrorMessage))
                     return
                 }
                 let cookies = HTTPCookie.cookies(withResponseHeaderFields: cookieHeadString, for: url)
                 AF.session.configuration.httpCookieStorage?.setCookies(cookies, for: url, mainDocumentURL: nil)
+                self.delegate?.showLoader()
                 self.getActualVaccineCard(model: model, token: self.queueitToken)
             } else {
-                self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: "An unknown error occured."))
+                self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .unknownErrorMessage))
             }
             
         }
@@ -93,7 +96,7 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
         self.saveValueToDefaults(queueitToken: self.queueitToken)
         guard let model = self.model, let token = self.queueitToken else {
             self.delegate?.hideLoader()
-            self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: "There was an issue with your request, please try again."))
+            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
             return
         }
         getActualVaccineCard(model: model, token: token)
@@ -133,7 +136,7 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
             print("notifyQueueITUnavailable: ", errorMessage ?? "Error")
         #endif
         self.delegate?.hideLoader()
-        self.delegate?.handleError(title: "QueueIt Waiting Room Closed", error: ResultError(resultMessage: errorMessage ?? "You have closed the QueueIt waiting room"))
+        self.delegate?.handleError(title: .queueItClosedTitle, error: ResultError(resultMessage: errorMessage ?? .queueItClosedMessage))
     }
     
     func notifyUserExited() {
@@ -153,15 +156,16 @@ extension QueueItWorker: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
 // MARK: Alamofire requests
 extension QueueItWorker {
     func createInitialVaccineCardRequest(model: GatewayVaccineCardRequest) {
+        self.retryOnEmptyPDFCount = 0
         self.model = model
         self.delegate?.showLoader()
         let interceptor = NetworkRequestInterceptor()
         let headerParameters: HTTPHeaders = [
-            "phn": model.phn,
-            "dateOfBirth": model.dateOfBirth,
-            "dateOfVaccine": model.dateOfVaccine
+            Constants.GatewayVaccineCardRequestParameters.phn: model.phn,
+            Constants.GatewayVaccineCardRequestParameters.dateOfBirth: model.dateOfBirth,
+            Constants.GatewayVaccineCardRequestParameters.dateOfVaccine: model.dateOfVaccine
         ]
-        // TODO: Need to find a better way to get URL - ran out of time
+        
         AF.request(endpoint, method: .get, headers: headerParameters, interceptor: interceptor).response { response in
             // Check for queue it cookie here, if it's there, set the cookie and make actual request
             self.url = response.request?.url
@@ -170,9 +174,11 @@ extension QueueItWorker {
                 self.saveValueToDefaults(cookieHeader: header)
                 guard let model = self.model else {
                     self.delegate?.hideLoader()
-                    self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: "There was an issue with your request, please try again."))
+                    self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
                     return
                 }
+                // Resetting this here as I want to make sure retry uses the same logic
+                self.queueitToken = nil
                 self.getActualVaccineCard(model: model, token: nil)
             } else if let redirectURLStringEndcoded = response.response?.allHeaderFields["x-queueit-redirect"] as? String,
                       let decodedURLString = redirectURLStringEndcoded.removingPercentEncoding,
@@ -184,16 +190,26 @@ extension QueueItWorker {
                 self.queueItSetup()
                 self.runQueueIt()
             } else {
-                self.delegate?.hideLoader()
                 switch response.result {
                 case .success(_):
-                    // This shouldn't happen, but putting this here in case
-                    self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: "There was an issue with your request, please try again."))
+                    // Resetting this here as I want to make sure retry uses the same logic
+                    self.queueitToken = nil
+                    self.getActualVaccineCard(model: model, token: nil)
                 case .failure(let error):
-                    self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: error.errorDescription))
+                    self.delegate?.hideLoader()
+                    self.delegate?.handleError(title: .error, error: ResultError(resultMessage: error.errorDescription))
                 }
             }
         }
+    }
+    
+    @objc private func retryGetActualVaccineCardRequest() {
+        guard let model = self.model else {
+            self.delegate?.hideLoader()
+            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            return
+        }
+        self.getActualVaccineCard(model: model, token: self.queueitToken)
     }
     
     private func getActualVaccineCard(model: GatewayVaccineCardRequest, token: String?) {
@@ -202,39 +218,42 @@ extension QueueItWorker {
             switch result {
             case .success(let vaccineCard):
                 print(vaccineCard)
-                // Note: Have to add error handling here, because whoever set up this response didn't do it correctly - error is part of ths success response object
-                // Noticed: Errors seem to be very inconsistent in terms of the response object
-                if let resultMessage = vaccineCard.resultError?.resultMessage {
-                    let adjustedMessage = resultMessage == "Error parsing phn" ? "There was an error with your Personal Health Number. Please check that it is correct and try again." : resultMessage
-                    self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: adjustedMessage))
+                // Note: Have to check for error here because error is being sent back on a 200 response
+                if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode?.data == nil && vaccineCard.resourcePayload?.federalVaccineProof?.data == nil) {
+                    let adjustedMessage = resultMessage == .errorParsingPHNFromHG ? .errorParsingPHNMessage : resultMessage
+                    self.delegate?.handleError(title: .error, error: ResultError(resultMessage: adjustedMessage))
                     self.delegate?.hideLoader()
-                }
-                let qrResult = vaccineCard.transformResponseIntoQRCode()
-                guard let code = qrResult.qrString else {
-                    self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: qrResult.error))
-                    self.delegate?.hideLoader()
-                    return
-                }
-                BCVaccineValidator.shared.validate(code: code) { [weak self] result in
-                    guard let `self` = self else { return }
-                    guard let data = result.result else {
-                        self.delegate?.handleError(title: "Error", error: ResultError(resultMessage: "Invalid QR Code"))
+                } else if vaccineCard.resourcePayload?.loaded == false && self.retryOnEmptyPDFCount < Constants.NetworkRetryAttempts.publicVaccineStatusRetryMaxForFedPass, let retryinMS = vaccineCard.resourcePayload?.retryin {
+                    // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+                    self.retryOnEmptyPDFCount += 1
+                    let retryInSeconds = Double(retryinMS/1000)
+                    self.perform(#selector(self.retryGetActualVaccineCardRequest), with: nil, afterDelay: retryInSeconds)
+                } else {
+                    let qrResult = vaccineCard.transformResponseIntoQRCode()
+                    guard let code = qrResult.qrString else {
+                        self.delegate?.handleError(title: .error, error: ResultError(resultMessage: qrResult.error))
                         self.delegate?.hideLoader()
                         return
                     }
-                    DispatchQueue.main.async { [weak self] in
-                        guard let `self` = self else {return}
-                        self.delegate?.handleVaccineCard(scanResult: data)
-                        self.delegate?.hideLoader()
+                    BCVaccineValidator.shared.validate(code: code) { [weak self] result in
+                        guard let `self` = self else { return }
+                        guard let data = result.result else {
+                            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .invalidQRCodeMessage))
+                            self.delegate?.hideLoader()
+                            return
+                        }
+                        DispatchQueue.main.async { [weak self] in
+                            guard let `self` = self else {return}
+                            self.delegate?.handleVaccineCard(scanResult: data, fedCode: vaccineCard.resourcePayload?.federalVaccineProof?.data)
+                            self.delegate?.hideLoader()
+                        }
+                        
                     }
-                    
                 }
-
-                
             case .failure(let error):
                 print(error)
                 self.delegate?.hideLoader()
-                self.delegate?.handleError(title: "Error", error: error)
+                self.delegate?.handleError(title: .error, error: error)
             }
         }
     }

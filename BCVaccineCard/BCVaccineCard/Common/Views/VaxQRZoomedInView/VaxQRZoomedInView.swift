@@ -44,7 +44,7 @@ class VaxQRZoomedInView: UIView {
         presentForScanningLabel.textColor = AppColours.appBlue
         presentForScanningLabel.font = UIFont.bcSansBoldWithSize(size: 20)
         presentForScanningLabel.isAccessibilityElement = true
-        presentForScanningLabel.accessibilityLabel = "Zoomed in QR code presented"
+        presentForScanningLabel.accessibilityLabel = AccessibilityLabels.ZoomedInQRImage.zoomedInQR
         presentForScanningLabel.accessibilityValue = .presentForScanning
     }
     

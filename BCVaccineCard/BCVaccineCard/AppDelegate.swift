@@ -1,7 +1,7 @@
 //
 //  AppDelegate.swift
 //  BCVaccineCard
-// 
+//
 //  Created by Connor Ogilvie on 2021-09-14.
 //
 
@@ -23,9 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func configure() {
         //use .Prod or .Test for different endpoints for keys
+#if PROD
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
+#elseif DEV
+        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
+        //        FirebaseApp.configure()
+#endif
         AnalyticsService.shared.setup()
-//        FirebaseApp.configure()
         setupGatewayFactory()
         setupRootViewController()
     }
@@ -37,13 +41,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          creates and returns a container, having loaded the store for the
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
-        */
+         */
         let container = NSPersistentContainer(name: "BCVaccineCard")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                 
+                
                 /*
                  Typical reasons for an error here include:
                  * The parent directory does not exist, cannot be created, or disallows writing.
@@ -57,9 +61,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         return container
     }()
-
+    
     // MARK: - Core Data Saving support
-
+    
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -73,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
+    
 }
 
 // MARK: Gateway setup
@@ -87,13 +91,15 @@ extension AppDelegate {
 // MARK: Root setup
 extension AppDelegate {
     private func setupRootViewController() {
-        if Defaults.hasSeenInitialOnboardingScreens {
+        let unseen = Defaults.unseenOnBoardingScreens()
+        guard let first = unseen.first else {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
-        } else {
-            let vc = InitialOnboardingViewController.constructInitialOnboardingViewController()
-            self.window?.rootViewController = vc
+            return
         }
+        
+        let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
+        self.window?.rootViewController = vc
         
     }
 }

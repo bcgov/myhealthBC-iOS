@@ -81,8 +81,12 @@ extension Constants {
         struct CellSpacing {
             struct QROptionsScreen {
                 static let optionButtonHeight: CGFloat = 74
-                static let staticText: CGFloat = 70
+                static let staticText: CGFloat = 100
             }
+        }
+        
+        struct RememberPHNDropDownRowHeight {
+            static let height: CGFloat = 50
         }
     }
 }

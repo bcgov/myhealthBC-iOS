@@ -18,7 +18,7 @@ extension UIViewController {
     func alert(title: String, message: String) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.isAccessibilityElement = true
-        controller.addAction(UIAlertAction(title: "OK", style: .default))
+        controller.addAction(UIAlertAction(title: .ok, style: .default))
         DispatchQueue.main.async {
             self.present(controller, animated: true)
         }
@@ -27,7 +27,7 @@ extension UIViewController {
     func alert(title: String, message: String, completion: @escaping()->Void) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.isAccessibilityElement = true
-        controller.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+        controller.addAction(UIAlertAction(title: .ok, style: .default, handler: { action in
             return completion()
         }))
         DispatchQueue.main.async {
@@ -90,7 +90,7 @@ extension UIViewController {
             self.view.layoutIfNeeded()
         }
         
-//        UIAccessibility.setFocusTo(label)
+        //        UIAccessibility.setFocusTo(label)
         
         // Remove banner after x seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.UI.Banner.displayDuration) {[weak self] in
@@ -104,7 +104,7 @@ extension UIViewController {
                 guard let `self` = self,
                       let container = self.view.viewWithTag(Constants.UI.Banner.tag),
                       container.viewWithTag(labelTAG) != nil
-                      else {return}
+                else {return}
                 container.alpha = 0
             } completion: { done in
                 container.removeFromSuperview()
@@ -149,7 +149,7 @@ extension UIViewController {
             guard let `self` = self,
                   let container = self.view.viewWithTag(Constants.UI.Banner.tag),
                   container.viewWithTag(labelTAG) != nil
-                  else {return}
+            else {return}
             /*
              We Randomly generated labelTAG.
              here we check if after the display duration, the same label is still displayed.
@@ -161,34 +161,45 @@ extension UIViewController {
     
     func showBanner(message: String, style: BannerStyle) {
         // Create label and container
-        let container = UIView(frame: .zero)
-        let label = UILabel(frame: .zero)
-        
-        if style == .Bottom {
-            label.isAccessibilityElement = true
-            label.accessibilityTraits = .staticText
-            label.accessibilityValue = "\(message)"
-        }
-        
-        
-        // Remove existing Banner / Container
-        if let existing = view.viewWithTag(Constants.UI.Banner.tag) {
-            existing.removeFromSuperview()
-        }
-        
-        // Add subviews
-        container.tag = Constants.UI.Banner.tag
-        let labelTAG = Int.random(in: 4000..<9000)
-        label.tag = labelTAG
-        self.view.addSubview(container)
-        container.addSubview(label)
-        label.text = message
-        
-        switch style {
-        case .Top:
-            presentBannerFromTop(container: container, label: label, labelTAG: labelTAG)
-        case .Bottom:
-            presentBannerAtBottom(container: container, label: label, labelTAG: labelTAG)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            if let parent = self.parent as? CustomNavigationController {
+                parent.showBanner(message: message, style: style)
+                return
+            }
+            if let parent = self.parent as? TabBarController {
+                parent.showBanner(message: message, style: style)
+                return
+            }
+            let container = UIView(frame: .zero)
+            let label = UILabel(frame: .zero)
+            
+            if style == .Bottom {
+                label.isAccessibilityElement = true
+                label.accessibilityTraits = .staticText
+                label.accessibilityValue = "\(message)"
+            }
+            
+            
+            // Remove existing Banner / Container
+            if let existing = self.view.viewWithTag(Constants.UI.Banner.tag) {
+                existing.removeFromSuperview()
+            }
+            
+            // Add subviews
+            container.tag = Constants.UI.Banner.tag
+            let labelTAG = Int.random(in: 4000..<9000)
+            label.tag = labelTAG
+            self.view.addSubview(container)
+            container.addSubview(label)
+            label.text = message
+            
+            switch style {
+            case .Top:
+                self.presentBannerFromTop(container: container, label: label, labelTAG: labelTAG)
+            case .Bottom:
+                self.presentBannerAtBottom(container: container, label: label, labelTAG: labelTAG)
+            }
         }
     }
     
@@ -202,7 +213,7 @@ extension UIViewController {
         } completion: { done in
             banner.removeFromSuperview()
         }
-
+        
     }
 }
 
@@ -235,24 +246,35 @@ extension UIViewController {
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        if Defaults.vaccinePassports == nil {
-            Defaults.vaccinePassports = []
-            Defaults.vaccinePassports?.append(model)
-        } else {
-            Defaults.vaccinePassports?.append(model)
-        }
+        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
     }
     
-    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        guard let defaultsPassports = Defaults.vaccinePassports else { return }
-        if let index = Defaults.vaccinePassports?.firstIndex(where: { $0.name == model.name && $0.birthdate == model.birthdate }), defaultsPassports.count > index {
-            Defaults.vaccinePassports?[index] = model
-        }
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] success in
+            guard let `self` = self else {return}
+            if success {
+                self.showBanner(message: .updatedCard, style: .Top)
+            } else {
+                self.alert(title: .error, message: .updateCardFailed)
+            }
+            completion(success)
+        })
+    }
+    
+    func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCardFedCode(newData: model, completion: {[weak self] success in
+            guard let `self` = self else {return}
+            if success {
+                self.showBanner(message: .updatedCard, style: .Top)
+            } else {
+                self.alert(title: .error, message: .updateCardFailed)
+            }
+            completion(success)
+        })
     }
     
     func convertScanResultModelIntoLocalData(data: ScanResultModel, source: Source) -> LocallyStoredVaccinePassportModel {
-        let status = VaccineStatus.init(rawValue: data.status.rawValue) ?? .notVaxed
-        return LocallyStoredVaccinePassportModel(code: data.code, birthdate: data.birthdate, name: data.name, issueDate: data.issueDate, status: status, source: source)
+        return data.toLocal(source: source)
     }
 }
 
@@ -286,31 +308,46 @@ extension UIViewController {
     }
 }
 
-// MARK: Check for duplicates - again, should probably find a better spot for this
-extension UIViewController {
-    // Need to think about how to handle this... will likely need two functions
-    func isCardAlreadyInWallet(modelToAdd model: AppVaccinePassportModel) -> Bool {
-        guard let localDS = Defaults.vaccinePassports, !localDS.isEmpty else { return false }
-        let appDS = localDS.map { $0.transform() }
-        let idArray = appDS.compactMap({ $0.id })
-        guard let id = model.id else { return false } // May need some form of error handling here, as this just means the new model is incomplete
-        guard idArray.firstIndex(where: { $0 == id }) == nil else { return true }
-        return false
-    }
-    // TODO: When we move these functions to it's own class, we should refactor how these are done as there is a fair amount of duplication.. just not doing it now as we are close to release
-    func doesCardNeedToBeUpdated(modelToUpdate model: AppVaccinePassportModel) -> Bool {
-        guard let localDS = Defaults.vaccinePassports, !localDS.isEmpty else { return false }
-        guard model.codableModel.status == .fully else { return false }
-        if let _ = Defaults.vaccinePassports?.firstIndex(where: { $0.name == model.codableModel.name && $0.birthdate == model.codableModel.birthdate && $0.status == .partially }) {
-            return true
-        }
-        return false
-    }
-}
-
 // MARK: Notification Center posting
 extension UIViewController {
     func postCardAddedNotification(id: String) {
         NotificationCenter.default.post(name: .cardAddedNotification, object: nil, userInfo: ["id": id])
+    }
+}
+
+// MARK: GoTo Health Gateway Logic
+extension UIViewController {
+    // Note: This is currently only being used for fetching fed pass only
+    // TODO: May need to be refactored in the future if we use this function anywhere else
+    func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, completion: ((String?) -> Void)?) {
+        var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+        if let details = Defaults.rememberGatewayDetails {
+            rememberDetails = details
+        }
+        
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
+        if fetchType.isFedPassOnly {
+            vc.completionHandler = { [weak self] (id, fedPass) in
+                if let fedPass = fedPass {
+                    self?.openFederalPass(pass: fedPass, vc: owner, id: id, completion: completion)
+                } else {
+                    self?.navigationController?.popViewController(animated: true)
+                }
+            }
+        }
+        self.tabBarController?.tabBar.isHidden = true
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: Open federal pass
+extension UIViewController {
+    func openFederalPass(pass: String, vc: UIViewController, id: String?, completion: ((String?) -> Void)?) {
+        guard let data = Data(base64URLEncoded: pass) else {
+            return
+        }
+        let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
+        pdfView.show(data: data, in: vc.parent ?? vc, id: id)
+        pdfView.completionHandler = completion
     }
 }

@@ -6,6 +6,7 @@
 // initial
 
 import UIKit
+import SwipeCellKit
 
 class HealthPassViewController: BaseViewController {
     
@@ -18,12 +19,13 @@ class HealthPassViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     
-    private var dataSource: AppVaccinePassportModel?
-    private var savedCardsCount = 0
+    private var dataSource: VaccineCard?
+    private var savedCardsCount: Int {
+        return StorageService.shared.fetchVaccineCards(for: AuthManager().userId()).count
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,6 +34,7 @@ class HealthPassViewController: BaseViewController {
         navSetup()
         // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -79,7 +82,7 @@ extension HealthPassViewController {
     
     private func goToAddCardOptionScreen() {
         // NOTE: Not sure if I should add UIImpactFeedbackGenerator here or not??
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Health Passes")
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -87,25 +90,27 @@ extension HealthPassViewController {
 // MARK: DataSource Management
 extension HealthPassViewController {
     private func retrieveDataSource() {
-        fetchFromDefaults()
+        fetchFromStorage()
     }
 }
 
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension HealthPassViewController {
-    private func fetchFromDefaults() {
-        guard let localDS = Defaults.vaccinePassports, localDS.count > 0 else {
+    private func fetchFromStorage() {
+        let cards = StorageService.shared.fetchVaccineCards(for: AuthManager().userId())
+        guard cards.count > 0 else {
             self.dataSource = nil
-            self.savedCardsCount = 0
             return
         }
-        self.savedCardsCount = localDS.count
-        self.dataSource = localDS.first?.transform()
+        self.dataSource = cards.first
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }
 
 // MARK: Table View Logic
-extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
+extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
     private func setupTableView() {
         //TODO: Note: Need a new table view cell created here as per designs
         tableView.register(UINib.init(nibName: VaccineCardTableViewCell.getName, bundle: .main), forCellReuseIdentifier: VaccineCardTableViewCell.getName)
@@ -142,7 +147,8 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
         } else if indexPath.row == 1 {
             if let cell = tableView.dequeueReusableCell(withIdentifier: VaccineCardTableViewCell.getName, for: indexPath) as? VaccineCardTableViewCell {
                 cell.isAccessibilityElement = false
-                cell.configure(model: card, expanded: true, editMode: false)
+                cell.delegate = self
+                cell.configure(model: card, expanded: true, editMode: false, delegateOwner: self)
                 return cell
             }
         } else if indexPath.row == 2 {
@@ -155,7 +161,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let image = dataSource?.image else { return }
+        guard let image = dataSource?.code?.generateQRCode() else { return }
         guard indexPath.row == 1 else { return }
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
@@ -163,32 +169,20 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
         self.tabBarController?.tabBar.isHidden = true
     }
     
-    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard savedCardsCount == 1, dataSource != nil, indexPath.row == 1 else { return nil }
-        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right, savedCardsCount == 1 else {return nil}
+        let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
+            guard let `self` = self else {return}
             self.deleteCard()
         }
-        delete.isAccessibilityElement = true
-        delete.accessibilityTraits = .button
-        delete.accessibilityLabel = "Unlink button"
-        delete.image = UIImage(named: "unlink")
-        delete.backgroundColor = .white
-        let config = UISwipeActionsConfiguration(actions: [delete])
-        return config
-    }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard savedCardsCount == 1, dataSource != nil, indexPath.row == 1  else { return nil }
-        let delete = UIContextualAction(style: .destructive, title: "") { action, view, completion in
-            self.deleteCard()
-        }
-        delete.isAccessibilityElement = true
-        delete.accessibilityTraits = .button
-        delete.accessibilityLabel = "Unlink button"
-        delete.image = UIImage(named: "unlink")
-        delete.backgroundColor = .white
-        let config = UISwipeActionsConfiguration(actions: [delete])
-        return config
+        deleteAction.hidesWhenSelected = true
+        deleteAction.image = UIImage(named: "unlink")
+        deleteAction.backgroundColor = .white
+        deleteAction.textColor = Constants.UI.Theme.primaryColor
+        deleteAction.isAccessibilityElement = true
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityTraits = .button
+        return [deleteAction]
     }
     
     private func deleteCard() {
@@ -198,39 +192,43 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource {
             self.tableView.reloadData()
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
-            self.savedCardsCount = 0
+            if let card = self.dataSource {
+                StorageService.shared.deleteVaccineCard(vaccineQR: card.code ?? "")
+            }
             self.dataSource = nil
-            Defaults.vaccinePassports = nil
             AnalyticsService.shared.track(action: .RemoveCard)
             self.tableView.reloadData()
         }
-
-        
     }
+}
+
+// MARK: Federal pass action button delegate
+extension HealthPassViewController: FederalPassViewDelegate {
+    func federalPassButtonTapped(model: AppVaccinePassportModel?) {
+        if let pass = model?.codableModel.fedCode {
+            self.openFederalPass(pass: pass, vc: self, id: nil, completion: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.tabBarController?.tabBar.isHidden = false
+            })
+        } else {
+            guard let model = model else { return }
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .healthPassHomeScreen, owner: self, completion: { [weak self] _ in
+                guard let `self` = self else { return }
+                self.tabBarController?.tabBar.isHidden = false
+                self.navigationController?.popViewController(animated: true)
+            })
+        }
+    }
+
 }
 
 // MARK: Add card button table view cell delegate here
 extension HealthPassViewController: AddCardsTableViewCellDelegate {
     func addCardButtonTapped() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: "Health Passes")
+        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
- // MARK: Primary Vaccine Card button delegates here
-//extension HealthPassViewController: PrimaryVaccineCardTableViewCellDelegate {
-//    func addCardButtonTapped() {
-//        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-//
-//    func tapToZoomInButtonTapped() {
-//        guard let image = dataSource?.image else { return }
-//        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-//        let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
-//        self.present(vc, animated: true, completion: nil)
-//        self.tabBarController?.tabBar.isHidden = true
-//    }
-//}
 
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
@@ -238,7 +236,7 @@ extension HealthPassViewController: AppStyleButtonDelegate {
             let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
             self.navigationController?.pushViewController(vc, animated: true)
         }
-        if type == .addABCVaccineCard {
+        if type == .addAHealthPass {
             goToAddCardOptionScreen()
         }
     }

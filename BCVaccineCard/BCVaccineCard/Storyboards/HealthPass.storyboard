@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hee-gI-keT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hee-gI-keT">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -70,33 +70,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="yFp-YB-xyv">
-                                <rect key="frame" x="8" y="44" width="398" height="744"/>
+                                <rect key="frame" x="8" y="44" width="398" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R0u-nJ-hvq" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="126" y="808" width="162" height="44"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="cWP-FU-Svw"/>
-                                    <constraint firstAttribute="width" constant="162" id="ztM-7J-Lxg"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XGL-vj-0ro"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="R0u-nJ-hvq" firstAttribute="centerX" secondItem="jYM-de-ydS" secondAttribute="centerX" id="92G-4T-6xc"/>
-                            <constraint firstItem="R0u-nJ-hvq" firstAttribute="top" secondItem="yFp-YB-xyv" secondAttribute="bottom" constant="20" id="VkZ-NU-YnF"/>
                             <constraint firstItem="yFp-YB-xyv" firstAttribute="leading" secondItem="XGL-vj-0ro" secondAttribute="leading" constant="8" id="Y4N-es-LKI"/>
-                            <constraint firstItem="XGL-vj-0ro" firstAttribute="bottom" secondItem="R0u-nJ-hvq" secondAttribute="bottom" constant="10" id="lAv-MR-6P5"/>
+                            <constraint firstItem="XGL-vj-0ro" firstAttribute="bottom" secondItem="yFp-YB-xyv" secondAttribute="bottom" constant="10" id="lqD-nH-NeF"/>
                             <constraint firstItem="yFp-YB-xyv" firstAttribute="top" secondItem="XGL-vj-0ro" secondAttribute="top" id="ltO-B6-csP"/>
                             <constraint firstItem="XGL-vj-0ro" firstAttribute="trailing" secondItem="yFp-YB-xyv" secondAttribute="trailing" constant="8" id="tXE-qv-uJ9"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mj3-WT-U5G"/>
                     <connections>
-                        <outlet property="bottomButton" destination="R0u-nJ-hvq" id="lJ7-UD-0se"/>
                         <outlet property="tableView" destination="yFp-YB-xyv" id="N7V-IK-2Bp"/>
                         <outlet property="tableViewLeadingConstraint" destination="Y4N-es-LKI" id="xt7-mY-cp8"/>
                         <outlet property="tableViewTrailingConstraint" destination="tXE-qv-uJ9" id="udg-Yy-pdl"/>

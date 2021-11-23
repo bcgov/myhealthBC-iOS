@@ -10,18 +10,47 @@ import UIKit
 
 struct Constants {
     
+    /// Authorization Header Key
+    static let authorizationHeaderKey = "Authorization"
+    
+    static func onBoardingScreenLatestVersion(for type: OnboardingScreenType) -> Int {
+        switch type {
+        case .healthPasses:
+            return 1
+        case .healthResources:
+            return 1
+        case .newsFeed:
+            return 1
+        }
+    }
+    
     struct DateConstants {
         static let firstVaxDate = Date.Formatter.yearMonthDay.date(from: "2020-01-01")
     }
     
     struct PrivacyPolicy {
-        static let urlString = "https://www.healthgateway.gov.bc.ca/termsofservice"
+        static let urlString = "https://www2.gov.bc.ca/gov/content/health/managing-your-health/health-gateway/myhealth-app-privacy"
     }
     
     struct Help {
         static let urlString = "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/proof#help"
     }
     
-    /// Authorization Header Key
-    static let authorizationHeaderKey = "Authorization"
+    struct QueueItStrings {
+        static let queueittoken = "queueittoken"
+    }
+    
+    struct GatewayVaccineCardRequestParameters {
+        static let phn = "phn"
+        static let dateOfBirth = "dateOfBirth"
+        static let dateOfVaccine = "dateOfVaccine"
+    }
+    
+    struct KeychainPHNKey {
+        static let key = "PHNKey" // Note: Data should be an array of 
+    }
+    
+    struct NetworkRetryAttempts {
+        static let publicVaccineStatusRetryMaxForFedPass = 3
+    }
 }

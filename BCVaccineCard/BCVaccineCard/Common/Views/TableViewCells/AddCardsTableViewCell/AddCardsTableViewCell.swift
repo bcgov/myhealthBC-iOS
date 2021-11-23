@@ -30,17 +30,12 @@ class AddCardsTableViewCell: UITableViewCell {
     
     private func labelSetup() {
         boldTextLabel.font = UIFont.boldSystemFont(ofSize: 17)
-        boldTextLabel.text = .bcVaccineCards
+        boldTextLabel.text = .bcVaccinePass
         boldTextLabel.textColor = .black
         subtextLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         subtextLabel.textColor = AppColours.textGray
-        if #available(iOS 15.0, *) {
-            addCardButton.configuration?.title = nil
-        } else {
-            addCardButton.setTitle(nil, for: .normal)
-        }
-        addCardButton.accessibilityLabel = "Add Card"
-        addCardButton.accessibilityHint = "Tap this button to add a vaccine card"
+        addCardButton.accessibilityLabel = AccessibilityLabels.AddCard.addCardLabel
+        addCardButton.accessibilityHint = AccessibilityLabels.AddCard.addCardHint
     }
     
     @IBAction func addCardButtonTapped(_ sender: UIButton) {

@@ -36,7 +36,7 @@ class ResourceTableViewCell: UITableViewCell {
         resourceImageView.isAccessibilityElement = false
         resourceLabel.isAccessibilityElement = false
         self.accessibilityLabel = resource.text
-        self.accessibilityHint = AccessibilityLabels.openWebLinkHint
+        self.accessibilityHint = AccessibilityLabels.OpenWebLink.openWebLinkHint
         self.accessibilityTraits = [.selected, .link]
     }
 
