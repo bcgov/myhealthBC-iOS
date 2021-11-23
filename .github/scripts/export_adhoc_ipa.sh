@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-xcodebuild -archivePath $PWD/build/BCVaccineCard-Prod.xcarchive \
+xcodebuild -archivePath $PWD/build/BCVaccineCard.xcarchive \
 			-exportOptionsPlist BCVaccineCard/exportOptions-adhoc.plist \
 			-exportPath $PWD/build \
 			-allowProvisioningUpdates \
