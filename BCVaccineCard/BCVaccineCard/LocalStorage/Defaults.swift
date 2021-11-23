@@ -3,11 +3,11 @@
 //  ClientVaxPass-POC
 //
 //  Created by Connor Ogilvie on 2021-09-10.
-//  
+//
 
 import Foundation
 
-enum Defaults {
+struct Defaults {
     enum Key: String {
 //        case vaccinePassports
         case initialOnboardingScreensSeen
@@ -49,6 +49,44 @@ enum Defaults {
             return details
         }
         set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.rememberGatewayDetails.rawValue) }
+    }
+    
+    static func unseenOnBoardingScreens() -> [OnboardingScreenType] {
+        let allSeen = getStoredOnBoardingScreensSeen()
+        var unseen: [OnboardingScreenType] = []
+        for each in OnboardingScreenType.allCases {
+            if !allSeen.contains(where: ({$0.version == Constants.onBoardingScreenLatestVersion(for: each) && $0.geTypeEnum() == each})) {
+                unseen.append(each)
+            }
+        }
+        return unseen.sorted(by: {$0.rawValue < $1.rawValue})
+    }
+    
+    static func getStoredOnBoardingScreensSeen() -> [VisitedOnboardingScreen] {
+        guard let data = UserDefaults.standard.value(forKey: self.Key.initialOnboardingScreensSeen.rawValue) as? Data else {
+            return []
+        }
+        do {
+            let decoded = try PropertyListDecoder().decode([VisitedOnboardingScreen].self, from: data)
+            return decoded
+        } catch {
+            print(error)
+            return []
+        }
+        
+    }
+    
+    static func storeInitialOnboardingScreensSeen(types: [OnboardingScreenType]) {
+        let newVisits = types.map({VisitedOnboardingScreen(type: $0.toScreenTypeID().rawValue, version: Constants.onBoardingScreenLatestVersion(for: $0))})
+        var allVisits = getStoredOnBoardingScreensSeen()
+        allVisits.append(contentsOf: newVisits)
+        do {
+            let encoded = try PropertyListEncoder().encode(allVisits)
+            UserDefaults.standard.set(encoded, forKey: self.Key.initialOnboardingScreensSeen.rawValue)
+        } catch {
+            print(error)
+            return
+        }
     }
     
 }

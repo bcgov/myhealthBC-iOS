@@ -1,11 +1,11 @@
-name: Deploying
+name: Build and deploy to Firebase
 on:
   push:
     branches:
       - dev
 jobs:
   deploy:
-    name: Deploying to Testflight
+    name: Deploying to Firebase
     runs-on: macOS-latest
     steps:
       - name: Checkout repository
@@ -15,16 +15,18 @@ jobs:
       - name: Setup provisioning profile
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
+          FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
         run: ./.github/secrets/decrypt_secrets.sh
       - name: Archiving project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        run: ./.github/scripts/archive_app.sh
+        run: ./.github/scripts/archive_adhoc.sh
       - name: Exporting .ipa
-        run: ./.github/scripts/export_ipa.sh
-      - name: Publishing app
+        run: ./.github/scripts/export_adhoc_ipa.sh
+      - name: Uploading .ipa
         if: success()
         env:
-          APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
-          APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
-        run: ./.github/scripts/publish_testflight.sh
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID}}
+        run: ./.github/scripts/publish_firebase.sh
+
