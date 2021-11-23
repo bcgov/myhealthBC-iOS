@@ -42,7 +42,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         }
         if type == .getStarted || type == .ok {
             // TODO: version
-            Defaults.storeInitialOnboardingScreensSeen(types: screensToShow, version: Constants.OnBoardingScreenVersion)
+            Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
             goToHomeTransition()
         }
     }

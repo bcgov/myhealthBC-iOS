@@ -33,11 +33,11 @@ struct Defaults {
         set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.rememberGatewayDetails.rawValue) }
     }
     
-    static func unseenOnBoardingScreens(version: Int) -> [OnboardingScreenType] {
+    static func unseenOnBoardingScreens() -> [OnboardingScreenType] {
         let allSeen = getStoredOnBoardingScreensSeen()
         var unseen: [OnboardingScreenType] = []
         for each in OnboardingScreenType.allCases {
-            if !allSeen.contains(where: ({$0.version == version && $0.geTypeEnum() == each})) {
+            if !allSeen.contains(where: ({$0.version == Constants.onBoardingScreenLatestVersion(for: each) && $0.geTypeEnum() == each})) {
                 unseen.append(each)
             }
         }
@@ -58,8 +58,8 @@ struct Defaults {
         
     }
     
-    static func storeInitialOnboardingScreensSeen(types: [OnboardingScreenType], version: Int) {
-        let newVisits = types.map({VisitedOnboardingScreen(type: $0.rawValue, version: version)})
+    static func storeInitialOnboardingScreensSeen(types: [OnboardingScreenType]) {
+        let newVisits = types.map({VisitedOnboardingScreen(type: $0.rawValue, version: Constants.onBoardingScreenLatestVersion(for: $0))})
         var allVisits = getStoredOnBoardingScreensSeen()
         allVisits.append(contentsOf: newVisits)
         do {

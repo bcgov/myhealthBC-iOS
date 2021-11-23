@@ -8,23 +8,6 @@
 
 import UIKit
 
-// TODO: Mpve
-struct VisitedOnboardingScreen: Encodable, Decodable {
-    let type: Int
-    let version: Int
-    
-    func geTypeEnum() -> OnboardingScreenType? {
-        return OnboardingScreenType.init(rawValue: type) ?? nil
-    }
-}
-
-// TODO: Move
-enum OnboardingScreenType: Int, CaseIterable {
-    case healthPasses = 0
-    case healthResources
-    case newsFeed
-}
-
 class InitialOnboardingView: UIView {
     
     
