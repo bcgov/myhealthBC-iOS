@@ -59,7 +59,7 @@ struct Defaults {
     }
     
     static func storeInitialOnboardingScreensSeen(types: [OnboardingScreenType]) {
-        let newVisits = types.map({VisitedOnboardingScreen(type: $0.rawValue, version: Constants.onBoardingScreenLatestVersion(for: $0))})
+        let newVisits = types.map({VisitedOnboardingScreen(type: $0.toScreenTypeID().rawValue, version: Constants.onBoardingScreenLatestVersion(for: $0))})
         var allVisits = getStoredOnBoardingScreensSeen()
         allVisits.append(contentsOf: newVisits)
         do {
