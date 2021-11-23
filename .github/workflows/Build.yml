@@ -1,4 +1,4 @@
-name: Build and deploy to Firebase
+name: Build Project
 on:
   pull_request:
     branches:
@@ -11,7 +11,7 @@ jobs:
     runs-on: macOS-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Install gpg
         run: brew install gnupg
       - name: Setup provisioning profile
@@ -19,7 +19,7 @@ jobs:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
           FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
         run: ./.github/secrets/decrypt_secrets.sh
-      - name: Archiving project
+      - name: Building project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        run: ./.github/scripts/archive_adhoc.sh
+        run: ./.github/scripts/build.sh
