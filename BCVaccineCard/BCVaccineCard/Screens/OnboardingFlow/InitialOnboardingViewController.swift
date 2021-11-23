@@ -9,10 +9,10 @@ import UIKit
 
 class InitialOnboardingViewController: UIViewController {
     
-    class func constructInitialOnboardingViewController(startScreenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType]) -> InitialOnboardingViewController {
+    class func constructInitialOnboardingViewController(startScreenNumber: InitialOnboardingView.ScreenNumber, screensToShow: [InitialOnboardingView.ScreenNumber]) -> InitialOnboardingViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: InitialOnboardingViewController.self)) as? InitialOnboardingViewController {
-            vc.screensToShow = screensToShow
             vc.screenNumber = startScreenNumber
+            vc.screensToShow = screensToShow
             return vc
         }
         return InitialOnboardingViewController()
@@ -20,8 +20,8 @@ class InitialOnboardingViewController: UIViewController {
     
     @IBOutlet weak var initialOnboardingView: InitialOnboardingView!
     
-    private var screensToShow: [OnboardingScreenType] = []
-    private var screenNumber: OnboardingScreenType = .healthPasses
+    private var screensToShow: [InitialOnboardingView.ScreenNumber]!
+    private var screenNumber: InitialOnboardingView.ScreenNumber!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,8 +41,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
             self.initialOnboardingView.adjustUI(screenNumber: self.screenNumber, screensToShow: self.screensToShow, delegateOwner: self)
         }
         if type == .getStarted || type == .ok {
-            // TODO: version 
-            Defaults.storeInitialOnboardingScreensSeen(types: screensToShow, version: Constants.OnBoardingScreenVersion)
+            Defaults.initialOnboardingScreensSeen = self.initialOnboardingView.getAllScreensForDefaults()
             goToHomeTransition()
         }
     }

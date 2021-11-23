@@ -23,12 +23,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func configure() {
         //use .Prod or .Test for different endpoints for keys
-#if PROD
+        #if PROD
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
-#elseif DEV
+        #elseif DEV
         BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
-        //        FirebaseApp.configure()
-#endif
+//        FirebaseApp.configure()
+        #endif
         AnalyticsService.shared.setup()
         setupGatewayFactory()
         setupRootViewController()
@@ -41,13 +41,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          creates and returns a container, having loaded the store for the
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
-         */
+        */
         let container = NSPersistentContainer(name: "BCVaccineCard")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                
+                 
                 /*
                  Typical reasons for an error here include:
                  * The parent directory does not exist, cannot be created, or disallows writing.
@@ -61,9 +61,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         return container
     }()
-    
+
     // MARK: - Core Data Saving support
-    
+
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -77,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
+
 }
 
 // MARK: Gateway setup
@@ -92,17 +92,31 @@ extension AppDelegate {
 extension AppDelegate {
     private func setupRootViewController() {
         // Note: Added the last else statement as we've removed health records from the initial release, so for those who installed the app previously, we don't want to have any issues - basically, if all of this fails, at least the user can use the app normally
-        
-        let unseen = Defaults.unseenOnBoardingScreens(version: Constants.OnBoardingScreenVersion)
-        guard let first = unseen.first else {
+        if Defaults.initialOnboardingScreensSeen == OnboardingScreenType.allCases {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
-            return
+        } else if Defaults.initialOnboardingScreensSeen == nil || Defaults.initialOnboardingScreensSeen?.count == 0 {
+            let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: .one, screensToShow: InitialOnboardingView.ScreenNumber.allCases)
+            self.window?.rootViewController = vc
+        } else if let screensSeen = Defaults.initialOnboardingScreensSeen, (screensSeen.count > 0 && (screensSeen.count < OnboardingScreenType.allCases.count || Defaults.initialOnboardingScreensSeen != OnboardingScreenType.allCases )) {
+            var unseenScreens: [OnboardingScreenType] = []
+            OnboardingScreenType.allCases.forEach { screen in
+                if !screensSeen.contains(screen) {
+                    unseenScreens.append(screen)
+                }
+            }
+            guard let firstScreen = unseenScreens.first else {
+                let vc = TabBarController.constructTabBarController()
+                self.window?.rootViewController = vc
+                return
+            }
+            let screensToShow = unseenScreens.map { $0.getStartScreenNumber }
+            let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: firstScreen.getStartScreenNumber, screensToShow: screensToShow)
+            self.window?.rootViewController = vc
+        } else {
+            let vc = TabBarController.constructTabBarController()
+            self.window?.rootViewController = vc
         }
-        
-        let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
-        self.window?.rootViewController = vc
-        
     }
 }
 

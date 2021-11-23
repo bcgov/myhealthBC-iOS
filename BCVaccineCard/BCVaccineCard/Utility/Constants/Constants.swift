@@ -13,8 +13,6 @@ struct Constants {
     /// Authorization Header Key
     static let authorizationHeaderKey = "Authorization"
     
-    static let OnBoardingScreenVersion: Int = 1
-    
     struct DateConstants {
         static let firstVaxDate = Date.Formatter.yearMonthDay.date(from: "2020-01-01")
     }
