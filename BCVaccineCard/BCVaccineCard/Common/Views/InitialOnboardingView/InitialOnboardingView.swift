@@ -4,33 +4,8 @@
 //
 //  Created by Connor Ogilvie on 2021-10-11.
 // NOTE: leaving code commented as it will be uncommented (and replacing respective current code) when health records are shown
-// TODO: Uncomment code and remove code in its place for when Health Records are included in the release
 
 import UIKit
-
-enum OnboardingScreenType: Codable, CaseIterable, Equatable {
-    static var allCases: [OnboardingScreenType] {
-        return [.healthPasses(version: 1), .healthRecords(version: 1), .healthResources(version: 1), .newsFeed(version: 1)]
-    }
-    
-    case healthPasses(version: Int)
-    case healthRecords(version: Int)
-    case healthResources(version: Int)
-    case newsFeed(version: Int)
-    
-    var getStartScreenNumber: InitialOnboardingView.ScreenNumber {
-        switch self {
-        case .healthPasses:
-            return .one
-        case .healthRecords:
-            return .two
-        case .healthResources:
-            return .three
-        case .newsFeed:
-            return .four
-        }
-    }
-}
 
 class InitialOnboardingView: UIView {
     
@@ -39,6 +14,8 @@ class InitialOnboardingView: UIView {
         switch screen {
         case .healthPasses:
             return UIImage(named: "bubble-passes")
+        case .healthRecords:
+            return UIImage(named: "bubble-records")
         case .healthResources:
             return UIImage(named: "bubble-resources")
         case .newsFeed:
@@ -50,6 +27,8 @@ class InitialOnboardingView: UIView {
         switch screen {
         case .healthPasses:
             return .healthPasses
+        case .healthRecords:
+            return .healthRecords
         case .healthResources:
             return .healthResources
         case .newsFeed:
@@ -61,6 +40,8 @@ class InitialOnboardingView: UIView {
         switch screen {
         case .healthPasses:
             return .initialOnboardingHealthPassesDescription
+        case .healthRecords:
+            return .initialOnboardingHealthRecordsDescription
         case .healthResources:
             return .initialOnboardingHealthResourcesDescription
         case .newsFeed:
@@ -268,6 +249,9 @@ extension InitialOnboardingView {
             let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 99)
             self.rotatingImageViewConstraints = [verticalConstraint, leadingConstraint, widthConstraint, heightConstraint]
             contentView.addConstraints([verticalConstraint, leadingConstraint, widthConstraint, heightConstraint])
+        case .healthRecords:
+            removeOldConstraints()
+            constraintsForBubbleAtTop(relativeView: relativeView, imageView: imageView)
         case .healthResources:
             removeOldConstraints()
             let relatedImageYReference: NSLayoutAnchor<NSLayoutYAxisAnchor> = relativeView.centerYAnchor

@@ -17,6 +17,8 @@ struct Constants {
         switch type {
         case .healthPasses:
             return 1
+        case .healthRecords:
+            return 1
         case .healthResources:
             return 1
         case .newsFeed:

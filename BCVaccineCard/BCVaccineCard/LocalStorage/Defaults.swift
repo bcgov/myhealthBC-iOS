@@ -9,28 +9,9 @@ import Foundation
 
 struct Defaults {
     enum Key: String {
-//        case vaccinePassports
         case initialOnboardingScreensSeen
         case cachedQueueItObject
         case rememberGatewayDetails
-    }
-    
-//    static var vaccinePassports: [LocallyStoredVaccinePassportModel]? {
-//        get {
-//            guard let data = UserDefaults.standard.value(forKey: self.Key.vaccinePassports.rawValue) as? Data else { return nil }
-//            let order = try? PropertyListDecoder().decode([LocallyStoredVaccinePassportModel].self, from: data)
-//            return order
-//        }
-//        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.vaccinePassports.rawValue) }
-//    }
-    
-    static var initialOnboardingScreensSeen: [OnboardingScreenType]? {
-        get {
-            guard let data = UserDefaults.standard.value(forKey: self.Key.initialOnboardingScreensSeen.rawValue) as? Data else { return nil }
-            let order = try? PropertyListDecoder().decode([OnboardingScreenType].self, from: data)
-            return order
-        }
-        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.initialOnboardingScreensSeen.rawValue) }
     }
     
     static var cachedQueueItObject: QueueItCachedObject? {
