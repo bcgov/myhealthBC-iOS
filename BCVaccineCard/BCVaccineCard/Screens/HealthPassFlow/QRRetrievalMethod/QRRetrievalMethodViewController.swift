@@ -146,13 +146,9 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         switch data {
         case .text: return Constants.UI.CellSpacing.QROptionsScreen.staticText
         case .image:
-            if view.isSmallScreen() {
-                return 175
-            } else {
-                let buffer: CGFloat = 20
-                let occupied = Constants.UI.CellSpacing.QROptionsScreen.staticText + (3 * Constants.UI.CellSpacing.QROptionsScreen.optionButtonHeight) + buffer
-                return tableView.bounds.height - occupied
-            }
+            let buffer: CGFloat = 20
+            let occupied = Constants.UI.CellSpacing.QROptionsScreen.staticText + (3 * Constants.UI.CellSpacing.QROptionsScreen.optionButtonHeight) + buffer
+            return tableView.bounds.height - occupied
             
         case .method: return Constants.UI.CellSpacing.QROptionsScreen.optionButtonHeight
         }
