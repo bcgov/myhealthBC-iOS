@@ -34,7 +34,7 @@ enum GatewayFormSource: Equatable {
 
 enum GatewayFormViewControllerFetchType: Equatable {
     case bcVaccineCardAndFederalPass
-    case federalPassOnly(dob: String, dov: String)
+    case federalPassOnly(dob: String, dov: String, code : String)
     case vaccinationRecord
     
     var getNavTitle: String {
@@ -52,6 +52,15 @@ enum GatewayFormViewControllerFetchType: Equatable {
         }
     }
     
+    var originalCode: String? {
+        switch self {
+        case .federalPassOnly(_, _, let code):
+            return code
+        default:
+            return nil
+        }
+    }
+    
     var getDataSource: [FormData] {
         switch self {
         case .bcVaccineCardAndFederalPass:
@@ -66,7 +75,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
                     LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
-        case .federalPassOnly(let dob, let dov):
+        case .federalPassOnly(let dob, let dov, _):
             return [
                 FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: dob, isTextField: true), isFieldVisible: false),
@@ -484,7 +493,7 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
         model.fedCode = fedCode
         // store prefered PHN if needed here
         self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
-        handleCardInCoreData(localModel: model)
+        handleCardInCoreData(localModel: model, replacing: fetchType.originalCode)
     }
     
     func handleError(title: String, error: ResultError) {
@@ -534,8 +543,11 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
         }
     }
     
-    func handleCardInCoreData(localModel: LocallyStoredVaccinePassportModel) {
+    func handleCardInCoreData(localModel: LocallyStoredVaccinePassportModel, replacing code: String?) {
         let model = localModel.transform()
+        if let codeToReplace = code {
+            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace)
+        }
         model.state { [weak self] state in
             guard let `self` = self else {return}
             switch state {
@@ -562,5 +574,7 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
             }
         }
     }
+    
+    
 }
 
