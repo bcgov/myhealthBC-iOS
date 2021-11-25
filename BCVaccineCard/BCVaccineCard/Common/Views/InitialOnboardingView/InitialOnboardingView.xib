@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -30,12 +30,12 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A0i-So-4gP">
-                    <rect key="frame" x="186.5" y="438" width="41.5" height="20.5"/>
+                    <rect key="frame" x="50" y="438" width="314" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vDU-sf-kcD">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="vDU-sf-kcD">
                     <rect key="frame" x="50" y="468.5" width="314" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
@@ -70,8 +70,8 @@
                         <constraint firstAttribute="width" constant="50" id="miw-M3-6dg"/>
                     </constraints>
                 </stackView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fze-fc-kKW">
-                    <rect key="frame" x="186.5" y="413" width="42" height="21"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fze-fc-kKW">
+                    <rect key="frame" x="50" y="413.5" width="314" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -80,13 +80,19 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
+                <constraint firstItem="BGQ-hp-g5F" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vDU-sf-kcD" secondAttribute="bottom" constant="16" id="0e6-Gs-tGQ"/>
                 <constraint firstItem="IB0-wM-pU6" firstAttribute="centerX" secondItem="fPV-Wc-CDh" secondAttribute="centerX" id="4Nr-rb-YQi"/>
                 <constraint firstItem="QGx-T6-Lhh" firstAttribute="top" secondItem="BGQ-hp-g5F" secondAttribute="bottom" constant="36" id="8AG-gA-Zfw"/>
                 <constraint firstItem="fPV-Wc-CDh" firstAttribute="bottom" secondItem="IB0-wM-pU6" secondAttribute="bottom" constant="12" id="CrM-o8-AOT"/>
+                <constraint firstItem="fze-fc-kKW" firstAttribute="trailing" secondItem="A0i-So-4gP" secondAttribute="trailing" id="DtM-Pn-z2L"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="vDU-sf-kcD" secondAttribute="trailing" constant="50" id="F4f-hu-Mrm"/>
                 <constraint firstItem="A0i-So-4gP" firstAttribute="top" secondItem="fPV-Wc-CDh" secondAttribute="bottom" constant="105" id="HJh-7T-mh8"/>
+                <constraint firstItem="A0i-So-4gP" firstAttribute="leading" secondItem="vDU-sf-kcD" secondAttribute="leading" id="KUS-Us-w80"/>
                 <constraint firstItem="vDU-sf-kcD" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="50" id="OPR-08-oyY"/>
+                <constraint firstItem="A0i-So-4gP" firstAttribute="trailing" secondItem="vDU-sf-kcD" secondAttribute="trailing" id="OaN-m3-doU"/>
                 <constraint firstAttribute="bottom" secondItem="QGx-T6-Lhh" secondAttribute="bottom" constant="80" id="Oh0-H3-vWM"/>
+                <constraint firstItem="fPV-Wc-CDh" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="Py5-rg-52u"/>
+                <constraint firstItem="fze-fc-kKW" firstAttribute="top" relation="greaterThanOrEqual" secondItem="fPV-Wc-CDh" secondAttribute="bottom" constant="50" id="QgH-0c-mCY"/>
                 <constraint firstItem="BGQ-hp-g5F" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="SPP-zT-QAC"/>
                 <constraint firstItem="QGx-T6-Lhh" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="U0k-fC-zEe"/>
                 <constraint firstItem="fze-fc-kKW" firstAttribute="leading" secondItem="A0i-So-4gP" secondAttribute="leading" id="aGV-VO-hcU"/>
