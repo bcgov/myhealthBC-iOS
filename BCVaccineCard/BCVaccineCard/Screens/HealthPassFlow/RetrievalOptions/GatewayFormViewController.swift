@@ -545,7 +545,7 @@ extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
     
     func handleCardInCoreData(localModel: LocallyStoredVaccinePassportModel, replacing code: String?) {
         let model = localModel.transform()
-        if if fetchType.isFedPassOnly && let codeToReplace = code {
+        if fetchType.isFedPassOnly, let codeToReplace = code {
             StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace)
         }
         model.state { [weak self] state in
