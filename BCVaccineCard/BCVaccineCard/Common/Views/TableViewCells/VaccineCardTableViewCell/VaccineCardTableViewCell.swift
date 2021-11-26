@@ -27,6 +27,7 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
 
     private func setup() {
         viewSetup()
+        self.selectionStyle = .none
     }
     
     private func viewSetup() {

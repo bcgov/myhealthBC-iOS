@@ -54,7 +54,8 @@ class TableViewButtonView: UIView {
     @IBOutlet weak private var roundedView: UIView!
     @IBOutlet weak private var optionTitleLabel: UILabel!
     @IBOutlet weak private var optionImageView: UIImageView!
-        
+    @IBOutlet weak private var titleLabelHorizontalCenterContraint: NSLayoutConstraint!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -85,17 +86,24 @@ class TableViewButtonView: UIView {
         borderRoundedView.backgroundColor = AppColours.appBlue
         roundedView.layer.cornerRadius = 4.0
         roundedView.layer.masksToBounds = true
-        optionTitleLabel.font = UIFont.bcSansBoldWithSize(size: 16)
+        if isSmallScreen() {
+            optionTitleLabel.font = UIFont.bcSansBoldWithSize(size: 14)
+        } else {
+            optionTitleLabel.font = UIFont.bcSansBoldWithSize(size: 16)
+        }
     }
     
     func configure(withStyle style: ButtonStyle, buttonType: ButtonType) {
+        if isSmallScreen(), let heightConstraint = titleLabelHorizontalCenterContraint {
+            heightConstraint.isActive = false
+        }
         roundedView.backgroundColor = style.getColorScheme.backgroundColor
         optionTitleLabel.textColor = style.getColorScheme.titleColor
         optionTitleLabel.text = buttonType.getTitle
         if #available(iOS 13.0, *) {
             optionImageView.image = buttonType.getImage.withTintColor(style.getColorScheme.titleColor)
         } else {
-            optionImageView.image = buttonType.getImage
+            optionImageView.image = buttonType.getImage.withRenderingMode(.alwaysTemplate)
             optionImageView.tintColor = style.getColorScheme.titleColor
         }
     }
