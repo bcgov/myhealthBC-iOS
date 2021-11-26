@@ -171,6 +171,8 @@ extension String {
     static var getCovidTestResultsTitle: String { return "GetCovidTestResultsTitle".localized }
     static var getVaccinationRecordsDescription: String { return "GetVaccinationRecordsDescription".localized }
     static var getCovidTestResultsDescription: String { return "GetCovidTestResultsDescription".localized }
+    static var covid19mRNATitle: String { return "Covid19mRNATitle".localized }
+    static var covid19TestResultTitle: String { return "Covid19TestResultTitle".localized }
     
     
 }

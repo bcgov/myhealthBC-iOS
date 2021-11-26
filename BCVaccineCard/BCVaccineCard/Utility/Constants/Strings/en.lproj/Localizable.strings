@@ -133,3 +133,5 @@
 "GetCovidTestResultsTitle" = "Get COVID-19 Test Results";
 "GetVaccinationRecordsDescription" = "Access to the details of you and your family’s COVID-19 Vaccination Records";
 "GetCovidTestResultsDescription" = "Access to the details of you and your family’s COVID-19 Test Results";
+"Covid19mRNATitle" = "Covid-19 mRNA";
+"Covid19TestResultTitle" = "Covid-19 Test Result";
