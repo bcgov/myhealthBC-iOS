@@ -84,6 +84,7 @@ class GetRecordsView: UIView {
     }
     
     func configure(type: RecordType) {
+        self.type = type
         setupAccessibility()
         titleLabel.text = type.getTitle
         descriptionLabel.text = type.getDescription
