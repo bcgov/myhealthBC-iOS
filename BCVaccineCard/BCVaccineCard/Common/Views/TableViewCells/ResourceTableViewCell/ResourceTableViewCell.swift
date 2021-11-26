@@ -24,7 +24,7 @@ class ResourceTableViewCell: UITableViewCell {
         resourceLabel.textColor = AppColours.appBlue
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
-        roundedBackgroundView.backgroundColor = AppColours.backgroundGrey
+        roundedBackgroundView.backgroundColor = AppColours.backgroundGray
         roundedBackgroundView.layer.cornerRadius = 5
         roundedBackgroundView.layer.masksToBounds = true
     }

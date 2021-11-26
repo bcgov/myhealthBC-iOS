@@ -49,6 +49,7 @@ class TextListView: UIView {
         // TODO: Fill in here
     }
     
+    // TODO: Setup accessibility
     private func setupAccessibility() {
         self.isAccessibilityElement = true
         let accessibilityLabel = ""

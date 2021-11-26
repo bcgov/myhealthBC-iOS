@@ -11,7 +11,9 @@ class GetARecordTableViewCell: UITableViewCell {
     
     @IBOutlet weak private var getRecordsView: GetRecordsView!
     
-    var type: GetRecordsView.RecordType!
+    var type: GetRecordsView.RecordType {
+        return getRecordsView.type
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -19,7 +21,6 @@ class GetARecordTableViewCell: UITableViewCell {
     }
 
     func configure(type: GetRecordsView.RecordType) {
-        self.type = type
         getRecordsView.configure(type: type)
     }
     

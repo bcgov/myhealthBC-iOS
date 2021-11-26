@@ -6,32 +6,32 @@
 // https://www.figma.com/file/ga1F6q5Kvi6CD6FLS27fXq/My-Health-BC?node-id=2411%3A24372
 // NOTE: This is for an individual's
 import UIKit
-// TODO: Connor: This is a placeholder test status that you can delete as I'm sure you have already created a separate enum in a model class for this, then replace where errors pop up, accordingly
-enum TestStatusForAmirToDelete: String, Codable {
-    case pending = "pending", negative, positive, indeterminate, cancelled
-    
-    var getTitle: String {
-        return self.rawValue.uppercased()
-    }
-}
+import CloudKit
 
 class UserRecordListView: UIView {
     
     enum RecordType {
-        case covidImmunizationRecord(status: VaccineStatus)
-        case covidTestResult(status: TestStatusForAmirToDelete)
+        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel)
+        case covidTestResult(model: LocallyStoredCovidTestResultModel)
         
         var getTitle: String {
             switch self {
-            case .covidImmunizationRecord: return .getVaccinationRecordsTitle
-            case .covidTestResult: return .getCovidTestResultsTitle
+            case .covidImmunizationRecord: return .covid19mRNATitle
+            case .covidTestResult: return .covid19TestResultTitle
             }
         }
         
         var getStatus: String {
             switch self {
-            case .covidImmunizationRecord(let status): return status.getTitle
-            case .covidTestResult(let status): return status.getTitle
+            case .covidImmunizationRecord(let model): return model.status.getTitle
+            case .covidTestResult(let model): return model.status.getTitle
+            }
+        }
+        
+        var getDate: String? {
+            switch self {
+            case .covidImmunizationRecord(let model): return model.vaxDates.last
+            case .covidTestResult(let model): return model.response?.resultDateTime?.monthDayYearString // TODO: Need to confirm formatting on this
             }
         }
         
@@ -44,8 +44,13 @@ class UserRecordListView: UIView {
     }
     
     @IBOutlet weak private var contentView: UIView!
+    @IBOutlet weak private var greyRoundedBackgroundView: UIView!
     @IBOutlet weak private var iconImageView: UIImageView!
-    @IBOutlet weak private var recordTypeTitle: UILabel!
+    @IBOutlet weak private var recordTypeTitleLabel: UILabel!
+    @IBOutlet weak private var recordTypeSubtitleLabel: UILabel! // This will include the status and the date
+    @IBOutlet weak private var rightArrowImageView: UIImageView!
+    
+    var type: RecordType!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,14 +81,29 @@ class UserRecordListView: UIView {
     }
     
     private func uiSetup() {
-        
+        greyRoundedBackgroundView.backgroundColor = AppColours.backgroundGray
+        greyRoundedBackgroundView.layer.cornerRadius = 4.0
+        greyRoundedBackgroundView.layer.masksToBounds = true
+        rightArrowImageView.image = UIImage(named: "resource-arrow")
+        recordTypeTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+        recordTypeTitleLabel.textColor = AppColours.appBlue
+        recordTypeSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 13)
+        recordTypeSubtitleLabel.textColor = AppColours.textBlack
     }
     
-    func configure() {
+    func configure(recordType: RecordType) {
+        self.type = recordType
         setupAccessibility()
-        // TODO: Fill in here
+        iconImageView.image = recordType.getImage
+        var subtitleString = recordType.getStatus
+        if let dateString = recordType.getDate {
+            let addition = " • " + dateString
+            subtitleString.append(addition)
+        }
+        recordTypeSubtitleLabel.text = subtitleString
     }
     
+    // TODO: Setup accessibility
     private func setupAccessibility() {
         self.isAccessibilityElement = true
         let accessibilityLabel = ""

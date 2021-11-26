@@ -42,7 +42,7 @@ class GetRecordsView: UIView {
     @IBOutlet weak private var recordTypeImageView: UIImageView!
     @IBOutlet weak private var addButtonImageView: UIImageView!
     
-    private var type: RecordType!
+    var type: RecordType!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,6 +91,7 @@ class GetRecordsView: UIView {
         recordTypeImageView.image = type.getImage
     }
     
+    // TODO: Setup accessibility
     private func setupAccessibility() {
         self.isAccessibilityElement = true
         let accessibilityLabel = ""

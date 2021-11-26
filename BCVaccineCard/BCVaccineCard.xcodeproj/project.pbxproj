@@ -72,6 +72,14 @@
 		79218A9D275141800063004E /* GetARecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218A9A2751417F0063004E /* GetARecordTableViewCell.swift */; };
 		79218A9E275141800063004E /* GetARecordTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218A9B2751417F0063004E /* GetARecordTableViewCell.xib */; };
 		79218A9F275141800063004E /* GetARecordTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218A9B2751417F0063004E /* GetARecordTableViewCell.xib */; };
+		79218AA127518A5E0063004E /* CovidTestResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AA027518A5E0063004E /* CovidTestResultModel.swift */; };
+		79218AA227518A5E0063004E /* CovidTestResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AA027518A5E0063004E /* CovidTestResultModel.swift */; };
+		79218AA427518CC20063004E /* GatewayTestResultResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AA327518CC20063004E /* GatewayTestResultResponse.swift */; };
+		79218AA527518CC20063004E /* GatewayTestResultResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AA327518CC20063004E /* GatewayTestResultResponse.swift */; };
+		79218AA92751946A0063004E /* UserRecordListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AA72751946A0063004E /* UserRecordListTableViewCell.swift */; };
+		79218AAA2751946A0063004E /* UserRecordListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AA72751946A0063004E /* UserRecordListTableViewCell.swift */; };
+		79218AAB2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AA82751946A0063004E /* UserRecordListTableViewCell.xib */; };
+		79218AAC2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AA82751946A0063004E /* UserRecordListTableViewCell.xib */; };
 		7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79283450272A880900EE2710 /* TableViewButtonView.xib */; };
@@ -345,6 +353,10 @@
 		791C27CE271DC777001A6E12 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		79218A9A2751417F0063004E /* GetARecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetARecordTableViewCell.swift; sourceTree = "<group>"; };
 		79218A9B2751417F0063004E /* GetARecordTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GetARecordTableViewCell.xib; sourceTree = "<group>"; };
+		79218AA027518A5E0063004E /* CovidTestResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CovidTestResultModel.swift; sourceTree = "<group>"; };
+		79218AA327518CC20063004E /* GatewayTestResultResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayTestResultResponse.swift; sourceTree = "<group>"; };
+		79218AA72751946A0063004E /* UserRecordListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecordListTableViewCell.swift; sourceTree = "<group>"; };
+		79218AA82751946A0063004E /* UserRecordListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserRecordListTableViewCell.xib; sourceTree = "<group>"; };
 		7928344D272A87FA00EE2710 /* TableViewButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewButtonView.swift; sourceTree = "<group>"; };
 		79283450272A880900EE2710 /* TableViewButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewButtonView.xib; sourceTree = "<group>"; };
 		792834532730A52800EE2710 /* RememberedGatewayDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RememberedGatewayDetails.swift; sourceTree = "<group>"; };
@@ -650,6 +662,7 @@
 		79218A98275141490063004E /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				79218AA6275194410063004E /* UserRecordListTableViewCell */,
 				79218A99275141550063004E /* GetARecordTableViewCell */,
 			);
 			path = TableViewCells;
@@ -662,6 +675,15 @@
 				79218A9B2751417F0063004E /* GetARecordTableViewCell.xib */,
 			);
 			path = GetARecordTableViewCell;
+			sourceTree = "<group>";
+		};
+		79218AA6275194410063004E /* UserRecordListTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				79218AA72751946A0063004E /* UserRecordListTableViewCell.swift */,
+				79218AA82751946A0063004E /* UserRecordListTableViewCell.xib */,
+			);
+			path = UserRecordListTableViewCell;
 			sourceTree = "<group>";
 		};
 		7928344C272A878200EE2710 /* TableViewButtonView */ = {
@@ -1079,6 +1101,7 @@
 			children = (
 				795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */,
 				795AA769271560F100E59FF1 /* NewsFeedResponse.swift */,
+				79218AA327518CC20063004E /* GatewayTestResultResponse.swift */,
 			);
 			path = NetworkModels;
 			sourceTree = "<group>";
@@ -1087,6 +1110,7 @@
 			isa = PBXGroup;
 			children = (
 				7944F6BD26F12BD5006B9444 /* VaccinePassportModel.swift */,
+				79218AA027518A5E0063004E /* CovidTestResultModel.swift */,
 				7967E73926F517F600EEF510 /* FormDataSource.swift */,
 				7967E74926F908E400EEF510 /* Setting.swift */,
 				795AA72E27108C1C00E59FF1 /* GatewayVaccineCardRequest.swift */,
@@ -1496,6 +1520,7 @@
 				79FDE426273335DC00DAD988 /* FederalPassView.xib in Resources */,
 				791C27BB27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
 				7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */,
+				79218AAB2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */,
 				7944F70026F3141A006B9444 /* VaccineCardTableViewCell.xib in Resources */,
 				795AA77B2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */,
 				7944F70526F31451006B9444 /* NoCardsTableViewCell.xib in Resources */,
@@ -1562,6 +1587,7 @@
 				794BD6622702EEC00084ADA8 /* NoCardsTableViewCell.xib in Resources */,
 				79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				794BD6632702EEC00084ADA8 /* BCSans-Bold.otf in Resources */,
+				79218AAC2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */,
 				79BDA087270CEE6400FF30AB /* Booking.storyboard in Resources */,
 				791C27C22718315A001A6E12 /* AddCardsTableViewCell.xib in Resources */,
 				799050AF27365111006CD726 /* FederalPassPDFView.xib in Resources */,
@@ -1752,6 +1778,7 @@
 				795AA73E271094B400E59FF1 /* UrlAccessor.swift in Sources */,
 				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
+				79218AA92751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */,
 				7944F70B26F39128006B9444 /* SettingsViewController.swift in Sources */,
 				79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
@@ -1818,7 +1845,9 @@
 				7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
 				795AA75C27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
 				795AA7452713FFEB00E59FF1 /* RemoteFactory.swift in Sources */,
+				79218AA127518A5E0063004E /* CovidTestResultModel.swift in Sources */,
 				79BDA07B270CB89900FF30AB /* Strings.swift in Sources */,
+				79218AA427518CC20063004E /* GatewayTestResultResponse.swift in Sources */,
 				795AA76127155F0900E59FF1 /* ResourceViewController.swift in Sources */,
 				29B446AB273575AA00E0F967 /* FederalPassPDFView.swift in Sources */,
 				795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
@@ -1871,6 +1900,7 @@
 				791C27B227179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */,
 				795AA73327108F5900E59FF1 /* NetworkAccessor.swift in Sources */,
 				794BD6332702EEC00084ADA8 /* Date+Ext.swift in Sources */,
+				79218AAA2751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				79BDA097270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				794BD6342702EEC00084ADA8 /* AppDelegate.swift in Sources */,
 				794BD6352702EEC00084ADA8 /* BCVaccineCard.xcdatamodeld in Sources */,
@@ -1937,7 +1967,9 @@
 				7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
 				794BD64F2702EEC00084ADA8 /* TextTableViewCell.swift in Sources */,
 				795AA76227155F0900E59FF1 /* ResourceViewController.swift in Sources */,
+				79218AA227518A5E0063004E /* CovidTestResultModel.swift in Sources */,
 				795AA751271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
+				79218AA527518CC20063004E /* GatewayTestResultResponse.swift in Sources */,
 				795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				29B446AC2735766400E0F967 /* FederalPassPDFView.swift in Sources */,
 				791C27C62718A68D001A6E12 /* QueueItWorker.swift in Sources */,
