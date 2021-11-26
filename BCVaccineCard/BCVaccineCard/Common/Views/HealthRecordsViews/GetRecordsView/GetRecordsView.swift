@@ -9,7 +9,46 @@ import UIKit
 
 class GetRecordsView: UIView {
     
-    @IBOutlet weak var contentView: UIView!
+    enum RecordType {
+        case covidImmunizationRecord
+        case covidTestResult
+        
+        var getTitle: String {
+            switch self {
+            case .covidImmunizationRecord:
+                <#code#>
+            case .covidTestResult:
+                <#code#>
+            }
+        }
+        
+        var getDescription: String {
+            switch self {
+            case .covidImmunizationRecord:
+                <#code#>
+            case .covidTestResult:
+                <#code#>
+            }
+        }
+        
+        var getImage: UIImage {
+            switch self {
+            case .covidImmunizationRecord:
+                <#code#>
+            case .covidTestResult:
+                <#code#>
+            }
+        }
+    }
+    
+    @IBOutlet weak private var contentView: UIView!
+    @IBOutlet weak private var backgroundGreyRoundedView: UIView!
+    @IBOutlet weak private var titleLabel: UILabel!
+    @IBOutlet weak private var descriptionLabel: UILabel!
+    @IBOutlet weak private var recordTypeImageView: UIImageView!
+    @IBOutlet weak private var addButtonImageView: UIImageView!
+    
+    private var type: RecordType!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,10 +79,17 @@ class GetRecordsView: UIView {
     }
     
     private func uiSetup() {
-        
+        backgroundGreyRoundedView.backgroundColor = AppColours.borderGray
+        backgroundGreyRoundedView.layer.cornerRadius = 4.0
+        backgroundGreyRoundedView.layer.masksToBounds = true
+        titleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+        titleLabel.textColor = AppColours.appBlue
+        descriptionLabel.font = UIFont.bcSansRegularWithSize(size: 13)
+        descriptionLabel.textColor = AppColours.textBlack
+        addButtonImageView.image = UIImage(named: "add-card-icon")
     }
     
-    func configure() {
+    func configure(type: RecordType) {
         setupAccessibility()
         // TODO: Fill in here
     }
