@@ -127,6 +127,9 @@
 "Covid19SymptomCheckerResource" = "Covid-19 symptom checker";
 "SchoolRelatedResource" = "K-12 Daily Check";
 "TravelPass" = "Travel Pass";
-
 "UpdateCard" = "Update Card";
 "UpdateCardFor" = "Would you like to replace the card for";
+"GetVaccinationRecordsTitle" = "Get Vaccination Records";
+"GetCovidTestResultsTitle" = "Get COVID-19 Test Results";
+"GetVaccinationRecordsDescription" = "Access to the details of you and your family’s COVID-19 Vaccination Records";
+"GetCovidTestResultsDescription" = "Access to the details of you and your family’s COVID-19 Test Results";

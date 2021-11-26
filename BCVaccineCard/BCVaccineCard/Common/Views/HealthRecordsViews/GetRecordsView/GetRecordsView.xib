@@ -11,7 +11,12 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GetRecordsView" customModule="BCVaccineCard" customModuleProvider="target">
             <connections>
+                <outlet property="addButtonImageView" destination="uko-wT-a4Y" id="gdJ-vu-JrU"/>
+                <outlet property="backgroundGreyRoundedView" destination="8kE-u1-gyo" id="cEy-QJ-XPE"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="2bQ-NO-yjT"/>
+                <outlet property="descriptionLabel" destination="Ija-hD-fbF" id="xrg-x1-gWe"/>
+                <outlet property="recordTypeImageView" destination="JlM-AN-KaY" id="V4n-3w-BZx"/>
+                <outlet property="titleLabel" destination="8T5-oT-mtb" id="sRQ-fa-ARj"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

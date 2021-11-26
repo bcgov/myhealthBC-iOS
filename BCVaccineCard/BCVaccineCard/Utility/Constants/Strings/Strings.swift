@@ -166,6 +166,12 @@ extension String {
     // News Feed screen
     /// Already have newsFeed string from onboarding flow
     
+    // Health Records
+    static var getVaccinationRecordsTitle: String { return "GetVaccinationRecordsTitle".localized }
+    static var getCovidTestResultsTitle: String { return "GetCovidTestResultsTitle".localized }
+    static var getVaccinationRecordsDescription: String { return "GetVaccinationRecordsDescription".localized }
+    static var getCovidTestResultsDescription: String { return "GetCovidTestResultsDescription".localized }
+    
     
 }
 

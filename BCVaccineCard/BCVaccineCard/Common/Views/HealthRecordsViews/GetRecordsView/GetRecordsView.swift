@@ -15,28 +15,22 @@ class GetRecordsView: UIView {
         
         var getTitle: String {
             switch self {
-            case .covidImmunizationRecord:
-                <#code#>
-            case .covidTestResult:
-                <#code#>
+            case .covidImmunizationRecord: return .getVaccinationRecordsTitle
+            case .covidTestResult: return .getCovidTestResultsTitle
             }
         }
         
         var getDescription: String {
             switch self {
-            case .covidImmunizationRecord:
-                <#code#>
-            case .covidTestResult:
-                <#code#>
+            case .covidImmunizationRecord: return .getVaccinationRecordsDescription
+            case .covidTestResult: return .getCovidTestResultsDescription
             }
         }
         
-        var getImage: UIImage {
+        var getImage: UIImage? {
             switch self {
-            case .covidImmunizationRecord:
-                <#code#>
-            case .covidTestResult:
-                <#code#>
+            case .covidImmunizationRecord: return UIImage(named: "vaccine-record-icon")
+            case .covidTestResult: return UIImage(named: "test-result-icon")
             }
         }
     }
@@ -91,7 +85,9 @@ class GetRecordsView: UIView {
     
     func configure(type: RecordType) {
         setupAccessibility()
-        // TODO: Fill in here
+        titleLabel.text = type.getTitle
+        descriptionLabel.text = type.getDescription
+        recordTypeImageView.image = type.getImage
     }
     
     private func setupAccessibility() {
