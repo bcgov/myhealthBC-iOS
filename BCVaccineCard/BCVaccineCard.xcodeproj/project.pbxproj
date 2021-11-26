@@ -80,6 +80,10 @@
 		79218AAA2751946A0063004E /* UserRecordListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AA72751946A0063004E /* UserRecordListTableViewCell.swift */; };
 		79218AAB2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AA82751946A0063004E /* UserRecordListTableViewCell.xib */; };
 		79218AAC2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AA82751946A0063004E /* UserRecordListTableViewCell.xib */; };
+		79218AAF275196040063004E /* HealthRecordsUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AAE275196040063004E /* HealthRecordsUserView.swift */; };
+		79218AB0275196040063004E /* HealthRecordsUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AAE275196040063004E /* HealthRecordsUserView.swift */; };
+		79218AB2275196150063004E /* HealthRecordsUserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AB1275196150063004E /* HealthRecordsUserView.xib */; };
+		79218AB3275196150063004E /* HealthRecordsUserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AB1275196150063004E /* HealthRecordsUserView.xib */; };
 		7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79283450272A880900EE2710 /* TableViewButtonView.xib */; };
@@ -357,6 +361,8 @@
 		79218AA327518CC20063004E /* GatewayTestResultResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayTestResultResponse.swift; sourceTree = "<group>"; };
 		79218AA72751946A0063004E /* UserRecordListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecordListTableViewCell.swift; sourceTree = "<group>"; };
 		79218AA82751946A0063004E /* UserRecordListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserRecordListTableViewCell.xib; sourceTree = "<group>"; };
+		79218AAE275196040063004E /* HealthRecordsUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsUserView.swift; sourceTree = "<group>"; };
+		79218AB1275196150063004E /* HealthRecordsUserView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HealthRecordsUserView.xib; sourceTree = "<group>"; };
 		7928344D272A87FA00EE2710 /* TableViewButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewButtonView.swift; sourceTree = "<group>"; };
 		79283450272A880900EE2710 /* TableViewButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewButtonView.xib; sourceTree = "<group>"; };
 		792834532730A52800EE2710 /* RememberedGatewayDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RememberedGatewayDetails.swift; sourceTree = "<group>"; };
@@ -584,6 +590,7 @@
 		7918A8C427482CB500D19D1C /* ReusableViews */ = {
 			isa = PBXGroup;
 			children = (
+				79218AAD275195E90063004E /* HealthRecordsUserView */,
 				7918A8C527482DE300D19D1C /* TextListView */,
 			);
 			path = ReusableViews;
@@ -684,6 +691,15 @@
 				79218AA82751946A0063004E /* UserRecordListTableViewCell.xib */,
 			);
 			path = UserRecordListTableViewCell;
+			sourceTree = "<group>";
+		};
+		79218AAD275195E90063004E /* HealthRecordsUserView */ = {
+			isa = PBXGroup;
+			children = (
+				79218AAE275196040063004E /* HealthRecordsUserView.swift */,
+				79218AB1275196150063004E /* HealthRecordsUserView.xib */,
+			);
+			path = HealthRecordsUserView;
 			sourceTree = "<group>";
 		};
 		7928344C272A878200EE2710 /* TableViewButtonView */ = {
@@ -1514,6 +1530,7 @@
 				7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */,
 				29B446AE27357F1700E0F967 /* FederalPassPDFView.xib in Resources */,
 				7967E74826F9071A00EEF510 /* SettingsTableViewCell.xib in Resources */,
+				79218AB2275196150063004E /* HealthRecordsUserView.xib in Resources */,
 				2942AC57273AC30900A4A466 /* ToggleSettingsTableViewCell.xib in Resources */,
 				795AA757271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
 				795AA7752715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
@@ -1612,6 +1629,7 @@
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
 				799050C1273C8344006CD726 /* GetRecordsView.xib in Resources */,
 				794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */,
+				79218AB3275196150063004E /* HealthRecordsUserView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1784,6 +1802,7 @@
 				79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				7944F6F526F30293006B9444 /* CovidVaccineCardsViewController.swift in Sources */,
 				2912314326F9433600CF5F3B /* UIConstants.swift in Sources */,
+				79218AAF275196040063004E /* HealthRecordsUserView.swift in Sources */,
 				795AA7732715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
 				791C27C52718A68D001A6E12 /* QueueItWorker.swift in Sources */,
 				79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
@@ -1906,6 +1925,7 @@
 				794BD6352702EEC00084ADA8 /* BCVaccineCard.xcdatamodeld in Sources */,
 				794BD6362702EEC00084ADA8 /* Constants.swift in Sources */,
 				795AA73F271094B400E59FF1 /* UrlAccessor.swift in Sources */,
+				79218AB0275196040063004E /* HealthRecordsUserView.swift in Sources */,
 				795AA74D2714018600E59FF1 /* HealthGatewayBCWorker.swift in Sources */,
 				795AA7492713FFF800E59FF1 /* WorkerFactory.swift in Sources */,
 				794BD6372702EEC00084ADA8 /* BaseViewController.swift in Sources */,
