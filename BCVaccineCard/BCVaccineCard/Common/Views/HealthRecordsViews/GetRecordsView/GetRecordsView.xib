@@ -83,7 +83,7 @@
                 <constraint firstItem="8kE-u1-gyo" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="two-HM-8Pe"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="137.68115942028987" y="97.767857142857139"/>
+            <point key="canvasLocation" x="138" y="77"/>
         </view>
     </objects>
     <resources>

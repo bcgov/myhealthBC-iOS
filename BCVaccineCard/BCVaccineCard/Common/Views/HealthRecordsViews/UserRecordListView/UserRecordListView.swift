@@ -6,7 +6,7 @@
 // https://www.figma.com/file/ga1F6q5Kvi6CD6FLS27fXq/My-Health-BC?node-id=2411%3A24372
 // NOTE: This is for an individual's
 import UIKit
-// TODO: Amir: This is a placeholder test status that you can delete as I'm sure you have already created a separate enum in a model class for this, then replace where errors pop up, accordingly
+// TODO: Connor: This is a placeholder test status that you can delete as I'm sure you have already created a separate enum in a model class for this, then replace where errors pop up, accordingly
 enum TestStatusForAmirToDelete: String, Codable {
     case pending = "pending", negative, positive, indeterminate, cancelled
     

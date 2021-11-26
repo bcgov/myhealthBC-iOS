@@ -2,7 +2,7 @@
 //  GetRecordsView.swift
 //  BCVaccineCard
 //
-//  Created by Connor Ogilvie on 2021-11-10.
+//  Created by Connor Ogilvie on 2021-11-10..
 // https://www.figma.com/file/ga1F6q5Kvi6CD6FLS27fXq/My-Health-BC?node-id=2411%3A24207
 // NOTE: This is for the initial view on an empty health records screen (Get Vaccination Records, Get COVID-19 Test Results)
 import UIKit

@@ -37,7 +37,7 @@
             <connections>
                 <outlet property="getRecordsView" destination="hLX-2c-hP3" id="g8M-2h-s8i"/>
             </connections>
-            <point key="canvasLocation" x="139" y="112"/>
+            <point key="canvasLocation" x="99" y="66"/>
         </tableViewCell>
     </objects>
     <resources>
