@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreImage.CIFilterBuiltins
 
 // Validation checks on strings
 extension String {
@@ -62,23 +63,35 @@ extension String {
                                              attributes: [.font: font],
                                              context: nil)
         return ceil(boundingRect.height)
-                                             
+        
     }
 }
 
 // MARK: Convert String Code to UIImage
 extension String {
     func generateQRCode() -> UIImage? {
+        let transform = CGAffineTransform(scaleX: 10, y: 10)
         let data = self.data(using: String.Encoding.ascii)
-        if let filter = CIFilter(name: "CIQRCodeGenerator") {
+        let allFiltersNames = CIFilter.filterNames(inCategories: nil)
+        print(allFiltersNames)
+        if #available(iOS 13.0, *) {
+            let filter = CIFilter.qrCodeGenerator()
+            let context = CIContext()
+            filter.correctionLevel = "L"
             filter.setValue(data, forKey: "inputMessage")
-            filter.setValue("L", forKey:"inputCorrectionLevel")
-            let transform = CGAffineTransform(scaleX: 10, y: 10)
-
-            if let output = filter.outputImage?.transformed(by: transform) {
-                return UIImage(ciImage: output)
+            if let outputImage = filter.outputImage?.transformed(by: transform) {
+                if let cgimg = context.createCGImage(outputImage, from: outputImage.extent) {
+                    return UIImage(cgImage: cgimg)
+                }
             }
+        } else if let filter = CIFilter(name: "CIQRCodeGenerator"){
+                filter.setValue(data, forKey: "inputMessage")
+                filter.setValue("L", forKey:"inputCorrectionLevel")
+                if let cgimg = filter.outputImage?.transformed(by: transform) {
+                    return UIImage(ciImage: cgimg)
+                }
         }
+        
         return nil
     }
     

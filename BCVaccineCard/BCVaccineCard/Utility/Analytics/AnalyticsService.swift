@@ -12,8 +12,8 @@ class AnalyticsService: NSObject, RequestCallback {
     public static let shared = AnalyticsService()
     
     fileprivate let endPoint = "spt.apps.gov.bc.ca"
-//    fileprivate let appID = "Snowplow_standalone_HApp_dev"
-    fileprivate let appID = "Snowplow_standalone_HApp_prod"
+    fileprivate let appID = "Snowplow_standalone_HApp_dev"
+//    fileprivate let appID = "Snowplow_standalone_HApp_prod"
     // TODO: For store release, change to Snowplow_standalone_HApp_prod
     fileprivate let namespace = "iOS"
     fileprivate let schema = "iglu:ca.bc.gov.gateway/action/jsonschema/1-0-0"
