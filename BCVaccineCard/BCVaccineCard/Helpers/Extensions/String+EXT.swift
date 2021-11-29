@@ -7,6 +7,8 @@
 
 import UIKit
 import CoreImage.CIFilterBuiltins
+import QRCodeGenerator
+import PocketSVG
 
 // Validation checks on strings
 extension String {
@@ -72,8 +74,6 @@ extension String {
     func generateQRCode() -> UIImage? {
         let transform = CGAffineTransform(scaleX: 10, y: 10)
         let data = self.data(using: String.Encoding.ascii)
-        let allFiltersNames = CIFilter.filterNames(inCategories: nil)
-        print(allFiltersNames)
         if #available(iOS 13.0, *) {
             let filter = CIFilter.qrCodeGenerator()
             let context = CIContext()
@@ -84,16 +84,53 @@ extension String {
                     return UIImage(cgImage: cgimg)
                 }
             }
-        } else if let filter = CIFilter(name: "CIQRCodeGenerator"){
-                filter.setValue(data, forKey: "inputMessage")
-                filter.setValue("L", forKey:"inputCorrectionLevel")
-                if let cgimg = filter.outputImage?.transformed(by: transform) {
-                    return UIImage(ciImage: cgimg)
-                }
+        } else {
+            // Separate numeric and alphanumberic portions of the code
+            let prefix = "shc:/"
+            let numeric = self.lowercased().replacingOccurrences(of: prefix, with: "")
+            let shcSegment: QRSegment = QRSegment.makeAlphanumeric(Array(prefix.uppercased()))
+            let numericSegment: QRSegment = QRSegment.makeNumeric(Array(numeric))
+            do {
+                // Create QR SVG ( what what the library gives us.. )
+                let qr = try QRCode.encode(segments: [shcSegment, numericSegment], ecl: .low)
+                let svg = qr.toSVGString(border: 5)
+                // Generate UIImage from svg
+                let path = SVGBezierPath.paths(fromSVGString: svg)
+                let layer = SVGLayer()
+                layer.paths = path
+                let size = UIView.screenWidth
+                let frame = CGRect(x: 10, y: 10, width: size, height: size)
+                layer.frame = frame
+                let img = snapshotImage(for: layer)
+                return img
+                
+            } catch {
+                return nil
+            }
         }
+        
+        func snapshotImage(for view: CALayer) -> UIImage? {
+            UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
+            guard let context = UIGraphicsGetCurrentContext() else { return nil }
+            view.render(in: context)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
+        }
+        
+        /* Ideal way - no longer working:
+         if let filter = CIFilter(name: "CIQRCodeGenerator") {
+         filter.setValue(data, forKey: "inputMessage")
+         filter.setValue("L", forKey:"inputCorrectionLevel")
+         if let cgimg = filter.outputImage?.transformed(by: transform) {
+         return UIImage(ciImage: cgimg)
+         }
+         */
         
         return nil
     }
+    
+    
     
     func toImage() -> UIImage? {
         if let data = Data(base64Encoded: self, options: .ignoreUnknownCharacters){

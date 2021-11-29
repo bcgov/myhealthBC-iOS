@@ -16,6 +16,10 @@ extension UIView {
 
 
 extension UIView {
+    static var screenWidth: CGFloat {
+        return UIScreen.main.bounds.width
+    }
+    
     func isSmallScreen() -> Bool {
         let bounds = UIScreen.main.bounds
         let height = bounds.size.height

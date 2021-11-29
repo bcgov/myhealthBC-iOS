@@ -235,7 +235,7 @@ extension QueueItWorker {
                         self.delegate?.hideLoader()
                         return
                     }
-                    BCVaccineValidator.shared.validate(code: code) { [weak self] result in
+                    BCVaccineValidator.shared.validate(code: code.lowercased()) { [weak self] result in
                         guard let `self` = self else { return }
                         guard let data = result.result else {
                             self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .invalidQRCodeMessage))
