@@ -24,7 +24,7 @@ class StatusBannerView: UIView {
     
     @IBOutlet weak var contentStackView: UIStackView!
     @IBOutlet weak var bannerImage: UIImageView!
-    @IBOutlet weak var topCOntainer: UIView!
+    @IBOutlet weak var topContainer: UIView!
     @IBOutlet weak var mainContainer: UIView!
     @IBOutlet weak var recordTypeLabel: UILabel!
     @IBOutlet weak var statusStack: UIStackView!
@@ -65,7 +65,7 @@ class StatusBannerView: UIView {
         
         // Hide Top banner if needed
         if type == .CovidTest {
-            topCOntainer.isHidden = true
+            topContainer.isHidden = true
         }
         
         // Set Status Icon if needed
