@@ -88,6 +88,10 @@
 		79218AB927519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AB627519E790063004E /* HealthRecordsUserCollectionViewCell.swift */; };
 		79218ABA27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AB727519E790063004E /* HealthRecordsUserCollectionViewCell.xib */; };
 		79218ABB27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AB727519E790063004E /* HealthRecordsUserCollectionViewCell.xib */; };
+		79218ABE27555B230063004E /* ReusableHeaderAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218ABD27555B230063004E /* ReusableHeaderAddView.swift */; };
+		79218ABF27555B230063004E /* ReusableHeaderAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218ABD27555B230063004E /* ReusableHeaderAddView.swift */; };
+		79218AC127555B350063004E /* ReusableHeaderAddView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AC027555B350063004E /* ReusableHeaderAddView.xib */; };
+		79218AC227555B350063004E /* ReusableHeaderAddView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218AC027555B350063004E /* ReusableHeaderAddView.xib */; };
 		7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79283450272A880900EE2710 /* TableViewButtonView.xib */; };
@@ -369,6 +373,8 @@
 		79218AB1275196150063004E /* HealthRecordsUserView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HealthRecordsUserView.xib; sourceTree = "<group>"; };
 		79218AB627519E790063004E /* HealthRecordsUserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsUserCollectionViewCell.swift; sourceTree = "<group>"; };
 		79218AB727519E790063004E /* HealthRecordsUserCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HealthRecordsUserCollectionViewCell.xib; sourceTree = "<group>"; };
+		79218ABD27555B230063004E /* ReusableHeaderAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableHeaderAddView.swift; sourceTree = "<group>"; };
+		79218AC027555B350063004E /* ReusableHeaderAddView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReusableHeaderAddView.xib; sourceTree = "<group>"; };
 		7928344D272A87FA00EE2710 /* TableViewButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewButtonView.swift; sourceTree = "<group>"; };
 		79283450272A880900EE2710 /* TableViewButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewButtonView.xib; sourceTree = "<group>"; };
 		792834532730A52800EE2710 /* RememberedGatewayDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RememberedGatewayDetails.swift; sourceTree = "<group>"; };
@@ -725,6 +731,15 @@
 			path = HealthRecordsUserCollectionViewCell;
 			sourceTree = "<group>";
 		};
+		79218ABC27555B040063004E /* ReusableHeaderAddView */ = {
+			isa = PBXGroup;
+			children = (
+				79218ABD27555B230063004E /* ReusableHeaderAddView.swift */,
+				79218AC027555B350063004E /* ReusableHeaderAddView.xib */,
+			);
+			path = ReusableHeaderAddView;
+			sourceTree = "<group>";
+		};
 		7928344C272A878200EE2710 /* TableViewButtonView */ = {
 			isa = PBXGroup;
 			children = (
@@ -942,6 +957,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				79218ABC27555B040063004E /* ReusableHeaderAddView */,
 				29B446A92735759400E0F967 /* FederalPassPDFView */,
 				79A2582C2731FF260067DD50 /* LargerTouchAreaButton */,
 				7928346827311C3D00EE2710 /* DropDownView */,
@@ -1568,6 +1584,7 @@
 				7944F70526F31451006B9444 /* NoCardsTableViewCell.xib in Resources */,
 				7967E75126F9145700EEF510 /* BCSans-Bold.otf in Resources */,
 				79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */,
+				79218AC127555B350063004E /* ReusableHeaderAddView.xib in Resources */,
 				794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */,
 				79BDA089270CEE8000FF30AB /* Localizable.strings in Resources */,
 				7944F68526F1261B006B9444 /* Assets.xcassets in Resources */,
@@ -1626,6 +1643,7 @@
 				794BD6602702EEC00084ADA8 /* BCSans-Italic.otf in Resources */,
 				794BD6612702EEC00084ADA8 /* VaccineCardTableViewCell.xib in Resources */,
 				795AA7762715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
+				79218AC227555B350063004E /* ReusableHeaderAddView.xib in Resources */,
 				7918A8CB27482E1900D19D1C /* TextListView.xib in Resources */,
 				794BD6622702EEC00084ADA8 /* NoCardsTableViewCell.xib in Resources */,
 				79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
@@ -1908,6 +1926,7 @@
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
+				79218ABE27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
 				792834542730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2032,6 +2051,7 @@
 				794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */,
 				794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */,
 				7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */,
+				79218ABF27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
 				792834552730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

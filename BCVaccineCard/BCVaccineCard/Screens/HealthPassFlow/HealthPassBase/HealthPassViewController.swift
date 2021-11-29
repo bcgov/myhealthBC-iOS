@@ -224,9 +224,12 @@ extension HealthPassViewController: FederalPassViewDelegate {
 
 // MARK: Add card button table view cell delegate here
 extension HealthPassViewController: AddCardsTableViewCellDelegate {
-    func addCardButtonTapped() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
-        self.navigationController?.pushViewController(vc, animated: true)
+    func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
+        if screenType == .healthPass {
+            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
     }
 }
 
