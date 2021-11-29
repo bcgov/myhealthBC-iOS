@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2021-10-28.
+//  Created by Amir on 2021-11-29.
 //
 //
 
@@ -19,6 +19,7 @@ extension User {
     @NSManaged public var id: String?
     @NSManaged public var name: String?
     @NSManaged public var vaccineCard: NSSet?
+    @NSManaged public var testResult: NSSet?
 
     public var userId: String {
         return id ?? ""
@@ -28,6 +29,13 @@ extension User {
         let set = vaccineCard as? Set<VaccineCard> ?? []
         return set.sorted {
             $0.sortOrder < $1.sortOrder
+        }
+    }
+    
+    public var testResultArray: [TestResult] {
+        let set = testResult as? Set<TestResult> ?? []
+        return set.sorted {
+            $0.resultDateTime ?? Date() > $1.resultDateTime ?? Date()
         }
     }
 }
@@ -46,5 +54,22 @@ extension User {
 
     @objc(removeVaccineCard:)
     @NSManaged public func removeFromVaccineCard(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for testResult
+extension User {
+
+    @objc(addTestResultObject:)
+    @NSManaged public func addToTestResult(_ value: TestResult)
+
+    @objc(removeTestResultObject:)
+    @NSManaged public func removeFromTestResult(_ value: TestResult)
+
+    @objc(addTestResult:)
+    @NSManaged public func addToTestResult(_ values: NSSet)
+
+    @objc(removeTestResult:)
+    @NSManaged public func removeFromTestResult(_ values: NSSet)
 
 }
