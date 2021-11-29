@@ -68,6 +68,7 @@ class ReusableHeaderAddView: UIView {
         delegate?.addCardButtonTapped(screenType: self.screenType)
     }
     
+    // NOTE: For now, have two different config methods (in which case, we wouldn't need the screen type property - leaving for now as I'll likely be making just one config function once designs are finalized
     func configureForHealthPass(savedCards: Int?, delegateOwner: UIViewController) {
         self.screenType = .healthPass
         setupAccessibility()
