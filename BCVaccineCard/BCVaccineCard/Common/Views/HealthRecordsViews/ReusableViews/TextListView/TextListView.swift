@@ -10,7 +10,8 @@ import UIKit
 
 class TextListView: UIView {
     
-    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak private var contentView: UIView!
+    @IBOutlet weak private var baseStackView: UIStackView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -37,16 +38,44 @@ class TextListView: UIView {
     private func setup() {
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
-        uiSetup()
     }
     
-    private func uiSetup() {
-        
-    }
-    
-    func configure() {
+    func configure(data: [TextListModel]) {
         setupAccessibility()
-        // TODO: Fill in here
+        self.setupStackViews(data: data)
+    }
+    
+    private func setupStackViews(data: [TextListModel]) {
+        for listComponent in data {
+            let stack = initializeStackView()
+            if let header = initializeLabel(textListProperties: listComponent.header) {
+                stack.addArrangedSubview(header)
+            }
+            if let subtext = initializeLabel(textListProperties: listComponent.subtext) {
+                stack.addArrangedSubview(subtext)
+            }
+            self.baseStackView.addArrangedSubview(stack)
+        }
+    }
+    
+    private func initializeStackView() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = 2
+        return stackView
+    }
+    
+    private func initializeLabel(textListProperties: TextListModel.TextProperties?) -> UILabel? {
+        guard let properties = textListProperties else { return nil }
+        let label = UILabel()
+        label.textColor = AppColours.textBlack
+        let textSize = properties.fontSize
+        label.font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
+        label.text = properties.text
+        label.numberOfLines = 0
+        return label
     }
     
     // TODO: Setup accessibility
