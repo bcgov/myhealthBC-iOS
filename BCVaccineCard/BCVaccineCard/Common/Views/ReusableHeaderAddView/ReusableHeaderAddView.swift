@@ -56,7 +56,6 @@ class ReusableHeaderAddView: UIView {
     
     private func labelSetup() {
         boldTextLabel.font = UIFont.boldSystemFont(ofSize: 17)
-        boldTextLabel.text = .bcVaccinePass
         boldTextLabel.textColor = .black
         subtextLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         subtextLabel.textColor = AppColours.textGray
@@ -71,6 +70,7 @@ class ReusableHeaderAddView: UIView {
     // NOTE: For now, have two different config methods (in which case, we wouldn't need the screen type property - leaving for now as I'll likely be making just one config function once designs are finalized
     func configureForHealthPass(savedCards: Int?, delegateOwner: UIViewController) {
         self.screenType = .healthPass
+        boldTextLabel.text = .bcVaccinePass
         setupAccessibility()
         if let savedCards = savedCards, savedCards > 1 {
             subtextLabel.isHidden = false
@@ -83,6 +83,7 @@ class ReusableHeaderAddView: UIView {
     
     func configureForHealthRecords(delegateOwner: UIViewController) {
         self.screenType = .healthRecords
+        boldTextLabel.text = .viewDetailsOfCovidRecordsText
         subtextLabel.isHidden = true
         setupAccessibility()
         self.delegate = delegateOwner as? AddCardsTableViewCellDelegate
