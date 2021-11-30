@@ -19,4 +19,23 @@ class AppColours {
     static let textGray = UIColor(red: 96/255, green: 96/255, blue: 96/255, alpha: 1.0)
     static let lightGray = UIColor(red: 183/255, green: 183/255, blue: 183/255, alpha: 1.0)
     static let borderGray = UIColor(red: 207/255, green: 207/255, blue: 207/255, alpha: 1.0)
+    
+    struct CovidTest {
+        static let pendingText = UIColor(hexString: "#1A5A96")
+        static let pendingBackground = UIColor(hexString: "#D9EAF7")
+        
+        static let cancelledText = pendingText
+        static let cancelledBackground = pendingBackground
+        
+        static let negativeText = UIColor(hexString: "#2E8540")
+        static let negativeBackground = UIColor(hexString: "#DFF0D8")
+        
+        static let positiveText = UIColor(hexString: "#A12622")
+        static let positiveBackground = UIColor(hexString: "#F2DEDE")
+        
+        static let indeterminateText = pendingText
+        static let indeterminateBackground = pendingBackground
+        
+        
+    }
 }

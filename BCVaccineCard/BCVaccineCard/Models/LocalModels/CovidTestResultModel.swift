@@ -13,21 +13,37 @@ enum CovidTestResult: String, Codable {
     var getTitle: String {
         return self.rawValue.uppercased()
     }
+    
     // TODO: Include get color here (based on designs) to be used for Banner View for test results
-//    var getColor: UIColor {
-//        switch self {
-//        case .pending:
-//            <#code#>
-//        case .negative:
-//            <#code#>
-//        case .positive:
-//            <#code#>
-//        case .indeterminate:
-//            <#code#>
-//        case .cancelled:
-//            <#code#>
-//        }
-//    }
+    var getColor: UIColor {
+        switch self {
+        case .pending:
+            return AppColours.CovidTest.pendingBackground
+        case .negative:
+            return AppColours.CovidTest.negativeBackground
+        case .positive:
+            return AppColours.CovidTest.positiveBackground
+        case .indeterminate:
+            return AppColours.CovidTest.indeterminateBackground
+        case .cancelled:
+            return AppColours.CovidTest.cancelledBackground
+        }
+    }
+    
+    var getStatusTextColor: UIColor {
+        switch self {
+        case .pending:
+            return AppColours.CovidTest.pendingText
+        case .negative:
+            return AppColours.CovidTest.negativeText
+        case .positive:
+            return AppColours.CovidTest.positiveText
+        case .indeterminate:
+            return AppColours.CovidTest.indeterminateText
+        case .cancelled:
+            return AppColours.CovidTest.cancelledText
+        }
+    }
 }
 
 // TODO: Will likely need to adjust this to what we need once we start testing with their actual endpoint
