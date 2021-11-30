@@ -12,8 +12,10 @@ target 'BCVaccineCard' do
   pod 'SwiftyJSON', '~> 4.0'
   pod 'Firebase/AppDistribution'
   pod 'SwipeCellKit'
+  pod 'SwiftQRCodeGenerator'
+  pod 'PocketSVG', '~> 2.6'
   pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
-
+  
   target 'BCVaccineCardTests' do
     inherit! :search_paths
     # Pods for testing
