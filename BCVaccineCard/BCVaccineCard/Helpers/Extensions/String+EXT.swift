@@ -72,9 +72,10 @@ extension String {
 // MARK: Convert String Code to UIImage
 extension String {
     func generateQRCode() -> UIImage? {
-        let transform = CGAffineTransform(scaleX: 10, y: 10)
-        let data = self.data(using: String.Encoding.ascii)
-        if #available(iOS 13.0, *) {
+        if #available(iOS 15.0, *) {
+            let data = self.data(using: String.Encoding.ascii)
+            let transform = CGAffineTransform(scaleX: 10, y: 10)
+            
             let filter = CIFilter.qrCodeGenerator()
             let context = CIContext()
             filter.correctionLevel = "L"
@@ -119,6 +120,7 @@ extension String {
         }
         
         /* Ideal way - no longer working:
+         https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html#//apple_ref/doc/filter/ci/CIQRCodeGenerator
          if let filter = CIFilter(name: "CIQRCodeGenerator") {
          filter.setValue(data, forKey: "inputMessage")
          filter.setValue("L", forKey:"inputCorrectionLevel")
