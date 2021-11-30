@@ -6,7 +6,7 @@
 //
 
 import UIKit
-// TODO: Amir to load his view into here
+
 class BannerViewTableViewCell: UITableViewCell {
     
     weak var bannerView: StatusBannerView?
