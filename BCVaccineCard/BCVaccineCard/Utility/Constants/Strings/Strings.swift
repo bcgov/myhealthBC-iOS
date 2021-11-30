@@ -15,6 +15,7 @@ extension String {
     static var yes: String { return "Yes".localized }
     static var no: String { return "No".localized }
     static var edit: String { return "Edit".localized }
+    static var delete: String { return "Delete".localized }
     /// Text used throughout app
     static var myCards: String { return "MyCards".localized }
     static var settings: String { return "Settings".localized }
@@ -176,6 +177,7 @@ extension String {
     static var getCovidTestResultsDescription: String { return "GetCovidTestResultsDescription".localized }
     static var covid19mRNATitle: String { return "Covid19mRNATitle".localized }
     static var covid19TestResultTitle: String { return "Covid19TestResultTitle".localized }
+    static var vaccinationRecord: String { return "VaccinationRecord".localized }
     static var recordText: String { return "RecordText".localized }
     static var viewDetailsOfCovidRecordsText: String { return "ViewDetailsOfCovidRecordsText".localized }
     static var fetchHealthRecordsIntroText: String { return "FetchHealthRecordsIntroText".localized }

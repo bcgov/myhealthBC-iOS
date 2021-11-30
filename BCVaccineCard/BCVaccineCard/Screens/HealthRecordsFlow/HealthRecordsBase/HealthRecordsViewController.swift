@@ -5,6 +5,7 @@
 //  Created by Connor Ogilvie on 2021-11-10.
 //
 //TODO: This will have a collection view that will display a users name. Above the collection view is the header add view
+// FIGMA: https://www.figma.com/file/ga1F6q5Kvi6CD6FLS27fXq/My-Health-BC?node-id=3275%3A42427
 
 import UIKit
 
@@ -74,7 +75,8 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
     
     func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
         if screenType == .healthRecords {
-            // TODO: Go to FetchHealthRecordsViewController here
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
@@ -84,7 +86,8 @@ extension HealthRecordsViewController {
     private func fetchDataSource() {
         dataSource = StorageService.shared.getHealthRecordsDataSource()
         if dataSource.isEmpty {
-            // TODO: Go to FetchHealthRecordsViewController
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
         } else {
             addRecordHeaderSetup()
             setupCollectionView()

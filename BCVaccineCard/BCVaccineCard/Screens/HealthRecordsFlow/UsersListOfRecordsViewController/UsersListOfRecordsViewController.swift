@@ -133,5 +133,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         // TODO: Will need to get the record type, and the model at this instance (which will come from dataSource), then pass to HealthRecordDetailViewController
                 
     }
+    
+    // TODO: Add in delete record logic (see covid 19 cards view controller)
  
 }

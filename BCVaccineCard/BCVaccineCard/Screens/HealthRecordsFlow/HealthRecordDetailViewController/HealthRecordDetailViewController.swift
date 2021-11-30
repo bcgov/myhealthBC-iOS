@@ -8,22 +8,45 @@
 import UIKit
 
 class HealthRecordDetailViewController: BaseViewController {
+    
+    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource) -> HealthRecordDetailViewController {
+        if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
+            vc.dataSource = dataSource
+            return vc
+        }
+        return HealthRecordDetailViewController()
+    }
+    
+    @IBOutlet weak private var tableView: UITableView!
+
+    private var dataSource: HealthRecordsDetailDataSource!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
-    
 
-    /*
-    // MARK: - Navigation
+}
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+// MARK: Navigation setup
+extension HealthRecordsDetailViewController {
+    private func navSetup() {
+        let rightNavButton = NavButton(title: .delete,
+                                                       image: nil, action: #selector(self.deleteButton),
+                                                       accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        self.navDelegate?.setNavigationBarWith(title: self.dataSource.type.getDetailNavTitle,
+                                               leftNavButton: nil,
+                                               rightNavButton: rightNavButton,
+                                               navStyle: .small,
+                                               targetVC: self,
+                                               backButtonHintString: nil)
+        
+        
     }
-    */
 
+    @objc private func deleteButton() {
+        // TODO: Delete record - show alert first
+        // TODO: Pop view controller (make sure that previous VC loads data source in view will appear
+    }
 }

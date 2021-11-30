@@ -43,6 +43,12 @@ struct AccessibilityLabels {
         static let navHint = "Your Health Records"
     }
     
+    struct HealthRecordsDetailScreen {
+        static let navRightIconTitle = "Deletee"
+        static let navRightIconHint = "Tapping this button will delete this record"
+        static let navHint = "Your Health Record"
+    }
+    
     struct OpenWebLink {
         static let openWebLinkHint = "Open Website link for more intormation"
     }

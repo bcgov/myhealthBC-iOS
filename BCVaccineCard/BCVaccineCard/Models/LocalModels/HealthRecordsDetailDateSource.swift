@@ -19,6 +19,13 @@ struct HealthRecordsDetailDataSource {
             }
         }
         
+        var getDetailNavTitle: String {
+            switch self {
+            case .covidImmunizationRecord: return .vaccinationRecord
+            case .covidTestResult: return .covid19TestResultTitle
+            }
+        }
+        
         var getStatus: String {
             switch self {
             case .covidImmunizationRecord(let model): return model.status.getTitle
