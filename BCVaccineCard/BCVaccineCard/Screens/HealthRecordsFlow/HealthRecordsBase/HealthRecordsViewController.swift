@@ -20,6 +20,8 @@ class HealthRecordsViewController: BaseViewController {
     @IBOutlet weak private var addRecordView: ReusableHeaderAddView!
     @IBOutlet weak private var collectionView: UICollectionView!
     
+    private var dataSource: [HealthRecordsDataSource] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSetup()
@@ -45,7 +47,7 @@ class HealthRecordsViewController: BaseViewController {
     }
     
     private func setup() {
-        
+        fetchDataSource()
     }
 
 }
@@ -61,5 +63,39 @@ extension HealthRecordsViewController {
                                                backButtonHintString: nil)
         
         
+    }
+}
+
+// MARK: Add Record Header Setup
+extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
+    private func addRecordHeaderSetup() {
+        addRecordView.configureForHealthRecords(delegateOwner: self)
+    }
+    
+    func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
+        if screenType == .healthRecords {
+            // TODO: Go to FetchHealthRecordsViewController here
+        }
+    }
+}
+
+// MARK: Fetch Data Source
+extension HealthRecordsViewController {
+    private func fetchDataSource() {
+        dataSource = StorageService.shared.getHealthRecordsDataSource()
+        if dataSource.isEmpty {
+            // TODO: Go to FetchHealthRecordsViewController
+        } else {
+            addRecordHeaderSetup()
+            setupCollectionView()
+        }
+        
+    }
+}
+
+// MARK: Collection View setup
+extension HealthRecordsViewController {
+    private func setupCollectionView() {
+        // TODO: Collection view setup logic
     }
 }
