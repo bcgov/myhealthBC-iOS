@@ -8,22 +8,107 @@
 import UIKit
 
 class FetchHealthRecordsViewController: BaseViewController {
+    
+    class func constructFetchHealthRecordsViewController() -> FetchHealthRecordsViewController {
+        if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: FetchHealthRecordsViewController.self)) as? FetchHealthRecordsViewController {
+            return vc
+        }
+        return FetchHealthRecordsViewController()
+    }
+    
+    @IBOutlet weak private var headerLabel: UILabel!
+    @IBOutlet weak private var tableView: UITableView!
+    
+    private var dataSource: [GetRecordsView.RecordType] = [.covidImmunizationRecord, .covidTestResult]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setup()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNeedsStatusBarAppearanceUpdate()
+        
     }
-    */
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if #available(iOS 13.0, *) {
+            return UIStatusBarStyle.darkContent
+        } else {
+            return UIStatusBarStyle.default
+        }
+    }
 
+    private func setup() {
+        navSetup()
+        setupLabel()
+        setupTableView()
+    }
+    
+    private func setupLabel() {
+        headerLabel.font = UIFont.bcSansRegularWithSize(size: 17)
+        headerLabel.textColor = AppColours.textBlack
+        headerLabel.text = .fetchHealthRecordsIntroText
+    }
+
+}
+
+// MARK: Navigation setup
+extension FetchHealthRecordsViewController {
+    private func navSetup() {
+        self.navDelegate?.setNavigationBarWith(title: .healthRecords,
+                                               leftNavButton: nil,
+                                               rightNavButton: nil,
+                                               navStyle: .large,
+                                               targetVC: self,
+                                               backButtonHintString: nil)
+        
+        
+    }
+}
+
+// MARK: TableView setup
+extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewDataSource {
+    private func setupTableView() {
+        tableView.register(UINib.init(nibName: GetARecordTableViewCell.getName, bundle: .main), forCellReuseIdentifier: GetARecordTableViewCell.getName)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 140
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: GetARecordTableViewCell.getName, for: indexPath) as? GetARecordTableViewCell {
+            cell.configure(type: dataSource[indexPath.row])
+            return cell
+        }
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let type = dataSource[indexPath.row]
+        var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+        if let details = Defaults.rememberGatewayDetails {
+            rememberDetails = details
+        }
+        switch type {
+        case .covidImmunizationRecord:
+            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
+            self.navigationController?.pushViewController(vc, animated: true)
+        case .covidTestResult:
+            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+ 
 }

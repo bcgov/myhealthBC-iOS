@@ -34,6 +34,15 @@ struct AccessibilityLabels {
         static let proofOfVaccineCardAdded = "Your proof of vaccination has been added to your passes. Vaccination Card Expanded"
     }
     
+    struct ListOfHealthRecordsScreen {
+        static let navRightDoneIconTitle = "Done"
+        static let navRightDoneIconHint = "Tapping this button will finish editing"
+        static let navRightEditIconTitle = "Edit"
+        static let navRightEditIconHint = "Tapping this button will allow you to edit your list of records, by removing records from your device"
+        static let inEditMode = "Tapping 'done' will stop the editing of records and save any changes."
+        static let navHint = "Your Health Records"
+    }
+    
     struct OpenWebLink {
         static let openWebLinkHint = "Open Website link for more intormation"
     }

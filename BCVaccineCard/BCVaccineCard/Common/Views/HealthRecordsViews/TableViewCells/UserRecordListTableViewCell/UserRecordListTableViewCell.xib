@@ -19,14 +19,14 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VOg-fG-t7w" customClass="UserRecordListView" customModule="BCVaccineCard" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="84"/>
+                        <rect key="frame" x="0.0" y="8" width="320" height="68"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="VOg-fG-t7w" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="5P6-5V-Gtb"/>
-                    <constraint firstAttribute="bottom" secondItem="VOg-fG-t7w" secondAttribute="bottom" id="StK-VQ-JFO"/>
-                    <constraint firstItem="VOg-fG-t7w" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="og0-Iv-nkV"/>
+                    <constraint firstAttribute="bottom" secondItem="VOg-fG-t7w" secondAttribute="bottom" constant="8" id="StK-VQ-JFO"/>
+                    <constraint firstItem="VOg-fG-t7w" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="og0-Iv-nkV"/>
                     <constraint firstAttribute="trailing" secondItem="VOg-fG-t7w" secondAttribute="trailing" id="qX4-rk-OKw"/>
                 </constraints>
             </tableViewCellContentView>

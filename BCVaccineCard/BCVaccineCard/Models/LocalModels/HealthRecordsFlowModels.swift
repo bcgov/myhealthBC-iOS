@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: This is the data source used in the collection view on the base health records screen
 struct HealthRecordsDataSource {
     let userName: String
     var numberOfRecords: Int
