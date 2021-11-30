@@ -35,13 +35,12 @@ class UsersListOfRecordsViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-        fetchDataSource()
+        setup()
         
     }
     
@@ -59,8 +58,7 @@ class UsersListOfRecordsViewController: BaseViewController {
 
     private func setup() {
         navSetup()
-        setupLabel()
-        setupTableView()
+        fetchDataSource()
     }
 
 }
@@ -99,6 +97,40 @@ extension UsersListOfRecordsViewController {
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
     private func fetchDataSource() {
-        dataSource = StorageService.shared.getListOfHealthRecordsForName(name: self.name)
+//        dataSource = StorageService.shared.getListOfHealthRecordsForName(name: self.name)
+        // TODO: May need some sort of completion handler here...
+        setupTableView()
     }
+}
+
+// MARK: TableView setup
+extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewDataSource {
+    private func setupTableView() {
+        tableView.register(UINib.init(nibName: UserRecordListTableViewCell.getName, bundle: .main), forCellReuseIdentifier: UserRecordListTableViewCell.getName)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 84
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: UserRecordListTableViewCell.getName, for: indexPath) as? UserRecordListTableViewCell {
+            cell.configure(type: dataSource[indexPath.row])
+            return cell
+        }
+        return UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // TODO: Will need to get the record type, and the model at this instance (which will come from dataSource), then pass to HealthRecordDetailViewController
+        
+        
+        
+    }
+ 
 }
