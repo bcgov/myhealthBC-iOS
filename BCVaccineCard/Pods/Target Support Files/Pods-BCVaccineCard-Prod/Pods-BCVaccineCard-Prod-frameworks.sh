@@ -181,8 +181,10 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/BCVaccineValidator/BCVaccineValidator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/JOSESwift/JOSESwift.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/PocketSVG/PocketSVG.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/QueueITLibrary/QueueITLibrary.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SnowplowTracker/SnowplowTracker.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SwiftQRCodeGenerator/QRCodeGenerator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework"
 fi
@@ -192,8 +194,10 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/BCVaccineValidator/BCVaccineValidator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/JOSESwift/JOSESwift.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/PocketSVG/PocketSVG.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/QueueITLibrary/QueueITLibrary.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SnowplowTracker/SnowplowTracker.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/SwiftQRCodeGenerator/QRCodeGenerator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework"
 fi
