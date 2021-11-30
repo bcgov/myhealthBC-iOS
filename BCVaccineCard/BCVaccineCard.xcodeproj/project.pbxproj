@@ -126,6 +126,8 @@
 		79218AF32756729D0063004E /* HealthRecordsFlowModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AF12756729D0063004E /* HealthRecordsFlowModels.swift */; };
 		79218AF527569CEA0063004E /* VaccineTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AF427569CEA0063004E /* VaccineTable.swift */; };
 		79218AF627569CEA0063004E /* VaccineTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AF427569CEA0063004E /* VaccineTable.swift */; };
+		79218AF82756A0B30063004E /* HealthRecordsDetailDateSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AF72756A0B20063004E /* HealthRecordsDetailDateSource.swift */; };
+		79218AF92756A0B30063004E /* HealthRecordsDetailDateSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AF72756A0B20063004E /* HealthRecordsDetailDateSource.swift */; };
 		7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79283450272A880900EE2710 /* TableViewButtonView.xib */; };
@@ -428,6 +430,7 @@
 		79218AEE275672110063004E /* StorageService+HealthRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+HealthRecords.swift"; sourceTree = "<group>"; };
 		79218AF12756729D0063004E /* HealthRecordsFlowModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsFlowModels.swift; sourceTree = "<group>"; };
 		79218AF427569CEA0063004E /* VaccineTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineTable.swift; sourceTree = "<group>"; };
+		79218AF72756A0B20063004E /* HealthRecordsDetailDateSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsDetailDateSource.swift; sourceTree = "<group>"; };
 		7928344D272A87FA00EE2710 /* TableViewButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewButtonView.swift; sourceTree = "<group>"; };
 		79283450272A880900EE2710 /* TableViewButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewButtonView.xib; sourceTree = "<group>"; };
 		792834532730A52800EE2710 /* RememberedGatewayDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RememberedGatewayDetails.swift; sourceTree = "<group>"; };
@@ -1298,6 +1301,7 @@
 				79218AD1275576640063004E /* TextListModel.swift */,
 				79218AF12756729D0063004E /* HealthRecordsFlowModels.swift */,
 				79218AF427569CEA0063004E /* VaccineTable.swift */,
+				79218AF72756A0B20063004E /* HealthRecordsDetailDateSource.swift */,
 			);
 			path = LocalModels;
 			sourceTree = "<group>";
@@ -1982,6 +1986,7 @@
 				79218AB827519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */,
 				79218AE82755E25C0063004E /* UsersListOfRecordsViewController.swift in Sources */,
 				7944F70B26F39128006B9444 /* SettingsViewController.swift in Sources */,
+				79218AF82756A0B30063004E /* HealthRecordsDetailDateSource.swift in Sources */,
 				79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				7944F6F526F30293006B9444 /* CovidVaccineCardsViewController.swift in Sources */,
 				79218AD2275576640063004E /* TextListModel.swift in Sources */,
@@ -2120,6 +2125,7 @@
 				79218AB927519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */,
 				79218AE92755E25C0063004E /* UsersListOfRecordsViewController.swift in Sources */,
 				794BD6342702EEC00084ADA8 /* AppDelegate.swift in Sources */,
+				79218AF92756A0B30063004E /* HealthRecordsDetailDateSource.swift in Sources */,
 				794BD6352702EEC00084ADA8 /* BCVaccineCard.xcdatamodeld in Sources */,
 				794BD6362702EEC00084ADA8 /* Constants.swift in Sources */,
 				79218AD3275576640063004E /* TextListModel.swift in Sources */,

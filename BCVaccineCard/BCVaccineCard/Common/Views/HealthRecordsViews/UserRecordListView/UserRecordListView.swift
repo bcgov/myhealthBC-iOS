@@ -10,38 +10,38 @@ import CloudKit
 
 class UserRecordListView: UIView {
     
-    enum RecordType {
-        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel)
-        case covidTestResult(model: LocallyStoredCovidTestResultModel)
-        
-        var getTitle: String {
-            switch self {
-            case .covidImmunizationRecord: return .covid19mRNATitle
-            case .covidTestResult: return .covid19TestResultTitle
-            }
-        }
-        
-        var getStatus: String {
-            switch self {
-            case .covidImmunizationRecord(let model): return model.status.getTitle
-            case .covidTestResult(let model): return model.status.getTitle
-            }
-        }
-        
-        var getDate: String? {
-            switch self {
-            case .covidImmunizationRecord(let model): return model.vaxDates.last
-            case .covidTestResult(let model): return model.response?.resultDateTime?.monthDayYearString // TODO: Need to confirm formatting on this
-            }
-        }
-        
-        var getImage: UIImage? {
-            switch self {
-            case .covidImmunizationRecord: return UIImage(named: "blue-bg-vaccine-record-icon")
-            case .covidTestResult: return UIImage(named: "blue-bg-test-result-icon")
-            }
-        }
-    }
+//    enum RecordType {
+//        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel)
+//        case covidTestResult(model: LocallyStoredCovidTestResultModel)
+//        
+//        var getTitle: String {
+//            switch self {
+//            case .covidImmunizationRecord: return .covid19mRNATitle
+//            case .covidTestResult: return .covid19TestResultTitle
+//            }
+//        }
+//        
+//        var getStatus: String {
+//            switch self {
+//            case .covidImmunizationRecord(let model): return model.status.getTitle
+//            case .covidTestResult(let model): return model.status.getTitle
+//            }
+//        }
+//        
+//        var getDate: String? {
+//            switch self {
+//            case .covidImmunizationRecord(let model): return model.vaxDates.last
+//            case .covidTestResult(let model): return model.response?.resultDateTime?.monthDayYearString // TODO: Need to confirm formatting on this
+//            }
+//        }
+//        
+//        var getImage: UIImage? {
+//            switch self {
+//            case .covidImmunizationRecord: return UIImage(named: "blue-bg-vaccine-record-icon")
+//            case .covidTestResult: return UIImage(named: "blue-bg-test-result-icon")
+//            }
+//        }
+//    }
     
     @IBOutlet weak private var contentView: UIView!
     @IBOutlet weak private var greyRoundedBackgroundView: UIView!
@@ -50,7 +50,7 @@ class UserRecordListView: UIView {
     @IBOutlet weak private var recordTypeSubtitleLabel: UILabel! // This will include the status and the date
     @IBOutlet weak private var rightArrowImageView: UIImageView!
     
-    var type: RecordType!
+    var type: HealthRecordsDetailDataSource.RecordType!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,7 +91,7 @@ class UserRecordListView: UIView {
         recordTypeSubtitleLabel.textColor = AppColours.textBlack
     }
     
-    func configure(recordType: RecordType) {
+    func configure(recordType: HealthRecordsDetailDataSource.RecordType) {
         self.type = recordType
         setupAccessibility()
         iconImageView.image = recordType.getImage

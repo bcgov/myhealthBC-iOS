@@ -20,7 +20,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
 
     private var name: String!
-    private var dataSource: [UserRecordListView.RecordType] = []
+    private var dataSource: [HealthRecordsDetailDataSource.RecordType] = []
     
     private var inEditMode = false {
         didSet {

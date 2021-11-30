@@ -15,7 +15,7 @@ class BannerViewTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func configure(type: UserRecordListView.RecordType) {
+    func configure(type: HealthRecordsDataSource.RecordType) {
         switch type {
         case .covidImmunizationRecord(let model):
             setup(vaccinePassport: model)

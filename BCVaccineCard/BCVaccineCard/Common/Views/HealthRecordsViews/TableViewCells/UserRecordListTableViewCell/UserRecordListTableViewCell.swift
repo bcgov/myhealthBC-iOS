@@ -11,7 +11,7 @@ class UserRecordListTableViewCell: UITableViewCell {
     
     @IBOutlet weak private var userRecordListView: UserRecordListView!
     
-    var type: UserRecordListView.RecordType {
+    var type: HealthRecordsDetailDataSource.RecordType {
         return userRecordListView.type
     }
 
@@ -20,7 +20,7 @@ class UserRecordListTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    func configure(type: UserRecordListView.RecordType) {
+    func configure(type: HealthRecordsDetailDataSource.RecordType) {
         userRecordListView.configure(recordType: type)
     }
     

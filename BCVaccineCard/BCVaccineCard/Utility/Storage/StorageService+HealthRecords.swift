@@ -41,13 +41,13 @@ extension StorageService {
     }
     
     // Note: This is used to get a list of health records for a specific user for the list view
-    func getListOfHealthRecordsForName(user: String, for userId: String? = AuthManager().userId()) -> [UserRecordListView.RecordType] {
+    func getListOfHealthRecordsForName(name: String, for userId: String? = AuthManager().userId()) -> [HealthRecordsDetailDataSource.RecordType] {
         guard let context = managedContext else {return []}
         do {
             let users = try context.fetch(User.createFetchRequest())
             guard let current = users.filter({$0.userId == userId}).first else {return []}
-            let tests = getTestResultsForName(user: user, tests: current.testResultArray)
-            let immunizationRecords = getImmunizationRecordsForName(user: user, immunizationRecords: current.vaccineCardArray)
+            let tests = getTestResultsForName(name: name, tests: current.testResultArray)
+            let immunizationRecords = getImmunizationRecordsForName(name: name, immunizationRecords: current.vaccineCardArray)
             return mapHealthRecordsForName(tests: tests, immunizationRecords: immunizationRecords)
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -56,19 +56,19 @@ extension StorageService {
 
     }
     // TODO: Will need to include birthdate in the check here
-    private func getTestResultsForName(user: String, tests: [TestResult]) -> [TestResult] {
-        return tests.filter { $0.patientDisplayName == user }
+    private func getTestResultsForName(name: String, tests: [TestResult]) -> [TestResult] {
+        return tests.filter { $0.patientDisplayName == name }
     }
     
-    private func getImmunizationRecordsForName(user: String, immunizationRecords: [VaccineCard]) -> [VaccineCard] {
-        return immunizationRecords.filter { $0.name == user }
+    private func getImmunizationRecordsForName(name: String, immunizationRecords: [VaccineCard]) -> [VaccineCard] {
+        return immunizationRecords.filter { $0.name == name }
     }
     
-    private func mapHealthRecordsForName(tests: [TestResult], immunizationRecords: [VaccineCard]) -> [UserRecordListView.RecordType] {
-        var dataSource: [UserRecordListView.RecordType] = []
+    private func mapHealthRecordsForName(tests: [TestResult], immunizationRecords: [VaccineCard]) -> [HealthRecordsDetailDataSource.RecordType] {
+        var dataSource: [HealthRecordsDetailDataSource.RecordType] = []
         for test in tests {
             let local = transformTestResultIntoCovidTestResultModel(test: test)
-            let record = UserRecordListView.RecordType.covidTestResult(model: local)
+            let record = HealthRecordsDetailDataSource.RecordType.covidTestResult(model: local)
             dataSource.append(record)
         }
 //        dataSource.sort(by: <#T##(UserRecordListView.RecordType, UserRecordListView.RecordType) throws -> Bool#>)
