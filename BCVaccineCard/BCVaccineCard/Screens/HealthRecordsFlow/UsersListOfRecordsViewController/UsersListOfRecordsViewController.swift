@@ -131,9 +131,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO: Will need to get the record type, and the model at this instance (which will come from dataSource), then pass to HealthRecordDetailViewController
-        
-        
-        
+                
     }
  
 }

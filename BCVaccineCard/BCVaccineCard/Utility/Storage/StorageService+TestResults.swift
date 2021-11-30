@@ -111,7 +111,7 @@ extension StorageService {
     
     func transformTestResultIntoCovidTestResultModel(test: TestResult) -> LocallyStoredCovidTestResultModel {
         let response = GatewayTestResultResponse(patientDisplayName: test.patientDisplayName, lab: test.lab, reportId: test.reportId, collectionDateTime: test.collectionDateTime, resultDateTime: test.resultDateTime, testName: test.testName, testType: test.testType, testStatus: test.testStatus, testOutcome: test.testOutcome, resultTitle: test.resultTitle, resultDescription: test.resultDescription, resultLink: test.resultLink)
-        let status = CovidTestResult.init(rawValue: test.testStatus ?? "indeterminate") ?? .indeterminate
+        let status = CovidTestResult.init(rawValue: test.testOutcome ?? "") ?? CovidTestResult.init(rawValue: test.testStatus ?? "") ?? .indeterminate
         let local = LocallyStoredCovidTestResultModel(response: response, status: status)
         return local
     }
