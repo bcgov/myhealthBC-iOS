@@ -89,7 +89,7 @@ extension String {
             // Separate numeric and alphanumberic portions of the code
             let prefix = "shc:/"
             let numeric = self.lowercased().replacingOccurrences(of: prefix, with: "")
-            let shcSegment: QRSegment = QRSegment.makeAlphanumeric(Array(prefix.uppercased()))
+            let shcSegment: QRSegment = QRSegment.makeBytes(Array(prefix.utf8))
             let numericSegment: QRSegment = QRSegment.makeNumeric(Array(numeric))
             do {
                 // Create QR SVG ( what what the library gives us.. )
