@@ -110,15 +110,6 @@ extension String {
             }
         }
         
-        func snapshotImage(for view: CALayer) -> UIImage? {
-            UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
-            guard let context = UIGraphicsGetCurrentContext() else { return nil }
-            view.render(in: context)
-            let image = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            return image
-        }
-        
         /* Ideal way - no longer working:
          https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html#//apple_ref/doc/filter/ci/CIQRCodeGenerator
          if let filter = CIFilter(name: "CIQRCodeGenerator") {
@@ -132,7 +123,14 @@ extension String {
         return nil
     }
     
-    
+    fileprivate func snapshotImage(for view: CALayer) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        view.render(in: context)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
     
     func toImage() -> UIImage? {
         if let data = Data(base64Encoded: self, options: .ignoreUnknownCharacters){
