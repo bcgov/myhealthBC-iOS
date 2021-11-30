@@ -23,7 +23,7 @@ class StorageService {
     
     public static let shared = StorageService()
     
-    fileprivate var managedContext: NSManagedObjectContext?
+    var managedContext: NSManagedObjectContext?
     
     
     init() {
