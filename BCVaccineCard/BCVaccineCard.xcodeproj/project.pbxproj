@@ -114,6 +114,12 @@
 		79218ADF27557F7D0063004E /* StaticPositiveTestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218ADC27557F7D0063004E /* StaticPositiveTestTableViewCell.swift */; };
 		79218AE027557F7D0063004E /* StaticPositiveTestTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218ADD27557F7D0063004E /* StaticPositiveTestTableViewCell.xib */; };
 		79218AE127557F7D0063004E /* StaticPositiveTestTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79218ADD27557F7D0063004E /* StaticPositiveTestTableViewCell.xib */; };
+		79218AE42755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AE32755E14E0063004E /* FetchHealthRecordsViewController.swift */; };
+		79218AE52755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AE32755E14E0063004E /* FetchHealthRecordsViewController.swift */; };
+		79218AE82755E25C0063004E /* UsersListOfRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AE72755E25C0063004E /* UsersListOfRecordsViewController.swift */; };
+		79218AE92755E25C0063004E /* UsersListOfRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AE72755E25C0063004E /* UsersListOfRecordsViewController.swift */; };
+		79218AEC2755E2B20063004E /* HealthRecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AEB2755E2B20063004E /* HealthRecordDetailViewController.swift */; };
+		79218AED2755E2B20063004E /* HealthRecordDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218AEB2755E2B20063004E /* HealthRecordDetailViewController.swift */; };
 		7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7928344D272A87FA00EE2710 /* TableViewButtonView.swift */; };
 		79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79283450272A880900EE2710 /* TableViewButtonView.xib */; };
@@ -410,6 +416,9 @@
 		79218AD627557ED50063004E /* TextListViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextListViewTableViewCell.xib; sourceTree = "<group>"; };
 		79218ADC27557F7D0063004E /* StaticPositiveTestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticPositiveTestTableViewCell.swift; sourceTree = "<group>"; };
 		79218ADD27557F7D0063004E /* StaticPositiveTestTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StaticPositiveTestTableViewCell.xib; sourceTree = "<group>"; };
+		79218AE32755E14E0063004E /* FetchHealthRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHealthRecordsViewController.swift; sourceTree = "<group>"; };
+		79218AE72755E25C0063004E /* UsersListOfRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersListOfRecordsViewController.swift; sourceTree = "<group>"; };
+		79218AEB2755E2B20063004E /* HealthRecordDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordDetailViewController.swift; sourceTree = "<group>"; };
 		7928344D272A87FA00EE2710 /* TableViewButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewButtonView.swift; sourceTree = "<group>"; };
 		79283450272A880900EE2710 /* TableViewButtonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewButtonView.xib; sourceTree = "<group>"; };
 		792834532730A52800EE2710 /* RememberedGatewayDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RememberedGatewayDetails.swift; sourceTree = "<group>"; };
@@ -816,6 +825,30 @@
 				79218ADD27557F7D0063004E /* StaticPositiveTestTableViewCell.xib */,
 			);
 			path = StaticPositiveTestInstructionsTableViewCell;
+			sourceTree = "<group>";
+		};
+		79218AE22755E1240063004E /* FetchHealthRecordsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				79218AE32755E14E0063004E /* FetchHealthRecordsViewController.swift */,
+			);
+			path = FetchHealthRecordsViewController;
+			sourceTree = "<group>";
+		};
+		79218AE62755E2410063004E /* UsersListOfRecordsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				79218AE72755E25C0063004E /* UsersListOfRecordsViewController.swift */,
+			);
+			path = UsersListOfRecordsViewController;
+			sourceTree = "<group>";
+		};
+		79218AEA2755E2940063004E /* HealthRecordDetailViewController */ = {
+			isa = PBXGroup;
+			children = (
+				79218AEB2755E2B20063004E /* HealthRecordDetailViewController.swift */,
+			);
+			path = HealthRecordDetailViewController;
 			sourceTree = "<group>";
 		};
 		7928344C272A878200EE2710 /* TableViewButtonView */ = {
@@ -1372,6 +1405,9 @@
 			isa = PBXGroup;
 			children = (
 				799050B1273C4D1F006CD726 /* HealthRecordsBase */,
+				79218AE22755E1240063004E /* FetchHealthRecordsViewController */,
+				79218AE62755E2410063004E /* UsersListOfRecordsViewController */,
+				79218AEA2755E2940063004E /* HealthRecordDetailViewController */,
 			);
 			path = HealthRecordsFlow;
 			sourceTree = "<group>";
@@ -1931,6 +1967,7 @@
 				79218AA92751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */,
 				79218AB827519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */,
+				79218AE82755E25C0063004E /* UsersListOfRecordsViewController.swift in Sources */,
 				7944F70B26F39128006B9444 /* SettingsViewController.swift in Sources */,
 				79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				7944F6F526F30293006B9444 /* CovidVaccineCardsViewController.swift in Sources */,
@@ -1996,6 +2033,7 @@
 				795AA7412713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */,
 				7944F71426F3A26D006B9444 /* QRSelectionTableViewCell.swift in Sources */,
 				29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */,
+				79218AE42755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */,
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
 				795AA7542715189C00E59FF1 /* InitialOnboardingView.swift in Sources */,
 				7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
@@ -2016,6 +2054,7 @@
 				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
 				29128F10272AEFA600358014 /* User+CoreDataProperties.swift in Sources */,
+				79218AEC2755E2B20063004E /* HealthRecordDetailViewController.swift in Sources */,
 				29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */,
 				29B23B3F26FB88BB00A3AC79 /* CameraViewController.swift in Sources */,
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
@@ -2063,6 +2102,7 @@
 				79218AAA2751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				79BDA097270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				79218AB927519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */,
+				79218AE92755E25C0063004E /* UsersListOfRecordsViewController.swift in Sources */,
 				794BD6342702EEC00084ADA8 /* AppDelegate.swift in Sources */,
 				794BD6352702EEC00084ADA8 /* BCVaccineCard.xcdatamodeld in Sources */,
 				794BD6362702EEC00084ADA8 /* Constants.swift in Sources */,
@@ -2128,6 +2168,7 @@
 				795AA73C271092D500E59FF1 /* MIMEType.swift in Sources */,
 				794BD64D2702EEC00084ADA8 /* NoCardsTableViewCell.swift in Sources */,
 				29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */,
+				79218AE52755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */,
 				79BDA083270CEE4700FF30AB /* Strings.swift in Sources */,
 				794BD64E2702EEC00084ADA8 /* QRSelectionTableViewCell.swift in Sources */,
 				7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
@@ -2148,6 +2189,7 @@
 				794BD6512702EEC00084ADA8 /* String+EXT.swift in Sources */,
 				791C27C02718315A001A6E12 /* AddCardsTableViewCell.swift in Sources */,
 				29128F11272AEFA600358014 /* User+CoreDataProperties.swift in Sources */,
+				79218AED2755E2B20063004E /* HealthRecordDetailViewController.swift in Sources */,
 				794BD6522702EEC00084ADA8 /* UIImage+EXT.swift in Sources */,
 				794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */,
 				794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */,

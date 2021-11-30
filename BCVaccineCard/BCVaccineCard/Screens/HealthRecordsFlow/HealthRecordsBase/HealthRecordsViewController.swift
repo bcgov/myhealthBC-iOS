@@ -4,6 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2021-11-10.
 //
+//TODO: This will have a collection view that will display a users name. Above the collection view is the header add view
 
 import UIKit
 

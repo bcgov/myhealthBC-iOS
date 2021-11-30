@@ -43,6 +43,51 @@
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="79.6875"/>
         </scene>
+        <!--Fetch Health Records View Controller-->
+        <scene sceneID="wlQ-fj-YdB">
+            <objects>
+                <viewController storyboardIdentifier="FetchHealthRecordsViewController" id="po3-mr-VPv" customClass="FetchHealthRecordsViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lpg-wR-VTq">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="dol-yA-rce"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SEL-Gm-WR5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1922" y="80"/>
+        </scene>
+        <!--Users List Of Records View Controller-->
+        <scene sceneID="euA-09-vEQ">
+            <objects>
+                <viewController storyboardIdentifier="UsersListOfRecordsViewController" id="Ke3-uk-6rZ" customClass="UsersListOfRecordsViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bXx-Sb-AcF">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="mUF-13-Soo"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="c1n-5c-Z2E" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2832" y="80"/>
+        </scene>
+        <!--Health Record Detail View Controller-->
+        <scene sceneID="26K-pz-Fs4">
+            <objects>
+                <viewController storyboardIdentifier="HealthRecordDetailViewController" id="pb9-QT-VsF" customClass="HealthRecordDetailViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="73N-XY-hgW">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Xb5-L5-VYM"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qOJ-9A-qBL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3711" y="81"/>
+        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
