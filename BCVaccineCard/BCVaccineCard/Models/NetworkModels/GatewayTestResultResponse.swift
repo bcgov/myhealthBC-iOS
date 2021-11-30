@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GatewayTestResultResponse: Codable {
+struct GatewayTestResultResponse: Codable, Equatable {
     let patientDisplayName: String?
     let lab: String?
     let reportId: String?

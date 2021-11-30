@@ -20,7 +20,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
 
     private var name: String!
-    private var dataSource: [HealthRecordsDetailDataSource.RecordType] = []
+    private var dataSource: [HealthRecordsDetailDataSource] = []
     
     private var inEditMode = false {
         didSet {
@@ -97,9 +97,12 @@ extension UsersListOfRecordsViewController {
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
     private func fetchDataSource() {
-        dataSource = StorageService.shared.getListOfHealthRecordsForName(name: self.name)
-        // TODO: May need some sort of completion handler here...
-        setupTableView()
+        self.view.startLoadingIndicator(backgroundColor: .clear)
+        StorageService.shared.getListOfHealthRecordsForName(name: self.name) { dataSource in
+            self.dataSource = dataSource
+            self.setupTableView()
+            self.view.endLoadingIndicator()
+        }
     }
 }
 
@@ -120,7 +123,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: UserRecordListTableViewCell.getName, for: indexPath) as? UserRecordListTableViewCell {
-            cell.configure(type: dataSource[indexPath.row])
+            cell.configure(type: dataSource[indexPath.row].type)
             return cell
         }
         return UITableViewCell()

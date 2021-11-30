@@ -219,6 +219,12 @@ class StorageService {
             return completion(processed)
         }
     }
+    // Note: This is used for health records flow
+    public func getVaccineCardsForNameWithCards(cards: [VaccineCard], completion: @escaping([AppVaccinePassportModel]) -> Void ) {
+        recursivelyProcessStored(cards: cards, processed: []) { processed in
+            return completion(processed)
+        }
+    }
     
     private func recursivelyProcessStored(cards: [VaccineCard], processed: [AppVaccinePassportModel], completion: @escaping([AppVaccinePassportModel]) -> Void) {
         if cards.isEmpty {

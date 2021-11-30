@@ -41,17 +41,25 @@ extension StorageService {
     }
     
     // Note: This is used to get a list of health records for a specific user for the list view
-    func getListOfHealthRecordsForName(name: String, for userId: String? = AuthManager().userId()) -> [HealthRecordsDetailDataSource.RecordType] {
-        guard let context = managedContext else {return []}
+    func getListOfHealthRecordsForName(name: String, for userId: String? = AuthManager().userId(), completion: @escaping([HealthRecordsDetailDataSource]) -> Void) {
+        guard let context = managedContext else {
+            completion([])
+            return
+        }
         do {
             let users = try context.fetch(User.createFetchRequest())
-            guard let current = users.filter({$0.userId == userId}).first else {return []}
+            guard let current = users.filter({$0.userId == userId}).first else {
+                completion([])
+                return
+            }
             let tests = getTestResultsForName(name: name, tests: current.testResultArray)
             let immunizationRecords = getImmunizationRecordsForName(name: name, immunizationRecords: current.vaccineCardArray)
-            return mapHealthRecordsForName(tests: tests, immunizationRecords: immunizationRecords)
+            mapHealthRecords(testArray: tests, immunizationRecordArray: immunizationRecords) { dataSource in
+                completion(dataSource)
+            }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
-            return []
+            completion([])
         }
 
     }
@@ -64,15 +72,25 @@ extension StorageService {
         return immunizationRecords.filter { $0.name == name }
     }
     
-    private func mapHealthRecordsForName(tests: [TestResult], immunizationRecords: [VaccineCard]) -> [HealthRecordsDetailDataSource.RecordType] {
-        var dataSource: [HealthRecordsDetailDataSource.RecordType] = []
+    private func mapHealthRecordsForName(tests: [TestResult], immunizationRecords: [VaccineCard], completion: @escaping([HealthRecordsDetailDataSource]) -> Void) {
+        var dataSource: [HealthRecordsDetailDataSource] = []
         for test in tests {
             let local = transformTestResultIntoCovidTestResultModel(test: test)
             let record = HealthRecordsDetailDataSource.RecordType.covidTestResult(model: local)
-            dataSource.append(record)
+            let dsInstance = HealthRecordsDetailDataSource(type: record)
+            dataSource.append(dsInstance)
         }
-//        dataSource.sort(by: <#T##(UserRecordListView.RecordType, UserRecordListView.RecordType) throws -> Bool#>)
-        
+        // TODO: Check with Amir here that no card means that appModel is just an empty array
+        self.getVaccineCardsForNameWithCards(cards: immunizationRecords) { appModel in
+            for model in appModel {
+                let local = model.transform()
+                let record = HealthRecordsDetailDataSource.RecordType.covidImmunizationRecord(model: local)
+                let dsInstance = HealthRecordsDetailDataSource(type: record)
+                dataSource.append(dsInstance)
+            }
+            dataSource.sort { $0.sortingDate > $1.sortingDate }
+            completion(dataSource)
+        }
     }
     
     

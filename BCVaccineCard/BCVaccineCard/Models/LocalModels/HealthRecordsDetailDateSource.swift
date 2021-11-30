@@ -44,6 +44,13 @@ struct HealthRecordsDetailDataSource {
     // TODO: Create data source here
     let type: RecordType
     
+    var sortingDate: Double {
+        switch type {
+        case .covidImmunizationRecord(let model): return model.issueDate
+        case .covidTestResult(let model): return model.response?.collectionDateTime?.timeIntervalSince1970 ?? Date().timeIntervalSince1970 // TODO: Should likely do something else here
+        }
+    }
+    
     var getTextSets: [[TextListModel]] {
         var set: [[TextListModel]] = []
         switch type {
