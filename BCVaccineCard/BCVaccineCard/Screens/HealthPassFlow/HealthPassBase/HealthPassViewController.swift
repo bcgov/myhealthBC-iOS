@@ -212,7 +212,7 @@ extension HealthPassViewController: FederalPassViewDelegate {
             })
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01"), source: .healthPassHomeScreen, owner: self, completion: { [weak self] _ in
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .healthPassHomeScreen, owner: self, completion: { [weak self] _ in
                 guard let `self` = self else { return }
                 self.tabBarController?.tabBar.isHidden = false
                 self.navigationController?.popViewController(animated: true)
@@ -224,9 +224,12 @@ extension HealthPassViewController: FederalPassViewDelegate {
 
 // MARK: Add card button table view cell delegate here
 extension HealthPassViewController: AddCardsTableViewCellDelegate {
-    func addCardButtonTapped() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
-        self.navigationController?.pushViewController(vc, animated: true)
+    func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
+        if screenType == .healthPass {
+            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
     }
 }
 

@@ -127,6 +127,13 @@
 "Covid19SymptomCheckerResource" = "Covid-19 symptom checker";
 "SchoolRelatedResource" = "K-12 Daily Check";
 "TravelPass" = "Travel Pass";
-
 "UpdateCard" = "Update Card";
 "UpdateCardFor" = "Would you like to replace the card for";
+"GetVaccinationRecordsTitle" = "Get Vaccination Records";
+"GetCovidTestResultsTitle" = "Get COVID-19 Test Results";
+"GetVaccinationRecordsDescription" = "Access to the details of you and your family’s COVID-19 Vaccination Records";
+"GetCovidTestResultsDescription" = "Access to the details of you and your family’s COVID-19 Test Results";
+"Covid19mRNATitle" = "Covid-19 mRNA";
+"Covid19TestResultTitle" = "Covid-19 Test Result";
+"RecordText" = "record";
+"ViewDetailsOfCovidRecordsText" = "View the details of all your COVID Health Records";
