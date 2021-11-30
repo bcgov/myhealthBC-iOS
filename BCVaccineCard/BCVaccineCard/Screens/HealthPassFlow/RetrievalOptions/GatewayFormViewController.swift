@@ -485,6 +485,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             // TODO: Should refactor this:
             if fetchType == .covid19TestResult {
                 // TODO: Show dummy data response here
+                // Note: For now we should also store locally
             } else {
                 prepareRequest() // Note: This should be refactored to be more reusable
             }
