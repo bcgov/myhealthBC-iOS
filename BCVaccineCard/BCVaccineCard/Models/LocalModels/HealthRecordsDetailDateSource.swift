@@ -52,13 +52,14 @@ struct HealthRecordsDetailDataSource {
 //                TextListModel(header: TextListModel.TextProperties(text: <#T##String#>, bolded: <#T##Bool#>), subtext: TextListModel.TextProperties(text: <#T##String#>, bolded: <#T##Bool#>))
 //            ]
             print("TODO")
+            return set
         case .covidImmunizationRecord(let model):
             // TODO: Basically, we will be getting each immunization record, creating an array of TextListModel, then adding each one to the set (which is array of array of TextListModel)
 //            for immunizationRecord in model.immunizations {
 //                // setup here
 //            }
             print("TODO")
-            
+            return set
         }
     }
 }
