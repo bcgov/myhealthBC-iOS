@@ -95,7 +95,6 @@ extension String {
                 // Create QR SVG ( what what the library gives us.. )
                 let qr = try QRCode.encode(segments: [shcSegment, numericSegment], ecl: .low)
                 let svg = qr.toSVGString(border: 5)
-                print(svg)
                 // Generate UIImage from svg
                 let path = SVGBezierPath.paths(fromSVGString: svg)
                 let layer = SVGLayer()
