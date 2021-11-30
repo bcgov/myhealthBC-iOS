@@ -97,7 +97,7 @@ extension UsersListOfRecordsViewController {
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
     private func fetchDataSource() {
-//        dataSource = StorageService.shared.getListOfHealthRecordsForName(name: self.name)
+        dataSource = StorageService.shared.getListOfHealthRecordsForName(name: self.name)
         // TODO: May need some sort of completion handler here...
         setupTableView()
     }

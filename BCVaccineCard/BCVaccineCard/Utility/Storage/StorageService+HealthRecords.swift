@@ -9,6 +9,7 @@ import Foundation
 
 extension StorageService {
     
+    // Note: This is used on the health records home screen to get a list of users and their number of health records
     func getHealthRecordsDataSource(for userId: String? = AuthManager().userId()) -> [HealthRecordsDataSource] {
         guard let context = managedContext else {return []}
         do {
@@ -22,7 +23,7 @@ extension StorageService {
             return []
         }
     }
-    
+    // TODO: Add Birthday to the unique check, just need it from test endpoint first
     private func mapHealthRecords(testArray: [TestResult], immunizationRecordArray: [VaccineCard]) -> [HealthRecordsDataSource] {
         var users = testArray.map { HealthRecordsDataSource(userName: $0.patientDisplayName ?? "", numberOfRecords: $0.reportId != nil ? 1 : 0) }
         let immRecords = immunizationRecordArray.map { HealthRecordsDataSource(userName: $0.name ?? "", numberOfRecords: $0.code != nil ? 1 : 0) }
@@ -39,6 +40,40 @@ extension StorageService {
         return healthRecordsDataSource
     }
     
+    // Note: This is used to get a list of health records for a specific user for the list view
+    func getListOfHealthRecordsForName(user: String, for userId: String? = AuthManager().userId()) -> [UserRecordListView.RecordType] {
+        guard let context = managedContext else {return []}
+        do {
+            let users = try context.fetch(User.createFetchRequest())
+            guard let current = users.filter({$0.userId == userId}).first else {return []}
+            let tests = getTestResultsForName(user: user, tests: current.testResultArray)
+            let immunizationRecords = getImmunizationRecordsForName(user: user, immunizationRecords: current.vaccineCardArray)
+            return mapHealthRecordsForName(tests: tests, immunizationRecords: immunizationRecords)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return []
+        }
+
+    }
+    // TODO: Will need to include birthdate in the check here
+    private func getTestResultsForName(user: String, tests: [TestResult]) -> [TestResult] {
+        return tests.filter { $0.patientDisplayName == user }
+    }
+    
+    private func getImmunizationRecordsForName(user: String, immunizationRecords: [VaccineCard]) -> [VaccineCard] {
+        return immunizationRecords.filter { $0.name == user }
+    }
+    
+    private func mapHealthRecordsForName(tests: [TestResult], immunizationRecords: [VaccineCard]) -> [UserRecordListView.RecordType] {
+        var dataSource: [UserRecordListView.RecordType] = []
+        for test in tests {
+            let local = transformTestResultIntoCovidTestResultModel(test: test)
+            let record = UserRecordListView.RecordType.covidTestResult(model: local)
+            dataSource.append(record)
+        }
+//        dataSource.sort(by: <#T##(UserRecordListView.RecordType, UserRecordListView.RecordType) throws -> Bool#>)
+        
+    }
     
     
 }
