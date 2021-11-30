@@ -126,6 +126,6 @@ public class BCVaccineValidator {
     }
     
     public func validate(code: String, completion: @escaping (CodeValidationResult)->Void) {
-        CodeValidationService.shared.validate(code: code, completion: completion)
+        CodeValidationService.shared.validate(code: code.lowercased(), completion: completion)
     }
 }

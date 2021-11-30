@@ -16,7 +16,7 @@ class CodeValidationService {
         // Move to a background thread
         DispatchQueue.global(qos: .userInteractive).async {
             
-            guard let compactjws = self.decodeNumeric(code: code) else {
+            guard let compactjws = self.decodeNumeric(code: code.lowercased()) else {
                 return completion(CodeValidationResult(status: .InvalidCode, result: nil))
             }
             
