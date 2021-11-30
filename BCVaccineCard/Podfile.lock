@@ -76,7 +76,7 @@ DEPENDENCIES:
   - PocketSVG (~> 2.6)
   - QueueITLibrary (~> 3.0.3)
   - SnowplowTracker (~> 2.0)
-  - SwiftQRCodeGenerator
+  - SwiftQRCodeGenerator (~> 1.0.3)
   - SwiftyJSON (~> 4.0)
   - SwipeCellKit
 
@@ -133,6 +133,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: d53c94e424e110cb5708ce98deebea78df7d6230
+PODFILE CHECKSUM: 04f95f2bd509c6a512157528ffac4944d0ab8a5f
 
 COCOAPODS: 1.11.2
