@@ -41,7 +41,6 @@ struct HealthRecordsDetailDataSource {
         }
     }
     
-    // TODO: Create data source here
     let type: RecordType
     
     var sortingDate: Double {
@@ -55,10 +54,17 @@ struct HealthRecordsDetailDataSource {
         var set: [[TextListModel]] = []
         switch type {
         case .covidTestResult(let model):
-//            let testSet = [
-//                TextListModel(header: TextListModel.TextProperties(text: <#T##String#>, bolded: <#T##Bool#>), subtext: TextListModel.TextProperties(text: <#T##String#>, bolded: <#T##Bool#>))
-//            ]
-            print("TODO")
+            // TODO: Put in strings file
+            // TODO: Look at test status setup
+            let testSet = [
+                TextListModel(header: TextListModel.TextProperties(text: "Name", bolded: false), subtext: TextListModel.TextProperties(text: model.response?.patientDisplayName ?? "", bolded: true)),
+                TextListModel(header: TextListModel.TextProperties(text: "Date of Testing", bolded: false), subtext: TextListModel.TextProperties(text: model.response?.collectionDateTime?.monthDayYearString ?? "", bolded: true)),
+                TextListModel(header: TextListModel.TextProperties(text: "Test Status", bolded: false), subtext: TextListModel.TextProperties(text: model.status.getTitle ?? "", bolded: true)),
+                TextListModel(header: TextListModel.TextProperties(text: "Test Result", bolded: false), subtext: TextListModel.TextProperties(text: model.status.getTitle ?? "", bolded: true)),
+                TextListModel(header: TextListModel.TextProperties(text: "Type Name", bolded: false), subtext: TextListModel.TextProperties(text: model.response?.testType ?? "", bolded: true)),
+                TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: model.response?.lab ?? "", bolded: true))
+            ]
+            set.append(testSet)
             return set
         case .covidImmunizationRecord(let model):
             // TODO: Basically, we will be getting each immunization record, creating an array of TextListModel, then adding each one to the set (which is array of array of TextListModel)
