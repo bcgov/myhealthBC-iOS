@@ -28,6 +28,7 @@ struct Constants {
     
     struct DateConstants {
         static let firstVaxDate = Date.Formatter.yearMonthDay.date(from: "2020-01-01")
+        static let firstTestDate = Date.Formatter.yearMonthDay.date(from: "2019-11-01")
     }
     
     struct PrivacyPolicy {

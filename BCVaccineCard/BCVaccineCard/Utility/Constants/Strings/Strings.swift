@@ -85,9 +85,11 @@ extension String {
     static var phnNumber: String { return "PHNNumber".localized }
     static var dobRequired: String { return "DOBRequired".localized }
     static var dovRequired: String { return "DOVRequired".localized }
+    static var dotRequired: String { return "DOTRequired".localized }
     static var validDate: String { return "ValidDate".localized }
     static var dobRange: String { return "DOBRange".localized }
     static var dovRange: String { return "DOVRange".localized }
+    static var dotRange: String { return "DOVRange".localized }
     /// Labels and other text
 //    static var formTitle: String { return "FormTitle".localized }
 //    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
@@ -97,6 +99,7 @@ extension String {
     static var dateOfBirth: String { return "DateOfBirth".localized }
     static var dateOfVaccine: String { return "DateOfVaccine".localized }
     static var dose1OrDose2: String { return "Dose1OrDose2".localized }
+    static var dateOfTest: String{ return "DateOfTest".localized }
     static var phnFooter: String { return "PHNFooter".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
     static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }

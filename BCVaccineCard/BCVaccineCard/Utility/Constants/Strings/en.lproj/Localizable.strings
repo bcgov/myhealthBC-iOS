@@ -68,9 +68,11 @@
 "PHNNumber" = "PHN must be numbers only";
 "DOBRequired" = "Date of Birth is required";
 "DOVRequired" = "Date of Vaccination is required";
+"DOTRequired" = "Date of Test is required";
 "ValidDate" = "Please choose a valid date from the date picker";
 "DOBRange" = "Birthday cannot be in the future";
 "DOVRange" = "Vaccination date must be in valid range";
+"DOVRange" = "Test date must be in valid range";
 //"FormTitle" = "Add a Health Pass";
 //"AddABCVaccineCard" = "Add a BC Vaccine Card";
 "AddAHealthPass" = "Add a Health Pass";
@@ -79,6 +81,7 @@
 "DateOfBirth" = "Date of Birth";
 "DateOfVaccine" = "Date of Vaccination";
 "Dose1OrDose2" = "Dose 1 or Dose 2";
+"DateOfTest" = "Date of Test";
 "PHNFooter" = "Find PHN on care card or the back of driver's license.";
 "PrivacyStatement" = "Privacy Statement";
 "GatewayPrivacyStatementDescription" = "Your information is being collected to provide you with your COVID-19 vaccination status under s. 26(c) of the Freedom of Information and Protection of Privacy Act. Contact the Ministry Privacy Officer at MOH.Privacy.Officer@gov.bc.ca if you have any questions about this collection.";

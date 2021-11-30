@@ -12,13 +12,14 @@ enum FormTextFieldKeyboardStyle {
 }
 
 enum FormTextFieldType {
-    case personalHealthNumber, dateOfBirth, dateOfVaccination
+    case personalHealthNumber, dateOfBirth, dateOfVaccination, dateOfTest
     
     var getFieldTitle: String {
         switch self {
         case .personalHealthNumber: return .personalHealthNumber
         case .dateOfBirth: return .dateOfBirth
         case .dateOfVaccination: return .dateOfVaccine
+        case .dateOfTest: return .dateOfTest
         }
     }
     
@@ -27,6 +28,7 @@ enum FormTextFieldType {
         case .personalHealthNumber: return nil
         case .dateOfBirth: return nil
         case .dateOfVaccination: return .dose1OrDose2
+        case .dateOfTest: return nil
         }
     }
     
@@ -35,6 +37,7 @@ enum FormTextFieldType {
         case .personalHealthNumber: return .phnFooter
         case .dateOfBirth: return nil
         case .dateOfVaccination: return nil
+        case .dateOfTest: return nil
         }
     }
     
@@ -43,6 +46,7 @@ enum FormTextFieldType {
         case .personalHealthNumber: return "xxxx xxx xxx"
         case .dateOfBirth: return "yyyy-mm-dd"
         case .dateOfVaccination: return "yyyy-mm-dd"
+        case .dateOfTest: return "yyyy-mm-dd"
         }
     }
     
@@ -51,6 +55,7 @@ enum FormTextFieldType {
         case .personalHealthNumber: return AccessibilityLabels.FormTextField.numberFormat
         case .dateOfBirth: return AccessibilityLabels.FormTextField.dateFormat
         case .dateOfVaccination: return AccessibilityLabels.FormTextField.dateFormat
+        case .dateOfTest: return AccessibilityLabels.FormTextField.dateFormat
         }
     }
     
@@ -59,6 +64,7 @@ enum FormTextFieldType {
         case .personalHealthNumber: return #imageLiteral(resourceName: "dropdown-arrow")
         case .dateOfBirth: return #imageLiteral(resourceName: "calendar-icon")
         case .dateOfVaccination: return #imageLiteral(resourceName: "calendar-icon")
+        case .dateOfTest: return #imageLiteral(resourceName: "calendar-icon")
         }
     }
     
@@ -67,6 +73,7 @@ enum FormTextFieldType {
         case .personalHealthNumber: return true
         case .dateOfBirth: return false
         case .dateOfVaccination: return false
+        case .dateOfTest: return false
         }
     }
     
@@ -75,6 +82,7 @@ enum FormTextFieldType {
         case .personalHealthNumber: return .number
         case .dateOfBirth: return .date
         case .dateOfVaccination: return .date
+        case .dateOfTest: return .date
         }
     }
     
@@ -94,6 +102,11 @@ enum FormTextFieldType {
             guard text.trimWhiteSpacesAndNewLines.count > 0 else { return .dovRequired }
             guard text.isValidDate(withFormatter: Date.Formatter.yearMonthDay) else { return .validDate }
             guard text.isValidDateRange(withFormatter: Date.Formatter.yearMonthDay, earliestDate: Constants.DateConstants.firstVaxDate, latestDate: Date()) else { return .dovRange }
+            return nil
+        case .dateOfTest:
+            guard text.trimWhiteSpacesAndNewLines.count > 0 else { return .dotRequired }
+            guard text.isValidDate(withFormatter: Date.Formatter.yearMonthDay) else { return .validDate }
+            guard text.isValidDateRange(withFormatter: Date.Formatter.yearMonthDay, earliestDate: Constants.DateConstants.firstTestDate, latestDate: Date()) else { return .dotRange }
             return nil
         }
     }

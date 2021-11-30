@@ -19,6 +19,7 @@ enum GatewayFormSource: Equatable {
     case healthPassHomeScreen
     case vaccineCardsScreen
     case qrMethodSelectionScreen
+    case fetchHealthRecordsScreen
     
     var getVC: UIViewController {
         switch self {
@@ -28,6 +29,8 @@ enum GatewayFormSource: Equatable {
             return CovidVaccineCardsViewController()
         case .qrMethodSelectionScreen:
             return QRRetrievalMethodViewController()
+        case .fetchHealthRecordsScreen:
+            return FetchHealthRecordsViewController()
         }
     }
 }
@@ -36,12 +39,14 @@ enum GatewayFormViewControllerFetchType: Equatable {
     case bcVaccineCardAndFederalPass
     case federalPassOnly(dob: String, dov: String, code : String)
     case vaccinationRecord
+    case covid19TestResult
     
     var getNavTitle: String {
         switch self {
         case .bcVaccineCardAndFederalPass: return .addAHealthPass
         case .federalPassOnly: return .getFederalTravelPass
         case .vaccinationRecord: return .addAHealthPass // TODO: Will need to update this when we implement it
+        case .covid19TestResult: return "TODO" // TODO: Add proper text
         }
     }
     
@@ -98,12 +103,20 @@ enum GatewayFormViewControllerFetchType: Equatable {
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
                     LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
+        case .covid19TestResult:
+            return [
+                FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dobForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dotForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
+                FormData(specificCell: .clickablePrivacyPolicy, configuration:
+                            FormData.Configuration(text: .privacyPolicyStatement,
+                                                   font: UIFont.bcSansRegularWithSize(size: 13),
+                                                   linkedStrings: [
+                    LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
+                    LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
         }
     }
-    
-    //NOTE: Leaving this here to show what we used to have for intro text, as designs are changing daily
-
-//                FormDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 16)), cellStringData: .formDescription, specificCell: .introText),
 }
 
 class GatewayFormViewController: BaseViewController {
@@ -146,6 +159,7 @@ class GatewayFormViewController: BaseViewController {
     }
     
     // For Request
+    // TODO: Will need to refactor this a bit when we get the endpoint for test results
     private var model: GatewayVaccineCardRequest?
     private var worker: QueueItWorker?
     private var healthGateway: HealthGatewayBCGateway!
@@ -468,7 +482,13 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
         if type == .cancel {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
-            prepareRequest()
+            // TODO: Should refactor this:
+            if fetchType == .covid19TestResult {
+                // TODO: Show dummy data response here
+            } else {
+                prepareRequest() // Note: This should be refactored to be more reusable
+            }
+            
         }
     }
     
