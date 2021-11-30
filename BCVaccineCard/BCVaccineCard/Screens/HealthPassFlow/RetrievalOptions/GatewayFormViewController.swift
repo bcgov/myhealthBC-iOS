@@ -489,7 +489,6 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             } else {
                 prepareRequest() // Note: This should be refactored to be more reusable
             }
-            
         }
     }
     

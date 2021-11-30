@@ -17,15 +17,17 @@ class HealthRecordsViewController: BaseViewController {
         return HealthRecordsViewController()
     }
     
+    @IBOutlet weak private var addRecordView: ReusableHeaderAddView!
+    @IBOutlet weak private var collectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        navSetup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-        navSetup()
-        // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
         
     }
@@ -43,7 +45,7 @@ class HealthRecordsViewController: BaseViewController {
     }
     
     private func setup() {
-
+        
     }
 
 }
