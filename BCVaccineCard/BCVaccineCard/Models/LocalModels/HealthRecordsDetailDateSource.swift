@@ -63,7 +63,6 @@ struct HealthRecordsDetailDataSource {
         switch type {
         case .covidTestResult(let model):
             // TODO: Put in strings file
-            // TODO: Look at test status setup
             let testSet = [
                 TextListModel(header: TextListModel.TextProperties(text: "Name", bolded: false), subtext: TextListModel.TextProperties(text: model.response?.patientDisplayName ?? "", bolded: true)),
                 TextListModel(header: TextListModel.TextProperties(text: "Date of Testing", bolded: false), subtext: TextListModel.TextProperties(text: model.response?.collectionDateTime?.monthDayYearString ?? "", bolded: true)),
@@ -75,11 +74,16 @@ struct HealthRecordsDetailDataSource {
             set.append(testSet)
             return set
         case .covidImmunizationRecord(let model, let immunizations):
-            // TODO: Basically, we will be getting each immunization record, creating an array of TextListModel, then adding each one to the set (which is array of array of TextListModel)
-            for immunizationRecord in immunizations {
-                // setup here
+            for (index, imsModel) in immunizations.enumerated() {
+                let imsSet = [
+                    TextListModel(header: TextListModel.TextProperties(text: "Dose \(index + 1)", bolded: true), subtext: nil),
+                    TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.date ?? "", bolded: true)),
+                    TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.vaccineCode ?? "", bolded: true)),
+                    TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "", bolded: true)),
+                    TextListModel(header: TextListModel.TextProperties(text: "Lot Number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "", bolded: true))
+                ]
+                set.append(imsSet)
             }
-            print("TODO")
             return set
         }
     }
