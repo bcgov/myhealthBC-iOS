@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ImmunizationRecord" representedClassName="ImmunizationRecord" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lotNumber" optional="YES" attributeType="String"/>
+        <attribute name="provider" optional="YES" attributeType="String"/>
+        <attribute name="snowmed" optional="YES" attributeType="String"/>
+        <relationship name="vaccineCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="VaccineCard"/>
+    </entity>
     <entity name="TestResult" representedClassName="TestResult" syncable="YES" codeGenerationType="class">
         <attribute name="collectionDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
@@ -31,11 +38,13 @@
         <attribute name="phn" optional="YES" attributeType="String"/>
         <attribute name="sortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="vaxDates" optional="YES" attributeType="Transformable"/>
+        <relationship name="immunizationRecord" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ImmunizationRecord"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="vaccineCard" inverseEntity="User"/>
     </entity>
     <elements>
         <element name="TestResult" positionX="-54" positionY="54" width="128" height="239"/>
         <element name="User" positionX="-54" positionY="0" width="128" height="89"/>
-        <element name="VaccineCard" positionX="-63" positionY="-18" width="128" height="164"/>
+        <element name="VaccineCard" positionX="-63" positionY="-18" width="128" height="179"/>
+        <element name="ImmunizationRecord" positionX="-45" positionY="135" width="128" height="104"/>
     </elements>
 </model>

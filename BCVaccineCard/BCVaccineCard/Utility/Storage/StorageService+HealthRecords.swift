@@ -6,8 +6,37 @@
 //
 
 import Foundation
+import BCVaccineValidator
 
 extension StorageService {
+    
+    func storeImmunizaionRecords(card: VaccineCard) {
+        guard let qrCode = card.code else {return}
+        BCVaccineValidator.shared.validate(code: qrCode) { result in
+            guard let result = result.result else {return}
+            for record in result.immunizations {
+                self.storeImmunizationRecord(record: record, card: card)
+            }
+        }
+    }
+    
+    fileprivate func storeImmunizationRecord(record: immunizationRecord, card: VaccineCard) {
+        guard let context = managedContext else {return}
+        let model = ImmunizationRecord(context: context)
+        // TODO: Add this field when its added to the payload
+        model.snowmed = record.vaccineCode
+        // TODO: format record.date and add here
+        model.date = Date()
+        model.provider = record.provider
+        model.lotNumber = record.lotNumber
+        model.vaccineCard = card
+        do {
+            try context.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            return
+        }
+    }
     
     // Note: This is used on the health records home screen to get a list of users and their number of health records
     func getHealthRecordsDataSource(for userId: String? = AuthManager().userId()) -> [HealthRecordsDataSource] {
@@ -54,14 +83,12 @@ extension StorageService {
             }
             let tests = getTestResultsForName(name: name, tests: current.testResultArray)
             let immunizationRecords = getImmunizationRecordsForName(name: name, immunizationRecords: current.vaccineCardArray)
-            mapHealthRecords(testArray: tests, immunizationRecordArray: immunizationRecords) { dataSource in
-                completion(dataSource)
-            }
+            mapHealthRecords(testArray: tests, immunizationRecordArray: immunizationRecords)
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
             completion([])
         }
-
+        
     }
     // TODO: Will need to include birthdate in the check here
     private func getTestResultsForName(name: String, tests: [TestResult]) -> [TestResult] {

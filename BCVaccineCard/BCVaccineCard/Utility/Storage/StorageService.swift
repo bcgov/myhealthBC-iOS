@@ -99,6 +99,7 @@ class StorageService {
         card.firHash = hash
         do {
             try context.save()
+            storeImmunizaionRecords(card: card)
             return true
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
