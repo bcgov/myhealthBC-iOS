@@ -73,7 +73,7 @@ struct HealthRecordsDetailDataSource {
             ]
             set.append(testSet)
             return set
-        case .covidImmunizationRecord(let model, let immunizations):
+        case .covidImmunizationRecord(_, let immunizations):
             for (index, imsModel) in immunizations.enumerated() {
                 let imsSet = [
                     TextListModel(header: TextListModel.TextProperties(text: "Dose \(index + 1)", bolded: true), subtext: nil),
