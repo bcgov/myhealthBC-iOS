@@ -130,8 +130,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: Will need to get the record type, and the model at this instance (which will come from dataSource), then pass to HealthRecordDetailViewController
-                
+        let ds = dataSource[indexPath.row]
+        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     // TODO: Add in delete record logic (see covid 19 cards view controller)
