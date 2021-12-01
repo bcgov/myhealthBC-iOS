@@ -16,8 +16,8 @@ class HealthRecordsUserCollectionViewCell: UICollectionViewCell {
         // Initialization code
     }
     
-    func configure(name: String, records: Int) {
-        healthRecordsUserView.configure(name: name, records: records)
+    func configure(data: HealthRecordsDataSource) {
+        healthRecordsUserView.configure(name: data.userName, records: data.numberOfRecords)
     }
 
 }
