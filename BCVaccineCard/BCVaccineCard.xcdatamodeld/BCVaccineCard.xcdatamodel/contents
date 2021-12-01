@@ -4,7 +4,7 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lotNumber" optional="YES" attributeType="String"/>
         <attribute name="provider" optional="YES" attributeType="String"/>
-        <attribute name="snowmed" optional="YES" attributeType="String"/>
+        <attribute name="snomed" optional="YES" attributeType="String"/>
         <relationship name="vaccineCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="VaccineCard" inverseName="immunizationRecord" inverseEntity="VaccineCard"/>
     </entity>
     <entity name="TestResult" representedClassName="TestResult" syncable="YES" codeGenerationType="class">
