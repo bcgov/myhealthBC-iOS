@@ -482,10 +482,17 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
         if type == .cancel {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
-            // TODO: Should refactor this:
+            // TODO: Should refactor this: - Will do when network layer gets added
             if fetchType == .covid19TestResult {
                 // TODO: Show dummy data response here
-                // Note: For now we should also store locally
+                guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
+                guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return }
+                if let index = Constants.testResultsDummyData.firstIndex(where: { $0.phn == phn }) {
+                    let data = Constants.testResultsDummyData[index].data
+                    guard let response = data.response else { return }
+                    let _ = StorageService.shared.saveTestResult(gateWayResponse: response)
+                    self.navigationController?.popViewController(animated: true)
+                }
             } else {
                 prepareRequest() // Note: This should be refactored to be more reusable
             }

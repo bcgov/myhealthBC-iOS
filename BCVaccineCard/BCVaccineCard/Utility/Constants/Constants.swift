@@ -86,3 +86,25 @@ extension Constants {
         return table
     }
 }
+
+// MARK: Dummy Data - delete once network request for test results is implemented
+extension Constants {
+    private static let gatewayResponsePending = GatewayTestResultResponse(patientDisplayName: "Kevin Malone", lab: "Chilli City", reportId: "DGNAGANGAGPIANGN", collectionDateTime: Date(), resultDateTime: Date(), testName: "COVID-19 TEST", testType: "pending", testStatus: "pending", testOutcome: "", resultTitle: "", resultDescription: "", resultLink: "")
+    private static let gatewayResponseNegative = GatewayTestResultResponse(patientDisplayName: "John Daley", lab: "Illinois", reportId: "GGNAGSDGDSIANGN", collectionDateTime: Date(), resultDateTime: Date(), testName: "COVID-19 TEST", testType: "negative", testStatus: "negative", testOutcome: "", resultTitle: "", resultDescription: "", resultLink: "")
+    private static let gatewayResponsePositive = GatewayTestResultResponse(patientDisplayName: "Magic Johnson", lab: "LA", reportId: "HGNAGANGONONAGGN", collectionDateTime: Date(), resultDateTime: Date(), testName: "COVID-19 TEST", testType: "positive", testStatus: "positive", testOutcome: "", resultTitle: "", resultDescription: "", resultLink: "")
+    private static let gatewayResponseIndeterminate = GatewayTestResultResponse(patientDisplayName: "Michael Scott", lab: "Dunder Mifflin", reportId: "RGNAIETAGPIANGN", collectionDateTime: Date(), resultDateTime: Date(), testName: "COVID-19 TEST", testType: "indeterminate", testStatus: "indeterminate", testOutcome: "", resultTitle: "", resultDescription: "", resultLink: "")
+    private static let gatewayResponseCancelled = GatewayTestResultResponse(patientDisplayName: "Seth Rogan", lab: "California", reportId: "BGAEGAGNGPIANGN", collectionDateTime: Date(), resultDateTime: Date(), testName: "COVID-19 TEST", testType: "cancelled", testStatus: "cancelled", testOutcome: "", resultTitle: "", resultDescription: "", resultLink: "")
+    
+    static let testResultsDummyData: [TestDummyData] = [
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponsePending, status: .pending), phn: "111111111"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponseNegative, status: .negative), phn: "222222222"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponsePositive, status: .positive), phn: "333333333"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponseIndeterminate, status: .indeterminate), phn: "444444444"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponseCancelled, status: .cancelled), phn: "555555555")
+    ]
+}
+
+struct TestDummyData {
+    let data: LocallyStoredCovidTestResultModel
+    let phn: String
+}
