@@ -6,11 +6,10 @@
 // NOTE: This model is used in the health records flow
 
 import UIKit
-import BCVaccineValidator
 
 struct HealthRecordsDetailDataSource {
     enum RecordType {
-        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord])
+        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
         case covidTestResult(model: LocallyStoredCovidTestResultModel)
         
         var getTitle: String {
@@ -77,8 +76,9 @@ struct HealthRecordsDetailDataSource {
             for (index, imsModel) in immunizations.enumerated() {
                 let imsSet = [
                     TextListModel(header: TextListModel.TextProperties(text: "Dose \(index + 1)", bolded: true), subtext: nil),
-                    TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.date ?? "", bolded: true)),
-                    TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.vaccineCode ?? "", bolded: true)),
+                    // TODO: date format
+                    TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.date?.fullString ?? "", bolded: true)),
+                    TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: false), subtext: TextListModel.TextProperties(text: Constants.vaccineTable(snowmedCode: imsModel.snowmed)?.displayName ?? "", bolded: true)),
                     TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "", bolded: true)),
                     TextListModel(header: TextListModel.TextProperties(text: "Lot Number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "", bolded: true))
                 ]

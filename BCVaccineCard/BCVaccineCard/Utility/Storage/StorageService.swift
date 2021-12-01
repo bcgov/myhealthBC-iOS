@@ -212,7 +212,7 @@ class StorageService {
             }
         }
     }
-    
+//
     public func getVaccineCardsForCurrentUser(completion: @escaping([AppVaccinePassportModel]) -> Void) {
         let userId = AuthManager().userId()
         let cards = fetchVaccineCards(for: userId)
@@ -221,12 +221,12 @@ class StorageService {
         }
     }
     // Note: This is used for health records flow
-    public func getVaccineCardsForNameWithCards(cards: [VaccineCard], completion: @escaping([HealthRecordsWrapperModelHack]) -> Void ) {
-        recursivelyProcessStoredForHealthRecords(cards: cards, processed: []) { processed in
-            return completion(processed)
-        }
-    }
-    // TODO: We will need to refactor this - just adding duplicate function below for now
+//    public func getVaccineCardsForNameWithCards(cards: [VaccineCard], completion: @escaping([HealthRecordsWrapperModelHack]) -> Void ) {
+//        recursivelyProcessStoredForHealthRecords(cards: cards, processed: []) { processed in
+//            return completion(processed)
+//        }
+//    }
+     //TODO: We will need to refactor this - just adding duplicate function below for now
     private func recursivelyProcessStored(cards: [VaccineCard], processed: [AppVaccinePassportModel], completion: @escaping([AppVaccinePassportModel]) -> Void) {
         if cards.isEmpty {
             return completion(processed)
@@ -248,29 +248,29 @@ class StorageService {
         }
     }
     
-    private func recursivelyProcessStoredForHealthRecords(cards: [VaccineCard], processed: [HealthRecordsWrapperModelHack], completion: @escaping([HealthRecordsWrapperModelHack]) -> Void) {
-        if cards.isEmpty {
-            return completion(processed)
-        }
-        var processedCards = processed
-        var remainingCards = cards
-        guard let cardToProcess = remainingCards.popLast(),
-              let code = cardToProcess.code else {
-                  return recursivelyProcessStoredForHealthRecords(cards: remainingCards, processed: processed, completion: completion)
-              }
-        // TODO: Will need to get vax dates from the processed result and add to model below
-        BCVaccineValidator.shared.validate(code: code) { result in
-            if let model = result.toLocal(federalPass: cardToProcess.federalPass, phn: cardToProcess.phn) {
-                let appVaxPassModel = AppVaccinePassportModel(codableModel: model)
-                let immunizations = cardToProcess.getCovidImmunizations()
-                let hackModel = HealthRecordsWrapperModelHack(appModel: appVaxPassModel, immunizationRecords: immunizations)
-                processedCards.append(hackModel)
-                self.recursivelyProcessStoredForHealthRecords(cards: remainingCards, processed: processedCards, completion: completion)
-            } else {
-                self.recursivelyProcessStoredForHealthRecords(cards: remainingCards, processed: processedCards, completion: completion)
-            }
-        }
-    }
+//    private func recursivelyProcessStoredForHealthRecords(cards: [VaccineCard], processed: [HealthRecordsWrapperModelHack], completion: @escaping([HealthRecordsWrapperModelHack]) -> Void) {
+//        if cards.isEmpty {
+//            return completion(processed)
+//        }
+//        var processedCards = processed
+//        var remainingCards = cards
+//        guard let cardToProcess = remainingCards.popLast(),
+//              let code = cardToProcess.code else {
+//                  return recursivelyProcessStoredForHealthRecords(cards: remainingCards, processed: processed, completion: completion)
+//              }
+//        // TODO: Will need to get vax dates from the processed result and add to model below
+//        BCVaccineValidator.shared.validate(code: code) { result in
+//            if let model = result.toLocal(federalPass: cardToProcess.federalPass, phn: cardToProcess.phn) {
+//                let appVaxPassModel = AppVaccinePassportModel(codableModel: model)
+//                let immunizations = cardToProcess.getCovidImmunizations()
+//                let hackModel = HealthRecordsWrapperModelHack(appModel: appVaxPassModel, immunizationRecords: immunizations)
+//                processedCards.append(hackModel)
+//                self.recursivelyProcessStoredForHealthRecords(cards: remainingCards, processed: processedCards, completion: completion)
+//            } else {
+//                self.recursivelyProcessStoredForHealthRecords(cards: remainingCards, processed: processedCards, completion: completion)
+//            }
+//        }
+//    }
 
     
     fileprivate func getState(of card: AppVaccinePassportModel, completion: @escaping(AppVaccinePassportModel.CardState) -> Void) {
@@ -323,8 +323,8 @@ extension AppVaccinePassportModel {
     }
 }
 
-struct HealthRecordsWrapperModelHack {
-    let appModel: AppVaccinePassportModel
-    let immunizationRecords: [CovidImmunizationRecord]
-}
+//struct HealthRecordsWrapperModelHack {
+//    let appModel: AppVaccinePassportModel
+//    let immunizationRecords: [CovidImmunizationRecord]
+//}
 

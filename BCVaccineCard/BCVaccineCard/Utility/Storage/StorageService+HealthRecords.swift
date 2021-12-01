@@ -108,15 +108,13 @@ extension StorageService {
             dataSource.append(dsInstance)
         }
         // TODO: Check with Amir here that no card means that appModel is just an empty array
-        self.getVaccineCardsForNameWithCards(cards: immunizationRecords) { healthRecordsWrapperModelHack in
-            for modelHack in healthRecordsWrapperModelHack {
-                let local = modelHack.appModel.transform()
-                let record = HealthRecordsDetailDataSource.RecordType.covidImmunizationRecord(model: local, immunizations: modelHack.immunizationRecords)
-                let dsInstance = HealthRecordsDetailDataSource(type: record)
+        for record in immunizationRecords {
+            let instances = record.immunizations
+            if let localModel = record.toLocal() {
+                let r = HealthRecordsDetailDataSource.RecordType.covidImmunizationRecord(model: localModel, immunizations: instances)
+                let dsInstance = HealthRecordsDetailDataSource(type: r)
                 dataSource.append(dsInstance)
             }
-            dataSource.sort { $0.sortingDate > $1.sortingDate }
-            completion(dataSource)
         }
     }
     

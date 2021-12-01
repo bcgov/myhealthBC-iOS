@@ -1,6 +1,6 @@
 //
 //  VaccineCard+CoreDataProperties.swift
-//  
+//
 //
 //  Created by Amir on 2021-11-30.
 //
@@ -17,6 +17,7 @@ extension VaccineCard {
     }
 
     @NSManaged public var code: String?
+    @NSManaged public var issueDate: NSNumber?
     @NSManaged public var name: String?
     @NSManaged public var sortOrder: Int64
     @NSManaged public var birthdate: String?
@@ -44,9 +45,14 @@ extension VaccineCard {
         }
     }
     
-    public func getCovidImmunizations() -> [CovidImmunizationRecord] {
+    public var getCovidImmunizations: [CovidImmunizationRecord] {
         guard let array = immunizationRecord?.allObjects as? [CovidImmunizationRecord] else { return [] }
         return array
+    }
+    
+    public func toLocal() -> LocallyStoredVaccinePassportModel? {
+        guard let qrCode = code, let dates = vaxDates, let issueDate = issueDate, let birthdate = birthdate, let firHash = firHash else {return nil}
+        return LocallyStoredVaccinePassportModel(code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: Double(issueDate), status: .fully, source: .imported, fedCode: federalPass, phn: phn)
     }
 
 }
