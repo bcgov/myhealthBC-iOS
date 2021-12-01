@@ -24,7 +24,7 @@ extension StorageService {
         guard let context = managedContext else {return}
         let model = ImmunizationRecord(context: context)
         // TODO: Add this field when its added to the payload
-        model.snowmed = ""
+        model.snowmed = record.vaccineCode
         // TODO: format record.date and add here
         model.date = Date()
         model.provider = record.provider

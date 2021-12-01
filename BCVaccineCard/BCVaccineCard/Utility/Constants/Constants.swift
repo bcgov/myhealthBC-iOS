@@ -78,4 +78,11 @@ extension Constants {
         }
         return table
     }
+    
+    static func vaccineTable(cvx: Int) -> VaccineTable? {
+        guard let table = vaccineTable.first(where: {$0.cvx == cvx}) else {
+            return VaccineTable(snowMedCode: 0, cvx: 500, mvx: "UNK", displayName: "UNSPECIFIED COVID-19 VACCINE / VACCIN CONTRE LA COVID-19 NON")
+        }
+        return table
+    }
 }
