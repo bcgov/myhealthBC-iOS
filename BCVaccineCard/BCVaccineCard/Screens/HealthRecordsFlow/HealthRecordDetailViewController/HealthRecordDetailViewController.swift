@@ -25,12 +25,13 @@ class HealthRecordDetailViewController: BaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
     }
 
 }
 
 // MARK: Navigation setup
-extension HealthRecordsDetailViewController {
+extension HealthRecordDetailViewController {
     private func navSetup() {
         let rightNavButton = NavButton(title: .delete,
                                                        image: nil, action: #selector(self.deleteButton),
