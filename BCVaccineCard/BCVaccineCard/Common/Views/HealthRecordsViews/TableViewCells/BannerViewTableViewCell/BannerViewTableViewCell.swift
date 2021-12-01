@@ -17,7 +17,7 @@ class BannerViewTableViewCell: UITableViewCell {
     
     func configure(type: HealthRecordsDetailDataSource.RecordType) {
         switch type {
-        case .covidImmunizationRecord(let model):
+        case .covidImmunizationRecord(let model, _):
             setup(vaccinePassport: model)
         case .covidTestResult(let model):
             setup(testResult: model)

@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import BCVaccineValidator
 
 extension VaccineCard {
 
@@ -41,6 +42,11 @@ extension VaccineCard {
         return set.sorted {
             $0.date ?? Date() < $1.date ?? Date()
         }
+    }
+    
+    public func getCovidImmunizations() -> [CovidImmunizationRecord] {
+        guard let array = immunizationRecord?.allObjects as? [CovidImmunizationRecord] else { return [] }
+        return array
     }
 
 }

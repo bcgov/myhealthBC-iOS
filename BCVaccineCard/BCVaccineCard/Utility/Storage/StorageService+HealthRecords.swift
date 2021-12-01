@@ -20,7 +20,7 @@ extension StorageService {
         }
     }
     
-    fileprivate func storeImmunizationRecord(record: immunizationRecord, card: VaccineCard) {
+    fileprivate func storeImmunizationRecord(record: CovidImmunizationRecord, card: VaccineCard) {
         guard let context = managedContext else {return}
         let model = ImmunizationRecord(context: context)
         // TODO: Add this field when its added to the payload
@@ -108,10 +108,10 @@ extension StorageService {
             dataSource.append(dsInstance)
         }
         // TODO: Check with Amir here that no card means that appModel is just an empty array
-        self.getVaccineCardsForNameWithCards(cards: immunizationRecords) { appModel in
-            for model in appModel {
-                let local = model.transform()
-                let record = HealthRecordsDetailDataSource.RecordType.covidImmunizationRecord(model: local)
+        self.getVaccineCardsForNameWithCards(cards: immunizationRecords) { healthRecordsWrapperModelHack in
+            for modelHack in healthRecordsWrapperModelHack {
+                let local = modelHack.appModel.transform()
+                let record = HealthRecordsDetailDataSource.RecordType.covidImmunizationRecord(model: local, immunizations: modelHack.immunizationRecords)
                 let dsInstance = HealthRecordsDetailDataSource(type: record)
                 dataSource.append(dsInstance)
             }

@@ -6,10 +6,11 @@
 // NOTE: This model is used in the health records flow
 
 import UIKit
+import BCVaccineValidator
 
 struct HealthRecordsDetailDataSource {
     enum RecordType {
-        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel)
+        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord])
         case covidTestResult(model: LocallyStoredCovidTestResultModel)
         
         var getTitle: String {
@@ -28,14 +29,14 @@ struct HealthRecordsDetailDataSource {
         
         var getStatus: String {
             switch self {
-            case .covidImmunizationRecord(let model): return model.status.getTitle
+            case .covidImmunizationRecord(let model, _): return model.status.getTitle
             case .covidTestResult(let model): return model.status.getTitle
             }
         }
         
         var getDate: String? {
             switch self {
-            case .covidImmunizationRecord(let model): return model.vaxDates.last
+            case .covidImmunizationRecord(let model, _): return model.vaxDates.last
             case .covidTestResult(let model): return model.response?.resultDateTime?.monthDayYearString // TODO: Need to confirm formatting on this
             }
         }
@@ -52,7 +53,7 @@ struct HealthRecordsDetailDataSource {
     
     var sortingDate: Double {
         switch type {
-        case .covidImmunizationRecord(let model): return model.issueDate
+        case .covidImmunizationRecord(let model, _): return model.issueDate
         case .covidTestResult(let model): return model.response?.collectionDateTime?.timeIntervalSince1970 ?? Date().timeIntervalSince1970 // TODO: Should likely do something else here
         }
     }
@@ -73,11 +74,11 @@ struct HealthRecordsDetailDataSource {
             ]
             set.append(testSet)
             return set
-        case .covidImmunizationRecord(let model):
+        case .covidImmunizationRecord(let model, let immunizations):
             // TODO: Basically, we will be getting each immunization record, creating an array of TextListModel, then adding each one to the set (which is array of array of TextListModel)
-//            for immunizationRecord in model.immunizations {
-//                // setup here
-//            }
+            for immunizationRecord in immunizations {
+                // setup here
+            }
             print("TODO")
             return set
         }
