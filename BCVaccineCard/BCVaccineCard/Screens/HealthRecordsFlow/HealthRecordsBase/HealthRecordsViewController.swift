@@ -97,8 +97,41 @@ extension HealthRecordsViewController {
 }
 
 // MARK: Collection View setup
-extension HealthRecordsViewController {
+extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     private func setupCollectionView() {
-        // TODO: Collection view setup logic
+        collectionView.register(UINib.init(nibName: HealthRecordsUserCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: HealthRecordsUserCollectionViewCell.getName)
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return dataSource.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HealthRecordsUserCollectionViewCell.getName, for: indexPath) as? HealthRecordsUserCollectionViewCell {
+            cell.configure(data: dataSource[indexPath.row])
+            return cell
+        }
+        return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let userName = dataSource[indexPath.row].userName
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: userName)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let availabelWidth = view.frame.width - 40
+        let widthPerItem = availabelWidth / 2.0
+        let heightPerItem = widthPerItem * (118.0/152.0)
+        return CGSize(width: widthPerItem, height: heightPerItem)
+    }
+    
+    
 }

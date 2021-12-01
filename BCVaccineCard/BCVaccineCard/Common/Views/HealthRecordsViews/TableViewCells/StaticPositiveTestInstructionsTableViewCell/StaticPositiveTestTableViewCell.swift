@@ -8,16 +8,27 @@
 import UIKit
 // TODO: Need to fill in details of this cell, note that the data will be static, so we will only load this cell for a positive test result (logic to include cell in data source will be in view controller) - see figma for design reference
 class StaticPositiveTestTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak private var headingLabel: UILabel!
+    @IBOutlet weak private var attributedTextLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        setup()
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    private func setup() {
+        headingLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+        headingLabel.textColor = AppColours.textBlack
+        attributedTextLabel.font = UIFont.bcSansRegularWithSize(size: 17)
+        attributedTextLabel.textColor = AppColours.textBlack
+        textSetup()
+    }
+    // TODO: Add to strings file
+    // TODO: Add attributed text for description (for links)
+    private func textSetup() {
+        headingLabel.text = "Instructions"
+        attributedTextLabel.text = "• You need to self-isolate now.\n• The people you live with will also need to self-isolate if they are not fully vaccinated.\n• Public health will contact you.\n• Monitor your health and contact a health care provider or call 8-1-1 if you are concerned about your symptoms.\n• Go to Understanding Test Results for more information"
     }
     
 }
