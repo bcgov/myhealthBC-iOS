@@ -10,15 +10,42 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StaticPositiveTestTableViewCell" id="KGk-i7-Jjw" customClass="StaticPositiveTestTableViewCell" customModule="BCVaccineCard" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StaticPositiveTestTableViewCell" rowHeight="100" id="KGk-i7-Jjw" customClass="StaticPositiveTestTableViewCell" customModule="BCVaccineCard" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGN-de-iDF">
+                        <rect key="frame" x="0.0" y="20" width="320" height="29.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iwa-8T-iIu">
+                        <rect key="frame" x="8" y="59.5" width="312" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="gGN-de-iDF" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="0VR-aO-VZa"/>
+                    <constraint firstItem="Iwa-8T-iIu" firstAttribute="top" secondItem="gGN-de-iDF" secondAttribute="bottom" constant="10" id="901-u7-7oy"/>
+                    <constraint firstItem="Iwa-8T-iIu" firstAttribute="leading" secondItem="gGN-de-iDF" secondAttribute="leading" constant="8" id="Gck-sO-lEc"/>
+                    <constraint firstAttribute="bottom" secondItem="Iwa-8T-iIu" secondAttribute="bottom" constant="20" id="QD4-bY-uQb"/>
+                    <constraint firstItem="Iwa-8T-iIu" firstAttribute="trailing" secondItem="gGN-de-iDF" secondAttribute="trailing" id="Wvu-od-R1w"/>
+                    <constraint firstItem="gGN-de-iDF" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="a8Z-Ld-WY7"/>
+                    <constraint firstAttribute="trailing" secondItem="gGN-de-iDF" secondAttribute="trailing" id="xc8-9B-9wp"/>
+                </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
-            <point key="canvasLocation" x="139" y="106"/>
+            <connections>
+                <outlet property="attributedTextLabel" destination="Iwa-8T-iIu" id="7hn-Zl-yzq"/>
+                <outlet property="headingLabel" destination="gGN-de-iDF" id="FZD-m0-dij"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="98.4375"/>
         </tableViewCell>
     </objects>
 </document>

@@ -91,7 +91,7 @@ extension HealthRecordDetailViewController: UITableViewDelegate, UITableViewData
         tableView.register(UINib.init(nibName: TextListViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextListViewTableViewCell.getName)
         tableView.register(UINib.init(nibName: StaticPositiveTestTableViewCell.getName, bundle: .main), forCellReuseIdentifier: StaticPositiveTestTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 84
+        tableView.estimatedRowHeight = 300
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
