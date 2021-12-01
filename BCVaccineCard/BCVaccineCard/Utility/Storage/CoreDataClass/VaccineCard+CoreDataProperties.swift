@@ -2,13 +2,12 @@
 //  VaccineCard+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2021-10-28.
+//  Created by Amir on 2021-11-30.
 //
-// TODO: Will need to add vaxDates as an NSManaged property
+//
 
 import Foundation
 import CoreData
-
 
 extension VaccineCard {
 
@@ -25,6 +24,7 @@ extension VaccineCard {
     @NSManaged public var phn: String?
     @NSManaged public var user: User?
     @NSManaged public var firHash: String?
+    @NSManaged public var immunizationRecord: NSSet?
     
     
     public var federalPassData: Data? {
@@ -35,5 +35,29 @@ extension VaccineCard {
     var id: String? {
         return firHash
     }
+    
+    public var immunizations: [ImmunizationRecord] {
+        let set = immunizationRecord as? Set<ImmunizationRecord> ?? []
+        return set.sorted {
+            $0.date ?? Date() < $1.date ?? Date()
+        }
+    }
+
+}
+
+// MARK: Generated accessors for immunizationRecord
+extension VaccineCard {
+
+    @objc(addImmunizationRecordObject:)
+    @NSManaged public func addToImmunizationRecord(_ value: ImmunizationRecord)
+
+    @objc(removeImmunizationRecordObject:)
+    @NSManaged public func removeFromImmunizationRecord(_ value: ImmunizationRecord)
+
+    @objc(addImmunizationRecord:)
+    @NSManaged public func addToImmunizationRecord(_ values: NSSet)
+
+    @objc(removeImmunizationRecord:)
+    @NSManaged public func removeFromImmunizationRecord(_ values: NSSet)
 
 }

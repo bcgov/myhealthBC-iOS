@@ -30,7 +30,7 @@ class HealthRecordDetailViewController: BaseViewController {
 }
 
 // MARK: Navigation setup
-extension HealthRecordsDetailViewController {
+extension HealthRecordDetailViewController {
     private func navSetup() {
         let rightNavButton = NavButton(title: .delete,
                                                        image: nil, action: #selector(self.deleteButton),

@@ -6,8 +6,45 @@
 //
 
 import Foundation
+import BCVaccineValidator
 
 extension StorageService {
+    
+    func storeImmunizaionRecords(for QRCode: String, card: VaccineCard) {
+        BCVaccineValidator.shared.validate(code: QRCode) { result in
+            guard let result = result.result else {return}
+            for record in result.immunizations {
+                self.storeImmunizationRecord(record: record, card: card)
+            }
+        }
+//        let testResult = TestResult(context: context)
+//        testResult.id = reportId
+//        testResult.patientDisplayName = patientDisplayName
+//        testResult.lab = lab
+//        testResult.reportId = reportId
+//        testResult.collectionDateTime = collectionDateTime
+//        testResult.resultDateTime = resultDateTime
+//        testResult.testName = testName
+//        testResult.testType = testType
+//        testResult.testStatus = testStatus
+//        testResult.testOutcome = testOutcome
+//        testResult.resultTitle = resultTitle
+//        testResult.resultDescription = resultDescription
+//        testResult.resultLink = resultLink
+//        testResult.user = user
+//        do {
+//            try context.save()
+//            return testResult.id
+//        } catch let error as NSError {
+//            print("Could not save. \(error), \(error.userInfo)")
+//            return nil
+//        }
+    }
+    
+    fileprivate func storeImmunizationRecord(record: immunizationRecord, card: VaccineCard) {
+        guard let context = managedContext else {return}
+//        let model = TestResult(context: context)
+    }
     
     // Note: This is used on the health records home screen to get a list of users and their number of health records
     func getHealthRecordsDataSource(for userId: String? = AuthManager().userId()) -> [HealthRecordsDataSource] {
@@ -54,9 +91,7 @@ extension StorageService {
             }
             let tests = getTestResultsForName(name: name, tests: current.testResultArray)
             let immunizationRecords = getImmunizationRecordsForName(name: name, immunizationRecords: current.vaccineCardArray)
-            mapHealthRecords(testArray: tests, immunizationRecordArray: immunizationRecords) { dataSource in
-                completion(dataSource)
-            }
+            mapHealthRecords(testArray: tests, immunizationRecordArray: immunizationRecords) 
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
             completion([])
