@@ -55,6 +55,7 @@ struct HealthRecordsDetailDataSource {
         case .covidImmunizationRecord(let model, _): return model.issueDate
         case .covidTestResult(let model): return model.response?.collectionDateTime?.timeIntervalSince1970 ?? Date().timeIntervalSince1970 // TODO: Should likely do something else here
         }
+        let x = Constants.vaccineInfo(snowMedCode: 1)
     }
     
     var getTextSets: [[TextListModel]] {
@@ -74,11 +75,12 @@ struct HealthRecordsDetailDataSource {
             return set
         case .covidImmunizationRecord(_, let immunizations):
             for (index, imsModel) in immunizations.enumerated() {
+                let product = Constants.vaccineInfo(snowMedCode: 1)?.displayName ?? ""
                 let imsSet = [
                     TextListModel(header: TextListModel.TextProperties(text: "Dose \(index + 1)", bolded: true), subtext: nil),
                     // TODO: date format
                     TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.date?.fullString ?? "", bolded: true)),
-                    TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: false), subtext: TextListModel.TextProperties(text: Constants.vaccineTable(snowmedCode: imsModel.snowmed)?.displayName ?? "", bolded: true)),
+                    TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: false), subtext: TextListModel.TextProperties(text: product, bolded: true)),
                     TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "", bolded: true)),
                     TextListModel(header: TextListModel.TextProperties(text: "Lot Number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "", bolded: true))
                 ]
