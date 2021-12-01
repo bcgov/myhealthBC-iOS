@@ -10,34 +10,6 @@ import BCVaccineValidator
 
 extension StorageService {
     
-    func storeImmunizaionRecords(card: VaccineCard) {
-        guard let qrCode = card.code else {return}
-        BCVaccineValidator.shared.validate(code: qrCode) { result in
-            guard let result = result.result else {return}
-            for record in result.immunizations {
-                self.storeImmunizationRecord(record: record, card: card)
-            }
-        }
-    }
-    
-    fileprivate func storeImmunizationRecord(record: immunizationRecord, card: VaccineCard) {
-        guard let context = managedContext else {return}
-        let model = ImmunizationRecord(context: context)
-        // TODO: Add this field when its added to the payload
-        model.snomed = record.snomed
-        // TODO: format record.date and add here
-        model.date = Date()
-        model.provider = record.provider
-        model.lotNumber = record.lotNumber
-        model.vaccineCard = card
-        do {
-            try context.save()
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            return
-        }
-    }
-    
     // Note: This is used on the health records home screen to get a list of users and their number of health records
     func getHealthRecordsDataSource(for userId: String? = AuthManager().userId()) -> [HealthRecordsDataSource] {
         guard let context = managedContext else {return []}
@@ -52,6 +24,7 @@ extension StorageService {
             return []
         }
     }
+    
     // TODO: Add Birthday to the unique check, just need it from test endpoint first
     private func mapHealthRecords(testArray: [TestResult], immunizationRecordArray: [VaccineCard]) -> [HealthRecordsDataSource] {
         var users = testArray.map { HealthRecordsDataSource(userName: $0.patientDisplayName ?? "", numberOfRecords: $0.reportId != nil ? 1 : 0) }
@@ -68,7 +41,7 @@ extension StorageService {
         }
         return healthRecordsDataSource
     }
-    
+
     // Note: This is used to get a list of health records for a specific user for the list view
     func getListOfHealthRecordsForName(name: String, for userId: String? = AuthManager().userId(), completion: @escaping([HealthRecordsDetailDataSource]) -> Void) {
         guard let context = managedContext else {
@@ -88,17 +61,17 @@ extension StorageService {
             print("Could not fetch. \(error), \(error.userInfo)")
             completion([])
         }
-        
     }
+    
     // TODO: Will need to include birthdate in the check here
     private func getTestResultsForName(name: String, tests: [TestResult]) -> [TestResult] {
         return tests.filter { $0.patientDisplayName == name }
     }
-    
+
     private func getImmunizationRecordsForName(name: String, immunizationRecords: [VaccineCard]) -> [VaccineCard] {
         return immunizationRecords.filter { $0.name == name }
     }
-    
+
     private func mapHealthRecordsForName(tests: [TestResult], immunizationRecords: [VaccineCard], completion: @escaping([HealthRecordsDetailDataSource]) -> Void) {
         var dataSource: [HealthRecordsDetailDataSource] = []
         for test in tests {
@@ -117,6 +90,6 @@ extension StorageService {
             }
         }
     }
-    
+
     
 }
