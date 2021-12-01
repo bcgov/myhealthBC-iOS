@@ -10,40 +10,32 @@ import BCVaccineValidator
 
 extension StorageService {
     
-    func storeImmunizaionRecords(for QRCode: String, card: VaccineCard) {
-        BCVaccineValidator.shared.validate(code: QRCode) { result in
+    func storeImmunizaionRecords(card: VaccineCard) {
+        guard let qrCode = card.code else {return}
+        BCVaccineValidator.shared.validate(code: qrCode) { result in
             guard let result = result.result else {return}
             for record in result.immunizations {
                 self.storeImmunizationRecord(record: record, card: card)
             }
         }
-//        let testResult = TestResult(context: context)
-//        testResult.id = reportId
-//        testResult.patientDisplayName = patientDisplayName
-//        testResult.lab = lab
-//        testResult.reportId = reportId
-//        testResult.collectionDateTime = collectionDateTime
-//        testResult.resultDateTime = resultDateTime
-//        testResult.testName = testName
-//        testResult.testType = testType
-//        testResult.testStatus = testStatus
-//        testResult.testOutcome = testOutcome
-//        testResult.resultTitle = resultTitle
-//        testResult.resultDescription = resultDescription
-//        testResult.resultLink = resultLink
-//        testResult.user = user
-//        do {
-//            try context.save()
-//            return testResult.id
-//        } catch let error as NSError {
-//            print("Could not save. \(error), \(error.userInfo)")
-//            return nil
-//        }
     }
     
     fileprivate func storeImmunizationRecord(record: immunizationRecord, card: VaccineCard) {
         guard let context = managedContext else {return}
-//        let model = TestResult(context: context)
+        let model = ImmunizationRecord(context: context)
+        // TODO: Add this field when its added to the payload
+        model.snowmed = ""
+        // TODO: format record.date and add here
+        model.date = Date()
+        model.provider = record.provider
+        model.lotNumber = record.lotNumber
+        model.vaccineCard = card
+        do {
+            try context.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            return
+        }
     }
     
     // Note: This is used on the health records home screen to get a list of users and their number of health records
@@ -91,12 +83,12 @@ extension StorageService {
             }
             let tests = getTestResultsForName(name: name, tests: current.testResultArray)
             let immunizationRecords = getImmunizationRecordsForName(name: name, immunizationRecords: current.vaccineCardArray)
-            mapHealthRecords(testArray: tests, immunizationRecordArray: immunizationRecords) 
+            mapHealthRecords(testArray: tests, immunizationRecordArray: immunizationRecords)
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
             completion([])
         }
-
+        
     }
     // TODO: Will need to include birthdate in the check here
     private func getTestResultsForName(name: String, tests: [TestResult]) -> [TestResult] {
