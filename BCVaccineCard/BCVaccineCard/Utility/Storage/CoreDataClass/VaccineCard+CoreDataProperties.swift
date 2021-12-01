@@ -45,8 +45,8 @@ extension VaccineCard {
         }
     }
     
-    public var getCovidImmunizations: [CovidImmunizationRecord] {
-        guard let array = immunizationRecord?.allObjects as? [CovidImmunizationRecord] else { return [] }
+    public var getCovidImmunizations: [ImmunizationRecord] {
+        guard let array = immunizationRecord?.allObjects as? [ImmunizationRecord] else { return [] }
         return array
     }
     
