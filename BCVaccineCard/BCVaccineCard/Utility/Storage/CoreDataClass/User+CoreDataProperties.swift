@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2021-11-29.
+//  Created by Amir on 2021-12-02.
 //
 //
 
@@ -12,14 +12,32 @@ import CoreData
 
 extension User {
 
-    @nonobjc public class func createFetchRequest() -> NSFetchRequest<User> {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<User> {
         return NSFetchRequest<User>(entityName: "User")
     }
 
     @NSManaged public var id: String?
     @NSManaged public var name: String?
+    @NSManaged public var covidTestResults: NSSet?
     @NSManaged public var vaccineCard: NSSet?
-    @NSManaged public var testResult: NSSet?  
+
+}
+
+// MARK: Generated accessors for covidTestResults
+extension User {
+
+    @objc(addCovidTestResultsObject:)
+    @NSManaged public func addToCovidTestResults(_ value: CovidLabTestResult)
+
+    @objc(removeCovidTestResultsObject:)
+    @NSManaged public func removeFromCovidTestResults(_ value: CovidLabTestResult)
+
+    @objc(addCovidTestResults:)
+    @NSManaged public func addToCovidTestResults(_ values: NSSet)
+
+    @objc(removeCovidTestResults:)
+    @NSManaged public func removeFromCovidTestResults(_ values: NSSet)
+
 }
 
 // MARK: Generated accessors for vaccineCard
@@ -36,22 +54,5 @@ extension User {
 
     @objc(removeVaccineCard:)
     @NSManaged public func removeFromVaccineCard(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for testResult
-extension User {
-
-    @objc(addTestResultObject:)
-    @NSManaged public func addToTestResult(_ value: TestResult)
-
-    @objc(removeTestResultObject:)
-    @NSManaged public func removeFromTestResult(_ value: TestResult)
-
-    @objc(addTestResult:)
-    @NSManaged public func addToTestResult(_ values: NSSet)
-
-    @objc(removeTestResult:)
-    @NSManaged public func removeFromTestResult(_ values: NSSet)
 
 }

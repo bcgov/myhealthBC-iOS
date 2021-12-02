@@ -8,16 +8,6 @@
 import Foundation
 import BCVaccineValidator
 
-
-/*
-Test {
-* PHN
-* DOB
-* DOT
-* TEST ID
-* TESTS: [RECORDS]
-}
-*/
 extension StorageService {
     
     func getHeathRecords(for userId: String? = AuthManager().userId()) -> [HealthRecord] {

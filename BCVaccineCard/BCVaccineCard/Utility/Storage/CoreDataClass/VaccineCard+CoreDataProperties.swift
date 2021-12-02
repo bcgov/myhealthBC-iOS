@@ -1,32 +1,33 @@
 //
 //  VaccineCard+CoreDataProperties.swift
+//  
 //
-//
-//  Created by Amir on 2021-11-30.
+//  Created by Amir on 2021-12-02.
 //
 //
 
 import Foundation
 import CoreData
-import BCVaccineValidator
+
 
 extension VaccineCard {
 
-    @nonobjc public class func createFetchRequest() -> NSFetchRequest<VaccineCard> {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<VaccineCard> {
         return NSFetchRequest<VaccineCard>(entityName: "VaccineCard")
     }
 
-    @NSManaged public var code: String?
-    @NSManaged public var issueDate: NSNumber?
-    @NSManaged public var name: String?
-    @NSManaged public var sortOrder: Int64
     @NSManaged public var birthdate: String?
+    @NSManaged public var code: String?
     @NSManaged public var federalPass: String?
-    @NSManaged public var vaxDates: [String]?
-    @NSManaged public var phn: String?
-    @NSManaged public var user: User?
     @NSManaged public var firHash: String?
+    @NSManaged public var issueDate: Double
+    @NSManaged public var name: String?
+    @NSManaged public var phn: String?
+    @NSManaged public var sortOrder: Int64
+    @NSManaged public var vaxDates: NSObject?
     @NSManaged public var immunizationRecord: NSSet?
+    @NSManaged public var user: User?
+
 }
 
 // MARK: Generated accessors for immunizationRecord

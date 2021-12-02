@@ -2,10 +2,34 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/VaccineCard+CoreDataProperties.swift">
+      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/ImmunizationRecord+CoreDataClass.swift">
    </FileRef>
    <FileRef
       location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/ImmunizationRecord+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
+      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/TestResult+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/TestResult+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
+      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/CovidLabTestResult+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/CovidLabTestResult+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
+      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/User+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/User+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
+      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/VaccineCard+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/VaccineCard+CoreDataProperties.swift">
    </FileRef>
    <FileRef
       location = "group:BCVaccineCard.xcodeproj">
