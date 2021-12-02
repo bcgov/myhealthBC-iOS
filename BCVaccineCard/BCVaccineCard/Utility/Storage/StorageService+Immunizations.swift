@@ -21,7 +21,7 @@ extension StorageService {
         }
     }
     
-    fileprivate func storeImmunizationRecord(record: immunizationRecord, card: VaccineCard) {
+    fileprivate func storeImmunizationRecord(record: COVIDImmunizationRecord, card: VaccineCard) {
         guard let context = managedContext else {return}
         let model = ImmunizationRecord(context: context)
         // TODO: Add this field when its added to the payload

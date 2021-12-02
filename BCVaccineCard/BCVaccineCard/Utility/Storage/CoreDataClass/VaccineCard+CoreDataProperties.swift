@@ -27,34 +27,6 @@ extension VaccineCard {
     @NSManaged public var user: User?
     @NSManaged public var firHash: String?
     @NSManaged public var immunizationRecord: NSSet?
-    
-    
-    public var federalPassData: Data? {
-        guard let stringData = federalPass else { return nil}
-        return Data(base64URLEncoded: stringData)
-    }
-    
-    var id: String? {
-        return firHash
-    }
-    
-    public var immunizations: [ImmunizationRecord] {
-        let set = immunizationRecord as? Set<ImmunizationRecord> ?? []
-        return set.sorted {
-            $0.date ?? Date() < $1.date ?? Date()
-        }
-    }
-    
-    public var getCovidImmunizations: [ImmunizationRecord] {
-        guard let array = immunizationRecord?.allObjects as? [ImmunizationRecord] else { return [] }
-        return array
-    }
-    
-    public func toLocal() -> LocallyStoredVaccinePassportModel? {
-        guard let qrCode = code, let dates = vaxDates, let issueDate = issueDate, let birthdate = birthdate, let firHash = firHash else {return nil}
-        return LocallyStoredVaccinePassportModel(code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: Double(issueDate), status: .fully, source: .imported, fedCode: federalPass, phn: phn)
-    }
-
 }
 
 // MARK: Generated accessors for immunizationRecord

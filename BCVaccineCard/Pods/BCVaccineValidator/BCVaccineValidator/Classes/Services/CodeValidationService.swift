@@ -46,14 +46,14 @@ class CodeValidationService {
                 }
                 let vaxes = payload.vaxes()
                 print(vaxes)
-                var immunizations: [immunizationRecord] = []
+                var immunizations: [COVIDImmunizationRecord] = []
                 for vax in vaxes {
                     let date: String? = vax.occurrenceDateTime
                     let vaxCode: String? = vax.vaccineCode?.coding[0].code
                     let snomed: String? = vax.vaccineCode?.coding[1].code
                     let provider: String? = vax.performer?[0].actor?.display
                     let lot: String? = vax.lotNumber
-                    immunizations.append(immunizationRecord(vaccineCode: vaxCode, date: date, provider: provider, lotNumber: lot, snomed: snomed))
+                    immunizations.append(COVIDImmunizationRecord(vaccineCode: vaxCode, date: date, provider: provider, lotNumber: lot, snomed: snomed))
                 }
                 let result = ScanResultModel(code: code, issueDate: Double(payload.nbf), name: payload.getName(), birthdate: birthdate, status: status, immunizations: immunizations, payload: payload)
                 
