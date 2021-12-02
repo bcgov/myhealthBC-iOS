@@ -52,10 +52,9 @@ struct HealthRecordsDetailDataSource {
     
     var sortingDate: Double {
         switch type {
-        case .covidImmunizationRecord(let model, _): return model.issueDate
-        case .covidTestResult(let model): return model.response?.collectionDateTime?.timeIntervalSince1970 ?? Date().timeIntervalSince1970 // TODO: Should likely do something else here
+            case .covidImmunizationRecord(let model, _): return model.issueDate
+            case .covidTestResult(let model): return model.response?.collectionDateTime?.timeIntervalSince1970 ?? Date().timeIntervalSince1970 // TODO: Should likely do something else here
         }
-        let x = Constants.vaccineInfo(snowMedCode: 1)
     }
     
     var getTextSets: [[TextListModel]] {
