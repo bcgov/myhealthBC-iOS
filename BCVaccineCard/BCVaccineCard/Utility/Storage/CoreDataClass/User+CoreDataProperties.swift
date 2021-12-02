@@ -19,25 +19,7 @@ extension User {
     @NSManaged public var id: String?
     @NSManaged public var name: String?
     @NSManaged public var vaccineCard: NSSet?
-    @NSManaged public var testResult: NSSet?
-
-    public var userId: String {
-        return id ?? ""
-    }
-    
-    public var vaccineCardArray: [VaccineCard] {
-        let set = vaccineCard as? Set<VaccineCard> ?? []
-        return set.sorted {
-            $0.sortOrder < $1.sortOrder
-        }
-    }
-    
-    public var testResultArray: [TestResult] {
-        let set = testResult as? Set<TestResult> ?? []
-        return set.sorted {
-            $0.resultDateTime ?? Date() > $1.resultDateTime ?? Date()
-        }
-    }
+    @NSManaged public var testResult: NSSet?  
 }
 
 // MARK: Generated accessors for vaccineCard

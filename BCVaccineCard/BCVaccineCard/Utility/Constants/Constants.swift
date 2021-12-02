@@ -72,14 +72,14 @@ struct Constants {
 }
 
 extension Constants {
-    static func vaccineTable(snowMedCode: Int) -> VaccineTable? {
+    public static func vaccineInfo(snowMedCode: Int) -> VaccineTable? {
         guard let table = vaccineTable.first(where: {$0.snowMedCode == snowMedCode}) else {
             return VaccineTable(snowMedCode: 0, cvx: 500, mvx: "UNK", displayName: "UNSPECIFIED COVID-19 VACCINE / VACCIN CONTRE LA COVID-19 NON")
         }
         return table
     }
     
-    static func vaccineTable(cvx: Int) -> VaccineTable? {
+   public  static func vaccineInfo(cvx: Int) -> VaccineTable? {
         guard let table = vaccineTable.first(where: {$0.cvx == cvx}) else {
             return VaccineTable(snowMedCode: 0, cvx: 500, mvx: "UNK", displayName: "UNSPECIFIED COVID-19 VACCINE / VACCIN CONTRE LA COVID-19 NON")
         }

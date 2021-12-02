@@ -84,7 +84,7 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
 // MARK: Fetch Data Source
 extension HealthRecordsViewController {
     private func fetchDataSource() {
-        dataSource = StorageService.shared.getHealthRecordsDataSource()
+        dataSource = StorageService.shared.getHeathRecords().dataSource()
         if dataSource.isEmpty {
             let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
             self.navigationController?.pushViewController(vc, animated: true)

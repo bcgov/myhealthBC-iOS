@@ -30,5 +30,6 @@ extension TestResult {
     @NSManaged public var resultDescription: String?
     @NSManaged public var resultLink: String?
     @NSManaged public var user: User?
-
+    
+    @NSManaged public var birthdate: Date?
 }

@@ -93,7 +93,6 @@ extension StorageService {
         }
     }
     
-    
     /// Returns all test results stored for user
     /// - Parameter userId: User id. if left empty, the results results for the currently authenticated user.
     /// - Returns: All Test results stored for the given user
@@ -109,10 +108,4 @@ extension StorageService {
         }
     }
     
-    func transformTestResultIntoCovidTestResultModel(test: TestResult) -> LocallyStoredCovidTestResultModel {
-        let response = GatewayTestResultResponse(patientDisplayName: test.patientDisplayName, lab: test.lab, reportId: test.reportId, collectionDateTime: test.collectionDateTime, resultDateTime: test.resultDateTime, testName: test.testName, testType: test.testType, testStatus: test.testStatus, testOutcome: test.testOutcome, resultTitle: test.resultTitle, resultDescription: test.resultDescription, resultLink: test.resultLink)
-        let status = CovidTestResult.init(rawValue: test.testOutcome ?? "") ?? CovidTestResult.init(rawValue: test.testStatus ?? "") ?? .indeterminate
-        let local = LocallyStoredCovidTestResultModel(response: response, status: status)
-        return local
-    }
 }

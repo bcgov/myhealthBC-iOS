@@ -98,11 +98,9 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController {
     private func fetchDataSource() {
         self.view.startLoadingIndicator(backgroundColor: .clear)
-        StorageService.shared.getListOfHealthRecordsForName(name: self.name) { dataSource in
-            self.dataSource = dataSource
-            self.setupTableView()
-            self.view.endLoadingIndicator()
-        }
+        self.dataSource = StorageService.shared.getHeathRecords().detailDataSource()
+        self.setupTableView()
+        self.view.endLoadingIndicator()
     }
 }
 

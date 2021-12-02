@@ -16,7 +16,7 @@ extension ImmunizationRecord {
         return NSFetchRequest<ImmunizationRecord>(entityName: "ImmunizationRecord")
     }
 
-    @NSManaged public var snowmed: String?
+    @NSManaged public var snomed: String?
     @NSManaged public var date: Date?
     @NSManaged public var provider: String?
     @NSManaged public var lotNumber: String?
