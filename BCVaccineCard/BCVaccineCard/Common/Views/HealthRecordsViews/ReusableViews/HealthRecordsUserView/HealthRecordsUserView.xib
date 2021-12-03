@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HealthRecordsUserView" customModule="BCVaccineCard" customModuleProvider="target">
             <connections>
-                <outlet property="borderView" destination="sNu-wB-DQu" id="WI0-Nt-1Bg"/>
+                <outlet property="backgroundWhiteView" destination="sNu-wB-DQu" id="WI0-Nt-1Bg"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="nKp-Kj-Rao"/>
                 <outlet property="nameLabel" destination="3rW-cD-DPY" id="br6-td-wg1"/>
                 <outlet property="recordCountLabel" destination="CiM-2D-qth" id="mCx-kf-x8F"/>

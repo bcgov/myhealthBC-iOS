@@ -11,7 +11,7 @@ import UIKit
 class HealthRecordsUserView: UIView {
     
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var borderView: UIView!
+    @IBOutlet weak var backgroundWhiteView: UIView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var recordCountLabel: UILabel!
     @IBOutlet weak var recordIconImageView: UIImageView!
@@ -45,9 +45,10 @@ class HealthRecordsUserView: UIView {
     }
     
     private func uiSetup() {
-        borderView.backgroundColor = AppColours.borderGray
-        borderView.layer.cornerRadius = 4.0
-        borderView.layer.masksToBounds = true
+        contentView.backgroundColor = AppColours.borderGray
+        contentView.layer.cornerRadius = 4.0
+        contentView.layer.masksToBounds = true
+        backgroundWhiteView.layer.masksToBounds = true
         nameLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         nameLabel.textColor = AppColours.appBlue
         recordCountLabel.font = UIFont.bcSansRegularWithSize(size: 13)

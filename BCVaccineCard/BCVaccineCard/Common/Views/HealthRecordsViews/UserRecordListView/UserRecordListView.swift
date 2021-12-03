@@ -10,39 +10,6 @@ import CloudKit
 
 class UserRecordListView: UIView {
     
-//    enum RecordType {
-//        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel)
-//        case covidTestResult(model: LocallyStoredCovidTestResultModel)
-//        
-//        var getTitle: String {
-//            switch self {
-//            case .covidImmunizationRecord: return .covid19mRNATitle
-//            case .covidTestResult: return .covid19TestResultTitle
-//            }
-//        }
-//        
-//        var getStatus: String {
-//            switch self {
-//            case .covidImmunizationRecord(let model): return model.status.getTitle
-//            case .covidTestResult(let model): return model.status.getTitle
-//            }
-//        }
-//        
-//        var getDate: String? {
-//            switch self {
-//            case .covidImmunizationRecord(let model): return model.vaxDates.last
-//            case .covidTestResult(let model): return model.response?.resultDateTime?.monthDayYearString // TODO: Need to confirm formatting on this
-//            }
-//        }
-//        
-//        var getImage: UIImage? {
-//            switch self {
-//            case .covidImmunizationRecord: return UIImage(named: "blue-bg-vaccine-record-icon")
-//            case .covidTestResult: return UIImage(named: "blue-bg-test-result-icon")
-//            }
-//        }
-//    }
-    
     @IBOutlet weak private var contentView: UIView!
     @IBOutlet weak private var greyRoundedBackgroundView: UIView!
     @IBOutlet weak private var iconImageView: UIImageView!
@@ -95,6 +62,7 @@ class UserRecordListView: UIView {
         self.type = recordType
         setupAccessibility()
         iconImageView.image = recordType.getImage
+        recordTypeTitleLabel.text = recordType.getTitle
         var subtitleString = recordType.getStatus
         if let dateString = recordType.getDate {
             let addition = " • " + dateString

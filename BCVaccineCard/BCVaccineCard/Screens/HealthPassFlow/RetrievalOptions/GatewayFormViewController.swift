@@ -50,6 +50,13 @@ enum GatewayFormViewControllerFetchType: Equatable {
         }
     }
     
+    var canGoToNextFormField: Bool {
+        switch self {
+        case .federalPassOnly: return false
+        default: return true
+        }
+    }
+    
     var isFedPassOnly: Bool {
         switch self {
         case .federalPassOnly: return true
@@ -429,7 +436,7 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     }
     
     func goToNextFormTextField(formField: FormTextFieldType) {
-        if fetchType == .bcVaccineCardAndFederalPass {
+        if fetchType.canGoToNextFormField {
             goToNextTextField(formField: formField)
         } else {
             self.view.endEditing(true)
@@ -491,7 +498,8 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
                     let data = Constants.testResultsDummyData[index].data
                     guard let response = data.response else { return }
                     let _ = StorageService.shared.saveTestResult(gateWayResponse: response)
-                    self.navigationController?.popViewController(animated: true)
+                    // Note - will have to fix this obviously and route properly
+                    self.popBack(toControllerType: HealthRecordsViewController.self)
                 }
             } else {
                 prepareRequest() // Note: This should be refactored to be more reusable

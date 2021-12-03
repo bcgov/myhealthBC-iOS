@@ -58,7 +58,7 @@ class BannerViewTableViewCell: UITableViewCell {
         }
         
         bannerView?.setup(in: self,
-                          type: .VaccineRecord,
+                          type: .CovidTest,
                           name: model.response?.patientDisplayName ?? "",
                           status: model.status.getTitle,
                           date: issueDate,

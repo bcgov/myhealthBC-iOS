@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -12,7 +10,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GetRecordsView" customModule="BCVaccineCard" customModuleProvider="target">
             <connections>
                 <outlet property="addButtonImageView" destination="uko-wT-a4Y" id="gdJ-vu-JrU"/>
-                <outlet property="backgroundGreyRoundedView" destination="8kE-u1-gyo" id="cEy-QJ-XPE"/>
+                <outlet property="backgroundWhiteView" destination="8kE-u1-gyo" id="cEy-QJ-XPE"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="2bQ-NO-yjT"/>
                 <outlet property="descriptionLabel" destination="Ija-hD-fbF" id="xrg-x1-gWe"/>
                 <outlet property="recordTypeImageView" destination="JlM-AN-KaY" id="V4n-3w-BZx"/>

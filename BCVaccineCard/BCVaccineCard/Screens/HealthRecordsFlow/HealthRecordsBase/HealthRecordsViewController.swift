@@ -84,10 +84,12 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
 // MARK: Fetch Data Source
 extension HealthRecordsViewController {
     private func fetchDataSource() {
+        self.view.startLoadingIndicator()
         dataSource = StorageService.shared.getHeathRecords().dataSource()
+        self.view.endLoadingIndicator()
         if dataSource.isEmpty {
             let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
+            self.navigationController?.pushViewController(vc, animated: false)
         } else {
             addRecordHeaderSetup()
             setupCollectionView()
@@ -100,6 +102,16 @@ extension HealthRecordsViewController {
 extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     private func setupCollectionView() {
         collectionView.register(UINib.init(nibName: HealthRecordsUserCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: HealthRecordsUserCollectionViewCell.getName)
+        let layout = UICollectionViewFlowLayout()
+        // TODO: Need to test this on larger screen sizes, as this works on SE - then add values to constants file
+        // FIXME: Name label doesnt quite fit for anything other than short names - also weird UI issue when returning to screen
+        let spacing: CGFloat = 100
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+        let availabelWidth = collectionView.frame.width - spacing
+        let widthPerItem = availabelWidth / 2.0
+        let heightPerItem = widthPerItem * (118.0/172.0)
+        layout.itemSize = CGSize(width: widthPerItem, height: heightPerItem)
+        collectionView.collectionViewLayout = layout
         collectionView.delegate = self
         collectionView.dataSource = self
     }
@@ -109,29 +121,36 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.count
+        let numberCells = dataSource.count % 2 == 0 ? dataSource.count : dataSource.count + 1
+        return numberCells
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HealthRecordsUserCollectionViewCell.getName, for: indexPath) as? HealthRecordsUserCollectionViewCell {
+        if indexPath.row == dataSource.count {
+            // This means that we load the empty cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EmptyCollectionCell", for: indexPath)
+            return cell
+        } else if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HealthRecordsUserCollectionViewCell.getName, for: indexPath) as? HealthRecordsUserCollectionViewCell {
             cell.configure(data: dataSource[indexPath.row])
+            cell.layoutIfNeeded()
             return cell
         }
         return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard indexPath.row < dataSource.count else { return }
         let userName = dataSource[indexPath.row].userName
         let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: userName)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availabelWidth = view.frame.width - 40
-        let widthPerItem = availabelWidth / 2.0
-        let heightPerItem = widthPerItem * (118.0/152.0)
-        return CGSize(width: widthPerItem, height: heightPerItem)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        let availabelWidth = collectionView.frame.width
+//        let widthPerItem = availabelWidth / 2.0
+//        let heightPerItem = widthPerItem * (118.0/152.0)
+//        return CGSize(width: widthPerItem, height: heightPerItem)
+//    }
     
     
 }

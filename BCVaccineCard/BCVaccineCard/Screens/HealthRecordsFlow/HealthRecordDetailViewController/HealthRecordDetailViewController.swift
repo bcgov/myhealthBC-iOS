@@ -91,7 +91,7 @@ extension HealthRecordDetailViewController: UITableViewDelegate, UITableViewData
         tableView.register(UINib.init(nibName: TextListViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextListViewTableViewCell.getName)
         tableView.register(UINib.init(nibName: StaticPositiveTestTableViewCell.getName, bundle: .main), forCellReuseIdentifier: StaticPositiveTestTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 300
+        tableView.estimatedRowHeight = 600
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
@@ -114,6 +114,7 @@ extension HealthRecordDetailViewController: UITableViewDelegate, UITableViewData
         if indexPath.row == 0 {
             if let cell = tableView.dequeueReusableCell(withIdentifier: BannerViewTableViewCell.getName, for: indexPath) as? BannerViewTableViewCell {
                 cell.configure(type: dataSource.type)
+                cell.layoutIfNeeded()
                 return cell
             }
             return UITableViewCell()
@@ -144,6 +145,7 @@ extension HealthRecordDetailViewController: UITableViewDelegate, UITableViewData
         if let cell = tableView.dequeueReusableCell(withIdentifier: TextListViewTableViewCell.getName, for: indexPath) as? TextListViewTableViewCell {
             let data = dataSource.getTextSets[indexPath.row - offset]
             cell.configure(data: data)
+            cell.layoutIfNeeded()
             return cell
         }
         return UITableViewCell()

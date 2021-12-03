@@ -55,7 +55,7 @@ class ReusableHeaderAddView: UIView {
     }
     
     private func labelSetup() {
-        boldTextLabel.font = UIFont.boldSystemFont(ofSize: 17)
+        boldTextLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         boldTextLabel.textColor = .black
         subtextLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         subtextLabel.textColor = AppColours.textGray
@@ -83,6 +83,7 @@ class ReusableHeaderAddView: UIView {
     
     func configureForHealthRecords(delegateOwner: UIViewController) {
         self.screenType = .healthRecords
+        boldTextLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         boldTextLabel.text = .viewDetailsOfCovidRecordsText
         subtextLabel.isHidden = true
         setupAccessibility()

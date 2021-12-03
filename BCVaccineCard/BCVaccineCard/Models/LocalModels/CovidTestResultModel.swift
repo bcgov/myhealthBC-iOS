@@ -11,7 +11,7 @@ enum CovidTestResult: String, Codable {
     case pending = "pending", negative, positive, indeterminate, cancelled
     
     var getTitle: String {
-        return self.rawValue.uppercased()
+        return self.rawValue.capitalized
     }
     
     // TODO: Include get color here (based on designs) to be used for Banner View for test results

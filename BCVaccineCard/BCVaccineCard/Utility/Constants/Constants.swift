@@ -96,11 +96,11 @@ extension Constants {
     private static let gatewayResponseCancelled = GatewayTestResultResponse(patientDisplayName: "Seth Rogan", lab: "California", reportId: "BGAEGAGNGPIANGN", collectionDateTime: Date(), resultDateTime: Date(), testName: "COVID-19 TEST", testType: "cancelled", testStatus: "cancelled", testOutcome: "", resultTitle: "", resultDescription: "", resultLink: "")
     
     static let testResultsDummyData: [TestDummyData] = [
-        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponsePending, status: .pending), phn: "111111111"),
-        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponseNegative, status: .negative), phn: "222222222"),
-        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponsePositive, status: .positive), phn: "333333333"),
-        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponseIndeterminate, status: .indeterminate), phn: "444444444"),
-        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponseCancelled, status: .cancelled), phn: "555555555")
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponsePending, status: .pending), phn: "1111111111"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponseNegative, status: .negative), phn: "2222222222"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponsePositive, status: .positive), phn: "3333333333"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponseIndeterminate, status: .indeterminate), phn: "4444444444"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response: gatewayResponseCancelled, status: .cancelled), phn: "5555555555")
     ]
 }
 

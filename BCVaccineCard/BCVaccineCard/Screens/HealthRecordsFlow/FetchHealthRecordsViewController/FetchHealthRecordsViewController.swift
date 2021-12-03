@@ -104,6 +104,10 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         switch type {
         case .covidImmunizationRecord:
             let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
+            vc.completionHandler = { [weak self] (_, _) in
+                guard let `self` = self else { return }
+                self.popBack(toControllerType: HealthRecordsViewController.self)
+            }
             self.navigationController?.pushViewController(vc, animated: true)
         case .covidTestResult:
             let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)

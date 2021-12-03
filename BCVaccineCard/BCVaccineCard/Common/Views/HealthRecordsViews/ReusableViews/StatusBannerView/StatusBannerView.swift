@@ -54,14 +54,15 @@ class StatusBannerView: UIView {
     ///   - statusColor: status text colour
     ///   - statusIconImage: status image icon. leave nil to remove icon
     public func setup(in containerView: UIView, type: RecordType, name: String, status: String, date: String, backgroundColor: UIColor, textColor: UIColor, statusColor: UIColor, statusIconImage: UIImage?) {
+        // TODO: Delete this label? Not sure if it's being used by anything other than QA'ing the UI
+        recordTypeLabel.isHidden = true
         // Place in container
         self.frame = .zero
         containerView.addSubview(self)
         self.addEqualSizeContraints(to: containerView)
         
         // set banner icon (gov logo)
-        // TODO: set correct image
-        bannerImage.image = UIImage(named: "")
+        bannerImage.image = UIImage(named: "bc-logo")
         
         // Hide Top banner if needed
         if type == .CovidTest {
@@ -93,14 +94,14 @@ class StatusBannerView: UIView {
         switch type {
         case .CovidTest:
             // TODO: put corrent fonts and sizes
-            nameLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold) 
-            statusLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-            timeLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+            nameLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+            statusLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+            timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         case .VaccineRecord:
             // TODO: put corrent fonts and sizes
-            nameLabel.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-            statusLabel.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-            timeLabel.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+            nameLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+            statusLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+            timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         }
     }
 

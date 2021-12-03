@@ -36,7 +36,7 @@ class GetRecordsView: UIView {
     }
     
     @IBOutlet weak private var contentView: UIView!
-    @IBOutlet weak private var backgroundGreyRoundedView: UIView!
+    @IBOutlet weak private var backgroundWhiteView: UIView!
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var descriptionLabel: UILabel!
     @IBOutlet weak private var recordTypeImageView: UIImageView!
@@ -68,14 +68,14 @@ class GetRecordsView: UIView {
     
     private func setup() {
         self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
         uiSetup()
     }
     
     private func uiSetup() {
-        backgroundGreyRoundedView.backgroundColor = AppColours.borderGray
-        backgroundGreyRoundedView.layer.cornerRadius = 4.0
-        backgroundGreyRoundedView.layer.masksToBounds = true
+        contentView.backgroundColor = AppColours.borderGray
+        contentView.layer.cornerRadius = 4.0
+        contentView.layer.masksToBounds = true
+        backgroundWhiteView.layer.masksToBounds = true
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         titleLabel.textColor = AppColours.appBlue
         descriptionLabel.font = UIFont.bcSansRegularWithSize(size: 13)

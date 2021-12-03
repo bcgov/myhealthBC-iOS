@@ -75,7 +75,8 @@ extension Array where Element == VaccineCard {
 extension VaccineCard {
     public func toLocal() -> LocallyStoredVaccinePassportModel? {
         guard let qrCode = code, let dates = vaxDates, let issueDate = issueDate, let birthdate = birthdate, let firHash = firHash else {return nil}
-        return LocallyStoredVaccinePassportModel(code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: Double(issueDate), status: .fully, source: .imported, fedCode: federalPass, phn: phn)
+        let status: VaccineStatus = vaxDates?.count ?? 0 > 1 ? .fully : (vaxDates?.count ?? 0 == 1 ? .partially : .notVaxed)
+        return LocallyStoredVaccinePassportModel(code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: Double(issueDate), status: status, source: .imported, fedCode: federalPass, phn: phn)
     }
 }
 
