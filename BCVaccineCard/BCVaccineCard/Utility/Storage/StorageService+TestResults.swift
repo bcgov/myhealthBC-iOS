@@ -13,7 +13,7 @@ extension StorageService {
     /// Store a test result from a HealthGateway response
     /// - Parameter gateWayResponse: codable response object from Health Gateway
     /// - Returns: String id of record if stored successfully
-    func saveTestResult(gateWayResponse: GatewayTestResultResponse) -> String? {
+    public func saveTestResult(gateWayResponse: GatewayTestResultResponse) -> String? {
         let userId = AuthManager().userId()
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
         
@@ -23,26 +23,29 @@ extension StorageService {
                          for each teast in that reponse, we will call saveTestResult
          */
         
-        
         // 1) for each result in the reponse save the test
+        var testResults: [TestResult] = []
         /*
-        saveTestResult(
-            for: userId,
-               resultId: id,
-               patientDisplayName: gateWayResponse.patientDisplayName,
-               lab: gateWayResponse.lab,
-               reportId: gateWayResponse.reportId,
-               collectionDateTime: gateWayResponse.collectionDateTime,
-               resultDateTime: gateWayResponse.resultDateTime,
-               testName: gateWayResponse.testName,
-               testType: gateWayResponse.testType,
-               testStatus: gateWayResponse.testStatus,
-               testOutcome: gateWayResponse.testOutcome,
-               resultTitle: gateWayResponse.resultTitle,
-               resultDescription: gateWayResponse.resultDescription,
-               resultLink: gateWayResponse.resultLink)
+        for whatever in gateWayResponse.whatever {
+            if let resultModel = saveTestResult(
+                   resultId: id,
+                   patientDisplayName: gateWayResponse.patientDisplayName,
+                   lab: gateWayResponse.lab,
+                   reportId: gateWayResponse.reportId,
+                   collectionDateTime: gateWayResponse.collectionDateTime,
+                   resultDateTime: gateWayResponse.resultDateTime,
+                   testName: gateWayResponse.testName,
+                   testType: gateWayResponse.testType,
+                   testStatus: gateWayResponse.testStatus,
+                   testOutcome: gateWayResponse.testOutcome,
+                   resultTitle: gateWayResponse.resultTitle,
+                   resultDescription: gateWayResponse.resultDescription,
+                   resultLink: gateWayResponse.resultLink) {
+                testResults.append(resultModel)
+            }
+        }
         */
-        // save the parent and pass the array saved above
+        // 2) save the parent and pass the array saved above
         guard let context = managedContext else {return nil}
         /*
         let model = CovidLabTestResult(context: context)
@@ -53,7 +56,7 @@ extension StorageService {
         model.testDate =
         model.testId =
         model.resultDateTime =
-        model.results =
+        model.results = testResults
         model.user = fetchUser(id: userId)
         */
        
@@ -77,7 +80,7 @@ extension StorageService {
         testOutcome: String?,
         resultTitle: String?,
         resultDescription: String?,
-        resultLink: String?) -> String? {
+        resultLink: String?) -> TestResult? {
             guard let context = managedContext else {return nil}
             let testResult = TestResult(context: context)
             testResult.id = reportId
@@ -95,7 +98,7 @@ extension StorageService {
             testResult.resultLink = resultLink
             do {
                 try context.save()
-                return testResult.id
+                return testResult
             } catch let error as NSError {
                 print("Could not save. \(error), \(error.userInfo)")
                 return nil
