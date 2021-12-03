@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19461" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="ImmunizationRecord" representedClassName="ImmunizationRecord" syncable="YES" codeGenerationType="class">
+    <entity name="CovidLabTestResult" representedClassName="CovidLabTestResult" syncable="YES">
+        <attribute name="birthday" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="phn" optional="YES" attributeType="String"/>
+        <attribute name="testDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="testId" optional="YES" attributeType="String"/>
+        <relationship name="results" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TestResult"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="covidTestResults" inverseEntity="User"/>
+    </entity>
+    <entity name="ImmunizationRecord" representedClassName=".ImmunizationRecord" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="lotNumber" optional="YES" attributeType="String"/>
         <attribute name="provider" optional="YES" attributeType="String"/>
         <attribute name="snomed" optional="YES" attributeType="String"/>
         <relationship name="vaccineCard" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="VaccineCard" inverseName="immunizationRecord" inverseEntity="VaccineCard"/>
     </entity>
-    <entity name="TestResult" representedClassName="TestResult" syncable="YES" codeGenerationType="class">
+    <entity name="TestResult" representedClassName=".TestResult" syncable="YES">
         <attribute name="collectionDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="lab" optional="YES" attributeType="String"/>
@@ -21,12 +30,11 @@
         <attribute name="testOutcome" optional="YES" attributeType="String"/>
         <attribute name="testStatus" optional="YES" attributeType="String"/>
         <attribute name="testType" optional="YES" attributeType="String"/>
-        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="testResult" inverseEntity="User"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="testResult" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TestResult" inverseName="user" inverseEntity="TestResult"/>
+        <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CovidLabTestResult" inverseName="user" inverseEntity="CovidLabTestResult"/>
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="VaccineCard" inverseName="user" inverseEntity="VaccineCard"/>
     </entity>
     <entity name="VaccineCard" representedClassName="VaccineCard" syncable="YES">
@@ -34,7 +42,7 @@
         <attribute name="code" optional="YES" attributeType="String"/>
         <attribute name="federalPass" optional="YES" attributeType="String"/>
         <attribute name="firHash" optional="YES" attributeType="String"/>
-        <attribute name="issueDate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="issueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <attribute name="sortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -43,9 +51,10 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="vaccineCard" inverseEntity="User"/>
     </entity>
     <elements>
-        <element name="ImmunizationRecord" positionX="406.703125" positionY="722.83984375" width="128" height="104"/>
-        <element name="TestResult" positionX="-27.796875" positionY="313.37109375" width="128" height="239"/>
-        <element name="User" positionX="200.21484375" positionY="327.20703125" width="128" height="89"/>
-        <element name="VaccineCard" positionX="423.671875" positionY="374.58984375" width="128" height="194"/>
+        <element name="CovidLabTestResult" positionX="159.5234375" positionY="507.296875" width="128" height="134"/>
+        <element name="ImmunizationRecord" positionX="497.89453125" positionY="782.546875" width="128" height="104"/>
+        <element name="TestResult" positionX="-104.609375" positionY="677.74609375" width="128" height="224"/>
+        <element name="User" positionX="234.6484375" positionY="237.27734375" width="128" height="89"/>
+        <element name="VaccineCard" positionX="483.7421875" positionY="301.015625" width="128" height="194"/>
     </elements>
 </model>

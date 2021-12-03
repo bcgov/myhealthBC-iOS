@@ -24,7 +24,7 @@ extension User {
     }
     
     public var testResultArray: [TestResult] {
-        let set = testResult as? Set<TestResult> ?? []
+        let set = covidTestResults as? Set<TestResult> ?? []
         return set.sorted {
             $0.resultDateTime ?? Date() > $1.resultDateTime ?? Date()
         }
@@ -75,8 +75,7 @@ extension Array where Element == VaccineCard {
 extension VaccineCard {
     public func toLocal() -> LocallyStoredVaccinePassportModel? {
         guard let qrCode = code, let dates = vaxDates, let issueDate = issueDate, let birthdate = birthdate, let firHash = firHash else {return nil}
-        let status: VaccineStatus = vaxDates?.count ?? 0 > 1 ? .fully : (vaxDates?.count ?? 0 == 1 ? .partially : .notVaxed)
-        return LocallyStoredVaccinePassportModel(code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: Double(issueDate), status: status, source: .imported, fedCode: federalPass, phn: phn)
+        return LocallyStoredVaccinePassportModel(code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: issueDate.timeIntervalSince1970, status: .fully, source: .imported, fedCode: federalPass, phn: phn)
     }
 }
 

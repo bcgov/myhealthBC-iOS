@@ -8,22 +8,12 @@
 import Foundation
 import BCVaccineValidator
 
-
-/*
-Test {
-* PHN
-* DOB
-* DOT
-* TEST ID
-* TESTS: [RECORDS]
-}
-*/
 extension StorageService {
     
     func getHeathRecords(for userId: String? = AuthManager().userId()) -> [HealthRecord] {
         guard let context = managedContext else {return []}
         do {
-            let users = try context.fetch(User.createFetchRequest())
+            let users = try context.fetch(User.fetchRequest())
             guard let user = users.filter({$0.userId == userId}).first else {return []}
             
             let tests = user.testResultArray.map({HealthRecord(type: .Test($0))})
