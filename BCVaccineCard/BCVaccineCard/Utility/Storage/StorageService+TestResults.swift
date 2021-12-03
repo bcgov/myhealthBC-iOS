@@ -17,7 +17,16 @@ extension StorageService {
         let userId = AuthManager().userId()
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
         
-        return saveTestResult(
+        /**
+                TODO:
+                    When GatewayTestResultResponse is updated, Here we will first store the parent test object and then
+                         for each teast in that reponse, we will call saveTestResult
+         */
+        
+        
+        // 1) for each result in the reponse save the test
+        /*
+        saveTestResult(
             for: userId,
                resultId: id,
                patientDisplayName: gateWayResponse.patientDisplayName,
@@ -32,13 +41,30 @@ extension StorageService {
                resultTitle: gateWayResponse.resultTitle,
                resultDescription: gateWayResponse.resultDescription,
                resultLink: gateWayResponse.resultLink)
+        */
+        // save the parent and pass the array saved above
+        guard let context = managedContext else {return nil}
+        /*
+        let model = CovidLabTestResult(context: context)
+        model.id = id
+        model.name =
+        model.phn =
+        model.birthday =
+        model.testDate =
+        model.testId =
+        model.resultDateTime =
+        model.results =
+        model.user = fetchUser(id: userId)
+        */
+       
+        
+        return id
     }
     
     
     /// Store a test result
     /// - Returns: String id of record if stored successfully
-    func saveTestResult(
-        for userId: String,
+    private func saveTestResult(
         resultId: String,
         patientDisplayName: String?,
         lab: String?,
@@ -52,7 +78,7 @@ extension StorageService {
         resultTitle: String?,
         resultDescription: String?,
         resultLink: String?) -> String? {
-            guard let context = managedContext, let user = fetchUser(id: userId) else {return nil}
+            guard let context = managedContext else {return nil}
             let testResult = TestResult(context: context)
             testResult.id = reportId
             testResult.patientDisplayName = patientDisplayName
@@ -67,7 +93,6 @@ extension StorageService {
             testResult.resultTitle = resultTitle
             testResult.resultDescription = resultDescription
             testResult.resultLink = resultLink
-            testResult.user = user
             do {
                 try context.save()
                 return testResult.id
@@ -83,8 +108,8 @@ extension StorageService {
     func deleteTestResult(id: String) {
         guard let context = managedContext else {return}
         do {
-            let tests = try context.fetch(TestResult.fetchRequest())
-            guard let item = tests.filter({ ($0.id == id) || $0.reportId == id}).first else {return}
+            let tests = try context.fetch(CovidLabTestResult.fetchRequest())
+            guard let item = tests.filter({ ($0.id == id) || $0.testId == id}).first else {return}
             context.delete(item)
             try context.save()
         } catch let error as NSError {
@@ -99,7 +124,7 @@ extension StorageService {
     func fetchTestResults(for userId: String? = AuthManager().userId()) -> [TestResult] {
         guard let context = managedContext else {return []}
         do {
-            let users = try context.fetch(User.createFetchRequest())
+            let users = try context.fetch(User.fetchRequest())
             guard let current = users.filter({$0.userId == userId}).first else {return []}
             return current.testResultArray
         } catch let error as NSError {

@@ -29,6 +29,5 @@ extension TestResult {
     @NSManaged public var testOutcome: String?
     @NSManaged public var testStatus: String?
     @NSManaged public var testType: String?
-    @NSManaged public var labResult: CovidLabTestResult?
 
 }
