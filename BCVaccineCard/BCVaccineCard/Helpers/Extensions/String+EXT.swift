@@ -72,6 +72,29 @@ extension String {
 // MARK: Convert String Code to UIImage
 extension String {
     func generateQRCode() -> UIImage? {
+        // Separate numeric and alphanumberic portions of the code
+        let prefix = "shc:/"
+        let numeric = self.lowercased().replacingOccurrences(of: prefix, with: "")
+        let shcSegment: QRSegment = QRSegment.makeBytes(Array(prefix.utf8))
+        let numericSegment: QRSegment = QRSegment.makeNumeric(Array(numeric))
+        do {
+            // Create QR SVG ( what what the library gives us.. )
+            let qr = try QRCode.encode(segments: [shcSegment, numericSegment], ecl: .low)
+            let svg = qr.toSVGString(border: 5)
+            // Generate UIImage from svg
+            let path = SVGBezierPath.paths(fromSVGString: svg)
+            let layer = SVGLayer()
+            layer.paths = path
+            let size = UIView.screenWidth
+            let frame = CGRect(x: 5, y: 5, width: size, height: size)
+            layer.frame = frame
+            let img = snapshotImage(for: layer)
+            return img
+            
+        } catch {
+            return nil
+        }
+        /*
         if #available(iOS 15.0, *) {
             let data = self.data(using: String.Encoding.ascii)
             let transform = CGAffineTransform(scaleX: 10, y: 10)
@@ -109,6 +132,7 @@ extension String {
                 return nil
             }
         }
+        */
         
         /* Ideal way - no longer working:
          https://developer.apple.com/library/archive/documentation/GraphicsImaging/Reference/CoreImageFilterReference/index.html#//apple_ref/doc/filter/ci/CIQRCodeGenerator
@@ -120,7 +144,7 @@ extension String {
          }
          */
         
-        return nil
+//        return nil
     }
     
     fileprivate func snapshotImage(for view: CALayer) -> UIImage? {
