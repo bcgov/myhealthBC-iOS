@@ -22,6 +22,7 @@
 		29128F17272AF41F00358014 /* Array+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29128F16272AF41F00358014 /* Array+EXT.swift */; };
 		29128F18272AF41F00358014 /* Array+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29128F16272AF41F00358014 /* Array+EXT.swift */; };
 		2932DCE3275D9C1600532BC4 /* LocalAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE2275D9C1600532BC4 /* LocalAuthManager.swift */; };
+		2932DCE5275EBE4600532BC4 /* CoreDataEncryptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE4275EBE4600532BC4 /* CoreDataEncryptionManager.swift */; };
 		2940A3502728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2940A3512728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2942AC56273AC30900A4A466 /* ToggleSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */; };
@@ -302,6 +303,7 @@
 		29128F0D272AEFA600358014 /* VaccineCard+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VaccineCard+CoreDataClass.swift"; sourceTree = "<group>"; };
 		29128F16272AF41F00358014 /* Array+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+EXT.swift"; sourceTree = "<group>"; };
 		2932DCE2275D9C1600532BC4 /* LocalAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthManager.swift; sourceTree = "<group>"; };
+		2932DCE4275EBE4600532BC4 /* CoreDataEncryptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataEncryptionManager.swift; sourceTree = "<group>"; };
 		2940A34F2728399B00132D7D /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		2942AC55273AC30900A4A466 /* ToggleSettingsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleSettingsTableViewCell.xib; sourceTree = "<group>"; };
@@ -494,6 +496,7 @@
 			children = (
 				2940A352272840C200132D7D /* CoreDataClass */,
 				2940A34F2728399B00132D7D /* StorageService.swift */,
+				2932DCE4275EBE4600532BC4 /* CoreDataEncryptionManager.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -1662,6 +1665,7 @@
 				7944F6BB26F12BC3006B9444 /* UIButton+EXT.swift in Sources */,
 				7967E73A26F517F600EEF510 /* FormDataSource.swift in Sources */,
 				29A12AF7271F69D700A106B5 /* AnalyticsAction.swift in Sources */,
+				2932DCE5275EBE4600532BC4 /* CoreDataEncryptionManager.swift in Sources */,
 				29128F0E272AEFA600358014 /* User+CoreDataClass.swift in Sources */,
 				29128F12272AEFA600358014 /* VaccineCard+CoreDataProperties.swift in Sources */,
 				29128F17272AF41F00358014 /* Array+EXT.swift in Sources */,

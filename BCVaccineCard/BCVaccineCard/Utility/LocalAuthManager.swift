@@ -45,6 +45,7 @@ class LocalAuthManager {
                 self.performAuth(policy: .deviceOwnerAuthentication, completion: { passStatus in
                     switch passStatus {
                     case .Authorized:
+                        self.view.style(state: .Success)
                         return completion(passStatus)
                     case .Unauthorized:
                         self.view.style(state: .Fail)
