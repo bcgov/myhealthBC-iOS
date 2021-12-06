@@ -23,6 +23,8 @@
 		29128F18272AF41F00358014 /* Array+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29128F16272AF41F00358014 /* Array+EXT.swift */; };
 		2932DCE7275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE6275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift */; };
 		2932DCE8275ECC8F00532BC4 /* CoreDataEncryptionKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE6275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift */; };
+		2932DCEA275ED82600532BC4 /* AnalyticsAppID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE9275ED82600532BC4 /* AnalyticsAppID.swift */; };
+		2932DCEB275ED8C800532BC4 /* AnalyticsAppID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE9275ED82600532BC4 /* AnalyticsAppID.swift */; };
 		2940A3502728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2940A3512728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2942AC56273AC30900A4A466 /* ToggleSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */; };
@@ -303,6 +305,7 @@
 		29128F0D272AEFA600358014 /* VaccineCard+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VaccineCard+CoreDataClass.swift"; sourceTree = "<group>"; };
 		29128F16272AF41F00358014 /* Array+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+EXT.swift"; sourceTree = "<group>"; };
 		2932DCE6275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataEncryptionKeyManager.swift; sourceTree = "<group>"; };
+		2932DCE9275ED82600532BC4 /* AnalyticsAppID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsAppID.swift; sourceTree = "<group>"; };
 		2940A34F2728399B00132D7D /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		2942AC55273AC30900A4A466 /* ToggleSettingsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleSettingsTableViewCell.xib; sourceTree = "<group>"; };
@@ -525,6 +528,7 @@
 			children = (
 				29A12AF3271F699000A106B5 /* AnalyticsService.swift */,
 				29A12AF6271F69D700A106B5 /* AnalyticsAction.swift */,
+				2932DCE9275ED82600532BC4 /* AnalyticsAppID.swift */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
@@ -1707,6 +1711,7 @@
 				29B446AB273575AA00E0F967 /* FederalPassPDFView.swift in Sources */,
 				795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
+				2932DCEA275ED82600532BC4 /* AnalyticsAppID.swift in Sources */,
 				795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				296519A5272995680002B778 /* AuthManager.swift in Sources */,
 				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
@@ -1822,6 +1827,7 @@
 				29B446AC2735766400E0F967 /* FederalPassPDFView.swift in Sources */,
 				791C27C62718A68D001A6E12 /* QueueItWorker.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
+				2932DCEB275ED8C800532BC4 /* AnalyticsAppID.swift in Sources */,
 				795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				296519A6272995680002B778 /* AuthManager.swift in Sources */,
 				794BD6512702EEC00084ADA8 /* String+EXT.swift in Sources */,
