@@ -95,12 +95,38 @@ extension AppDelegate {
         guard let first = unseen.first else {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
+            // Display Auth
+            self.performLocalAuth(on: vc)
             return
         }
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
-        
+        // Display Auth
+        self.performLocalAuth(on: vc)
+    }
+    
+    private func performLocalAuth(on viewController: UIViewController) {
+        let manager = LocalAuthManager()
+        if manager.availableAuthMethods().isEmpty {
+            localNoAvailableAuth()
+            return
+        }
+        // Use the manager to perform authentication. It has a view of its own which is auto dismissed.
+        // localAuthFailed () is called if it was unsuccessful for FE to know how to handle it
+        manager.performLocalAuth(on: viewController) { [weak self] status in
+            if status != .Authorized {self?.localAuthFailed()}
+        }
+    }
+    
+    private func localAuthFailed() {
+        //TODO:
+    }
+    
+    private func localNoAvailableAuth() {
+        //TODO:
+        self.window?.rootViewController?.view.startLoadingIndicator(backgroundColor: .white)
+        self.window?.rootViewController?.alert(title: "Unsecure device", message: "Please enable authentication on your device to proceed")
     }
 }
 
