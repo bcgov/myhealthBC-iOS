@@ -9,6 +9,6 @@ import Foundation
 
 extension AnalyticsService {
     var appID: String {
-        return "Snowplow_standalone_HApp_dev"
+        return "Snowplow_standalone_HApp_prod"
     }
 }
