@@ -25,7 +25,7 @@ class StorageService {
         createUserIfneeded()
     }
     
-    func deleteAllStoredData() {
+    func deleteAllStoredData(for userId: String? = AuthManager().userId()) {
         /**
          We could do this, but then we would have to add do this with each new record type:
          
@@ -41,7 +41,7 @@ class StorageService {
          cascade delete rule on the relationships
          then we can create the user again with the same properties.
          */
-        if let user = fetchUser(), let userID = user.id {
+        if let user = fetchUser(id: userId), let userID = user.id {
             // cache user data
             let userName = user.name ?? ""
             
