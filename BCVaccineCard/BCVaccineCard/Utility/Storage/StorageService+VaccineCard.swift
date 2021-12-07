@@ -68,7 +68,7 @@ extension StorageService {
     /// Fetch all Vaccine Cards stored for a user
     /// - Parameter user: user id
     /// - Returns: array of vaccine cards
-    func fetchVaccineCards(for userId: String) -> [VaccineCard] {
+    func fetchVaccineCards(for userId: String? = AuthManager().userId()) -> [VaccineCard] {
         guard let context = managedContext else {return []}
         do {
             let users = try context.fetch(User.fetchRequest())

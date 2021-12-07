@@ -37,7 +37,7 @@ extension StorageService {
     /// Fetch a user by user id
     /// - Parameter id: user id
     /// - Returns: user
-    func fetchUser(id: String) -> User? {
+    func fetchUser(id: String? = AuthManager().userId()) -> User? {
         guard let context = managedContext else {return nil}
         do {
             let users = try context.fetch(User.fetchRequest())

@@ -2,7 +2,7 @@ PODS:
   - Alamofire (5.4.4)
   - AlamofireRSSParser (2.4.0):
     - Alamofire (~> 5.0)
-  - BCVaccineValidator (1.0.8):
+  - BCVaccineValidator (1.0.9):
     - Alamofire
     - JOSESwift
   - Firebase/AppDistribution (8.10.0):
@@ -102,13 +102,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   BCVaccineValidator:
-    :commit: 563285086b00950005f13259bdcd0a74bbfd21f5
+    :commit: a2cbdbbaee46e51636dc46db643c407d7241a058
     :git: https://github.com/bcgov/iOSVaccineValidator
 
 SPEC CHECKSUMS:
   Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
   AlamofireRSSParser: dab86644d4d220b313767c33ef09e7acf11f641a
-  BCVaccineValidator: 0e37cfc32f72c82c44f1d32534007313e7b238f9
+  BCVaccineValidator: 9f5ecb5accb833cbeab1220df42f7d5235be2eee
   Firebase: 44213362f1dcc52555b935dc925ed35ac55f1b20
   FirebaseAppDistribution: 1d62aa8711bd2d9a56aa4c44098f533d3d459822
   FirebaseCore: 04186597c095da37d90ff9fd3e53bc61a1ff2440
