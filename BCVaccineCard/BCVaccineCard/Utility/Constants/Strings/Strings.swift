@@ -182,6 +182,13 @@ extension String {
     static var viewDetailsOfCovidRecordsText: String { return "ViewDetailsOfCovidRecordsText".localized }
     static var fetchHealthRecordsIntroText: String { return "FetchHealthRecordsIntroText".localized }
     
+    // MARK: Settings
+    
+    static var deleteAllRecordsAndSavedData: String { return "DeleteAllRecordsAndSavedData".localized }
+    static var disableAnalytics: String { return "DisableAnalytics".localized }
+    static var enableAnalytics: String { return "EnableAnalytics".localized }
+    static var analytyticsUsageDescription: String { return "AnalytyticsUsageDescription".localized }
+
 }
 
 // Accessibility only localized strings

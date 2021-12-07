@@ -13,6 +13,7 @@
 		2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314426F9440600CF5F3B /* UIColor+EXT.swift */; };
 		29128F17272AF41F00358014 /* Array+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29128F16272AF41F00358014 /* Array+EXT.swift */; };
 		29128F18272AF41F00358014 /* Array+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29128F16272AF41F00358014 /* Array+EXT.swift */; };
+		291D43BB275FE0EC005F5B94 /* SettingsTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D43BA275FE0EC005F5B94 /* SettingsTextTableViewCell.swift */; };
 		29245D40275581C700F48642 /* StorageService+TestResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D3F275581C700F48642 /* StorageService+TestResults.swift */; };
 		29245D41275581C700F48642 /* StorageService+TestResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D3F275581C700F48642 /* StorageService+TestResults.swift */; };
 		29245D432755877A00F48642 /* Encodable+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D422755877A00F48642 /* Encodable+EXT.swift */; };
@@ -226,7 +227,6 @@
 		794BD6472702EEC00084ADA8 /* QRRetrievalMethodViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F70D26F3A0C1006B9444 /* QRRetrievalMethodViewController.swift */; };
 		794BD6482702EEC00084ADA8 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E74226F900E400EEF510 /* TabBarController.swift */; };
 		794BD6492702EEC00084ADA8 /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
-		794BD64A2702EEC00084ADA8 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E74926F908E400EEF510 /* Setting.swift */; };
 		794BD64B2702EEC00084ADA8 /* AccessibilityLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD61B270235430084ADA8 /* AccessibilityLabels.swift */; };
 		794BD64C2702EEC00084ADA8 /* ZoomedInPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F6E326F12C4E006B9444 /* ZoomedInPopUpVC.swift */; };
 		794BD64D2702EEC00084ADA8 /* NoCardsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944F70226F31451006B9444 /* NoCardsTableViewCell.swift */; };
@@ -319,7 +319,6 @@
 		7967E74326F900E400EEF510 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E74226F900E400EEF510 /* TabBarController.swift */; };
 		7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E74526F9071A00EEF510 /* SettingsTableViewCell.swift */; };
 		7967E74826F9071A00EEF510 /* SettingsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74626F9071A00EEF510 /* SettingsTableViewCell.xib */; };
-		7967E74A26F908E400EEF510 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E74926F908E400EEF510 /* Setting.swift */; };
 		7967E75026F9145700EEF510 /* BCSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74C26F9145600EEF510 /* BCSans-Regular.otf */; };
 		7967E75126F9145700EEF510 /* BCSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74D26F9145600EEF510 /* BCSans-Bold.otf */; };
 		7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7967E74E26F9145600EEF510 /* BCSans-BoldItalic.otf */; };
@@ -387,6 +386,7 @@
 		2912314226F9433600CF5F3B /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		2912314426F9440600CF5F3B /* UIColor+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+EXT.swift"; sourceTree = "<group>"; };
 		29128F16272AF41F00358014 /* Array+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+EXT.swift"; sourceTree = "<group>"; };
+		291D43BA275FE0EC005F5B94 /* SettingsTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTextTableViewCell.swift; sourceTree = "<group>"; };
 		29245D3F275581C700F48642 /* StorageService+TestResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+TestResults.swift"; sourceTree = "<group>"; };
 		29245D422755877A00F48642 /* Encodable+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+EXT.swift"; sourceTree = "<group>"; };
 		2931A7E427596E9100109161 /* VaccineCard+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VaccineCard+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -545,7 +545,6 @@
 		7967E74226F900E400EEF510 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		7967E74526F9071A00EEF510 /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		7967E74626F9071A00EEF510 /* SettingsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsTableViewCell.xib; sourceTree = "<group>"; };
-		7967E74926F908E400EEF510 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		7967E74C26F9145600EEF510 /* BCSans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BCSans-Regular.otf"; sourceTree = "<group>"; };
 		7967E74D26F9145600EEF510 /* BCSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BCSans-Bold.otf"; sourceTree = "<group>"; };
 		7967E74E26F9145600EEF510 /* BCSans-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BCSans-BoldItalic.otf"; sourceTree = "<group>"; };
@@ -1206,6 +1205,7 @@
 				791C27B627183118001A6E12 /* AddCardsTableViewCell */,
 				791C27B52718310A001A6E12 /* ButtonTableViewCell */,
 				7944F6FC26F313F7006B9444 /* VaccineCardTableViewCell */,
+				291D43BA275FE0EC005F5B94 /* SettingsTextTableViewCell.swift */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -1325,7 +1325,6 @@
 				7944F6BD26F12BD5006B9444 /* VaccinePassportModel.swift */,
 				79218AA027518A5E0063004E /* CovidTestResultModel.swift */,
 				7967E73926F517F600EEF510 /* FormDataSource.swift */,
-				7967E74926F908E400EEF510 /* Setting.swift */,
 				795AA72E27108C1C00E59FF1 /* GatewayVaccineCardRequest.swift */,
 				795AA76C271563C500E59FF1 /* ResourceDataSource.swift */,
 				791C27CB2719DB3D001A6E12 /* QueueItCachedObject.swift */,
@@ -2077,7 +2076,6 @@
 				795AA74C2714018600E59FF1 /* HealthGatewayBCWorker.swift in Sources */,
 				795AA77F2715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
 				2931A7EE27596E9200109161 /* VaccineCard+CoreDataClass.swift in Sources */,
-				7967E74A26F908E400EEF510 /* Setting.swift in Sources */,
 				795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				2932DCE1275AA10D00532BC4 /* StorageService+User.swift in Sources */,
 				791C27B127179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */,
@@ -2108,6 +2106,7 @@
 				79218AA427518CC20063004E /* GatewayTestResultResponse.swift in Sources */,
 				795AA76127155F0900E59FF1 /* ResourceViewController.swift in Sources */,
 				29B446AB273575AA00E0F967 /* FederalPassPDFView.swift in Sources */,
+				291D43BB275FE0EC005F5B94 /* SettingsTextTableViewCell.swift in Sources */,
 				795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				2932DCDF275A9D2C00532BC4 /* StorageService+VaccineCard.swift in Sources */,
@@ -2226,7 +2225,6 @@
 				795AA7422713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */,
 				795AA7802715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
 				794BD6492702EEC00084ADA8 /* FormTableViewCell.swift in Sources */,
-				794BD64A2702EEC00084ADA8 /* Setting.swift in Sources */,
 				794BD64B2702EEC00084ADA8 /* AccessibilityLabels.swift in Sources */,
 				79218AC7275569B70063004E /* BannerViewTableViewCell.swift in Sources */,
 				79FDE424273335D000DAD988 /* FederalPassView.swift in Sources */,

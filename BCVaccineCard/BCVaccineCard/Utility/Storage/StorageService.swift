@@ -29,4 +29,8 @@ class StorageService {
         // TODO: Refactor when authentication is added
         createUserIfneeded()
     }
+    
+    func deleteAllStoredData() {
+        
+    }
 }

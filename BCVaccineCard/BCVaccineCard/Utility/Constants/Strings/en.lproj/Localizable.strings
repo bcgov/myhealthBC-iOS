@@ -143,3 +143,8 @@
 "RecordText" = "record";
 "ViewDetailsOfCovidRecordsText" = "View the details of all your COVID Health Records";
 "FetchHealthRecordsIntroText" = "View the details of all your COVID Health Records";
+
+"DeleteAllRecordsAndSavedData" = "Delete all records and saved data";
+"DisableAnalytics" = "Disable Analytics";
+"EnableAnalytics" = "Enable Analytics";
+"AnalytyticsUsageDescription" = "Anonymized behavioural data is used to help improve the user experience";
