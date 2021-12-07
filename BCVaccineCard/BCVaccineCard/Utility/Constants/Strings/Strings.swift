@@ -188,7 +188,8 @@ extension String {
     static var disableAnalytics: String { return "DisableAnalytics".localized }
     static var enableAnalytics: String { return "EnableAnalytics".localized }
     static var analytyticsUsageDescription: String { return "AnalytyticsUsageDescription".localized }
-
+    static var deleteData: String { return "DeleteData".localized }
+    static var confirmDeleteAllRecordsAndSaveData: String { return "ConfirmDeleteAllRecordsAndSaveData".localized }
 }
 
 // Accessibility only localized strings

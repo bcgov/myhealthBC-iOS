@@ -148,3 +148,5 @@
 "DisableAnalytics" = "Disable Analytics";
 "EnableAnalytics" = "Enable Analytics";
 "AnalytyticsUsageDescription" = "Anonymized behavioural data is used to help improve the user experience";
+"DeleteData"= "Delete data";
+"ConfirmDeleteAllRecordsAndSaveData"= "Are you sure you want to delete all records and saved data?";

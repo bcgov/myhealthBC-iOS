@@ -106,8 +106,11 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
             
         case .deleteAllRecords:
-            let cell = textCell(for: indexPath, title: .deleteAllRecordsAndSavedData, textColor: AppColours.appRed) {
-                StorageService.shared.deleteAllStoredData()
+            let cell = textCell(for: indexPath, title: .deleteAllRecordsAndSavedData, textColor: AppColours.appRed) {[weak self] in
+                guard let `self` = self else {return}
+                self.alertConfirmation(title: .deleteData, message: .confirmDeleteAllRecordsAndSaveData, confirmTitle: .delete, confirmStyle: .destructive) {
+                    StorageService.shared.deleteAllStoredData()
+                } onCancel: {}
             }
             return cell
         }

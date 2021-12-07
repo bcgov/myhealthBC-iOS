@@ -35,6 +35,29 @@ extension UIViewController {
         }
     }
     
+    func alertConfirmation(title: String,
+               message: String,
+               confirmTitle: String,
+               confirmStyle: UIAlertAction.Style,
+               onConfirm: @escaping()->Void,
+               cancelTitle: String? = .cancel,
+               cancelStyle: UIAlertAction.Style? = .cancel,
+               onCancel: @escaping()->Void) {
+        
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.isAccessibilityElement = true
+        
+        controller.addAction(UIAlertAction(title: cancelTitle, style: cancelStyle ?? .cancel, handler: { action in
+            return onCancel()
+        }))
+        controller.addAction(UIAlertAction(title: confirmTitle, style: confirmStyle, handler: { action in
+            return onConfirm()
+        }))
+        DispatchQueue.main.async {
+            self.present(controller, animated: true)
+        }
+    }
+    
     func alert(title: String, message: String, buttonOneTitle: String, buttonOneCompletion: @escaping()->Void, buttonTwoTitle: String?, buttonTwoCompletion: @escaping()->Void) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.isAccessibilityElement = true
