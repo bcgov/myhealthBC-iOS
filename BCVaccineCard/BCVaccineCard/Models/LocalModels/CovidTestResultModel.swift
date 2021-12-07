@@ -50,10 +50,25 @@ enum CovidTestResult: String, Codable {
 public struct LocallyStoredCovidTestResultModel: Codable, Equatable {
     // For now, just doing this until we actually test with their data to see what we really get (just have a lack of faith in their documentation is all)
     public static func == (lhs: LocallyStoredCovidTestResultModel, rhs: LocallyStoredCovidTestResultModel) -> Bool {
-        guard let l = lhs.response?.reportId, let r = rhs.response?.reportId else { return false }
-        return l == r
+        if let rhsResponse = rhs.response, let lshResponse = lhs.response {
+            return lshResponse.records.equals(other: rhsResponse.records)
+        }
+        return (rhs.response == nil && lhs.response == nil)
     }
     // TODO: Should likely convert this 'response' into a model that we can use
     let response: GatewayTestResultResponse?
     let status: CovidTestResult
+}
+
+
+extension LocallyStoredCovidTestResultModel {
+    var testResults: [GatewayTestResultResponseRecord] {
+        return response?.records ?? []
+    }
+}
+
+extension GatewayTestResultResponseRecord {
+    var status: CovidTestResult {
+         CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
+    }
 }

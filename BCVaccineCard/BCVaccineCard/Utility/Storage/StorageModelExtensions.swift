@@ -23,10 +23,10 @@ extension User {
         }
     }
     
-    public var testResultArray: [TestResult] {
-        let set = covidTestResults as? Set<TestResult> ?? []
+    public var testResultArray: [CovidLabTestResult] {
+        let set = covidTestResults as? Set<CovidLabTestResult> ?? []
         return set.sorted {
-            $0.resultDateTime ?? Date() > $1.resultDateTime ?? Date()
+            $0.testDate ?? Date() > $1.testDate ?? Date()
         }
     }
 }
@@ -80,13 +80,34 @@ extension VaccineCard {
     }
 }
 
+// MARK: CovidLabTestResult
+extension CovidLabTestResult {
+    public var resultArray: [TestResult] {
+        let set = results as? Set<TestResult> ?? []
+        return set.sorted {
+            $0.resultDateTime ?? Date() > $1.resultDateTime ?? Date()
+        }
+    }
+    
+    var status: CovidTestResult? {
+        return resultArray.first?.status
+    }
+    
+    func toLocal() -> LocallyStoredCovidTestResultModel? {
+        let response: GatewayTestResultResponse = GatewayTestResultResponse(records: resultArray.compactMap({$0.toRecord()}))
+        return LocallyStoredCovidTestResultModel(response: response, status: status ?? .indeterminate)
+    }
+}
+
 // MARK: TestResult
 extension TestResult {
-    func toLocal() -> LocallyStoredCovidTestResultModel? {
-        let response = GatewayTestResultResponse(patientDisplayName: self.patientDisplayName, lab: self.lab, reportId: self.reportId, collectionDateTime: self.collectionDateTime, resultDateTime: self.resultDateTime, testName: self.testName, testType: self.testType, testStatus: self.testStatus, testOutcome: self.testOutcome, resultTitle: self.resultTitle, resultDescription: self.resultDescription, resultLink: self.resultLink)
-        let status = CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
-        let local = LocallyStoredCovidTestResultModel(response: response, status: status)
-        return local
+    
+    var status: CovidTestResult {
+        return CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
+    }
+    
+    func toRecord() -> GatewayTestResultResponseRecord? {
+        return GatewayTestResultResponseRecord(patientDisplayName: self.patientDisplayName, lab: self.lab, reportId: self.reportId, collectionDateTime: self.collectionDateTime, resultDateTime: self.resultDateTime, testName: self.testName, testType: self.testType, testStatus: self.testStatus, testOutcome: self.testOutcome, resultTitle: self.resultTitle, resultDescription: self.resultDescription, resultLink: self.resultLink)
     }
 }
 

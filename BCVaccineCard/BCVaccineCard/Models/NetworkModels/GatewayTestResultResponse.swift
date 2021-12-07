@@ -8,6 +8,14 @@
 import Foundation
 
 struct GatewayTestResultResponse: Codable, Equatable {
+    static func == (lhs: GatewayTestResultResponse, rhs: GatewayTestResultResponse) -> Bool {
+        lhs.records.equals(other: rhs.records)
+    }
+    
+    let records: [GatewayTestResultResponseRecord]
+}
+
+struct GatewayTestResultResponseRecord: Codable, Equatable {
     let patientDisplayName: String?
     let lab: String?
     let reportId: String?
@@ -20,4 +28,17 @@ struct GatewayTestResultResponse: Codable, Equatable {
     let resultTitle: String?
     let resultDescription: String?
     let resultLink: String?
+}
+
+extension Array where Element == GatewayTestResultResponseRecord {
+    func equals(other: [GatewayTestResultResponseRecord]) -> Bool {
+        for el in self {
+            if !other.contains(where: { element in
+                return element == el
+            }) {
+                return false
+            }
+        }
+        return self.count == other.count
+    }
 }

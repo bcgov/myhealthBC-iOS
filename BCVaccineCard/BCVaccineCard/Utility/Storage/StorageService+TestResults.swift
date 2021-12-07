@@ -124,7 +124,7 @@ extension StorageService {
     /// Returns all test results stored for user
     /// - Parameter userId: User id. if left empty, the results results for the currently authenticated user.
     /// - Returns: All Test results stored for the given user
-    func fetchTestResults(for userId: String? = AuthManager().userId()) -> [TestResult] {
+    func fetchTestResults(for userId: String? = AuthManager().userId()) -> [CovidLabTestResult] {
         guard let context = managedContext else {return []}
         do {
             let users = try context.fetch(User.fetchRequest())
