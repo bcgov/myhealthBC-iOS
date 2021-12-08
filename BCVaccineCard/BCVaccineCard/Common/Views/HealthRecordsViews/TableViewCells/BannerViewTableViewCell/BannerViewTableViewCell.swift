@@ -8,7 +8,7 @@
 import UIKit
 
 extension HealthRecordsDetailDataSource.Record {
-    func toBannerViewTableViewCell() -> BannerViewTableViewCell.ViewModel {
+    func toBannerViewTableViewCellViewModel() -> BannerViewTableViewCell.ViewModel {
         switch type {
         case .covidImmunizationRecord(let model, _):
             let statusImage: UIImage? = model.status == .fully ? UIImage(named: "check-mark") : nil

@@ -120,11 +120,13 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: UserRecordListTableViewCell.getName, for: indexPath) as? UserRecordListTableViewCell {
-            cell.configure(type: dataSource[indexPath.row].type)
-            return cell
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: UserRecordListTableViewCell.getName, for: indexPath) as? UserRecordListTableViewCell else {
+            return UITableViewCell()
         }
-        return UITableViewCell()
+        cell.configure(record: dataSource[indexPath.row])
+        return cell
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

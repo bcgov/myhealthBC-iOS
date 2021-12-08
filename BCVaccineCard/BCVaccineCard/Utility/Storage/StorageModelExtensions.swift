@@ -111,10 +111,10 @@ extension TestResult {
     }
 }
 
-extension Array where Element == TestResult {
-    /// Convert to health record object
-    /// - Returns: Array of HealthRecord objects
-    func toHealthRecord() -> [HealthRecord] {
-        return self.map({HealthRecord(type: .Test($0))})
-    }
-}
+//extension Array where Element == TestResult {
+//    /// Convert to health record object
+//    /// - Returns: Array of HealthRecord objects
+//    func toHealthRecord() -> [HealthRecord] {
+//        return self.map({HealthRecord(type: .Test($0))})
+//    }
+//}

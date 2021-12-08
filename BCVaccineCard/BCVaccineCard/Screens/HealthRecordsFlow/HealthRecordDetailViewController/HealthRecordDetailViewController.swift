@@ -7,6 +7,177 @@
 
 import UIKit
 
+
+extension HealthRecordsDetailDataSource.Record {
+    fileprivate func getCellSections() -> [HealthRecordView.CellSection] {
+        switch type {
+        case .covidImmunizationRecord(let model, let immunizations):
+            return [.Header, .StaticText, .Fields]
+        case .covidTestResultRecord(model: let model):
+            if model.status == .positive {
+                return [.Header, .StaticText, .Fields]
+            } else {
+                return [.Header, .Fields]
+            }
+        }
+    }
+}
+class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
+    enum CellSection {
+        case Header
+        case StaticText
+        case Fields
+    }
+    
+    private var tableView: UITableView?
+    private var model: HealthRecordsDetailDataSource.Record?
+    
+    func configure(model: HealthRecordsDetailDataSource.Record) {
+        self.model = model
+        setupTableView()
+    }
+    
+    private func setupTableView() {
+        let tableView = UITableView(frame: .zero)
+        addSubview(tableView)
+        tableView.addEqualSizeContraints(to: self)
+        tableView.register(UINib.init(nibName: BannerViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BannerViewTableViewCell.getName)
+        tableView.register(UINib.init(nibName: TextListViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextListViewTableViewCell.getName)
+        tableView.register(UINib.init(nibName: StaticPositiveTestTableViewCell.getName, bundle: .main), forCellReuseIdentifier: StaticPositiveTestTableViewCell.getName)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 600
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
+        self.tableView = tableView
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        guard let model = self.model else {return 0}
+        return model.getCellSections().count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let model = self.model else {return 0}
+        let sections = model.getCellSections()
+        if sections.contains(where: {$0 == .Fields}) {
+            return model.fields.count
+        } else {
+            return 1
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let model = self.model else { return UITableViewCell()}
+        let sections = model.getCellSections()
+        let currentSection = sections[indexPath.section]
+        switch currentSection {
+        case .Header:
+            return headerCell(indexPath: indexPath, tableView: tableView)
+        case .StaticText:
+            return getStaticPositiveTestCell(indexPath: indexPath, tableView: tableView)
+        case .Fields:
+            return textListCellWithIndexPathOffset(indexPath: indexPath, tableView: tableView)
+        }
+    }
+    
+    private func headerCell(indexPath: IndexPath, tableView: UITableView) -> UITableViewCell {
+        guard
+            let model = self.model,
+            let cell = tableView.dequeueReusableCell(withIdentifier: BannerViewTableViewCell.getName, for: indexPath) as? BannerViewTableViewCell
+        else {
+            return UITableViewCell()
+        }
+        cell.configure(model: model.toBannerViewTableViewCellViewModel())
+        return cell
+    }
+    
+    private func getStaticPositiveTestCell(indexPath: IndexPath, tableView: UITableView) -> UITableViewCell {
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: StaticPositiveTestTableViewCell.getName, for: indexPath) as? StaticPositiveTestTableViewCell
+        else {
+            return UITableViewCell()
+        }
+        return cell
+    }
+    
+    private func textListCellWithIndexPathOffset(indexPath: IndexPath, tableView: UITableView) -> UITableViewCell {
+        guard
+            let model = self.model,
+            let cell = tableView.dequeueReusableCell(withIdentifier: TextListViewTableViewCell.getName, for: indexPath) as? TextListViewTableViewCell
+        else {
+            return UITableViewCell()
+        }
+        let data = model.fields[indexPath.row]
+        cell.configure(data: data)
+        cell.layoutIfNeeded()
+        return cell
+    }
+}
+
+class HealthRecordsView: UIView, UITableViewDelegate, UITableViewDataSource {
+    
+    private var tableView: UITableView?
+    
+    private var models: [HealthRecordsDetailDataSource.Record] = []
+    
+    func configure(models: [HealthRecordsDetailDataSource.Record]) {
+        self.models = models
+        setupTableView()
+        
+    }
+    
+    private func setupTableView() {
+        let tableView = UITableView(frame: .zero)
+        addSubview(tableView)
+        tableView.addEqualSizeContraints(to: self)
+        tableView.register(HealthRecordTableViewCell.self, forCellReuseIdentifier: HealthRecordTableViewCell.getName)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 600
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
+        self.tableView = tableView
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return models.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: HealthRecordTableViewCell.getName, for: indexPath) as? HealthRecordTableViewCell
+        else {
+            return HealthRecordTableViewCell()
+        }
+        cell.configure(model: models[indexPath.row])
+        return cell
+    }
+    
+}
+
+class HealthRecordTableViewCell: UITableViewCell {
+
+    var model: HealthRecordsDetailDataSource.Record?
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(model: HealthRecordsDetailDataSource.Record) {
+        self.model = model
+        let recordView: HealthRecordView = HealthRecordView(frame: .zero)
+        self.contentView.addSubview(recordView)
+        recordView.addEqualSizeContraints(to: self.contentView)
+        recordView.configure(model: model)
+    }
+}
+
+
 class HealthRecordDetailViewController: BaseViewController {
     
     class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource) -> HealthRecordDetailViewController {
@@ -45,7 +216,15 @@ class HealthRecordDetailViewController: BaseViewController {
     
     private func setup() {
         navSetup()
-        setupTableView()
+//        setupTableView()
+        setupContent()
+    }
+    
+    func setupContent() {
+        let recordsView: HealthRecordsView = HealthRecordsView()
+        self.view.addSubview(recordsView)
+        recordsView.addEqualSizeContraints(to: self.view)
+        recordsView.configure(models: dataSource.records)
     }
     
 }
@@ -58,104 +237,18 @@ extension HealthRecordDetailViewController {
             image: nil, action: #selector(self.deleteButton),
             accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
         
-        var title: String = ""
-        if dataSource.detail.count == 1 {
-            title = dataSource.detail.first?.detailNavTitle ?? ""
-        } else if dataSource.detail.isEmpty {
-            
-        }
-        self.navDelegate?.setNavigationBarWith(title: self.dataSource.detail.c,
+        self.navDelegate?.setNavigationBarWith(title: dataSource.title,
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: nil)
-        
-        
     }
     
     @objc private func deleteButton() {
-        switch dataSource.type {
-        case .covidImmunizationRecord(model: let model, immunizations: let immunizations):
-            alert(title: "Delete Record", message: "The Health Pass that is linked to this record will be removed. You will be required to enter your health information again to access the record.", buttonOneTitle: "Cancel", buttonOneCompletion: {
-                // Do Nothing
-            }, buttonTwoTitle: "Delete") {
-                //TODO: Delete card and pop view controller
-            }
-        case .covidTestResult(model: let model):
-            alert(title: "Delete Test Result", message: "Do you want to delete this test result?", buttonOneTitle: "Cancel", buttonOneCompletion: {
-                // Do Nothing
-            }, buttonTwoTitle: "Delete") {
-                //TODO: Delete test result and pop view controller
-            }
+        alertConfirmation(title: dataSource.deleteAlertTitle, message: dataSource.deleteAlertMessage, confirmTitle: .delete, confirmStyle: .destructive) {
+            //TODO: Delete Record and pop view controller
+        } onCancel: {
         }
-    }
-}
-
-// MARK: TableView setup
-extension HealthRecordDetailViewController: UITableViewDelegate, UITableViewDataSource {
-    private func setupTableView() {
-        tableView.register(UINib.init(nibName: BannerViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BannerViewTableViewCell.getName)
-        tableView.register(UINib.init(nibName: TextListViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextListViewTableViewCell.getName)
-        tableView.register(UINib.init(nibName: StaticPositiveTestTableViewCell.getName, bundle: .main), forCellReuseIdentifier: StaticPositiveTestTableViewCell.getName)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 600
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.tableFooterView = UIView()
-    }
-    // TODO: Should refactor data source to be more safe
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch dataSource.type {
-        case .covidImmunizationRecord(model: let model, immunizations: let immunizations):
-            return immunizations.count + 1
-        case .covidTestResult(model: let model):
-            if model.status == .positive {
-                return 3
-            } else {
-                return 2
-            }
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: BannerViewTableViewCell.getName, for: indexPath) as? BannerViewTableViewCell {
-                cell.configure(type: dataSource.type)
-                cell.layoutIfNeeded()
-                return cell
-            }
-            return UITableViewCell()
-        } else {
-            switch dataSource.type {
-            case .covidImmunizationRecord:
-                return returnTextListCellWithIndexPathOffset(offset: 1, indexPath: indexPath, tableView: tableView)
-            case .covidTestResult(model: let model):
-                if model.status == .positive {
-                    // Show static cell first
-                    if indexPath.row == 1 {
-                        if let cell = tableView.dequeueReusableCell(withIdentifier: StaticPositiveTestTableViewCell.getName, for: indexPath) as? StaticPositiveTestTableViewCell {
-                            return cell
-                        }
-                        return UITableViewCell()
-                    } else {
-                        return returnTextListCellWithIndexPathOffset(offset: 2, indexPath: indexPath, tableView: tableView)
-                    }
-                    
-                } else {
-                    return returnTextListCellWithIndexPathOffset(offset: 1, indexPath: indexPath, tableView: tableView)
-                }
-            }
-        }
-    }
-    
-    private func returnTextListCellWithIndexPathOffset(offset: Int, indexPath: IndexPath, tableView: UITableView) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: TextListViewTableViewCell.getName, for: indexPath) as? TextListViewTableViewCell {
-            let data = dataSource.getTextSets[indexPath.row - offset]
-            cell.configure(data: data)
-            cell.layoutIfNeeded()
-            return cell
-        }
-        return UITableViewCell()
     }
 }

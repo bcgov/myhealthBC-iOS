@@ -72,12 +72,23 @@ struct HealthRecordsDetailDataSource {
         case covidTestResultRecord(model: CovidLabTestResult)
     }
     
+    let name: String
     let type: RecordType
     let title: String
     let detailNavTitle: String
     let image: UIImage?
+    
     let records: [Record]
-    let name: String
+    
+    
+    var mainRecord: Record? {
+        // TODO: this is what the status and date of the overall thing is based on
+        // how is this determined?
+        return records.first
+    }
+    
+    let deleteAlertTitle: String
+    let deleteAlertMessage: String
     
     
     init(type: RecordType) {
@@ -89,11 +100,15 @@ struct HealthRecordsDetailDataSource {
             detailNavTitle = .vaccinationRecord
             name = model.name
             image = UIImage(named: "blue-bg-vaccine-record-icon")
+            deleteAlertTitle = "Delete Record"
+            deleteAlertMessage = "The Health Pass that is linked to this record will be removed. You will be required to enter your health information again to access the record."
         case .covidTestResultRecord(let model):
             title = .covid19mRNATitle
             detailNavTitle = .covid19TestResultTitle
             name = model.resultArray.first?.patientDisplayName ?? ""
             image = UIImage(named: "blue-bg-test-result-icon")
+            deleteAlertTitle = "Delete Test Result"
+            deleteAlertMessage = "Do you want to delete this test result?"
         }
     }
     

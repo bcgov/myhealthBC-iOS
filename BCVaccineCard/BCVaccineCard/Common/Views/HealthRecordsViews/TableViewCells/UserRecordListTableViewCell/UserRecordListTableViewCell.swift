@@ -20,8 +20,8 @@ class UserRecordListTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    func configure(type: HealthRecordsDetailDataSource.RecordType) {
-        userRecordListView.configure(recordType: type)
+    func configure(record: HealthRecordsDetailDataSource) {
+        userRecordListView.configure(record: record)
     }
     
 }
