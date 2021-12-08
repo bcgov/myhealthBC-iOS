@@ -18,6 +18,9 @@ extension StorageService {
             
             let tests = user.testResultArray.map({HealthRecord(type: .Test($0))})
             let vaccineCards = user.vaccineCardArray.map({HealthRecord(type: .CovidImmunization($0))})
+            #if DEBUG
+                print("User Has \(tests.count) tests & \(vaccineCards.count) vaccine cards stored")
+            #endif
             return tests + vaccineCards
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")

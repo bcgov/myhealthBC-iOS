@@ -133,7 +133,7 @@ class HealthRecordsView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.addEqualSizeContraints(to: self)
         tableView.register(HealthRecordTableViewCell.self, forCellReuseIdentifier: HealthRecordTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 600
+        tableView.estimatedRowHeight = self.bounds.height
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()

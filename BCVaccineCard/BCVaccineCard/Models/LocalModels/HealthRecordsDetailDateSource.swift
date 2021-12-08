@@ -7,53 +7,6 @@
 
 import UIKit
 
-/**
- /// Setup cell for a Vaccine Record
- /// - Parameter model: Local Model
- func setup(vaccinePassport model: LocallyStoredVaccinePassportModel) {
-     self.bannerView = createView()
-     let statusImage: UIImage? = model.status == .fully ? UIImage(named: "check-mark") : nil
-     let textColor = UIColor.white
-     let backgroundColor = model.status.getColor
-     let statusColor = textColor
-     let date = Date.init(timeIntervalSince1970: model.issueDate)
-     let issueDate = "Issued on: \(date.yearMonthDayString)"
-     bannerView?.setup(in: self,
-                       type: .VaccineRecord,
-                       name: model.name,
-                       status: model.status.getTitle,
-                       date: issueDate,
-                       backgroundColor: backgroundColor,
-                       textColor: textColor,
-                       statusColor: statusColor,
-                       statusIconImage: statusImage)
- }
- 
- /// Setup for test results
- /// - Parameter model: Local Model
- func setup(testResult model: TestResult) {
-     self.bannerView = createView()
-     let textColor = UIColor.black
-     let backgroundColor = model.status.getColor
-     let statusColor = model.status.getStatusTextColor
-     var issueDate = ""
-     if let date = model.collectionDateTime {
-         issueDate = "Tested on: \(date.yearMonthDayString)"
-     }
-     
-     bannerView?.setup(in: self,
-                       type: .CovidTest,
-                       name: model.patientDisplayName ?? "",
-                       status: model.status.getTitle,
-                       date: issueDate,
-                       backgroundColor: backgroundColor,
-                       textColor: textColor,
-                       statusColor: statusColor,
-                       statusIconImage: nil)
-     
- }
- */
-
 struct HealthRecordsDetailDataSource {
     struct Record {
         enum RecordType {
