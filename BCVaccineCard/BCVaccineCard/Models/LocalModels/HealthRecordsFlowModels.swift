@@ -17,13 +17,13 @@ struct HealthRecordsDataSource {
 
 struct HealthRecord {
     public enum Record {
-        case Test(TestResult)
+        case Test(CovidLabTestResult)
         case CovidImmunization(VaccineCard)
         
         fileprivate func patientName() -> String? {
             switch self {
             case .Test(let test):
-                return test.patientDisplayName
+                return !test.resultArray.isEmpty ? test.resultArray.first?.patientDisplayName ?? "" : ""
             case .CovidImmunization(let card):
                 return card.name
             }
@@ -45,8 +45,7 @@ extension HealthRecord {
     func detailDataSource() -> HealthRecordsDetailDataSource? {
         switch type {
         case .Test(let test):
-            guard let model = test.toLocal() else {return nil}
-            return HealthRecordsDetailDataSource(type: .covidTestResult(model: model))
+            return HealthRecordsDetailDataSource(type: .covidTestResultRecord(model: test))
         case .CovidImmunization(let covidImmunization):
             guard let model = covidImmunization.toLocal() else {return nil}
             return HealthRecordsDetailDataSource(type: .covidImmunizationRecord(model: model, immunizations: covidImmunization.immunizations))

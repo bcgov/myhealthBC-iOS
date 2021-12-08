@@ -18,9 +18,9 @@ class HealthRecordDetailViewController: BaseViewController {
     }
     
     @IBOutlet weak private var tableView: UITableView!
-
+    
     private var dataSource: HealthRecordsDetailDataSource!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -42,21 +42,29 @@ class HealthRecordDetailViewController: BaseViewController {
             return UIStatusBarStyle.default
         }
     }
-
+    
     private func setup() {
         navSetup()
         setupTableView()
     }
-
+    
 }
 
 // MARK: Navigation setup
 extension HealthRecordDetailViewController {
     private func navSetup() {
-        let rightNavButton = NavButton(title: .delete,
-                                                       image: nil, action: #selector(self.deleteButton),
-                                                       accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
-        self.navDelegate?.setNavigationBarWith(title: self.dataSource.type.getDetailNavTitle,
+        let rightNavButton = NavButton(
+            title: .delete,
+            image: nil, action: #selector(self.deleteButton),
+            accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        
+        var title: String = ""
+        if dataSource.detail.count == 1 {
+            title = dataSource.detail.first?.detailNavTitle ?? ""
+        } else if dataSource.detail.isEmpty {
+            
+        }
+        self.navDelegate?.setNavigationBarWith(title: self.dataSource.detail.c,
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
@@ -65,7 +73,7 @@ extension HealthRecordDetailViewController {
         
         
     }
-
+    
     @objc private func deleteButton() {
         switch dataSource.type {
         case .covidImmunizationRecord(model: let model, immunizations: let immunizations):
