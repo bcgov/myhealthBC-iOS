@@ -124,7 +124,6 @@ class HealthRecordsView: UIView, UITableViewDelegate, UITableViewDataSource {
     func configure(models: [HealthRecordsDetailDataSource.Record]) {
         self.models = models
         setupTableView()
-        
     }
     
     private func setupTableView() {
@@ -137,6 +136,8 @@ class HealthRecordsView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
+        tableView.showsVerticalScrollIndicator = false
+        tableView.showsHorizontalScrollIndicator = false
         self.tableView = tableView
     }
     
@@ -152,6 +153,10 @@ class HealthRecordsView: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         cell.configure(model: models[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return bounds.height
     }
     
 }
@@ -171,6 +176,7 @@ class HealthRecordTableViewCell: UITableViewCell {
     func configure(model: HealthRecordsDetailDataSource.Record) {
         self.model = model
         let recordView: HealthRecordView = HealthRecordView(frame: .zero)
+        self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(recordView)
         recordView.addEqualSizeContraints(to: self.contentView)
         recordView.configure(model: model)
@@ -194,15 +200,16 @@ class HealthRecordDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
+        navSetup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        super.viewWillAppear(animated)
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        setupContent()
         super.viewDidAppear(animated)
     }
     
@@ -214,17 +221,15 @@ class HealthRecordDetailViewController: BaseViewController {
         }
     }
     
-    private func setup() {
-        navSetup()
-//        setupTableView()
-        setupContent()
-    }
-    
     func setupContent() {
         let recordsView: HealthRecordsView = HealthRecordsView()
-        self.view.addSubview(recordsView)
+        recordsView.frame = .zero
+        recordsView.bounds = view.bounds
+        view.addSubview(recordsView)
+        recordsView.layoutIfNeeded()
         recordsView.addEqualSizeContraints(to: self.view)
         recordsView.configure(models: dataSource.records)
+        view.layoutSubviews()
     }
     
 }

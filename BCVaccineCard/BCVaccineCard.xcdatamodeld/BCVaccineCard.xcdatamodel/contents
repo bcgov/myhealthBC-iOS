@@ -4,7 +4,7 @@
         <attribute name="birthday" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
-        <relationship name="results" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TestResult"/>
+        <relationship name="results" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TestResult" inverseName="parentTest" inverseEntity="TestResult"/>
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="covidTestResults" inverseEntity="User"/>
     </entity>
     <entity name="ImmunizationRecord" representedClassName=".ImmunizationRecord" syncable="YES">
@@ -28,6 +28,7 @@
         <attribute name="testOutcome" optional="YES" attributeType="String"/>
         <attribute name="testStatus" optional="YES" attributeType="String"/>
         <attribute name="testType" optional="YES" attributeType="String"/>
+        <relationship name="parentTest" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CovidLabTestResult" inverseName="results" inverseEntity="CovidLabTestResult"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String"/>
@@ -51,7 +52,7 @@
     <elements>
         <element name="CovidLabTestResult" positionX="159.5234375" positionY="507.296875" width="128" height="104"/>
         <element name="ImmunizationRecord" positionX="497.89453125" positionY="782.546875" width="128" height="104"/>
-        <element name="TestResult" positionX="-104.609375" positionY="677.74609375" width="128" height="224"/>
+        <element name="TestResult" positionX="-104.609375" positionY="677.74609375" width="128" height="239"/>
         <element name="User" positionX="234.6484375" positionY="237.27734375" width="128" height="89"/>
         <element name="VaccineCard" positionX="483.7421875" positionY="301.015625" width="128" height="194"/>
     </elements>

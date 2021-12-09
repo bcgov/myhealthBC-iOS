@@ -19,20 +19,24 @@ struct HealthRecord {
     public enum Record {
         case Test(CovidLabTestResult)
         case CovidImmunization(VaccineCard)
-        
-        fileprivate func patientName() -> String? {
-            switch self {
-            case .Test(let test):
-                return !test.resultArray.isEmpty ? test.resultArray.first?.patientDisplayName ?? "" : ""
-            case .CovidImmunization(let card):
-                return card.name
-            }
-        }
     }
     
     public let type: Record
-    public var patientName: String? {
-        return type.patientName()
+    public let patientName: String
+    
+    init(type: HealthRecord.Record) {
+        self.type = type
+        switch type {
+        case .Test(let test):
+            let results = test.resultArray
+            if let first = results.first {
+                patientName = first.patientDisplayName ?? ""
+            } else {
+                patientName = ""
+            }
+        case .CovidImmunization(let card):
+            patientName = card.name ?? ""
+        }
     }
 }
 

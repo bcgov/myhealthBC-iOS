@@ -47,7 +47,13 @@ extension StorageService {
             }
         }
         
-        return id
+        do {
+            try context.save()
+            return id
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            return nil
+        }
     }
     
     
@@ -113,6 +119,15 @@ extension StorageService {
     func fetchTestResults(for userId: String? = AuthManager().userId()) -> [CovidLabTestResult] {
         guard let context = managedContext else {return []}
         do {
+            let request = CovidLabTestResult.fetchRequest()
+            request.returnsObjectsAsFaults = false
+            let labTests = try context.fetch(request)
+            let filtered = labTests.filter({$0.user?.id == userId})
+            for r in filtered {
+                for res in r.resultArray {
+                    print(res.patientDisplayName)
+                }
+            }
             let users = try context.fetch(User.fetchRequest())
             guard let current = users.filter({$0.userId == userId}).first else {return []}
             return current.testResultArray

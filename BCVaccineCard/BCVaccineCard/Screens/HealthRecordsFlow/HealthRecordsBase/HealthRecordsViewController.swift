@@ -31,8 +31,7 @@ class HealthRecordsViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-        setup()
-        
+        setup()        
     }
     
     override func viewDidAppear(_ animated: Bool) {

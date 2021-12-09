@@ -13,7 +13,9 @@ extension StorageService {
     func getHeathRecords(for userId: String? = AuthManager().userId()) -> [HealthRecord] {
         guard let context = managedContext else {return []}
         do {
-            let users = try context.fetch(User.fetchRequest())
+            let request = User.fetchRequest()
+            request.returnsObjectsAsFaults = false
+            let users = try context.fetch(request)
             guard let user = users.filter({$0.userId == userId}).first else {return []}
             
             let tests = user.testResultArray.map({HealthRecord(type: .Test($0))})

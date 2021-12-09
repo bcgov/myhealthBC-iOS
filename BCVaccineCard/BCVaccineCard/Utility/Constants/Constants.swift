@@ -97,7 +97,7 @@ extension Constants {
     
     static let testResultsDummyData: [TestDummyData] = 
         [
-            TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponsePending]), status: .pending), phn: "1111111111"),
+            TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponsePending, gatewayResponseNegative, gatewayResponsePositive]), status: .pending), phn: "1111111111"),
             TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseNegative]), status: .negative), phn: "2222222222"),
             TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponsePositive]), status: .positive), phn: "3333333333"),
             TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseIndeterminate]), status: .indeterminate), phn: "4444444444"),

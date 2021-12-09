@@ -77,13 +77,13 @@ struct HealthRecordsDetailDataSource {
         switch type {
         case .covidImmunizationRecord(let model, let immunizations):
             result.append(genRecord(vaccineModel: model, immunizations: immunizations))
+            return result
         case .covidTestResultRecord(let model):
             for item in model.resultArray {
                 result.append(genRecord(testResult: item, parentResult: model))
             }
-            
+            return result
         }
-        return result
     }
     
     private static func genRecord(vaccineModel model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord]) -> Record {
