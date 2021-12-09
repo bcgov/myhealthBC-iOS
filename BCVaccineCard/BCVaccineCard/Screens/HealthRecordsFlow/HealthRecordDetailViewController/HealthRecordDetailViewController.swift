@@ -133,6 +133,7 @@ class HealthRecordsView: UIView, UICollectionViewDataSource, UICollectionViewDel
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.itemSize = CGSize(width: bounds.width, height: bounds.height)
         layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
         collectionview = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
         collectionview.isPagingEnabled = true
         collectionview.dataSource = self
@@ -140,6 +141,7 @@ class HealthRecordsView: UIView, UICollectionViewDataSource, UICollectionViewDel
         collectionview.register(HealthRecordCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionview.showsVerticalScrollIndicator = false
         collectionview.showsHorizontalScrollIndicator = false
+        collectionview.contentInsetAdjustmentBehavior = .never
         collectionview.backgroundColor = .clear
         self.addSubview(collectionview)
         collectionview.addEqualSizeContraints(to: self)
