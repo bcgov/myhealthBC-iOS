@@ -26,7 +26,7 @@ extension User {
     public var testResultArray: [CovidLabTestResult] {
         let set = covidTestResults as? Set<CovidLabTestResult> ?? []
         return set.sorted {
-            $0.testDate ?? Date() > $1.testDate ?? Date()
+            $0.mainResult?.collectionDateTime ?? Date() > $1.mainResult?.collectionDateTime ?? Date()
         }
     }
 }
@@ -93,8 +93,13 @@ extension CovidLabTestResult {
         return resultArray.first?.status
     }
     
+    var mainResult: TestResult? {
+        // TODO: Criteria for selecting main result to use the status of
+        return resultArray.first
+    }
+    
     func toLocal() -> LocallyStoredCovidTestResultModel? {
-        let response: GatewayTestResultResponse = GatewayTestResultResponse(records: resultArray.compactMap({$0.toRecord()}))
+        let response: GatewayTestResultResponse = GatewayTestResultResponse(records: resultArray.compactMap({$0.toGatewayRecord()}))
         return LocallyStoredCovidTestResultModel(response: response, status: status ?? .indeterminate)
     }
 }
@@ -106,7 +111,7 @@ extension TestResult {
         return CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
     }
     
-    func toRecord() -> GatewayTestResultResponseRecord? {
+    func toGatewayRecord() -> GatewayTestResultResponseRecord? {
         return GatewayTestResultResponseRecord(patientDisplayName: self.patientDisplayName, lab: self.lab, reportId: self.reportId, collectionDateTime: self.collectionDateTime, resultDateTime: self.resultDateTime, testName: self.testName, testType: self.testType, testStatus: self.testStatus, testOutcome: self.testOutcome, resultTitle: self.resultTitle, resultDescription: self.resultDescription, resultLink: self.resultLink)
     }
 }

@@ -19,8 +19,6 @@ extension CovidLabTestResult {
     @NSManaged public var id: String?
     @NSManaged public var phn: String?
     @NSManaged public var birthday: Date?
-    @NSManaged public var testDate: Date?
-    @NSManaged public var testId: String?
     @NSManaged public var results: NSSet?
     @NSManaged public var user: User?
 
