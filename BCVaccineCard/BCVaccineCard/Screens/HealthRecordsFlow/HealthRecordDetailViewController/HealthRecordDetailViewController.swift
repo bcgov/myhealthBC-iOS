@@ -45,6 +45,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.register(UINib.init(nibName: TextListViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextListViewTableViewCell.getName)
         tableView.register(UINib.init(nibName: StaticPositiveTestTableViewCell.getName, bundle: .main), forCellReuseIdentifier: StaticPositiveTestTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
+        tableView.showsVerticalScrollIndicator = false
         tableView.estimatedRowHeight = 600
         tableView.delegate = self
         tableView.dataSource = self
@@ -115,58 +116,59 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-class HealthRecordsView: UIView, UITableViewDelegate, UITableViewDataSource {
-    
-    private var tableView: UITableView?
+class HealthRecordsView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    private var collectionView: UICollectionView?
     
     private var models: [HealthRecordsDetailDataSource.Record] = []
     
     func configure(models: [HealthRecordsDetailDataSource.Record]) {
         self.models = models
-        setupTableView()
+        setupCollectionView()
     }
     
-    private func setupTableView() {
-        let tableView = UITableView(frame: .zero)
-        addSubview(tableView)
-        tableView.addEqualSizeContraints(to: self)
-        tableView.register(HealthRecordTableViewCell.self, forCellReuseIdentifier: HealthRecordTableViewCell.getName)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = self.bounds.height
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.tableFooterView = UIView()
-        tableView.showsVerticalScrollIndicator = false
-        tableView.showsHorizontalScrollIndicator = false
-        self.tableView = tableView
+    private func setupCollectionView() {
+        var collectionview: UICollectionView
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: bounds.width, height: bounds.height)
+        layout.scrollDirection = .horizontal
+        collectionview = UICollectionView(frame: self.bounds, collectionViewLayout: layout)
+        collectionview.isPagingEnabled = true
+        collectionview.dataSource = self
+        collectionview.delegate = self
+        collectionview.register(HealthRecordCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionview.showsVerticalScrollIndicator = false
+        collectionview.showsHorizontalScrollIndicator = false
+        collectionview.backgroundColor = .clear
+        self.addSubview(collectionview)
+        collectionview.addEqualSizeContraints(to: self)
+        self.collectionView = collectionview
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return models.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: HealthRecordTableViewCell.getName, for: indexPath) as? HealthRecordTableViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HealthRecordCollectionViewCell
         else {
-            return HealthRecordTableViewCell()
+            return UICollectionViewCell()
         }
         cell.configure(model: models[indexPath.row])
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return bounds.height
-    }
-    
 }
 
-class HealthRecordTableViewCell: UITableViewCell {
-
-    var model: HealthRecordsDetailDataSource.Record?
+class HealthRecordCollectionViewCell: UICollectionViewCell {
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    private var model: HealthRecordsDetailDataSource.Record?
+    private weak var recordView: HealthRecordView?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {
@@ -178,8 +180,9 @@ class HealthRecordTableViewCell: UITableViewCell {
         let recordView: HealthRecordView = HealthRecordView(frame: .zero)
         self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(recordView)
-        recordView.addEqualSizeContraints(to: self.contentView)
+        recordView.addEqualSizeContraints(to: self.contentView, paddingVertical: 0, paddingHorizontal: 20)
         recordView.configure(model: model)
+        self.recordView = recordView
     }
 }
 

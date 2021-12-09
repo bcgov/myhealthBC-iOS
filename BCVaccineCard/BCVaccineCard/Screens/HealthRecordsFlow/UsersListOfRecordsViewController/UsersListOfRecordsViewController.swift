@@ -98,9 +98,12 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController {
     private func fetchDataSource() {
         self.view.startLoadingIndicator(backgroundColor: .clear)
-        self.dataSource = StorageService.shared.getHeathRecords().detailDataSource(userName: self.name)
-        self.setupTableView()
-        self.view.endLoadingIndicator()
+        StorageService.shared.getHeathRecords { [weak self] records in
+            guard let `self` = self else {return}
+            self.dataSource = records.detailDataSource(userName: self.name)
+            self.setupTableView()
+            self.view.endLoadingIndicator()
+        }
     }
 }
 

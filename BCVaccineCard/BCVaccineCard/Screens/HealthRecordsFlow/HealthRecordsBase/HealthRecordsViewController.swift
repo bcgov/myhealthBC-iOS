@@ -84,16 +84,19 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
 extension HealthRecordsViewController {
     private func fetchDataSource() {
         self.view.startLoadingIndicator()
-        dataSource = StorageService.shared.getHeathRecords().dataSource()
-        self.view.endLoadingIndicator()
-        if dataSource.isEmpty {
-            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
-            self.navigationController?.pushViewController(vc, animated: false)
-        } else {
-            addRecordHeaderSetup()
-            setupCollectionView()
-        }
         
+        StorageService.shared.getHeathRecords { [weak self] records in
+            guard let `self` = self else {return}
+            self.dataSource = records.dataSource()
+            if self.dataSource.isEmpty {
+                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+                self.navigationController?.pushViewController(vc, animated: false)
+            } else {
+                self.addRecordHeaderSetup()
+                self.setupCollectionView()
+            }
+            self.view.endLoadingIndicator()
+        }
     }
 }
 

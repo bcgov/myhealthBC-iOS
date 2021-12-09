@@ -61,10 +61,18 @@ extension UIView {
     
     public func addEqualSizeContraints(to toView: UIView) {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.heightAnchor.constraint(equalTo: toView.heightAnchor, constant: 0).isActive = true
-        self.widthAnchor.constraint(equalTo: toView.widthAnchor, constant: 0).isActive = true
+        self.topAnchor.constraint(equalTo: toView.topAnchor, constant: 0).isActive = true
+        self.bottomAnchor.constraint(equalTo: toView.bottomAnchor, constant: 0).isActive = true
         self.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: 0).isActive = true
         self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0).isActive = true
+    }
+    
+    public func addEqualSizeContraints(to toView: UIView, paddingVertical: CGFloat, paddingHorizontal: CGFloat) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: toView.topAnchor, constant: paddingVertical).isActive = true
+        self.bottomAnchor.constraint(equalTo: toView.bottomAnchor, constant: 0 - paddingVertical).isActive = true
+        self.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: paddingHorizontal).isActive = true
+        self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0 - paddingHorizontal).isActive = true
     }
     
     public func center(in view: UIView, width: CGFloat, height: CGFloat) {
