@@ -31,13 +31,12 @@ class QueueItWorker: NSObject {
     private var retryOnEmptyPDFCount: Int = 0
     
     private var delegateOwner: UIViewController
-    private var healthGateway: HealthGatewayBCGateway
+    private var apiClient = APIClient()
     private weak var delegate: QueueItWorkerDefaultsDelegate?
     private var endpoint: URL
     
-    init(delegateOwner: UIViewController, healthGateway: HealthGatewayBCGateway, delegate: QueueItWorkerDefaultsDelegate, endpoint: URL) {
+    init(delegateOwner: UIViewController, delegate: QueueItWorkerDefaultsDelegate, endpoint: URL) {
         self.delegateOwner = delegateOwner
-        self.healthGateway = healthGateway
         self.delegate = delegate
         self.endpoint = endpoint
     }
@@ -213,7 +212,7 @@ extension QueueItWorker {
     }
     
     private func getActualVaccineCard(model: GatewayVaccineCardRequest, token: String?) {
-        self.healthGateway.requestVaccineCard(model, token: token) { [weak self ] result in
+        self.apiClient.getVaccineCard(model, token: token) { [weak self ] result in
             guard let `self` = self else {return}
             switch result {
             case .success(let vaccineCard):

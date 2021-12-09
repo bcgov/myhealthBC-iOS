@@ -12,7 +12,6 @@
 
 import UIKit
 import QueueITLibrary
-import Alamofire
 import BCVaccineValidator
 
 enum GatewayFormSource: Equatable {
@@ -130,7 +129,6 @@ class GatewayFormViewController: BaseViewController {
     
     class func constructGatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType) -> GatewayFormViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
-            vc.healthGateway = GatewayAccess.factory.makeHealthGatewayBCGateway()
             vc.rememberDetails = rememberDetails
             vc.fetchType = fetchType
             vc.navTitle = fetchType.getNavTitle
@@ -169,7 +167,6 @@ class GatewayFormViewController: BaseViewController {
     // TODO: Will need to refactor this a bit when we get the endpoint for test results
     private var model: GatewayVaccineCardRequest?
     private var worker: QueueItWorker?
-    private var healthGateway: HealthGatewayBCGateway!
     private var endpoint = UrlAccessor().getVaccineCard
     
     // Completion - first string is for the ID for core data, second string is optional for fed pass only
@@ -212,7 +209,7 @@ class GatewayFormViewController: BaseViewController {
     }
     
     private func setupQueueItWorker() {
-        self.worker = QueueItWorker(delegateOwner: self, healthGateway: self.healthGateway, delegate: self, endpoint: self.endpoint)
+        self.worker = QueueItWorker(delegateOwner: self, delegate: self, endpoint: self.endpoint)
     }
 
 }
@@ -344,6 +341,7 @@ extension GatewayFormViewController: DropDownViewDelegate {
             guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
             indexPaths.append(firstIP)
             dataSource[firstIP.row].configuration.text = details.phn
+            // TODO: Here, should probably put if fetchType.canGoToNextField
             if fetchType == .bcVaccineCardAndFederalPass {
                 guard let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: true) else {
                     return

@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //        FirebaseApp.configure()
 #endif
         AnalyticsService.shared.setup()
-        setupGatewayFactory()
+//        setupGatewayFactory()
         setupRootViewController()
     }
     
@@ -80,13 +80,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 }
 
-// MARK: Gateway setup
-extension AppDelegate {
-    private func setupGatewayFactory() {
-        GatewayAccess.initialize(withFactory: WorkerFactory(remoteFactory: RemoteFactory()))
-    }
-    
-}
+//// MARK: Gateway setup
+//extension AppDelegate {
+//    private func setupGatewayFactory() {
+//        GatewayAccess.initialize(withFactory: WorkerFactory(remoteFactory: RemoteFactory()))
+//    }
+//
+//}
 
 // MARK: Root setup
 extension AppDelegate {

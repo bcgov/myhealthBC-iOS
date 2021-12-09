@@ -8,6 +8,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import QueueITLibrary
 
 typealias MethodType = HTTPMethod
 typealias Encoding = ParameterEncoding
@@ -16,7 +17,6 @@ typealias RequestParameters = Parameters
 typealias JsonEncoding = JSONEncoding
 typealias UrlEncoding = URLEncoding
 typealias Interceptor = RequestInterceptor
-// FIXME: Will need to edit error response and use that as the response object instead, using ResultError for now as it is the only request
 typealias NetworkRequestCompletion<T: Decodable> = ((Result<T, ResultError>) -> Void)
 
 protocol RemoteAccessor {
@@ -77,11 +77,8 @@ extension RemoteAccessor {
 }
 
 final class NetworkAccessor {
-    
-    private var sessionExpiredObserver: (() -> Void)?
-    
-    private func execute<T: Decodable>(request: DataRequest,
-                                       withCompletion completion: @escaping NetworkRequestCompletion<T>) {
+        
+    private func execute<T: Decodable>(request: DataRequest, withCompletion completion: @escaping NetworkRequestCompletion<T>) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
         request.responseDecodable(of: T.self, decoder: decoder) { response in
@@ -89,14 +86,12 @@ final class NetworkAccessor {
             case .success(let successResponse):
                 completion(.success(successResponse))
             case .failure(let error):
-                guard
-                    let responseData = response.data,
-                    let errorResponse = try? JSONDecoder().decode(GatewayVaccineCardResponse.self, from: responseData) else {
-//                        let errorMessage = error.errorDescription.unwrapped
-                        let unexpectedErrorResponse = ResultError(resultMessage: "Unknown")
-                        return completion(.failure(unexpectedErrorResponse))
+                guard let responseData = response.data, let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
+                    print(error.errorDescription.unwrapped)
+                    let unexpectedErrorResponse = ResultError(resultMessage: .genericErrorMessage)
+                    return completion(.failure(unexpectedErrorResponse))
                 }
-                completion(.failure(errorResponse.resultError ?? ResultError(resultMessage: error.errorDescription)))
+                completion(.failure(errorResponse))
             }
         }
     }
@@ -143,9 +138,6 @@ extension NetworkAccessor: RemoteAccessor {
         }, to: url, method: method, headers: headers)
         self.execute(request: request, withCompletion: completion)
     }
-    
-//    func setSessionExpiredObserver(_ observer: @escaping (() -> Void)) {
-//        self.sessionExpiredObserver = observer
-//    }
-    
 }
+
+

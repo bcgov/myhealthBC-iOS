@@ -49,6 +49,12 @@ struct Constants {
         static let dateOfVaccine = "dateOfVaccine"
     }
     
+    struct GatewayTestResultsRequestParameters {
+        static let phn = "phn"
+        static let dateOfBirth = "dateOfBirth"
+        static let collectionDate = "collectionDate"
+    }
+    
     struct KeychainPHNKey {
         static let key = "PHNKey" // Note: Data should be an array of 
     }
