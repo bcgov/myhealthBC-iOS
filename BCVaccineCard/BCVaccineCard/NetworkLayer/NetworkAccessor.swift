@@ -22,14 +22,14 @@ typealias NetworkRequestCompletion<T: Decodable> = ((Result<T, ResultError>) -> 
 protocol RemoteAccessor {
     func authorizationHeader(fromToken token: String) -> Headers
     func request<T: Decodable>(withURL url: URL, method: MethodType, encoding: Encoding,
-                               headers: Headers?, parameters: RequestParameters?, interceptor: Interceptor?,
+                               headers: Headers?, parameters: RequestParameters?, interceptor: Interceptor?, checkQueueIt: Bool,
                                andCompletion completion: @escaping NetworkRequestCompletion<T>)
     func request<Parameters: Encodable, T: Decodable>(withURL url: URL, method: MethodType,
                                                       headers: Headers?, encoder: ParameterEncoder, parameters: Parameters?,
-                                                      interceptor: Interceptor?,
+                                                      interceptor: Interceptor?, checkQueueIt: Bool,
                                                       andCompletionHandler completion: @escaping NetworkRequestCompletion<T>)
     func uploadRequest<T: Decodable>(withURL url: URL, method: MethodType, mediaType: MIMEType?,
-                                     headers: Headers, parameters: RequestParameters, interceptor: Interceptor?,
+                                     headers: Headers, parameters: RequestParameters, interceptor: Interceptor?, checkQueueIt: Bool,
                                      andCompletion completion: @escaping NetworkRequestCompletion<T>)
 }
 
@@ -40,9 +40,10 @@ extension RemoteAccessor {
                                headers: Headers? = nil,
                                parameters: RequestParameters? = nil,
                                interceptor: Interceptor? = nil,
+                               checkQueueIt: Bool,
                                andCompletion completion: @escaping NetworkRequestCompletion<T>) {
         return request(withURL: url, method: method, encoding: encoding, headers: headers,
-                       parameters: parameters, interceptor: interceptor, andCompletion: completion)
+                       parameters: parameters, interceptor: interceptor, checkQueueIt: checkQueueIt, andCompletion: completion)
     }
     
     func request<Parameters: Encodable, T: Decodable>(
@@ -52,6 +53,7 @@ extension RemoteAccessor {
         encoder: ParameterEncoder? = nil,
         parameters: Parameters,
         interceptor: Interceptor? = nil,
+        checkQueueIt: Bool,
         andCompletionHandler completion: @escaping NetworkRequestCompletion<T>) {
         
         let defaultEncoder: ParameterEncoder
@@ -71,14 +73,15 @@ extension RemoteAccessor {
                        encoder: defaultEncoder,
                        parameters: parameters,
                        interceptor: interceptor,
+                       checkQueueIt: checkQueueIt,
                        andCompletionHandler: completion)
     }
     
 }
 
 final class NetworkAccessor {
-        
-    private func execute<T: Decodable>(request: DataRequest, withCompletion completion: @escaping NetworkRequestCompletion<T>) {
+        // TODO: Add in queue it logic here
+    private func execute<T: Decodable>(request: DataRequest, checkQueueIt: Bool, withCompletion completion: @escaping NetworkRequestCompletion<T>) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
         request.responseDecodable(of: T.self, decoder: decoder) { response in
@@ -105,10 +108,10 @@ extension NetworkAccessor: RemoteAccessor {
     }
     
     func request<T: Decodable>(withURL url: URL, method: MethodType, encoding: Encoding,
-                               headers: Headers?, parameters: RequestParameters?, interceptor: Interceptor?,
+                               headers: Headers?, parameters: RequestParameters?, interceptor: Interceptor?, checkQueueIt: Bool,
                                andCompletion completion: @escaping NetworkRequestCompletion<T>) {
         let request = AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor)
-        self.execute(request: request, withCompletion: completion)
+        self.execute(request: request, checkQueueIt: checkQueueIt, withCompletion: completion)
     }
     
     func request<Parameters: Encodable, T: Decodable> (
@@ -118,14 +121,15 @@ extension NetworkAccessor: RemoteAccessor {
         encoder: ParameterEncoder,
         parameters: Parameters?,
         interceptor: Interceptor?,
+        checkQueueIt: Bool,
         andCompletionHandler completion: @escaping NetworkRequestCompletion<T>) {
         
         let request = AF.request(url, method: method, parameters: parameters, encoder: encoder, headers: headers)
-        self.execute(request: request, withCompletion: completion)
+            self.execute(request: request, checkQueueIt: checkQueueIt, withCompletion: completion)
     }
     
     func uploadRequest<T: Decodable>(withURL url: URL, method: MethodType, mediaType: MIMEType?,
-                                     headers: Headers, parameters: RequestParameters, interceptor: Interceptor?,
+                                     headers: Headers, parameters: RequestParameters, interceptor: Interceptor?, checkQueueIt: Bool,
                                      andCompletion completion: @escaping NetworkRequestCompletion<T>) {
         let request = AF.upload(multipartFormData: { multipartFormData in
             parameters.forEach({ (key, value) in
@@ -136,7 +140,7 @@ extension NetworkAccessor: RemoteAccessor {
                 }
             })
         }, to: url, method: method, headers: headers)
-        self.execute(request: request, withCompletion: completion)
+        self.execute(request: request, checkQueueIt: checkQueueIt, withCompletion: completion)
     }
 }
 
