@@ -75,7 +75,7 @@ extension Array where Element == HealthRecord {
     }
     
     func detailDataSource(userName: String) -> [HealthRecordsDetailDataSource] {
-        let filtered = self.filter { $0.patientName ?? "" == userName }
+        let filtered = self.filter { $0.patientName == userName }
         return filtered.compactMap({$0.detailDataSource()})
     }
 }

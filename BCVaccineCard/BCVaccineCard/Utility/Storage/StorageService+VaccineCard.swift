@@ -16,7 +16,7 @@ extension StorageService {
     ///   - name: card holder name: NOT the name of the user storing data
     ///   - userId: User id under which this card is to be stored
     /// - Returns: boolean indicating success or failure
-    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, userId: String, hash: String, phn: String? = nil, federalPass: String? = nil, vaxDates: [String]? = nil) -> Bool {
+    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, issueDate: Date, userId: String, hash: String, phn: String? = nil, federalPass: String? = nil, vaxDates: [String]? = nil) -> Bool {
         guard let context = managedContext, let user = fetchUser(id: userId) else {return false}
         let sortOrder = Int64(fetchVaccineCards(for: userId).count)
         let card = VaccineCard(context: context)
@@ -29,6 +29,7 @@ extension StorageService {
         card.phn = phn
         card.sortOrder = sortOrder
         card.firHash = hash
+        card.issueDate = issueDate
         do {
             try context.save()
             storeImmunizaionRecords(card: card)
