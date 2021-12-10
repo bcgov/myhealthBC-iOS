@@ -70,8 +70,6 @@ class StorageService {
             return
         }
     }
-<<<<<<< HEAD
-=======
     
     func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
         guard let context = managedContext else {return}
@@ -178,6 +176,4 @@ class StorageService {
             return completion(.isNew)
         }
     }
-    
->>>>>>> origin/dev
 }
