@@ -16,7 +16,7 @@ protocol QueueItWorkerDefaultsDelegate: AnyObject {
     func showLoader()
     func hideLoader()
 }
-// TODO: Rename this "HealthGatewayAPIWorker" or something like that - then test out the vaccine card API calls here
+// TODO: Rename this "HealthGatewayAPIWorker" or something like that - then test out the vaccine card API calls here - heavy refactor coming
 class QueueItWorker: NSObject {
     
     private var engine: QueueITEngine?
@@ -31,7 +31,7 @@ class QueueItWorker: NSObject {
     private var retryOnEmptyPDFCount: Int = 0
     
     private var delegateOwner: UIViewController
-    private var apiClient = APIClient()
+    private var apiClient: APIClient
     private weak var delegate: QueueItWorkerDefaultsDelegate?
     private var endpoint: URL
     
@@ -39,6 +39,7 @@ class QueueItWorker: NSObject {
         self.delegateOwner = delegateOwner
         self.delegate = delegate
         self.endpoint = endpoint
+        self.apiClient = APIClient(delegateOwner: delegateOwner)
     }
 }
 
@@ -212,7 +213,7 @@ extension QueueItWorker {
     }
     
     private func getActualVaccineCard(model: GatewayVaccineCardRequest, token: String?) {
-        self.apiClient.getVaccineCard(model, token: token) { [weak self ] result in
+        self.apiClient.getVaccineCard(model, token: token, executingVC: self.delegateOwner) { [weak self ] result, retry  in
             guard let `self` = self else {return}
             switch result {
             case .success(let vaccineCard):
