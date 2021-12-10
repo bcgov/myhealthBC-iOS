@@ -13,15 +13,13 @@ class APIClient {
         
     }
     
-    private let endpoints: EndpointsAccessor = {
+    private var endpoints: EndpointsAccessor {
        return UrlAccessor()
-    }()
+    }
     
-    private let remote: RemoteAccessor = {
-        return NetworkAccessor()
-    }()
-    
-    // TODO: Include interceptor and queue it logic here
+    private var remote: RemoteAccessor {
+        return NetworkAccessor(delegateOwner: self)
+    }
     
     func getVaccineCard(_ model: GatewayVaccineCardRequest, token: String?, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
         let interceptor = NetworkRequestInterceptor()
@@ -34,7 +32,7 @@ class APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, andCompletion: completion)
     }
 }
 
@@ -58,4 +56,8 @@ extension APIClient {
     func queueItInitialRequest() {
         
     }
+}
+
+extension APIClient: QueueItWorkerDelegate {
+    
 }

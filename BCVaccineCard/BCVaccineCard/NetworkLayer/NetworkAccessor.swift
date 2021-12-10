@@ -79,26 +79,61 @@ extension RemoteAccessor {
     
 }
 
+protocol QueueItWorkerDelegate: AnyObject {
+    
+}
+
 final class NetworkAccessor {
-        // TODO: Add in queue it logic here
+    
+    weak var delegate: QueueItWorkerDelegate?
+    
+    init(delegateOwner: QueueItWorkerDelegate) {
+        self.delegate = delegateOwner
+    }
+    
     private func execute<T: Decodable>(request: DataRequest, checkQueueIt: Bool, withCompletion completion: @escaping NetworkRequestCompletion<T>) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
         request.responseDecodable(of: T.self, decoder: decoder) { response in
-            switch response.result {
-            case .success(let successResponse):
-                completion(.success(successResponse))
-            case .failure(let error):
-                guard let responseData = response.data, let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
-                    print(error.errorDescription.unwrapped)
-                    let unexpectedErrorResponse = ResultError(resultMessage: .genericErrorMessage)
-                    return completion(.failure(unexpectedErrorResponse))
-                }
-                completion(.failure(errorResponse))
+            if self.checkIfCookieIsSet() {
+                self.decodeResponse(response: response, withCompletion: completion)
+            } else if self.checkForQueueItRedirect() {
+                //TODO: call delegate here
+            } else {
+                self.decodeResponse(response: response, withCompletion: completion)
             }
+            
         }
     }
     
+    private func decodeResponse<T: Decodable>(response: DataResponse<T, AFError>, withCompletion completion: @escaping NetworkRequestCompletion<T>) {
+        switch response.result {
+        case .success(let successResponse):
+            completion(.success(successResponse))
+        case .failure(let error):
+            guard let responseData = response.data, let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
+                print(error.errorDescription.unwrapped)
+                let unexpectedErrorResponse = ResultError(resultMessage: .genericErrorMessage)
+                return completion(.failure(unexpectedErrorResponse))
+            }
+            completion(.failure(errorResponse))
+        }
+    }
+    
+}
+
+// MARK: QueueIt functions
+// TODO: Add in logic here
+extension NetworkAccessor {
+    private func checkIfCookieIsSet() -> Bool {
+        // if cookie is set, then we can likely extract the response already
+        return true
+    }
+    
+    private func checkForQueueItRedirect() -> Bool {
+        // if redirect is in the url, then we need to run queue it by calling the delegate, then API client will run QUEUE IT, will get the token, then we will retry the request
+        return true
+    }
 }
 
 extension NetworkAccessor: RemoteAccessor {
