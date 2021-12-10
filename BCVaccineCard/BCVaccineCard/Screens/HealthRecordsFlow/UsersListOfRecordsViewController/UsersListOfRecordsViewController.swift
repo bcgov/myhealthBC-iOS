@@ -133,6 +133,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
         let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds)
         self.navigationController?.pushViewController(vc, animated: true)
