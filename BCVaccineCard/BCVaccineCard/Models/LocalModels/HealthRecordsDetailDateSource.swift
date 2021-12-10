@@ -61,16 +61,16 @@ struct HealthRecordsDetailDataSource {
             detailNavTitle = .vaccinationRecord
             name = model.name
             image = UIImage(named: "blue-bg-vaccine-record-icon")
-            deleteAlertTitle = "Delete Record"
-            deleteAlertMessage = "The Health Pass that is linked to this record will be removed. You will be required to enter your health information again to access the record."
+            deleteAlertTitle = .deleteRecord
+            deleteAlertMessage = .deleteCovidHealthRecord
         case .covidTestResultRecord(let model):
             id = model.id
             title = .covid19mRNATitle
             detailNavTitle = .covid19TestResultTitle
             name = model.resultArray.first?.patientDisplayName ?? ""
             image = UIImage(named: "blue-bg-test-result-icon")
-            deleteAlertTitle = "Delete Test Result"
-            deleteAlertMessage = "Do you want to delete this test result?"
+            deleteAlertTitle = .deleteTestResult
+            deleteAlertMessage = .deleteTestResultMessage
         }
     }
     

@@ -6,6 +6,7 @@
 // TODO: This will be a table view controller with editable cells (for deleting) - nav bar will have same edit/done functionality that covid 19 view controller has
 
 import UIKit
+import SwipeCellKit
 
 class UsersListOfRecordsViewController: BaseViewController {
     
@@ -18,21 +19,21 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     @IBOutlet weak private var tableView: UITableView!
-
+    
     private var name: String!
     private var dataSource: [HealthRecordsDetailDataSource] = []
     
     private var inEditMode = false {
         didSet {
-//            tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
-//            tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
+            //            tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
+            //            tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
             self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
             navSetup()
             self.tableView.layoutSubviews()
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -55,12 +56,11 @@ class UsersListOfRecordsViewController: BaseViewController {
             return UIStatusBarStyle.default
         }
     }
-
+    
     private func setup() {
-        navSetup()
         fetchDataSource()
     }
-
+    
 }
 
 // MARK: Navigation setup
@@ -83,7 +83,7 @@ extension UsersListOfRecordsViewController {
         
         
     }
-
+    
     @objc private func doneButton() {
         inEditMode = false
     }
@@ -102,13 +102,14 @@ extension UsersListOfRecordsViewController {
             guard let `self` = self else {return}
             self.dataSource = records.detailDataSource(userName: self.name)
             self.setupTableView()
+            self.navSetup()
             self.view.endLoadingIndicator()
         }
     }
 }
 
 // MARK: TableView setup
-extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewDataSource {
+extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: UserRecordListTableViewCell.getName, bundle: .main), forCellReuseIdentifier: UserRecordListTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
@@ -125,9 +126,10 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: UserRecordListTableViewCell.getName, for: indexPath) as? UserRecordListTableViewCell else {
-            return UITableViewCell()
-        }
+                return UITableViewCell()
+            }
         cell.configure(record: dataSource[indexPath.row])
+        cell.delegate = self
         return cell
         
     }
@@ -139,6 +141,83 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    // TODO: Add in delete record logic (see covid 19 cards view controller)
- 
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        guard !dataSource.isEmpty || !inEditMode else { return .none }
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            self.deleteRecord(at: indexPath.row, reInitEditMode: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        if inEditMode {
+            deleteRecord(at: indexPath.row, reInitEditMode: true)
+        }
+        
+        return "Delete"
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        
+        guard orientation == .right else {return nil}
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { [weak self] action, indexPath in
+            guard let `self` = self else {return}
+            self.deleteRecord(at: indexPath.row, reInitEditMode: false)
+        }
+        deleteAction.hidesWhenSelected = true
+        deleteAction.image = UIImage(named: "unlink")
+        deleteAction.backgroundColor = .white
+        deleteAction.textColor = Constants.UI.Theme.primaryColor
+        deleteAction.isAccessibilityElement = true
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityTraits = .button
+        return [deleteAction]
+    }
+    
+    private func deleteRecord(at index: Int, reInitEditMode: Bool) {
+        guard dataSource.indices.contains(index) else {return}
+        let record = dataSource[index]
+        self.delete(record: record, completion: { [weak self] deleted in
+            guard let `self` = self else {return}
+            if deleted {
+                self.dataSource.remove(at: index)
+                if self.dataSource.isEmpty {
+                    self.inEditMode = false
+                    self.popBack(toControllerType: HealthRecordsViewController.self)
+                } else {
+                    self.tableView.reloadData()
+                }
+            } else {
+                if reInitEditMode {
+                    self.tableView.setEditing(false, animated: true)
+                    self.tableView.setEditing(true, animated: true)
+                }
+            }
+        })
+    }
+    
+    private func delete(record: HealthRecordsDetailDataSource, completion: @escaping(_ deleted: Bool)-> Void) {
+        switch record.type {
+        case .covidImmunizationRecord(model: let model, immunizations: _):
+            alertConfirmation(title: .deleteRecord, message: .deleteCovidHealthRecord, confirmTitle: .delete, confirmStyle: .destructive) {
+                StorageService.shared.deleteVaccineCard(vaccineQR: model.code)
+                completion(true)
+            } onCancel: {
+                completion(false)
+            }
+            
+        case .covidTestResultRecord:
+            guard let recordId = record.id else {return}
+            alertConfirmation(title: .deleteTestResult, message: .deleteTestResultMessage, confirmTitle: .delete, confirmStyle: .destructive) {
+                StorageService.shared.deleteTestResult(id: recordId)
+                completion(true)
+            } onCancel: {
+                completion(false)
+            }
+        }
+    }
+    
 }

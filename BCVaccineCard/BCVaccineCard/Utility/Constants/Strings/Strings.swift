@@ -170,7 +170,7 @@ extension String {
     // News Feed screen
     /// Already have newsFeed string from onboarding flow
     
-    // Health Records
+    // MARK: Health Records
     static var getVaccinationRecordsTitle: String { return "GetVaccinationRecordsTitle".localized }
     static var getCovidTestResultsTitle: String { return "GetCovidTestResultsTitle".localized }
     static var getVaccinationRecordsDescription: String { return "GetVaccinationRecordsDescription".localized }
@@ -181,6 +181,10 @@ extension String {
     static var recordText: String { return "RecordText".localized }
     static var viewDetailsOfCovidRecordsText: String { return "ViewDetailsOfCovidRecordsText".localized }
     static var fetchHealthRecordsIntroText: String { return "FetchHealthRecordsIntroText".localized }
+    static var deleteCovidHealthRecord: String { return "DeleteCovidHealthRecord".localized }
+    static var deleteRecord: String { return "DeleteRecord".localized }
+    static var deleteTestResult: String { return "DeleteTestResult".localized }
+    static var deleteTestResultMessage: String { return "DeleteTestResultMessage".localized }
     
     // MARK: Settings
     

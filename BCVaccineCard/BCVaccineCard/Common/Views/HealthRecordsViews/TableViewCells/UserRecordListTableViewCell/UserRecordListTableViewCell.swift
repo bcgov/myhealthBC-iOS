@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SwipeCellKit
 
-class UserRecordListTableViewCell: UITableViewCell {
+class UserRecordListTableViewCell: SwipeTableViewCell {
     
     @IBOutlet weak private var userRecordListView: UserRecordListView!
     
