@@ -267,14 +267,14 @@
 		795AA7392710920600E59FF1 /* ResultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7372710920600E59FF1 /* ResultError.swift */; };
 		795AA73B271092D500E59FF1 /* MIMEType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA73A271092D500E59FF1 /* MIMEType.swift */; };
 		795AA73C271092D500E59FF1 /* MIMEType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA73A271092D500E59FF1 /* MIMEType.swift */; };
-		795AA73E271094B400E59FF1 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA73D271094B400E59FF1 /* APIRouter.swift */; };
-		795AA73F271094B400E59FF1 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA73D271094B400E59FF1 /* APIRouter.swift */; };
+		795AA73E271094B400E59FF1 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA73D271094B400E59FF1 /* Endpoint.swift */; };
+		795AA73F271094B400E59FF1 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA73D271094B400E59FF1 /* Endpoint.swift */; };
 		795AA7412713FB1400E59FF1 /* QueueItLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7402713FB1400E59FF1 /* QueueItLocal.swift */; };
 		795AA7422713FB1400E59FF1 /* QueueItLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7402713FB1400E59FF1 /* QueueItLocal.swift */; };
 		795AA7452713FFEB00E59FF1 /* RemoteFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7442713FFEB00E59FF1 /* RemoteFactory.swift */; };
 		795AA7462713FFEB00E59FF1 /* RemoteFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7442713FFEB00E59FF1 /* RemoteFactory.swift */; };
-		795AA7482713FFF800E59FF1 /* WorkerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7472713FFF800E59FF1 /* WorkerFactory.swift */; };
-		795AA7492713FFF800E59FF1 /* WorkerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7472713FFF800E59FF1 /* WorkerFactory.swift */; };
+		795AA7482713FFF800E59FF1 /* QueueItEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7472713FFF800E59FF1 /* QueueItEngine.swift */; };
+		795AA7492713FFF800E59FF1 /* QueueItEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7472713FFF800E59FF1 /* QueueItEngine.swift */; };
 		795AA74C2714018600E59FF1 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA74B2714018600E59FF1 /* APIClient.swift */; };
 		795AA74D2714018600E59FF1 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA74B2714018600E59FF1 /* APIClient.swift */; };
 		795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */; };
@@ -514,10 +514,10 @@
 		795AA73127108F5900E59FF1 /* NetworkAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAccessor.swift; sourceTree = "<group>"; };
 		795AA7372710920600E59FF1 /* ResultError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultError.swift; sourceTree = "<group>"; };
 		795AA73A271092D500E59FF1 /* MIMEType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIMEType.swift; sourceTree = "<group>"; };
-		795AA73D271094B400E59FF1 /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
+		795AA73D271094B400E59FF1 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		795AA7402713FB1400E59FF1 /* QueueItLocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueItLocal.swift; sourceTree = "<group>"; };
 		795AA7442713FFEB00E59FF1 /* RemoteFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFactory.swift; sourceTree = "<group>"; };
-		795AA7472713FFF800E59FF1 /* WorkerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerFactory.swift; sourceTree = "<group>"; };
+		795AA7472713FFF800E59FF1 /* QueueItEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueItEngine.swift; sourceTree = "<group>"; };
 		795AA74B2714018600E59FF1 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingViewController.swift; path = BCVaccineCard/Screens/OnboardingFlow/InitialOnboardingViewController.swift; sourceTree = SOURCE_ROOT; };
 		795AA7532715189C00E59FF1 /* InitialOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InitialOnboardingView.swift; path = BCVaccineCard/Common/Views/InitialOnboardingView/InitialOnboardingView.swift; sourceTree = SOURCE_ROOT; };
@@ -1301,9 +1301,11 @@
 				795AA74A2714016000E59FF1 /* GatewaysAndWorkers */,
 				795AA7432713FFD900E59FF1 /* Factories */,
 				795AA7372710920600E59FF1 /* ResultError.swift */,
+				795AA74B2714018600E59FF1 /* APIClient.swift */,
 				791C27B027179076001A6E12 /* NetworkRequestInterceptor.swift */,
-				795AA73D271094B400E59FF1 /* APIRouter.swift */,
+				795AA73D271094B400E59FF1 /* Endpoint.swift */,
 				795AA73127108F5900E59FF1 /* NetworkAccessor.swift */,
+				795AA7472713FFF800E59FF1 /* QueueItEngine.swift */,
 				795AA7402713FB1400E59FF1 /* QueueItLocal.swift */,
 			);
 			path = NetworkLayer;
@@ -1343,7 +1345,6 @@
 			isa = PBXGroup;
 			children = (
 				795AA7442713FFEB00E59FF1 /* RemoteFactory.swift */,
-				795AA7472713FFF800E59FF1 /* WorkerFactory.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
@@ -1351,7 +1352,6 @@
 		795AA74A2714016000E59FF1 /* GatewaysAndWorkers */ = {
 			isa = PBXGroup;
 			children = (
-				795AA74B2714018600E59FF1 /* APIClient.swift */,
 			);
 			path = GatewaysAndWorkers;
 			sourceTree = "<group>";
@@ -2013,7 +2013,7 @@
 				29A12AF4271F699000A106B5 /* AnalyticsService.swift in Sources */,
 				7944F67926F12613006B9444 /* AppDelegate.swift in Sources */,
 				2931A7FE27596E9200109161 /* ImmunizationRecord+CoreDataProperties.swift in Sources */,
-				795AA73E271094B400E59FF1 /* APIRouter.swift in Sources */,
+				795AA73E271094B400E59FF1 /* Endpoint.swift in Sources */,
 				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
 				79218AA92751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
@@ -2035,7 +2035,7 @@
 				29820CE127582C7D00B53468 /* StorageService+Immunizations.swift in Sources */,
 				792834582730E53200EE2710 /* InteractiveLinkLabel.swift in Sources */,
 				2931A7F027596E9200109161 /* ImmunizationRecord+CoreDataClass.swift in Sources */,
-				795AA7482713FFF800E59FF1 /* WorkerFactory.swift in Sources */,
+				795AA7482713FFF800E59FF1 /* QueueItEngine.swift in Sources */,
 				2931A7FC27596E9200109161 /* TestResult+CoreDataClass.swift in Sources */,
 				795AA72F27108C1C00E59FF1 /* GatewayVaccineCardRequest.swift in Sources */,
 				7944F6D526F12C00006B9444 /* AppStyleButton.swift in Sources */,
@@ -2174,11 +2174,11 @@
 				794BD6352702EEC00084ADA8 /* BCVaccineCard.xcdatamodeld in Sources */,
 				794BD6362702EEC00084ADA8 /* Constants.swift in Sources */,
 				79218AD3275576640063004E /* TextListModel.swift in Sources */,
-				795AA73F271094B400E59FF1 /* APIRouter.swift in Sources */,
+				795AA73F271094B400E59FF1 /* Endpoint.swift in Sources */,
 				79218AB0275196040063004E /* HealthRecordsUserView.swift in Sources */,
 				795AA74D2714018600E59FF1 /* APIClient.swift in Sources */,
 				2931A7F127596E9200109161 /* ImmunizationRecord+CoreDataClass.swift in Sources */,
-				795AA7492713FFF800E59FF1 /* WorkerFactory.swift in Sources */,
+				795AA7492713FFF800E59FF1 /* QueueItEngine.swift in Sources */,
 				794BD6372702EEC00084ADA8 /* BaseViewController.swift in Sources */,
 				794BD6382702EEC00084ADA8 /* SettingsViewController.swift in Sources */,
 				792834592730E53200EE2710 /* InteractiveLinkLabel.swift in Sources */,
