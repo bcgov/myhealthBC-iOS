@@ -101,6 +101,7 @@ final class NetworkAccessor {
                 self.setupQueueIt(onViewController: executingVC, customerID: cAndE.c, eventAlias: cAndE.e, url: url) { status, error in
                     if status.succeeded {
                         let token = status.token
+                        QueueItLocal.saveValueToDefaults(queueitToken: token)
                         self.decodeResponse(response: response, retryStatus: NetworkRetryStatus(token: token, retry: true), withCompletion: completion)
                     
                     } else {
