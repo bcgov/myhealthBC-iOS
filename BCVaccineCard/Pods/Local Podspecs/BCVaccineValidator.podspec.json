@@ -1,6 +1,10 @@
 {
   "name": "BCVaccineValidator",
+<<<<<<< HEAD
   "version": "1.0.9",
+=======
+  "version": "1.0.6",
+>>>>>>> origin/dev
   "summary": "Validate vaccine cards allowed in British Columbia",
   "license": {
     "type": "MIT",
@@ -13,7 +17,11 @@
   },
   "source": {
     "git": "https://github.com/bcgov/iOSVaccineValidator.git",
+<<<<<<< HEAD
     "tag": "1.0.9"
+=======
+    "tag": "1.0.6"
+>>>>>>> origin/dev
   },
   "platforms": {
     "ios": "11.0"

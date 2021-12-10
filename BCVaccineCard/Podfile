@@ -12,8 +12,12 @@ target 'BCVaccineCard' do
   pod 'SwiftyJSON', '~> 4.0'
   pod 'Firebase/AppDistribution'
   pod 'SwipeCellKit'
+  pod 'SwiftQRCodeGenerator', '~> 1.0.3'
+  pod 'PocketSVG', '~> 2.6'
   pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
-
+  pod 'EncryptedCoreData', :git => 'https://github.com/project-imas/encrypted-core-data.git'
+  pod 'KeychainAccess'
+  
   target 'BCVaccineCardTests' do
     inherit! :search_paths
     # Pods for testing
@@ -35,7 +39,11 @@ target 'BCVaccineCard-Prod' do
   pod 'SnowplowTracker', '~> 2.0'
   pod 'SwiftyJSON', '~> 4.0'
   pod 'SwipeCellKit'
+  pod 'SwiftQRCodeGenerator', '~> 1.0.3'
+  pod 'PocketSVG', '~> 2.6'
   pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
+  pod 'EncryptedCoreData', :git => 'https://github.com/project-imas/encrypted-core-data.git'
+  pod 'KeychainAccess'
 end
 
 post_install do |installer|
