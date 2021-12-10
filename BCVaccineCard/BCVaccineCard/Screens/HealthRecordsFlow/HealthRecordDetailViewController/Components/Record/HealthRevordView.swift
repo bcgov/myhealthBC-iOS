@@ -62,11 +62,10 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let model = self.model else {return 0}
         let sections = model.getCellSections()
-        if sections.contains(where: {$0 == .Fields}) {
+        if sections.contains(where: {$0 == .Fields}), sections.last == .Fields && section == sections.count - 1 {
             return model.fields.count
-        } else {
-            return 1
         }
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
