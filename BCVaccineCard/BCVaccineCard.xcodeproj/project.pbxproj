@@ -269,8 +269,8 @@
 		795AA73C271092D500E59FF1 /* MIMEType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA73A271092D500E59FF1 /* MIMEType.swift */; };
 		795AA73E271094B400E59FF1 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA73D271094B400E59FF1 /* APIRouter.swift */; };
 		795AA73F271094B400E59FF1 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA73D271094B400E59FF1 /* APIRouter.swift */; };
-		795AA7412713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7402713FB1400E59FF1 /* RemoteRequestAccessor.swift */; };
-		795AA7422713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7402713FB1400E59FF1 /* RemoteRequestAccessor.swift */; };
+		795AA7412713FB1400E59FF1 /* QueueItLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7402713FB1400E59FF1 /* QueueItLocal.swift */; };
+		795AA7422713FB1400E59FF1 /* QueueItLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7402713FB1400E59FF1 /* QueueItLocal.swift */; };
 		795AA7452713FFEB00E59FF1 /* RemoteFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7442713FFEB00E59FF1 /* RemoteFactory.swift */; };
 		795AA7462713FFEB00E59FF1 /* RemoteFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7442713FFEB00E59FF1 /* RemoteFactory.swift */; };
 		795AA7482713FFF800E59FF1 /* WorkerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7472713FFF800E59FF1 /* WorkerFactory.swift */; };
@@ -515,7 +515,7 @@
 		795AA7372710920600E59FF1 /* ResultError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultError.swift; sourceTree = "<group>"; };
 		795AA73A271092D500E59FF1 /* MIMEType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIMEType.swift; sourceTree = "<group>"; };
 		795AA73D271094B400E59FF1 /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
-		795AA7402713FB1400E59FF1 /* RemoteRequestAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteRequestAccessor.swift; sourceTree = "<group>"; };
+		795AA7402713FB1400E59FF1 /* QueueItLocal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueItLocal.swift; sourceTree = "<group>"; };
 		795AA7442713FFEB00E59FF1 /* RemoteFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteFactory.swift; sourceTree = "<group>"; };
 		795AA7472713FFF800E59FF1 /* WorkerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerFactory.swift; sourceTree = "<group>"; };
 		795AA74B2714018600E59FF1 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
@@ -1304,7 +1304,7 @@
 				791C27B027179076001A6E12 /* NetworkRequestInterceptor.swift */,
 				795AA73D271094B400E59FF1 /* APIRouter.swift */,
 				795AA73127108F5900E59FF1 /* NetworkAccessor.swift */,
-				795AA7402713FB1400E59FF1 /* RemoteRequestAccessor.swift */,
+				795AA7402713FB1400E59FF1 /* QueueItLocal.swift */,
 			);
 			path = NetworkLayer;
 			sourceTree = "<group>";
@@ -2091,7 +2091,7 @@
 				2931A7F827596E9200109161 /* CovidLabTestResult+CoreDataProperties.swift in Sources */,
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
 				7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */,
-				795AA7412713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */,
+				795AA7412713FB1400E59FF1 /* QueueItLocal.swift in Sources */,
 				7944F71426F3A26D006B9444 /* QRSelectionTableViewCell.swift in Sources */,
 				79218AEF275672120063004E /* StorageService+HealthRecords.swift in Sources */,
 				29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */,
@@ -2223,7 +2223,7 @@
 				791C27CA27192D7C001A6E12 /* String+Localizable.swift in Sources */,
 				794BD6472702EEC00084ADA8 /* QRRetrievalMethodViewController.swift in Sources */,
 				794BD6482702EEC00084ADA8 /* TabBarController.swift in Sources */,
-				795AA7422713FB1400E59FF1 /* RemoteRequestAccessor.swift in Sources */,
+				795AA7422713FB1400E59FF1 /* QueueItLocal.swift in Sources */,
 				795AA7802715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
 				794BD6492702EEC00084ADA8 /* FormTableViewCell.swift in Sources */,
 				794BD64A2702EEC00084ADA8 /* Setting.swift in Sources */,

@@ -23,3 +23,8 @@ struct ResultError: Codable {
 extension ResultError: Error {
     
 }
+
+struct DisplayableResultError: Codable {
+    let title: String
+    let resultError: ResultError
+}

@@ -9,14 +9,14 @@ import QueueITLibrary
 import Alamofire
 import UIKit
 import BCVaccineValidator
-
+// TODO: Strip out vaccine specific code and make this as generic as possible
 protocol QueueItWorkerDefaultsDelegate: AnyObject {
     func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?)
     func handleError(title: String, error: ResultError)
     func showLoader()
     func hideLoader()
 }
-
+// TODO: Rename this "HealthGatewayAPIWorker" or something like that - then test out the vaccine card API calls here
 class QueueItWorker: NSObject {
     
     private var engine: QueueITEngine?
