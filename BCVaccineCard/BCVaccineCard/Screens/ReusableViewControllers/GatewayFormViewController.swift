@@ -11,7 +11,7 @@
 /// 5.) Reduce redundancies in code where possible (indexOf functions, for example)
 
 import UIKit
-import QueueITLibrary
+//import QueueITLibrary
 import BCVaccineValidator
 
 enum GatewayFormSource: Equatable {
@@ -166,8 +166,8 @@ class GatewayFormViewController: BaseViewController {
     // For Request
     // TODO: Will need to refactor this a bit when we get the endpoint for test results
     private var model: GatewayVaccineCardRequest?
-    private var worker: QueueItWorker?
-    private var endpoint = UrlAccessor().getVaccineCard
+    private var worker: HealthGatewayAPIWorker?
+//    private var endpoint = UrlAccessor().getVaccineCard
     
     // Completion - first string is for the ID for core data, second string is optional for fed pass only
     var completionHandler: ((String, String?) -> Void)?
@@ -200,7 +200,7 @@ class GatewayFormViewController: BaseViewController {
     private func setup() {
         setupButtons()
         setupTableView()
-        setupQueueItWorker()
+        setupAPIWorker()
     }
     
     private func setupButtons() {
@@ -208,8 +208,8 @@ class GatewayFormViewController: BaseViewController {
         submitButton.configure(withStyle: .blue, buttonType: .submit, delegateOwner: self, enabled: false)
     }
     
-    private func setupQueueItWorker() {
-        self.worker = QueueItWorker(delegateOwner: self, delegate: self, endpoint: self.endpoint)
+    private func setupAPIWorker() {
+        self.worker = HealthGatewayAPIWorker(delegateOwner: self)
     }
 
 }
@@ -400,7 +400,8 @@ extension GatewayFormViewController {
         guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
         self.whiteSpaceFormattedPHN = phn
         self.model = model
-        worker?.createInitialVaccineCardRequest(model: model)
+        showLoader()
+        worker?.getVaccineCard(model: model, executingVC: self)
     }
     
     private func formatGatewayData(phn: String, birthday: String, vax: String) -> GatewayVaccineCardRequest? {
@@ -519,17 +520,20 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
 
 }
 
-// MARK: QueueIt
-extension GatewayFormViewController: QueueItWorkerDefaultsDelegate {
+// MARK: Health Gateway worker
+extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?) {
         var model = convertScanResultModelIntoLocalData(data: scanResult, source: .healthGateway)
         model.fedCode = fedCode
         // store prefered PHN if needed here
         self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
+        // TODO: Should probably put this endLoadingIndicator inside the handleCardInCoreData call
+        hideLoader()
         handleCardInCoreData(localModel: model, replacing: fetchType.originalCode)
     }
     
     func handleError(title: String, error: ResultError) {
+        hideLoader()
         if error.resultMessage == "Unknown" {
             alert(title: title, message: .unknownErrorMessage)
         } else {
