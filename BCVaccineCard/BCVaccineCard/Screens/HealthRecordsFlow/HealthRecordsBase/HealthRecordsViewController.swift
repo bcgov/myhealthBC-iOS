@@ -48,6 +48,7 @@ class HealthRecordsViewController: BaseViewController {
     
     private func setup() {
         fetchDataSource()
+        collectionView.reloadData()
     }
 
 }

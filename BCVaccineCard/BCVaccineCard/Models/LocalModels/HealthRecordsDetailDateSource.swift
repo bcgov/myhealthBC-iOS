@@ -26,6 +26,7 @@ struct HealthRecordsDetailDataSource {
         case covidTestResultRecord(model: CovidLabTestResult)
     }
     
+    let id: String?
     let name: String
     let type: RecordType
     let title: String
@@ -55,6 +56,7 @@ struct HealthRecordsDetailDataSource {
         self.records = HealthRecordsDetailDataSource.genRecords(type: type)
         switch type {
         case .covidImmunizationRecord(let model, _):
+            id = model.id
             title = .covid19mRNATitle
             detailNavTitle = .vaccinationRecord
             name = model.name
@@ -62,6 +64,7 @@ struct HealthRecordsDetailDataSource {
             deleteAlertTitle = "Delete Record"
             deleteAlertMessage = "The Health Pass that is linked to this record will be removed. You will be required to enter your health information again to access the record."
         case .covidTestResultRecord(let model):
+            id = model.id
             title = .covid19mRNATitle
             detailNavTitle = .covid19TestResultTitle
             name = model.resultArray.first?.patientDisplayName ?? ""

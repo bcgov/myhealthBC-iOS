@@ -33,6 +33,7 @@ enum Source: String, Codable {
 }
 
 public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
+    let id: String? // stored id in core data.
     let code: String
     let birthdate: String
     let hash: String
@@ -103,7 +104,7 @@ extension ScanResultModel {
         
         let hash = payload.fhirBundleHash() ?? "\(name)-\(birthdate)"
       
-        return LocallyStoredVaccinePassportModel(code: code, birthdate: birthdate, hash: hash, vaxDates: vadDates, name: name, issueDate: issueDate, status: status, source: source ?? .imported, fedCode: federalPass, phn: phn)
+        return LocallyStoredVaccinePassportModel(id: nil, code: code, birthdate: birthdate, hash: hash, vaxDates: vadDates, name: name, issueDate: issueDate, status: status, source: source ?? .imported, fedCode: federalPass, phn: phn)
         
     }
 }

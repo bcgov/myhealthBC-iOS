@@ -76,7 +76,7 @@ extension VaccineCard {
     public func toLocal() -> LocallyStoredVaccinePassportModel? {
         guard let qrCode = code, let dates = vaxDates, let issueDate = issueDate, let birthdate = birthdate, let firHash = firHash else {return nil}
         let status: VaccineStatus = vaxDates?.count ?? 0 > 1 ? .fully : (vaxDates?.count ?? 0 == 1 ? .partially : .notVaxed)
-        return LocallyStoredVaccinePassportModel(code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: issueDate.timeIntervalSince1970, status: status, source: .imported, fedCode: federalPass, phn: phn)
+        return LocallyStoredVaccinePassportModel(id: id, code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: issueDate.timeIntervalSince1970, status: status, source: .imported, fedCode: federalPass, phn: phn)
     }
 }
 

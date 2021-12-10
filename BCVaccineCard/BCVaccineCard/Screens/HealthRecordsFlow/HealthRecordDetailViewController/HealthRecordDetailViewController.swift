@@ -257,7 +257,16 @@ extension HealthRecordDetailViewController {
     
     @objc private func deleteButton() {
         alertConfirmation(title: dataSource.deleteAlertTitle, message: dataSource.deleteAlertMessage, confirmTitle: .delete, confirmStyle: .destructive) {
-            //TODO: Delete Record and pop view controller
+            [weak self] in
+            guard let `self` = self else {return}
+            switch self.dataSource.type {
+            case .covidImmunizationRecord(model: let model, immunizations: _):
+                StorageService.shared.deleteVaccineCard(vaccineQR: model.code)
+            case .covidTestResultRecord:
+                guard let recordId = self.dataSource.id else {return}
+                StorageService.shared.deleteTestResult(id: recordId)
+            }
+            self.popBack(toControllerType: HealthRecordsViewController.self)
         } onCancel: {
         }
     }

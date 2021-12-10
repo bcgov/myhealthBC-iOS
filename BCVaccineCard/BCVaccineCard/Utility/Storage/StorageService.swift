@@ -57,13 +57,17 @@ class StorageService {
     
     fileprivate func deleteAllRecords(in array: [NSManagedObject]) {
         for object in array {
-            let context = managedContext
-            do {
-                context?.delete(object)
-                try context?.save()
-            } catch {
-                continue
-            }
+           delete(object: object)
+        }
+    }
+    
+    func delete(object: NSManagedObject) {
+        let context = managedContext
+        do {
+            context?.delete(object)
+            try context?.save()
+        } catch {
+            return
         }
     }
 }

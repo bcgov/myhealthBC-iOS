@@ -15,4 +15,14 @@ extension StorageService {
         let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
         return completion(tests + vaccineCards)
     }
+    
+    
+    func delete(healthRecord: HealthRecord) {
+        switch healthRecord.type {
+        case .Test(let object):
+            delete(object: object)
+        case .CovidImmunization(let object):
+            delete(object: object)
+        }
+    }
 }
