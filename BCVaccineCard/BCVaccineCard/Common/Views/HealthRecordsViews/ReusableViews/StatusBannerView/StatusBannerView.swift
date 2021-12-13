@@ -22,6 +22,8 @@ import UIKit
  */
 class StatusBannerView: UIView {
     
+    static let roundness: CGFloat = 5
+    
     @IBOutlet weak var contentStackView: UIStackView!
     @IBOutlet weak var bannerImage: UIImageView!
     @IBOutlet weak var topContainer: UIView!
@@ -63,9 +65,13 @@ class StatusBannerView: UIView {
         // set banner icon (gov logo)
         bannerImage.image = UIImage(named: "bc-logo")
         
-        // Hide Top banner if needed
+        // Hide Top banner if needed & set rounded corners
         if type == .CovidTest {
             topContainer.isHidden = true
+            mainContainer.layer.cornerRadius = StatusBannerView.roundness
+        } else {
+            topContainer.roundTopCorners(radius: StatusBannerView.roundness)
+            mainContainer.roundBottomCorners(radius: StatusBannerView.roundness)
         }
         
         // Set Status Icon if needed
@@ -83,8 +89,6 @@ class StatusBannerView: UIView {
             }
         }
         statusLabel.textColor = statusColour
-        self.layer.cornerRadius = 4
-        mainContainer.layer.cornerRadius = 4
         
         // set texts
         nameLabel.text = name
@@ -101,7 +105,7 @@ class StatusBannerView: UIView {
         case .VaccineRecord:
             // TODO: put corrent fonts and sizes
             nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
-            statusLabel.font = UIFont.bcSansBoldWithSize(size: 18)
+            statusLabel.font = UIFont.bcSansRegularWithSize(size: 18)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         case .Message:
             topContainer.isHidden = true

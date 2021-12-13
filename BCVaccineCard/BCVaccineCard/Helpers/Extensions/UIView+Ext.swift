@@ -92,6 +92,18 @@ extension UIView {
         self.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
     }
     
+    public func roundTopCorners(radius: CGFloat) {
+        self.clipsToBounds = true
+        self.layer.cornerRadius = radius
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    }
+    
+    public func roundBottomCorners(radius: CGFloat) {
+        self.clipsToBounds = true
+        self.layer.cornerRadius = radius
+        self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+    }
+    
     // Load a nib
     public class func fromNib<T: UIView>(bundle: Bundle? = Bundle.main) -> T {
         return bundle!.loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T
