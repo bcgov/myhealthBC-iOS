@@ -1,8 +1,8 @@
 //
-//  QueueItWorker.swift
+//  HGWorker.swift
 //  BCVaccineCard
 //
-//  Created by Connor Ogilvie on 2021-10-14.
+//  Created by Connor Ogilvie on 2021-12-13.
 //
 
 import UIKit
