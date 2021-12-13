@@ -490,17 +490,18 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
         } else if type == .submit {
             // TODO: Should refactor this: - Will do when network layer gets added
             if fetchType == .covid19TestResult {
-                // TODO: Show dummy data response here
-                guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
-                guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return }
-                if let index = Constants.testResultsDummyData.firstIndex(where: { $0.phn == phn }) {
-                    let data = Constants.testResultsDummyData[index].data
-                    guard let response = data.response else { return }
-                    // TODO: add correct birthdate and phn
-                    let _ = StorageService.shared.saveTestResult(phn: phn , birthdate: Date(), gateWayResponse: response)
-                    // Note - will have to fix this obviously and route properly
-                    self.popBack(toControllerType: HealthRecordsViewController.self)
-                }
+//                // TODO: Show dummy data response here
+//                guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
+//                guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return }
+//                if let index = Constants.testResultsDummyData.firstIndex(where: { $0.phn == phn }) {
+//                    let data = Constants.testResultsDummyData[index].data
+//                    guard let response = data.response else { return }
+//                    // TODO: add correct birthdate and phn
+//                    let _ = StorageService.shared.saveTestResult(phn: phn , birthdate: Date(), gateWayResponse: response)
+//                    // Note - will have to fix this obviously and route properly
+//                    self.popBack(toControllerType: HealthRecordsViewController.self)
+//                }
+                // TODO: Add in network layer here
             } else {
                 prepareRequest() // Note: This should be refactored to be more reusable
             }

@@ -37,6 +37,10 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, andCompletion: completion)
     }
     
+    func getTestResult() {
+        
+    }
+    
 }
 
 // MARK: QUEUEIT Logic here

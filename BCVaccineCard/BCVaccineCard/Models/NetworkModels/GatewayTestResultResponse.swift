@@ -9,10 +9,24 @@ import Foundation
 
 struct GatewayTestResultResponse: Codable, Equatable {
     static func == (lhs: GatewayTestResultResponse, rhs: GatewayTestResultResponse) -> Bool {
-        lhs.records.equals(other: rhs.records)
+        if let rhsResponse = rhs.resourcePayload, let lshResponse = lhs.resourcePayload {
+            return lshResponse.records.equals(other: rhsResponse.records)
+        }
+        return (rhs.resourcePayload == nil && lhs.resourcePayload == nil)
     }
     
-    let records: [GatewayTestResultResponseRecord]
+    let resourcePayload: ResourcePayload?
+    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    let resultError: ResultError?
+    
+    // MARK: - ResourcePayload
+    struct ResourcePayload: Codable {
+        let loaded: Bool
+        let retryin: Int
+        let records: [GatewayTestResultResponseRecord]
+    }
+    
+//    let records: [GatewayTestResultResponseRecord]
 }
 
 struct GatewayTestResultResponseRecord: Codable, Equatable {
@@ -42,3 +56,4 @@ extension Array where Element == GatewayTestResultResponseRecord {
         return self.count == other.count
     }
 }
+
