@@ -165,7 +165,8 @@ class GatewayFormViewController: BaseViewController {
     
     // For Request
     // TODO: Will need to refactor this a bit when we get the endpoint for test results
-    private var model: GatewayVaccineCardRequest?
+    private var vaccineCardRequestModel: GatewayVaccineCardRequest?
+    private var testResultRequestModel: GatewayTestResultRequest?
     private var worker: HealthGatewayAPIWorker?
 //    private var endpoint = UrlAccessor().getVaccineCard
     
@@ -293,8 +294,8 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
     }
     
     private func storePHNDetails() {
-        guard let model = self.model else { return }
-        if self.model?.phn == self.whiteSpaceFormattedPHN?.removeWhiteSpaceFormatting, self.whiteSpaceFormattedPHN != nil {
+        guard let model = self.vaccineCardRequestModel else { return }
+        if model.phn == self.whiteSpaceFormattedPHN?.removeWhiteSpaceFormatting, self.whiteSpaceFormattedPHN != nil {
             let rememberProperties = GatewayStorageProperties(phn: self.whiteSpaceFormattedPHN!, dob: model.dateOfBirth)
             guard rememberProperties.phn != self.rememberDetails.storageArray?.first?.phn else { return }
             // NOTE: This is where we can append data to existing storage for abilitly to store multiple pieces of data
@@ -306,7 +307,7 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
     private func removePHNDetailsIfNeccessary() {
         let rememberKeychainStorage = RememberedGatewayDetails(storageArray: nil)
         // Note: If remember details is unchecked, and the phn used is not the same as the remembered phn, then we do nothing
-        if self.model?.phn.removeWhiteSpaceFormatting == self.rememberDetails.storageArray?.first?.phn.removeWhiteSpaceFormatting {
+        if self.vaccineCardRequestModel?.phn.removeWhiteSpaceFormatting == self.rememberDetails.storageArray?.first?.phn.removeWhiteSpaceFormatting {
             Defaults.rememberGatewayDetails = rememberKeychainStorage
         }
     }
@@ -390,23 +391,42 @@ extension GatewayFormViewController: DropDownViewDelegate {
 // MARK: Request formatting
 extension GatewayFormViewController {
     
-    private func prepareRequest() {
+    private func prepareRequestForVaccineCard() {
         guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
         guard let phn = dataSource[phnIndexPath.row].configuration.text else { return }
         guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
         guard let birthday = dataSource[dobIndexPath.row].configuration.text else { return }
         guard let dovIndexPath = getIndexPathForSpecificCell(.dovForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
         guard let vaxDate = dataSource[dovIndexPath.row].configuration.text else { return }
-        guard let model = formatGatewayData(phn: phn, birthday: birthday, vax: vaxDate) else { return }
+        guard let model = formatGatewayDataForVaccineRequest(phn: phn, birthday: birthday, vax: vaxDate) else { return }
         self.whiteSpaceFormattedPHN = phn
-        self.model = model
+        self.vaccineCardRequestModel = model
         showLoader()
         worker?.getVaccineCard(model: model, executingVC: self)
     }
     
-    private func formatGatewayData(phn: String, birthday: String, vax: String) -> GatewayVaccineCardRequest? {
+    private func formatGatewayDataForVaccineRequest(phn: String, birthday: String, vax: String) -> GatewayVaccineCardRequest? {
         let formattedPHN = phn.removeWhiteSpaceFormatting
         return GatewayVaccineCardRequest(phn: formattedPHN, dateOfBirth: birthday, dateOfVaccine: vax)
+    }
+    
+    private func prepareRequestForTestResult() {
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
+        guard let phn = dataSource[phnIndexPath.row].configuration.text else { return }
+        guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
+        guard let birthday = dataSource[dobIndexPath.row].configuration.text else { return }
+        guard let dotIndexPath = getIndexPathForSpecificCell(.dotForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
+        guard let testDate = dataSource[dotIndexPath.row].configuration.text else { return }
+        guard let model = formatGatewayDataForTestResultRequest(phn: phn, birthday: birthday, test: testDate) else { return }
+        self.whiteSpaceFormattedPHN = phn
+        self.testResultRequestModel = model
+        showLoader()
+        worker?.getTestResult(model: model, executingVC: self)
+    }
+    
+    private func formatGatewayDataForTestResultRequest(phn: String, birthday: String, test: String) -> GatewayTestResultRequest? {
+        let formattedPHN = phn.removeWhiteSpaceFormatting
+        return GatewayTestResultRequest(phn: formattedPHN, dateOfBirth: birthday, collectionDate: test)
     }
 }
 
@@ -503,7 +523,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
 //                }
                 // TODO: Add in network layer here
             } else {
-                prepareRequest() // Note: This should be refactored to be more reusable
+                prepareRequestForVaccineCard() // Note: This should be refactored to be more reusable
             }
         }
     }
@@ -532,6 +552,10 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         // TODO: Should probably put this endLoadingIndicator inside the handleCardInCoreData call
         hideLoader()
         handleCardInCoreData(localModel: model, replacing: fetchType.originalCode)
+    }
+    
+    func handleTestResult(result: GatewayTestResultResponse) {
+        // TODO: Handle result locally here
     }
     
     func handleError(title: String, error: ResultError) {

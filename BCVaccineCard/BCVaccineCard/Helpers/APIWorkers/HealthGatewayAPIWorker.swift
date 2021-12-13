@@ -10,6 +10,7 @@ import BCVaccineValidator
 
 protocol HealthGatewayAPIWorkerDelegate: AnyObject {
     func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?)
+    func handleTestResult(result: GatewayTestResultResponse)
     func handleError(title: String, error: ResultError)
 }
 
@@ -36,19 +37,37 @@ class HealthGatewayAPIWorker: NSObject {
                 self.requestDetails.vaccineCardDetails?.queueItToken = queueItToken
                 self.apiClient.getVaccineCard(model, token: queueItToken, executingVC: executingVC) { [weak self ] result, _ in
                     guard let `self` = self else {return}
-                    self.handleResponse(result: result)
+                    self.handleVaccineCardResponse(result: result)
                 }
             } else {
-                self.handleResponse(result: result)
+                self.handleVaccineCardResponse(result: result)
             }
         }
     }
     
-    func getTestResults(model: GatewayTestResultRequest, executingVC: UIViewController) {
+    func getTestResult(model: GatewayTestResultRequest, executingVC: UIViewController) {
         let token = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.testResultDetails = HealthGatewayAPIWorkerRetryDetails.TestResultDetails(model: model, queueItToken: token, executingVC: executingVC)
+        apiClient.getTestResult(model, token: token, executingVC: executingVC) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.testResultDetails?.queueItToken = queueItToken
+                self.apiClient.getTestResult(model, token: queueItToken, executingVC: executingVC) { [weak self] result, _ in
+                    guard let `self` = self else {return}
+                    self.handleTestResultResponse(result: result)
+                }
+            } else {
+                self.handleTestResultResponse(result: result)
+            }
+        }
     }
     
-    private func handleResponse(result: Result<GatewayVaccineCardResponse, ResultError>) {
+}
+
+// MARK: Handling responses
+extension HealthGatewayAPIWorker {
+    private func handleVaccineCardResponse(result: Result<GatewayVaccineCardResponse, ResultError>) {
         switch result {
         case .success(let vaccineCard):
             print(vaccineCard)
@@ -61,7 +80,7 @@ class HealthGatewayAPIWorker: NSObject {
                 // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
                 self.retryCount += 1
                 let retryInSeconds = Double(retryinMS/1000)
-                self.perform(#selector(self.retryGetActualVaccineCardRequest), with: nil, afterDelay: retryInSeconds)
+                self.perform(#selector(self.retryGetVaccineCardRequest), with: nil, afterDelay: retryInSeconds)
             } else {
                 let qrResult = vaccineCard.transformResponseIntoQRCode()
                 guard let code = qrResult.qrString else {
@@ -91,22 +110,58 @@ class HealthGatewayAPIWorker: NSObject {
         }
     }
     
-    @objc private func retryGetActualVaccineCardRequest() {
+    @objc private func retryGetVaccineCardRequest() {
         guard let model = self.requestDetails.vaccineCardDetails?.model, let vc = self.requestDetails.vaccineCardDetails?.executingVC else {
             self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
             return
         }
         self.getVaccineCard(model: model, executingVC: vc)
     }
+    
+    
+    private func handleTestResultResponse(result: Result<GatewayTestResultResponse, ResultError>) {
+        switch result {
+        case .success(let testResult):
+            // Note: Have to check for error here because error is being sent back on a 200 response
+            if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload?.records == nil) {
+                // TODO: Error mapping here
+                self.delegate?.handleError(title: .error, error: ResultError(resultMessage: resultMessage))
+            } else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
+                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+                self.retryCount += 1
+                let retryInSeconds = Double(retryinMS/1000)
+                self.perform(#selector(self.retryGetTestResultRequest), with: nil, afterDelay: retryInSeconds)
+            } else {
+                self.delegate?.handleTestResult(result: testResult)
+            }
+        case .failure(let error):
+            self.delegate?.handleError(title: .error, error: error)
+        }
+    }
+    
+    @objc private func retryGetTestResultRequest() {
+        guard let model = self.requestDetails.testResultDetails?.model, let vc = self.requestDetails.testResultDetails?.executingVC else {
+            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            return
+        }
+        self.getTestResult(model: model, executingVC: vc)
+    }
 }
 
 // This is where we will store details pertaining to each request type
 struct HealthGatewayAPIWorkerRetryDetails {
     var vaccineCardDetails: VaccineCardDetails?
+    var testResultDetails: TestResultDetails?
     
     
     struct VaccineCardDetails {
         var model: GatewayVaccineCardRequest
+        var queueItToken: String?
+        var executingVC: UIViewController
+    }
+    
+    struct TestResultDetails {
+        var model: GatewayTestResultRequest
         var queueItToken: String?
         var executingVC: UIViewController
     }
