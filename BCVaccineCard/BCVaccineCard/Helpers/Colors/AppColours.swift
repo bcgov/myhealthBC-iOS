@@ -10,6 +10,7 @@ import UIKit
 class AppColours {
     
     static let appBlue = UIColor(red: 0/255, green: 51/255, blue: 102/255, alpha: 1.0)
+    static let appBlueLight = UIColor(red: 0.851, green: 0.918, blue: 0.969, alpha: 1)
     static let vaccinatedGreen = UIColor(red: 72/255, green: 131/255, blue: 72/255, alpha: 1.0)
     static let partiallyVaxedBlue = UIColor(red: 45/255, green: 89/255, blue: 145/255, alpha: 1.0)
     static let backgroundGray = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1.0)
@@ -21,8 +22,8 @@ class AppColours {
     static let borderGray = UIColor(red: 207/255, green: 207/255, blue: 207/255, alpha: 1.0)
     
     struct CovidTest {
-        static let pendingText = UIColor(hexString: "#1A5A96")
-        static let pendingBackground = UIColor(hexString: "#D9EAF7")
+        static let pendingText = appBlue
+        static let pendingBackground = appBlueLight
         
         static let cancelledText = pendingText
         static let cancelledBackground = pendingBackground
