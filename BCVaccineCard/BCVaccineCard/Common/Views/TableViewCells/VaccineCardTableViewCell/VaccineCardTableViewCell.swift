@@ -9,6 +9,18 @@ import UIKit
 import BCVaccineValidator
 import SwipeCellKit
 
+fileprivate class VaccineCardTableViewCellCache {
+    static var validationResults: [String: CodeValidationResult] = [String: CodeValidationResult]()
+    
+    static func fromCache(code: String) -> CodeValidationResult? {
+        return validationResults[code]
+    }
+    
+    static func cache(code: String, result: CodeValidationResult) {
+        validationResults[code] = result
+    }
+}
+
 class VaccineCardTableViewCell: SwipeTableViewCell {
     
     @IBOutlet weak var shadowView: UIView!
@@ -52,16 +64,27 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
             return
         }
         self.code = vaxCode
-        self.contentView.startLoadingIndicator(backgroundColor: .white)
-        BCVaccineValidator.shared.validate(code: vaxCode) { [weak self] result in
+       
+        validateCode(code: vaxCode) { [weak self] result in
             guard let `self` = self, self.code == vaxCode else {return}
-            let localModel = result.toLocal(federalPass: model.federalPass, phn: model.phn)
+            if let localModel = result.toLocal(federalPass: model.federalPass, phn: model.phn) {
+                self.config(model: localModel.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
+            }
+        }
+    }
+    
+    private func validateCode(code: String, completion: @escaping (CodeValidationResult)->Void) {
+        if let cached = VaccineCardTableViewCellCache.fromCache(code: code.lowercased()) {
+            return completion(cached)
+        }
+        self.contentView.startLoadingIndicator(backgroundColor: .white)
+        BCVaccineValidator.shared.validate(code: code.lowercased()) { [weak self] result in
+            VaccineCardTableViewCellCache.cache(code: code, result: result)
+            guard let `self` = self else {return}
             DispatchQueue.main.async {[weak self] in
                 guard let `self` = self else {return}
-                if let lm = localModel {
-                    self.config(model: lm.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
-                }
                 self.contentView.endLoadingIndicator()
+                return completion(result)
             }
         }
     }

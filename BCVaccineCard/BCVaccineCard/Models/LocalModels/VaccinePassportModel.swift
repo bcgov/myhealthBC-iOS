@@ -33,6 +33,7 @@ enum Source: String, Codable {
 }
 
 public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
+    let id: String? // stored id in core data.
     let code: String
     let birthdate: String
     let hash: String
@@ -59,8 +60,7 @@ public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
 struct AppVaccinePassportModel: Equatable {
     let codableModel: LocallyStoredVaccinePassportModel
     var image: UIImage? {
-        // TODO: After testing has been completed, can remove the default value - this is just for the locally stored values
-        return codableModel.code.generateQRCode() ?? codableModel.code.toImage()
+        return codableModel.code.generateQRCode()
     }
     var issueDate: String? {
         let date = Date.init(timeIntervalSince1970: codableModel.issueDate)
@@ -103,7 +103,7 @@ extension ScanResultModel {
         
         let hash = payload.fhirBundleHash() ?? "\(name)-\(birthdate)"
       
-        return LocallyStoredVaccinePassportModel(code: code, birthdate: birthdate, hash: hash, vaxDates: vadDates, name: name, issueDate: issueDate, status: status, source: source ?? .imported, fedCode: federalPass, phn: phn)
+        return LocallyStoredVaccinePassportModel(id: nil, code: code, birthdate: birthdate, hash: hash, vaxDates: vadDates, name: name, issueDate: issueDate, status: status, source: source ?? .imported, fedCode: federalPass, phn: phn)
         
     }
 }

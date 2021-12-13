@@ -2,7 +2,7 @@
 //  TestResult+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2021-12-02.
+//  Created by Amir on 2021-12-09.
 //
 //
 
@@ -29,5 +29,6 @@ extension TestResult {
     @NSManaged public var testOutcome: String?
     @NSManaged public var testStatus: String?
     @NSManaged public var testType: String?
+    @NSManaged public var parentTest: CovidLabTestResult?
 
 }

@@ -58,13 +58,13 @@ class UserRecordListView: UIView {
         recordTypeSubtitleLabel.textColor = AppColours.textBlack
     }
     
-    func configure(recordType: HealthRecordsDetailDataSource.RecordType) {
-        self.type = recordType
+    func configure(record: HealthRecordsDetailDataSource) {
+        self.type = record.type
         setupAccessibility()
-        iconImageView.image = recordType.getImage
-        recordTypeTitleLabel.text = recordType.getTitle
-        var subtitleString = recordType.getStatus
-        if let dateString = recordType.getDate {
+        iconImageView.image = record.image
+        recordTypeTitleLabel.text = record.title
+        var subtitleString: String = record.mainRecord?.status ?? ""
+        if let dateString = record.mainRecord?.status {
             let addition = " • " + dateString
             subtitleString.append(addition)
         }

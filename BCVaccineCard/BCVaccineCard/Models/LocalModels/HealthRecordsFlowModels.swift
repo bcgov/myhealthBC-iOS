@@ -17,22 +17,26 @@ struct HealthRecordsDataSource {
 
 struct HealthRecord {
     public enum Record {
-        case Test(TestResult)
+        case Test(CovidLabTestResult)
         case CovidImmunization(VaccineCard)
-        
-        fileprivate func patientName() -> String? {
-            switch self {
-            case .Test(let test):
-                return test.patientDisplayName
-            case .CovidImmunization(let card):
-                return card.name
-            }
-        }
     }
     
     public let type: Record
-    public var patientName: String? {
-        return type.patientName()
+    public let patientName: String
+    
+    init(type: HealthRecord.Record) {
+        self.type = type
+        switch type {
+        case .Test(let test):
+            let results = test.resultArray
+            if let first = results.first {
+                patientName = first.patientDisplayName ?? ""
+            } else {
+                patientName = ""
+            }
+        case .CovidImmunization(let card):
+            patientName = card.name ?? ""
+        }
     }
 }
 
@@ -45,8 +49,7 @@ extension HealthRecord {
     func detailDataSource() -> HealthRecordsDetailDataSource? {
         switch type {
         case .Test(let test):
-            guard let model = test.toLocal() else {return nil}
-            return HealthRecordsDetailDataSource(type: .covidTestResult(model: model))
+            return HealthRecordsDetailDataSource(type: .covidTestResultRecord(model: test))
         case .CovidImmunization(let covidImmunization):
             guard let model = covidImmunization.toLocal() else {return nil}
             return HealthRecordsDetailDataSource(type: .covidImmunizationRecord(model: model, immunizations: covidImmunization.immunizations))
@@ -60,19 +63,19 @@ extension Array where Element == HealthRecord {
     /// - Returns: Array of Detail Data Source
     func dataSource() -> [HealthRecordsDataSource] {
         var result: [HealthRecordsDataSource] = []
-        for record in self where record.patientName != nil {
+        for record in self {
             // TODO: check for birthday too
             if let i = result.firstIndex(where: {$0.userName == record.patientName}) {
                 result[i].numberOfRecords += 1
             } else {
-                result.append(HealthRecordsDataSource(userName: record.patientName ?? "", numberOfRecords: 1))
+                result.append(HealthRecordsDataSource(userName: record.patientName, numberOfRecords: 1))
             }
         }
         return result
     }
     
     func detailDataSource(userName: String) -> [HealthRecordsDetailDataSource] {
-        let filtered = self.filter { $0.patientName ?? "" == userName }
+        let filtered = self.filter { $0.patientName == userName }
         return filtered.compactMap({$0.detailDataSource()})
     }
 }

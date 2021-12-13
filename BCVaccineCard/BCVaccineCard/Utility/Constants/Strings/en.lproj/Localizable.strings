@@ -143,3 +143,16 @@
 "RecordText" = "record";
 "ViewDetailsOfCovidRecordsText" = "View the details of all your COVID Health Records";
 "FetchHealthRecordsIntroText" = "View the details of all your COVID Health Records";
+
+"DeleteAllRecordsAndSavedData" = "Delete all records and saved data";
+"DisableAnalytics" = "Disable Analytics";
+"EnableAnalytics" = "Enable Analytics";
+"AnalytyticsUsageDescription" = "Anonymized behavioural data is used to help improve the user experience";
+"DeleteData"= "Delete data";
+"ConfirmDeleteAllRecordsAndSaveData"= "Are you sure you want to delete all records and saved data?";
+
+"DeleteCovidHealthRecord" = "Health pass linked to this record will be removed. You will be required to enter your health information again to access the record.";
+"DeleteRecord" = "Delete Record";
+
+"DeleteTestResult" = "Delete Test Result";
+"DeleteTestResultMessage" = "Do you want to delete this test result?";

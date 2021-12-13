@@ -10,18 +10,19 @@ import BCVaccineValidator
 
 extension StorageService {
     
-    func getHeathRecords(for userId: String? = AuthManager().userId()) -> [HealthRecord] {
-        guard let context = managedContext else {return []}
-        do {
-            let users = try context.fetch(User.fetchRequest())
-            guard let user = users.filter({$0.userId == userId}).first else {return []}
-            
-            let tests = user.testResultArray.map({HealthRecord(type: .Test($0))})
-            let vaccineCards = user.vaccineCardArray.map({HealthRecord(type: .CovidImmunization($0))})
-            return tests + vaccineCards
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            return []
+    func getHeathRecords(for userId: String? = AuthManager().userId(), completion: @escaping( [HealthRecord])-> Void) {
+        let tests = fetchTestResults().map({HealthRecord(type: .Test($0))})
+        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
+        return completion(tests + vaccineCards)
+    }
+    
+    
+    func delete(healthRecord: HealthRecord) {
+        switch healthRecord.type {
+        case .Test(let object):
+            delete(object: object)
+        case .CovidImmunization(let object):
+            delete(object: object)
         }
     }
 }

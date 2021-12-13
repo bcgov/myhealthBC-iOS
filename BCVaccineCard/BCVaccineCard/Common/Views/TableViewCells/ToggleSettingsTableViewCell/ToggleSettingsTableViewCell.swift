@@ -14,9 +14,12 @@ class ToggleSettingsTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     
     private var callback: ((Bool)->Void)?
+    private var onTitle: String = ""
+    private var offTitle: String = ""
     
     @IBAction func settingSwitchToggled(_ sender: Any) {
         if let callback = callback {
+            titleLabel.text = settingSwitch.isOn ? onTitle : offTitle
             callback(settingSwitch.isOn)
         }
     }
@@ -34,8 +37,10 @@ class ToggleSettingsTableViewCell: UITableViewCell {
         settingSwitch.tintColor = AppColours.appBlue
     }
     
-    func configure(title: String, subTitle: String, isOn: Bool, onToggle: @escaping(_ result: Bool) -> Void) {
-        titleLabel.text = title
+    func configure(onTitle: String, offTitle: String, subTitle: String, isOn: Bool, onToggle: @escaping(_ result: Bool) -> Void) {
+        self.onTitle = onTitle
+        self.offTitle = offTitle
+        titleLabel.text = isOn ? onTitle : offTitle
         subtitleLabel.text = subTitle
         settingSwitch.isOn = isOn
         callback = onToggle

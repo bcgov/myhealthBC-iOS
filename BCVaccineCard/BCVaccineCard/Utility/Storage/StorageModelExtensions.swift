@@ -23,10 +23,10 @@ extension User {
         }
     }
     
-    public var testResultArray: [TestResult] {
-        let set = covidTestResults as? Set<TestResult> ?? []
+    public var testResultArray: [CovidLabTestResult] {
+        let set = covidTestResults as? Set<CovidLabTestResult> ?? []
         return set.sorted {
-            $0.resultDateTime ?? Date() > $1.resultDateTime ?? Date()
+            $0.mainResult?.collectionDateTime ?? Date() > $1.mainResult?.collectionDateTime ?? Date()
         }
     }
 }
@@ -76,24 +76,50 @@ extension VaccineCard {
     public func toLocal() -> LocallyStoredVaccinePassportModel? {
         guard let qrCode = code, let dates = vaxDates, let issueDate = issueDate, let birthdate = birthdate, let firHash = firHash else {return nil}
         let status: VaccineStatus = vaxDates?.count ?? 0 > 1 ? .fully : (vaxDates?.count ?? 0 == 1 ? .partially : .notVaxed)
-        return LocallyStoredVaccinePassportModel(code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: issueDate.timeIntervalSince1970, status: status, source: .imported, fedCode: federalPass, phn: phn)
+        return LocallyStoredVaccinePassportModel(id: id, code: qrCode, birthdate: birthdate, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: issueDate.timeIntervalSince1970, status: status, source: .imported, fedCode: federalPass, phn: phn)
+    }
+}
+
+// MARK: CovidLabTestResult
+extension CovidLabTestResult {
+    public var resultArray: [TestResult] {
+        let set = results as? Set<TestResult> ?? []
+        return set.sorted {
+            $0.resultDateTime ?? Date() > $1.resultDateTime ?? Date()
+        }
+    }
+    
+    var status: CovidTestResult? {
+        return resultArray.first?.status
+    }
+    
+    var mainResult: TestResult? {
+        // TODO: Criteria for selecting main result to use the status of
+        return resultArray.first
+    }
+    
+    func toLocal() -> LocallyStoredCovidTestResultModel? {
+        let response: GatewayTestResultResponse = GatewayTestResultResponse(records: resultArray.compactMap({$0.toGatewayRecord()}))
+        return LocallyStoredCovidTestResultModel(response: response, status: status ?? .indeterminate)
     }
 }
 
 // MARK: TestResult
 extension TestResult {
-    func toLocal() -> LocallyStoredCovidTestResultModel? {
-        let response = GatewayTestResultResponse(patientDisplayName: self.patientDisplayName, lab: self.lab, reportId: self.reportId, collectionDateTime: self.collectionDateTime, resultDateTime: self.resultDateTime, testName: self.testName, testType: self.testType, testStatus: self.testStatus, testOutcome: self.testOutcome, resultTitle: self.resultTitle, resultDescription: self.resultDescription, resultLink: self.resultLink)
-        let status = CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
-        let local = LocallyStoredCovidTestResultModel(response: response, status: status)
-        return local
+    
+    var status: CovidTestResult {
+        return CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
+    }
+    
+    func toGatewayRecord() -> GatewayTestResultResponseRecord? {
+        return GatewayTestResultResponseRecord(patientDisplayName: self.patientDisplayName, lab: self.lab, reportId: self.reportId, collectionDateTime: self.collectionDateTime, resultDateTime: self.resultDateTime, testName: self.testName, testType: self.testType, testStatus: self.testStatus, testOutcome: self.testOutcome, resultTitle: self.resultTitle, resultDescription: self.resultDescription, resultLink: self.resultLink)
     }
 }
 
-extension Array where Element == TestResult {
-    /// Convert to health record object
-    /// - Returns: Array of HealthRecord objects
-    func toHealthRecord() -> [HealthRecord] {
-        return self.map({HealthRecord(type: .Test($0))})
-    }
-}
+//extension Array where Element == TestResult {
+//    /// Convert to health record object
+//    /// - Returns: Array of HealthRecord objects
+//    func toHealthRecord() -> [HealthRecord] {
+//        return self.map({HealthRecord(type: .Test($0))})
+//    }
+//}

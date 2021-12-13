@@ -2,7 +2,7 @@
 //  CovidLabTestResult+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2021-12-02.
+//  Created by Amir on 2021-12-09.
 //
 //
 
@@ -16,11 +16,9 @@ extension CovidLabTestResult {
         return NSFetchRequest<CovidLabTestResult>(entityName: "CovidLabTestResult")
     }
 
+    @NSManaged public var birthday: Date?
     @NSManaged public var id: String?
     @NSManaged public var phn: String?
-    @NSManaged public var birthday: Date?
-    @NSManaged public var testDate: Date?
-    @NSManaged public var testId: String?
     @NSManaged public var results: NSSet?
     @NSManaged public var user: User?
 

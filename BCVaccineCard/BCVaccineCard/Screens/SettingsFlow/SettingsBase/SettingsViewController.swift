@@ -9,6 +9,12 @@ import UIKit
 
 class SettingsViewController: BaseViewController {
     
+    enum SettingType: Int, CaseIterable {
+        case analytics = 0
+        case privacy
+        case deleteAllRecords
+    }
+    
     class func constructSettingsViewController() -> SettingsViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: SettingsViewController.self)) as? SettingsViewController {
             return vc
@@ -18,8 +24,6 @@ class SettingsViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     
-    private var dataSource: [Setting] = []
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -40,10 +44,9 @@ class SettingsViewController: BaseViewController {
     }
     
     private func setup() {
-        setupDataSource()
         setupTableView()
     }
-
+    
 }
 
 // MARK: Navigation setup
@@ -58,76 +61,75 @@ extension SettingsViewController {
     }
 }
 
-// MARK: Data Source Setup
-extension SettingsViewController {
-    private func setupDataSource() {
-        self.dataSource = [
-//            Setting(cell: .text(text: .settingsOpeningText), isClickable: false),
-            Setting(cell: .analytics(title: "Enable Analytics", subtitle: "Anonymized behavioural data is used to help improve the user experience", isOn: AnalyticsService.shared.isEnabled), isClickable: false),
-            Setting(cell: .privacy(text: .privacyStatement, image: #imageLiteral(resourceName: "lock-icon")), isClickable: true)
-            // TODO: Unhide this cell once we have some details surrounding the help option
-//            Setting(cell: .setting(text: Constants.Strings.Settings.help, image: #imageLiteral(resourceName: "question-icon")), isClickable: true)
-        ]
-    }
-}
-
 // MARK: TableView setup
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: SettingsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsTableViewCell.getName)
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: ToggleSettingsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ToggleSettingsTableViewCell.getName)
+        tableView.register(SettingsTextTableViewCell.self, forCellReuseIdentifier: SettingsTextTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 100
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
+        return SettingType.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellType = dataSource[indexPath.row].cell
-        switch cellType {
-        case .text(text: let text):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 14), labelSpacingAdjustment: 36)
-                return cell
+        guard let type = SettingType.init(rawValue: indexPath.row) else {return UITableViewCell()}
+        switch type {
+        case .privacy:
+            let cell = textCell(for: indexPath, title: .privacyStatement, textColor: AppColours.appBlue) { [weak self] in
+                guard let `self` = self else {return}
+                self.openPrivacyPolicy()
             }
-        case .privacy(text: let text, image: let image):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTableViewCell.getName, for: indexPath) as? SettingsTableViewCell {
-                cell.configure(text: text, image: image)
-                cell.isAccessibilityElement = true
-                cell.accessibilityLabel = AccessibilityLabels.Settings.privacyStatementLink
-                cell.accessibilityHint = AccessibilityLabels.Settings.privacyStatementHint
-                return cell
+            cell.isAccessibilityElement = true
+            cell.accessibilityLabel = AccessibilityLabels.Settings.privacyStatementLink
+            cell.accessibilityHint = AccessibilityLabels.Settings.privacyStatementHint
+            return cell
+        case .analytics:
+            let isOn = AnalyticsService.shared.isEnabled
+            let cell = toggleCell(for: indexPath, onTitle: .disableAnalytics, offTitle: .enableAnalytics, subTitle: .analytyticsUsageDescription, isOn: isOn) { isOn in
+                if isOn {
+                    AnalyticsService.shared.enable()
+                } else {
+                    AnalyticsService.shared.disable()
+                }
             }
-        case .analytics(title: let title, subtitle: let subtitle, let isOn):
-            if let cell = tableView.dequeueReusableCell(withIdentifier: ToggleSettingsTableViewCell.getName, for: indexPath) as? ToggleSettingsTableViewCell {
-                cell.configure(title: title, subTitle: subtitle, isOn: isOn, onToggle: { isOn in
-                    if isOn {
-                        AnalyticsService.shared.enable()
-                    } else {
-                        AnalyticsService.shared.disable()
-                    }
-                })
-                
-                cell.isAccessibilityElement = true
-                cell.accessibilityLabel = AccessibilityLabels.Settings.privacyStatementLink
-                cell.accessibilityHint = AccessibilityLabels.Settings.privacyStatementHint
-                return cell
+            
+            cell.isAccessibilityElement = true
+            cell.accessibilityLabel = AccessibilityLabels.Settings.privacyStatementLink
+            cell.accessibilityHint = AccessibilityLabels.Settings.privacyStatementHint
+            return cell
+            
+        case .deleteAllRecords:
+            let cell = textCell(for: indexPath, title: .deleteAllRecordsAndSavedData, textColor: AppColours.appRed) {[weak self] in
+                guard let `self` = self else {return}
+                self.alertConfirmation(title: .deleteData, message: .confirmDeleteAllRecordsAndSaveData, confirmTitle: .delete, confirmStyle: .destructive) {
+                    StorageService.shared.deleteAllStoredData()
+                } onCancel: {}
             }
+            return cell
         }
-        return UITableViewCell()
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let type = dataSource[indexPath.row]
-        guard type.isClickable else { return }
-        // FIXME: Once other features are added, will need a way to distinguish which cell is tapped and where it's going.
-        self.openPrivacyPolicy()
+    func textCell(for indexPath: IndexPath, title: String, font: UIFont? = .bcSansRegularWithSize(size: 16), textColor: UIColor, onTap: @escaping() -> Void) -> SettingsTextTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTextTableViewCell.getName, for: indexPath) as? SettingsTextTableViewCell else {
+            return SettingsTextTableViewCell()
+        }
+        cell.configure(text: title, font: font ?? UIFont.bcSansRegularWithSize(size: 16), colour: textColor, onTap: onTap)
+        return cell
+    }
+    
+    func toggleCell(for indexPath: IndexPath, onTitle: String, offTitle: String, subTitle: String, isOn: Bool, onToggle: @escaping(_ result: Bool) -> Void) -> ToggleSettingsTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ToggleSettingsTableViewCell.getName, for: indexPath) as? ToggleSettingsTableViewCell else {
+            return ToggleSettingsTableViewCell()
+        }
+        cell.configure(onTitle: onTitle, offTitle: offTitle, subTitle: subTitle, isOn: isOn, onToggle: onToggle)
+        return cell
     }
     
 }

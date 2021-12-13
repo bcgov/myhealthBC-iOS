@@ -7,7 +7,43 @@
 
 import UIKit
 
+extension HealthRecordsDetailDataSource.Record {
+    func toBannerViewTableViewCellViewModel() -> BannerViewTableViewCell.ViewModel {
+        switch type {
+        case .covidImmunizationRecord(let model, _):
+            let statusImage: UIImage? = model.status == .fully ? UIImage(named: "check-mark") : nil
+            let textColor = UIColor.white
+            let backgroundColor = model.status.getColor
+            let statusColor = textColor
+            let date = Date.init(timeIntervalSince1970: model.issueDate)
+            let issueDate = "Issued on: \(date.yearMonthDayString)"
+            return BannerViewTableViewCell.ViewModel(statusImage: statusImage, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: .VaccineRecord)
+        case .covidTestResultRecord(let model):
+            let textColor = UIColor.black
+            let backgroundColor = model.status.getColor
+            let statusColor = model.status.getStatusTextColor
+            var issueDate = ""
+            if let date = model.collectionDateTime {
+                issueDate = "Tested on: \(date.yearMonthDayString)"
+            }
+            return BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: .CovidTest)
+        }
+    }
+}
+
 class BannerViewTableViewCell: UITableViewCell {
+    
+    struct ViewModel {
+        let statusImage: UIImage?
+        let textColor: UIColor
+        let backgroundColor: UIColor
+        let statusColor: UIColor
+        let issueDate: String
+        let name: String
+        let status: String
+        let type: StatusBannerView.RecordType
+        
+    }
     
     weak var bannerView: StatusBannerView?
     
@@ -15,58 +51,17 @@ class BannerViewTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func configure(type: HealthRecordsDetailDataSource.RecordType) {
-        switch type {
-        case .covidImmunizationRecord(let model, _):
-            setup(vaccinePassport: model)
-        case .covidTestResult(let model):
-            setup(testResult: model)
-        }
-    }
-    
-    /// Setup cell for a Vaccine Record
-    /// - Parameter model: Local Model
-    func setup(vaccinePassport model: LocallyStoredVaccinePassportModel) {
+    func configure(model: ViewModel) {
         self.bannerView = createView()
-        let statusImage: UIImage? = model.status == .fully ? UIImage(named: "check-mark") : nil
-        let textColor = UIColor.white
-        let backgroundColor = model.status.getColor
-        let statusColor = textColor
-        let date = Date.init(timeIntervalSince1970: model.issueDate)
-        let issueDate = "Issued on: \(date.yearMonthDayString)"
         bannerView?.setup(in: self,
-                          type: .VaccineRecord,
+                          type: model.type,
                           name: model.name,
-                          status: model.status.getTitle,
-                          date: issueDate,
-                          backgroundColor: backgroundColor,
-                          textColor: textColor,
-                          statusColor: statusColor,
-                          statusIconImage: statusImage)
-    }
-    
-    /// Setup for test results
-    /// - Parameter model: Local Model
-    func setup(testResult model: LocallyStoredCovidTestResultModel) {
-        self.bannerView = createView()
-        let textColor = UIColor.black
-        let backgroundColor = model.status.getColor
-        let statusColor = model.status.getStatusTextColor
-        var issueDate = ""
-        if let date = model.response?.collectionDateTime {
-            issueDate = "Tested on: \(date.yearMonthDayString)"
-        }
-        
-        bannerView?.setup(in: self,
-                          type: .CovidTest,
-                          name: model.response?.patientDisplayName ?? "",
-                          status: model.status.getTitle,
-                          date: issueDate,
-                          backgroundColor: backgroundColor,
-                          textColor: textColor,
-                          statusColor: statusColor,
-                          statusIconImage: nil)
-        
+                          status: model.status,
+                          date: model.issueDate,
+                          backgroundColor: model.backgroundColor,
+                          textColor: model.textColor,
+                          statusColor: model.statusColor,
+                          statusIconImage: model.statusImage)
     }
     
     private func createView() -> StatusBannerView {

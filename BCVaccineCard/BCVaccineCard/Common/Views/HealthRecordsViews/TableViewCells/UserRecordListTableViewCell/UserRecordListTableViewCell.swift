@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SwipeCellKit
 
-class UserRecordListTableViewCell: UITableViewCell {
+class UserRecordListTableViewCell: SwipeTableViewCell {
     
     @IBOutlet weak private var userRecordListView: UserRecordListView!
     
@@ -20,8 +21,8 @@ class UserRecordListTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    func configure(type: HealthRecordsDetailDataSource.RecordType) {
-        userRecordListView.configure(recordType: type)
+    func configure(record: HealthRecordsDetailDataSource) {
+        userRecordListView.configure(record: record)
     }
     
 }

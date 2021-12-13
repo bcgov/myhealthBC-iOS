@@ -256,7 +256,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         self.parentViewController?.hideBanner()
         self.startLoadingIndicator()
         // Validate
-        BCVaccineValidator.shared.validate(code: code) { [weak self] result in
+        BCVaccineValidator.shared.validate(code: code.lowercased()) { [weak self] result in
             guard let `self` = self else {return}
             // Validation is done on background thread. This moves us back to main thread
             DispatchQueue.main.async {

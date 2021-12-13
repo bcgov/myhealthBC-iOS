@@ -35,6 +35,29 @@ extension UIViewController {
         }
     }
     
+    func alertConfirmation(title: String,
+               message: String,
+               confirmTitle: String,
+               confirmStyle: UIAlertAction.Style,
+               onConfirm: @escaping()->Void,
+               cancelTitle: String? = .cancel,
+               cancelStyle: UIAlertAction.Style? = .cancel,
+               onCancel: @escaping()->Void) {
+        
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.isAccessibilityElement = true
+        
+        controller.addAction(UIAlertAction(title: cancelTitle, style: cancelStyle ?? .cancel, handler: { action in
+            return onCancel()
+        }))
+        controller.addAction(UIAlertAction(title: confirmTitle, style: confirmStyle, handler: { action in
+            return onConfirm()
+        }))
+        DispatchQueue.main.async {
+            self.present(controller, animated: true)
+        }
+    }
+    
     func alert(title: String, message: String, buttonOneTitle: String, buttonOneCompletion: @escaping()->Void, buttonTwoTitle: String?, buttonTwoCompletion: @escaping()->Void) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.isAccessibilityElement = true
@@ -246,7 +269,7 @@ extension UIViewController {
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
+        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, issueDate: Date(timeIntervalSince1970: model.issueDate), userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {

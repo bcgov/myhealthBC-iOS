@@ -496,7 +496,8 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
                 if let index = Constants.testResultsDummyData.firstIndex(where: { $0.phn == phn }) {
                     let data = Constants.testResultsDummyData[index].data
                     guard let response = data.response else { return }
-                    let _ = StorageService.shared.saveTestResult(gateWayResponse: response)
+                    // TODO: add correct birthdate and phn
+                    let _ = StorageService.shared.saveTestResult(phn: phn , birthdate: Date(), gateWayResponse: response)
                     // Note - will have to fix this obviously and route properly
                     self.popBack(toControllerType: HealthRecordsViewController.self)
                 }

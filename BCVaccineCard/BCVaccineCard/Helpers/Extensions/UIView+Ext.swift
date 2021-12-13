@@ -16,6 +16,10 @@ extension UIView {
 
 
 extension UIView {
+    static var screenWidth: CGFloat {
+        return UIScreen.main.bounds.width
+    }
+    
     func isSmallScreen() -> Bool {
         let bounds = UIScreen.main.bounds
         let height = bounds.size.height
@@ -59,12 +63,25 @@ extension UIView {
         }
     }
     
-    public func addEqualSizeContraints(to toView: UIView) {
+    public func addEqualSizeContraints(to toView: UIView, safe: Bool? = false) {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.heightAnchor.constraint(equalTo: toView.heightAnchor, constant: 0).isActive = true
-        self.widthAnchor.constraint(equalTo: toView.widthAnchor, constant: 0).isActive = true
         self.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: 0).isActive = true
         self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0).isActive = true
+        if let safe = safe, safe {
+            self.bottomAnchor.constraint(equalTo: toView.safeBottomAnchor, constant: 0).isActive = true
+            self.topAnchor.constraint(equalTo: toView.safeTopAnchor, constant: 0).isActive = true
+        } else {
+            self.bottomAnchor.constraint(equalTo: toView.bottomAnchor, constant: 0).isActive = true
+            self.topAnchor.constraint(equalTo: toView.topAnchor, constant: 0).isActive = true
+        }
+    }
+    
+    public func addEqualSizeContraints(to toView: UIView, paddingVertical: CGFloat, paddingHorizontal: CGFloat) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: toView.topAnchor, constant: paddingVertical).isActive = true
+        self.bottomAnchor.constraint(equalTo: toView.bottomAnchor, constant: 0 - paddingVertical).isActive = true
+        self.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: paddingHorizontal).isActive = true
+        self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0 - paddingHorizontal).isActive = true
     }
     
     public func center(in view: UIView, width: CGFloat, height: CGFloat) {
@@ -79,4 +96,35 @@ extension UIView {
     public class func fromNib<T: UIView>(bundle: Bundle? = Bundle.main) -> T {
         return bundle!.loadNibNamed(String(describing: T.self), owner: nil, options: nil)![0] as! T
     }
+}
+
+extension UIView {
+
+  var safeTopAnchor: NSLayoutYAxisAnchor {
+    if #available(iOS 11.0, *) {
+      return safeAreaLayoutGuide.topAnchor
+    }
+    return topAnchor
+  }
+
+  var safeLeftAnchor: NSLayoutXAxisAnchor {
+    if #available(iOS 11.0, *){
+      return safeAreaLayoutGuide.leftAnchor
+    }
+    return leftAnchor
+  }
+
+  var safeRightAnchor: NSLayoutXAxisAnchor {
+    if #available(iOS 11.0, *){
+      return safeAreaLayoutGuide.rightAnchor
+    }
+    return rightAnchor
+  }
+
+  var safeBottomAnchor: NSLayoutYAxisAnchor {
+    if #available(iOS 11.0, *) {
+      return safeAreaLayoutGuide.bottomAnchor
+    }
+    return bottomAnchor
+  }
 }

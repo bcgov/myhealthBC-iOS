@@ -25,18 +25,18 @@ class HealthRecordsViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navSetup()
+        setup()
+        setupCollectionView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-        setup()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        updateData()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -46,9 +46,37 @@ class HealthRecordsViewController: BaseViewController {
             return UIStatusBarStyle.default
         }
     }
-    
+ 
     private func setup() {
-        fetchDataSource()
+        navSetup()
+        fetchData { [weak self] records in
+            guard let `self` = self else {return}
+            self.dataSource = records.dataSource()
+            if self.dataSource.isEmpty {
+                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+                self.navigationController?.pushViewController(vc, animated: false)
+            } else {
+                self.addRecordHeaderSetup()
+                self.setupCollectionView()
+            }
+        }
+    }
+    
+    private func updateData() {
+        fetchData { [weak self] records in
+            guard let `self` = self else {return}
+            self.dataSource = records.dataSource()
+            self.collectionView.reloadData()
+        }
+    }
+    
+    private func fetchData(completion: @escaping([HealthRecord])-> Void) {
+        view.startLoadingIndicator(backgroundColor: .white)
+        StorageService.shared.getHeathRecords {[weak self] records in
+            guard let `self` = self else {return}
+            self.view.endLoadingIndicator()
+            return completion(records)
+        }
     }
 
 }
@@ -78,23 +106,6 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
             let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
             self.navigationController?.pushViewController(vc, animated: true)
         }
-    }
-}
-
-// MARK: Fetch Data Source
-extension HealthRecordsViewController {
-    private func fetchDataSource() {
-        self.view.startLoadingIndicator()
-        dataSource = StorageService.shared.getHeathRecords().dataSource()
-        self.view.endLoadingIndicator()
-        if dataSource.isEmpty {
-            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
-            self.navigationController?.pushViewController(vc, animated: false)
-        } else {
-            addRecordHeaderSetup()
-            setupCollectionView()
-        }
-        
     }
 }
 
