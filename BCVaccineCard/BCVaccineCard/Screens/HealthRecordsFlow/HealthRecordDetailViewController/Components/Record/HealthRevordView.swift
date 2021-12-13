@@ -51,6 +51,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
+        tableView.allowsSelection = false
         self.tableView = tableView
     }
     

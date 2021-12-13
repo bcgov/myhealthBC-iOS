@@ -50,7 +50,7 @@
                             <rect key="frame" x="0.0" y="54" width="412" height="133"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="O19-ah-Ftr">
-                                    <rect key="frame" x="32" y="16" width="364" height="101"/>
+                                    <rect key="frame" x="16" y="16" width="380" height="101"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ptk-5T-NVf">
                                             <rect key="frame" x="0.0" y="0.0" width="41.5" height="20.5"/>
@@ -89,7 +89,7 @@
                             <constraints>
                                 <constraint firstItem="O19-ah-Ftr" firstAttribute="top" secondItem="SM4-1L-XtY" secondAttribute="top" constant="16" id="0ED-e0-Mjo"/>
                                 <constraint firstAttribute="bottom" secondItem="O19-ah-Ftr" secondAttribute="bottom" constant="16" id="3Mw-bJ-Lgm"/>
-                                <constraint firstItem="O19-ah-Ftr" firstAttribute="leading" secondItem="SM4-1L-XtY" secondAttribute="leading" constant="32" id="XS8-7U-BOf"/>
+                                <constraint firstItem="O19-ah-Ftr" firstAttribute="leading" secondItem="SM4-1L-XtY" secondAttribute="leading" constant="16" id="XS8-7U-BOf"/>
                                 <constraint firstAttribute="trailing" secondItem="O19-ah-Ftr" secondAttribute="trailing" constant="16" id="wQb-Ga-ENR"/>
                             </constraints>
                         </view>
