@@ -22,7 +22,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="412" height="54"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Yzd-3X-6Wp">
-                                    <rect key="frame" x="8" y="4" width="150" height="46"/>
+                                    <rect key="frame" x="8" y="12" width="150" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="150" id="IUf-C2-Shk"/>
                                     </constraints>
@@ -37,8 +37,7 @@
                             <color key="backgroundColor" red="0.0" green="0.1960801482" blue="0.396075815" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstItem="Yzd-3X-6Wp" firstAttribute="leading" secondItem="yJi-w6-0h3" secondAttribute="leading" constant="8" id="6Ez-Be-TGk"/>
-                                <constraint firstItem="Yzd-3X-6Wp" firstAttribute="top" secondItem="yJi-w6-0h3" secondAttribute="top" constant="4" id="H3z-EV-92H"/>
-                                <constraint firstAttribute="bottom" secondItem="Yzd-3X-6Wp" secondAttribute="bottom" constant="4" id="XSb-Ch-uGj"/>
+                                <constraint firstAttribute="bottom" secondItem="Yzd-3X-6Wp" secondAttribute="bottom" constant="12" id="XSb-Ch-uGj"/>
                                 <constraint firstItem="xrY-Rx-XPb" firstAttribute="centerY" secondItem="yJi-w6-0h3" secondAttribute="centerY" id="e6U-iq-Xyo"/>
                                 <constraint firstItem="Yzd-3X-6Wp" firstAttribute="centerY" secondItem="yJi-w6-0h3" secondAttribute="centerY" id="fxS-CF-KVC"/>
                                 <constraint firstAttribute="height" constant="54" id="h6L-5Q-eaU"/>
