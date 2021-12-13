@@ -44,6 +44,10 @@ class HealthGatewayAPIWorker: NSObject {
         }
     }
     
+    func getTestResults(model: GatewayTestResultRequest, executingVC: UIViewController) {
+        let token = Defaults.cachedQueueItObject?.queueitToken
+    }
+    
     private func handleResponse(result: Result<GatewayVaccineCardResponse, ResultError>) {
         switch result {
         case .success(let vaccineCard):

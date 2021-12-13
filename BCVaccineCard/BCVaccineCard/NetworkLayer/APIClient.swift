@@ -37,8 +37,18 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, andCompletion: completion)
     }
     
-    func getTestResult() {
+    func getTestResult(_ model: GatewayTestResultRequest, token: String?, executingVC: UIViewController, completion: @escaping NetworkRequestCompletion<GatewayTestResultResponse>) {
+        let interceptor = NetworkRequestInterceptor()
+        let url = configureURL(token: token, endpoint: self.endpoints.getTestResults)
         
+        let headerParameters: Headers = [
+            Constants.GatewayTestResultsRequestParameters.phn: model.phn,
+            Constants.GatewayTestResultsRequestParameters.dateOfBirth: model.dateOfBirth,
+            Constants.GatewayTestResultsRequestParameters.collectionDate: model.collectionDate
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, andCompletion: completion)
     }
     
 }
