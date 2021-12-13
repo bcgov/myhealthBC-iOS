@@ -40,6 +40,20 @@ enum GatewayFormViewControllerFetchType: Equatable {
     case vaccinationRecord
     case covid19TestResult
     
+    enum RequestType: Equatable {
+        case getVaccineCard
+        case getTestResults
+    }
+    
+    var getRequestType: RequestType {
+        switch self {
+        case .bcVaccineCardAndFederalPass, .federalPassOnly, .vaccinationRecord:
+            return .getVaccineCard
+        case .covid19TestResult:
+            return .getTestResults
+        }
+    }
+    
     var getNavTitle: String {
         switch self {
         case .bcVaccineCardAndFederalPass: return .addAHealthPass
@@ -342,7 +356,7 @@ extension GatewayFormViewController: DropDownViewDelegate {
             indexPaths.append(firstIP)
             dataSource[firstIP.row].configuration.text = details.phn
             // TODO: Here, should probably put if fetchType.canGoToNextField
-            if fetchType == .bcVaccineCardAndFederalPass {
+            if fetchType.canGoToNextFormField {
                 guard let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: true) else {
                     return
                 }
@@ -507,23 +521,10 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
         if type == .cancel {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
-            // TODO: Should refactor this: - Will do when network layer gets added
-            if fetchType == .covid19TestResult {
+            if fetchType.getRequestType == .getTestResults {
                 prepareRequestForTestResult()
-//                // TODO: Show dummy data response here
-//                guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
-//                guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return }
-//                if let index = Constants.testResultsDummyData.firstIndex(where: { $0.phn == phn }) {
-//                    let data = Constants.testResultsDummyData[index].data
-//                    guard let response = data.response else { return }
-//                    // TODO: add correct birthdate and phn
-//                    let _ = StorageService.shared.saveTestResult(phn: phn , birthdate: Date(), gateWayResponse: response)
-//                    // Note - will have to fix this obviously and route properly
-//                    self.popBack(toControllerType: HealthRecordsViewController.self)
-//                }
-                // TODO: Add in network layer here
-            } else {
-                prepareRequestForVaccineCard() // Note: This should be refactored to be more reusable
+            } else if fetchType.getRequestType == .getVaccineCard {
+                prepareRequestForVaccineCard()
             }
         }
     }
