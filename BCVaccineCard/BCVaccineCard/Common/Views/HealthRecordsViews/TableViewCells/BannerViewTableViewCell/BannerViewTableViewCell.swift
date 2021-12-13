@@ -26,7 +26,19 @@ extension HealthRecordsDetailDataSource.Record {
             if let date = model.collectionDateTime {
                 issueDate = "Tested on: \(date.yearMonthDayString)"
             }
-            return BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: .CovidTest)
+            var name = name
+            var type = StatusBannerView.BannerType.CovidTest
+            if status.lowercased() == .pending.lowercased() {
+                type = .Message
+                name = .pendingTestRecordMessage
+            }
+            
+            if status.lowercased() == .cancelled.lowercased() {
+                type = .Message
+                name = .cancelledTestRecordMessage
+            }
+                
+            return BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type)
         }
     }
 }
@@ -41,8 +53,8 @@ class BannerViewTableViewCell: UITableViewCell {
         let issueDate: String
         let name: String
         let status: String
-        let type: StatusBannerView.RecordType
-        
+        let type: StatusBannerView.BannerType
+
     }
     
     weak var bannerView: StatusBannerView?
@@ -58,9 +70,9 @@ class BannerViewTableViewCell: UITableViewCell {
                           name: model.name,
                           status: model.status,
                           date: model.issueDate,
-                          backgroundColor: model.backgroundColor,
-                          textColor: model.textColor,
-                          statusColor: model.statusColor,
+                          backgroundColour: model.backgroundColor,
+                          textColour: model.textColor,
+                          statusColour: model.statusColor,
                           statusIconImage: model.statusImage)
     }
     

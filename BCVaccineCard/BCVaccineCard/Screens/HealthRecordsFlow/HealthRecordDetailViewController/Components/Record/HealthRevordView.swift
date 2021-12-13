@@ -12,7 +12,7 @@ extension HealthRecordsDetailDataSource.Record {
     fileprivate func getCellSections() -> [HealthRecordView.CellSection] {
         switch type {
         case .covidImmunizationRecord(let model, let immunizations):
-            return [.Header, .StaticText, .Fields]
+            return [.Header, .Fields]
         case .covidTestResultRecord(model: let model):
             if model.status == .positive {
                 return [.Header, .StaticText, .Fields]
@@ -51,6 +51,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
+        tableView.allowsSelection = false
         self.tableView = tableView
     }
     

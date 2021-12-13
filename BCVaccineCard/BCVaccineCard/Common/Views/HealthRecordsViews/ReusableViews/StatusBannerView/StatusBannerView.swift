@@ -37,7 +37,8 @@ class StatusBannerView: UIView {
         return [recordTypeLabel, statusLabel, nameLabel, timeLabel]
     }
     
-    enum RecordType {
+    enum BannerType {
+        case Message
         case CovidTest
         case VaccineRecord
     }
@@ -53,13 +54,11 @@ class StatusBannerView: UIView {
     ///   - textColor: all text colour
     ///   - statusColor: status text colour
     ///   - statusIconImage: status image icon. leave nil to remove icon
-    public func setup(in containerView: UIView, type: RecordType, name: String, status: String, date: String, backgroundColor: UIColor, textColor: UIColor, statusColor: UIColor, statusIconImage: UIImage?) {
+    public func setup(in containerView: UIView, type: BannerType, name: String, status: String, date: String, backgroundColour: UIColor, textColour: UIColor, statusColour: UIColor, statusIconImage: UIImage?) {
         // TODO: Delete this label? Not sure if it's being used by anything other than QA'ing the UI
         recordTypeLabel.isHidden = true
         // Place in container
-        self.frame = .zero
-        containerView.addSubview(self)
-        self.addEqualSizeContraints(to: containerView)
+        position(in: containerView)
         
         // set banner icon (gov logo)
         bannerImage.image = UIImage(named: "bc-logo")
@@ -77,13 +76,15 @@ class StatusBannerView: UIView {
         }
         
         // Set backgerund and text colours
-        mainContainer.backgroundColor = backgroundColor
+        mainContainer.backgroundColor = backgroundColour
         labels.forEach { label in
             if let item = label {
-                item.textColor = textColor
+                item.textColor = textColour
             }
         }
-        statusLabel.textColor = statusColor
+        statusLabel.textColor = statusColour
+        self.layer.cornerRadius = 4
+        mainContainer.layer.cornerRadius = 4
         
         // set texts
         nameLabel.text = name
@@ -94,15 +95,31 @@ class StatusBannerView: UIView {
         switch type {
         case .CovidTest:
             // TODO: put corrent fonts and sizes
-            nameLabel.font = UIFont.bcSansBoldWithSize(size: 17)
-            statusLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+            nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
+            statusLabel.font = UIFont.bcSansBoldWithSize(size: 18)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         case .VaccineRecord:
             // TODO: put corrent fonts and sizes
-            nameLabel.font = UIFont.bcSansBoldWithSize(size: 17)
-            statusLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+            nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
+            statusLabel.font = UIFont.bcSansBoldWithSize(size: 18)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+        case .Message:
+            topContainer.isHidden = true
+            statusStack.isHidden = true
+            timeLabel.isHidden = true
+            
+            nameLabel.text = name
+            nameLabel.numberOfLines = 0
+            nameLabel.textColor = statusColour
+            nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
         }
+    }
+    
+    private func position(in containerView: UIView) {
+        // Place in container
+        self.frame = .zero
+        containerView.addSubview(self)
+        self.addEqualSizeContraints(to: containerView)
     }
 
 
