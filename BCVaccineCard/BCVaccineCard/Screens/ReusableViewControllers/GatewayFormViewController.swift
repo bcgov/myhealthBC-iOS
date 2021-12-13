@@ -165,8 +165,7 @@ class GatewayFormViewController: BaseViewController {
     
     // For Request
     // TODO: Will need to refactor this a bit when we get the endpoint for test results
-    private var vaccineCardRequestModel: GatewayVaccineCardRequest?
-    private var testResultRequestModel: GatewayTestResultRequest?
+    private var storageModel: HGStorageModel?
     private var worker: HealthGatewayAPIWorker?
 //    private var endpoint = UrlAccessor().getVaccineCard
     
@@ -294,9 +293,9 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
     }
     
     private func storePHNDetails() {
-        guard let model = self.vaccineCardRequestModel else { return }
+        guard let model = self.storageModel else { return }
         if model.phn == self.whiteSpaceFormattedPHN?.removeWhiteSpaceFormatting, self.whiteSpaceFormattedPHN != nil {
-            let rememberProperties = GatewayStorageProperties(phn: self.whiteSpaceFormattedPHN!, dob: model.dateOfBirth)
+            let rememberProperties = GatewayStorageProperties(phn: self.whiteSpaceFormattedPHN!, dob: model.dob)
             guard rememberProperties.phn != self.rememberDetails.storageArray?.first?.phn else { return }
             // NOTE: This is where we can append data to existing storage for abilitly to store multiple pieces of data
             let rememberKeychainStorage = RememberedGatewayDetails(storageArray: [rememberProperties])
@@ -307,7 +306,7 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
     private func removePHNDetailsIfNeccessary() {
         let rememberKeychainStorage = RememberedGatewayDetails(storageArray: nil)
         // Note: If remember details is unchecked, and the phn used is not the same as the remembered phn, then we do nothing
-        if self.vaccineCardRequestModel?.phn.removeWhiteSpaceFormatting == self.rememberDetails.storageArray?.first?.phn.removeWhiteSpaceFormatting {
+        if self.storageModel?.phn.removeWhiteSpaceFormatting == self.rememberDetails.storageArray?.first?.phn.removeWhiteSpaceFormatting {
             Defaults.rememberGatewayDetails = rememberKeychainStorage
         }
     }
@@ -400,7 +399,7 @@ extension GatewayFormViewController {
         guard let vaxDate = dataSource[dovIndexPath.row].configuration.text else { return }
         guard let model = formatGatewayDataForVaccineRequest(phn: phn, birthday: birthday, vax: vaxDate) else { return }
         self.whiteSpaceFormattedPHN = phn
-        self.vaccineCardRequestModel = model
+        self.storageModel = HGStorageModel(phn: model.phn, dob: model.dateOfBirth)
         showLoader()
         worker?.getVaccineCard(model: model, executingVC: self)
     }
@@ -419,7 +418,7 @@ extension GatewayFormViewController {
         guard let testDate = dataSource[dotIndexPath.row].configuration.text else { return }
         guard let model = formatGatewayDataForTestResultRequest(phn: phn, birthday: birthday, test: testDate) else { return }
         self.whiteSpaceFormattedPHN = phn
-        self.testResultRequestModel = model
+        self.storageModel = HGStorageModel(phn: model.phn, dob: model.dateOfBirth)
         showLoader()
         worker?.getTestResult(model: model, executingVC: self)
     }
@@ -510,6 +509,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
         } else if type == .submit {
             // TODO: Should refactor this: - Will do when network layer gets added
             if fetchType == .covid19TestResult {
+                prepareRequestForTestResult()
 //                // TODO: Show dummy data response here
 //                guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
 //                guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return }
@@ -555,7 +555,14 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     }
     
     func handleTestResult(result: GatewayTestResultResponse) {
-        // TODO: Handle result locally here
+        // store prefered PHN if needed here
+        self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
+        hideLoader()
+        if let id = handleTestResultInCoreData(gatewayResponse: result) {
+            completionHandler?(id, nil)
+        } else {
+            alert(title: .error, message: .healthGatewayError)
+        }
     }
     
     func handleError(title: String, error: ResultError) {
@@ -638,6 +645,19 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         }
     }
     
+    func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse) -> String? {
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
+        guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
+        guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
+        guard let dob = dataSource[dobIndexPath.row].configuration.text, let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) else { return nil }
+        guard let id = StorageService.shared.saveTestResult(phn: phn , birthdate: dateOfBirth, gateWayResponse: gatewayResponse) else { return nil }
+        return id
+    }
+    
     
 }
 
+struct HGStorageModel {
+    let phn: String
+    let dob: String
+}
