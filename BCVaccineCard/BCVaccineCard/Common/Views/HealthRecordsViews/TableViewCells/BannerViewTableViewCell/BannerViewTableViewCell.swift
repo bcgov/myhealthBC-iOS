@@ -28,9 +28,14 @@ extension HealthRecordsDetailDataSource.Record {
             }
             var name = name
             var type = StatusBannerView.BannerType.CovidTest
-            if status.lowercased() == "pending" {
+            if status.lowercased() == .pending.lowercased() {
                 type = .Message
-                name = "Your test is being processed and can take up to 48 hours to complete."
+                name = .pendingTestRecordMessage
+            }
+            
+            if status.lowercased() == .cancelled.lowercased() {
+                type = .Message
+                name = .cancelledTestRecordMessage
             }
                 
             return BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type)

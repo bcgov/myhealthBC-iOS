@@ -186,6 +186,13 @@ extension String {
     static var deleteTestResult: String { return "DeleteTestResult".localized }
     static var deleteTestResultMessage: String { return "DeleteTestResultMessage".localized }
     
+    static var cancelledTestRecordMessage: String { return "CancelledTestRecordMessage".localized }
+    static var pendingTestRecordMessage: String { return "PendingTestRecordMessage".localized }
+    
+    // MARK: Statuses
+    static var cancelled: String { return "Cancelled".localized }
+    static var pending: String { return "Pending".localized }
+    
     // MARK: Settings
     
     static var deleteAllRecordsAndSavedData: String { return "DeleteAllRecordsAndSavedData".localized }
