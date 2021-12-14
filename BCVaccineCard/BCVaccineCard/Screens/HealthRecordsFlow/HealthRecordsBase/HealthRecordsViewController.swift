@@ -53,12 +53,27 @@ class HealthRecordsViewController: BaseViewController {
             guard let `self` = self else {return}
             self.dataSource = records.dataSource()
             if self.dataSource.isEmpty {
-                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
                 self.navigationController?.pushViewController(vc, animated: false)
             } else {
                 self.addRecordHeaderSetup()
                 self.setupCollectionView()
             }
+        }
+        
+        refreshOnStorageChange()
+    }
+    
+    private func refreshOnStorageChange() {
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            switch event.entity {
+            case .VaccineCard, .CovidLabTestResult:
+                self.updateData()
+            default:
+                break
+            }
+           
         }
     }
     
@@ -66,8 +81,21 @@ class HealthRecordsViewController: BaseViewController {
         fetchData { [weak self] records in
             guard let `self` = self else {return}
             self.dataSource = records.dataSource()
+            self.addRecordHeaderSetup()
             self.collectionView.reloadData()
+            if self.dataSource.isEmpty {
+                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
+                self.navigationController?.pushViewController(vc, animated: false)
+            } else {
+                self.dismissFetchHealthRecordsViewControllerIfNeeded()
+            }
         }
+    }
+    
+    func dismissFetchHealthRecordsViewControllerIfNeeded() {
+        guard let vcs = self.navigationController?.viewControllers.compactMap({$0 as? FetchHealthRecordsViewController}),
+              let vc = vcs.first else {return}
+        popBack(toControllerType: HealthRecordsViewController.self)
     }
     
     private func fetchData(completion: @escaping([HealthRecord])-> Void) {
@@ -103,7 +131,7 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
     
     func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
         if screenType == .healthRecords {
-            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false)
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -116,12 +144,18 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
         let layout = UICollectionViewFlowLayout()
         // TODO: Need to test this on larger screen sizes, as this works on SE - then add values to constants file
         // FIXME: Name label doesnt quite fit for anything other than short names - also weird UI issue when returning to screen
-        let spacing: CGFloat = 100
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        let availabelWidth = collectionView.frame.width - spacing
-        let widthPerItem = availabelWidth / 2.0
-        let heightPerItem = widthPerItem * (118.0/172.0)
-        layout.itemSize = CGSize(width: widthPerItem, height: heightPerItem)
+        let spacingPerItem: CGFloat = 10
+        let itemsPerRow: CGFloat = 2
+        let maxCellHeight: CGFloat = 130
+        let availableWidth = UIScreen.main.bounds.width
+        var width: CGFloat = (availableWidth / itemsPerRow) - (spacingPerItem * itemsPerRow)
+        width += (spacingPerItem/itemsPerRow)
+        let maxHeightNeededForNames = dataSource.map({$0.userName}).maxHeightNeeded(width: width, font: HealthRecordsUserView.nameFont)
+        let height: CGFloat = maxHeightNeededForNames >= maxCellHeight ? maxHeightNeededForNames : maxCellHeight
+        
+        layout.minimumLineSpacing = spacingPerItem
+        layout.sectionInset = UIEdgeInsets(top: 0, left: spacingPerItem, bottom: 0, right: spacingPerItem)
+        layout.itemSize =  CGSize(width: width, height: height)
         collectionView.collectionViewLayout = layout
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -152,7 +186,8 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row < dataSource.count else { return }
         let userName = dataSource[indexPath.row].userName
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: userName)
+        let birthdate =  dataSource[indexPath.row].birthdate
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: userName, birthdate: birthdate)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -99,7 +99,7 @@ extension String {
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
     static var dateOfBirth: String { return "DateOfBirth".localized }
     static var dateOfVaccine: String { return "DateOfVaccine".localized }
-    static var dose1OrDose2: String { return "Dose1OrDose2".localized }
+    static var anyDose: String { return "AnyDose".localized }
     static var dateOfTest: String{ return "DateOfTest".localized }
     static var phnFooter: String { return "PHNFooter".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
@@ -176,6 +176,7 @@ extension String {
     static var getVaccinationRecordsDescription: String { return "GetVaccinationRecordsDescription".localized }
     static var getCovidTestResultsDescription: String { return "GetCovidTestResultsDescription".localized }
     static var covid19mRNATitle: String { return "Covid19mRNATitle".localized }
+    static var covid19vaccination: String { return "Covid19vaccination".localized }
     static var covid19TestResultTitle: String { return "Covid19TestResultTitle".localized }
     static var vaccinationRecord: String { return "VaccinationRecord".localized }
     static var recordText: String { return "RecordText".localized }
@@ -185,9 +186,16 @@ extension String {
     static var deleteRecord: String { return "DeleteRecord".localized }
     static var deleteTestResult: String { return "DeleteTestResult".localized }
     static var deleteTestResultMessage: String { return "DeleteTestResultMessage".localized }
+    static var cancelledTestRecordMessage: String { return "CancelledTestRecordMessage".localized }
+    static var pendingTestRecordMessage: String { return "PendingTestRecordMessage".localized }
+    static var instructions: String { return "Instructions".localized }
+    static var instructionsMessage: String { return "InstructionsMessage".localized }
+    
+    // MARK: Statuses
+    static var cancelled: String { return "Cancelled".localized }
+    static var pending: String { return "Pending".localized }
     
     // MARK: Settings
-    
     static var deleteAllRecordsAndSavedData: String { return "DeleteAllRecordsAndSavedData".localized }
     static var disableAnalytics: String { return "DisableAnalytics".localized }
     static var enableAnalytics: String { return "EnableAnalytics".localized }

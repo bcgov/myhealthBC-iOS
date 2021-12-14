@@ -33,6 +33,7 @@ extension StorageService {
         model.vaccineCard = card
         do {
             try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .ImmunizationRecord, object: model))
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
             return

@@ -47,24 +47,3 @@ struct GatewayVaccineCardResponse: Codable {
         return (code, nil)
     }
 }
-
-// MARK: - ResultError
-// For now this can go here
-struct ResultError: Codable {
-    let resultMessage: String?
-    let errorCode: String? = nil
-    let traceID: String? = nil
-    let actionCode: String? = nil
-
-    enum CodingKeys: String, CodingKey {
-        case resultMessage, errorCode
-        case traceID = "traceId"
-        case actionCode
-    }
-}
-
-extension ResultError: Error {
-    
-}
-
-

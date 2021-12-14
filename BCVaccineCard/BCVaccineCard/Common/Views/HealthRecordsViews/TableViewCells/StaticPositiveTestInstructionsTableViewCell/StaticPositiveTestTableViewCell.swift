@@ -27,8 +27,25 @@ class StaticPositiveTestTableViewCell: UITableViewCell {
     // TODO: Add to strings file
     // TODO: Add attributed text for description (for links)
     private func textSetup() {
-        headingLabel.text = "Instructions"
-        attributedTextLabel.text = "• You need to self-isolate now.\n• The people you live with will also need to self-isolate if they are not fully vaccinated.\n• Public health will contact you.\n• Monitor your health and contact a health care provider or call 8-1-1 if you are concerned about your symptoms.\n• Go to Understanding Test Results for more information"
+        headingLabel.text = .instructions
+        let attributedText = NSMutableAttributedString(string: .instructionsMessage)
+        _ = attributedText.setAsLink(textToFind: "8-1-1", linkURL: "tel://811")
+        _ = attributedText.setAsLink(textToFind: "understanding test result", linkURL: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/understanding-test-results")
+        attributedTextLabel.attributedText = attributedText
     }
     
+}
+
+
+extension NSMutableAttributedString {
+
+    public func setAsLink(textToFind:String, linkURL:String) -> Bool {
+
+        let foundRange = self.mutableString.range(of: textToFind)
+        if foundRange.location != NSNotFound {
+            self.addAttribute(.link, value: linkURL, range: foundRange)
+            return true
+        }
+        return false
+    }
 }

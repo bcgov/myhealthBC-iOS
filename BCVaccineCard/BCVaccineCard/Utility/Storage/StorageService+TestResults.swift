@@ -25,8 +25,8 @@ extension StorageService {
         model.user = fetchUser()
         
         var testResults: [TestResult] = []
-        
-        for record in gateWayResponse.records {
+        guard let records = gateWayResponse.resourcePayload?.records else { return nil }
+        for record in records {
             if let resultModel = saveTestResult(
                    resultId: id,
                    patientDisplayName: record.patientDisplayName,
@@ -49,6 +49,7 @@ extension StorageService {
         
         do {
             try context.save()
+            self.notify(event: StorageEvent(event: .Save, entity: .CovidLabTestResult, object: model))
             return id
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
@@ -71,7 +72,7 @@ extension StorageService {
         testStatus: String?,
         testOutcome: String?,
         resultTitle: String?,
-        resultDescription: String?,
+        resultDescription: [String]?,
         resultLink: String?) -> TestResult? {
             guard let context = managedContext else {return nil}
             let testResult = TestResult(context: context)
@@ -90,6 +91,7 @@ extension StorageService {
             testResult.resultLink = resultLink
             do {
                 try context.save()
+                self.notify(event: StorageEvent(event: .Save, entity: .TestResult, object: testResult))
                 return testResult
             } catch let error as NSError {
                 print("Could not save. \(error), \(error.userInfo)")
@@ -107,6 +109,7 @@ extension StorageService {
             guard let item = tests.filter({ ($0.id == id) }).first else {return}
             context.delete(item)
             try context.save()
+            self.notify(event: StorageEvent(event: .Delete, entity: .CovidLabTestResult, object: item))
         } catch let error as NSError {
             print("Could not delete. \(error), \(error.userInfo)")
             return

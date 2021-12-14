@@ -14,6 +14,7 @@ public extension Notification.Name {
     static let keysUpdated = Notification.Name("keysUpdated")
     static let isReachable = Notification.Name("isReachable")
     static let isUnReachable = Notification.Name("isUnReachable")
+    static let storageChangeEvent = Notification.Name("StorageChangeEvent")
   
     func post(object: Any? = nil, userInfo: [AnyHashable : Any]? = nil) {
         NotificationCenter.default.post(name: self, object: object, userInfo: userInfo)

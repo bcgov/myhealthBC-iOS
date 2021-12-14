@@ -10,9 +10,11 @@ import SwipeCellKit
 
 class UsersListOfRecordsViewController: BaseViewController {
     
-    class func constructUsersListOfRecordsViewController(name: String) -> UsersListOfRecordsViewController {
+    // TODO: Replace params with USER after storage refactor
+    class func constructUsersListOfRecordsViewController(name: String, birthdate: Date?) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.name = name
+            vc.birthdate = birthdate
             return vc
         }
         return UsersListOfRecordsViewController()
@@ -21,12 +23,12 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var name: String!
+    private var birthdate: Date?
+    
     private var dataSource: [HealthRecordsDetailDataSource] = []
     
     private var inEditMode = false {
         didSet {
-            //            tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
-            //            tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
             self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
             navSetup()
@@ -100,7 +102,7 @@ extension UsersListOfRecordsViewController {
         self.view.startLoadingIndicator(backgroundColor: .clear)
         StorageService.shared.getHeathRecords { [weak self] records in
             guard let `self` = self else {return}
-            self.dataSource = records.detailDataSource(userName: self.name)
+            self.dataSource = records.detailDataSource(userName: self.name, birthDate: self.birthdate)
             self.setupTableView()
             self.navSetup()
             self.view.endLoadingIndicator()

@@ -63,12 +63,7 @@ class UserRecordListView: UIView {
         setupAccessibility()
         iconImageView.image = record.image
         recordTypeTitleLabel.text = record.title
-        var subtitleString: String = record.mainRecord?.status ?? ""
-        if let dateString = record.mainRecord?.status {
-            let addition = " • " + dateString
-            subtitleString.append(addition)
-        }
-        recordTypeSubtitleLabel.text = subtitleString
+        recordTypeSubtitleLabel.text = record.mainRecord?.date ?? ""
     }
     
     // TODO: Setup accessibility

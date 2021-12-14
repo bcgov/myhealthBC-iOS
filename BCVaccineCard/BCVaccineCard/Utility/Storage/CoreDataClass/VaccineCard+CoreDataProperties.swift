@@ -16,7 +16,7 @@ extension VaccineCard {
         return NSFetchRequest<VaccineCard>(entityName: "VaccineCard")
     }
 
-    @NSManaged public var birthdate: String?
+    @NSManaged public var birthdate: Date?
     @NSManaged public var code: String?
     @NSManaged public var federalPass: String?
     @NSManaged public var firHash: String?
