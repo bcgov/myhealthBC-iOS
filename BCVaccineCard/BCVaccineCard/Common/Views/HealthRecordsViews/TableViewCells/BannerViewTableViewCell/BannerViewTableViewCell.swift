@@ -46,7 +46,10 @@ extension HealthRecordsDetailDataSource.Record {
             let statusColor = model.status.getStatusTextColor
             var issueDate = ""
             if let date = model.collectionDateTime {
-                issueDate = "Tested on: \(date.yearMonthDayString)"
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MMMM-dd-yyyy, HH:mm"
+                let stringDate = formatter.string(from: date)
+                issueDate = "Tested on: \(stringDate)"
             }
             var name = name
             var type = StatusBannerView.BannerType.CovidTest
