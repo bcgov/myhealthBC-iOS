@@ -9,7 +9,7 @@ import UIKit
 import BCVaccineValidator
 
 extension ImmunizationStatus {
-
+    
     func toCovidTestResult() -> VaccineStatus {
         switch self {
         case .Fully:
@@ -20,7 +20,6 @@ extension ImmunizationStatus {
             return .notVaxed
         }
     }
-
 }
 
 extension HealthRecordsDetailDataSource.Record {
@@ -34,10 +33,13 @@ extension HealthRecordsDetailDataSource.Record {
             BCVaccineValidator.shared.validate(code: model.code) { validationResult in
                 guard let result = validationResult.result else {return completion(nil)}
                 let statusImage: UIImage? = result.status == .Fully ? UIImage(named: "check-mark") : nil
+                let status = result.status.toCovidTestResult().getTitle
                 let backgroundColor = result.status.toCovidTestResult().getColor
-                return completion(BannerViewTableViewCell.ViewModel(statusImage: statusImage, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name, status: result.status.toCovidTestResult().rawValue, type: .VaccineRecord))
+                DispatchQueue.main.async {
+                    return completion(BannerViewTableViewCell.ViewModel(statusImage: statusImage, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name, status: status, type: .VaccineRecord))
+                }
             }
-           
+            
         case .covidTestResultRecord(let model):
             let textColor = UIColor.black
             let backgroundColor = model.status.getColor
@@ -57,7 +59,7 @@ extension HealthRecordsDetailDataSource.Record {
                 type = .Message
                 name = .cancelledTestRecordMessage
             }
-                
+            
             return completion(BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type))
         }
     }
@@ -74,7 +76,7 @@ class BannerViewTableViewCell: UITableViewCell {
         let name: String
         let status: String?
         let type: StatusBannerView.BannerType
-
+        
     }
     
     weak var bannerView: StatusBannerView?
@@ -85,19 +87,27 @@ class BannerViewTableViewCell: UITableViewCell {
     
     func configure(record: HealthRecordsDetailDataSource.Record) {
         self.bannerView = createView()
+        self.bannerView?.setup(in: self)
+        self.bannerView?.alpha = 0
         self.startLoadingIndicator()
         record.toBannerViewTableViewCellViewModel { [weak self] model in
             guard let `self` = self, let model = model else {return}
-            self.bannerView?.setup(in: self,
-                              type: model.type,
-                              name: model.name,
-                              status: model.status ?? "",
-                              date: model.issueDate,
-                              backgroundColour: model.backgroundColor,
-                              textColour: model.textColor,
-                              statusColour: model.statusColor,
-                              statusIconImage: model.statusImage)
+            self.bannerView?.update(
+                type: model.type,
+                name: model.name,
+                status: model.status ?? "",
+                date: model.issueDate,
+                backgroundColour: model.backgroundColor,
+                textColour: model.textColor,
+                statusColour: model.statusColor,
+                statusIconImage: model.statusImage)
+               
             self.endLoadingIndicator()
+            self.layoutIfNeeded()
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn) {[weak self] in
+                guard let `self` = self else {return}
+                self.bannerView?.alpha = 1
+            }
         }
         
     }
@@ -108,4 +118,16 @@ class BannerViewTableViewCell: UITableViewCell {
         return banner
     }
     
+}
+
+extension HealthRecordsDetailDataSource.Record.RecordType {
+    
+    func toBannerType() -> StatusBannerView.BannerType {
+        switch self {
+        case .covidImmunizationRecord:
+            return .VaccineRecord
+        case .covidTestResultRecord:
+            return .CovidTest
+        }
+    }
 }

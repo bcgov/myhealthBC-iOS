@@ -48,6 +48,15 @@ class StatusBannerView: UIView {
     /// Configure View
     /// - Parameters:
     ///   - containerView: Container that this view will place itself in.
+    public func setup(in containerView: UIView) {
+        // TODO: Delete this label? Not sure if it's being used by anything other than QA'ing the UI
+        recordTypeLabel.isHidden = true
+        // Place in container
+        position(in: containerView)
+    }
+    
+    /// Configure data
+    /// - Parameters:
     ///   - type: Record type
     ///   - name: Name text
     ///   - status: status text
@@ -56,12 +65,7 @@ class StatusBannerView: UIView {
     ///   - textColor: all text colour
     ///   - statusColor: status text colour
     ///   - statusIconImage: status image icon. leave nil to remove icon
-    public func setup(in containerView: UIView, type: BannerType, name: String, status: String, date: String, backgroundColour: UIColor, textColour: UIColor, statusColour: UIColor, statusIconImage: UIImage?) {
-        // TODO: Delete this label? Not sure if it's being used by anything other than QA'ing the UI
-        recordTypeLabel.isHidden = true
-        // Place in container
-        position(in: containerView)
-        
+    func update(type: BannerType, name: String, status: String, date: String, backgroundColour: UIColor, textColour: UIColor, statusColour: UIColor, statusIconImage: UIImage?) {
         // set banner icon (gov logo)
         bannerImage.image = UIImage(named: "bc-logo")
         
@@ -117,6 +121,7 @@ class StatusBannerView: UIView {
             nameLabel.textColor = statusColour
             nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
         }
+        self.layoutIfNeeded()
     }
     
     private func position(in containerView: UIView) {
