@@ -123,12 +123,12 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
         // FIXME: Name label doesnt quite fit for anything other than short names - also weird UI issue when returning to screen
         let spacingPerItem: CGFloat = 10
         let itemsPerRow: CGFloat = 2
-        let maxTextHeight: CGFloat = 130
+        let maxCellHeight: CGFloat = 130
         let availableWidth = UIScreen.main.bounds.width
         var width: CGFloat = (availableWidth / itemsPerRow) - (spacingPerItem * itemsPerRow)
         width += (spacingPerItem/itemsPerRow)
         let maxHeightNeededForNames = dataSource.map({$0.userName}).maxHeightNeeded(width: width, font: HealthRecordsUserView.nameFont)
-        let height: CGFloat = maxHeightNeededForNames >= maxTextHeight ? maxHeightNeededForNames : maxTextHeight
+        let height: CGFloat = maxHeightNeededForNames >= maxCellHeight ? maxHeightNeededForNames : maxCellHeight
         
         layout.minimumLineSpacing = spacingPerItem
         layout.sectionInset = UIEdgeInsets(top: 0, left: spacingPerItem, bottom: 0, right: spacingPerItem)
