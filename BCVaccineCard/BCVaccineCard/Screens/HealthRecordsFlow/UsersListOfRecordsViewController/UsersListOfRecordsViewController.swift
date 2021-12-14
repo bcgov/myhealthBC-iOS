@@ -29,8 +29,6 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private var inEditMode = false {
         didSet {
-            //            tableViewLeadingConstraint.constant = inEditMode ? 0.0 : 8.0
-            //            tableViewTrailingConstraint.constant = inEditMode ? 0.0 : 8.0
             self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
             navSetup()
