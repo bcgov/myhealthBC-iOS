@@ -98,8 +98,8 @@ extension Constants {
     static let testResultsDummyData: [TestDummyData] =
     [
         TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponsePending(name: "Post Malone"), gatewayResponseNegative(name: "Post Malone"), gatewayResponsePositive(name: "Post Malone")]), status: .pending), phn: "1111111111"),
-        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseNegative(name: "John Daley")]), status: .negative), phn: "2222222222"),
-        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponsePositive(name: "Magic Johnson")]), status: .positive), phn: "3333333333"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseNegative(name: "Diego armando maradona")]), status: .negative), phn: "2222222222"),
+        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponsePositive(name: "Ronaldo de Assis Moreira")]), status: .positive), phn: "3333333333"),
         TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseIndeterminate(name: "Michael Scott")]), status: .indeterminate), phn: "4444444444"),
         TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseCancelled(name: "Seth Rogan")]), status: .cancelled), phn: "5555555555")
     ]

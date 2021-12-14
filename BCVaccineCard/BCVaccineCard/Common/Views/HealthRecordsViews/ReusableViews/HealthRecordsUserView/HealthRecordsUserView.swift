@@ -10,6 +10,8 @@ import UIKit
 
 class HealthRecordsUserView: UIView {
     
+    static let nameFont = UIFont.bcSansBoldWithSize(size: 17)
+    
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var backgroundWhiteView: UIView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -49,7 +51,7 @@ class HealthRecordsUserView: UIView {
         contentView.layer.cornerRadius = 4.0
         contentView.layer.masksToBounds = true
         backgroundWhiteView.layer.masksToBounds = true
-        nameLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+        nameLabel.font = HealthRecordsUserView.nameFont
         nameLabel.textColor = AppColours.appBlue
         recordCountLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         recordCountLabel.textColor = AppColours.textBlack

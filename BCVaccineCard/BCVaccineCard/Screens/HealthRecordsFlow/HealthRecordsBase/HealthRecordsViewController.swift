@@ -114,6 +114,19 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
     }
 }
 
+extension Array where Element == String {
+    func maxHeightNeeded(width: CGFloat, font: UIFont) -> CGFloat {
+        var max: CGFloat = 0
+        for string in self {
+            let height = string.heightForView(font: font, width: width)
+            if height > max {
+                max = height
+            }
+        }
+        return max
+    }
+}
+
 // MARK: Collection View setup
 extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     private func setupCollectionView() {
@@ -121,12 +134,18 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
         let layout = UICollectionViewFlowLayout()
         // TODO: Need to test this on larger screen sizes, as this works on SE - then add values to constants file
         // FIXME: Name label doesnt quite fit for anything other than short names - also weird UI issue when returning to screen
-        let spacing: CGFloat = 100
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        let availabelWidth = collectionView.frame.width - spacing
-        let widthPerItem = availabelWidth / 2.0
-        let heightPerItem = widthPerItem * (118.0/172.0)
-        layout.itemSize = CGSize(width: widthPerItem, height: heightPerItem)
+        let spacingPerItem: CGFloat = 10
+        let itemsPerRow: CGFloat = 2
+        let maxTextHeight: CGFloat = 130
+        let availableWidth = UIScreen.main.bounds.width
+        var width: CGFloat = (availableWidth / itemsPerRow) - (spacingPerItem * itemsPerRow)
+        width += (spacingPerItem/itemsPerRow)
+        let maxHeightNeededForNames = dataSource.map({$0.userName}).maxHeightNeeded(width: width, font: HealthRecordsUserView.nameFont)
+        let height: CGFloat = maxHeightNeededForNames >= maxTextHeight ? maxHeightNeededForNames : maxTextHeight
+        
+        layout.minimumLineSpacing = spacingPerItem
+        layout.sectionInset = UIEdgeInsets(top: 0, left: spacingPerItem, bottom: 0, right: spacingPerItem)
+        layout.itemSize =  CGSize(width: width, height: height)
         collectionView.collectionViewLayout = layout
         collectionView.delegate = self
         collectionView.dataSource = self

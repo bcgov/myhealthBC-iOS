@@ -99,7 +99,7 @@ extension String {
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
     static var dateOfBirth: String { return "DateOfBirth".localized }
     static var dateOfVaccine: String { return "DateOfVaccine".localized }
-    static var dose1OrDose2: String { return "Dose1OrDose2".localized }
+    static var anyDose: String { return "AnyDose".localized }
     static var dateOfTest: String{ return "DateOfTest".localized }
     static var phnFooter: String { return "PHNFooter".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
