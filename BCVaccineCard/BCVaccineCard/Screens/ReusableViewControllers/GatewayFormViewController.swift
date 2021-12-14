@@ -58,8 +58,8 @@ enum GatewayFormViewControllerFetchType: Equatable {
         switch self {
         case .bcVaccineCardAndFederalPass: return .addAHealthPass
         case .federalPassOnly: return .getFederalTravelPass
-        case .vaccinationRecord: return .addAHealthPass // TODO: Will need to update this when we implement it
-        case .covid19TestResult: return "TODO" // TODO: Add proper text
+        case .vaccinationRecord: return .formRecordNavTitle
+        case .covid19TestResult: return .formTestNavTitle
         }
     }
     
