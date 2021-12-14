@@ -21,8 +21,10 @@ extension StorageService {
         switch healthRecord.type {
         case .Test(let object):
             delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .CovidLabTestResult, object: object))
         case .CovidImmunization(let object):
             delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: object))
         }
     }
 }

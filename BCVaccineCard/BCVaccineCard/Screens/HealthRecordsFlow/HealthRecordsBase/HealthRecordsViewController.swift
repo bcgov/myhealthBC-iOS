@@ -60,6 +60,21 @@ class HealthRecordsViewController: BaseViewController {
                 self.setupCollectionView()
             }
         }
+        
+        refreshOnStorageChange()
+    }
+    
+    private func refreshOnStorageChange() {
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            switch event.entity {
+            case .VaccineCard, .CovidLabTestResult:
+                self.updateData()
+            default:
+                break
+            }
+           
+        }
     }
     
     private func updateData() {
@@ -71,8 +86,16 @@ class HealthRecordsViewController: BaseViewController {
             if self.dataSource.isEmpty {
                 let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
                 self.navigationController?.pushViewController(vc, animated: false)
+            } else {
+                self.dismissFetchHealthRecordsViewControllerIfNeeded()
             }
         }
+    }
+    
+    func dismissFetchHealthRecordsViewControllerIfNeeded() {
+        guard let vcs = self.navigationController?.viewControllers.compactMap({$0 as? FetchHealthRecordsViewController}),
+              let vc = vcs.first else {return}
+        popBack(toControllerType: HealthRecordsViewController.self)
     }
     
     private func fetchData(completion: @escaping([HealthRecord])-> Void) {

@@ -27,6 +27,7 @@ extension StorageService {
         user.name = name
         do {
             try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .User, object: user))
             return true
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")

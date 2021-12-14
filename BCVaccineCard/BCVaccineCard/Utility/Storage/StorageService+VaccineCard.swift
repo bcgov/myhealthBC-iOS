@@ -32,6 +32,7 @@ extension StorageService {
         card.issueDate = issueDate
         do {
             try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
             storeImmunizaionRecords(card: card)
             return true
         } catch let error as NSError {
@@ -59,6 +60,7 @@ extension StorageService {
             for (index, card) in cards.enumerated() {
                 card.sortOrder = Int64(index)
             }
+            notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: item))
             try context.save()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -114,7 +116,9 @@ extension StorageService {
             card.phn = model.phn
             card.firHash = model.hash
             try context.save()
-            DispatchQueue.main.async {
+            DispatchQueue.main.async {[weak self] in
+                guard let `self` = self else {return}
+                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
                 return completion(true)
             }
         } catch let error as NSError {
@@ -135,8 +139,11 @@ extension StorageService {
                 card.phn = model.phn
             }
             try context.save()
-            DispatchQueue.main.async {
+            DispatchQueue.main.async {[weak self] in
+                guard let `self` = self else {return}
+                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
                 return completion(true)
+                
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -154,7 +161,7 @@ extension StorageService {
         }
     }
     
-//     TODO: We will need to refactor this - just adding duplicate function below for now
+    //     TODO: We will need to refactor this - just adding duplicate function below for now
     private func recursivelyProcessStored(cards: [VaccineCard], processed: [AppVaccinePassportModel], completion: @escaping([AppVaccinePassportModel]) -> Void) {
         if cards.isEmpty {
             return completion(processed)
