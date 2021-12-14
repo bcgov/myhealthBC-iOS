@@ -100,8 +100,8 @@ struct HealthRecordsDetailDataSource {
                 // TODO: date format
                 TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.date?.fullString ?? "", bolded: true)),
                 TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: false), subtext: TextListModel.TextProperties(text: product, bolded: true)),
-                TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "", bolded: true)),
-                TextListModel(header: TextListModel.TextProperties(text: "Lot Number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "", bolded: true))
+                TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "N/A", bolded: true)),
+                TextListModel(header: TextListModel.TextProperties(text: "Lot Number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "N/A", bolded: true))
             ]
             fields.append(imsSet)
         }

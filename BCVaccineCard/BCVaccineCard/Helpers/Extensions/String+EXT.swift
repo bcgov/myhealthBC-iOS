@@ -202,3 +202,15 @@ extension String{
 }
 
 
+extension Array where Element == String {
+    func maxHeightNeeded(width: CGFloat, font: UIFont) -> CGFloat {
+        var max: CGFloat = 0
+        for string in self {
+            let height = string.heightForView(font: font, width: width)
+            if height > max {
+                max = height
+            }
+        }
+        return max
+    }
+}
