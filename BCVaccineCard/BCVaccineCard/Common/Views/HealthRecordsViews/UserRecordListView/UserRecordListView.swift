@@ -63,7 +63,12 @@ class UserRecordListView: UIView {
         setupAccessibility()
         iconImageView.image = record.image
         recordTypeTitleLabel.text = record.title
-        recordTypeSubtitleLabel.text = "\(record.mainRecord?.status ?? "") • \(record.mainRecord?.date ?? "")"
+        var statusToInclude: String?
+        switch record.type {
+        case .covidImmunizationRecord: statusToInclude = nil
+        case .covidTestResultRecord: statusToInclude = record.mainRecord?.status
+        }
+        recordTypeSubtitleLabel.text = "\(statusToInclude ?? "") • \(record.mainRecord?.date ?? "")"
     }
     
     // TODO: Setup accessibility
