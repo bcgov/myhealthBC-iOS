@@ -24,12 +24,18 @@ class FetchHealthRecordsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-        
+        self.navigationItem.setHidesBackButton(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.setHidesBackButton(false, animated: animated)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -66,7 +66,12 @@ class HealthRecordsViewController: BaseViewController {
         fetchData { [weak self] records in
             guard let `self` = self else {return}
             self.dataSource = records.dataSource()
+            self.addRecordHeaderSetup()
             self.collectionView.reloadData()
+            if self.dataSource.isEmpty {
+                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+                self.navigationController?.pushViewController(vc, animated: false)
+            }
         }
     }
     

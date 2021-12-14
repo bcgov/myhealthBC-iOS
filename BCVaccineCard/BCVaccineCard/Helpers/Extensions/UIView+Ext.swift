@@ -47,7 +47,7 @@ extension UIView {
         
         backdrop.backgroundColor = backgroundColor
         loadingContainer.backgroundColor = Constants.UI.LoadingIndicator.containerColor
-        loadingContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadius
+        loadingContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         
         backdrop.addEqualSizeContraints(to: self)
         

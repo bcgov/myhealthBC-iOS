@@ -104,7 +104,7 @@ extension UIViewController {
         label.font = Constants.UI.Banner.labelFont
         label.textColor = Constants.UI.Banner.labelColor
         container.backgroundColor = Constants.UI.Banner.backgroundColor
-        container.layer.cornerRadius = Constants.UI.Theme.cornerRadius
+        container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {[weak self] in
@@ -161,7 +161,7 @@ extension UIViewController {
         label.font = Constants.UI.Banner.labelFont
         label.textColor = Constants.UI.Banner.labelColor
         container.backgroundColor = Constants.UI.Banner.backgroundColor
-        container.layer.cornerRadius = Constants.UI.Theme.cornerRadius
+        container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         
         self.view.layoutIfNeeded()
         

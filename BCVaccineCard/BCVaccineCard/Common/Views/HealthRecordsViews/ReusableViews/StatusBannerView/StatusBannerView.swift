@@ -68,10 +68,10 @@ class StatusBannerView: UIView {
         // Hide Top banner if needed & set rounded corners
         if type == .CovidTest {
             topContainer.isHidden = true
-            mainContainer.layer.cornerRadius = StatusBannerView.roundness
+            mainContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         } else {
-            topContainer.roundTopCorners(radius: StatusBannerView.roundness)
-            mainContainer.roundBottomCorners(radius: StatusBannerView.roundness)
+            topContainer.roundTopCorners(radius: Constants.UI.Theme.cornerRadiusRegular)
+            mainContainer.roundBottomCorners(radius: Constants.UI.Theme.cornerRadiusRegular)
         }
         
         // Set Status Icon if needed
