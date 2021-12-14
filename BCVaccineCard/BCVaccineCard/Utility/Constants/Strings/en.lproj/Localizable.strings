@@ -163,3 +163,5 @@
 
 "Cancelled" = "Cancelled";
 "Pending" = "Pending";
+"Instructions" = "Instructions";
+"InstructionsMessage" = "• You need to self-isolate now.\n• The people you live with will also need to self-isolate if they are not fully vaccinated.\n• Public health will contact you.\n• Monitor your health and contact a health care provider or call 8-1-1 if you are concerned about your symptoms.\n• Go to Understanding Test Results for more information";
