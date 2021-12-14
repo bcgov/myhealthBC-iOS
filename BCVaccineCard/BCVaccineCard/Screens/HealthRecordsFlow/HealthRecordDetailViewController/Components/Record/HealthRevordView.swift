@@ -50,7 +50,6 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.estimatedRowHeight = 600
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.tableFooterView = UIView()
         tableView.allowsSelection = false
         self.tableView = tableView
     }
