@@ -99,7 +99,9 @@ extension CovidLabTestResult {
     }
     
     func toLocal() -> LocallyStoredCovidTestResultModel? {
-        let response: GatewayTestResultResponse = GatewayTestResultResponse(records: resultArray.compactMap({$0.toGatewayRecord()}))
+        let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 0, records: resultArray.compactMap({$0.toGatewayRecord()}))
+        let response: GatewayTestResultResponse = GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: nil, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
+//        let response: GatewayTestResultResponse = GatewayTestResultResponse(records: resultArray.compactMap({$0.toGatewayRecord()}))
         return LocallyStoredCovidTestResultModel(response: response, status: status ?? .indeterminate)
     }
 }

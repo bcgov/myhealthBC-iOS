@@ -14,3 +14,9 @@ struct GatewayVaccineCardRequest: Codable {
     let dateOfBirth: String /// yyyy-MM-dd
     let dateOfVaccine: String /// yyyy-MM-dd
 }
+
+struct GatewayTestResultRequest: Codable {
+    let phn: String
+    let dateOfBirth: String /// yyyy-MM-dd
+    let collectionDate: String /// yyyy-MM-dd
+}

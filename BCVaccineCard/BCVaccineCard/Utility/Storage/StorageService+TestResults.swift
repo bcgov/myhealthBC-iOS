@@ -25,8 +25,8 @@ extension StorageService {
         model.user = fetchUser()
         
         var testResults: [TestResult] = []
-        
-        for record in gateWayResponse.records {
+        guard let records = gateWayResponse.resourcePayload?.records else { return nil }
+        for record in records {
             if let resultModel = saveTestResult(
                    resultId: id,
                    patientDisplayName: record.patientDisplayName,

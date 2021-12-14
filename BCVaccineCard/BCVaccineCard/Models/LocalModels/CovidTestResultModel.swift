@@ -50,7 +50,7 @@ enum CovidTestResult: String, Codable {
 public struct LocallyStoredCovidTestResultModel: Codable, Equatable {
     // For now, just doing this until we actually test with their data to see what we really get (just have a lack of faith in their documentation is all)
     public static func == (lhs: LocallyStoredCovidTestResultModel, rhs: LocallyStoredCovidTestResultModel) -> Bool {
-        if let rhsResponse = rhs.response, let lshResponse = lhs.response {
+        if let rhsResponse = rhs.response?.resourcePayload, let lshResponse = lhs.response?.resourcePayload {
             return lshResponse.records.equals(other: rhsResponse.records)
         }
         return (rhs.response == nil && lhs.response == nil)
@@ -63,7 +63,7 @@ public struct LocallyStoredCovidTestResultModel: Codable, Equatable {
 
 extension LocallyStoredCovidTestResultModel {
     var testResults: [GatewayTestResultResponseRecord] {
-        return response?.records ?? []
+        return response?.resourcePayload?.records ?? []
     }
 }
 
