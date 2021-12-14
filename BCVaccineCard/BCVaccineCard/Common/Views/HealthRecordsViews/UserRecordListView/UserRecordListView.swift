@@ -63,7 +63,7 @@ class UserRecordListView: UIView {
         setupAccessibility()
         iconImageView.image = record.image
         recordTypeTitleLabel.text = record.title
-        recordTypeSubtitleLabel.text = record.mainRecord?.date ?? ""
+        recordTypeSubtitleLabel.text = "\(record.mainRecord?.status ?? "") • \(record.mainRecord?.date ?? "")"
     }
     
     // TODO: Setup accessibility

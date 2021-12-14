@@ -8,7 +8,11 @@
 import UIKit
 
 enum CovidTestResult: String, Codable {
-    case pending = "pending", negative, positive, indeterminate, cancelled
+    case pending = "Pending"
+    case negative = "Negative"
+    case positive = "Positive"
+    case indeterminate = "Indeterminate"
+    case cancelled = "Cancelled"
     
     var getTitle: String {
         return self.rawValue.capitalized
