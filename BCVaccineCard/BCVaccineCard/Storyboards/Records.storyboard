@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -135,7 +135,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="5KY-jQ-pFs">
-                                <rect key="frame" x="24" y="52" width="366" height="810"/>
+                                <rect key="frame" x="4" y="52" width="406" height="810"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -143,9 +143,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="mUF-13-Soo" firstAttribute="bottom" secondItem="5KY-jQ-pFs" secondAttribute="bottom" id="Cc5-Fm-qDI"/>
-                            <constraint firstItem="mUF-13-Soo" firstAttribute="trailing" secondItem="5KY-jQ-pFs" secondAttribute="trailing" constant="24" id="Zq6-Hl-yTK"/>
+                            <constraint firstItem="mUF-13-Soo" firstAttribute="trailing" secondItem="5KY-jQ-pFs" secondAttribute="trailing" constant="4" id="Zq6-Hl-yTK"/>
                             <constraint firstItem="5KY-jQ-pFs" firstAttribute="top" secondItem="mUF-13-Soo" secondAttribute="top" constant="8" id="eCD-bM-jWn"/>
-                            <constraint firstItem="5KY-jQ-pFs" firstAttribute="leading" secondItem="mUF-13-Soo" secondAttribute="leading" constant="24" id="l2G-6P-93E"/>
+                            <constraint firstItem="5KY-jQ-pFs" firstAttribute="leading" secondItem="mUF-13-Soo" secondAttribute="leading" constant="4" id="l2G-6P-93E"/>
                         </constraints>
                     </view>
                     <connections>
