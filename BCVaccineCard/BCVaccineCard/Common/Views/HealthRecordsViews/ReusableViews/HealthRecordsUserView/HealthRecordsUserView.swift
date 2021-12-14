@@ -47,10 +47,10 @@ class HealthRecordsUserView: UIView {
     }
     
     private func uiSetup() {
-        contentView.backgroundColor = AppColours.borderGray
-        contentView.layer.cornerRadius = 4.0
-        contentView.layer.masksToBounds = true
         backgroundWhiteView.layer.masksToBounds = true
+        backgroundWhiteView.layer.borderWidth = 1
+        backgroundWhiteView.layer.borderColor = AppColours.borderGray.cgColor
+        backgroundWhiteView.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         nameLabel.font = HealthRecordsUserView.nameFont
         nameLabel.textColor = AppColours.appBlue
         recordCountLabel.font = UIFont.bcSansRegularWithSize(size: 13)
