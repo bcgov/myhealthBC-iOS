@@ -75,7 +75,6 @@ extension HealthGatewayAPIWorker {
             if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode?.data == nil && vaccineCard.resourcePayload?.federalVaccineProof?.data == nil) {
                 let adjustedMessage = resultMessage == .errorParsingPHNFromHG ? .errorParsingPHNMessage : resultMessage
                 self.delegate?.handleError(title: .error, error: ResultError(resultMessage: adjustedMessage))
-//                self.delegate?.hideLoader()
             } else if vaccineCard.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicVaccineStatusRetryMaxForFedPass, let retryinMS = vaccineCard.resourcePayload?.retryin {
                 // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
                 self.retryCount += 1
@@ -85,27 +84,23 @@ extension HealthGatewayAPIWorker {
                 let qrResult = vaccineCard.transformResponseIntoQRCode()
                 guard let code = qrResult.qrString else {
                     self.delegate?.handleError(title: .error, error: ResultError(resultMessage: qrResult.error))
-//                    self.delegate?.hideLoader()
                     return
                 }
                 BCVaccineValidator.shared.validate(code: code) { [weak self] result in
                     guard let `self` = self else { return }
                     guard let data = result.result else {
                         self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .invalidQRCodeMessage))
-//                        self.delegate?.hideLoader()
                         return
                     }
                     DispatchQueue.main.async { [weak self] in
                         guard let `self` = self else {return}
                         self.delegate?.handleVaccineCard(scanResult: data, fedCode: vaccineCard.resourcePayload?.federalVaccineProof?.data)
-//                        self.delegate?.hideLoader()
                     }
                     
                 }
             }
         case .failure(let error):
             print(error)
-//            self.delegate?.hideLoader()
             self.delegate?.handleError(title: .error, error: error)
         }
     }

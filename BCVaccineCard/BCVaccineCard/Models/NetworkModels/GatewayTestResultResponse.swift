@@ -25,8 +25,6 @@ struct GatewayTestResultResponse: Codable, Equatable {
         let retryin: Int
         let records: [GatewayTestResultResponseRecord]
     }
-    
-//    let records: [GatewayTestResultResponseRecord]
 }
 
 struct GatewayTestResultResponseRecord: Codable, Equatable {
