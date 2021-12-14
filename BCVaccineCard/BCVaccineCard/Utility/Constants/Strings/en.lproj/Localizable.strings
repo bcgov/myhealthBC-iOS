@@ -82,6 +82,7 @@
 "DateOfBirth" = "Date of Birth";
 "DateOfVaccine" = "Date of Vaccination";
 "Dose1OrDose2" = "Dose 1 or Dose 2";
+"Covid19vaccination" = "Covid-19 vaccination";
 "AnyDose" = "Any dose";
 "DateOfTest" = "Date of Test";
 "PHNFooter" = "Find PHN on care card or the back of driver's license.";

@@ -57,7 +57,7 @@ struct HealthRecordsDetailDataSource {
         switch type {
         case .covidImmunizationRecord(let model, _):
             id = model.id
-            title = .covid19mRNATitle
+            title = .covid19vaccination
             detailNavTitle = .vaccinationRecord
             name = model.name
             image = UIImage(named: "blue-bg-vaccine-record-icon")
