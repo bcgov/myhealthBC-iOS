@@ -22,7 +22,7 @@ extension TestResult {
     @NSManaged public var patientDisplayName: String?
     @NSManaged public var reportId: String?
     @NSManaged public var resultDateTime: Date?
-    @NSManaged public var resultDescription: String?
+    @NSManaged public var resultDescription: [String]?
     @NSManaged public var resultLink: String?
     @NSManaged public var resultTitle: String?
     @NSManaged public var testName: String?

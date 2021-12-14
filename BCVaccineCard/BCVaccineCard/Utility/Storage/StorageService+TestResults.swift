@@ -71,7 +71,7 @@ extension StorageService {
         testStatus: String?,
         testOutcome: String?,
         resultTitle: String?,
-        resultDescription: String?,
+        resultDescription: [String]?,
         resultLink: String?) -> TestResult? {
             guard let context = managedContext else {return nil}
             let testResult = TestResult(context: context)

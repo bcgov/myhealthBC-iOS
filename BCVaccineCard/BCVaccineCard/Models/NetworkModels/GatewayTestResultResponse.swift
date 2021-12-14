@@ -40,7 +40,7 @@ struct GatewayTestResultResponseRecord: Codable, Equatable {
     let testStatus: String? // I'm assuming this will be equal to the enum that I created in the CovidTestResultModel
     let testOutcome: String? // Could also be here too??
     let resultTitle: String?
-    let resultDescription: String?
+    let resultDescription: [String]?
     let resultLink: String?
 }
 
