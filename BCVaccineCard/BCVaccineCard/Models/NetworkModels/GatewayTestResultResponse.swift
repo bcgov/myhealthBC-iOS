@@ -15,7 +15,7 @@ struct GatewayTestResultResponse: Codable, Equatable {
         return (rhs.resourcePayload == nil && lhs.resourcePayload == nil)
     }
     
-    let resourcePayload: ResourcePayload?
+    var resourcePayload: ResourcePayload?
     let totalResultCount, pageIndex, pageSize, resultStatus: Int?
     let resultError: ResultError?
     
@@ -23,18 +23,16 @@ struct GatewayTestResultResponse: Codable, Equatable {
     struct ResourcePayload: Codable {
         let loaded: Bool
         let retryin: Int
-        let records: [GatewayTestResultResponseRecord]
+        var records: [GatewayTestResultResponseRecord]
     }
-    
-//    let records: [GatewayTestResultResponseRecord]
 }
 
 struct GatewayTestResultResponseRecord: Codable, Equatable {
     let patientDisplayName: String?
     let lab: String?
     let reportId: String?
-    let collectionDateTime: Date?
-    let resultDateTime: Date?
+    var collectionDateTime: Date?
+    var resultDateTime: Date?
     let testName: String?
     let testType: String?
     let testStatus: String? // I'm assuming this will be equal to the enum that I created in the CovidTestResultModel

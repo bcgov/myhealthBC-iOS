@@ -3,15 +3,8 @@
 //  ClientVaxPass-POC
 //
 //  Created by Connor Ogilvie on 2021-09-09.
-// TODO: Steps:
-/// 1.) Organize file better so things are easier to find and more structured
-/// 2.) Rethink how form data source is structured (perhaps have the enum have the same associated type, which is a struct. Or a protocol which implements a property which is a struct ) Basically just need to rethink the "FormDataSource" structure
-/// 3.) Should implement a "Configuration" protocol of some sort, or a getter that returns configuration specific for each type of TBV cell that will be used here
-/// 4.) Make sure functions, such as prepopulating the cell, updating the data source, etc.. are as extracted as possible to the struct or whatever model type is decided
-/// 5.) Reduce redundancies in code where possible (indexOf functions, for example)
 
 import UIKit
-//import QueueITLibrary
 import BCVaccineValidator
 
 enum GatewayFormSource: Equatable {
@@ -58,8 +51,8 @@ enum GatewayFormViewControllerFetchType: Equatable {
         switch self {
         case .bcVaccineCardAndFederalPass: return .addAHealthPass
         case .federalPassOnly: return .getFederalTravelPass
-        case .vaccinationRecord: return .addAHealthPass // TODO: Will need to update this when we implement it
-        case .covid19TestResult: return "TODO" // TODO: Add proper text
+        case .vaccinationRecord: return .formRecordNavTitle
+        case .covid19TestResult: return .formTestNavTitle
         }
     }
     
@@ -181,7 +174,6 @@ class GatewayFormViewController: BaseViewController {
     // TODO: Will need to refactor this a bit when we get the endpoint for test results
     private var storageModel: HGStorageModel?
     private var worker: HealthGatewayAPIWorker?
-//    private var endpoint = UrlAccessor().getVaccineCard
     
     // Completion - first string is for the ID for core data, second string is optional for fed pass only
     var completionHandler: ((String, String?) -> Void)?
@@ -340,10 +332,6 @@ extension GatewayFormViewController {
         }
         return indexPath
     }
-    
-//    private func getIndexInDataSource(formField: FormTextFieldType, dataSource: [FormData]) -> Int? {
-//        return dataSource.firstIndex { $0.type == .form(type: formField) }
-//    }
 }
 
 // MARK: Drop down
@@ -500,7 +488,6 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
         let specificCell = FormData.getSpecificCellFromFormTextField(formField)
         let shownDS = dataSource.filter { $0.isFieldVisible }
         guard var indexPath = getIndexPathForSpecificCell(specificCell, inDS: self.dataSource, usingOnlyShownCells: true), indexPath.row < (shownDS.count - 1) else { return }
-//        guard let index = self.getIndexInDataSource(formField: formField, dataSource: self.dataSource), index < (dataSource.count - 1) else { return }
         let newRow = indexPath.row + 1
         indexPath.row = newRow
         if shownDS[indexPath.row].specificCell.isTextField, let cell = self.tableView.cellForRow(at: indexPath) as? FormTableViewCell {
@@ -651,7 +638,31 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
         guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
         guard let dob = dataSource[dobIndexPath.row].configuration.text, let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) else { return nil }
-        guard let id = StorageService.shared.saveTestResult(phn: phn , birthdate: dateOfBirth, gateWayResponse: gatewayResponse) else { return nil }
+        // TODO: Once HG API is fixed, we can remove this hack
+        //FROM HERE
+        var updatedResponse = gatewayResponse
+        var updatedRecords: [GatewayTestResultResponseRecord] = []
+        if let records = gatewayResponse.resourcePayload?.records {
+            for record in records {
+                var newRecord = record
+                let date: Date
+                if let dotIndexPath = getIndexPathForSpecificCell(.dotForm, inDS: self.dataSource, usingOnlyShownCells: false), let dot = dataSource[dotIndexPath.row].configuration.text, let dateOfTest = Date.Formatter.yearMonthDay.date(from: dot) {
+                    date = dateOfTest
+                } else {
+                    date = Date()
+                }
+                if record.resultDateTime == nil {
+                    newRecord.resultDateTime = date
+                }
+                if record.collectionDateTime == nil {
+                    newRecord.collectionDateTime = date
+                }
+                updatedRecords.append(newRecord)
+            }
+            updatedResponse.resourcePayload?.records = updatedRecords
+        }
+        // TO HERE
+        guard let id = StorageService.shared.saveTestResult(phn: phn , birthdate: dateOfBirth, gateWayResponse: updatedResponse) else { return nil }
         return id
     }
     

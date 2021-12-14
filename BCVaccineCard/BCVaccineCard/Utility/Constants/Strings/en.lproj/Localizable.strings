@@ -74,6 +74,8 @@
 "DOBRange" = "Birthday cannot be in the future";
 "DOVRange" = "Vaccination date must be in valid range";
 "DOVRange" = "Test date must be in valid range";
+"AddCovid19TestResult" = "Add COVID-19 Test result";
+"AddABCVaccineRecord" = "Add a BC vaccine record";
 //"FormTitle" = "Add a Health Pass";
 //"AddABCVaccineCard" = "Add a BC Vaccine Card";
 "AddAHealthPass" = "Add a Health Pass";

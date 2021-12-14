@@ -191,12 +191,4 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let availabelWidth = collectionView.frame.width
-//        let widthPerItem = availabelWidth / 2.0
-//        let heightPerItem = widthPerItem * (118.0/152.0)
-//        return CGSize(width: widthPerItem, height: heightPerItem)
-//    }
-    
-    
 }
