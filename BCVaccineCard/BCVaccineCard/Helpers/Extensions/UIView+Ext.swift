@@ -47,7 +47,7 @@ extension UIView {
         
         backdrop.backgroundColor = backgroundColor
         loadingContainer.backgroundColor = Constants.UI.LoadingIndicator.containerColor
-        loadingContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadius
+        loadingContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         
         backdrop.addEqualSizeContraints(to: self)
         
@@ -90,6 +90,18 @@ extension UIView {
         self.widthAnchor.constraint(equalToConstant: width).isActive = true
         self.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         self.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
+    }
+    
+    public func roundTopCorners(radius: CGFloat) {
+        self.clipsToBounds = true
+        self.layer.cornerRadius = radius
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    }
+    
+    public func roundBottomCorners(radius: CGFloat) {
+        self.clipsToBounds = true
+        self.layer.cornerRadius = radius
+        self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
     
     // Load a nib

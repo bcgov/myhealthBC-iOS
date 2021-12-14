@@ -8,6 +8,29 @@
 import Foundation
 import CoreData
 import UIKit
+import Combine
+
+extension StorageService {
+    enum Entity {
+        case User
+        case CovidLabTestResult
+        case TestResult
+        case ImmunizationRecord
+        case VaccineCard
+    }
+    
+    struct StorageEvent<T> {
+        enum Event {
+            case Delete
+            case Save
+            case Update
+        }
+        
+        let event: Event
+        let entity: Entity
+        let object: T
+    }
+}
 
 class StorageService {
     
@@ -23,6 +46,13 @@ class StorageService {
         
         // TODO: Refactor when authentication is added
         createUserIfneeded()
+    }
+    
+    func notify(event: StorageEvent<Any>) {
+        #if DEV
+        print("StorageEvent \(event.entity) - \(event.event)")
+        #endif
+        NotificationCenter.default.post(name: .storageChangeEvent, object: event)
     }
     
     func deleteAllStoredData(for userId: String? = AuthManager().userId()) {

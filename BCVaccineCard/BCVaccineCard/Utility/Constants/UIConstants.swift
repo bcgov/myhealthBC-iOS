@@ -14,8 +14,8 @@ extension Constants {
             static let primaryColor = UIColor(hexString: "#003366")
             static let secondaryColor = UIColor(hexString: "#eea73b")
             static let primaryConstractColor = UIColor.white
-            static let cornerRadius: CGFloat = 4
             static let animationDuration = 0.3
+            static let cornerRadiusRegular: CGFloat = 5
         }
         
         struct TorchButton {
@@ -53,7 +53,7 @@ extension Constants {
             
             struct QRCodeHighlighter {
                 static let tag = 72192376
-                static let cornerRadius: CGFloat = Constants.UI.Theme.cornerRadius
+                static let cornerRadius: CGFloat = Constants.UI.Theme.cornerRadiusRegular
                 static let borderWidth: CGFloat = 6
                 static let borderColor = Constants.UI.Theme.secondaryColor.cgColor
                 static let borderColorInvalid = UIColor.red.cgColor

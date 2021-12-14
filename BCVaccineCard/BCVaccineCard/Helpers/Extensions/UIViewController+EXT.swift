@@ -104,7 +104,7 @@ extension UIViewController {
         label.font = Constants.UI.Banner.labelFont
         label.textColor = Constants.UI.Banner.labelColor
         container.backgroundColor = Constants.UI.Banner.backgroundColor
-        container.layer.cornerRadius = Constants.UI.Theme.cornerRadius
+        container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {[weak self] in
@@ -161,7 +161,7 @@ extension UIViewController {
         label.font = Constants.UI.Banner.labelFont
         label.textColor = Constants.UI.Banner.labelColor
         container.backgroundColor = Constants.UI.Banner.backgroundColor
-        container.layer.cornerRadius = Constants.UI.Theme.cornerRadius
+        container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         
         self.view.layoutIfNeeded()
         
@@ -266,10 +266,15 @@ extension UIViewController {
     }
 }
 
+
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, issueDate: Date(timeIntervalSince1970: model.issueDate), userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
+        print (model.birthdate)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let birthdate = formatter.date(from: model.birthdate) ?? Date()
+        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: birthdate, issueDate: Date(timeIntervalSince1970: model.issueDate), userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {

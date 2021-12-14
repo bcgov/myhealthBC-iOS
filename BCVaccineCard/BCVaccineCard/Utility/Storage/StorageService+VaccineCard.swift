@@ -16,7 +16,7 @@ extension StorageService {
     ///   - name: card holder name: NOT the name of the user storing data
     ///   - userId: User id under which this card is to be stored
     /// - Returns: boolean indicating success or failure
-    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, issueDate: Date, userId: String, hash: String, phn: String? = nil, federalPass: String? = nil, vaxDates: [String]? = nil) -> Bool {
+    func saveVaccineVard(vaccineQR: String, name: String, birthdate: Date, issueDate: Date, userId: String, hash: String, phn: String? = nil, federalPass: String? = nil, vaxDates: [String]? = nil) -> Bool {
         guard let context = managedContext, let user = fetchUser(id: userId) else {return false}
         let sortOrder = Int64(fetchVaccineCards(for: userId).count)
         let card = VaccineCard(context: context)
@@ -32,6 +32,7 @@ extension StorageService {
         card.issueDate = issueDate
         do {
             try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
             storeImmunizaionRecords(card: card)
             return true
         } catch let error as NSError {
@@ -59,6 +60,7 @@ extension StorageService {
             for (index, card) in cards.enumerated() {
                 card.sortOrder = Int64(index)
             }
+            notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: item))
             try context.save()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -107,14 +109,16 @@ extension StorageService {
         guard let context = managedContext else {return}
         do {
             let cards = try context.fetch(VaccineCard.fetchRequest())
-            guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
+            guard let card = cards.filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return}
             card.code = model.code
             card.vaxDates = model.vaxDates
             card.federalPass = model.fedCode
             card.phn = model.phn
             card.firHash = model.hash
             try context.save()
-            DispatchQueue.main.async {
+            DispatchQueue.main.async {[weak self] in
+                guard let `self` = self else {return}
+                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
                 return completion(true)
             }
         } catch let error as NSError {
@@ -129,14 +133,17 @@ extension StorageService {
         guard let context = managedContext else {return}
         do {
             let cards = try context.fetch(VaccineCard.fetchRequest())
-            guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
+            guard let card = cards.filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return}
             card.federalPass = model.fedCode
             if card.phn == nil || card.phn?.count ?? 0 < 1 {
                 card.phn = model.phn
             }
             try context.save()
-            DispatchQueue.main.async {
+            DispatchQueue.main.async {[weak self] in
+                guard let `self` = self else {return}
+                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
                 return completion(true)
+                
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -154,7 +161,7 @@ extension StorageService {
         }
     }
     
-//     TODO: We will need to refactor this - just adding duplicate function below for now
+    //     TODO: We will need to refactor this - just adding duplicate function below for now
     private func recursivelyProcessStored(cards: [VaccineCard], processed: [AppVaccinePassportModel], completion: @escaping([AppVaccinePassportModel]) -> Void) {
         if cards.isEmpty {
             return completion(processed)

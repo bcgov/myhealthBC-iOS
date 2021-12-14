@@ -37,7 +37,7 @@
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="user" inverseEntity="VaccineCard"/>
     </entity>
     <entity name="VaccineCard" representedClassName="VaccineCard" syncable="YES">
-        <attribute name="birthdate" optional="YES" attributeType="String"/>
+        <attribute name="birthdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="code" optional="YES" attributeType="String"/>
         <attribute name="federalPass" optional="YES" attributeType="String"/>
         <attribute name="firHash" optional="YES" attributeType="String"/>
@@ -54,6 +54,6 @@
         <element name="ImmunizationRecord" positionX="497.89453125" positionY="782.546875" width="128" height="104"/>
         <element name="TestResult" positionX="-104.609375" positionY="677.74609375" width="128" height="239"/>
         <element name="User" positionX="234.6484375" positionY="237.27734375" width="128" height="89"/>
-        <element name="VaccineCard" positionX="483.7421875" positionY="301.015625" width="128" height="194"/>
+        <element name="VaccineCard" positionX="483.7421875" positionY="301.015625" width="128" height="208"/>
     </elements>
 </model>

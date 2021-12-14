@@ -40,7 +40,7 @@ public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
     var vaxDates: [String]
     let name: String
     let issueDate: Double
-    let status: VaccineStatus
+    let status: VaccineStatus // Use code to derive when possible
     let source: Source
     var fedCode: String?
     let phn: String?

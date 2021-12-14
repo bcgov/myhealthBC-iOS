@@ -16,7 +16,7 @@ struct HealthRecordsDetailDataSource {
         let id: String
         let name: String
         let type: RecordType
-        let status: String
+        let status: String?
         let date: String?
         let fields: [[TextListModel]]
         
@@ -57,7 +57,7 @@ struct HealthRecordsDetailDataSource {
         switch type {
         case .covidImmunizationRecord(let model, _):
             id = model.id
-            title = .covid19mRNATitle
+            title = .covid19vaccination
             detailNavTitle = .vaccinationRecord
             name = model.name
             image = UIImage(named: "blue-bg-vaccine-record-icon")
@@ -90,22 +90,27 @@ struct HealthRecordsDetailDataSource {
     }
     
     private static func genRecord(vaccineModel model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord]) -> Record {
-        let status: String = model.status.getTitle
         let date: String? = model.vaxDates.last
         var fields: [[TextListModel]] = []
         for (index, imsModel) in immunizations.enumerated() {
+            var stringDate = ""
+            if let date = imsModel.date {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MMMM dd, yyyy"
+                stringDate = formatter.string(from: date)
+            }
             let product = Constants.vaccineInfo(snowMedCode: 1)?.displayName ?? ""
             let imsSet = [
                 TextListModel(header: TextListModel.TextProperties(text: "Dose \(index + 1)", bolded: true), subtext: nil),
                 // TODO: date format
-                TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.date?.fullString ?? "", bolded: true)),
+                TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: false), subtext: TextListModel.TextProperties(text: stringDate, bolded: true)),
                 TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: false), subtext: TextListModel.TextProperties(text: product, bolded: true)),
-                TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "", bolded: true)),
-                TextListModel(header: TextListModel.TextProperties(text: "Lot Number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "", bolded: true))
+                TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "N/A", bolded: true)),
+                TextListModel(header: TextListModel.TextProperties(text: "Lot Number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "N/A", bolded: true))
             ]
             fields.append(imsSet)
         }
-        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: status, date: date, fields: fields)
+        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: nil, date: date, fields: fields)
     }
     
     

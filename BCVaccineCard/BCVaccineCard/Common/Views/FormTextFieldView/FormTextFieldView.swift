@@ -27,7 +27,7 @@ enum FormTextFieldType {
         switch self {
         case .personalHealthNumber: return nil
         case .dateOfBirth: return nil
-        case .dateOfVaccination: return .dose1OrDose2
+        case .dateOfVaccination: return .anyDose
         case .dateOfTest: return nil
         }
     }

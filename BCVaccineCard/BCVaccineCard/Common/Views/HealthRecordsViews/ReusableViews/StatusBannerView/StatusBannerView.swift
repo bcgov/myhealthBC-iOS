@@ -22,6 +22,8 @@ import UIKit
  */
 class StatusBannerView: UIView {
     
+    static let roundness: CGFloat = 5
+    
     @IBOutlet weak var contentStackView: UIStackView!
     @IBOutlet weak var bannerImage: UIImageView!
     @IBOutlet weak var topContainer: UIView!
@@ -46,6 +48,15 @@ class StatusBannerView: UIView {
     /// Configure View
     /// - Parameters:
     ///   - containerView: Container that this view will place itself in.
+    public func setup(in containerView: UIView) {
+        // TODO: Delete this label? Not sure if it's being used by anything other than QA'ing the UI
+        recordTypeLabel.isHidden = true
+        // Place in container
+        position(in: containerView)
+    }
+    
+    /// Configure data
+    /// - Parameters:
     ///   - type: Record type
     ///   - name: Name text
     ///   - status: status text
@@ -54,18 +65,17 @@ class StatusBannerView: UIView {
     ///   - textColor: all text colour
     ///   - statusColor: status text colour
     ///   - statusIconImage: status image icon. leave nil to remove icon
-    public func setup(in containerView: UIView, type: BannerType, name: String, status: String, date: String, backgroundColour: UIColor, textColour: UIColor, statusColour: UIColor, statusIconImage: UIImage?) {
-        // TODO: Delete this label? Not sure if it's being used by anything other than QA'ing the UI
-        recordTypeLabel.isHidden = true
-        // Place in container
-        position(in: containerView)
-        
+    func update(type: BannerType, name: String, status: String, date: String, backgroundColour: UIColor, textColour: UIColor, statusColour: UIColor, statusIconImage: UIImage?) {
         // set banner icon (gov logo)
         bannerImage.image = UIImage(named: "bc-logo")
         
-        // Hide Top banner if needed
+        // Hide Top banner if needed & set rounded corners
         if type == .CovidTest {
             topContainer.isHidden = true
+            mainContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
+        } else {
+            topContainer.roundTopCorners(radius: Constants.UI.Theme.cornerRadiusRegular)
+            mainContainer.roundBottomCorners(radius: Constants.UI.Theme.cornerRadiusRegular)
         }
         
         // Set Status Icon if needed
@@ -83,8 +93,6 @@ class StatusBannerView: UIView {
             }
         }
         statusLabel.textColor = statusColour
-        self.layer.cornerRadius = 4
-        mainContainer.layer.cornerRadius = 4
         
         // set texts
         nameLabel.text = name
@@ -101,7 +109,7 @@ class StatusBannerView: UIView {
         case .VaccineRecord:
             // TODO: put corrent fonts and sizes
             nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
-            statusLabel.font = UIFont.bcSansBoldWithSize(size: 18)
+            statusLabel.font = UIFont.bcSansRegularWithSize(size: 18)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         case .Message:
             topContainer.isHidden = true
@@ -113,6 +121,7 @@ class StatusBannerView: UIView {
             nameLabel.textColor = statusColour
             nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
         }
+        self.layoutIfNeeded()
     }
     
     private func position(in containerView: UIView) {

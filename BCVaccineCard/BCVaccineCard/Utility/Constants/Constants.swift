@@ -101,18 +101,17 @@ extension Constants {
 //    private static func gatewayResponsePositive(name: String) -> GatewayTestResultResponseRecord { GatewayTestResultResponseRecord(patientDisplayName: name, lab: "LA", reportId: "HGNAGANGONONAGGN", collectionDateTime: Date(), resultDateTime: Date(), testName: "COVID-19 TEST", testType: "positive", testStatus: "positive", testOutcome: "", resultTitle: "", resultDescription: "", resultLink: "")}
 //    private static func gatewayResponseIndeterminate(name: String) -> GatewayTestResultResponseRecord { GatewayTestResultResponseRecord(patientDisplayName: name, lab: "Dunder Mifflin", reportId: "RGNAIETAGPIANGN", collectionDateTime: Date(), resultDateTime: Date(), testName: "COVID-19 TEST", testType: "indeterminate", testStatus: "indeterminate", testOutcome: "", resultTitle: "", resultDescription: "", resultLink: "")}
 //    private static func gatewayResponseCancelled(name: String) -> GatewayTestResultResponseRecord { GatewayTestResultResponseRecord(patientDisplayName: name, lab: "California", reportId: "BGAEGAGNGPIANGN", collectionDateTime: Date(), resultDateTime: Date(), testName: "COVID-19 TEST", testType: "cancelled", testStatus: "cancelled", testOutcome: "", resultTitle: "", resultDescription: "", resultLink: "")}
-//
+//    
 //    static let testResultsDummyData: [TestDummyData] =
 //    [
 //        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponsePending(name: "Post Malone"), gatewayResponseNegative(name: "Post Malone"), gatewayResponsePositive(name: "Post Malone")]), status: .pending), phn: "1111111111"),
-//        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseNegative(name: "John Daley")]), status: .negative), phn: "2222222222"),
-//        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponsePositive(name: "Magic Johnson")]), status: .positive), phn: "3333333333"),
+//        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseNegative(name: "Diego armando maradona")]), status: .negative), phn: "2222222222"),
+//        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponsePositive(name: "Ronaldo de Assis Moreira")]), status: .positive), phn: "3333333333"),
 //        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseIndeterminate(name: "Michael Scott")]), status: .indeterminate), phn: "4444444444"),
 //        TestDummyData(data: LocallyStoredCovidTestResultModel(response:  GatewayTestResultResponse(records: [gatewayResponseCancelled(name: "Seth Rogan")]), status: .cancelled), phn: "5555555555")
 //    ]
-//
 //}
-
+//
 //struct TestDummyData {
 //    let data: LocallyStoredCovidTestResultModel
 //    let phn: String
