@@ -16,7 +16,7 @@ struct HealthRecordsDetailDataSource {
         let id: String
         let name: String
         let type: RecordType
-        let status: String
+        let status: String?
         let date: String?
         let fields: [[TextListModel]]
         
@@ -90,7 +90,6 @@ struct HealthRecordsDetailDataSource {
     }
     
     private static func genRecord(vaccineModel model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord]) -> Record {
-        let status: String = model.status.getTitle
         let date: String? = model.vaxDates.last
         var fields: [[TextListModel]] = []
         for (index, imsModel) in immunizations.enumerated() {
@@ -105,7 +104,7 @@ struct HealthRecordsDetailDataSource {
             ]
             fields.append(imsSet)
         }
-        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: status, date: date, fields: fields)
+        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: nil, date: date, fields: fields)
     }
     
     

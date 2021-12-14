@@ -90,7 +90,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         else {
             return UITableViewCell()
         }
-        cell.configure(model: model.toBannerViewTableViewCellViewModel())
+        cell.configure(record: model)
         return cell
     }
     
