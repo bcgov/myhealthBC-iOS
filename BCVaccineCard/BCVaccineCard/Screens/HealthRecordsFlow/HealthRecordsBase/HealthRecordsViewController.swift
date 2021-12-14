@@ -53,7 +53,7 @@ class HealthRecordsViewController: BaseViewController {
             guard let `self` = self else {return}
             self.dataSource = records.dataSource()
             if self.dataSource.isEmpty {
-                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
                 self.navigationController?.pushViewController(vc, animated: false)
             } else {
                 self.addRecordHeaderSetup()
@@ -69,7 +69,7 @@ class HealthRecordsViewController: BaseViewController {
             self.addRecordHeaderSetup()
             self.collectionView.reloadData()
             if self.dataSource.isEmpty {
-                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
                 self.navigationController?.pushViewController(vc, animated: false)
             }
         }
@@ -108,7 +108,7 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
     
     func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
         if screenType == .healthRecords {
-            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController()
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false)
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }

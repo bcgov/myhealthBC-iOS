@@ -6,11 +6,13 @@
 // TODO: This will contain a table view with the two cells for immunization record and test results. This view controller will be shown automatically on top of the healthRecordsViewController when no health records exist - will have to show a loading indicator
 
 import UIKit
+import SwiftUI
 
 class FetchHealthRecordsViewController: BaseViewController {
     
-    class func constructFetchHealthRecordsViewController() -> FetchHealthRecordsViewController {
+    class func constructFetchHealthRecordsViewController(hideNavBackButton: Bool) -> FetchHealthRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: FetchHealthRecordsViewController.self)) as? FetchHealthRecordsViewController {
+            vc.hideNavBackButton = hideNavBackButton
             return vc
         }
         return FetchHealthRecordsViewController()
@@ -18,6 +20,8 @@ class FetchHealthRecordsViewController: BaseViewController {
     
     @IBOutlet weak private var headerLabel: UILabel!
     @IBOutlet weak private var tableView: UITableView!
+    
+    private var hideNavBackButton = false
     
     private var dataSource: [GetRecordsView.RecordType] = [.covidImmunizationRecord, .covidTestResult]
 
@@ -30,7 +34,9 @@ class FetchHealthRecordsViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-        self.navigationItem.setHidesBackButton(true, animated: animated)
+        if hideNavBackButton {
+            self.navigationItem.setHidesBackButton(true, animated: animated)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
