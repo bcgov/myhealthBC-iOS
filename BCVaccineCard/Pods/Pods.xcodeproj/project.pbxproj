@@ -17,7 +17,6 @@
 				156D92AB915DA9AB17D2E1C917E1E984 /* PBXTargetDependency */,
 			);
 			name = Firebase;
-			productName = Firebase;
 		};
 /* End PBXAggregateTarget section */
 
@@ -4783,7 +4782,7 @@
 			);
 			name = "Pods-BCVaccineCard";
 			productName = Pods_BCVaccineCard;
-			productReference = 68BE55F4A3F1EF923D7C51246A06F7BD /* Pods_BCVaccineCard.framework */;
+			productReference = 68BE55F4A3F1EF923D7C51246A06F7BD /* Pods-BCVaccineCard */;
 			productType = "com.apple.product-type.framework";
 		};
 		57B7E23CE80EC1AAA76AD2F821D233EC /* FirebaseAppDistribution */ = {

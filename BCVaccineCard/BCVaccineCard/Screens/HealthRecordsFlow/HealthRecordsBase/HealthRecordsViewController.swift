@@ -186,7 +186,8 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row < dataSource.count else { return }
         let userName = dataSource[indexPath.row].userName
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: userName)
+        let birthdate =  dataSource[indexPath.row].birthdate
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: userName, birthdate: birthdate)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

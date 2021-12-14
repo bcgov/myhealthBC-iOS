@@ -16,7 +16,7 @@ extension StorageService {
     ///   - name: card holder name: NOT the name of the user storing data
     ///   - userId: User id under which this card is to be stored
     /// - Returns: boolean indicating success or failure
-    func saveVaccineVard(vaccineQR: String, name: String, birthdate: String, issueDate: Date, userId: String, hash: String, phn: String? = nil, federalPass: String? = nil, vaxDates: [String]? = nil) -> Bool {
+    func saveVaccineVard(vaccineQR: String, name: String, birthdate: Date, issueDate: Date, userId: String, hash: String, phn: String? = nil, federalPass: String? = nil, vaxDates: [String]? = nil) -> Bool {
         guard let context = managedContext, let user = fetchUser(id: userId) else {return false}
         let sortOrder = Int64(fetchVaccineCards(for: userId).count)
         let card = VaccineCard(context: context)
@@ -109,7 +109,7 @@ extension StorageService {
         guard let context = managedContext else {return}
         do {
             let cards = try context.fetch(VaccineCard.fetchRequest())
-            guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
+            guard let card = cards.filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return}
             card.code = model.code
             card.vaxDates = model.vaxDates
             card.federalPass = model.fedCode
@@ -133,7 +133,7 @@ extension StorageService {
         guard let context = managedContext else {return}
         do {
             let cards = try context.fetch(VaccineCard.fetchRequest())
-            guard let card = cards.filter({$0.name == model.name && $0.birthdate == model.birthdate}).first else {return}
+            guard let card = cards.filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return}
             card.federalPass = model.fedCode
             if card.phn == nil || card.phn?.count ?? 0 < 1 {
                 card.phn = model.phn

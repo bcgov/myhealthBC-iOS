@@ -266,10 +266,15 @@ extension UIViewController {
     }
 }
 
+
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, issueDate: Date(timeIntervalSince1970: model.issueDate), userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
+        print (model.birthdate)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let birthdate = formatter.date(from: model.birthdate) ?? Date()
+        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: birthdate, issueDate: Date(timeIntervalSince1970: model.issueDate), userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
