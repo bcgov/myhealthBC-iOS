@@ -640,29 +640,29 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         guard let dob = dataSource[dobIndexPath.row].configuration.text, let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) else { return nil }
         // TODO: Once HG API is fixed, we can remove this hack
         //FROM HERE
-        var updatedResponse = gatewayResponse
-        var updatedRecords: [GatewayTestResultResponseRecord] = []
-        if let records = gatewayResponse.resourcePayload?.records {
-            for record in records {
-                var newRecord = record
-                let date: Date
-                if let dotIndexPath = getIndexPathForSpecificCell(.dotForm, inDS: self.dataSource, usingOnlyShownCells: false), let dot = dataSource[dotIndexPath.row].configuration.text, let dateOfTest = Date.Formatter.yearMonthDay.date(from: dot) {
-                    date = dateOfTest
-                } else {
-                    date = Date()
-                }
-                if record.resultDateTime == nil {
-                    newRecord.resultDateTime = date
-                }
-                if record.collectionDateTime == nil {
-                    newRecord.collectionDateTime = date
-                }
-                updatedRecords.append(newRecord)
-            }
-            updatedResponse.resourcePayload?.records = updatedRecords
-        }
+//        var updatedResponse = gatewayResponse
+//        var updatedRecords: [GatewayTestResultResponseRecord] = []
+//        if let records = gatewayResponse.resourcePayload?.records {
+//            for record in records {
+//                var newRecord = record
+//                let date: Date
+//                if let dotIndexPath = getIndexPathForSpecificCell(.dotForm, inDS: self.dataSource, usingOnlyShownCells: false), let dot = dataSource[dotIndexPath.row].configuration.text, let dateOfTest = Date.Formatter.yearMonthDay.date(from: dot) {
+//                    date = dateOfTest
+//                } else {
+//                    date = Date()
+//                }
+//                if record.resultDateTime == nil {
+//                    newRecord.resultDateTime = date
+//                }
+//                if record.collectionDateTime == nil {
+//                    newRecord.collectionDateTime = date
+//                }
+//                updatedRecords.append(newRecord)
+//            }
+//            updatedResponse.resourcePayload?.records = updatedRecords
+//        }
         // TO HERE
-        guard let id = StorageService.shared.saveTestResult(phn: phn , birthdate: dateOfBirth, gateWayResponse: updatedResponse) else { return nil }
+        guard let id = StorageService.shared.saveTestResult(phn: phn , birthdate: dateOfBirth, gateWayResponse: gatewayResponse) else { return nil }
         return id
     }
     

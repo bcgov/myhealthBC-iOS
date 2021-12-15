@@ -118,7 +118,7 @@ extension TestResult {
     }
     
     func toGatewayRecord() -> GatewayTestResultResponseRecord? {
-        return GatewayTestResultResponseRecord(patientDisplayName: self.patientDisplayName, lab: self.lab, reportId: self.reportId, collectionDateTime: self.collectionDateTime, resultDateTime: self.resultDateTime, testName: self.testName, testType: self.testType, testStatus: self.testStatus, testOutcome: self.testOutcome, resultTitle: self.resultTitle, resultDescription: self.resultDescription, resultLink: self.resultLink)
+        return GatewayTestResultResponseRecord(patientDisplayName: self.patientDisplayName, lab: self.lab, reportId: self.reportId, collectionDateTime: self.collectionDateTime?.gatewayDateAndTime, resultDateTime: self.resultDateTime?.gatewayDateAndTime, testName: self.testName, testType: self.testType, testStatus: self.testStatus, testOutcome: self.testOutcome, resultTitle: self.resultTitle, resultDescription: self.resultDescription, resultLink: self.resultLink)
     }
 }
 
