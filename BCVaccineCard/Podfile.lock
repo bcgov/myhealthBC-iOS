@@ -1,8 +1,8 @@
 PODS:
-  - Alamofire (5.4.4)
+  - Alamofire (5.5.0)
   - AlamofireRSSParser (2.4.0):
     - Alamofire (~> 5.0)
-  - BCVaccineValidator (1.0.9):
+  - BCVaccineValidator (1.0.10):
     - Alamofire
     - JOSESwift
   - EncryptedCoreData (3.1):
@@ -63,7 +63,7 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
-  - PocketSVG (2.7.0)
+  - PocketSVG (2.7.2)
   - PromisesObjC (2.0.0)
   - QueueITLibrary (3.0.8)
   - SnowplowTracker (2.2.2):
@@ -122,16 +122,16 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   BCVaccineValidator:
-    :commit: a2cbdbbaee46e51636dc46db643c407d7241a058
+    :commit: 4c61642a32fe7ac57fe0982b58f0fc3d2e7f870c
     :git: https://github.com/bcgov/iOSVaccineValidator
   EncryptedCoreData:
     :commit: b97ffaf2f19dad4d1558bc9b0668cc2e09d17347
     :git: https://github.com/project-imas/encrypted-core-data.git
 
 SPEC CHECKSUMS:
-  Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
+  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   AlamofireRSSParser: dab86644d4d220b313767c33ef09e7acf11f641a
-  BCVaccineValidator: 9f5ecb5accb833cbeab1220df42f7d5235be2eee
+  BCVaccineValidator: c9328bc389a5d3f20fa764425ffb9266c9f3ff15
   EncryptedCoreData: f6762fb05f88a52f36c5648659abc91b57f244b4
   Firebase: 44213362f1dcc52555b935dc925ed35ac55f1b20
   FirebaseAppDistribution: 1d62aa8711bd2d9a56aa4c44098f533d3d459822
@@ -144,7 +144,7 @@ SPEC CHECKSUMS:
   JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  PocketSVG: 5e0ff20c8a661586b2f2c295cd18b3e8f06de552
+  PocketSVG: c597e6916641fd2674d2f0cabca0d1869cb82880
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   QueueITLibrary: 0ed653c2f57929946b85269b0f53493fe316ad70
   SnowplowTracker: 2eee2d6606a60db98f7c4e1515499bb216b6c8ad

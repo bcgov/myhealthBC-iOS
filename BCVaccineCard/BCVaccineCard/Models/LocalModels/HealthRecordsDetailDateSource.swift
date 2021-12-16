@@ -99,7 +99,7 @@ struct HealthRecordsDetailDataSource {
                 formatter.dateFormat = "MMMM dd, yyyy"
                 stringDate = formatter.string(from: date)
             }
-            let product = Constants.vaccineInfo(snowMedCode: 1)?.displayName ?? ""
+            let product = Constants.vaccineInfo(snowMedCode: Int(imsModel.snomed ?? "1") ?? 1)?.displayName ?? ""
             let imsSet = [
                 TextListModel(header: TextListModel.TextProperties(text: "Dose \(index + 1)", bolded: true), subtext: nil),
                 // TODO: date format
