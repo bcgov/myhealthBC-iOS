@@ -12,7 +12,6 @@ import BCVaccineValidator
 fileprivate extension String {
     func vaxDate() -> Date? {
         let dateFormatter = Date.Formatter.yearMonthDay
-        dateFormatter.locale = .current
         return dateFormatter.date(from:self)
     }
 }
