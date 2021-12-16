@@ -119,10 +119,8 @@ struct HealthRecordsDetailDataSource {
         let date: String? = testResult.resultDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         fields.append([
-//            TextListModel(header: TextListModel.TextProperties(text: "Name", bolded: false), subtext: TextListModel.TextProperties(text: testResult.patientDisplayName ?? "", bolded: true)),
             TextListModel(header: TextListModel.TextProperties(text: "Date of Testing:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.monthDayYearString ?? "", bolded: true)),
             TextListModel(header: TextListModel.TextProperties(text: "Test Status:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testStatus ?? "Pending", bolded: true)),
-//            TextListModel(header: TextListModel.TextProperties(text: "Test Result", bolded: false), subtext: TextListModel.TextProperties(text: testResult.status.getTitle, bolded: true)),
             TextListModel(header: TextListModel.TextProperties(text: "Type Name:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: true)),
             TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.lab ?? "", bolded: true))
         ])
