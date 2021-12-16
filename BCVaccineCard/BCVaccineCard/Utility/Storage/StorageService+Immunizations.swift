@@ -9,6 +9,15 @@ import Foundation
 import Foundation
 import BCVaccineValidator
 
+fileprivate extension String {
+    func vaxDate() -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .current
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.date(from:self)
+    }
+}
+
 extension StorageService {
     
     func storeImmunizaionRecords(card: VaccineCard) {
@@ -30,6 +39,8 @@ extension StorageService {
         model.date = Date()
         model.provider = record.provider
         model.lotNumber = record.lotNumber
+        model.date = record.date?.vaxDate()
+        model.snomed = record.snomed
         model.vaccineCard = card
         do {
             try context.save()
