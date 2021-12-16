@@ -65,3 +65,23 @@ extension Array where Element == GatewayTestResultResponseRecord {
     }
 }
 
+extension GatewayTestResultResponseRecord {
+    enum ResponseStatusTypes: String, Codable {
+        case pending = "Pending"
+        case final = "Final"
+        case statusChange = "StatusChange"
+    }
+    
+    enum ResponseOutcomeTypes: String, Codable {
+        case notSet = "NotSet"
+        case other = "Other"
+        case pending = "Pending"
+        case indeterminate = "Indeterminate"
+        case negative = "Negative"
+        case positive = "Positive"
+        case cancelled = "Cancelled"
+    }
+    
+    
+}
+
