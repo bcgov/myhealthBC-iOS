@@ -81,7 +81,5 @@ extension GatewayTestResultResponseRecord {
         case positive = "Positive"
         case cancelled = "Cancelled"
     }
-    
-    
 }
 
