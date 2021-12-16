@@ -59,7 +59,7 @@ class CodeValidationService {
                         }
                     }
                     var provider: String? = nil
-                    if let performer = vax.performer, performer.isEmpty {
+                    if let performer = vax.performer, !performer.isEmpty {
                         provider = performer[0].actor?.display
                     }
                     let lot: String? = vax.lotNumber
