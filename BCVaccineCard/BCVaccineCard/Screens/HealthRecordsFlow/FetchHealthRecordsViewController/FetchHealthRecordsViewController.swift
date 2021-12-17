@@ -113,19 +113,36 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             rememberDetails = details
         }
         switch type {
+            // TODO: Once presenting detail VC, we will have to remove gatewayVC - essentially we should show home vc, then detail vc on top of that
+            // TODO: Need to test this out
         case .covidImmunizationRecord:
             let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
-            vc.completionHandler = { [weak self] (_, _) in
+            vc.completionHandler = { [weak self] (id, _) in
                 guard let `self` = self else { return }
-                self.popBack(toControllerType: HealthRecordsViewController.self)
+                StorageService.shared.getHeathRecords { [weak self] records in
+                    let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: .covidImmunizationRecord)
+                    guard let ds = dataSource else {
+                        self?.popBack(toControllerType: HealthRecordsViewController.self)
+                        return
+                    }
+                    let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds)
+                    self?.navigationController?.pushViewController(detailVC, animated: true)
+                }
             }
             self.navigationController?.pushViewController(vc, animated: true)
         case .covidTestResult:
             let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
             vc.completionHandler = { [weak self] (id, _) in
                 guard let `self` = self else { return }
-                // TODO: Go to specific details screen here - will fetch test result from core data using id
-                self.popBack(toControllerType: HealthRecordsViewController.self)
+                StorageService.shared.getHeathRecords { [weak self] records in
+                    let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: .covidTestResult)
+                    guard let ds = dataSource else {
+                        self?.popBack(toControllerType: HealthRecordsViewController.self)
+                        return
+                    }
+                    let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds)
+                    self?.navigationController?.pushViewController(detailVC, animated: true)
+                }
             }
             self.navigationController?.pushViewController(vc, animated: true)
         }
