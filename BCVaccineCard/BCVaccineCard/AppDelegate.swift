@@ -9,12 +9,14 @@ import UIKit
 import CoreData
 import BCVaccineValidator
 import EncryptedCoreData
+import AppAuth
 //import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let sharedInstance = UIApplication.shared.delegate as? AppDelegate
+    var currentAuthorizationFlow: OIDExternalUserAgentSession?
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -79,6 +81,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 }
 
+// MARK: Auth {
+extension AppDelegate {
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+      // Sends the URL to the current authorization flow (if any) which will
+      // process it if it relates to an authorization response.
+      if let authorizationFlow = self.currentAuthorizationFlow,
+                                 authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+        self.currentAuthorizationFlow = nil
+        return true
+      }
+
+      // Your additional URL handling (if any)
+
+      return false
+    }
+}
+
 // MARK: Root setup
 extension AppDelegate {
     private func setupRootViewController() {
@@ -86,11 +107,13 @@ extension AppDelegate {
         guard let first = unseen.first else {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
+            AuthManager().authenticate(in: vc)
             return
         }
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
+        AuthManager().authenticate(in: vc)
         
     }
 }
