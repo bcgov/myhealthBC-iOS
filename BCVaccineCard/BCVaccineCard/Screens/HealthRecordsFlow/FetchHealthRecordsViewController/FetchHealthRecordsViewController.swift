@@ -154,7 +154,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         guard let name = details.name, let birthday = details.dob else { return }
         guard let stack = self.navigationController?.viewControllers, stack.count > 0 else { return }
         var navStack: [UIViewController] = []
-        guard let firstVC = self.navigationController?.viewControllers.first else { return }
+        guard let firstVC = self.navigationController?.viewControllers.first as? HealthRecordsViewController else { return }
         navStack.append(firstVC)
         var containsUserRecordsVC = false
         for (_, vc) in stack.enumerated() {
