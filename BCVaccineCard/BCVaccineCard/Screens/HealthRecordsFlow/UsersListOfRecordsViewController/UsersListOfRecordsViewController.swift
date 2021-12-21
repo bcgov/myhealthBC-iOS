@@ -106,6 +106,7 @@ extension UsersListOfRecordsViewController {
             self.setupTableView()
             self.navSetup()
             self.view.endLoadingIndicator()
+            self.tableView.reloadData()
         }
     }
 }
@@ -139,7 +140,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
-        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: dataSource.count)
+        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: dataSource.count, source: GatewayData(details: nil, fromGateway: false))
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

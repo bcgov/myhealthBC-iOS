@@ -10,10 +10,11 @@ import UIKit
 
 class HealthRecordDetailViewController: BaseViewController {
     
-    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
+    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, userNumberHealthRecords: Int, source: GatewayData) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
             vc.dataSource = dataSource
             vc.userNumberHealthRecords = userNumberHealthRecords
+            vc.source = source
             return vc
         }
         return HealthRecordDetailViewController()
@@ -23,6 +24,7 @@ class HealthRecordDetailViewController: BaseViewController {
     
     private var dataSource: HealthRecordsDetailDataSource!
     private var userNumberHealthRecords: Int!
+    private var source: GatewayData!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,6 +78,9 @@ extension HealthRecordDetailViewController {
                                                navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: nil)
+//        if source.fromGateway {
+//            self.navigationController?.delegate = self
+//        }
     }
     
     @objc private func deleteButton() {
@@ -97,4 +102,44 @@ extension HealthRecordDetailViewController {
         } onCancel: {
         }
     }
+}
+
+//extension HealthRecordDetailViewController: UINavigationControllerDelegate {
+//    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+//        if let name = source.details?.name, let birthday = source.details?.dob {
+//            var navStack: [UIViewController] = []
+//            guard let firstVC = navigationController.viewControllers.first else { return }
+//            navStack.append(firstVC)
+//            var containsUserRecordsVC = false
+//            for (_, vc) in navigationController.viewControllers.enumerated() {
+//                if vc is UsersListOfRecordsViewController {
+//                    containsUserRecordsVC = true
+//                }
+//            }
+//            if containsUserRecordsVC == false {
+//                let birthDate = Date.Formatter.yearMonthDay.date(from: birthday)
+//                let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: name, birthdate: birthDate)
+//                navStack.append(secondVC)
+//            }
+//            let thirdVC = viewController
+//            navStack.append(thirdVC)
+//            navigationController.setViewControllers(navStack, animated: false)
+//            print("")
+////            for (index, vc) in navigationController.viewControllers.enumerated() {
+////                if vc is GatewayFormViewController {
+////                    navigationController.viewControllers.remove(at: index)
+////                }
+////            }
+////            for (index, vc) in navigationController.viewControllers.enumerated() {
+////                if vc is FetchHealthRecordsViewController {
+////                    navigationController.viewControllers.remove(at: index)
+////                }
+////            }
+//        }
+//    }
+//}
+
+struct GatewayData {
+    let details: GatewayFormCompletionHandlerDetails?
+    let fromGateway: Bool
 }

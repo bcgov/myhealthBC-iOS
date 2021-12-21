@@ -87,7 +87,7 @@ class HealthRecordsViewController: BaseViewController {
                 let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
                 self.navigationController?.pushViewController(vc, animated: false)
             } else {
-                self.dismissFetchHealthRecordsViewControllerIfNeeded()
+//                self.dismissFetchHealthRecordsViewControllerIfNeeded()
             }
         }
     }
