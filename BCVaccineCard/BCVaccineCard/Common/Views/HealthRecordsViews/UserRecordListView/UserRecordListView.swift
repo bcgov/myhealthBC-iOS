@@ -68,7 +68,8 @@ class UserRecordListView: UIView {
         case .covidImmunizationRecord: statusToInclude = nil
         case .covidTestResultRecord: statusToInclude = record.mainRecord?.status
         }
-        recordTypeSubtitleLabel.text = "\(statusToInclude ?? "") • \(record.mainRecord?.date ?? "")"
+        let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
+        recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"
     }
     
     // TODO: Setup accessibility

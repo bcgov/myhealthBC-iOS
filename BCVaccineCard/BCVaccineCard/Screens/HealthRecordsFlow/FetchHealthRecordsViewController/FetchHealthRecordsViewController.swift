@@ -115,20 +115,59 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         switch type {
         case .covidImmunizationRecord:
             let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
-            vc.completionHandler = { [weak self] (_, _) in
+            vc.completionHandler = { [weak self] details in
                 guard let `self` = self else { return }
-                self.popBack(toControllerType: HealthRecordsViewController.self)
+                self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
             }
             self.navigationController?.pushViewController(vc, animated: true)
         case .covidTestResult:
             let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
-            vc.completionHandler = { [weak self] (id, _) in
+            vc.completionHandler = { [weak self] details in
                 guard let `self` = self else { return }
-                // TODO: Go to specific details screen here - will fetch test result from core data using id
-                self.popBack(toControllerType: HealthRecordsViewController.self)
+                self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
             }
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
- 
+    
+    private func handleRouting(id: String, recordType: GetRecordsView.RecordType, details: GatewayFormCompletionHandlerDetails) {
+        StorageService.shared.getHeathRecords { [weak self] records in
+            guard let `self` = self else { return }
+            var recordsCount: Int
+            if let name = details.name, let birthday = details.dob {
+                let birthDate = Date.Formatter.yearMonthDay.date(from: birthday)
+                recordsCount = records.detailDataSource(userName: name, birthDate: birthDate).count
+            } else {
+                recordsCount = 1
+            }
+            let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: recordType)
+            guard let ds = dataSource else {
+                self.popBack(toControllerType: HealthRecordsViewController.self)
+                return
+            }
+            let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: recordsCount)
+            self.setupNavStack(details: details, detailVC: detailVC)
+        }
+    }
+    
+    private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController) {
+        guard let name = details.name, let birthday = details.dob else { return }
+        guard let stack = self.navigationController?.viewControllers, stack.count > 0 else { return }
+        var navStack: [UIViewController] = []
+        guard let firstVC = self.navigationController?.viewControllers.first as? HealthRecordsViewController else { return }
+        navStack.append(firstVC)
+        var containsUserRecordsVC = false
+        for (_, vc) in stack.enumerated() {
+            if vc is UsersListOfRecordsViewController {
+                containsUserRecordsVC = true
+            }
+        }
+        if containsUserRecordsVC == false {
+            let birthDate = Date.Formatter.yearMonthDay.date(from: birthday)
+            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: name, birthdate: birthDate)
+            navStack.append(secondVC)
+        }
+        navStack.append(detailVC)
+        self.navigationController?.setViewControllers(navStack, animated: false)
+    }
 }

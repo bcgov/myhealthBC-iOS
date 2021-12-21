@@ -185,14 +185,14 @@ extension QRRetrievalMethodViewController {
             rememberDetails = details
         }
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass)
-        vc.completionHandler = { [weak self] (id, _) in
+        vc.completionHandler = { [weak self] details in
             guard let `self` = self else { return }
             self.view.accessibilityElementsHidden = true
             self.tableView.accessibilityElementsHidden = true
             self.view.isAccessibilityElement = false
             self.tableView.isAccessibilityElement = false
             AnalyticsService.shared.track(action: .AddQR, text: .Get)
-            self.popBackToProperViewController(id: id)
+            self.popBackToProperViewController(id: details.id)
         }
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(vc, animated: true)

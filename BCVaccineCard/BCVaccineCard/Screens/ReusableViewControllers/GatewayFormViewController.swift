@@ -132,6 +132,13 @@ enum GatewayFormViewControllerFetchType: Equatable {
     }
 }
 
+struct GatewayFormCompletionHandlerDetails {
+    let id: String
+    let fedPassId: String?
+    let name: String?
+    let dob: String?
+}
+
 class GatewayFormViewController: BaseViewController {
     
     class func constructGatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType) -> GatewayFormViewController {
@@ -175,8 +182,8 @@ class GatewayFormViewController: BaseViewController {
     private var storageModel: HGStorageModel?
     private var worker: HealthGatewayAPIWorker?
     
-    // Completion - first string is for the ID for core data, second string is optional for fed pass only
-    var completionHandler: ((String, String?) -> Void)?
+    // Completion - first string is for the ID for core data, second string is optional for fed pass only, third string is optional for name, fourth string is optional for birthday
+    var completionHandler: ((GatewayFormCompletionHandlerDetails) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -547,7 +554,12 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
         hideLoader()
         if let id = handleTestResultInCoreData(gatewayResponse: result) {
-            completionHandler?(id, nil)
+            var birthday: String?
+            if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) {
+                birthday = dataSource[dobIndexPath.row].configuration.text
+            }
+            let handlerDetails = GatewayFormCompletionHandlerDetails(id: id, fedPassId: nil, name: result.resourcePayload?.records.first?.patientDisplayName, dob: birthday)
+            completionHandler?(handlerDetails)
         } else {
             alert(title: .error, message: .healthGatewayError)
         }
@@ -575,7 +587,8 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         self.updateCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
             guard let `self` = self else {return}
             let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-            self.completionHandler?(model.id ?? "", fedCode)
+            let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
+            self.completionHandler?(handlerDetails)
         })
     }
     
@@ -583,8 +596,8 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.appendModelToLocalStorage(model: model.transform())
             let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-            self.completionHandler?(model.id ?? "", fedCode)
-            
+            let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
+            self.completionHandler?(handlerDetails)
         }
     }
     
@@ -595,8 +608,9 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             }
             self.updateFedCodeForCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
                 guard let `self` = self else {return}
-                let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-                self.completionHandler?(model.id ?? "", fedCode)
+                let fedCode = self.fetchType.isFedPassOnly ? fedCode : nil
+                let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
+                self.completionHandler?(handlerDetails)
             })
         }
     }
@@ -610,12 +624,14 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             guard let `self` = self else {return}
             switch state {
             case .exists, .isOutdated:
-                self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
+                let message: String = self.fetchType == .vaccinationRecord ? .duplicateMessageImsRecord : .duplicateMessage
+                self.alert(title: .duplicateTitle, message: message) { [weak self] in
                     guard let `self` = self else {return}
                     DispatchQueue.main.async {
                         self.navigationController?.popViewController(animated: true)
                     }
-                    self.completionHandler?(model.id ?? "", nil)
+                    let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: nil, name: localModel.name, dob: localModel.birthdate)
+                    self.completionHandler?(handlerDetails)
                 }
             case .isNew:
                 self.storeCardInLocalStorage(model: model)
@@ -625,7 +641,8 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
                     self.updateCardInLocalStorage(model: model)
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
-                    self.completionHandler?(model.id ?? "", nil)
+                    let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: nil, name: localModel.name, dob: localModel.birthdate)
+                    self.completionHandler?(handlerDetails)
                 }
             case .UpdatedFederalPass:
                 self.updateFederalPassInLocalStorge(model: model)
@@ -638,31 +655,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
         guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
         guard let dob = dataSource[dobIndexPath.row].configuration.text, let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) else { return nil }
-        // TODO: Once HG API is fixed, we can remove this hack
-        //FROM HERE
-        var updatedResponse = gatewayResponse
-        var updatedRecords: [GatewayTestResultResponseRecord] = []
-        if let records = gatewayResponse.resourcePayload?.records {
-            for record in records {
-                var newRecord = record
-                let date: Date
-                if let dotIndexPath = getIndexPathForSpecificCell(.dotForm, inDS: self.dataSource, usingOnlyShownCells: false), let dot = dataSource[dotIndexPath.row].configuration.text, let dateOfTest = Date.Formatter.yearMonthDay.date(from: dot) {
-                    date = dateOfTest
-                } else {
-                    date = Date()
-                }
-                if record.resultDateTime == nil {
-                    newRecord.resultDateTime = date
-                }
-                if record.collectionDateTime == nil {
-                    newRecord.collectionDateTime = date
-                }
-                updatedRecords.append(newRecord)
-            }
-            updatedResponse.resourcePayload?.records = updatedRecords
-        }
-        // TO HERE
-        guard let id = StorageService.shared.saveTestResult(phn: phn , birthdate: dateOfBirth, gateWayResponse: updatedResponse) else { return nil }
+        guard let id = StorageService.shared.saveTestResult(phn: phn , birthdate: dateOfBirth, gateWayResponse: gatewayResponse) else { return nil }
         return id
     }
     

@@ -15,7 +15,7 @@ struct GatewayTestResultResponse: Codable, Equatable {
         return (rhs.resourcePayload == nil && lhs.resourcePayload == nil)
     }
     
-    var resourcePayload: ResourcePayload?
+    let resourcePayload: ResourcePayload?
     let totalResultCount, pageIndex, pageSize, resultStatus: Int?
     let resultError: ResultError?
     
@@ -23,7 +23,7 @@ struct GatewayTestResultResponse: Codable, Equatable {
     struct ResourcePayload: Codable {
         let loaded: Bool
         let retryin: Int
-        var records: [GatewayTestResultResponseRecord]
+        let records: [GatewayTestResultResponseRecord]
     }
 }
 
@@ -31,8 +31,8 @@ struct GatewayTestResultResponseRecord: Codable, Equatable {
     let patientDisplayName: String?
     let lab: String?
     let reportId: String?
-    var collectionDateTime: Date?
-    var resultDateTime: Date?
+    let collectionDateTime: String?
+    let resultDateTime: String?
     let testName: String?
     let testType: String?
     let testStatus: String? // I'm assuming this will be equal to the enum that I created in the CovidTestResultModel
@@ -40,6 +40,16 @@ struct GatewayTestResultResponseRecord: Codable, Equatable {
     let resultTitle: String?
     let resultDescription: [String]?
     let resultLink: String?
+    
+    var collectionDateTimeDate: Date? {
+        guard let dateString = self.collectionDateTime else { return nil }
+        return Date.Formatter.gatewayDateAndTime.date(from: dateString)
+    }
+    
+    var resultDateTimeDate: Date? {
+        guard let dateString = self.resultDateTime else { return nil }
+        return Date.Formatter.gatewayDateAndTime.date(from: dateString)
+    }
 }
 
 extension Array where Element == GatewayTestResultResponseRecord {
@@ -52,6 +62,24 @@ extension Array where Element == GatewayTestResultResponseRecord {
             }
         }
         return self.count == other.count
+    }
+}
+
+extension GatewayTestResultResponseRecord {
+    enum ResponseStatusTypes: String, Codable {
+        case pending = "Pending"
+        case final = "Final"
+        case statusChange = "StatusChange"
+    }
+    
+    enum ResponseOutcomeTypes: String, Codable {
+        case notSet = "NotSet"
+        case other = "Other"
+        case pending = "Pending"
+        case indeterminate = "Indeterminate"
+        case negative = "Negative"
+        case positive = "Positive"
+        case cancelled = "Cancelled"
     }
 }
 

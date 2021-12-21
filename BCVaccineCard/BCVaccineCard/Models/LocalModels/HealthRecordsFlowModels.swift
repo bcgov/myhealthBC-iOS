@@ -82,4 +82,24 @@ extension Array where Element == HealthRecord {
         let filtered = self.filter { $0.patientName == userName && $0.birthDate == birthDate }
         return filtered.compactMap({$0.detailDataSource()})
     }
+    
+    func fetchDetailDataSourceWithID(id: String, recordType: GetRecordsView.RecordType) -> HealthRecordsDetailDataSource? {
+        if let index = self.firstIndex(where: { record in
+            switch record.type {
+            case .Test(let testResult):
+                if recordType == .covidTestResult {
+                    return testResult.id == id
+                }
+                return false
+            case .CovidImmunization(let immunizationRecord):
+                if recordType == .covidImmunizationRecord {
+                    return immunizationRecord.id == id
+                }
+                return false
+            }
+        }) {
+            return self[index].detailDataSource()
+        }
+        return nil
+    }
 }

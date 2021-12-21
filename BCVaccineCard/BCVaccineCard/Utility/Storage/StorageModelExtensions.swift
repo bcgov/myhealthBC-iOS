@@ -93,8 +93,8 @@ extension CovidLabTestResult {
         }
     }
     
-    var status: CovidTestResult? {
-        return resultArray.first?.status
+    var resultType: CovidTestResult? {
+        return resultArray.first?.resultType
     }
     
     var mainResult: TestResult? {
@@ -106,19 +106,40 @@ extension CovidLabTestResult {
         let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 0, records: resultArray.compactMap({$0.toGatewayRecord()}))
         let response: GatewayTestResultResponse = GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: nil, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
 //        let response: GatewayTestResultResponse = GatewayTestResultResponse(records: resultArray.compactMap({$0.toGatewayRecord()}))
-        return LocallyStoredCovidTestResultModel(response: response, status: status ?? .indeterminate)
+        return LocallyStoredCovidTestResultModel(response: response, resultType: resultType ?? .indeterminate)
     }
 }
 
 // MARK: TestResult
 extension TestResult {
+            // Logic here is basically as follows:
+            // Below are the possible outcomes:
+    ///        Test Status:
+    ///        - Pending
+    ///        - Final
+    ///        - StatusChange
+    ///
+    ///        Test Outcome:
+    ///        - NotSet - (Pending) - unknown
+    ///        - Other - unknown
+    ///        - Indeterminate
+    ///        - Negative
+    ///        - Positive
+    ///        - Cancelled
     
-    var status: CovidTestResult {
-        return CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
+            // So - if the test result is "NotSet" or "Other", and status is pending, then for our purposes, result is pending. If said case but not pending, then indeterminate
+    var resultType: CovidTestResult {
+        var testOutcome = GatewayTestResultResponseRecord.ResponseOutcomeTypes.init(rawValue: self.testOutcome ?? "") ?? .indeterminate
+        let testStatus = GatewayTestResultResponseRecord.ResponseStatusTypes.init(rawValue: self.testStatus ?? "") ?? .pending
+        if testOutcome == .notSet || testOutcome == .other {
+            testOutcome = testStatus == .pending ? .pending : .indeterminate
+        }
+        let rawValue = testOutcome.rawValue
+        return CovidTestResult.init(rawValue: rawValue) ?? .indeterminate
     }
     
     func toGatewayRecord() -> GatewayTestResultResponseRecord? {
-        return GatewayTestResultResponseRecord(patientDisplayName: self.patientDisplayName, lab: self.lab, reportId: self.reportId, collectionDateTime: self.collectionDateTime, resultDateTime: self.resultDateTime, testName: self.testName, testType: self.testType, testStatus: self.testStatus, testOutcome: self.testOutcome, resultTitle: self.resultTitle, resultDescription: self.resultDescription, resultLink: self.resultLink)
+        return GatewayTestResultResponseRecord(patientDisplayName: self.patientDisplayName, lab: self.lab, reportId: self.reportId, collectionDateTime: self.collectionDateTime?.gatewayDateAndTime, resultDateTime: self.resultDateTime?.gatewayDateAndTime, testName: self.testName, testType: self.testType, testStatus: self.testStatus, testOutcome: self.testOutcome, resultTitle: self.resultTitle, resultDescription: self.resultDescription, resultLink: self.resultLink)
     }
 }
 

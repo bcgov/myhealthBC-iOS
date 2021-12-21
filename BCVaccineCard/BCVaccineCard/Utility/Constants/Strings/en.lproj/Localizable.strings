@@ -51,6 +51,7 @@
 "ErrorParsingPHNMessage" = "There was an error with your Personal Health Number. Please check that it is correct and try again.";
 "DuplicateTitle" = "Duplicate";
 "DuplicateMessage" = "This QR code is already saved in your list of passes.";
+"DuplicateMessageImsRecord" = "This immunization record is already saved in your list of records.";
 "HealthGatewayError" = "Health Gateway error";
 "VaxAddedBannerAlert" = "Your proof of vaccination has been added";
 "UpdatedCard" =" Your proof of vaccination has been updated";

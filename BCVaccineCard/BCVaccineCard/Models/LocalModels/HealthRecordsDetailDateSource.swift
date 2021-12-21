@@ -99,7 +99,7 @@ struct HealthRecordsDetailDataSource {
                 formatter.dateFormat = "MMMM dd, yyyy"
                 stringDate = formatter.string(from: date)
             }
-            let product = Constants.vaccineInfo(snowMedCode: 1)?.displayName ?? ""
+            let product = Constants.vaccineInfo(snowMedCode: Int(imsModel.snomed ?? "1") ?? 1)?.displayName ?? ""
             let imsSet = [
                 TextListModel(header: TextListModel.TextProperties(text: "Dose \(index + 1)", bolded: true), subtext: nil),
                 // TODO: date format
@@ -115,15 +115,13 @@ struct HealthRecordsDetailDataSource {
     
     
     private static func genRecord(testResult: TestResult, parentResult: CovidLabTestResult) -> Record {
-        let status: String = testResult.status.getTitle
+        let status: String = testResult.resultType.getTitle
         let date: String? = testResult.resultDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         fields.append([
-            TextListModel(header: TextListModel.TextProperties(text: "Name", bolded: false), subtext: TextListModel.TextProperties(text: testResult.patientDisplayName ?? "", bolded: true)),
-            TextListModel(header: TextListModel.TextProperties(text: "Date of Testing", bolded: false), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.monthDayYearString ?? "", bolded: true)),
-            TextListModel(header: TextListModel.TextProperties(text: "Test Status", bolded: false), subtext: TextListModel.TextProperties(text: testResult.status.getTitle, bolded: true)),
-            TextListModel(header: TextListModel.TextProperties(text: "Test Result", bolded: false), subtext: TextListModel.TextProperties(text: testResult.status.getTitle, bolded: true)),
-            TextListModel(header: TextListModel.TextProperties(text: "Type Name", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: true)),
+            TextListModel(header: TextListModel.TextProperties(text: "Date of Testing:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.monthDayYearString ?? "", bolded: true)),
+            TextListModel(header: TextListModel.TextProperties(text: "Test Status:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testStatus ?? "Pending", bolded: true)),
+            TextListModel(header: TextListModel.TextProperties(text: "Type Name:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: true)),
             TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.lab ?? "", bolded: true))
         ])
         return Record(id: testResult.id ?? UUID().uuidString, name: testResult.patientDisplayName ?? "", type: .covidTestResultRecord(model: testResult), status: status, date: date, fields: fields)
