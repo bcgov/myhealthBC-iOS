@@ -113,39 +113,78 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             rememberDetails = details
         }
         switch type {
-            // TODO: Once presenting detail VC, we will have to remove gatewayVC - essentially we should show home vc, then detail vc on top of that
-            // TODO: Need to test this out
         case .covidImmunizationRecord:
             let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
-            vc.completionHandler = { [weak self] (id, _) in
+            vc.completionHandler = { [weak self] details in
                 guard let `self` = self else { return }
-                StorageService.shared.getHeathRecords { [weak self] records in
-                    let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: .covidImmunizationRecord)
-                    guard let ds = dataSource else {
-                        self?.popBack(toControllerType: HealthRecordsViewController.self)
-                        return
-                    }
-                    let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds)
-                    self?.navigationController?.pushViewController(detailVC, animated: true)
-                }
+                self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, name: details.name, birthday: details.dob)
             }
             self.navigationController?.pushViewController(vc, animated: true)
         case .covidTestResult:
             let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
-            vc.completionHandler = { [weak self] (id, _) in
+            vc.completionHandler = { [weak self] details in
                 guard let `self` = self else { return }
-                StorageService.shared.getHeathRecords { [weak self] records in
-                    let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: .covidTestResult)
-                    guard let ds = dataSource else {
-                        self?.popBack(toControllerType: HealthRecordsViewController.self)
-                        return
-                    }
-                    let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds)
-                    self?.navigationController?.pushViewController(detailVC, animated: true)
-                }
+                self.handleRouting(id: details.id, recordType: .covidTestResult, name: details.name, birthday: details.dob)
             }
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
- 
+    
+    private func handleRouting(id: String, recordType: GetRecordsView.RecordType, name: String?, birthday: String?) {
+        StorageService.shared.getHeathRecords { [weak self] records in
+            guard let `self` = self else { return }
+            var recordsCount: Int
+            if let name = name, let birthday = birthday {
+                let birthDate = Date.Formatter.yearMonthDay.date(from: birthday)
+                recordsCount = records.detailDataSource(userName: name, birthDate: birthDate).count
+            } else {
+                recordsCount = 1
+            }
+            let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: recordType)
+            guard let ds = dataSource else {
+                self.popBack(toControllerType: HealthRecordsViewController.self)
+                return
+            }
+            let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: recordsCount)
+            self.navigationController?.pushViewController(detailVC, animated: true)
+            self.setupNavStack(name: name, birthday: birthday)
+        }
+    }
+    
+    
+    private func setupNavStack(name: String?, birthday: String?) {
+//        // Step 1: Check if HealthRecords VC is in the stack or not
+        guard let viewControllerStack = self.navigationController?.viewControllers, viewControllerStack.count > 0 else { return }
+//        var containsHealthRecordsBaseVC = false
+//        for (_, vc) in viewControllerStack.enumerated() {
+//            if vc is HealthRecordsViewController {
+//                containsHealthRecordsBaseVC = true
+//            }
+//        }
+//        if containsHealthRecordsBaseVC == false {
+//            let vc = HealthRecordsViewController.constructHealthRecordsViewController()
+//            self.navigationController?.viewControllers.insert(vc, at: 0)
+//        }
+        var containsUserRecordsVC = false
+        for (_, vc) in viewControllerStack.enumerated() {
+            if vc is UsersListOfRecordsViewController {
+                containsUserRecordsVC = true
+            }
+        }
+        if containsUserRecordsVC == false, let name = name, let birthday = birthday {
+            let birthDate = Date.Formatter.yearMonthDay.date(from: birthday)
+            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: name, birthdate: birthDate)
+            self.navigationController?.viewControllers.insert(vc, at: 1)
+        }
+        for (index, vc) in viewControllerStack.enumerated() {
+            if vc is GatewayFormViewController {
+                self.navigationController?.viewControllers.remove(at: index)
+            }
+        }
+        for (index, vc) in viewControllerStack.enumerated() {
+            if vc is FetchHealthRecordsViewController {
+                self.navigationController?.viewControllers.remove(at: index)
+            }
+        }
+    }
 }

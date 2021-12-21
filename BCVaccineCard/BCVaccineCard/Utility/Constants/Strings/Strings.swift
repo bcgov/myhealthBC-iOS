@@ -60,6 +60,7 @@ extension String {
     static var errorParsingPHNMessage: String { return "ErrorParsingPHNMessage".localized }
     static var duplicateTitle: String { return "DuplicateTitle".localized }
     static var duplicateMessage: String { return "DuplicateMessage".localized }
+    static var duplicateMessageImsRecord: String { return "DuplicateMessageImsRecord".localized }
     static var healthGatewayError: String { return "HealthGatewayError".localized }
     
     // Alert
