@@ -168,6 +168,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             navStack.append(secondVC)
         }
         navStack.append(detailVC)
+        self.tabBarController?.tabBar.isHidden = false
         self.navigationController?.setViewControllers(navStack, animated: false)
     }
 }
