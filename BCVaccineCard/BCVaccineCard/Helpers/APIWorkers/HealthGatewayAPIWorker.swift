@@ -30,12 +30,12 @@ class HealthGatewayAPIWorker: NSObject {
     func getVaccineCard(model: GatewayVaccineCardRequest, executingVC: UIViewController) {
         let token = Defaults.cachedQueueItObject?.queueitToken // May need to check if this is necessary - maybe pass nil for now
         requestDetails.vaccineCardDetails = HealthGatewayAPIWorkerRetryDetails.VaccineCardDetails(model: model, queueItToken: token, executingVC: executingVC)
-        apiClient.getVaccineCard(model, token: token, executingVC: executingVC) { [weak self ] result, queueItRetryStatus in
+        apiClient.getVaccineCard(model, token: token, executingVC: executingVC, includeQueueItUI: true) { [weak self ] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
                 self.requestDetails.vaccineCardDetails?.queueItToken = queueItToken
-                self.apiClient.getVaccineCard(model, token: queueItToken, executingVC: executingVC) { [weak self ] result, _ in
+                self.apiClient.getVaccineCard(model, token: queueItToken, executingVC: executingVC, includeQueueItUI: true) { [weak self ] result, _ in
                     guard let `self` = self else {return}
                     self.handleVaccineCardResponse(result: result)
                 }
@@ -48,12 +48,12 @@ class HealthGatewayAPIWorker: NSObject {
     func getTestResult(model: GatewayTestResultRequest, executingVC: UIViewController) {
         let token = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.testResultDetails = HealthGatewayAPIWorkerRetryDetails.TestResultDetails(model: model, queueItToken: token, executingVC: executingVC)
-        apiClient.getTestResult(model, token: token, executingVC: executingVC) { [weak self] result, queueItRetryStatus in
+        apiClient.getTestResult(model, token: token, executingVC: executingVC, includeQueueItUI: true) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
                 self.requestDetails.testResultDetails?.queueItToken = queueItToken
-                self.apiClient.getTestResult(model, token: queueItToken, executingVC: executingVC) { [weak self] result, _ in
+                self.apiClient.getTestResult(model, token: queueItToken, executingVC: executingVC, includeQueueItUI: true) { [weak self] result, _ in
                     guard let `self` = self else {return}
                     self.handleTestResultResponse(result: result)
                 }

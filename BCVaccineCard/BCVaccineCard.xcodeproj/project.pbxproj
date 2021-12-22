@@ -76,6 +76,8 @@
 		5E04D95F28DEE00EAF8EF434 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */; };
 		65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */; };
 		65649CF2147EF54DEEA617D4 /* Pods_BCVaccineCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF2F1BABD4F59F68F534ADA9 /* Pods_BCVaccineCard.framework */; };
+		79053CF92773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79053CF82773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift */; };
+		79053CFA2773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79053CF82773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift */; };
 		7918A8C727482E0C00D19D1C /* TextListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7918A8C627482E0C00D19D1C /* TextListView.swift */; };
 		7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7918A8C627482E0C00D19D1C /* TextListView.swift */; };
 		7918A8CA27482E1900D19D1C /* TextListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7918A8C927482E1900D19D1C /* TextListView.xib */; };
@@ -439,6 +441,7 @@
 		3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_Prod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_BCVaccineCardUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		79053CF82773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTestResultUpdateAPIWorker.swift; sourceTree = "<group>"; };
 		7918A8C627482E0C00D19D1C /* TextListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextListView.swift; sourceTree = "<group>"; };
 		7918A8C927482E1900D19D1C /* TextListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextListView.xib; sourceTree = "<group>"; };
 		791C27B027179076001A6E12 /* NetworkRequestInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequestInterceptor.swift; sourceTree = "<group>"; };
@@ -984,6 +987,7 @@
 			isa = PBXGroup;
 			children = (
 				797BB9632767DCE100CD1645 /* HealthGatewayAPIWorker.swift */,
+				79053CF82773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift */,
 			);
 			path = APIWorkers;
 			sourceTree = "<group>";
@@ -2148,6 +2152,7 @@
 				29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */,
 				29B23B3F26FB88BB00A3AC79 /* CameraViewController.swift in Sources */,
 				291D43D2276276D6005F5B94 /* TestResult+CoreDataProperties.swift in Sources */,
+				79053CF92773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
@@ -2302,6 +2307,7 @@
 				794BD6522702EEC00084ADA8 /* UIImage+EXT.swift in Sources */,
 				794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */,
 				794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */,
+				79053CFA2773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
 				794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */,
 				7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				79218ABF27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
