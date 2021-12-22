@@ -252,11 +252,12 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
 
 extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerDelegate {
     func handleTestResult(result: GatewayTestResultResponse, row: Int) {
-        print("Response: ", result, "Row to update: ", row)
+        print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
+        // TODO: Update the result in core data and update this VC's dataSource and reload data
     }
     
     func handleError(title: String, error: ResultError, row: Int) {
-        print("Error: ", title, error, "For Row: ", row)
+        print("BACKGROUND FETCH INFO: Error: ", title, error, "For Row: ", row)
     }
     
     

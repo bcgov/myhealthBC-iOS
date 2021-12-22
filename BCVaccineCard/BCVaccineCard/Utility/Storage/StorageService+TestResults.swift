@@ -136,29 +136,4 @@ extension StorageService {
     func updateTestResult(gateWayResponse: GatewayTestResultResponse, completion: @escaping(Bool)->Void) {
         // TODO: Update the test result here
     }
-    
-//    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
-//        guard let context = managedContext else {return}
-//        do {
-//            let cards = try context.fetch(VaccineCard.fetchRequest())
-//            guard let card = cards.filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return}
-//            card.code = model.code
-//            card.vaxDates = model.vaxDates
-//            card.federalPass = model.fedCode
-//            card.phn = model.phn
-//            card.firHash = model.hash
-//            try context.save()
-//            DispatchQueue.main.async {[weak self] in
-//                guard let `self` = self else {return}
-//                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
-//                return completion(true)
-//            }
-//        } catch let error as NSError {
-//            print("Could not fetch. \(error), \(error.userInfo)")
-//            DispatchQueue.main.async {
-//                return completion(false)
-//            }
-//        }
-//    }
-    
 }
