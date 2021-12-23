@@ -33,6 +33,12 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>servicescard</string>
+		<string>myhealthapp</string>
+		<string>ca.bc.gov.idtest.servicescard</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -71,11 +77,5 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>servicescard</string>
-        <string>myhealthapp</string>
-        <string>ca.bc.gov.idtest.servicescard</string>
-    </array>
 </dict>
 </plist>

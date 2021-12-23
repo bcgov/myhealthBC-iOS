@@ -179,7 +179,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 // MARK: Table View Button Methods
 extension QRRetrievalMethodViewController {
     func authenticateBeforeDisplayingGatewayForm() {
-        if !AuthManager().isAuthenticated() {
+        if !AuthManager().isAuthenticated {
             let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] in
                 guard let `self` = self else {return}
                 self.goToEnterGateway()

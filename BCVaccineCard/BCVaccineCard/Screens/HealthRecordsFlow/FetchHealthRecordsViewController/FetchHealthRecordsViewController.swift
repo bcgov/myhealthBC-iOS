@@ -117,7 +117,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
     
     
     private func showForm(type: GetRecordsView.RecordType, rememberDetails: RememberedGatewayDetails) {
-        if !AuthManager().isAuthenticated() {
+        if !AuthManager().isAuthenticated {
             let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] in
                 guard let `self` = self else {return}
                 switch type {

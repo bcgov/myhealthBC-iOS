@@ -70,17 +70,17 @@ class AuthManager {
         return nil
     }
     
-    public func isAuthenticated() -> Bool {
-       
+    var isAuthenticated: Bool {
         guard let exp = authTokenExpiery, authToken != nil else {
             return false
         }
         // TODO: After token refresh is implemented, use this
-//        return exp > Date()
+        // return exp > Date()
         // For now:
         return true
     }
     
+    // MARK: Network
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
         guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
             return
@@ -181,6 +181,7 @@ class AuthManager {
         delete(key: .authToken)
         delete(key: .refreshToken)
         delete(key: .authTokenExpiery)
+        delete(key: .idToken)
     }
     
     private func store(string: String, for key: Key) {

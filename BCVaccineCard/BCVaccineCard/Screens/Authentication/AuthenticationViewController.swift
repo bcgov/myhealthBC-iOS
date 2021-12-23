@@ -68,11 +68,15 @@ class AuthenticationViewController: UIViewController {
             guard let self = self else {return}
             switch result {
             case .Unavailable:
+                // TODO
                 print("Handle Unavailable")
+                self.dismissView()
             case .Success:
                 self.dismissViewWithDelay()
             case .Fail:
+                // TODO
                 print("Handle fail")
+                self.dismissView()
             }
         })
     }
