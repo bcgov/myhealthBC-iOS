@@ -31,6 +31,7 @@ class AuthManager {
         case authTokenExpiery
         case authToken
         case refreshToken
+        case idToken
     }
     let defaultUserID = "default"
     private let keychain = Keychain(service: "ca.bc.gov.myhealth")
@@ -49,6 +50,13 @@ class AuthManager {
     
     var refreshToken: String? {
         guard let token = keychain[Key.refreshToken.rawValue] else {
+            return nil
+        }
+        return token.isEmpty ? nil : token
+    }
+    
+    var idToken: String? {
+        guard let token = keychain[Key.idToken.rawValue] else {
             return nil
         }
         return token.isEmpty ? nil : token
@@ -74,18 +82,13 @@ class AuthManager {
     }
     
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
-        guard let issuer = URL(string: Constants.Auth.issuer),
-              let redirectURI = URL(string: Constants.Auth.redirectURI)
-        else {
+        guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
             return
         }
-        // discovers endpoints
-        OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { result, error in
+        discoverConfiguration { result in
             guard let configuration = result, let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                print("Error retrieving discovery document: \(error?.localizedDescription ?? "Unknown error")")
                 return completion(.Unavailable)
             }
-            // perform the auth request...
             let request = OIDAuthorizationRequest(configuration: configuration,
                                                   clientId: Constants.Auth.clientID,
                                                   scopes: [OIDScopeOpenID, OIDScopeProfile],
@@ -104,61 +107,74 @@ class AuthManager {
                     return completion(.Fail)
                 }
             }
-            
         }
     }
     
-    func signout(in viewController: UIViewController) {
-        removeAuthTokens()
-        guard let issuer = URL(string: Constants.Auth.issuer),
-              let redirectURI = URL(string: Constants.Auth.redirectURI)
-        else {
+    func signout(in viewController: UIViewController, completion: @escaping(Bool)->Void) {
+        guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
             return
         }
-        // discovers endpoints
-        OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { result, error in
+        discoverConfiguration { result in
             guard let configuration = result,
-                  let token = self.authToken,
+                  let token = self.idToken,
                   let appDelegate = UIApplication.shared.delegate as? AppDelegate
             else {
-                print("Error retrieving discovery document: \(error?.localizedDescription ?? "Unknown error")")
-                return
+                return completion(false)
             }
             let request = OIDEndSessionRequest(configuration: configuration,
                                                idTokenHint: token,
                                                postLogoutRedirectURL: redirectURI,
-                                               additionalParameters: Constants.Auth.params)
+                                               additionalParameters: nil)
             guard let agent = OIDExternalUserAgentIOS(presenting: viewController) else {
-                return
+                return completion(false)
             }
-            appDelegate.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent,
-                                                                                   callback: { (response, error) in
-                if let response = response {
-                    //delete cookies just in case
+            
+            appDelegate.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent, callback: { (response, error) in
+                if response != nil {
                     HTTPCookieStorage.shared.cookies?.forEach { cookie in
                         HTTPCookieStorage.shared.deleteCookie(cookie)
                     }
-                    // successfully logout
+                    self.removeAuthTokens()
+                    return completion(true)
                 }
-                if let err = error {
-                    // print Error
+                if error != nil {
+                    return completion(false)
                 }
             })
         }
     }
     
+    private func discoverConfiguration(completion: @escaping(OIDServiceConfiguration?)->Void) {
+        guard let issuer = URL(string: Constants.Auth.issuer) else {
+            return completion(nil)
+        }
+        OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { result, error in
+            guard let configuration = result else {
+                print("Error retrieving discovery document: \(error?.localizedDescription ?? "Unknown error")")
+                return completion(nil)
+            }
+            return completion(configuration)
+        }
+    }
+    
+    // MARK: STORAGE
     private func store(state: OIDAuthState) {
         guard state.isAuthorized else { return }
         if let authToken = state.lastTokenResponse?.accessToken {
             store(string: authToken, for: .authToken)
         }
+        
         if let refreshToken = state.lastTokenResponse?.refreshToken {
             store(string: refreshToken, for: .refreshToken)
         }
+        
         if let expiery = state.lastTokenResponse?.accessTokenExpirationDate {
             store(date: expiery, for: .authTokenExpiery)
         }
         
+        if let idToken = state.lastTokenResponse?.idToken {
+            store(string: idToken, for: .idToken)
+        }
     }
     
     private func removeAuthTokens() {

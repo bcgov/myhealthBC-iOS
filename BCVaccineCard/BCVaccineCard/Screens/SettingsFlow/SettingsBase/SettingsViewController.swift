@@ -135,8 +135,10 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                 let cell = textCell(for: indexPath, title: "sign out", textColor: AppColours.appRed) {[weak self] in
                     guard let `self` = self else {return}
                     self.alertConfirmation(title: "sign out?", message: "token exp is \(expDate)", confirmTitle: .delete, confirmStyle: .destructive) {
-                        AuthManager().signout(in: self)
-                        tableView.reloadData()
+                        AuthManager().signout(in: self, completion: { _ in
+                            tableView.reloadData()
+                        })
+                        
                     } onCancel: {}
                 }
                 return cell
