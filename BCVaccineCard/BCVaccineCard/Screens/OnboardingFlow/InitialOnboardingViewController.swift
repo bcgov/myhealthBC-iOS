@@ -43,8 +43,12 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         if type == .getStarted || type == .ok {
             // TODO: version
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
-            goToHomeTransition()
+            goToAuthentication()
         }
+    }
+    
+    private func goToAuthentication() {
+        AuthenticationViewController.displayFullScreen()
     }
     
     private func goToHomeTransition() {

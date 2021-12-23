@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
         lazy var persistentContainer: NSPersistentContainer = {
             let container = NSPersistentContainer(name: "BCVaccineCard")
-            
+           
             do {
                 let options = [
                     EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key
@@ -107,13 +107,11 @@ extension AppDelegate {
         guard let first = unseen.first else {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
-            AuthManager().authenticate(in: vc)
             return
         }
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
-        AuthManager().authenticate(in: vc)
         
     }
 }

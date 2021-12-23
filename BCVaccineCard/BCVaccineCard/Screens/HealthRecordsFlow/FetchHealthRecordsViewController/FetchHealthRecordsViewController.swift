@@ -112,23 +112,50 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         if let details = Defaults.rememberGatewayDetails {
             rememberDetails = details
         }
-        switch type {
-        case .covidImmunizationRecord:
-            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
-            vc.completionHandler = { [weak self] (_, _) in
-                guard let `self` = self else { return }
-                self.popBack(toControllerType: HealthRecordsViewController.self)
+        showForm(type: type, rememberDetails: rememberDetails)
+    }
+    
+    
+    private func showForm(type: GetRecordsView.RecordType, rememberDetails: RememberedGatewayDetails) {
+        if !AuthManager().isAuthenticated() {
+            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] in
+                guard let `self` = self else {return}
+                switch type {
+                case .covidImmunizationRecord:
+                    self.showVaccineForm(rememberDetails: rememberDetails)
+                case .covidTestResult:
+                    self.showTestForm(rememberDetails: rememberDetails)
+                }
+            })
+            self.present(vc, animated: true, completion: nil)
+        } else {
+            switch type {
+            case .covidImmunizationRecord:
+                showVaccineForm(rememberDetails: rememberDetails)
+            case .covidTestResult:
+                showTestForm(rememberDetails: rememberDetails)
             }
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .covidTestResult:
-            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
-            vc.completionHandler = { [weak self] (id, _) in
-                guard let `self` = self else { return }
-                // TODO: Go to specific details screen here - will fetch test result from core data using id
-                self.popBack(toControllerType: HealthRecordsViewController.self)
-            }
-            self.navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    
+    private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
+        vc.completionHandler = { [weak self] (_, _) in
+            guard let `self` = self else { return }
+            self.popBack(toControllerType: HealthRecordsViewController.self)
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func showTestForm(rememberDetails: RememberedGatewayDetails) {
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
+        vc.completionHandler = { [weak self] (id, _) in
+            guard let `self` = self else { return }
+            // TODO: Go to specific details screen here - will fetch test result from core data using id
+            self.popBack(toControllerType: HealthRecordsViewController.self)
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
  
 }

@@ -71,5 +71,11 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>servicescard</string>
+        <string>myhealthapp</string>
+        <string>ca.bc.gov.idtest.servicescard</string>
+    </array>
 </dict>
 </plist>
