@@ -55,7 +55,7 @@ extension BackgroundTestResultUpdateAPIWorker {
         switch result {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload?.records == nil) {
+            if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload?.records == nil || testResult.resourcePayload?.records.count == 0) {
                 // TODO: Error mapping here
                 self.delegate?.handleError(title: .error, error: ResultError(resultMessage: resultMessage), row: row)
             } else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
