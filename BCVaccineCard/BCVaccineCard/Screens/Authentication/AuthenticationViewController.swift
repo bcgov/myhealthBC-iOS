@@ -82,7 +82,7 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func showHomeScreen() {
-        
+        self.view.startLoadingIndicator()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             guard let self = self else {return}
             self.removeChild()
