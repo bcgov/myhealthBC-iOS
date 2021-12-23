@@ -164,7 +164,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 switch type {
                 case .goToEnterGateway:
-                    self.goToEnterGateway()
+                    self.authenticateBeforeDisplayingGatewayForm()
                 case .goToCameraScan:
                     self.goToCameraScan()
                 case .goToUploadImage:
@@ -178,6 +178,17 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 
 // MARK: Table View Button Methods
 extension QRRetrievalMethodViewController {
+    func authenticateBeforeDisplayingGatewayForm() {
+        if !AuthManager().isAuthenticated() {
+            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] in
+                guard let `self` = self else {return}
+                self.goToEnterGateway()
+            })
+            self.present(vc, animated: true, completion: nil)
+        } else {
+            goToEnterGateway()
+        }
+    }
     func goToEnterGateway() {
         // TODO: Should look at refactoring this a bit
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)

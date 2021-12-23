@@ -19,10 +19,12 @@ class AuthenticationViewController: UIViewController {
     }
     
     fileprivate let childTag = 19141244
+    fileprivate let dismissDelay: TimeInterval = 1
     
     private var completion: (()->Void)?
     private var returnToHealthPass: Bool = true
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         showLanding()
@@ -38,7 +40,7 @@ class AuthenticationViewController: UIViewController {
             case .Login:
                 self.showInfo()
             case .Cancel:
-                self.showHomeScreen()
+                self.dismissView()
             }
         }
     }
@@ -53,7 +55,7 @@ class AuthenticationViewController: UIViewController {
             case .Continue:
                 self.performAuthentication()
             case .Cancel:
-                self.showHomeScreen()
+                self.dismissView()
             case .Back:
                 self.showLanding()
             }
@@ -68,7 +70,7 @@ class AuthenticationViewController: UIViewController {
             case .Unavailable:
                 print("Handle Unavailable")
             case .Success:
-                self.showHomeScreen()
+                self.dismissViewWithDelay()
             case .Fail:
                 print("Handle fail")
             }
@@ -81,25 +83,30 @@ class AuthenticationViewController: UIViewController {
         }
     }
     
-    private func showHomeScreen() {
-        self.view.startLoadingIndicator()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            guard let self = self else {return}
-            self.removeChild()
-            let comp = self.completion
-            self.dismiss(animated: true, completion: {
-                if let comp = comp {
-                    comp()
-                }
-            })
-            if self.returnToHealthPass {
-                let transition = CATransition()
-                transition.type = .fade
-                transition.duration = 0.3
-                AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-                let vc = TabBarController.constructTabBarController()
-                AppDelegate.sharedInstance?.window?.rootViewController = vc
+    private func dismissView() {
+        self.removeChild()
+        let comp = self.completion
+        self.dismiss(animated: true, completion: {
+            if let comp = comp {
+                comp()
             }
+        })
+        if self.returnToHealthPass {
+            let transition = CATransition()
+            transition.type = .fade
+            transition.duration = 0.3
+            AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
+            let vc = TabBarController.constructTabBarController()
+            AppDelegate.sharedInstance?.window?.rootViewController = vc
+        }
+        
+    }
+    
+    private func dismissViewWithDelay() {
+        self.view.startLoadingIndicator()
+        DispatchQueue.main.asyncAfter(deadline: .now() + dismissDelay) { [weak self] in
+            guard let self = self else {return}
+            self.dismissView()
         }
     }
     
@@ -111,5 +118,5 @@ class AuthenticationViewController: UIViewController {
         let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: true, completion: {})
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
-
+    
 }
