@@ -93,6 +93,13 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func dismissView(withDelay: Bool, status: AuthenticationStatus) {
+        // TODO: Here we can fetch user records before dismissing
+        /**
+         alternatively, look for:
+         // TODO: FETCH RECORDS FOR AUTHENTICATED USER
+            where you see that, it would be the place to perform this action.
+               but its probably cleaner to do it here.
+         */
         if withDelay {
             self.view.startLoadingIndicator()
             DispatchQueue.main.asyncAfter(deadline: .now() + dismissDelay) { [weak self] in
@@ -121,6 +128,7 @@ class AuthenticationViewController: UIViewController {
     }
     
     func dismissFullScreen() {
+        // TODO: FETCH RECORDS FOR AUTHENTICATED USER
         let transition = CATransition()
         transition.type = .fade
         transition.duration = Constants.UI.Theme.animationDuration

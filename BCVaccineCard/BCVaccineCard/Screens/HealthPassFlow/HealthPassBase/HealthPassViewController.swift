@@ -88,7 +88,7 @@ extension HealthPassViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
-        if showAuth && authManager.isAuthenticated {
+        if showAuth && !authManager.isAuthenticated {
             self.view.startLoadingIndicator()
             let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] result in
                 guard let self = self else {return}
@@ -96,6 +96,8 @@ extension HealthPassViewController {
                 switch result {
                 case .Completed:
                     self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
+                        
+                        // TODO: FETCH RECORDS FOR AUTHENTICATED USER
                         showScreen()
                     }
                 case .Cancelled, .Failed:

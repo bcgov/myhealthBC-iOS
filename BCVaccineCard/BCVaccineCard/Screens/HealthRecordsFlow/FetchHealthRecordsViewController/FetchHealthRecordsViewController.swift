@@ -125,6 +125,8 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
                 switch result {
                 case .Completed:
                     self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
+                        
+                        // TODO: FETCH RECORDS FOR AUTHENTICATED USER
                         switch type {
                         case .covidImmunizationRecord:
                             self.showVaccineForm(rememberDetails: rememberDetails)

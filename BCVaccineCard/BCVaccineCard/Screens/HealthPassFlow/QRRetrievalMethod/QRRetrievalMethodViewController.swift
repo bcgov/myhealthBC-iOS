@@ -189,6 +189,7 @@ extension QRRetrievalMethodViewController {
                     {
                         [weak self] in
                         guard let `self` = self else {return}
+                        // TODO: FETCH RECORDS FOR AUTHENTICATED USER 
                         self.goToEnterGateway()
                     }
                 case .Cancelled, .Failed:
