@@ -118,6 +118,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
     
     private func showForm(type: GetRecordsView.RecordType, rememberDetails: RememberedGatewayDetails) {
         if !AuthManager().isAuthenticated {
+            self.view.startLoadingIndicator()
             let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] in
                 guard let `self` = self else {return}
                 switch type {
@@ -126,6 +127,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
                 case .covidTestResult:
                     self.showTestForm(rememberDetails: rememberDetails)
                 }
+                self.view.endLoadingIndicator()
             })
             self.present(vc, animated: true, completion: nil)
         } else {
