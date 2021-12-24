@@ -164,7 +164,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 switch type {
                 case .goToEnterGateway:
-                    self.authenticateBeforeDisplayingGatewayForm()
+                    self.goToEnterGateway()
                 case .goToCameraScan:
                     self.goToCameraScan()
                 case .goToUploadImage:
