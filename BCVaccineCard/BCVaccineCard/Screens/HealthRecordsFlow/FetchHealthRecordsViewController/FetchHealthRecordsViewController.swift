@@ -119,15 +119,22 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
     private func showForm(type: GetRecordsView.RecordType, rememberDetails: RememberedGatewayDetails) {
         if !AuthManager().isAuthenticated {
             self.view.startLoadingIndicator()
-            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] in
+            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] result in
                 guard let `self` = self else {return}
-                switch type {
-                case .covidImmunizationRecord:
-                    self.showVaccineForm(rememberDetails: rememberDetails)
-                case .covidTestResult:
-                    self.showTestForm(rememberDetails: rememberDetails)
-                }
                 self.view.endLoadingIndicator()
+                switch result {
+                case .Completed:
+                    self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
+                        switch type {
+                        case .covidImmunizationRecord:
+                            self.showVaccineForm(rememberDetails: rememberDetails)
+                        case .covidTestResult:
+                            self.showTestForm(rememberDetails: rememberDetails)
+                        }
+                    }
+                case .Cancelled, .Failed:
+                    break
+                }
             })
             self.present(vc, animated: true, completion: nil)
         } else {

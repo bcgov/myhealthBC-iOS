@@ -54,7 +54,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
     private func goToHomeTransition() {
         let transition = CATransition()
         transition.type = .fade
-        transition.duration = 0.3
+        transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
         let vc = TabBarController.constructTabBarController()
         AppDelegate.sharedInstance?.window?.rootViewController = vc

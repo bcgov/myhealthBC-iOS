@@ -180,9 +180,21 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 extension QRRetrievalMethodViewController {
     func authenticateBeforeDisplayingGatewayForm() {
         if !AuthManager().isAuthenticated {
-            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] in
+            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] result in
                 guard let `self` = self else {return}
-                self.goToEnterGateway()
+                switch result {
+                case .Completed:
+                    self.alert(title: "Log in successful",
+                               message: "Your records will be automatically added and updated in My Health BC.")
+                    {
+                        [weak self] in
+                        guard let `self` = self else {return}
+                        self.goToEnterGateway()
+                    }
+                case .Cancelled, .Failed:
+                    break
+                }
+                
             })
             self.present(vc, animated: true, completion: nil)
         } else {
@@ -235,7 +247,7 @@ extension QRRetrievalMethodViewController {
                     guard let `self` = self else {return}
                     self.storeValidatedQRCode(data: data, source: .imported)
                 }
-               
+                
             }
         }
     }
@@ -276,7 +288,7 @@ extension QRRetrievalMethodViewController {
                     })
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
-//                    self.navigationController?.popViewController(animated: true)
+                    //                    self.navigationController?.popViewController(animated: true)
                     self.popBackToProperViewController(id: model.id ?? "")
                 }
             case .UpdatedFederalPass:
@@ -288,7 +300,7 @@ extension QRRetrievalMethodViewController {
                         self.popBackToProperViewController(id: model.id ?? "")
                     }
                 }
-            
+                
             }
         }
     }
@@ -313,7 +325,7 @@ extension QRRetrievalMethodViewController {
         }
         guard containsCovidVaxCardsVC == false else {
             postCardAddedNotification(id: id)
-//            self.navigationController?.popViewController(animated: true)
+            //            self.navigationController?.popViewController(animated: true)
             self.popBack(toControllerType: CovidVaccineCardsViewController.self)
             return
         }
@@ -349,7 +361,7 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
                 self.view.endLoadingIndicator()
             })
         }
-       
+        
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {

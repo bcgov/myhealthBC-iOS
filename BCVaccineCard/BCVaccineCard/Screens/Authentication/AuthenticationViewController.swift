@@ -9,7 +9,13 @@ import UIKit
 
 class AuthenticationViewController: UIViewController {
     
-    class func constructAuthenticationViewController(returnToHealthPass: Bool, completion: @escaping()->Void) -> AuthenticationViewController {
+    enum AuthenticationStatus {
+        case Completed
+        case Cancelled
+        case Failed
+    }
+    
+    class func constructAuthenticationViewController(returnToHealthPass: Bool, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion
             vc.returnToHealthPass = returnToHealthPass
@@ -21,7 +27,7 @@ class AuthenticationViewController: UIViewController {
     fileprivate let childTag = 19141244
     fileprivate let dismissDelay: TimeInterval = 1
     
-    private var completion: (()->Void)?
+    private var completion: ((AuthenticationStatus)->Void)?
     private var returnToHealthPass: Bool = true
     
     
@@ -40,7 +46,7 @@ class AuthenticationViewController: UIViewController {
             case .Login:
                 self.showInfo()
             case .Cancel:
-                self.dismissView()
+                self.dismissView(withDelay: false, status: .Cancelled)
             }
         }
     }
@@ -55,11 +61,10 @@ class AuthenticationViewController: UIViewController {
             case .Continue:
                 self.performAuthentication()
             case .Cancel:
-                self.dismissView()
+                self.dismissView(withDelay: false, status: .Cancelled)
             case .Back:
                 self.showLanding()
             }
-            
         }
     }
     
@@ -68,15 +73,15 @@ class AuthenticationViewController: UIViewController {
             guard let self = self else {return}
             switch result {
             case .Unavailable:
-                // TODO
+                // TODO:
                 print("Handle Unavailable")
-                self.dismissView()
+                self.dismissView(withDelay: false, status: .Failed)
             case .Success:
-                self.dismissViewWithDelay()
+                self.dismissView(withDelay: true, status: .Completed)
             case .Fail:
-                // TODO
+                // TODO:
                 print("Handle fail")
-                self.dismissView()
+                self.dismissView(withDelay: false, status: .Failed)
             }
         })
     }
@@ -87,39 +92,49 @@ class AuthenticationViewController: UIViewController {
         }
     }
     
-    private func dismissView() {
-        self.removeChild()
-        let comp = self.completion
-        self.dismiss(animated: true, completion: {
-            if let comp = comp {
-                comp()
+    private func dismissView(withDelay: Bool, status: AuthenticationStatus) {
+        if withDelay {
+            self.view.startLoadingIndicator()
+            DispatchQueue.main.asyncAfter(deadline: .now() + dismissDelay) { [weak self] in
+                guard let self = self else {return}
+                self.dismissView(withDelay: false, status: status)
             }
-        })
-        if self.returnToHealthPass {
-            let transition = CATransition()
-            transition.type = .fade
-            transition.duration = 0.3
-            AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-            let vc = TabBarController.constructTabBarController()
-            AppDelegate.sharedInstance?.window?.rootViewController = vc
         }
+        self.removeChild()
         
+        dismissAndReturnCompletion(status: status)
+        if self.returnToHealthPass {
+            dismissFullScreen()
+        }
     }
     
-    private func dismissViewWithDelay() {
-        self.view.startLoadingIndicator()
-        DispatchQueue.main.asyncAfter(deadline: .now() + dismissDelay) { [weak self] in
-            guard let self = self else {return}
-            self.dismissView()
+    private func dismissAndReturnCompletion(status: AuthenticationStatus) {
+        self.dismiss(animated: true, completion: {
+            self.returnCompletion(status: status)
+        })
+    }
+    
+    private func returnCompletion(status: AuthenticationStatus) {
+        if let completion = completion {
+            completion(status)
         }
+    }
+    
+    func dismissFullScreen() {
+        let transition = CATransition()
+        transition.type = .fade
+        transition.duration = Constants.UI.Theme.animationDuration
+        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
+        let vc = TabBarController.constructTabBarController()
+        AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
     
     public static func displayFullScreen() {
         let transition = CATransition()
         transition.type = .fade
-        transition.duration = 0.3
+        transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: true, completion: {})
+        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: true, completion: {_ in})
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
     

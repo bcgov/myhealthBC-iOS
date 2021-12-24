@@ -18,14 +18,16 @@ class HealthPassViewController: BaseViewController {
     }
     
     @IBOutlet weak private var tableView: UITableView!
+    lazy var authManager: AuthManager = AuthManager()
     
     private var dataSource: VaccineCard?
     private var savedCardsCount: Int {
         return StorageService.shared.fetchVaccineCards(for: AuthManager().userId()).count
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        authManager = AuthManager()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,7 +56,7 @@ class HealthPassViewController: BaseViewController {
         setupTableView()
         self.tableView.reloadData()
     }
-
+    
 }
 
 // MARK: Navigation setup
@@ -86,10 +88,19 @@ extension HealthPassViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
-        if showAuth && !AuthManager().isAuthenticated {
+        if showAuth && authManager.isAuthenticated {
             self.view.startLoadingIndicator()
-            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: {
-                showScreen()
+            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] result in
+                guard let self = self else {return}
+                self.view.endLoadingIndicator()
+                switch result {
+                case .Completed:
+                    self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
+                        showScreen()
+                    }
+                case .Cancelled, .Failed:
+                    break
+                }
             })
             self.present(vc, animated: true, completion: nil)
         } else {
@@ -231,7 +242,7 @@ extension HealthPassViewController: FederalPassViewDelegate {
             })
         }
     }
-
+    
 }
 
 // MARK: Add card button table view cell delegate here
