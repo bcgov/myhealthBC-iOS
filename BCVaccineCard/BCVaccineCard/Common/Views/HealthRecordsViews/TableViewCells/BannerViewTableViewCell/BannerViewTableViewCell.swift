@@ -29,7 +29,7 @@ extension HealthRecordsDetailDataSource.Record {
             let textColor = UIColor.white
             let statusColor = textColor
             let date = Date.init(timeIntervalSince1970: model.issueDate)
-            let issueDate = "Issued on: \(date.yearMonthDayString)"
+            let issueDate = "Issued on: \(date.issuedOnDateTime)"
             BCVaccineValidator.shared.validate(code: model.code) { validationResult in
                 guard let result = validationResult.result else {return completion(nil)}
                 let statusImage: UIImage? = result.status == .Fully ? UIImage(named: "check-mark") : nil

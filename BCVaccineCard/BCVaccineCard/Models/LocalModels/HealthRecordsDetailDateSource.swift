@@ -57,7 +57,7 @@ struct HealthRecordsDetailDataSource {
         switch type {
         case .covidImmunizationRecord(let model, _):
             id = model.id
-            title = .covid19vaccination
+            title = .vaccinationRecord
             detailNavTitle = .vaccinationRecord
             name = model.name
             image = UIImage(named: "blue-bg-vaccine-record-icon")
@@ -95,9 +95,7 @@ struct HealthRecordsDetailDataSource {
         for (index, imsModel) in immunizations.enumerated() {
             var stringDate = ""
             if let date = imsModel.date {
-                let formatter = DateFormatter()
-                formatter.dateFormat = "MMMM dd, yyyy"
-                stringDate = formatter.string(from: date)
+                stringDate = date.issuedOnDateTime
             }
             let product = Constants.vaccineInfo(snowMedCode: Int(imsModel.snomed ?? "1") ?? 1)?.displayName ?? ""
             let imsSet = [
@@ -119,7 +117,7 @@ struct HealthRecordsDetailDataSource {
         let date: String? = testResult.resultDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         fields.append([
-            TextListModel(header: TextListModel.TextProperties(text: "Date of Testing:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.monthDayYearString ?? "", bolded: true)),
+            TextListModel(header: TextListModel.TextProperties(text: "Date of Testing:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.issuedOnDateTime ?? "", bolded: true)),
             TextListModel(header: TextListModel.TextProperties(text: "Test Status:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testStatus ?? "Pending", bolded: true)),
             TextListModel(header: TextListModel.TextProperties(text: "Type Name:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: true)),
             TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.lab ?? "", bolded: true))
