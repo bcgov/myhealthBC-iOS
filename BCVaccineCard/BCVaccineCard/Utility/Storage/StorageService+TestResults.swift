@@ -7,27 +7,62 @@
 
 import Foundation
 
-extension StorageService {
+protocol StorageTestResultManager {
     
+    // MARK: Store
+    /// Store a Test results for given patient
+    /// - Parameters:
+    ///   - patient: owenr of the test result
+    ///   - gateWayResponse: gateway response
+    /// - Returns: stored object
+    func storeTestResults(
+        patient: Patient,
+        gateWayResponse: GatewayTestResultResponse) -> CovidLabTestResult?
     
-    /// Store a test result from a HealthGateway response
-    /// - Parameter gateWayResponse: codable response object from Health Gateway
+    /// Store a single test result
     /// - Returns: String id of record if stored successfully
-    public func saveTestResult(phn: String, birthdate: Date, gateWayResponse: GatewayTestResultResponse) -> String? {
+    func storeTestResult(
+        resultId: String,
+        patientDisplayName: String?,
+        lab: String?,
+        reportId: String?,
+        collectionDateTime: Date?,
+        resultDateTime: Date?,
+        testName: String?,
+        testType: String?,
+        testStatus: String?,
+        testOutcome: String?,
+        resultTitle: String?,
+        resultDescription: [String]?,
+        resultLink: String?) -> TestResult?
+    
+    // MARK: Update
+    /// Update a test result from a HealthGateway response
+    /// - Parameter gateWayResponse: codable response object from Health Gateway
+    func updateTestResult(
+        gateWayResponse: GatewayTestResultResponse,
+        completion: @escaping(CovidLabTestResult?)->Void)
+    
+    // MARK: Delete
+    /// delete a test result for given id
+    /// - Parameter id: id of record (not reportId).
+    func deleteTestResult(id: String)
+}
+
+
+extension StorageService: StorageTestResultManager {
+    // MARK: Store
+    public func storeTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse) -> CovidLabTestResult? {
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
-        
         guard let context = managedContext else {return nil}
         let model = CovidLabTestResult(context: context)
-        
-        model.id = gateWayResponse.md5Hash()
-        model.phn = phn
-        model.birthday = birthdate
-        model.user = fetchUser()
-        
+        model.patient = patient
+        model.id = id
+        model.createdAt = Date()
         var testResults: [TestResult] = []
         guard let records = gateWayResponse.resourcePayload?.records else { return nil }
         for record in records {
-            if let resultModel = saveTestResult(
+            if let resultModel = storeTestResult(
                 resultId: id,
                 patientDisplayName: record.patientDisplayName,
                 lab: record.lab,
@@ -45,22 +80,19 @@ extension StorageService {
                 testResults.append(resultModel)
                 model.addToResults(resultModel)
             }
+            
         }
-        
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .CovidLabTestResult, object: model))
-            return id
+            return model
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
             return nil
         }
     }
     
-    
-    /// Store a test result
-    /// - Returns: String id of record if stored successfully
-    private func saveTestResult(
+    internal func storeTestResult(
         resultId: String,
         patientDisplayName: String?,
         lab: String?,
@@ -73,35 +105,55 @@ extension StorageService {
         testOutcome: String?,
         resultTitle: String?,
         resultDescription: [String]?,
-        resultLink: String?) -> TestResult? {
-            guard let context = managedContext else {return nil}
-            let testResult = TestResult(context: context)
-            testResult.id = reportId
-            testResult.patientDisplayName = patientDisplayName
-            testResult.lab = lab
-            testResult.reportId = reportId
-            testResult.collectionDateTime = collectionDateTime
-            testResult.resultDateTime = resultDateTime
-            testResult.testName = testName
-            testResult.testType = testType
-            testResult.testStatus = testStatus
-            testResult.testOutcome = testOutcome
-            testResult.resultTitle = resultTitle
-            testResult.resultDescription = resultDescription
-            testResult.resultLink = resultLink
-            do {
-                try context.save()
-                self.notify(event: StorageEvent(event: .Save, entity: .TestResult, object: testResult))
-                return testResult
-            } catch let error as NSError {
-                print("Could not save. \(error), \(error.userInfo)")
-                return nil
-            }
+        resultLink: String?) -> TestResult?
+    {
+        guard let context = managedContext else {return nil}
+        let testResult = TestResult(context: context)
+        testResult.id = reportId
+        testResult.patientDisplayName = patientDisplayName
+        testResult.lab = lab
+        testResult.reportId = reportId
+        testResult.collectionDateTime = collectionDateTime
+        testResult.resultDateTime = resultDateTime
+        testResult.testName = testName
+        testResult.testType = testType
+        testResult.testStatus = testStatus
+        testResult.testOutcome = testOutcome
+        testResult.resultTitle = resultTitle
+        testResult.resultDescription = resultDescription
+        testResult.resultLink = resultLink
+        do {
+            try context.save()
+            self.notify(event: StorageEvent(event: .Save, entity: .TestResult, object: testResult))
+            return testResult
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            return nil
         }
+    }
     
     
-    /// delete a test result for given id
-    /// - Parameter id: id of record. this can be the report id or the id generated by during storage (TestResult.id)
+    // MARK: Update
+    func updateTestResult(gateWayResponse: GatewayTestResultResponse, completion: @escaping(CovidLabTestResult?)->Void) {
+        guard
+            let existing = findExistingResult(gateWayResponse: gateWayResponse),
+            let existingId = existing.id,
+            let existingPatient = existing.patient
+        else {return completion(nil)}
+        
+        
+        // Delete existing
+        deleteTestResult(id: existingId)
+        // Store the new one.
+        if let object = storeTestResults(patient: existingPatient, gateWayResponse: gateWayResponse) {
+            notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
+            return completion(object)
+        }
+        return completion(nil)
+        
+    }
+    
+    // MARK: Delete
     func deleteTestResult(id: String) {
         guard let context = managedContext else {return}
         do {
@@ -116,22 +168,20 @@ extension StorageService {
         }
     }
     
-    /// Returns all test results stored for user
-    /// - Parameter userId: User id. if left empty, the results results for the currently authenticated user.
-    /// - Returns: All Test results stored for the given user
-    func fetchTestResults(for userId: String? = AuthManager().userId()) -> [CovidLabTestResult] {
+    // MARK: Fetch
+    func fetchTestResults() -> [CovidLabTestResult] {
         guard let context = managedContext else {return []}
         do {
-            let users = try context.fetch(User.fetchRequest())
-            guard let current = users.filter({$0.userId == userId}).first else {return []}
-            return current.testResultArray
+            let patients = try context.fetch(Patient.fetchRequest())
+            let tests = patients.map({$0.testResultArray})
+            return Array(tests.joined())
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
             return []
         }
     }
     
-    
+    // MARK: Hekpers
     /// Find the stored test record that is likely the one from the response:
     /// - Parameter gateWayResponse: gateway test result response
     /// - Returns: Stored CovidLabTestResult object that matches the response
@@ -159,25 +209,5 @@ extension StorageService {
             }
         }
         return nil
-    }
-    
-    /// Update a test result from a HealthGateway response
-    /// - Parameter gateWayResponse: codable response object from Health Gateway
-    func updateTestResult(gateWayResponse: GatewayTestResultResponse, completion: @escaping(Bool)->Void) {
-        guard
-            let context = managedContext,
-            let existing = findExistingResult(gateWayResponse: gateWayResponse),
-            let existingId = existing.id,
-            // Temp cache: when we refactor storage, this information will be stored under user and wont be necessary to do this here
-            let phn = existing.phn,
-            let birthday = existing.birthday
-        else {return completion(false)}
-        
-        
-        // Delete existing
-        deleteTestResult(id: existingId)
-        // Store the new one.
-        let res = saveTestResult(phn: phn, birthdate: birthday, gateWayResponse: gateWayResponse)
-        return completion(res != nil)
     }
 }

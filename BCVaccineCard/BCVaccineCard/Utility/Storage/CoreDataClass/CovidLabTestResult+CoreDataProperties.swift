@@ -16,9 +16,8 @@ extension CovidLabTestResult {
         return NSFetchRequest<CovidLabTestResult>(entityName: "CovidLabTestResult")
     }
 
-    @NSManaged public var birthday: Date?
     @NSManaged public var id: String?
-    @NSManaged public var phn: String?
+    @NSManaged public var createdAt: Date?
     @NSManaged public var results: NSSet?
     @NSManaged public var patient: Patient?
 

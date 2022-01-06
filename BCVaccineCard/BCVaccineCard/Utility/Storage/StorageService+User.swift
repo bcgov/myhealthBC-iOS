@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol StorageManager {
+protocol StoragePatientManager {
     
     /// Save a new patient.
     /// The name formats we get can be inconsistent
@@ -25,7 +25,7 @@ protocol StorageManager {
                      lastName: String?) -> Bool
 }
 
-extension StorageService: StorageManager {
+extension StorageService: StoragePatientManager {
     
     func savePatient(name: String,
                      dob: Date,

@@ -11,10 +11,7 @@ import Foundation
  */
 
 // MARK: Users
-extension User {
-    public var userId: String {
-        return id ?? ""
-    }
+extension Patient {
     
     public var vaccineCardArray: [VaccineCard] {
         let set = vaccineCard as? Set<VaccineCard> ?? []
