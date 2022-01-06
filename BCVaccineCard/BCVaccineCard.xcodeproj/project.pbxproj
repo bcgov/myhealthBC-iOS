@@ -65,6 +65,7 @@
 		29736A212786691C00CCB1D2 /* Patient+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A132786691B00CCB1D2 /* Patient+CoreDataClass.swift */; };
 		29736A222786691C00CCB1D2 /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A142786691B00CCB1D2 /* Patient+CoreDataProperties.swift */; };
 		29736A232786691C00CCB1D2 /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A142786691B00CCB1D2 /* Patient+CoreDataProperties.swift */; };
+		29736A252787A78A00CCB1D2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A242787A78A00CCB1D2 /* Logger.swift */; };
 		29806693275970C8006FF3ED /* StorageModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29820CE527594CF600B53468 /* StorageModelExtensions.swift */; };
 		29820CE127582C7D00B53468 /* StorageService+Immunizations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29820CE027582C7D00B53468 /* StorageService+Immunizations.swift */; };
 		29820CE627594CF600B53468 /* StorageModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29820CE527594CF600B53468 /* StorageModelExtensions.swift */; };
@@ -439,6 +440,7 @@
 		29736A152786691B00CCB1D2 /* CovidLabTestResult+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CovidLabTestResult+CoreDataProperties.swift"; path = "/Users/amir/Developer/covid/myhealthBC-iOS/BCVaccineCard/BCVaccineCard/Utility/Storage/CoreDataClass/CovidLabTestResult+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		29736A162786691B00CCB1D2 /* VaccineCard+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VaccineCard+CoreDataProperties.swift"; path = "/Users/amir/Developer/covid/myhealthBC-iOS/BCVaccineCard/BCVaccineCard/Utility/Storage/CoreDataClass/VaccineCard+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		29736A172786691B00CCB1D2 /* TestResult+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "TestResult+CoreDataProperties.swift"; path = "/Users/amir/Developer/covid/myhealthBC-iOS/BCVaccineCard/BCVaccineCard/Utility/Storage/CoreDataClass/TestResult+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
+		29736A242787A78A00CCB1D2 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		29820CE027582C7D00B53468 /* StorageService+Immunizations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Immunizations.swift"; sourceTree = "<group>"; };
 		29820CE527594CF600B53468 /* StorageModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageModelExtensions.swift; sourceTree = "<group>"; };
 		29A12AF3271F699000A106B5 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
@@ -1102,6 +1104,7 @@
 				795AA77D2715FC7D00E59FF1 /* XMLConverter */,
 				7944F6B526F12BC3006B9444 /* Colors */,
 				7944F6B726F12BC3006B9444 /* Extensions */,
+				29736A242787A78A00CCB1D2 /* Logger.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -2146,6 +2149,7 @@
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
 				795AA7542715189C00E59FF1 /* InitialOnboardingView.swift in Sources */,
 				29736A1D2786691C00CCB1D2 /* ImmunizationRecord+CoreDataProperties.swift in Sources */,
+				29736A252787A78A00CCB1D2 /* Logger.swift in Sources */,
 				7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
 				29245D432755877A00F48642 /* Encodable+EXT.swift in Sources */,
 				795AA75C27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
