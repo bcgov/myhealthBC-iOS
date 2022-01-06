@@ -15,8 +15,6 @@
     </entity>
     <entity name="Patient" representedClassName="Patient" syncable="YES">
         <attribute name="birthhday" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="firstName" optional="YES" attributeType="String"/>
-        <attribute name="lastName" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
@@ -52,10 +50,10 @@
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="vaccineCard" inverseEntity="Patient"/>
     </entity>
     <elements>
-        <element name="CovidLabTestResult" positionX="159.5234375" positionY="507.296875" width="128" height="89"/>
-        <element name="ImmunizationRecord" positionX="497.89453125" positionY="782.546875" width="128" height="104"/>
-        <element name="TestResult" positionX="-104.609375" positionY="677.74609375" width="128" height="239"/>
-        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="134"/>
-        <element name="VaccineCard" positionX="483.7421875" positionY="301.015625" width="128" height="194"/>
+        <element name="CovidLabTestResult" positionX="70.65234375" positionY="497.984375" width="128" height="89"/>
+        <element name="ImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="104"/>
+        <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
+        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="118"/>
+        <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="194"/>
     </elements>
 </model>

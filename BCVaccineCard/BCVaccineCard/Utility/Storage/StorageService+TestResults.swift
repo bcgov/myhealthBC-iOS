@@ -47,6 +47,10 @@ protocol StorageTestResultManager {
     /// delete a test result for given id
     /// - Parameter id: id of record (not reportId).
     func deleteTestResult(id: String)
+    
+    // MARK: Fetch
+    func fetchTestResults() -> [CovidLabTestResult]
+    func fetchTestResult(id: String) -> CovidLabTestResult?
 }
 
 
@@ -155,17 +159,9 @@ extension StorageService: StorageTestResultManager {
     
     // MARK: Delete
     func deleteTestResult(id: String) {
-        guard let context = managedContext else {return}
-        do {
-            let tests = try context.fetch(CovidLabTestResult.fetchRequest())
-            guard let item = tests.filter({ ($0.id == id) }).first else {return}
-            context.delete(item)
-            try context.save()
-            self.notify(event: StorageEvent(event: .Delete, entity: .CovidLabTestResult, object: item))
-        } catch let error as NSError {
-            print("Could not delete. \(error), \(error.userInfo)")
-            return
-        }
+        guard let object = fetchTestResult(id: id) else {return}
+        delete(object: object)
+        notify(event: StorageEvent(event: .Delete, entity: .CovidLabTestResult, object: object))
     }
     
     // MARK: Fetch
@@ -178,6 +174,17 @@ extension StorageService: StorageTestResultManager {
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
             return []
+        }
+    }
+    
+    func fetchTestResult(id: String) -> CovidLabTestResult? {
+        guard let context = managedContext else {return nil}
+        do {
+            let tests = try context.fetch(CovidLabTestResult.fetchRequest())
+            return tests.filter({ ($0.id == id) }).first
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return nil
         }
     }
     

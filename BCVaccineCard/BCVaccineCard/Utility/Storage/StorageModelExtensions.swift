@@ -26,6 +26,7 @@ extension Patient {
             $0.mainResult?.collectionDateTime ?? Date() > $1.mainResult?.collectionDateTime ?? Date()
         }
     }
+    
 }
 
 // MARK: VaccineCard
