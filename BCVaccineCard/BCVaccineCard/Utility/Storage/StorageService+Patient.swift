@@ -19,11 +19,9 @@ protocol StoragePatientManager {
     ///   - firstName: Optional first name
     ///   - lastName: Optional last name
     /// - Returns: Success or fail
-    func storePatient(name: String,
-                     dob: Date,
-                     phn: String?,
-                     firstName: String?,
-                     lastName: String?) -> Bool
+    func storePatient(name: String?,
+                      birthday: Date?,
+                      phn: String?) -> Bool
     // MARK: Update
     /// Update a patient entity to add phn or add name and birthday.
     /// This function will find the patient based on the data given and update it. if not found, returns nil
@@ -50,32 +48,33 @@ protocol StoragePatientManager {
     /// Returns the patient with matching name and bitthday
     /// - Returns: patient
     func fetchPatient(name: String, birthday: Date) -> Patient?
+    
+    //MARK: Helpers
+    func fetchOrCreatePatient(phn: String) -> Patient?
+    func fetchOrCreatePatient(name: String, birthday: Date) -> Patient?
 }
 
 extension StorageService: StoragePatientManager {
     
     // MARK: Store
-    public func storePatient(name: String,
-                     dob: Date,
-                     phn: String? = nil,
-                     firstName: String? = nil,
-                     lastName: String? = nil) -> Bool {
-        guard let context = managedContext else {return false}
-        let patient = Patient(context: context)
-        patient.birthhday = dob
-        patient.name = name
-        patient.phn = phn
-        patient.firstName = firstName
-        patient.lastName = lastName
-        do {
-            try context.save()
-            notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
-            return true
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            return false
+    public func storePatient(
+        name: String? = nil,
+        birthday: Date? = nil,
+        phn: String? = nil) -> Bool {
+            guard let context = managedContext else {return false}
+            let patient = Patient(context: context)
+            patient.birthhday = birthday
+            patient.name = name
+            patient.phn = phn
+            do {
+                try context.save()
+                notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
+                return true
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+                return false
+            }
         }
-    }
     
     // MARK: Update
     func updatePatient(phn: String, name: String, birthday: Date) -> Patient? {
@@ -101,7 +100,7 @@ extension StorageService: StoragePatientManager {
             print("Could not save. \(error), \(error.userInfo)")
             return nil
         }
-       
+        
     }
     
     fileprivate func update(name: String, birthday: Date, for patient: Patient) -> Patient? {
@@ -151,5 +150,17 @@ extension StorageService: StoragePatientManager {
         let patients = fetchPatients()
         return patients.filter({$0.name == name && $0.birthhday == birthday}).first
     }
+    
+    // MARK: Helpers
+    func fetchOrCreatePatient(name: String, birthday: Date) -> Patient? {
+        if let existing = fetchPatient(name: name, birthday: birthday) { return existing}
+        storePatient(name: name, birthday: birthday)
+    }
+    
+    func fetchOrCreatePatient(phn: String) -> Patient? {
+        if let existing = fetchPatient(phn: phn) { return existing}
+        storePatient(phn: phn)
+    }
+    
     
 }
