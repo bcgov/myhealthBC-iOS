@@ -2,7 +2,7 @@
 //  CovidLabTestResult+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2021-12-09.
+//  Created by Amir on 2022-01-05.
 //
 //
 
@@ -20,7 +20,7 @@ extension CovidLabTestResult {
     @NSManaged public var id: String?
     @NSManaged public var phn: String?
     @NSManaged public var results: NSSet?
-    @NSManaged public var user: User?
+    @NSManaged public var patient: Patient?
 
 }
 

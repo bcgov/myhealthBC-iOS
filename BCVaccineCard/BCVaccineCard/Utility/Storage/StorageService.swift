@@ -11,7 +11,7 @@ import UIKit
 
 extension StorageService {
     enum Entity {
-        case User
+        case Patient
         case CovidLabTestResult
         case TestResult
         case ImmunizationRecord

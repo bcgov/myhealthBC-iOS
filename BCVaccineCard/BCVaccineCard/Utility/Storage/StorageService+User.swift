@@ -7,27 +7,41 @@
 
 import Foundation
 
-extension StorageService {
-    func createUserIfneeded() {
-        // TODO: add appropriate name when authentication is added
-        if fetchUser(id: AuthManager().userId()) == nil {
-            _ = saveUser(id: AuthManager().userId(), name: AuthManager().userId())
-        }
-    }
+protocol StorageManager {
     
-    ///  Save a new user with user id and user name
+    /// Save a new patient.
+    /// The name formats we get can be inconsistent
     /// - Parameters:
-    ///   - id: Unique user id
-    ///   - name: user's name
-    /// - Returns: boolean indicating success or failure
-    func saveUser(id: String, name: String) -> Bool {
+    ///   - name: Patient name
+    ///   - dob: date of birth
+    ///   - phn: Optional phn
+    ///   - firstName: Optional first name
+    ///   - lastName: Optional last name
+    /// - Returns: Success or fail
+    func savePatient(name: String,
+                     dob: Date,
+                     phn: String?,
+                     firstName: String?,
+                     lastName: String?) -> Bool
+}
+
+extension StorageService: StorageManager {
+    
+    func savePatient(name: String,
+                     dob: Date,
+                     phn: String? = nil,
+                     firstName: String? = nil,
+                     lastName: String? = nil) -> Bool {
         guard let context = managedContext else {return false}
-        let user = User(context: context)
-        user.id = id
-        user.name = name
+        let patient = Patient(context: context)
+        patient.birthhday = dob
+        patient.name = name
+        patient.phn = phn
+        patient.firstName = firstName
+        patient.lastName = lastName
         do {
             try context.save()
-            notify(event: StorageEvent(event: .Save, entity: .User, object: user))
+            notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
             return true
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
