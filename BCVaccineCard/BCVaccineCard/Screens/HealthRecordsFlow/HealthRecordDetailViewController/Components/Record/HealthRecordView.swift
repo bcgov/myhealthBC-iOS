@@ -1,5 +1,5 @@
 //
-//  HealthRevordView.swift
+//  HealthRecordView.swift
 //  BCVaccineCard
 //
 //  Created by Amir on 2021-12-09.

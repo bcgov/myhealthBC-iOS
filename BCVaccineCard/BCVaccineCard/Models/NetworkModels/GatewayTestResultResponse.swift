@@ -35,8 +35,8 @@ struct GatewayTestResultResponseRecord: Codable, Equatable {
     let resultDateTime: String?
     let testName: String?
     let testType: String?
-    let testStatus: String? // I'm assuming this will be equal to the enum that I created in the CovidTestResultModel
-    let testOutcome: String? // Could also be here too??
+    let testStatus: String?
+    let testOutcome: String?
     let resultTitle: String?
     let resultDescription: [String]?
     let resultLink: String?
@@ -69,11 +69,11 @@ extension GatewayTestResultResponseRecord {
     enum ResponseStatusTypes: String, Codable {
         case pending = "Pending"
         case final = "Final"
-        case statusChange = "StatusChange"
+        case statusChange = "Status Change" //To Check here
     }
     
     enum ResponseOutcomeTypes: String, Codable {
-        case notSet = "NotSet"
+        case notSet = "Not Set" // To Check here
         case other = "Other"
         case pending = "Pending"
         case indeterminate = "Indeterminate"

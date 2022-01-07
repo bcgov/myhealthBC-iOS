@@ -164,6 +164,17 @@ extension String {
     }
 }
 
+// MARK: For capitalization
+extension String {
+    private func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    func sentenceCase() -> String {
+        return self.lowercased().capitalizingFirstLetter()
+    }
+}
+
 extension Optional where Wrapped == String {
     
     /// This computable property unwraps an optional string value to empty string.
