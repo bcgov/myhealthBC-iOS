@@ -42,8 +42,8 @@ extension HealthRecordsDetailDataSource.Record {
             
         case .covidTestResultRecord(let model):
             let textColor = UIColor.black
-            let backgroundColor = model.status.getColor
-            let statusColor = model.status.getStatusTextColor
+            let backgroundColor = model.resultType.getColor
+            let statusColor = model.resultType.getResultTextColor
             var issueDate = ""
             if let date = model.collectionDateTime {
                 issueDate = "Tested on: \(date.issuedOnDateTime)"

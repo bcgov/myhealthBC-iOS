@@ -59,7 +59,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LNe-UX-65N" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2219" y="1926"/>
+            <point key="canvasLocation" x="2186" y="1926"/>
         </scene>
         <!--Covid Vaccine Cards View Controller-->
         <scene sceneID="zD9-Xd-EZU">

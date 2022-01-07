@@ -106,6 +106,8 @@ extension UsersListOfRecordsViewController {
             self.setupTableView()
             self.navSetup()
             self.view.endLoadingIndicator()
+            // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
+            self.tableView.reloadData()
         }
     }
 }
@@ -139,7 +141,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
-        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds)
+        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: dataSource.count)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

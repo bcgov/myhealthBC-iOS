@@ -14,7 +14,7 @@ extension HealthRecordsDetailDataSource.Record {
         case .covidImmunizationRecord(let model, let immunizations):
             return [.Header, .Fields]
         case .covidTestResultRecord(model: let model):
-            if model.status == .positive {
+            if model.resultType == .positive {
                 return [.Header, .StaticText, .Fields]
             } else {
                 return [.Header, .Fields]

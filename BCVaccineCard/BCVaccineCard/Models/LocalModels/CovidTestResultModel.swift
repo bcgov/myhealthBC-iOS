@@ -34,7 +34,7 @@ enum CovidTestResult: String, Codable {
         }
     }
     
-    var getStatusTextColor: UIColor {
+    var getResultTextColor: UIColor {
         switch self {
         case .pending:
             return AppColours.CovidTest.pendingText
@@ -61,7 +61,7 @@ public struct LocallyStoredCovidTestResultModel: Codable, Equatable {
     }
     // TODO: Should likely convert this 'response' into a model that we can use
     let response: GatewayTestResultResponse?
-    let status: CovidTestResult
+    let resultType: CovidTestResult
 }
 
 
@@ -71,8 +71,9 @@ extension LocallyStoredCovidTestResultModel {
     }
 }
 
-extension GatewayTestResultResponseRecord {
-    var status: CovidTestResult {
-         CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
-    }
-}
+//extension GatewayTestResultResponseRecord {
+//    var status: CovidTestResult {
+
+//         CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
+//    }
+//}

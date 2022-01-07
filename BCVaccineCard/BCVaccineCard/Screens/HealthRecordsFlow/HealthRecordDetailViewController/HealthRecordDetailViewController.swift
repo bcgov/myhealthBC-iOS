@@ -10,9 +10,10 @@ import UIKit
 
 class HealthRecordDetailViewController: BaseViewController {
     
-    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource) -> HealthRecordDetailViewController {
+    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
             vc.dataSource = dataSource
+            vc.userNumberHealthRecords = userNumberHealthRecords
             return vc
         }
         return HealthRecordDetailViewController()
@@ -21,6 +22,7 @@ class HealthRecordDetailViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var dataSource: HealthRecordsDetailDataSource!
+    private var userNumberHealthRecords: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,7 +89,11 @@ extension HealthRecordDetailViewController {
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteTestResult(id: recordId)
             }
-            self.popBack(toControllerType: HealthRecordsViewController.self)
+            if self.userNumberHealthRecords > 1 {
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                self.popBack(toControllerType: HealthRecordsViewController.self)
+            }
         } onCancel: {
         }
     }
