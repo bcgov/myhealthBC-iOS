@@ -99,6 +99,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         else {
             return UITableViewCell()
         }
+        cell.isUserInteractionEnabled = true
         return cell
     }
     
