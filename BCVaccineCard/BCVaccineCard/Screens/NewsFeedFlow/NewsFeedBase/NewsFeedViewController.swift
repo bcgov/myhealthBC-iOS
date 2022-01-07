@@ -79,10 +79,20 @@ extension NewsFeedViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .newsFeed,
                                                leftNavButton: nil,
-                                               rightNavButton: nil,
+                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
                                                targetVC: self,
                                                backButtonHintString: nil)
+    }
+    
+    @objc private func settingsButton() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        goToSettingsScreen()
+    }
+    
+    private func goToSettingsScreen() {
+        let vc = SettingsViewController.constructSettingsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
