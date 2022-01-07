@@ -36,4 +36,17 @@ extension BaseViewController {
     }
 }
 
+// MARK: For Settings Navigation
+extension BaseViewController {
+    @objc func settingsButton() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        goToSettingsScreen()
+    }
+    
+    private func goToSettingsScreen() {
+        let vc = SettingsViewController.constructSettingsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
 

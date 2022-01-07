@@ -70,16 +70,6 @@ extension HealthPassViewController {
         
     }
     
-    @objc private func settingsButton() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        goToSettingsScreen()
-    }
-    
-    private func goToSettingsScreen() {
-        let vc = SettingsViewController.constructSettingsViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
     private func goToAddCardOptionScreen() {
         // NOTE: Not sure if I should add UIImpactFeedbackGenerator here or not??
         let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
