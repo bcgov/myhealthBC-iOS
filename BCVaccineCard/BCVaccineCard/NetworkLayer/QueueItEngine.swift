@@ -25,13 +25,15 @@ class QueueItEngine: NSObject {
         self.customDelegate = customDelegateOwner as? QueueItEngineCustomDelegate
     }
     
-    func setupQueueIt(customerID: String, eventAlias: String, url: URL?) {
+    func setupQueueIt(customerID: String, eventAlias: String, url: URL?, includeQueueItUI: Bool) {
         self.engine = QueueITEngine.init(host: self.delegateOwner, customerId: customerID, eventOrAliasId: eventAlias, layoutName: nil, language: nil)
         self.engine?.queuePassedDelegate = self // Invoked once the user is passed the queue
-        self.engine?.queueViewWillOpenDelegate = self // Invoked to notify that Queue-It UIWebView or WKWebview will open
-        self.engine?.queueDisabledDelegate = self // Invoked to notify that queue is disabled
-        self.engine?.queueITUnavailableDelegate = self // Invoked in case QueueIT is unavailable (500 errors)
-        self.engine?.queueUserExitedDelegate = self // Invoked when user chooses to leave the queue
+        if includeQueueItUI {
+            self.engine?.queueViewWillOpenDelegate = self // Invoked to notify that Queue-It UIWebView or WKWebview will open
+            self.engine?.queueDisabledDelegate = self // Invoked to notify that queue is disabled
+            self.engine?.queueITUnavailableDelegate = self // Invoked in case QueueIT is unavailable (500 errors)
+            self.engine?.queueUserExitedDelegate = self // Invoked when user chooses to leave the queue
+        }
         self.runQueueIt(url: url)
     }
     

@@ -72,7 +72,7 @@ class VaccineCardView: UIView {
         self.isAccessibilityElement = false
         nameLabel.text = model.codableModel.name.uppercased()
         checkmarkImageView.isHidden = model.codableModel.status != .fully
-        vaccineStatusLabel.text = model.codableModel.status.getTitle
+        vaccineStatusLabel.text = model.codableModel.status.getTitle.sentenceCase()
         if let issuedOnDate = model.issueDate {
             issuedOnLabel.text = .issuedOn + issuedOnDate
         }

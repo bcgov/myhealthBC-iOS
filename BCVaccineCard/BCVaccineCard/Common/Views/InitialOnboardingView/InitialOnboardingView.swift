@@ -26,13 +26,13 @@ class InitialOnboardingView: UIView {
     func getTitle(for screen: OnboardingScreenType) -> String {
         switch screen {
         case .healthPasses:
-            return .healthPasses
+            return .healthPasses.sentenceCase()
         case .healthRecords:
-            return .healthRecords
+            return .healthRecords.sentenceCase()
         case .healthResources:
-            return .healthResources
+            return .healthResources.sentenceCase()
         case .newsFeed:
-            return .newsFeed
+            return .newsFeed.sentenceCase()
         }
     }
     

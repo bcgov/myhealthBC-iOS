@@ -23,15 +23,16 @@ protocol RemoteAccessor {
     func authorizationHeader(fromToken token: String) -> Headers
     func request<T: Decodable>(withURL url: URL, method: MethodType, encoding: Encoding,
                                headers: Headers?, parameters: RequestParameters?, interceptor: Interceptor?,
-                               checkQueueIt: Bool,  executingVC: UIViewController,
+                               checkQueueIt: Bool,  executingVC: UIViewController, includeQueueItUI: Bool,
                                andCompletion completion: @escaping NetworkRequestCompletion<T>)
     func request<Parameters: Encodable, T: Decodable>(withURL url: URL, method: MethodType,
                                                       headers: Headers?, encoder: ParameterEncoder, parameters: Parameters?,
-                                                      interceptor: Interceptor?, checkQueueIt: Bool,  executingVC: UIViewController,
+                                                      interceptor: Interceptor?, checkQueueIt: Bool,
+                                                      executingVC: UIViewController, includeQueueItUI: Bool,
                                                       andCompletionHandler completion: @escaping NetworkRequestCompletion<T>)
     func uploadRequest<T: Decodable>(withURL url: URL, method: MethodType, mediaType: MIMEType?,
                                      headers: Headers, parameters: RequestParameters, interceptor: Interceptor?,
-                                     checkQueueIt: Bool,  executingVC: UIViewController,
+                                     checkQueueIt: Bool, executingVC: UIViewController, includeQueueItUI: Bool,
                                      andCompletion completion: @escaping NetworkRequestCompletion<T>)
 }
 
@@ -44,9 +45,10 @@ extension RemoteAccessor {
                                interceptor: Interceptor? = nil,
                                checkQueueIt: Bool,
                                executingVC: UIViewController,
+                               includeQueueItUI: Bool,
                                andCompletion completion: @escaping NetworkRequestCompletion<T>) {
         return request(withURL: url, method: method, encoding: encoding, headers: headers,
-                       parameters: parameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, andCompletion: completion)
+                       parameters: parameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     func request<Parameters: Encodable, T: Decodable>(
@@ -58,6 +60,7 @@ extension RemoteAccessor {
         interceptor: Interceptor? = nil,
         checkQueueIt: Bool,
         executingVC: UIViewController,
+        includeQueueItUI: Bool,
         andCompletionHandler completion: @escaping NetworkRequestCompletion<T>) {
         
         let defaultEncoder: ParameterEncoder
@@ -79,6 +82,7 @@ extension RemoteAccessor {
                        interceptor: interceptor,
                        checkQueueIt: checkQueueIt,
                        executingVC: executingVC,
+                       includeQueueItUI: includeQueueItUI,
                        andCompletionHandler: completion)
     }
     
@@ -86,7 +90,7 @@ extension RemoteAccessor {
 
 final class NetworkAccessor {
     
-    private func execute<T: Decodable>(request: DataRequest, checkQueueIt: Bool, executingVC: UIViewController, withCompletion completion: @escaping NetworkRequestCompletion<T>) {
+    private func execute<T: Decodable>(request: DataRequest, checkQueueIt: Bool, executingVC: UIViewController, includeQueueItUI: Bool, withCompletion completion: @escaping NetworkRequestCompletion<T>) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
         request.responseDecodable(of: T.self, decoder: decoder) { response in
@@ -98,7 +102,7 @@ final class NetworkAccessor {
                 self.decodeResponse(response: response, retryStatus: nil, withCompletion: completion)
             } else if let cAndE = self.checkForQueueItRedirect(response: response) {
                 let url = response.request?.url
-                self.setupQueueIt(onViewController: executingVC, customerID: cAndE.c, eventAlias: cAndE.e, url: url) { status, error in
+                self.setupQueueIt(onViewController: executingVC, customerID: cAndE.c, eventAlias: cAndE.e, url: url, includeQueueItUI: includeQueueItUI) { status, error in
                     if status.succeeded {
                         let token = status.token
                         QueueItLocal.saveValueToDefaults(queueitToken: token)
@@ -137,9 +141,9 @@ final class NetworkAccessor {
         }
     }
     
-    private func setupQueueIt(onViewController vc: UIViewController, customerID: String, eventAlias: String, url: URL?, completion: ((QueueItRunStatus, DisplayableResultError?) -> Void)?) {
+    private func setupQueueIt(onViewController vc: UIViewController, customerID: String, eventAlias: String, url: URL?, includeQueueItUI: Bool, completion: ((QueueItRunStatus, DisplayableResultError?) -> Void)?) {
         let queueIt = QueueItEngine(delegateOwner: vc, customDelegateOwner: vc)
-        queueIt.setupQueueIt(customerID: customerID, eventAlias: eventAlias, url: url)
+        queueIt.setupQueueIt(customerID: customerID, eventAlias: eventAlias, url: url, includeQueueItUI: includeQueueItUI)
         queueIt.runCompletionHandler = completion
     }
 }
@@ -180,10 +184,10 @@ extension NetworkAccessor: RemoteAccessor {
     
     func request<T: Decodable>(withURL url: URL, method: MethodType, encoding: Encoding,
                                headers: Headers?, parameters: RequestParameters?, interceptor: Interceptor?,
-                               checkQueueIt: Bool, executingVC: UIViewController,
+                               checkQueueIt: Bool, executingVC: UIViewController, includeQueueItUI: Bool,
                                andCompletion completion: @escaping NetworkRequestCompletion<T>) {
         let request = AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor)
-        self.execute(request: request, checkQueueIt: checkQueueIt, executingVC: executingVC, withCompletion: completion)
+        self.execute(request: request, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, withCompletion: completion)
     }
     
     func request<Parameters: Encodable, T: Decodable> (
@@ -195,15 +199,16 @@ extension NetworkAccessor: RemoteAccessor {
         interceptor: Interceptor?,
         checkQueueIt: Bool,
         executingVC: UIViewController,
+        includeQueueItUI: Bool,
         andCompletionHandler completion: @escaping NetworkRequestCompletion<T>) {
         
         let request = AF.request(url, method: method, parameters: parameters, encoder: encoder, headers: headers)
-            self.execute(request: request, checkQueueIt: checkQueueIt, executingVC: executingVC, withCompletion: completion)
+            self.execute(request: request, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, withCompletion: completion)
     }
     
     func uploadRequest<T: Decodable>(withURL url: URL, method: MethodType, mediaType: MIMEType?,
                                      headers: Headers, parameters: RequestParameters, interceptor: Interceptor?,
-                                     checkQueueIt: Bool, executingVC: UIViewController,
+                                     checkQueueIt: Bool, executingVC: UIViewController, includeQueueItUI: Bool,
                                      andCompletion completion: @escaping NetworkRequestCompletion<T>) {
         let request = AF.upload(multipartFormData: { multipartFormData in
             parameters.forEach({ (key, value) in
@@ -214,7 +219,7 @@ extension NetworkAccessor: RemoteAccessor {
                 }
             })
         }, to: url, method: method, headers: headers)
-        self.execute(request: request, checkQueueIt: checkQueueIt, executingVC: executingVC, withCompletion: completion)
+        self.execute(request: request, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, withCompletion: completion)
     }
 }
 

@@ -23,7 +23,7 @@ class APIClient {
         return NetworkAccessor()
     }
     
-    func getVaccineCard(_ model: GatewayVaccineCardRequest, token: String?, executingVC: UIViewController, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
+    func getVaccineCard(_ model: GatewayVaccineCardRequest, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
         let interceptor = NetworkRequestInterceptor()
         let url = configureURL(token: token, endpoint: self.endpoints.getVaccineCard)
         
@@ -34,10 +34,10 @@ class APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
-    func getTestResult(_ model: GatewayTestResultRequest, token: String?, executingVC: UIViewController, completion: @escaping NetworkRequestCompletion<GatewayTestResultResponse>) {
+    func getTestResult(_ model: GatewayTestResultRequest, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayTestResultResponse>) {
         let interceptor = NetworkRequestInterceptor()
         let url = configureURL(token: token, endpoint: self.endpoints.getTestResults)
         
@@ -48,7 +48,7 @@ class APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
 }

@@ -24,6 +24,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private var name: String!
     private var birthdate: Date?
+    private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     
@@ -60,6 +61,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
+        self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
     }
     
@@ -108,6 +110,28 @@ extension UsersListOfRecordsViewController {
             self.view.endLoadingIndicator()
             // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
             self.tableView.reloadData()
+            self.checkForTestResultsToUpdate(ds: self.dataSource)
+        }
+    }
+    
+    private func checkForTestResultsToUpdate(ds: [HealthRecordsDetailDataSource]) {
+        for (indexPathRow, record) in ds.enumerated() {
+            switch record.type {
+            case .covidTestResultRecord(model: let model):
+                let listOfStatuses = record.records.map { ($0.status, $0.date) }
+                for (index, data) in listOfStatuses.enumerated() {
+                    if data.0 == CovidTestResult.pending.rawValue {
+                        guard let dateOfBirth = model.birthday?.yearMonthDayString,
+                                let phn = model.phn,
+                              let collectionDatePresentableFormat = listOfStatuses[index].1,
+                              let collectionDate = Date.Formatter.monthDayYearDate.date(from: collectionDatePresentableFormat)?.yearMonthDayString else { return }
+                        
+                        let model = GatewayTestResultRequest(phn: phn, dateOfBirth: dateOfBirth, collectionDate: collectionDate)
+                        backgroundWorker?.getTestResult(model: model, executingVC: self, row: indexPathRow)
+                    }
+                }
+            default: print("")
+            }
         }
     }
 }
@@ -223,5 +247,21 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             }
         }
     }
+    
+}
+
+extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerDelegate {
+    func handleTestResult(result: GatewayTestResultResponse, row: Int) {
+        print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
+        StorageService.shared.updateTestResult(gateWayResponse: result) { [weak self] success in
+            guard let `self` = self else {return}
+            self.tableView.reloadData()
+        }
+    }
+    
+    func handleError(title: String, error: ResultError, row: Int) {
+        print("BACKGROUND FETCH INFO: Error: ", title, error, "For Row: ", row)
+    }
+    
     
 }

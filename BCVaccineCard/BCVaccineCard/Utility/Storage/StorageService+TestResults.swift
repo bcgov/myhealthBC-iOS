@@ -28,19 +28,19 @@ extension StorageService {
         guard let records = gateWayResponse.resourcePayload?.records else { return nil }
         for record in records {
             if let resultModel = saveTestResult(
-                   resultId: id,
-                   patientDisplayName: record.patientDisplayName,
-                   lab: record.lab,
-                   reportId: record.reportId,
-                   collectionDateTime: record.collectionDateTimeDate,
-                   resultDateTime: record.resultDateTimeDate,
-                   testName: record.testName,
-                   testType: record.testType,
-                   testStatus: record.testStatus,
-                   testOutcome: record.testOutcome,
-                   resultTitle: record.resultTitle,
-                   resultDescription: record.resultDescription,
-                   resultLink: record.resultLink) {
+                resultId: id,
+                patientDisplayName: record.patientDisplayName,
+                lab: record.lab,
+                reportId: record.reportId,
+                collectionDateTime: record.collectionDateTimeDate,
+                resultDateTime: record.resultDateTimeDate,
+                testName: record.testName,
+                testType: record.testType,
+                testStatus: record.testStatus,
+                testOutcome: record.testOutcome,
+                resultTitle: record.resultTitle,
+                resultDescription: record.resultDescription,
+                resultLink: record.resultLink) {
                 
                 testResults.append(resultModel)
                 model.addToResults(resultModel)
@@ -97,7 +97,7 @@ extension StorageService {
                 print("Could not save. \(error), \(error.userInfo)")
                 return nil
             }
-    }
+        }
     
     
     /// delete a test result for given id
@@ -131,4 +131,53 @@ extension StorageService {
         }
     }
     
+    
+    /// Find the stored test record that is likely the one from the response:
+    /// - Parameter gateWayResponse: gateway test result response
+    /// - Returns: Stored CovidLabTestResult object that matches the response
+    func findExistingResult(gateWayResponse: GatewayTestResultResponse) -> CovidLabTestResult? {
+        let tests = fetchTestResults()
+        guard let responseTestIds = gateWayResponse.resourcePayload?.records.map({$0.reportId}) else {
+            return nil
+        }
+        // Loop through stored tests
+        for test in tests {
+            let results = test.resultArray
+            // Cache ids of stored results in this test
+            var storedTestIds = results.map({$0.reportId})
+            // Loop through the ids in the gateway response
+            // and remove ids in storedTestIds that are also in responseTestIds
+            for recordId in responseTestIds {
+                if let index = storedTestIds.firstIndex(of: recordId) {
+                    storedTestIds.remove(at: index)
+                }
+            }
+            
+            // now if responseTestIds is empty, they were all contained in the response.
+            if storedTestIds.isEmpty && !responseTestIds.isEmpty {
+                return test
+            }
+        }
+        return nil
+    }
+    
+    /// Update a test result from a HealthGateway response
+    /// - Parameter gateWayResponse: codable response object from Health Gateway
+    func updateTestResult(gateWayResponse: GatewayTestResultResponse, completion: @escaping(Bool)->Void) {
+        guard
+            let context = managedContext,
+            let existing = findExistingResult(gateWayResponse: gateWayResponse),
+            let existingId = existing.id,
+            // Temp cache: when we refactor storage, this information will be stored under user and wont be necessary to do this here
+            let phn = existing.phn,
+            let birthday = existing.birthday
+        else {return completion(false)}
+        
+        
+        // Delete existing
+        deleteTestResult(id: existingId)
+        // Store the new one.
+        let res = saveTestResult(phn: phn, birthdate: birthday, gateWayResponse: gateWayResponse)
+        return completion(res != nil)
+    }
 }
