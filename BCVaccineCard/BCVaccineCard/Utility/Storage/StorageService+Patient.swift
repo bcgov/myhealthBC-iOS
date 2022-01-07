@@ -11,13 +11,10 @@ protocol StoragePatientManager {
     
     // MARK: Store
     /// Save a new patient.
-    /// The name formats we get can be inconsistent
     /// - Parameters:
     ///   - name: Patient name
     ///   - dob: date of birth
     ///   - phn: Optional phn
-    ///   - firstName: Optional first name
-    ///   - lastName: Optional last name
     /// - Returns: Patient object
     func storePatient(name: String?,
                       birthday: Date?,
@@ -50,33 +47,52 @@ protocol StoragePatientManager {
     func fetchPatient(name: String, birthday: Date) -> Patient?
     
     //MARK: Helpers
-    func fetchOrCreatePatient(phn: String) -> Patient?
-    func fetchOrCreatePatient(name: String, birthday: Date) -> Patient?
+    /// Find stored patient or create a new one with given data
+    /// - Parameters:
+    ///   - phn: phn
+    ///   - name: name
+    ///   - birthday: birthday
+    /// - Returns: stored patient
+    func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?) -> Patient?
 }
 
 extension StorageService: StoragePatientManager {
     
     // MARK: Store
+    /// Does the same thing as fetchOrCreatePatient()
+    /// returns existing patient or creates a new one if it doesnt exist.
     public func storePatient(
         name: String? = nil,
         birthday: Date? = nil,
-        phn: String? = nil) -> Patient? {
-            guard let context = managedContext else {return nil}
-            let patient = Patient(context: context)
-            patient.birthday = birthday
-            patient.name = name
-            patient.phn = phn
-            do {
-                try context.save()
-                notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
-                return patient
-            } catch let error as NSError {
-                print("Could not save. \(error), \(error.userInfo)")
-                return nil
-            }
+        phn: String? = nil
+    ) -> Patient? {
+        return fetchOrCreatePatient(phn: phn, name: name, birthday: birthday)
+    }
+    
+    fileprivate func savePatient(
+        name: String? = nil,
+        birthday: Date? = nil,
+        phn: String? = nil
+    ) -> Patient? {
+        guard let context = managedContext else {return nil}
+        let patient = Patient(context: context)
+        patient.birthday = birthday
+        patient.name = name
+        patient.phn = phn
+        do {
+            try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
+            return patient
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+            return nil
         }
+    }
     
     // MARK: Update
+    
+    /// Update a patient entity to add phn or add name and birthday.
+    /// This function will find the patient based on the data given and update it. if not found, returns nil
     func updatePatient(phn: String, name: String, birthday: Date) -> Patient? {
         if let patient = fetchPatient(phn: phn) {
             // Update birthday and name
@@ -152,14 +168,44 @@ extension StorageService: StoragePatientManager {
     }
     
     // MARK: Helpers
-    func fetchOrCreatePatient(name: String, birthday: Date) -> Patient? {
-        if let existing = fetchPatient(name: name, birthday: birthday) { return existing}
-        return storePatient(name: name, birthday: birthday)
+    /// Find stored patient or create a new one with given data
+    /// - Parameters:
+    ///   - phn: phn
+    ///   - name: name
+    ///   - birthday: birthday
+    /// - Returns: stored patient
+    public func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?) -> Patient? {
+        var phnPatient: Patient?
+        var dobPatient: Patient?
+        
+        if let heathNumber = phn {
+            phnPatient = fetchPatient(phn: heathNumber)
+        }
+        
+        if let bday = birthday, let patientName = name {
+            dobPatient = fetchPatient(name: patientName, birthday: bday)
+        }
+        
+        // If patient doesnt exist, create it
+        if phnPatient == nil && dobPatient == nil {
+            return createPatient(phn: phn, name: name, birthday: birthday)
+        }
+        
+        
+        return phnPatient ?? dobPatient
     }
     
-    func fetchOrCreatePatient(phn: String) -> Patient? {
-        if let existing = fetchPatient(phn: phn) { return existing}
-       return  storePatient(phn: phn)
+    /// This function is meant to be used by fetchOrCreatePatient
+    fileprivate func createPatient(phn: String?, name: String?, birthday: Date?) -> Patient? {
+        if phn != nil {
+            return savePatient(name: name, birthday: birthday, phn: phn)
+        }
+        
+        if birthday != nil && name != nil {
+            return savePatient(name: name, birthday: birthday, phn: phn)
+        }
+        
+        return nil
     }
     
     

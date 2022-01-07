@@ -30,7 +30,7 @@ struct HealthRecord {
         switch type {
         case .Test(let test):
             let results = test.resultArray
-            birthDate = test.birthday
+            birthDate = test.patient?.birthday
             if let first = results.first {
                 patientName = first.patientDisplayName ?? ""
                 

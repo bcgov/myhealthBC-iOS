@@ -21,7 +21,7 @@ class HealthPassViewController: BaseViewController {
     
     private var dataSource: VaccineCard?
     private var savedCardsCount: Int {
-        return StorageService.shared.fetchVaccineCards(for: AuthManager().userId()).count
+        return StorageService.shared.fetchVaccineCards().count
     }
 
     override func viewDidLoad() {
@@ -97,7 +97,7 @@ extension HealthPassViewController {
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension HealthPassViewController {
     private func fetchFromStorage() {
-        let cards = StorageService.shared.fetchVaccineCards(for: AuthManager().userId())
+        let cards = StorageService.shared.fetchVaccineCards()
         guard cards.count > 0 else {
             self.dataSource = nil
             return

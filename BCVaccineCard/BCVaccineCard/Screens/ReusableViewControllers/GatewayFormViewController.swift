@@ -653,9 +653,15 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse) -> String? {
         guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
         guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
-//        guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
-//        guard let dob = dataSource[dobIndexPath.row].configuration.text, let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) else { return nil }
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn) else {return nil}
+        let bday: Date?
+        if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false),
+           let dob = dataSource[dobIndexPath.row].configuration.text,
+           let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) {
+            bday = dateOfBirth
+        } else {
+            bday = nil
+        }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday) else {return nil}
         guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse) else { return nil }
         return object.id
     }
