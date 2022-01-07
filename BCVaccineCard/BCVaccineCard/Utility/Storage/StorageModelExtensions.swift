@@ -49,7 +49,7 @@ extension VaccineCard {
     }
     
     public var birthDateString: String {
-        return birthdate?.birthdayYearDateString ?? ""
+        return patient?.birthday?.birthdayYearDateString ?? ""
     }
     
     public var getCovidImmunizations: [ImmunizationRecord] {
@@ -96,7 +96,7 @@ extension Array where Element == VaccineCard {
               }
         // TODO: Will need to get vax dates from the processed result and add to model below
         BCVaccineValidator.shared.validate(code: code) { result in
-            if let model = result.toLocal(federalPass: cardToProcess.federalPass, phn: cardToProcess.phn) {
+            if let model = result.toLocal(federalPass: cardToProcess.federalPass) {
                 processedCards.append(AppVaccinePassportModel(codableModel: model))
                 self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
             } else {
@@ -108,9 +108,9 @@ extension Array where Element == VaccineCard {
 
 extension VaccineCard {
     public func toLocal() -> LocallyStoredVaccinePassportModel? {
-        guard let qrCode = code, let dates = vaxDates, let issueDate = issueDate, let birthdate = birthdate, let firHash = firHash else {return nil}
+        guard let qrCode = code, let dates = vaxDates, let issueDate = issueDate, let firHash = firHash else {return nil}
         let status: VaccineStatus = vaxDates?.count ?? 0 > 1 ? .fully : (vaxDates?.count ?? 0 == 1 ? .partially : .notVaxed)
-        return LocallyStoredVaccinePassportModel(id: id, code: qrCode, birthdate: birthDateString, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: issueDate.timeIntervalSince1970, status: status, source: .imported, fedCode: federalPass, phn: phn)
+        return LocallyStoredVaccinePassportModel(id: id, code: qrCode, birthdate: birthDateString, hash: firHash, vaxDates: dates, name: name ?? "", issueDate: issueDate.timeIntervalSince1970, status: status, source: .imported, fedCode: federalPass, phn: patient?.phn)
     }
 }
 

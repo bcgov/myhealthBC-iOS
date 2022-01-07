@@ -83,8 +83,8 @@ struct AppVaccinePassportModel: Equatable {
 
 
 extension CodeValidationResult {
-    func toLocal(federalPass: String? = nil, phn: String? = nil, source: Source? = .imported) -> LocallyStoredVaccinePassportModel? {
-        return result?.toLocal(federalPass: federalPass, phn: phn, source: source)
+    func toLocal(federalPass: String? = nil, source: Source? = .imported) -> LocallyStoredVaccinePassportModel? {
+        return result?.toLocal(federalPass: federalPass, source: source)
     }
 }
 

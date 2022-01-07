@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/CovidLabTestResult+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
       location = "group:BCVaccineCard.xcodeproj">
    </FileRef>
    <FileRef

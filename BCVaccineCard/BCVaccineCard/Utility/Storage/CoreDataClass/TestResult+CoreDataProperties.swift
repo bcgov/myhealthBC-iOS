@@ -2,7 +2,7 @@
 //  TestResult+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-01-05.
+//  Created by Amir on 2022-01-07.
 //
 //
 

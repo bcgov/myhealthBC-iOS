@@ -39,7 +39,7 @@ struct HealthRecord {
             }
         case .CovidImmunization(let card):
             patientName = card.name ?? ""
-            birthDate = card.birthdate
+            birthDate = card.patient?.birthday
         }
     }
 }

@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-01-05.
+//  Created by Amir on 2022-01-07.
 //
 //
 
@@ -19,8 +19,6 @@ extension Patient {
     @NSManaged public var phn: String?
     @NSManaged public var name: String?
     @NSManaged public var birthday: Date?
-    @NSManaged public var firstName: String?
-    @NSManaged public var lastName: String?
     @NSManaged public var covidTestResults: NSSet?
     @NSManaged public var vaccineCard: NSSet?
 
