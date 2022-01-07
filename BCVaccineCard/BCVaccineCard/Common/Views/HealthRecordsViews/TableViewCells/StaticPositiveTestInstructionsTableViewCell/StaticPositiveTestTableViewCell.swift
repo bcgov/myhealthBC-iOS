@@ -11,12 +11,12 @@ class StaticPositiveTestTableViewCell: UITableViewCell {
     
     @IBOutlet weak private var headingLabel: UILabel!
     @IBOutlet weak private var attributedTextLabel: UILabel!
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setup()
     }
-
+    
     private func setup() {
         headingLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         headingLabel.textColor = AppColours.textBlack
@@ -38,9 +38,9 @@ class StaticPositiveTestTableViewCell: UITableViewCell {
 
 
 extension NSMutableAttributedString {
-
+    
     public func setAsLink(textToFind:String, linkURL:String) -> Bool {
-
+        
         let foundRange = self.mutableString.range(of: textToFind)
         if foundRange.location != NSNotFound {
             self.addAttribute(.link, value: linkURL, range: foundRange)

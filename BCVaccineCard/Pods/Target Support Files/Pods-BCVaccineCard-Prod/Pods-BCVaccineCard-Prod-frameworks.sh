@@ -178,6 +178,7 @@ code_sign_if_enabled() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AlamofireRSSParser/AlamofireRSSParser.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/BCVaccineValidator/BCVaccineValidator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/EncryptedCoreData/EncryptedCoreData.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
@@ -194,6 +195,7 @@ fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AlamofireRSSParser/AlamofireRSSParser.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/BCVaccineValidator/BCVaccineValidator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/EncryptedCoreData/EncryptedCoreData.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"

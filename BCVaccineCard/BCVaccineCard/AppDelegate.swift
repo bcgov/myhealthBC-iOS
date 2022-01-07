@@ -9,12 +9,14 @@ import UIKit
 import CoreData
 import BCVaccineValidator
 import EncryptedCoreData
+import AppAuth
 //import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let sharedInstance = UIApplication.shared.delegate as? AppDelegate
+    var currentAuthorizationFlow: OIDExternalUserAgentSession?
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -37,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
         lazy var persistentContainer: NSPersistentContainer = {
             let container = NSPersistentContainer(name: "BCVaccineCard")
-            
+           
             do {
                 let options = [
                     EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key
@@ -77,6 +79,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+}
+
+// MARK: Auth {
+extension AppDelegate {
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+      // Sends the URL to the current authorization flow (if any) which will
+      // process it if it relates to an authorization response.
+      if let authorizationFlow = self.currentAuthorizationFlow,
+                                 authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+        self.currentAuthorizationFlow = nil
+        return true
+      }
+
+      // Your additional URL handling (if any)
+
+      return false
+    }
 }
 
 // MARK: Root setup
