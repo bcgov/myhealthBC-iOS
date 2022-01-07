@@ -13,6 +13,7 @@ class SettingsViewController: BaseViewController {
         case analytics = 0
         case privacy
         case deleteAllRecords
+        case auth
     }
     
     class func constructSettingsViewController() -> SettingsViewController {
@@ -27,6 +28,11 @@ class SettingsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,6 +119,30 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                 } onCancel: {}
             }
             return cell
+        case .auth:
+            // This is temporary for dev/qa
+            if AuthManager().authToken == nil {
+                let cell = textCell(for: indexPath, title: "sign in", textColor: AppColours.appBlue) {
+                    AuthenticationViewController.displayFullScreen()
+                }
+                return cell
+            } else {
+                var expDate = ""
+                if let exp = AuthManager().authTokenExpiery {
+                    expDate = exp.customDateTimeString
+                }
+                
+                let cell = textCell(for: indexPath, title: "sign out", textColor: AppColours.appRed) {[weak self] in
+                    guard let `self` = self else {return}
+                    self.alertConfirmation(title: "sign out?", message: "token exp is \(expDate)", confirmTitle: .delete, confirmStyle: .destructive) {
+                        AuthManager().signout(in: self, completion: { _ in
+                            tableView.reloadData()
+                        })
+                        
+                    } onCancel: {}
+                }
+                return cell
+            }
         }
     }
     

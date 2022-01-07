@@ -12,6 +12,7 @@ class StaticPositiveTestTableViewCell:  UITableViewCell, UITextViewDelegate {
     @IBOutlet weak private var headingLabel: UILabel!
     @IBOutlet weak var attributedTextView: UITextView!
     @IBOutlet weak var textHeight: NSLayoutConstraint!
+    @IBOutlet weak private var attributedTextLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -52,7 +53,6 @@ class StaticPositiveTestTableViewCell:  UITableViewCell, UITextViewDelegate {
 
 
 extension NSMutableAttributedString {
-    
     public func range(textToFind: String) -> NSRange? {
         self.mutableString.range(of: textToFind)
     }
