@@ -121,8 +121,11 @@ extension UsersListOfRecordsViewController {
                 let listOfStatuses = record.records.map { ($0.status, $0.date) }
                 for (index, data) in listOfStatuses.enumerated() {
                     if data.0 == CovidTestResult.pending.rawValue {
-                        guard let dateOfBirth = model.birthday?.yearMonthDayString,
-                                let phn = model.phn,
+                        
+                        guard
+                            let patient = model.patient,
+                            let dateOfBirth = patient.birthday?.yearMonthDayString,
+                                let phn = patient.phn,
                               let collectionDatePresentableFormat = listOfStatuses[index].1,
                               let collectionDate = Date.Formatter.monthDayYearDate.date(from: collectionDatePresentableFormat)?.yearMonthDayString else { return }
                         

@@ -8,25 +8,60 @@
 import Foundation
 import BCVaccineValidator
 
-extension StorageService {
+protocol StorageVaccineCardManager {
     
+    // MARK: Store
     /// Store a vaccine card for a given user id
     /// - Parameters:
     ///   - vaccineQR: Vaccine card code
-    ///   - name: card holder name: NOT the name of the user storing data
-    ///   - userId: User id under which this card is to be stored
-    /// - Returns: boolean indicating success or failure
-    func saveVaccineVard(vaccineQR: String, name: String, birthdate: Date, issueDate: Date, userId: String, hash: String, phn: String? = nil, federalPass: String? = nil, vaxDates: [String]? = nil) -> Bool {
-        guard let context = managedContext, let user = fetchUser(id: userId) else {return false}
-        let sortOrder = Int64(fetchVaccineCards(for: userId).count)
+    ///   - name: card holder name
+    ///   - issueDate: card's issue date
+    ///   - hash: hash of the qr code's payload. use as id
+    ///   - patient: patient to store this card for
+    ///   - federalPass: federal pass if available
+    ///   - vaxDates: vaccine dates
+    /// - Returns: created object
+    func storeVaccineVard(
+        vaccineQR: String,
+        name: String,
+        issueDate: Date,
+        hash: String,
+        patient: Patient,
+        federalPass: String?,
+        vaxDates: [String]?
+    ) -> VaccineCard?
+    
+    // MARK: Update
+    
+    /// Update a stored vaccine card to a add federal pass
+    func updateVaccineCard(card: VaccineCard, federalPass: String, completion: @escaping(VaccineCard?)->Void)
+    
+    /// Updated a stored vaccine card with new data from
+    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(VaccineCard?)->Void)
+    
+    /// Update a vaccine card's sort order
+    func updateVaccineCardSortOrder(card: VaccineCard, newPosition: Int)
+    
+    
+    // MARK: Delete
+    func deleteVaccineCard(vaccineQR code: String)
+    
+    // MARK: Fetch
+    func fetchVaccineCards() -> [VaccineCard]
+    func fetchVaccineCard(code: String) -> VaccineCard?
+}
+
+extension StorageService: StorageVaccineCardManager {
+    // MARK: Store
+    func storeVaccineVard(vaccineQR: String, name: String, issueDate: Date, hash: String, patient: Patient, federalPass: String? = nil, vaxDates: [String]? = nil) -> VaccineCard? {
+        guard let context = managedContext else {return nil}
+        let sortOrder = Int64(fetchVaccineCards().count)
         let card = VaccineCard(context: context)
         card.code = vaccineQR
         card.name = name
-        card.user = user
-        card.birthdate = birthdate
+        card.patient = patient
         card.federalPass = federalPass
         card.vaxDates = vaxDates
-        card.phn = phn
         card.sortOrder = sortOrder
         card.firHash = hash
         card.issueDate = issueDate
@@ -34,62 +69,60 @@ extension StorageService {
             try context.save()
             notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
             storeImmunizaionRecords(card: card)
-            return true
+            return card
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
-            return false
+            return nil
         }
     }
     
-    func deleteVaccineCard(vaccineQR code: String) {
-        guard let context = managedContext else {return}
+    // MARK: Update
+    func updateVaccineCard(card: VaccineCard, federalPass: String, completion: @escaping (VaccineCard?) -> Void) {
+        guard let context = managedContext else {return completion(nil)}
         do {
-            var cards = try context.fetch(VaccineCard.fetchRequest())
-            guard let item = cards.filter({$0.code == code}).first else {return}
-            // Delete from core data
-            context.delete(item)
-            // Filter cards with the same use and sort by sort order
-            cards = cards.filter({$0.user?.userId == item.user?.userId}).sorted {
-                $0.sortOrder < $1.sortOrder
-            }
-            // Remove card at index
-            cards.removeAll { card in
-                card.code == code
-            }
-            // update sort order based on array index
-            for (index, card) in cards.enumerated() {
-                card.sortOrder = Int64(index)
-            }
-            notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: item))
+            card.federalPass = federalPass
             try context.save()
+            DispatchQueue.main.async {[weak self] in
+                guard let `self` = self else {return}
+                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+                return completion(card)
+                
+            }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
-            return
+            DispatchQueue.main.async {
+                return completion(nil)
+            }
         }
     }
     
-    /// Fetch all Vaccine Cards stored for a user
-    /// - Parameter user: user id
-    /// - Returns: array of vaccine cards
-    func fetchVaccineCards(for userId: String? = AuthManager().userId()) -> [VaccineCard] {
-        guard let context = managedContext else {return []}
+    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping (VaccineCard?) -> Void) {
+        guard let context = managedContext, let card = fetchVaccineCard(code: model.code) else {return completion(nil)}
         do {
-            let users = try context.fetch(User.fetchRequest())
-            guard let current = users.filter({$0.userId == userId}).first else {return []}
-            return current.vaccineCardArray
+            card.code = model.code
+            card.vaxDates = model.vaxDates
+            card.federalPass = model.fedCode
+            card.firHash = model.hash
+            try context.save()
+            DispatchQueue.main.async {[weak self] in
+                guard let `self` = self else {return}
+                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+                return completion(card)
+            }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
-            return []
+            DispatchQueue.main.async {
+                return completion(nil)
+            }
         }
     }
     
-    func changeVaccineCardSortOrder(cardQR code: String, newPosition: Int) {
+    func updateVaccineCardSortOrder(card: VaccineCard, newPosition: Int) {
         guard let context = managedContext else {return}
         do {
-            var cards = try context.fetch(VaccineCard.fetchRequest())
-            guard let cardToMove = cards.filter({$0.code == code}).first else {return}
-            // Filter cards that have the same user id and sort by sort order
-            cards = cards.filter({$0.user?.userId == cardToMove.user?.userId}).sorted {
+            var cards = fetchVaccineCards()
+            guard let cardToMove = cards.filter({$0.code == card.code}).first else {return}
+            cards = cards.sorted {
                 $0.sortOrder < $1.sortOrder
             }
             // Move card in array
@@ -105,84 +138,47 @@ extension StorageService {
         }
     }
     
-    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
+    // MARK: Delete
+    func deleteVaccineCard(vaccineQR code: String) {
         guard let context = managedContext else {return}
+        
+        var cards = fetchVaccineCards()
+        guard let item = cards.filter({$0.code == code}).first else {return}
+        // Delete from core data
+        delete(object: item)
+        // Sort
+        cards = cards.sorted {
+            $0.sortOrder < $1.sortOrder
+        }
+        // Remove card at index
+        cards.removeAll { card in
+            card.code == code
+        }
         do {
-            let cards = try context.fetch(VaccineCard.fetchRequest())
-            guard let card = cards.filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return}
-            card.code = model.code
-            card.vaxDates = model.vaxDates
-            card.federalPass = model.fedCode
-            card.phn = model.phn
-            card.firHash = model.hash
-            try context.save()
-            DispatchQueue.main.async {[weak self] in
-                guard let `self` = self else {return}
-                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
-                return completion(true)
+            // update sort order or stored cards based on array index
+            for (index, card) in cards.enumerated() {
+                card.sortOrder = Int64(index)
             }
+            notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: item))
+            try context.save()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
-            DispatchQueue.main.async {
-                return completion(false)
-            }
+            return
         }
     }
     
-    func updateVaccineCardFedCode(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
-        guard let context = managedContext else {return}
-        do {
-            let cards = try context.fetch(VaccineCard.fetchRequest())
-            guard let card = cards.filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return}
-            card.federalPass = model.fedCode
-            if card.phn == nil || card.phn?.count ?? 0 < 1 {
-                card.phn = model.phn
-            }
-            try context.save()
-            DispatchQueue.main.async {[weak self] in
-                guard let `self` = self else {return}
-                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
-                return completion(true)
-                
-            }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            DispatchQueue.main.async {
-                return completion(false)
-            }
-        }
+    // MARK: Fetch
+    func fetchVaccineCards() -> [VaccineCard] {
+        let patients = fetchPatients()
+        let cards = patients.map({$0.vaccineCardArray})
+        return Array(cards.joined())
     }
     
-    public func getVaccineCardsForCurrentUser(completion: @escaping([AppVaccinePassportModel]) -> Void) {
-        let userId = AuthManager().userId()
-        let cards = fetchVaccineCards(for: userId)
-        recursivelyProcessStored(cards: cards, processed: []) { processed in
-            return completion(processed)
-        }
+    func fetchVaccineCard(code: String) -> VaccineCard? {
+        fetchVaccineCards().filter({$0.code == code}).first
     }
     
-    //     TODO: We will need to refactor this - just adding duplicate function below for now
-    private func recursivelyProcessStored(cards: [VaccineCard], processed: [AppVaccinePassportModel], completion: @escaping([AppVaccinePassportModel]) -> Void) {
-        if cards.isEmpty {
-            return completion(processed)
-        }
-        var processedCards = processed
-        var remainingCards = cards
-        guard let cardToProcess = remainingCards.popLast(),
-              let code = cardToProcess.code else {
-                  return recursivelyProcessStored(cards: remainingCards, processed: processed, completion: completion)
-              }
-        // TODO: Will need to get vax dates from the processed result and add to model below
-        BCVaccineValidator.shared.validate(code: code) { result in
-            if let model = result.toLocal(federalPass: cardToProcess.federalPass, phn: cardToProcess.phn) {
-                processedCards.append(AppVaccinePassportModel(codableModel: model))
-                self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
-            } else {
-                self.recursivelyProcessStored(cards: remainingCards, processed: processedCards, completion: completion)
-            }
-        }
-    }
-    
+    // MARK: Helpers
     fileprivate func getState(of card: AppVaccinePassportModel, completion: @escaping(AppVaccinePassportModel.CardState) -> Void) {
         
         func addedFederalCode(to otherCard: AppVaccinePassportModel) -> Bool {
@@ -192,7 +188,8 @@ extension StorageService {
                 return false
             }
         }
-        StorageService.shared.getVaccineCardsForCurrentUser { localDS in
+        let cards = fetchVaccineCards()
+        cards.toAppVaccinePassportModel { localDS in
             guard !localDS.isEmpty else { return completion(.isNew) }
             
             // Check if card is duplicate

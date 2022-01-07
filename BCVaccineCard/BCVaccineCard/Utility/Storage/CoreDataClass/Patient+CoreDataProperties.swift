@@ -18,7 +18,7 @@ extension Patient {
 
     @NSManaged public var phn: String?
     @NSManaged public var name: String?
-    @NSManaged public var birthhday: Date?
+    @NSManaged public var birthday: Date?
     @NSManaged public var firstName: String?
     @NSManaged public var lastName: String?
     @NSManaged public var covidTestResults: NSSet?

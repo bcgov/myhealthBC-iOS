@@ -18,10 +18,10 @@ protocol StoragePatientManager {
     ///   - phn: Optional phn
     ///   - firstName: Optional first name
     ///   - lastName: Optional last name
-    /// - Returns: Success or fail
+    /// - Returns: Patient object
     func storePatient(name: String?,
                       birthday: Date?,
-                      phn: String?) -> Bool
+                      phn: String?) -> Patient?
     // MARK: Update
     /// Update a patient entity to add phn or add name and birthday.
     /// This function will find the patient based on the data given and update it. if not found, returns nil
@@ -60,19 +60,19 @@ extension StorageService: StoragePatientManager {
     public func storePatient(
         name: String? = nil,
         birthday: Date? = nil,
-        phn: String? = nil) -> Bool {
-            guard let context = managedContext else {return false}
+        phn: String? = nil) -> Patient? {
+            guard let context = managedContext else {return nil}
             let patient = Patient(context: context)
-            patient.birthhday = birthday
+            patient.birthday = birthday
             patient.name = name
             patient.phn = phn
             do {
                 try context.save()
                 notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
-                return true
+                return patient
             } catch let error as NSError {
                 print("Could not save. \(error), \(error.userInfo)")
-                return false
+                return nil
             }
         }
     
@@ -107,7 +107,7 @@ extension StorageService: StoragePatientManager {
         guard let context = managedContext else {return nil}
         do {
             patient.name = name
-            patient.birthhday = birthday
+            patient.birthday = birthday
             try context.save()
             notify(event: StorageEvent(event: .Update, entity: .Patient, object: patient))
             return patient
@@ -148,18 +148,18 @@ extension StorageService: StoragePatientManager {
     
     public func fetchPatient(name: String, birthday: Date) -> Patient? {
         let patients = fetchPatients()
-        return patients.filter({$0.name == name && $0.birthhday == birthday}).first
+        return patients.filter({$0.name == name && $0.birthday == birthday}).first
     }
     
     // MARK: Helpers
     func fetchOrCreatePatient(name: String, birthday: Date) -> Patient? {
         if let existing = fetchPatient(name: name, birthday: birthday) { return existing}
-        storePatient(name: name, birthday: birthday)
+        return storePatient(name: name, birthday: birthday)
     }
     
     func fetchOrCreatePatient(phn: String) -> Patient? {
         if let existing = fetchPatient(phn: phn) { return existing}
-        storePatient(phn: phn)
+       return  storePatient(phn: phn)
     }
     
     

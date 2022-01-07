@@ -14,7 +14,7 @@
         <relationship name="vaccineCard" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="immunizationRecord" inverseEntity="VaccineCard"/>
     </entity>
     <entity name="Patient" representedClassName="Patient" syncable="YES">
-        <attribute name="birthhday" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="birthday" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
@@ -37,13 +37,11 @@
         <relationship name="parentTest" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CovidLabTestResult" inverseName="results" inverseEntity="CovidLabTestResult"/>
     </entity>
     <entity name="VaccineCard" representedClassName="VaccineCard" syncable="YES">
-        <attribute name="birthdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="code" optional="YES" attributeType="String"/>
         <attribute name="federalPass" optional="YES" attributeType="String"/>
         <attribute name="firHash" optional="YES" attributeType="String"/>
         <attribute name="issueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="phn" optional="YES" attributeType="String"/>
         <attribute name="sortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="vaxDates" optional="YES" attributeType="Transformable"/>
         <relationship name="immunizationRecord" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ImmunizationRecord" inverseName="vaccineCard" inverseEntity="ImmunizationRecord"/>
@@ -54,6 +52,6 @@
         <element name="ImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="104"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
         <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="118"/>
-        <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="194"/>
+        <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="178"/>
     </elements>
 </model>
