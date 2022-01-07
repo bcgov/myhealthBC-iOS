@@ -58,10 +58,11 @@ class HealthRecordsUserView: UIView {
         recordIconImageView.image = UIImage(named: "vaccine-record-icon")
     }
     
-    // TODO: Perhaps we need a user model here to configure this? User object which contains all of the different records that a user will have?
     func configure(name: String, records: Int) {
         setupAccessibility()
-        // TODO: Add in a model to pass into configure and then adjust values
+        // NOTE: This is for weird logic where we word wrap, unless there is a name that is really long and hyphenated (so, going to make assumptions here)
+        let numberOfSpaces = name.reduce(0) { $1 == " " ? $0 + 1 : $0 }
+        nameLabel.lineBreakMode = name.count >= 20 && numberOfSpaces <= 1 ? .byTruncatingTail : .byWordWrapping
         nameLabel.text = name
         var recordText = "\(records) " + .recordText
         if records != 1 {

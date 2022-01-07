@@ -120,7 +120,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         switch data {
         case .text(text: let text):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .partiallyBoldedText(boldTexts: [.officialHealthPass], boldFont: UIFont.bcSansBoldWithSize(size: 17)), text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
+                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
                 return cell
             }
         case .image(image: let image):
