@@ -270,9 +270,7 @@ extension UIViewController {
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
     func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let birthdate = formatter.date(from: model.birthdate) ?? Date()
+        let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: model.name, birthday: birthdate) else {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card")
             return

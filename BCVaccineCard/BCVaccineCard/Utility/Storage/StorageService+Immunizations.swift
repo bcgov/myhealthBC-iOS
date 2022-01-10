@@ -31,15 +31,16 @@ extension StorageService {
     fileprivate func storeImmunizationRecord(record: COVIDImmunizationRecord, card: VaccineCard) {
         guard let context = managedContext else {return}
         let model = ImmunizationRecord(context: context)
-        // TODO: Add this field when its added to the payload
+        print(card)
         model.snomed = record.snomed
         // TODO: format record.date and add here
-        model.date = Date()
+        if let dateString = record.date, let date = Date.Formatter.yearMonthDay.date(from: dateString) {
+            model.date = date
+        }
         model.provider = record.provider
         model.lotNumber = record.lotNumber
         model.date = record.date?.vaxDate()
         model.snomed = record.snomed
-        model.vaccineCard = card
         do {
             try context.save()
             notify(event: StorageEvent(event: .Save, entity: .ImmunizationRecord, object: model))

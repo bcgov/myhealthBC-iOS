@@ -104,6 +104,7 @@ extension UsersListOfRecordsViewController {
         self.view.startLoadingIndicator(backgroundColor: .clear)
         StorageService.shared.getHeathRecords { [weak self] records in
             guard let `self` = self else {return}
+            Logger.log(string: records.first!.detailDataSource())
             self.dataSource = records.detailDataSource(userName: self.name, birthDate: self.birthdate)
             self.setupTableView()
             self.navSetup()
