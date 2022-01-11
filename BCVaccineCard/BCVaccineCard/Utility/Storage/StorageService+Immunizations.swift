@@ -18,7 +18,7 @@ fileprivate extension String {
 
 extension StorageService {
     
-    func storeImmunizaionRecords(card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void) {
+    func storeImmunizaionRecords(in card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void) {
         guard let qrCode = card.code else {return}
         BCVaccineValidator.shared.validate(code: qrCode) { result in
             guard let result = result.result else {return}

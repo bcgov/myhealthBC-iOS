@@ -32,6 +32,8 @@ protocol StorageVaccineCardManager {
         completion: @escaping(VaccineCard?)->Void
     )
     
+    func storeImmunizaionRecords(in card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void)
+    
     // MARK: Update
     
     /// Update a stored vaccine card to a add federal pass
@@ -66,7 +68,7 @@ extension StorageService: StorageVaccineCardManager {
         card.sortOrder = sortOrder
         card.firHash = hash
         card.issueDate = issueDate
-        storeImmunizaionRecords(card: card, completion: { records in
+        storeImmunizaionRecords(in: card, completion: { records in
             for record in records {
                 card.addToImmunizationRecord(record)
             }
