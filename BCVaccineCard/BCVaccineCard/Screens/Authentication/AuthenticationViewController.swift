@@ -15,10 +15,13 @@ class AuthenticationViewController: UIViewController {
         case Failed
     }
     
-    class func constructAuthenticationViewController(returnToHealthPass: Bool, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
+    class func constructAuthenticationViewController(returnToHealthPass: Bool, isModal: Bool, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion
             vc.returnToHealthPass = returnToHealthPass
+            if #available(iOS 13.0, *) {
+                vc.isModalInPresentation = isModal
+            }
             return vc
         }
         return AuthenticationViewController()
@@ -142,7 +145,7 @@ class AuthenticationViewController: UIViewController {
         transition.type = .fade
         transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: true, completion: {_ in})
+        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: true, isModal: false, completion: {_ in})
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
     

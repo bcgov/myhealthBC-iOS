@@ -24,6 +24,9 @@ class StaticPositiveTestTableViewCell:  UITableViewCell, UITextViewDelegate {
         headingLabel.textColor = AppColours.textBlack
         attributedTextView.font = UIFont.bcSansRegularWithSize(size: 17)
         attributedTextView.textColor = AppColours.textBlack
+        let selectedBGView = UIView()
+        selectedBGView.backgroundColor = .clear
+        selectedBackgroundView = selectedBGView
         textSetup()
     }
     
@@ -39,6 +42,7 @@ class StaticPositiveTestTableViewCell:  UITableViewCell, UITextViewDelegate {
         attributedTextView.translatesAutoresizingMaskIntoConstraints = true
         attributedTextView.sizeToFit()
         attributedTextView.isScrollEnabled = false
+        attributedTextView.isEditable = false
         self.layoutIfNeeded()
     }
     
