@@ -13,9 +13,9 @@ enum VaccineStatus: String, Codable {
     
     var getTitle: String {
         switch self {
-        case .fully: return .vaccinated
-        case .partially: return .partiallyVaccinated
-        case .notVaxed: return .noRecordFound
+        case .fully: return .vaccinated.sentenceCase()
+        case .partially: return .partiallyVaccinated.sentenceCase()
+        case .notVaxed: return .noRecordFound.sentenceCase()
         }
     }
     

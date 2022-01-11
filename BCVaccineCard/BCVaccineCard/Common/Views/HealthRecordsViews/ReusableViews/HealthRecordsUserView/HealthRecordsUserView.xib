@@ -27,9 +27,9 @@
                     <rect key="frame" x="1" y="1" width="150" height="116"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Mnl-0G-LVB">
-                            <rect key="frame" x="84" y="50" width="54" height="54"/>
+                            <rect key="frame" x="108" y="74" width="30" height="30"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="54" id="dfG-Vq-S4s"/>
+                                <constraint firstAttribute="width" constant="30" id="dfG-Vq-S4s"/>
                                 <constraint firstAttribute="width" secondItem="Mnl-0G-LVB" secondAttribute="height" multiplier="1:1" id="n5Z-vq-imK"/>
                             </constraints>
                         </imageView>
@@ -40,7 +40,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CiM-2D-qth">
-                            <rect key="frame" x="14" y="67" width="70" height="20.5"/>
+                            <rect key="frame" x="14" y="79" width="94" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
