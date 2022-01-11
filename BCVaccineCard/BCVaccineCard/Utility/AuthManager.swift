@@ -8,6 +8,7 @@
 import Foundation
 import AppAuth
 import KeychainAccess
+import JWTDecode
 
 extension Constants {
     struct Auth {
@@ -46,6 +47,17 @@ class AuthManager {
             return nil
         }
         return token.isEmpty ? nil : token
+    }
+    
+    var hdid: String? {
+        guard let stringToken = authToken else {return nil}
+        do {
+            let jwt = try decode(jwt: stringToken)
+            let claim = jwt.claim(name: "hdid")
+            return claim.string
+        } catch {
+            return nil
+        }
     }
     
     var refreshToken: String? {
