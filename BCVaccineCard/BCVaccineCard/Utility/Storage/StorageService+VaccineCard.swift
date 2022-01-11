@@ -32,7 +32,7 @@ protocol StorageVaccineCardManager {
         completion: @escaping(VaccineCard?)->Void
     )
     
-    func storeImmunizaionRecords(in card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void)
+    func createImmunizationRecords(for card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void)
     
     // MARK: Update
     
@@ -68,11 +68,10 @@ extension StorageService: StorageVaccineCardManager {
         card.sortOrder = sortOrder
         card.firHash = hash
         card.issueDate = issueDate
-        storeImmunizaionRecords(in: card, completion: { records in
+        createImmunizationRecords(for: card) { records in
             for record in records {
                 card.addToImmunizationRecord(record)
             }
-//            card.addToImmunizationRecord(records)
             do {
                 try context.save()
                 self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
@@ -81,8 +80,7 @@ extension StorageService: StorageVaccineCardManager {
                 print("Could not save. \(error), \(error.userInfo)")
                 completion(nil)
             }
-        })
-        
+        }
     }
     
     // MARK: Update
@@ -188,6 +186,27 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Helpers
+    func createImmunizationRecords(for card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void) {
+        guard let qrCode = card.code, let context = managedContext else {return completion([])}
+        BCVaccineValidator.shared.validate(code: qrCode) { result in
+            guard let result = result.result else {return}
+            var immunizations: [ImmunizationRecord] = []
+            for record in result.immunizations {
+                let model = ImmunizationRecord(context: context)
+                model.snomed = record.snomed
+                if let dateString = record.date, let date = Date.Formatter.yearMonthDay.date(from: dateString) {
+                    model.date = date
+                }
+                model.provider = record.provider
+                model.lotNumber = record.lotNumber
+                model.date = record.date?.vaxDate()
+                model.snomed = record.snomed
+                model.vaccineCard = card
+                immunizations.append(model)
+            }
+        }
+    }
+    
     fileprivate func getState(of card: AppVaccinePassportModel, completion: @escaping(AppVaccinePassportModel.CardState) -> Void) {
         
         func addedFederalCode(to otherCard: AppVaccinePassportModel) -> Bool {
@@ -239,3 +258,9 @@ extension AppVaccinePassportModel {
     }
 }
 
+fileprivate extension String {
+    func vaxDate() -> Date? {
+        let dateFormatter = Date.Formatter.yearMonthDay
+        return dateFormatter.date(from:self)
+    }
+}

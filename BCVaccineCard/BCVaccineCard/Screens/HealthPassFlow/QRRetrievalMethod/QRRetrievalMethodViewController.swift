@@ -272,7 +272,7 @@ extension QRRetrievalMethodViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .isNew:
-                self.appendModelToLocalStorage(model: model.transform())
+                self.storeVaccineCard(model: model.transform())
                 DispatchQueue.main.async {[weak self] in
                     guard let self = self else {return}
                     self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)

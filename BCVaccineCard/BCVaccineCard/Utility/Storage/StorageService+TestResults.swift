@@ -218,3 +218,10 @@ extension StorageService: StorageTestResultManager {
         return nil
     }
 }
+
+fileprivate extension String {
+    func vaxDate() -> Date? {
+        let dateFormatter = Date.Formatter.yearMonthDay
+        return dateFormatter.date(from:self)
+    }
+}
