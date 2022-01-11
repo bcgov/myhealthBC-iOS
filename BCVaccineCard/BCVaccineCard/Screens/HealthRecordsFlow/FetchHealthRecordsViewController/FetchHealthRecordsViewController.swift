@@ -117,6 +117,15 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
     
     
     private func showForm(type: GetRecordsView.RecordType, rememberDetails: RememberedGatewayDetails) {
+        
+        func showForm() {
+            switch type {
+            case .covidImmunizationRecord:
+                self.showVaccineForm(rememberDetails: rememberDetails)
+            case .covidTestResult:
+                self.showTestForm(rememberDetails: rememberDetails)
+            }
+        }
         if !AuthManager().isAuthenticated {
             self.view.startLoadingIndicator()
             let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] result in
@@ -125,27 +134,17 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
                 switch result {
                 case .Completed:
                     self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
-                        
                         // TODO: FETCH RECORDS FOR AUTHENTICATED USER
-                        switch type {
-                        case .covidImmunizationRecord:
-                            self.showVaccineForm(rememberDetails: rememberDetails)
-                        case .covidTestResult:
-                            self.showTestForm(rememberDetails: rememberDetails)
-                        }
+                        showForm()
                     }
                 case .Cancelled, .Failed:
+                    showForm()
                     break
                 }
             })
             self.present(vc, animated: true, completion: nil)
         } else {
-            switch type {
-            case .covidImmunizationRecord:
-                showVaccineForm(rememberDetails: rememberDetails)
-            case .covidTestResult:
-                showTestForm(rememberDetails: rememberDetails)
-            }
+            showForm()
         }
     }
      

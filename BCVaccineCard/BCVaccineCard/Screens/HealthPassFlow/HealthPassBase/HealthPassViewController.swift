@@ -91,6 +91,7 @@ extension HealthPassViewController {
                         showScreen()
                     }
                 case .Cancelled, .Failed:
+                    showScreen()
                     break
                 }
             })
