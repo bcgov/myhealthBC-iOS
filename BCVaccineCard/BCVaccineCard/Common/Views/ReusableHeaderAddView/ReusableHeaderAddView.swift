@@ -70,7 +70,7 @@ class ReusableHeaderAddView: UIView {
     // NOTE: For now, have two different config methods (in which case, we wouldn't need the screen type property - leaving for now as I'll likely be making just one config function once designs are finalized
     func configureForHealthPass(savedCards: Int?, delegateOwner: UIViewController) {
         self.screenType = .healthPass
-        boldTextLabel.text = .bcVaccinePass
+        boldTextLabel.text = .bcVaccineCard
         setupAccessibility()
         if let savedCards = savedCards, savedCards > 1 {
             subtextLabel.isHidden = false

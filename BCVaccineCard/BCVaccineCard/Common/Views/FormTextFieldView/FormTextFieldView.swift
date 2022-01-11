@@ -22,12 +22,12 @@ enum FormTextFieldType {
         case .dateOfTest: return .dateOfTest
         }
     }
-    
+    // Leaving this for now, even though we currently aren't using, as designs keep changing
     var getFieldSubtitle: String? {
         switch self {
         case .personalHealthNumber: return nil
         case .dateOfBirth: return nil
-        case .dateOfVaccination: return .anyDose
+        case .dateOfVaccination: return nil
         case .dateOfTest: return nil
         }
     }

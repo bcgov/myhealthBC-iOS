@@ -18,22 +18,24 @@ fileprivate extension String {
 
 extension StorageService {
     
-    func storeImmunizaionRecords(card: VaccineCard) {
+    func storeImmunizaionRecords(card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void) {
         guard let qrCode = card.code else {return}
         BCVaccineValidator.shared.validate(code: qrCode) { result in
             guard let result = result.result else {return}
+            var immunizations: [ImmunizationRecord] = []
             for record in result.immunizations {
-                self.storeImmunizationRecord(record: record, card: card)
+                if let storedObject = self.storeImmunizationRecord(record: record, card: card) {
+                    immunizations.append(storedObject)
+                }
             }
         }
     }
     
-    fileprivate func storeImmunizationRecord(record: COVIDImmunizationRecord, card: VaccineCard) {
-        guard let context = managedContext else {return}
+    fileprivate func storeImmunizationRecord(record: COVIDImmunizationRecord, card: VaccineCard) -> ImmunizationRecord? {
+        guard let context = managedContext else {return nil}
         let model = ImmunizationRecord(context: context)
         print(card)
         model.snomed = record.snomed
-        // TODO: format record.date and add here
         if let dateString = record.date, let date = Date.Formatter.yearMonthDay.date(from: dateString) {
             model.date = date
         }
@@ -41,12 +43,14 @@ extension StorageService {
         model.lotNumber = record.lotNumber
         model.date = record.date?.vaxDate()
         model.snomed = record.snomed
+        model.vaccineCard = card
         do {
             try context.save()
             notify(event: StorageEvent(event: .Save, entity: .ImmunizationRecord, object: model))
+            return model
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
-            return
+            return nil
         }
     }
 }

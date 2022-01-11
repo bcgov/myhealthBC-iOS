@@ -88,7 +88,7 @@ class FederalPassPDFView: UIView {
         shareButton.tintColor = .systemBlue
         shareButton.setTitle("", for: .normal)
         closeButton.setTitle("", for: .normal)
-        viewTitleLabel.text = .travelPass
+        viewTitleLabel.text = .canadianCOVID19ProofOfVaccination
         viewTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         closeButton.setTitle(.done, for: .normal)
     }

@@ -120,7 +120,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
         switch data {
         case .text(text: let text):
             if let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell {
-                cell.configure(forType: .partiallyBoldedText(boldTexts: [.officialHealthPass], boldFont: UIFont.bcSansBoldWithSize(size: 17)), text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
+                cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansRegularWithSize(size: 17), labelSpacingAdjustment: 0)
                 return cell
             }
         case .image(image: let image):
@@ -178,6 +178,30 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 
 // MARK: Table View Button Methods
 extension QRRetrievalMethodViewController {
+    func authenticateBeforeDisplayingGatewayForm() {
+        if !AuthManager().isAuthenticated {
+            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] result in
+                guard let `self` = self else {return}
+                switch result {
+                case .Completed:
+                    self.alert(title: "Log in successful",
+                               message: "Your records will be automatically added and updated in My Health BC.")
+                    {
+                        [weak self] in
+                        guard let `self` = self else {return}
+                        // TODO: FETCH RECORDS FOR AUTHENTICATED USER 
+                        self.goToEnterGateway()
+                    }
+                case .Cancelled, .Failed:
+                    break
+                }
+                
+            })
+            self.present(vc, animated: true, completion: nil)
+        } else {
+            goToEnterGateway()
+        }
+    }
     func goToEnterGateway() {
         // TODO: Should look at refactoring this a bit
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
@@ -224,7 +248,7 @@ extension QRRetrievalMethodViewController {
                     guard let `self` = self else {return}
                     self.storeValidatedQRCode(data: data, source: .imported)
                 }
-               
+                
             }
         }
     }
@@ -265,7 +289,7 @@ extension QRRetrievalMethodViewController {
                     })
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
-//                    self.navigationController?.popViewController(animated: true)
+                    //                    self.navigationController?.popViewController(animated: true)
                     self.popBackToProperViewController(id: model.id ?? "")
                 }
             case .UpdatedFederalPass:
@@ -277,7 +301,7 @@ extension QRRetrievalMethodViewController {
                         self.popBackToProperViewController(id: model.id ?? "")
                     }
                 }
-            
+                
             }
         }
     }
@@ -302,7 +326,7 @@ extension QRRetrievalMethodViewController {
         }
         guard containsCovidVaxCardsVC == false else {
             postCardAddedNotification(id: id)
-//            self.navigationController?.popViewController(animated: true)
+            //            self.navigationController?.popViewController(animated: true)
             self.popBack(toControllerType: CovidVaccineCardsViewController.self)
             return
         }
@@ -338,7 +362,7 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
                 self.view.endLoadingIndicator()
             })
         }
-       
+        
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {

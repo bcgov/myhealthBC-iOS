@@ -50,7 +50,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
     var getNavTitle: String {
         switch self {
         case .bcVaccineCardAndFederalPass: return .addAHealthPass
-        case .federalPassOnly: return .getFederalTravelPass
+        case .federalPassOnly: return .getFederalProof
         case .vaccinationRecord: return .formRecordNavTitle
         case .covid19TestResult: return .formTestNavTitle
         }

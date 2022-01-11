@@ -57,7 +57,7 @@ struct HealthRecordsDetailDataSource {
         switch type {
         case .covidImmunizationRecord(let model, _):
             id = model.id
-            title = .covid19vaccination
+            title = .vaccinationRecord
             detailNavTitle = .vaccinationRecord
             name = model.name
             image = UIImage(named: "blue-bg-vaccine-record-icon")
@@ -65,7 +65,7 @@ struct HealthRecordsDetailDataSource {
             deleteAlertMessage = .deleteCovidHealthRecord
         case .covidTestResultRecord(let model):
             id = model.id
-            title = .covid19mRNATitle
+            title = .covid19TestResultTitle
             detailNavTitle = .covid19TestResultTitle
             name = model.resultArray.first?.patientDisplayName ?? ""
             image = UIImage(named: "blue-bg-test-result-icon")
@@ -95,9 +95,7 @@ struct HealthRecordsDetailDataSource {
         for (index, imsModel) in immunizations.enumerated() {
             var stringDate = ""
             if let date = imsModel.date {
-                let formatter = DateFormatter()
-                formatter.dateFormat = "MMMM dd, yyyy"
-                stringDate = formatter.string(from: date)
+                stringDate = date.issuedOnDateTime
             }
             let product = Constants.vaccineInfo(snowMedCode: Int(imsModel.snomed ?? "1") ?? 1)?.displayName ?? ""
             let imsSet = [
@@ -106,7 +104,7 @@ struct HealthRecordsDetailDataSource {
                 TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: false), subtext: TextListModel.TextProperties(text: stringDate, bolded: true)),
                 TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: false), subtext: TextListModel.TextProperties(text: product, bolded: true)),
                 TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "N/A", bolded: true)),
-                TextListModel(header: TextListModel.TextProperties(text: "Lot Number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "N/A", bolded: true))
+                TextListModel(header: TextListModel.TextProperties(text: "Lot number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "N/A", bolded: true))
             ]
             fields.append(imsSet)
         }
@@ -119,9 +117,9 @@ struct HealthRecordsDetailDataSource {
         let date: String? = testResult.resultDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         fields.append([
-            TextListModel(header: TextListModel.TextProperties(text: "Date of Testing:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.monthDayYearString ?? "", bolded: true)),
-            TextListModel(header: TextListModel.TextProperties(text: "Test Status:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testStatus ?? "Pending", bolded: true)),
-            TextListModel(header: TextListModel.TextProperties(text: "Type Name:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: true)),
+            TextListModel(header: TextListModel.TextProperties(text: "Date of testing:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.issuedOnDateTime ?? "", bolded: true)),
+            TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testStatus ?? "Pending", bolded: true)),
+            TextListModel(header: TextListModel.TextProperties(text: "Type name:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: true)),
             TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.lab ?? "", bolded: true))
         ])
         return Record(id: testResult.id ?? UUID().uuidString, name: testResult.patientDisplayName ?? "", type: .covidTestResultRecord(model: testResult), status: status, date: date, fields: fields)

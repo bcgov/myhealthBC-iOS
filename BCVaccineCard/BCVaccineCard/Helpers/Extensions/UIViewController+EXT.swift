@@ -275,7 +275,7 @@ extension UIViewController {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card")
             return
         }
-        _ = StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, federalPass: model.fedCode, vaxDates: model.vaxDates)
+        StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, federalPass: model.fedCode, vaxDates: model.vaxDates, completion: {_ in})
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {

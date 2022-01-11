@@ -118,7 +118,7 @@ extension HealthRecordsViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .healthRecords,
                                                leftNavButton: nil,
-                                               rightNavButton: nil,
+                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
                                                targetVC: self,
                                                backButtonHintString: nil)

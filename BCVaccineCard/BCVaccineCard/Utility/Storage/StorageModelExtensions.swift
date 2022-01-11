@@ -147,10 +147,10 @@ extension TestResult {
     ///        Test Status:
     ///        - Pending
     ///        - Final
-    ///        - StatusChange
+    ///        - Status Change
     ///
     ///        Test Outcome:
-    ///        - NotSet - (Pending) - unknown
+    ///        - Not Set - (Pending) - unknown
     ///        - Other - unknown
     ///        - Indeterminate
     ///        - Negative

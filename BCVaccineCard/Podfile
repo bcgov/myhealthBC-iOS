@@ -17,6 +17,7 @@ target 'BCVaccineCard' do
   pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
   pod 'EncryptedCoreData', :git => 'https://github.com/project-imas/encrypted-core-data.git'
   pod 'KeychainAccess'
+  pod 'AppAuth'
   
   target 'BCVaccineCardTests' do
     inherit! :search_paths
@@ -44,6 +45,7 @@ target 'BCVaccineCard-Prod' do
   pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
   pod 'EncryptedCoreData', :git => 'https://github.com/project-imas/encrypted-core-data.git'
   pod 'KeychainAccess'
+  pod 'AppAuth'
 end
 
 post_install do |installer|

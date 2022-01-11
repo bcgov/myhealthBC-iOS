@@ -28,8 +28,9 @@ protocol StorageVaccineCardManager {
         hash: String,
         patient: Patient,
         federalPass: String?,
-        vaxDates: [String]?
-    ) -> VaccineCard?
+        vaxDates: [String]?,
+        completion: @escaping(VaccineCard?)->Void
+    )
     
     // MARK: Update
     
@@ -53,8 +54,8 @@ protocol StorageVaccineCardManager {
 
 extension StorageService: StorageVaccineCardManager {
     // MARK: Store
-    func storeVaccineVard(vaccineQR: String, name: String, issueDate: Date, hash: String, patient: Patient, federalPass: String? = nil, vaxDates: [String]? = nil) -> VaccineCard? {
-        guard let context = managedContext else {return nil}
+    func storeVaccineVard(vaccineQR: String, name: String, issueDate: Date, hash: String, patient: Patient, federalPass: String? = nil, vaxDates: [String]? = nil, completion: @escaping(VaccineCard?)->Void) {
+        guard let context = managedContext else {return completion(nil)}
         let sortOrder = Int64(fetchVaccineCards().count)
         let card = VaccineCard(context: context)
         card.code = vaccineQR
@@ -65,15 +66,21 @@ extension StorageService: StorageVaccineCardManager {
         card.sortOrder = sortOrder
         card.firHash = hash
         card.issueDate = issueDate
-        do {
-            try context.save()
-            notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
-            storeImmunizaionRecords(card: card)
-            return card
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            return nil
-        }
+        storeImmunizaionRecords(card: card, completion: { records in
+            for record in records {
+                card.addToImmunizationRecord(record)
+            }
+//            card.addToImmunizationRecord(records)
+            do {
+                try context.save()
+                self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
+                completion(card)
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+                completion(nil)
+            }
+        })
+        
     }
     
     // MARK: Update

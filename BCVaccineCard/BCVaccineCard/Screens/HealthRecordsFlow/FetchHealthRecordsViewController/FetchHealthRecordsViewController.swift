@@ -112,24 +112,60 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         if let details = Defaults.rememberGatewayDetails {
             rememberDetails = details
         }
-        switch type {
-        case .covidImmunizationRecord:
-            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
-            vc.completionHandler = { [weak self] details in
-                guard let `self` = self else { return }
-                self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
-            }
-            self.navigationController?.pushViewController(vc, animated: true)
-        case .covidTestResult:
-            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
-            vc.completionHandler = { [weak self] details in
-                guard let `self` = self else { return }
-                self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
-            }
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        showForm(type: type, rememberDetails: rememberDetails)
     }
     
+    
+    private func showForm(type: GetRecordsView.RecordType, rememberDetails: RememberedGatewayDetails) {
+        if !AuthManager().isAuthenticated {
+            self.view.startLoadingIndicator()
+            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] result in
+                guard let `self` = self else {return}
+                self.view.endLoadingIndicator()
+                switch result {
+                case .Completed:
+                    self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
+                        
+                        // TODO: FETCH RECORDS FOR AUTHENTICATED USER
+                        switch type {
+                        case .covidImmunizationRecord:
+                            self.showVaccineForm(rememberDetails: rememberDetails)
+                        case .covidTestResult:
+                            self.showTestForm(rememberDetails: rememberDetails)
+                        }
+                    }
+                case .Cancelled, .Failed:
+                    break
+                }
+            })
+            self.present(vc, animated: true, completion: nil)
+        } else {
+            switch type {
+            case .covidImmunizationRecord:
+                showVaccineForm(rememberDetails: rememberDetails)
+            case .covidTestResult:
+                showTestForm(rememberDetails: rememberDetails)
+            }
+        }
+    }
+     
+    private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
+        vc.completionHandler = { [weak self] details in
+            guard let `self` = self else { return }
+            self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func showTestForm(rememberDetails: RememberedGatewayDetails) {
+        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
+        vc.completionHandler = { [weak self] details in
+            guard let `self` = self else { return }
+            self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     private func handleRouting(id: String, recordType: GetRecordsView.RecordType, details: GatewayFormCompletionHandlerDetails) {
         StorageService.shared.getHeathRecords { [weak self] records in
             guard let `self` = self else { return }
