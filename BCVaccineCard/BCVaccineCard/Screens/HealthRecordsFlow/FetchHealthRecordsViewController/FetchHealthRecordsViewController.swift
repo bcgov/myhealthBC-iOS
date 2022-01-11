@@ -128,7 +128,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         if !AuthManager().isAuthenticated {
             self.view.startLoadingIndicator()
-            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, completion: { [weak self] result in
+            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
                 guard let `self` = self else {return}
                 self.view.endLoadingIndicator()
                 switch result {
