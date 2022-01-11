@@ -10,7 +10,7 @@ import BCVaccineValidator
 
 extension StorageService {
     
-    func getHeathRecords(for userId: String? = AuthManager().userId(), completion: @escaping( [HealthRecord])-> Void) {
+    func getHeathRecords(completion: @escaping( [HealthRecord])-> Void) {
         let tests = fetchTestResults().map({HealthRecord(type: .Test($0))})
         let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
         return completion(tests + vaccineCards)

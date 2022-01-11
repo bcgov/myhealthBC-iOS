@@ -46,8 +46,6 @@
 		29245D442755877A00F48642 /* Encodable+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D422755877A00F48642 /* Encodable+EXT.swift */; };
 		2932DCDF275A9D2C00532BC4 /* StorageService+VaccineCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCDE275A9D2C00532BC4 /* StorageService+VaccineCard.swift */; };
 		2932DCE1275AA10D00532BC4 /* StorageService+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE0275AA10D00532BC4 /* StorageService+User.swift */; };
-=======
->>>>>>> origin/dev
 		2932DCE7275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE6275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift */; };
 		2932DCE8275ECC8F00532BC4 /* CoreDataEncryptionKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE6275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift */; };
 		2932DCEA275ED82600532BC4 /* AnalyticsAppID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2932DCE9275ED82600532BC4 /* AnalyticsAppID.swift */; };

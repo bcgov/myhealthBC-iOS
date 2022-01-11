@@ -272,7 +272,7 @@ extension QRRetrievalMethodViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .isNew:
-                self.appendModelToLocalStorage(model: model.transform())
+                self.storeVaccineCard(model: model.transform())
                 DispatchQueue.main.async {[weak self] in
                     guard let self = self else {return}
                     self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
@@ -312,7 +312,7 @@ extension QRRetrievalMethodViewController {
     func popBackToProperViewController(id: String) {
         // If we only have one card (or no cards), then go back to health pass with popBackTo
         // If we have more than one card, we should check if 2nd controller in stack is CovidVaccineCardsViewController, if so, pop back, if not, instantiate, insert at 1, then pop back
-        guard StorageService.shared.fetchVaccineCards(for: AuthManager().userId()).count > 1 else {
+        guard StorageService.shared.fetchVaccineCards().count > 1 else {
             self.popBack(toControllerType: HealthPassViewController.self)
             return
         }

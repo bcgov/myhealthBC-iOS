@@ -67,7 +67,7 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
        
         validateCode(code: vaxCode) { [weak self] result in
             guard let `self` = self, self.code == vaxCode else {return}
-            if let localModel = result.toLocal(federalPass: model.federalPass, phn: model.phn) {
+            if let localModel = result.toLocal(federalPass: model.federalPass) {
                 self.config(model: localModel.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
             }
         }

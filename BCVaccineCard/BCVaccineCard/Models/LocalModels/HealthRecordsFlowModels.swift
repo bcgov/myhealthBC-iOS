@@ -30,7 +30,7 @@ struct HealthRecord {
         switch type {
         case .Test(let test):
             let results = test.resultArray
-            birthDate = test.birthday
+            birthDate = test.patient?.birthday
             if let first = results.first {
                 patientName = first.patientDisplayName ?? ""
                 
@@ -39,7 +39,7 @@ struct HealthRecord {
             }
         case .CovidImmunization(let card):
             patientName = card.name ?? ""
-            birthDate = card.birthdate
+            birthDate = card.patient?.birthday
         }
     }
 }
@@ -69,7 +69,7 @@ extension Array where Element == HealthRecord {
         var result: [HealthRecordsDataSource] = []
         for record in self {
             // TODO: check for birthday too
-            if let i = result.firstIndex(where: {$0.userName == record.patientName}) {
+            if let i = result.firstIndex(where: {$0.userName == record.patientName && $0.birthdate == record.birthDate}) {
                 result[i].numberOfRecords += 1
             } else {
                 result.append(HealthRecordsDataSource(userName: record.patientName, birthdate: record.birthDate, numberOfRecords: 1))
@@ -78,6 +78,7 @@ extension Array where Element == HealthRecord {
         return result
     }
     
+    // TODO: Refactor to use patient as parameter
     func detailDataSource(userName: String, birthDate: Date?) -> [HealthRecordsDetailDataSource] {
         let filtered = self.filter { $0.patientName == userName && $0.birthDate == birthDate }
         return filtered.compactMap({$0.detailDataSource()})

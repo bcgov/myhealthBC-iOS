@@ -242,7 +242,9 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         let movedObject = dataSource[sourceIndexPath.row]
         dataSource.remove(at: sourceIndexPath.row)
         dataSource.insert(movedObject, at: destinationIndexPath.row)
-        StorageService.shared.changeVaccineCardSortOrder(cardQR: movedObject.code ?? "", newPosition: destinationIndexPath.row)
+        if let card = StorageService.shared.fetchVaccineCard(code: movedObject.code ?? "") {
+            StorageService.shared.updateVaccineCardSortOrder(card: card, newPosition: destinationIndexPath.row)
+        }
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
@@ -312,7 +314,7 @@ extension CovidVaccineCardsViewController {
 extension CovidVaccineCardsViewController {
     
     private func fetchFromStorage() {
-        let cards = StorageService.shared.fetchVaccineCards(for: AuthManager().userId())
+        let cards = StorageService.shared.fetchVaccineCards()
         self.dataSource = cards
         self.adjustNavBar()
         self.tableView.reloadData()

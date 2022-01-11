@@ -1,8 +1,8 @@
 //
-//  User+CoreDataProperties.swift
+//  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2021-12-09.
+//  Created by Amir on 2022-01-07.
 //
 //
 
@@ -10,21 +10,22 @@ import Foundation
 import CoreData
 
 
-extension User {
+extension Patient {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<User> {
-        return NSFetchRequest<User>(entityName: "User")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Patient> {
+        return NSFetchRequest<Patient>(entityName: "Patient")
     }
 
-    @NSManaged public var id: String?
+    @NSManaged public var phn: String?
     @NSManaged public var name: String?
+    @NSManaged public var birthday: Date?
     @NSManaged public var covidTestResults: NSSet?
     @NSManaged public var vaccineCard: NSSet?
 
 }
 
 // MARK: Generated accessors for covidTestResults
-extension User {
+extension Patient {
 
     @objc(addCovidTestResultsObject:)
     @NSManaged public func addToCovidTestResults(_ value: CovidLabTestResult)
@@ -41,7 +42,7 @@ extension User {
 }
 
 // MARK: Generated accessors for vaccineCard
-extension User {
+extension Patient {
 
     @objc(addVaccineCardObject:)
     @NSManaged public func addToVaccineCard(_ value: VaccineCard)

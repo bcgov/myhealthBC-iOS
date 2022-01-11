@@ -2,7 +2,7 @@
 //  VaccineCard+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2021-12-09.
+//  Created by Amir on 2022-01-07.
 //
 //
 
@@ -16,17 +16,15 @@ extension VaccineCard {
         return NSFetchRequest<VaccineCard>(entityName: "VaccineCard")
     }
 
-    @NSManaged public var birthdate: Date?
     @NSManaged public var code: String?
     @NSManaged public var federalPass: String?
     @NSManaged public var firHash: String?
     @NSManaged public var issueDate: Date?
     @NSManaged public var name: String?
-    @NSManaged public var phn: String?
     @NSManaged public var sortOrder: Int64
     @NSManaged public var vaxDates: [String]?
     @NSManaged public var immunizationRecord: NSSet?
-    @NSManaged public var user: User?
+    @NSManaged public var patient: Patient?
 
 }
 

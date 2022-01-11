@@ -269,35 +269,37 @@ extension UIViewController {
 
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
-    func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        print (model.birthdate)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let birthdate = formatter.date(from: model.birthdate) ?? Date()
-        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: birthdate, issueDate: Date(timeIntervalSince1970: model.issueDate), userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
+    func storeVaccineCard(model: LocallyStoredVaccinePassportModel) {
+        let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
+        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: model.name, birthday: birthdate) else {
+            Logger.log(string: "**Could not fetch or create patent to store vaccine card")
+            return
+        }
+        StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, federalPass: model.fedCode, vaxDates: model.vaxDates, completion: {_ in})
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
-        StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] success in
+        StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] card in
             guard let `self` = self else {return}
-            if success {
+            if card != nil {
                 self.showBanner(message: .updatedCard, style: .Top)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
-            completion(success)
+            completion(true)
         })
     }
     
     func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
-        StorageService.shared.updateVaccineCardFedCode(newData: model, completion: {[weak self] success in
+        guard let card = StorageService.shared.fetchVaccineCard(code: model.code), let fedCode = model.fedCode else {return}
+        StorageService.shared.updateVaccineCard(card: card, federalPass: fedCode, completion: {[weak self] card in
             guard let `self` = self else {return}
-            if success {
+            if card != nil {
                 self.showBanner(message: .updatedCard, style: .Top)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
-            completion(success)
+            completion(true)
         })
     }
     
