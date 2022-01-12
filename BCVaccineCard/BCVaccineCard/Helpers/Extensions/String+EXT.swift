@@ -101,7 +101,6 @@ extension String {
             let layer = SVGLayer()
             layer.paths = path
             let size = UIView.screenWidth
-         
             let frame = CGRect(x: 0, y:  0 , width: size, height: size)
             layer.frame = frame
             let img = snapshotImage(for: layer)
