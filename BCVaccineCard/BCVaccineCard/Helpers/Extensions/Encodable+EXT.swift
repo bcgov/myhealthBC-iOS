@@ -19,6 +19,9 @@ extension Encodable {
         return nil
     }
     
+    
+    /// DO NOT USE THIS FOR SECURITY
+    /// this function is inteded for generating unique ids
     func md5Hash() -> String? {
         guard let string = self.toString(), let messageData = string.data(using:.utf8) else {return nil}
 
