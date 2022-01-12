@@ -43,14 +43,23 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         if type == .getStarted || type == .ok {
             // TODO: version
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
+            
+            
+            // TODO: Enable Auth - comment below
             goToHomeTransition()
+            // TODO: Enable Auth - uncomment below
+            // goToAuthentication()
         }
+    }
+    
+    private func goToAuthentication() {
+        AuthenticationViewController.displayFullScreen()
     }
     
     private func goToHomeTransition() {
         let transition = CATransition()
         transition.type = .fade
-        transition.duration = 0.3
+        transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
         let vc = TabBarController.constructTabBarController()
         AppDelegate.sharedInstance?.window?.rootViewController = vc

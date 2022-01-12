@@ -18,14 +18,16 @@ class HealthPassViewController: BaseViewController {
     }
     
     @IBOutlet weak private var tableView: UITableView!
+    lazy var authManager: AuthManager = AuthManager()
     
     private var dataSource: VaccineCard?
     private var savedCardsCount: Int {
-        return StorageService.shared.fetchVaccineCards(for: AuthManager().userId()).count
+        return StorageService.shared.fetchVaccineCards().count
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        authManager = AuthManager()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,7 +56,7 @@ class HealthPassViewController: BaseViewController {
         setupTableView()
         self.tableView.reloadData()
     }
-
+    
 }
 
 // MARK: Navigation setup
@@ -70,22 +72,40 @@ extension HealthPassViewController {
         
     }
     
-    @objc private func settingsButton() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        goToSettingsScreen()
-    }
-    
-    private func goToSettingsScreen() {
-        let vc = SettingsViewController.constructSettingsViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    private func goToAddCardOptionScreen() {
-        // NOTE: Not sure if I should add UIImpactFeedbackGenerator here or not??
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
-        self.navigationController?.pushViewController(vc, animated: true)
+    private func goToAddCardOptionScreen(showAuth: Bool) {
+        func showScreen() {
+            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        // TODO: Enable Auth - comment below
+        showScreen()
+        // TODO: Enable Auth - uncomment below
+        /*
+        if showAuth && !authManager.isAuthenticated {
+            self.view.startLoadingIndicator()
+            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
+                guard let self = self else {return}
+                self.view.endLoadingIndicator()
+                switch result {
+                case .Completed:
+                    self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
+                        
+                        // TODO: FETCH RECORDS FOR AUTHENTICATED USER
+                        showScreen()
+                    }
+                case .Cancelled, .Failed:
+                    showScreen()
+                    break
+                }
+            })
+            self.present(vc, animated: true, completion: nil)
+        } else {
+            showScreen()
+        }*/
     }
 }
+
 
 // MARK: DataSource Management
 extension HealthPassViewController {
@@ -97,7 +117,7 @@ extension HealthPassViewController {
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension HealthPassViewController {
     private func fetchFromStorage() {
-        let cards = StorageService.shared.fetchVaccineCards(for: AuthManager().userId())
+        let cards = StorageService.shared.fetchVaccineCards()
         guard cards.count > 0 else {
             self.dataSource = nil
             return
@@ -219,14 +239,14 @@ extension HealthPassViewController: FederalPassViewDelegate {
             })
         }
     }
-
+    
 }
 
 // MARK: Add card button table view cell delegate here
 extension HealthPassViewController: AddCardsTableViewCellDelegate {
-    func addCardButtonTapped() {
-        let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
-        self.navigationController?.pushViewController(vc, animated: true)
+    
+    func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
+        goToAddCardOptionScreen(showAuth: true)
     }
 }
 
@@ -237,7 +257,7 @@ extension HealthPassViewController: AppStyleButtonDelegate {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         if type == .addAHealthPass {
-            goToAddCardOptionScreen()
+            goToAddCardOptionScreen(showAuth: true)
         }
     }
 }

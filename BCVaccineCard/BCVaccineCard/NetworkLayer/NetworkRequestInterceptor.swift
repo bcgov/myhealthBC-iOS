@@ -14,14 +14,11 @@ class NetworkRequestInterceptor: Interceptor {
   let retryDelay: TimeInterval = 10
   //2
   func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-    var urlRequest = urlRequest
+      var urlRequest = urlRequest
       // Note: We would add cookie here
-//    if let token = TokenManager.shared.fetchAccessToken() {
-//      urlRequest.setValue("token \(token)", forHTTPHeaderField: "Authorization")
-//    }
       guard let urlString = urlRequest.url?.absoluteString else { return }
       urlRequest.addValue(urlString, forHTTPHeaderField: "x-queueit-ajaxpageurl")
-    completion(.success(urlRequest))
+      completion(.success(urlRequest))
   }
   //3
   func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {

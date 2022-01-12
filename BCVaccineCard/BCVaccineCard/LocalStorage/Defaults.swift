@@ -9,7 +9,6 @@ import Foundation
 
 struct Defaults {
     enum Key: String {
-        case vaccinePassports
         case initialOnboardingScreensSeen
         case cachedQueueItObject
         case rememberGatewayDetails

@@ -77,18 +77,35 @@ extension String {
         let numeric = self.lowercased().replacingOccurrences(of: prefix, with: "")
         let shcSegment: QRSegment = QRSegment.makeBytes(Array(prefix.utf8))
         let numericSegment: QRSegment = QRSegment.makeNumeric(Array(numeric))
+        let minBorder = 2
+        let thinBorder = 3
+        let mediumBorder = 4
+        let thickBorder = 5
+        var border = 6
+        let payloadSize = self.lowercased().count
+        if payloadSize > 1900 {
+            border = minBorder
+        } else if payloadSize > 1800 {
+            border = thinBorder
+        } else if payloadSize > 1700 {
+            border = mediumBorder
+        } else if payloadSize > 1600 {
+            border = thickBorder
+        }
         do {
             // Create QR SVG ( what what the library gives us.. )
             let qr = try QRCode.encode(segments: [shcSegment, numericSegment], ecl: .low)
-            let svg = qr.toSVGString(border: 5)
+            let svg = qr.toSVGString(border: border)
             // Generate UIImage from svg
             let path = SVGBezierPath.paths(fromSVGString: svg)
             let layer = SVGLayer()
             layer.paths = path
             let size = UIView.screenWidth
-            let frame = CGRect(x: 5, y: 5, width: size, height: size)
+            let frame = CGRect(x: 0, y:  0 , width: size, height: size)
             layer.frame = frame
             let img = snapshotImage(for: layer)
+            print(frame)
+            print(self.lowercased().count)
             return img
             
         } catch {
@@ -164,6 +181,17 @@ extension String {
     }
 }
 
+// MARK: For capitalization
+extension String {
+    private func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    func sentenceCase() -> String {
+        return self.lowercased().capitalizingFirstLetter()
+    }
+}
+
 extension Optional where Wrapped == String {
     
     /// This computable property unwraps an optional string value to empty string.
@@ -202,3 +230,15 @@ extension String{
 }
 
 
+extension Array where Element == String {
+    func maxHeightNeeded(width: CGFloat, font: UIFont) -> CGFloat {
+        var max: CGFloat = 0
+        for string in self {
+            let height = string.heightForView(font: font, width: width)
+            if height > max {
+                max = height
+            }
+        }
+        return max
+    }
+}

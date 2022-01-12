@@ -67,7 +67,7 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
        
         validateCode(code: vaxCode) { [weak self] result in
             guard let `self` = self, self.code == vaxCode else {return}
-            if let localModel = result.toLocal(federalPass: model.federalPass, phn: model.phn) {
+            if let localModel = result.toLocal(federalPass: model.federalPass) {
                 self.config(model: localModel.transform(), expanded: expanded, editMode: editMode, delegateOwner: delegateOwner)
             }
         }
@@ -103,7 +103,7 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
     private func adjustExpansion(expanded: Bool) {
         vaccineCardView.expandableBackgroundView.isHidden = !expanded
         federalPassView.isHidden = !expanded
-        federalPassViewHeightConstraint.constant = expanded ? 94.0 : 0.0
+        federalPassViewHeightConstraint.constant = expanded ? 116.0 : 0.0
     }
 
 }

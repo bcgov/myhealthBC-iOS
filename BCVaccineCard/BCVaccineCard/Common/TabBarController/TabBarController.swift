@@ -22,7 +22,7 @@ enum TabBarVCs {
         case .healthPass:
             return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .records:
-            return nil
+            return Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: HealthRecordsViewController.constructHealthRecordsViewController())
         case .resource:
             return Properties(title: .resources, selectedTabBarImage: #imageLiteral(resourceName: "resource-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "resource-tab-unselected"), baseViewController: ResourceViewController.constructResourceViewController())
         case .booking:
@@ -41,6 +41,8 @@ class TabBarController: UITabBarController {
         }
         return TabBarController()
     }
+    
+    private var lastTab: UIViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +54,7 @@ class TabBarController: UITabBarController {
         self.tabBar.tintColor = AppColours.appBlue
         self.tabBar.barTintColor = .white
         self.delegate = self
-        self.viewControllers = setViewControllers(withVCs: [.healthPass, .resource, .newsFeed])
+        self.viewControllers = setViewControllers(withVCs: [.healthPass, .records, .resource, .newsFeed])
         self.selectedIndex = 0
         setupObserver()
     }
@@ -86,6 +88,12 @@ class TabBarController: UITabBarController {
 }
 
 extension TabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if let last = lastTab, last == viewController {return false}
+        lastTab = viewController
+        return true
+    }
+    
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
     }

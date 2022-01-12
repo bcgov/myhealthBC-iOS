@@ -25,6 +25,7 @@ struct FormData: Equatable {
         case phnForm
         case dobForm
         case dovForm
+        case dotForm
         case rememberCheckbox
         case clickablePrivacyPolicy
         
@@ -38,6 +39,8 @@ struct FormData: Equatable {
                 return .form(type: .dateOfBirth)
             case .dovForm:
                 return .form(type: .dateOfVaccination)
+            case .dotForm:
+                return .form(type: .dateOfTest)
             case .rememberCheckbox:
                 return .checkbox
             case .clickablePrivacyPolicy:
@@ -50,6 +53,7 @@ struct FormData: Equatable {
             case .phnForm: return true
             case .dobForm: return true
             case .dovForm: return true
+            case .dotForm: return true
             default: return false
             }
         }
@@ -60,6 +64,7 @@ struct FormData: Equatable {
         case .phnForm: return TextFieldData(type: .personalHealthNumber, text: self.configuration.text)
         case .dobForm: return TextFieldData(type: .dateOfBirth, text: self.configuration.text)
         case .dovForm: return TextFieldData(type: .dateOfVaccination, text: self.configuration.text)
+        case .dotForm: return TextFieldData(type: .dateOfTest, text: self.configuration.text)
         default: return nil
         }
     }
@@ -69,6 +74,7 @@ struct FormData: Equatable {
         case .personalHealthNumber: return .phnForm
         case .dateOfBirth: return .dobForm
         case .dateOfVaccination: return .dovForm
+        case .dateOfTest: return .dotForm
         }
     }
     

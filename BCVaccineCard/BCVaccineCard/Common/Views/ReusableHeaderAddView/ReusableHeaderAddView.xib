@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ReusableHeaderAddView" customModule="BCVaccineCard" customModuleProvider="target">
+            <connections>
+                <outlet property="addCardButton" destination="sM2-3I-hpB" id="xGI-c3-u3Q"/>
+                <outlet property="boldTextLabel" destination="Sk6-Ay-tQ8" id="Jir-09-4Bh"/>
+                <outlet property="contentView" destination="iN0-l3-epB" id="hnQ-EN-FrH"/>
+                <outlet property="subtextLabel" destination="Biv-QA-dLb" id="zdR-Ei-LlJ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="346" height="74"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="BgM-Qn-NmY">
+                    <rect key="frame" x="16" y="16" width="269" height="46"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sk6-Ay-tQ8">
+                            <rect key="frame" x="0.0" y="0.0" width="269" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Biv-QA-dLb">
+                            <rect key="frame" x="0.0" y="25.5" width="269" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                </stackView>
+                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sM2-3I-hpB">
+                    <rect key="frame" x="290" y="19" width="40" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="fBP-ZE-8ZG"/>
+                        <constraint firstAttribute="width" secondItem="sM2-3I-hpB" secondAttribute="height" multiplier="1:1" id="vVD-jt-qzV"/>
+                    </constraints>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="Button" backgroundImage="add-card-icon"/>
+                    <connections>
+                        <action selector="addCardButtonTapped:" destination="-1" eventType="touchUpInside" id="ldD-R1-TmM"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="BgM-Qn-NmY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="2Jt-MC-2ku"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="BgM-Qn-NmY" secondAttribute="bottom" constant="12" id="Bin-Mv-dJX"/>
+                <constraint firstItem="sM2-3I-hpB" firstAttribute="leading" secondItem="BgM-Qn-NmY" secondAttribute="trailing" constant="5" id="Nwx-xj-brm"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sM2-3I-hpB" secondAttribute="bottom" constant="12" id="Oit-rK-wCc"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="sM2-3I-hpB" secondAttribute="trailing" constant="16" id="Ond-ZQ-i5l"/>
+                <constraint firstItem="BgM-Qn-NmY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="lcQ-LZ-TRy"/>
+                <constraint firstItem="sM2-3I-hpB" firstAttribute="centerY" secondItem="BgM-Qn-NmY" secondAttribute="centerY" id="zV0-YY-adV"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="139" y="71"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="add-card-icon" width="40" height="40"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
