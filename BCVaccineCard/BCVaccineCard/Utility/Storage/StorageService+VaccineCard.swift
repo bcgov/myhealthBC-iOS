@@ -151,18 +151,19 @@ extension StorageService: StorageVaccineCardManager {
         
         var cards = fetchVaccineCards()
         guard let item = cards.filter({$0.code == code}).first else {return}
-        // Delete from core data
-        delete(object: item)
-        // Sort
+        
         cards = cards.sorted {
             $0.sortOrder < $1.sortOrder
         }
-        // Remove card at index
         cards.removeAll { card in
             card.code == code
         }
+        
+        // Delete from core data
+        delete(object: item)
+        
         do {
-            // update sort order or stored cards based on array index
+            // update sort order for stored cards based on array index
             for (index, card) in cards.enumerated() {
                 card.sortOrder = Int64(index)
             }
@@ -178,7 +179,7 @@ extension StorageService: StorageVaccineCardManager {
     func fetchVaccineCards() -> [VaccineCard] {
         let patients = fetchPatients()
         let cards = patients.map({$0.vaccineCardArray})
-        return Array(cards.joined())
+        return Array(cards.joined()).sorted(by: {$0.sortOrder < $1.sortOrder})
     }
     
     func fetchVaccineCard(code: String) -> VaccineCard? {
@@ -189,7 +190,7 @@ extension StorageService: StorageVaccineCardManager {
     func createImmunizationRecords(for card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void) {
         guard let qrCode = card.code, let context = managedContext else {return completion([])}
         BCVaccineValidator.shared.validate(code: qrCode) { result in
-            guard let result = result.result else {return}
+            guard let result = result.result else {return completion([])}
             var immunizations: [ImmunizationRecord] = []
             for record in result.immunizations {
                 let model = ImmunizationRecord(context: context)
@@ -201,9 +202,9 @@ extension StorageService: StorageVaccineCardManager {
                 model.lotNumber = record.lotNumber
                 model.date = record.date?.vaxDate()
                 model.snomed = record.snomed
-                model.vaccineCard = card
                 immunizations.append(model)
             }
+            return completion(immunizations)
         }
     }
     
