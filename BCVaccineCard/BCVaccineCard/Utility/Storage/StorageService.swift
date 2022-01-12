@@ -48,7 +48,10 @@ class StorageService: StorageManagerProtocol {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
+        
+        appDelegate.persistentContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         managedContext = appDelegate.persistentContainer.viewContext
+        
     }
     
     func notify(event: StorageEvent<Any>) {

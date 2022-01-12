@@ -43,7 +43,12 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         if type == .getStarted || type == .ok {
             // TODO: version
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
-            goToAuthentication()
+            
+            
+            // TODO: Enable Auth - comment below
+            goToHomeTransition()
+            // TODO: Enable Auth - uncomment below
+            // goToAuthentication()
         }
     }
     

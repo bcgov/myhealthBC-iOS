@@ -41,6 +41,8 @@ class TabBarController: UITabBarController {
         }
         return TabBarController()
     }
+    
+    private var lastTab: UIViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,6 +88,12 @@ class TabBarController: UITabBarController {
 }
 
 extension TabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if let last = lastTab, last == viewController {return false}
+        lastTab = viewController
+        return true
+    }
+    
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
     }
