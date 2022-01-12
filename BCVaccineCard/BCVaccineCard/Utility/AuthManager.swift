@@ -37,11 +37,7 @@ class AuthManager {
     let defaultUserID = "default"
     private let keychain = Keychain(service: "ca.bc.gov.myhealth")
     
-    
-    func userId() -> String {
-        return defaultUserID
-    }
-    
+    // MARK: Computed
     var authToken: String? {
         guard let token = keychain[Key.authToken.rawValue] else {
             return nil
@@ -55,6 +51,25 @@ class AuthManager {
             let jwt = try decode(jwt: stringToken)
             let claim = jwt.claim(name: "hdid")
             return claim.string
+        } catch {
+            return nil
+        }
+    }
+    
+    var displayName: String? {
+        guard let stringToken = authToken else {return nil}
+        do {
+            let jwt = try decode(jwt: stringToken)
+            let firstNameClaim = jwt.claim(name: "given_name")
+            let lastNameClaim = jwt.claim(name: "family_name")
+            var result = ""
+            if let first = firstNameClaim.string {
+                result += first
+            }
+            if let last = lastNameClaim.string {
+                result += " \(last)"
+            }
+            return result
         } catch {
             return nil
         }
