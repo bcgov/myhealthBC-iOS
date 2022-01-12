@@ -10,7 +10,6 @@ import CoreData
 import BCVaccineValidator
 import EncryptedCoreData
 import AppAuth
-//import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -39,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
         lazy var persistentContainer: NSPersistentContainer = {
             let container = NSPersistentContainer(name: "BCVaccineCard")
-           
+
             do {
                 let options = [
                     EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key

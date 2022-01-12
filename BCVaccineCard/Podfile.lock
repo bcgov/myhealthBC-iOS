@@ -7,7 +7,7 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
-  - BCVaccineValidator (1.0.10):
+  - BCVaccineValidator (1.0.11):
     - Alamofire
     - JOSESwift
   - EncryptedCoreData (3.1):
@@ -44,22 +44,22 @@ PODS:
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/AppDelegateSwizzler (7.6.0):
+  - GoogleUtilities/AppDelegateSwizzler (7.7.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.6.0):
+  - GoogleUtilities/Environment (7.7.0):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.6.0):
+  - GoogleUtilities/Logger (7.7.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/Network (7.6.0):
+  - GoogleUtilities/Network (7.7.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.6.0)"
-  - GoogleUtilities/Reachability (7.6.0):
+  - "GoogleUtilities/NSData+zlib (7.7.0)"
+  - GoogleUtilities/Reachability (7.7.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.6.0):
+  - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
   - JOSESwift (2.4.0)
   - JWTDecode (2.6.3)
@@ -71,7 +71,7 @@ PODS:
   - nanopb/encode (2.30908.0)
   - PocketSVG (2.7.2)
   - PromisesObjC (2.0.0)
-  - QueueITLibrary (3.0.8)
+  - QueueITLibrary (3.0.9)
   - SnowplowTracker (2.2.2):
     - FMDB (~> 2.7)
   - SQLCipher (3.4.2):
@@ -132,7 +132,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   BCVaccineValidator:
-    :commit: 4c61642a32fe7ac57fe0982b58f0fc3d2e7f870c
+    :commit: b83c48efc2bb180d2cd6b349e4a83317a6dbf057
     :git: https://github.com/bcgov/iOSVaccineValidator
   EncryptedCoreData:
     :commit: b97ffaf2f19dad4d1558bc9b0668cc2e09d17347
@@ -142,7 +142,7 @@ SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   AlamofireRSSParser: dab86644d4d220b313767c33ef09e7acf11f641a
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  BCVaccineValidator: c9328bc389a5d3f20fa764425ffb9266c9f3ff15
+  BCVaccineValidator: d9bc33a3695ba4825c9a8dd7b004fb2324ddab93
   EncryptedCoreData: f6762fb05f88a52f36c5648659abc91b57f244b4
   Firebase: 44213362f1dcc52555b935dc925ed35ac55f1b20
   FirebaseAppDistribution: 1d62aa8711bd2d9a56aa4c44098f533d3d459822
@@ -151,20 +151,20 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 830327b45345ffc859eaa9c17bcd5ae893fd5425
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
-  GoogleUtilities: 684ee790a24f73ebb2d1d966e9711c203f2a4237
+  GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
   JWTDecode: 33e5e26e5ddbd21b2065820894c08fef0cad9509
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PocketSVG: c597e6916641fd2674d2f0cabca0d1869cb82880
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
-  QueueITLibrary: 0ed653c2f57929946b85269b0f53493fe316ad70
+  QueueITLibrary: 840b877e4a4aad67b9b1941f31a56988bc03be71
   SnowplowTracker: 2eee2d6606a60db98f7c4e1515499bb216b6c8ad
   SQLCipher: f9fcf29b2e59ced7defc2a2bdd0ebe79b40d4990
   SwiftQRCodeGenerator: c5cdef1603699784b07af0fd3cc1c2f45ac26ada
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: c31b7e467c376c6ff4c572594a56faef58f8c83e
+PODFILE CHECKSUM: 45ea03fef079314602945d1bb5ab28f3fe28da5f
 
 COCOAPODS: 1.11.2
