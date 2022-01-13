@@ -67,6 +67,20 @@ class CovidVaccineCardsViewController: BaseViewController {
         cardChangedObservableSetup()
         retrieveDataSource()
         setupTableView()
+        
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            switch event.entity {
+            case .VaccineCard:
+                self.fetchFromStorage()
+                if self.expandedIndexRow > self.dataSource.count - 1 {
+                    self.expandedIndexRow = 0
+                    self.tableView.reloadData()
+                }
+            default:
+                break
+            }
+        }
     }
     
 }
@@ -304,12 +318,6 @@ extension CovidVaccineCardsViewController {
             guard self.dataSource.count > indexPath.row else { return }
             let item = self.dataSource[indexPath.row]
             StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "")
-            self.dataSource.remove(at: indexPath.row)
-            if self.dataSource.isEmpty {
-                self.inEditMode = false
-            } else {
-                self.tableView.reloadData()
-            }
         }
     }
 }
