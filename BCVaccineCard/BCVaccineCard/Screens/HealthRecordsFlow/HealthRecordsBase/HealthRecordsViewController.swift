@@ -144,7 +144,7 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
         let availableWidth = UIScreen.main.bounds.width
         var width: CGFloat = (availableWidth / itemsPerRow) - (spacingPerItem * itemsPerRow)
         width += (spacingPerItem/itemsPerRow)
-        let maxHeightNeededForNames = dataSource.map({$0.userName}).maxHeightNeeded(width: width, font: HealthRecordsUserView.nameFont)
+        let maxHeightNeededForNames = dataSource.map({$0.patient.name ?? ""}).maxHeightNeeded(width: width, font: HealthRecordsUserView.nameFont)
         let height: CGFloat = maxHeightNeededForNames >= maxCellHeight ? maxHeightNeededForNames : maxCellHeight
         
         layout.minimumLineSpacing = spacingPerItem
@@ -179,9 +179,8 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row < dataSource.count else { return }
-        let userName = dataSource[indexPath.row].userName
-        let birthdate =  dataSource[indexPath.row].birthdate
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: userName, birthdate: birthdate)
+        let patient = dataSource[indexPath.row].patient
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
