@@ -31,6 +31,10 @@ enum TabBarVCs {
             return Properties(title: .newsFeed, selectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-unselected"), baseViewController: NewsFeedViewController.constructNewsFeedViewController())
         }
     }
+    
+    var addHeathRecords: Properties {
+        return Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true))
+    }
 }
 
 class TabBarController: UITabBarController {
@@ -62,7 +66,7 @@ class TabBarController: UITabBarController {
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {
         var viewControllers: [UIViewController] = []
         vcs.forEach { vc in
-            guard let properties = vc.properties else { return }
+            guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? vc.addHeathRecords : vc.properties  else { return }
             let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
             tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
             let viewController = properties.baseViewController
@@ -76,6 +80,15 @@ class TabBarController: UITabBarController {
     
     private func setupObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            switch event.entity {
+            case .VaccineCard, .CovidLabTestResult:
+                self.setup()
+            default:
+                break
+            }
+        }
     }
     
     @objc private func tabChanged(_ notification: Notification) {
@@ -88,9 +101,8 @@ class TabBarController: UITabBarController {
 }
 
 extension TabBarController: UITabBarControllerDelegate {
+    
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-//        if let last = lastTab, last == viewController {return false}
-//        lastTab = viewController
         return true
     }
     
