@@ -61,7 +61,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setup() {
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
-        fetchDataSource(checkForBackgroundUpdates: true)
+        fetchDataSource(initialFetch: true)
     }
     
 }
@@ -97,19 +97,21 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
-    private func fetchDataSource(checkForBackgroundUpdates: Bool) {
+    private func fetchDataSource(initialFetch: Bool) {
         guard let patient = self.patient else {return}
-        self.view.startLoadingIndicator(backgroundColor: .clear)
+        if initialFetch {
+            self.view.startLoadingIndicator(backgroundColor: .clear)
+        }
         let records = StorageService.shared.getHeathRecords()
-        // TODO: Refactor to use Patient
         self.dataSource = records.detailDataSource(patient: patient)
         self.setupTableView()
         self.navSetup()
-        self.view.endLoadingIndicator()
+        if initialFetch {
+            self.view.endLoadingIndicator()
+        }
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
-        self.checkForTestResultsToUpdate(ds: self.dataSource)
-        if checkForBackgroundUpdates {
+        if initialFetch {
             self.checkForTestResultsToUpdate(ds: self.dataSource)
         }
     }
@@ -259,7 +261,7 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
         StorageService.shared.updateTestResult(gateWayResponse: result) { [weak self] success in
             guard let `self` = self else {return}
             // TODO: Need to find a better way to update the VC data source - refactor needed
-            self.fetchDataSource(checkForBackgroundUpdates: false)
+            self.fetchDataSource(initialFetch: false)
 //            let indexPath = IndexPath(row: row, section: 0)
 //            self.tableView.reloadRows(at: [indexPath], with: .automatic)
         }
