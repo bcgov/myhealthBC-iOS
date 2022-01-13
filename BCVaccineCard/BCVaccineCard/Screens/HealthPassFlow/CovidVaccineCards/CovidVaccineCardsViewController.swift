@@ -72,7 +72,7 @@ class CovidVaccineCardsViewController: BaseViewController {
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
             case .VaccineCard:
-                self.retrieveDataSource()
+                self.fetchFromStorage()
                 if self.expandedIndexRow > self.dataSource.count - 1 {
                     self.expandedIndexRow = 0
                     self.tableView.reloadData()
