@@ -45,6 +45,8 @@ class TabBarController: UITabBarController {
     fileprivate var addHeathRecords: TabBarVCs.Properties {
         return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true))
     }
+    
+    private var previousSelectedIndex: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,7 +84,8 @@ class TabBarController: UITabBarController {
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
             case .VaccineCard, .CovidLabTestResult:
-                self.setup()
+//                self.setup()
+                print("DONE")
             default:
                 break
             }
@@ -94,6 +97,10 @@ class TabBarController: UITabBarController {
         if viewController is NewsFeedViewController {
             NotificationCenter.default.post(name: .reloadNewsFeed, object: nil, userInfo: nil)
         }
+        // This will handle the case where a tab is tapped again while already being on that tab
+        if let previous = self.previousSelectedIndex, previous == self.selectedIndex {
+            NotificationCenter.default.post(name: .doubleTappedTab, object: nil, userInfo: nil)
+        }
     }
 
 }
@@ -101,6 +108,8 @@ class TabBarController: UITabBarController {
 extension TabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        // Save the previously selected index, so that we can check if the tab was selected again
+        self.previousSelectedIndex = tabBarController.selectedIndex
         return true
     }
     
