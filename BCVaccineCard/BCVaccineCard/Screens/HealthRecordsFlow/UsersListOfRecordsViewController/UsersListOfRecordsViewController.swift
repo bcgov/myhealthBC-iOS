@@ -62,7 +62,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setup() {
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
-        fetchDataSource()
+        fetchDataSource(checkForBackgroundUpdates: true)
     }
     
 }
@@ -100,18 +100,25 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
-    private func fetchDataSource() {
-        self.view.startLoadingIndicator(backgroundColor: .clear)
+    private func fetchDataSource(checkForBackgroundUpdates: Bool) {
+        // TODO: Adding this check here for now, will remove once refactored
+        if checkForBackgroundUpdates {
+            self.view.startLoadingIndicator(backgroundColor: .clear)
+        }
         StorageService.shared.getHeathRecords { [weak self] records in
             guard let `self` = self else {return}
 //            Logger.log(string: records.first!.detailDataSource())
             self.dataSource = records.detailDataSource(userName: self.name, birthDate: self.birthdate)
             self.setupTableView()
             self.navSetup()
-            self.view.endLoadingIndicator()
+            if checkForBackgroundUpdates {
+                self.view.endLoadingIndicator()
+            }
             // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
             self.tableView.reloadData()
-            self.checkForTestResultsToUpdate(ds: self.dataSource)
+            if checkForBackgroundUpdates {
+                self.checkForTestResultsToUpdate(ds: self.dataSource)
+            }
         }
     }
     
@@ -259,7 +266,10 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
         print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
         StorageService.shared.updateTestResult(gateWayResponse: result) { [weak self] success in
             guard let `self` = self else {return}
-            self.tableView.reloadData()
+            // TODO: Need to find a better way to update the VC data source - refactor needed
+            self.fetchDataSource(checkForBackgroundUpdates: false)
+//            let indexPath = IndexPath(row: row, section: 0)
+//            self.tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
     

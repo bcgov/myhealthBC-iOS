@@ -651,6 +651,8 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     }
     
     func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse) -> String? {
+        // TODO: Put check in here for gatewayResponse - seems to be an issue with HealthGateway - test out first to see if we can replicate
+        print("CONNOR CHECK: ", gatewayResponse)
         guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
         guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
         let bday: Date?
