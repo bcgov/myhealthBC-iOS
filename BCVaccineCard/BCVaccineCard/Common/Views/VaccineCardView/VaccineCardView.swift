@@ -82,7 +82,7 @@ class VaccineCardView: UIView {
 //        qrImageConstraints.forEach { $0.constant = model.codableModel.source == .healthGateway ? 0 : 6 }
         expandableBackgroundView.isHidden = !expanded
         setupAccessibility(model: model, expanded: expanded, editMode: editMode)
-        self.qrCodeImage.startLoadingIndicator()
+        self.qrCodeImage.startLoadingIndicator(backgroundColor: .clear)
         QRMaker.image(for: model.codableModel.code) { [weak self] image in
             guard let `self` = self else {return}
             self.qrCodeImage.image = image
