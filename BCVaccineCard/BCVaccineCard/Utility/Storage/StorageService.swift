@@ -63,6 +63,7 @@ class StorageService: StorageManagerProtocol {
         // this will delete objects related to it as well because of the
         let patients = fetchPatients()
         deleteAllRecords(in: patients)
+        self.notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patients))
     }
     
     // MARK: Helper functions

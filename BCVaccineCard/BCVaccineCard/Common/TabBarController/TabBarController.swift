@@ -83,7 +83,7 @@ class TabBarController: UITabBarController {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
-            case .VaccineCard, .CovidLabTestResult:
+            case .VaccineCard, .CovidLabTestResult, .Patient:
                 if event.event == .Delete, StorageService.shared.getHeathRecords().isEmpty {
                     // If data was deleted and now health records are empty
                     self.resetHealthRecordsTab()
