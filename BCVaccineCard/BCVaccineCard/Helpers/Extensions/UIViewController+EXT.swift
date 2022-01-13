@@ -35,6 +35,29 @@ extension UIViewController {
         }
     }
     
+    func alertConfirmation(title: String,
+               message: String,
+               confirmTitle: String,
+               confirmStyle: UIAlertAction.Style,
+               onConfirm: @escaping()->Void,
+               cancelTitle: String? = .cancel,
+               cancelStyle: UIAlertAction.Style? = .cancel,
+               onCancel: @escaping()->Void) {
+        
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        controller.isAccessibilityElement = true
+        
+        controller.addAction(UIAlertAction(title: cancelTitle, style: cancelStyle ?? .cancel, handler: { action in
+            return onCancel()
+        }))
+        controller.addAction(UIAlertAction(title: confirmTitle, style: confirmStyle, handler: { action in
+            return onConfirm()
+        }))
+        DispatchQueue.main.async {
+            self.present(controller, animated: true)
+        }
+    }
+    
     func alert(title: String, message: String, buttonOneTitle: String, buttonOneCompletion: @escaping()->Void, buttonTwoTitle: String?, buttonTwoCompletion: @escaping()->Void) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.isAccessibilityElement = true
@@ -81,7 +104,7 @@ extension UIViewController {
         label.font = Constants.UI.Banner.labelFont
         label.textColor = Constants.UI.Banner.labelColor
         container.backgroundColor = Constants.UI.Banner.backgroundColor
-        container.layer.cornerRadius = Constants.UI.Theme.cornerRadius
+        container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         
         self.view.layoutIfNeeded()
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {[weak self] in
@@ -138,7 +161,7 @@ extension UIViewController {
         label.font = Constants.UI.Banner.labelFont
         label.textColor = Constants.UI.Banner.labelColor
         container.backgroundColor = Constants.UI.Banner.backgroundColor
-        container.layer.cornerRadius = Constants.UI.Theme.cornerRadius
+        container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         
         self.view.layoutIfNeeded()
         
@@ -243,33 +266,40 @@ extension UIViewController {
     }
 }
 
+
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
-    func appendModelToLocalStorage(model: LocallyStoredVaccinePassportModel) {
-        _ = StorageService.shared.saveVaccineVard(vaccineQR: model.code, name: model.name, birthdate: model.birthdate, userId: AuthManager().userId(), hash: model.hash, federalPass: model.fedCode, vaxDates: model.vaxDates)
+    func storeVaccineCard(model: LocallyStoredVaccinePassportModel) {
+        let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
+        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: model.name, birthday: birthdate) else {
+            Logger.log(string: "**Could not fetch or create patent to store vaccine card")
+            return
+        }
+        StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, federalPass: model.fedCode, vaxDates: model.vaxDates, completion: {_ in})
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
-        StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] success in
+        StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] card in
             guard let `self` = self else {return}
-            if success {
+            if card != nil {
                 self.showBanner(message: .updatedCard, style: .Top)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
-            completion(success)
+            completion(true)
         })
     }
     
     func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
-        StorageService.shared.updateVaccineCardFedCode(newData: model, completion: {[weak self] success in
+        guard let card = StorageService.shared.fetchVaccineCard(code: model.code), let fedCode = model.fedCode else {return}
+        StorageService.shared.updateVaccineCard(card: card, federalPass: fedCode, completion: {[weak self] card in
             guard let `self` = self else {return}
-            if success {
+            if card != nil {
                 self.showBanner(message: .updatedCard, style: .Top)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
-            completion(success)
+            completion(true)
         })
     }
     
@@ -327,9 +357,9 @@ extension UIViewController {
         
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
         if fetchType.isFedPassOnly {
-            vc.completionHandler = { [weak self] (id, fedPass) in
-                if let fedPass = fedPass {
-                    self?.openFederalPass(pass: fedPass, vc: owner, id: id, completion: completion)
+            vc.completionHandler = { [weak self] details in
+                if let fedPass = details.fedPassId {
+                    self?.openFederalPass(pass: fedPass, vc: owner, id: details.id, completion: completion)
                 } else {
                     self?.navigationController?.popViewController(animated: true)
                 }

@@ -13,9 +13,9 @@ enum VaccineStatus: String, Codable {
     
     var getTitle: String {
         switch self {
-        case .fully: return .vaccinated
-        case .partially: return .partiallyVaccinated
-        case .notVaxed: return .noRecordFound
+        case .fully: return .vaccinated.sentenceCase()
+        case .partially: return .partiallyVaccinated.sentenceCase()
+        case .notVaxed: return .noRecordFound.sentenceCase()
         }
     }
     
@@ -33,13 +33,14 @@ enum Source: String, Codable {
 }
 
 public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
+    let id: String? // stored id in core data.
     let code: String
     let birthdate: String
     let hash: String
     var vaxDates: [String]
     let name: String
     let issueDate: Double
-    let status: VaccineStatus
+    let status: VaccineStatus // Use code to derive when possible
     let source: Source
     var fedCode: String?
     let phn: String?
@@ -58,9 +59,7 @@ public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
 
 struct AppVaccinePassportModel: Equatable {
     let codableModel: LocallyStoredVaccinePassportModel
-    var image: UIImage? {
-        return codableModel.code.generateQRCode()
-    }
+    
     var issueDate: String? {
         let date = Date.init(timeIntervalSince1970: codableModel.issueDate)
         return Date.Formatter.issuedOnDateTime.string(from: date)
@@ -82,8 +81,8 @@ struct AppVaccinePassportModel: Equatable {
 
 
 extension CodeValidationResult {
-    func toLocal(federalPass: String? = nil, phn: String? = nil, source: Source? = .imported) -> LocallyStoredVaccinePassportModel? {
-        return result?.toLocal(federalPass: federalPass, phn: phn, source: source)
+    func toLocal(federalPass: String? = nil, source: Source? = .imported) -> LocallyStoredVaccinePassportModel? {
+        return result?.toLocal(federalPass: federalPass, source: source)
     }
 }
 
@@ -102,7 +101,7 @@ extension ScanResultModel {
         
         let hash = payload.fhirBundleHash() ?? "\(name)-\(birthdate)"
       
-        return LocallyStoredVaccinePassportModel(code: code, birthdate: birthdate, hash: hash, vaxDates: vadDates, name: name, issueDate: issueDate, status: status, source: source ?? .imported, fedCode: federalPass, phn: phn)
+        return LocallyStoredVaccinePassportModel(id: nil, code: code, birthdate: birthdate, hash: hash, vaxDates: vadDates, name: name, issueDate: issueDate, status: status, source: source ?? .imported, fedCode: federalPass, phn: phn)
         
     }
 }

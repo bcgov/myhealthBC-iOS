@@ -2,9 +2,9 @@
 //  VaccineCard+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2021-10-28.
+//  Created by Amir on 2022-01-07.
 //
-// TODO: Will need to add vaxDates as an NSManaged property
+//
 
 import Foundation
 import CoreData
@@ -12,28 +12,35 @@ import CoreData
 
 extension VaccineCard {
 
-    @nonobjc public class func createFetchRequest() -> NSFetchRequest<VaccineCard> {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<VaccineCard> {
         return NSFetchRequest<VaccineCard>(entityName: "VaccineCard")
     }
 
     @NSManaged public var code: String?
+    @NSManaged public var federalPass: String?
+    @NSManaged public var firHash: String?
+    @NSManaged public var issueDate: Date?
     @NSManaged public var name: String?
     @NSManaged public var sortOrder: Int64
-    @NSManaged public var birthdate: String?
-    @NSManaged public var federalPass: String?
     @NSManaged public var vaxDates: [String]?
-    @NSManaged public var phn: String?
-    @NSManaged public var user: User?
-    @NSManaged public var firHash: String?
-    
-    
-    public var federalPassData: Data? {
-        guard let stringData = federalPass else { return nil}
-        return Data(base64URLEncoded: stringData)
-    }
-    
-    var id: String? {
-        return firHash
-    }
+    @NSManaged public var immunizationRecord: NSSet?
+    @NSManaged public var patient: Patient?
+
+}
+
+// MARK: Generated accessors for immunizationRecord
+extension VaccineCard {
+
+    @objc(addImmunizationRecordObject:)
+    @NSManaged public func addToImmunizationRecord(_ value: ImmunizationRecord)
+
+    @objc(removeImmunizationRecordObject:)
+    @NSManaged public func removeFromImmunizationRecord(_ value: ImmunizationRecord)
+
+    @objc(addImmunizationRecord:)
+    @NSManaged public func addToImmunizationRecord(_ values: NSSet)
+
+    @objc(removeImmunizationRecord:)
+    @NSManaged public func removeFromImmunizationRecord(_ values: NSSet)
 
 }

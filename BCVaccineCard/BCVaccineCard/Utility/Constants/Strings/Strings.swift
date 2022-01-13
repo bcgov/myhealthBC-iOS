@@ -15,11 +15,13 @@ extension String {
     static var yes: String { return "Yes".localized }
     static var no: String { return "No".localized }
     static var edit: String { return "Edit".localized }
+    static var delete: String { return "Delete".localized }
     /// Text used throughout app
     static var myCards: String { return "MyCards".localized }
     static var settings: String { return "Settings".localized }
     static var healthPass: String { return "HealthPass".localized }
     static var passes: String { return "Passes".localized }
+    static var records: String { return "Records".localized }
     /// Button titles
     static var cancel: String { return "Cancel".localized }
 //    static var enter: String { return "Enter".localized }
@@ -58,6 +60,8 @@ extension String {
     static var errorParsingPHNMessage: String { return "ErrorParsingPHNMessage".localized }
     static var duplicateTitle: String { return "DuplicateTitle".localized }
     static var duplicateMessage: String { return "DuplicateMessage".localized }
+    static var duplicateTestMessage: String { return "DuplicateTestMessage".localized }
+    static var duplicateMessageImsRecord: String { return "DuplicateMessageImsRecord".localized }
     static var healthGatewayError: String { return "HealthGatewayError".localized }
     
     // Alert
@@ -84,9 +88,13 @@ extension String {
     static var phnNumber: String { return "PHNNumber".localized }
     static var dobRequired: String { return "DOBRequired".localized }
     static var dovRequired: String { return "DOVRequired".localized }
+    static var dotRequired: String { return "DOTRequired".localized }
     static var validDate: String { return "ValidDate".localized }
     static var dobRange: String { return "DOBRange".localized }
     static var dovRange: String { return "DOVRange".localized }
+    static var dotRange: String { return "DOVRange".localized }
+    static var formTestNavTitle: String { return "AddCovid19TestResult".localized }
+    static var formRecordNavTitle: String { return "AddABCVaccineRecord".localized }
     /// Labels and other text
 //    static var formTitle: String { return "FormTitle".localized }
 //    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
@@ -95,7 +103,8 @@ extension String {
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
     static var dateOfBirth: String { return "DateOfBirth".localized }
     static var dateOfVaccine: String { return "DateOfVaccine".localized }
-    static var dose1OrDose2: String { return "Dose1OrDose2".localized }
+    static var anyDose: String { return "AnyDose".localized }
+    static var dateOfTest: String{ return "DateOfTest".localized }
     static var phnFooter: String { return "PHNFooter".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
     static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }
@@ -159,13 +168,45 @@ extension String {
     
     // Federal Paaa pdf
     static var travelPass: String { return "TravelPass".localized }
+    static var canadianCOVID19ProofOfVaccination: String { return "CanadianCOVID19ProofOfVaccination".localized }
 
     static var updateCard: String { return "UpdateCard".localized }
     static var updateCardFor: String { return "UpdateCardFor".localized }
     // News Feed screen
     /// Already have newsFeed string from onboarding flow
     
+    // MARK: Health Records
+    static var getVaccinationRecordsTitle: String { return "GetVaccinationRecordsTitle".localized }
+    static var getCovidTestResultsTitle: String { return "GetCovidTestResultsTitle".localized }
+    static var getVaccinationRecordsDescription: String { return "GetVaccinationRecordsDescription".localized }
+    static var getCovidTestResultsDescription: String { return "GetCovidTestResultsDescription".localized }
+    static var covid19mRNATitle: String { return "Covid19mRNATitle".localized }
+    static var covid19vaccination: String { return "Covid19vaccination".localized }
+    static var covid19TestResultTitle: String { return "Covid19TestResultTitle".localized }
+    static var vaccinationRecord: String { return "VaccinationRecord".localized }
+    static var recordText: String { return "RecordText".localized }
+    static var viewDetailsOfCovidRecordsText: String { return "ViewDetailsOfCovidRecordsText".localized }
+    static var fetchHealthRecordsIntroText: String { return "FetchHealthRecordsIntroText".localized }
+    static var deleteCovidHealthRecord: String { return "DeleteCovidHealthRecord".localized }
+    static var deleteRecord: String { return "DeleteRecord".localized }
+    static var deleteTestResult: String { return "DeleteTestResult".localized }
+    static var deleteTestResultMessage: String { return "DeleteTestResultMessage".localized }
+    static var cancelledTestRecordMessage: String { return "CancelledTestRecordMessage".localized }
+    static var pendingTestRecordMessage: String { return "PendingTestRecordMessage".localized }
+    static var instructions: String { return "Instructions".localized }
+    static var instructionsMessage: String { return "InstructionsMessage".localized }
     
+    // MARK: Statuses
+    static var cancelled: String { return "Cancelled".localized }
+    static var pending: String { return "Pending".localized }
+    
+    // MARK: Settings
+    static var deleteAllRecordsAndSavedData: String { return "DeleteAllRecordsAndSavedData".localized }
+    static var disableAnalytics: String { return "DisableAnalytics".localized }
+    static var enableAnalytics: String { return "EnableAnalytics".localized }
+    static var analytyticsUsageDescription: String { return "AnalytyticsUsageDescription".localized }
+    static var deleteData: String { return "DeleteData".localized }
+    static var confirmDeleteAllRecordsAndSaveData: String { return "ConfirmDeleteAllRecordsAndSaveData".localized }
 }
 
 // Accessibility only localized strings

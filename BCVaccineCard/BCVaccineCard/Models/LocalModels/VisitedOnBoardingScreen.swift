@@ -26,12 +26,14 @@ struct VisitedOnboardingScreen: Encodable, Decodable {
  */
 enum OnboardingScreenType: Int, CaseIterable {
     case healthPasses = 0
+    case healthRecords
     case healthResources
     case newsFeed
 }
 
 enum OnboardingScreenTypeID: String {
     case healthPasses = "healthPasses"
+    case healthRecords = "healthRecords"
     case healthResources = "healthResources"
     case newsFeed = "newsFeed"
 }
@@ -41,6 +43,8 @@ extension OnboardingScreenType {
         switch self {
         case .healthPasses:
             return .healthPasses
+        case .healthRecords:
+            return .healthRecords
         case .healthResources:
             return .healthResources
         case .newsFeed:
@@ -54,6 +58,8 @@ extension OnboardingScreenTypeID {
         switch self {
         case .healthPasses:
             return .healthPasses
+        case .healthRecords:
+            return .healthRecords
         case .healthResources:
             return .healthResources
         case .newsFeed:

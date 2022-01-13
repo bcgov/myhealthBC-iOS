@@ -67,6 +67,20 @@ class CovidVaccineCardsViewController: BaseViewController {
         cardChangedObservableSetup()
         retrieveDataSource()
         setupTableView()
+        
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            switch event.entity {
+            case .VaccineCard:
+                self.fetchFromStorage()
+                if self.expandedIndexRow > self.dataSource.count - 1 {
+                    self.expandedIndexRow = 0
+                    self.tableView.reloadData()
+                }
+            default:
+                break
+            }
+        }
     }
     
 }
@@ -200,22 +214,26 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard !self.inEditMode else { return }
-        guard let _ = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
-        guard self.expandedIndexRow != indexPath.row else {
-            guard let image = dataSource[indexPath.row].code?.generateQRCode() else { return }
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-            let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
-            self.present(vc, animated: true, completion: nil)
-            self.tabBarController?.tabBar.isHidden = true
-            return
+        guard let _ = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell,
+              let code = dataSource[indexPath.row].code
+        else { return }
+        if self.expandedIndexRow != indexPath.row {
+            let requestedExpandedIndex = indexPath
+            let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
+            self.expandedIndexRow = requestedExpandedIndex.row
+            self.tableView.reloadRows(at: [requestedExpandedIndex, currentExpandedIndex], with: .automatic)
+            let cell = self.tableView.cellForRow(at: requestedExpandedIndex)
+            UIAccessibility.setFocusTo(cell)
+        } else {
+            QRMaker.image(for: code) { img in
+                guard let image = img else { return }
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
+                self.present(vc, animated: true, completion: nil)
+                self.tabBarController?.tabBar.isHidden = true
+                return
+            }
         }
-        let requestedExpandedIndex = indexPath
-        let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
-        self.expandedIndexRow = requestedExpandedIndex.row
-        self.tableView.reloadRows(at: [requestedExpandedIndex, currentExpandedIndex], with: .automatic)
-        let cell = self.tableView.cellForRow(at: requestedExpandedIndex)
-        UIAccessibility.setFocusTo(cell)
-        
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -242,7 +260,9 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         let movedObject = dataSource[sourceIndexPath.row]
         dataSource.remove(at: sourceIndexPath.row)
         dataSource.insert(movedObject, at: destinationIndexPath.row)
-        StorageService.shared.changeVaccineCardSortOrder(cardQR: movedObject.code ?? "", newPosition: destinationIndexPath.row)
+        if let card = StorageService.shared.fetchVaccineCard(code: movedObject.code ?? "") {
+            StorageService.shared.updateVaccineCardSortOrder(card: card, newPosition: destinationIndexPath.row)
+        }
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
@@ -298,12 +318,6 @@ extension CovidVaccineCardsViewController {
             guard self.dataSource.count > indexPath.row else { return }
             let item = self.dataSource[indexPath.row]
             StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "")
-            self.dataSource.remove(at: indexPath.row)
-            if self.dataSource.isEmpty {
-                self.inEditMode = false
-            } else {
-                self.tableView.reloadData()
-            }
         }
     }
 }
@@ -312,7 +326,7 @@ extension CovidVaccineCardsViewController {
 extension CovidVaccineCardsViewController {
     
     private func fetchFromStorage() {
-        let cards = StorageService.shared.fetchVaccineCards(for: AuthManager().userId())
+        let cards = StorageService.shared.fetchVaccineCards()
         self.dataSource = cards
         self.adjustNavBar()
         self.tableView.reloadData()

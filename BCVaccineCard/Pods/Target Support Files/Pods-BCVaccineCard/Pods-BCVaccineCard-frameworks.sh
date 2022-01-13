@@ -178,6 +178,7 @@ code_sign_if_enabled() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AlamofireRSSParser/AlamofireRSSParser.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/BCVaccineValidator/BCVaccineValidator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/EncryptedCoreData/EncryptedCoreData.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
@@ -188,6 +189,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleDataTransport/GoogleDataTransport.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/JOSESwift/JOSESwift.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/JWTDecode/JWTDecode.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/PocketSVG/PocketSVG.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework"
@@ -202,6 +204,7 @@ fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AlamofireRSSParser/AlamofireRSSParser.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/BCVaccineValidator/BCVaccineValidator.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/EncryptedCoreData/EncryptedCoreData.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework"
@@ -212,6 +215,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleDataTransport/GoogleDataTransport.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/JOSESwift/JOSESwift.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/JWTDecode/JWTDecode.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/KeychainAccess/KeychainAccess.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/PocketSVG/PocketSVG.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/PromisesObjC/FBLPromises.framework"
