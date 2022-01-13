@@ -189,6 +189,11 @@ extension StorageService: StorageTestResultManager {
     }
     
     // MARK: Hekpers
+    func testExists(from gateWayResponse: GatewayTestResultResponse) -> Bool {
+        guard let id = gateWayResponse.md5Hash() else {return false}
+        return !fetchTestResults().filter({$0.id == id}).isEmpty
+    }
+    
     /// Find the stored test record that is likely the one from the response:
     /// - Parameter gateWayResponse: gateway test result response
     /// - Returns: Stored CovidLabTestResult object that matches the response
