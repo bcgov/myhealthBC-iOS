@@ -180,10 +180,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 extension QRRetrievalMethodViewController {
     func authenticateBeforeDisplayingGatewayForm() {
         
-        // TODO: Enable Auth - comment below
-        goToEnterGateway()
-        // TODO: Enable Auth - uncomment below
-        /*
+       
         if !AuthManager().isAuthenticated {
             let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
                 guard let `self` = self else {return}
@@ -205,7 +202,7 @@ extension QRRetrievalMethodViewController {
             self.present(vc, animated: true, completion: nil)
         } else {
             goToEnterGateway()
-        }*/
+        }
     }
     func goToEnterGateway() {
         // TODO: Should look at refactoring this a bit

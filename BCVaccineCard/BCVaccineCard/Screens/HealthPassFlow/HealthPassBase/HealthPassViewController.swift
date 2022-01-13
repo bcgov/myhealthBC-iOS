@@ -78,10 +78,8 @@ extension HealthPassViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
-        // TODO: Enable Auth - comment below
-        showScreen()
-        // TODO: Enable Auth - uncomment below
-        /*
+        
+       
         if showAuth && !authManager.isAuthenticated {
             self.view.startLoadingIndicator()
             let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
@@ -102,7 +100,7 @@ extension HealthPassViewController {
             self.present(vc, animated: true, completion: nil)
         } else {
             showScreen()
-        }*/
+        }
     }
 }
 

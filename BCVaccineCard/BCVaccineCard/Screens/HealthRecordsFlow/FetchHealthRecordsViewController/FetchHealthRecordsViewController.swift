@@ -126,10 +126,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
                 self.showTestForm(rememberDetails: rememberDetails)
             }
         }
-        // TODO: Enable Auth - comment below
-        showForm()
-        // TODO: Enable Auth - uncomment below
-        /*
+        
         if !AuthManager().isAuthenticated {
             self.view.startLoadingIndicator()
             let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
@@ -149,7 +146,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             self.present(vc, animated: true, completion: nil)
         } else {
             showForm()
-        }*/
+        }
     }
      
     private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {
