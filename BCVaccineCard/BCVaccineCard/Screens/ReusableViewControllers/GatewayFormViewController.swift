@@ -553,6 +553,10 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         // store prefered PHN if needed here
         self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
         hideLoader()
+        if StorageService.shared.testExists(from: result) {
+            alert(title: .duplicateTitle, message: .duplicateTestMessage)
+            return
+        }
         if let id = handleTestResultInCoreData(gatewayResponse: result) {
             var birthday: String?
             if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) {

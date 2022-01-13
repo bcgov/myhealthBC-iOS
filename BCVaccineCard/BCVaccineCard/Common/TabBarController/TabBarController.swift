@@ -43,23 +43,23 @@ class TabBarController: UITabBarController {
     }
     
     fileprivate var addHeathRecords: TabBarVCs.Properties {
-        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true))
+        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true))
     }
     
     private var previousSelectedIndex: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
+        setup(selectedIndex: 0)
     }
     
 
-    private func setup() {
+    private func setup(selectedIndex: Int) {
         self.tabBar.tintColor = AppColours.appBlue
         self.tabBar.barTintColor = .white
         self.delegate = self
         self.viewControllers = setViewControllers(withVCs: [.healthPass, .records, .resource, .newsFeed])
-        self.selectedIndex = 0
+        self.selectedIndex = selectedIndex
         setupObserver()
     }
     
@@ -83,12 +83,35 @@ class TabBarController: UITabBarController {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
-            case .VaccineCard, .CovidLabTestResult:
-//                self.setup()
-                print("DONE")
+            case .VaccineCard, .CovidLabTestResult, .Patient:
+                if event.event == .Delete, StorageService.shared.getHeathRecords().isEmpty {
+                    // If data was deleted and now health records are empty
+                    self.resetHealthRecordsTab()
+                } else if event.event == .Save, StorageService.shared.getHeathRecords().count == 1 {
+                    // If data was saved and now health records now have exactly 1 item
+                    self.resetHealthRecordsTab()
+                }
             default:
                 break
             }
+        }
+    }
+    
+    private func resetHealthRecordsTab() {
+        let vc: TabBarVCs = .records
+        guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHeathRecords : vc.properties  else { return }
+        let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
+        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+        let viewController = properties.baseViewController
+        viewController.tabBarItem = tabBarItem
+        viewController.title = properties.title
+        let navController = CustomNavigationController.init(rootViewController: viewController)
+        
+        let isOnRecordsTab = self.selectedIndex == 1
+        viewControllers?.remove(at: 1)
+        viewControllers?.insert(navController, at: 1)
+        if isOnRecordsTab {
+            selectedIndex = 1
         }
     }
     
@@ -96,10 +119,6 @@ class TabBarController: UITabBarController {
         guard let viewController = (notification.userInfo?["viewController"] as? CustomNavigationController)?.visibleViewController else { return }
         if viewController is NewsFeedViewController {
             NotificationCenter.default.post(name: .reloadNewsFeed, object: nil, userInfo: nil)
-        }
-        // This will handle the case where a tab is tapped again while already being on that tab
-        if let previous = self.previousSelectedIndex, previous == self.selectedIndex {
-            NotificationCenter.default.post(name: .doubleTappedTab, object: nil, userInfo: nil)
         }
     }
 

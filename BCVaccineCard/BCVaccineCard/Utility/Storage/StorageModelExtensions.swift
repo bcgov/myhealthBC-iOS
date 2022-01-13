@@ -49,7 +49,7 @@ extension VaccineCard {
     }
     
     public var birthDateString: String {
-        return patient?.birthday?.birthdayYearDateString ?? ""
+        return patient?.birthday?.yearMonthDayString ?? ""
     }
     
     public var getCovidImmunizations: [ImmunizationRecord] {

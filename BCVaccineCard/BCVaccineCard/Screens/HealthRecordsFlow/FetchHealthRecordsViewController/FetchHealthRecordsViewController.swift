@@ -9,9 +9,10 @@ import UIKit
 
 class FetchHealthRecordsViewController: BaseViewController {
     
-    class func constructFetchHealthRecordsViewController(hideNavBackButton: Bool) -> FetchHealthRecordsViewController {
+    class func constructFetchHealthRecordsViewController(hideNavBackButton: Bool, showSettingsIcon: Bool) -> FetchHealthRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: FetchHealthRecordsViewController.self)) as? FetchHealthRecordsViewController {
             vc.hideNavBackButton = hideNavBackButton
+            vc.showSettingsIcon = showSettingsIcon
             return vc
         }
         return FetchHealthRecordsViewController()
@@ -21,6 +22,7 @@ class FetchHealthRecordsViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var hideNavBackButton = false
+    private var showSettingsIcon: Bool!
     
     private var dataSource: [GetRecordsView.RecordType] = [.covidImmunizationRecord, .covidTestResult]
 
@@ -72,9 +74,10 @@ class FetchHealthRecordsViewController: BaseViewController {
 // MARK: Navigation setup
 extension FetchHealthRecordsViewController {
     private func navSetup() {
+        let navButton: NavButton? = showSettingsIcon ? NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)) : nil
         self.navDelegate?.setNavigationBarWith(title: .healthRecords,
                                                leftNavButton: nil,
-                                               rightNavButton: nil,
+                                               rightNavButton: navButton,
                                                navStyle: .large,
                                                targetVC: self,
                                                backButtonHintString: nil)

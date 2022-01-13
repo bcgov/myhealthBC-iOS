@@ -62,7 +62,8 @@ class HealthRecordsViewController: BaseViewController {
     }
     
     func showFetchVC() {
-        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
+        // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
+        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true)
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
@@ -128,7 +129,7 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
     
     func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
         if screenType == .healthRecords {
-            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false)
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false)
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
