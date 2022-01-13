@@ -61,7 +61,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setup() {
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
-        fetchDataSource()
+        fetchDataSource(checkForBackgroundUpdates: true)
     }
     
 }
@@ -97,7 +97,7 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
-    private func fetchDataSource() {
+    private func fetchDataSource(checkForBackgroundUpdates: Bool) {
         guard let patient = self.patient else {return}
         self.view.startLoadingIndicator(backgroundColor: .clear)
         let records = StorageService.shared.getHeathRecords()
@@ -109,6 +109,9 @@ extension UsersListOfRecordsViewController {
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
         self.checkForTestResultsToUpdate(ds: self.dataSource)
+        if checkForBackgroundUpdates {
+            self.checkForTestResultsToUpdate(ds: self.dataSource)
+        }
     }
     
     private func checkForTestResultsToUpdate(ds: [HealthRecordsDetailDataSource]) {
@@ -255,7 +258,10 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
         print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
         StorageService.shared.updateTestResult(gateWayResponse: result) { [weak self] success in
             guard let `self` = self else {return}
-            self.tableView.reloadData()
+            // TODO: Need to find a better way to update the VC data source - refactor needed
+            self.fetchDataSource(checkForBackgroundUpdates: false)
+//            let indexPath = IndexPath(row: row, section: 0)
+//            self.tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
     
