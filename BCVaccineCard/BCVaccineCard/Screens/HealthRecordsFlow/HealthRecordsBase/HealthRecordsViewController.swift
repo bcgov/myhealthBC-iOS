@@ -50,19 +50,20 @@ class HealthRecordsViewController: BaseViewController {
  
     private func setup() {
         navSetup()
-        fetchData { [weak self] records in
-            guard let `self` = self else {return}
-            self.dataSource = records.dataSource()
-            if self.dataSource.isEmpty {
-                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
-                self.navigationController?.pushViewController(vc, animated: false)
-            } else {
-                self.addRecordHeaderSetup()
-                self.setupCollectionView()
-            }
+        let records = fetchData()
+        self.dataSource = records.dataSource()
+        if self.dataSource.isEmpty {
+            self.showFetchVC()
+        } else {
+            self.addRecordHeaderSetup()
+            self.setupCollectionView()
         }
-        
         refreshOnStorageChange()
+    }
+    
+    func showFetchVC() {
+        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     private func refreshOnStorageChange() {
@@ -79,20 +80,17 @@ class HealthRecordsViewController: BaseViewController {
     }
     
     private func updateData() {
-        fetchData { [weak self] records in
-            guard let `self` = self else {return}
-            self.dataSource = records.dataSource()
-            self.addRecordHeaderSetup()
-            self.collectionView.reloadData()
-            if self.dataSource.isEmpty {
-                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
-                self.navigationController?.pushViewController(vc, animated: false)
-            } else {
-                // FIXME: Need a way of dismissing dismissFetchHealthRecordsViewController() for the case where data is nil, user enters app, goes to health records tab (so it is instantiated and viewDidLoad is called), then user goes to healthPasses tab, scans a QR code, then user goes back to health records tab.... issue is that the fetchVC will still be shown
-                // Possible solution: Listener on tab bar controller, check when tab is changed - something like that. Need to think on this
+        let records = fetchData()
+        self.dataSource = records.dataSource()
+        self.addRecordHeaderSetup()
+        self.collectionView.reloadData()
+        if self.dataSource.isEmpty {
+            self.showFetchVC()
+        } else {
+            // FIXME: Need a way of dismissing dismissFetchHealthRecordsViewController() for the case where data is nil, user enters app, goes to health records tab (so it is instantiated and viewDidLoad is called), then user goes to healthPasses tab, scans a QR code, then user goes back to health records tab.... issue is that the fetchVC will still be shown
+            // Possible solution: Listener on tab bar controller, check when tab is changed - something like that. Need to think on this
 //                    self.dismissFetchHealthRecordsViewControllerIfNeeded()
-                
-            }
+            
         }
     }
     
@@ -102,13 +100,8 @@ class HealthRecordsViewController: BaseViewController {
         popBack(toControllerType: HealthRecordsViewController.self)
     }
     
-    private func fetchData(completion: @escaping([HealthRecord])-> Void) {
-        view.startLoadingIndicator(backgroundColor: .white)
-        StorageService.shared.getHeathRecords {[weak self] records in
-            guard let `self` = self else {return}
-            self.view.endLoadingIndicator()
-            return completion(records)
-        }
+    private func fetchData() -> [HealthRecord] {
+        StorageService.shared.getHeathRecords()
     }
 
 }
@@ -154,7 +147,7 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
         let availableWidth = UIScreen.main.bounds.width
         var width: CGFloat = (availableWidth / itemsPerRow) - (spacingPerItem * itemsPerRow)
         width += (spacingPerItem/itemsPerRow)
-        let maxHeightNeededForNames = dataSource.map({$0.userName}).maxHeightNeeded(width: width, font: HealthRecordsUserView.nameFont)
+        let maxHeightNeededForNames = dataSource.map({$0.patient.name ?? ""}).maxHeightNeeded(width: width, font: HealthRecordsUserView.nameFont)
         let height: CGFloat = maxHeightNeededForNames >= maxCellHeight ? maxHeightNeededForNames : maxCellHeight
         
         layout.minimumLineSpacing = spacingPerItem
@@ -189,9 +182,8 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row < dataSource.count else { return }
-        let userName = dataSource[indexPath.row].userName
-        let birthdate =  dataSource[indexPath.row].birthdate
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(name: userName, birthdate: birthdate)
+        let patient = dataSource[indexPath.row].patient
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -59,9 +59,7 @@ public struct LocallyStoredVaccinePassportModel: Codable, Equatable {
 
 struct AppVaccinePassportModel: Equatable {
     let codableModel: LocallyStoredVaccinePassportModel
-    var image: UIImage? {
-        return codableModel.code.generateQRCode()
-    }
+    
     var issueDate: String? {
         let date = Date.init(timeIntervalSince1970: codableModel.issueDate)
         return Date.Formatter.issuedOnDateTime.string(from: date)

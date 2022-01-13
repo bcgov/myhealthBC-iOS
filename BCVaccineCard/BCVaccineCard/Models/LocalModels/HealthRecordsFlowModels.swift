@@ -9,8 +9,7 @@ import Foundation
 
 // MARK: This is the data source used in the collection view on the base health records screen
 struct HealthRecordsDataSource {
-    let userName: String
-    let birthdate: Date?
+    let patient: Patient
     var numberOfRecords: Int
 }
 
@@ -22,6 +21,7 @@ struct HealthRecord {
     }
     
     public let type: Record
+    public let patient: Patient
     public let patientName: String
     public let birthDate: Date?
     
@@ -30,6 +30,7 @@ struct HealthRecord {
         switch type {
         case .Test(let test):
             let results = test.resultArray
+            patient = test.patient!
             birthDate = test.patient?.birthday
             if let first = results.first {
                 patientName = first.patientDisplayName ?? ""
@@ -38,6 +39,7 @@ struct HealthRecord {
                 patientName = ""
             }
         case .CovidImmunization(let card):
+            patient = card.patient!
             patientName = card.name ?? ""
             birthDate = card.patient?.birthday
         }
@@ -69,18 +71,18 @@ extension Array where Element == HealthRecord {
         var result: [HealthRecordsDataSource] = []
         for record in self {
             // TODO: check for birthday too
-            if let i = result.firstIndex(where: {$0.userName == record.patientName && $0.birthdate == record.birthDate}) {
+            if let i = result.firstIndex(where: {$0.patient == record.patient}) {
                 result[i].numberOfRecords += 1
             } else {
-                result.append(HealthRecordsDataSource(userName: record.patientName, birthdate: record.birthDate, numberOfRecords: 1))
+                result.append(HealthRecordsDataSource(patient: record.patient, numberOfRecords: 1))
             }
         }
         return result
     }
     
     // TODO: Refactor to use patient as parameter
-    func detailDataSource(userName: String, birthDate: Date?) -> [HealthRecordsDetailDataSource] {
-        let filtered = self.filter { $0.patientName == userName && $0.birthDate == birthDate }
+    func detailDataSource(patient: Patient) -> [HealthRecordsDetailDataSource] {
+        let filtered = self.filter { $0.patient == patient }
         return filtered.compactMap({$0.detailDataSource()})
     }
     

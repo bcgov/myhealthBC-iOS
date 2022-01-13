@@ -10,11 +10,10 @@ import SwipeCellKit
 
 class UsersListOfRecordsViewController: BaseViewController {
     
-    // TODO: Replace params with USER after storage refactor
-    class func constructUsersListOfRecordsViewController(name: String, birthdate: Date?) -> UsersListOfRecordsViewController {
+    // TODO: Replace params with Patient after storage refactor
+    class func constructUsersListOfRecordsViewController(patient: Patient) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
-            vc.name = name
-            vc.birthdate = birthdate
+            vc.patient = patient
             return vc
         }
         return UsersListOfRecordsViewController()
@@ -22,8 +21,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     
-    private var name: String!
-    private var birthdate: Date?
+    private var patient: Patient?
+    
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
@@ -78,14 +77,12 @@ extension UsersListOfRecordsViewController {
                   image: nil, action: #selector(self.editButton),
                   accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
         let rightNavButton = hasRecords ? editModeNavButton : nil
-        self.navDelegate?.setNavigationBarWith(title: self.name + " " + .recordText.capitalized,
+        self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: nil)
-        
-        
     }
     
     @objc private func doneButton() {
@@ -101,24 +98,19 @@ extension UsersListOfRecordsViewController {
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
     private func fetchDataSource(checkForBackgroundUpdates: Bool) {
-        // TODO: Adding this check here for now, will remove once refactored
+        guard let patient = self.patient else {return}
+        self.view.startLoadingIndicator(backgroundColor: .clear)
+        let records = StorageService.shared.getHeathRecords()
+        // TODO: Refactor to use Patient
+        self.dataSource = records.detailDataSource(patient: patient)
+        self.setupTableView()
+        self.navSetup()
+        self.view.endLoadingIndicator()
+        // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
+        self.tableView.reloadData()
+        self.checkForTestResultsToUpdate(ds: self.dataSource)
         if checkForBackgroundUpdates {
-            self.view.startLoadingIndicator(backgroundColor: .clear)
-        }
-        StorageService.shared.getHeathRecords { [weak self] records in
-            guard let `self` = self else {return}
-//            Logger.log(string: records.first!.detailDataSource())
-            self.dataSource = records.detailDataSource(userName: self.name, birthDate: self.birthdate)
-            self.setupTableView()
-            self.navSetup()
-            if checkForBackgroundUpdates {
-                self.view.endLoadingIndicator()
-            }
-            // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
-            self.tableView.reloadData()
-            if checkForBackgroundUpdates {
-                self.checkForTestResultsToUpdate(ds: self.dataSource)
-            }
+            self.checkForTestResultsToUpdate(ds: self.dataSource)
         }
     }
     
