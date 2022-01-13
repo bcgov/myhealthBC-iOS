@@ -104,7 +104,7 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping (VaccineCard?) -> Void) {
-        guard let context = managedContext, let card = fetchVaccineCard(code: model.code) else {return completion(nil)}
+        guard let context = managedContext, let card = fetchVaccineCards().filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return completion(nil)}
         do {
             card.code = model.code
             card.vaxDates = model.vaxDates
