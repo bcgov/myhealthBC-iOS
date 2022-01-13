@@ -104,8 +104,6 @@ extension String {
             let frame = CGRect(x: 0, y:  0 , width: size, height: size)
             layer.frame = frame
             let img = snapshotImage(for: layer)
-            print(frame)
-            print(self.lowercased().count)
             return img
             
         } catch {

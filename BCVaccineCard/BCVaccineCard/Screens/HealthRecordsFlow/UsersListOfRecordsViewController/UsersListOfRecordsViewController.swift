@@ -83,8 +83,6 @@ extension UsersListOfRecordsViewController {
                                                navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: nil)
-        
-        
     }
     
     @objc private func doneButton() {

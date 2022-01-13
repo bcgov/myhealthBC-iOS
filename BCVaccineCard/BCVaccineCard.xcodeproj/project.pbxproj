@@ -692,8 +692,8 @@
 		2940A34E2728393100132D7D /* Storage */ = {
 			isa = PBXGroup;
 			children = (
-				29820CE527594CF600B53468 /* StorageModelExtensions.swift */,
 				2940A352272840C200132D7D /* CoreDataClass */,
+				29820CE527594CF600B53468 /* StorageModelExtensions.swift */,
 				2940A34F2728399B00132D7D /* StorageService.swift */,
 				2932DCE0275AA10D00532BC4 /* StorageService+Patient.swift */,
 				2932DCDE275A9D2C00532BC4 /* StorageService+VaccineCard.swift */,
