@@ -23,6 +23,6 @@ class profileAndSettingsViewController: UIViewController {
     
 }
 
-extension profileAndSettingsViewController: UITableViewDelegate, UITableViewDataSource {
-    
-}
+//extension profileAndSettingsViewController: UITableViewDelegate, UITableViewDataSource {
+//    
+//}
