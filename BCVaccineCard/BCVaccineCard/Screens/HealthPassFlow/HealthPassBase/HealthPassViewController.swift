@@ -184,31 +184,21 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.row == 1, let cell = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else {
+        guard indexPath.row == 1,
+              let dataSource = self.dataSource,
+              let code = dataSource.code
+        else {
             return
         }
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         self.tableView.isUserInteractionEnabled = false
-        let cellImage = cell.vaccineCardView.qrCodeImage.image
-        DispatchQueue.global(qos: .background).async {[weak self] in
-            guard let `self` = self else {return}
-            var img: UIImage?
-            if let fromcell = cellImage {
-                img = fromcell
-            } else if let generated = self.dataSource?.code?.generateQRCode() {
-                img = generated
-            }
-            guard let image = img else { return }
-            
-            DispatchQueue.main.async {[weak self] in
-                guard let `self` = self else {return}
-                let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
-                self.present(vc, animated: true, completion: nil)
-                self.tabBarController?.tabBar.isHidden = true
-                self.tableView.isUserInteractionEnabled = true
-            }
+        QRMaker.image(for: code) {[weak self] img in
+            guard let `self` = self, let image = img else {return}
+            let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
+            self.present(vc, animated: true, completion: nil)
+            self.tabBarController?.tabBar.isHidden = true
+            self.tableView.isUserInteractionEnabled = true
         }
-        
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {

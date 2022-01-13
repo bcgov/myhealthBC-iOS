@@ -200,22 +200,26 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard !self.inEditMode else { return }
-        guard let _ = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell else { return }
-        guard self.expandedIndexRow != indexPath.row else {
-            guard let image = dataSource[indexPath.row].code?.generateQRCode() else { return }
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
-            let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
-            self.present(vc, animated: true, completion: nil)
-            self.tabBarController?.tabBar.isHidden = true
-            return
+        guard let _ = tableView.cellForRow(at: indexPath) as? VaccineCardTableViewCell,
+              let code = dataSource[indexPath.row].code
+        else { return }
+        if self.expandedIndexRow != indexPath.row {
+            let requestedExpandedIndex = indexPath
+            let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
+            self.expandedIndexRow = requestedExpandedIndex.row
+            self.tableView.reloadRows(at: [requestedExpandedIndex, currentExpandedIndex], with: .automatic)
+            let cell = self.tableView.cellForRow(at: requestedExpandedIndex)
+            UIAccessibility.setFocusTo(cell)
+        } else {
+            QRMaker.image(for: code) { img in
+                guard let image = img else { return }
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
+                self.present(vc, animated: true, completion: nil)
+                self.tabBarController?.tabBar.isHidden = true
+                return
+            }
         }
-        let requestedExpandedIndex = indexPath
-        let currentExpandedIndex = IndexPath(row: self.expandedIndexRow, section: 0)
-        self.expandedIndexRow = requestedExpandedIndex.row
-        self.tableView.reloadRows(at: [requestedExpandedIndex, currentExpandedIndex], with: .automatic)
-        let cell = self.tableView.cellForRow(at: requestedExpandedIndex)
-        UIAccessibility.setFocusTo(cell)
-        
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
