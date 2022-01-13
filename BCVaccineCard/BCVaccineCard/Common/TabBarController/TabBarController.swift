@@ -41,6 +41,12 @@ class TabBarController: UITabBarController {
         }
         return TabBarController()
     }
+    
+    fileprivate var addHeathRecords: TabBarVCs.Properties {
+        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true))
+    }
+    
+    private var previousSelectedIndex: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +66,7 @@ class TabBarController: UITabBarController {
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {
         var viewControllers: [UIViewController] = []
         vcs.forEach { vc in
-            guard let properties = vc.properties else { return }
+            guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHeathRecords : vc.properties  else { return }
             let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
             tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
             let viewController = properties.baseViewController
@@ -74,6 +80,16 @@ class TabBarController: UITabBarController {
     
     private func setupObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            switch event.entity {
+            case .VaccineCard, .CovidLabTestResult:
+//                self.setup()
+                print("DONE")
+            default:
+                break
+            }
+        }
     }
     
     @objc private func tabChanged(_ notification: Notification) {
@@ -81,11 +97,22 @@ class TabBarController: UITabBarController {
         if viewController is NewsFeedViewController {
             NotificationCenter.default.post(name: .reloadNewsFeed, object: nil, userInfo: nil)
         }
+        // This will handle the case where a tab is tapped again while already being on that tab
+        if let previous = self.previousSelectedIndex, previous == self.selectedIndex {
+            NotificationCenter.default.post(name: .doubleTappedTab, object: nil, userInfo: nil)
+        }
     }
 
 }
 
 extension TabBarController: UITabBarControllerDelegate {
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        // Save the previously selected index, so that we can check if the tab was selected again
+        self.previousSelectedIndex = tabBarController.selectedIndex
+        return true
+    }
+    
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
     }

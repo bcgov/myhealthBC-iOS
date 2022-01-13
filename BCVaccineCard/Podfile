@@ -48,6 +48,7 @@ target 'BCVaccineCard-Prod' do
   pod 'KeychainAccess'
   pod 'AppAuth'
   pod 'JWTDecode', '~> 2.6'
+  
 end
 
 post_install do |installer|

@@ -651,6 +651,10 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     }
     
     func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse) -> String? {
+        // Note, this first guard statement is to handle the case when health gateway is wonky - throws success with no error but has key nil values, so in this case we don't want to store a dummy patient value, as that's what was happening
+        guard let collectionDate = gatewayResponse.resourcePayload?.records.first?.collectionDateTime,
+              !collectionDate.trimWhiteSpacesAndNewLines.isEmpty, let reportID = gatewayResponse.resourcePayload?.records.first?.reportId,
+              !reportID.trimWhiteSpacesAndNewLines.isEmpty else { return nil }
         guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
         guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
         let bday: Date?

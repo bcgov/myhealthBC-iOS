@@ -78,6 +78,10 @@ extension HealthPassViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
+        // TODO: Enable Auth - comment below
+        showScreen()
+        // TODO: Enable Auth - uncomment below
+        /*
         if showAuth && !authManager.isAuthenticated {
             self.view.startLoadingIndicator()
             let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
@@ -98,7 +102,7 @@ extension HealthPassViewController {
             self.present(vc, animated: true, completion: nil)
         } else {
             showScreen()
-        }
+        }*/
     }
 }
 
@@ -112,15 +116,18 @@ extension HealthPassViewController {
 
 // MARK: Fetching and Saving conversions between local data source and app data source
 extension HealthPassViewController {
+    
     private func fetchFromStorage() {
-        let cards = StorageService.shared.fetchVaccineCards()
-        guard cards.count > 0 else {
-            self.dataSource = nil
-            return
-        }
-        self.dataSource = cards.first
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        DispatchQueue.global(qos: .background).async {
+            let cards = StorageService.shared.fetchVaccineCards()
+            guard cards.count > 0 else {
+                self.dataSource = nil
+                return
+            }
+            self.dataSource = cards.first
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
 }
@@ -177,12 +184,21 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let image = dataSource?.code?.generateQRCode() else { return }
-        guard indexPath.row == 1 else { return }
+        guard indexPath.row == 1,
+              let dataSource = self.dataSource,
+              let code = dataSource.code
+        else {
+            return
+        }
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
-        self.present(vc, animated: true, completion: nil)
-        self.tabBarController?.tabBar.isHidden = true
+        self.tableView.isUserInteractionEnabled = false
+        QRMaker.image(for: code) {[weak self] img in
+            guard let `self` = self, let image = img else {return}
+            let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
+            self.present(vc, animated: true, completion: nil)
+            self.tabBarController?.tabBar.isHidden = true
+            self.tableView.isUserInteractionEnabled = true
+        }
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {

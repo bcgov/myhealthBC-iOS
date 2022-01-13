@@ -10,11 +10,10 @@ import SwipeCellKit
 
 class UsersListOfRecordsViewController: BaseViewController {
     
-    // TODO: Replace params with USER after storage refactor
-    class func constructUsersListOfRecordsViewController(name: String, birthdate: Date?) -> UsersListOfRecordsViewController {
+    // TODO: Replace params with Patient after storage refactor
+    class func constructUsersListOfRecordsViewController(patient: Patient) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
-            vc.name = name
-            vc.birthdate = birthdate
+            vc.patient = patient
             return vc
         }
         return UsersListOfRecordsViewController()
@@ -22,8 +21,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     
-    private var name: String!
-    private var birthdate: Date?
+    private var patient: Patient?
+    
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
@@ -62,7 +61,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setup() {
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
-        fetchDataSource()
+        fetchDataSource(initialFetch: true)
     }
     
 }
@@ -78,14 +77,12 @@ extension UsersListOfRecordsViewController {
                   image: nil, action: #selector(self.editButton),
                   accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
         let rightNavButton = hasRecords ? editModeNavButton : nil
-        self.navDelegate?.setNavigationBarWith(title: self.name + " " + .recordText.capitalized,
+        self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: nil)
-        
-        
     }
     
     @objc private func doneButton() {
@@ -100,17 +97,21 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
-    private func fetchDataSource() {
-        self.view.startLoadingIndicator(backgroundColor: .clear)
-        StorageService.shared.getHeathRecords { [weak self] records in
-            guard let `self` = self else {return}
-//            Logger.log(string: records.first!.detailDataSource())
-            self.dataSource = records.detailDataSource(userName: self.name, birthDate: self.birthdate)
-            self.setupTableView()
-            self.navSetup()
+    private func fetchDataSource(initialFetch: Bool) {
+        guard let patient = self.patient else {return}
+        if initialFetch {
+            self.view.startLoadingIndicator(backgroundColor: .clear)
+        }
+        let records = StorageService.shared.getHeathRecords()
+        self.dataSource = records.detailDataSource(patient: patient)
+        self.setupTableView()
+        self.navSetup()
+        if initialFetch {
             self.view.endLoadingIndicator()
-            // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
-            self.tableView.reloadData()
+        }
+        // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
+        self.tableView.reloadData()
+        if initialFetch {
             self.checkForTestResultsToUpdate(ds: self.dataSource)
         }
     }
@@ -259,7 +260,10 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
         print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
         StorageService.shared.updateTestResult(gateWayResponse: result) { [weak self] success in
             guard let `self` = self else {return}
-            self.tableView.reloadData()
+            // TODO: Need to find a better way to update the VC data source - refactor needed
+            self.fetchDataSource(initialFetch: false)
+//            let indexPath = IndexPath(row: row, section: 0)
+//            self.tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
     
