@@ -102,17 +102,14 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController {
     private func fetchDataSource() {
         self.view.startLoadingIndicator(backgroundColor: .clear)
-        StorageService.shared.getHeathRecords { [weak self] records in
-            guard let `self` = self else {return}
-//            Logger.log(string: records.first!.detailDataSource())
-            self.dataSource = records.detailDataSource(userName: self.name, birthDate: self.birthdate)
-            self.setupTableView()
-            self.navSetup()
-            self.view.endLoadingIndicator()
-            // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
-            self.tableView.reloadData()
-            self.checkForTestResultsToUpdate(ds: self.dataSource)
-        }
+        let records = StorageService.shared.getHeathRecords()
+        self.dataSource = records.detailDataSource(userName: self.name, birthDate: self.birthdate)
+        self.setupTableView()
+        self.navSetup()
+        self.view.endLoadingIndicator()
+        // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
+        self.tableView.reloadData()
+        self.checkForTestResultsToUpdate(ds: self.dataSource)
     }
     
     private func checkForTestResultsToUpdate(ds: [HealthRecordsDetailDataSource]) {

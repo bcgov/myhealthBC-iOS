@@ -170,23 +170,21 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         self.navigationController?.pushViewController(vc, animated: true)
     }
     private func handleRouting(id: String, recordType: GetRecordsView.RecordType, details: GatewayFormCompletionHandlerDetails) {
-        StorageService.shared.getHeathRecords { [weak self] records in
-            guard let `self` = self else { return }
-            var recordsCount: Int
-            if let name = details.name, let birthday = details.dob {
-                let birthDate = Date.Formatter.yearMonthDay.date(from: birthday)
-                recordsCount = records.detailDataSource(userName: name, birthDate: birthDate).count
-            } else {
-                recordsCount = 1
-            }
-            let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: recordType)
-            guard let ds = dataSource else {
-                self.popBack(toControllerType: HealthRecordsViewController.self)
-                return
-            }
-            let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: recordsCount)
-            self.setupNavStack(details: details, detailVC: detailVC)
+        let records = StorageService.shared.getHeathRecords()
+        var recordsCount: Int
+        if let name = details.name, let birthday = details.dob {
+            let birthDate = Date.Formatter.yearMonthDay.date(from: birthday)
+            recordsCount = records.detailDataSource(userName: name, birthDate: birthDate).count
+        } else {
+            recordsCount = 1
         }
+        let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: recordType)
+        guard let ds = dataSource else {
+            self.popBack(toControllerType: HealthRecordsViewController.self)
+            return
+        }
+        let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: recordsCount)
+        self.setupNavStack(details: details, detailVC: detailVC)
     }
     
     private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController) {

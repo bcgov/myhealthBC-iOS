@@ -50,18 +50,15 @@ class HealthRecordsViewController: BaseViewController {
  
     private func setup() {
         navSetup()
-        fetchData { [weak self] records in
-            guard let `self` = self else {return}
-            self.dataSource = records.dataSource()
-            if self.dataSource.isEmpty {
-                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
-                self.navigationController?.pushViewController(vc, animated: false)
-            } else {
-                self.addRecordHeaderSetup()
-                self.setupCollectionView()
-            }
+        let records = fetchData()
+        self.dataSource = records.dataSource()
+        if self.dataSource.isEmpty {
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
+            self.navigationController?.pushViewController(vc, animated: false)
+        } else {
+            self.addRecordHeaderSetup()
+            self.setupCollectionView()
         }
-        
         refreshOnStorageChange()
     }
     
@@ -79,20 +76,18 @@ class HealthRecordsViewController: BaseViewController {
     }
     
     private func updateData() {
-        fetchData { [weak self] records in
-            guard let `self` = self else {return}
-            self.dataSource = records.dataSource()
-            self.addRecordHeaderSetup()
-            self.collectionView.reloadData()
-            if self.dataSource.isEmpty {
-                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
-                self.navigationController?.pushViewController(vc, animated: false)
-            } else {
-                // FIXME: Need a way of dismissing dismissFetchHealthRecordsViewController() for the case where data is nil, user enters app, goes to health records tab (so it is instantiated and viewDidLoad is called), then user goes to healthPasses tab, scans a QR code, then user goes back to health records tab.... issue is that the fetchVC will still be shown
-                // Possible solution: Listener on tab bar controller, check when tab is changed - something like that. Need to think on this
+        let records = fetchData()
+        self.dataSource = records.dataSource()
+        self.addRecordHeaderSetup()
+        self.collectionView.reloadData()
+        if self.dataSource.isEmpty {
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true)
+            self.navigationController?.pushViewController(vc, animated: false)
+        } else {
+            // FIXME: Need a way of dismissing dismissFetchHealthRecordsViewController() for the case where data is nil, user enters app, goes to health records tab (so it is instantiated and viewDidLoad is called), then user goes to healthPasses tab, scans a QR code, then user goes back to health records tab.... issue is that the fetchVC will still be shown
+            // Possible solution: Listener on tab bar controller, check when tab is changed - something like that. Need to think on this
 //                    self.dismissFetchHealthRecordsViewControllerIfNeeded()
-                
-            }
+            
         }
     }
     
@@ -102,13 +97,8 @@ class HealthRecordsViewController: BaseViewController {
         popBack(toControllerType: HealthRecordsViewController.self)
     }
     
-    private func fetchData(completion: @escaping([HealthRecord])-> Void) {
-        view.startLoadingIndicator(backgroundColor: .white)
-        StorageService.shared.getHeathRecords {[weak self] records in
-            guard let `self` = self else {return}
-            self.view.endLoadingIndicator()
-            return completion(records)
-        }
+    private func fetchData() -> [HealthRecord] {
+        StorageService.shared.getHeathRecords()
     }
 
 }

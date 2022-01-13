@@ -89,8 +89,8 @@ class TabBarController: UITabBarController {
 
 extension TabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        if let last = lastTab, last == viewController {return false}
-        lastTab = viewController
+//        if let last = lastTab, last == viewController {return false}
+//        lastTab = viewController
         return true
     }
     
