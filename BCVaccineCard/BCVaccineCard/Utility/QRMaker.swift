@@ -10,27 +10,20 @@ import CoreImage.CIFilterBuiltins
 import QRCodeGenerator
 import PocketSVG
 
-class QRCache {
-    let code: String
-    let image: UIImage
-    var lastUsed: Date
-    
-    init(code: String, image: UIImage, lastUsed: Date) {
-        self.code = code
-        self.image = image
-        self.lastUsed = lastUsed
-    }
-}
-
+/// It caches up to 4 most recently used QR codes for improved user experience
+/// QR generation, when needed, is dont on background thread for imroved responsiveness.
 class QRMaker {
-    
-    static var cache: [QRCache] = [] {
+    static fileprivate var cache: [QRCache] = [] {
         didSet {
             cleanCache()
         }
     }
     
-    static func image(for string: String, completion: @escaping(UIImage?)->Void) {
+    /// Generate and return a QR image for the given string.
+    /// - Parameters:
+    ///   - string: String to generate QR image for
+    ///   - completion: resulting image
+    static public func image(for string: String, completion: @escaping(UIImage?)->Void) {
         DispatchQueue.global(qos: .background).async {
             if let cahced = cache.filter({$0.code == string}).first {
                 cahced.lastUsed = Date()
@@ -54,6 +47,19 @@ class QRMaker {
         var sorted = cache.sorted(by: {$0.lastUsed > $1.lastUsed})
         sorted.removeSubrange(4...)
         cache = sorted
+    }
+}
+
+// MARK: Cache Model
+class QRCache {
+    let code: String
+    let image: UIImage
+    var lastUsed: Date
+    
+    init(code: String, image: UIImage, lastUsed: Date) {
+        self.code = code
+        self.image = image
+        self.lastUsed = lastUsed
     }
 }
 // MARK: Convert String Code to UIImage
