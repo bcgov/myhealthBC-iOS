@@ -87,9 +87,6 @@ class TabBarController: UITabBarController {
                 if event.event == .Delete, StorageService.shared.getHeathRecords().isEmpty {
                     // If data was deleted and now health records are empty
                     self.resetHealthRecordsTab()
-                } else if event.event == .Save, StorageService.shared.getHeathRecords().count == 1 {
-                    // If data was saved and now health records now have exactly 1 item
-                    self.resetHealthRecordsTab()
                 }
             default:
                 break
@@ -97,7 +94,7 @@ class TabBarController: UITabBarController {
         }
     }
     
-    private func resetHealthRecordsTab() {
+    func resetHealthRecordsTab(viewControllersToInclude vcs: [UIViewController]? = nil) {
         let vc: TabBarVCs = .records
         guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHeathRecords : vc.properties  else { return }
         let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
@@ -106,12 +103,19 @@ class TabBarController: UITabBarController {
         viewController.tabBarItem = tabBarItem
         viewController.title = properties.title
         let navController = CustomNavigationController.init(rootViewController: viewController)
-        
         let isOnRecordsTab = self.selectedIndex == 1
         viewControllers?.remove(at: 1)
         viewControllers?.insert(navController, at: 1)
         if isOnRecordsTab {
             selectedIndex = 1
+            if let vcs = vcs {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    for vc in vcs {
+                        navController.pushViewController(vc, animated: false)
+                    }
+                    AppDelegate.sharedInstance?.removeLoadingViewHack()
+                }
+            }
         }
     }
     
@@ -134,6 +138,9 @@ extension TabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
+        if self.selectedIndex == 1 {
+            self.resetHealthRecordsTab()
+        }
     }
     
 }

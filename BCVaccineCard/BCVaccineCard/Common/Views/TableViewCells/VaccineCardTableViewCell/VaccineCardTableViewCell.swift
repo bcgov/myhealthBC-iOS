@@ -17,6 +17,7 @@ fileprivate class VaccineCardTableViewCellCache {
     }
     
     static func cache(code: String, result: CodeValidationResult) {
+        // FIXME: Noticed a crash here... BAD EXEC - Thread 5: EXC_BAD_ACCESS (code=1, address=0x18)
         validationResults[code] = result
     }
 }

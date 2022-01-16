@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
     var window: UIWindow?
     
+    private var loadingViewHack: UIView?
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         configure()
         return true
@@ -112,6 +114,22 @@ extension AppDelegate {
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
         
+    }
+}
+
+// MARK: For custom navigation routing hack with multiple pushes
+extension AppDelegate {
+    func addLoadingViewHack() {
+        let rect = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        loadingViewHack = UIView(frame: rect)
+        loadingViewHack?.backgroundColor = .white
+        loadingViewHack?.startLoadingIndicator(backgroundColor: .white)
+        self.window?.addSubview(loadingViewHack!)
+    }
+    
+    func removeLoadingViewHack() {
+        loadingViewHack?.endLoadingIndicator()
+        loadingViewHack?.removeFromSuperview()
     }
 }
 
