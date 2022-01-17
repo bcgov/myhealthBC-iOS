@@ -185,6 +185,9 @@ class AuthManager {
     }
     
     // MARK: STORAGE
+    public func clearData() {
+        removeAuthTokens()
+    }
     private func store(state: OIDAuthState) {
         guard state.isAuthorized else { return }
         if let authToken = state.lastTokenResponse?.accessToken {

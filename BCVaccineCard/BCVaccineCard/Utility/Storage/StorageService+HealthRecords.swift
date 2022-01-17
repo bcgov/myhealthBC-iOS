@@ -27,4 +27,11 @@ extension StorageService {
             notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: object))
         }
     }
+    
+    func deleteHealthRecordsForAuthenticatedUser() {
+        let tests = fetchTestResults().filter({$0.authenticated == true})
+        let vaccineCards = fetchVaccineCards().filter({$0.authenticated == true})
+        deleteAllRecords(in: tests)
+        deleteAllRecords(in: vaccineCards)
+    }
 }
