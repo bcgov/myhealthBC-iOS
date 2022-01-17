@@ -82,7 +82,12 @@ class SecurityAndDataViewController: BaseViewController {
     }
     
     func login() {
-        AuthenticationViewController.displayFullScreen()
+        self.view.startLoadingIndicator()
+        showLogin { [weak self] authenticated in
+            guard let `self` = self else {return}
+            self.view.endLoadingIndicator()
+            self.tableView.reloadData()
+        }
     }
     
     // MARK: Local Auth
