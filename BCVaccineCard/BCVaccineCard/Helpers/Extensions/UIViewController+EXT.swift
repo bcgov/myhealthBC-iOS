@@ -269,13 +269,13 @@ extension UIViewController {
 
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
-    func storeVaccineCard(model: LocallyStoredVaccinePassportModel) {
+    func storeVaccineCard(model: LocallyStoredVaccinePassportModel, authenticated: Bool) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: model.name, birthday: birthdate) else {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card")
             return
         }
-        StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, federalPass: model.fedCode, vaxDates: model.vaxDates, completion: {_ in})
+        StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, completion: {_ in})
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
