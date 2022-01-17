@@ -151,11 +151,17 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         tableView.rowHeight = UITableView.automaticDimension
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.tableFooterView = UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 54
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let section = TableSection.init(rawValue: section) else {return nil}
+        guard let section = TableSection.init(rawValue: section) else {
+            return nil
+        }
+        
         let titleString: String
         switch section {
         case .Login:
@@ -163,7 +169,8 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         case .Data:
             titleString = "Data"
         }
-        let headerView:SettingsSectionHeaderView = SettingsSectionHeaderView.fromNib()
+        let headerView: SettingsSectionHeaderView = SettingsSectionHeaderView.fromNib()
+        headerView.frame = .zero
         headerView.setup(title: titleString)
         return headerView
     }

@@ -18,9 +18,9 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e04-D3-cCi">
-                        <rect key="frame" x="36" y="27" width="442" height="54"/>
+                        <rect key="frame" x="36" y="27" width="442" height="57"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="54" id="vUy-8Z-MbN"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="vUy-8Z-MbN"/>
                         </constraints>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain" title="Button"/>

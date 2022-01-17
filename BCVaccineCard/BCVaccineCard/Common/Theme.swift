@@ -29,13 +29,13 @@ enum LabelColour {
 extension Theme {
     
     // Buttons
-    public func style(button: UIButton, style: ButtonStyle, title: String) {
+    public func style(button: UIButton, style: ButtonStyle, title: String, bold: Bool? = false) {
         switch style {
             
         case .Fill:
-            styleButtonfill(button: button)
+            styleButtonfill(button: button, bold: bold)
         case .Hollow:
-            styleButtonHollow(button: button)
+            styleButtonHollow(button: button, bold: bold)
         }
         button.setTitle(title, for: .normal)
         button.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
@@ -62,22 +62,31 @@ extension Theme {
         }
     }
     
-    fileprivate func styleButtonHollow(button: UIButton) {
+    fileprivate func styleButtonHollow(button: UIButton, bold: Bool? = false) {
         button.backgroundColor = .white
         button.setTitleColor(AppColours.appBlue, for: .normal)
         button.borderColor = AppColours.appBlue
         button.borderWidth = 1
         if let label = button.titleLabel {
-            label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+            if let bolded = bold, bolded {
+                label.font = UIFont.bcSansBoldWithSize(size: 17)
+            } else {
+                label.font = UIFont.bcSansRegularWithSize(size: 17)
+            }
             label.minimumScaleFactor = 0.6
         }
     }
     
-    fileprivate func styleButtonfill(button: UIButton) {
+    fileprivate func styleButtonfill(button: UIButton, bold: Bool? = false) {
         button.backgroundColor = AppColours.appBlue
         button.setTitleColor(.white, for: .normal)
         if let label = button.titleLabel {
-            label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+            if let bolded = bold, bolded {
+                label.font = UIFont.bcSansBoldWithSize(size: 17)
+            } else {
+                label.font = UIFont.bcSansRegularWithSize(size: 17)
+            }
+            
             label.minimumScaleFactor = 0.6
         }
     }

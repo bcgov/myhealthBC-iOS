@@ -93,8 +93,10 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func performAuthentication() {
+        self.view.startLoadingIndicator()
         AuthManager().authenticate(in: self, completion: { [weak self] result in
             guard let self = self else {return}
+            self.view.endLoadingIndicator()
             switch result {
             case .Unavailable:
                 // TODO:

@@ -28,11 +28,13 @@ class AuthenticationInfoView: UIView, Theme {
     
     @IBAction func continueAction(_ sender: Any) {
         guard let completion = self.completion else {return}
+        continueButton.isUserInteractionEnabled = false
         completion(.Continue)
     }
     
     @IBAction func cancelAction(_ sender: Any) {
         guard let completion = self.completion else {return}
+        continueButton.isUserInteractionEnabled = false
         completion(.Cancel)
     }
     

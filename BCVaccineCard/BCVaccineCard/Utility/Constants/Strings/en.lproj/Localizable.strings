@@ -177,7 +177,7 @@
 
 "LoginSuccess" = "Log in successful";
 "RecordsWillBeAutomaticallyAdded" = "Your records will be automatically added and updated in My Health BC.";
-"LogiDescription" = "When logged in, recrods will be automatically added and updated";
+"LoginDescription" = "When logged in, recrods will be automatically added and updated";
 "LocalAuthDescription" = "When enabled, you can unlock the app with touch touch ID instead of passcode";
 "TouchId" = "Touch ID";
 "DeleteAllRecordsAndSavedDataDescription" = "Log out of BC Services Card account and delete every records and saved personal information from My Health BC";

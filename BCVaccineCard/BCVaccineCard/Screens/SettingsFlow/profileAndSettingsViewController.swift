@@ -32,12 +32,13 @@ class profileAndSettingsViewController: BaseViewController {
     // MARK: Class funcs
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTableView()
+        navSetup()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupTableView()
-        navSetup()
+        tableView.reloadData()
     }
     
     // MARK: Routing
@@ -73,8 +74,10 @@ extension profileAndSettingsViewController {
 extension profileAndSettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
     private func setupTableView() {
-                tableView.register(UINib.init(nibName: SettingsRowTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsRowTableViewCell.getName)
-                tableView.register(UINib.init(nibName: SettingsProfileTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsProfileTableViewCell.getName)
+        tableView.register(UINib.init(nibName: SettingsRowTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsRowTableViewCell.getName)
+        tableView.register(UINib.init(nibName: SettingsProfileTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsProfileTableViewCell.getName)
+        tableView.register(UINib.init(nibName: SettingsAuthenticateTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsAuthenticateTableViewCell.getName)
+        
         tableView.rowHeight = UITableView.automaticDimension
         tableView.delegate = self
         tableView.dataSource = self

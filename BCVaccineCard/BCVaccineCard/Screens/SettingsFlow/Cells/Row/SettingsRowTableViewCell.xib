@@ -26,16 +26,21 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="29K-Pd-Kch">
-                        <rect key="frame" x="54" y="41.5" width="41.5" height="21"/>
+                        <rect key="frame" x="54" y="0.0" width="41.5" height="104"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="56" id="13M-Ak-NkX"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="29K-Pd-Kch" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="95q-sq-v76"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="29K-Pd-Kch" secondAttribute="trailing" constant="16" id="DJe-lX-yAO"/>
                     <constraint firstItem="3ey-QG-Yb6" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="DZa-ui-a1d"/>
                     <constraint firstItem="3ey-QG-Yb6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="Dgz-Uh-inm"/>
+                    <constraint firstAttribute="bottom" secondItem="29K-Pd-Kch" secondAttribute="bottom" id="Rt4-GZ-wFS"/>
                     <constraint firstItem="29K-Pd-Kch" firstAttribute="leading" secondItem="3ey-QG-Yb6" secondAttribute="trailing" constant="16" id="oys-Qr-hmv"/>
                     <constraint firstItem="29K-Pd-Kch" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="v3Z-dz-tB4"/>
                 </constraints>
