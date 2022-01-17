@@ -11,7 +11,6 @@ class SecurityAndDataViewController: BaseViewController {
     
     enum TableRow {
         case analytics
-        case privacy
         case deleteAllRecords
         case auth
         case localAuth
@@ -125,15 +124,6 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         let row = section.rows[indexPath.row]
         
         switch row {
-        case .privacy:
-            let cell = textCell(for: indexPath, title: .privacyStatement, textColor: AppColours.appBlue) { [weak self] in
-                guard let `self` = self else {return}
-                self.openPrivacyPolicy()
-            }
-            cell.isAccessibilityElement = true
-            cell.accessibilityLabel = AccessibilityLabels.Settings.privacyStatementLink
-            cell.accessibilityHint = AccessibilityLabels.Settings.privacyStatementHint
-            return cell
         case .analytics:
             let isOn = AnalyticsService.shared.isEnabled
             let cell = toggleCell(for: indexPath, onTitle: .disableAnalytics, offTitle: .enableAnalytics, subTitle: .analytyticsUsageDescription, isOn: isOn) { isOn in
@@ -150,7 +140,7 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
             return cell
             
         case .deleteAllRecords:
-            let cell = textCell(for: indexPath, title: .deleteAllRecordsAndSavedData, textColor: AppColours.appRed) {[weak self] in
+            let cell = textCell(for: indexPath, title: .deleteAllRecordsAndSavedData, titleColour: .Red, subTitle: .deleteAllRecordsAndSavedDataDescription) {[weak self] in
                 guard let `self` = self else {return}
                 self.alertConfirmation(title: .deleteData, message: .confirmDeleteAllRecordsAndSaveData, confirmTitle: .delete, confirmStyle: .destructive) {
                     StorageService.shared.deleteAllStoredData()
@@ -190,11 +180,11 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         }
     }
     
-    func textCell(for indexPath: IndexPath, title: String, font: UIFont? = .bcSansRegularWithSize(size: 16), textColor: UIColor, onTap: @escaping() -> Void) -> SettingsTextTableViewCell {
+    func textCell(for indexPath: IndexPath, title: String, titleColour: LabelColour, subTitle: String, onTap: @escaping() -> Void) -> SettingsTextTableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsTextTableViewCell.getName, for: indexPath) as? SettingsTextTableViewCell else {
             return SettingsTextTableViewCell()
         }
-        cell.configure(text: title, font: font ?? UIFont.bcSansRegularWithSize(size: 16), colour: textColor, onTap: onTap)
+        cell.configure(title: title, titleColour: titleColour, subTitle: subTitle, onTap: onTap)
         return cell
     }
     

@@ -23,6 +23,7 @@ enum LabelColour {
     case Grey
     case Blue
     case Black
+    case Red
 }
 
 extension Theme {
@@ -56,6 +57,8 @@ extension Theme {
             label.textColor = AppColours.appBlue
         case .Black:
             label.textColor = AppColours.textBlack
+        case .Red:
+            label.textColor = AppColours.appRed
         }
     }
     

@@ -206,6 +206,7 @@ extension String {
     static var securityAndData: String { return "SecurityAndData".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
     
+    static var deleteAllRecordsAndSavedDataDescription: String { return "DeleteAllRecordsAndSavedDataDescription".localized }
     static var deleteAllRecordsAndSavedData: String { return "DeleteAllRecordsAndSavedData".localized }
     static var disableAnalytics: String { return "DisableAnalytics".localized }
     static var enableAnalytics: String { return "EnableAnalytics".localized }
