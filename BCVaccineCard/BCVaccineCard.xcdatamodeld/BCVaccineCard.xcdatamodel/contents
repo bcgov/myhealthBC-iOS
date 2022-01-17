@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CovidLabTestResult" representedClassName="CovidLabTestResult" syncable="YES">
+        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="covidTestResults" inverseEntity="Patient"/>
@@ -37,6 +38,7 @@
         <relationship name="parentTest" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CovidLabTestResult" inverseName="results" inverseEntity="CovidLabTestResult"/>
     </entity>
     <entity name="VaccineCard" representedClassName="VaccineCard" syncable="YES">
+        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="code" optional="YES" attributeType="String"/>
         <attribute name="federalPass" optional="YES" attributeType="String"/>
         <attribute name="firHash" optional="YES" attributeType="String"/>
@@ -48,10 +50,10 @@
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="vaccineCard" inverseEntity="Patient"/>
     </entity>
     <elements>
-        <element name="CovidLabTestResult" positionX="70.65234375" positionY="497.984375" width="128" height="89"/>
+        <element name="CovidLabTestResult" positionX="70.65234375" positionY="497.984375" width="128" height="104"/>
         <element name="ImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="104"/>
-        <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
         <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="118"/>
-        <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="178"/>
+        <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
+        <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="179"/>
     </elements>
 </model>
