@@ -150,34 +150,22 @@ extension SecurityAndDataViewController {
 extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: SettingsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsTableViewCell.getName)
-        tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: ToggleSettingsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ToggleSettingsTableViewCell.getName)
         tableView.register(SettingsTextTableViewCell.self, forCellReuseIdentifier: SettingsTextTableViewCell.getName)
-        tableView.rowHeight = UITableView.automaticDimension
         tableView.delegate = self
         tableView.dataSource = self
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 54
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let section = TableSection.init(rawValue: section) else {
             return nil
         }
-        
-        let titleString: String
         switch section {
         case .Login:
-            titleString = "Login"
+            return generateHeader(text: "Login", height: 54)
         case .Data:
-            titleString = "Data"
+            return generateHeader(text: "Data", height: 54)
         }
-        let headerView: SettingsSectionHeaderView = SettingsSectionHeaderView.fromNib()
-        headerView.frame = .zero
-        headerView.setup(title: titleString)
-        return headerView
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -270,6 +258,33 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         }
         cell.configure(onTitle: onTitle, offTitle: offTitle, subTitle: subTitle, isOn: isOn, onToggle: onToggle)
         return cell
+    }
+    
+    private func generateHeader(text: String, height: CGFloat) -> UIView {
+        let frame = CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: height)
+        let spacing: CGFloat = 8
+        let headerContainer = UIView.init(frame: frame)
+        headerContainer.backgroundColor = .white
+        let titleLabel = UILabel(frame: .zero)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.numberOfLines = 0
+        
+        headerContainer.addSubview(titleLabel)
+        
+        let top = titleLabel.topAnchor.constraint(greaterThanOrEqualTo: headerContainer.topAnchor, constant: spacing)
+        let center = titleLabel.centerYAnchor.constraint(equalTo: headerContainer.centerYAnchor, constant: 0)
+        let bottom = titleLabel.bottomAnchor.constraint(equalTo: headerContainer.bottomAnchor, constant: -spacing)
+        let leading = titleLabel.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor, constant: 32)
+        let trailing = titleLabel.trailingAnchor.constraint(greaterThanOrEqualTo: headerContainer.trailingAnchor, constant: 0)
+        
+        top.isActive = true
+        center.isActive = true
+        bottom.isActive = true
+        leading.isActive = true
+        trailing.isActive = true
+        titleLabel.text = text
+        style(label: titleLabel, style: .Bold, size: 17, colour: .Blue)
+        return headerContainer
     }
     
 }

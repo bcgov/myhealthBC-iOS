@@ -43,6 +43,7 @@ class SettingsTextTableViewCell: UITableViewCell, Theme {
         titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: horizontalPadding).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalPadding).isActive = true
         titleHeight = titleLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: defaultLabelHeight)
+        titleHeight?.priority = .defaultLow
         titleHeight?.isActive = true
     }
     
@@ -59,6 +60,7 @@ class SettingsTextTableViewCell: UITableViewCell, Theme {
         subtitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -horizontalPadding).isActive = true
         subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: spacing).isActive = true
         subtitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -spacing).isActive = true
+        subtitleHeight?.priority = .defaultLow
         subtitleHeight?.isActive = true
     }
     

@@ -11,7 +11,7 @@ protocol NavigationSetupProtocol: AnyObject {
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
 }
 
-class BaseViewController: UIViewController, NavigationSetupProtocol {
+class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
     
     weak var navDelegate: NavigationSetupProtocol?
 
