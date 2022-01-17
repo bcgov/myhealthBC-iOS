@@ -71,6 +71,12 @@
 		29736A5A2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A3E2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift */; };
 		29736A5B2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A3E2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift */; };
 		29736A5C2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A3E2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift */; };
+		297885192795F13D00FF912D /* SettingsProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297885172795F13D00FF912D /* SettingsProfileTableViewCell.swift */; };
+		2978851A2795F13D00FF912D /* SettingsProfileTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 297885182795F13D00FF912D /* SettingsProfileTableViewCell.xib */; };
+		2978851F2795F16E00FF912D /* SettingsRowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2978851D2795F16E00FF912D /* SettingsRowTableViewCell.swift */; };
+		297885202795F16E00FF912D /* SettingsRowTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2978851E2795F16E00FF912D /* SettingsRowTableViewCell.xib */; };
+		297885252795F38500FF912D /* SettingsAuthenticateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297885232795F38500FF912D /* SettingsAuthenticateTableViewCell.swift */; };
+		297885262795F38500FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 297885242795F38500FF912D /* SettingsAuthenticateTableViewCell.xib */; };
 		29806693275970C8006FF3ED /* StorageModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29820CE527594CF600B53468 /* StorageModelExtensions.swift */; };
 		298190C42773B4090062F55E /* Authentication.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 298190C32773B4090062F55E /* Authentication.storyboard */; };
 		298190C72773B4350062F55E /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298190C62773B4350062F55E /* AuthenticationViewController.swift */; };
@@ -457,6 +463,12 @@
 		29736A3C2788EBD700CCB1D2 /* Patient+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataClass.swift"; sourceTree = "<group>"; };
 		29736A3D2788EBD700CCB1D2 /* VaccineCard+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "VaccineCard+CoreDataClass.swift"; sourceTree = "<group>"; };
 		29736A3E2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TestResult+CoreDataClass.swift"; sourceTree = "<group>"; };
+		297885172795F13D00FF912D /* SettingsProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsProfileTableViewCell.swift; sourceTree = "<group>"; };
+		297885182795F13D00FF912D /* SettingsProfileTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsProfileTableViewCell.xib; sourceTree = "<group>"; };
+		2978851D2795F16E00FF912D /* SettingsRowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRowTableViewCell.swift; sourceTree = "<group>"; };
+		2978851E2795F16E00FF912D /* SettingsRowTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsRowTableViewCell.xib; sourceTree = "<group>"; };
+		297885232795F38500FF912D /* SettingsAuthenticateTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAuthenticateTableViewCell.swift; sourceTree = "<group>"; };
+		297885242795F38500FF912D /* SettingsAuthenticateTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingsAuthenticateTableViewCell.xib; sourceTree = "<group>"; };
 		298190C32773B4090062F55E /* Authentication.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Authentication.storyboard; sourceTree = "<group>"; };
 		298190C62773B4350062F55E /* AuthenticationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
 		29820CE527594CF600B53468 /* StorageModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageModelExtensions.swift; sourceTree = "<group>"; };
@@ -741,6 +753,43 @@
 				2942AC55273AC30900A4A466 /* ToggleSettingsTableViewCell.xib */,
 			);
 			path = ToggleSettingsTableViewCell;
+			sourceTree = "<group>";
+		};
+		2978851B2795F14100FF912D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				2978851C2795F14800FF912D /* Profile */,
+				297885222795F37000FF912D /* login */,
+				297885212795F17200FF912D /* Row */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		2978851C2795F14800FF912D /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				297885172795F13D00FF912D /* SettingsProfileTableViewCell.swift */,
+				297885182795F13D00FF912D /* SettingsProfileTableViewCell.xib */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		297885212795F17200FF912D /* Row */ = {
+			isa = PBXGroup;
+			children = (
+				2978851D2795F16E00FF912D /* SettingsRowTableViewCell.swift */,
+				2978851E2795F16E00FF912D /* SettingsRowTableViewCell.xib */,
+			);
+			path = Row;
+			sourceTree = "<group>";
+		};
+		297885222795F37000FF912D /* login */ = {
+			isa = PBXGroup;
+			children = (
+				297885232795F38500FF912D /* SettingsAuthenticateTableViewCell.swift */,
+				297885242795F38500FF912D /* SettingsAuthenticateTableViewCell.xib */,
+			);
+			path = login;
 			sourceTree = "<group>";
 		};
 		298190C52773B4170062F55E /* Authentication */ = {
@@ -1355,6 +1404,9 @@
 		7944F70726F390E4006B9444 /* SettingsFlow */ = {
 			isa = PBXGroup;
 			children = (
+				2978851B2795F14100FF912D /* Cells */,
+				2920AC1D278E3DA300F7CAE7 /* SecurityAndDataViewController.swift */,
+				2920AC1F278E626500F7CAE7 /* profileAndSettingsViewController.swift */,
 				7944F70826F390EC006B9444 /* SettingsBase */,
 			);
 			path = SettingsFlow;
@@ -1364,8 +1416,6 @@
 			isa = PBXGroup;
 			children = (
 				7944F70A26F39128006B9444 /* SettingsViewController.swift */,
-				2920AC1D278E3DA300F7CAE7 /* SecurityAndDataViewController.swift */,
-				2920AC1F278E626500F7CAE7 /* profileAndSettingsViewController.swift */,
 			);
 			path = SettingsBase;
 			sourceTree = "<group>";
@@ -1833,6 +1883,7 @@
 				29921C8D27739612005025D2 /* AuthenticationView.xib in Resources */,
 				79218ABA27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */,
 				7967E75026F9145700EEF510 /* BCSans-Regular.otf in Resources */,
+				2978851A2795F13D00FF912D /* SettingsProfileTableViewCell.xib in Resources */,
 				79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */,
 				792834662731016600EE2710 /* CheckboxTableViewCell.xib in Resources */,
 				7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */,
@@ -1843,6 +1894,7 @@
 				795AA757271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
 				795AA7752715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
 				79FDE426273335DC00DAD988 /* FederalPassView.xib in Resources */,
+				297885262795F38500FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				791C27BB27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
 				7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */,
 				79218AAB2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */,
@@ -1857,6 +1909,7 @@
 				794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */,
 				79BDA089270CEE8000FF30AB /* Localizable.strings in Resources */,
 				7944F68526F1261B006B9444 /* Assets.xcassets in Resources */,
+				297885202795F16E00FF912D /* SettingsRowTableViewCell.xib in Resources */,
 				7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */,
 				7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */,
 				791C27C12718315A001A6E12 /* AddCardsTableViewCell.xib in Resources */,
@@ -2122,6 +2175,7 @@
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
 				79218AA92751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				797BB9642767DCE100CD1645 /* HealthGatewayAPIWorker.swift in Sources */,
+				297885252795F38500FF912D /* SettingsAuthenticateTableViewCell.swift in Sources */,
 				7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */,
 				29736A542788EBD700CCB1D2 /* Patient+CoreDataClass.swift in Sources */,
 				79218AB827519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */,
@@ -2203,6 +2257,7 @@
 				7918A8C727482E0C00D19D1C /* TextListView.swift in Sources */,
 				795AA78527162AAA00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
+				297885192795F13D00FF912D /* SettingsProfileTableViewCell.swift in Sources */,
 				7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */,
 				795AA7412713FB1400E59FF1 /* QueueItLocal.swift in Sources */,
 				298190C72773B4350062F55E /* AuthenticationViewController.swift in Sources */,
@@ -2230,6 +2285,7 @@
 				2932DCEA275ED82600532BC4 /* AnalyticsAppID.swift in Sources */,
 				795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				296519A5272995680002B778 /* AuthManager.swift in Sources */,
+				2978851F2795F16E00FF912D /* SettingsRowTableViewCell.swift in Sources */,
 				79218AD727557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
 				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,

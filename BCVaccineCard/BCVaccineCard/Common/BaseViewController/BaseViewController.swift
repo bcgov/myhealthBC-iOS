@@ -44,7 +44,7 @@ extension BaseViewController {
     }
     
     private func goToSettingsScreen() {
-        let vc = SettingsViewController.constructSettingsViewController()
+        let vc = profileAndSettingsViewController.constructSettingsViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
