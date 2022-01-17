@@ -41,6 +41,8 @@ class SecurityAndDataViewController: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    fileprivate let authManager = AuthManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -74,12 +76,12 @@ class SecurityAndDataViewController: BaseViewController {
 // MARK: Navigation setup
 extension SecurityAndDataViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .settings,
+        self.navDelegate?.setNavigationBarWith(title: .securityAndData,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
                                                targetVC: self,
-                                               backButtonHintString: .healthPasses)
+                                               backButtonHintString: .profileAndSettings)
     }
 }
 
@@ -96,8 +98,23 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         tableView.tableFooterView = UIView()
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard let section = TableSection.init(rawValue: section) else {return nil}
+        switch section {
+        case .Login:
+            return "Login"
+        case .Data:
+            return "Data"
+        }
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         return TableSection.allCases.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let section = TableSection.init(rawValue: section) else {return 0}
+        return section.rows.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -141,24 +158,31 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
             }
             return cell
         case .auth:
-            
-            let cell = toggleCell(for: indexPath, onTitle: "Log in with BC Services Card", offTitle: "Log in with BC Services Card", subTitle: "When logged in, recrods will be automatically added and updated", isOn: AuthManager().isAuthenticated, onToggle: {[weak self] enable in
+            let cell = toggleCell(for: indexPath,
+                                     onTitle: .bcscLogin,
+                                     offTitle: .bcscLogin,
+                                     subTitle: .loginDescription,
+                                     isOn: authManager.isAuthenticated,
+                                     onToggle: {[weak self] enable in
                 guard let `self` = self else {return}
                 switch enable {
                 case true:
                     AuthenticationViewController.displayFullScreen()
                 case false:
-                    self.alertConfirmation(title: "sign out?", message: "out out?", confirmTitle: .delete, confirmStyle: .destructive) {
+                    self.alertConfirmation(title: .logoutTitle, message: .logoutDescription, confirmTitle: .logOut, confirmStyle: .destructive) {
                         AuthManager().signout(in: self, completion: { _ in
                             tableView.reloadData()
                         })
                         
-                    } onCancel: {}
+                    } onCancel: {
+                        tableView.reloadData()
+                    }
                 }
             })
             return cell
+            
         case .localAuth:
-            let cell = toggleCell(for: indexPath, onTitle: "Touch ID", offTitle: "Touch ID", subTitle: "When enabled, you can unlock the app with touch touch ID instead of passcode", isOn: false, onToggle: {[weak self] enable in
+            let cell = toggleCell(for: indexPath, onTitle: .touchId, offTitle: .touchId, subTitle: .localAuthDescription, isOn: false, onToggle: {[weak self] enable in
                 guard let `self` = self else {return}
                 // TODO: LOCAL AUTH
             })

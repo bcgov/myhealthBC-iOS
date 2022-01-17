@@ -212,6 +212,16 @@ extension String {
     static var analytyticsUsageDescription: String { return "AnalytyticsUsageDescription".localized }
     static var deleteData: String { return "DeleteData".localized }
     static var confirmDeleteAllRecordsAndSaveData: String { return "ConfirmDeleteAllRecordsAndSaveData".localized }
+    
+    static var loginSuccess: String { return "LoginSuccess".localized }
+    static var recordsWillBeAutomaticallyAdded: String { return "RecordsWillBeAutomaticallyAdded".localized }
+    static var loginDescription: String { return "LoginDescription".localized }
+    static var localAuthDescription: String { return "LocalAuthDescription".localized }
+    static var touchId: String { return "TouchId".localized }
+    static var logoutTitle: String { return "LogoutTitle".localized }
+    static var logoutDescription: String { return "LogoutDescription".localized }
+    static var logOut: String { return "LogOut".localized }
+    
 }
 
 // Accessibility only localized strings

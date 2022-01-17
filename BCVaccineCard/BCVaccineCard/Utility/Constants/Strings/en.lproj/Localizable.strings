@@ -175,3 +175,13 @@
 "ViewProfile" = "View profile";
 "SecurityAndData" = "Security & data";
 "BcscLogin" = "Log in with BC Services Card";
+
+"LoginSuccess" = "Log in successful";
+"RecordsWillBeAutomaticallyAdded" = "Your records will be automatically added and updated in My Health BC.";
+"LogiDescription" = "When logged in, recrods will be automatically added and updated";
+"LocalAuthDescription" = "When enabled, you can unlock the app with touch touch ID instead of passcode";
+"TouchId" = "Touch ID";
+
+"LogoutTitle" = "Log out of BC Service Card";
+"LogoutDescription" = "All records under the account will be removed";
+"LogOut" = "Log out";

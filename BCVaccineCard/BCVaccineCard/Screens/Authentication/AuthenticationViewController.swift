@@ -15,7 +15,7 @@ extension BaseViewController {
             self.view.endLoadingIndicator()
             switch result {
             case .Completed:
-                self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
+                self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
                     // TODO: FETCH RECORDS FOR AUTHENTICATED USER
                     completion(true)
                 }
