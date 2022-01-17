@@ -7,6 +7,27 @@
 
 import UIKit
 
+extension BaseViewController {
+    func showLogin(completion: @escaping(_ authenticated: Bool)->Void) {
+        self.view.startLoadingIndicator()
+        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
+            guard let self = self else {return}
+            self.view.endLoadingIndicator()
+            switch result {
+            case .Completed:
+                self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
+                    // TODO: FETCH RECORDS FOR AUTHENTICATED USER
+                    completion(true)
+                }
+            case .Cancelled, .Failed:
+                completion(false)
+                break
+            }
+        })
+        self.present(vc, animated: true, completion: nil)
+    }
+}
+
 class AuthenticationViewController: UIViewController {
     
     enum AuthenticationStatus {
@@ -100,8 +121,8 @@ class AuthenticationViewController: UIViewController {
         /**
          look for:
          // TODO: FETCH RECORDS FOR AUTHENTICATED USER
-            where you see that, it would be the place to perform the fetch.
-               but its probably cleaner to do it here.
+         where you see that, it would be the place to perform the fetch.
+         but its probably cleaner to do it here.
          */
         if withDelay {
             self.view.startLoadingIndicator()

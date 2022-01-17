@@ -46,20 +46,7 @@ class profileAndSettingsViewController: BaseViewController {
     }
     
     func showLogin() {
-        self.view.startLoadingIndicator()
-        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
-            guard let self = self else {return}
-            self.view.endLoadingIndicator()
-            switch result {
-            case .Completed:
-                self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
-                    // TODO: FETCH RECORDS FOR AUTHENTICATED USER
-                }
-            case .Cancelled, .Failed:
-                break
-            }
-        })
-        self.present(vc, animated: true, completion: nil)
+        showLogin(completion: {success in})
     }
     
     func showSecurityAndData() {
