@@ -106,7 +106,6 @@ extension String {
     static var anyDose: String { return "AnyDose".localized }
     static var dateOfTest: String{ return "DateOfTest".localized }
     static var phnFooter: String { return "PHNFooter".localized }
-    static var privacyStatement: String { return "PrivacyStatement".localized }
     static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }
     static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
     static var privacyPolicyStatementEmail: String { return "PrivacyPolicyStatementEmail".localized }
@@ -201,6 +200,12 @@ extension String {
     static var pending: String { return "Pending".localized }
     
     // MARK: Settings
+    static var profileAndSettings: String { return "ProfileAndSettings".localized }
+    static var viewProfile: String { return "ViewProfile".localized }
+    static var bcscLogin: String { return "BcscLogin".localized }
+    static var securityAndData: String { return "SecurityAndData".localized }
+    static var privacyStatement: String { return "PrivacyStatement".localized }
+    
     static var deleteAllRecordsAndSavedData: String { return "DeleteAllRecordsAndSavedData".localized }
     static var disableAnalytics: String { return "DisableAnalytics".localized }
     static var enableAnalytics: String { return "EnableAnalytics".localized }

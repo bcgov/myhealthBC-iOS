@@ -14,6 +14,17 @@ enum ButtonStyle {
     case Hollow
 }
 
+enum FontStyle {
+    case Regular
+    case Bold
+}
+
+enum LabelColour {
+    case Grey
+    case Blue
+    case Black
+}
+
 extension Theme {
     
     // Buttons
@@ -27,6 +38,25 @@ extension Theme {
         }
         button.setTitle(title, for: .normal)
         button.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
+    }
+    
+    // Labels
+    public func style(label: UILabel, style: FontStyle, size: CGFloat, colour: LabelColour) {
+        switch style {
+        case .Regular:
+            label.font = UIFont.bcSansRegularWithSize(size: size)
+        case .Bold:
+            label.font = UIFont.bcSansBoldWithSize(size: size)
+        }
+        
+        switch colour {
+        case .Grey:
+            label.textColor = AppColours.textGray
+        case .Blue:
+            label.textColor = AppColours.appBlue
+        case .Black:
+            label.textColor = AppColours.textBlack
+        }
     }
     
     fileprivate func styleButtonHollow(button: UIButton) {

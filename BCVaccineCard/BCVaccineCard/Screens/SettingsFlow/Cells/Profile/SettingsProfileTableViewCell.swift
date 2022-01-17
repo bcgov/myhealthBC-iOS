@@ -16,25 +16,41 @@ class SettingsProfileTableViewCell: UITableViewCell, Theme {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var iconImageView: UIImageView!
     
+    // MARK: Class functions
     override func awakeFromNib() {
         super.awakeFromNib()
-        fillData()
-    }
-    
-    func setup(onTap: @escaping ()->Void) {
-        self.callback = onTap
+        setup()
         style()
     }
     
-    func fillData() {
+    // MARK: Setup
+    public func setup(onTap: @escaping ()->Void) {
+        self.callback = onTap
+        setup()
+        style()
+    }
+    
+    fileprivate func setup() {
         if let icon = UIImage(named: "profile-icon"), let imageView = iconImageView {
             imageView.image = icon
         }
         nameLabel.text = AuthManager().displayName
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        self.contentView.gestureRecognizers?.removeAll()
+        self.contentView.addGestureRecognizer(tap)
     }
     
-    func style() {
-        
+    @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        if let callback = callback {
+            callback()
+        }
+    }
+    
+    // MARK: Style
+    fileprivate func style() {
+        viewProfileLabel.text = .viewProfile
+        style(label: viewProfileLabel, style: .Regular, size: 13, colour: .Grey)
+        style(label: nameLabel, style: .Bold, size: 17, colour: .Blue)
     }
     
 }

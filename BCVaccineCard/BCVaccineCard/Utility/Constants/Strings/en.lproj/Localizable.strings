@@ -170,3 +170,8 @@
 "Pending" = "Pending";
 "Instructions" = "Instructions";
 "InstructionsMessage" = "•\tYou need to self-isolate now.\n•\tThe people you live with will also need to self-isolate if they are not fully vaccinated.\n•\tPublic health will contact you.\n•\tMonitor your health and contact a health care provider or call 8-1-1 if you are concerned about your symptoms.\n•\tGo to Understanding Test Results for more information";
+
+"ProfileAndSettings" = "Profile & settings";
+"ViewProfile" = "View profile";
+"SecurityAndData" = "Security & data";
+"BcscLogin" = "Log in with BC Services Card";

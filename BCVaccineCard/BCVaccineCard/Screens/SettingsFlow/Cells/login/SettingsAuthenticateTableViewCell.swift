@@ -14,20 +14,28 @@ class SettingsAuthenticateTableViewCell: UITableViewCell, Theme {
     // MARK: Outlets
     @IBOutlet weak var button: UIButton!
     
+    // MARK: Outlet Actions
     @IBAction func buttonTapped(_ sender: Any) {
+        if let callback = callback {
+            callback()
+        }
     }
     
+    // MARK: Class functions
     override func awakeFromNib() {
         super.awakeFromNib()
+        style()
     }
     
-    func setup(onTap: @escaping ()->Void) {
+    // MARK: Setup
+    public func setup(onTap: @escaping ()->Void) {
         self.callback = onTap
         style()
     }
     
-    func style() {
-        style(button: button, style: .Fill, title: "Log in with BC Services Card")
+    // MARK: Style
+    fileprivate func style() {
+        style(button: button, style: .Fill, title: .bcscLogin)
         if let icon = UIImage(named: "bcscLogo") {
             button.setImage(icon, for: .normal)
         }

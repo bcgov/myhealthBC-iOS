@@ -31,8 +31,7 @@ class SecurityAndDataViewController: BaseViewController {
         }
     }
     
-    
-    class func constructSettingsViewController() -> SecurityAndDataViewController {
+    class func constructSecurityAndDataViewController() -> SecurityAndDataViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: SecurityAndDataViewController.self)) as? SecurityAndDataViewController {
             return vc
         }

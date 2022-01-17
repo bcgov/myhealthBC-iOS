@@ -15,7 +15,7 @@ class profileAndSettingsViewController: BaseViewController {
         case privacyStatement
     }
     
-    class func constructSettingsViewController() -> profileAndSettingsViewController {
+    class func constructProfileAndSettingsViewController() -> profileAndSettingsViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: profileAndSettingsViewController.self)) as? profileAndSettingsViewController {
             return vc
         }
@@ -42,30 +42,44 @@ class profileAndSettingsViewController: BaseViewController {
     
     // MARK: Routing
     func showProfile() {
-        
+        alert(title: "Not implemented", message: "Can't view profile yet")
     }
     
     func showLogin() {
-        
+        self.view.startLoadingIndicator()
+        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
+            guard let self = self else {return}
+            self.view.endLoadingIndicator()
+            switch result {
+            case .Completed:
+                self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
+                    // TODO: FETCH RECORDS FOR AUTHENTICATED USER
+                }
+            case .Cancelled, .Failed:
+                break
+            }
+        })
+        self.present(vc, animated: true, completion: nil)
     }
     
     func showSecurityAndData() {
-        
+        let vc = SecurityAndDataViewController.constructSecurityAndDataViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func showPrivacyStatement() {
-        
+        openPrivacyPolicy()
     }
 }
 
 extension profileAndSettingsViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: "Profile & settings",
+        self.navDelegate?.setNavigationBarWith(title: .profileAndSettings,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
                                                targetVC: self,
-                                               backButtonHintString: .healthPasses)
+                                               backButtonHintString: nil)
     }
 }
 
@@ -100,7 +114,7 @@ extension profileAndSettingsViewController: UITableViewDelegate, UITableViewData
                 }
             }
         case .securityAndData:
-            let title: String = "Security & data"
+            let title: String = .securityAndData
             let icon = UIImage(named: "privacy-icon")
             return rowCell(for: indexPath, title: title, icon: icon) {[weak self] in
                 guard let `self` = self else {return}

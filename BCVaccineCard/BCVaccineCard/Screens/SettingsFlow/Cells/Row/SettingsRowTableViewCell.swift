@@ -23,7 +23,7 @@ class SettingsRowTableViewCell: UITableViewCell, Theme {
     }
     
     // MARK: Setup
-    func setup(title: String, icon: UIImage?, onTap: @escaping ()->Void) {
+    public func setup(title: String, icon: UIImage?, onTap: @escaping ()->Void) {
         self.callback = onTap
         rowRitle = title
         rowIcon = icon
@@ -38,10 +38,20 @@ class SettingsRowTableViewCell: UITableViewCell, Theme {
         if let icon = rowIcon {
             iconImageVIew.image = icon
         }
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        self.contentView.gestureRecognizers?.removeAll()
+        self.contentView.addGestureRecognizer(tap)
+    }
+    
+    @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        if let callback = callback {
+            callback()
+        }
     }
     
     // MARK: Style
-    func style() {
-        
+    fileprivate func style() {
+        style(label: titleLabel, style: .Regular, size: 17, colour: .Black)
     }
 }
