@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CovidLabTestResult" representedClassName="CovidLabTestResult" syncable="YES">
-        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="authenticated" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="covidTestResults" inverseEntity="Patient"/>
@@ -38,7 +38,7 @@
         <relationship name="parentTest" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CovidLabTestResult" inverseName="results" inverseEntity="CovidLabTestResult"/>
     </entity>
     <entity name="VaccineCard" representedClassName="VaccineCard" syncable="YES">
-        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="authenticated" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="code" optional="YES" attributeType="String"/>
         <attribute name="federalPass" optional="YES" attributeType="String"/>
         <attribute name="firHash" optional="YES" attributeType="String"/>
