@@ -189,8 +189,8 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             self.popBack(toControllerType: HealthRecordsViewController.self)
             return
         }
-        let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: recordsCount)
         DispatchQueue.main.async {
+            let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: recordsCount)
             self.setupNavStack(details: details, detailVC: detailVC)
         }
     }
