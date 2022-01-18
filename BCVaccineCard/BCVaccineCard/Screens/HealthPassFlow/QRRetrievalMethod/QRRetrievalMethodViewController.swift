@@ -216,12 +216,14 @@ extension QRRetrievalMethodViewController {
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass)
         vc.completionHandler = { [weak self] details in
             guard let `self` = self else { return }
-            self.view.accessibilityElementsHidden = true
-            self.tableView.accessibilityElementsHidden = true
-            self.view.isAccessibilityElement = false
-            self.tableView.isAccessibilityElement = false
-            AnalyticsService.shared.track(action: .AddQR, text: .Get)
-            self.popBackToProperViewController(id: details.id)
+            DispatchQueue.main.async {
+                self.view.accessibilityElementsHidden = true
+                self.tableView.accessibilityElementsHidden = true
+                self.view.isAccessibilityElement = false
+                self.tableView.isAccessibilityElement = false
+                AnalyticsService.shared.track(action: .AddQR, text: .Get)
+                self.popBackToProperViewController(id: details.id)
+            }
         }
         self.tabBarController?.tabBar.isHidden = true
         self.navigationController?.pushViewController(vc, animated: true)
@@ -277,25 +279,30 @@ extension QRRetrievalMethodViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .isNew:
-                self.storeVaccineCard(model: model.transform())
-                DispatchQueue.main.async {[weak self] in
-                    guard let self = self else {return}
-                    self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                    self.popBackToProperViewController(id: model.id ?? "")
-                }
+                self.storeVaccineCard(model: model.transform(), authenticated: false, completion: {
+                    DispatchQueue.main.async {[weak self] in
+                        guard let self = self else {return}
+                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                        self.popBackToProperViewController(id: model.id ?? "")
+                    }
+                })
             case .canUpdateExisting:
                 self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}
                     self.updateCardInLocalStorage(model: model.transform(), completion: {[weak self] success in
                         guard let `self` = self else {return}
                         if success {
-                            self.popBackToProperViewController(id: model.id ?? "")
+                            DispatchQueue.main.async {
+                                self.popBackToProperViewController(id: model.id ?? "")
+                            }
                         }
                     })
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
                     //                    self.navigationController?.popViewController(animated: true)
-                    self.popBackToProperViewController(id: model.id ?? "")
+                    DispatchQueue.main.async {
+                        self.popBackToProperViewController(id: model.id ?? "")
+                    }
                 }
             case .UpdatedFederalPass:
                 self.updateFedCodeForCardInLocalStorage(model: model.transform()) {[weak self] _ in

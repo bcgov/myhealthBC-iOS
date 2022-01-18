@@ -115,6 +115,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                 guard let `self` = self else {return}
                 self.alertConfirmation(title: .deleteData, message: .confirmDeleteAllRecordsAndSaveData, confirmTitle: .delete, confirmStyle: .destructive) {
                     StorageService.shared.deleteAllStoredData()
+                    Defaults.rememberGatewayDetails = nil
                 } onCancel: {}
             }
             return cell

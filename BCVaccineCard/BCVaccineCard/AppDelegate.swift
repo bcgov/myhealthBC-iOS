@@ -3,7 +3,6 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-09-14.
-//
 
 import UIKit
 import CoreData
@@ -17,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let sharedInstance = UIApplication.shared.delegate as? AppDelegate
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
     var window: UIWindow?
+    
+    // Note - this is used to smooth the transition when adding a health record and showing the detail screen
+    private var loadingViewHack: UIView?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         configure()
@@ -112,6 +114,22 @@ extension AppDelegate {
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
         
+    }
+}
+
+// MARK: For custom navigation routing hack with multiple pushes
+extension AppDelegate {
+    func addLoadingViewHack() {
+        let rect = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        loadingViewHack = UIView(frame: rect)
+        loadingViewHack?.backgroundColor = .white
+        loadingViewHack?.startLoadingIndicator(backgroundColor: .white)
+        self.window?.addSubview(loadingViewHack!)
+    }
+    
+    func removeLoadingViewHack() {
+        loadingViewHack?.endLoadingIndicator()
+        loadingViewHack?.removeFromSuperview()
     }
 }
 

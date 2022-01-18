@@ -199,6 +199,7 @@ class GatewayFormViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        // Note - sometimes tabBarController will be nil due to when it's released in memory
         self.tabBarController?.tabBar.isHidden = false
     }
     
@@ -557,7 +558,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             alert(title: .duplicateTitle, message: .duplicateTestMessage)
             return
         }
-        if let id = handleTestResultInCoreData(gatewayResponse: result) {
+        if let id = handleTestResultInCoreData(gatewayResponse: result, authenticated: false) {
             var birthday: String?
             if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) {
                 birthday = dataSource[dobIndexPath.row].configuration.text
@@ -598,10 +599,11 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     
     func storeCardInLocalStorage(model: AppVaccinePassportModel) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.storeVaccineCard(model: model.transform())
-            let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-            let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
-            self.completionHandler?(handlerDetails)
+            self.storeVaccineCard(model: model.transform(), authenticated: false, completion: {
+                let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
+                let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
+                self.completionHandler?(handlerDetails)
+            })
         }
     }
     
@@ -654,7 +656,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         }
     }
     
-    func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse) -> String? {
+    func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool) -> String? {
         // Note, this first guard statement is to handle the case when health gateway is wonky - throws success with no error but has key nil values, so in this case we don't want to store a dummy patient value, as that's what was happening
         guard let collectionDate = gatewayResponse.resourcePayload?.records.first?.collectionDateTime,
               !collectionDate.trimWhiteSpacesAndNewLines.isEmpty, let reportID = gatewayResponse.resourcePayload?.records.first?.reportId,
@@ -670,7 +672,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             bday = nil
         }
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday) else {return nil}
-        guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse) else { return nil }
+        guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
         return object.id
     }
     

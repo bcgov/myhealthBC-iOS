@@ -244,22 +244,26 @@ extension UIViewController {
 extension UIViewController {
     //Position in stack popback
     func popBackBy(_ x: Int) {
-        if let viewControllers: [UIViewController] = self.navigationController?.viewControllers {
-            guard viewControllers.count < x else {
-                self.navigationController?.popToViewController(viewControllers[viewControllers.count - x], animated: true)
-                return
+        DispatchQueue.main.async {
+            if let viewControllers: [UIViewController] = self.navigationController?.viewControllers {
+                guard viewControllers.count < x else {
+                    self.navigationController?.popToViewController(viewControllers[viewControllers.count - x], animated: true)
+                    return
+                }
             }
         }
     }
     
     //Specific VC in stack
     func popBack<T: UIViewController>(toControllerType: T.Type) {
-        if var viewControllers: [UIViewController] = self.navigationController?.viewControllers {
-            viewControllers = viewControllers.reversed()
-            for currentViewController in viewControllers {
-                if currentViewController .isKind(of: toControllerType) {
-                    self.navigationController?.popToViewController(currentViewController, animated: true)
-                    break
+        DispatchQueue.main.async {
+            if var viewControllers: [UIViewController] = self.navigationController?.viewControllers {
+                viewControllers = viewControllers.reversed()
+                for currentViewController in viewControllers {
+                    if currentViewController .isKind(of: toControllerType) {
+                        self.navigationController?.popToViewController(currentViewController, animated: true)
+                        break
+                    }
                 }
             }
         }
@@ -269,13 +273,13 @@ extension UIViewController {
 
 // MARK: For Local Storage - FIXME: Should find a better spot for this
 extension UIViewController {
-    func storeVaccineCard(model: LocallyStoredVaccinePassportModel) {
+    func storeVaccineCard(model: LocallyStoredVaccinePassportModel, authenticated: Bool, completion: @escaping()->Void) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: model.name, birthday: birthdate) else {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card")
-            return
+            return completion()
         }
-        StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, federalPass: model.fedCode, vaxDates: model.vaxDates, completion: {_ in})
+        StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, completion: {_ in completion()})
     }
     
     func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
@@ -358,10 +362,12 @@ extension UIViewController {
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
         if fetchType.isFedPassOnly {
             vc.completionHandler = { [weak self] details in
-                if let fedPass = details.fedPassId {
-                    self?.openFederalPass(pass: fedPass, vc: owner, id: details.id, completion: completion)
-                } else {
-                    self?.navigationController?.popViewController(animated: true)
+                DispatchQueue.main.async {
+                    if let fedPass = details.fedPassId {
+                        self?.openFederalPass(pass: fedPass, vc: owner, id: details.id, completion: completion)
+                    } else {
+                        self?.navigationController?.popViewController(animated: true)
+                    }
                 }
             }
         }

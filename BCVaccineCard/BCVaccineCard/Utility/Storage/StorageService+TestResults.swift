@@ -14,10 +14,13 @@ protocol StorageTestResultManager {
     /// - Parameters:
     ///   - patient: owenr of the test result
     ///   - gateWayResponse: gateway response
+    ///   - authenticated: Indicating if this record is for an authenticated user
     /// - Returns: stored object
     func storeTestResults(
         patient: Patient,
-        gateWayResponse: GatewayTestResultResponse) -> CovidLabTestResult?
+        gateWayResponse: GatewayTestResultResponse,
+        authenticated: Bool
+    ) -> CovidLabTestResult?
     
     /// Store a single test result
     /// - Returns: String id of record if stored successfully
@@ -56,13 +59,14 @@ protocol StorageTestResultManager {
 
 extension StorageService: StorageTestResultManager {
     // MARK: Store
-    public func storeTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse) -> CovidLabTestResult? {
+    public func storeTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool) -> CovidLabTestResult? {
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
         guard let context = managedContext else {return nil}
         let model = CovidLabTestResult(context: context)
         model.patient = patient
         model.id = id
         model.createdAt = Date()
+        model.authenticated = authenticated
         var testResults: [TestResult] = []
         guard let records = gateWayResponse.resourcePayload?.records else { return nil }
         for record in records {
@@ -145,11 +149,12 @@ extension StorageService: StorageTestResultManager {
             let existingPatient = existing.patient
         else {return completion(nil)}
         
+        let authStatus = existing.authenticated
         
         // Delete existing
         deleteTestResult(id: existingId)
         // Store the new one.
-        if let object = storeTestResults(patient: existingPatient, gateWayResponse: gateWayResponse) {
+        if let object = storeTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus) {
             notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
             return completion(object)
         }

@@ -18,6 +18,7 @@ protocol StorageVaccineCardManager {
     ///   - issueDate: card's issue date
     ///   - hash: hash of the qr code's payload. use as id
     ///   - patient: patient to store this card for
+    ///   - authenticated: Indicating if this record is for an authenticated user
     ///   - federalPass: federal pass if available
     ///   - vaxDates: vaccine dates
     /// - Returns: created object
@@ -27,6 +28,7 @@ protocol StorageVaccineCardManager {
         issueDate: Date,
         hash: String,
         patient: Patient,
+        authenticated: Bool,
         federalPass: String?,
         vaxDates: [String]?,
         completion: @escaping(VaccineCard?)->Void
@@ -56,10 +58,11 @@ protocol StorageVaccineCardManager {
 
 extension StorageService: StorageVaccineCardManager {
     // MARK: Store
-    func storeVaccineVard(vaccineQR: String, name: String, issueDate: Date, hash: String, patient: Patient, federalPass: String? = nil, vaxDates: [String]? = nil, completion: @escaping(VaccineCard?)->Void) {
+    func storeVaccineVard(vaccineQR: String, name: String, issueDate: Date, hash: String, patient: Patient, authenticated: Bool, federalPass: String? = nil, vaxDates: [String]? = nil, completion: @escaping(VaccineCard?)->Void) {
         guard let context = managedContext else {return completion(nil)}
         let sortOrder = Int64(fetchVaccineCards().count)
         let card = VaccineCard(context: context)
+        card.authenticated = authenticated
         card.code = vaccineQR
         card.name = name
         card.patient = patient
