@@ -56,7 +56,7 @@
         <!--Profile And Settings View Controller-->
         <scene sceneID="XrK-f9-U7M">
             <objects>
-                <viewController storyboardIdentifier="profileAndSettingsViewController" id="BQI-xk-hkn" customClass="profileAndSettingsViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileAndSettingsViewController" id="BQI-xk-hkn" customClass="ProfileAndSettingsViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HMB-6o-V7A">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
