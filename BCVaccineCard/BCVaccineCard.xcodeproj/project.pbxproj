@@ -371,6 +371,13 @@
 		799050C5273C8558006CD726 /* UserRecordListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050C3273C8558006CD726 /* UserRecordListView.swift */; };
 		799050C7273C8567006CD726 /* UserRecordListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799050C6273C8567006CD726 /* UserRecordListView.xib */; };
 		799050C8273C8567006CD726 /* UserRecordListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799050C6273C8567006CD726 /* UserRecordListView.xib */; };
+		79932CAA2790F8DA007E8D92 /* QRMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AC25322790320F001C22B4 /* QRMaker.swift */; };
+		79932CAB2790F8E2007E8D92 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A242787A78A00CCB1D2 /* Logger.swift */; };
+		79932CAC2790F8F0007E8D92 /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298190C62773B4350062F55E /* AuthenticationViewController.swift */; };
+		79932CAD2790F9FE007E8D92 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29921C8A27739609005025D2 /* AuthenticationView.swift */; };
+		79932CAE2790FA38007E8D92 /* AuthenticationInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29921C912773A5F0005025D2 /* AuthenticationInfoView.swift */; };
+		79932CAF2790FA94007E8D92 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29921C8E27739F6C005025D2 /* Theme.swift */; };
+		79932CB02790FB4D007E8D92 /* AttributedString+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29921C952773B049005025D2 /* AttributedString+EXT.swift */; };
 		79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
@@ -2263,6 +2270,7 @@
 				799050BE273C8330006CD726 /* GetRecordsView.swift in Sources */,
 				794BD62F2702EEC00084ADA8 /* UIView+Ext.swift in Sources */,
 				791C27BA27183149001A6E12 /* ButtonTableViewCell.swift in Sources */,
+				79932CAA2790F8DA007E8D92 /* QRMaker.swift in Sources */,
 				2940A3512728399B00132D7D /* StorageService.swift in Sources */,
 				794BD6302702EEC00084ADA8 /* VaccinePassportModel.swift in Sources */,
 				79218AF32756729D0063004E /* HealthRecordsFlowModels.swift in Sources */,
@@ -2305,6 +2313,7 @@
 				794BD63D2702EEC00084ADA8 /* UINavigationItem+Ext.swift in Sources */,
 				29806693275970C8006FF3ED /* StorageModelExtensions.swift in Sources */,
 				795AA7552715189C00E59FF1 /* InitialOnboardingView.swift in Sources */,
+				79932CAE2790FA38007E8D92 /* AuthenticationInfoView.swift in Sources */,
 				794BD63E2702EEC00084ADA8 /* UIFont+Ext.swift in Sources */,
 				794BD63F2702EEC00084ADA8 /* UIViewController+EXT.swift in Sources */,
 				795AA73027108C1C00E59FF1 /* GatewayRequestObjects.swift in Sources */,
@@ -2318,6 +2327,7 @@
 				29736A532788EBD700CCB1D2 /* CovidLabTestResult+CoreDataClass.swift in Sources */,
 				79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				795AA7392710920600E59FF1 /* ResultError.swift in Sources */,
+				79932CAD2790F9FE007E8D92 /* AuthenticationView.swift in Sources */,
 				2942AC58273AC4CA00A4A466 /* ToggleSettingsTableViewCell.swift in Sources */,
 				29736A562788EBD700CCB1D2 /* Patient+CoreDataClass.swift in Sources */,
 				792834652731016600EE2710 /* CheckboxTableViewCell.swift in Sources */,
@@ -2331,6 +2341,7 @@
 				795AA76E271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
 				791C27CD2719DB3E001A6E12 /* QueueItCachedObject.swift in Sources */,
 				7928345E2730E63A00EE2710 /* InteractiveLabelTableViewCell.swift in Sources */,
+				79932CB02790FB4D007E8D92 /* AttributedString+EXT.swift in Sources */,
 				29736A502788EBD700CCB1D2 /* ImmunizationRecord+CoreDataProperties.swift in Sources */,
 				794BD6452702EEC00084ADA8 /* UIColor+EXT.swift in Sources */,
 				291D43E02762E1C5005F5B94 /* HealthRecordsView.swift in Sources */,
@@ -2354,6 +2365,7 @@
 				29A12AF9271F6B2100A106B5 /* AnalyticsService.swift in Sources */,
 				794BD64C2702EEC00084ADA8 /* ZoomedInPopUpVC.swift in Sources */,
 				795AA73C271092D500E59FF1 /* MIMEType.swift in Sources */,
+				79932CAB2790F8E2007E8D92 /* Logger.swift in Sources */,
 				797BB96A2767E85D00CD1645 /* SettingsTextTableViewCell.swift in Sources */,
 				794BD64D2702EEC00084ADA8 /* NoCardsTableViewCell.swift in Sources */,
 				79218AF0275672120063004E /* StorageService+HealthRecords.swift in Sources */,
@@ -2364,6 +2376,7 @@
 				7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
 				29245D442755877A00F48642 /* Encodable+EXT.swift in Sources */,
 				794BD64F2702EEC00084ADA8 /* TextTableViewCell.swift in Sources */,
+				79932CAC2790F8F0007E8D92 /* AuthenticationViewController.swift in Sources */,
 				795AA76227155F0900E59FF1 /* ResourceViewController.swift in Sources */,
 				79218AA227518A5E0063004E /* CovidTestResultModel.swift in Sources */,
 				795AA751271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
@@ -2388,6 +2401,7 @@
 				79053CFA2773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
 				794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */,
 				7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */,
+				79932CAF2790FA94007E8D92 /* Theme.swift in Sources */,
 				79218ABF27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
 				792834552730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
 				797BB96B2767F17D00CD1645 /* PagingIndicatorView.swift in Sources */,
@@ -2707,7 +2721,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -2735,7 +2749,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
