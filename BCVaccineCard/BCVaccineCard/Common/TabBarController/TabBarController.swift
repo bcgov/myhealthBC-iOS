@@ -47,6 +47,7 @@ class TabBarController: UITabBarController {
     }
     
     private var previousSelectedIndex: Int?
+    private var updateRecordsScreenState = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,6 +88,9 @@ class TabBarController: UITabBarController {
                 if event.event == .Delete, StorageService.shared.getHeathRecords().isEmpty {
                     // If data was deleted and now health records are empty
                     self.resetHealthRecordsTab()
+                }
+                if event.event == .Save, StorageService.shared.getHeathRecords().count == 1 {
+                    self.updateRecordsScreenState = true
                 }
             default:
                 break
@@ -140,7 +144,11 @@ extension TabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
-        if self.selectedIndex == 1 && self.previousSelectedIndex == 1 {
+        // First we are checking if the health records screen state needs to be updated when a user taps on records tab - this is to handle the case where a user adds a vaccine pass via health pass flow, and we need to reflect the state change in the records tab. This boolean property is being set in a listener above
+        if self.selectedIndex == 1 && updateRecordsScreenState {
+            updateRecordsScreenState = false
+            self.resetHealthRecordsTab()
+        } else if self.selectedIndex == 1 && self.previousSelectedIndex == 1 {
             // This is called here to rest the records tab appropriately, when the tab is tapped
             self.resetHealthRecordsTab()
         }
