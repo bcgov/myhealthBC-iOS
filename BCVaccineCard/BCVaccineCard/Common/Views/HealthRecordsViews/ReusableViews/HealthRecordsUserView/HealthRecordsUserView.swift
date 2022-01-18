@@ -18,6 +18,7 @@ class HealthRecordsUserView: UIView {
     @IBOutlet weak var recordCountLabel: UILabel!
     @IBOutlet weak var recordIconImageView: UIImageView!
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -58,7 +59,14 @@ class HealthRecordsUserView: UIView {
         recordIconImageView.image = UIImage(named: "vaccine-record-icon")
     }
     
-    func configure(name: String, records: Int) {
+    func styleAuthStatus(authenticated: Bool) {
+        if !authenticated {return}
+        let bcscLogo = UIImage(named: "bcscLogo")
+        recordIconImageView.image = bcscLogo
+        recordIconImageView.alpha = AuthManager().isAuthenticated ? 1 : 0.3
+    }
+    
+    func configure(name: String, records: Int, authenticated: Bool) {
         setupAccessibility()
         // NOTE: This is for weird logic where we word wrap, unless there is a name that is really long and hyphenated (so, going to make assumptions here)
         let numberOfSpaces = name.reduce(0) { $1 == " " ? $0 + 1 : $0 }
@@ -69,7 +77,7 @@ class HealthRecordsUserView: UIView {
             recordText.append("s")
         }
         recordCountLabel.text = recordText
-        
+        styleAuthStatus(authenticated: authenticated)
     }
     
     // TODO: Setup accessibility
