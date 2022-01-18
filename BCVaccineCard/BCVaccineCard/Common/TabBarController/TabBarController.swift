@@ -47,6 +47,7 @@ class TabBarController: UITabBarController {
     }
     
     private var previousSelectedIndex: Int?
+    private var updateRecordsScreenState = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,9 +88,9 @@ class TabBarController: UITabBarController {
                 if event.event == .Delete, StorageService.shared.getHeathRecords().isEmpty {
                     // If data was deleted and now health records are empty
                     self.resetHealthRecordsTab()
-                } else if event.event == .Save, StorageService.shared.getHeathRecords().count == 1 {
-                    // If data was saved and now health records now have exactly 1 item
-                    self.resetHealthRecordsTab()
+                }
+                if event.event == .Save, StorageService.shared.getHeathRecords().count == 1 {
+                    self.updateRecordsScreenState = true
                 }
             default:
                 break
@@ -97,7 +98,8 @@ class TabBarController: UITabBarController {
         }
     }
     
-    private func resetHealthRecordsTab() {
+    // This function is called within the tab bar 1.) (when records are deleted and go to zero, called in the listener above), and called when the 2.) health records tab is selected, to appropriately show the correct VC, and is called 3.) on the FetchHealthRecordsViewController in the routing section to apporiately reset the health records tab's vc stack and route to the details screen
+    func resetHealthRecordsTab(viewControllersToInclude vcs: [UIViewController]? = nil) {
         let vc: TabBarVCs = .records
         guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHeathRecords : vc.properties  else { return }
         let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
@@ -106,12 +108,20 @@ class TabBarController: UITabBarController {
         viewController.tabBarItem = tabBarItem
         viewController.title = properties.title
         let navController = CustomNavigationController.init(rootViewController: viewController)
-        
         let isOnRecordsTab = self.selectedIndex == 1
         viewControllers?.remove(at: 1)
         viewControllers?.insert(navController, at: 1)
         if isOnRecordsTab {
             selectedIndex = 1
+            // This portion is used to handle the re-setting of the health records VC stack for proper routing - in order to maintain the correct Navigation UI, we must push the VC's onto the stack (and not set the VC's with .setViewControllers() as this causes issues) - the loading view on the app delegate window is to hide the consecutive pushes to make a smoother UI transition - tested and works
+            if let vcs = vcs {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    for vc in vcs {
+                        navController.pushViewController(vc, animated: false)
+                    }
+                    AppDelegate.sharedInstance?.removeLoadingViewHack()
+                }
+            }
         }
     }
     
@@ -134,6 +144,14 @@ extension TabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
+        // First we are checking if the health records screen state needs to be updated when a user taps on records tab - this is to handle the case where a user adds a vaccine pass via health pass flow, and we need to reflect the state change in the records tab. This boolean property is being set in a listener above
+        if self.selectedIndex == 1 && updateRecordsScreenState {
+            updateRecordsScreenState = false
+            self.resetHealthRecordsTab()
+        } else if self.selectedIndex == 1 && self.previousSelectedIndex == 1 {
+            // This is called here to rest the records tab appropriately, when the tab is tapped
+            self.resetHealthRecordsTab()
+        }
     }
     
 }
