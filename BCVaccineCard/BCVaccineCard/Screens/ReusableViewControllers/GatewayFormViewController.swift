@@ -199,6 +199,7 @@ class GatewayFormViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        // Note - sometimes tabBarController will be nil due to when it's released in memory
         self.tabBarController?.tabBar.isHidden = false
     }
     
@@ -598,10 +599,11 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     
     func storeCardInLocalStorage(model: AppVaccinePassportModel) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.storeVaccineCard(model: model.transform(), authenticated: false)
-            let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-            let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
-            self.completionHandler?(handlerDetails)
+            self.storeVaccineCard(model: model.transform(), authenticated: false, completion: {
+                let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
+                let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
+                self.completionHandler?(handlerDetails)
+            })
         }
     }
     
