@@ -35,6 +35,7 @@ class FetchHealthRecordsViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        self.tabBarController?.tabBar.isHidden = false
         if hideNavBackButton {
             self.navigationItem.setHidesBackButton(true, animated: animated)
         }
@@ -174,7 +175,9 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             return
         }
         let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: recordsCount)
-        self.setupNavStack(details: details, detailVC: detailVC)
+        DispatchQueue.main.async {
+            self.setupNavStack(details: details, detailVC: detailVC)
+        }
     }
     
     private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController) {
@@ -182,12 +185,13 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
               let birthday = details.dob,
               let birthDate = Date.Formatter.yearMonthDay.date(from: birthday),
               let patient = StorageService.shared.fetchPatient(name: name, birthday: birthDate),
-              let stack = self.navigationController?.viewControllers, stack.count > 0,
-              let firstVC = self.navigationController?.viewControllers.first as? HealthRecordsViewController
-        else { return }
+              let stack = self.navigationController?.viewControllers, stack.count > 0
+        else {
+            return
+        }
         
         var navStack: [UIViewController] = []
-        navStack.append(firstVC)
+
         var containsUserRecordsVC = false
         for (_, vc) in stack.enumerated() {
             if vc is UsersListOfRecordsViewController {
@@ -202,6 +206,8 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         
         navStack.append(detailVC)
         self.tabBarController?.tabBar.isHidden = false
-        self.navigationController?.setViewControllers(navStack, animated: false)
+        guard let tabBarVC = self.tabBarController as? TabBarController else { return }
+        AppDelegate.sharedInstance?.addLoadingViewHack()
+        tabBarVC.resetHealthRecordsTab(viewControllersToInclude: navStack)
     }
 }
