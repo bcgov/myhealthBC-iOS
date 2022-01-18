@@ -362,10 +362,12 @@ extension UIViewController {
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
         if fetchType.isFedPassOnly {
             vc.completionHandler = { [weak self] details in
-                if let fedPass = details.fedPassId {
-                    self?.openFederalPass(pass: fedPass, vc: owner, id: details.id, completion: completion)
-                } else {
-                    self?.navigationController?.popViewController(animated: true)
+                DispatchQueue.main.async {
+                    if let fedPass = details.fedPassId {
+                        self?.openFederalPass(pass: fedPass, vc: owner, id: details.id, completion: completion)
+                    } else {
+                        self?.navigationController?.popViewController(animated: true)
+                    }
                 }
             }
         }
