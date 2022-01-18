@@ -63,7 +63,13 @@ class HealthRecordsUserView: UIView {
         if !authenticated {return}
         let bcscLogo = UIImage(named: "bcscLogo")
         recordIconImageView.image = bcscLogo
-        recordIconImageView.alpha = AuthManager().isAuthenticated ? 1 : 0.3
+        let isAuthenticated = AuthManager().isAuthenticated
+        recordIconImageView.alpha = isAuthenticated ? 1 : 0.3
+        if !isAuthenticated {return}
+        Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
+            guard let `self` = self else {return}
+            self.recordIconImageView.alpha = 0.3
+        }
     }
     
     func configure(name: String, records: Int, authenticated: Bool) {

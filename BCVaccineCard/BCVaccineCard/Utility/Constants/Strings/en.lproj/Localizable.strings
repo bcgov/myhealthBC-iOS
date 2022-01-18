@@ -185,3 +185,4 @@
 "LogoutTitle" = "Log out of BC Service Card";
 "LogoutDescription" = "All records under the account will be removed";
 "LogOut" = "Log out";
+"ReAuthenticateMessage" = "You’re attempting to access records that are protected by BC Services Card, please log in again.";

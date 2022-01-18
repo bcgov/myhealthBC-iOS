@@ -21,9 +21,11 @@ class HealthRecordsViewController: BaseViewController {
     @IBOutlet weak private var addRecordView: ReusableHeaderAddView!
     @IBOutlet weak private var collectionView: UICollectionView!
     
+    private let authManager: AuthManager = AuthManager()
     private var dataSource: [HealthRecordsDataSource] = []
-    var recentlyAddedId: String?
-    let authManager: AuthManager = AuthManager()
+    private var recentlyAddedId: String?
+   
+    var lastPatientSelected: Patient? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,23 +131,34 @@ class HealthRecordsViewController: BaseViewController {
         
         // If authenticated - show
         if authManager.isAuthenticated {
+            closeRecordWhenAuthExpires(patient: patient)
             showRecords(for: patient)
             return
         }
         
+        // Let user authenticate to view record
         alertConfirmation(
-            title: "Log in with BC Services Card",
-            message: "You’re attempting to access records that are protected by BC Services Card, please log in again.",
+            title: .bcscLogin,
+            message: .reAuthenticateMessage,
             confirmTitle: .ok, confirmStyle: .default) {[weak self] in
                 guard let `self` = self else {return}
                 self.showLogin(initialView: .Auth) { [weak self] authenticated in
-                    guard let `self` = self else {return}
-                    
+                    guard let `self` = self, authenticated else {return}
+                    self.closeRecordWhenAuthExpires(patient: patient)
+                    self.showRecords(for: patient)
                 }
             } onCancel: {
                 return
             }
 
+    }
+    
+    func closeRecordWhenAuthExpires(patient: Patient) {
+        lastPatientSelected = patient
+        Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
+            guard let `self` = self, patient == self.lastPatientSelected else {return}
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
 }
 
