@@ -190,7 +190,9 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             return
         }
         let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: recordsCount)
-        self.setupNavStack(details: details, detailVC: detailVC)
+        DispatchQueue.main.async {
+            self.setupNavStack(details: details, detailVC: detailVC)
+        }
     }
     
     private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController) {
