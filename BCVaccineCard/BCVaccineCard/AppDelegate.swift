@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
     var window: UIWindow?
     
+    // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
