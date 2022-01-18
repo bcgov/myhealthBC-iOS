@@ -140,7 +140,7 @@ extension TabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
-        if self.selectedIndex == 1 {
+        if self.selectedIndex == 1 && self.previousSelectedIndex == 1 {
             // This is called here to rest the records tab appropriately, when the tab is tapped
             self.resetHealthRecordsTab()
         }
