@@ -55,6 +55,11 @@ struct Constants {
         static let collectionDate = "collectionDate"
     }
     
+    struct AuthenticationHeaderKeys {
+        static let authToken = "Authentication"
+        static let hdid = "hdid"
+    }
+    
     struct KeychainPHNKey {
         static let key = "PHNKey" // Note: Data should be an array of
     }

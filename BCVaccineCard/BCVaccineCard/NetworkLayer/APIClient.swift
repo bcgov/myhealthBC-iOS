@@ -51,7 +51,31 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
-    // TODO: CONNOR 1: Add authenticated endpoints here
+    func getAuthenticatedVaccineCard(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
+        let interceptor = NetworkRequestInterceptor()
+        let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedVaccineCard)
+        
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+            Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
+    
+    func getAuthenticatedTestResult(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayTestResultResponse>) {
+        let interceptor = NetworkRequestInterceptor()
+        let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedTestResults)
+        
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+            Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
     
 }
 

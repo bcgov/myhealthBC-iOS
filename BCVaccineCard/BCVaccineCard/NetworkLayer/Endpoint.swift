@@ -11,6 +11,8 @@ import Foundation
 protocol EndpointsAccessor {
     var getVaccineCard: URL { get }
     var getTestResults: URL { get }
+    var getAuthenticatedVaccineCard: URL { get }
+    var getAuthenticatedTestResults: URL { get }
 }
 
 struct UrlAccessor {
@@ -39,6 +41,14 @@ extension UrlAccessor: EndpointsAccessor {
     
     var getTestResults: URL {
         return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/PublicLaboratory/CovidTests")
+    }
+    
+    var getAuthenticatedVaccineCard: URL {
+        return self.immunizationBaseUrl.appendingPathComponent("v1/api/AuthenticatedVaccineStatus")
+    }
+    
+    var getAuthenticatedTestResults: URL {
+        return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory")
     }
 }
 
