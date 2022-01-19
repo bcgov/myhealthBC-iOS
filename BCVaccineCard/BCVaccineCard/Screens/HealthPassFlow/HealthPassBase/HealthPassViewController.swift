@@ -79,7 +79,7 @@ extension HealthPassViewController {
         }
         
         if showAuth && !authManager.isAuthenticated {
-            showLogin { authenticated in
+            showLogin(initialView: .Landing) { authenticated in
                 // TODO: Handle conditionally
                 showScreen()
             }

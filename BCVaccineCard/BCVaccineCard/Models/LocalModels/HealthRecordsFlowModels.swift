@@ -11,6 +11,7 @@ import Foundation
 struct HealthRecordsDataSource {
     let patient: Patient
     var numberOfRecords: Int
+    var authenticated: Bool
 }
 
 
@@ -61,6 +62,15 @@ extension HealthRecord {
             return HealthRecordsDetailDataSource(type: .covidImmunizationRecord(model: model, immunizations: covidImmunization.immunizations))
         }
     }
+    
+    var isAuthenticated: Bool {
+        switch type {
+        case .Test(let test):
+            return test.authenticated
+        case .CovidImmunization(let covidImmunization):
+            return covidImmunization.authenticated
+        }
+    }
 }
 
 extension Array where Element == HealthRecord {
@@ -70,11 +80,13 @@ extension Array where Element == HealthRecord {
     func dataSource() -> [HealthRecordsDataSource] {
         var result: [HealthRecordsDataSource] = []
         for record in self {
-            // TODO: check for birthday too
             if let i = result.firstIndex(where: {$0.patient == record.patient}) {
+                if record.isAuthenticated {
+                    result[i].authenticated = true
+                }
                 result[i].numberOfRecords += 1
             } else {
-                result.append(HealthRecordsDataSource(patient: record.patient, numberOfRecords: 1))
+                result.append(HealthRecordsDataSource(patient: record.patient, numberOfRecords: 1, authenticated: record.isAuthenticated))
             }
         }
         return result

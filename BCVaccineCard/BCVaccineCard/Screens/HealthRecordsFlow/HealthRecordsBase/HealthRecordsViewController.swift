@@ -21,8 +21,11 @@ class HealthRecordsViewController: BaseViewController {
     @IBOutlet weak private var addRecordView: ReusableHeaderAddView!
     @IBOutlet weak private var collectionView: UICollectionView!
     
+    private let authManager: AuthManager = AuthManager()
     private var dataSource: [HealthRecordsDataSource] = []
-    var recentlyAddedId: String?
+    private var recentlyAddedId: String?
+   
+    var lastPatientSelected: Patient? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,12 +65,8 @@ class HealthRecordsViewController: BaseViewController {
         refreshOnStorageChange()
     }
     
-    func showFetchVC() {
-        // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
-        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true)
-        self.navigationController?.pushViewController(vc, animated: false)
-    }
     
+    // MARK: Data
     private func refreshOnStorageChange() {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
@@ -96,16 +95,71 @@ class HealthRecordsViewController: BaseViewController {
         }
     }
     
+    private func fetchData() -> [HealthRecord] {
+        StorageService.shared.getHeathRecords()
+    }
+    
+    // MARK: Routing
     func dismissFetchHealthRecordsViewControllerIfNeeded() {
         guard let vcs = self.navigationController?.viewControllers.compactMap({$0 as? FetchHealthRecordsViewController}),
               let vc = vcs.first else {return}
         popBack(toControllerType: HealthRecordsViewController.self)
     }
-    
-    private func fetchData() -> [HealthRecord] {
-        StorageService.shared.getHeathRecords()
-    }
 
+    func showFetchVC() {
+        // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
+        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true)
+        self.navigationController?.pushViewController(vc, animated: false)
+    }
+    
+    func showRecords(for patient: Patient) {
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    // MARK: Helpers
+    func selected(data: HealthRecordsDataSource) {
+        let patient = data.patient
+        
+        // Not Authenticated - show
+        if !data.authenticated {
+            showRecords(for: patient)
+            return
+        }
+        
+        // Patient has records added after authentication
+        
+        // If authenticated - show
+        if authManager.isAuthenticated {
+            closeRecordWhenAuthExpires(patient: patient)
+            showRecords(for: patient)
+            return
+        }
+        
+        // Let user authenticate to view record
+        alertConfirmation(
+            title: .bcscLogin,
+            message: .reAuthenticateMessage,
+            confirmTitle: .ok, confirmStyle: .default) {[weak self] in
+                guard let `self` = self else {return}
+                self.showLogin(initialView: .Auth) { [weak self] authenticated in
+                    guard let `self` = self, authenticated else {return}
+                    self.closeRecordWhenAuthExpires(patient: patient)
+                    self.showRecords(for: patient)
+                }
+            } onCancel: {
+                return
+            }
+
+    }
+    
+    func closeRecordWhenAuthExpires(patient: Patient) {
+        lastPatientSelected = patient
+        Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
+            guard let `self` = self, patient == self.lastPatientSelected else {return}
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+    }
 }
 
 // MARK: Navigation setup
@@ -184,9 +238,7 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row < dataSource.count else { return }
-        let patient = dataSource[indexPath.row].patient
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient)
-        self.navigationController?.pushViewController(vc, animated: true)
+        let data = dataSource[indexPath.row]
+        selected(data: data)
     }
-    
 }

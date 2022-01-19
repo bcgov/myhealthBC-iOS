@@ -222,6 +222,8 @@ extension String {
     static var logoutTitle: String { return "LogoutTitle".localized }
     static var logoutDescription: String { return "LogoutDescription".localized }
     static var logOut: String { return "LogOut".localized }
+    static var reAuthenticateMessage: String { return "ReAuthenticateMessage".localized }
+    
     
 }
 

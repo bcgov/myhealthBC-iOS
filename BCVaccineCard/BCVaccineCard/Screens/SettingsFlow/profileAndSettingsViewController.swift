@@ -47,7 +47,7 @@ class profileAndSettingsViewController: BaseViewController {
     }
     
     func showLogin() {
-        showLogin(completion: {success in})
+        showLogin(initialView: .Landing, completion: {success in})
     }
     
     func showSecurityAndData() {
@@ -105,14 +105,14 @@ extension profileAndSettingsViewController: UITableViewDelegate, UITableViewData
             }
         case .securityAndData:
             let title: String = .securityAndData
-            let icon = UIImage(named: "privacy-icon")
+            let icon = UIImage(named: "security-icon")
             return rowCell(for: indexPath, title: title, icon: icon) {[weak self] in
                 guard let `self` = self else {return}
                 self.showSecurityAndData()
             }
         case .privacyStatement:
             let title: String = .privacyStatement
-            let icon = UIImage(named: "security-icon")
+            let icon = UIImage(named: "privacy-icon")
             return rowCell(for: indexPath, title: title, icon: icon) {[weak self] in
                 guard let `self` = self else {return}
                 self.showPrivacyStatement()

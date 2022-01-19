@@ -8,9 +8,9 @@
 import UIKit
 
 extension BaseViewController {
-    func showLogin(completion: @escaping(_ authenticated: Bool)->Void) {
+    func showLogin(initialView: AuthenticationViewController.InitialView,completion: @escaping(_ authenticated: Bool)->Void) {
         self.view.startLoadingIndicator()
-        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
+        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, initialView: initialView, completion: { [weak self] result in
             guard let self = self else {return}
             self.view.endLoadingIndicator()
             switch result {
@@ -30,16 +30,23 @@ extension BaseViewController {
 
 class AuthenticationViewController: UIViewController {
     
+    enum InitialView {
+        case Landing
+        case AuthInfo
+        case Auth
+    }
+    
     enum AuthenticationStatus {
         case Completed
         case Cancelled
         case Failed
     }
     
-    class func constructAuthenticationViewController(returnToHealthPass: Bool, isModal: Bool, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
+    class func constructAuthenticationViewController(returnToHealthPass: Bool, isModal: Bool, initialView: InitialView, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion
             vc.returnToHealthPass = returnToHealthPass
+            vc.initialView = initialView
             if #available(iOS 13.0, *) {
                 vc.isModalInPresentation = isModal
             }
@@ -53,11 +60,20 @@ class AuthenticationViewController: UIViewController {
     
     private var completion: ((AuthenticationStatus)->Void)?
     private var returnToHealthPass: Bool = true
+    private var initialView: InitialView = .Landing
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        showLanding()
+        switch initialView {
+        case .Landing:
+            showLanding()
+        case .AuthInfo:
+            showInfo()
+        case .Auth:
+            performAuthentication()
+        }
+        
     }
     
     private func showLanding() {
@@ -163,12 +179,12 @@ class AuthenticationViewController: UIViewController {
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
     
-    public static func displayFullScreen() {
+    public static func displayFullScreen(returnToHealthPass: Bool, initialView: InitialView) {
         let transition = CATransition()
         transition.type = .fade
         transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: true, isModal: false, completion: {_ in})
+        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: returnToHealthPass, isModal: false, initialView: initialView, completion: {_ in})
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
     
