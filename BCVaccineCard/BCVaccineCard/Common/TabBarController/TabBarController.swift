@@ -48,6 +48,8 @@ class TabBarController: UITabBarController {
     
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
+    
+    // TODO: Connor 3: Create authenticated API worker in tab bar initialization, which we will call from the authentication component, triggering updates in our listener in this screen
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,6 +94,7 @@ class TabBarController: UITabBarController {
                 if event.event == .Save, StorageService.shared.getHeathRecords().count == 1 {
                     self.updateRecordsScreenState = true
                 }
+                // TODO: CONNOR 4: Handle authentication data reloads for specific screens here
             default:
                 break
             }

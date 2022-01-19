@@ -144,8 +144,9 @@ class AuthenticationViewController: UIViewController {
          but its probably cleaner to do it here.
          */
         if status == .Completed {
-            // TODO: CONNOR: Fetch records here
+            // TODO: Fetch records here
             // use AuthManager().hdid and AuthManager().authToken
+            // Steps: follow the '// TODO: CONNOR' comments and you'll see a number
         }
         
         if withDelay {

@@ -354,6 +354,8 @@
 		795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA78427162AA900E59FF1 /* NotificationName+Ext.swift */; };
 		795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
 		795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795E68252703DBA100948502 /* UIAccessibility+EXT.swift */; };
+		796653DA27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653D927981335004D103E /* AuthenticatedHealthRecordsAPIWorker.swift */; };
+		796653DB27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653D927981335004D103E /* AuthenticatedHealthRecordsAPIWorker.swift */; };
 		7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
 		7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */; };
 		7967E73626F40DB100EEF510 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73526F40DB100EEF510 /* Constants.swift */; };
@@ -617,6 +619,7 @@
 		795AA77E2715FC9B00E59FF1 /* ParseXMLData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseXMLData.swift; sourceTree = "<group>"; };
 		795AA78427162AA900E59FF1 /* NotificationName+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Ext.swift"; sourceTree = "<group>"; };
 		795E68252703DBA100948502 /* UIAccessibility+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAccessibility+EXT.swift"; sourceTree = "<group>"; };
+		796653D927981335004D103E /* AuthenticatedHealthRecordsAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedHealthRecordsAPIWorker.swift; sourceTree = "<group>"; };
 		7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableViewCell.swift; sourceTree = "<group>"; };
 		7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormTableViewCell.xib; sourceTree = "<group>"; };
 		7967E73526F40DB100EEF510 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -1121,6 +1124,7 @@
 			children = (
 				797BB9632767DCE100CD1645 /* HealthGatewayAPIWorker.swift */,
 				79053CF82773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift */,
+				796653D927981335004D103E /* AuthenticatedHealthRecordsAPIWorker.swift */,
 			);
 			path = APIWorkers;
 			sourceTree = "<group>";
@@ -2298,6 +2302,7 @@
 				795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				2932DCDF275A9D2C00532BC4 /* StorageService+VaccineCard.swift in Sources */,
+				796653DA27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */,
 				29245D40275581C700F48642 /* StorageService+TestResults.swift in Sources */,
 				2932DCEA275ED82600532BC4 /* AnalyticsAppID.swift in Sources */,
 				795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
@@ -2474,6 +2479,7 @@
 				29245D41275581C700F48642 /* StorageService+TestResults.swift in Sources */,
 				29736A472788EBD700CCB1D2 /* ImmunizationRecord+CoreDataClass.swift in Sources */,
 				2932DCEB275ED8C800532BC4 /* AnalyticsAppID.swift in Sources */,
+				796653DB27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */,
 				795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				296519A6272995680002B778 /* AuthManager.swift in Sources */,
 				79218AD827557ED50063004E /* TextListViewTableViewCell.swift in Sources */,

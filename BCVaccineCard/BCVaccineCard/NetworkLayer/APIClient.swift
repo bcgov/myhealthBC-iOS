@@ -51,6 +51,8 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
+    // TODO: CONNOR 1: Add authenticated endpoints here
+    
 }
 
 // MARK: QUEUEIT Logic here
