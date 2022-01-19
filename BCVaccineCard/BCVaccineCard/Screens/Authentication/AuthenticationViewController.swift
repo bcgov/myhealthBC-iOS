@@ -17,6 +17,7 @@ extension BaseViewController {
             case .Completed:
                 self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
                     // TODO: FETCH RECORDS FOR AUTHENTICATED USER
+                    // Will be fetching on completion, before user interacts with this message
                     completion(true)
                 }
             case .Cancelled, .Failed:
@@ -142,6 +143,11 @@ class AuthenticationViewController: UIViewController {
          where you see that, it would be the place to perform the fetch.
          but its probably cleaner to do it here.
          */
+        if status == .Completed {
+            // TODO: CONNOR: Fetch records here
+            // use AuthManager().hdid and AuthManager().authToken
+        }
+        
         if withDelay {
             self.view.startLoadingIndicator()
             DispatchQueue.main.asyncAfter(deadline: .now() + dismissDelay) { [weak self] in
@@ -170,6 +176,7 @@ class AuthenticationViewController: UIViewController {
     }
     
     func dismissFullScreen() {
+        // Note - prob not here
         // TODO: FETCH RECORDS FOR AUTHENTICATED USER
         let transition = CATransition()
         transition.type = .fade
