@@ -73,7 +73,7 @@ class TextListView: UIView {
             let label = InteractiveLinkLabel()
             let textSize = properties.fontSize
             let font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
-            label.attributedText = attributedText(withString: properties.text, linkedStrings: links, textColor: AppColours.textBlack, font: font)
+            label.attributedText = label.attributedText(withString: properties.text, linkedStrings: links, textColor: AppColours.textBlack, font: font)
             label.numberOfLines = 0
             return label
         } else {
@@ -95,17 +95,5 @@ class TextListView: UIView {
 //        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
 //        self.accessibilityValue = accessibilityValue
         self.accessibilityHint = ""
-    }
-    
-    private func attributedText(withString string: String, linkedStrings: [LinkedStrings], textColor: UIColor, font: UIFont) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: textColor, NSAttributedString.Key.font: font])
-        for linkedString in linkedStrings {
-            let range = (string as NSString).range(of: linkedString.text)
-            if let url = URL(string: linkedString.link) {
-                let linkAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.link: url]
-                attributedString.addAttributes(linkAttribute, range: range)
-            }
-        }
-        return attributedString
     }
 }
