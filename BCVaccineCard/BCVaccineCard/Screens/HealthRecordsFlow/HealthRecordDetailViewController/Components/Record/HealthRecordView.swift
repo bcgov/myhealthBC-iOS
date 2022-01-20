@@ -14,11 +14,8 @@ extension HealthRecordsDetailDataSource.Record {
         case .covidImmunizationRecord(let model, let immunizations):
             return [.Header, .Fields]
         case .covidTestResultRecord(model: let model):
-            if model.resultType == .positive {
-                return [.Header, .StaticText, .Fields]
-            } else {
-                return [.Header, .Fields]
-            }
+            return [.Header, .Fields]
+            
         }
     }
 }
@@ -26,7 +23,6 @@ extension HealthRecordsDetailDataSource.Record {
 class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     enum CellSection {
         case Header
-        case StaticText
         case Fields
     }
     
@@ -75,8 +71,6 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         switch currentSection {
         case .Header:
             return headerCell(indexPath: indexPath, tableView: tableView)
-        case .StaticText:
-            return getStaticPositiveTestCell(indexPath: indexPath, tableView: tableView)
         case .Fields:
             return textListCellWithIndexPathOffset(indexPath: indexPath, tableView: tableView)
         }
@@ -90,16 +84,6 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         cell.configure(record: model)
-        return cell
-    }
-    
-    private func getStaticPositiveTestCell(indexPath: IndexPath, tableView: UITableView) -> UITableViewCell {
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: StaticPositiveTestTableViewCell.getName, for: indexPath) as? StaticPositiveTestTableViewCell
-        else {
-            return UITableViewCell()
-        }
-        cell.isUserInteractionEnabled = true
         return cell
     }
     

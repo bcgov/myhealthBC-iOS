@@ -245,7 +245,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         case .covidTestResultRecord:
             guard let recordId = record.id else {return}
             alertConfirmation(title: .deleteTestResult, message: .deleteTestResultMessage, confirmTitle: .delete, confirmStyle: .destructive) {
-                StorageService.shared.deleteTestResult(id: recordId)
+                StorageService.shared.deleteTestResult(id: recordId, sendDeleteEvent: true)
                 completion(true)
             } onCancel: {
                 completion(false)

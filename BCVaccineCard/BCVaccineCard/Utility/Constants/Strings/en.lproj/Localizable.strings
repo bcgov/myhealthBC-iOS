@@ -39,6 +39,8 @@
 "UnsupportedDeviceVideoMessage" = "Please use a device that supports video capture.";
 "UnsupportedDeviceQRMessage" = "Your device does not support QR code scanning.";
 "Error" = "Error";
+"TheInformationDoesNotMatchTitle" = "The information does not match";
+"TheInformationDoesNotMatchDescription" = "If it has been 48 hours from the time of your test, contact the BC COVID-19 Results Line (1‐833‐707‐2792) to investigate the issue.";
 "NetworkUnavailableTitle" = "Network Unavailable";
 "NetworkUnavailableMessage" = "The network is currently unavailable, please try again later";
 "InProgressErrorTitle" = "In Progress Error";
@@ -68,6 +70,7 @@
 "NEW" = "NEW";
 "PHNRequired" = "Personal Health Number is required";
 "PHNLength" = "PHN should be 10 characters";
+"PHNNotValid" = "The Personal Health Number entered is not valid";
 "PHNNumber" = "PHN must be numbers only";
 "DOBRequired" = "Date of Birth is required";
 "DOVRequired" = "Date of Vaccination is required";
@@ -92,11 +95,13 @@
 "PHNFooter" = "Find PHN on care card or the back of driver's license.";
 "PrivacyStatement" = "Privacy Statement";
 "GatewayPrivacyStatementDescription" = "Your information is being collected to provide you with your COVID-19 vaccination status under s. 26(c) of the Freedom of Information and Protection of Privacy Act. Contact the Ministry Privacy Officer at MOH.Privacy.Officer@gov.bc.ca if you have any questions about this collection.";
-"PrivacyPolicyStatement" = "Your information is being collected to provide you with your COVID-19 vaccination status under s. 26(c) of the Freedom of Information and Protection of Privacy Act. Contact the Ministry Privacy Officer at MOH.Privacy.Officer@gov.bc.ca or 778-698-5849 if you have any questions about this collection.";
+"PrivacyPolicyStatement" = "Your information is being collected to provide you with your %@ under s. 26(c) of the Freedom of Information and Protection of Privacy Act. Contact the Ministry Privacy Officer at MOH.Privacy.Officer@gov.bc.ca or 778-698-5849 if you have any questions about this collection.";
 "PrivacyPolicyStatementEmail" = "MOH.Privacy.Officer@gov.bc.ca";
 "PrivacyPolicyStatementEmailLink" = "mailto:MOH.Privacy.Officer@gov.bc.ca";
 "PrivacyPolicyStatementPhoneNumber" = "778-698-5849";
 "PrivacyPolicyStatementPhoneNumberLink" = "tel://7786985849";
+"PrivacyVaccineStatusText" = "COVID-19 vaccination status";
+"PrivacyTestResultText" = "COVID-19 test results";
 "RememberPHNandDOB" = "Remember my PHN and DoB for next time.";
 "CovidVaccineCards" = "COVID-19 Vaccine Cards";
 "PassCount" = "%@ passes";
@@ -163,7 +168,7 @@
 
 "DeleteTestResult" = "Delete Test Result";
 "DeleteTestResultMessage" = "Do you want to delete this test result?";
-"CancelledTestRecordMessage" = "There was a problem with your test. Please visit BC CDC Test Results  for more information";
+"CancelledTestRecordMessage" = "There was a problem with your test. Please visit BC CDC Test Results for more information";
 "PendingTestRecordMessage" = "Your test is being processed and can take up to 48 hours to complete.";
 
 "Cancelled" = "Cancelled";
