@@ -17,8 +17,8 @@ struct UrlAccessor {
     #if PROD
     let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
     #elseif DEV
-    let baseUrl = URL(string: "https://dev.healthgateway.gov.bc.ca/api/")!
-//    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
+//    let baseUrl = URL(string: "https://dev.healthgateway.gov.bc.ca/api/")!
+    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
     #endif
     
     private var immunizationBaseUrl: URL {

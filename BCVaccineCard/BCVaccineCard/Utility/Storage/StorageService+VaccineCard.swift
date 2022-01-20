@@ -31,6 +31,7 @@ protocol StorageVaccineCardManager {
         authenticated: Bool,
         federalPass: String?,
         vaxDates: [String]?,
+        sortOrder: Int64?,
         completion: @escaping(VaccineCard?)->Void
     )
     
@@ -49,7 +50,7 @@ protocol StorageVaccineCardManager {
     
     
     // MARK: Delete
-    func deleteVaccineCard(vaccineQR code: String)
+    func deleteVaccineCard(vaccineQR code: String, resort: Bool?)
     
     // MARK: Fetch
     func fetchVaccineCards() -> [VaccineCard]
@@ -58,9 +59,25 @@ protocol StorageVaccineCardManager {
 
 extension StorageService: StorageVaccineCardManager {
     // MARK: Store
-    func storeVaccineVard(vaccineQR: String, name: String, issueDate: Date, hash: String, patient: Patient, authenticated: Bool, federalPass: String? = nil, vaxDates: [String]? = nil, completion: @escaping(VaccineCard?)->Void) {
+    func storeVaccineVard(vaccineQR: String,
+                          name: String,
+                          issueDate: Date,
+                          hash: String,
+                          patient: Patient,
+                          authenticated: Bool,
+                          federalPass: String? = nil,
+                          vaxDates: [String]? = nil,
+                          sortOrder: Int64? = nil,
+                          completion: @escaping(VaccineCard?)->Void
+    ) {
         guard let context = managedContext else {return completion(nil)}
-        let sortOrder = Int64(fetchVaccineCards().count)
+        let cardSortOrder: Int64
+        if let sortOrderPosition = sortOrder {
+            cardSortOrder = sortOrderPosition
+        } else {
+            cardSortOrder = Int64(fetchVaccineCards().count)
+        }
+        
         let card = VaccineCard(context: context)
         card.authenticated = authenticated
         card.code = vaccineQR
@@ -68,7 +85,7 @@ extension StorageService: StorageVaccineCardManager {
         card.patient = patient
         card.federalPass = federalPass
         card.vaxDates = vaxDates
-        card.sortOrder = sortOrder
+        card.sortOrder = cardSortOrder
         card.firHash = hash
         card.issueDate = issueDate
         createImmunizationRecords(for: card) { records in
@@ -149,7 +166,7 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Delete
-    func deleteVaccineCard(vaccineQR code: String) {
+    func deleteVaccineCard(vaccineQR code: String, resort: Bool? = true) {
         guard let context = managedContext else {return}
         
         var cards = fetchVaccineCards()
@@ -165,8 +182,13 @@ extension StorageService: StorageVaccineCardManager {
         // Delete from core data
         delete(object: item)
         
+        // Blocking re-sort:
+        if let resort = resort, !resort {
+            return
+        }
+        // update sort order for stored cards based on array index
         do {
-            // update sort order for stored cards based on array index
+           
             for (index, card) in cards.enumerated() {
                 card.sortOrder = Int64(index)
             }
