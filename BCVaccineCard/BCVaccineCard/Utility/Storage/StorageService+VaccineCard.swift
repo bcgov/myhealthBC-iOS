@@ -50,7 +50,7 @@ protocol StorageVaccineCardManager {
     
     
     // MARK: Delete
-    func deleteVaccineCard(vaccineQR code: String, resort: Bool?)
+    func deleteVaccineCard(vaccineQR code: String, reSort: Bool?)
     
     // MARK: Fetch
     func fetchVaccineCards() -> [VaccineCard]
@@ -166,7 +166,7 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Delete
-    func deleteVaccineCard(vaccineQR code: String, resort: Bool? = true) {
+    func deleteVaccineCard(vaccineQR code: String, reSort: Bool? = true) {
         guard let context = managedContext else {return}
         
         var cards = fetchVaccineCards()
@@ -183,7 +183,7 @@ extension StorageService: StorageVaccineCardManager {
         delete(object: item)
         
         // Blocking re-sort:
-        if let resort = resort, !resort {
+        if let resort = reSort, !resort {
             return
         }
         // update sort order for stored cards based on array index

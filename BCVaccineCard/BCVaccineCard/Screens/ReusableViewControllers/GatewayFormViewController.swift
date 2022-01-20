@@ -630,7 +630,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         let deletedCardSortOrder: Int64?
         if fetchType.isFedPassOnly, let codeToReplace = code {
             deletedCardSortOrder = StorageService.shared.fetchVaccineCard(code: codeToReplace)?.sortOrder
-            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace, resort: false)
+            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace, reSort: false)
         } else {
             deletedCardSortOrder = nil
         }
