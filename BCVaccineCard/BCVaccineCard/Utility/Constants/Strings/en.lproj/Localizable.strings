@@ -163,7 +163,7 @@
 
 "DeleteTestResult" = "Delete Test Result";
 "DeleteTestResultMessage" = "Do you want to delete this test result?";
-"CancelledTestRecordMessage" = "There was a problem with your test. Please call the BC CDC on 1234567890";
+"CancelledTestRecordMessage" = "There was a problem with your test. Please visit BC CDC Test Results  for more information";
 "PendingTestRecordMessage" = "Your test is being processed and can take up to 48 hours to complete.";
 
 "Cancelled" = "Cancelled";

@@ -36,7 +36,7 @@ extension HealthRecordsDetailDataSource.Record {
                 let status = result.status.toCovidTestResult().getTitle
                 let backgroundColor = result.status.toCovidTestResult().getColor
                 DispatchQueue.main.async {
-                    return completion(BannerViewTableViewCell.ViewModel(statusImage: statusImage, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name, status: status, type: .VaccineRecord))
+                    return completion(BannerViewTableViewCell.ViewModel(statusImage: statusImage, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name, status: status, type: .VaccineRecord, attributedString: nil))
                 }
             }
             
@@ -48,7 +48,8 @@ extension HealthRecordsDetailDataSource.Record {
             if let date = model.collectionDateTime {
                 issueDate = "Tested on: \(date.issuedOnDateTime)"
             }
-            var name = name
+            var attributedString: NSMutableAttributedString? = nil
+            var name: String? = name
             var type = StatusBannerView.BannerType.CovidTest
             if status?.lowercased() == .pending.lowercased() {
                 type = .Message
@@ -57,10 +58,12 @@ extension HealthRecordsDetailDataSource.Record {
             
             if status?.lowercased() == .cancelled.lowercased() {
                 type = .Message
-                name = .cancelledTestRecordMessage
+                name = nil
+                attributedString = NSMutableAttributedString(string: .cancelledTestRecordMessage)
+                _ = attributedString?.setAsLink(textToFind: "BC CDC Test Results", linkURL: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/test-results")
             }
             
-            return completion(BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type))
+            return completion(BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type, attributedString: attributedString))
         }
     }
 }
@@ -73,10 +76,10 @@ class BannerViewTableViewCell: UITableViewCell {
         let backgroundColor: UIColor
         let statusColor: UIColor
         let issueDate: String
-        let name: String
+        let name: String?
         let status: String?
         let type: StatusBannerView.BannerType
-        
+        let attributedString: NSMutableAttributedString?
     }
     
     weak var bannerView: StatusBannerView?
@@ -100,7 +103,8 @@ class BannerViewTableViewCell: UITableViewCell {
                 backgroundColour: model.backgroundColor,
                 textColour: model.textColor,
                 statusColour: model.statusColor,
-                statusIconImage: model.statusImage)
+                statusIconImage: model.statusImage,
+                attributedString: model.attributedString)
                
             self.endLoadingIndicator()
             self.layoutIfNeeded()
