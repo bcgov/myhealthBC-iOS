@@ -107,12 +107,17 @@ extension String {
     static var dateOfTest: String{ return "DateOfTest".localized }
     static var phnFooter: String { return "PHNFooter".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
-    static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }
-    static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
+    static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized } //Don't think we're using this
+//    static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
+    static func privacyPolicyStatement(context: String) -> String {
+        return String(format: "PrivacyPolicyStatement".localized, context)
+    }
     static var privacyPolicyStatementEmail: String { return "PrivacyPolicyStatementEmail".localized }
     static var privacyPolicyStatementEmailLink: String { return "PrivacyPolicyStatementEmailLink".localized }
     static var privacyPolicyStatementPhoneNumber: String { return "PrivacyPolicyStatementPhoneNumber".localized }
     static var privacyPolicyStatementPhoneNumberLink: String { return "PrivacyPolicyStatementPhoneNumberLink".localized }
+    static var privacyVaccineStatusText: String { return "PrivacyVaccineStatusText".localized }
+    static var privacyTestResultText: String { return "PrivacyTestResultText".localized }
     static var rememberePHNandDOB: String { return "RememberPHNandDOB".localized }
     
     

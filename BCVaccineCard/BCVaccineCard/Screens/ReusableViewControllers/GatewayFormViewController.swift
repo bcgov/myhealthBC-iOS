@@ -88,7 +88,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatement,
+                            FormData.Configuration(text: .privacyPolicyStatement(context: .privacyVaccineStatusText),
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -99,7 +99,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: dob, isTextField: true), isFieldVisible: false),
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(text: dov, isTextField: true), isFieldVisible: false),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatement,
+                            FormData.Configuration(text: .privacyPolicyStatement(context: .privacyVaccineStatusText),
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -111,7 +111,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatement,
+                            FormData.Configuration(text: .privacyPolicyStatement(context: .privacyVaccineStatusText),
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -123,7 +123,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dotForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatement,
+                            FormData.Configuration(text: .privacyPolicyStatement(context: .privacyTestResultText),
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
