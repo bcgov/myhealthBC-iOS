@@ -87,6 +87,7 @@ extension String {
     /// Validation
     static var phnRequired: String { return "PHNRequired".localized }
     static var phnLength: String { return "PHNLength".localized }
+    static var phnNotValid: String { return "PHNNotValid".localized }
     static var phnNumber: String { return "PHNNumber".localized }
     static var dobRequired: String { return "DOBRequired".localized }
     static var dovRequired: String { return "DOVRequired".localized }

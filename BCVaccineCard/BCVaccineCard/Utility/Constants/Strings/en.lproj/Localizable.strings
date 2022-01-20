@@ -70,6 +70,7 @@
 "NEW" = "NEW";
 "PHNRequired" = "Personal Health Number is required";
 "PHNLength" = "PHN should be 10 characters";
+"PHNNotValid" = "The Personal Health Number entered is not valid";
 "PHNNumber" = "PHN must be numbers only";
 "DOBRequired" = "Date of Birth is required";
 "DOVRequired" = "Date of Vaccination is required";
