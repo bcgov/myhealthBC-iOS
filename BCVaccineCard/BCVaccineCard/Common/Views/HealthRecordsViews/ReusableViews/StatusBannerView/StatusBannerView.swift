@@ -20,10 +20,11 @@ import UIKit
  let ban: StatusBannerView = StatusBannerView.fromNib()
  ban.setup()
  */
-class StatusBannerView: UIView {
+class StatusBannerView: UIView, UITextViewDelegate {
     
     static let roundness: CGFloat = 5
     
+    @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var contentStackView: UIStackView!
     @IBOutlet weak var bannerImage: UIImageView!
     @IBOutlet weak var topContainer: UIView!
@@ -65,7 +66,16 @@ class StatusBannerView: UIView {
     ///   - textColor: all text colour
     ///   - statusColor: status text colour
     ///   - statusIconImage: status image icon. leave nil to remove icon
-    func update(type: BannerType, name: String, status: String, date: String, backgroundColour: UIColor, textColour: UIColor, statusColour: UIColor, statusIconImage: UIImage?) {
+    func update(type: BannerType,
+                name: String?,
+                status: String,
+                date: String,
+                backgroundColour: UIColor,
+                textColour: UIColor,
+                statusColour: UIColor,
+                statusIconImage: UIImage?,
+                attributedString: NSMutableAttributedString?
+    ) {
         // set banner icon (gov logo)
         bannerImage.image = UIImage(named: "bc-logo")
         
@@ -98,7 +108,16 @@ class StatusBannerView: UIView {
         nameLabel.text = name
         statusLabel.text = status
         timeLabel.text = date
+        textView.attributedText = attributedString
         
+        if attributedString == nil {
+            textView.isHidden = true
+        }
+        
+        if name == nil {
+            nameLabel.isHidden = true
+        }
+        self.layoutIfNeeded()
         // Adjust fonts based on type
         switch type {
         case .CovidTest:
@@ -120,8 +139,24 @@ class StatusBannerView: UIView {
             nameLabel.numberOfLines = 0
             nameLabel.textColor = statusColour
             nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
+            
+            textView.isUserInteractionEnabled = true
+            textView.delegate = self
+            textView.font = UIFont.bcSansBoldWithSize(size: 16)
+            textView.textColor = statusColour
+            textView.translatesAutoresizingMaskIntoConstraints = true
+            textView.sizeToFit()
+            textView.isScrollEnabled = false
+            textView.isEditable = false
+            textView.backgroundColor = .clear
         }
         self.layoutIfNeeded()
+    }
+    
+    
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        UIApplication.shared.open(URL)
+        return false
     }
     
     private func position(in containerView: UIView) {

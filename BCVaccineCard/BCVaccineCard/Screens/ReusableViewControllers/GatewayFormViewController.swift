@@ -201,6 +201,7 @@ class GatewayFormViewController: BaseViewController {
         super.viewWillDisappear(animated)
         // Note - sometimes tabBarController will be nil due to when it's released in memory
         self.tabBarController?.tabBar.isHidden = false
+        self.worker = nil
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
