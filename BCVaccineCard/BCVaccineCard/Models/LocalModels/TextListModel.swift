@@ -15,6 +15,7 @@ struct TextListModel: Codable {
         var text: String
         var bolded: Bool
         var fontSize: CGFloat = 17.0
+        var links: [LinkedStrings]? = nil
     }
 }
 

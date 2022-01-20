@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct LinkedStrings: Equatable {
+struct LinkedStrings: Codable, Equatable {
     let text: String
     let link: String
 }
