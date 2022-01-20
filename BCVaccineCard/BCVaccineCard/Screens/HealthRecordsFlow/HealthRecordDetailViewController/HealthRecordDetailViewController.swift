@@ -87,7 +87,7 @@ extension HealthRecordDetailViewController {
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code)
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
-                StorageService.shared.deleteTestResult(id: recordId)
+                StorageService.shared.deleteTestResult(id: recordId, sendDeleteEvent: true)
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)
