@@ -48,6 +48,8 @@ extension String {
     static var unsupportedDeviceVideoMessage: String { return "UnsupportedDeviceVideoMessage".localized }
     static var unsupportedDeviceQRMessage: String { return "UnsupportedDeviceQRMessage".localized }
     static var error: String { return "Error".localized }
+    static var theInformationDoesNotMatchTitle: String { return "TheInformationDoesNotMatchTitle".localized }
+    static var theInformationDoesNotMatchDescription: String { return "TheInformationDoesNotMatchDescription".localized }
     static var networkUnavailableTitle: String { return "NetworkUnavailableTitle".localized }
     static var networkUnavailableMessage: String { return "NetworkUnavailableMessage".localized }
     static var inProgressErrorTitle: String { return "InProgressErrorTitle".localized }

@@ -39,6 +39,8 @@
 "UnsupportedDeviceVideoMessage" = "Please use a device that supports video capture.";
 "UnsupportedDeviceQRMessage" = "Your device does not support QR code scanning.";
 "Error" = "Error";
+"TheInformationDoesNotMatchTitle" = "The information does not match";
+"TheInformationDoesNotMatchDescription" = "If it has been 48 hours from the time of your test, contact the BC COVID-19 Results Line (1‐833‐707‐2792) to investigate the issue.";
 "NetworkUnavailableTitle" = "Network Unavailable";
 "NetworkUnavailableMessage" = "The network is currently unavailable, please try again later";
 "InProgressErrorTitle" = "In Progress Error";
