@@ -313,9 +313,7 @@ extension FormTextFieldView: UITextFieldDelegate {
         if formField == .personalHealthNumber {
             var fullString = textField.text ?? ""
             if string != "", let ran = Range(range, in: fullString) {
-//                fullString.insert(contentsOf: <#T##Collection#>, at: <#T##String.Index#>)
-                // FIXME: Need to figure out how to insert the new string at the index given by the range, then this should resolve the appending issue
-                fullString.append(string)
+                fullString = fullString.replacingCharacters(in: ran, with: string)
             } else {
                 fullString.append(string)
             }
