@@ -11,9 +11,9 @@ import UIKit
 extension HealthRecordsDetailDataSource.Record {
     fileprivate func getCellSections() -> [HealthRecordView.CellSection] {
         switch type {
-        case .covidImmunizationRecord(let model, let immunizations):
+        case .covidImmunizationRecord:
             return [.Header, .Fields]
-        case .covidTestResultRecord(model: let model):
+        case .covidTestResultRecord:
             return [.Header, .Fields]
             
         }
