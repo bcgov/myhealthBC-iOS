@@ -55,6 +55,7 @@ class UserRecordListView: UIView {
         recordTypeTitleLabel.textColor = AppColours.appBlue
         recordTypeSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         recordTypeSubtitleLabel.textColor = AppColours.textBlack
+        self.layoutIfNeeded()
     }
     
     func configure(record: HealthRecordsDetailDataSource) {

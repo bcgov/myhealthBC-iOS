@@ -39,6 +39,7 @@ extension UIView {
         let backdrop = UIView(frame: .zero)
         backdrop.tag = Constants.UI.LoadingIndicator.backdropTag
         let indicator = UIActivityIndicatorView(frame: .zero)
+        indicator.color = AppColours.appBlue
         indicator.tintColor = AppColours.appBlue
         let loadingContainer = UIView(frame:.zero)
         
