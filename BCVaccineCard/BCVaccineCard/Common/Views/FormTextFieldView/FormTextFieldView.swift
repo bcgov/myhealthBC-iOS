@@ -27,7 +27,7 @@ enum FormTextFieldType {
         switch self {
         case .personalHealthNumber: return nil
         case .dateOfBirth: return nil
-        case .dateOfVaccination: return nil
+        case .dateOfVaccination: return .anyDose
         case .dateOfTest: return nil
         }
     }
@@ -312,15 +312,23 @@ extension FormTextFieldView: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if formField == .personalHealthNumber {
             var fullString = textField.text ?? ""
+            var check = fullString
+            check.append(string)
+            if string != "", let ran = Range(range, in: fullString), check.removeWhiteSpaceFormatting.count <= 10  {
+                fullString = fullString.replacingCharacters(in: ran, with: string)
+            } else {
                 fullString.append(string)
-                if range.length == 1 {
-                    textField.text = format(phn: fullString, shouldRemoveLastDigit: true)
-                } else {
-                    textField.text = format(phn: fullString)
-                }
+            }
+            if range.length == 1 {
+                let updatedRange = checkValueAtRange(nsRange: range, inText: textField.text)
+                textField.text = format(phn: fullString, shouldRemoveDigitIn: updatedRange)
+            } else {
+                textField.text = format(phn: fullString)
+            }
             let newString = textField.text ?? ""
             self.delegate?.textFieldTextDidChange(formField: self.formField, newText: newString)
-                return false
+            
+            return false
         }
         return true
     }
@@ -339,9 +347,30 @@ extension FormTextFieldView: UITextFieldDelegate {
     }
 }
 
+// MARK: Formatting helper functions
+extension FormTextFieldView {
+    private func checkValueAtRange(nsRange: NSRange, inText text: String?) -> NSRange? {
+        guard let text = text else { return nil }
+        guard let range = Range(nsRange, in: text) else { return nil }
+        if text[range] == " " {
+            return nil
+        } else {
+            var updatedNSRange: NSRange
+            if nsRange.location > 8 {
+                updatedNSRange = NSRange(location: nsRange.location - 2, length: nsRange.length)
+            } else if nsRange.location > 4 {
+                updatedNSRange = NSRange(location: nsRange.location - 1, length: nsRange.length)
+            } else {
+                updatedNSRange = nsRange
+            }
+            return updatedNSRange
+        }
+    }
+}
+
 // MARK: Formatting for UITextField PHN
 extension FormTextFieldView {
-    func format(phn: String, shouldRemoveLastDigit: Bool = false) -> String {
+    func format(phn: String, shouldRemoveDigitIn nsRange: NSRange? = nil) -> String {
         guard !phn.isEmpty else { return "" }
         guard let regex = try? NSRegularExpression(pattern: "[\\s-\\(\\)]", options: .caseInsensitive) else { return "" }
         let r = NSString(string: phn).range(of: phn)
@@ -351,10 +380,15 @@ extension FormTextFieldView {
             let tenthDigitIndex = number.index(number.startIndex, offsetBy: 10)
             number = String(number[number.startIndex..<tenthDigitIndex])
         }
-
-        if shouldRemoveLastDigit {
-            let end = number.index(number.startIndex, offsetBy: number.count-1)
-            number = String(number[number.startIndex..<end])
+        
+        // Basically, if we pass in a valid NS range here, then we must remove a character. First if check is to remove a specific character in the range - as a failsafe, the else statement just removes the last digit
+        if let nsRange = nsRange {
+            if let range = Range(nsRange, in: phn) {
+                number.removeSubrange(range)
+            } else {
+                let end = number.index(number.startIndex, offsetBy: number.count-1)
+                number = String(number[number.startIndex..<end])
+            }
         }
 
         if number.count < 8 {

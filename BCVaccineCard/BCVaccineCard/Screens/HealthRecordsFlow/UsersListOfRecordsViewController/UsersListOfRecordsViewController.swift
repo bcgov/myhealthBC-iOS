@@ -61,7 +61,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setup() {
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
-        fetchDataSource(initialFetch: true)
+        fetchDataSource()
     }
     
 }
@@ -97,23 +97,21 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
-    private func fetchDataSource(initialFetch: Bool) {
+    private func fetchDataSource() {
         guard let patient = self.patient else {return}
-        if initialFetch {
-            self.view.startLoadingIndicator(backgroundColor: .clear)
-        }
+        self.view.startLoadingIndicator(backgroundColor: .clear)
+        
         let records = StorageService.shared.getHeathRecords()
         self.dataSource = records.detailDataSource(patient: patient)
         self.setupTableView()
         self.navSetup()
-        if initialFetch {
-            self.view.endLoadingIndicator()
-        }
+        
+        self.view.endLoadingIndicator()
+        
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
-        if initialFetch {
-            self.checkForTestResultsToUpdate(ds: self.dataSource)
-        }
+        self.checkForTestResultsToUpdate(ds: self.dataSource)
+        
     }
     
     private func checkForTestResultsToUpdate(ds: [HealthRecordsDetailDataSource]) {
@@ -132,6 +130,7 @@ extension UsersListOfRecordsViewController {
                               let collectionDate = Date.Formatter.monthDayYearDate.date(from: collectionDatePresentableFormat)?.yearMonthDayString else { return }
                         
                         let model = GatewayTestResultRequest(phn: phn, dateOfBirth: dateOfBirth, collectionDate: collectionDate)
+                        tableView.cellForRow(at: IndexPath(row: indexPathRow, section: 0))?.startLoadingIndicator(backgroundColor: .clear, containerSize: 20, size: 8)
                         backgroundWorker?.getTestResult(model: model, executingVC: self, row: indexPathRow)
                     }
                 }
@@ -258,17 +257,25 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
 extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerDelegate {
     func handleTestResult(result: GatewayTestResultResponse, row: Int) {
         print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
-        StorageService.shared.updateTestResult(gateWayResponse: result) { [weak self] success in
+        StorageService.shared.updateTestResult(gateWayResponse: result) { [weak self] covidLabTestResult in
             guard let `self` = self else {return}
-            // TODO: Need to find a better way to update the VC data source - refactor needed
-            self.fetchDataSource(initialFetch: false)
-//            let indexPath = IndexPath(row: row, section: 0)
-//            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+ 
+            guard let covidLabTestResult = covidLabTestResult else { return }
+            guard let healthRecordDetailDS = HealthRecord(type: .Test(covidLabTestResult)).detailDataSource() else { return }
+            guard self.dataSource.count > row else { return }
+            self.dataSource[row] = healthRecordDetailDS
+            let indexPath = IndexPath(row: row, section: 0)
+            guard self.tableView.numberOfRows(inSection: 0) > indexPath.row else { return }
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            self.tableView.cellForRow(at: indexPath)?.endLoadingIndicator()
         }
     }
     
     func handleError(title: String, error: ResultError, row: Int) {
         print("BACKGROUND FETCH INFO: Error: ", title, error, "For Row: ", row)
+        let indexPath = IndexPath(row: row, section: 0)
+        guard self.tableView.numberOfRows(inSection: 0) > indexPath.row else { return }
+        self.tableView.cellForRow(at: indexPath)?.endLoadingIndicator()
     }
     
     

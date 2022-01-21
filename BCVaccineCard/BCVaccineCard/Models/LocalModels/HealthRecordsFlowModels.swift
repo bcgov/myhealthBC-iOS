@@ -80,7 +80,6 @@ extension Array where Element == HealthRecord {
         return result
     }
     
-    // TODO: Refactor to use patient as parameter
     func detailDataSource(patient: Patient) -> [HealthRecordsDetailDataSource] {
         let filtered = self.filter { $0.patient == patient }
         return filtered.compactMap({$0.detailDataSource()})

@@ -101,6 +101,7 @@ extension String {
     /// Labels and other text
 //    static var formTitle: String { return "FormTitle".localized }
 //    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
+    static var addAHealthRecord: String { return "AddAHealthRecord".localized }
     static var addAHealthPass: String { return "AddAHealthPass".localized }
     static var formDescription: String { return "FormDescription".localized }
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
@@ -155,7 +156,6 @@ extension String {
     
     // QR Method Selection screen
     static var qrDescriptionText: String { return "QRDescriptionText".localized }
-    static var officialHealthPass: String { return "OfficialHealthPass".localized }
     static var cameraScanOption: String { return "CameraScanOption".localized }
     static var imageUploadOption: String { return "ImageUploadOption".localized }
     static var healthGatewayOption: String { return "HealthGatewayOption".localized }

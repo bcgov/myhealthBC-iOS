@@ -95,7 +95,7 @@ struct HealthRecordsDetailDataSource {
         for (index, imsModel) in immunizations.enumerated() {
             var stringDate = ""
             if let date = imsModel.date {
-                stringDate = date.issuedOnDateTime
+                stringDate = date.issuedOnDate
             }
             let product = Constants.vaccineInfo(snowMedCode: Int(imsModel.snomed ?? "1") ?? 1)?.displayName ?? ""
             let imsSet = [
@@ -108,7 +108,8 @@ struct HealthRecordsDetailDataSource {
             ]
             fields.append(imsSet)
         }
-        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: nil, date: date, fields: fields)
+        let modifiedDate = Date.Formatter.yearMonthDay.date(from: date ?? "")?.monthDayYearString ?? date
+        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: modifiedDate, fields: fields)
     }
     
     
@@ -117,12 +118,12 @@ struct HealthRecordsDetailDataSource {
         let date: String? = testResult.resultDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         fields.append([
-            TextListModel(header: TextListModel.TextProperties(text: "Date of testing:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.issuedOnDateTime ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Date of testing:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.issuedOnDate ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.testStatus ?? "Pending", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Type name:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.lab ?? "", bolded: false))
         ])
-        if let resultDescription = testResult.resultDescription {
+        if let resultDescription = testResult.resultDescription, !resultDescription.isEmpty {
             var descriptionString = ""
             for (index, description) in resultDescription.enumerated() {
                 descriptionString.append(description)
@@ -130,8 +131,11 @@ struct HealthRecordsDetailDataSource {
                     descriptionString.append("\n\n")
                 }
             }
+            if descriptionString.last != " " {
+                descriptionString.append(" ")
+            }
             var linkedStrings: [LinkedStrings]?
-            if let link = testResult.resultLink {
+            if let link = testResult.resultLink, !link.isEmpty {
                 let text = "this page"
                 descriptionString.append(text)
                 let linkedString = LinkedStrings(text: text, link: link)

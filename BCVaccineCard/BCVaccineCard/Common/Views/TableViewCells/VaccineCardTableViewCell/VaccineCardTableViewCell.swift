@@ -104,7 +104,7 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
     private func adjustExpansion(expanded: Bool) {
         vaccineCardView.expandableBackgroundView.isHidden = !expanded
         federalPassView.isHidden = !expanded
-        federalPassViewHeightConstraint.constant = expanded ? 116.0 : 0.0
+        federalPassViewHeightConstraint.constant = expanded ? 94.0 : 0.0
     }
 
 }
