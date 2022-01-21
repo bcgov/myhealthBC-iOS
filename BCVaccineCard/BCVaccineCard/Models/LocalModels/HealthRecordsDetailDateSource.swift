@@ -132,9 +132,9 @@ struct HealthRecordsDetailDataSource {
             }
             if descriptionString.last != " " {
                 descriptionString.append(" ")
-            }
+            }3209
             var linkedStrings: [LinkedStrings]?
-            if let link = testResult.resultLink {
+            if let link = testResult.resultLink, !link.isEmpty {
                 let text = "this page"
                 descriptionString.append(text)
                 let linkedString = LinkedStrings(text: text, link: link)
