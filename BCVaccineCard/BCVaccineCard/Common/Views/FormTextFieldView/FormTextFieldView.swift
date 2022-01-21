@@ -312,7 +312,9 @@ extension FormTextFieldView: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if formField == .personalHealthNumber {
             var fullString = textField.text ?? ""
-            if string != "", let ran = Range(range, in: fullString) {
+            var check = fullString
+            check.append(string)
+            if string != "", let ran = Range(range, in: fullString), check.removeWhiteSpaceFormatting.count <= 10  {
                 fullString = fullString.replacingCharacters(in: ran, with: string)
             } else {
                 fullString.append(string)
@@ -325,6 +327,7 @@ extension FormTextFieldView: UITextFieldDelegate {
             }
             let newString = textField.text ?? ""
             self.delegate?.textFieldTextDidChange(formField: self.formField, newText: newString)
+            
             return false
         }
         return true
@@ -362,6 +365,11 @@ extension FormTextFieldView {
             }
             return updatedNSRange
         }
+    }
+    
+    // TODO: Just need to handle the cursor logic when editing the PHN
+    private func handleCursor() {
+        
     }
 }
 
