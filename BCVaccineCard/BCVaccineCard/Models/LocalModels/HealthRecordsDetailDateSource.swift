@@ -122,13 +122,16 @@ struct HealthRecordsDetailDataSource {
             TextListModel(header: TextListModel.TextProperties(text: "Type name:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.lab ?? "", bolded: false))
         ])
-        if let resultDescription = testResult.resultDescription {
+        if let resultDescription = testResult.resultDescription, !resultDescription.isEmpty {
             var descriptionString = ""
             for (index, description) in resultDescription.enumerated() {
                 descriptionString.append(description)
                 if index < resultDescription.count - 1 {
                     descriptionString.append("\n\n")
                 }
+            }
+            if descriptionString.last != " " {
+                descriptionString.append(" ")
             }
             var linkedStrings: [LinkedStrings]?
             if let link = testResult.resultLink {
