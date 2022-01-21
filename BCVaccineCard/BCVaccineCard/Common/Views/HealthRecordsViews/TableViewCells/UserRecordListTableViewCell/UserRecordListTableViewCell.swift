@@ -23,6 +23,7 @@ class UserRecordListTableViewCell: SwipeTableViewCell {
 
     func configure(record: HealthRecordsDetailDataSource) {
         userRecordListView.configure(record: record)
+        self.layoutIfNeeded()
     }
     
 }
