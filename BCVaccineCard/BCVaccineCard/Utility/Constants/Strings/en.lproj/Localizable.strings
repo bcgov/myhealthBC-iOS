@@ -159,6 +159,7 @@
 "AnalytyticsUsageDescription" = "Anonymized behavioural data is used to help improve the user experience";
 "DeleteData"= "Delete data";
 "ConfirmDeleteAllRecordsAndSaveData"= "Are you sure you want to delete all records and saved data?";
+"DeletedAllRecordsAndSavedData" = "Deleted all records and saved data";
 
 "DeleteCovidHealthRecord" = "Proof of vaccination linked to this record will be removed. You will be required to enter your health information again to access the record.";
 "DeleteRecord" = "Delete Record";

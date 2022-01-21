@@ -34,6 +34,7 @@ class HealthPassViewController: BaseViewController {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
         navSetup()
+        setupTableView()
         // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
         
@@ -53,8 +54,6 @@ class HealthPassViewController: BaseViewController {
     
     private func setup() {
         retrieveDataSource()
-        setupTableView()
-        self.tableView.reloadData()
     }
     
 }
@@ -122,6 +121,9 @@ extension HealthPassViewController {
             let cards = StorageService.shared.fetchVaccineCards()
             guard cards.count > 0 else {
                 self.dataSource = nil
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
                 return
             }
             self.dataSource = cards.first

@@ -215,6 +215,7 @@ extension String {
     static var analytyticsUsageDescription: String { return "AnalytyticsUsageDescription".localized }
     static var deleteData: String { return "DeleteData".localized }
     static var confirmDeleteAllRecordsAndSaveData: String { return "ConfirmDeleteAllRecordsAndSaveData".localized }
+    static var deletedAllRecordsAndSavedData: String { return "DeletedAllRecordsAndSavedData".localized }
 }
 
 // Accessibility only localized strings
