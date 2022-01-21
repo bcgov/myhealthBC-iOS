@@ -23,15 +23,7 @@ class HealthRecordDetailViewController: BaseViewController {
     
     private var dataSource: HealthRecordsDetailDataSource!
     private var userNumberHealthRecords: Int!
-    
-    private var dataSourceID: String? {
-        switch self.dataSource.type {
-        case .covidImmunizationRecord(model: let model, immunizations: _):
-            return model.id
-        case .covidTestResultRecord(model: let model):
-            return model.id
-        }
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
