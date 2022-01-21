@@ -64,7 +64,7 @@ class UserRecordListView: UIView {
         recordTypeTitleLabel.text = record.title
         var statusToInclude: String?
         switch record.type {
-        case .covidImmunizationRecord: statusToInclude = record.mainRecord?.status
+        case .covidImmunizationRecord: statusToInclude = nil
         case .covidTestResultRecord: statusToInclude = record.mainRecord?.status
         }
         let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""

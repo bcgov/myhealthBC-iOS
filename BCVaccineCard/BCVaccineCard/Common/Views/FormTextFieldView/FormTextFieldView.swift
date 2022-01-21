@@ -27,7 +27,7 @@ enum FormTextFieldType {
         switch self {
         case .personalHealthNumber: return nil
         case .dateOfBirth: return nil
-        case .dateOfVaccination: return nil
+        case .dateOfVaccination: return .anyDose
         case .dateOfTest: return nil
         }
     }
@@ -365,11 +365,6 @@ extension FormTextFieldView {
             }
             return updatedNSRange
         }
-    }
-    
-    // TODO: Just need to handle the cursor logic when editing the PHN
-    private func handleCursor() {
-        
     }
 }
 

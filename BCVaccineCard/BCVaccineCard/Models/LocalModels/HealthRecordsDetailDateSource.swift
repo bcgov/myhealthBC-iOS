@@ -108,7 +108,8 @@ struct HealthRecordsDetailDataSource {
             ]
             fields.append(imsSet)
         }
-        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: date, fields: fields)
+        let modifiedDate = Date.Formatter.yearMonthDay.date(from: date ?? "")?.monthDayYearString ?? date
+        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: modifiedDate, fields: fields)
     }
     
     
@@ -132,7 +133,7 @@ struct HealthRecordsDetailDataSource {
             }
             if descriptionString.last != " " {
                 descriptionString.append(" ")
-            }3209
+            }
             var linkedStrings: [LinkedStrings]?
             if let link = testResult.resultLink, !link.isEmpty {
                 let text = "this page"

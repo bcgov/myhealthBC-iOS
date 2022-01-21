@@ -76,7 +76,7 @@ class FetchHealthRecordsViewController: BaseViewController {
 extension FetchHealthRecordsViewController {
     private func navSetup() {
         let navButton: NavButton? = showSettingsIcon ? NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)) : nil
-        self.navDelegate?.setNavigationBarWith(title: .addAHealthRecord,
+        self.navDelegate?.setNavigationBarWith(title: .healthRecords,
                                                leftNavButton: nil,
                                                rightNavButton: navButton,
                                                navStyle: .large,
