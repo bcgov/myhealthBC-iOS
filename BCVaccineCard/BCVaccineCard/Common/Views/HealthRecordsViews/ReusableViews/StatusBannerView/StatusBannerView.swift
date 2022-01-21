@@ -49,11 +49,12 @@ class StatusBannerView: UIView, UITextViewDelegate {
     /// Configure View
     /// - Parameters:
     ///   - containerView: Container that this view will place itself in.
-    public func setup(in containerView: UIView) {
+    public func setup(in containerView: UIView, type: BannerType) {
         // TODO: Delete this label? Not sure if it's being used by anything other than QA'ing the UI
         recordTypeLabel.isHidden = true
         // Place in container
         position(in: containerView)
+        style(for: type)
     }
     
     /// Configure data
@@ -103,6 +104,7 @@ class StatusBannerView: UIView, UITextViewDelegate {
             }
         }
         statusLabel.textColor = statusColour
+        textView.textColor = statusColour
         
         // set texts
         nameLabel.text = name
@@ -110,23 +112,22 @@ class StatusBannerView: UIView, UITextViewDelegate {
         timeLabel.text = date
         textView.attributedText = attributedString
         
-        if attributedString == nil {
-            textView.isHidden = true
-        }
-        
-        if name == nil {
-            nameLabel.isHidden = true
-        }
         self.layoutIfNeeded()
-        // Adjust fonts based on type
+        style(for: type)
+    }
+    
+    func style(for type: BannerType) {
+        self.layoutIfNeeded()
         switch type {
         case .CovidTest:
-            // TODO: put corrent fonts and sizes
+            textView.isHidden = true
+            
             nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
             statusLabel.font = UIFont.bcSansBoldWithSize(size: 18)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         case .VaccineRecord:
-            // TODO: put corrent fonts and sizes
+            textView.isHidden = true
+            
             nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
             statusLabel.font = UIFont.bcSansRegularWithSize(size: 18)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
@@ -134,16 +135,11 @@ class StatusBannerView: UIView, UITextViewDelegate {
             topContainer.isHidden = true
             statusStack.isHidden = true
             timeLabel.isHidden = true
-            
-            nameLabel.text = name
-            nameLabel.numberOfLines = 0
-            nameLabel.textColor = statusColour
-            nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
+            nameLabel.isHidden = true
             
             textView.isUserInteractionEnabled = true
             textView.delegate = self
             textView.font = UIFont.bcSansBoldWithSize(size: 16)
-            textView.textColor = statusColour
             textView.translatesAutoresizingMaskIntoConstraints = true
             textView.sizeToFit()
             textView.isScrollEnabled = false
