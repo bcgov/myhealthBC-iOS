@@ -108,7 +108,7 @@ struct HealthRecordsDetailDataSource {
             ]
             fields.append(imsSet)
         }
-        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: nil, date: date, fields: fields)
+        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: date, fields: fields)
     }
     
     
