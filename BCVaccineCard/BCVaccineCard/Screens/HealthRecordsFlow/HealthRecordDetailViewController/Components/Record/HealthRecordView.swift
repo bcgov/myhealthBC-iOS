@@ -34,6 +34,24 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         setupTableView()
     }
     
+    func setupStorageListener() {
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {notification in
+            guard let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            switch event.entity {
+            case .VaccineCard :
+                if let object = event.object as? VaccineCard {
+                    
+                }
+            case .CovidLabTestResult:
+                if let object = event.object as? CovidTestResult {
+                    
+                }
+            default:
+                break
+            }
+        }
+    }
+    
     private func setupTableView() {
         let tableView = UITableView(frame: .zero)
         addSubview(tableView)

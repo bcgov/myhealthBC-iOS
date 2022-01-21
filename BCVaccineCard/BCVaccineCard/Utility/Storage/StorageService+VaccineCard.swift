@@ -125,21 +125,26 @@ extension StorageService: StorageVaccineCardManager {
     
     func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping (VaccineCard?) -> Void) {
         guard let context = managedContext, let card = fetchVaccineCards().filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return completion(nil)}
-        do {
-            card.code = model.code
-            card.vaxDates = model.vaxDates
-            card.federalPass = model.fedCode
-            card.firHash = model.hash
-            try context.save()
-            DispatchQueue.main.async {[weak self] in
-                guard let `self` = self else {return}
-                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
-                return completion(card)
+        card.code = model.code
+        card.vaxDates = model.vaxDates
+        card.federalPass = model.fedCode
+        card.firHash = model.hash
+        if let immunizations = card.immunizationRecord {
+            card.removeFromImmunizationRecord(immunizations)
+        }
+        createImmunizationRecords(for: card) { records in
+            for record in records {
+                card.addToImmunizationRecord(record)
             }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            DispatchQueue.main.async {
-                return completion(nil)
+            do {
+                try context.save()
+                DispatchQueue.main.async {
+                    self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+                    return completion(card)
+                }
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+                completion(nil)
             }
         }
     }
