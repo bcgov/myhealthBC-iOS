@@ -273,6 +273,9 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
     
     func handleError(title: String, error: ResultError, row: Int) {
         print("BACKGROUND FETCH INFO: Error: ", title, error, "For Row: ", row)
+        let indexPath = IndexPath(row: row, section: 0)
+        guard self.tableView.numberOfRows(inSection: 0) > indexPath.row else { return }
+        self.tableView.cellForRow(at: indexPath)?.endLoadingIndicator()
     }
     
     

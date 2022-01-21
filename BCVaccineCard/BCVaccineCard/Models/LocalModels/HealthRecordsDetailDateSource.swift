@@ -95,7 +95,7 @@ struct HealthRecordsDetailDataSource {
         for (index, imsModel) in immunizations.enumerated() {
             var stringDate = ""
             if let date = imsModel.date {
-                stringDate = date.issuedOnDateTime
+                stringDate = date.issuedOnDate
             }
             let product = Constants.vaccineInfo(snowMedCode: Int(imsModel.snomed ?? "1") ?? 1)?.displayName ?? ""
             let imsSet = [
@@ -117,7 +117,7 @@ struct HealthRecordsDetailDataSource {
         let date: String? = testResult.resultDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         fields.append([
-            TextListModel(header: TextListModel.TextProperties(text: "Date of testing:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.issuedOnDateTime ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Date of testing:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.issuedOnDate ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.testStatus ?? "Pending", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Type name:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.lab ?? "", bolded: false))
