@@ -95,20 +95,21 @@ struct HealthRecordsDetailDataSource {
         for (index, imsModel) in immunizations.enumerated() {
             var stringDate = ""
             if let date = imsModel.date {
-                stringDate = date.issuedOnDateTime
+                stringDate = date.issuedOnDate
             }
             let product = Constants.vaccineInfo(snowMedCode: Int(imsModel.snomed ?? "1") ?? 1)?.displayName ?? ""
             let imsSet = [
                 TextListModel(header: TextListModel.TextProperties(text: "Dose \(index + 1)", bolded: true), subtext: nil),
                 // TODO: date format
-                TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: false), subtext: TextListModel.TextProperties(text: stringDate, bolded: true)),
-                TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: false), subtext: TextListModel.TextProperties(text: product, bolded: true)),
-                TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "N/A", bolded: true)),
-                TextListModel(header: TextListModel.TextProperties(text: "Lot number:", bolded: false), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "N/A", bolded: true))
+                TextListModel(header: TextListModel.TextProperties(text: "Date:", bolded: true), subtext: TextListModel.TextProperties(text: stringDate, bolded: false)),
+                TextListModel(header: TextListModel.TextProperties(text: "Product:", bolded: true), subtext: TextListModel.TextProperties(text: product, bolded: false)),
+                TextListModel(header: TextListModel.TextProperties(text: "Provide / Clinic:", bolded: true), subtext: TextListModel.TextProperties(text: imsModel.provider ?? "N/A", bolded: false)),
+                TextListModel(header: TextListModel.TextProperties(text: "Lot number:", bolded: true), subtext: TextListModel.TextProperties(text: imsModel.lotNumber ?? "N/A", bolded: false))
             ]
             fields.append(imsSet)
         }
-        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: nil, date: date, fields: fields)
+        let modifiedDate = Date.Formatter.yearMonthDay.date(from: date ?? "")?.monthDayYearString ?? date
+        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: modifiedDate, fields: fields)
     }
     
     
@@ -117,12 +118,54 @@ struct HealthRecordsDetailDataSource {
         let date: String? = testResult.resultDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         fields.append([
-            TextListModel(header: TextListModel.TextProperties(text: "Date of testing:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.issuedOnDateTime ?? "", bolded: true)),
-            TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testStatus ?? "Pending", bolded: true)),
-            TextListModel(header: TextListModel.TextProperties(text: "Type name:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: true)),
-            TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: false), subtext: TextListModel.TextProperties(text: testResult.lab ?? "", bolded: true))
+            TextListModel(header: TextListModel.TextProperties(text: "Date of testing:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.issuedOnDate ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.testStatus ?? "Pending", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Type name:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.testType ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Provider / Clinic:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.lab ?? "", bolded: false))
         ])
+        if let resultDescription = testResult.resultDescription, !resultDescription.isEmpty {
+            let tuple = self.handleResultDescriptionAndLinks(resultDescription: resultDescription, testResult: testResult)
+            let resultDescriptionfield = TextListModel(header: TextListModel.TextProperties(text: "Result description:", bolded: true), subtext: TextListModel.TextProperties(text: tuple.text, bolded: false, links: tuple.links))
+            fields[0].append(resultDescriptionfield)
+        }
         return Record(id: testResult.id ?? UUID().uuidString, name: testResult.patientDisplayName ?? "", type: .covidTestResultRecord(model: testResult), status: status, date: date, fields: fields)
+    }
+    
+    // Note this funcion is used to append "this page" text with link from API to end of result description. In the event where there is a positive test, there is no link, but there are links embedded in the text. For this, we use NSDataDetector to create links
+    private static func handleResultDescriptionAndLinks(resultDescription: [String], testResult: TestResult) -> (text: String, links: [LinkedStrings]?) {
+        var descriptionString = ""
+        for (index, description) in resultDescription.enumerated() {
+            descriptionString.append(description)
+            if index < resultDescription.count - 1 {
+                descriptionString.append("\n\n")
+            }
+        }
+        if descriptionString.last != " " {
+            descriptionString.append(" ")
+        }
+        var linkedStrings: [LinkedStrings]?
+        if let link = testResult.resultLink, !link.isEmpty {
+            let text = "this page"
+            descriptionString.append(text)
+            let linkedString = LinkedStrings(text: text, link: link)
+            linkedStrings = []
+            linkedStrings?.append(linkedString)
+        }
+        do {
+            let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+            guard let matches = detector?.matches(in: descriptionString, options: [], range: NSRange(location: 0, length: descriptionString.utf16.count)) else { return (descriptionString, linkedStrings) }
+            for match in matches {
+                guard let range = Range(match.range, in: descriptionString) else { continue }
+                let url = descriptionString[range]
+                let linkString = String(url)
+                let newLink = LinkedStrings(text: linkString, link: linkString)
+                if linkedStrings == nil {
+                    linkedStrings = []
+                }
+                linkedStrings?.append(newLink)
+            }
+        }
+        return (descriptionString, linkedStrings)
     }
 }
 

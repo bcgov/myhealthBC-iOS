@@ -18,7 +18,9 @@ fileprivate class VaccineCardTableViewCellCache {
     
     static func cache(code: String, result: CodeValidationResult) {
         // FIXME: Noticed a crash here... BAD EXEC - Thread 5: EXC_BAD_ACCESS (code=1, address=0x18)
-        validationResults[code] = result
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 0.1) {
+            validationResults[code] = result
+        }
     }
 }
 
@@ -104,7 +106,7 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
     private func adjustExpansion(expanded: Bool) {
         vaccineCardView.expandableBackgroundView.isHidden = !expanded
         federalPassView.isHidden = !expanded
-        federalPassViewHeightConstraint.constant = expanded ? 116.0 : 0.0
+        federalPassViewHeightConstraint.constant = expanded ? 94.0 : 0.0
     }
 
 }

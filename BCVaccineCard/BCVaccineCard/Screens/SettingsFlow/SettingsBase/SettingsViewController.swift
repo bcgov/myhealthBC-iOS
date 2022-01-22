@@ -113,9 +113,11 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         case .deleteAllRecords:
             let cell = textCell(for: indexPath, title: .deleteAllRecordsAndSavedData, textColor: AppColours.appRed) {[weak self] in
                 guard let `self` = self else {return}
-                self.alertConfirmation(title: .deleteData, message: .confirmDeleteAllRecordsAndSaveData, confirmTitle: .delete, confirmStyle: .destructive) {
+                self.alertConfirmation(title: .deleteData, message: .confirmDeleteAllRecordsAndSaveData, confirmTitle: .delete, confirmStyle: .destructive) { [weak self] in
+                    guard let `self` = self else {return}
                     StorageService.shared.deleteAllStoredData()
                     Defaults.rememberGatewayDetails = nil
+                    self.showBanner(message: .deletedAllRecordsAndSavedData, style: .Top)
                 } onCancel: {}
             }
             return cell

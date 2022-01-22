@@ -20,10 +20,11 @@ import UIKit
  let ban: StatusBannerView = StatusBannerView.fromNib()
  ban.setup()
  */
-class StatusBannerView: UIView {
+class StatusBannerView: UIView, UITextViewDelegate {
     
     static let roundness: CGFloat = 5
     
+    @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var contentStackView: UIStackView!
     @IBOutlet weak var bannerImage: UIImageView!
     @IBOutlet weak var topContainer: UIView!
@@ -48,11 +49,12 @@ class StatusBannerView: UIView {
     /// Configure View
     /// - Parameters:
     ///   - containerView: Container that this view will place itself in.
-    public func setup(in containerView: UIView) {
+    public func setup(in containerView: UIView, type: BannerType) {
         // TODO: Delete this label? Not sure if it's being used by anything other than QA'ing the UI
         recordTypeLabel.isHidden = true
         // Place in container
         position(in: containerView)
+        style(for: type)
     }
     
     /// Configure data
@@ -65,7 +67,16 @@ class StatusBannerView: UIView {
     ///   - textColor: all text colour
     ///   - statusColor: status text colour
     ///   - statusIconImage: status image icon. leave nil to remove icon
-    func update(type: BannerType, name: String, status: String, date: String, backgroundColour: UIColor, textColour: UIColor, statusColour: UIColor, statusIconImage: UIImage?) {
+    func update(type: BannerType,
+                name: String?,
+                status: String,
+                date: String,
+                backgroundColour: UIColor,
+                textColour: UIColor,
+                statusColour: UIColor,
+                statusIconImage: UIImage?,
+                attributedString: NSMutableAttributedString?
+    ) {
         // set banner icon (gov logo)
         bannerImage.image = UIImage(named: "bc-logo")
         
@@ -93,21 +104,30 @@ class StatusBannerView: UIView {
             }
         }
         statusLabel.textColor = statusColour
+        textView.textColor = statusColour
         
         // set texts
         nameLabel.text = name
         statusLabel.text = status
         timeLabel.text = date
+        textView.attributedText = attributedString
         
-        // Adjust fonts based on type
+        self.layoutIfNeeded()
+        style(for: type)
+    }
+    
+    func style(for type: BannerType) {
+        self.layoutIfNeeded()
         switch type {
         case .CovidTest:
-            // TODO: put corrent fonts and sizes
+            textView.isHidden = true
+            
             nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
             statusLabel.font = UIFont.bcSansBoldWithSize(size: 18)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         case .VaccineRecord:
-            // TODO: put corrent fonts and sizes
+            textView.isHidden = true
+            
             nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
             statusLabel.font = UIFont.bcSansRegularWithSize(size: 18)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
@@ -115,13 +135,24 @@ class StatusBannerView: UIView {
             topContainer.isHidden = true
             statusStack.isHidden = true
             timeLabel.isHidden = true
+            nameLabel.isHidden = true
             
-            nameLabel.text = name
-            nameLabel.numberOfLines = 0
-            nameLabel.textColor = statusColour
-            nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
+            textView.isUserInteractionEnabled = true
+            textView.delegate = self
+            textView.font = UIFont.bcSansBoldWithSize(size: 16)
+            textView.translatesAutoresizingMaskIntoConstraints = true
+            textView.sizeToFit()
+            textView.isScrollEnabled = false
+            textView.isEditable = false
+            textView.backgroundColor = .clear
         }
         self.layoutIfNeeded()
+    }
+    
+    
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        UIApplication.shared.open(URL)
+        return false
     }
     
     private func position(in containerView: UIView) {

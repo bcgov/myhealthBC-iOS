@@ -48,6 +48,8 @@ extension String {
     static var unsupportedDeviceVideoMessage: String { return "UnsupportedDeviceVideoMessage".localized }
     static var unsupportedDeviceQRMessage: String { return "UnsupportedDeviceQRMessage".localized }
     static var error: String { return "Error".localized }
+    static var theInformationDoesNotMatchTitle: String { return "TheInformationDoesNotMatchTitle".localized }
+    static var theInformationDoesNotMatchDescription: String { return "TheInformationDoesNotMatchDescription".localized }
     static var networkUnavailableTitle: String { return "NetworkUnavailableTitle".localized }
     static var networkUnavailableMessage: String { return "NetworkUnavailableMessage".localized }
     static var inProgressErrorTitle: String { return "InProgressErrorTitle".localized }
@@ -85,6 +87,7 @@ extension String {
     /// Validation
     static var phnRequired: String { return "PHNRequired".localized }
     static var phnLength: String { return "PHNLength".localized }
+    static var phnNotValid: String { return "PHNNotValid".localized }
     static var phnNumber: String { return "PHNNumber".localized }
     static var dobRequired: String { return "DOBRequired".localized }
     static var dovRequired: String { return "DOVRequired".localized }
@@ -98,6 +101,7 @@ extension String {
     /// Labels and other text
 //    static var formTitle: String { return "FormTitle".localized }
 //    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
+    static var addAHealthRecord: String { return "AddAHealthRecord".localized }
     static var addAHealthPass: String { return "AddAHealthPass".localized }
     static var formDescription: String { return "FormDescription".localized }
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
@@ -107,12 +111,17 @@ extension String {
     static var dateOfTest: String{ return "DateOfTest".localized }
     static var phnFooter: String { return "PHNFooter".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
-    static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }
-    static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
+    static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized } //Don't think we're using this
+//    static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
+    static func privacyPolicyStatement(context: String) -> String {
+        return String(format: "PrivacyPolicyStatement".localized, context)
+    }
     static var privacyPolicyStatementEmail: String { return "PrivacyPolicyStatementEmail".localized }
     static var privacyPolicyStatementEmailLink: String { return "PrivacyPolicyStatementEmailLink".localized }
     static var privacyPolicyStatementPhoneNumber: String { return "PrivacyPolicyStatementPhoneNumber".localized }
     static var privacyPolicyStatementPhoneNumberLink: String { return "PrivacyPolicyStatementPhoneNumberLink".localized }
+    static var privacyVaccineStatusText: String { return "PrivacyVaccineStatusText".localized }
+    static var privacyTestResultText: String { return "PrivacyTestResultText".localized }
     static var rememberePHNandDOB: String { return "RememberPHNandDOB".localized }
     
     
@@ -147,7 +156,6 @@ extension String {
     
     // QR Method Selection screen
     static var qrDescriptionText: String { return "QRDescriptionText".localized }
-    static var officialHealthPass: String { return "OfficialHealthPass".localized }
     static var cameraScanOption: String { return "CameraScanOption".localized }
     static var imageUploadOption: String { return "ImageUploadOption".localized }
     static var healthGatewayOption: String { return "HealthGatewayOption".localized }
@@ -207,6 +215,7 @@ extension String {
     static var analytyticsUsageDescription: String { return "AnalytyticsUsageDescription".localized }
     static var deleteData: String { return "DeleteData".localized }
     static var confirmDeleteAllRecordsAndSaveData: String { return "ConfirmDeleteAllRecordsAndSaveData".localized }
+    static var deletedAllRecordsAndSavedData: String { return "DeletedAllRecordsAndSavedData".localized }
 }
 
 // Accessibility only localized strings

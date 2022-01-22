@@ -57,6 +57,12 @@ extension Date {
             formatter.dateFormat = "MMMM-dd-yyyy, hh:mm z"
             return formatter
         }()
+        static let issuedOnDate: DateFormatter = {
+            let formatter = DateFormatter()
+//            September-09-2012
+            formatter.dateFormat = "MMMM-dd-yyyy"
+            return formatter
+        }()
         static let gatewayDateAndTime: DateFormatter = {
             let formatter = DateFormatter()
 //            September-09-2012, 14:27
@@ -184,6 +190,7 @@ extension Date {
     var customHeaderDateAndTime: String { return Formatter.customHeaderDateAndTime.string(from: self) }
     var customHeaderDateAndTimeShort: String { return Formatter.customHeaderDateAndTimeShort.string(from: self) }
     var issuedOnDateTime: String { return Formatter.issuedOnDateTime.string(from: self) }
+    var issuedOnDate: String { return Formatter.issuedOnDate.string(from: self) }
     var gatewayDateAndTime: String { return Formatter.gatewayDateAndTime.string(from: self) }
     
     //MARK: - Date Strings
