@@ -129,6 +129,7 @@ extension StorageService: StorageVaccineCardManager {
         card.vaxDates = model.vaxDates
         card.federalPass = model.fedCode
         card.firHash = model.hash
+        card.issueDate = Date(timeIntervalSince1970: model.issueDate)
         if let immunizations = card.immunizationRecord {
             card.removeFromImmunizationRecord(immunizations)
         }
