@@ -82,7 +82,23 @@ extension Array where Element == HealthRecord {
     
     func detailDataSource(patient: Patient) -> [HealthRecordsDetailDataSource] {
         let filtered = self.filter { $0.patient == patient }
-        return filtered.compactMap({$0.detailDataSource()})
+        return filtered.compactMap({$0.detailDataSource()}).sorted(by: {first,second in
+            let firstDate: Date?
+            let secondDate: Date?
+            switch first.type {
+            case .covidImmunizationRecord(model: let model, immunizations: _):
+                firstDate = Date(timeIntervalSince1970: model.issueDate)
+            case .covidTestResultRecord(model: let model):
+                firstDate = model.createdAt
+            }
+            switch second.type {
+            case .covidImmunizationRecord(model: let model, immunizations: _):
+                secondDate = Date(timeIntervalSince1970: model.issueDate)
+            case .covidTestResultRecord(model: let model):
+                secondDate = model.createdAt
+            }
+            return firstDate ?? Date() < secondDate ?? Date()
+        })
     }
     
     func fetchDetailDataSourceWithID(id: String, recordType: GetRecordsView.RecordType) -> HealthRecordsDetailDataSource? {
