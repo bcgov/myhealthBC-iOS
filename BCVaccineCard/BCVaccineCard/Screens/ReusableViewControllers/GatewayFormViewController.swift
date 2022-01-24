@@ -88,7 +88,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatement,
+                            FormData.Configuration(text: .privacyPolicyStatement(context: .privacyVaccineStatusText),
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -99,7 +99,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: dob, isTextField: true), isFieldVisible: false),
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(text: dov, isTextField: true), isFieldVisible: false),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatement,
+                            FormData.Configuration(text: .privacyPolicyStatement(context: .privacyVaccineStatusText),
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -111,7 +111,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatement,
+                            FormData.Configuration(text: .privacyPolicyStatement(context: .privacyVaccineStatusText),
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -123,7 +123,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                 FormData(specificCell: .dotForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatement,
+                            FormData.Configuration(text: .privacyPolicyStatement(context: .privacyTestResultText),
                                                    font: UIFont.bcSansRegularWithSize(size: 13),
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
@@ -201,6 +201,7 @@ class GatewayFormViewController: BaseViewController {
         super.viewWillDisappear(animated)
         // Note - sometimes tabBarController will be nil due to when it's released in memory
         self.tabBarController?.tabBar.isHidden = false
+        self.worker = nil
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -597,9 +598,12 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         })
     }
     
-    func storeCardInLocalStorage(model: AppVaccinePassportModel) {
+    func storeCardInLocalStorage(model: AppVaccinePassportModel, sortOrder: Int64? = nil) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.storeVaccineCard(model: model.transform(), authenticated: false, completion: {
+            self.storeVaccineCard(model: model.transform(),
+                                  authenticated: false,
+                                  sortOrder: sortOrder,
+                                  completion: {
                 let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
                 let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
                 self.completionHandler?(handlerDetails)
@@ -623,8 +627,12 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     
     func handleCardInCoreData(localModel: LocallyStoredVaccinePassportModel, replacing code: String?) {
         let model = localModel.transform()
+        let deletedCardSortOrder: Int64?
         if fetchType.isFedPassOnly, let codeToReplace = code {
-            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace)
+            deletedCardSortOrder = StorageService.shared.fetchVaccineCard(code: codeToReplace)?.sortOrder
+            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace, reSort: false)
+        } else {
+            deletedCardSortOrder = nil
         }
         model.state { [weak self] state in
             guard let `self` = self else {return}
@@ -640,7 +648,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
                     self.completionHandler?(handlerDetails)
                 }
             case .isNew:
-                self.storeCardInLocalStorage(model: model)
+                self.storeCardInLocalStorage(model: model, sortOrder: deletedCardSortOrder)
             case .canUpdateExisting:
                 self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}

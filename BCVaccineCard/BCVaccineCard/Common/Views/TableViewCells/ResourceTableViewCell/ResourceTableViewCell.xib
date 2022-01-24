@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -29,7 +29,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GOj-Pf-rLU">
-                                <rect key="frame" x="68" y="25" width="214" height="20.5"/>
+                                <rect key="frame" x="68" y="25" width="234" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -45,7 +45,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="oK2-l8-jQu" firstAttribute="leading" secondItem="b2Z-Ge-u4W" secondAttribute="leading" constant="10" id="Fmk-bX-3ZN"/>
-                            <constraint firstItem="GxN-x3-T7B" firstAttribute="leading" secondItem="GOj-Pf-rLU" secondAttribute="trailing" constant="20" id="SkC-hZ-pjO"/>
+                            <constraint firstItem="GxN-x3-T7B" firstAttribute="leading" secondItem="GOj-Pf-rLU" secondAttribute="trailing" id="SkC-hZ-pjO"/>
                             <constraint firstItem="oK2-l8-jQu" firstAttribute="top" relation="greaterThanOrEqual" secondItem="b2Z-Ge-u4W" secondAttribute="top" constant="10" id="X4g-vV-9Jh"/>
                             <constraint firstItem="GOj-Pf-rLU" firstAttribute="centerY" secondItem="b2Z-Ge-u4W" secondAttribute="centerY" id="ZMf-9w-TUy"/>
                             <constraint firstItem="GxN-x3-T7B" firstAttribute="centerY" secondItem="b2Z-Ge-u4W" secondAttribute="centerY" id="czW-PJ-3YM"/>

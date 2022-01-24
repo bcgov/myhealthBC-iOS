@@ -29,8 +29,9 @@ extension UIView {
     }
 }
 
+// MARK: Loading indicator
 extension UIView {
-    func startLoadingIndicator(backgroundColor: UIColor = Constants.UI.LoadingIndicator.backdropColor) {
+    func startLoadingIndicator(backgroundColor: UIColor = Constants.UI.LoadingIndicator.backdropColor, containerSize: CGFloat = Constants.UI.LoadingIndicator.containerSize, size: CGFloat = Constants.UI.LoadingIndicator.size) {
         if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
             existing.removeFromSuperview()
         }
@@ -38,6 +39,7 @@ extension UIView {
         let backdrop = UIView(frame: .zero)
         backdrop.tag = Constants.UI.LoadingIndicator.backdropTag
         let indicator = UIActivityIndicatorView(frame: .zero)
+        indicator.color = AppColours.appBlue
         indicator.tintColor = AppColours.appBlue
         let loadingContainer = UIView(frame:.zero)
         
@@ -51,8 +53,8 @@ extension UIView {
         
         backdrop.addEqualSizeContraints(to: self)
         
-        loadingContainer.center(in: backdrop, width: Constants.UI.LoadingIndicator.containerSize, height: Constants.UI.LoadingIndicator.containerSize)
-        indicator.center(in: loadingContainer, width: Constants.UI.LoadingIndicator.size, height: Constants.UI.LoadingIndicator.size)
+        loadingContainer.center(in: backdrop, width: containerSize, height: containerSize)
+        indicator.center(in: loadingContainer, width: size, height: size)
         
         indicator.startAnimating()
     }
@@ -62,6 +64,11 @@ extension UIView {
             existing.removeFromSuperview()
         }
     }
+    
+    
+}
+// MARK: Constraint and other helper functions
+extension UIView {
     
     public func addEqualSizeContraints(to toView: UIView, safe: Bool? = false) {
         self.translatesAutoresizingMaskIntoConstraints = false

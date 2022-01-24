@@ -9,9 +9,9 @@ import Foundation
 // MARK: - ResultError
 struct ResultError: Codable {
     let resultMessage: String?
-    let errorCode: String? = nil
-    let traceID: String? = nil
-    let actionCode: String? = nil
+    var errorCode: String? = nil
+    var traceID: String? = nil
+    var actionCode: String? = nil
 
     enum CodingKeys: String, CodingKey {
         case resultMessage, errorCode

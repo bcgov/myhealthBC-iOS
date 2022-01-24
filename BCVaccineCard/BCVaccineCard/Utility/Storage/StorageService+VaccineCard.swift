@@ -31,6 +31,7 @@ protocol StorageVaccineCardManager {
         authenticated: Bool,
         federalPass: String?,
         vaxDates: [String]?,
+        sortOrder: Int64?,
         completion: @escaping(VaccineCard?)->Void
     )
     
@@ -49,7 +50,7 @@ protocol StorageVaccineCardManager {
     
     
     // MARK: Delete
-    func deleteVaccineCard(vaccineQR code: String)
+    func deleteVaccineCard(vaccineQR code: String, reSort: Bool?)
     
     // MARK: Fetch
     func fetchVaccineCards() -> [VaccineCard]
@@ -58,9 +59,25 @@ protocol StorageVaccineCardManager {
 
 extension StorageService: StorageVaccineCardManager {
     // MARK: Store
-    func storeVaccineVard(vaccineQR: String, name: String, issueDate: Date, hash: String, patient: Patient, authenticated: Bool, federalPass: String? = nil, vaxDates: [String]? = nil, completion: @escaping(VaccineCard?)->Void) {
+    func storeVaccineVard(vaccineQR: String,
+                          name: String,
+                          issueDate: Date,
+                          hash: String,
+                          patient: Patient,
+                          authenticated: Bool,
+                          federalPass: String? = nil,
+                          vaxDates: [String]? = nil,
+                          sortOrder: Int64? = nil,
+                          completion: @escaping(VaccineCard?)->Void
+    ) {
         guard let context = managedContext else {return completion(nil)}
-        let sortOrder = Int64(fetchVaccineCards().count)
+        let cardSortOrder: Int64
+        if let sortOrderPosition = sortOrder {
+            cardSortOrder = sortOrderPosition
+        } else {
+            cardSortOrder = Int64(fetchVaccineCards().count)
+        }
+        
         let card = VaccineCard(context: context)
         card.authenticated = authenticated
         card.code = vaccineQR
@@ -68,7 +85,7 @@ extension StorageService: StorageVaccineCardManager {
         card.patient = patient
         card.federalPass = federalPass
         card.vaxDates = vaxDates
-        card.sortOrder = sortOrder
+        card.sortOrder = cardSortOrder
         card.firHash = hash
         card.issueDate = issueDate
         createImmunizationRecords(for: card) { records in
@@ -108,21 +125,28 @@ extension StorageService: StorageVaccineCardManager {
     
     func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping (VaccineCard?) -> Void) {
         guard let context = managedContext, let card = fetchVaccineCards().filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return completion(nil)}
-        do {
-            card.code = model.code
-            card.vaxDates = model.vaxDates
-            card.federalPass = model.fedCode
-            card.firHash = model.hash
-            try context.save()
-            DispatchQueue.main.async {[weak self] in
-                guard let `self` = self else {return}
-                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
-                return completion(card)
+        card.code = model.code
+        card.vaxDates = model.vaxDates
+        card.federalPass = model.fedCode
+        card.firHash = model.hash
+        card.issueDate = Date(timeIntervalSince1970: model.issueDate)
+        card.name = model.name
+        if let immunizations = card.immunizationRecord {
+            card.removeFromImmunizationRecord(immunizations)
+        }
+        createImmunizationRecords(for: card) { records in
+            for record in records {
+                card.addToImmunizationRecord(record)
             }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            DispatchQueue.main.async {
-                return completion(nil)
+            do {
+                try context.save()
+                DispatchQueue.main.async {
+                    self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+                    return completion(card)
+                }
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+                completion(nil)
             }
         }
     }
@@ -149,7 +173,7 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Delete
-    func deleteVaccineCard(vaccineQR code: String) {
+    func deleteVaccineCard(vaccineQR code: String, reSort: Bool? = true) {
         guard let context = managedContext else {return}
         
         var cards = fetchVaccineCards()
@@ -165,8 +189,13 @@ extension StorageService: StorageVaccineCardManager {
         // Delete from core data
         delete(object: item)
         
+        // Blocking re-sort:
+        if let resort = reSort, !resort {
+            return
+        }
+        // update sort order for stored cards based on array index
         do {
-            // update sort order for stored cards based on array index
+           
             for (index, card) in cards.enumerated() {
                 card.sortOrder = Int64(index)
             }

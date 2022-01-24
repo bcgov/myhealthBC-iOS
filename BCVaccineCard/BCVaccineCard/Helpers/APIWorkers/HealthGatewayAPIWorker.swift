@@ -120,7 +120,12 @@ extension HealthGatewayAPIWorker {
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload?.records == nil || testResult.resourcePayload?.records.count == 0) {
                 // TODO: Error mapping here
-                self.delegate?.handleError(title: .error, error: ResultError(resultMessage: resultMessage))
+                if checkForMismatchActionCode(error: testResult.resultError) {
+                    self.delegate?.handleError(title: .theInformationDoesNotMatchTitle, error: ResultError(resultMessage: .theInformationDoesNotMatchDescription))
+                } else {
+                    let adjustedMessage = resultMessage == .errorParsingPHNFromHG ? .errorParsingPHNMessage : resultMessage
+                    self.delegate?.handleError(title: .error, error: ResultError(resultMessage: adjustedMessage))
+                }
             } else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
                 // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
                 self.retryCount += 1
@@ -130,7 +135,11 @@ extension HealthGatewayAPIWorker {
                 self.delegate?.handleTestResult(result: testResult)
             }
         case .failure(let error):
-            self.delegate?.handleError(title: .error, error: error)
+            if checkForMismatchActionCode(error: error) {
+                self.delegate?.handleError(title: .theInformationDoesNotMatchTitle, error: ResultError(resultMessage: .theInformationDoesNotMatchDescription))
+            } else {
+                self.delegate?.handleError(title: .error, error: error)
+            }
         }
     }
     
@@ -140,6 +149,11 @@ extension HealthGatewayAPIWorker {
             return
         }
         self.getTestResult(model: model, executingVC: vc)
+    }
+    
+    private func checkForMismatchActionCode(error: ResultError?) -> Bool {
+        guard let code = error?.actionCode, code == "MISMATCH" else { return false }
+        return true
     }
 }
 

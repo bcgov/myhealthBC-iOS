@@ -23,10 +23,32 @@ class HealthRecordDetailViewController: BaseViewController {
     
     private var dataSource: HealthRecordsDetailDataSource!
     private var userNumberHealthRecords: Int!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navSetup()
+        setupStorageListener()
+    }
+    
+    func setupStorageListener() {
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) { [weak self] notification in
+            guard let `self` = self else {return}
+            if let event = notification.object as? StorageService.StorageEvent<Any> {
+                switch event.entity {
+                case .VaccineCard :
+                    if let object = event.object as? VaccineCard, object.patient?.name == self.dataSource.name {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                case .CovidLabTestResult:
+                    if let object = event.object as? CovidLabTestResult, object.patient?.name == self.dataSource.name {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                default:
+                    break
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -87,7 +109,7 @@ extension HealthRecordDetailViewController {
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code)
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
-                StorageService.shared.deleteTestResult(id: recordId)
+                StorageService.shared.deleteTestResult(id: recordId, sendDeleteEvent: true)
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)

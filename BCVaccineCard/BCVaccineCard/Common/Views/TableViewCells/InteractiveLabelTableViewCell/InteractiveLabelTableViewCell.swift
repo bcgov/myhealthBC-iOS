@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct LinkedStrings: Equatable {
+struct LinkedStrings: Codable, Equatable {
     let text: String
     let link: String
 }
@@ -22,19 +22,6 @@ class InteractiveLabelTableViewCell: UITableViewCell {
     }
     
     func configure(string: String, linkedStrings: [LinkedStrings], textColor: UIColor, font: UIFont) {
-        clickableLabel.attributedText = attributedText(withString: string, linkedStrings: linkedStrings, textColor: textColor, font: font)
+        clickableLabel.attributedText = clickableLabel.attributedText(withString: string, linkedStrings: linkedStrings, textColor: textColor, font: font)
     }
-    
-    private func attributedText(withString string: String, linkedStrings: [LinkedStrings], textColor: UIColor, font: UIFont) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: textColor, NSAttributedString.Key.font: font])
-        for linkedString in linkedStrings {
-            let range = (string as NSString).range(of: linkedString.text)
-            if let url = URL(string: linkedString.link) {
-                let linkAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.link: url]
-                attributedString.addAttributes(linkAttribute, range: range)
-            } 
-        }
-        return attributedString
-    }
-    
 }
