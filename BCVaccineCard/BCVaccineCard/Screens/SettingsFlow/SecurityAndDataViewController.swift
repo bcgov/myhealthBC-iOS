@@ -125,7 +125,6 @@ class SecurityAndDataViewController: BaseViewController {
     // MARK: Helpers
     private func deleteRecordsForAuthenticatedUserAndLogout() {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-        Defaults.rememberGatewayDetails = nil
         performLogout(completion: {})
     }
     
