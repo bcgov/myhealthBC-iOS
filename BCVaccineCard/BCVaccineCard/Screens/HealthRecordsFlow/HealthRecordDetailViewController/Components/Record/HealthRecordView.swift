@@ -11,14 +11,11 @@ import UIKit
 extension HealthRecordsDetailDataSource.Record {
     fileprivate func getCellSections() -> [HealthRecordView.CellSection] {
         switch type {
-        case .covidImmunizationRecord(let model, let immunizations):
+        case .covidImmunizationRecord:
             return [.Header, .Fields]
-        case .covidTestResultRecord(model: let model):
-            if model.resultType == .positive {
-                return [.Header, .StaticText, .Fields]
-            } else {
-                return [.Header, .Fields]
-            }
+        case .covidTestResultRecord:
+            return [.Header, .Fields]
+            
         }
     }
 }
@@ -26,7 +23,6 @@ extension HealthRecordsDetailDataSource.Record {
 class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     enum CellSection {
         case Header
-        case StaticText
         case Fields
     }
     
@@ -44,7 +40,6 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.addEqualSizeContraints(to: self)
         tableView.register(UINib.init(nibName: BannerViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BannerViewTableViewCell.getName)
         tableView.register(UINib.init(nibName: TextListViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextListViewTableViewCell.getName)
-        tableView.register(UINib.init(nibName: StaticPositiveTestTableViewCell.getName, bundle: .main), forCellReuseIdentifier: StaticPositiveTestTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.showsVerticalScrollIndicator = false
         tableView.estimatedRowHeight = 600
@@ -75,8 +70,6 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         switch currentSection {
         case .Header:
             return headerCell(indexPath: indexPath, tableView: tableView)
-        case .StaticText:
-            return getStaticPositiveTestCell(indexPath: indexPath, tableView: tableView)
         case .Fields:
             return textListCellWithIndexPathOffset(indexPath: indexPath, tableView: tableView)
         }
@@ -90,16 +83,6 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         cell.configure(record: model)
-        return cell
-    }
-    
-    private func getStaticPositiveTestCell(indexPath: IndexPath, tableView: UITableView) -> UITableViewCell {
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: StaticPositiveTestTableViewCell.getName, for: indexPath) as? StaticPositiveTestTableViewCell
-        else {
-            return UITableViewCell()
-        }
-        cell.isUserInteractionEnabled = true
         return cell
     }
     

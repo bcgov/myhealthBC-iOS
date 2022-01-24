@@ -23,6 +23,23 @@ extension ImmunizationStatus {
 }
 
 extension HealthRecordsDetailDataSource.Record {
+    fileprivate func statusBannerViewType() -> StatusBannerView.BannerType {
+        switch self.type {
+        case .covidImmunizationRecord:
+            return .VaccineRecord
+        case .covidTestResultRecord:
+            var type = StatusBannerView.BannerType.CovidTest
+            if status?.lowercased() == .pending.lowercased() {
+                type = .Message
+            }
+            
+            if status?.lowercased() == .cancelled.lowercased() {
+                type = .Message
+            }
+            return type
+        }
+    }
+    
     func toBannerViewTableViewCellViewModel(completion: @escaping(BannerViewTableViewCell.ViewModel?)->Void) {
         switch type {
         case .covidImmunizationRecord(let model, _):
@@ -36,7 +53,7 @@ extension HealthRecordsDetailDataSource.Record {
                 let status = result.status.toCovidTestResult().getTitle
                 let backgroundColor = result.status.toCovidTestResult().getColor
                 DispatchQueue.main.async {
-                    return completion(BannerViewTableViewCell.ViewModel(statusImage: statusImage, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name, status: status, type: .VaccineRecord))
+                    return completion(BannerViewTableViewCell.ViewModel(statusImage: statusImage, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name, status: status, type: .VaccineRecord, attributedString: nil))
                 }
             }
             
@@ -48,19 +65,23 @@ extension HealthRecordsDetailDataSource.Record {
             if let date = model.collectionDateTime {
                 issueDate = "Tested on: \(date.issuedOnDateTime)"
             }
-            var name = name
+            var attributedString: NSMutableAttributedString? = nil
+            var name: String? = name
             var type = StatusBannerView.BannerType.CovidTest
             if status?.lowercased() == .pending.lowercased() {
                 type = .Message
-                name = .pendingTestRecordMessage
+                name = nil
+                attributedString = NSMutableAttributedString(string: .pendingTestRecordMessage)
             }
             
             if status?.lowercased() == .cancelled.lowercased() {
                 type = .Message
-                name = .cancelledTestRecordMessage
+                name = nil
+                attributedString = NSMutableAttributedString(string: .cancelledTestRecordMessage)
+                _ = attributedString?.setAsLink(textToFind: "BC CDC Test Results", linkURL: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/test-results")
             }
             
-            return completion(BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type))
+            return completion(BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type, attributedString: attributedString))
         }
     }
 }
@@ -73,10 +94,10 @@ class BannerViewTableViewCell: UITableViewCell {
         let backgroundColor: UIColor
         let statusColor: UIColor
         let issueDate: String
-        let name: String
+        let name: String?
         let status: String?
         let type: StatusBannerView.BannerType
-        
+        let attributedString: NSMutableAttributedString?
     }
     
     weak var bannerView: StatusBannerView?
@@ -87,7 +108,8 @@ class BannerViewTableViewCell: UITableViewCell {
     
     func configure(record: HealthRecordsDetailDataSource.Record) {
         self.bannerView = createView()
-        self.bannerView?.setup(in: self)
+        let type = record.statusBannerViewType()
+        self.bannerView?.setup(in: self, type: type)
         self.bannerView?.alpha = 0
         self.startLoadingIndicator()
         record.toBannerViewTableViewCellViewModel { [weak self] model in
@@ -100,13 +122,15 @@ class BannerViewTableViewCell: UITableViewCell {
                 backgroundColour: model.backgroundColor,
                 textColour: model.textColor,
                 statusColour: model.statusColor,
-                statusIconImage: model.statusImage)
+                statusIconImage: model.statusImage,
+                attributedString: model.attributedString)
                
             self.endLoadingIndicator()
             self.layoutIfNeeded()
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseIn) {[weak self] in
                 guard let `self` = self else {return}
                 self.bannerView?.alpha = 1
+                self.layoutIfNeeded()
             }
         }
         

@@ -49,7 +49,7 @@ protocol StorageTestResultManager {
     // MARK: Delete
     /// delete a test result for given id
     /// - Parameter id: id of record (not reportId).
-    func deleteTestResult(id: String)
+    func deleteTestResult(id: String, sendDeleteEvent: Bool)
     
     // MARK: Fetch
     func fetchTestResults() -> [CovidLabTestResult]
@@ -152,7 +152,7 @@ extension StorageService: StorageTestResultManager {
         let authStatus = existing.authenticated
         
         // Delete existing
-        deleteTestResult(id: existingId)
+        deleteTestResult(id: existingId, sendDeleteEvent: false)
         // Store the new one.
         if let object = storeTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus) {
             notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
@@ -163,10 +163,12 @@ extension StorageService: StorageTestResultManager {
     }
     
     // MARK: Delete
-    func deleteTestResult(id: String) {
+    func deleteTestResult(id: String, sendDeleteEvent: Bool) {
         guard let object = fetchTestResult(id: id) else {return}
         delete(object: object)
-        notify(event: StorageEvent(event: .Delete, entity: .CovidLabTestResult, object: object))
+        if sendDeleteEvent {
+            notify(event: StorageEvent(event: .Delete, entity: .CovidLabTestResult, object: object))
+        }
     }
     
     // MARK: Fetch

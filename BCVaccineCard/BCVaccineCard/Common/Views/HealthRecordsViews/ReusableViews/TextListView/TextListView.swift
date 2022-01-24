@@ -69,13 +69,22 @@ class TextListView: UIView {
     
     private func initializeLabel(textListProperties: TextListModel.TextProperties?) -> UILabel? {
         guard let properties = textListProperties else { return nil }
-        let label = UILabel()
-        label.textColor = AppColours.textBlack
-        let textSize = properties.fontSize
-        label.font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
-        label.text = properties.text
-        label.numberOfLines = 0
-        return label
+        if let links = properties.links, !links.isEmpty {
+            let label = InteractiveLinkLabel()
+            let textSize = properties.fontSize
+            let font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
+            label.attributedText = label.attributedText(withString: properties.text, linkedStrings: links, textColor: AppColours.textBlack, font: font)
+            label.numberOfLines = 0
+            return label
+        } else {
+            let label = UILabel()
+            label.textColor = AppColours.textBlack
+            let textSize = properties.fontSize
+            label.font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
+            label.text = properties.text
+            label.numberOfLines = 0
+            return label
+        }
     }
     
     // TODO: Setup accessibility

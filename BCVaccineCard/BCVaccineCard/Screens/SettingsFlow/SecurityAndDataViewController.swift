@@ -103,7 +103,13 @@ class SecurityAndDataViewController: BaseViewController {
     func deleteAllData() {
         self.alertConfirmation(title: .deleteData, message: .confirmDeleteAllRecordsAndSaveData, confirmTitle: .delete, confirmStyle: .destructive) {[weak self] in
             guard let `self` = self else {return}
-            self.deleteRecordsForAuthenticatedUserAndLogout()
+            Defaults.rememberGatewayDetails = nil
+            StorageService.shared.deleteAllStoredData()
+            self.performLogout(completion: {[weak self] in
+                guard let `self` = self else {return}
+                self.showBanner(message: .deletedAllRecordsAndSavedData, style: .Top)
+            })
+            
         } onCancel: {}
     }
     
@@ -119,11 +125,10 @@ class SecurityAndDataViewController: BaseViewController {
     // MARK: Helpers
     private func deleteRecordsForAuthenticatedUserAndLogout() {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-        Defaults.rememberGatewayDetails = nil
-        performLogout()
+        performLogout(completion: {})
     }
     
-    private func performLogout() {
+    private func performLogout(completion: @escaping()-> Void) {
         authManager.signout(in: self, completion: { [weak self] success in
             guard let `self` = self else {return}
             // Regardless of the result of the async logout, clear tokens.
