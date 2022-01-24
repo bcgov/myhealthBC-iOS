@@ -153,7 +153,6 @@
 "ViewDetailsOfCovidRecordsText" = "View the details of all your COVID Health Records";
 "FetchHealthRecordsIntroText" = "View the details of all your COVID Health Records";
 
-"DeleteAllRecordsAndSavedData" = "Delete all records and saved data";
 "DisableAnalytics" = "Disable Analytics";
 "EnableAnalytics" = "Enable Analytics";
 "AnalytyticsUsageDescription" = "Anonymized behavioural data is used to help improve the user experience";
@@ -173,3 +172,20 @@
 "Pending" = "Pending";
 "Instructions" = "Instructions";
 "InstructionsMessage" = "•\tYou need to self-isolate now.\n•\tThe people you live with will also need to self-isolate if they are not fully vaccinated.\n•\tPublic health will contact you.\n•\tMonitor your health and contact a health care provider or call 8-1-1 if you are concerned about your symptoms.\n•\tGo to Understanding Test Results for more information";
+
+"ProfileAndSettings" = "Profile & settings";
+"ViewProfile" = "View profile";
+"SecurityAndData" = "Security & data";
+"BcscLogin" = "Log in with BC Services Card";
+
+"LoginSuccess" = "Log in successful";
+"RecordsWillBeAutomaticallyAdded" = "Your records will be automatically added and updated in My Health BC.";
+"LoginDescription" = "When logged in, recrods will be automatically added and updated";
+"LocalAuthDescription" = "When enabled, you can unlock the app with touch touch ID instead of passcode";
+"TouchId" = "Touch ID";
+"DeleteAllRecordsAndSavedDataDescription" = "Log out of BC Services Card account and delete every records and saved personal information from My Health BC";
+"DeleteAllRecordsAndSavedData" = "Delete all records and saved data";
+"LogoutTitle" = "Log out of BC Service Card";
+"LogoutDescription" = "All records under the account will be removed";
+"LogOut" = "Log out";
+"ReAuthenticateMessage" = "You’re attempting to access records that are protected by BC Services Card, please log in again.";

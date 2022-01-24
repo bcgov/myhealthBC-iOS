@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static let sharedInstance = UIApplication.shared.delegate as? AppDelegate
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
     var window: UIWindow?
+    var authManager: AuthManager?
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -35,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #endif
         AnalyticsService.shared.setup()
         setupRootViewController()
+        authManager = AuthManager()
+        authManager?.initTokenExpieryTimer()
     }
     
     // MARK: - Core Data stack

@@ -37,11 +37,7 @@ class AuthManager {
     let defaultUserID = "default"
     private let keychain = Keychain(service: "ca.bc.gov.myhealth")
     
-    
-    func userId() -> String {
-        return defaultUserID
-    }
-    
+    // MARK: Computed
     var authToken: String? {
         guard let token = keychain[Key.authToken.rawValue] else {
             return nil
@@ -55,6 +51,25 @@ class AuthManager {
             let jwt = try decode(jwt: stringToken)
             let claim = jwt.claim(name: "hdid")
             return claim.string
+        } catch {
+            return nil
+        }
+    }
+    
+    var displayName: String? {
+        guard let stringToken = authToken else {return nil}
+        do {
+            let jwt = try decode(jwt: stringToken)
+            let firstNameClaim = jwt.claim(name: "given_name")
+            let lastNameClaim = jwt.claim(name: "family_name")
+            var result = ""
+            if let first = firstNameClaim.string {
+                result += first
+            }
+            if let last = lastNameClaim.string {
+                result += " \(last)"
+            }
+            return result
         } catch {
             return nil
         }
@@ -82,14 +97,24 @@ class AuthManager {
         return nil
     }
     
+    var refreshTokenExpiery: Date? {
+        guard let stringToken = refreshToken else {return nil}
+        do {
+            let jwt = try decode(jwt: stringToken)
+            return jwt.expiresAt
+        } catch {
+            return nil
+        }
+    }
+    
     var isAuthenticated: Bool {
-        guard let exp = authTokenExpiery, authToken != nil else {
+        guard authToken != nil else {
             return false
         }
-        // TODO: After token refresh is implemented, use this
-        // return exp > Date()
-        // For now:
-        return true
+        guard let refreshExpiery = refreshTokenExpiery else {
+            return false
+        }
+        return refreshExpiery > Date()
     }
     
     // MARK: Network
@@ -170,6 +195,9 @@ class AuthManager {
     }
     
     // MARK: STORAGE
+    public func clearData() {
+        removeAuthTokens()
+    }
     private func store(state: OIDAuthState) {
         guard state.isAuthorized else { return }
         if let authToken = state.lastTokenResponse?.accessToken {
@@ -223,4 +251,27 @@ class AuthManager {
             print(error)
         }
     }
+}
+
+
+extension AuthManager {
+    func initTokenExpieryTimer() {
+        if let refreshTokenExpiery = refreshTokenExpiery {
+            let timer = Timer(fireAt: refreshTokenExpiery, interval: 0, target: self, selector: #selector(refreshTokenExpired), userInfo: nil, repeats: false)
+            RunLoop.main.add(timer, forMode: .common)
+        }
+        
+        if let authTokenExpiery = authTokenExpiery {
+            let timer = Timer(fireAt: authTokenExpiery, interval: 0, target: self, selector: #selector(authTokenExpired), userInfo: nil, repeats: false)
+            RunLoop.main.add(timer, forMode: .common)
+        }
+    }
+    
+    @objc func refreshTokenExpired() {
+        NotificationCenter.default.post(name: .refreshTokenExpired, object: nil)
+    }
+    @objc func authTokenExpired() {
+        NotificationCenter.default.post(name: .authTokenExpired, object: nil)
+    }
+    
 }

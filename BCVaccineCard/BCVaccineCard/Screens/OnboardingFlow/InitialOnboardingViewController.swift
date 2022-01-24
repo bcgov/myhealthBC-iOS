@@ -44,16 +44,12 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
             // TODO: version
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
             
-            
-            // TODO: Enable Auth - comment below
-            goToHomeTransition()
-            // TODO: Enable Auth - uncomment below
-            // goToAuthentication()
+            goToAuthentication()
         }
     }
     
     private func goToAuthentication() {
-        AuthenticationViewController.displayFullScreen()
+        AuthenticationViewController.displayFullScreen(returnToHealthPass: true, initialView: .Landing)
     }
     
     private func goToHomeTransition() {

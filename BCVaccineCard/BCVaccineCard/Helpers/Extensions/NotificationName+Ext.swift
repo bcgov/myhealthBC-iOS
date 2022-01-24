@@ -13,4 +13,7 @@ extension Notification.Name {
     static let cardAddedNotification = Notification.Name("cardAddedNotification")
     static let storageChangeEvent = Notification.Name("StorageChangeEvent")
     static let doubleTappedTab = Notification.Name("DoubleTappedTab")
+    
+    static let refreshTokenExpired = Notification.Name("refreshTokenExpired")
+    static let authTokenExpired = Notification.Name("authTokenExpired")
 }

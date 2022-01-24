@@ -110,8 +110,8 @@ extension String {
     static var anyDose: String { return "AnyDose".localized }
     static var dateOfTest: String{ return "DateOfTest".localized }
     static var phnFooter: String { return "PHNFooter".localized }
-    static var privacyStatement: String { return "PrivacyStatement".localized }
-    static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized } //Don't think we're using this
+    static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }
+    static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
 //    static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
     static func privacyPolicyStatement(context: String) -> String {
         return String(format: "PrivacyPolicyStatement".localized, context)
@@ -209,12 +209,28 @@ extension String {
     static var pending: String { return "Pending".localized }
     
     // MARK: Settings
+    static var profileAndSettings: String { return "ProfileAndSettings".localized }
+    static var viewProfile: String { return "ViewProfile".localized }
+    static var bcscLogin: String { return "BcscLogin".localized }
+    static var securityAndData: String { return "SecurityAndData".localized }
+    static var privacyStatement: String { return "PrivacyStatement".localized }
+    
+    static var deleteAllRecordsAndSavedDataDescription: String { return "DeleteAllRecordsAndSavedDataDescription".localized }
     static var deleteAllRecordsAndSavedData: String { return "DeleteAllRecordsAndSavedData".localized }
     static var disableAnalytics: String { return "DisableAnalytics".localized }
     static var enableAnalytics: String { return "EnableAnalytics".localized }
     static var analytyticsUsageDescription: String { return "AnalytyticsUsageDescription".localized }
     static var deleteData: String { return "DeleteData".localized }
     static var confirmDeleteAllRecordsAndSaveData: String { return "ConfirmDeleteAllRecordsAndSaveData".localized }
+    static var loginSuccess: String { return "LoginSuccess".localized }
+    static var recordsWillBeAutomaticallyAdded: String { return "RecordsWillBeAutomaticallyAdded".localized }
+    static var loginDescription: String { return "LoginDescription".localized }
+    static var localAuthDescription: String { return "LocalAuthDescription".localized }
+    static var touchId: String { return "TouchId".localized }
+    static var logoutTitle: String { return "LogoutTitle".localized }
+    static var logoutDescription: String { return "LogoutDescription".localized }
+    static var logOut: String { return "LogOut".localized }
+    static var reAuthenticateMessage: String { return "ReAuthenticateMessage".localized }
     static var deletedAllRecordsAndSavedData: String { return "DeletedAllRecordsAndSavedData".localized }
 }
 
