@@ -105,7 +105,11 @@ class SecurityAndDataViewController: BaseViewController {
             guard let `self` = self else {return}
             Defaults.rememberGatewayDetails = nil
             StorageService.shared.deleteAllStoredData()
-            self.performLogout()
+            self.performLogout(completion: {[weak self] in
+                guard let `self` = self else {return}
+                self.showBanner(message: .deletedAllRecordsAndSavedData, style: .Top)
+            })
+            
         } onCancel: {}
     }
     
@@ -122,10 +126,10 @@ class SecurityAndDataViewController: BaseViewController {
     private func deleteRecordsForAuthenticatedUserAndLogout() {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
         Defaults.rememberGatewayDetails = nil
-        performLogout()
+        performLogout(completion: {})
     }
     
-    private func performLogout() {
+    private func performLogout(completion: @escaping()-> Void) {
         authManager.signout(in: self, completion: { [weak self] success in
             guard let `self` = self else {return}
             // Regardless of the result of the async logout, clear tokens.
