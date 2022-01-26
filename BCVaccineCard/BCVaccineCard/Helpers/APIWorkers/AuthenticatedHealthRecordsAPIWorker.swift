@@ -7,11 +7,16 @@
 // TODO: Connor 2: Create AuthenticatedHealthRecordsAPIWorker - similar to background test result api worker - except records will be stored/modified in core data in this worker, and then will notify tab bar that the record has been updated
 import UIKit
 
-// FIXME: Instead of handle delegates, should use notification system instead to notify banner view of fetching progress
+// FIXME: Adjust delegates to handle progress (pass back value, and completed fetch type)
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func handleTestResult(result: AuthenticatedTestResultsResponseModel)
     func handleVaccineCard(result: GatewayVaccineCardResponse)
     func handleError(title: String, error: ResultError)
+}
+
+enum AuthenticationFetchType {
+    case VaccineCard
+    case TestResults
 }
 
 class AuthenticatedHealthRecordsAPIWorker: NSObject {
@@ -134,6 +139,13 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
     }
+}
+
+// MARK: Handle results in core data
+extension AuthenticatedHealthRecordsAPIWorker {
+    // TODO: Handle vaccine card response in core data here
+    
+    // TODO: Handle test results response in core data here
 }
 
 struct AuthenticatedAPIWorkerRetryDetails {
