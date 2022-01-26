@@ -31,6 +31,8 @@ struct UrlAccessor {
         return self.baseUrl.appendingPathComponent("laboratoryservice")
     }
     
+    // TODO: Add patient details endpoint here
+    
 }
 
 extension UrlAccessor: EndpointsAccessor {

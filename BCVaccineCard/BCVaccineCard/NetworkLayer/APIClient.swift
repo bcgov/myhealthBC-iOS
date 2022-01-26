@@ -77,6 +77,8 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
+    // TODO: Get patient details here...
+    
 }
 
 // MARK: QUEUEIT Logic here
