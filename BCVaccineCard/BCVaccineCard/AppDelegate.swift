@@ -41,31 +41,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // MARK: - Core Data stack
-        lazy var persistentContainer: NSPersistentContainer = {
-            let container = NSPersistentContainer(name: "BCVaccineCard")
-
-            do {
-                let options = [
-                    EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key
-                ]
-                
-                let description = try EncryptedStore.makeDescription(options: options, configuration: nil)
-                container.persistentStoreDescriptions = [ description ]
-            }
-            catch {
-                // TODO: WE need to handle this better
-                fatalError("Could not initialize encrypted database storage: " + error.localizedDescription)
-            }
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "BCVaccineCard")
+        
+        do {
+            let options = [
+                EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key
+            ]
             
-            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-                if let error = error as NSError? {
-                    // TODO: WE need to handle this better
-                    fatalError("Unresolved error \(error), \(error.userInfo)")
-                }
-            })
-            return container
-        }()
-
+            let description = try EncryptedStore.makeDescription(options: options, configuration: nil)
+            container.persistentStoreDescriptions = [ description ]
+        }
+        catch {
+            // TODO: WE need to handle this better
+            fatalError("Could not initialize encrypted database storage: " + error.localizedDescription)
+        }
+        
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                // TODO: WE need to handle this better
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+    
     
     // MARK: - Core Data Saving support
     
@@ -90,17 +90,17 @@ extension AppDelegate {
     func application(_ app: UIApplication,
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-      // Sends the URL to the current authorization flow (if any) which will
-      // process it if it relates to an authorization response.
-      if let authorizationFlow = self.currentAuthorizationFlow,
-                                 authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-        self.currentAuthorizationFlow = nil
-        return true
-      }
-
-      // Your additional URL handling (if any)
-
-      return false
+        // Sends the URL to the current authorization flow (if any) which will
+        // process it if it relates to an authorization response.
+        if let authorizationFlow = self.currentAuthorizationFlow,
+           authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+            self.currentAuthorizationFlow = nil
+            return true
+        }
+        
+        // Your additional URL handling (if any)
+        
+        return false
     }
 }
 
@@ -111,11 +111,15 @@ extension AppDelegate {
         guard let first = unseen.first else {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
+            // Display Auth
+            self.performLocalAuth(on: vc)
             return
         }
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
+        // Display Auth
+        self.performLocalAuth(on: vc)
         
     }
 }
@@ -136,3 +140,29 @@ extension AppDelegate {
     }
 }
 
+
+// MARK: Local Auth
+extension AppDelegate {
+    private func performLocalAuth(on viewController: UIViewController) {
+        let manager = LocalAuthManager()
+        if manager.isEnabled, manager.availableAuthMethods().isEmpty {
+            localNoAvailableAuth()
+            return
+        }
+        // Use the manager to perform authentication. It has a view of its own which is auto dismissed.
+        // localAuthFailed () is called if it was unsuccessful for FE to know how to handle it
+        manager.performLocalAuth(on: viewController) { [weak self] status in
+            if status != .Authorized {self?.localAuthFailed()}
+        }
+    }
+    
+    private func localAuthFailed() {
+        //TODO:
+    }
+    
+    private func localNoAvailableAuth() {
+        //TODO:
+        self.window?.rootViewController?.view.startLoadingIndicator(backgroundColor: .white)
+        self.window?.rootViewController?.alert(title: "Unsecure device", message: "Please enable authentication on your device to proceed")
+    }
+}

@@ -77,5 +77,8 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+    
+    <key>NSFaceIDUsageDescription</key>
+        <string>To authenticate you</string>
 </dict>
 </plist>
