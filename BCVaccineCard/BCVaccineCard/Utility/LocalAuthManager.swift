@@ -58,6 +58,7 @@ class LocalAuthManager {
                 self.performAuth(policy: .deviceOwnerAuthentication, completion: { passStatus in
                     switch passStatus {
                     case .Authorized:
+                        self.view.style(state: .Success)
                         return completion(passStatus)
                     case .Unauthorized:
                         self.view.style(state: .Fail)
@@ -73,7 +74,7 @@ class LocalAuthManager {
 
     private func performAuth(policy: LAPolicy, completion: @escaping(_ status: AuthStatus) -> Void) {
         let context = LAContext()
-        let reason = "TODO"
+        let reason = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication."
         var error: NSError?
         if context.canEvaluatePolicy(policy, error: &error) {
 
@@ -95,6 +96,9 @@ class LocalAuthManager {
 
 import UIKit
 class LocalAuthView: UIView {
+    
+    weak var parent: UIViewController?
+    
     enum State {
         case Success
         case Fail
@@ -104,7 +108,8 @@ class LocalAuthView: UIView {
     func display(on viewController: UIViewController) {
         viewController.view.addSubview(self)
         addEqualSizeContraints(to: viewController.view)
-        self.backgroundColor = .orange
+        self.backgroundColor = AppColours.appBlue
+        self.parent = viewController
         layoutIfNeeded()
     }
 
@@ -137,8 +142,18 @@ class LocalAuthView: UIView {
     }
 
     func setSuccess() {
-        // TODO
-        self.backgroundColor = .green
+        DispatchQueue.main.async {[weak self] in
+            guard let `self` = self else {return}
+            UIView.animate(withDuration: 0.3, delay: 1, options: .curveEaseOut) {
+                [weak self] in
+                guard let self = self else {return}
+                self.alpha = 0
+                self.layoutIfNeeded()
+            } completion: { [weak self] done in
+                guard let self = self else {return}
+                self.removeFromSuperview()
+            }
+        }
     }
 
     func setFail() {
@@ -149,6 +164,11 @@ class LocalAuthView: UIView {
     func setUnAvailable() {
         // TODO
         self.backgroundColor = .red
+        guard let parent = parent else {
+            return
+        }
+        parent.alertConfirmation(title: <#T##String#>, message: <#T##String#>, confirmTitle: <#T##String#>, confirmStyle: <#T##UIAlertAction.Style#>, onConfirm: <#T##() -> Void#>, onCancel: <#T##() -> Void#>)
+
     }
 }
 
