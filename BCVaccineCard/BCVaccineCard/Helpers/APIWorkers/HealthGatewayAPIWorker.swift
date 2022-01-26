@@ -162,14 +162,14 @@ struct HealthGatewayAPIWorkerRetryDetails {
     var vaccineCardDetails: VaccineCardDetails?
     var testResultDetails: TestResultDetails?
     
-    struct TestResultDetails {
-        var model: GatewayTestResultRequest
+    struct VaccineCardDetails {
+        var model: GatewayVaccineCardRequest
         var queueItToken: String?
         var executingVC: UIViewController
     }
     
-    struct AuthenticatedTestResultsDetails {
-        var authCredentials: AuthenticationRequestObject
+    struct TestResultDetails {
+        var model: GatewayTestResultRequest
         var queueItToken: String?
         var executingVC: UIViewController
     }

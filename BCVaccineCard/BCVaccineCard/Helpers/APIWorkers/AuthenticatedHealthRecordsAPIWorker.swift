@@ -9,6 +9,7 @@ import UIKit
 
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func handleTestResult(result: AuthenticatedTestResultsResponseModel)
+    func handleVaccineCard(result: GatewayVaccineCardResponse)
     func handleError(title: String, error: ResultError)
 }
 
@@ -40,6 +41,24 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 }
             } else {
                 self.handleTestResultsResponse(result: result)
+            }
+        }
+    }
+    
+    func getAuthenticatedVaccineCard(authCredentials: AuthenticationRequestObject, executingVC: UIViewController) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedVaccineCardDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedVaccineCardDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached, executingVC: executingVC)
+        apiClient.getAuthenticatedVaccineCard(authCredentials, token: queueItTokenCached, executingVC: executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedVaccineCardDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedVaccineCard(authCredentials, token: queueItToken, executingVC: executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else {return}
+                    self.handleVaccineCardResponse(result: result)
+                }
+            } else {
+                self.handleVaccineCardResponse(result: result)
             }
         }
     }
@@ -78,6 +97,34 @@ extension AuthenticatedHealthRecordsAPIWorker {
             return
         }
         self.getAuthenticatedTestResults(authCredentials: authCredentials, executingVC: vc)
+    }
+    
+    private func handleVaccineCardResponse(result: Result<GatewayVaccineCardResponse, ResultError>) {
+        switch result {
+        case .success(let vaccineCard):
+            // Note: Have to check for error here because error is being sent back on a 200 response
+            if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode?.data == nil && vaccineCard.resourcePayload?.federalVaccineProof?.data == nil) {
+                // TODO: Error mapping here
+                self.delegate?.handleError(title: .error, error: ResultError(resultMessage: resultMessage))
+            } else if vaccineCard.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicVaccineStatusRetryMaxForFedPass, let retryinMS = vaccineCard.resourcePayload?.retryin {
+                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+                self.retryCount += 1
+                let retryInSeconds = Double(retryinMS/1000)
+                self.perform(#selector(self.retryGetVaccineCardRequest), with: nil, afterDelay: retryInSeconds)
+            } else {
+                self.delegate?.handleVaccineCard(result: vaccineCard)
+            }
+        case .failure(let error):
+            self.delegate?.handleError(title: .error, error: error)
+        }
+    }
+    
+    @objc private func retryGetVaccineCardRequest() {
+        guard let authCredentials = self.requestDetails.authenticatedVaccineCardDetails?.authCredentials, let vc = self.requestDetails.authenticatedVaccineCardDetails?.executingVC else {
+            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            return
+        }
+        self.getAuthenticatedVaccineCard(authCredentials: authCredentials, executingVC: vc)
     }
 }
 
