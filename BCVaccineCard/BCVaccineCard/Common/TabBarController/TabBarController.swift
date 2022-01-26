@@ -48,11 +48,13 @@ class TabBarController: UITabBarController {
     
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
+    var authWorker: AuthenticatedHealthRecordsAPIWorker?
     
     // TODO: Connor 3: Create authenticated API worker in tab bar initialization, which we will call from the authentication component, triggering updates in our listener in this screen
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
         setup(selectedIndex: 0)
     }
     

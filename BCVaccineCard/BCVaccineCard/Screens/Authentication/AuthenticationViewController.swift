@@ -147,6 +147,12 @@ class AuthenticationViewController: UIViewController {
             // TODO: Fetch records here
             // use AuthManager().hdid and AuthManager().authToken
             // Steps: follow the '// TODO: CONNOR' comments and you'll see a number
+            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
+                // TODO: Error handling here
+                return
+            }
+            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+            tabVC.authWorker?.initializeRequests(authCredentials: authCreds, executingVC: <#T##UIViewController#>)
         }
         
         if withDelay {
