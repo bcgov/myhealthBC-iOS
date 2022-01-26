@@ -161,14 +161,6 @@ extension HealthGatewayAPIWorker {
 struct HealthGatewayAPIWorkerRetryDetails {
     var vaccineCardDetails: VaccineCardDetails?
     var testResultDetails: TestResultDetails?
-    var authenticatedTestResultsDetails: AuthenticatedTestResultsDetails?
-    
-    
-    struct VaccineCardDetails {
-        var model: GatewayVaccineCardRequest
-        var queueItToken: String?
-        var executingVC: UIViewController
-    }
     
     struct TestResultDetails {
         var model: GatewayTestResultRequest

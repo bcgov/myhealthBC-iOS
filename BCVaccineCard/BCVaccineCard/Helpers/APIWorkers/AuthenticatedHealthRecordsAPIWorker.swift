@@ -18,7 +18,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     weak private var delegate: AuthenticatedHealthRecordsAPIWorkerDelegate?
     
     private var retryCount = 0
-    private var requestDetails = HealthGatewayAPIWorkerRetryDetails()
+    private var requestDetails = AuthenticatedAPIWorkerRetryDetails()
     private var includeQueueItUI = false
     
     init(delegateOwner: UIViewController) {
@@ -28,12 +28,12 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         
     func getAuthenticatedTestResults(authCredentials: AuthenticationRequestObject, executingVC: UIViewController) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-        requestDetails.authenticatedTestResultsDetails = HealthGatewayAPIWorkerRetryDetails.AuthenticatedTestResultsDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached, executingVC: executingVC)
+        requestDetails.authenticatedTestResultsDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedTestResultsDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached, executingVC: executingVC)
         apiClient.getAuthenticatedTestResults(authCredentials, token: queueItTokenCached, executingVC: executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
-                self.requestDetails.testResultDetails?.queueItToken = queueItToken
+                self.requestDetails.authenticatedTestResultsDetails?.queueItToken = queueItToken
                 self.apiClient.getAuthenticatedTestResults(authCredentials, token: queueItToken, executingVC: executingVC, includeQueueItUI: false) { [weak self] result, _ in
                     guard let `self` = self else {return}
                     self.handleTestResultsResponse(result: result)
@@ -78,5 +78,23 @@ extension AuthenticatedHealthRecordsAPIWorker {
             return
         }
         self.getAuthenticatedTestResults(authCredentials: authCredentials, executingVC: vc)
+    }
+}
+
+struct AuthenticatedAPIWorkerRetryDetails {
+    var authenticatedVaccineCardDetails: AuthenticatedVaccineCardDetails?
+    var authenticatedTestResultsDetails: AuthenticatedTestResultsDetails?
+    
+    
+    struct AuthenticatedVaccineCardDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+        var executingVC: UIViewController
+    }
+
+    struct AuthenticatedTestResultsDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+        var executingVC: UIViewController
     }
 }
