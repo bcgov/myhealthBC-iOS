@@ -13,6 +13,7 @@ protocol EndpointsAccessor {
     var getTestResults: URL { get }
     var getAuthenticatedVaccineCard: URL { get }
     var getAuthenticatedTestResults: URL { get }
+    func getAuthenticatedPatientDetails(hdid: String) -> URL
 }
 
 struct UrlAccessor {
@@ -31,8 +32,10 @@ struct UrlAccessor {
         return self.baseUrl.appendingPathComponent("laboratoryservice")
     }
     
-    // TODO: Add patient details endpoint here
-    
+    private var patientServiceBaseURL: URL {
+        return self.baseUrl.appendingPathComponent("patientservice")
+    }
+
 }
 
 extension UrlAccessor: EndpointsAccessor {
@@ -51,6 +54,10 @@ extension UrlAccessor: EndpointsAccessor {
     
     var getAuthenticatedTestResults: URL {
         return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory")
+    }
+    
+    func getAuthenticatedPatientDetails(hdid: String) -> URL {
+        return self.patientServiceBaseURL.appendingPathComponent("v1/api/Patient").appendingPathComponent(hdid)
     }
 }
 

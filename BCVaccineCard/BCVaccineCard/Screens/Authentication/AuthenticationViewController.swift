@@ -152,7 +152,7 @@ class AuthenticationViewController: UIViewController {
                 return
             }
             let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-            tabVC.authWorker?.initializeRequests(authCredentials: authCreds)
+            tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds)
         }
         
         if withDelay {

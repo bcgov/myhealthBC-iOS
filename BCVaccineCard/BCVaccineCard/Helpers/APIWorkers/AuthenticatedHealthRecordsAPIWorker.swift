@@ -28,6 +28,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private var requestDetails = AuthenticatedAPIWorkerRetryDetails()
     private var includeQueueItUI = false
     private var executingVC: UIViewController
+    private var patientDetails: AuthenticatedPatientDetailsResponseObject?
     
     init(delegateOwner: UIViewController) {
         self.apiClient = APIClient(delegateOwner: delegateOwner)
@@ -35,7 +36,38 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         self.executingVC = delegateOwner
     }
     
-    func initializeRequests(authCredentials: AuthenticationRequestObject) {
+    // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
+    func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedPatientDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else {return}
+                    self.initializePatientDetails(authCredentials: authCredentials, result: result)
+                    
+                }
+            } else {
+                self.initializePatientDetails(authCredentials: authCredentials, result: result)
+            }
+        }
+    }
+    
+    private func initializePatientDetails(authCredentials: AuthenticationRequestObject, result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>) {
+        switch result {
+        case .success(let patientDetails):
+            self.patientDetails = patientDetails
+            initializeRequests(authCredentials: authCredentials)
+        case .failure(let error):
+            print(error)
+            //TODO: Handle error here
+        }
+    }
+    
+    private func initializeRequests(authCredentials: AuthenticationRequestObject) {
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
     }
@@ -80,6 +112,14 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
 
 // MARK: Handling responses
 extension AuthenticatedHealthRecordsAPIWorker {
+    
+    @objc private func retryGetPatientDetailsRequest() {
+        guard let authCredentials = self.requestDetails.authenticatedPatientDetails?.authCredentials else {
+            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            return
+        }
+        self.getAuthenticatedPatientDetails(authCredentials: authCredentials)
+    }
     
     private func handleTestResultsResponse(result: Result<AuthenticatedTestResultsResponseModel, ResultError>) {
         switch result {
@@ -149,9 +189,14 @@ extension AuthenticatedHealthRecordsAPIWorker {
 }
 
 struct AuthenticatedAPIWorkerRetryDetails {
+    var authenticatedPatientDetails: AuthenticatedPatientDetails?
     var authenticatedVaccineCardDetails: AuthenticatedVaccineCardDetails?
     var authenticatedTestResultsDetails: AuthenticatedTestResultsDetails?
     
+    struct AuthenticatedPatientDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+    }
     
     struct AuthenticatedVaccineCardDetails {
         var authCredentials: AuthenticationRequestObject
