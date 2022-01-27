@@ -286,8 +286,8 @@ extension UIViewController {
         StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, completion: {_ in completion()})
     }
     
-    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
-        StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] card in
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
                 self.showBanner(message: .updatedCard, style: .Top)

@@ -6,11 +6,12 @@
 //
 // TODO: Connor 2: Create AuthenticatedHealthRecordsAPIWorker - similar to background test result api worker - except records will be stored/modified in core data in this worker, and then will notify tab bar that the record has been updated
 import UIKit
+import BCVaccineValidator
 
 // FIXME: Adjust delegates to handle progress (pass back value, and completed fetch type)
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int)
-    func handleError(title: String, error: ResultError)
+    func handleError(error: String?)
 }
 
 enum AuthenticationFetchType {
@@ -121,7 +122,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetPatientDetailsRequest() {
         guard let authCredentials = self.requestDetails.authenticatedPatientDetails?.authCredentials else {
-            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            self.delegate?.handleError(error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedPatientDetails(authCredentials: authCredentials)
@@ -129,7 +130,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetTestResultsRequest() {
         guard let authCredentials = self.requestDetails.authenticatedTestResultsDetails?.authCredentials else {
-            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            self.delegate?.handleError(error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
@@ -137,7 +138,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetVaccineCardRequest(completion: () -> Void) {
         guard let authCredentials = self.requestDetails.authenticatedVaccineCardDetails?.authCredentials else {
-            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            self.delegate?.handleError(error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials, completion: completion)
@@ -154,7 +155,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload == nil || testResult.resourcePayload?.count == 0) {
                 // TODO: Error mapping here
-                self.delegate?.handleError(title: .error, error: ResultError(resultMessage: resultMessage))
+                self.delegate?.handleError(error: resultMessage)
             }
             // TODO: Find out if retry logic is needed
 //            else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
@@ -168,7 +169,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 
             }
         case .failure(let error):
-            self.delegate?.handleError(title: .error, error: error)
+            self.delegate?.handleError(error: error.resultMessage)
         }
     }
         
@@ -178,7 +179,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode?.data == nil && vaccineCard.resourcePayload?.federalVaccineProof?.data == nil) {
                 // TODO: Error mapping here
-                self.delegate?.handleError(title: .error, error: ResultError(resultMessage: resultMessage))
+                self.delegate?.handleError(error: resultMessage)
             } else if vaccineCard.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicVaccineStatusRetryMaxForFedPass, let retryinMS = vaccineCard.resourcePayload?.retryin {
                 // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
                 self.retryCount += 1
@@ -188,22 +189,77 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.handleVaccineCardInCoreData(vaccineCard: vaccineCard, completion: completion)
             }
         case .failure(let error):
-            self.delegate?.handleError(title: .error, error: error)
+            self.delegate?.handleError(error: error.resultMessage)
         }
     }
     
 }
 
-// MARK: Handle results in core data
+// MARK: Handle Vaccine results in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     // TODO: Handle vaccine card response in core data here
     private func handleVaccineCardInCoreData(vaccineCard: GatewayVaccineCardResponse, completion: () -> Void) {
         
-        
-        self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: <#T##Int#>, completedCount: <#T##Int#>)
+        let qrResult = vaccineCard.transformResponseIntoQRCode()
+        guard let code = qrResult.qrString else {
+            self.delegate?.handleError(error: qrResult.error)
+            return
+        }
+        BCVaccineValidator.shared.validate(code: code) { [weak self] result in
+            guard let `self` = self else { return }
+            guard let data = result.result else {
+                self.delegate?.handleError(error: .invalidQRCodeMessage)
+                return
+            }
+            DispatchQueue.main.async { [weak self] in
+                guard let `self` = self else {return}
+                var model = self.executingVC.convertScanResultModelIntoLocalData(data: data, source: .healthGateway)
+                model.fedCode = vaccineCard.resourcePayload?.federalVaccineProof?.data
+                self.coreDataLogic(localModel: model)
+            }
+        }
         completion()
     }
     
+    private func coreDataLogic(localModel: LocallyStoredVaccinePassportModel) {
+        let model = localModel.transform()
+        model.state { [weak self] state in
+            guard let `self` = self else {return}
+            switch state {
+            case .isNew:
+                self.storeCard(model: model)
+            case .canUpdateExisting, .exists, .isOutdated, .UpdatedFederalPass:
+                self.updateCard(model: model)
+            }
+        }
+    }
+    
+    private func storeCard(model: AppVaccinePassportModel) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.executingVC.storeVaccineCard(model: model.transform(),
+                                  authenticated: true,
+                                  sortOrder: nil,
+                                  completion: {
+                self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: 1, completedCount: 1)
+            })
+        }
+    }
+    
+    private func updateCard(model: AppVaccinePassportModel) {
+        let localModel = model.transform()
+        StorageService.shared.updateVaccineCard(newData: localModel, authenticated: true, completion: {[weak self] card in
+            guard let `self` = self else {return}
+            if card != nil {
+                self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: 1, completedCount: 1)
+            } else {
+                self.delegate?.handleError(error: .updateCardFailed)
+            }
+        })
+    }
+}
+
+// MARK: Handle test results in core data
+extension AuthenticatedHealthRecordsAPIWorker {
     // TODO: Handle test results response in core data here
     private func handleTestResultsInCoreData(testResult: AuthenticatedTestResultsResponseModel) {
         
@@ -232,3 +288,25 @@ struct AuthenticatedAPIWorkerRetryDetails {
         var queueItToken: String?
     }
 }
+
+//if let id = handleTestResultInCoreData(gatewayResponse: result, authenticated: false) { /*if id exists, then increase loader value, if not, then increase error array check*/  }
+
+//func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool) -> String? {
+//    // Note, this first guard statement is to handle the case when health gateway is wonky - throws success with no error but has key nil values, so in this case we don't want to store a dummy patient value, as that's what was happening
+//    guard let collectionDate = gatewayResponse.resourcePayload?.records.first?.collectionDateTime,
+//          !collectionDate.trimWhiteSpacesAndNewLines.isEmpty, let reportID = gatewayResponse.resourcePayload?.records.first?.reportId,
+//          !reportID.trimWhiteSpacesAndNewLines.isEmpty else { return nil }
+//    guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
+//    guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
+//    let bday: Date?
+//    if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false),
+//       let dob = dataSource[dobIndexPath.row].configuration.text,
+//       let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) {
+//        bday = dateOfBirth
+//    } else {
+//        bday = nil
+//    }
+//    guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday) else {return nil}
+//    guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
+//    return object.id
+//}
