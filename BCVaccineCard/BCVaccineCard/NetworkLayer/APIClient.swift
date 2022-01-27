@@ -57,11 +57,14 @@ class APIClient {
         
         let headerParameters: Headers = [
             Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+        ]
+        
+        let parameters: [String: String] = [
             Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
     }
     
     func getAuthenticatedTestResults(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedTestResultsResponseModel>) {
@@ -70,11 +73,14 @@ class APIClient {
         
         let headerParameters: Headers = [
             Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
-            Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
         ]
         
+        let parameters: [String: String] = [
+            Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
+        ]
+       
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
     }
     
     func getAuthenticatedPatientDetails(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedPatientDetailsResponseObject>) {

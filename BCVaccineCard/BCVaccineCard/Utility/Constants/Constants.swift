@@ -56,7 +56,7 @@ struct Constants {
     }
     
     struct AuthenticationHeaderKeys {
-        static let authToken = "Authentication"
+        static let authToken = "Authorization"
         static let hdid = "hdid"
     }
     

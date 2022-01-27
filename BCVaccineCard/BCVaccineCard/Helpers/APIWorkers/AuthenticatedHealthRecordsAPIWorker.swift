@@ -9,8 +9,7 @@ import UIKit
 
 // FIXME: Adjust delegates to handle progress (pass back value, and completed fetch type)
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
-    func handleTestResult(result: AuthenticatedTestResultsResponseModel)
-    func handleVaccineCard(result: GatewayVaccineCardResponse)
+    func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int)
     func handleError(title: String, error: ResultError)
 }
 
@@ -68,8 +67,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
-        self.getAuthenticatedTestResults(authCredentials: authCredentials)
-        self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
+        self.getAuthenticatedVaccineCard(authCredentials: authCredentials) {
+            self.getAuthenticatedTestResults(authCredentials: authCredentials)
+        }
     }
         
     private func getAuthenticatedTestResults(authCredentials: AuthenticationRequestObject) {
@@ -90,27 +90,33 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
-    private func getAuthenticatedVaccineCard(authCredentials: AuthenticationRequestObject) {
+    private func getAuthenticatedVaccineCard(authCredentials: AuthenticationRequestObject, completion: () -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedVaccineCardDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedVaccineCardDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
         apiClient.getAuthenticatedVaccineCard(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
-            guard let `self` = self else {return}
+            guard let `self` = self else {
+                completion()
+                return
+            }
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
                 self.requestDetails.authenticatedVaccineCardDetails?.queueItToken = queueItToken
                 self.apiClient.getAuthenticatedVaccineCard(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
-                    guard let `self` = self else {return}
-                    self.handleVaccineCardResponse(result: result)
+                    guard let `self` = self else {
+                        completion()
+                        return
+                    }
+                    self.handleVaccineCardResponse(result: result, completion: completion)
                 }
             } else {
-                self.handleVaccineCardResponse(result: result)
+                self.handleVaccineCardResponse(result: result, completion: completion)
             }
         }
     }
     
 }
 
-// MARK: Handling responses
+// MARK: Retry functions
 extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetPatientDetailsRequest() {
@@ -120,6 +126,27 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
         self.getAuthenticatedPatientDetails(authCredentials: authCredentials)
     }
+    
+    @objc private func retryGetTestResultsRequest() {
+        guard let authCredentials = self.requestDetails.authenticatedTestResultsDetails?.authCredentials else {
+            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            return
+        }
+        self.getAuthenticatedTestResults(authCredentials: authCredentials)
+    }
+    
+    @objc private func retryGetVaccineCardRequest(completion: () -> Void) {
+        guard let authCredentials = self.requestDetails.authenticatedVaccineCardDetails?.authCredentials else {
+            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
+            return
+        }
+        self.getAuthenticatedVaccineCard(authCredentials: authCredentials, completion: completion)
+    }
+    
+}
+
+// MARK: Handling responses
+extension AuthenticatedHealthRecordsAPIWorker {
     
     private func handleTestResultsResponse(result: Result<AuthenticatedTestResultsResponseModel, ResultError>) {
         switch result {
@@ -137,22 +164,15 @@ extension AuthenticatedHealthRecordsAPIWorker {
 //                self.perform(#selector(self.retryGetTestResultsRequest), with: nil, afterDelay: retryInSeconds)
 //            }
             else {
-                self.delegate?.handleTestResult(result: testResult)
+                self.handleTestResultsInCoreData(testResult: testResult)
+                
             }
         case .failure(let error):
             self.delegate?.handleError(title: .error, error: error)
         }
     }
-    
-    @objc private func retryGetTestResultsRequest() {
-        guard let authCredentials = self.requestDetails.authenticatedTestResultsDetails?.authCredentials else {
-            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
-            return
-        }
-        self.getAuthenticatedTestResults(authCredentials: authCredentials)
-    }
-    
-    private func handleVaccineCardResponse(result: Result<GatewayVaccineCardResponse, ResultError>) {
+        
+    private func handleVaccineCardResponse(result: Result<GatewayVaccineCardResponse, ResultError>, completion: () -> Void) {
         switch result {
         case .success(let vaccineCard):
             // Note: Have to check for error here because error is being sent back on a 200 response
@@ -165,27 +185,31 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 let retryInSeconds = Double(retryinMS/1000)
                 self.perform(#selector(self.retryGetVaccineCardRequest), with: nil, afterDelay: retryInSeconds)
             } else {
-                self.delegate?.handleVaccineCard(result: vaccineCard)
+                self.handleVaccineCardInCoreData(vaccineCard: vaccineCard, completion: completion)
             }
         case .failure(let error):
             self.delegate?.handleError(title: .error, error: error)
         }
     }
     
-    @objc private func retryGetVaccineCardRequest() {
-        guard let authCredentials = self.requestDetails.authenticatedVaccineCardDetails?.authCredentials else {
-            self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .genericErrorMessage))
-            return
-        }
-        self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
-    }
 }
 
 // MARK: Handle results in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     // TODO: Handle vaccine card response in core data here
+    private func handleVaccineCardInCoreData(vaccineCard: GatewayVaccineCardResponse, completion: () -> Void) {
+        
+        
+        self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: <#T##Int#>, completedCount: <#T##Int#>)
+        completion()
+    }
     
     // TODO: Handle test results response in core data here
+    private func handleTestResultsInCoreData(testResult: AuthenticatedTestResultsResponseModel) {
+        
+        
+        self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: <#T##Int#>, completedCount: <#T##Int#>)
+    }
 }
 
 struct AuthenticatedAPIWorkerRetryDetails {

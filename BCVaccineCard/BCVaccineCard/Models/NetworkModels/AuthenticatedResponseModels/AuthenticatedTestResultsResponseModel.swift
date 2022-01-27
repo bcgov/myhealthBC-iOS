@@ -18,7 +18,7 @@ struct AuthenticatedTestResultsResponseModel: Codable {
         let phn: String?
         let orderingProviderIDS, orderingProviders, reportingLab, location: String?
         let ormOrOru: ORMOrOru?
-        let messageDateTime: Date?
+        let messageDateTime: String?
         let messageID: String?
         let additionalData: String?
         let reportAvailable: Bool?
@@ -37,11 +37,11 @@ struct AuthenticatedTestResultsResponseModel: Codable {
             let id: String?
             let testType: String?
             let outOfRange: Bool?
-            let collectedDateTime: Date?
+            let collectedDateTime: String?
             let testStatus, labResultOutcome: String?
             let resultDescription: [String]?
             let resultLink: String?
-            let receivedDateTime, resultDateTime: Date?
+            let receivedDateTime, resultDateTime: String?
             let loinc: String?
             let loincName: String?
         }

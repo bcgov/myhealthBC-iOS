@@ -11,13 +11,14 @@ extension BaseViewController {
     func showLogin(initialView: AuthenticationViewController.InitialView,completion: @escaping(_ authenticated: Bool)->Void) {
         self.view.startLoadingIndicator()
         let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, initialView: initialView, completion: { [weak self] result in
-            guard let self = self else {return}
+            guard let `self` = self else {return}
             self.view.endLoadingIndicator()
             switch result {
             case .Completed:
                 self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
                     // TODO: FETCH RECORDS FOR AUTHENTICATED USER
                     // Will be fetching on completion, before user interacts with this message
+                    self.performAuthenticatedBackgroundFetch()
                     completion(true)
                 }
             case .Cancelled, .Failed:
@@ -143,17 +144,17 @@ class AuthenticationViewController: UIViewController {
          where you see that, it would be the place to perform the fetch.
          but its probably cleaner to do it here.
          */
-        if status == .Completed {
-            // TODO: Fetch records here
-            // use AuthManager().hdid and AuthManager().authToken
-            // Steps: follow the '// TODO: CONNOR' comments and you'll see a number
-            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
-                // TODO: Error handling here
-                return
-            }
-            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-            tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds)
-        }
+//        if status == .Completed {
+//            // TODO: Fetch records here
+//            // use AuthManager().hdid and AuthManager().authToken
+//            // Steps: follow the '// TODO: CONNOR' comments and you'll see a number
+//            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
+//                // TODO: Error handling here
+//                return
+//            }
+//            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+//            tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds)
+//        }
         
         if withDelay {
             self.view.startLoadingIndicator()
