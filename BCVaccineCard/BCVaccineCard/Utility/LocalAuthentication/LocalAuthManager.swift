@@ -14,11 +14,11 @@ class LocalAuthManager {
     public static let shared = LocalAuthManager()
     
     public static var shouldAuthenticate = true
-    private static var isPerformingAuth = false
+    private static var block = true
     
     //MARK: Handle launch from background
     private func launchedFromBackground() {
-        guard !LocalAuthManager.isPerformingAuth else {return}
+        guard !LocalAuthManager.block else {return}
         LocalAuthManager.shouldAuthenticate = true
         Notification.Name.shouldPerformLocalAuth.post(object: nil, userInfo: nil)
     }
@@ -27,12 +27,7 @@ class LocalAuthManager {
         Notification.Name.launchedFromBackground.onPost(object: nil, queue: .main) {[weak self] _ in
             guard let `self` = self else {return}
             self.launchedFromBackground()
-        }
-    }
-    
-    private static func donePerformingAuth() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            LocalAuthManager.isPerformingAuth = false
+            LocalAuthManager.block = false
         }
     }
     
@@ -50,6 +45,11 @@ class LocalAuthManager {
         case TouchID
         case Password
         case None
+    }
+    
+    public var appHasPermission: Bool {
+        var error: NSError?
+        return context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error)
     }
     
     public var isBiometricAvailable: Bool {
@@ -87,7 +87,7 @@ class LocalAuthManager {
     
     public func performLocalAuth(on viewController: UIViewController, completion: @escaping(_ status: AuthStatus) -> Void) {
         let viewType: LocalAuthView.ViewType = availableAuthMethods.isEmpty ? .EnableAuthentication : .Authenticate
-        
+        view.dismiss(animated: false)
         view.display(on: viewController, type: viewType, manager: self) {
             self.openAuthSettings()
         } useTouchId: {
@@ -103,13 +103,7 @@ class LocalAuthManager {
     }
     
     private func openAuthSettings() {
-        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
-            return
-        }
-        
-        if UIApplication.shared.canOpenURL(settingsUrl) {
-            UIApplication.shared.open(settingsUrl, completionHandler: nil)
-        }
+        UIApplication.openAppSettings()
     }
     
     private func useAuth(policy: LAPolicy, completion: @escaping(_ status: AuthStatus) -> Void) {
@@ -146,11 +140,10 @@ class LocalAuthManager {
         let reason = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication."
         var error: NSError?
         if context.canEvaluatePolicy(policy, error: &error) {
-            LocalAuthManager.isPerformingAuth = true
+            LocalAuthManager.block = true
             context.evaluatePolicy(policy, localizedReason: reason) {
                 success, authenticationError in
                 DispatchQueue.main.async {
-                    LocalAuthManager.donePerformingAuth()
                     if success {
                         return completion(.Authorized)
                     } else {

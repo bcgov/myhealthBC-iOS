@@ -18,6 +18,7 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationSetup()
+        performLocalAuthIfNeeded()
         listenToLocalAuthNotification()
     }
     

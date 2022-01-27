@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 class LocalAuthView: UIView, Theme {
+    static let viewTag = 41312
+    
     // MARK: Outlets
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
@@ -74,19 +76,33 @@ class LocalAuthView: UIView, Theme {
         self.enableTouchIdCallback = enableTouchId
         self.useTouchIdCallback = useTouchId
         
+        if let existing = viewController.view.viewWithTag(LocalAuthView.viewTag) {
+            existing.removeFromSuperview()
+        }
+        tag = LocalAuthView.viewTag
+        
+        
         viewController.view.addSubview(self)
         addEqualSizeContraints(to: viewController.view)
+        
+        
+//        let window = UIApplication.shared.windows.last!
+//        window.addSubview(self)
+//        addEqualSizeContraints(to: window)
         
         layoutIfNeeded()
         style(type: type)
     }
-
-    // MARK: States
-    func setSuccess() {
+    
+    func dismiss(animated: Bool) {
+        if !animated {
+            self.removeFromSuperview()
+            return
+        }
         self.isUserInteractionEnabled = false
         DispatchQueue.main.async {[weak self] in
             guard let `self` = self else {return}
-            UIView.animate(withDuration: 0.3, delay: 1, options: .curveEaseOut) {
+            UIView.animate(withDuration: 0.5, delay: 1, options: .curveEaseOut) {
                 [weak self] in
                 guard let self = self else {return}
                 self.alpha = 0
@@ -96,6 +112,11 @@ class LocalAuthView: UIView, Theme {
                 self.removeFromSuperview()
             }
         }
+    }
+
+    // MARK: States
+    func setSuccess() {
+        dismiss(animated: true)
     }
 
     func setFail() {

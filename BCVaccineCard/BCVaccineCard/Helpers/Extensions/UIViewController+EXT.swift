@@ -252,27 +252,48 @@ extension UIViewController {
                 parent.showLocalAuth()
                 return
             }
-            let manager = LocalAuthManager()
+            let manager = LocalAuthManager.shared
+
+//            let containerVC = UIViewController()
+//            containerVC.modalPresentationStyle = .overFullScreen
+//            self.present(containerVC, animated: true, completion: nil)
             
-            manager.performLocalAuth(on: self) { [weak self] status in
-                if status != .Authorized {self?.localAuthFailed()}
+            if manager.appHasPermission {
+                manager.performLocalAuth(on: self) { [weak self] status in
+                    if status != .Authorized {self?.localAuthFailed()}
+                    return
+                }
             }
+
             if manager.isEnabled, manager.availableAuthMethods.isEmpty {
                 self.localNoAvailableAuth()
             }
         }
     }
     
-    
-    
-    
     private func localAuthFailed() {
-        //TODO:
     }
     
     private func localNoAvailableAuth() {
-        view.startLoadingIndicator(backgroundColor: .white)
         alert(title: "Unsecure device", message: "Please enable authentication on your device to proceed")
+    }
+    
+    // MARK: Helpers
+    
+    /// returns the tab bar controller: the main parent of all viewcontrollers in this app
+    /// Call this from the main thread:
+    /// DispatchQueue.main.async { [weak self] in guard let self = self else {return} }
+    /// - Returns: tab bar UIViewController
+    func findTabBarController() -> UIViewController {
+        if let parent = self.parent as? CustomNavigationController {
+            return parent.findTabBarController()
+            
+        }
+        if let parent = self.parent as? TabBarController {
+            return parent.findTabBarController()
+            
+        }
+        return self
     }
     
     
