@@ -145,14 +145,14 @@ extension AppDelegate {
 extension AppDelegate {
     private func performLocalAuth(on viewController: UIViewController) {
         let manager = LocalAuthManager()
-        if manager.isEnabled, manager.availableAuthMethods().isEmpty {
-            localNoAvailableAuth()
-            return
-        }
+       
         // Use the manager to perform authentication. It has a view of its own which is auto dismissed.
         // localAuthFailed () is called if it was unsuccessful for FE to know how to handle it
         manager.performLocalAuth(on: viewController) { [weak self] status in
             if status != .Authorized {self?.localAuthFailed()}
+        }
+        if manager.isEnabled, manager.availableAuthMethods.isEmpty {
+            localNoAvailableAuth()
         }
     }
     
