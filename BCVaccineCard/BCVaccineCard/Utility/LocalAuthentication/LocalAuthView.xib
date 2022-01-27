@@ -56,6 +56,9 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hbk-Ym-pRK">
                             <rect key="frame" x="0.0" y="62" width="350" height="54"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="54" id="fPI-Cm-3h9"/>
+                            </constraints>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="Use Touch ID"/>
                             <connections>
@@ -64,6 +67,9 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAq-Fs-cFk">
                             <rect key="frame" x="0.0" y="124" width="350" height="54"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="54" id="QwM-lJ-ccd"/>
+                            </constraints>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" title="Use passcode"/>
                             <connections>

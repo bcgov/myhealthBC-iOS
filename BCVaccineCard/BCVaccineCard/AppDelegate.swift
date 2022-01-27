@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
     var window: UIWindow?
     var authManager: AuthManager?
+    var localAuthManager: LocalAuthManager?
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -38,7 +39,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupRootViewController()
         authManager = AuthManager()
         authManager?.initTokenExpieryTimer()
+        listenToAppState()
+        localAuthManager = LocalAuthManager()
+        localAuthManager?.listenToAppLaunch()
     }
+    
+    private func listenToAppState() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    @objc func didBecomeActive(_ notification: Notification) {
+        NotificationCenter.default.post(name: .launchedFromBackground, object: nil)
+    }
+    
     
     // MARK: - Core Data stack
     lazy var persistentContainer: NSPersistentContainer = {
@@ -111,15 +124,12 @@ extension AppDelegate {
         guard let first = unseen.first else {
             let vc = TabBarController.constructTabBarController()
             self.window?.rootViewController = vc
-            // Display Auth
-            self.performLocalAuth(on: vc)
             return
         }
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
-        // Display Auth
-        self.performLocalAuth(on: vc)
+       
         
     }
 }
@@ -143,26 +153,30 @@ extension AppDelegate {
 
 // MARK: Local Auth
 extension AppDelegate {
-    private func performLocalAuth(on viewController: UIViewController) {
-        let manager = LocalAuthManager()
-       
-        // Use the manager to perform authentication. It has a view of its own which is auto dismissed.
-        // localAuthFailed () is called if it was unsuccessful for FE to know how to handle it
-        manager.performLocalAuth(on: viewController) { [weak self] status in
-            if status != .Authorized {self?.localAuthFailed()}
+//    private func performLocalAuth() {
+//        guard let rootViewController = UIApplication.topViewController() else {return}
+//        rootViewController.showLocalAuth()
+//    }
+}
+
+public extension UIApplication {
+
+    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(base: nav.visibleViewController)
         }
-        if manager.isEnabled, manager.availableAuthMethods.isEmpty {
-            localNoAvailableAuth()
+        if let tab = base as? UITabBarController {
+            let moreNavigationController = tab.moreNavigationController
+
+            if let top = moreNavigationController.topViewController, top.view.window != nil {
+                return topViewController(base: top)
+            } else if let selected = tab.selectedViewController {
+                return topViewController(base: selected)
+            }
         }
-    }
-    
-    private func localAuthFailed() {
-        //TODO:
-    }
-    
-    private func localNoAvailableAuth() {
-        //TODO:
-        self.window?.rootViewController?.view.startLoadingIndicator(backgroundColor: .white)
-        self.window?.rootViewController?.alert(title: "Unsecure device", message: "Please enable authentication on your device to proceed")
+        if let presented = base?.presentedViewController {
+            return topViewController(base: presented)
+        }
+        return base
     }
 }

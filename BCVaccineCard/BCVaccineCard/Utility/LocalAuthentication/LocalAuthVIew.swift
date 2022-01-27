@@ -39,14 +39,24 @@ class LocalAuthView: UIView, Theme {
     // MARK: Outlet Actions
     
     @IBAction func turnOnTouchID(_ sender: Any) {
+        guard let enableTouchIdCallback = enableTouchIdCallback else {
+            return
+        }
+        enableTouchIdCallback()
         
     }
     @IBAction func useTouchID(_ sender: Any) {
-        
+        guard let useTouchIdCallback = useTouchIdCallback else {
+            return
+        }
+        useTouchIdCallback()
     }
     
     @IBAction func usePasscode(_ sender: Any) {
-        
+        guard let usePasscodeCallback = usePasscodeCallback else {
+            return
+        }
+        usePasscodeCallback()
     }
     
     // MARK: Display
@@ -103,6 +113,7 @@ class LocalAuthView: UIView, Theme {
         }
         setBaseText()
         var hasBiometric: Bool = false
+        
         switch manager.biometricType {
         case .none:
             useTouchIDButton.isHidden = true
@@ -120,16 +131,24 @@ class LocalAuthView: UIView, Theme {
             useTouchIDButton.isHidden = true
         }
         
+        if !manager.isBiometricAvailable {
+            hasBiometric = false
+        }
         
         switch type {
         case .Authenticate:
             turnOnTouchIDButton.isHidden = true
-            useTouchIDButton.isHidden = false
+            if hasBiometric {
+                useTouchIDButton.isHidden = false
+            } else {
+                useTouchIDButton.isHidden = true
+            }
             usePasscodeButton.alpha = 1
             usePasscodeButton.isUserInteractionEnabled = true
         case .EnableAuthentication:
+            turnOnTouchIDButton.isHidden = false
             if hasBiometric {
-                turnOnTouchIDButton.isHidden = false
+                turnOnTouchIDButton.setTitle("Turn on passcode", for: .normal)
             }
             useTouchIDButton.isHidden = true
             usePasscodeButton.alpha = 0

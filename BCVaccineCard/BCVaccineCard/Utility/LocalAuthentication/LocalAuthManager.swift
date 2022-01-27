@@ -10,7 +10,33 @@ import LocalAuthentication
 import UIKit
 
 class LocalAuthManager {
-    private lazy var view: LocalAuthView = LocalAuthView()
+    
+    public static let shared = LocalAuthManager()
+    
+    public static var shouldAuthenticate = true
+    private static var isPerformingAuth = false
+    
+    //MARK: Handle launch from background
+    private func launchedFromBackground() {
+        guard !LocalAuthManager.isPerformingAuth else {return}
+        LocalAuthManager.shouldAuthenticate = true
+        Notification.Name.shouldPerformLocalAuth.post(object: nil, userInfo: nil)
+    }
+    
+    public func listenToAppLaunch() {
+        Notification.Name.launchedFromBackground.onPost(object: nil, queue: .main) {[weak self] _ in
+            guard let `self` = self else {return}
+            self.launchedFromBackground()
+        }
+    }
+    
+    private static func donePerformingAuth() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            LocalAuthManager.isPerformingAuth = false
+        }
+    }
+    
+    private lazy var view: LocalAuthView = LocalAuthView.fromNib()
     private let context = LAContext()
     
     public enum AuthStatus {
@@ -26,8 +52,11 @@ class LocalAuthManager {
         case None
     }
     
+    public var isBiometricAvailable: Bool {
+       return availableAuthMethods.contains(where: {$0 == .deviceOwnerAuthenticationWithBiometrics})
+    }
+    
     public var biometricType: LABiometryType {
-        
         return context.biometryType
     }
     
@@ -66,6 +95,11 @@ class LocalAuthManager {
         } usePasscode: {
             self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
         }
+        
+        if viewType == .Authenticate {
+            useAuth(policy: .deviceOwnerAuthenticationWithBiometrics, completion: completion)
+        }
+         
     }
     
     private func openAuthSettings() {
@@ -93,6 +127,7 @@ class LocalAuthManager {
                     switch passStatus {
                     case .Authorized:
                         self.view.setState(state: .Success)
+                        LocalAuthManager.shouldAuthenticate = false
                         return completion(passStatus)
                     case .Unauthorized:
                         self.view.setState(state: .Fail)
@@ -111,10 +146,11 @@ class LocalAuthManager {
         let reason = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication."
         var error: NSError?
         if context.canEvaluatePolicy(policy, error: &error) {
-            
+            LocalAuthManager.isPerformingAuth = true
             context.evaluatePolicy(policy, localizedReason: reason) {
                 success, authenticationError in
                 DispatchQueue.main.async {
+                    LocalAuthManager.donePerformingAuth()
                     if success {
                         return completion(.Authorized)
                     } else {

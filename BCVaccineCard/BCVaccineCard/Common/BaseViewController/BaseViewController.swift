@@ -18,6 +18,20 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationSetup()
+        listenToLocalAuthNotification()
+    }
+    
+    func listenToLocalAuthNotification() {
+        Notification.Name.shouldPerformLocalAuth.onPost(object: nil, queue: .main) {[weak self] _ in
+            guard let `self` = self, UIApplication.topViewController() == self else {return}
+            self.performLocalAuthIfNeeded()
+        }
+    }
+    
+    func performLocalAuthIfNeeded() {
+        if LocalAuthManager.shouldAuthenticate {
+            showLocalAuth()
+        }
     }
     
 }
