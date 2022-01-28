@@ -12,6 +12,7 @@ import BCVaccineValidator
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int)
     func handleError(error: String?)
+    func dismissLoader()
 }
 
 enum AuthenticationFetchType {
@@ -36,6 +37,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         self.executingVC = delegateOwner
     }
     
+    // FIXME: Include escaping closure with no parameters
     // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
     func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
@@ -68,7 +70,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
-//        self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
+        self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
     }
         
@@ -267,6 +269,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.delegate?.handleError(error: "Error fetching test result")
             }
         }
+        self.delegate?.dismissLoader()
     }
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
