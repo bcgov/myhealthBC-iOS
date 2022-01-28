@@ -68,7 +68,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
-        self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
+//        self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
     }
         
@@ -146,17 +146,16 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload == nil || testResult.resourcePayload?.count == 0) {
+            if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload?.orders == nil || testResult.resourcePayload?.orders.count == 0) {
                 // TODO: Error mapping here
                 self.delegate?.handleError(error: resultMessage)
             }
-            // TODO: Find out if retry logic is needed
-//            else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
-//                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
-//                self.retryCount += 1
-//                let retryInSeconds = Double(retryinMS/1000)
-//                self.perform(#selector(self.retryGetTestResultsRequest), with: nil, afterDelay: retryInSeconds)
-//            }
+            else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
+                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+                self.retryCount += 1
+                let retryInSeconds = Double(retryinMS/1000)
+                self.perform(#selector(self.retryGetTestResultsRequest), with: nil, afterDelay: retryInSeconds)
+            }
             else {
                 self.handleTestResultsInCoreData(testResult: testResult)
                 
@@ -255,14 +254,14 @@ extension AuthenticatedHealthRecordsAPIWorker {
     // TODO: Handle test results response in core data here
     private func handleTestResultsInCoreData(testResult: AuthenticatedTestResultsResponseModel) {
         guard let patient = self.patientDetails else { return }
-        guard let payloadArray = testResult.resourcePayload else { return }
+        guard let orders = testResult.resourcePayload?.orders else { return }
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
-        for resourcePayload in payloadArray {
-            let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: resourcePayload, patient: patient)
+        for order in orders {
+            let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
             if let id = handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient) {
                 completedCount += 1
-                self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: testResult.totalResultCount ?? payloadArray.count, completedCount: completedCount)
+                self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: testResult.totalResultCount ?? orders.count, completedCount: completedCount)
             } else {
                 errorArrayCount += 1
                 self.delegate?.handleError(error: "Error fetching test result")

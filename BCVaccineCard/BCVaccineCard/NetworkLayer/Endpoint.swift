@@ -53,7 +53,7 @@ extension UrlAccessor: EndpointsAccessor {
     }
     
     var getAuthenticatedTestResults: URL {
-        return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory")
+        return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory/Covid19Orders")
     }
     
     func getAuthenticatedPatientDetails(hdid: String) -> URL {
