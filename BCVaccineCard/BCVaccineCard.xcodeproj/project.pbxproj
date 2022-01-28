@@ -362,6 +362,10 @@
 		796653E227A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653E027A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift */; };
 		796653E427A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653E327A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift */; };
 		796653E527A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653E327A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift */; };
+		796653E827A3ACF9004D103E /* AuthenticatedFetchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653E727A3ACF9004D103E /* AuthenticatedFetchLoader.swift */; };
+		796653E927A3ACFA004D103E /* AuthenticatedFetchLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653E727A3ACF9004D103E /* AuthenticatedFetchLoader.swift */; };
+		796653EB27A3AD07004D103E /* AuthenticatedFetchLoader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 796653EA27A3AD07004D103E /* AuthenticatedFetchLoader.xib */; };
+		796653EC27A3AD07004D103E /* AuthenticatedFetchLoader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 796653EA27A3AD07004D103E /* AuthenticatedFetchLoader.xib */; };
 		7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
 		7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */; };
 		7967E73626F40DB100EEF510 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73526F40DB100EEF510 /* Constants.swift */; };
@@ -629,6 +633,8 @@
 		796653DC279876C9004D103E /* AuthenticationRequestObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationRequestObjects.swift; sourceTree = "<group>"; };
 		796653E027A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedTestResultsResponseModel.swift; sourceTree = "<group>"; };
 		796653E327A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPatientDetailsResponseObject.swift; sourceTree = "<group>"; };
+		796653E727A3ACF9004D103E /* AuthenticatedFetchLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedFetchLoader.swift; sourceTree = "<group>"; };
+		796653EA27A3AD07004D103E /* AuthenticatedFetchLoader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AuthenticatedFetchLoader.xib; sourceTree = "<group>"; };
 		7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableViewCell.swift; sourceTree = "<group>"; };
 		7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormTableViewCell.xib; sourceTree = "<group>"; };
 		7967E73526F40DB100EEF510 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -1319,6 +1325,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				796653E627A3ACD5004D103E /* AuthenticatedFetchLoader */,
 				29921C902773A5D2005025D2 /* AuthenticationInfoView */,
 				29921C89277395D8005025D2 /* AuthenticationView */,
 				79218ABC27555B040063004E /* ReusableHeaderAddView */,
@@ -1580,6 +1587,15 @@
 				796653E327A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift */,
 			);
 			path = AuthenticatedResponseModels;
+			sourceTree = "<group>";
+		};
+		796653E627A3ACD5004D103E /* AuthenticatedFetchLoader */ = {
+			isa = PBXGroup;
+			children = (
+				796653E727A3ACF9004D103E /* AuthenticatedFetchLoader.swift */,
+				796653EA27A3AD07004D103E /* AuthenticatedFetchLoader.xib */,
+			);
+			path = AuthenticatedFetchLoader;
 			sourceTree = "<group>";
 		};
 		7967E73026F3DC5F00EEF510 /* FormTableViewCell */ = {
@@ -1924,6 +1940,7 @@
 				79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */,
 				792834662731016600EE2710 /* CheckboxTableViewCell.xib in Resources */,
 				7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */,
+				796653EB27A3AD07004D103E /* AuthenticatedFetchLoader.xib in Resources */,
 				29B446AE27357F1700E0F967 /* FederalPassPDFView.xib in Resources */,
 				7967E74826F9071A00EEF510 /* SettingsTableViewCell.xib in Resources */,
 				79218AB2275196150063004E /* HealthRecordsUserView.xib in Resources */,
@@ -2008,6 +2025,7 @@
 				79218ADA27557ED50063004E /* TextListViewTableViewCell.xib in Resources */,
 				795AA7762715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
 				79218AC227555B350063004E /* ReusableHeaderAddView.xib in Resources */,
+				796653EC27A3AD07004D103E /* AuthenticatedFetchLoader.xib in Resources */,
 				7918A8CB27482E1900D19D1C /* TextListView.xib in Resources */,
 				794BD6622702EEC00084ADA8 /* NoCardsTableViewCell.xib in Resources */,
 				79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
@@ -2209,6 +2227,7 @@
 				791C27CF271DC777001A6E12 /* Keychain.swift in Sources */,
 				7967E73826F502E800EEF510 /* Date+Ext.swift in Sources */,
 				29921C8F27739F6C005025D2 /* Theme.swift in Sources */,
+				796653E827A3ACF9004D103E /* AuthenticatedFetchLoader.swift in Sources */,
 				29A12AF4271F699000A106B5 /* AnalyticsService.swift in Sources */,
 				7944F67926F12613006B9444 /* AppDelegate.swift in Sources */,
 				795AA73E271094B400E59FF1 /* Endpoint.swift in Sources */,
@@ -2389,6 +2408,7 @@
 				791C27C827192C4C001A6E12 /* ImageTableViewCell.swift in Sources */,
 				794BD6322702EEC00084ADA8 /* Storyboard.swift in Sources */,
 				791C27B227179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */,
+				796653E927A3ACFA004D103E /* AuthenticatedFetchLoader.swift in Sources */,
 				795AA73327108F5900E59FF1 /* NetworkAccessor.swift in Sources */,
 				794BD6332702EEC00084ADA8 /* Date+Ext.swift in Sources */,
 				79218AAA2751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
