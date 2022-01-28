@@ -27,14 +27,14 @@ class StorageServiceTests: XCTestCase {
     
     // Patient Test Cases
     
-    func test_no_patient_exist_on_lunch() {
+    func testNoPatientExistOnLunch() {
         // when
         let patients = storageService.fetchPatients()
         // then
         XCTAssertTrue(patients.isEmpty)
     }
     
-    func test_adding_one_patient() {
+    func testAddingOnePatient() {
         // given
         let name = "Adam"
         let birthday = Date()
@@ -52,7 +52,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(patientOne?.phn, phn)
     }
     
-    func test_fetching_patient_by_phn() {
+    func testFetchingPatientByPHN() {
         // given
         let phn = "d"
         let storedPatient = storageService.storePatient(name: "Any", birthday: Date(), phn: phn)
@@ -63,7 +63,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(patient, storedPatient)
     }
     
-    func test_adding_multiple_patient_with_same_name_and_password() {
+    func testAddingMultiplePatientaWithSameNameAndPassword() {
         // given
         let name = "adam"
         let birthday = Date()
@@ -76,10 +76,10 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(patients.count, 1)
     }
     
-    func test_adding_multiple_patient_with_different_name_and_password_but_same_phn() {
+    func testAddingMultiplePatiensWithDifferentNameAndPasswordButSamePHN() {
         // given
         let names = ["adam", "John", "James"]
-        let birthdays = [Date(), Date(), Date()]
+        let birthdays = [Date(), Date(timeIntervalSinceNow: 60*20), Date(timeIntervalSinceNow: 60*30)]
         let phn = "1A2B3C4D"
         // when
         names.enumerated().forEach { i, name in
@@ -90,7 +90,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(patients.count, 1)
     }
     
-    func test_update_patient_while_no_patients_exist() {
+    func testUpdatePatientWhileNoPatientsExist() {
         // given
         let name = "John"
         let birthday = Date() // not exist date
@@ -103,7 +103,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertNil(patient)
     }
     
-    func test_update_patient_with_date_not_equal_to_stored_one() {
+    func testUpdatePatientWithDateNotEqualToStoredOne() {
         // given
         let oldName = ""
         let oldBirthday = Date()
@@ -120,7 +120,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(patients.count, 1)
     }
     
-    func test_update_patient_phn_by_name_and_birthday() {
+    func testUpdatePatientPhnByNameAndBirthday() {
         // given
         let name = "Nil"
         let birthday = Date()
@@ -138,7 +138,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(fetchedPatient?.phn, phn)
     }
     
-    func test_update_patient_name_and_birthday_by_phn() {
+    func testUpdatePatientNameAndBirthdayByPHN() {
         // given
         let name = "Nil"
         let birthday = Date()
@@ -157,7 +157,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(fetchedPatient?.birthday, birthday)
     }
     
-    func test_delete_patient_by_phn() {
+    func testDeletePatientByPHN() {
         // given
         let phn = "1A2B3C4D"
         // when
@@ -170,7 +170,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(allPatients.count, 0)
     }
     
-    func test_delete_patient_by_name_and_birthday() {
+    func testDeletePatientByNameAndBirthday() {
         // given
         let name = "David"
         let birthday = Date()
@@ -186,18 +186,18 @@ class StorageServiceTests: XCTestCase {
 
     // Vaccine Card Test Cases
     
-    func test_store_fetch_vaccine_card() {
+    func testStoreFetchVaccineCard() {
         // given
-        let vaccineQR = "0101010#QR#01010"
+        let vaccineQR = "QR"
         let name = "Sam"
         let issueDate = Date()
-        let hash = "#0d2mxe22!#"
+        let hash = "Hash"
         let birthday = Date()
         let phn = "AnyPHN"
         let authenticated = false
         // when storing card and fetching it back
         guard let patient = storageService.storePatient(name: name, birthday: birthday, phn: phn) else {
-            XCTFail("failed to create patient entity")
+            XCTFail() // failed to create patient entity
             return
         }
         let storeExp = expectation(description: "store vaccine card")
@@ -219,12 +219,12 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(card?.patient, patient)
     }
     
-    func test_update_vaccine_card() {
+    func testUpdateVaccinCcard() {
         // given
-        let vaccineQR = "0101010#QR#01010"
+        let vaccineQR = "QR"
         let name = "Sam"
         let issueDate = Date()
-        let hash = "#0d2mxe22!#"
+        let hash = "Hash"
         let birthday = Date()
         let phn = "AnyPHN"
         let authenticated = false
@@ -262,12 +262,12 @@ class StorageServiceTests: XCTestCase {
 
     }
     
-    func test_delete_vaccine_card() {
+    func testDeleteVaccineCard() {
         // given
-        let vaccineQR = "0101010#QR#01010"
+        let vaccineQR = "QR"
         let name = "Sam"
         let issueDate = Date()
-        let hash = "#0d2mxe22!#"
+        let hash = "Hash"
         let birthday = Date()
         let phn = "AnyPHN"
         let authenticated = false
@@ -281,10 +281,9 @@ class StorageServiceTests: XCTestCase {
             storeExp.fulfill()
         }
         waitForExpectations(timeout: 2)
-        var cardsList = storageService.fetchVaccineCards()
         // when deleting card and fetch all cards back
         storageService.deleteVaccineCard(vaccineQR: vaccineQR)
-        cardsList = storageService.fetchVaccineCards()
+        let cardsList = storageService.fetchVaccineCards()
         // then
         XCTAssertTrue(cardsList.isEmpty)
         // when fetching patients after deleting vaccine cards
