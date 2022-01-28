@@ -64,83 +64,15 @@ struct AuthenticatedTestResultsResponseModel: Codable {
 // MARK: Mapping functions to convert into model that we use for Core Data
 // NOTE: For Amir...This will likely have to be adjusted in the future as a new table in Core Data (AuthenticatedTestResults) or something like that
 extension AuthenticatedTestResultsResponseModel {
-    
-    
+    // TODO: Check on values here
+    func transformToGatewayTestResultResponse(model: AuthenticatedTestResultsResponseModel.ResourcePayload, name: String) -> GatewayTestResultResponse {
+        var records: [GatewayTestResultResponseRecord] = []
+        model.labResults?.forEach({ labResult in
+            let record = GatewayTestResultResponseRecord(patientDisplayName: name, lab: model.reportingLab, reportId: labResult.id, collectionDateTime: labResult.collectedDateTime, resultDateTime: labResult.resultDateTime, testName: labResult.loincName, testType: labResult.testType, testStatus: labResult.testStatus, testOutcome: labResult.labResultOutcome, resultTitle: labResult.loincName, resultDescription: labResult.resultDescription, resultLink: labResult.resultLink)
+            records.append(record)
+        })
+        let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 0, records: records)
+        let gatewayResponse = GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: nil, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
+        return gatewayResponse
+    }
 }
-
-
-//struct GatewayTestResultResponse: Codable, Equatable {
-//    static func == (lhs: GatewayTestResultResponse, rhs: GatewayTestResultResponse) -> Bool {
-//        if let rhsResponse = rhs.resourcePayload, let lshResponse = lhs.resourcePayload {
-//            return lshResponse.records.equals(other: rhsResponse.records)
-//        }
-//        return (rhs.resourcePayload == nil && lhs.resourcePayload == nil)
-//    }
-//
-//    let resourcePayload: ResourcePayload?
-//    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
-//    let resultError: ResultError?
-//
-//    // MARK: - ResourcePayload
-//    struct ResourcePayload: Codable {
-//        let loaded: Bool
-//        let retryin: Int
-//        let records: [GatewayTestResultResponseRecord]
-//    }
-//}
-//
-//struct GatewayTestResultResponseRecord: Codable, Equatable {
-//    let patientDisplayName: String?
-//    let lab: String?
-//    let reportId: String?
-//    let collectionDateTime: String?
-//    let resultDateTime: String?
-//    let testName: String?
-//    let testType: String?
-//    let testStatus: String?
-//    let testOutcome: String?
-//    let resultTitle: String?
-//    let resultDescription: [String]?
-//    let resultLink: String?
-//
-//    var collectionDateTimeDate: Date? {
-//        guard let dateString = self.collectionDateTime else { return nil }
-//        return Date.Formatter.gatewayDateAndTime.date(from: dateString)
-//    }
-//
-//    var resultDateTimeDate: Date? {
-//        guard let dateString = self.resultDateTime else { return nil }
-//        return Date.Formatter.gatewayDateAndTime.date(from: dateString)
-//    }
-//}
-//
-//extension Array where Element == GatewayTestResultResponseRecord {
-//    func equals(other: [GatewayTestResultResponseRecord]) -> Bool {
-//        for el in self {
-//            if !other.contains(where: { element in
-//                return element == el
-//            }) {
-//                return false
-//            }
-//        }
-//        return self.count == other.count
-//    }
-//}
-//
-//extension GatewayTestResultResponseRecord {
-//    enum ResponseStatusTypes: String, Codable {
-//        case pending = "Pending"
-//        case final = "Final"
-//        case statusChange = "Status Change" //To Check here
-//    }
-//
-//    enum ResponseOutcomeTypes: String, Codable {
-//        case notSet = "Not Set" // To Check here
-//        case other = "Other"
-//        case pending = "Pending"
-//        case indeterminate = "Indeterminate"
-//        case negative = "Negative"
-//        case positive = "Positive"
-//        case cancelled = "Cancelled"
-//    }
-//}
