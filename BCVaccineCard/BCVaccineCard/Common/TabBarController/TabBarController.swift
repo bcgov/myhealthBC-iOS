@@ -259,7 +259,8 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     }
     
     func handleError(fetchType: AuthenticationFetchType, error: String) {
-        self.updateLoadingView(status: error, loadingProgress: nil)
+        let status = fetchType.getName + ": " + error
+        self.updateLoadingView(status: status, loadingProgress: nil)
     }
     
     func dismissLoader() {
