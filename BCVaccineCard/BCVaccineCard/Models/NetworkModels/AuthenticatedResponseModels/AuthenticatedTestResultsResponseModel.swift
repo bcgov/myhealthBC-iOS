@@ -65,7 +65,7 @@ struct AuthenticatedTestResultsResponseModel: Codable {
 // NOTE: For Amir...This will likely have to be adjusted in the future as a new table in Core Data (AuthenticatedTestResults) or something like that
 extension AuthenticatedTestResultsResponseModel {
     // TODO: Check on values here
-    func transformToGatewayTestResultResponse(model: AuthenticatedTestResultsResponseModel.ResourcePayload, name: String) -> GatewayTestResultResponse {
+    static func transformToGatewayTestResultResponse(model: AuthenticatedTestResultsResponseModel.ResourcePayload, name: String) -> GatewayTestResultResponse {
         var records: [GatewayTestResultResponseRecord] = []
         model.labResults?.forEach({ labResult in
             let record = GatewayTestResultResponseRecord(patientDisplayName: name, lab: model.reportingLab, reportId: labResult.id, collectionDateTime: labResult.collectedDateTime, resultDateTime: labResult.resultDateTime, testName: labResult.loincName, testType: labResult.testType, testStatus: labResult.testStatus, testOutcome: labResult.labResultOutcome, resultTitle: labResult.loincName, resultDescription: labResult.resultDescription, resultLink: labResult.resultLink)
