@@ -70,10 +70,3 @@ extension LocallyStoredCovidTestResultModel {
         return response?.resourcePayload?.records ?? []
     }
 }
-
-//extension GatewayTestResultResponseRecord {
-//    var status: CovidTestResult {
-
-//         CovidTestResult.init(rawValue: self.testOutcome ?? "") ?? CovidTestResult.init(rawValue: self.testStatus ?? "") ?? .indeterminate
-//    }
-//}
