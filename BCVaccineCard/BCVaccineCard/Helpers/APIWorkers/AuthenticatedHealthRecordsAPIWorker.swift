@@ -68,9 +68,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
-        self.getAuthenticatedVaccineCard(authCredentials: authCredentials) {
-            self.getAuthenticatedTestResults(authCredentials: authCredentials)
-        }
+        self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
+        self.getAuthenticatedTestResults(authCredentials: authCredentials)
     }
         
     private func getAuthenticatedTestResults(authCredentials: AuthenticationRequestObject) {
@@ -91,26 +90,20 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
-    private func getAuthenticatedVaccineCard(authCredentials: AuthenticationRequestObject, completion: () -> Void) {
+    private func getAuthenticatedVaccineCard(authCredentials: AuthenticationRequestObject) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedVaccineCardDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedVaccineCardDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
         apiClient.getAuthenticatedVaccineCard(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
-            guard let `self` = self else {
-                completion()
-                return
-            }
+            guard let `self` = self else { return }
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
                 self.requestDetails.authenticatedVaccineCardDetails?.queueItToken = queueItToken
                 self.apiClient.getAuthenticatedVaccineCard(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
-                    guard let `self` = self else {
-                        completion()
-                        return
-                    }
-                    self.handleVaccineCardResponse(result: result, completion: completion)
+                    guard let `self` = self else { return }
+                    self.handleVaccineCardResponse(result: result)
                 }
             } else {
-                self.handleVaccineCardResponse(result: result, completion: completion)
+                self.handleVaccineCardResponse(result: result)
             }
         }
     }
@@ -136,12 +129,12 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
     }
     
-    @objc private func retryGetVaccineCardRequest(completion: () -> Void) {
+    @objc private func retryGetVaccineCardRequest() {
         guard let authCredentials = self.requestDetails.authenticatedVaccineCardDetails?.authCredentials else {
             self.delegate?.handleError(error: .genericErrorMessage)
             return
         }
-        self.getAuthenticatedVaccineCard(authCredentials: authCredentials, completion: completion)
+        self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
     }
     
 }
@@ -173,7 +166,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
     }
         
-    private func handleVaccineCardResponse(result: Result<GatewayVaccineCardResponse, ResultError>, completion: () -> Void) {
+    private func handleVaccineCardResponse(result: Result<GatewayVaccineCardResponse, ResultError>) {
         switch result {
         case .success(let vaccineCard):
             // Note: Have to check for error here because error is being sent back on a 200 response
@@ -186,7 +179,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 let retryInSeconds = Double(retryinMS/1000)
                 self.perform(#selector(self.retryGetVaccineCardRequest), with: nil, afterDelay: retryInSeconds)
             } else {
-                self.handleVaccineCardInCoreData(vaccineCard: vaccineCard, completion: completion)
+                self.handleVaccineCardInCoreData(vaccineCard: vaccineCard)
             }
         case .failure(let error):
             self.delegate?.handleError(error: error.resultMessage)
@@ -198,7 +191,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
 // MARK: Handle Vaccine results in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     // TODO: Handle vaccine card response in core data here
-    private func handleVaccineCardInCoreData(vaccineCard: GatewayVaccineCardResponse, completion: () -> Void) {
+    private func handleVaccineCardInCoreData(vaccineCard: GatewayVaccineCardResponse) {
         
         let qrResult = vaccineCard.transformResponseIntoQRCode()
         guard let code = qrResult.qrString else {
@@ -218,7 +211,6 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.coreDataLogic(localModel: model)
             }
         }
-        completion()
     }
     
     private func coreDataLogic(localModel: LocallyStoredVaccinePassportModel) {
@@ -262,9 +254,26 @@ extension AuthenticatedHealthRecordsAPIWorker {
 extension AuthenticatedHealthRecordsAPIWorker {
     // TODO: Handle test results response in core data here
     private func handleTestResultsInCoreData(testResult: AuthenticatedTestResultsResponseModel) {
-        
-        
-        self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: <#T##Int#>, completedCount: <#T##Int#>)
+        guard let patient = self.patientDetails else { return }
+        guard let payloadArray = testResult.resourcePayload else { return }
+        var errorArrayCount: Int = 0
+        var completedCount: Int = 0
+        for resourcePayload in payloadArray {
+            let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: resourcePayload, patient: patient)
+            if let id = handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient) {
+                completedCount += 1
+                self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: testResult.totalResultCount ?? payloadArray.count, completedCount: completedCount)
+            } else {
+                errorArrayCount += 1
+                self.delegate?.handleError(error: "Error fetching test result")
+            }
+        }
+    }
+    
+    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+        guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
+        return object.id
     }
 }
 
@@ -288,25 +297,3 @@ struct AuthenticatedAPIWorkerRetryDetails {
         var queueItToken: String?
     }
 }
-
-//if let id = handleTestResultInCoreData(gatewayResponse: result, authenticated: false) { /*if id exists, then increase loader value, if not, then increase error array check*/  }
-
-//func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool) -> String? {
-//    // Note, this first guard statement is to handle the case when health gateway is wonky - throws success with no error but has key nil values, so in this case we don't want to store a dummy patient value, as that's what was happening
-//    guard let collectionDate = gatewayResponse.resourcePayload?.records.first?.collectionDateTime,
-//          !collectionDate.trimWhiteSpacesAndNewLines.isEmpty, let reportID = gatewayResponse.resourcePayload?.records.first?.reportId,
-//          !reportID.trimWhiteSpacesAndNewLines.isEmpty else { return nil }
-//    guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
-//    guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
-//    let bday: Date?
-//    if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false),
-//       let dob = dataSource[dobIndexPath.row].configuration.text,
-//       let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) {
-//        bday = dateOfBirth
-//    } else {
-//        bday = nil
-//    }
-//    guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday) else {return nil}
-//    guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
-//    return object.id
-//}

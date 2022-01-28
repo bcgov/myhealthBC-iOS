@@ -17,6 +17,7 @@ struct AuthenticatedPatientDetailsResponseObject: Codable {
     struct ResourcePayload: Codable {
         let hdid, personalhealthnumber, firstname, lastname: String?
         let birthdate, gender: String?
+        // Birthday format: "1967-06-02T00:00:00"
     }
     
     var getFullName: String {
@@ -32,6 +33,11 @@ struct AuthenticatedPatientDetailsResponseObject: Codable {
             name.append(last)
         }
         return name
+    }
+    
+    var getBdayDate: Date? {
+        guard let birthdate = resourcePayload?.birthdate else { return nil }
+        return Date.Formatter.gatewayDateAndTime.date(from: birthdate)
     }
 }
 
