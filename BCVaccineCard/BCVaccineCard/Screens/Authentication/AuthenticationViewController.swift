@@ -137,24 +137,6 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func dismissView(withDelay: Bool, status: AuthenticationStatus) {
-        // TODO: Here we can fetch user records before dismissing
-        /**
-         look for:
-         // TODO: FETCH RECORDS FOR AUTHENTICATED USER
-         where you see that, it would be the place to perform the fetch.
-         but its probably cleaner to do it here.
-         */
-//        if status == .Completed {
-//            // TODO: Fetch records here
-//            // use AuthManager().hdid and AuthManager().authToken
-//            // Steps: follow the '// TODO: CONNOR' comments and you'll see a number
-//            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
-//                // TODO: Error handling here
-//                return
-//            }
-//            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-//            tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds)
-//        }
         
         if withDelay {
             self.view.startLoadingIndicator()

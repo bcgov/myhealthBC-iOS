@@ -21,17 +21,17 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="400" height="100"/>
+            <rect key="frame" x="0.0" y="0.0" width="400" height="60"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cz4-Co-71N">
-                    <rect key="frame" x="0.0" y="0.0" width="400" height="70"/>
+                    <rect key="frame" x="0.0" y="0.0" width="400" height="30"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SBi-x5-0Ig">
-                            <rect key="frame" x="1" y="1" width="398" height="68"/>
+                            <rect key="frame" x="1" y="1" width="398" height="28"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9P9-w0-HeZ">
-                                    <rect key="frame" x="1" y="1" width="396" height="66"/>
+                                    <rect key="frame" x="1" y="1" width="396" height="26"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 </view>
                             </subviews>
@@ -53,7 +53,7 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c3R-I0-jb6">
-                    <rect key="frame" x="5" y="75" width="390" height="21"/>
+                    <rect key="frame" x="5" y="32" width="390" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -64,7 +64,7 @@
             <constraints>
                 <constraint firstItem="c3R-I0-jb6" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="5" id="09v-Yx-nUn"/>
                 <constraint firstItem="c3R-I0-jb6" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="2yq-Pq-DyI"/>
-                <constraint firstItem="c3R-I0-jb6" firstAttribute="top" secondItem="Cz4-Co-71N" secondAttribute="bottom" constant="5" id="6LA-L6-7KV"/>
+                <constraint firstItem="c3R-I0-jb6" firstAttribute="top" secondItem="Cz4-Co-71N" secondAttribute="bottom" constant="2" id="6LA-L6-7KV"/>
                 <constraint firstItem="Cz4-Co-71N" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="MqM-zj-o0g"/>
                 <constraint firstItem="Cz4-Co-71N" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="QTg-Sk-3jI"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Cz4-Co-71N" secondAttribute="trailing" id="UzZ-QJ-JEY"/>

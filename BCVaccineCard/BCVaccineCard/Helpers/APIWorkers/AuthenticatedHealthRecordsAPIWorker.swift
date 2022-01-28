@@ -10,14 +10,25 @@ import BCVaccineValidator
 
 // FIXME: Adjust delegates to handle progress (pass back value, and completed fetch type)
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
+    func openLoader()
     func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int)
-    func handleError(error: String?)
+    func handleError(fetchType: AuthenticationFetchType, error: String)
     func dismissLoader()
 }
 
 enum AuthenticationFetchType {
+    case PatientDetails
     case VaccineCard
     case TestResults
+    
+    // NOTE: The reason this is not in localized file yet is because we don't know what loader will look like, so text will likely change
+    var getName: String {
+        switch self {
+        case .PatientDetails: return "Patient Details"
+        case .VaccineCard: return "Vaccine Card"
+        case .TestResults: return "Test Results"
+        }
+    }
 }
 
 class AuthenticatedHealthRecordsAPIWorker: NSObject {
@@ -70,6 +81,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
+        delegate?.openLoader()
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
     }
@@ -117,7 +129,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetPatientDetailsRequest() {
         guard let authCredentials = self.requestDetails.authenticatedPatientDetails?.authCredentials else {
-            self.delegate?.handleError(error: .genericErrorMessage)
+            self.delegate?.handleError(fetchType: .PatientDetails, error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedPatientDetails(authCredentials: authCredentials)
@@ -125,7 +137,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetTestResultsRequest() {
         guard let authCredentials = self.requestDetails.authenticatedTestResultsDetails?.authCredentials else {
-            self.delegate?.handleError(error: .genericErrorMessage)
+            self.delegate?.handleError(fetchType: .TestResults, error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
@@ -133,7 +145,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetVaccineCardRequest() {
         guard let authCredentials = self.requestDetails.authenticatedVaccineCardDetails?.authCredentials else {
-            self.delegate?.handleError(error: .genericErrorMessage)
+            self.delegate?.handleError(fetchType: .VaccineCard, error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
@@ -150,7 +162,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload?.orders == nil || testResult.resourcePayload?.orders.count == 0) {
                 // TODO: Error mapping here
-                self.delegate?.handleError(error: resultMessage)
+                self.delegate?.handleError(fetchType: .TestResults, error: resultMessage)
             }
             else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
                 // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
@@ -163,7 +175,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 
             }
         case .failure(let error):
-            self.delegate?.handleError(error: error.resultMessage)
+            self.delegate?.handleError(fetchType: .TestResults, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
         
@@ -173,7 +185,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode?.data == nil && vaccineCard.resourcePayload?.federalVaccineProof?.data == nil) {
                 // TODO: Error mapping here
-                self.delegate?.handleError(error: resultMessage)
+                self.delegate?.handleError(fetchType: .VaccineCard, error: resultMessage)
             } else if vaccineCard.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicVaccineStatusRetryMaxForFedPass, let retryinMS = vaccineCard.resourcePayload?.retryin {
                 // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
                 self.retryCount += 1
@@ -183,7 +195,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.handleVaccineCardInCoreData(vaccineCard: vaccineCard)
             }
         case .failure(let error):
-            self.delegate?.handleError(error: error.resultMessage)
+            self.delegate?.handleError(fetchType: .VaccineCard, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
     
@@ -196,13 +208,13 @@ extension AuthenticatedHealthRecordsAPIWorker {
         
         let qrResult = vaccineCard.transformResponseIntoQRCode()
         guard let code = qrResult.qrString else {
-            self.delegate?.handleError(error: qrResult.error)
+            self.delegate?.handleError(fetchType: .VaccineCard, error: qrResult.error ?? .genericErrorMessage)
             return
         }
         BCVaccineValidator.shared.validate(code: code) { [weak self] result in
             guard let `self` = self else { return }
             guard let data = result.result else {
-                self.delegate?.handleError(error: .invalidQRCodeMessage)
+                self.delegate?.handleError(fetchType: .VaccineCard, error: .invalidQRCodeMessage)
                 return
             }
             DispatchQueue.main.async { [weak self] in
@@ -245,7 +257,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             if card != nil {
                 self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: 1, completedCount: 1)
             } else {
-                self.delegate?.handleError(error: .updateCardFailed)
+                self.delegate?.handleError(fetchType: .VaccineCard, error: .updateCardFailed)
             }
         })
     }
@@ -266,7 +278,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: testResult.totalResultCount ?? orders.count, completedCount: completedCount)
             } else {
                 errorArrayCount += 1
-                self.delegate?.handleError(error: "Error fetching test result")
+                self.delegate?.handleError(fetchType: .TestResults, error: "Error fetching test result")
             }
         }
         self.delegate?.dismissLoader()

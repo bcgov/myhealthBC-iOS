@@ -63,10 +63,21 @@ class AuthenticatedFetchLoader: UIView {
         loadingViewTrailingConstraint.constant = self.getLoaderConstraintAtZero
     }
     
-    func configure(status: String, loadingProgress: CGFloat) {
+    func configure(status: String, loadingProgress: CGFloat?) {
         statusLabel.text = status
-        loadingViewTrailingConstraint.constant = calculateTrailingConstraing(progress: loadingProgress)
         self.layoutIfNeeded()
+        guard let loadingProgress = loadingProgress else { return }
+        if loadingProgress == 1 {
+            print("STARTED ANIMATION")
+            UIView.animate(withDuration: 1.3, delay: 0.2, options: .curveEaseIn) {
+                self.loadingViewTrailingConstraint.constant = self.calculateTrailingConstraing(progress: loadingProgress)
+                self.layoutIfNeeded()
+            } completion: { done in
+                print("DONE ANIMATION")
+            }
+        }
+        
+        
     }
     
     func calculateTrailingConstraing(progress: CGFloat) -> CGFloat {
