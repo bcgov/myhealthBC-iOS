@@ -231,7 +231,7 @@ extension TabBarController {
     }
     
 }
-
+// TODO: Cleanup
 // MARK: Auth Fetch delegates
 extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     func openLoader() {
