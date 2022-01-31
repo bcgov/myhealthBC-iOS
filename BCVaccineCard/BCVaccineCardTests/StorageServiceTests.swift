@@ -12,17 +12,21 @@ import CoreData
 class StorageServiceTests: XCTestCase {
     var storageService: StorageService!
     var coreDataStack: CoreDataStackProtocol!
+    var gatewayFormViewController: GatewayFormViewController!
     
     override func setUp() {
         super.setUp()
         coreDataStack = TestCoreDataStack()
         storageService = StorageService(managedContext: coreDataStack.managedContext)
+        gatewayFormViewController = GatewayFormViewController()
+        gatewayFormViewController.storageService = storageService
     }
 
     override func tearDown() {
         super.tearDown()
         storageService = nil
         coreDataStack = nil
+        gatewayFormViewController = nil
     }
     
     // Patient Test Cases
@@ -188,58 +192,46 @@ class StorageServiceTests: XCTestCase {
     
     func testStoreFetchVaccineCard() {
         // given
-        let vaccineQR = "QR"
-        let name = "Sam"
-        let issueDate = Date()
-        let hash = "Hash"
-        let birthday = Date()
-        let phn = "AnyPHN"
-        let authenticated = false
+        let model = SampleVaxCard()
         // when storing card and fetching it back
-        guard let patient = storageService.storePatient(name: name, birthday: birthday, phn: phn) else {
+        guard let patient = storePatient() else {
             XCTFail() // failed to create patient entity
             return
         }
         let storeExp = expectation(description: "store vaccine card")
-        storageService.storeVaccineVard(vaccineQR: vaccineQR, name: name, issueDate: issueDate, hash: hash, patient: patient, authenticated: authenticated) { _ in
+        storageService.storeVaccineCard(vaccineQR: model.vaccineQR, name: model.name, issueDate: model.issueDate, hash: model.hash, patient: patient, authenticated: model.authenticated) { _ in
             storeExp.fulfill()
         }
         waitForExpectations(timeout: 2)
         let cardsList = storageService.fetchVaccineCards()
-        let card = storageService.fetchVaccineCard(code: vaccineQR)
+        let card = storageService.fetchVaccineCard(code: model.vaccineQR)
         // then
         XCTAssertEqual(cardsList.count, 1)
-        XCTAssertEqual(card?.code, vaccineQR)
-        XCTAssertEqual(card?.name, name)
-        XCTAssertEqual(card?.issueDate, issueDate)
-        XCTAssertEqual(card?.firHash, hash)
-        XCTAssertEqual(card?.authenticated, authenticated)
-        XCTAssertEqual(card?.authenticated, authenticated)
+        XCTAssertEqual(card?.code, model.vaccineQR)
+        XCTAssertEqual(card?.name, model.name)
+        XCTAssertEqual(card?.issueDate, model.issueDate)
+        XCTAssertEqual(card?.firHash, model.hash)
+        XCTAssertEqual(card?.authenticated, model.authenticated)
+        XCTAssertEqual(card?.authenticated, model.authenticated)
         XCTAssertEqual(card?.sortOrder, 0)
         XCTAssertEqual(card?.patient, patient)
     }
     
     func testUpdateVaccinCcard() {
         // given
-        let vaccineQR = "QR"
-        let name = "Sam"
-        let issueDate = Date()
-        let hash = "Hash"
-        let birthday = Date()
-        let phn = "AnyPHN"
-        let authenticated = false
+        let model = SampleVaxCard()
         // when storing card and fetching it back
-        guard let patient = storageService.storePatient(name: name, birthday: birthday, phn: phn) else {
+        guard let patient = storePatient() else {
             XCTFail("failed to create patient entity")
             return
         }
-        let storeExp = expectation(description: "store vaccine card")
-        storageService.storeVaccineVard(vaccineQR: vaccineQR, name: name, issueDate: issueDate, hash: hash, patient: patient, authenticated: authenticated) { _ in
+        let storeExp = expectation(description: "store card")
+        storageService.storeVaccineCard(vaccineQR: model.vaccineQR, name: model.name, issueDate: model.issueDate, hash: model.hash, patient: patient, authenticated: model.authenticated) { _ in
             storeExp.fulfill()
         }
         waitForExpectations(timeout: 2)
         let cardsList = storageService.fetchVaccineCards()
-        var card = storageService.fetchVaccineCard(code: vaccineQR)
+        var card = storageService.fetchVaccineCard(code: model.vaccineQR)
         // when updating the existing card
         let federalPass = "Test federal Pass"
         let updatExp = expectation(description: "update vaccine card")
@@ -247,16 +239,15 @@ class StorageServiceTests: XCTestCase {
             updatExp.fulfill()
         }
         waitForExpectations(timeout: 2)
-        card = storageService.fetchVaccineCard(code: vaccineQR)
+        card = storageService.fetchVaccineCard(code: model.vaccineQR)
         // then
         XCTAssertEqual(cardsList.count, 1)
         XCTAssertEqual(card?.federalPass, federalPass)
-        XCTAssertEqual(card?.code, vaccineQR)
-        XCTAssertEqual(card?.name, name)
-        XCTAssertEqual(card?.issueDate, issueDate)
-        XCTAssertEqual(card?.firHash, hash)
-        XCTAssertEqual(card?.authenticated, authenticated)
-        XCTAssertEqual(card?.authenticated, authenticated)
+        XCTAssertEqual(card?.code, model.vaccineQR)
+        XCTAssertEqual(card?.name, model.name)
+        XCTAssertEqual(card?.issueDate, model.issueDate)
+        XCTAssertEqual(card?.firHash, model.hash)
+        XCTAssertEqual(card?.authenticated, model.authenticated)
         XCTAssertEqual(card?.sortOrder, 0)
         XCTAssertEqual(card?.patient, patient)
 
@@ -264,25 +255,19 @@ class StorageServiceTests: XCTestCase {
     
     func testDeleteVaccineCard() {
         // given
-        let vaccineQR = "QR"
-        let name = "Sam"
-        let issueDate = Date()
-        let hash = "Hash"
-        let birthday = Date()
-        let phn = "AnyPHN"
-        let authenticated = false
+        let model = SampleVaxCard()
         // when storing card and fetching it back
-        guard let patient = storageService.storePatient(name: name, birthday: birthday, phn: phn) else {
-            XCTFail("failed to create patient entity")
+        guard let patient = storePatient() else {
+            XCTFail()
             return
         }
         let storeExp = expectation(description: "store vaccine card")
-        storageService.storeVaccineVard(vaccineQR: vaccineQR, name: name, issueDate: issueDate, hash: hash, patient: patient, authenticated: authenticated) { _ in
+        storageService.storeVaccineCard(vaccineQR: model.vaccineQR, name: model.name, issueDate: model.issueDate, hash: model.hash, patient: patient, authenticated: model.authenticated) { _ in
             storeExp.fulfill()
         }
         waitForExpectations(timeout: 2)
         // when deleting card and fetch all cards back
-        storageService.deleteVaccineCard(vaccineQR: vaccineQR)
+        storageService.deleteVaccineCard(vaccineQR: model.vaccineQR)
         let cardsList = storageService.fetchVaccineCards()
         // then
         XCTAssertTrue(cardsList.isEmpty)
@@ -290,5 +275,52 @@ class StorageServiceTests: XCTestCase {
         let patients = storageService.fetchPatients()
         // then
         XCTAssertEqual(patients.count, 1)
+    }
+    
+    func testAddingTestResult() {
+        // giving
+        let patietName = "Donald"
+        let bday = Date(timeIntervalSinceNow: -60*60*24*365*30)
+        let reportId = "12122"
+        let phn = "123253"
+        let authenticated = true
+        let testResultModel = self.sampleTestResult(patietName: patietName, reportId: reportId)
+        // when
+        let testId = gatewayFormViewController.handleTestResultInCoreData(gatewayResponse: testResultModel, authenticated: authenticated, phn: phn, birthday: bday)
+        let patients = storageService.fetchPatients()
+        let patient = patients.first
+        let testResults = storageService.fetchTestResults()
+        let testResult = testResults.first
+        // then
+        XCTAssertEqual(patients.count,1)
+        XCTAssertEqual(testResults.count,1)
+        XCTAssertEqual(testResult?.id, testId)
+        XCTAssertEqual(testResult?.patient?.name, patietName)
+        XCTAssertEqual(testResult?.patient?.birthday, bday)
+        XCTAssertEqual(patient?.phn, phn)
+        XCTAssertEqual(patient?.name, patietName)
+
+    }
+}
+
+extension StorageServiceTests {
+    func storePatient(name: String? = "Any Name", birthday: Date? = Date(), phn: String? = "Any PHN") -> BCVaccineCard.Patient? {
+        return storageService.storePatient(name: name, birthday: birthday, phn: phn)
+    }
+    
+    struct SampleVaxCard {
+        let vaccineQR = "QR"
+        let name = "Sam"
+        let issueDate = Date()
+        let hash = "Hash"
+        let birthday = Date()
+        let phn = "AnyPHN"
+        let authenticated = false
+    }
+    
+    func sampleTestResult(patietName: String, reportId: String) -> GatewayTestResultResponse {
+        let record = GatewayTestResultResponseRecord(patientDisplayName: patietName, lab: nil, reportId: reportId, collectionDateTime: "2022-01-01", resultDateTime: nil, testName: nil, testType: nil, testStatus: nil, testOutcome: nil, resultTitle: nil, resultDescription: nil, resultLink: nil)
+        let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 1, records: [record])
+        return GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: 1, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
     }
 }
