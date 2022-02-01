@@ -12,21 +12,17 @@ import CoreData
 class StorageServiceTests: XCTestCase {
     var storageService: StorageService!
     var coreDataStack: CoreDataStackProtocol!
-    var gatewayFormViewController: GatewayFormViewController!
     
     override func setUp() {
         super.setUp()
         coreDataStack = TestCoreDataStack()
         storageService = StorageService(managedContext: coreDataStack.managedContext)
-        gatewayFormViewController = GatewayFormViewController()
-        gatewayFormViewController.storageService = storageService
     }
 
     override func tearDown() {
         super.tearDown()
         storageService = nil
         coreDataStack = nil
-        gatewayFormViewController = nil
     }
     
     // Patient Test Cases
@@ -276,31 +272,6 @@ class StorageServiceTests: XCTestCase {
         // then
         XCTAssertEqual(patients.count, 1)
     }
-    
-    func testAddingTestResult() {
-        // giving
-        let patietName = "Donald"
-        let bday = Date(timeIntervalSinceNow: -60*60*24*365*30)
-        let reportId = "12122"
-        let phn = "123253"
-        let authenticated = true
-        let testResultModel = self.sampleTestResult(patietName: patietName, reportId: reportId)
-        // when
-        let testId = gatewayFormViewController.handleTestResultInCoreData(gatewayResponse: testResultModel, authenticated: authenticated, phn: phn, birthday: bday)
-        let patients = storageService.fetchPatients()
-        let patient = patients.first
-        let testResults = storageService.fetchTestResults()
-        let testResult = testResults.first
-        // then
-        XCTAssertEqual(patients.count,1)
-        XCTAssertEqual(testResults.count,1)
-        XCTAssertEqual(testResult?.id, testId)
-        XCTAssertEqual(testResult?.patient?.name, patietName)
-        XCTAssertEqual(testResult?.patient?.birthday, bday)
-        XCTAssertEqual(patient?.phn, phn)
-        XCTAssertEqual(patient?.name, patietName)
-
-    }
 }
 
 extension StorageServiceTests {
@@ -316,11 +287,5 @@ extension StorageServiceTests {
         let birthday = Date()
         let phn = "AnyPHN"
         let authenticated = false
-    }
-    
-    func sampleTestResult(patietName: String, reportId: String) -> GatewayTestResultResponse {
-        let record = GatewayTestResultResponseRecord(patientDisplayName: patietName, lab: nil, reportId: reportId, collectionDateTime: "2022-01-01", resultDateTime: nil, testName: nil, testType: nil, testStatus: nil, testOutcome: nil, resultTitle: nil, resultDescription: nil, resultLink: nil)
-        let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 1, records: [record])
-        return GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: 1, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
     }
 }
