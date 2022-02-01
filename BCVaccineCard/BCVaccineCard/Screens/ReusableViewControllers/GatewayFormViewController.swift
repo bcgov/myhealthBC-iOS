@@ -156,9 +156,6 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
     
-    // StorageService
-    var storageService = StorageService.shared
-    
     // Form setup
     private var dataSource: [FormData] = []
     private var fetchType: GatewayFormViewControllerFetchType!
@@ -558,13 +555,11 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         // store prefered PHN if needed here
         self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
         hideLoader()
-        if storageService.testExists(from: result) {
+        if StorageService.shared.testExists(from: result) {
             alert(title: .duplicateTitle, message: .duplicateTestMessage)
             return
         }
-        guard let phn = self.personalHealthNumber() else { return }
-        let bday = self.birthday()
-        if let id = handleTestResultInCoreData(gatewayResponse: result, authenticated: false, phn: phn, birthday: bday) {
+        if let id = handleTestResultInCoreData(gatewayResponse: result, authenticated: false) {
             var birthday: String?
             if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) {
                 birthday = dataSource[dobIndexPath.row].configuration.text
@@ -634,8 +629,8 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         let model = localModel.transform()
         let deletedCardSortOrder: Int64?
         if fetchType.isFedPassOnly, let codeToReplace = code {
-            deletedCardSortOrder = storageService.fetchVaccineCard(code: codeToReplace)?.sortOrder
-            storageService.deleteVaccineCard(vaccineQR: codeToReplace, reSort: false)
+            deletedCardSortOrder = StorageService.shared.fetchVaccineCard(code: codeToReplace)?.sortOrder
+            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace, reSort: false)
         } else {
             deletedCardSortOrder = nil
         }
@@ -669,12 +664,13 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         }
     }
     
-    func personalHealthNumber() -> String? {
+    func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool) -> String? {
+        // Note, this first guard statement is to handle the case when health gateway is wonky - throws success with no error but has key nil values, so in this case we don't want to store a dummy patient value, as that's what was happening
+        guard let collectionDate = gatewayResponse.resourcePayload?.records.first?.collectionDateTime,
+              !collectionDate.trimWhiteSpacesAndNewLines.isEmpty, let reportID = gatewayResponse.resourcePayload?.records.first?.reportId,
+              !reportID.trimWhiteSpacesAndNewLines.isEmpty else { return nil }
         guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
-        return dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting
-    }
-    
-    func birthday() -> Date? {
+        guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
         let bday: Date?
         if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false),
            let dob = dataSource[dobIndexPath.row].configuration.text,
@@ -683,16 +679,8 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         } else {
             bday = nil
         }
-        return bday
-    }
-    
-    func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, phn: String, birthday: Date?) -> String? {
-        // Note, this first guard statement is to handle the case when health gateway is wonky - throws success with no error but has key nil values, so in this case we don't want to store a dummy patient value, as that's what was happening
-        guard let collectionDate = gatewayResponse.resourcePayload?.records.first?.collectionDateTime,
-              !collectionDate.trimWhiteSpacesAndNewLines.isEmpty, let reportID = gatewayResponse.resourcePayload?.records.first?.reportId,
-              !reportID.trimWhiteSpacesAndNewLines.isEmpty else { return nil }
-        guard let patient = storageService.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: birthday) else {return nil}
-        guard let object = storageService.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday) else {return nil}
+        guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
         return object.id
     }
     
