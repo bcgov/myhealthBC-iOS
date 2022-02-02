@@ -189,6 +189,13 @@ class LocalAuthView: UIView, Theme {
         style(label: subtitleLabel, style: .Regular, size: 17, colour: .Grey)
         style(label: infoLabel, style: .Regular, size: 17, colour: .Blue)
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.showPrivacy(_:)))
+        infoLabel.addGestureRecognizer(tap)
+    }
+    
+    @objc func showPrivacy(_ sender: UITapGestureRecognizer? = nil) {
+        let privacyView: LocalAuthPrivacyView = LocalAuthPrivacyView.fromNib()
+        privacyView.show(over: self)
     }
     
     func setState(state: LocalAuthView.State) {

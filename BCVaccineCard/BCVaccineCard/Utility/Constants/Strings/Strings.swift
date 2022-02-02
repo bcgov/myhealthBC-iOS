@@ -232,6 +232,11 @@ extension String {
     static var logOut: String { return "LogOut".localized }
     static var reAuthenticateMessage: String { return "ReAuthenticateMessage".localized }
     static var deletedAllRecordsAndSavedData: String { return "DeletedAllRecordsAndSavedData".localized }
+    
+    // MARK: Local Auth
+    static var localAuthPrivacyText: String { return "LocalAuthPrivacyText".localized }
+    static var privacy: String { return "Privacy".localized }
+    
 }
 
 // Accessibility only localized strings
