@@ -42,6 +42,7 @@ class SettingsRowTableViewCell: UITableViewCell, Theme {
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.contentView.gestureRecognizers?.removeAll()
         self.contentView.addGestureRecognizer(tap)
+        titleLabel.accessibilityTraits = .button
     }
     
     @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
