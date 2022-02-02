@@ -54,7 +54,7 @@ struct AccessibilityLabels {
     }
     
     struct Navigation {
-        static let backButtonTitle = "Navigation bar back button"
+        static let backButtonTitle = "Navigation bar back"
         static let backButtonHint = "Tapping this button will take you back to "
     }
     
