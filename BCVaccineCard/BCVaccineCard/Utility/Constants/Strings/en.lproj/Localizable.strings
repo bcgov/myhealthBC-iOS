@@ -197,7 +197,7 @@
 "LocalAuthViewDescription" = "Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure.";
 "LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
 "UseTouchId" = "Use Touch ID";
-"usePassCode" = "Use passcode";
+"UsePassCode" = "Use passcode";
 "UseFaceId" = "Use Face ID";
 "TurnOnPasscode" = "Turn on passcode";
 "TurnOnFaceId" = "Turn on Face ID";

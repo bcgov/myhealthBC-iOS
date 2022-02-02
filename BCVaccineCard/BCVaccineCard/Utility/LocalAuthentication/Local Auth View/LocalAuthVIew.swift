@@ -134,13 +134,13 @@ class LocalAuthView: UIView, Theme {
             useTouchIDButton.isHidden = true
         case .touchID:
             useTouchIDButton.isHidden = false
-            style(button: turnOnTouchIDButton, style: .Fill, title: "Turn on Touch ID")
-            style(button: useTouchIDButton, style: .Fill, title: "Use Touch ID")
+            style(button: turnOnTouchIDButton, style: .Fill, title: .turnOnTouchId)
+            style(button: useTouchIDButton, style: .Fill, title: .useTouchId)
             hasBiometric = true
         case .faceID:
             useTouchIDButton.isHidden = false
-            style(button: turnOnTouchIDButton, style: .Fill, title: "Turn on Face ID")
-            style(button: useTouchIDButton, style: .Fill, title: "Use Face ID")
+            style(button: turnOnTouchIDButton, style: .Fill, title: .turnOnFaceId)
+            style(button: useTouchIDButton, style: .Fill, title: .useFaceId)
             hasBiometric = true
         @unknown default:
             useTouchIDButton.isHidden = true
@@ -164,7 +164,7 @@ class LocalAuthView: UIView, Theme {
         case .EnableAuthentication:
             turnOnTouchIDButton.isHidden = false
             if !hasBiometric {
-                turnOnTouchIDButton.setTitle("Turn on passcode", for: .normal)
+                turnOnTouchIDButton.setTitle(.turnOnPasscode, for: .normal)
             }
             useTouchIDButton.isHidden = true
             usePasscodeButton.isHidden = true
@@ -181,9 +181,9 @@ class LocalAuthView: UIView, Theme {
         let underlineAttributedString = NSAttributedString(string: .learnMoreAboutLocalAuth, attributes: underlineAttribute)
         infoLabel.attributedText = underlineAttributedString
         
-        style(button: turnOnTouchIDButton, style: .Fill, title: "Turn on Touch ID")
-        style(button: useTouchIDButton, style: .Fill, title: "Use Touch ID")
-        style(button: usePasscodeButton, style: .Fill, title: "Use passcode")
+        style(button: turnOnTouchIDButton, style: .Fill, title: .turnOnTouchId)
+        style(button: useTouchIDButton, style: .Fill, title: .useTouchId)
+        style(button: usePasscodeButton, style: .Fill, title: .usePassCode)
         
         style(label: titleLabel, style: .Bold, size: 24, colour: .Blue)
         style(label: subtitleLabel, style: .Regular, size: 17, colour: .Grey)

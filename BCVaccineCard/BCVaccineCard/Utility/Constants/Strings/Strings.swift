@@ -241,7 +241,7 @@ extension String {
     static var learnMoreAboutLocalAuth: String { return "LearnMoreAboutLocalAuth".localized }
     
     static var useTouchId: String { return "UseTouchId".localized }
-    static var usePassCode: String { return "usePassCode".localized }
+    static var usePassCode: String { return "UsePassCode".localized }
     static var useFaceId: String { return "UseFaceId".localized }
     static var turnOnPasscode: String { return "TurnOnPasscode".localized }
     static var turnOnFaceId: String { return "TurnOnFaceId".localized }

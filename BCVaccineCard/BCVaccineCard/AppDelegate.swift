@@ -150,15 +150,6 @@ extension AppDelegate {
     }
 }
 
-
-// MARK: Local Auth
-extension AppDelegate {
-//    private func performLocalAuth() {
-//        guard let rootViewController = UIApplication.topViewController() else {return}
-//        rootViewController.showLocalAuth()
-//    }
-}
-
 public extension UIApplication {
 
     class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
