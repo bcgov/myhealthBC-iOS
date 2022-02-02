@@ -51,6 +51,50 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
+    func getAuthenticatedVaccineCard(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
+        let interceptor = NetworkRequestInterceptor()
+        let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedVaccineCard)
+        
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+        ]
+        
+        let parameters: [String: String] = [
+            Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
+    }
+    
+    func getAuthenticatedTestResults(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedTestResultsResponseModel>) {
+        let interceptor = NetworkRequestInterceptor()
+        let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedTestResults)
+        
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+        ]
+        
+        let parameters: [String: String] = [
+            Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
+        ]
+       
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
+    }
+    
+    func getAuthenticatedPatientDetails(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedPatientDetailsResponseObject>) {
+        let interceptor = NetworkRequestInterceptor()
+        let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedPatientDetails(hdid: authCredentials.hdid))
+        
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
+    
 }
 
 // MARK: QUEUEIT Logic here

@@ -59,9 +59,20 @@ extension BaseViewController {
     }
     
     private func goToSettingsScreen() {
-        let vc = profileAndSettingsViewController.constructProfileAndSettingsViewController()
+        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
+// MARK: For Authenticated Fetch
+extension BaseViewController {
+    func performAuthenticatedBackgroundFetch() {
+        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
+            // TODO: Error handling here
+            return
+        }
+        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+        tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds)
+    }
+}
 
