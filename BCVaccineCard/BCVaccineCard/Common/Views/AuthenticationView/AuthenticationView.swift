@@ -39,8 +39,8 @@ class AuthenticationView: UIView, Theme {
     }
     
     func style() {
-        style(button: loginButton, style: .Fill, title: "Log in with BC Services Card")
-        style(button: cancelButton, style: .Hollow, title: "Not Now")
+        style(button: loginButton, style: .Fill, title: .bcscLogin)
+        style(button: cancelButton, style: .Hollow, title: .notNow)
         
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 24)
         subtitleLabel.font = UIFont.bcSansRegularWithSize(size: 17)

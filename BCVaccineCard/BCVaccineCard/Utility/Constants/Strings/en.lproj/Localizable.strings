@@ -177,7 +177,7 @@
 "ViewProfile" = "View profile";
 "SecurityAndData" = "Security & data";
 "BcscLogin" = "Log in with BC Services Card";
-
+"notNow" = "Not Now";
 "LoginSuccess" = "Log in successful";
 "RecordsWillBeAutomaticallyAdded" = "Your records will be automatically added and updated in My Health BC.";
 "LoginDescription" = "When logged in, recrods will be automatically added and updated";
