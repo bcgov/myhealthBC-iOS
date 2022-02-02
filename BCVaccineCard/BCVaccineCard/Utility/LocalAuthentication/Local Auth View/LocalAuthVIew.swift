@@ -174,11 +174,11 @@ class LocalAuthView: UIView, Theme {
     
     func setBaseText() {
         self.backgroundColor = .white
-        titleLabel.text = "Protect your personal information"
-        subtitleLabel.text = "Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure."
+        titleLabel.text = .protectYourPersonalInformation
+        subtitleLabel.text = .localAuthViewDescription
         
         let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.thick.rawValue]
-        let underlineAttributedString = NSAttributedString(string: "Learn more about enabling biometric on your device", attributes: underlineAttribute)
+        let underlineAttributedString = NSAttributedString(string: .learnMoreAboutLocalAuth, attributes: underlineAttribute)
         infoLabel.attributedText = underlineAttributedString
         
         style(button: turnOnTouchIDButton, style: .Fill, title: "Turn on Touch ID")
@@ -190,6 +190,7 @@ class LocalAuthView: UIView, Theme {
         style(label: infoLabel, style: .Regular, size: 17, colour: .Blue)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.showPrivacy(_:)))
+        infoLabel.isUserInteractionEnabled = true
         infoLabel.addGestureRecognizer(tap)
     }
     

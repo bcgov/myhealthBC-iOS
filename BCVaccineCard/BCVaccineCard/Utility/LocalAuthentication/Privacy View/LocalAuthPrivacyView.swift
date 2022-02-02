@@ -25,6 +25,7 @@ class LocalAuthPrivacyView: UIView, UITextViewDelegate, Theme {
         parentView.layer.add(transition, forKey: nil)
         parentView.addSubview(self)
         self.addEqualSizeContraints(to: parentView)
+        style()
     }
     
     private func style() {
