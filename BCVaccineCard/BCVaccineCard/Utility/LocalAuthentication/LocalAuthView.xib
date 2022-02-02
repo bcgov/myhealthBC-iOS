@@ -41,7 +41,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="9hQ-KH-g8G">
-                    <rect key="frame" x="32" y="668" width="350" height="178"/>
+                    <rect key="frame" x="32" y="614" width="350" height="178"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wR8-Zs-2ep">
                             <rect key="frame" x="0.0" y="0.0" width="350" height="54"/>
@@ -96,7 +96,7 @@
                 <constraint firstItem="a3P-xz-QNo" firstAttribute="top" secondItem="06m-DN-SXG" secondAttribute="bottom" constant="16" id="ko9-bb-odD"/>
                 <constraint firstItem="06m-DN-SXG" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="32" id="msM-K4-s4L"/>
                 <constraint firstItem="7zX-d2-qNL" firstAttribute="top" relation="greaterThanOrEqual" secondItem="a3P-xz-QNo" secondAttribute="bottom" constant="32" id="oJD-Pz-kPU"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="9hQ-KH-g8G" secondAttribute="bottom" constant="16" id="zak-SP-DTl"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="9hQ-KH-g8G" secondAttribute="bottom" priority="250" constant="70" id="zak-SP-DTl"/>
             </constraints>
             <connections>
                 <outlet property="iconImageView" destination="7zX-d2-qNL" id="oDk-ne-23z"/>

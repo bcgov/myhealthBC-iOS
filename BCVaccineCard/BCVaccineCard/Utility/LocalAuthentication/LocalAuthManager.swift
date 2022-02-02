@@ -13,13 +13,22 @@ class LocalAuthManager {
     
     public static let shared = LocalAuthManager()
     
-    public static var shouldAuthenticate = true
-    private static var block = true
+    public static var shouldAuthenticate = true {
+        didSet {
+            Logger.log(string: "SET SHOULD AUTHENTICATE - \(shouldAuthenticate)", type: .localAuth)
+        }
+    }
+    private static var block = true {
+        didSet {
+            Logger.log(string: "Blocking local authentication popups - \(block)", type: .localAuth)
+        }
+    }
     
     //MARK: Handle launch from background
     private func launchedFromBackground() {
         guard !LocalAuthManager.block else {return}
         LocalAuthManager.shouldAuthenticate = true
+        Logger.log(string: "Should perfom local authentication", type: .localAuth)
         Notification.Name.shouldPerformLocalAuth.post(object: nil, userInfo: nil)
     }
     
@@ -27,11 +36,12 @@ class LocalAuthManager {
         Notification.Name.launchedFromBackground.onPost(object: nil, queue: .main) {[weak self] _ in
             guard let `self` = self else {return}
             self.launchedFromBackground()
+            Logger.log(string: "App launched from background", type: .localAuth)
             LocalAuthManager.block = false
         }
     }
     
-    private lazy var view: LocalAuthView = LocalAuthView.fromNib()
+    private var view: LocalAuthView?
     private let context = LAContext()
     
     public enum AuthStatus {
@@ -86,18 +96,23 @@ class LocalAuthManager {
     }
     
     public func performLocalAuth(on viewController: UIViewController, completion: @escaping(_ status: AuthStatus) -> Void) {
+        if !LocalAuthManager.shouldAuthenticate {return}
         let viewType: LocalAuthView.ViewType = availableAuthMethods.isEmpty ? .EnableAuthentication : .Authenticate
-        view.dismiss(animated: false)
-        view.display(on: viewController, type: viewType, manager: self) {
+        view?.dismiss(animated: false)
+        view = LocalAuthView.fromNib()
+        Logger.log(string: "Performing local authentication", type: .localAuth)
+        view?.display(on: viewController, type: viewType, manager: self) {
             self.openAuthSettings()
         } useTouchId: {
-            self.useAuth(policy: .deviceOwnerAuthenticationWithBiometrics, completion: completion)
+            self.useAuth(withBiometric: true, completion: completion)
         } usePasscode: {
-            self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
+            self.useAuth(withBiometric: false, completion: completion)
         }
         
-        if viewType == .Authenticate {
-            useAuth(policy: .deviceOwnerAuthenticationWithBiometrics, completion: completion)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if viewType == .Authenticate {
+                self.useAuth(withBiometric: true, completion: completion)
+            }
         }
          
     }
@@ -106,28 +121,34 @@ class LocalAuthManager {
         UIApplication.openAppSettings()
     }
     
+    private func useAuth(withBiometric: Bool, completion: @escaping(_ status: AuthStatus) -> Void) {
+        let policy: LAPolicy = withBiometric ? .deviceOwnerAuthenticationWithBiometrics : .deviceOwnerAuthentication
+        useAuth(policy: policy, completion: completion)
+    }
+    
     private func useAuth(policy: LAPolicy, completion: @escaping(_ status: AuthStatus) -> Void) {
         performAuth(policy: policy) { biometricStatus in
             switch biometricStatus {
             case .Authorized:
-                self.view.setState(state: .Success)
+                LocalAuthManager.shouldAuthenticate = false
+                self.view?.setState(state: .Success)
                 return completion(biometricStatus)
             case .Unauthorized:
-                self.view.setState(state: .Fail)
+                self.view?.setState(state: .Fail)
                 return completion(biometricStatus)
                 
             case .Unavailable:
                 self.performAuth(policy: .deviceOwnerAuthentication, completion: { passStatus in
                     switch passStatus {
                     case .Authorized:
-                        self.view.setState(state: .Success)
                         LocalAuthManager.shouldAuthenticate = false
+                        self.view?.setState(state: .Success)
                         return completion(passStatus)
                     case .Unauthorized:
-                        self.view.setState(state: .Fail)
+                        self.view?.setState(state: .Fail)
                         return completion(passStatus)
                     case .Unavailable:
-                        self.view.setState(state: .Unavailable)
+                        self.view?.setState(state: .Unavailable)
                         return completion(passStatus)
                     }
                 })

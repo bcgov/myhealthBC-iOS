@@ -252,30 +252,27 @@ extension UIViewController {
                 parent.showLocalAuth()
                 return
             }
-            let manager = LocalAuthManager.shared
-
-//            let containerVC = UIViewController()
-//            containerVC.modalPresentationStyle = .overFullScreen
-//            self.present(containerVC, animated: true, completion: nil)
+            if !LocalAuthManager.shouldAuthenticate {return}
             
-            if manager.appHasPermission {
-                manager.performLocalAuth(on: self) { [weak self] status in
-                    if status != .Authorized {self?.localAuthFailed()}
-                    return
+            LocalAuthManager.shared.performLocalAuth(on: self) { [weak self] status in
+                switch status {
+                case .Authorized:
+                    self?.localAuthSucceded()
+                case .Unauthorized, .Unavailable:
+                    self?.localAuthFailed()
                 }
+                return
             }
 
-            if manager.isEnabled, manager.availableAuthMethods.isEmpty {
-                self.localNoAvailableAuth()
-            }
         }
     }
     
     private func localAuthFailed() {
+        Logger.log(string: "Local auth Failed", type: .localAuth)
     }
     
-    private func localNoAvailableAuth() {
-        alert(title: "Unsecure device", message: "Please enable authentication on your device to proceed")
+    private func localAuthSucceded() {
+        Logger.log(string: "Local auth successful", type: .localAuth)
     }
     
     // MARK: Helpers
@@ -339,7 +336,7 @@ extension UIViewController {
     ) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: model.name, birthday: birthdate) else {
-            Logger.log(string: "**Could not fetch or create patent to store vaccine card")
+            Logger.log(string: "**Could not fetch or create patent to store vaccine card", type: .storage)
             return completion()
         }
         StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, completion: {_ in completion()})

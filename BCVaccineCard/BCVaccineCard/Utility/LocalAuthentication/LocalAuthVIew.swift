@@ -81,14 +81,8 @@ class LocalAuthView: UIView, Theme {
         }
         tag = LocalAuthView.viewTag
         
-        
         viewController.view.addSubview(self)
         addEqualSizeContraints(to: viewController.view)
-        
-        
-//        let window = UIApplication.shared.windows.last!
-//        window.addSubview(self)
-//        addEqualSizeContraints(to: window)
         
         layoutIfNeeded()
         style(type: type)
@@ -160,24 +154,26 @@ class LocalAuthView: UIView, Theme {
         case .Authenticate:
             turnOnTouchIDButton.isHidden = true
             if hasBiometric {
+                usePasscodeButton.isHidden = true
                 useTouchIDButton.isHidden = false
             } else {
+                usePasscodeButton.isHidden = false
                 useTouchIDButton.isHidden = true
             }
-            usePasscodeButton.alpha = 1
-            usePasscodeButton.isUserInteractionEnabled = true
+            
         case .EnableAuthentication:
             turnOnTouchIDButton.isHidden = false
-            if hasBiometric {
+            if !hasBiometric {
                 turnOnTouchIDButton.setTitle("Turn on passcode", for: .normal)
             }
             useTouchIDButton.isHidden = true
-            usePasscodeButton.alpha = 0
-            usePasscodeButton.isUserInteractionEnabled = false
+            usePasscodeButton.isHidden = true
+            alertNotAvailable()
         }
     }
     
     func setBaseText() {
+        self.backgroundColor = .white
         titleLabel.text = "Protect your personal information"
         subtitleLabel.text = "Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure."
         
@@ -187,7 +183,7 @@ class LocalAuthView: UIView, Theme {
         
         style(button: turnOnTouchIDButton, style: .Fill, title: "Turn on Touch ID")
         style(button: useTouchIDButton, style: .Fill, title: "Use Touch ID")
-        style(button: usePasscodeButton, style: .Hollow, title: "Use passcode")
+        style(button: usePasscodeButton, style: .Fill, title: "Use passcode")
         
         style(label: titleLabel, style: .Bold, size: 24, colour: .Blue)
         style(label: subtitleLabel, style: .Regular, size: 17, colour: .Grey)
@@ -220,6 +216,10 @@ class LocalAuthView: UIView, Theme {
                 }
             }
         }
+    }
+    
+    private func alertNotAvailable() {
+//        parent?.alert(title: "Unsecure device", message: "Please enable authentication on your device to proceed")
     }
 }
 
