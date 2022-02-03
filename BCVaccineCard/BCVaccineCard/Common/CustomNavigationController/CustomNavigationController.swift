@@ -140,7 +140,7 @@ class CustomNavigationController: UINavigationController {
             vc.navigationItem.rightBarButtonItem?.accessibilityLabel = left.accessibility.label
             vc.navigationItem.rightBarButtonItem?.accessibilityHint = left.accessibility.hint
         }
-        vc.navigationItem.backButtonTitle = ""
+        vc.navigationItem.setBackItemTitle(with: "")
     }
     
     func getRightBarButtonItem() -> UIBarButtonItem? {

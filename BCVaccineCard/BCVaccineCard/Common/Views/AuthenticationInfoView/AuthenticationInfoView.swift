@@ -83,6 +83,7 @@ class AuthenticationInfoView: UIView, Theme {
     }
     
     func setupAccessibility() {
-        navBackButton.accessibilityLabel = "back"
+        navBackButton.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
+        navTitle.accessibilityTraits = .header
     }
 }

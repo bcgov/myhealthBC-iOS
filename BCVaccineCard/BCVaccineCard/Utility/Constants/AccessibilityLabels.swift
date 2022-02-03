@@ -10,7 +10,7 @@ import Foundation
 struct AccessibilityLabels {
     
     struct MyHealthPassesScreen {
-        static let navRightIconTitle = "Settings Icon"
+        static let navRightIconTitle = "Settings"
         static let navRightIconHint = "Tapping this button will bring you to the settings screen"
     }
     
@@ -54,7 +54,7 @@ struct AccessibilityLabels {
     }
     
     struct Navigation {
-        static let backButtonTitle = "Navigation bar back"
+        static let backButtonTitle = "back"
         static let backButtonHint = "Tapping this button will take you back to "
     }
     
