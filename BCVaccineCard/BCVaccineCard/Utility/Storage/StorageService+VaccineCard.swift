@@ -43,7 +43,7 @@ protocol StorageVaccineCardManager {
     func updateVaccineCard(card: VaccineCard, federalPass: String, completion: @escaping(VaccineCard?)->Void)
     
     /// Updated a stored vaccine card with new data from
-    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(VaccineCard?)->Void)
+    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, authenticated: Bool, completion: @escaping(VaccineCard?)->Void)
     
     /// Update a vaccine card's sort order
     func updateVaccineCardSortOrder(card: VaccineCard, newPosition: Int)
@@ -123,11 +123,12 @@ extension StorageService: StorageVaccineCardManager {
         }
     }
     
-    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping (VaccineCard?) -> Void) {
+    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, authenticated: Bool, completion: @escaping (VaccineCard?) -> Void) {
         guard let context = managedContext, let card = fetchVaccineCards().filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return completion(nil)}
         card.code = model.code
         card.vaxDates = model.vaxDates
         card.federalPass = model.fedCode
+        card.authenticated = authenticated
         card.firHash = model.hash
         card.issueDate = Date(timeIntervalSince1970: model.issueDate)
         card.name = model.name

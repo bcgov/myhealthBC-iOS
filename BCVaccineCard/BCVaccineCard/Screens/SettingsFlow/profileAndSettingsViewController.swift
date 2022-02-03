@@ -7,7 +7,7 @@
 
 import UIKit
 
-class profileAndSettingsViewController: BaseViewController {
+class ProfileAndSettingsViewController: BaseViewController {
     
     enum TableRow: Int, CaseIterable {
         case profile
@@ -15,11 +15,11 @@ class profileAndSettingsViewController: BaseViewController {
         case privacyStatement
     }
     
-    class func constructProfileAndSettingsViewController() -> profileAndSettingsViewController {
-        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: profileAndSettingsViewController.self)) as? profileAndSettingsViewController {
+    class func constructProfileAndSettingsViewController() -> ProfileAndSettingsViewController {
+        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: ProfileAndSettingsViewController.self)) as? ProfileAndSettingsViewController {
             return vc
         }
-        return profileAndSettingsViewController()
+        return ProfileAndSettingsViewController()
     }
     
     // MARK: Variables
@@ -60,7 +60,7 @@ class profileAndSettingsViewController: BaseViewController {
     }
 }
 
-extension profileAndSettingsViewController {
+extension ProfileAndSettingsViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .profileAndSettings,
                                                leftNavButton: nil,
@@ -71,7 +71,7 @@ extension profileAndSettingsViewController {
     }
 }
 
-extension profileAndSettingsViewController: UITableViewDelegate, UITableViewDataSource {
+extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
     private func setupTableView() {
         tableView.register(UINib.init(nibName: SettingsRowTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsRowTableViewCell.getName)

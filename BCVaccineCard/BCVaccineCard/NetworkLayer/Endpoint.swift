@@ -11,6 +11,9 @@ import Foundation
 protocol EndpointsAccessor {
     var getVaccineCard: URL { get }
     var getTestResults: URL { get }
+    var getAuthenticatedVaccineCard: URL { get }
+    var getAuthenticatedTestResults: URL { get }
+    func getAuthenticatedPatientDetails(hdid: String) -> URL
 }
 
 struct UrlAccessor {
@@ -29,6 +32,10 @@ struct UrlAccessor {
         return self.baseUrl.appendingPathComponent("laboratoryservice")
     }
     
+    private var patientServiceBaseURL: URL {
+        return self.baseUrl.appendingPathComponent("patientservice")
+    }
+
 }
 
 extension UrlAccessor: EndpointsAccessor {
@@ -39,6 +46,18 @@ extension UrlAccessor: EndpointsAccessor {
     
     var getTestResults: URL {
         return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/PublicLaboratory/CovidTests")
+    }
+    
+    var getAuthenticatedVaccineCard: URL {
+        return self.immunizationBaseUrl.appendingPathComponent("v1/api/AuthenticatedVaccineStatus")
+    }
+    
+    var getAuthenticatedTestResults: URL {
+        return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory/Covid19Orders")
+    }
+    
+    func getAuthenticatedPatientDetails(hdid: String) -> URL {
+        return self.patientServiceBaseURL.appendingPathComponent("v1/api/Patient").appendingPathComponent(hdid)
     }
 }
 

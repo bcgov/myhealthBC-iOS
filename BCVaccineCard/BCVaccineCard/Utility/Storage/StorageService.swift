@@ -51,7 +51,7 @@ class StorageService: StorageManagerProtocol {
     }
     
     func notify(event: StorageEvent<Any>) {
-        Logger.log(string: "StorageEvent \(event.entity) - \(event.event)")
+        Logger.log(string: "StorageEvent \(event.entity) - \(event.event)", type: .storage)
         NotificationCenter.default.post(name: .storageChangeEvent, object: event)
     }
     

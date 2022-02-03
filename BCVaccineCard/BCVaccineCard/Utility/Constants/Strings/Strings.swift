@@ -232,6 +232,21 @@ extension String {
     static var logOut: String { return "LogOut".localized }
     static var reAuthenticateMessage: String { return "ReAuthenticateMessage".localized }
     static var deletedAllRecordsAndSavedData: String { return "DeletedAllRecordsAndSavedData".localized }
+    
+    // MARK: Local Auth
+    static var localAuthPrivacyText: String { return "LocalAuthPrivacyText".localized }
+    static var privacy: String { return "Privacy".localized }
+    static var protectYourPersonalInformation: String { return "ProtectYourPersonalInformation".localized }
+    static var localAuthViewDescription: String { return "LocalAuthViewDescription".localized }
+    static var learnMoreAboutLocalAuth: String { return "LearnMoreAboutLocalAuth".localized }
+    
+    static var useTouchId: String { return "UseTouchId".localized }
+    static var usePassCode: String { return "UsePassCode".localized }
+    static var useFaceId: String { return "UseFaceId".localized }
+    static var turnOnPasscode: String { return "TurnOnPasscode".localized }
+    static var turnOnFaceId: String { return "TurnOnFaceId".localized }
+    static var turnOnTouchId: String { return "TurnOnTouchId".localized }
+    
 }
 
 // Accessibility only localized strings
