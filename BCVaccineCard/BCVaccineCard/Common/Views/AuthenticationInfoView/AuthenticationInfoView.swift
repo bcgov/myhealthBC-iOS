@@ -49,6 +49,7 @@ class AuthenticationInfoView: UIView, Theme {
         self.addEqualSizeContraints(to: view)
         self.completion = completion
         style()
+        setupAccessibility()
     }
     
     func style() {
@@ -79,5 +80,9 @@ class AuthenticationInfoView: UIView, Theme {
         navTitle.font = UIFont.bcSansBoldWithSize(size: 17)
         navTitle.textColor = AppColours.appBlue
         navDivider.backgroundColor = .lightGray.withAlphaComponent(0.3)
+    }
+    
+    func setupAccessibility() {
+        navBackButton.accessibilityLabel = "back"
     }
 }
