@@ -119,6 +119,7 @@
 "TapToZoomIn" = "Tap to zoom in";
 "PresentForScanning" = "Present For Scanning";
 "UnlinkCardTitle" = "Unlink Card";
+"UnlinkTitle" = "Unlink";
 "UnlinkCardMessage" = "Are you sure you want to unlink this pass?";
 "NoName" = "No Name";
 "ShowFederalProof" = "Show federal proof of vaccination";

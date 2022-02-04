@@ -248,11 +248,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        if inEditMode {
-            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
-        }
-    
-        return "Unlink"
+        return .unlinkTitle
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -276,7 +272,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         deleteAction.backgroundColor = .white
         deleteAction.textColor = Constants.UI.Theme.primaryColor
         deleteAction.isAccessibilityElement = true
-        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkCard
         deleteAction.accessibilityTraits = .button
         return [deleteAction]
     }

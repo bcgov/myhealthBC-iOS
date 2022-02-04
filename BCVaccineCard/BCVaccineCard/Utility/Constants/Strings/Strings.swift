@@ -148,6 +148,7 @@ extension String {
     static var tapToZoomIn: String { return "TapToZoomIn".localized }
     static var presentForScanning: String { return "PresentForScanning".localized }
     static var unlinkCardTitle: String { return "UnlinkCardTitle".localized }
+    static var unlinkTitle: String { return "UnlinkTitle".localized }
     static var unlinkCardMessage: String { return "UnlinkCardMessage".localized }
     static var noName: String { return "NoName".localized }
     static var showFederalProof: String { return "ShowFederalProof".localized }
