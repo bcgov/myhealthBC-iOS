@@ -8,7 +8,7 @@
 import UIKit
 import BCVaccineValidator
 
-// FIXME: Adjust delegates to handle progress (pass back value, and completed fetch type)
+// FIXME: Adjust delegates to only pass in once everything has started, and once everything has finished
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func openLoader()
     func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int)
@@ -50,6 +50,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     // Note: Choosing this instead of completion handlers as completion handlers were causing issues
+    // TODO: Turn this into an array which will track the fetch status - construct this independendently (via init, perhaps) so that it is more reusable
     var fetchStatus: FetchStatus = FetchStatus(fetchType: .PatientDetails, requestCompleted: false) {
         didSet {
             switch fetchStatus.fetchType {
@@ -357,6 +358,7 @@ struct AuthenticatedAPIWorkerRetryDetails {
     }
 }
 
+// TODO: Modify this accordingly
 struct FetchStatus {
     var fetchType: AuthenticationFetchType
     var requestCompleted: Bool
