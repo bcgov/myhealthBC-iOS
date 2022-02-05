@@ -7,7 +7,7 @@
 
 import Foundation
 // MARK: - Welcome
-struct AuthenticatedMedicationResponseObject: Codable {
+struct AuthenticatedMedicationStatementResponseObject: Codable {
     let resourcePayload: [ResourcePayload]
     let totalResultCount, pageIndex, pageSize, resultStatus: Int
     let resultError: ResultError?

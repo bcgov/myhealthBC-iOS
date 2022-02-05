@@ -156,6 +156,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
+    // TODO: Add medication request here - first though, let's cleanup this file
+    
 }
 
 // MARK: Retry functions
