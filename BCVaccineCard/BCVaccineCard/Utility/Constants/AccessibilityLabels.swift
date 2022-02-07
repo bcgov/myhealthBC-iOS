@@ -58,7 +58,7 @@ struct AccessibilityLabels {
     }
     
     struct OpenWebLink {
-        static let openWebLinkHint = "Open Website link for more intormation"
+        static let openWebLinkHint = "Open Website link for more information"
     }
     
     struct Navigation {

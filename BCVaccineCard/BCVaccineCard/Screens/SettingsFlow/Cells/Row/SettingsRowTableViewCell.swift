@@ -42,7 +42,7 @@ class SettingsRowTableViewCell: UITableViewCell, Theme {
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.contentView.gestureRecognizers?.removeAll()
         self.contentView.addGestureRecognizer(tap)
-        titleLabel.accessibilityTraits = .link
+        self.setupAccessibility()
     }
     
     @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
@@ -54,5 +54,13 @@ class SettingsRowTableViewCell: UITableViewCell, Theme {
     // MARK: Style
     fileprivate func style() {
         style(label: titleLabel, style: .Regular, size: 17, colour: .Black)
+    }
+    
+    // MARK: setup accessibility
+    private func setupAccessibility() {
+        self.isAccessibilityElement = true
+        self.accessibilityLabel = titleLabel.text
+        self.accessibilityTraits = .link
+        self.accessibilityHint = AccessibilityLabels.OpenWebLink.openWebLinkHint
     }
 }
