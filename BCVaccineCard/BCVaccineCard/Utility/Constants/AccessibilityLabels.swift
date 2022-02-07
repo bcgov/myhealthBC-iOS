@@ -43,8 +43,12 @@ struct AccessibilityLabels {
         static let navHint = "Your Health Records"
     }
     
-    struct UserHealthRecords {
-        static let cardHint = "Double tap to navigate to user's detailed list of records"
+    struct HealthRecords {
+        static let cardHint = "Double tap to navigate to user's list of records"
+    }
+    
+    struct UserRecord {
+        static let cardHint = "Tap to navigate to record details"
     }
     
     struct HealthRecordsDetailScreen {

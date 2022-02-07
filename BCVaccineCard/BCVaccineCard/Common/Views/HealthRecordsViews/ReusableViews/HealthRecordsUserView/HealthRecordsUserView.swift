@@ -91,6 +91,6 @@ class HealthRecordsUserView: UIView {
         self.isAccessibilityElement = true
         self.accessibilityLabel = nameLabel.text
         self.accessibilityValue = recordCountLabel.text
-        self.accessibilityHint = AccessibilityLabels.UserHealthRecords.cardHint
+        self.accessibilityHint = AccessibilityLabels.HealthRecords.cardHint
     }
 }
