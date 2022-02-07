@@ -43,8 +43,12 @@ struct AccessibilityLabels {
         static let navHint = "Your Health Records"
     }
     
+    struct UserHealthRecords {
+        static let cardHint = "Double tap to navigate to user's detailed list of records"
+    }
+    
     struct HealthRecordsDetailScreen {
-        static let navRightIconTitle = "Deletee"
+        static let navRightIconTitle = "Delete"
         static let navRightIconHint = "Tapping this button will delete this record"
         static let navHint = "Your Health Record"
     }

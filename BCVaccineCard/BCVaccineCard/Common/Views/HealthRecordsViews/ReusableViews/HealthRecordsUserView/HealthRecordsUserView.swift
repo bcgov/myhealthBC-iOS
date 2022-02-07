@@ -73,7 +73,6 @@ class HealthRecordsUserView: UIView {
     }
     
     func configure(name: String, records: Int, authenticated: Bool) {
-        setupAccessibility()
         // NOTE: This is for weird logic where we word wrap, unless there is a name that is really long and hyphenated (so, going to make assumptions here)
         let numberOfSpaces = name.reduce(0) { $1 == " " ? $0 + 1 : $0 }
         nameLabel.lineBreakMode = name.count >= 20 && numberOfSpaces <= 1 ? .byTruncatingTail : .byWordWrapping
@@ -84,15 +83,14 @@ class HealthRecordsUserView: UIView {
         }
         recordCountLabel.text = recordText
         styleAuthStatus(authenticated: authenticated)
+        setupAccessibility()
     }
     
     // TODO: Setup accessibility
     private func setupAccessibility() {
         self.isAccessibilityElement = true
-        let accessibilityLabel = ""
-        self.accessibilityLabel = accessibilityLabel
-//        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-//        self.accessibilityValue = accessibilityValue
-        self.accessibilityHint = ""
+        self.accessibilityLabel = nameLabel.text
+        self.accessibilityValue = recordCountLabel.text
+        self.accessibilityHint = AccessibilityLabels.UserHealthRecords.cardHint
     }
 }
