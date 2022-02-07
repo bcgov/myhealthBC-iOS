@@ -90,6 +90,7 @@ class ReusableHeaderAddView: UIView {
     
     // TODO: Setup accessibility
     private func setupAccessibility() {
+        boldTextLabel.accessibilityLabel = boldTextLabel.text?.capitalized
         addCardButton.accessibilityLabel = AccessibilityLabels.AddCard.addCardLabel
         addCardButton.accessibilityHint = AccessibilityLabels.AddCard.addCardHint
     }

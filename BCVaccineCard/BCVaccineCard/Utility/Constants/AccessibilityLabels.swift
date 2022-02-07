@@ -10,15 +10,15 @@ import Foundation
 struct AccessibilityLabels {
     
     struct MyHealthPassesScreen {
-        static let navRightIconTitle = "Settings"
-        static let navRightIconHint = "Tapping this button will bring you to the settings screen"
+        static let navRightIconTitle = String.settings
+        static let navRightIconHint = String.tappingButtonBringToSettings
     }
     
     struct HealthGatewayScreen {
-        static let navLeftIconTitle = "Close Icon"
-        static let navLeftIconHint = "Tapping this button will return you to the previous screen"
-        static let navRightIconTitle = "Help"
-        static let navRightIconHint = "Tapping this button will bring you to a help screen to assist you with the Health Gateway vaccine card retrieval method"
+        static let navLeftIconTitle = String.close
+        static let navLeftIconHint = String.tappingButtonTeturnToPreviousScreen
+        static let navRightIconTitle = String.help
+        static let navRightIconHint = String.tappingButtonBringHelpScreen
     }
     
     struct CovidVaccineCardsScreen {

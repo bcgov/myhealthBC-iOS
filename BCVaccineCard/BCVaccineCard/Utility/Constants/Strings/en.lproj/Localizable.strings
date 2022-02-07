@@ -190,3 +190,19 @@
 "LogoutDescription" = "All records under the account will be removed";
 "LogOut" = "Log out";
 "ReAuthenticateMessage" = "You’re attempting to access records that are protected by BC Services Card, please log in again.";
+"PublishedOn" = "Published on";
+"Title" = "Title";
+"Details" = "Details";
+"LeavingMyHealthBC" = "Leaving My Health BC";
+"YouWillRedirected" = "You will be temporarily redirected to ";
+"HealthGateway" = "Health Gateway ";
+"toLoginWithYourBCServices" = "to login with your BC Services Card.";
+"YouWillAutomaticallyReturned" = "You will then be automatically returned to the ";
+"MyHealthBC" = "My Health BC";
+"MobileApp" = " mobile app.";
+
+// Accessibility only localized strings
+
+"TappingButtonBringToSettings" = "Tapping this button will bring you to the settings screen";
+"TappingButtonTeturnToPreviousScreen" = "Tapping this button will return you to the previous screen";
+"TappingButtonBringHelpScreen" = "Tapping this button will bring you to a help screen to assist you with the Health Gateway vaccine card retrieval method";

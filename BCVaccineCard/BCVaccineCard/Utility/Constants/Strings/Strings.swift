@@ -234,10 +234,48 @@ extension String {
     static var logOut: String { return "LogOut".localized }
     static var reAuthenticateMessage: String { return "ReAuthenticateMessage".localized }
     static var deletedAllRecordsAndSavedData: String { return "DeletedAllRecordsAndSavedData".localized }
+    static var publishedOn: String {
+        return "PublishedOn".localized
+    }
+    static var title: String {
+        return "Title".localized
+    }
+    static var details: String {
+        return "Details".localized
+    }
+    static var leavingMyHealthBC: String {
+        return "LeavingMyHealthBC".localized
+    }
+    static var youWillRedirected: String {
+        return "YouWillRedirected".localized
+    }
+    static var healthGateway: String {
+        return "HealthGateway".localized
+    }
+    static var toLoginWithYourBCServices: String {
+        return "toLoginWithYourBCServices".localized
+    }
+    static var youWillAutomaticallyReturned: String {
+        return "YouWillAutomaticallyReturned".localized
+    }
+    static var myHealthBC: String {
+        return "MyHealthBC".localized
+    }
+    static var mobileApp: String {
+        return "MobileApp".localized
+    }
 }
 
 // Accessibility only localized strings
 extension String {
-    
+    static var tappingButtonBringToSettings: String {
+        return "TappingButtonBringToSettings".localized
+    }
+    static var tappingButtonTeturnToPreviousScreen: String {
+        return "TappingButtonTeturnToPreviousScreen".localized
+    }
+    static var tappingButtonBringHelpScreen: StringLiteralType {
+        return "TappingButtonBringHelpScreen".localized
+    }
 }
 

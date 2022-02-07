@@ -55,14 +55,14 @@ class NewsFeedTableViewCell: UITableViewCell {
         
         var label = ""
         if let date = newsDateLabel.text, !date.isEmpty {
-            label = "Published on: \(date). \n"
+            label = "\(String.publishedOn): \(date). \n"
         }
         if let title = newsTitleLabel.text, !title.isEmpty {
-            label += "Title: \(title). \n"
+            label += "\(String.title): \(title). \n"
         }
         
         if let detail = newsDetailsLabel.text, !detail.isEmpty {
-            label += "Details: \(detail). \n"
+            label += "\(String.details): \(detail). \n"
         }
         
         self.accessibilityLabel = label
