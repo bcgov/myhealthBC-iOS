@@ -67,6 +67,7 @@ struct Constants {
     struct NetworkRetryAttempts {
         static let publicVaccineStatusRetryMaxForFedPass = 3
         static let publicRetryMaxForTestResults = 3
+        static let publicRetryMaxForMedicationStatement = 3
     }
     
     static let vaccineTable: [VaccineTable] = [
