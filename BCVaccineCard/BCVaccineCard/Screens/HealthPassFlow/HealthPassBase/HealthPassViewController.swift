@@ -197,7 +197,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
         deleteAction.backgroundColor = .white
         deleteAction.textColor = Constants.UI.Theme.primaryColor
         deleteAction.isAccessibilityElement = true
-        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkCard
         deleteAction.accessibilityTraits = .button
         return [deleteAction]
     }

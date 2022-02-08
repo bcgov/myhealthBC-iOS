@@ -232,11 +232,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        if inEditMode {
-            deleteRecord(at: indexPath.row, reInitEditMode: true)
-        }
-        
-        return "Delete"
+        return .delete
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
@@ -251,7 +247,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         deleteAction.backgroundColor = .white
         deleteAction.textColor = Constants.UI.Theme.primaryColor
         deleteAction.isAccessibilityElement = true
-        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkCard
         deleteAction.accessibilityTraits = .button
         return [deleteAction]
     }

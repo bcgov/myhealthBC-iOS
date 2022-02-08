@@ -59,8 +59,6 @@ class ReusableHeaderAddView: UIView {
         boldTextLabel.textColor = .black
         subtextLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         subtextLabel.textColor = AppColours.textGray
-        addCardButton.accessibilityLabel = AccessibilityLabels.AddCard.addCardLabel
-        addCardButton.accessibilityHint = AccessibilityLabels.AddCard.addCardHint
     }
     
     @IBAction func addCardButtonTapped(_ sender: UIButton) {
@@ -92,11 +90,8 @@ class ReusableHeaderAddView: UIView {
     
     // TODO: Setup accessibility
     private func setupAccessibility() {
-        self.isAccessibilityElement = true
-        let accessibilityLabel = ""
-        self.accessibilityLabel = accessibilityLabel
-//        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-//        self.accessibilityValue = accessibilityValue
-        self.accessibilityHint = ""
+        boldTextLabel.accessibilityLabel = boldTextLabel.text
+        addCardButton.accessibilityLabel = AccessibilityLabels.AddCard.addCardLabel
+        addCardButton.accessibilityHint = AccessibilityLabels.AddCard.addCardHint
     }
 }

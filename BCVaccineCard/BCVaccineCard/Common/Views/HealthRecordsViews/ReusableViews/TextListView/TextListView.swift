@@ -41,7 +41,6 @@ class TextListView: UIView {
     }
     
     func configure(data: [TextListModel]) {
-        setupAccessibility()
         self.setupStackViews(data: data)
     }
     
@@ -54,6 +53,7 @@ class TextListView: UIView {
             if let subtext = initializeLabel(textListProperties: listComponent.subtext) {
                 stack.addArrangedSubview(subtext)
             }
+            self.setupAccessibility(stack: stack, listComponent: listComponent)
             self.baseStackView.addArrangedSubview(stack)
         }
     }
@@ -88,12 +88,9 @@ class TextListView: UIView {
     }
     
     // TODO: Setup accessibility
-    private func setupAccessibility() {
-        self.isAccessibilityElement = true
-        let accessibilityLabel = ""
-        self.accessibilityLabel = accessibilityLabel
-//        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-//        self.accessibilityValue = accessibilityValue
-        self.accessibilityHint = ""
+    private func setupAccessibility(stack: UIStackView, listComponent: TextListModel) {
+        stack.isAccessibilityElement = true
+        stack.accessibilityLabel = listComponent.header.text
+        stack.accessibilityValue = listComponent.subtext?.text
     }
 }
