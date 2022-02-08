@@ -104,26 +104,20 @@ class LocalAuthManager {
         view?.display(on: viewController, type: viewType, manager: self) {
             self.openAuthSettings()
         } useTouchId: {
-            self.useAuth(withBiometric: true, completion: completion)
+            self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
         } usePasscode: {
-            self.useAuth(withBiometric: false, completion: completion)
+            self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if viewType == .Authenticate {
-                self.useAuth(withBiometric: true, completion: completion)
+                self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
             }
         }
-         
     }
     
     private func openAuthSettings() {
         UIApplication.openAppSettings()
-    }
-    
-    private func useAuth(withBiometric: Bool, completion: @escaping(_ status: AuthStatus) -> Void) {
-        let policy: LAPolicy = withBiometric ? .deviceOwnerAuthenticationWithBiometrics : .deviceOwnerAuthentication
-        useAuth(policy: policy, completion: completion)
     }
     
     private func useAuth(policy: LAPolicy, completion: @escaping(_ status: AuthStatus) -> Void) {

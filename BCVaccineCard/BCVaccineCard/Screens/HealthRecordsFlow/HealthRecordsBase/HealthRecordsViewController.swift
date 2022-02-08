@@ -120,37 +120,11 @@ class HealthRecordsViewController: BaseViewController {
     // MARK: Helpers
     func selected(data: HealthRecordsDataSource) {
         let patient = data.patient
-        
-        // Not Authenticated - show
-        if !data.authenticated {
-            showRecords(for: patient)
-            return
-        }
-        
-        // Patient has records added after authentication
-        
-        // If authenticated - show
+
         if authManager.isAuthenticated {
             closeRecordWhenAuthExpires(patient: patient)
-            showRecords(for: patient)
-            return
         }
-        
-        // Let user authenticate to view record
-        alertConfirmation(
-            title: .bcscLogin,
-            message: .reAuthenticateMessage,
-            confirmTitle: .ok, confirmStyle: .default) {[weak self] in
-                guard let `self` = self else {return}
-                self.showLogin(initialView: .Auth) { [weak self] authenticated in
-                    guard let `self` = self, authenticated else {return}
-                    self.closeRecordWhenAuthExpires(patient: patient)
-                    self.showRecords(for: patient)
-                }
-            } onCancel: {
-                return
-            }
-
+        showRecords(for: patient)
     }
     
     func closeRecordWhenAuthExpires(patient: Patient) {

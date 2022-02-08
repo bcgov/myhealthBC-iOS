@@ -10,127 +10,135 @@ import Foundation
 struct AccessibilityLabels {
     
     struct MyHealthPassesScreen {
-        static let navRightIconTitle = "Settings Icon"
-        static let navRightIconHint = "Tapping this button will bring you to the settings screen"
+        static let navRightIconTitle = String.settings
+        static let navRightIconHint = String.tappingButtonBringToSettings
     }
     
     struct HealthGatewayScreen {
-        static let navLeftIconTitle = "Close Icon"
-        static let navLeftIconHint = "Tapping this button will return you to the previous screen"
-        static let navRightIconTitle = "Help Icon"
-        static let navRightIconHint = "Tapping this button will bring you to a help screen to assist you with the Health Gateway vaccine card retrieval method"
+        static let navLeftIconTitle = String.close
+        static let navLeftIconHint = String.tappingButtonTeturnToPreviousScreen
+        static let navRightIconTitle = String.help
+        static let navRightIconHint = String.tappingButtonBringHelpScreen
     }
     
     struct CovidVaccineCardsScreen {
-        static let navRightDoneIconTitle = "Done"
-        static let navRightDoneIconHint = "Tapping this button will finish editing"
-        static let navRightEditIconTitle = "Edit"
-        static let navRightEditIconHint = "Tapping this button will allow you to edit your list of cards, by reordering your list or removing cards from your device"
-        static let navRightIconTitle = "Add Card"
-        static let navRightIconHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
-        static let inEditMode = "Tapping 'done' will stop the editing of cards and save any changes."
-        static let notInEditMode = "Tapping 'manage cards' will allow you to edit the order of your cards, and remove any cards you no longer want in your list of passes."
-        static let navHint = "Your Covid Vaccine Cards"
-        static let proofOfVaccineCardAdded = "Your proof of vaccination has been added to your passes. Vaccination Card Expanded"
+        static let navRightDoneIconTitle = String.done
+        static let navRightDoneIconHint = String.tappingWillFinishEditing
+        static let navRightEditIconTitle = String.edit
+        static let navRightEditIconHint = String.tappingWillAllowYouEditYourListOfCards
+        static let navRightIconTitle = String.addCard
+        static let navRightIconHint = String.tappingWillBringNewScreenWithOptionsRetrieveQR
+        static let inEditMode = String.tappingDoneStopEditing
+        static let notInEditMode = String.tappingManageCardsWillAllowEditTheOrderOfCards
+        static let navHint = String.yourCovidVaccineCards
+        static let proofOfVaccineCardAdded = "\(String.yourProofOfVaccinationAddedToYourPasses) \(String.vaccinationCardExpanded)"
     }
     
     struct ListOfHealthRecordsScreen {
-        static let navRightDoneIconTitle = "Done"
-        static let navRightDoneIconHint = "Tapping this button will finish editing"
-        static let navRightEditIconTitle = "Edit"
-        static let navRightEditIconHint = "Tapping this button will allow you to edit your list of records, by removing records from your device"
-        static let inEditMode = "Tapping 'done' will stop the editing of records and save any changes."
-        static let navHint = "Your Health Records"
+        static let navRightDoneIconTitle = String.done
+        static let navRightDoneIconHint = String.tappingWillFinishEditing
+        static let navRightEditIconTitle = String.edit
+        static let navRightEditIconHint = String.tappingButtonAllowYouEditRecords
+        static let inEditMode = String.tappingDoneWillStopEditingRecords
+        static let navHint = String.yourHealthRecords
+    }
+    
+    struct HealthRecords {
+        static let cardHint = String.doubleTapNavigateToUsersRecords
+    }
+    
+    struct UserRecord {
+        static let cardHint = String.tapToNavigateToRecordDetails
     }
     
     struct HealthRecordsDetailScreen {
-        static let navRightIconTitle = "Deletee"
-        static let navRightIconHint = "Tapping this button will delete this record"
-        static let navHint = "Your Health Record"
+        static let navRightIconTitle = String.delete
+        static let navRightIconHint = String.tappingWillDeleteThisRecord
+        static let navHint = String.yourHealthRecord
     }
     
     struct OpenWebLink {
-        static let openWebLinkHint = "Open Website link for more intormation"
+        static let openWebLinkHint = String.openWebsiteLinkForMoreInformation
     }
     
     struct Navigation {
-        static let backButtonTitle = "Navigation bar back button"
-        static let backButtonHint = "Tapping this button will take you back to "
+        static let backButtonTitle = String.back
+        static let backButtonHint = String.tappingWillTakeYouBackTo
     }
     
     struct Onboarding {
-        static let buttonNextTitle = "Next"
-        static let buttonNextHint = "Tapping this button will take you to the introduction of the next feature"
-        static let buttonGetStartedTitle = "Get Started"
-        static let buttonGetStartedHint = "Tapping this button will take you to the Health Passes home screen"
-        static let buttonOkTitle = "Okay"
-        static let buttonOkHint = "Tapping this button will take you to the Health Passes home screen"
+        static let buttonNextTitle = String.next
+        static let buttonNextHint = String.tappingWillTakeToIntroductionOfNextFeature
+        static let buttonGetStartedTitle = String.getStarted
+        static let buttonGetStartedHint = String.tappingWillTakeYouToHealthPassesHome
+        static let buttonOkTitle = String.okay
+        static let buttonOkHint = String.tappingWillTakeYouToHealthPassesHome
     }
     
     struct QRMethods {
-        static let scanWithCamera = "Tapping this button will open your camera to scan a QR code."
-        static let uploadImage = "Tapping this button will open your camera roll to select a QR code that you've saved."
-        static let enterGatewayInfo = "Tapping this button will take you to a new screen where you can enter your personal health information to fetch your vaccine card from health gateway"
+        static let scanWithCamera = String.tappingWillOpenYourCameraToScanQRcode
+        static let uploadImage = String.tappingWillOpenYourCameraRollToSelectSavedQRCode
+        static let enterGatewayInfo = String.tappingButtonWillTakeYouWhereYouEnterPrsonalHealthInfo
     }
     
     struct NoCards {
-        static let addCardLabel = "Add Card"
-        static let addCardHint = "Tapping this button will bring you to a new screen with different options to retrieve your QR code"
+        static let addCardLabel = String.addCard
+        static let addCardHint = String.tappingWillBringNewScreenWithOptionsRetrieveQR
     }
     
     struct AddCard {
-        static let addCardLabel = "Add Card"
-        static let addCardHint = "Tap this button to add a vaccine card"
+        static let addCardLabel = String.addCard
+        static let addCardHint = String.tapToAddVaccineCard
     }
     
     struct ViewAllButton {
-        static let viewAllLabel = "View All"
-        static let viewAllHint = "Tapping this button will show you all of your saved covid 19 vaccine cards"
+        static let viewAllLabel = String.viewAll
+        static let viewAllHint = String.tappingWillShowAllSavedCovid19VaccineCards
     }
     
     struct VaccineCardView {
-        static let vaccineCardExpanded = "Vaccination Card Expanded"
-        static let vaccineCardCollapsed = "Vaccination Card Collapsed"
-        static let qrCodeImage = "QR code image"
-        static let inEditMode = "In edit mode: Swipe up or down for special actions, and you can unlink a card or adjust the order of your cards"
-        static let expandedAction = "Action Available: Tap to zoom in QR code"
-        static let collapsedAction = "Action Available: Tap to expand Vaccination Card"
+        static let vaccineCardExpanded = String.vaccinationCardExpanded
+        static let vaccineCardCollapsed = String.vaccinationCardCollapsed
+        static let qrCodeImage = String.qrCodeImage
+        static let inEditMode = String.inEditModeSwipeUpOrDownForSpecialActions
+        static let expandedAction = String.actionAvailableTapToZoomIn
+        static let collapsedAction = String.actionAvailableTapToExpandVaccinationCard
     }
     
     struct FederalPassView {
-        static let fedPassDescriptionHasPass = "This is your federal proof of vaccination link. Double tap to show your proof."
-        static let fedPassDescriptionDoesNotHavePass = "This is your federal proof of vaccination link. Double tap to get your proof from Health Gateway."
-        static let hasPassHint = "Double tapping this button will open your federal proof of vaccination PDF."
-        static let noPassHint = "Double tapping this button will take you to health gateway where you can provide your personal health number to retrieve your federal proof of vaccination."
+        static let fedPassDescriptionHasPass = String.localAuthDescription
+        static let fedPassDescriptionDoesNotHavePass = String.federalProofOfVaccinationLinkToHealthGateway
+        static let hasPassHint = String.doubleTappingWillOpenFederalProofPDF
+        static let noPassHint = String.doubleTappingWillTakeYouToHealthGatewayForPersonalHealthNumber
     }
     
     struct FormTextField {
-        static let numberFormat = "Number Format"
-        static let dateFormat = "Date Format"
-        static let required = "Required"
+        static let numberFormat = String.numberFormat
+        static let dateFormat = String.dateFormat
+        static let required = String.required
     }
     
     struct ZoomedInQRImage {
-        static let zoomedInQR = "Zoomed in QR code presented"
+        static let zoomedInQR = String.zoomedInQRCodePresented
     }
     
     struct Settings {
-        static let privacyStatementLink = "Privacy Statement Link"
-        static let privacyStatementHint = "Action Available: Tapping the privacy statement link will take you to the privacy statement web page"
+        static let privacyStatementLink = String.privacyStatementLink
+        static let privacyStatementHint = String.actionAvailableTappingPrivacyLinkToWebPage
     }
     
     struct UnlinkFunctionality {
-        static let unlinkButton = "Unlink Button"
+        static let unlinkCard = String.unlinkCardTitle
     }
     
     struct Camera {
-        static let notifyUserCameraOpened = "Camera has been opened to scan a QR code"
-        static let closeText = "Close"
-        static let closeHint = "Tapping the close button will dismiss the camera and return you to the previous screen"
+        static let notifyUserCameraOpened = String.cameraOpenedToScanQR
+        static let closeText = String.close
+        static let closeHint = String.tappingCloseWillDismissCamera
     }
     
     struct GatewayForm {
-        static let navHint = "the QR Retrieval Methods"
+        static let navHint = String.theQRRetrievalMethods
     }
 }
 

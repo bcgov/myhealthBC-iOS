@@ -68,8 +68,12 @@ class FetchHealthRecordsViewController: BaseViewController {
         headerLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         headerLabel.textColor = AppColours.textBlack
         headerLabel.text = .fetchHealthRecordsIntroText
+        setupAccessibilty()
     }
     
+    private func setupAccessibilty() {
+        self.headerLabel.accessibilityLabel = .fetchHealthRecordsIntroText.capitalized
+    }
 }
 
 // MARK: Navigation setup

@@ -47,6 +47,15 @@ struct HealthRecordsDetailDataSource {
         }
     }
     
+    var isAuthenticated: Bool {
+        switch type {
+        case .covidImmunizationRecord(let model, _):
+            return StorageService.shared.fetchVaccineCard(code: model.code)?.authenticated ?? false
+        case .covidTestResultRecord(let model):
+            return model.authenticated
+        }
+    }
+    
     let deleteAlertTitle: String
     let deleteAlertMessage: String
     

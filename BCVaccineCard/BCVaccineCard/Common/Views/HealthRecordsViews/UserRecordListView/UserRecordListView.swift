@@ -60,7 +60,6 @@ class UserRecordListView: UIView {
     
     func configure(record: HealthRecordsDetailDataSource) {
         self.type = record.type
-        setupAccessibility()
         iconImageView.image = record.image
         recordTypeTitleLabel.text = record.title
         var statusToInclude: String?
@@ -70,15 +69,14 @@ class UserRecordListView: UIView {
         }
         let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
         recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"
+        setupAccessibility()
     }
     
     // TODO: Setup accessibility
     private func setupAccessibility() {
         self.isAccessibilityElement = true
-        let accessibilityLabel = ""
-        self.accessibilityLabel = accessibilityLabel
-//        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-//        self.accessibilityValue = accessibilityValue
-        self.accessibilityHint = ""
+        self.accessibilityLabel = recordTypeTitleLabel.text
+        self.accessibilityValue = recordTypeSubtitleLabel.text
+        self.accessibilityHint = AccessibilityLabels.UserRecord.cardHint
     }
 }

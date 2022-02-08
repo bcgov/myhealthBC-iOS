@@ -8,7 +8,8 @@
 import UIKit
 
 public extension UINavigationItem {
-    func backItemTitle(with title: String?) {
+    func setBackItemTitle(with title: String?) {
         backBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
+        backBarButtonItem?.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
     }
 }

@@ -49,6 +49,7 @@ class AuthenticationInfoView: UIView, Theme {
         self.addEqualSizeContraints(to: view)
         self.completion = completion
         style()
+        setupAccessibility()
     }
     
     func style() {
@@ -60,15 +61,15 @@ class AuthenticationInfoView: UIView, Theme {
         
         titleLabel.textColor = AppColours.appBlue
         
-        titleLabel.text = "Leaving My Health BC"
+        titleLabel.text = .leavingMyHealthBC
         messageLabel.attributedText =
             NSMutableAttributedString()
-                .normal("You will be temporarily redirected to ")
-                .bold("Health Gateway ")
-                .normal("to login with your BC Services Card.\n\n")
-                .normal("You will then be automatically returned to the")
-                .bold("My Health BC")
-                .normal("mobile app.")
+            .normal(.youWillRedirected)
+            .bold(.healthGateway)
+            .normal("\(String.toLoginWithYourBCServices)\n\n")
+            .normal(.youWillAutomaticallyReturned)
+            .bold(.myHealthBC)
+            .normal(.mobileApp)
         navBackButton.setTitle("", for: .normal)
         
         let backIcon = UIImage(named: "app-back-arrow")?.withRenderingMode(.alwaysTemplate)
@@ -79,5 +80,10 @@ class AuthenticationInfoView: UIView, Theme {
         navTitle.font = UIFont.bcSansBoldWithSize(size: 17)
         navTitle.textColor = AppColours.appBlue
         navDivider.backgroundColor = .lightGray.withAlphaComponent(0.3)
+    }
+    
+    func setupAccessibility() {
+        navBackButton.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
+        navTitle.accessibilityTraits = .header
     }
 }

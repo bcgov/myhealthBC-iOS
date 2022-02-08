@@ -26,6 +26,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
+    private var hiddenRecords: [HealthRecordsDetailDataSource] = []
     
     private var inEditMode = false {
         didSet {
@@ -102,7 +103,16 @@ extension UsersListOfRecordsViewController {
         self.view.startLoadingIndicator(backgroundColor: .clear)
         
         let records = StorageService.shared.getHeathRecords()
-        self.dataSource = records.detailDataSource(patient: patient)
+        let patientRecords = records.detailDataSource(patient: patient)
+        if AuthManager().isAuthenticated {
+            self.dataSource = patientRecords
+            self.hiddenRecords.removeAll()
+        } else {
+            let unauthenticatedRecords = patientRecords.filter({!$0.isAuthenticated})
+            let authenticatedRecords = patientRecords.filter({$0.isAuthenticated})
+            self.dataSource = unauthenticatedRecords
+            self.hiddenRecords = authenticatedRecords
+        }
         self.setupTableView()
         self.navSetup()
         
@@ -138,12 +148,20 @@ extension UsersListOfRecordsViewController {
             }
         }
     }
+    
+    func performBCSCLogin() {
+        self.showLogin(initialView: .Auth) { [weak self] authenticated in
+            guard let `self` = self, authenticated else {return}
+            self.fetchDataSource()
+        }
+    }
 }
 
 // MARK: TableView setup
 extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: UserRecordListTableViewCell.getName, bundle: .main), forCellReuseIdentifier: UserRecordListTableViewCell.getName)
+        tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
         tableView.delegate = self
@@ -151,11 +169,18 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         tableView.tableFooterView = UIView()
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return hiddenRecords.isEmpty ? 1 : 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !hiddenRecords.isEmpty && section == 0 {
+            return 1
+        }
         return dataSource.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    private func recordCell(indexPath: IndexPath) -> UITableViewCell {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: UserRecordListTableViewCell.getName, for: indexPath) as? UserRecordListTableViewCell else {
                 return UITableViewCell()
@@ -163,10 +188,32 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         cell.configure(record: dataSource[indexPath.row])
         cell.delegate = self
         return cell
-        
+    }
+    
+    private func hiddenRecordsCell(indexPath: IndexPath) -> UITableViewCell {
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: HiddenRecordsTableViewCell.getName, for: indexPath) as? HiddenRecordsTableViewCell else {
+                return UITableViewCell()
+            }
+        cell.configure(numberOfHiddenRecords: hiddenRecords.count, onLogin: {[weak self] in
+            guard let `self` = self else {return}
+            self.performBCSCLogin()
+            
+        })
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if !hiddenRecords.isEmpty && indexPath.section == 0 {
+            return hiddenRecordsCell(indexPath: indexPath)
+        } else {
+            return recordCell(indexPath: indexPath)
+        }
+       
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
         let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: dataSource.count)
@@ -185,11 +232,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        if inEditMode {
-            deleteRecord(at: indexPath.row, reInitEditMode: true)
-        }
-        
-        return "Delete"
+        return .delete
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
@@ -204,7 +247,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         deleteAction.backgroundColor = .white
         deleteAction.textColor = Constants.UI.Theme.primaryColor
         deleteAction.isAccessibilityElement = true
-        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkCard
         deleteAction.accessibilityTraits = .button
         return [deleteAction]
     }
