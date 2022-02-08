@@ -94,8 +94,8 @@ class GetRecordsView: UIView {
     // TODO: Setup accessibility
     private func setupAccessibility() {
         self.isAccessibilityElement = true
-        self.accessibilityLabel = titleLabel.text?.capitalized
-        self.accessibilityHint = descriptionLabel.text?.capitalized
+        self.accessibilityLabel = titleLabel.text
+        self.accessibilityHint = descriptionLabel.text
         self.accessibilityTraits = .button
     }
 }

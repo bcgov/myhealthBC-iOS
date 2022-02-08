@@ -34,16 +34,33 @@ class CheckboxTableViewCell: UITableViewCell {
         self.checkboxSelected = selected
         adjustImage(selected: selected)
         self.delegate = delegateOwner as? CheckboxTableViewCellDelegate
+        setupAccessibility()
     }
     
     @IBAction private func checkboxButtonTapped(_ sender: UIButton) {
         checkboxSelected = !checkboxSelected
         adjustImage(selected: checkboxSelected)
         self.delegate?.checkboxTapped(selected: checkboxSelected)
+        setupAccessibility()
     }
     
     private func adjustImage(selected: Bool) {
         let image = selected ? UIImage(named: "checkbox-filled") : UIImage(named: "checkbox-empty")
         checkboxButton.setImage(image, for: .normal)
+    }
+    
+    private func setupAccessibility() {
+        self.isAccessibilityElement = true
+        self.accessibilityLabel = .checkBox
+        self.accessibilityTraits = .button
+        self.accessibilityValue = checkboxSelected ? .selected : .unselected
+        if let labelText = checkboxTextLabel.text {
+            self.accessibilityHint = "\(String.selectTo) \(labelText)"
+        }
+    }
+    
+    override func accessibilityActivate() -> Bool {
+        checkboxButtonTapped(checkboxButton)
+        return true
     }
 }
