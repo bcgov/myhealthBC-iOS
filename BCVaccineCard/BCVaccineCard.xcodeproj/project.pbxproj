@@ -380,6 +380,8 @@
 		796653E227A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653E027A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift */; };
 		796653E427A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653E327A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift */; };
 		796653E527A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653E327A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift */; };
+		796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653ED27AE324A004D103E /* AuthenticatedMedicationResponseObject.swift */; };
+		796653EF27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653ED27AE324A004D103E /* AuthenticatedMedicationResponseObject.swift */; };
 		7967E73326F3DC9A00EEF510 /* FormTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */; };
 		7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */; };
 		7967E73626F40DB100EEF510 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E73526F40DB100EEF510 /* Constants.swift */; };
@@ -657,6 +659,7 @@
 		796653DC279876C9004D103E /* AuthenticationRequestObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationRequestObjects.swift; sourceTree = "<group>"; };
 		796653E027A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedTestResultsResponseModel.swift; sourceTree = "<group>"; };
 		796653E327A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPatientDetailsResponseObject.swift; sourceTree = "<group>"; };
+		796653ED27AE324A004D103E /* AuthenticatedMedicationResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedMedicationResponseObject.swift; sourceTree = "<group>"; };
 		7967E73126F3DC9A00EEF510 /* FormTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTableViewCell.swift; sourceTree = "<group>"; };
 		7967E73226F3DC9A00EEF510 /* FormTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FormTableViewCell.xib; sourceTree = "<group>"; };
 		7967E73526F40DB100EEF510 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -1656,6 +1659,7 @@
 			children = (
 				796653E027A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift */,
 				796653E327A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift */,
+				796653ED27AE324A004D103E /* AuthenticatedMedicationResponseObject.swift */,
 			);
 			path = AuthenticatedResponseModels;
 			sourceTree = "<group>";
@@ -2429,6 +2433,7 @@
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				29736A482788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
+				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				79218ABE27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
 				792834542730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
@@ -2616,6 +2621,7 @@
 				794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */,
 				7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				79932CAF2790FA94007E8D92 /* Theme.swift in Sources */,
+				796653EF27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				79218ABF27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
 				792834552730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
 				797BB96B2767F17D00CD1645 /* PagingIndicatorView.swift in Sources */,

@@ -8,18 +8,18 @@
 import UIKit
 import BCVaccineValidator
 
-// FIXME: Adjust delegates to handle progress (pass back value, and completed fetch type)
+// FIXME: Adjust delegates to only pass in once everything has started, and once everything has finished
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
-    func openLoader()
-    func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int)
-    func handleError(fetchType: AuthenticationFetchType, error: String)
-    func dismissLoader()
+    func showPatientDetailsError(error: String)
+    func showFetchStartedBanner()
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?)
 }
 
 enum AuthenticationFetchType {
     case PatientDetails
     case VaccineCard
     case TestResults
+    case MedicationStatement
     
     // NOTE: The reason this is not in localized file yet is because we don't know what loader will look like, so text will likely change
     var getName: String {
@@ -27,6 +27,7 @@ enum AuthenticationFetchType {
         case .PatientDetails: return "Patient Details"
         case .VaccineCard: return "Vaccine Card"
         case .TestResults: return "Test Results"
+        case .MedicationStatement: return "Medication Statement"
         }
     }
 }
@@ -50,37 +51,15 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     // Note: Choosing this instead of completion handlers as completion handlers were causing issues
-    var fetchStatus: FetchStatus = FetchStatus(fetchType: .PatientDetails, requestCompleted: false) {
+    // TODO: Turn this into an array which will track the fetch status - construct this independendently (via init, perhaps) so that it is more reusable
+    var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [.VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0), .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)]) {
         didSet {
-            switch fetchStatus.fetchType {
-            case .PatientDetails: print("Not using right now")
-            case .VaccineCard:
-                if let error = fetchStatus.error {
-                    self.delegate?.handleError(fetchType: .VaccineCard, error: error)
-                    if fetchStatus.requestCompleted {
-                        guard let authCredentials = authCredentials else { return }
-                        self.getAuthenticatedTestResults(authCredentials: authCredentials)
-                    }
-                } else if fetchStatus.requestCompleted {
-                    self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: 1, completedCount: 1)
-                    guard let authCredentials = authCredentials else { return }
-                    self.getAuthenticatedTestResults(authCredentials: authCredentials)
-                }
-            case .TestResults:
-                if let error = fetchStatus.error {
-                    self.delegate?.handleError(fetchType: .TestResults, error: error)
-                    if fetchStatus.requestCompleted {
-                        self.delegate?.dismissLoader()
-                    }
-                } else if fetchStatus.requestCompleted {
-                    self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: 1, completedCount: 1)
-                    self.delegate?.dismissLoader()
-                }
+            if fetchStatusList.isCompleted {
+                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors)
             }
         }
     }
     
-    // FIXME: Include escaping closure with no parameters
     // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
     func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject) {
         self.authCredentials = authCredentials
@@ -114,9 +93,10 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
-        delegate?.openLoader()
+        delegate?.showFetchStartedBanner()
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
-//        self.getAuthenticatedTestResults(authCredentials: authCredentials)
+        self.getAuthenticatedTestResults(authCredentials: authCredentials)
+        self.getAuthenticatedMedicationStatement(authCredentials: authCredentials)
     }
         
     private func getAuthenticatedTestResults(authCredentials: AuthenticationRequestObject) {
@@ -155,6 +135,24 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
+    private func getAuthenticatedMedicationStatement(authCredentials: AuthenticationRequestObject) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedMedicationStatementDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedMedicationStatementDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        apiClient.getAuthenticatedMedicationStatement(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else { return }
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedMedicationStatementDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedMedicationStatement(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else { return }
+                    self.handleMedicationStatementResponse(result: result)
+                }
+            } else {
+                self.handleMedicationStatementResponse(result: result)
+            }
+        }
+    }
+    
 }
 
 // MARK: Retry functions
@@ -162,7 +160,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetPatientDetailsRequest() {
         guard let authCredentials = self.requestDetails.authenticatedPatientDetails?.authCredentials else {
-            self.delegate?.handleError(fetchType: .PatientDetails, error: .genericErrorMessage)
+            self.delegate?.showPatientDetailsError(error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedPatientDetails(authCredentials: authCredentials)
@@ -170,8 +168,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetTestResultsRequest() {
         guard let authCredentials = self.requestDetails.authenticatedTestResultsDetails?.authCredentials else {
-            self.fetchStatus = FetchStatus(fetchType: .TestResults, requestCompleted: true, error: .genericErrorMessage)
-//            self.delegate?.handleError(fetchType: .TestResults, error: .genericErrorMessage)
+            self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
@@ -179,11 +176,18 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetVaccineCardRequest() {
         guard let authCredentials = self.requestDetails.authenticatedVaccineCardDetails?.authCredentials else {
-            self.fetchStatus = FetchStatus(fetchType: .VaccineCard, requestCompleted: true, error: .genericErrorMessage)
-//            self.delegate?.handleError(fetchType: .VaccineCard, error: .genericErrorMessage)
+            self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
+    }
+    
+    @objc private func retryGetMedicationStatementRequest() {
+        guard let authCredentials = self.requestDetails.authenticatedVaccineCardDetails?.authCredentials else {
+            self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: .genericErrorMessage)
+            return
+        }
+        self.getAuthenticatedMedicationStatement(authCredentials: authCredentials)
     }
     
 }
@@ -196,9 +200,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload?.orders == nil || testResult.resourcePayload?.orders.count == 0) {
-                // TODO: Error mapping here
-                self.fetchStatus = FetchStatus(fetchType: .TestResults, requestCompleted: true, error: resultMessage)
-//                self.delegate?.handleError(fetchType: .TestResults, error: resultMessage)
+                self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: testResult.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
             }
             else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
                 // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
@@ -211,8 +213,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 
             }
         case .failure(let error):
-//            self.delegate?.handleError(fetchType: .TestResults, error: error.resultMessage ?? .genericErrorMessage)
-            self.fetchStatus = FetchStatus(fetchType: .TestResults, requestCompleted: true, error: error.resultMessage ?? .genericErrorMessage)
+            self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
         
@@ -222,8 +223,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode?.data == nil && vaccineCard.resourcePayload?.federalVaccineProof?.data == nil) {
                 // TODO: Error mapping here
-//                self.delegate?.handleError(fetchType: .VaccineCard, error: resultMessage)
-                self.fetchStatus = FetchStatus(fetchType: .VaccineCard, requestCompleted: true, error: resultMessage)
+                self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: resultMessage)
             } else if vaccineCard.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicVaccineStatusRetryMaxForFedPass, let retryinMS = vaccineCard.resourcePayload?.retryin {
                 // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
                 self.retryCount += 1
@@ -233,8 +233,30 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.handleVaccineCardInCoreData(vaccineCard: vaccineCard)
             }
         case .failure(let error):
-//            self.delegate?.handleError(fetchType: .VaccineCard, error: error.resultMessage ?? .genericErrorMessage)
-            self.fetchStatus = FetchStatus(fetchType: .VaccineCard, requestCompleted: true, error: error.resultMessage ?? .genericErrorMessage)
+            self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
+        }
+    }
+    
+    private func handleMedicationStatementResponse(result: Result<AuthenticatedMedicationStatementResponseObject, ResultError>) {
+        switch result {
+        case .success(let medicationStatement):
+            // Note: Have to check for error here because error is being sent back on a 200 response
+            if let resultMessage = medicationStatement.resultError?.resultMessage, (medicationStatement.resourcePayload == nil || medicationStatement.resourcePayload?.count == 0) {
+                self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: medicationStatement.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
+            }
+            // NOTE: Currently the response object doesn't have "loaded" property - I could see that changing, so for now added the retry code below and leaving it commented out
+//            else if medicationStatement.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForMedicationStatement, let retryinMS = medicationStatement.resourcePayload?.retryin {
+//                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+//                self.retryCount += 1
+//                let retryInSeconds = Double(retryinMS/1000)
+//                self.perform(#selector(self.retryGetMedicationStatementRequest), with: nil, afterDelay: retryInSeconds)
+//            }
+            else {
+                self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement)
+                
+            }
+        case .failure(let error):
+            self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
     
@@ -242,20 +264,17 @@ extension AuthenticatedHealthRecordsAPIWorker {
 
 // MARK: Handle Vaccine results in core data
 extension AuthenticatedHealthRecordsAPIWorker {
-    // TODO: Handle vaccine card response in core data here
     private func handleVaccineCardInCoreData(vaccineCard: GatewayVaccineCardResponse) {
         
         let qrResult = vaccineCard.transformResponseIntoQRCode()
         guard let code = qrResult.qrString else {
-//            self.delegate?.handleError(fetchType: .VaccineCard, error: qrResult.error ?? .genericErrorMessage)
-            self.fetchStatus = FetchStatus(fetchType: .VaccineCard, requestCompleted: true, error: qrResult.error ?? .genericErrorMessage)
+            self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: qrResult.error ?? .genericErrorMessage)
             return
         }
         BCVaccineValidator.shared.validate(code: code) { [weak self] result in
             guard let `self` = self else { return }
             guard let data = result.result else {
-//                self.delegate?.handleError(fetchType: .VaccineCard, error: .invalidQRCodeMessage)
-                self.fetchStatus = FetchStatus(fetchType: .VaccineCard, requestCompleted: true, error: .invalidQRCodeMessage)
+                self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: .invalidQRCodeMessage)
                 return
             }
             DispatchQueue.main.async { [weak self] in
@@ -286,8 +305,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                                   authenticated: true,
                                   sortOrder: nil,
                                   completion: {
-//                self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: 1, completedCount: 1)
-                self.fetchStatus = FetchStatus(fetchType: .VaccineCard, requestCompleted: true, error: nil)
+                self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
             })
         }
     }
@@ -297,11 +315,9 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.updateVaccineCard(newData: localModel, authenticated: true, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
-//                self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: 1, completedCount: 1)
-                self.fetchStatus = FetchStatus(fetchType: .VaccineCard, requestCompleted: true, error: nil)
+                self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
             } else {
-//                self.delegate?.handleError(fetchType: .VaccineCard, error: .updateCardFailed)
-                self.fetchStatus = FetchStatus(fetchType: .VaccineCard, requestCompleted: true, error: .updateCardFailed)
+                self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: .updateCardFailed)
             }
         })
     }
@@ -319,14 +335,11 @@ extension AuthenticatedHealthRecordsAPIWorker {
             let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
             if let id = handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient) {
                 completedCount += 1
-//                self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: testResult.totalResultCount ?? orders.count, completedCount: completedCount)
             } else {
                 errorArrayCount += 1
-//                self.delegate?.handleError(fetchType: .TestResults, error: "Error fetching test result")
             }
         }
-//        self.delegate?.dismissLoader()
-        self.fetchStatus = FetchStatus(fetchType: .TestResults, requestCompleted: true, error: nil)
+        self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: .genericErrorMessage)
     }
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
@@ -336,10 +349,23 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
 }
 
+// MARK: Handle Medication Statement in core data
+extension AuthenticatedHealthRecordsAPIWorker {
+    private func handleMedicationStatementInCoreData(medicationStatement: AuthenticatedMedicationStatementResponseObject) {
+        // TODO: Amir - handle core data response here - will be similar to how test results is handled above
+        
+        // Note: For now, adding this delegate here so that the other fetches work...
+        self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: nil)
+    }
+}
+
+
+// MARK: Structs used for various fetch types
 struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedPatientDetails: AuthenticatedPatientDetails?
     var authenticatedVaccineCardDetails: AuthenticatedVaccineCardDetails?
     var authenticatedTestResultsDetails: AuthenticatedTestResultsDetails?
+    var authenticatedMedicationStatementDetails: AuthenticatedMedicationStatementDetails?
     
     struct AuthenticatedPatientDetails {
         var authCredentials: AuthenticationRequestObject
@@ -355,10 +381,44 @@ struct AuthenticatedAPIWorkerRetryDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?
     }
+    
+    struct AuthenticatedMedicationStatementDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+    }
 }
 
+// MARK: Struct used to handle async requests
 struct FetchStatus {
-    var fetchType: AuthenticationFetchType
     var requestCompleted: Bool
+    var attemptedCount: Int
+    var successfullCount: Int
     var error: String?
+}
+
+struct FetchStatusList {
+    var fetchStatus: [AuthenticationFetchType: FetchStatus]
+    
+    var isCompleted: Bool {
+        return fetchStatus.count == fetchStatus.map({ $0.value.requestCompleted == true }).count
+    }
+    
+    var getAttemptedCount: Int {
+        return fetchStatus.map { $0.value.attemptedCount }.reduce(0, +)
+    }
+    
+    var getSuccessfulCount: Int {
+        return fetchStatus.map { $0.value.successfullCount }.reduce(0, +)
+    }
+    
+    var getErrors: [AuthenticationFetchType: String]? {
+        var errors: [AuthenticationFetchType: String] = [:]
+        fetchStatus.forEach { instance in
+            if let error = instance.value.error {
+                errors[instance.key] = error
+            }
+        }
+        guard errors.count > 0 else { return nil }
+        return errors
+    }
 }
