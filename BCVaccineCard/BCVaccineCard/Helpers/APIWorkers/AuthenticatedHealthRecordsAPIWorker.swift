@@ -10,10 +10,12 @@ import BCVaccineValidator
 
 // FIXME: Adjust delegates to only pass in once everything has started, and once everything has finished
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
-    func openLoader()
-    func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int)
-    func handleError(fetchType: AuthenticationFetchType, error: String)
-    func dismissLoader()
+//    func openLoader()
+//    func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int)
+//    func handleError(fetchType: AuthenticationFetchType, error: String)
+//    func dismissLoader()
+    func showFetchStartedBanner()
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?)
 }
 
 enum AuthenticationFetchType {
@@ -51,33 +53,36 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
     // Note: Choosing this instead of completion handlers as completion handlers were causing issues
     // TODO: Turn this into an array which will track the fetch status - construct this independendently (via init, perhaps) so that it is more reusable
-    var fetchStatus: FetchStatus = FetchStatus(fetchType: .PatientDetails, requestCompleted: false) {
+    var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [.VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0), .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)]) {
         didSet {
-            switch fetchStatus.fetchType {
-            case .PatientDetails: print("Not using right now")
-            case .VaccineCard:
-                if let error = fetchStatus.error {
-                    self.delegate?.handleError(fetchType: .VaccineCard, error: error)
-                    if fetchStatus.requestCompleted {
-                        guard let authCredentials = authCredentials else { return }
-                        self.getAuthenticatedTestResults(authCredentials: authCredentials)
-                    }
-                } else if fetchStatus.requestCompleted {
-                    self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: 1, completedCount: 1)
-                    guard let authCredentials = authCredentials else { return }
-                    self.getAuthenticatedTestResults(authCredentials: authCredentials)
-                }
-            case .TestResults:
-                if let error = fetchStatus.error {
-                    self.delegate?.handleError(fetchType: .TestResults, error: error)
-                    if fetchStatus.requestCompleted {
-                        self.delegate?.dismissLoader()
-                    }
-                } else if fetchStatus.requestCompleted {
-                    self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: 1, completedCount: 1)
-                    self.delegate?.dismissLoader()
-                }
+            if fetchStatusList.isCompleted {
+                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors)
             }
+//            switch fetchStatus.fetchType {
+//            case .PatientDetails: print("Not using right now")
+//            case .VaccineCard:
+//                if let error = fetchStatus.error {
+//                    self.delegate?.handleError(fetchType: .VaccineCard, error: error)
+//                    if fetchStatus.requestCompleted {
+//                        guard let authCredentials = authCredentials else { return }
+//                        self.getAuthenticatedTestResults(authCredentials: authCredentials)
+//                    }
+//                } else if fetchStatus.requestCompleted {
+//                    self.delegate?.handleDataProgress(fetchType: .VaccineCard, totalCount: 1, completedCount: 1)
+//                    guard let authCredentials = authCredentials else { return }
+//                    self.getAuthenticatedTestResults(authCredentials: authCredentials)
+//                }
+//            case .TestResults:
+//                if let error = fetchStatus.error {
+//                    self.delegate?.handleError(fetchType: .TestResults, error: error)
+//                    if fetchStatus.requestCompleted {
+//                        self.delegate?.dismissLoader()
+//                    }
+//                } else if fetchStatus.requestCompleted {
+//                    self.delegate?.handleDataProgress(fetchType: .TestResults, totalCount: 1, completedCount: 1)
+//                    self.delegate?.dismissLoader()
+//                }
+//            }
         }
     }
     
@@ -115,9 +120,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
-        delegate?.openLoader()
+        delegate?.showFetchStartedBanner()
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
-//        self.getAuthenticatedTestResults(authCredentials: authCredentials)
+        self.getAuthenticatedTestResults(authCredentials: authCredentials)
     }
         
     private func getAuthenticatedTestResults(authCredentials: AuthenticationRequestObject) {
@@ -362,7 +367,45 @@ struct AuthenticatedAPIWorkerRetryDetails {
 
 // TODO: Modify this accordingly
 struct FetchStatus {
-    var fetchType: AuthenticationFetchType
     var requestCompleted: Bool
+    var attemptedCount: Int
+    var successfullCount: Int
     var error: String?
 }
+
+struct FetchStatusList {
+    var fetchStatus: [AuthenticationFetchType: FetchStatus]
+    
+    var isCompleted: Bool {
+        return fetchStatus.count == fetchStatus.map({ $0.value.requestCompleted == true }).count
+    }
+    
+    var getAttemptedCount: Int {
+        return fetchStatus.map { $0.value.attemptedCount }.reduce(0, +)
+    }
+    
+    var getSuccessfulCount: Int {
+        return fetchStatus.map { $0.value.successfullCount }.reduce(0, +)
+    }
+    
+    var getErrors: [AuthenticationFetchType: String]? {
+        var errors: [AuthenticationFetchType: String] = [:]
+        fetchStatus.forEach { instance in
+            if let error = instance.value.error {
+                errors[instance.key] = error
+            }
+        }
+        guard errors.count > 0 else { return nil }
+        return errors
+    }
+}
+
+
+// TODO List:
+// 1.) Modify the fetchStatus property type to be an array
+
+// 2.) Adjust the new property type for each part of the call in this file
+
+// 3.) Add in the medication fetch and add TODO's for Amir to see
+
+// 4.) Adjust the bottom banner logic in view controller exenstion to support an error pop-up
