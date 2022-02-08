@@ -22,7 +22,7 @@ protocol StorageVaccineCardManager {
     ///   - federalPass: federal pass if available
     ///   - vaxDates: vaccine dates
     /// - Returns: created object
-    func storeVaccineVard(
+    func storeVaccineCard(
         vaccineQR: String,
         name: String,
         issueDate: Date,
@@ -59,7 +59,7 @@ protocol StorageVaccineCardManager {
 
 extension StorageService: StorageVaccineCardManager {
     // MARK: Store
-    func storeVaccineVard(vaccineQR: String,
+    func storeVaccineCard(vaccineQR: String,
                           name: String,
                           issueDate: Date,
                           hash: String,
