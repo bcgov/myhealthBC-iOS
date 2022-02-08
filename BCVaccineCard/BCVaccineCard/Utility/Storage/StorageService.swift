@@ -44,14 +44,10 @@ class StorageService: StorageManagerProtocol {
     
     var managedContext: NSManagedObjectContext?
     
-    init() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        
-        appDelegate.persistentContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        managedContext = appDelegate.persistentContainer.viewContext
-        
+    init(managedContext: NSManagedObjectContext = CoreDataStack.shared.managedContext,
+         mergePolicy: Any = NSMergeByPropertyObjectTrumpMergePolicy) {
+        self.managedContext = managedContext
+        self.managedContext?.mergePolicy = mergePolicy
     }
     
     func notify(event: StorageEvent<Any>) {
