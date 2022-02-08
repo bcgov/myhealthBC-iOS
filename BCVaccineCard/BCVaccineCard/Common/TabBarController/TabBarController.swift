@@ -48,22 +48,12 @@ class TabBarController: UITabBarController {
     
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
-    private var loadingView: AuthenticatedFetchLoader?
     var authWorker: AuthenticatedHealthRecordsAPIWorker?
-    // TODO: Rework this in a future sprint
-    var fetchProgress: [AuthenticationFetchType: CGFloat] = [:]
-    
-    // TODO: Connor 3: Create authenticated API worker in tab bar initialization, which we will call from the authentication component, triggering updates in our listener in this screen
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
         setup(selectedIndex: 0)
-//        testLoader()
-        self.fetchProgress = [
-            .VaccineCard: 0.0,
-            .TestResults: 0.0
-        ]
     }
     
 
@@ -75,27 +65,6 @@ class TabBarController: UITabBarController {
         self.selectedIndex = selectedIndex
         setupObserver()
     }
-    
-//    private func testLoader() {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//            self.addCustomLoadingView()
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                self.updateLoadingView(status: "Test", loadingProgress: 0.2)
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                    self.updateLoadingView(status: "Test", loadingProgress: 0.4)
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                        self.updateLoadingView(status: "Test", loadingProgress: 0.75)
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                            self.updateLoadingView(status: "Test", loadingProgress: 1.0)
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-//                                self.removeCustomLoadingView()
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {
         var viewControllers: [UIViewController] = []
@@ -125,7 +94,6 @@ class TabBarController: UITabBarController {
                 if event.event == .Save, StorageService.shared.getHeathRecords().count == 1 {
                     self.updateRecordsScreenState = true
                 }
-                // TODO: CONNOR 4: Handle authentication data reloads for specific screens here
             default:
                 break
             }
@@ -190,80 +158,18 @@ extension TabBarController: UITabBarControllerDelegate {
     
 }
 
-// MARK: Custom Loader for fetching authenticated records
-extension TabBarController {
-    func addCustomLoadingView() {
-        loadingView = AuthenticatedFetchLoader(frame: .zero)
-        let bannerHeight: CGFloat = 60
-        let closedTopAnchor = 0 - bannerHeight
-        let openTopAnchor: CGFloat = 0
-        // Position container
-        guard let loadingView = self.loadingView else { return }
-        self.view.addSubview(loadingView)
-        
-        loadingView.translatesAutoresizingMaskIntoConstraints = false
-        let topContraint = loadingView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: closedTopAnchor)
-        loadingView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-        loadingView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-        loadingView.heightAnchor.constraint(equalToConstant: bannerHeight).isActive = true
-        
-        NSLayoutConstraint.activate([topContraint])
-        
-        self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {[weak self] in
-            guard let `self` = self else {return}
-            topContraint.constant = openTopAnchor
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    func updateLoadingView(status: String, loadingProgress: CGFloat?) {
-        loadingView?.configure(status: status, loadingProgress: loadingProgress)
-    }
-    
-    func removeCustomLoadingView() {
-        UIView.animate(withDuration: 2.0, delay: 2.0, options: .curveEaseOut) {
-            self.loadingView?.alpha = 0
-            self.loadingView?.layoutIfNeeded()
-        } completion: { done in
-            self.loadingView?.removeFromSuperview()
-        }
-    }
-    
-}
-// TODO: Cleanup
 // MARK: Auth Fetch delegates
 extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
-    func openLoader() {
-        self.addCustomLoadingView()
+    func showPatientDetailsError(error: String) {
+        self.showBanner(message: error, style: .Bottom)
     }
     
-    func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int) {
-        let progress: CGFloat = CGFloat(completedCount) / CGFloat(totalCount)
-//        fetchProgress[fetchType] = progress
-//        // For now, this is how we will switch between loading types (as a sync setup was tricky with fetching)
-//        if fetchType == .VaccineCard && progress == 1 {
-//            self.updateLoadingView(status: fetchType.getName, loadingProgress: progress)
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-//                self.updateLoadingView(status: AuthenticationFetchType.TestResults.getName, loadingProgress: self.fetchProgress[fetchType])
-//            }
-//        } else if fetchType == .TestResults, let value = fetchProgress[.VaccineCard], value < 1 {
-//            // Do nothing here when vaccine card is still fetching
-//        } else {
-//            self.updateLoadingView(status: fetchType.getName, loadingProgress: progress)
-//        }
-        
-        // For now, only update loading view when loading is completed
-        self.updateLoadingView(status: fetchType.getName, loadingProgress: progress)
-        
+    func showFetchStartedBanner() {
+        self.showBanner(message: "Retrieving records", style: .Bottom)
     }
     
-    func handleError(fetchType: AuthenticationFetchType, error: String) {
-        let status = fetchType.getName + ": " + error
-        self.updateLoadingView(status: status, loadingProgress: nil)
-    }
-    
-    func dismissLoader() {
-        self.removeCustomLoadingView()
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?) {
+        // TODO: Connor - handle error case
+        self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
     }
 }

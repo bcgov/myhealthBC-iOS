@@ -10,10 +10,6 @@ import BCVaccineValidator
 
 // FIXME: Adjust delegates to only pass in once everything has started, and once everything has finished
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
-//    func openLoader()
-//    func handleDataProgress(fetchType: AuthenticationFetchType, totalCount: Int, completedCount: Int)
-//    func handleError(fetchType: AuthenticationFetchType, error: String)
-//    func dismissLoader()
     func showPatientDetailsError(error: String)
     func showFetchStartedBanner()
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?)
@@ -426,13 +422,3 @@ struct FetchStatusList {
         return errors
     }
 }
-
-
-// TODO List:
-// 1.) Modify the fetchStatus property type to be an array DONE
-
-// 2.) Adjust the new property type for each part of the call in this file DONE
-
-// 3.) Add in the medication fetch and add TODO's for Amir to see DONE
-
-// 4.) Adjust the bottom banner logic in view controller exenstion to support an error pop-up
