@@ -15,6 +15,7 @@ extension UIViewController {
     enum BannerStyle {
         case Top, Bottom
     }
+    // MARK: Alert
     func alert(title: String, message: String) {
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.isAccessibilityElement = true
@@ -36,13 +37,13 @@ extension UIViewController {
     }
     
     func alertConfirmation(title: String,
-               message: String,
-               confirmTitle: String,
-               confirmStyle: UIAlertAction.Style,
-               onConfirm: @escaping()->Void,
-               cancelTitle: String? = .cancel,
-               cancelStyle: UIAlertAction.Style? = .cancel,
-               onCancel: @escaping()->Void) {
+                           message: String,
+                           confirmTitle: String,
+                           confirmStyle: UIAlertAction.Style,
+                           onConfirm: @escaping()->Void,
+                           cancelTitle: String? = .cancel,
+                           cancelStyle: UIAlertAction.Style? = .cancel,
+                           onCancel: @escaping()->Void) {
         
         let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         controller.isAccessibilityElement = true
@@ -74,6 +75,63 @@ extension UIViewController {
         }
     }
     
+    // MARK: Banner
+    func showBanner(message: String, style: BannerStyle) {
+        // Create label and container
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else {return}
+            if let parent = self.parent as? CustomNavigationController {
+                parent.showBanner(message: message, style: style)
+                return
+            }
+            if let parent = self.parent as? TabBarController {
+                parent.showBanner(message: message, style: style)
+                return
+            }
+            let container = UIView(frame: .zero)
+            let label = UILabel(frame: .zero)
+            
+            if style == .Bottom {
+                label.isAccessibilityElement = true
+                label.accessibilityTraits = .staticText
+                label.accessibilityValue = "\(message)"
+            }
+            
+            
+            // Remove existing Banner / Container
+            if let existing = self.view.viewWithTag(Constants.UI.Banner.tag) {
+                existing.removeFromSuperview()
+            }
+            
+            // Add subviews
+            container.tag = Constants.UI.Banner.tag
+            let labelTAG = Int.random(in: 4000..<9000)
+            label.tag = labelTAG
+            self.view.addSubview(container)
+            container.addSubview(label)
+            label.text = message
+            
+            switch style {
+            case .Top:
+                self.presentBannerFromTop(container: container, label: label, labelTAG: labelTAG)
+            case .Bottom:
+                self.presentBannerAtBottom(container: container, label: label, labelTAG: labelTAG)
+            }
+        }
+    }
+    
+    func hideBanner() {
+        guard let banner = view.viewWithTag(Constants.UI.Banner.tag) else {
+            return
+        }
+        UIView.animate(withDuration: Constants.UI.Theme.animationDuration) {
+            banner.alpha = 0
+            banner.layoutIfNeeded()
+        } completion: { done in
+            banner.removeFromSuperview()
+        }
+        
+    }
     fileprivate func presentBannerFromTop(container: UIView, label: UILabel, labelTAG: Int) {
         let textPadding: CGFloat = Constants.UI.Banner.labelPadding
         let containerPadding: CGFloat = Constants.UI.Banner.containerPadding
@@ -182,62 +240,60 @@ extension UIViewController {
         }
     }
     
-    func showBanner(message: String, style: BannerStyle) {
-        // Create label and container
+    // MARK: Local Auth
+    func showLocalAuth() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {return}
             if let parent = self.parent as? CustomNavigationController {
-                parent.showBanner(message: message, style: style)
+                parent.showLocalAuth()
                 return
             }
             if let parent = self.parent as? TabBarController {
-                parent.showBanner(message: message, style: style)
+                parent.showLocalAuth()
                 return
             }
-            let container = UIView(frame: .zero)
-            let label = UILabel(frame: .zero)
+            if !LocalAuthManager.shouldAuthenticate {return}
             
-            if style == .Bottom {
-                label.isAccessibilityElement = true
-                label.accessibilityTraits = .staticText
-                label.accessibilityValue = "\(message)"
+            LocalAuthManager.shared.performLocalAuth(on: self) { [weak self] status in
+                switch status {
+                case .Authorized:
+                    self?.localAuthSucceded()
+                case .Unauthorized, .Unavailable:
+                    self?.localAuthFailed()
+                }
+                return
             }
-            
-            
-            // Remove existing Banner / Container
-            if let existing = self.view.viewWithTag(Constants.UI.Banner.tag) {
-                existing.removeFromSuperview()
-            }
-            
-            // Add subviews
-            container.tag = Constants.UI.Banner.tag
-            let labelTAG = Int.random(in: 4000..<9000)
-            label.tag = labelTAG
-            self.view.addSubview(container)
-            container.addSubview(label)
-            label.text = message
-            
-            switch style {
-            case .Top:
-                self.presentBannerFromTop(container: container, label: label, labelTAG: labelTAG)
-            case .Bottom:
-                self.presentBannerAtBottom(container: container, label: label, labelTAG: labelTAG)
-            }
+
         }
     }
     
-    func hideBanner() {
-        guard let banner = view.viewWithTag(Constants.UI.Banner.tag) else {
-            return
-        }
-        UIView.animate(withDuration: Constants.UI.Theme.animationDuration) {
-            banner.alpha = 0
-            banner.layoutIfNeeded()
-        } completion: { done in
-            banner.removeFromSuperview()
-        }
-        
+    private func localAuthFailed() {
+        Logger.log(string: "Local auth Failed", type: .localAuth)
     }
+    
+    private func localAuthSucceded() {
+        Logger.log(string: "Local auth successful", type: .localAuth)
+    }
+    
+    // MARK: Helpers
+    
+    /// returns the tab bar controller: the main parent of all viewcontrollers in this app
+    /// Call this from the main thread:
+    /// DispatchQueue.main.async { [weak self] in guard let self = self else {return} }
+    /// - Returns: tab bar UIViewController
+    func findTabBarController() -> UIViewController {
+        if let parent = self.parent as? CustomNavigationController {
+            return parent.findTabBarController()
+            
+        }
+        if let parent = self.parent as? TabBarController {
+            return parent.findTabBarController()
+            
+        }
+        return self
+    }
+    
+    
 }
 
 //MARK: Pop-back functions
@@ -280,14 +336,14 @@ extension UIViewController {
     ) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: model.name, birthday: birthdate) else {
-            Logger.log(string: "**Could not fetch or create patent to store vaccine card")
+            Logger.log(string: "**Could not fetch or create patent to store vaccine card", type: .storage)
             return completion()
         }
-        StorageService.shared.storeVaccineVard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, completion: {_ in completion()})
+        StorageService.shared.storeVaccineCard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, completion: {_ in completion()})
     }
     
-    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
-        StorageService.shared.updateVaccineCard(newData: model, completion: {[weak self] card in
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
                 self.showBanner(message: .updatedCard, style: .Top)

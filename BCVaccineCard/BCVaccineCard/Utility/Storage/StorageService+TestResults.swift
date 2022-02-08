@@ -70,13 +70,17 @@ extension StorageService: StorageTestResultManager {
         var testResults: [TestResult] = []
         guard let records = gateWayResponse.resourcePayload?.records else { return nil }
         for record in records {
+            // Note: For Amir - Adding this here as a fallback for computed propertied
+            // FIXME: Remove the next two lines once we decide on how we are going to handle the new authenticated test result core data model
+            let collectionDateTime = record.collectionDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.collectionDateTime ?? "")
+            let resultDateTime = record.resultDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.resultDateTime ?? "")
             if let resultModel = storeTestResult(
                 resultId: id,
                 patientDisplayName: record.patientDisplayName,
                 lab: record.lab,
                 reportId: record.reportId,
-                collectionDateTime: record.collectionDateTimeDate,
-                resultDateTime: record.resultDateTimeDate,
+                collectionDateTime: collectionDateTime,
+                resultDateTime: resultDateTime,
                 testName: record.testName,
                 testType: record.testType,
                 testStatus: record.testStatus,

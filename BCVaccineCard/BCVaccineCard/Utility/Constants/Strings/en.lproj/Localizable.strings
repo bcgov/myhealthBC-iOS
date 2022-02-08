@@ -254,3 +254,16 @@
 "Selected" = "Selected";
 "Unselected" = "Unselected";
 "SelectTo" = "Select To";
+
+"LocalAuthPrivacyText" = "Biometric authenication is a security feature to protect your personal health information and are required to log on My Health BC.\n\nYour health information and the health information of your spouse, dependents, and claim details will be stored in your mobile device. Should you elect to use Touch ID offered by Apple Inc., or fingerprint sign in functionality offered by Android, or any other type of biometric identification managed on your device (collectively “biometrics”), you agree with acknowledge and consent to the terms and conditions, which can be accessed at here.";
+"Privacy" = "Privacy";
+"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
+"ProtectYourPersonalInformation" = "Protect your personal information";
+"LocalAuthViewDescription" = "Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure.";
+"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
+"UseTouchId" = "Use Touch ID";
+"UsePassCode" = "Use passcode";
+"UseFaceId" = "Use Face ID";
+"TurnOnPasscode" = "Turn on passcode";
+"TurnOnFaceId" = "Turn on Face ID";
+"TurnOnTouchId" = "Turn on Touch ID";

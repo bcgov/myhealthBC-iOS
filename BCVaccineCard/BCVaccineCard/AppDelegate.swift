@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
     var window: UIWindow?
     var authManager: AuthManager?
+    var localAuthManager: LocalAuthManager?
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -38,34 +39,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupRootViewController()
         authManager = AuthManager()
         authManager?.initTokenExpieryTimer()
+        listenToAppState()
+        localAuthManager = LocalAuthManager()
+        localAuthManager?.listenToAppLaunch()
+    }
+    
+    private func listenToAppState() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+    }
+    
+    @objc func didBecomeActive(_ notification: Notification) {
+        NotificationCenter.default.post(name: .launchedFromBackground, object: nil)
     }
     
     // MARK: - Core Data stack
-        lazy var persistentContainer: NSPersistentContainer = {
-            let container = NSPersistentContainer(name: "BCVaccineCard")
-
-            do {
-                let options = [
-                    EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key
-                ]
-                
-                let description = try EncryptedStore.makeDescription(options: options, configuration: nil)
-                container.persistentStoreDescriptions = [ description ]
-            }
-            catch {
-                // TODO: WE need to handle this better
-                fatalError("Could not initialize encrypted database storage: " + error.localizedDescription)
-            }
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "BCVaccineCard")
+        
+        do {
+            let options = [
+                EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key
+            ]
             
-            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-                if let error = error as NSError? {
-                    // TODO: WE need to handle this better
-                    fatalError("Unresolved error \(error), \(error.userInfo)")
-                }
-            })
-            return container
-        }()
-
+            let description = try EncryptedStore.makeDescription(options: options, configuration: nil)
+            container.persistentStoreDescriptions = [ description ]
+        }
+        catch {
+            // TODO: WE need to handle this better
+            fatalError("Could not initialize encrypted database storage: " + error.localizedDescription)
+        }
+        
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                // TODO: WE need to handle this better
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+    
     
     // MARK: - Core Data Saving support
     
@@ -81,8 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-    }
-    
+    } 
 }
 
 // MARK: Auth {
@@ -90,17 +101,17 @@ extension AppDelegate {
     func application(_ app: UIApplication,
                      open url: URL,
                      options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-      // Sends the URL to the current authorization flow (if any) which will
-      // process it if it relates to an authorization response.
-      if let authorizationFlow = self.currentAuthorizationFlow,
-                                 authorizationFlow.resumeExternalUserAgentFlow(with: url) {
-        self.currentAuthorizationFlow = nil
-        return true
-      }
-
-      // Your additional URL handling (if any)
-
-      return false
+        // Sends the URL to the current authorization flow (if any) which will
+        // process it if it relates to an authorization response.
+        if let authorizationFlow = self.currentAuthorizationFlow,
+           authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+            self.currentAuthorizationFlow = nil
+            return true
+        }
+        
+        // Your additional URL handling (if any)
+        
+        return false
     }
 }
 
@@ -116,6 +127,7 @@ extension AppDelegate {
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
+       
         
     }
 }
@@ -136,3 +148,40 @@ extension AppDelegate {
     }
 }
 
+public extension UIApplication {
+
+    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(base: nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController {
+            let moreNavigationController = tab.moreNavigationController
+
+            if let top = moreNavigationController.topViewController, top.view.window != nil {
+                return topViewController(base: top)
+            } else if let selected = tab.selectedViewController {
+                return topViewController(base: selected)
+            }
+        }
+        if let presented = base?.presentedViewController {
+            return topViewController(base: presented)
+        }
+        return base
+    }
+}
+
+
+extension UIApplication {
+    @discardableResult
+    static func openAppSettings() -> Bool {
+        guard
+            let settingsURL = URL(string: UIApplication.openSettingsURLString),
+            UIApplication.shared.canOpenURL(settingsURL)
+            else {
+                return false
+        }
+
+        UIApplication.shared.open(settingsURL)
+        return true
+    }
+}
