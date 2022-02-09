@@ -49,7 +49,6 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
     }
     
     private func goToAuthentication() {
-        LocalAuthManager.shouldAuthenticate = true
         AuthenticationViewController.displayFullScreen(returnToHealthPass: true, initialView: .Landing)
     }
     
