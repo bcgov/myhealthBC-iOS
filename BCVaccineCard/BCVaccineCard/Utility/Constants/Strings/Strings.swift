@@ -278,7 +278,9 @@ extension String {
     static var turnOnPasscode: String { return "TurnOnPasscode".localized }
     static var turnOnFaceId: String { return "TurnOnFaceId".localized }
     static var turnOnTouchId: String { return "TurnOnTouchId".localized }
-    
+    static var setupTouchId: String { return "SetupTouchId".localized }
+    static var setupFaceId: String { return "SetupFaceId".localized }
+    static var setupPasscode: String { return "SetupPasscode".localized }
 }
 
 // Accessibility only localized strings

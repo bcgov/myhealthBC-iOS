@@ -121,6 +121,19 @@ class LocalAuthView: UIView, Theme {
         style(type: .EnableAuthentication)
     }
     
+    func buttonTitle(manager: LocalAuthManager) -> String {
+        var title = ""
+        switch manager.biometricType {
+        case .touchID:
+            title = Defaults.isBiometricSetupDone ? .turnOnTouchId : .setupTouchId
+        case .faceID:
+            title = Defaults.isBiometricSetupDone ? .turnOnFaceId : .setupFaceId
+        default:
+            break
+        }
+        return title
+    }
+    
     // MARK: Style
     func style(type: ViewType) {
         guard let manager = manager else {
@@ -128,19 +141,19 @@ class LocalAuthView: UIView, Theme {
         }
         setBaseText()
         var hasBiometric: Bool = false
-        
+        let title = buttonTitle(manager: manager)
         switch manager.biometricType {
         case .none:
             useTouchIDButton.isHidden = true
         case .touchID:
             useTouchIDButton.isHidden = false
-            style(button: turnOnTouchIDButton, style: .Fill, title: .turnOnTouchId)
-            style(button: useTouchIDButton, style: .Fill, title: .useTouchId)
+            style(button: turnOnTouchIDButton, style: .Fill, title: title)
+            style(button: useTouchIDButton, style: .Fill, title: title)
             hasBiometric = true
         case .faceID:
             useTouchIDButton.isHidden = false
-            style(button: turnOnTouchIDButton, style: .Fill, title: .turnOnFaceId)
-            style(button: useTouchIDButton, style: .Fill, title: .useFaceId)
+            style(button: turnOnTouchIDButton, style: .Fill, title: title)
+            style(button: useTouchIDButton, style: .Fill, title: title)
             hasBiometric = true
         @unknown default:
             useTouchIDButton.isHidden = true

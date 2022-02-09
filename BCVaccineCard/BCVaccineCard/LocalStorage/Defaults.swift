@@ -12,6 +12,7 @@ struct Defaults {
         case initialOnboardingScreensSeen
         case cachedQueueItObject
         case rememberGatewayDetails
+        case isBiometricSetup
     }
     
     static var cachedQueueItObject: QueueItCachedObject? {
@@ -70,4 +71,11 @@ struct Defaults {
         }
     }
     
+    static func setBiometricSetupDone() {
+        UserDefaults.standard.set(true, forKey: self.Key.isBiometricSetup.rawValue)
+    }
+
+    static var isBiometricSetupDone: Bool {
+        return UserDefaults.standard.bool(forKey: self.Key.isBiometricSetup.rawValue)
+    }
 }

@@ -109,8 +109,9 @@ class LocalAuthManager {
             self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            if viewType == .Authenticate {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let `self` = self else {return}
+            if Defaults.isBiometricSetupDone {
                 self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
             }
         }
@@ -158,6 +159,7 @@ class LocalAuthManager {
             LocalAuthManager.block = true
             context.evaluatePolicy(policy, localizedReason: reason) {
                 success, authenticationError in
+                Defaults.setBiometricSetupDone()
                 DispatchQueue.main.async {
                     if success {
                         return completion(.Authorized)
