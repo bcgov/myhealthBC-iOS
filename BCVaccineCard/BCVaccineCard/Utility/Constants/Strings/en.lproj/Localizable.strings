@@ -267,6 +267,4 @@
 "TurnOnPasscode" = "Turn on passcode";
 "TurnOnFaceId" = "Turn on Face ID";
 "TurnOnTouchId" = "Turn on Touch ID";
-"SetupTouchId" = "Setup Touch ID";
-"SetupFaceId" = "Setup Face ID";
-"SetupPasscode" = "Setup passcode";
+"SetupAuthentication" = "Set up authentication";

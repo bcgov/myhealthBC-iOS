@@ -125,9 +125,9 @@ class LocalAuthView: UIView, Theme {
         var title = ""
         switch manager.biometricType {
         case .touchID:
-            title = Defaults.isBiometricSetupDone ? .turnOnTouchId : .setupTouchId
+            title = Defaults.isBiometricSetupDone ? .useTouchId : .setupAuthentication
         case .faceID:
-            title = Defaults.isBiometricSetupDone ? .turnOnFaceId : .setupFaceId
+            title = Defaults.isBiometricSetupDone ? .useFaceId : .setupAuthentication
         default:
             break
         }
