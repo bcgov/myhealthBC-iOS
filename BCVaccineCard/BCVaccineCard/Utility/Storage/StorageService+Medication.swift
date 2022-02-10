@@ -77,6 +77,30 @@ protocol StorageMedicationManager {
 extension StorageService: StorageMedicationManager {
     
     // MARK: Store
+    
+    ///  Store All perscriptions from Health Gateway response.
+    /// - Parameters:
+    ///   - gatewayResponse: Object retrieved from API containing array of Perscriptions
+    ///   - patient: patient to store object for
+    ///   - completion:  returns array of stored perscriptions
+    func storePerscriotions(in gatewayResponse: AuthenticatedMedicationStatementResponseObject, patient: Patient, completion: @escaping([Perscription])->Void) {
+        /**
+         Note the return is Async but function doesnt do anything async yet.
+         This is in case the proccess is slow in the future and we want to handle it asynchronously.
+         */
+        
+        guard let perscriptionObjects = gatewayResponse.resourcePayload else {return}
+        var storedObjects: [Perscription] = []
+        for object in perscriptionObjects {
+            if let storedObject = storePerscription(patient: patient, object: object) {
+                storedObjects.append(storedObject)
+            } else {
+                Logger.log(string: "*Failed while storing perscription", type: .storage)
+            }
+        }
+        return completion(storedObjects)
+    }
+    
     func storePerscription(patient: Patient, object: AuthenticatedMedicationStatementResponseObject.ResourcePayload) -> Perscription? {
         guard let prescriptionId = object.prescriptionIdentifier else {return nil}
         // Handle Medication
