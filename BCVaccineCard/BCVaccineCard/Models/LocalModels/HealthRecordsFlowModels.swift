@@ -44,10 +44,10 @@ struct HealthRecord {
             patient = card.patient!
             patientName = card.name ?? ""
             birthDate = card.patient?.birthday
-        case .Medication(let perscription):
-            patient = perscription.patient!
-            patientName = perscription.patient?.name ?? ""
-            birthDate = perscription.patient?.birthday
+        case .Medication(let prescription):
+            patient = prescription.patient!
+            patientName = prescription.patient?.name ?? ""
+            birthDate = prescription.patient?.birthday
         }
     }
 }
@@ -65,8 +65,8 @@ extension HealthRecord {
         case .CovidImmunization(let covidImmunization):
             guard let model = covidImmunization.toLocal() else {return nil}
             return HealthRecordsDetailDataSource(type: .covidImmunizationRecord(model: model, immunizations: covidImmunization.immunizations))
-        case .Medication(let perscription):
-            return HealthRecordsDetailDataSource(type: .medication(model: perscription))
+        case .Medication(let prescription):
+            return HealthRecordsDetailDataSource(type: .medication(model: prescription))
         }
     }
     
@@ -76,8 +76,8 @@ extension HealthRecord {
             return test.authenticated
         case .CovidImmunization(let covidImmunization):
             return covidImmunization.authenticated
-        case .Medication(let perscription):
-            return perscription.authenticated
+        case .Medication(let prescription):
+            return prescription.authenticated
         }
     }
 }
@@ -112,7 +112,7 @@ extension Array where Element == HealthRecord {
             case .covidTestResultRecord(model: let model):
                 firstDate = model.createdAt
             case .medication(model: let model):
-                <#code#>
+                firstDate = model.dispensedDate
             }
             switch second.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
@@ -120,7 +120,7 @@ extension Array where Element == HealthRecord {
             case .covidTestResultRecord(model: let model):
                 secondDate = model.createdAt
             case .medication(model: let model):
-                <#code#>
+                secondDate = model.dispensedDate
             }
             return firstDate ?? Date() < secondDate ?? Date()
         })
@@ -139,10 +139,11 @@ extension Array where Element == HealthRecord {
                     return immunizationRecord.id == id
                 }
                 return false
-            case .Medication(let perscriotion):
+            case .Medication(let prescription):
                 if recordType == .medication {
-                    return perscriotion.id == id
+                    return prescription.id == id
                 }
+                return false
             }
         }) {
             return self[index].detailDataSource()
