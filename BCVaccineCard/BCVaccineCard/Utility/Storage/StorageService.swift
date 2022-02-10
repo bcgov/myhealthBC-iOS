@@ -23,6 +23,9 @@ extension StorageService {
         case TestResult
         case ImmunizationRecord
         case VaccineCard
+        case Perscription
+        case Medication
+        case Pharmacy
     }
     
     struct StorageEvent<T> {

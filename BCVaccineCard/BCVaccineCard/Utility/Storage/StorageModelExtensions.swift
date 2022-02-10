@@ -180,3 +180,10 @@ extension TestResult {
 //        return self.map({HealthRecord(type: .Test($0))})
 //    }
 //}
+
+
+extension Medication {
+    var id: String {
+        return din ?? (genericName ?? "")
+    }
+}
