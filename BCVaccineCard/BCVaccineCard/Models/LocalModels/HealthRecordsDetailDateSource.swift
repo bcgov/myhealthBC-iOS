@@ -12,7 +12,7 @@ struct HealthRecordsDetailDataSource {
         enum RecordType {
             case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
             case covidTestResultRecord(model: TestResult)
-            case Medication(model: Perscription)
+            case medication(model: Perscription)
         }
         let id: String
         let name: String
@@ -25,7 +25,7 @@ struct HealthRecordsDetailDataSource {
     enum RecordType {
         case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
         case covidTestResultRecord(model: CovidLabTestResult)
-        case Medication(model: Perscription)
+        case medication(model: Perscription)
     }
     
     let id: String?
@@ -46,6 +46,8 @@ struct HealthRecordsDetailDataSource {
             guard let mainResultModel = model.mainResult else {return nil}
             let record = HealthRecordsDetailDataSource.genRecord(testResult: mainResultModel, parentResult: model)
             return records.first(where: {$0.id == record.id})
+        case .medication(model: let model):
+            return records.first
         }
     }
     
@@ -54,6 +56,8 @@ struct HealthRecordsDetailDataSource {
         case .covidImmunizationRecord(let model, _):
             return StorageService.shared.fetchVaccineCard(code: model.code)?.authenticated ?? false
         case .covidTestResultRecord(let model):
+            return model.authenticated
+        case .medication(model: let model):
             return model.authenticated
         }
     }
@@ -82,9 +86,20 @@ struct HealthRecordsDetailDataSource {
             image = UIImage(named: "blue-bg-test-result-icon")
             deleteAlertTitle = .deleteTestResult
             deleteAlertMessage = .deleteTestResultMessage
+        case .medication(model: let model):
+            id = model.id
+            title = "Statins" // TODO: Put this into localized file once text is finalized
+            detailNavTitle = "Statins" // Same here
+            name = model.patient?.name ?? ""
+            image = UIImage(named: "blue-bg-medication-record-icon")
+            deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary
+            deleteAlertMessage = "Shouldn't see this" // Showing these values for testing purposes
         }
     }
-    
+}
+
+// MARK: Gen Records section
+extension HealthRecordsDetailDataSource {
     private static func genRecords(type: RecordType)-> [Record] {
         var result: [Record] = []
         
@@ -97,9 +112,13 @@ struct HealthRecordsDetailDataSource {
                 result.append(genRecord(testResult: item, parentResult: model))
             }
             return result
+        case .medication(model: let model):
+            result.append(genRecord(prescription: model))
+            return result
         }
     }
     
+    // MARK: Immunization Records
     private static func genRecord(vaccineModel model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord]) -> Record {
         let date: String? = model.vaxDates.last
         var fields: [[TextListModel]] = []
@@ -123,7 +142,7 @@ struct HealthRecordsDetailDataSource {
         return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: modifiedDate, fields: fields)
     }
     
-    
+    // MARK: Covid Test Results
     private static func genRecord(testResult: TestResult, parentResult: CovidLabTestResult) -> Record {
         let status: String = testResult.resultType.getTitle
         let date: String? = testResult.resultDateTime?.monthDayYearString
@@ -177,6 +196,31 @@ struct HealthRecordsDetailDataSource {
             }
         }
         return (descriptionString, linkedStrings)
+    }
+    
+    // MARK: Medications
+    private static func genRecord(prescription: Perscription) -> Record {
+        let dateString = prescription.dispensedDate?.monthDayYearString
+        
+        
+        var fields: [[TextListModel]] = []
+        fields.append([
+            TextListModel(header: TextListModel.TextProperties(text: "Practitioner:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.practitionerSurname ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Quantity:", bolded: true), subtext: TextListModel.TextProperties(text: String(prescription.medication?.quantity ?? 0), bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Strength:", bolded: true), subtext: TextListModel.TextProperties(text: (prescription.medication?.strength ?? "") + " " + (prescription.medication?.strengthUnit ?? ""), bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Form:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.medication?.form ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Manufacturer:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.medication?.manufacturer ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Din:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.medication?.din ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Filled at:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.name ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Filled date:", bolded: true), subtext: TextListModel.TextProperties(text: dateString ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Address:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.addressLine1 ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Phone number:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.phoneNumber ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Fax:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.faxNumber ?? "", bolded: false))
+        ])
+        
+        // Notes:
+        /// Unsure about status field - this is what it appears to be in designs though
+        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.status, date: dateString, fields: fields)
     }
 }
 

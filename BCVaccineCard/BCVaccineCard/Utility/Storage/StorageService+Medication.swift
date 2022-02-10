@@ -83,7 +83,7 @@ extension StorageService: StorageMedicationManager {
     ///   - gatewayResponse: Object retrieved from API containing array of Perscriptions
     ///   - patient: patient to store object for
     ///   - completion:  returns array of stored perscriptions
-    func storePerscriotions(in gatewayResponse: AuthenticatedMedicationStatementResponseObject, patient: Patient, completion: @escaping([Perscription])->Void) {
+    func storePerscriptions(in gatewayResponse: AuthenticatedMedicationStatementResponseObject, patient: Patient, completion: @escaping([Perscription])->Void) {
         /**
          Note the return is Async but function doesnt do anything async yet.
          This is in case the proccess is slow in the future and we want to handle it asynchronously.

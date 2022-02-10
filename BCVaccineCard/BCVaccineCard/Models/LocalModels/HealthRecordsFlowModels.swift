@@ -66,7 +66,7 @@ extension HealthRecord {
             guard let model = covidImmunization.toLocal() else {return nil}
             return HealthRecordsDetailDataSource(type: .covidImmunizationRecord(model: model, immunizations: covidImmunization.immunizations))
         case .Medication(let perscription):
-            return HealthRecordsDetailDataSource(type: .Medication(model: perscription))
+            return HealthRecordsDetailDataSource(type: .medication(model: perscription))
         }
     }
     
@@ -111,12 +111,16 @@ extension Array where Element == HealthRecord {
                 firstDate = Date(timeIntervalSince1970: model.issueDate)
             case .covidTestResultRecord(model: let model):
                 firstDate = model.createdAt
+            case .medication(model: let model):
+                <#code#>
             }
             switch second.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 secondDate = Date(timeIntervalSince1970: model.issueDate)
             case .covidTestResultRecord(model: let model):
                 secondDate = model.createdAt
+            case .medication(model: let model):
+                <#code#>
             }
             return firstDate ?? Date() < secondDate ?? Date()
         })
@@ -136,7 +140,7 @@ extension Array where Element == HealthRecord {
                 }
                 return false
             case .Medication(let perscriotion):
-                if recordType == .Medication {
+                if recordType == .medication {
                     return perscriotion.id == id
                 }
             }
