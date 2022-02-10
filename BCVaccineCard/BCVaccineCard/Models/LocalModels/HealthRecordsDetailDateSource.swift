@@ -12,6 +12,7 @@ struct HealthRecordsDetailDataSource {
         enum RecordType {
             case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
             case covidTestResultRecord(model: TestResult)
+            case Medication(model: Perscription)
         }
         let id: String
         let name: String
@@ -24,6 +25,7 @@ struct HealthRecordsDetailDataSource {
     enum RecordType {
         case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
         case covidTestResultRecord(model: CovidLabTestResult)
+        case Medication(model: Perscription)
     }
     
     let id: String?

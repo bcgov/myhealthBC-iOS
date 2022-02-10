@@ -19,6 +19,7 @@ struct HealthRecord {
     public enum Record {
         case Test(CovidLabTestResult)
         case CovidImmunization(VaccineCard)
+        case Medication(Perscription)
     }
     
     public let type: Record
@@ -43,6 +44,10 @@ struct HealthRecord {
             patient = card.patient!
             patientName = card.name ?? ""
             birthDate = card.patient?.birthday
+        case .Medication(let perscription):
+            patient = perscription.patient!
+            patientName = perscription.patient?.name ?? ""
+            birthDate = perscription.patient?.birthday
         }
     }
 }
@@ -60,6 +65,8 @@ extension HealthRecord {
         case .CovidImmunization(let covidImmunization):
             guard let model = covidImmunization.toLocal() else {return nil}
             return HealthRecordsDetailDataSource(type: .covidImmunizationRecord(model: model, immunizations: covidImmunization.immunizations))
+        case .Medication(let perscription):
+            return HealthRecordsDetailDataSource(type: .Medication(model: perscription))
         }
     }
     
@@ -69,6 +76,8 @@ extension HealthRecord {
             return test.authenticated
         case .CovidImmunization(let covidImmunization):
             return covidImmunization.authenticated
+        case .Medication(let perscription):
+            return perscription.authenticated
         }
     }
 }
@@ -126,6 +135,10 @@ extension Array where Element == HealthRecord {
                     return immunizationRecord.id == id
                 }
                 return false
+            case .Medication(let perscriotion):
+                if recordType == .Medication {
+                    return perscriotion.id == id
+                }
             }
         }) {
             return self[index].detailDataSource()

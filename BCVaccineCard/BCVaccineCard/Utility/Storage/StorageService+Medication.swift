@@ -160,6 +160,7 @@ extension StorageService: StorageMedicationManager {
         perscription.directions = directions
         perscription.dateEntered = dateEntered
         perscription.patient = patient
+        perscription.authenticated = true
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: perscription))

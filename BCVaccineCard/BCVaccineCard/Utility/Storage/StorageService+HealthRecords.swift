@@ -13,7 +13,8 @@ extension StorageService {
     func getHeathRecords() -> [HealthRecord] {
         let tests = fetchTestResults().map({HealthRecord(type: .Test($0))})
         let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
-        return tests + vaccineCards
+        let medications = fetchPerscriptions().map({HealthRecord(type: .Medication($0))})
+        return tests + vaccineCards + medications
     }
     
     
@@ -25,6 +26,9 @@ extension StorageService {
         case .CovidImmunization(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: object))
+        case .Medication(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: object))
         }
     }
     
