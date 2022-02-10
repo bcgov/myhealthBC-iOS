@@ -147,8 +147,7 @@ class StatusBannerView: UIView, UITextViewDelegate {
             textView.isEditable = false
             textView.backgroundColor = .clear
         case .Medication:
-            // TODO: Check this
-            mainContainer.isHidden = true
+            print("Not using this cell here")
         }
         self.layoutIfNeeded()
     }

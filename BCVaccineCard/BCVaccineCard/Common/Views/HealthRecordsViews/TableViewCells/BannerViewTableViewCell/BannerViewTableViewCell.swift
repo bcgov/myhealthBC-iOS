@@ -84,8 +84,8 @@ extension HealthRecordsDetailDataSource.Record {
             }
             
             return completion(BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type, attributedString: attributedString))
-        case .medication(model: let model):
-            <#code#>
+        case .medication:
+            return completion(nil)
         }
     }
 }
