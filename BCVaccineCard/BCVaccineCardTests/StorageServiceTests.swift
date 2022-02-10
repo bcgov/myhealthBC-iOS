@@ -301,7 +301,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(patient.name, patietName)
     }
     
-    func testAddingHealthRecord() {
+    func testAddingImmunizationRecord() {
         // given
         let vaxCard = SampleVaxCard()
         // when storing card and fetching it back
