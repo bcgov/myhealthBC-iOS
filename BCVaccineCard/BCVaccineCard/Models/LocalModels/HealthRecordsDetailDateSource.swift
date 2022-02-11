@@ -202,7 +202,6 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(prescription: Perscription) -> Record {
         let dateString = prescription.dispensedDate?.monthDayYearString
         
-        
         var fields: [[TextListModel]] = []
         fields.append([
             TextListModel(header: TextListModel.TextProperties(text: "Practitioner:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.practitionerSurname ?? "", bolded: false)),

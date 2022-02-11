@@ -13,7 +13,7 @@ extension StorageService {
     func getHeathRecords() -> [HealthRecord] {
         let tests = fetchTestResults().map({HealthRecord(type: .Test($0))})
         let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
-        let medications = fetchPerscriptions().map({HealthRecord(type: .Medication($0))})
+        let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         return tests + vaccineCards + medications
     }
     
