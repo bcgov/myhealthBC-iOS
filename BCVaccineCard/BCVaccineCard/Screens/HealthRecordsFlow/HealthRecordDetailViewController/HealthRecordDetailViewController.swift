@@ -10,9 +10,10 @@ import UIKit
 
 class HealthRecordDetailViewController: BaseViewController {
     
-    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
+    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticated: Bool, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
             vc.dataSource = dataSource
+            vc.authenticated = authenticated
             vc.userNumberHealthRecords = userNumberHealthRecords
             return vc
         }
@@ -22,6 +23,7 @@ class HealthRecordDetailViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var dataSource: HealthRecordsDetailDataSource!
+    private var authenticated: Bool!
     private var userNumberHealthRecords: Int!
 
     
@@ -42,6 +44,10 @@ class HealthRecordDetailViewController: BaseViewController {
                     }
                 case .CovidLabTestResult:
                     if let object = event.object as? CovidLabTestResult, object.patient?.name == self.dataSource.name {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                case .Medication:
+                    if let object = event.object as? Perscription, object.patient?.name == self.dataSource.name {
                         self.navigationController?.popToRootViewController(animated: true)
                     }
                 default:
@@ -87,7 +93,8 @@ class HealthRecordDetailViewController: BaseViewController {
 // MARK: Navigation setup
 extension HealthRecordDetailViewController {
     private func navSetup() {
-        let rightNavButton = NavButton(
+        let rightNavButton: NavButton? = self.authenticated ? nil :
+        NavButton(
             title: .delete,
             image: nil, action: #selector(self.deleteButton),
             accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
@@ -110,6 +117,8 @@ extension HealthRecordDetailViewController {
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteTestResult(id: recordId, sendDeleteEvent: true)
+            case .medication:
+                print("Not able to delete medications currently, as they are auth-only records")
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)

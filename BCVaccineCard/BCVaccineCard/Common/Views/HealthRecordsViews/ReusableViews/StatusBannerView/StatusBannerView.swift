@@ -44,6 +44,7 @@ class StatusBannerView: UIView, UITextViewDelegate {
         case Message
         case CovidTest
         case VaccineRecord
+        case Medication
     }
     
     /// Configure View
@@ -145,6 +146,8 @@ class StatusBannerView: UIView, UITextViewDelegate {
             textView.isScrollEnabled = false
             textView.isEditable = false
             textView.backgroundColor = .clear
+        case .Medication:
+            print("Not using this cell here")
         }
         self.layoutIfNeeded()
     }

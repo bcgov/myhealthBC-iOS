@@ -15,7 +15,8 @@ extension HealthRecordsDetailDataSource.Record {
             return [.Header, .Fields]
         case .covidTestResultRecord:
             return [.Header, .Fields]
-            
+        case .medication:
+            return [.Fields]
         }
     }
 }

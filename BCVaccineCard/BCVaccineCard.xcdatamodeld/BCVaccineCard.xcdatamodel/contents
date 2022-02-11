@@ -35,6 +35,7 @@
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="patient" inverseEntity="VaccineCard"/>
     </entity>
     <entity name="Perscription" representedClassName="Perscription" syncable="YES">
+        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="dateEntered" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="directions" optional="YES" attributeType="String"/>
         <attribute name="dispensedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -90,7 +91,7 @@
         <element name="ImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="104"/>
         <element name="Medication" positionX="180" positionY="414" width="128" height="194"/>
         <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="104"/>
-        <element name="Perscription" positionX="162" positionY="396" width="128" height="164"/>
+        <element name="Perscription" positionX="162" positionY="396" width="128" height="179"/>
         <element name="Pharmacy" positionX="171" positionY="405" width="128" height="179"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
         <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="179"/>

@@ -10,7 +10,7 @@ import Foundation
 protocol StorageMedicationManager {
     
     // MARK: Store
-    func storePerscription(
+    func storePrescription(
         patient: Patient,
         object: AuthenticatedMedicationStatementResponseObject.ResourcePayload
     )-> Perscription?
@@ -23,8 +23,8 @@ protocol StorageMedicationManager {
         practitionerSurname: String?,
         directions: String?,
         dateEntered: Date?,
-        pharmacyID: String?,
-        medicationDin: String?
+        pharmacy: Pharmacy?,
+        medication: Medication?
     )-> Perscription?
     
     func storeMedication(
@@ -63,13 +63,13 @@ protocol StorageMedicationManager {
     )-> Pharmacy?
     
     // MARK: Delete
-    func deletePerscription(id: String, sendDeleteEvent: Bool)
+    func deletePrescription(id: String, sendDeleteEvent: Bool)
     func deletePharmacy(id: String, sendDeleteEvent: Bool)
     func deleteMedication(id: String, sendDeleteEvent: Bool)
     
     // MARK: Fetch
-    func fetchPerscriptions()-> [Perscription]
-    func fetchPerscription(id: String)-> Perscription?
+    func fetchPrescriptions()-> [Perscription]
+    func fetchPrescription(id: String)-> Perscription?
     func fetchPharmacy(id: String)-> Pharmacy?
     func fetchMedication(id: String)-> Medication?
 }
@@ -83,7 +83,7 @@ extension StorageService: StorageMedicationManager {
     ///   - gatewayResponse: Object retrieved from API containing array of Perscriptions
     ///   - patient: patient to store object for
     ///   - completion:  returns array of stored perscriptions
-    func storePerscriotions(in gatewayResponse: AuthenticatedMedicationStatementResponseObject, patient: Patient, completion: @escaping([Perscription])->Void) {
+    func storePrescriptions(in gatewayResponse: AuthenticatedMedicationStatementResponseObject, patient: Patient, completion: @escaping([Perscription])->Void) {
         /**
          Note the return is Async but function doesnt do anything async yet.
          This is in case the proccess is slow in the future and we want to handle it asynchronously.
@@ -92,7 +92,7 @@ extension StorageService: StorageMedicationManager {
         guard let perscriptionObjects = gatewayResponse.resourcePayload else {return}
         var storedObjects: [Perscription] = []
         for object in perscriptionObjects {
-            if let storedObject = storePerscription(patient: patient, object: object) {
+            if let storedObject = storePrescription(patient: patient, object: object) {
                 storedObjects.append(storedObject)
             } else {
                 Logger.log(string: "*Failed while storing perscription", type: .storage)
@@ -101,7 +101,7 @@ extension StorageService: StorageMedicationManager {
         return completion(storedObjects)
     }
     
-    func storePerscription(patient: Patient, object: AuthenticatedMedicationStatementResponseObject.ResourcePayload) -> Perscription? {
+    func storePrescription(patient: Patient, object: AuthenticatedMedicationStatementResponseObject.ResourcePayload) -> Perscription? {
         guard let prescriptionId = object.prescriptionIdentifier else {return nil}
         // Handle Medication
         var medication: Medication? = nil
@@ -123,10 +123,24 @@ extension StorageService: StorageMedicationManager {
             }
         }
         // Delete existing record if exists
-        deletePerscription(id: prescriptionId, sendDeleteEvent: false)
+        deletePrescription(id: prescriptionId, sendDeleteEvent: false)
         // Store new record
-        let dispenseDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dispensedDate ?? "")
-        let dateEntered = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dateEntered ?? "")
+        // This is due to API inconsistencies with date formatting
+        var dispenseDate: Date?
+        var dateEntered: Date?
+        
+        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dispensedDate ?? "") {
+            dispenseDate = timezoneDate
+        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dispensedDate ?? "") {
+            dispenseDate = nozoneDate
+        }
+        
+        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dateEntered ?? "") {
+            dateEntered = timezoneDate
+        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dateEntered ?? "") {
+            dateEntered = nozoneDate
+        }
+        
         return storePrescription(
             patient: patient,
             prescriptionIdentifier: object.prescriptionIdentifier,
@@ -135,8 +149,8 @@ extension StorageService: StorageMedicationManager {
             practitionerSurname: object.practitionerSurname,
             directions: object.directions,
             dateEntered: dateEntered,
-            pharmacyID: pharmacy?.id,
-            medicationDin: medication?.din
+            pharmacy: pharmacy,
+            medication: medication
         )
     }
    
@@ -148,22 +162,25 @@ extension StorageService: StorageMedicationManager {
         practitionerSurname: String?,
         directions: String?,
         dateEntered: Date?,
-        pharmacyID: String?,
-        medicationDin: String?
+        pharmacy: Pharmacy?,
+        medication: Medication?
     ) -> Perscription? {
         guard let context = managedContext else {return nil}
-        let perscription = Perscription(context: context)
-        perscription.id = prescriptionIdentifier
-        perscription.status = prescriptionStatus
-        perscription.dispensedDate = dispensedDate
-        perscription.practitionerSurname = practitionerSurname
-        perscription.directions = directions
-        perscription.dateEntered = dateEntered
-        perscription.patient = patient
+        let prescription = Perscription(context: context)
+        prescription.id = prescriptionIdentifier
+        prescription.status = prescriptionStatus
+        prescription.dispensedDate = dispensedDate
+        prescription.practitionerSurname = practitionerSurname
+        prescription.directions = directions
+        prescription.dateEntered = dateEntered
+        prescription.patient = patient
+        prescription.authenticated = true
+        prescription.pharmacy = pharmacy
+        prescription.medication = medication
         do {
             try context.save()
-            self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: perscription))
-            return perscription
+            self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: prescription))
+            return prescription
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
             return nil
@@ -272,7 +289,7 @@ extension StorageService: StorageMedicationManager {
     }
     
     // MARK: Fetch
-    func fetchPerscriptions() -> [Perscription] {
+    func fetchPrescriptions() -> [Perscription] {
         guard let context = managedContext else {return []}
         do {
             return try context.fetch(Perscription.fetchRequest())
@@ -282,9 +299,9 @@ extension StorageService: StorageMedicationManager {
         }
     }
     
-    func fetchPerscription(id: String) -> Perscription? {
-        let perscriptions = fetchPerscriptions()
-        return perscriptions.first(where: {$0.id == id})
+    func fetchPrescription(id: String) -> Perscription? {
+        let prescriptions = fetchPrescriptions()
+        return prescriptions.first(where: {$0.id == id})
     }
     
     func fetchPharmacy(id: String) -> Pharmacy? {
@@ -310,8 +327,8 @@ extension StorageService: StorageMedicationManager {
     }
     
     // MARK: Delete
-    func deletePerscription(id: String, sendDeleteEvent: Bool) {
-        guard let object = fetchPerscription(id: id) else {return}
+    func deletePrescription(id: String, sendDeleteEvent: Bool) {
+        guard let object = fetchPrescription(id: id) else {return}
         delete(object: object)
     }
     

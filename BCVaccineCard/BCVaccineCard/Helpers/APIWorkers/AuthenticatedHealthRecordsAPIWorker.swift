@@ -52,7 +52,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
     // Note: Choosing this instead of completion handlers as completion handlers were causing issues
     // TODO: Turn this into an array which will track the fetch status - construct this independendently (via init, perhaps) so that it is more reusable
-    var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [.VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0), .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)]) {
+    var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [
+        .VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+        .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+        .MedicationStatement : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
+    ]) {
         didSet {
             if fetchStatusList.isCompleted {
                 self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors)
@@ -339,7 +343,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 errorArrayCount += 1
             }
         }
-        self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: .genericErrorMessage)
+        let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+        self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
@@ -352,10 +357,25 @@ extension AuthenticatedHealthRecordsAPIWorker {
 // MARK: Handle Medication Statement in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleMedicationStatementInCoreData(medicationStatement: AuthenticatedMedicationStatementResponseObject) {
-        // TODO: Amir - handle core data response here - will be similar to how test results is handled above
-        
-        // Note: For now, adding this delegate here so that the other fetches work...
-        self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: nil)
+        guard let patient = self.patientDetails else { return }
+        guard let payloads = medicationStatement.resourcePayload else { return }
+        var errorArrayCount: Int = 0
+        var completedCount: Int = 0
+        for payload in payloads {
+            if let id = handleMedicationStatementInCoreData(object: payload, authenticated: true, patientObject: patient) {
+                completedCount += 1
+            } else {
+                errorArrayCount += 1
+            }
+        }
+        let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+        self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+    }
+    
+    private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+        guard let object = StorageService.shared.storePrescription(patient: patient, object: object) else { return nil }
+        return object.id
     }
 }
 

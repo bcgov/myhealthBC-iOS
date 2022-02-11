@@ -25,5 +25,6 @@ extension Perscription {
     @NSManaged public var medication: Medication?
     @NSManaged public var pharmacy: Pharmacy?
     @NSManaged public var patient: Patient?
+    @NSManaged public var authenticated: Bool
 
 }
