@@ -117,7 +117,9 @@ class LocalAuthManager {
     }
     
     private func openAuthSettings() {
-        UIApplication.openAppSettings()
+        self.view?.parent?.alertConfirmation(title: .allowSecurityAccessTitle, message: .allowSecurityAccessMessage, confirmTitle: .settings, confirmStyle: .default, onConfirm: {
+            UIApplication.openAppSettings()
+        },cancelTitle: .notNow, onCancel: {})
     }
     
     private func useAuth(policy: LAPolicy, completion: @escaping(_ status: AuthStatus) -> Void) {
