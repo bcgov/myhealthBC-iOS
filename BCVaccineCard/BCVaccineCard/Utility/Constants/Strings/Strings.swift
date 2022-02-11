@@ -275,10 +275,9 @@ extension String {
     static var useTouchId: String { return "UseTouchId".localized }
     static var usePassCode: String { return "UsePassCode".localized }
     static var useFaceId: String { return "UseFaceId".localized }
-    static var turnOnPasscode: String { return "TurnOnPasscode".localized }
-    static var turnOnFaceId: String { return "TurnOnFaceId".localized }
-    static var turnOnTouchId: String { return "TurnOnTouchId".localized }
-    
+    static var setupAuthentication: String { return "SetupAuthentication".localized }
+    static var allowSecurityAccessTitle: String { return "AllowSecurityAccessTitle".localized }
+    static var allowSecurityAccessMessage: String { return "AllowSecurityAccessMessage".localized }
 }
 
 // Accessibility only localized strings
