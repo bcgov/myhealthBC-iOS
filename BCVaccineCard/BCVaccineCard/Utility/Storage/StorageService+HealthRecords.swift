@@ -35,7 +35,9 @@ extension StorageService {
     func deleteHealthRecordsForAuthenticatedUser() {
         let tests = fetchTestResults().filter({$0.authenticated == true})
         let vaccineCards = fetchVaccineCards().filter({$0.authenticated == true})
+        let medications = fetchPrescriptions().filter({ $0.authenticated == true })
         deleteAllRecords(in: tests)
         deleteAllRecords(in: vaccineCards)
+        deleteAllRecords(in: medications)
     }
 }
