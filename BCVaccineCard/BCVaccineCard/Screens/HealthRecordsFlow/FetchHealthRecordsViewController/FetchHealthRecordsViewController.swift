@@ -132,6 +132,9 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
                 self.showVaccineForm(rememberDetails: rememberDetails)
             case .covidTestResult:
                 self.showTestForm(rememberDetails: rememberDetails)
+            case .medication:
+                // Currently we are not going to allow user to manually fetch meds, so no action here
+                return
             }
         }
         
@@ -179,7 +182,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             return
         }
         DispatchQueue.main.async {
-            let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: recordsCount)
+            let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticated: ds.isAuthenticated, userNumberHealthRecords: recordsCount)
             self.setupNavStack(details: details, detailVC: detailVC)
         }
     }

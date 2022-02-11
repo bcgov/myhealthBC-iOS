@@ -12,11 +12,13 @@ class GetRecordsView: UIView {
     enum RecordType {
         case covidImmunizationRecord
         case covidTestResult
+        case medication
         
         var getTitle: String {
             switch self {
             case .covidImmunizationRecord: return .getVaccinationRecordsTitle
             case .covidTestResult: return .getCovidTestResultsTitle
+            case .medication: return ""
             }
         }
         
@@ -24,6 +26,7 @@ class GetRecordsView: UIView {
             switch self {
             case .covidImmunizationRecord: return .getVaccinationRecordsDescription
             case .covidTestResult: return .getCovidTestResultsDescription
+            case .medication: return ""
             }
         }
         
@@ -31,6 +34,7 @@ class GetRecordsView: UIView {
             switch self {
             case .covidImmunizationRecord: return UIImage(named: "vaccine-record-icon")
             case .covidTestResult: return UIImage(named: "test-result-icon")
+            case .medication: return nil
             }
         }
     }

@@ -216,13 +216,17 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
-        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, userNumberHealthRecords: dataSource.count)
+        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticated: ds.isAuthenticated, userNumberHealthRecords: dataSource.count)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         guard !dataSource.isEmpty || !inEditMode else { return .none }
-        return .delete
+        if ableToDeleteRecord(at: indexPath.row) {
+            return .delete
+        } else {
+            return .none
+        }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -237,7 +241,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         
-        guard orientation == .right else {return nil}
+        guard orientation == .right, ableToDeleteRecord(at: indexPath.row) else {return nil}
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { [weak self] action, indexPath in
             guard let `self` = self else {return}
             self.deleteRecord(at: indexPath.row, reInitEditMode: false)
@@ -250,6 +254,12 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkCard
         deleteAction.accessibilityTraits = .button
         return [deleteAction]
+    }
+    
+    private func ableToDeleteRecord(at index: Int) -> Bool {
+        guard dataSource.indices.contains(index) else { return false }
+        let record = dataSource[index]
+        return !record.isAuthenticated
     }
     
     private func deleteRecord(at index: Int, reInitEditMode: Bool) {
@@ -292,6 +302,8 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             } onCancel: {
                 completion(false)
             }
+        case .medication:
+            return
         }
     }
     

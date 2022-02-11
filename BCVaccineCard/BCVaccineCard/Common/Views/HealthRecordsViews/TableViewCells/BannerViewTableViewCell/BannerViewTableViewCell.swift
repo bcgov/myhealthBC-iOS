@@ -37,6 +37,8 @@ extension HealthRecordsDetailDataSource.Record {
                 type = .Message
             }
             return type
+        case .medication:
+            return .Medication
         }
     }
     
@@ -82,6 +84,8 @@ extension HealthRecordsDetailDataSource.Record {
             }
             
             return completion(BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type, attributedString: attributedString))
+        case .medication:
+            return completion(nil)
         }
     }
 }
@@ -152,6 +156,8 @@ extension HealthRecordsDetailDataSource.Record.RecordType {
             return .VaccineRecord
         case .covidTestResultRecord:
             return .CovidTest
+        case .medication:
+            return .Medication
         }
     }
 }

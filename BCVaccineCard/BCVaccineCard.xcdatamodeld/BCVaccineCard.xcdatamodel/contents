@@ -14,12 +14,49 @@
         <attribute name="snomed" optional="YES" attributeType="String"/>
         <relationship name="vaccineCard" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="immunizationRecord" inverseEntity="VaccineCard"/>
     </entity>
+    <entity name="Medication" representedClassName="Medication" syncable="YES">
+        <attribute name="brandName" optional="YES" attributeType="String"/>
+        <attribute name="din" attributeType="String"/>
+        <attribute name="drugDiscontinuedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="form" optional="YES" attributeType="String"/>
+        <attribute name="genericName" optional="YES" attributeType="String"/>
+        <attribute name="isPin" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="manufacturer" optional="YES" attributeType="String"/>
+        <attribute name="maxDailyDosage" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="strength" optional="YES" attributeType="String"/>
+        <attribute name="strengthUnit" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="Patient" representedClassName="Patient" syncable="YES">
         <attribute name="birthday" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="patient" inverseEntity="VaccineCard"/>
+    </entity>
+    <entity name="Perscription" representedClassName="Perscription" syncable="YES">
+        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="dateEntered" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="directions" optional="YES" attributeType="String"/>
+        <attribute name="dispensedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="practitionerSurname" optional="YES" attributeType="String"/>
+        <attribute name="status" attributeType="String"/>
+        <relationship name="medication" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Medication"/>
+        <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient"/>
+        <relationship name="pharmacy" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pharmacy"/>
+    </entity>
+    <entity name="Pharmacy" representedClassName="Pharmacy" syncable="YES">
+        <attribute name="addressLine1" optional="YES" attributeType="String"/>
+        <attribute name="addressLine2" optional="YES" attributeType="String"/>
+        <attribute name="city" optional="YES" attributeType="String"/>
+        <attribute name="countryCode" optional="YES" attributeType="String"/>
+        <attribute name="faxNumber" optional="YES" attributeType="String"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="postalCode" optional="YES" attributeType="String"/>
+        <attribute name="province" optional="YES" attributeType="String"/>
     </entity>
     <entity name="TestResult" representedClassName=".TestResult" syncable="YES">
         <attribute name="collectionDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -52,7 +89,10 @@
     <elements>
         <element name="CovidLabTestResult" positionX="70.65234375" positionY="497.984375" width="128" height="104"/>
         <element name="ImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="104"/>
-        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="118"/>
+        <element name="Medication" positionX="180" positionY="414" width="128" height="194"/>
+        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="104"/>
+        <element name="Perscription" positionX="162" positionY="396" width="128" height="179"/>
+        <element name="Pharmacy" positionX="171" positionY="405" width="128" height="179"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
         <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="179"/>
     </elements>
