@@ -187,7 +187,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        // TODO: Make sure we check for authenticated card here.
+        // TODO: Make sure we check for authenticated card here
         guard orientation == .right, savedCardsCount == 1 else {return nil}
         let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
             guard let `self` = self else {return}
