@@ -219,7 +219,7 @@ extension HealthRecordsDetailDataSource {
         
         // Notes:
         /// Unsure about status field - this is what it appears to be in designs though
-        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.status, date: dateString, fields: fields)
+        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.medication?.genericName, date: dateString, fields: fields)
     }
 }
 

@@ -26,6 +26,8 @@ class HealthRecordsViewController: BaseViewController {
     private let authManager: AuthManager = AuthManager()
     private var dataSource: [HealthRecordsDataSource] = []
     private var recentlyAddedId: String?
+    // Note: This is used when we want to automatically go to a users records
+    private var authenticatedPatientToShow: Patient?
    
     var lastPatientSelected: Patient? = nil
     
@@ -63,6 +65,9 @@ class HealthRecordsViewController: BaseViewController {
         } else {
             self.addRecordHeaderSetup()
             self.setupCollectionView()
+            if let patient = authenticatedPatientToShow {
+                self.goToUserRecordsViewControllerForPatient(patient)
+            }
         }
         refreshOnStorageChange()
     }
@@ -235,10 +240,17 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
 
 // MARK: Function to go to user records view controller
 extension HealthRecordsViewController {
-    func goToUserRecordsViewControllerForPatien(_ patient: Patient) {
+    func setPatientToShow(patient: Patient) {
+        authenticatedPatientToShow = patient
+    }
+    
+    private func goToUserRecordsViewControllerForPatient(_ patient: Patient) {
         if let index = dataSource.firstIndex(where: { $0.patient == patient }) {
             let data = dataSource[index]
-            selected(data: data)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.selected(data: data)
+                self.authenticatedPatientToShow = nil
+            }
         }
     }
 }

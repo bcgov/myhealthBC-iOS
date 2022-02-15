@@ -28,6 +28,13 @@ extension Patient {
         }
     }
     
+    public var prescriptionArray: [Perscription] {
+        let set = prescriptions as? Set<Perscription> ?? []
+        return set.sorted {
+            $0.dispensedDate ?? Date() > $1.dispensedDate ?? Date()
+        }
+    }
+    
 }
 
 // MARK: VaccineCard
