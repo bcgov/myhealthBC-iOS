@@ -60,15 +60,19 @@ class HealthRecordsUserView: UIView {
     }
     
     func styleAuthStatus(authenticated: Bool) {
-        if !authenticated {return}
-        let bcscLogo = UIImage(named: "bcscLogo")
-        recordIconImageView.image = bcscLogo
-        let isAuthenticated = AuthManager().isAuthenticated
-        recordIconImageView.alpha = isAuthenticated ? 1 : 0.3
-        if !isAuthenticated {return}
-        Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
-            guard let `self` = self else {return}
-            self.recordIconImageView.alpha = 0.3
+        if !authenticated {
+            recordIconImageView.image = UIImage(named: "vaccine-record-icon")
+            recordIconImageView.alpha = 1
+            return
+        } else {
+            let bcscLogo = UIImage(named: "bcscLogo")
+            recordIconImageView.image = bcscLogo
+            let isAuthenticated = AuthManager().isAuthenticated
+            recordIconImageView.alpha = isAuthenticated ? 1 : 0.3
+            Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
+                guard let `self` = self else {return}
+                self.recordIconImageView.alpha = 0.3
+            }
         }
     }
     
