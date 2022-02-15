@@ -26,7 +26,10 @@ class LocalAuthManager {
     
     //MARK: Handle launch from background
     private func launchedFromBackground() {
-        guard !LocalAuthManager.block else {return}
+        guard !LocalAuthManager.block else {
+            Logger.log(string: "Local Auth is blocked, not showing challenge", type: .localAuth)
+            return
+        }
         LocalAuthManager.shouldAuthenticate = true
         Logger.log(string: "Should perfom local authentication", type: .localAuth)
         Notification.Name.shouldPerformLocalAuth.post(object: nil, userInfo: nil)
@@ -35,8 +38,8 @@ class LocalAuthManager {
     public func listenToAppLaunch() {
         Notification.Name.launchedFromBackground.onPost(object: nil, queue: .main) {[weak self] _ in
             guard let `self` = self else {return}
-            self.launchedFromBackground()
             Logger.log(string: "App launched from background", type: .localAuth)
+            self.launchedFromBackground()
             LocalAuthManager.block = false
         }
     }

@@ -133,7 +133,7 @@ class AuthManager {
                                                   responseType: OIDResponseTypeCode,
                                                   additionalParameters: Constants.Auth.params)
             
-            
+            LocalAuthManager.block = true
             appDelegate.currentAuthorizationFlow =
             OIDAuthState.authState(byPresenting: request, presenting: viewController) { authState, error in
                 if let authState = authState {
