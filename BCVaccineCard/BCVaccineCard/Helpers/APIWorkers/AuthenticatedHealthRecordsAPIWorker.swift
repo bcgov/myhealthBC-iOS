@@ -256,6 +256,17 @@ extension AuthenticatedHealthRecordsAPIWorker {
 //                self.perform(#selector(self.retryGetMedicationStatementRequest), with: nil, afterDelay: retryInSeconds)
 //            }
             else {
+                #if DEBUG
+                if let payload = medicationStatement.resourcePayload {
+                    let items = payload.map({$0.prescriptionIdentifier ?? ""})
+                    Logger.log(string: print("items fetched: \(items.count)"), type: .general)
+                    
+                    
+                    let uniques = Array(Set(items))
+                    Logger.log(string: print("Unique items fetched: \(uniques.count)"), type: .general)
+                }
+                #endif
+                
                 self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement)
                 
             }
@@ -333,6 +344,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleTestResultsInCoreData(testResult: AuthenticatedTestResultsResponseModel) {
         guard let patient = self.patientDetails else { return }
         guard let orders = testResult.resourcePayload?.orders else { return }
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Test])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         for order in orders {
@@ -349,6 +361,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+       
         guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
         return object.id
     }
@@ -359,6 +372,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleMedicationStatementInCoreData(medicationStatement: AuthenticatedMedicationStatementResponseObject) {
         guard let patient = self.patientDetails else { return }
         guard let payloads = medicationStatement.resourcePayload else { return }
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Prescription])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         for payload in payloads {

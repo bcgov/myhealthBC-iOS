@@ -7,6 +7,15 @@
 
 import UIKit
 
+/*
+We can call the BCSC auth in 2 ways:
+1) AuthenticationViewController.displayFullScreen()
+    - Replaces the VC in window with AuthenticationViewController
+    - then sets the VC in window to be Tab Bar
+2) BaseViewController.showLogin()
+    - Shows AuthenticationViewController as a modal on the current view controller
+ */
+
 extension BaseViewController {
     func showLogin(initialView: AuthenticationViewController.InitialView,completion: @escaping(_ authenticated: Bool)->Void) {
         self.view.startLoadingIndicator()
@@ -174,6 +183,9 @@ class AuthenticationViewController: UIViewController {
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
         let vc = TabBarController.constructTabBarController()
         AppDelegate.sharedInstance?.window?.rootViewController = vc
+        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else {return}
+        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+        vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds)
     }
     
     public static func displayFullScreen(returnToHealthPass: Bool, initialView: InitialView) {

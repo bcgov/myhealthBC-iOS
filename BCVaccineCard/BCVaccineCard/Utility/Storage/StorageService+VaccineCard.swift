@@ -70,6 +70,8 @@ extension StorageService: StorageVaccineCardManager {
                           sortOrder: Int64? = nil,
                           completion: @escaping(VaccineCard?)->Void
     ) {
+        deleteVaccineCard(vaccineQR: vaccineQR)
+        
         guard let context = managedContext else {return completion(nil)}
         let cardSortOrder: Int64
         if let sortOrderPosition = sortOrder {

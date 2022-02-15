@@ -105,6 +105,7 @@ class SecurityAndDataViewController: BaseViewController {
             guard let `self` = self else {return}
             Defaults.rememberGatewayDetails = nil
             StorageService.shared.deleteAllStoredData()
+            LocalAuthManager.block = true
             self.performLogout(completion: {[weak self] in
                 guard let `self` = self else {return}
                 self.showBanner(message: .deletedAllRecordsAndSavedData, style: .Top)
@@ -125,6 +126,7 @@ class SecurityAndDataViewController: BaseViewController {
     // MARK: Helpers
     private func deleteRecordsForAuthenticatedUserAndLogout() {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+        LocalAuthManager.block = true
         performLogout(completion: {})
     }
     

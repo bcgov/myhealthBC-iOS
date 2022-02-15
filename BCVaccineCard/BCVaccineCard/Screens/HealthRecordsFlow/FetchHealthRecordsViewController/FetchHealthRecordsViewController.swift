@@ -140,8 +140,9 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         
         if !AuthManager().isAuthenticated {
             showLogin(initialView: .Landing) { authenticated in
-                // TODO: Handle conditionally
-                showForm()
+                if !authenticated {
+                    showForm()
+                }
             }
         } else {
             showForm()
