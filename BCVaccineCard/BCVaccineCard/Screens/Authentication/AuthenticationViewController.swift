@@ -174,6 +174,9 @@ class AuthenticationViewController: UIViewController {
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
         let vc = TabBarController.constructTabBarController()
         AppDelegate.sharedInstance?.window?.rootViewController = vc
+        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else {return}
+        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+        vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds)
     }
     
     public static func displayFullScreen(returnToHealthPass: Bool, initialView: InitialView) {
