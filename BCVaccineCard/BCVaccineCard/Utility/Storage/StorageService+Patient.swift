@@ -109,6 +109,7 @@ extension StorageService: StoragePatientManager {
     /// Updates values that are not nil
     fileprivate func update(phn: String?, name: String?, birthday: Date?, for patient: Patient) -> Patient? {
         guard let context = managedContext else {return nil}
+        if patient.name == name && patient.phn == phn && patient.birthday == birthday {return patient}
         do {
             if let patientName = name {
                 patient.name = patientName

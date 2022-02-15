@@ -13,7 +13,7 @@ extension StorageService {
     enum healthRecordType {
         case Test
         case VaccineCard
-        case Medication
+        case Prescription
     }
     
     func getHeathRecords() -> [HealthRecord] {
@@ -39,7 +39,7 @@ extension StorageService {
     
     func deleteHealthRecordsForAuthenticatedUser(types: [healthRecordType]? = nil) {
         var toDelete: [NSManagedObject] = []
-        let typesTodelete: [healthRecordType] = types ?? [.Medication, .Test, .VaccineCard]
+        let typesTodelete: [healthRecordType] = types ?? [.Prescription, .Test, .VaccineCard]
         if typesTodelete.contains(.VaccineCard) {
             let vaccineCards = fetchVaccineCards().filter({$0.authenticated == true})
             toDelete.append(contentsOf: vaccineCards)
@@ -50,7 +50,7 @@ extension StorageService {
             toDelete.append(contentsOf: tests)
             notify(event: StorageEvent(event: .Delete, entity: .TestResult, object: tests))
         }
-        if typesTodelete.contains(.Medication) {
+        if typesTodelete.contains(.Prescription) {
             let medications = fetchPrescriptions().filter({ $0.authenticated == true })
             toDelete.append(contentsOf: medications)
             notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: medications))

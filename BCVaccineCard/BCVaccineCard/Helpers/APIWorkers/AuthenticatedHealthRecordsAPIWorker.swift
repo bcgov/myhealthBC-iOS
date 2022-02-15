@@ -256,6 +256,17 @@ extension AuthenticatedHealthRecordsAPIWorker {
 //                self.perform(#selector(self.retryGetMedicationStatementRequest), with: nil, afterDelay: retryInSeconds)
 //            }
             else {
+                #if DEBUG
+                if let payload = medicationStatement.resourcePayload {
+                    let items = payload.map({$0.prescriptionIdentifier ?? ""})
+                    Logger.log(string: print("items fetched: \(items.count)"), type: .general)
+                    
+                    
+                    let uniques = Array(Set(items))
+                    Logger.log(string: print("Unique items fetched: \(uniques.count)"), type: .general)
+                }
+                #endif
+                
                 self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement)
                 
             }
@@ -361,7 +372,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleMedicationStatementInCoreData(medicationStatement: AuthenticatedMedicationStatementResponseObject) {
         guard let patient = self.patientDetails else { return }
         guard let payloads = medicationStatement.resourcePayload else { return }
-        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Medication])
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Prescription])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         for payload in payloads {

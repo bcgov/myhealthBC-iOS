@@ -98,12 +98,16 @@ extension StorageService: StorageMedicationManager {
                 Logger.log(string: "*Failed while storing perscription", type: .storage)
             }
         }
+        Logger.log(string: "Stored \(storedObjects.count) items", type: .storage)
         self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: storedObjects))
         return completion(storedObjects)
     }
     
     func storePrescription(patient: Patient, object: AuthenticatedMedicationStatementResponseObject.ResourcePayload) -> Perscription? {
-        guard let prescriptionId = object.prescriptionIdentifier else {return nil}
+        guard let prescriptionId = object.prescriptionIdentifier else {
+            Logger.log(string: "Perscription has no identifier - cannot store", type: .storage)
+            return nil
+        }
         // Handle Medication
         var medication: Medication? = nil
         if let medicationSummary = object.medicationSummary {
@@ -330,15 +334,24 @@ extension StorageService: StorageMedicationManager {
     func deletePrescription(id: String, sendDeleteEvent: Bool) {
         guard let object = fetchPrescription(id: id) else {return}
         delete(object: object)
+        if sendDeleteEvent {
+            self.notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: object))
+        }
     }
     
     func deletePharmacy(id: String, sendDeleteEvent: Bool) {
         guard let object = fetchPharmacy(id: id) else {return}
         delete(object: object)
+        if sendDeleteEvent {
+            self.notify(event: StorageEvent(event: .Delete, entity: .Pharmacy, object: object))
+        }
     }
     
     func deleteMedication(id: String, sendDeleteEvent: Bool) {
         guard let object = fetchMedication(id: id) else {return}
         delete(object: object)
+        if sendDeleteEvent {
+            self.notify(event: StorageEvent(event: .Delete, entity: .Medication, object: object))
+        }
     }
 }
