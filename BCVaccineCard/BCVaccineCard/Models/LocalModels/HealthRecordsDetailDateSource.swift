@@ -88,8 +88,8 @@ struct HealthRecordsDetailDataSource {
             deleteAlertMessage = .deleteTestResultMessage
         case .medication(model: let model):
             id = model.id
-            title = "Statins" // TODO: Put this into localized file once text is finalized
-            detailNavTitle = "Statins" // Same here
+            title = model.medication?.brandName ?? "Statins"
+            detailNavTitle = model.medication?.brandName ?? "Statins"
             name = model.patient?.name ?? ""
             image = UIImage(named: "blue-bg-medication-record-icon")
             deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary

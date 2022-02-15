@@ -69,11 +69,11 @@ extension GatewayTestResultResponseRecord {
     enum ResponseStatusTypes: String, Codable {
         case pending = "Pending"
         case final = "Final"
-        case statusChange = "Status Change" //To Check here
+        case statusChange = "StatusChange"
     }
     
     enum ResponseOutcomeTypes: String, Codable {
-        case notSet = "Not Set" // To Check here
+        case notSet = "NotSet"
         case other = "Other"
         case pending = "Pending"
         case indeterminate = "Indeterminate"
