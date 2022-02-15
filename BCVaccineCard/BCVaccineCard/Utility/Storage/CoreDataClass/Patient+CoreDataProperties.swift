@@ -21,7 +21,7 @@ extension Patient {
     @NSManaged public var birthday: Date?
     @NSManaged public var covidTestResults: NSSet?
     @NSManaged public var vaccineCard: NSSet?
-
+    @NSManaged public var prescriptions: NSSet?
 }
 
 // MARK: Generated accessors for covidTestResults
@@ -55,5 +55,22 @@ extension Patient {
 
     @objc(removeVaccineCard:)
     @NSManaged public func removeFromVaccineCard(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for prescription
+extension Patient {
+
+    @objc(addPerscriptionObject:)
+    @NSManaged public func addToPrescription(_ value: Perscription)
+
+    @objc(removePerscriptionObject:)
+    @NSManaged public func removeFromPrescription(_ value: Perscription)
+
+    @objc(addPerscription:)
+    @NSManaged public func addToPrescription(_ values: NSSet)
+
+    @objc(removePerscription:)
+    @NSManaged public func removeFromPrescription(_ values: NSSet)
 
 }

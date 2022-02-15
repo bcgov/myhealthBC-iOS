@@ -513,22 +513,40 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
 
 // MARK: Check for authenticated patient
 extension GatewayFormViewController {
-    func isPHNOfAuthenticatedPatient() -> (auth: Bool, patient: Patient?) {
+    private func isPHNOfAuthenticatedPatient() -> (auth: Bool, patient: Patient?) {
         guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return (false, nil) }
         guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return (false, nil) }
         guard let patient = StorageService.shared.fetchPatient(phn: phn) else { return (false, nil) }
-        guard let authDisplayName = AuthManager().displayName, let patientName = patient.name else { return (false, patient) }
-        return (authDisplayName == patientName, patient)
+        return (doesPatientHaveAuthenticatedRecords(patient: patient), patient)
     }
     
-    func showAlertToRedirectAuthenticatedUserToRecordsView(patient: Patient) {
+    private func doesPatientHaveAuthenticatedRecords(patient: Patient) -> Bool {
+        for vaccineCard in patient.vaccineCardArray {
+            if vaccineCard.authenticated {
+                return true
+            }
+        }
+        for testResult in patient.testResultArray {
+            if testResult.authenticated {
+                return true
+            }
+        }
+        for prescription in patient.prescriptionArray {
+            if prescription.authenticated {
+                return true
+            }
+        }
+        return false
+    }
+    
+    private func showAlertToRedirectAuthenticatedUserToRecordsView(patient: Patient) {
         alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
             guard let `self` = self else {return}
             self.handleAuthNavigation(patient: patient)
         }, buttonTwoTitle: "Retry") {}
     }
     
-    func handleAuthNavigation(patient: Patient) {
+    private func handleAuthNavigation(patient: Patient) {
         if let tabBar = self.tabBarController as? TabBarController {
             tabBar.goToUserRecordsScreenForPatient(patient)
         }

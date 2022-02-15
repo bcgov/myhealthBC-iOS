@@ -129,7 +129,7 @@ class TabBarController: UITabBarController {
         if let patient = patient {
             selectedIndex = 1
             if let vc = navController.viewControllers.first as? HealthRecordsViewController {
-                vc.goToUserRecordsViewControllerForPatien(patient)
+                vc.setPatientToShow(patient: patient)
             }
         }
     }
