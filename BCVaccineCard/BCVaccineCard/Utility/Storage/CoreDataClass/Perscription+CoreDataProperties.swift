@@ -20,6 +20,7 @@ extension Perscription {
     @NSManaged public var directions: String?
     @NSManaged public var dispensedDate: Date?
     @NSManaged public var id: String?
+    @NSManaged public var prescriptionIdentifier: String?
     @NSManaged public var practitionerSurname: String?
     @NSManaged public var status: String?
     @NSManaged public var medication: Medication?
