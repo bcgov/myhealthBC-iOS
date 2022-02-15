@@ -71,7 +71,7 @@ class HealthRecordsViewController: BaseViewController {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
-            case .VaccineCard, .CovidLabTestResult:
+            case .VaccineCard, .CovidLabTestResult, .Perscription:
                 self.updateData()
             default:
                 break
@@ -90,7 +90,7 @@ class HealthRecordsViewController: BaseViewController {
         } else {
             // FIXME: Need a way of dismissing dismissFetchHealthRecordsViewController() for the case where data is nil, user enters app, goes to health records tab (so it is instantiated and viewDidLoad is called), then user goes to healthPasses tab, scans a QR code, then user goes back to health records tab.... issue is that the fetchVC will still be shown
             // Possible solution: Listener on tab bar controller, check when tab is changed - something like that. Need to think on this
-//                    self.dismissFetchHealthRecordsViewControllerIfNeeded()
+            self.dismissFetchHealthRecordsViewControllerIfNeeded()
             
         }
     }

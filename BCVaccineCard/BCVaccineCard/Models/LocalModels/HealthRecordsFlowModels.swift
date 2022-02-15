@@ -122,7 +122,7 @@ extension Array where Element == HealthRecord {
             case .medication(model: let model):
                 secondDate = model.dispensedDate
             }
-            return secondDate ?? Date() < firstDate ?? Date()
+            return firstDate ?? Date() < secondDate ?? Date()
         })
     }
     

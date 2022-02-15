@@ -18,7 +18,7 @@ class LocalAuthManager {
             Logger.log(string: "SET SHOULD AUTHENTICATE - \(shouldAuthenticate)", type: .localAuth)
         }
     }
-    private static var block = true {
+    static var block = true {
         didSet {
             Logger.log(string: "Blocking local authentication popups - \(block)", type: .localAuth)
         }

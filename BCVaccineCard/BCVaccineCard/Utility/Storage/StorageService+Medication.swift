@@ -98,6 +98,7 @@ extension StorageService: StorageMedicationManager {
                 Logger.log(string: "*Failed while storing perscription", type: .storage)
             }
         }
+        self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: storedObjects))
         return completion(storedObjects)
     }
     
@@ -179,7 +180,6 @@ extension StorageService: StorageMedicationManager {
         prescription.medication = medication
         do {
             try context.save()
-            self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: prescription))
             return prescription
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
