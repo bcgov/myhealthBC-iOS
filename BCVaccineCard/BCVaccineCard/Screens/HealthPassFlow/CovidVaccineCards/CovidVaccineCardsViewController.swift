@@ -237,8 +237,10 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        // TODO: Check for authentication here to prevent deleting authenticated record
         guard !dataSource.isEmpty || !inEditMode else { return .none }
+        if !dataSource.isEmpty && dataSource[indexPath.row].authenticated {
+            return .none
+        }
         return .delete
     }
 
@@ -249,7 +251,9 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        // TODO: Check if we need an authentication check here
+        if !dataSource.isEmpty && dataSource[indexPath.row].authenticated {
+            return nil
+        }
         return .unlinkTitle
     }
     
@@ -264,6 +268,9 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        if !dataSource.isEmpty && dataSource[indexPath.row].authenticated {
+            return nil
+        }
         guard orientation == .right else {return nil}
         let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
             guard let `self` = self else {return}
