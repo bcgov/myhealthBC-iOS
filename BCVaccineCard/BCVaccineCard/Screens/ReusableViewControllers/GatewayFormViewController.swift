@@ -36,15 +36,12 @@ enum GatewayFormViewControllerFetchType: Equatable {
     enum RequestType: Equatable {
         case getVaccineCard
         case getTestResults
-        case getImsRecords
     }
     
     var getRequestType: RequestType {
         switch self {
-        case .bcVaccineCardAndFederalPass, .federalPassOnly:
+        case .bcVaccineCardAndFederalPass, .federalPassOnly, .vaccinationRecord:
             return .getVaccineCard
-        case .vaccinationRecord:
-            return .getImsRecords
         case .covid19TestResult:
             return .getTestResults
         }
@@ -516,19 +513,25 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
 
 // MARK: Check for authenticated patient
 extension GatewayFormViewController {
-    func isPHNOfAuthenticatedPatient() -> Bool {
-        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return false }
-        guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return false }
-        guard let patient = StorageService.shared.fetchPatient(phn: phn) else { return false }
-        guard let authDisplayName = AuthManager().displayName, let patientName = patient.name else { return false }
-        return authDisplayName == patientName
+    func isPHNOfAuthenticatedPatient() -> (auth: Bool, patient: Patient?) {
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return (false, nil) }
+        guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return (false, nil) }
+        guard let patient = StorageService.shared.fetchPatient(phn: phn) else { return (false, nil) }
+        guard let authDisplayName = AuthManager().displayName, let patientName = patient.name else { return (false, patient) }
+        return (authDisplayName == patientName, patient)
     }
     
-    func showAlertToRedirectAuthenticatedUserToRecordsView() {
+    func showAlertToRedirectAuthenticatedUserToRecordsView(patient: Patient) {
         alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
             guard let `self` = self else {return}
-            // TODO: Handle routing here
+            self.handleAuthNavigation(patient: patient)
         }, buttonTwoTitle: "Retry") {}
+    }
+    
+    func handleAuthNavigation(patient: Patient) {
+        if let tabBar = self.tabBarController as? TabBarController {
+            tabBar.goToUserRecordsScreenForPatient(patient)
+        }
     }
 }
 
@@ -538,12 +541,13 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
         if type == .cancel {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
-            if isPHNOfAuthenticatedPatient() {
-                showAlertToRedirectAuthenticatedUserToRecordsView()
+            let tuple = isPHNOfAuthenticatedPatient()
+            if tuple.auth, let patient = tuple.patient {
+                showAlertToRedirectAuthenticatedUserToRecordsView(patient: patient)
             } else {
                 if fetchType.getRequestType == .getTestResults {
                     prepareRequestForTestResult()
-                } else if fetchType.getRequestType == .getVaccineCard || fetchType.getRequestType == .getImsRecords {
+                } else if fetchType.getRequestType == .getVaccineCard {
                     prepareRequestForVaccineCard()
                 }
             }

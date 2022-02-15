@@ -216,3 +216,13 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
         selected(data: data)
     }
 }
+
+// MARK: Function to go to user records view controller
+extension HealthRecordsViewController {
+    func goToUserRecordsViewControllerForPatien(_ patient: Patient) {
+        if let index = dataSource.firstIndex(where: { $0.patient == patient }) {
+            let data = dataSource[index]
+            selected(data: data)
+        }
+    }
+}
