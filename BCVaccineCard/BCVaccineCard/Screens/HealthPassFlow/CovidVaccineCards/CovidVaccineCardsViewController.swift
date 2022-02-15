@@ -237,6 +237,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        // TODO: Check for authentication here to prevent deleting authenticated record
         guard !dataSource.isEmpty || !inEditMode else { return .none }
         return .delete
     }
@@ -248,6 +249,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        // TODO: Check if we need an authentication check here
         return .unlinkTitle
     }
     
