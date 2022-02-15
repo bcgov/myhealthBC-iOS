@@ -256,19 +256,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
 //                self.perform(#selector(self.retryGetMedicationStatementRequest), with: nil, afterDelay: retryInSeconds)
 //            }
             else {
-                #if DEBUG
-                if let payload = medicationStatement.resourcePayload {
-                    let items = payload.map({$0.prescriptionIdentifier ?? ""})
-                    Logger.log(string: print("items fetched: \(items.count)"), type: .general)
-                    
-                    
-                    let uniques = Array(Set(items))
-                    Logger.log(string: print("Unique items fetched: \(uniques.count)"), type: .general)
-                }
-                #endif
-                
                 self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement)
-                
             }
         case .failure(let error):
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)

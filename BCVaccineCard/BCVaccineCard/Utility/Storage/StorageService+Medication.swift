@@ -17,6 +17,7 @@ protocol StorageMedicationManager {
     
     func storePrescription(
         patient: Patient,
+        id: String,
         prescriptionIdentifier: String?,
         prescriptionStatus: String?,
         dispensedDate: Date?,
@@ -104,10 +105,7 @@ extension StorageService: StorageMedicationManager {
     }
     
     func storePrescription(patient: Patient, object: AuthenticatedMedicationStatementResponseObject.ResourcePayload) -> Perscription? {
-        guard let prescriptionId = object.prescriptionIdentifier else {
-            Logger.log(string: "Perscription has no identifier - cannot store", type: .storage)
-            return nil
-        }
+        
         // Handle Medication
         var medication: Medication? = nil
         if let medicationSummary = object.medicationSummary {
@@ -128,7 +126,8 @@ extension StorageService: StorageMedicationManager {
             }
         }
         // Delete existing record if exists
-        deletePrescription(id: prescriptionId, sendDeleteEvent: false)
+        let id = object.md5Hash() ?? UUID().uuidString
+        deletePrescription(id: id, sendDeleteEvent: false)
         // Store new record
         // This is due to API inconsistencies with date formatting
         var dispenseDate: Date?
@@ -148,6 +147,7 @@ extension StorageService: StorageMedicationManager {
         
         return storePrescription(
             patient: patient,
+            id: id,
             prescriptionIdentifier: object.prescriptionIdentifier,
             prescriptionStatus: object.prescriptionStatus,
             dispensedDate: dispenseDate,
@@ -161,6 +161,7 @@ extension StorageService: StorageMedicationManager {
    
     func storePrescription(
         patient: Patient,
+        id: String,
         prescriptionIdentifier: String?,
         prescriptionStatus: String?,
         dispensedDate: Date?,
@@ -172,7 +173,8 @@ extension StorageService: StorageMedicationManager {
     ) -> Perscription? {
         guard let context = managedContext else {return nil}
         let prescription = Perscription(context: context)
-        prescription.id = prescriptionIdentifier
+        prescription.id = id
+        prescription.prescriptionIdentifier = prescriptionIdentifier
         prescription.status = prescriptionStatus
         prescription.dispensedDate = dispensedDate
         prescription.practitionerSurname = practitionerSurname

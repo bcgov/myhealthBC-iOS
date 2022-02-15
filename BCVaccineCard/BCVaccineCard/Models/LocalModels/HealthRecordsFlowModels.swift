@@ -110,7 +110,7 @@ extension Array where Element == HealthRecord {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 firstDate = Date(timeIntervalSince1970: model.issueDate)
             case .covidTestResultRecord(model: let model):
-                firstDate = model.createdAt
+                firstDate = model.mainResult?.resultDateTime
             case .medication(model: let model):
                 firstDate = model.dispensedDate
             }
@@ -118,11 +118,11 @@ extension Array where Element == HealthRecord {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 secondDate = Date(timeIntervalSince1970: model.issueDate)
             case .covidTestResultRecord(model: let model):
-                secondDate = model.createdAt
+                secondDate = model.mainResult?.resultDateTime
             case .medication(model: let model):
                 secondDate = model.dispensedDate
             }
-            return firstDate ?? Date() < secondDate ?? Date()
+            return firstDate ?? Date() > secondDate ?? Date()
         })
     }
     
