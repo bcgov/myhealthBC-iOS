@@ -61,6 +61,7 @@ extension StorageService: StorageTestResultManager {
     // MARK: Store
     public func storeTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool) -> CovidLabTestResult? {
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
+        deleteTestResult(id: id, sendDeleteEvent: false)
         guard let context = managedContext else {return nil}
         let model = CovidLabTestResult(context: context)
         model.patient = patient
