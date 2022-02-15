@@ -517,10 +517,10 @@ extension GatewayFormViewController {
         guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return (false, nil) }
         guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return (false, nil) }
         guard let patient = StorageService.shared.fetchPatient(phn: phn) else { return (false, nil) }
-        return (doesPatientHaveAuthenticatedRecords(patient: patient), patient)
+        return (hasAuthRecords(patient: patient), patient)
     }
     
-    private func doesPatientHaveAuthenticatedRecords(patient: Patient) -> Bool {
+    private func hasAuthRecords(patient: Patient) -> Bool {
         for vaccineCard in patient.vaccineCardArray {
             if vaccineCard.authenticated {
                 return true
