@@ -36,12 +36,15 @@ enum GatewayFormViewControllerFetchType: Equatable {
     enum RequestType: Equatable {
         case getVaccineCard
         case getTestResults
+        case getImsRecords
     }
     
     var getRequestType: RequestType {
         switch self {
-        case .bcVaccineCardAndFederalPass, .federalPassOnly, .vaccinationRecord:
+        case .bcVaccineCardAndFederalPass, .federalPassOnly:
             return .getVaccineCard
+        case .vaccinationRecord:
+            return .getImsRecords
         case .covid19TestResult:
             return .getTestResults
         }
@@ -511,16 +514,38 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     }
 }
 
+// MARK: Check for authenticated patient
+extension GatewayFormViewController {
+    func isPHNOfAuthenticatedPatient() -> Bool {
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return false }
+        guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return false }
+        guard let patient = StorageService.shared.fetchPatient(phn: phn) else { return false }
+        guard let authDisplayName = AuthManager().displayName, let patientName = patient.name else { return false }
+        return authDisplayName == patientName
+    }
+    
+    func showAlertToRedirectAuthenticatedUserToRecordsView() {
+        alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
+            guard let `self` = self else {return}
+            // TODO: Handle routing here
+        }, buttonTwoTitle: "Retry") {}
+    }
+}
+
 // MARK: For Button tap and enabling
 extension GatewayFormViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .cancel {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
-            if fetchType.getRequestType == .getTestResults {
-                prepareRequestForTestResult()
-            } else if fetchType.getRequestType == .getVaccineCard {
-                prepareRequestForVaccineCard()
+            if isPHNOfAuthenticatedPatient() {
+                showAlertToRedirectAuthenticatedUserToRecordsView()
+            } else {
+                if fetchType.getRequestType == .getTestResults {
+                    prepareRequestForTestResult()
+                } else if fetchType.getRequestType == .getVaccineCard || fetchType.getRequestType == .getImsRecords {
+                    prepareRequestForVaccineCard()
+                }
             }
         }
     }
