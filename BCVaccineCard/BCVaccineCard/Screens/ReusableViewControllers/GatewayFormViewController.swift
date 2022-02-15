@@ -511,16 +511,45 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     }
 }
 
+// MARK: Check for authenticated patient
+extension GatewayFormViewController {
+    func isPHNOfAuthenticatedPatient() -> (auth: Bool, patient: Patient?) {
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return (false, nil) }
+        guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return (false, nil) }
+        guard let patient = StorageService.shared.fetchPatient(phn: phn) else { return (false, nil) }
+        guard let authDisplayName = AuthManager().displayName, let patientName = patient.name else { return (false, patient) }
+        return (authDisplayName == patientName, patient)
+    }
+    
+    func showAlertToRedirectAuthenticatedUserToRecordsView(patient: Patient) {
+        alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
+            guard let `self` = self else {return}
+            self.handleAuthNavigation(patient: patient)
+        }, buttonTwoTitle: "Retry") {}
+    }
+    
+    func handleAuthNavigation(patient: Patient) {
+        if let tabBar = self.tabBarController as? TabBarController {
+            tabBar.goToUserRecordsScreenForPatient(patient)
+        }
+    }
+}
+
 // MARK: For Button tap and enabling
 extension GatewayFormViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .cancel {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
-            if fetchType.getRequestType == .getTestResults {
-                prepareRequestForTestResult()
-            } else if fetchType.getRequestType == .getVaccineCard {
-                prepareRequestForVaccineCard()
+            let tuple = isPHNOfAuthenticatedPatient()
+            if tuple.auth, let patient = tuple.patient {
+                showAlertToRedirectAuthenticatedUserToRecordsView(patient: patient)
+            } else {
+                if fetchType.getRequestType == .getTestResults {
+                    prepareRequestForTestResult()
+                } else if fetchType.getRequestType == .getVaccineCard {
+                    prepareRequestForVaccineCard()
+                }
             }
         }
     }

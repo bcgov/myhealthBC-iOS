@@ -101,7 +101,7 @@ class TabBarController: UITabBarController {
     }
     
     // This function is called within the tab bar 1.) (when records are deleted and go to zero, called in the listener above), and called when the 2.) health records tab is selected, to appropriately show the correct VC, and is called 3.) on the FetchHealthRecordsViewController in the routing section to apporiately reset the health records tab's vc stack and route to the details screen
-    func resetHealthRecordsTab(viewControllersToInclude vcs: [UIViewController]? = nil) {
+    func resetHealthRecordsTab(viewControllersToInclude vcs: [UIViewController]? = nil, goToRecordsForPatient patient: Patient? = nil) {
         let vc: TabBarVCs = .records
         guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHeathRecords : vc.properties  else { return }
         let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
@@ -123,6 +123,13 @@ class TabBarController: UITabBarController {
                     }
                     AppDelegate.sharedInstance?.removeLoadingViewHack()
                 }
+            }
+        }
+        // TODO: Should probably find a cleaner way to do this - but the necessity of the function above will likely change with new design updates
+        if let patient = patient {
+            selectedIndex = 1
+            if let vc = navController.viewControllers.first as? HealthRecordsViewController {
+                vc.goToUserRecordsViewControllerForPatien(patient)
             }
         }
     }
@@ -171,5 +178,12 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?) {
         // TODO: Connor - handle error case
         self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
+    }
+}
+
+// MARK: To go to specific user records tab
+extension TabBarController {
+    func goToUserRecordsScreenForPatient(_ patient: Patient) {
+        resetHealthRecordsTab(goToRecordsForPatient: patient)
     }
 }
