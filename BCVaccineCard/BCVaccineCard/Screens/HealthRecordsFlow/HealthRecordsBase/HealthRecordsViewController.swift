@@ -18,6 +18,8 @@ class HealthRecordsViewController: BaseViewController {
         return HealthRecordsViewController()
     }
     
+    let spacingPerItem: CGFloat = 10
+    
     @IBOutlet weak private var addRecordView: ReusableHeaderAddView!
     @IBOutlet weak private var collectionView: UICollectionView!
     
@@ -171,7 +173,15 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
         let layout = UICollectionViewFlowLayout()
         // TODO: Need to test this on larger screen sizes, as this works on SE - then add values to constants file
         // FIXME: Name label doesnt quite fit for anything other than short names - also weird UI issue when returning to screen
-        let spacingPerItem: CGFloat = 10
+        layout.minimumLineSpacing = spacingPerItem
+        layout.sectionInset = UIEdgeInsets(top: 0, left: spacingPerItem, bottom: 0, right: spacingPerItem)
+        layout.itemSize =  defaultCellSize()
+        collectionView.collectionViewLayout = layout
+        collectionView.delegate = self
+        collectionView.dataSource = self
+    }
+    
+    func defaultCellSize() -> CGSize {
         let itemsPerRow: CGFloat = 2
         let maxCellHeight: CGFloat = 130
         let availableWidth = UIScreen.main.bounds.width
@@ -179,17 +189,23 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
         width += (spacingPerItem/itemsPerRow)
         let maxHeightNeededForNames = dataSource.map({$0.patient.name ?? ""}).maxHeightNeeded(width: width, font: HealthRecordsUserView.nameFont)
         let height: CGFloat = maxHeightNeededForNames >= maxCellHeight ? maxHeightNeededForNames : maxCellHeight
-        
-        layout.minimumLineSpacing = spacingPerItem
-        layout.sectionInset = UIEdgeInsets(top: 0, left: spacingPerItem, bottom: 0, right: spacingPerItem)
-        layout.itemSize =  CGSize(width: width, height: height)
-        collectionView.collectionViewLayout = layout
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        return CGSize(width: width, height: height)
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let defaultSize = defaultCellSize()
+        guard indexPath.row < dataSource.count else { return defaultSize}
+        let data = dataSource[indexPath.row]
+        
+        if data.authenticated {
+            return CGSize(width: UIScreen.main.bounds.width - (spacingPerItem * 2), height: defaultSize.height)
+        } else {
+            return defaultSize
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
