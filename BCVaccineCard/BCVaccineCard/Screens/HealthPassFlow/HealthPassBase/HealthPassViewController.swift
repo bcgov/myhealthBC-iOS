@@ -28,6 +28,7 @@ class HealthPassViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         authManager = AuthManager()
+        refreshOnStorageChange()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,6 +95,19 @@ extension HealthPassViewController {
 extension HealthPassViewController {
     private func retrieveDataSource() {
         fetchFromStorage()
+    }
+    
+    private func refreshOnStorageChange() {
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            switch event.entity {
+            case .VaccineCard:
+                self.fetchFromStorage()
+            default:
+                break
+            }
+           
+        }
     }
 }
 
