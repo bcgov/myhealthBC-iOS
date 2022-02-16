@@ -135,9 +135,10 @@ extension UsersListOfRecordsViewController {
                         guard
                             let patient = model.patient,
                             let dateOfBirth = patient.birthday?.yearMonthDayString,
-                                let phn = patient.phn,
-                              let collectionDatePresentableFormat = listOfStatuses[index].1,
-                              let collectionDate = Date.Formatter.monthDayYearDate.date(from: collectionDatePresentableFormat)?.yearMonthDayString else { return }
+                            let phn = patient.phn,
+                            let collectionDatePresentableFormat = listOfStatuses[index].1,
+                            let collectionDate = Date.Formatter.monthDayYearDate.date(from: collectionDatePresentableFormat)?.yearMonthDayString, model.authenticated == false
+                        else { return }
                         
                         let model = GatewayTestResultRequest(phn: phn, dateOfBirth: dateOfBirth, collectionDate: collectionDate)
                         tableView.cellForRow(at: IndexPath(row: indexPathRow, section: 0))?.startLoadingIndicator(backgroundColor: .clear, containerSize: 20, size: 8)
