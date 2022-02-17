@@ -184,6 +184,7 @@
 "LoginDescription" = "When logged in, recrods will be automatically added and updated";
 "LocalAuthDescription" = "When enabled, you can unlock the app with touch touch ID instead of passcode";
 "TouchId" = "Touch ID";
+"FaceId" = "Face ID";
 "DeleteAllRecordsAndSavedDataDescription" = "Log out of BC Services Card account and delete every records and saved personal information from My Health BC";
 "DeleteAllRecordsAndSavedData" = "Delete all records and saved data";
 "LogoutTitle" = "Log out of BC Service Card";
@@ -265,6 +266,8 @@
 "UsePassCode" = "Use passcode";
 "UseFaceId" = "Use Face ID";
 "AllowSecurityAccessTitle" = "Allow Security Access";
-"AllowSecurityAccessMessage" = "\nMy Health BC needs permission to use Touch ID and passcode for the device.\n\nGo to Settings > Touch ID & Passcode and change the settings to on.";
+"and" = " and ";
+"AllowSecurityAccessMessage" = "\nMy Health BC needs permission to use %@%@Passcode for the device.\n\nGo to Settings > %@Passcode and change the settings to on.";
 "SetupAuthentication" = "Set up authentication";
+"ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication.";
 "ActionAvailable" = "Action Available: ";

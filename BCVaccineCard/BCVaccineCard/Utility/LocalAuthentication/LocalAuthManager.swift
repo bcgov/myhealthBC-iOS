@@ -120,7 +120,16 @@ class LocalAuthManager {
     }
     
     private func openAuthSettings() {
-        self.view?.parent?.alertConfirmation(title: .allowSecurityAccessTitle, message: .allowSecurityAccessMessage, confirmTitle: .settings, confirmStyle: .default, onConfirm: {
+        let message: String
+        switch biometricType {
+        case .touchID:
+            message = .allowSecurityAccessForTouchIdMessage
+        case .faceID:
+            message = .allowSecurityAccessForFaceIdMessage
+        default:
+            message = .allowSecurityAccessDefaultMessage
+        }
+        self.view?.parent?.alertConfirmation(title: .allowSecurityAccessTitle, message: message, confirmTitle: .settings, confirmStyle: .default, onConfirm: {
             UIApplication.openAppSettings()
         },cancelTitle: .notNow, onCancel: {})
     }
@@ -157,11 +166,10 @@ class LocalAuthManager {
     
     private func performAuth(policy: LAPolicy, completion: @escaping(_ status: AuthStatus) -> Void) {
         let context = LAContext()
-        let reason = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication."
         var error: NSError?
         if context.canEvaluatePolicy(policy, error: &error) {
             LocalAuthManager.block = true
-            context.evaluatePolicy(policy, localizedReason: reason) {
+            context.evaluatePolicy(policy, localizedReason: .reasonForRequestingAuthentication) {
                 success, authenticationError in
                 DispatchQueue.main.async {
                     if success {
