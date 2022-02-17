@@ -59,8 +59,9 @@ class ToggleSettingsTableViewCell: UITableViewCell {
     }
     
     override func accessibilityActivate() -> Bool {
+        guard let settingSwitch = settingSwitch else { return false }
         settingSwitch.isOn.toggle()
-        self.settingSwitchToggled(settingSwitch!)
+        self.settingSwitchToggled(settingSwitch)
         return true
     }
 }
