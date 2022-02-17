@@ -52,6 +52,7 @@ class NetworkLayerTests: XCTestCase {
         XCTAssertEqual(headers?["phn"], phn)
         XCTAssertEqual(headers?["dateOfBirth"], dateOfBirth)
         XCTAssertEqual(headers?["dateOfVaccine"], dateOfVaccine)
+        XCTAssertEqual(headers?["x-queueit-ajaxpageurl"], request?.url?.absoluteString)
         XCTAssertEqual(pathComponents![2],"immunizationservice")
         XCTAssertEqual(pathComponents![5],"PublicVaccineStatus")
         XCTAssertEqual(query, "queueittoken=\(token)")
@@ -80,6 +81,7 @@ class NetworkLayerTests: XCTestCase {
         XCTAssertEqual(pathComponents![5],"PublicLaboratory")
         XCTAssertEqual(request?.method?.rawValue, "GET")
         XCTAssertEqual(query, "queueittoken=\(token)")
+        XCTAssertEqual(headers?["x-queueit-ajaxpageurl"], request?.url?.absoluteString)
     }
     
     func testGetAuthenticatedVaccineCard() {
@@ -97,6 +99,7 @@ class NetworkLayerTests: XCTestCase {
         let pathComponents = request?.url?.pathComponents
         let query = request?.url?.query
         XCTAssertEqual(request?.method?.rawValue, "GET")
+        XCTAssertEqual(headers?["x-queueit-ajaxpageurl"], request?.url?.absoluteString)
         XCTAssertEqual(headers?["Authorization"], "Bearer \(token)")
         XCTAssertEqual(pathComponents![2],"immunizationservice")
         XCTAssertEqual(pathComponents![5],"AuthenticatedVaccineStatus")
@@ -105,8 +108,8 @@ class NetworkLayerTests: XCTestCase {
     
     func testGetAuthenticatedTestResults() {
         // given
-        let token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6IC"
-        let hdid =  "RD33Y2LJEUZCY2TCMOIECUTKS3E62MEQ62CSUL6Q553IHHBI3AWQ"
+        let token = "eyJhbGciOia2lkI"
+        let hdid =  "L6Q553IHHBI3AWQ"
         let authenticationRequest = AuthenticationRequestObject(authToken: token, hdid: hdid)
         // when
         let exp = expectation(description: "getAuthenticatedTestResults expectation")
@@ -120,6 +123,7 @@ class NetworkLayerTests: XCTestCase {
         XCTAssertEqual(request?.url?.path, "/api/laboratoryservice/v1/api/Laboratory/Covid19Orders")
         XCTAssertEqual(query, "hdid=\(hdid)")
         XCTAssertEqual(request?.method?.rawValue, "GET")
+        XCTAssertEqual(headers?["x-queueit-ajaxpageurl"], request?.url?.absoluteString)
     }
     
     func testGetAuthenticatedPatientDetails() {
@@ -135,6 +139,7 @@ class NetworkLayerTests: XCTestCase {
         // then
         let headers = request?.headers
         let path = request?.url?.path
+        XCTAssertEqual(headers?["x-queueit-ajaxpageurl"], request?.url?.absoluteString)
         XCTAssertEqual(headers?["Authorization"], "Bearer \(token)")
         XCTAssertEqual(path, "/api/patientservice/v1/api/Patient/\(hdid)")
         XCTAssertNil(request?.url?.query)
@@ -155,22 +160,23 @@ class NetworkLayerTests: XCTestCase {
         let headers = request?.headers
         let path = request?.url?.path
         XCTAssertEqual(headers?["Authorization"], "Bearer \(token)")
+        XCTAssertEqual(headers?["x-queueit-ajaxpageurl"], request?.url?.absoluteString)
         XCTAssertEqual(path, "/api/medicationservice/v1/api/MedicationStatement/\(hdid)")
         XCTAssertEqual(request?.method?.rawValue, "GET")
         XCTAssertNil(request?.url?.query)
     }
 }
 
-class InterceptorStub: RequestInterceptor {
+class InterceptorStub: NetworkRequestInterceptor {
     var urlRequest: URLRequest?
     var expectation: XCTestExpectation?
     
-    func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
-        self.urlRequest = urlRequest
-        self.expectation?.fulfill()
-    }
-    
-    func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
-        return completion(.doNotRetry)
+    override func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
+        super.adapt(urlRequest, for: session, completion: { result in
+            if case let .success(urlRequest) = result {
+                self.urlRequest = urlRequest
+                self.expectation?.fulfill()
+            }
+        })
     }
 }
