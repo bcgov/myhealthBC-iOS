@@ -267,3 +267,4 @@
 "AllowSecurityAccessTitle" = "Allow Security Access";
 "AllowSecurityAccessMessage" = "\nMy Health BC needs permission to use Touch ID and passcode for the device.\n\nGo to Settings > Touch ID & Passcode and change the settings to on.";
 "SetupAuthentication" = "Set up authentication";
+"ActionAvailable" = "Action Available: ";
