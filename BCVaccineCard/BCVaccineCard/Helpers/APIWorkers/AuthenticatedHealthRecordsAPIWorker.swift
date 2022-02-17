@@ -66,6 +66,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
     // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
     func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject) {
+        delegate?.showFetchStartedBanner()
         self.authCredentials = authCredentials
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
@@ -92,12 +93,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             initializeRequests(authCredentials: authCredentials)
         case .failure(let error):
             print(error)
-            //TODO: Handle error here
+            self.delegate?.showPatientDetailsError(error: error.resultMessage ?? .genericErrorMessage)
         }
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
-        delegate?.showFetchStartedBanner()
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
         self.getAuthenticatedMedicationStatement(authCredentials: authCredentials)
@@ -422,7 +422,7 @@ struct FetchStatusList {
     var fetchStatus: [AuthenticationFetchType: FetchStatus]
     
     var isCompleted: Bool {
-        return fetchStatus.count == fetchStatus.map({ $0.value.requestCompleted == true }).count
+        return fetchStatus.count == fetchStatus.map({ $0.value.requestCompleted }).filter({ $0 == true }).count
     }
     
     var getAttemptedCount: Int {

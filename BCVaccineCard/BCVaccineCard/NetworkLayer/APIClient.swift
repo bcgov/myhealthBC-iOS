@@ -10,9 +10,11 @@ import UIKit
 class APIClient {
     
     private var delegateOwner: UIViewController
+    private var interceptor: Interceptor
         
-    init(delegateOwner: UIViewController) {
+    init(delegateOwner: UIViewController, interceptor: Interceptor = NetworkRequestInterceptor()) {
         self.delegateOwner = delegateOwner
+        self.interceptor = interceptor
     }
     
     private var endpoints: EndpointsAccessor {
@@ -24,7 +26,7 @@ class APIClient {
     }
     
     func getVaccineCard(_ model: GatewayVaccineCardRequest, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
-        let interceptor = NetworkRequestInterceptor()
+        
         let url = configureURL(token: token, endpoint: self.endpoints.getVaccineCard)
         
         let headerParameters: Headers = [
@@ -38,7 +40,7 @@ class APIClient {
     }
     
     func getTestResult(_ model: GatewayTestResultRequest, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayTestResultResponse>) {
-        let interceptor = NetworkRequestInterceptor()
+        
         let url = configureURL(token: token, endpoint: self.endpoints.getTestResults)
         
         let headerParameters: Headers = [
@@ -52,7 +54,7 @@ class APIClient {
     }
     
     func getAuthenticatedVaccineCard(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
-        let interceptor = NetworkRequestInterceptor()
+        
         let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedVaccineCard)
         
         let headerParameters: Headers = [
@@ -68,7 +70,7 @@ class APIClient {
     }
     
     func getAuthenticatedTestResults(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedTestResultsResponseModel>) {
-        let interceptor = NetworkRequestInterceptor()
+        
         let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedTestResults)
         
         let headerParameters: Headers = [
@@ -84,7 +86,7 @@ class APIClient {
     }
     
     func getAuthenticatedPatientDetails(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedPatientDetailsResponseObject>) {
-        let interceptor = NetworkRequestInterceptor()
+        
         let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedPatientDetails(hdid: authCredentials.hdid))
         
         let headerParameters: Headers = [
@@ -96,7 +98,7 @@ class APIClient {
     }
     
     func getAuthenticatedMedicationStatement(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedMedicationStatementResponseObject>) {
-        let interceptor = NetworkRequestInterceptor()
+        
         let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedMedicationStatement(hdid: authCredentials.hdid))
         
         let headerParameters: Headers = [
