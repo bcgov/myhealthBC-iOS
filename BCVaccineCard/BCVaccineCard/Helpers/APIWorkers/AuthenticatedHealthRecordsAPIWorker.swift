@@ -20,6 +20,7 @@ enum AuthenticationFetchType {
     case VaccineCard
     case TestResults
     case MedicationStatement
+    case LaboratoryOrders
     
     // NOTE: The reason this is not in localized file yet is because we don't know what loader will look like, so text will likely change
     var getName: String {
@@ -28,6 +29,7 @@ enum AuthenticationFetchType {
         case .VaccineCard: return "Vaccine Card"
         case .TestResults: return "Test Results"
         case .MedicationStatement: return "Medication Statement"
+        case .LaboratoryOrders: return "Laboratory Orders"
         }
     }
 }
@@ -56,7 +58,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [
         .VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
         .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
-        .MedicationStatement : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
+        .MedicationStatement : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+        .LaboratoryOrders : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
     ]) {
         didSet {
             if fetchStatusList.isCompleted {
@@ -103,6 +106,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
         self.getAuthenticatedMedicationStatement(authCredentials: authCredentials)
+        self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
     }
         
     private func getAuthenticatedTestResults(authCredentials: AuthenticationRequestObject) {
@@ -159,6 +163,24 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
+    private func getAuthenticatedLaboratoryOrders(authCredentials: AuthenticationRequestObject) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedLaboratoryOrdersDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedLaboratoryOrdersDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        apiClient.getAuthenticatedLaboratoryOrders(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else { return }
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedLaboratoryOrdersDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedLaboratoryOrders(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else { return }
+                    self.handleLaboratoryOrdersResponse(result: result)
+                }
+            } else {
+                self.handleLaboratoryOrdersResponse(result: result)
+            }
+        }
+    }
+    
 }
 
 // MARK: Retry functions
@@ -189,11 +211,19 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     @objc private func retryGetMedicationStatementRequest() {
-        guard let authCredentials = self.requestDetails.authenticatedVaccineCardDetails?.authCredentials else {
+        guard let authCredentials = self.requestDetails.authenticatedMedicationStatementDetails?.authCredentials else {
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: .genericErrorMessage)
             return
         }
         self.getAuthenticatedMedicationStatement(authCredentials: authCredentials)
+    }
+    
+    @objc private func retryGetLaboratoryOrdersRequest() {
+        guard let authCredentials = self.requestDetails.authenticatedLaboratoryOrdersDetails?.authCredentials else {
+            self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: .genericErrorMessage)
+            return
+        }
+        self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
     }
     
 }
@@ -205,7 +235,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload?.orders == nil || testResult.resourcePayload?.orders.count == 0) {
+            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders.count == 0 {
                 self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: testResult.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
             }
             else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
@@ -262,6 +292,29 @@ extension AuthenticatedHealthRecordsAPIWorker {
             }
         case .failure(let error):
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
+        }
+    }
+    
+    private func handleLaboratoryOrdersResponse(result: Result<AuthenticatedLaboratoryOrdersResponseObject, ResultError>) {
+        switch result {
+        case .success(let labOrders):
+            // Note: Have to check for error here because error is being sent back on a 200 response
+            if let resultMessage = labOrders.resultError?.resultMessage, labOrders.resourcePayload?.orders.count == 0 {
+                self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: labOrders.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
+            }
+            else if labOrders.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForLaboratoryOrders, let retryinMS = labOrders.resourcePayload?.retryin {
+                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+                self.retryCount += 1
+                let retryInSeconds = Double(retryinMS/1000)
+                self.perform(#selector(self.retryGetLaboratoryOrdersRequest), with: nil, afterDelay: retryInSeconds)
+            }
+            else {
+                print("CONNOR LAB: ", labOrders)
+                self.handleLaboratoryOrdersInCoreData(labOrders: labOrders)
+            }
+        case .failure(let error):
+            print("CONNOR LAB: ", error)
+            self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
     
@@ -383,6 +436,22 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
 }
 
+// MARK: Handle Laboratory Orders in core data
+extension AuthenticatedHealthRecordsAPIWorker {
+    private func handleLaboratoryOrdersInCoreData(labOrders: AuthenticatedLaboratoryOrdersResponseObject) {
+        guard let patient = self.patientDetails else { return }
+        guard let payloads = labOrders.resourcePayload else { return }
+        // TODO: Handle in core data here, call the handleLaboratoryOrdersInCoreData function below in loop
+        // For now, just calling success so that the entire fetch can pass
+        self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: nil)
+//        self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+    }
+    
+    private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+        // TODO: Handle patient in core data here
+        return nil
+    }
+}
 
 // MARK: Structs used for various fetch types
 struct AuthenticatedAPIWorkerRetryDetails {
@@ -390,6 +459,7 @@ struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedVaccineCardDetails: AuthenticatedVaccineCardDetails?
     var authenticatedTestResultsDetails: AuthenticatedTestResultsDetails?
     var authenticatedMedicationStatementDetails: AuthenticatedMedicationStatementDetails?
+    var authenticatedLaboratoryOrdersDetails: AuthenticatedLaboratoryOrdersDetails?
     
     struct AuthenticatedPatientDetails {
         var authCredentials: AuthenticationRequestObject
@@ -407,6 +477,11 @@ struct AuthenticatedAPIWorkerRetryDetails {
     }
     
     struct AuthenticatedMedicationStatementDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+    }
+    
+    struct AuthenticatedLaboratoryOrdersDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?
     }
