@@ -448,5 +448,8 @@ extension String {
     static var selectTo: String {
         return "SelectTo".localized
     }
+    static var actionAvailable: String {
+        return "ActionAvailable".localized
+    }
 }
 

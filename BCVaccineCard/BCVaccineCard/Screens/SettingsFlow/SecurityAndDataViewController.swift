@@ -203,10 +203,6 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
                     self.disableAnalytics()
                 }
             }
-            
-            cell.isAccessibilityElement = true
-            cell.accessibilityLabel = AccessibilityLabels.Settings.privacyStatementLink
-            cell.accessibilityHint = AccessibilityLabels.Settings.privacyStatementHint
             return cell
             
         case .deleteAllRecords:
@@ -292,7 +288,15 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         trailing.isActive = true
         titleLabel.text = text
         style(label: titleLabel, style: .Bold, size: 17, colour: .Blue)
+        setupAccessibility(view: headerContainer, label: text)
         return headerContainer
     }
     
+    //MARK: Accessibility
+    
+    private func setupAccessibility(view: UIView, label: String) {
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = label
+        view.accessibilityTraits = .header
+    }
 }
