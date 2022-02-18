@@ -106,7 +106,7 @@ struct AccessibilityLabels {
     }
     
     struct FederalPassView {
-        static let fedPassDescriptionHasPass = String.localAuthDescription
+        static let fedPassDescriptionHasPass = String.federalProofOfVaccinationLink
         static let fedPassDescriptionDoesNotHavePass = String.federalProofOfVaccinationLinkToHealthGateway
         static let hasPassHint = String.doubleTappingWillOpenFederalProofPDF
         static let noPassHint = String.doubleTappingWillTakeYouToHealthGatewayForPersonalHealthNumber

@@ -270,3 +270,4 @@
 "AllowSecurityAccessMessage" = "\nMy Health BC needs permission to use %@%@Passcode for the device.\n\nGo to Settings > %@Passcode and change the settings to on.";
 "SetupAuthentication" = "Set up authentication";
 "ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication.";
+"ActionAvailable" = "Action Available: ";

@@ -60,7 +60,6 @@ class SettingsRowTableViewCell: UITableViewCell, Theme {
     private func setupAccessibility() {
         self.isAccessibilityElement = true
         self.accessibilityLabel = titleLabel.text
-        self.accessibilityTraits = .link
-        self.accessibilityHint = AccessibilityLabels.OpenWebLink.openWebLinkHint
+        self.accessibilityTraits = .button
     }
 }
