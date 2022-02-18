@@ -171,7 +171,8 @@ extension StorageService: StoragePatientManager {
     /// - Returns: patient
     public func fetchPatient(name: String, birthday: Date) -> Patient? {
         let patients = fetchPatients()
-        return patients.filter({$0.name == name && $0.birthday == birthday}).first
+       
+        return patients.filter({$0.getComparableName() == StorageService.getComparableName(from: name) && $0.birthday == birthday}).first
     }
     
     // MARK: Helpers
@@ -215,5 +216,16 @@ extension StorageService: StoragePatientManager {
         return nil
     }
     
+    /// Returns first name + first letter of last name (if exists)
+    public static func getComparableName(from name: String) -> String {
+        let splitName = name.split(separator: " ")
+        guard let first = splitName.first else {
+            return name
+        }
+        if let last = splitName.last {
+            return "\(first) \(last.prefix(1))"
+        }
+        return name
+    }
     
 }
