@@ -202,7 +202,7 @@ extension NetworkAccessor: RemoteAccessor {
         includeQueueItUI: Bool,
         andCompletionHandler completion: @escaping NetworkRequestCompletion<T>) {
         
-        let request = AF.request(url, method: method, parameters: parameters, encoder: encoder, headers: headers, interceptor: interceptor)
+        let request = AF.request(url, method: method, parameters: parameters, encoder: encoder, headers: headers)
             self.execute(request: request, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, withCompletion: completion)
     }
     
@@ -218,7 +218,7 @@ extension NetworkAccessor: RemoteAccessor {
                     multipartFormData.append(castedStringData, withName: key)
                 }
             })
-        }, to: url, method: method, headers: headers, interceptor: interceptor)
+        }, to: url, method: method, headers: headers)
         self.execute(request: request, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, withCompletion: completion)
     }
 }
