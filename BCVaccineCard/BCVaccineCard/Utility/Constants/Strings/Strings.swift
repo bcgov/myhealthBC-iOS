@@ -229,6 +229,7 @@ extension String {
     static var loginDescription: String { return "LoginDescription".localized }
     static var localAuthDescription: String { return "LocalAuthDescription".localized }
     static var touchId: String { return "TouchId".localized }
+    static var faceId: String { return "FaceId".localized }
     static var logoutTitle: String { return "LogoutTitle".localized }
     static var logoutDescription: String { return "LogoutDescription".localized }
     static var logOut: String { return "LogOut".localized }
@@ -277,7 +278,18 @@ extension String {
     static var useFaceId: String { return "UseFaceId".localized }
     static var setupAuthentication: String { return "SetupAuthentication".localized }
     static var allowSecurityAccessTitle: String { return "AllowSecurityAccessTitle".localized }
-    static var allowSecurityAccessMessage: String { return "AllowSecurityAccessMessage".localized }
+    static var allowSecurityAccessForFaceIdMessage: String {
+        return String(format: "AllowSecurityAccessMessage".localized, String.faceId, "and".localized, "\(String.faceId) & ")
+    }
+    static var allowSecurityAccessForTouchIdMessage: String {
+        return String(format: "AllowSecurityAccessMessage".localized, String.touchId, "and".localized, "\(String.touchId) & ")
+    }
+    static var allowSecurityAccessDefaultMessage: String {
+        return String(format: "AllowSecurityAccessMessage".localized, "", "", "")
+    }
+    static var reasonForRequestingAuthentication: String {
+        return "ReasonForRequestingAuthentication".localized
+    }
 }
 
 // Accessibility only localized strings

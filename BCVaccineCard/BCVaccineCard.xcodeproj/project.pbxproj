@@ -142,6 +142,8 @@
 		29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
 		29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
+		5B8BA6FE27BBB7D700250430 /* NetworkLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */; };
+		5B8BA6FF27BBB7D700250430 /* NetworkLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */; };
 		5BA177D027A1880600D61F2A /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177CF27A1880600D61F2A /* TestCoreDataStack.swift */; };
 		5BA177D227A18CDD00D61F2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */; };
 		5BA177D327A18CDD00D61F2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */; };
@@ -557,6 +559,7 @@
 		29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedOnBoardingScreen.swift; sourceTree = "<group>"; };
 		3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_Prod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayerTests.swift; sourceTree = "<group>"; };
 		5BA177CF27A1880600D61F2A /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
 		5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		5BA177D427A1A70000D61F2A /* StorageServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageServiceTests.swift; sourceTree = "<group>"; };
@@ -1296,6 +1299,7 @@
 				7944F69426F1261B006B9444 /* Info.plist */,
 				5BA177CF27A1880600D61F2A /* TestCoreDataStack.swift */,
 				5BA177D427A1A70000D61F2A /* StorageServiceTests.swift */,
+				5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */,
 			);
 			path = BCVaccineCardTests;
 			sourceTree = "<group>";
@@ -2484,6 +2488,7 @@
 				29736A492788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
 				29736A462788EBD700CCB1D2 /* ImmunizationRecord+CoreDataClass.swift in Sources */,
 				7944F69326F1261B006B9444 /* BCVaccineCardTests.swift in Sources */,
+				5B8BA6FE27BBB7D700250430 /* NetworkLayerTests.swift in Sources */,
 				29736A582788EBD700CCB1D2 /* VaccineCard+CoreDataClass.swift in Sources */,
 				5BA177D527A1A70000D61F2A /* StorageServiceTests.swift in Sources */,
 				29736A432788EBD700CCB1D2 /* Patient+CoreDataProperties.swift in Sources */,
@@ -2518,6 +2523,7 @@
 				794BD6312702EEC00084ADA8 /* FormTextFieldView.swift in Sources */,
 				791C27D0271DC778001A6E12 /* Keychain.swift in Sources */,
 				795AA7742715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
+				5B8BA6FF27BBB7D700250430 /* NetworkLayerTests.swift in Sources */,
 				791C27C827192C4C001A6E12 /* ImageTableViewCell.swift in Sources */,
 				794BD6322702EEC00084ADA8 /* Storyboard.swift in Sources */,
 				791C27B227179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */,
