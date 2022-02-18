@@ -83,6 +83,7 @@ class TabBarController: UITabBarController {
     
     private func setupObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
@@ -140,6 +141,12 @@ class TabBarController: UITabBarController {
             NotificationCenter.default.post(name: .reloadNewsFeed, object: nil, userInfo: nil)
         }
     }
+    
+    @objc private func backgroundAuthFetch(_ notification: Notification) {
+        guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
+        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false)
+    }
 
 }
 
@@ -167,15 +174,18 @@ extension TabBarController: UITabBarControllerDelegate {
 
 // MARK: Auth Fetch delegates
 extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
-    func showPatientDetailsError(error: String) {
+    func showPatientDetailsError(error: String, showBanner: Bool) {
+        guard showBanner else { return }
         self.showBanner(message: error, style: .Bottom)
     }
     
-    func showFetchStartedBanner() {
+    func showFetchStartedBanner(showBanner: Bool) {
+        guard showBanner else { return }
         self.showBanner(message: "Retrieving records", style: .Bottom)
     }
     
-    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?) {
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool) {
+        guard showBanner else { return }
         // TODO: Connor - handle error case
         self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
     }

@@ -72,7 +72,7 @@ extension BaseViewController {
             return
         }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds)
+        tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true)
     }
 }
 
