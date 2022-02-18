@@ -35,6 +35,13 @@ extension Patient {
         }
     }
     
+    public func getComparableName() -> String? {
+        guard let name = self.name else {
+            return nil
+        }
+        return StorageService.getComparableName(from: name)
+    }
+    
 }
 
 // MARK: VaccineCard
