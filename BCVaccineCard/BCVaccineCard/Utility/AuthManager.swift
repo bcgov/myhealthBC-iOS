@@ -246,9 +246,9 @@ class AuthManager {
     }
     
     private func store(date: Date, for key: Key) {
-        let dateDounle = date.timeIntervalSince1970
+        let dateDouble = date.timeIntervalSince1970
         do {
-            try keychain.set(String(dateDounle), key: key.rawValue)
+            try keychain.set(String(dateDouble), key: key.rawValue)
         }
         catch let error {
             print(error)
