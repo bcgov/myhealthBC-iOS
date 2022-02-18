@@ -17,7 +17,7 @@ struct AuthenticatedLaboratoryOrdersResponseObject: Codable {
     struct ResourcePayload: Codable {
         let loaded: Bool?
         let retryin: Int?
-        let orders: [Order]?
+        let orders: [Order]
         
         // MARK: - Order
         struct Order: Codable {
