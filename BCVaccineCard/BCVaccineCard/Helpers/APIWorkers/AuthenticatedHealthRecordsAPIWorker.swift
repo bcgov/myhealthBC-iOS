@@ -10,9 +10,9 @@ import BCVaccineValidator
 
 // FIXME: Adjust delegates to only pass in once everything has started, and once everything has finished
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
-    func showPatientDetailsError(error: String)
-    func showFetchStartedBanner()
-    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?)
+    func showPatientDetailsError(error: String, showBanner: Bool)
+    func showFetchStartedBanner(showBanner: Bool)
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool)
 }
 
 enum AuthenticationFetchType {
@@ -43,6 +43,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private var executingVC: UIViewController
     private var patientDetails: AuthenticatedPatientDetailsResponseObject?
     private var authCredentials: AuthenticationRequestObject?
+    private var showBanner = true
     
     init(delegateOwner: UIViewController) {
         self.apiClient = APIClient(delegateOwner: delegateOwner)
@@ -59,13 +60,15 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     ]) {
         didSet {
             if fetchStatusList.isCompleted {
-                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors)
+                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner)
             }
         }
     }
     
     // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
-    func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject) {
+    func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool) {
+        self.showBanner = showBanner
+        delegate?.showFetchStartedBanner(showBanner: showBanner)
         self.authCredentials = authCredentials
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
@@ -92,12 +95,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             initializeRequests(authCredentials: authCredentials)
         case .failure(let error):
             print(error)
-            //TODO: Handle error here
+            self.delegate?.showPatientDetailsError(error: error.resultMessage ?? .genericErrorMessage, showBanner: self.showBanner)
         }
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
-        delegate?.showFetchStartedBanner()
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
         self.getAuthenticatedMedicationStatement(authCredentials: authCredentials)
@@ -164,10 +166,10 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     @objc private func retryGetPatientDetailsRequest() {
         guard let authCredentials = self.requestDetails.authenticatedPatientDetails?.authCredentials else {
-            self.delegate?.showPatientDetailsError(error: .genericErrorMessage)
+            self.delegate?.showPatientDetailsError(error: .genericErrorMessage, showBanner: self.showBanner)
             return
         }
-        self.getAuthenticatedPatientDetails(authCredentials: authCredentials)
+        self.getAuthenticatedPatientDetails(authCredentials: authCredentials, showBanner: self.showBanner)
     }
     
     @objc private func retryGetTestResultsRequest() {
@@ -422,7 +424,7 @@ struct FetchStatusList {
     var fetchStatus: [AuthenticationFetchType: FetchStatus]
     
     var isCompleted: Bool {
-        return fetchStatus.count == fetchStatus.map({ $0.value.requestCompleted == true }).count
+        return fetchStatus.count == fetchStatus.map({ $0.value.requestCompleted }).filter({ $0 == true }).count
     }
     
     var getAttemptedCount: Int {

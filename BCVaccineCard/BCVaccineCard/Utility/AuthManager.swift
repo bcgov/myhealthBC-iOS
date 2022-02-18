@@ -201,6 +201,9 @@ class AuthManager {
     private func store(state: OIDAuthState) {
         guard state.isAuthorized else { return }
         if let authToken = state.lastTokenResponse?.accessToken {
+            if self.authToken != nil {
+                postRefetchNotification(newAuthToken: authToken)
+            }
             store(string: authToken, for: .authToken)
         }
         
@@ -243,9 +246,9 @@ class AuthManager {
     }
     
     private func store(date: Date, for key: Key) {
-        let dateDounle = date.timeIntervalSince1970
+        let dateDouble = date.timeIntervalSince1970
         do {
-            try keychain.set(String(dateDounle), key: key.rawValue)
+            try keychain.set(String(dateDouble), key: key.rawValue)
         }
         catch let error {
             print(error)
@@ -274,4 +277,20 @@ extension AuthManager {
         NotificationCenter.default.post(name: .authTokenExpired, object: nil)
     }
     
+}
+
+// MARK: For refetch of authenticated data
+extension AuthManager {
+    private func postRefetchNotification(newAuthToken token: String) {
+        let hdid: String?
+        do {
+            let jwt = try decode(jwt: token)
+            let claim = jwt.claim(name: "hdid")
+            hdid = claim.string
+        } catch {
+            hdid = nil
+        }
+        guard let hdid = hdid else { return }
+        NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
+    }
 }

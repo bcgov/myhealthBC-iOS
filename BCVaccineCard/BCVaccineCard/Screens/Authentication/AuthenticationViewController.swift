@@ -157,7 +157,7 @@ class AuthenticationViewController: UIViewController {
         self.removeChild()
         
         dismissAndReturnCompletion(status: status)
-        if self.returnToHealthPass {
+        if self.returnToHealthPass && status == .Completed {
             dismissFullScreen()
         }
     }
@@ -185,7 +185,7 @@ class AuthenticationViewController: UIViewController {
         AppDelegate.sharedInstance?.window?.rootViewController = vc
         guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else {return}
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds)
+        vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true)
     }
     
     public static func displayFullScreen(returnToHealthPass: Bool, initialView: InitialView) {
