@@ -17,7 +17,7 @@ extension StorageService {
     }
     
     func getHeathRecords() -> [HealthRecord] {
-        let tests = fetchTestResults().map({HealthRecord(type: .Test($0))})
+        let tests = fetchCovidTestResults().map({HealthRecord(type: .Test($0))})
         let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         return tests + vaccineCards + medications
@@ -46,7 +46,7 @@ extension StorageService {
             notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: vaccineCards))
         }
         if typesTodelete.contains(.Test) {
-            let tests = fetchTestResults().filter({$0.authenticated == true})
+            let tests = fetchCovidTestResults().filter({$0.authenticated == true})
             toDelete.append(contentsOf: tests)
             notify(event: StorageEvent(event: .Delete, entity: .TestResult, object: tests))
         }
@@ -61,7 +61,7 @@ extension StorageService {
     func deleteAllHealthRecords() {
         let vaccineCards = fetchVaccineCards()
         deleteAllRecords(in: vaccineCards)
-        let tests = fetchTestResults()
+        let tests = fetchCovidTestResults()
         deleteAllRecords(in: tests)
         let medications = fetchPrescriptions()
         deleteAllRecords(in: medications)

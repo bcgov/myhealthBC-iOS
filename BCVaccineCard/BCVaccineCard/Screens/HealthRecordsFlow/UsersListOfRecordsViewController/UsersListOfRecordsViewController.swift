@@ -298,7 +298,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         case .covidTestResultRecord:
             guard let recordId = record.id else {return}
             alertConfirmation(title: .deleteTestResult, message: .deleteTestResultMessage, confirmTitle: .delete, confirmStyle: .destructive) {
-                StorageService.shared.deleteTestResult(id: recordId, sendDeleteEvent: true)
+                StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
                 completion(true)
             } onCancel: {
                 completion(false)
@@ -313,7 +313,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
 extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerDelegate {
     func handleTestResult(result: GatewayTestResultResponse, row: Int) {
         print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
-        StorageService.shared.updateTestResult(gateWayResponse: result) { [weak self] covidLabTestResult in
+        StorageService.shared.updateCovidTestResult(gateWayResponse: result) { [weak self] covidLabTestResult in
             guard let `self` = self else {return}
  
             guard let covidLabTestResult = covidLabTestResult else { return }

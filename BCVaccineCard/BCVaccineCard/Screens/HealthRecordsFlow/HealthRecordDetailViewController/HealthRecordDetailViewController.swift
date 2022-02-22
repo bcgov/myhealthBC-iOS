@@ -116,7 +116,7 @@ extension HealthRecordDetailViewController {
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code)
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
-                StorageService.shared.deleteTestResult(id: recordId, sendDeleteEvent: true)
+                StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
             case .medication:
                 print("Not able to delete medications currently, as they are auth-only records")
             }
