@@ -16,6 +16,7 @@ extension LaboratoryOrder {
         return NSFetchRequest<LaboratoryOrder>(entityName: "LaboratoryOrder")
     }
 
+    @NSManaged public var id: String?
     @NSManaged public var laboratoryReportID: String?
     @NSManaged public var reportingSource: String?
     @NSManaged public var reportID: String?

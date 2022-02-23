@@ -17,6 +17,7 @@
     <entity name="LaboratoryOrder" representedClassName="LaboratoryOrder" syncable="YES">
         <attribute name="collectionDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="commonName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="laboratoryReportID" optional="YES" attributeType="String"/>
         <attribute name="orderingProvider" optional="YES" attributeType="String"/>
         <attribute name="reportAvailable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -118,7 +119,7 @@
         <element name="Pharmacy" positionX="171" positionY="405" width="128" height="179"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
         <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="179"/>
-        <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="179"/>
+        <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="194"/>
         <element name="LaboratoryTest" positionX="171" positionY="405" width="128" height="119"/>
     </elements>
 </model>
