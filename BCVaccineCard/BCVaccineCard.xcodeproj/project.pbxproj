@@ -818,8 +818,8 @@
 				294BD3D627B54AFE00BD8D46 /* StorageService+Medication.swift */,
 				2932DCDE275A9D2C00532BC4 /* StorageService+VaccineCard.swift */,
 				29245D3F275581C700F48642 /* StorageService+TestResults.swift */,
-				79218AEE275672110063004E /* StorageService+HealthRecords.swift */,
 				297967A327C5371C0019EE9B /* StorageService+LabOrder.swift */,
+				79218AEE275672110063004E /* StorageService+HealthRecords.swift */,
 				2932DCE6275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift */,
 			);
 			path = Storage;

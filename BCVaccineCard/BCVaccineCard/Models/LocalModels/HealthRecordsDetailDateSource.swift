@@ -13,6 +13,7 @@ struct HealthRecordsDetailDataSource {
             case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
             case covidTestResultRecord(model: TestResult)
             case medication(model: Perscription)
+            case laboratoryOder(model: LaboratoryOrder)
         }
         let id: String
         let name: String
@@ -26,6 +27,7 @@ struct HealthRecordsDetailDataSource {
         case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
         case covidTestResultRecord(model: CovidLabTestResult)
         case medication(model: Perscription)
+        case laboratoryOder(model: LaboratoryOrder)
     }
     
     let id: String?
@@ -48,6 +50,8 @@ struct HealthRecordsDetailDataSource {
             return records.first(where: {$0.id == record.id})
         case .medication(model: let model):
             return records.first
+        case .laboratoryOder(model: let model):
+            return records.first
         }
     }
     
@@ -58,6 +62,8 @@ struct HealthRecordsDetailDataSource {
         case .covidTestResultRecord(let model):
             return model.authenticated
         case .medication(model: let model):
+            return model.authenticated
+        case .laboratoryOder(model: let model):
             return model.authenticated
         }
     }
@@ -94,6 +100,9 @@ struct HealthRecordsDetailDataSource {
             image = UIImage(named: "blue-bg-medication-record-icon")
             deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary
             deleteAlertMessage = "Shouldn't see this" // Showing these values for testing purposes
+        case .laboratoryOder(model: let model):
+            // TODO UI
+            
         }
     }
 }
@@ -115,6 +124,8 @@ extension HealthRecordsDetailDataSource {
         case .medication(model: let model):
             result.append(genRecord(prescription: model))
             return result
+        case .laboratoryOder(model: let model):
+            // TODO
         }
     }
     

@@ -67,6 +67,7 @@ class UserRecordListView: UIView {
         case .covidImmunizationRecord: statusToInclude = nil
         case .covidTestResultRecord: statusToInclude = record.mainRecord?.status
         case .medication: statusToInclude = record.mainRecord?.status
+        case .laboratoryOder: // TODO
         }
         let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
         recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"

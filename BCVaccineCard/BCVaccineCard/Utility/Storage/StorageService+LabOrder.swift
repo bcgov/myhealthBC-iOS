@@ -97,6 +97,7 @@ extension StorageService: StorageLaboratoryOrderManager {
         guard let context = managedContext else {return nil}
         let labOrder = LaboratoryOrder(context: context)
         labOrder.id = id
+        labOrder.authenticated = true
         labOrder.patient = patient
         labOrder.laboratoryReportID = laboratoryReportID
         labOrder.reportingSource = reportingSource

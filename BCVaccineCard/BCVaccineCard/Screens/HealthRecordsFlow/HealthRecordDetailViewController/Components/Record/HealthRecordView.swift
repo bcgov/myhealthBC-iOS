@@ -17,6 +17,8 @@ extension HealthRecordsDetailDataSource.Record {
             return [.Header, .Fields]
         case .medication:
             return [.Fields]
+        case .laboratoryOder:
+            // TODO:
         }
     }
 }

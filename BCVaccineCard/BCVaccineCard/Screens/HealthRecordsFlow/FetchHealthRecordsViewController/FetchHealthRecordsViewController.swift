@@ -135,6 +135,8 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             case .medication:
                 // Currently we are not going to allow user to manually fetch meds, so no action here
                 return
+            case .LaboratoryOrder:
+                return
             }
         }
         

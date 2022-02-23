@@ -387,7 +387,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleTestResultsInCoreData(testResult: AuthenticatedTestResultsResponseModel) {
         guard let patient = self.patientDetails else { return }
         guard let orders = testResult.resourcePayload?.orders else { return }
-        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Test])
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.CovidTest])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         for order in orders {

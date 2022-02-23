@@ -11,13 +11,14 @@ import CoreData
 
 extension StorageService {
     enum healthRecordType {
-        case Test
+        case CovidTest
         case VaccineCard
         case Prescription
+        case LaboratoryOrder
     }
     
     func getHeathRecords() -> [HealthRecord] {
-        let tests = fetchCovidTestResults().map({HealthRecord(type: .Test($0))})
+        let tests = fetchCovidTestResults().map({HealthRecord(type: .CovidTest($0))})
         let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         return tests + vaccineCards + medications
@@ -25,7 +26,7 @@ extension StorageService {
     
     func delete(healthRecord: HealthRecord) {
         switch healthRecord.type {
-        case .Test(let object):
+        case .CovidTest(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .CovidLabTestResult, object: object))
         case .CovidImmunization(let object):
@@ -34,18 +35,21 @@ extension StorageService {
         case .Medication(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: object))
+        case .LaboratoryOrder(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .LaboratoryOrder, object: object))
         }
     }
     
     func deleteHealthRecordsForAuthenticatedUser(types: [healthRecordType]? = nil) {
         var toDelete: [NSManagedObject] = []
-        let typesTodelete: [healthRecordType] = types ?? [.Prescription, .Test, .VaccineCard]
+        let typesTodelete: [healthRecordType] = types ?? [.Prescription, .CovidTest, .VaccineCard]
         if typesTodelete.contains(.VaccineCard) {
             let vaccineCards = fetchVaccineCards().filter({$0.authenticated == true})
             toDelete.append(contentsOf: vaccineCards)
             notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: vaccineCards))
         }
-        if typesTodelete.contains(.Test) {
+        if typesTodelete.contains(.CovidTest) {
             let tests = fetchCovidTestResults().filter({$0.authenticated == true})
             toDelete.append(contentsOf: tests)
             notify(event: StorageEvent(event: .Delete, entity: .TestResult, object: tests))

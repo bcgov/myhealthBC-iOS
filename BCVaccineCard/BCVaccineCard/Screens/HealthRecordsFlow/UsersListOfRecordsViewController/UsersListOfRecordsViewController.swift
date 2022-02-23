@@ -305,6 +305,8 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             }
         case .medication:
             return
+        case .laboratoryOder:
+            return
         }
     }
     
@@ -317,7 +319,7 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
             guard let `self` = self else {return}
  
             guard let covidLabTestResult = covidLabTestResult else { return }
-            guard let healthRecordDetailDS = HealthRecord(type: .Test(covidLabTestResult)).detailDataSource() else { return }
+            guard let healthRecordDetailDS = HealthRecord(type: .CovidTest(covidLabTestResult)).detailDataSource() else { return }
             guard self.dataSource.count > row else { return }
             self.dataSource[row] = healthRecordDetailDS
             let indexPath = IndexPath(row: row, section: 0)
