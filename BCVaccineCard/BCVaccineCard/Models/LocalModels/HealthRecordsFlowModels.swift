@@ -73,7 +73,7 @@ extension HealthRecord {
         case .Medication(let prescription):
             return HealthRecordsDetailDataSource(type: .medication(model: prescription))
         case .LaboratoryOrder(let labOrder):
-            return HealthRecordsDetailDataSource(type: .laboratoryOder(model: labOrder))
+            return HealthRecordsDetailDataSource(type: .laboratoryOrder(model: labOrder))
         }
     }
     
@@ -122,7 +122,7 @@ extension Array where Element == HealthRecord {
                 firstDate = model.mainResult?.resultDateTime
             case .medication(model: let model):
                 firstDate = model.dispensedDate
-            case .laboratoryOder(model: let model):
+            case .laboratoryOrder(model: let model):
                 firstDate = model.collectionDateTime
             }
             switch second.type {
@@ -132,7 +132,7 @@ extension Array where Element == HealthRecord {
                 secondDate = model.mainResult?.resultDateTime
             case .medication(model: let model):
                 secondDate = model.dispensedDate
-            case .laboratoryOder(model: let model):
+            case .laboratoryOrder(model: let model):
                 secondDate = model.collectionDateTime
             }
             return firstDate ?? Date() > secondDate ?? Date()
@@ -158,9 +158,10 @@ extension Array where Element == HealthRecord {
                 }
                 return false
             case .LaboratoryOrder(let labOrder):
-                if recordType == .LaboratoryOrder {
+                if recordType == .laboratoryOrder {
                     return labOrder.id == id
                 }
+                return false
             }
         }) {
             return self[index].detailDataSource()

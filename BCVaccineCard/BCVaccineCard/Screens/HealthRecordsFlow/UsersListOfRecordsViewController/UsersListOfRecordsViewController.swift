@@ -305,7 +305,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             }
         case .medication:
             return
-        case .laboratoryOder:
+        case .laboratoryOrder:
             return
         }
     }

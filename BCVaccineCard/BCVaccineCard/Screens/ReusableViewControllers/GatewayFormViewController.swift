@@ -536,6 +536,11 @@ extension GatewayFormViewController {
                 return true
             }
         }
+        for labOrder in patient.labOrdersArray {
+            if labOrder.authenticated {
+                return true
+            }
+        }
         return false
     }
     

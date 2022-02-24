@@ -88,7 +88,7 @@ extension StorageService: StorageLaboratoryOrderManager {
                     }
                 }
             }
-            let collectionDateTime =  Date() // TODO: gateWayObject.collectionDateTime 
+            let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
             return storeLaboratoryOrder(patient: patient, id: id, laboratoryReportID: gateWayObject.laboratoryReportID, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests)
             
         }
@@ -106,7 +106,21 @@ extension StorageService: StorageLaboratoryOrderManager {
         labOrder.commonName = commonName
         labOrder.orderingProvider = orderingProvider
         labOrder.reportAvailable = reportAvailable
-        labOrder.laboratoryTests = laboratoryTests
+//        labOrder.laboratoryTests = laboratoryTests
+        var labTestsArray: [LaboratoryTest] = []
+        let labTests = laboratoryTests ?? []
+        for test in labTests {
+            if let model = storeLaboratoryTest(
+                batteryType: test.batteryType,
+                obxID: test.obxID,
+                outOfRange: test.outOfRange,
+                loinc: test.loinc,
+                testStatus: test.testStatus) {
+                
+                labTestsArray.append(model)
+                labOrder.addToLaboratoryTests(model)
+            }
+        }
         do {
             try context.save()
             return labOrder
