@@ -216,7 +216,7 @@ extension LaboratoryOrder {
     public var labTests: [LaboratoryTest] {
         let set = laboratoryTests as? Set<LaboratoryTest> ?? []
         return set.sorted {
-            $0.obxID ?? "" < $1.obxID ?? ""
+            $0.batteryType ?? "" < $1.batteryType ?? ""
         }
     }
 }
