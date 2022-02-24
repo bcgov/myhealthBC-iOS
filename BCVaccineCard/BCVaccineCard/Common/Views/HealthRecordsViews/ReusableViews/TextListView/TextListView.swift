@@ -12,6 +12,7 @@ class TextListView: UIView {
     
     @IBOutlet weak private var contentView: UIView!
     @IBOutlet weak private var baseStackView: UIStackView!
+    private var listOfStacks: [UIStackView]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,6 +46,8 @@ class TextListView: UIView {
     }
     
     private func setupStackViews(data: [TextListModel]) {
+        removeOldStacks()
+        listOfStacks = []
         for listComponent in data {
             let stack = initializeStackView()
             if let header = initializeLabel(textListProperties: listComponent.header) {
@@ -55,6 +58,7 @@ class TextListView: UIView {
             }
             self.setupAccessibility(stack: stack, listComponent: listComponent)
             self.baseStackView.addArrangedSubview(stack)
+            self.listOfStacks?.append(stack)
         }
     }
     
@@ -84,6 +88,13 @@ class TextListView: UIView {
             label.text = properties.text
             label.numberOfLines = 0
             return label
+        }
+    }
+    
+    private func removeOldStacks() {
+        guard let listOfStacks = listOfStacks else { return }
+        for stack in listOfStacks {
+            stack.removeFromSuperview()
         }
     }
     
