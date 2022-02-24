@@ -13,14 +13,14 @@ class GetRecordsView: UIView {
         case covidImmunizationRecord
         case covidTestResult
         case medication
-        case LaboratoryOrder
+        case laboratoryOrder
         
         var getTitle: String {
             switch self {
             case .covidImmunizationRecord: return .getVaccinationRecordsTitle
             case .covidTestResult: return .getCovidTestResultsTitle
             case .medication: return ""
-            case .LaboratoryOrder: // TODO
+            case .laboratoryOrder: return ""
             }
         }
         
@@ -29,7 +29,7 @@ class GetRecordsView: UIView {
             case .covidImmunizationRecord: return .getVaccinationRecordsDescription
             case .covidTestResult: return .getCovidTestResultsDescription
             case .medication: return ""
-            case .LaboratoryOrder: // TODO
+            case .laboratoryOrder: return ""
             }
         }
         
@@ -38,7 +38,7 @@ class GetRecordsView: UIView {
             case .covidImmunizationRecord: return UIImage(named: "vaccine-record-icon")
             case .covidTestResult: return UIImage(named: "test-result-icon")
             case .medication: return nil
-            case .LaboratoryOrder: // TODO
+            case .laboratoryOrder: return nil
             }
         }
     }

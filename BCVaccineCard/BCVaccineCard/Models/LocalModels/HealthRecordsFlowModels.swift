@@ -158,9 +158,10 @@ extension Array where Element == HealthRecord {
                 }
                 return false
             case .LaboratoryOrder(let labOrder):
-                if recordType == .LaboratoryOrder {
+                if recordType == .laboratoryOrder {
                     return labOrder.id == id
                 }
+                return false
             }
         }) {
             return self[index].detailDataSource()

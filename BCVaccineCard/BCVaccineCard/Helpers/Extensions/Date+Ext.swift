@@ -65,14 +65,18 @@ extension Date {
         }()
         static let gatewayDateAndTime: DateFormatter = {
             let formatter = DateFormatter()
-//            September-09-2012, 14:27
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
             return formatter
         }()
         static let gatewayDateAndTimeWithTimeZone: DateFormatter = {
             let formatter = DateFormatter()
-//            September-09-2012, 14:27
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            return formatter
+        }()
+        static let labOrderDateTime: DateFormatter = {
+            let formatter = DateFormatter()
+//            2012-May-14, 4:35 PM
+            formatter.dateFormat = "yyyy-MMMM-dd, hh:mm a"
             return formatter
         }()
         
@@ -199,6 +203,7 @@ extension Date {
     var issuedOnDate: String { return Formatter.issuedOnDate.string(from: self) }
     var gatewayDateAndTime: String { return Formatter.gatewayDateAndTime.string(from: self) }
     var gatewayDateAndTimeWithTimeZone: String { return Formatter.gatewayDateAndTimeWithTimeZone.string(from: self) }
+    var labOrderDateTime: String { return Formatter.labOrderDateTime.string(from: self) }
     
     //MARK: - Date Strings
     var shortDateString: String { return Formatter.shortDate.string(from: self) }
