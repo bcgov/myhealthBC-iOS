@@ -326,6 +326,98 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(record?.patient.phn, patient.phn)
         XCTAssertEqual(record?.patient.birthday, patient.birthday)
     }
+    
+    func testStoreAndFetchPrescription() {
+        // given
+        let prescriptionIdentifier = "123"
+        let prescriptionStatus = ""
+        let dispensedDate = "2015-06-25T00:00:00"
+        let practitionerSurname = "Sam"
+        let directions = "take one ...."
+        let din = "1234" // medicationSummary
+        let brandName = "DILAUDID"
+        let genericName = "Any mame"
+        let quantity = 12.0
+        let maxDailyDosage = 1
+        let form = "tablet"
+        let manufacturer = "PR&D"
+        let strength = "2"
+        let strengthUnit = "MG"
+        let pharmacyID = " BC040" // pharmacy
+        let pharmacyName = "Any"
+        let addressLine1 = "address line 1"
+        let addressLine2 = "CAD"
+        let city = "SECHELT"
+        let province = "BC"
+        let countryCode = "CAN"
+        let phoneNumber = "602-7212312"
+        let faxNumber   = "603-1144233"
+        let medicationObject = medicationObject(prescriptionIdentifier: prescriptionIdentifier, prescriptionStatus: prescriptionStatus, dispensedDate: dispensedDate, practitionerSurname: practitionerSurname, directions: directions, pharmacyID: pharmacyID, din: din, brandName: brandName, genericName: genericName, quantity: quantity, maxDailyDosage: maxDailyDosage, form: form, manufacturer: manufacturer, strength: strength, strengthUnit: strengthUnit, pharmacyName: pharmacyName, addressLine1: addressLine1, addressLine2: addressLine2, city: city, province: province, countryCode: countryCode, phone: phoneNumber, fax: faxNumber)
+        // when storing perscription
+        guard let patient = storePatient() else {
+            XCTFail()
+            return
+        }
+        _ = storageService.storePrescription(patient: patient, object: medicationObject)
+        // when fetching porescription by id
+        let prescription = storageService.fetchPrescription(id: medicationObject.md5Hash()!)
+        // then
+        XCTAssertEqual(prescription?.prescriptionIdentifier, prescriptionIdentifier)
+        XCTAssertEqual(prescription?.status, prescriptionStatus)
+        XCTAssertEqual(prescription?.dispensedDate?.yearMonthDayString, "2015-06-25")
+        XCTAssertEqual(prescription?.practitionerSurname, practitionerSurname)
+        XCTAssertEqual(prescription?.directions, directions)
+        XCTAssertEqual(prescription?.medication?.din, din)
+        XCTAssertEqual(prescription?.medication?.brandName, brandName)
+        XCTAssertEqual(prescription?.medication?.genericName, genericName)
+        XCTAssertEqual(prescription?.medication?.quantity, quantity)
+        XCTAssertEqual(prescription?.medication?.maxDailyDosage, Int64(maxDailyDosage))
+        XCTAssertEqual(prescription?.medication?.form, form)
+        XCTAssertEqual(prescription?.medication?.manufacturer, manufacturer)
+        XCTAssertEqual(prescription?.medication?.strength, strength)
+        XCTAssertEqual(prescription?.medication?.strengthUnit, strengthUnit)
+        XCTAssertEqual(prescription?.pharmacy?.id, pharmacyID)
+        XCTAssertEqual(prescription?.pharmacy?.name, pharmacyName)
+        XCTAssertEqual(prescription?.pharmacy?.addressLine1, addressLine1)
+        XCTAssertEqual(prescription?.pharmacy?.addressLine2, addressLine2)
+        XCTAssertEqual(prescription?.pharmacy?.city, city)
+        XCTAssertEqual(prescription?.pharmacy?.province, province)
+        XCTAssertEqual(prescription?.pharmacy?.countryCode, countryCode)
+        XCTAssertEqual(prescription?.pharmacy?.phoneNumber, phoneNumber)
+        XCTAssertEqual(prescription?.pharmacy?.faxNumber, faxNumber)
+        XCTAssertEqual(prescription?.patient?.name, patient.name)
+        XCTAssertEqual(prescription?.patient?.phn, patient.phn)
+        XCTAssertEqual(prescription?.patient?.birthday, patient.birthday)
+    }
+    
+    func testStoreAndFetchPharmacy() {
+        // given
+        let pharmacyID = " BC033" // pharmacy
+        let pharmacyName = "Ph.. Name"
+        let addressLine1 = "Qwwn street ..."
+        let addressLine2 = "RED"
+        let city = "SECHELT"
+        let province = "YK"
+        let postalCode = "12434"
+        let countryCode = "CAN"
+        let phoneNumber = "202-5235265"
+        let faxNumber   = "203-9897215"
+        let pharmacyObject = self.pharmacyObject(pharmacyID: pharmacyID, pharmacyName: pharmacyName, addressLine1: addressLine1, addressLine2: addressLine2, city: city, province: province, postalCode: postalCode, countryCode: countryCode, phone: phoneNumber, fax: faxNumber)
+        // when - storing pharmacy
+        _ = storageService.storePharmacy(gateWayResponse: pharmacyObject)
+        // when fetching pharmacy
+        let pharmacy = storageService.fetchPharmacy(id: pharmacyID)
+        // then
+        XCTAssertEqual(pharmacy?.id, pharmacyID)
+        XCTAssertEqual(pharmacy?.name, pharmacyName)
+        XCTAssertEqual(pharmacy?.addressLine1, addressLine1)
+        XCTAssertEqual(pharmacy?.addressLine2, addressLine2)
+        XCTAssertEqual(pharmacy?.city, city)
+        XCTAssertEqual(pharmacy?.province, province)
+        XCTAssertEqual(pharmacy?.countryCode, countryCode)
+        XCTAssertEqual(pharmacy?.phoneNumber, phoneNumber)
+        XCTAssertEqual(pharmacy?.faxNumber, faxNumber)
+    }
 }
 
 extension StorageServiceTests {
@@ -347,5 +439,15 @@ extension StorageServiceTests {
         let record = GatewayTestResultResponseRecord(patientDisplayName: patietName, lab: nil, reportId: reportId, collectionDateTime: "2022-01-01", resultDateTime: nil, testName: nil, testType: nil, testStatus: nil, testOutcome: nil, resultTitle: nil, resultDescription: nil, resultLink: nil)
         let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 1, records: [record])
         return GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: 1, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
+    }
+    
+    func medicationObject(prescriptionIdentifier: String? = nil, prescriptionStatus: String? = nil, dispensedDate: String? = nil, practitionerSurname: String? = nil, directions: String? = nil, dateEntered: String? = nil, pharmacyID: String? = nil, din: String? = nil, brandName: String? = nil, genericName: String? = nil, quantity: Double? = nil, maxDailyDosage: Int? = nil, drugDiscontinuedDate: String? = nil, form: String? = nil, manufacturer: String? = nil, strength: String? = nil, strengthUnit: String? = nil, pharmacyName: String? = nil, addressLine1: String? = nil, addressLine2: String? = nil, city: String? = nil, province: String? = nil, countryCode: String? = nil, phone: String? = nil, fax: String? = nil) -> BCVaccineCard.AuthenticatedMedicationStatementResponseObject.ResourcePayload {
+        let medicationSummary = AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary(din: din, brandName: brandName, genericName: genericName, quantity: quantity, maxDailyDosage: maxDailyDosage, drugDiscontinuedDate: drugDiscontinuedDate, form: form, manufacturer: manufacturer, strength: strength, strengthUnit: strengthUnit, isPin: nil)
+        let dispensingPharmacy = self.pharmacyObject(pharmacyID: pharmacyID, pharmacyName: pharmacyName, addressLine1: addressLine1, addressLine2: addressLine2, city: city, province: province, postalCode: nil, countryCode: countryCode, phone: phone, fax: fax)
+        return AuthenticatedMedicationStatementResponseObject.ResourcePayload.init(prescriptionIdentifier: prescriptionIdentifier, prescriptionStatus: prescriptionStatus, dispensedDate: dispensedDate, practitionerSurname: practitionerSurname, directions: directions, dateEntered: dateEntered, pharmacyID: pharmacyID, medicationSummary: medicationSummary, dispensingPharmacy: dispensingPharmacy)
+    }
+    
+    func pharmacyObject(pharmacyID: String? = nil, pharmacyName: String? = nil, addressLine1: String? = nil, addressLine2: String? = nil, city: String? = nil, province: String? = nil, postalCode: String? = nil, countryCode: String? = nil, phone: String? = nil, fax: String? = nil) -> BCVaccineCard.AuthenticatedMedicationStatementResponseObject.ResourcePayload.DispensingPharmacy {
+        return AuthenticatedMedicationStatementResponseObject.ResourcePayload.DispensingPharmacy(pharmacyID: pharmacyID, name: pharmacyName, addressLine1: addressLine1, addressLine2: addressLine2, city: city, province: province, postalCode: postalCode, countryCode: countryCode, phoneNumber: phone, faxNumber: fax)
     }
 }
