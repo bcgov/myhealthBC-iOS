@@ -211,7 +211,6 @@ extension Medication {
     }
 }
 
-// FIXME: Need to find a way to sort these - this will cause an issue right now
 extension LaboratoryOrder {
     public var labTests: [LaboratoryTest] {
         let set = laboratoryTests as? Set<LaboratoryTest> ?? []
