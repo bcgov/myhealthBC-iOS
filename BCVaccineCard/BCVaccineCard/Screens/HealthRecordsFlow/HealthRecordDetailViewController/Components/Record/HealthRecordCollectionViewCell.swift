@@ -23,6 +23,7 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
     
     func configure(model: HealthRecordsDetailDataSource.Record) {
         self.model = model
+        self.recordView?.removeFromSuperview()
         let recordView: HealthRecordView = HealthRecordView(frame: .zero)
         self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(recordView)

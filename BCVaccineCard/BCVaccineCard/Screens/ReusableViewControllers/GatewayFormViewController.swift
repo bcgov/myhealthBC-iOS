@@ -536,6 +536,11 @@ extension GatewayFormViewController {
                 return true
             }
         }
+        for labOrder in patient.labOrdersArray {
+            if labOrder.authenticated {
+                return true
+            }
+        }
         return false
     }
     
@@ -602,7 +607,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         // store prefered PHN if needed here
         self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
         hideLoader()
-        if StorageService.shared.testExists(from: result) {
+        if StorageService.shared.covidTestExists(from: result) {
             alert(title: .duplicateTitle, message: .duplicateTestMessage)
             return
         }
@@ -727,7 +732,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             bday = nil
         }
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday) else {return nil}
-        guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
+        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
         return object.id
     }
     

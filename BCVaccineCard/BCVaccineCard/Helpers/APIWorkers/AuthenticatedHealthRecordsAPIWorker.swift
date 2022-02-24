@@ -387,7 +387,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleTestResultsInCoreData(testResult: AuthenticatedTestResultsResponseModel) {
         guard let patient = self.patientDetails else { return }
         guard let orders = testResult.resourcePayload?.orders else { return }
-        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Test])
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.CovidTest])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         for order in orders {
@@ -405,7 +405,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
        
-        guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
+        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
         return object.id
     }
 }
@@ -440,16 +440,27 @@ extension AuthenticatedHealthRecordsAPIWorker {
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleLaboratoryOrdersInCoreData(labOrders: AuthenticatedLaboratoryOrdersResponseObject) {
         guard let patient = self.patientDetails else { return }
-        guard let payloads = labOrders.resourcePayload else { return }
-        // TODO: Handle in core data here, call the handleLaboratoryOrdersInCoreData function below in loop
+        guard let orders = labOrders.resourcePayload?.orders else { return }
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.LaboratoryOrder])
+        var errorArrayCount: Int = 0
+        var completedCount: Int = 0
+        
+        for order in orders {
+            if let id = handleLaboratoryOrdersInCoreData(object: order, authenticated: true, patientObject: patient) {
+                completedCount += 1
+            } else {
+                errorArrayCount += 1
+            }
+        }
+        let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
         // For now, just calling success so that the entire fetch can pass
-        self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: nil)
-//        self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+        self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
-    private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        // TODO: Handle patient in core data here
-        return nil
+    private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+        guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object) else { return nil }
+        return object.id
     }
 }
 
