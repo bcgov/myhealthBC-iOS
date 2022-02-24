@@ -13,7 +13,7 @@ struct HealthRecordsDetailDataSource {
             case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
             case covidTestResultRecord(model: TestResult)
             case medication(model: Perscription)
-            case laboratoryOder(model: LaboratoryOrder)
+            case laboratoryOder(model: [LaboratoryTest])
         }
         let id: String
         let name: String
@@ -130,7 +130,8 @@ extension HealthRecordsDetailDataSource {
             result.append(genRecord(prescription: model))
             return result
         case .laboratoryOder(model: let model):
-            result.append(genRecord(labOrder: model))
+            let labTests = model.labTests
+            result.append(genRecord(labTests: labTests))
             return result
         }
     }
@@ -240,22 +241,21 @@ extension HealthRecordsDetailDataSource {
     }
     
     // MARK: Lab Orders
-    private static func genRecord(labOrder: LaboratoryOrder) -> Record {
-        let dateString = labOrder.collectionDateTime?.monthDayYearString
+    private static func genRecord(labTests: [LaboratoryTest]) -> Record {
+        let labOrder = labTests.first?.laboratoryOrder
+        let dateString = labOrder?.collectionDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         
         fields.append([
-            TextListModel(header: TextListModel.TextProperties(text: "Collection date:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder.collectionDateTime?.labOrderDateTime ?? "", bolded: false)),
-            TextListModel(header: TextListModel.TextProperties(text: "Ordering provider:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder.orderingProvider ?? "", bolded: false)),
-            TextListModel(header: TextListModel.TextProperties(text: "Reporting Lab:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder.commonName ?? "", bolded: false))
+            TextListModel(header: TextListModel.TextProperties(text: "Collection date:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.collectionDateTime?.labOrderDateTime ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Ordering provider:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.orderingProvider ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Reporting Lab:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.commonName ?? "", bolded: false))
         ])
-        let tests = labOrder.laboratoryTests ?? []
-        
-        for (index, test) in tests.enumerated() {
+        for (index, test) in labTests.enumerated() {
             var section: [TextListModel] = [
                 // Note: Unsure what value is used for test name
                 TextListModel(header: TextListModel.TextProperties(text: "Test name:", bolded: true), subtext: TextListModel.TextProperties(text: test.batteryType ?? "", bolded: false)),
-                TextListModel(header: TextListModel.TextProperties(text: "Result:", bolded: true), subtext: TextListModel.TextProperties(text: test.outOfRange ? "Out of Range" : "In Range", bolded: false)),
+                TextListModel(header: TextListModel.TextProperties(text: "Result:", bolded: true), subtext: TextListModel.TextProperties(text: test.outOfRange ? "Out of Range" : "In Range", bolded: false, textColor: test.outOfRange ? .red : .green)),
                 TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: test.testStatus ?? "", bolded: false))
             ]
             if index == 0 {
@@ -264,7 +264,7 @@ extension HealthRecordsDetailDataSource {
             fields.append(section)
         }
         
-        return Record(id: labOrder.id ?? UUID().uuidString, name: labOrder.patient?.name ?? "", type: .laboratoryOder(model: labOrder), status: "\(labOrder.laboratoryTests?.count ?? 0) tests", date: dateString, fields: fields)
+        return Record(id: labOrder?.id ?? UUID().uuidString, name: labOrder?.patient?.name ?? "", type: .laboratoryOder(model: labTests), status: "\(labOrder?.laboratoryTests?.count ?? 0) tests", date: dateString, fields: fields)
     }
 }
 

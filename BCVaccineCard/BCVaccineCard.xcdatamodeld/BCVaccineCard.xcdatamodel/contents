@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CovidLabTestResult" representedClassName="CovidLabTestResult" syncable="YES">
         <attribute name="authenticated" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -25,7 +25,7 @@
         <attribute name="reportID" optional="YES" attributeType="String"/>
         <attribute name="reportingSource" optional="YES" attributeType="String"/>
         <attribute name="testStatus" optional="YES" attributeType="String"/>
-        <relationship name="laboratoryTests" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LaboratoryTest" inverseName="laboratoryOrder" inverseEntity="LaboratoryTest"/>
+        <relationship name="laboratoryTests" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LaboratoryTest" inverseName="laboratoryOrder" inverseEntity="LaboratoryTest"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="laboratoryOrders" inverseEntity="Patient"/>
     </entity>
     <entity name="LaboratoryTest" representedClassName="LaboratoryTest" syncable="YES">
@@ -34,7 +34,7 @@
         <attribute name="obxID" optional="YES" attributeType="String"/>
         <attribute name="outOfRange" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="testStatus" optional="YES" attributeType="String"/>
-        <relationship name="laboratoryOrder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LaboratoryOrder" inverseName="laboratoryTests" inverseEntity="LaboratoryOrder"/>
+        <relationship name="laboratoryOrder" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="LaboratoryOrder" inverseName="laboratoryTests" inverseEntity="LaboratoryOrder"/>
     </entity>
     <entity name="Medication" representedClassName="Medication" syncable="YES">
         <attribute name="brandName" optional="YES" attributeType="String"/>

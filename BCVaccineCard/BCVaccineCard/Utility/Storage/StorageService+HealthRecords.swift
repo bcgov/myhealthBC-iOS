@@ -21,7 +21,8 @@ extension StorageService {
         let tests = fetchCovidTestResults().map({HealthRecord(type: .CovidTest($0))})
         let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
-        return tests + vaccineCards + medications
+        let labOrders = fetchLaboratoryOrders().map({HealthRecord(type: .LaboratoryOrder($0))})
+        return tests + vaccineCards + medications + labOrders
     }
     
     func delete(healthRecord: HealthRecord) {
@@ -43,7 +44,7 @@ extension StorageService {
     
     func deleteHealthRecordsForAuthenticatedUser(types: [healthRecordType]? = nil) {
         var toDelete: [NSManagedObject] = []
-        let typesTodelete: [healthRecordType] = types ?? [.Prescription, .CovidTest, .VaccineCard]
+        let typesTodelete: [healthRecordType] = types ?? [.Prescription, .CovidTest, .VaccineCard, .LaboratoryOrder]
         if typesTodelete.contains(.VaccineCard) {
             let vaccineCards = fetchVaccineCards().filter({$0.authenticated == true})
             toDelete.append(contentsOf: vaccineCards)
@@ -59,6 +60,11 @@ extension StorageService {
             toDelete.append(contentsOf: medications)
             notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: medications))
         }
+        if typesTodelete.contains(.LaboratoryOrder) {
+            let orders = fetchLaboratoryOrders().filter({ $0.authenticated == true })
+            toDelete.append(contentsOf: orders)
+            notify(event: StorageEvent(event: .Delete, entity: .LaboratoryOrder, object: orders))
+        }
         deleteAllRecords(in: toDelete)
     }
     
@@ -69,5 +75,7 @@ extension StorageService {
         deleteAllRecords(in: tests)
         let medications = fetchPrescriptions()
         deleteAllRecords(in: medications)
+        let labOrders = fetchLaboratoryOrders()
+        deleteAllRecords(in: labOrders)
     }
 }

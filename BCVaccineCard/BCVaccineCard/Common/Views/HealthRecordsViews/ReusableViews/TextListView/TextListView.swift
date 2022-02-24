@@ -73,12 +73,12 @@ class TextListView: UIView {
             let label = InteractiveLinkLabel()
             let textSize = properties.fontSize
             let font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
-            label.attributedText = label.attributedText(withString: properties.text, linkedStrings: links, textColor: AppColours.textBlack, font: font)
+            label.attributedText = label.attributedText(withString: properties.text, linkedStrings: links, textColor: textListProperties?.textColor.getUIColor ?? AppColours.textBlack, font: font)
             label.numberOfLines = 0
             return label
         } else {
             let label = UILabel()
-            label.textColor = AppColours.textBlack
+            label.textColor = textListProperties?.textColor.getUIColor ?? AppColours.textBlack
             let textSize = properties.fontSize
             label.font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
             label.text = properties.text

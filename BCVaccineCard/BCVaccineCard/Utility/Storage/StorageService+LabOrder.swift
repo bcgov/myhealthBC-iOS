@@ -106,7 +106,21 @@ extension StorageService: StorageLaboratoryOrderManager {
         labOrder.commonName = commonName
         labOrder.orderingProvider = orderingProvider
         labOrder.reportAvailable = reportAvailable
-        labOrder.laboratoryTests = laboratoryTests
+//        labOrder.laboratoryTests = laboratoryTests
+        var labTestsArray: [LaboratoryTest] = []
+        let labTests = laboratoryTests ?? []
+        for test in labTests {
+            if let model = storeLaboratoryTest(
+                batteryType: test.batteryType,
+                obxID: test.obxID,
+                outOfRange: test.outOfRange,
+                loinc: test.loinc,
+                testStatus: test.testStatus) {
+                
+                labTestsArray.append(model)
+                labOrder.addToLaboratoryTests(model)
+            }
+        }
         do {
             try context.save()
             return labOrder
