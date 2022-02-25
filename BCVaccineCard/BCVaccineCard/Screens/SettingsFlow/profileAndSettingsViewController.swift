@@ -34,6 +34,7 @@ class ProfileAndSettingsViewController: BaseViewController {
         super.viewDidLoad()
         setupTableView()
         navSetup()
+        setupListener()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -68,6 +69,16 @@ extension ProfileAndSettingsViewController {
                                                navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: nil)
+    }
+}
+
+extension ProfileAndSettingsViewController {
+    private func setupListener() {
+        NotificationCenter.default.addObserver(self, selector: #selector(settingsTableViewReload), name: .settingsTableViewReload, object: nil)
+    }
+    
+    @objc private func settingsTableViewReload() {
+        self.tableView.reloadData()
     }
 }
 

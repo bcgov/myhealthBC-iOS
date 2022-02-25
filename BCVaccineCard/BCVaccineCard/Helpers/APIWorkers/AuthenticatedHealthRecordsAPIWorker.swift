@@ -55,15 +55,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
     // Note: Choosing this instead of completion handlers as completion handlers were causing issues
     // TODO: Turn this into an array which will track the fetch status - construct this independendently (via init, perhaps) so that it is more reusable
-    var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [
-        .VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
-        .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
-        .MedicationStatement : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
-        .LaboratoryOrders : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
-    ]) {
+    var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [:]) {
         didSet {
             if fetchStatusList.isCompleted {
                 self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner)
+                self.initializeFetchStatusList()
             }
         }
     }
@@ -72,6 +68,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool) {
         self.showBanner = showBanner
         delegate?.showFetchStartedBanner(showBanner: showBanner)
+        self.initializeFetchStatusList()
         self.authCredentials = authCredentials
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
@@ -530,5 +527,18 @@ struct FetchStatusList {
         }
         guard errors.count > 0 else { return nil }
         return errors
+    }
+}
+
+// MARK: Initialize and deinit of fetch status values
+extension AuthenticatedHealthRecordsAPIWorker {
+    // TODO: Should make this a little more clean, seems pretty clunky right now
+    private func initializeFetchStatusList() {
+        self.fetchStatusList = FetchStatusList(fetchStatus: [
+            .VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+            .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+            .MedicationStatement : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+            .LaboratoryOrders : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
+        ])
     }
 }

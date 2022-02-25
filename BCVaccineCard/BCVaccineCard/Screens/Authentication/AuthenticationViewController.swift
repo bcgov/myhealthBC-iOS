@@ -25,9 +25,9 @@ extension BaseViewController {
             switch result {
             case .Completed:
                 self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
-                    // TODO: FETCH RECORDS FOR AUTHENTICATED USER
                     // Will be fetching on completion, before user interacts with this message
                     self.performAuthenticatedBackgroundFetch()
+                    self.postAuthChangedSettingsReloadRequired()
                     completion(true)
                 }
             case .Cancelled, .Failed:
