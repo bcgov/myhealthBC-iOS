@@ -16,7 +16,7 @@ jobs:
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
           FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
-        run: ./.github/secrets/decrypt_ssecret.sh
+        run: ./.github/secrets/decrypt_secrets.sh
       - name: Archiving project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
