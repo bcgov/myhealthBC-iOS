@@ -35,6 +35,13 @@ extension Patient {
         }
     }
     
+    public var labOrdersArray: [LaboratoryOrder] {
+        let set = laboratoryOrders as? Set<LaboratoryOrder> ?? []
+        return set.sorted {
+            $0.collectionDateTime ?? Date() > $1.collectionDateTime ?? Date()
+        }
+    }
+    
     public func getComparableName() -> String? {
         guard let name = self.name else {
             return nil
@@ -201,5 +208,14 @@ extension TestResult {
 extension Medication {
     var id: String {
         return din ?? (genericName ?? "")
+    }
+}
+
+extension LaboratoryOrder {
+    public var labTests: [LaboratoryTest] {
+        let set = laboratoryTests as? Set<LaboratoryTest> ?? []
+        return set.sorted {
+            $0.batteryType ?? "" < $1.batteryType ?? ""
+        }
     }
 }

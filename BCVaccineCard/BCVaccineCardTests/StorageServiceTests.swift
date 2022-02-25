@@ -284,10 +284,10 @@ class StorageServiceTests: XCTestCase {
         // when
         let patient = self.storageService.storePatient(name: patietName, birthday: bday, phn: phn)!
         _ = storageService.storeTestResults(patient: patient, gateWayResponse: gatewayTestResult, authenticated: authenticated)
-        let testResults = storageService.fetchTestResults()
+        let testResults = storageService.fetchCovidTestResults()
         let patients = storageService.fetchPatients()
         let testResult = testResults.first
-        let testExists = storageService.testExists(from: gatewayTestResult)
+        let testExists = storageService.covidTestExists(from: gatewayTestResult)
         // then
         XCTAssertEqual(patients.count,1)
         XCTAssertEqual(testResults.count,1)

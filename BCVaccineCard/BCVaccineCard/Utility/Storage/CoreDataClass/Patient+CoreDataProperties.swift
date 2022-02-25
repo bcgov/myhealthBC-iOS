@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-01-07.
+//  Created by Amir Shayegh on 2022-02-22.
 //
 //
 
@@ -16,12 +16,14 @@ extension Patient {
         return NSFetchRequest<Patient>(entityName: "Patient")
     }
 
-    @NSManaged public var phn: String?
-    @NSManaged public var name: String?
     @NSManaged public var birthday: Date?
+    @NSManaged public var name: String?
+    @NSManaged public var phn: String?
     @NSManaged public var covidTestResults: NSSet?
-    @NSManaged public var vaccineCard: NSSet?
     @NSManaged public var prescriptions: NSSet?
+    @NSManaged public var vaccineCard: NSSet?
+    @NSManaged public var laboratoryOrders: NSSet?
+
 }
 
 // MARK: Generated accessors for covidTestResults
@@ -38,6 +40,23 @@ extension Patient {
 
     @objc(removeCovidTestResults:)
     @NSManaged public func removeFromCovidTestResults(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for prescriptions
+extension Patient {
+
+    @objc(addPrescriptionsObject:)
+    @NSManaged public func addToPrescriptions(_ value: Perscription)
+
+    @objc(removePrescriptionsObject:)
+    @NSManaged public func removeFromPrescriptions(_ value: Perscription)
+
+    @objc(addPrescriptions:)
+    @NSManaged public func addToPrescriptions(_ values: NSSet)
+
+    @objc(removePrescriptions:)
+    @NSManaged public func removeFromPrescriptions(_ values: NSSet)
 
 }
 
@@ -58,19 +77,19 @@ extension Patient {
 
 }
 
-// MARK: Generated accessors for prescription
+// MARK: Generated accessors for laboratoryOrders
 extension Patient {
 
-    @objc(addPerscriptionObject:)
-    @NSManaged public func addToPrescription(_ value: Perscription)
+    @objc(addLaboratoryOrdersObject:)
+    @NSManaged public func addToLaboratoryOrders(_ value: LaboratoryOrder)
 
-    @objc(removePerscriptionObject:)
-    @NSManaged public func removeFromPrescription(_ value: Perscription)
+    @objc(removeLaboratoryOrdersObject:)
+    @NSManaged public func removeFromLaboratoryOrders(_ value: LaboratoryOrder)
 
-    @objc(addPerscription:)
-    @NSManaged public func addToPrescription(_ values: NSSet)
+    @objc(addLaboratoryOrders:)
+    @NSManaged public func addToLaboratoryOrders(_ values: NSSet)
 
-    @objc(removePerscription:)
-    @NSManaged public func removeFromPrescription(_ values: NSSet)
+    @objc(removeLaboratoryOrders:)
+    @NSManaged public func removeFromLaboratoryOrders(_ values: NSSet)
 
 }

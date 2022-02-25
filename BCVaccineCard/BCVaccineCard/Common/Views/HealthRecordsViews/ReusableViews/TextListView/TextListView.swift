@@ -12,6 +12,7 @@ class TextListView: UIView {
     
     @IBOutlet weak private var contentView: UIView!
     @IBOutlet weak private var baseStackView: UIStackView!
+    private var listOfStacks: [UIStackView]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,6 +46,8 @@ class TextListView: UIView {
     }
     
     private func setupStackViews(data: [TextListModel]) {
+        removeOldStacks()
+        listOfStacks = []
         for listComponent in data {
             let stack = initializeStackView()
             if let header = initializeLabel(textListProperties: listComponent.header) {
@@ -55,6 +58,7 @@ class TextListView: UIView {
             }
             self.setupAccessibility(stack: stack, listComponent: listComponent)
             self.baseStackView.addArrangedSubview(stack)
+            self.listOfStacks?.append(stack)
         }
     }
     
@@ -73,17 +77,24 @@ class TextListView: UIView {
             let label = InteractiveLinkLabel()
             let textSize = properties.fontSize
             let font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
-            label.attributedText = label.attributedText(withString: properties.text, linkedStrings: links, textColor: AppColours.textBlack, font: font)
+            label.attributedText = label.attributedText(withString: properties.text, linkedStrings: links, textColor: textListProperties?.textColor.getUIColor ?? AppColours.textBlack, font: font)
             label.numberOfLines = 0
             return label
         } else {
             let label = UILabel()
-            label.textColor = AppColours.textBlack
+            label.textColor = textListProperties?.textColor.getUIColor ?? AppColours.textBlack
             let textSize = properties.fontSize
             label.font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
             label.text = properties.text
             label.numberOfLines = 0
             return label
+        }
+    }
+    
+    private func removeOldStacks() {
+        guard let listOfStacks = listOfStacks else { return }
+        for stack in listOfStacks {
+            stack.removeFromSuperview()
         }
     }
     

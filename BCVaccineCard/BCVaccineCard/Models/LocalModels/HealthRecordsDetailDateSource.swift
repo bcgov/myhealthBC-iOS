@@ -13,6 +13,7 @@ struct HealthRecordsDetailDataSource {
             case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
             case covidTestResultRecord(model: TestResult)
             case medication(model: Perscription)
+            case laboratoryOrder(model: [LaboratoryTest])
         }
         let id: String
         let name: String
@@ -26,6 +27,7 @@ struct HealthRecordsDetailDataSource {
         case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
         case covidTestResultRecord(model: CovidLabTestResult)
         case medication(model: Perscription)
+        case laboratoryOrder(model: LaboratoryOrder)
     }
     
     let id: String?
@@ -48,6 +50,8 @@ struct HealthRecordsDetailDataSource {
             return records.first(where: {$0.id == record.id})
         case .medication(model: let model):
             return records.first
+        case .laboratoryOrder(model: let model):
+            return records.first
         }
     }
     
@@ -58,6 +62,8 @@ struct HealthRecordsDetailDataSource {
         case .covidTestResultRecord(let model):
             return model.authenticated
         case .medication(model: let model):
+            return model.authenticated
+        case .laboratoryOrder(model: let model):
             return model.authenticated
         }
     }
@@ -94,6 +100,14 @@ struct HealthRecordsDetailDataSource {
             image = UIImage(named: "blue-bg-medication-record-icon")
             deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary
             deleteAlertMessage = "Shouldn't see this" // Showing these values for testing purposes
+        case .laboratoryOrder(model: let model):
+            id = model.id
+            title = "Lab Test"
+            detailNavTitle = "Lab test"
+            name = model.patient?.name ?? ""
+            image = UIImage(named: "blue-bg-laboratory-record-icon")
+            deleteAlertTitle = "N/A" // Can't delete an authenticated lab result
+            deleteAlertMessage = "Should not see this" // Showing for testing purposes
         }
     }
 }
@@ -114,6 +128,10 @@ extension HealthRecordsDetailDataSource {
             return result
         case .medication(model: let model):
             result.append(genRecord(prescription: model))
+            return result
+        case .laboratoryOrder(model: let model):
+            let labTests = model.labTests
+            result.append(genRecord(labTests: labTests))
             return result
         }
     }
@@ -220,6 +238,33 @@ extension HealthRecordsDetailDataSource {
         // Notes:
         /// Unsure about status field - this is what it appears to be in designs though
         return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.medication?.genericName, date: dateString, fields: fields)
+    }
+    
+    // MARK: Lab Orders
+    private static func genRecord(labTests: [LaboratoryTest]) -> Record {
+        let labOrder = labTests.first?.laboratoryOrder
+        let dateString = labOrder?.collectionDateTime?.monthDayYearString
+        var fields: [[TextListModel]] = []
+        
+        fields.append([
+            TextListModel(header: TextListModel.TextProperties(text: "Collection date:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.collectionDateTime?.labOrderDateTime ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Ordering provider:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.orderingProvider ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Reporting Lab:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.commonName ?? "", bolded: false))
+        ])
+        for (index, test) in labTests.enumerated() {
+            var section: [TextListModel] = [
+                // Note: Unsure what value is used for test name
+                TextListModel(header: TextListModel.TextProperties(text: "Test name:", bolded: true), subtext: TextListModel.TextProperties(text: test.batteryType ?? "", bolded: false)),
+                TextListModel(header: TextListModel.TextProperties(text: "Result:", bolded: true), subtext: TextListModel.TextProperties(text: test.outOfRange ? "Out of Range" : "In Range", bolded: false, textColor: test.outOfRange ? .red : .green)),
+                TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: test.testStatus ?? "", bolded: false))
+            ]
+            if index == 0 {
+                section.insert(TextListModel(header: TextListModel.TextProperties(text: "Test summary", bolded: true), subtext: nil), at: 0)
+            }
+            fields.append(section)
+        }
+        
+        return Record(id: labOrder?.id ?? UUID().uuidString, name: labOrder?.patient?.name ?? "", type: .laboratoryOrder(model: labTests), status: "\(labOrder?.laboratoryTests?.count ?? 0) tests", date: dateString, fields: fields)
     }
 }
 

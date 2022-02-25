@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol StorageTestResultManager {
+protocol StorageCovidTestResultManager {
     
     // MARK: Store
     /// Store a Test results for given patient
@@ -16,7 +16,7 @@ protocol StorageTestResultManager {
     ///   - gateWayResponse: gateway response
     ///   - authenticated: Indicating if this record is for an authenticated user
     /// - Returns: stored object
-    func storeTestResults(
+    func storeCovidTestResults(
         patient: Patient,
         gateWayResponse: GatewayTestResultResponse,
         authenticated: Bool
@@ -24,7 +24,7 @@ protocol StorageTestResultManager {
     
     /// Store a single test result
     /// - Returns: String id of record if stored successfully
-    func storeTestResult(
+    func storeCovidTestResult(
         resultId: String,
         patientDisplayName: String?,
         lab: String?,
@@ -42,26 +42,26 @@ protocol StorageTestResultManager {
     // MARK: Update
     /// Update a test result from a HealthGateway response
     /// - Parameter gateWayResponse: codable response object from Health Gateway
-    func updateTestResult(
+    func updateCovidTestResult(
         gateWayResponse: GatewayTestResultResponse,
         completion: @escaping(CovidLabTestResult?)->Void)
     
     // MARK: Delete
     /// delete a test result for given id
     /// - Parameter id: id of record (not reportId).
-    func deleteTestResult(id: String, sendDeleteEvent: Bool)
+    func deleteCovidTestResult(id: String, sendDeleteEvent: Bool)
     
     // MARK: Fetch
-    func fetchTestResults() -> [CovidLabTestResult]
-    func fetchTestResult(id: String) -> CovidLabTestResult?
+    func fetchCovidTestResults() -> [CovidLabTestResult]
+    func fetchCovidTestResult(id: String) -> CovidLabTestResult?
 }
 
 
-extension StorageService: StorageTestResultManager {
+extension StorageService: StorageCovidTestResultManager {
     // MARK: Store
-    public func storeTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool) -> CovidLabTestResult? {
+    public func storeCovidTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool) -> CovidLabTestResult? {
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
-        deleteTestResult(id: id, sendDeleteEvent: false)
+        deleteCovidTestResult(id: id, sendDeleteEvent: false)
         guard let context = managedContext else {return nil}
         let model = CovidLabTestResult(context: context)
         model.patient = patient
@@ -75,7 +75,7 @@ extension StorageService: StorageTestResultManager {
             // FIXME: Remove the next two lines once we decide on how we are going to handle the new authenticated test result core data model
             let collectionDateTime = record.collectionDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.collectionDateTime ?? "")
             let resultDateTime = record.resultDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.resultDateTime ?? "")
-            if let resultModel = storeTestResult(
+            if let resultModel = storeCovidTestResult(
                 resultId: id,
                 patientDisplayName: record.patientDisplayName,
                 lab: record.lab,
@@ -105,7 +105,7 @@ extension StorageService: StorageTestResultManager {
         }
     }
     
-    internal func storeTestResult(
+    internal func storeCovidTestResult(
         resultId: String,
         patientDisplayName: String?,
         lab: String?,
@@ -147,7 +147,7 @@ extension StorageService: StorageTestResultManager {
     
     
     // MARK: Update
-    func updateTestResult(gateWayResponse: GatewayTestResultResponse, completion: @escaping(CovidLabTestResult?)->Void) {
+    func updateCovidTestResult(gateWayResponse: GatewayTestResultResponse, completion: @escaping(CovidLabTestResult?)->Void) {
         guard
             let existing = findExistingResult(gateWayResponse: gateWayResponse),
             let existingId = existing.id,
@@ -157,9 +157,9 @@ extension StorageService: StorageTestResultManager {
         let authStatus = existing.authenticated
         
         // Delete existing
-        deleteTestResult(id: existingId, sendDeleteEvent: false)
+        deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
         // Store the new one.
-        if let object = storeTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus) {
+        if let object = storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus) {
             notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
             return completion(object)
         }
@@ -168,8 +168,8 @@ extension StorageService: StorageTestResultManager {
     }
     
     // MARK: Delete
-    func deleteTestResult(id: String, sendDeleteEvent: Bool) {
-        guard let object = fetchTestResult(id: id) else {return}
+    func deleteCovidTestResult(id: String, sendDeleteEvent: Bool) {
+        guard let object = fetchCovidTestResult(id: id) else {return}
         delete(object: object)
         if sendDeleteEvent {
             notify(event: StorageEvent(event: .Delete, entity: .CovidLabTestResult, object: object))
@@ -177,7 +177,7 @@ extension StorageService: StorageTestResultManager {
     }
     
     // MARK: Fetch
-    func fetchTestResults() -> [CovidLabTestResult] {
+    func fetchCovidTestResults() -> [CovidLabTestResult] {
         guard let context = managedContext else {return []}
         do {
             let patients = try context.fetch(Patient.fetchRequest())
@@ -189,7 +189,7 @@ extension StorageService: StorageTestResultManager {
         }
     }
     
-    func fetchTestResult(id: String) -> CovidLabTestResult? {
+    func fetchCovidTestResult(id: String) -> CovidLabTestResult? {
         guard let context = managedContext else {return nil}
         do {
             let tests = try context.fetch(CovidLabTestResult.fetchRequest())
@@ -201,16 +201,16 @@ extension StorageService: StorageTestResultManager {
     }
     
     // MARK: Hekpers
-    func testExists(from gateWayResponse: GatewayTestResultResponse) -> Bool {
+    func covidTestExists(from gateWayResponse: GatewayTestResultResponse) -> Bool {
         guard let id = gateWayResponse.md5Hash() else {return false}
-        return !fetchTestResults().filter({$0.id == id}).isEmpty
+        return !fetchCovidTestResults().filter({$0.id == id}).isEmpty
     }
     
     /// Find the stored test record that is likely the one from the response:
     /// - Parameter gateWayResponse: gateway test result response
     /// - Returns: Stored CovidLabTestResult object that matches the response
     func findExistingResult(gateWayResponse: GatewayTestResultResponse) -> CovidLabTestResult? {
-        let tests = fetchTestResults()
+        let tests = fetchCovidTestResults()
         guard let responseTestIds = gateWayResponse.resourcePayload?.records.map({$0.reportId}) else {
             return nil
         }

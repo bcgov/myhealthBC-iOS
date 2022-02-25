@@ -17,9 +17,10 @@ struct HealthRecordsDataSource {
 
 struct HealthRecord {
     public enum Record {
-        case Test(CovidLabTestResult)
+        case CovidTest(CovidLabTestResult)
         case CovidImmunization(VaccineCard)
         case Medication(Perscription)
+        case LaboratoryOrder(LaboratoryOrder)
     }
     
     public let type: Record
@@ -30,7 +31,7 @@ struct HealthRecord {
     init(type: HealthRecord.Record) {
         self.type = type
         switch type {
-        case .Test(let test):
+        case .CovidTest(let test):
             let results = test.resultArray
             patient = test.patient!
             birthDate = test.patient?.birthday
@@ -48,6 +49,10 @@ struct HealthRecord {
             patient = prescription.patient!
             patientName = prescription.patient?.name ?? ""
             birthDate = prescription.patient?.birthday
+        case .LaboratoryOrder(let labOrder):
+            patient = labOrder.patient!
+            patientName = patient.name ?? ""
+            birthDate = patient.birthday
         }
     }
 }
@@ -60,24 +65,28 @@ extension HealthRecord {
     /// - Returns: Detail Data Source
     func detailDataSource() -> HealthRecordsDetailDataSource? {
         switch type {
-        case .Test(let test):
+        case .CovidTest(let test):
             return HealthRecordsDetailDataSource(type: .covidTestResultRecord(model: test))
         case .CovidImmunization(let covidImmunization):
             guard let model = covidImmunization.toLocal() else {return nil}
             return HealthRecordsDetailDataSource(type: .covidImmunizationRecord(model: model, immunizations: covidImmunization.immunizations))
         case .Medication(let prescription):
             return HealthRecordsDetailDataSource(type: .medication(model: prescription))
+        case .LaboratoryOrder(let labOrder):
+            return HealthRecordsDetailDataSource(type: .laboratoryOrder(model: labOrder))
         }
     }
     
     var isAuthenticated: Bool {
         switch type {
-        case .Test(let test):
+        case .CovidTest(let test):
             return test.authenticated
         case .CovidImmunization(let covidImmunization):
             return covidImmunization.authenticated
         case .Medication(let prescription):
             return prescription.authenticated
+        case .LaboratoryOrder(let labOrder):
+            return labOrder.authenticated
         }
     }
 }
@@ -113,6 +122,8 @@ extension Array where Element == HealthRecord {
                 firstDate = model.mainResult?.resultDateTime
             case .medication(model: let model):
                 firstDate = model.dispensedDate
+            case .laboratoryOrder(model: let model):
+                firstDate = model.collectionDateTime
             }
             switch second.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
@@ -121,6 +132,8 @@ extension Array where Element == HealthRecord {
                 secondDate = model.mainResult?.resultDateTime
             case .medication(model: let model):
                 secondDate = model.dispensedDate
+            case .laboratoryOrder(model: let model):
+                secondDate = model.collectionDateTime
             }
             return firstDate ?? Date() > secondDate ?? Date()
         })
@@ -129,7 +142,7 @@ extension Array where Element == HealthRecord {
     func fetchDetailDataSourceWithID(id: String, recordType: GetRecordsView.RecordType) -> HealthRecordsDetailDataSource? {
         if let index = self.firstIndex(where: { record in
             switch record.type {
-            case .Test(let testResult):
+            case .CovidTest(let testResult):
                 if recordType == .covidTestResult {
                     return testResult.id == id
                 }
@@ -142,6 +155,11 @@ extension Array where Element == HealthRecord {
             case .Medication(let prescription):
                 if recordType == .medication {
                     return prescription.id == id
+                }
+                return false
+            case .LaboratoryOrder(let labOrder):
+                if recordType == .laboratoryOrder {
+                    return labOrder.id == id
                 }
                 return false
             }

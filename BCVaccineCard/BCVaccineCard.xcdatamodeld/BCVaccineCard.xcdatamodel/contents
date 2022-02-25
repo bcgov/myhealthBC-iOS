@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21A559" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CovidLabTestResult" representedClassName="CovidLabTestResult" syncable="YES">
         <attribute name="authenticated" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -13,6 +13,28 @@
         <attribute name="provider" optional="YES" attributeType="String"/>
         <attribute name="snomed" optional="YES" attributeType="String"/>
         <relationship name="vaccineCard" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="immunizationRecord" inverseEntity="VaccineCard"/>
+    </entity>
+    <entity name="LaboratoryOrder" representedClassName="LaboratoryOrder" syncable="YES">
+        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="collectionDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="commonName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="laboratoryReportID" optional="YES" attributeType="String"/>
+        <attribute name="orderingProvider" optional="YES" attributeType="String"/>
+        <attribute name="reportAvailable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="reportID" optional="YES" attributeType="String"/>
+        <attribute name="reportingSource" optional="YES" attributeType="String"/>
+        <attribute name="testStatus" optional="YES" attributeType="String"/>
+        <relationship name="laboratoryTests" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LaboratoryTest" inverseName="laboratoryOrder" inverseEntity="LaboratoryTest"/>
+        <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="laboratoryOrders" inverseEntity="Patient"/>
+    </entity>
+    <entity name="LaboratoryTest" representedClassName="LaboratoryTest" syncable="YES">
+        <attribute name="batteryType" optional="YES" attributeType="String"/>
+        <attribute name="loinc" optional="YES" attributeType="String"/>
+        <attribute name="obxID" optional="YES" attributeType="String"/>
+        <attribute name="outOfRange" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="testStatus" optional="YES" attributeType="String"/>
+        <relationship name="laboratoryOrder" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="LaboratoryOrder" inverseName="laboratoryTests" inverseEntity="LaboratoryOrder"/>
     </entity>
     <entity name="Medication" representedClassName="Medication" syncable="YES">
         <attribute name="brandName" optional="YES" attributeType="String"/>
@@ -32,6 +54,7 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
+        <relationship name="laboratoryOrders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LaboratoryOrder" inverseName="patient" inverseEntity="LaboratoryOrder"/>
         <relationship name="prescriptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Perscription" inverseName="patient" inverseEntity="Perscription"/>
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="patient" inverseEntity="VaccineCard"/>
     </entity>
@@ -91,8 +114,10 @@
     <elements>
         <element name="CovidLabTestResult" positionX="70.65234375" positionY="497.984375" width="128" height="104"/>
         <element name="ImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="104"/>
+        <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="209"/>
+        <element name="LaboratoryTest" positionX="171" positionY="405" width="128" height="119"/>
         <element name="Medication" positionX="180" positionY="414" width="128" height="194"/>
-        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="119"/>
+        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="134"/>
         <element name="Perscription" positionX="162" positionY="396" width="128" height="194"/>
         <element name="Pharmacy" positionX="171" positionY="405" width="128" height="179"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
