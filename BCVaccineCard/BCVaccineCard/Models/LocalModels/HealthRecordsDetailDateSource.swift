@@ -249,13 +249,13 @@ extension HealthRecordsDetailDataSource {
         fields.append([
             TextListModel(header: TextListModel.TextProperties(text: "Collection date:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.collectionDateTime?.labOrderDateTime ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Ordering provider:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.orderingProvider ?? "", bolded: false)),
-            TextListModel(header: TextListModel.TextProperties(text: "Reporting Lab:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.commonName ?? "", bolded: false))
+            TextListModel(header: TextListModel.TextProperties(text: "Reporting Lab:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.reportingSource ?? "", bolded: false))
         ])
         for (index, test) in labTests.enumerated() {
+            let resultTuple = formatResultField(test: test)
             var section: [TextListModel] = [
-                // Note: Unsure what value is used for test name
                 TextListModel(header: TextListModel.TextProperties(text: "Test name:", bolded: true), subtext: TextListModel.TextProperties(text: test.batteryType ?? "", bolded: false)),
-                TextListModel(header: TextListModel.TextProperties(text: "Result:", bolded: true), subtext: TextListModel.TextProperties(text: test.outOfRange ? "Out of Range" : "In Range", bolded: false, textColor: test.outOfRange ? .red : .green)),
+                TextListModel(header: TextListModel.TextProperties(text: "Result:", bolded: true), subtext: TextListModel.TextProperties(text: resultTuple.text, bolded: resultTuple.bolded, textColor: resultTuple.color)),
                 TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: test.testStatus ?? "", bolded: false))
             ]
             if index == 0 {
@@ -265,6 +265,16 @@ extension HealthRecordsDetailDataSource {
         }
         
         return Record(id: labOrder?.id ?? UUID().uuidString, name: labOrder?.patient?.name ?? "", type: .laboratoryOrder(model: labTests), status: "\(labOrder?.laboratoryTests?.count ?? 0) tests", date: dateString, fields: fields)
+    }
+    
+    private static func formatResultField(test: LaboratoryTest) -> (text: String, color: TextListModel.TextProperties.CodableColors, bolded: Bool) {
+        if test.testStatus == "Partial" || test.testStatus == "Cancelled" {
+            return ("Pending", .black, false)
+        } else {
+            let text = test.outOfRange ? "Out of Range" : "In Range"
+            let color: TextListModel.TextProperties.CodableColors = test.outOfRange ? .red : .green
+            return (text, color, true)
+        }
     }
 }
 
