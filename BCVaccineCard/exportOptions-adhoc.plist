@@ -15,5 +15,7 @@
 	<string>TCH45SXZ69</string>
 	<key>uploadSymbols</key>
 	<true/>
+	<key>thinning</key>
+	<string>&lt;thin-for-all-variants&gt;</string>
 </dict>
 </plist>
