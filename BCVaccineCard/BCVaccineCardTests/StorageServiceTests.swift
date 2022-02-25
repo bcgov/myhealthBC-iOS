@@ -327,7 +327,7 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(record?.patient.birthday, patient.birthday)
     }
     
-    func testStoreAndFetchPrescription() {
+    func testStoreFetchAndDeletePrescription() {
         // given
         let prescriptionIdentifier = "123"
         let prescriptionStatus = ""
@@ -360,7 +360,8 @@ class StorageServiceTests: XCTestCase {
         }
         _ = storageService.storePrescription(patient: patient, object: medicationObject)
         // when fetching porescription by id
-        let prescription = storageService.fetchPrescription(id: medicationObject.md5Hash()!)
+        let id = medicationObject.md5Hash()!
+        let prescription = storageService.fetchPrescription(id: id)
         // then
         XCTAssertEqual(prescription?.prescriptionIdentifier, prescriptionIdentifier)
         XCTAssertEqual(prescription?.status, prescriptionStatus)
@@ -388,9 +389,12 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(prescription?.patient?.name, patient.name)
         XCTAssertEqual(prescription?.patient?.phn, patient.phn)
         XCTAssertEqual(prescription?.patient?.birthday, patient.birthday)
+        // when deleting prescription
+        storageService.deletePrescription(id: id, sendDeleteEvent: false)
+        XCTAssertTrue(storageService.fetchPrescriptions().isEmpty)
     }
     
-    func testStoreAndFetchPharmacy() {
+    func testStoreFetchAndDeletePharmacy() {
         // given
         let pharmacyID = " BC033" // pharmacy
         let pharmacyName = "Ph.. Name"
@@ -417,6 +421,40 @@ class StorageServiceTests: XCTestCase {
         XCTAssertEqual(pharmacy?.countryCode, countryCode)
         XCTAssertEqual(pharmacy?.phoneNumber, phoneNumber)
         XCTAssertEqual(pharmacy?.faxNumber, faxNumber)
+        // when deleting Pharmacy
+        storageService.deletePharmacy(id: pharmacyID, sendDeleteEvent: false)
+        XCTAssertNil(storageService.fetchPharmacy(id: pharmacyID))
+    }
+    
+    func testStoringFetchingAndDeletingMedication() {
+        // given
+        let din = "523122"
+        let brandName = "JAMJOOM"
+        let genericName = "GADA"
+        let quantity = 14.0
+        let maxDailyDosage = 3
+        let form = "cream"
+        let manufacturer = "RSD"
+        let strength = "2"
+        let unit = "MG"
+        let isPin = false
+        // when
+        _ = storageService.storeMedication(gateWayResponse: medicationSummary(din: din, brandName: brandName, genericName: genericName, quantity: quantity, maxDailyDosage: maxDailyDosage, form: form, manufacturer: manufacturer, strength: strength, strengthUnit: unit, isPin: isPin))
+        let medication = storageService.fetchMedication(id: din)
+        // then
+        XCTAssertEqual(medication?.din, din)
+        XCTAssertEqual(medication?.brandName, brandName)
+        XCTAssertEqual(medication?.genericName, genericName)
+        XCTAssertEqual(medication?.quantity, quantity)
+        XCTAssertEqual(medication?.maxDailyDosage, Int64(maxDailyDosage))
+        XCTAssertEqual(medication?.form, form)
+        XCTAssertEqual(medication?.manufacturer, manufacturer)
+        XCTAssertEqual(medication?.strength, strength)
+        XCTAssertEqual(medication?.strengthUnit, unit)
+        XCTAssertEqual(medication?.isPin, isPin)
+        // when deleting medication
+        storageService.deleteMedication(id: din, sendDeleteEvent: false)
+        XCTAssertNil(storageService.fetchMedication(id: din))
     }
 }
 
@@ -441,10 +479,14 @@ extension StorageServiceTests {
         return GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: 1, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
     }
     
-    func medicationObject(prescriptionIdentifier: String? = nil, prescriptionStatus: String? = nil, dispensedDate: String? = nil, practitionerSurname: String? = nil, directions: String? = nil, dateEntered: String? = nil, pharmacyID: String? = nil, din: String? = nil, brandName: String? = nil, genericName: String? = nil, quantity: Double? = nil, maxDailyDosage: Int? = nil, drugDiscontinuedDate: String? = nil, form: String? = nil, manufacturer: String? = nil, strength: String? = nil, strengthUnit: String? = nil, pharmacyName: String? = nil, addressLine1: String? = nil, addressLine2: String? = nil, city: String? = nil, province: String? = nil, countryCode: String? = nil, phone: String? = nil, fax: String? = nil) -> BCVaccineCard.AuthenticatedMedicationStatementResponseObject.ResourcePayload {
-        let medicationSummary = AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary(din: din, brandName: brandName, genericName: genericName, quantity: quantity, maxDailyDosage: maxDailyDosage, drugDiscontinuedDate: drugDiscontinuedDate, form: form, manufacturer: manufacturer, strength: strength, strengthUnit: strengthUnit, isPin: nil)
+    func medicationObject(prescriptionIdentifier: String? = nil, prescriptionStatus: String? = nil, dispensedDate: String? = nil, practitionerSurname: String? = nil, directions: String? = nil, dateEntered: String? = nil, pharmacyID: String? = nil, din: String? = nil, brandName: String? = nil, genericName: String? = nil, quantity: Double? = nil, maxDailyDosage: Int? = nil, drugDiscontinuedDate: String? = nil, form: String? = nil, manufacturer: String? = nil, strength: String? = nil, strengthUnit: String? = nil, isPin: Bool? = nil, pharmacyName: String? = nil, addressLine1: String? = nil, addressLine2: String? = nil, city: String? = nil, province: String? = nil, countryCode: String? = nil, phone: String? = nil, fax: String? = nil) -> BCVaccineCard.AuthenticatedMedicationStatementResponseObject.ResourcePayload {
+        let medicationSummary = self.medicationSummary(din: din, brandName: brandName, genericName: genericName, quantity: quantity, maxDailyDosage: maxDailyDosage, drugDiscontinuedDate: drugDiscontinuedDate, form: form, manufacturer: manufacturer, strength: strength, strengthUnit: strengthUnit, isPin: isPin)
         let dispensingPharmacy = self.pharmacyObject(pharmacyID: pharmacyID, pharmacyName: pharmacyName, addressLine1: addressLine1, addressLine2: addressLine2, city: city, province: province, postalCode: nil, countryCode: countryCode, phone: phone, fax: fax)
         return AuthenticatedMedicationStatementResponseObject.ResourcePayload.init(prescriptionIdentifier: prescriptionIdentifier, prescriptionStatus: prescriptionStatus, dispensedDate: dispensedDate, practitionerSurname: practitionerSurname, directions: directions, dateEntered: dateEntered, pharmacyID: pharmacyID, medicationSummary: medicationSummary, dispensingPharmacy: dispensingPharmacy)
+    }
+    
+    func medicationSummary(din: String? = nil, brandName: String? = nil, genericName: String? = nil, quantity: Double? = nil, maxDailyDosage: Int? = nil, drugDiscontinuedDate: String? = nil, form: String? = nil, manufacturer: String? = nil, strength: String? = nil, strengthUnit: String? = nil, isPin: Bool? = nil) -> AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary{
+        return AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary(din: din, brandName: brandName, genericName: genericName, quantity: quantity, maxDailyDosage: maxDailyDosage, drugDiscontinuedDate: drugDiscontinuedDate, form: form, manufacturer: manufacturer, strength: strength, strengthUnit: strengthUnit, isPin: isPin)
     }
     
     func pharmacyObject(pharmacyID: String? = nil, pharmacyName: String? = nil, addressLine1: String? = nil, addressLine2: String? = nil, city: String? = nil, province: String? = nil, postalCode: String? = nil, countryCode: String? = nil, phone: String? = nil, fax: String? = nil) -> BCVaccineCard.AuthenticatedMedicationStatementResponseObject.ResourcePayload.DispensingPharmacy {
