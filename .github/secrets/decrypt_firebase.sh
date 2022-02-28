@@ -3,7 +3,7 @@
 set -eo pipefail
 
 gpg --quiet --batch --yes --decrypt --passphrase="$FW_KEYS" --output ./.github/secrets/dist.p12 ./.github/secrets/dist.p12.gpg
-gpg --quiet --batch --yes --decrypt --passphrase="$FIREBASE_PROVISIONING" --output ./.github/secrets/prov2.mobileprovision ./.github/secrets/ClientVaccineCardADHOC.mobileprovision.gpg
+gpg --quiet --batch --yes --decrypt --passphrase="$FW_KEYS" --output ./.github/secrets/prov2.mobileprovision ./.github/secrets/ClientVaccineCardADHOC.mobileprovision.gpg
 
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
