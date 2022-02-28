@@ -15,7 +15,6 @@ jobs:
       - name: Setup provisioning profile
         env:
           FW_KEYS: ${{ secrets.FW_KEYS }}
-          FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
         run: ./.github/secrets/decrypt_firebase.sh
       - name: Archiving project
         env:
