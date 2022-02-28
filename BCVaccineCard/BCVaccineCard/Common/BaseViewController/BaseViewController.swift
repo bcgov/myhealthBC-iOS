@@ -76,3 +76,9 @@ extension BaseViewController {
     }
 }
 
+// MARK: This is used to let the settings screen know that it should reload table view (viewDidAppear not called when auth is complete from settings screen)
+extension BaseViewController {
+    func postAuthChangedSettingsReloadRequired() {
+        NotificationCenter.default.post(name: .settingsTableViewReload, object: nil, userInfo: nil)
+    }
+}
