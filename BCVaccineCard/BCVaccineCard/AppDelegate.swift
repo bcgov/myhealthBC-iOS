@@ -33,7 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
 #elseif DEV
         BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
-        //        FirebaseApp.configure()
 #endif
         AnalyticsService.shared.setup()
         setupRootViewController()
