@@ -27,5 +27,5 @@ jobs:
         run: ./.github/scripts/build.sh
       - name: Building Prod
         env:
-        PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
         run: ./.github/scripts/build_prod.sh
