@@ -7,23 +7,23 @@ jobs:
   deploy:
     name: Deploying to Firebase
     runs-on: macOS-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
       - name: Install gpg
         run: brew install gnupg
-      - name: Setup provisioning profile
+      - name: Setup profiles and certs
         env:
           FW_KEYS: ${{ secrets.FW_KEYS }}
         run: ./.github/secrets/decrypt_firebase.sh
-      - name: Archiving project
+      - name: Archive project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
         run: ./.github/scripts/archive_adhoc.sh
-      - name: Exporting .ipa
+      - name: Export .ipa
         run: ./.github/scripts/export_adhoc_ipa.sh
-      - name: Uploading .ipa
+      - name: Upload .ipa to firebase
         if: success()
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
