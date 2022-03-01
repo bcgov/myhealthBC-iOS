@@ -456,6 +456,41 @@ class StorageServiceTests: XCTestCase {
         storageService.deleteMedication(id: din, sendDeleteEvent: false)
         XCTAssertNil(storageService.fetchMedication(id: din))
     }
+    
+    func testStoreFetchAndDeleteLaboratoryOrder() {
+        // given
+        let source = "Vancouver Coastal Health"
+        let collectionDate = "2021-07-20T00:00:00"
+        let commonName = "Lab Test"
+        let provider = "DREVOR"
+        let status = "Not Set"
+        let batteryType = "Some type"
+        let obxID = "341L85ALT"
+        let outOfRange = false
+        let loinc = "XCA01592-5"
+        let orders = laboratoryOrders(source: source, collectionDateTime: collectionDate, commonName: commonName, orderingProvider: provider, testStatus: status, batteryType: batteryType, obxID: obxID, outOfRange: outOfRange, loinc: loinc)
+        // when storing and fetching
+        guard let patient = storePatient() else {
+            XCTFail()
+            return
+        }
+        _ = storageService.storeLaboratoryOrder(patient: patient, gateWayObject: orders)
+        let laboratoryOrder = storageService.fetchLaboratoryOrders().first!
+        let labTest = laboratoryOrder.labTests.first!
+        // then
+        XCTAssertEqual(laboratoryOrder.reportingSource, source)
+        XCTAssertEqual(laboratoryOrder.collectionDateTime?.yearMonthDayString, "2021-07-20")
+        XCTAssertEqual(laboratoryOrder.commonName, commonName)
+        XCTAssertEqual(laboratoryOrder.orderingProvider, provider)
+        XCTAssertFalse(laboratoryOrder.labTests.isEmpty)
+        XCTAssertEqual(labTest.batteryType, batteryType)
+        XCTAssertEqual(labTest.obxID, obxID)
+        XCTAssertEqual(labTest.outOfRange, outOfRange)
+        XCTAssertEqual(labTest.loinc, loinc)
+        // when deleting laboratory order
+        storageService.deleteLaboratoryOrder(id: laboratoryOrder.id!, sendDeleteEvent: false)
+        XCTAssertEqual(storageService.fetchLaboratoryOrders().count, 0)
+    }
 }
 
 extension StorageServiceTests {
@@ -487,6 +522,11 @@ extension StorageServiceTests {
     
     func medicationSummary(din: String? = nil, brandName: String? = nil, genericName: String? = nil, quantity: Double? = nil, maxDailyDosage: Int? = nil, drugDiscontinuedDate: String? = nil, form: String? = nil, manufacturer: String? = nil, strength: String? = nil, strengthUnit: String? = nil, isPin: Bool? = nil) -> AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary{
         return AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary(din: din, brandName: brandName, genericName: genericName, quantity: quantity, maxDailyDosage: maxDailyDosage, drugDiscontinuedDate: drugDiscontinuedDate, form: form, manufacturer: manufacturer, strength: strength, strengthUnit: strengthUnit, isPin: isPin)
+    }
+    
+    func laboratoryOrders(reportID: String? = nil, source: String? = nil, collectionDateTime: String? = nil, commonName: String? = nil, orderingProvider: String? = nil, testStatus: String? = nil, reportAvailable: Bool = true, batteryType: String? = nil, obxID: String? = nil, outOfRange: Bool = true, loinc: String? = nil) -> AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order {
+        let laboratoryTest = AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order.LaboratoryTest.init(batteryType: batteryType, obxID: obxID, outOfRange: outOfRange, loinc: loinc, testStatus: testStatus)
+        return AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order(laboratoryReportID: reportID, reportingSource: source, reportID: reportID, collectionDateTime: collectionDateTime, commonName: commonName, orderingProvider: orderingProvider, testStatus: testStatus, reportAvailable: reportAvailable, laboratoryTests: [laboratoryTest])
     }
     
     func pharmacyObject(pharmacyID: String? = nil, pharmacyName: String? = nil, addressLine1: String? = nil, addressLine2: String? = nil, city: String? = nil, province: String? = nil, postalCode: String? = nil, countryCode: String? = nil, phone: String? = nil, fax: String? = nil) -> BCVaccineCard.AuthenticatedMedicationStatementResponseObject.ResourcePayload.DispensingPharmacy {
