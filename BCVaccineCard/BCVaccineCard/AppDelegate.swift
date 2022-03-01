@@ -39,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupRootViewController()
         authManager = AuthManager()
         authManager?.initTokenExpieryTimer()
+        authManager?.checkAuthTokenExpiry()
         listenToAppState()
         localAuthManager = LocalAuthManager()
         localAuthManager?.listenToAppLaunch()

@@ -181,6 +181,32 @@ class AuthManager {
         }
     }
     
+    private func refetchAuthToken() {
+        discoverConfiguration { result in
+            guard let configuration = result, let refreshToken = self.refreshToken else { return }
+
+            let request = OIDTokenRequest(configuration: configuration,
+                                          grantType: OIDGrantTypeRefreshToken,
+                                          authorizationCode: nil,
+                                          redirectURL: nil,
+                                          clientID: Constants.Auth.clientID,
+                                          clientSecret: nil,
+                                          scope: nil,
+                                          refreshToken: refreshToken,
+                                          codeVerifier: nil,
+                                          additionalParameters: nil)
+
+            LocalAuthManager.block = true
+            OIDAuthorizationService.perform(request) { tokenResponse, error in
+                if let tokenResponse = tokenResponse {
+                    self.store(tokenResponse: tokenResponse)
+                } else {
+                    print("Refetch error: \(error?.localizedDescription ?? "Unknown error")")
+                }
+            }
+        }
+    }
+    
     private func discoverConfiguration(completion: @escaping(OIDServiceConfiguration?)->Void) {
         guard let issuer = URL(string: Constants.Auth.issuer) else {
             return completion(nil)
@@ -201,11 +227,12 @@ class AuthManager {
     private func store(state: OIDAuthState) {
         guard state.isAuthorized else { return }
         if let authToken = state.lastTokenResponse?.accessToken {
-            let previousToken = self.authToken
+            // Check - we likely don't need this here, commenting out for now
+//            let previousToken = self.authToken
             store(string: authToken, for: .authToken)
-            if previousToken != nil {
-                postRefetchNotification()
-            }
+//            if previousToken != nil {
+//                postRefetchNotification()
+//            }
         }
         
         if let refreshToken = state.lastTokenResponse?.refreshToken {
@@ -217,6 +244,28 @@ class AuthManager {
         }
         
         if let idToken = state.lastTokenResponse?.idToken {
+            store(string: idToken, for: .idToken)
+        }
+    }
+    
+    private func store(tokenResponse: OIDTokenResponse) {
+        if let authToken = tokenResponse.accessToken {
+            let previousToken = self.authToken
+            store(string: authToken, for: .authToken)
+            if previousToken != nil {
+                postRefetchNotification()
+            }
+        }
+        
+        if let refreshToken = tokenResponse.refreshToken {
+            store(string: refreshToken, for: .refreshToken)
+        }
+        
+        if let expiery = tokenResponse.accessTokenExpirationDate {
+            store(date: expiery, for: .authTokenExpiery)
+        }
+        
+        if let idToken = tokenResponse.idToken {
             store(string: idToken, for: .idToken)
         }
     }
@@ -276,6 +325,19 @@ extension AuthManager {
     }
     @objc func authTokenExpired() {
         NotificationCenter.default.post(name: .authTokenExpired, object: nil)
+        fetchAccessTokenWithRefeshToken()
+    }
+    
+    private func fetchAccessTokenWithRefeshToken() {
+        refetchAuthToken()
+    }
+    
+    // Note: This is called when the app is launched, just in case the access token expired while the app was closed. In this case, the timer wouldn't fire as the time occurred in the past
+    func checkAuthTokenExpiry() {
+        guard let expiry = self.authTokenExpiery else { return }
+        if Date() > expiry {
+            fetchAccessTokenWithRefeshToken()
+        }
     }
     
 }
