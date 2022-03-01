@@ -2,13 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>compileBitcode</key>
-	<false/>
+	<key>signingStyle</key>
+	<string>manual</string>
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>io.freshworks.BCVaccineCard</key>
 		<string>ClientVaccineCard-ADHOC</string>
 	</dict>
+	<key>signingCertificate</key>
+	<string>iPhone Distribution</string>
 	<key>teamID</key>
 	<string>TCH45SXZ69</string>
 	<key>compileBitcode</key>
