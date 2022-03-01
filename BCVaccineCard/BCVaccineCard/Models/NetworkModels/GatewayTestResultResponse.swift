@@ -70,6 +70,8 @@ extension GatewayTestResultResponseRecord {
         case pending = "Pending"
         case final = "Final"
         case statusChange = "StatusChange"
+        case amended = "Amended"
+        case corrected = "Corrected"
     }
     
     enum ResponseOutcomeTypes: String, Codable {
