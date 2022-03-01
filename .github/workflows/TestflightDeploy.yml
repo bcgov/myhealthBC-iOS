@@ -15,7 +15,6 @@ jobs:
       - name: Setup provisioning profile
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
-          FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
         run: ./.github/secrets/decrypt_secrets.sh
       - name: Archiving project
         env:

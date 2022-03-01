@@ -2,8 +2,4 @@
 
 set -eo pipefail
 
-sudo xcodebuild -workspace BCVaccineCard/BCVaccineCard.xcworkspace \
-			-scheme BCVaccineCard \
-			-sdk iphonesimulator \
-			-archivePath $PWD/build/BCVaccineCard.xcarchive \
-			clean archive | xcpretty
+xcodebuild -workspace BCVaccineCard/BCVaccineCard.xcworkspace -scheme BCVaccineCard -sdk iphoneos -configuration AppStoreDistribution archive -archivePath $PWD/build/BCVaccineCard.xcarchive clean archive

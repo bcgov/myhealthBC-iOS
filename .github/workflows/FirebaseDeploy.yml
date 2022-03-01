@@ -14,9 +14,8 @@ jobs:
         run: brew install gnupg
       - name: Setup provisioning profile
         env:
-          IOS_KEYS: ${{ secrets.IOS_KEYS }}
-          FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
-        run: ./.github/secrets/decrypt_secrets.sh
+          FW_KEYS: ${{ secrets.FW_KEYS }}
+        run: ./.github/secrets/decrypt_firebase.sh
       - name: Archiving project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")

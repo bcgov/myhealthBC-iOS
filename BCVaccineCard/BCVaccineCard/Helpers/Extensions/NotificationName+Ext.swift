@@ -21,4 +21,6 @@ extension Notification.Name {
     static let shouldPerformLocalAuth = Notification.Name("shouldPerformLocalAuth")
     
     static let backgroundAuthFetch = Notification.Name("backgroundAuthFetch")
+    
+    static let settingsTableViewReload = Notification.Name("settingsTableViewReload")
 }
