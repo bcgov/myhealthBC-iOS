@@ -182,6 +182,7 @@ class AuthManager {
     }
     
     private func refetchAuthToken() {
+        print("CON AUTH: Refetch token called")
         discoverConfiguration { result in
             guard let configuration = result, let refreshToken = self.refreshToken else { return }
 
@@ -199,9 +200,11 @@ class AuthManager {
             LocalAuthManager.block = true
             OIDAuthorizationService.perform(request) { tokenResponse, error in
                 if let tokenResponse = tokenResponse {
+                    print("CON AUTH: Token response here")
                     self.store(tokenResponse: tokenResponse)
                 } else {
                     print("Refetch error: \(error?.localizedDescription ?? "Unknown error")")
+                    print("CON AUTH: Token response error")
                 }
             }
         }
@@ -249,10 +252,12 @@ class AuthManager {
     }
     
     private func store(tokenResponse: OIDTokenResponse) {
+        print("CON AUTH: Token refetch response called")
         if let authToken = tokenResponse.accessToken {
             let previousToken = self.authToken
             store(string: authToken, for: .authToken)
             if previousToken != nil {
+                print("CON AUTH: Post Refetch")
                 postRefetchNotification()
             }
         }
@@ -325,19 +330,12 @@ extension AuthManager {
     }
     @objc func authTokenExpired() {
         NotificationCenter.default.post(name: .authTokenExpired, object: nil)
+        print("CON AUTH: EXPIRED FROM TIMER")
         fetchAccessTokenWithRefeshToken()
     }
     
     private func fetchAccessTokenWithRefeshToken() {
         refetchAuthToken()
-    }
-    
-    // Note: This is called when the app is launched, just in case the access token expired while the app was closed. In this case, the timer wouldn't fire as the time occurred in the past
-    func checkAuthTokenExpiry() {
-        guard let expiry = self.authTokenExpiery else { return }
-        if Date() > expiry {
-            fetchAccessTokenWithRefeshToken()
-        }
     }
     
 }
@@ -347,6 +345,7 @@ extension AuthManager {
     private func postRefetchNotification() {
         guard let token = self.authToken else { return }
         guard let hdid = self.hdid else { return }
+        print("CON AUTH: background refetch triggered")
         NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
     }
 }
