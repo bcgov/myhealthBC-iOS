@@ -2522,7 +2522,6 @@
 				29736A582788EBD700CCB1D2 /* VaccineCard+CoreDataClass.swift in Sources */,
 				5BA177D527A1A70000D61F2A /* StorageServiceTests.swift in Sources */,
 				5BD38CFE27C7FA9300DC5C7B /* Perscription+CoreDataClass.swift in Sources */,
-				29736A432788EBD700CCB1D2 /* Patient+CoreDataProperties.swift in Sources */,
 				29736A4F2788EBD700CCB1D2 /* ImmunizationRecord+CoreDataProperties.swift in Sources */,
 				29736A552788EBD700CCB1D2 /* Patient+CoreDataClass.swift in Sources */,
 				29736A5B2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift in Sources */,
@@ -2920,7 +2919,7 @@
 				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-ADHOC";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEV;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
