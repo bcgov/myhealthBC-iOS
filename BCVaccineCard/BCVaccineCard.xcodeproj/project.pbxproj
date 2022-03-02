@@ -157,6 +157,7 @@
 		5BA177D227A18CDD00D61F2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */; };
 		5BA177D327A18CDD00D61F2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */; };
 		5BA177D527A1A70000D61F2A /* StorageServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177D427A1A70000D61F2A /* StorageServiceTests.swift */; };
+		5BD38CFE27C7FA9300DC5C7B /* Perscription+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A5B6D327B55B65006A9BA7 /* Perscription+CoreDataClass.swift */; };
 		5E04D95F28DEE00EAF8EF434 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7863DFE68FF701DE75A416C5 /* Pods_BCVaccineCard_BCVaccineCardUITests.framework */; };
 		65401D3CC0C574CAB54EBAA8 /* Pods_BCVaccineCard_Prod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */; };
 		65649CF2147EF54DEEA617D4 /* Pods_BCVaccineCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DF2F1BABD4F59F68F534ADA9 /* Pods_BCVaccineCard.framework */; };
@@ -2520,6 +2521,8 @@
 				5B8BA6FE27BBB7D700250430 /* NetworkLayerTests.swift in Sources */,
 				29736A582788EBD700CCB1D2 /* VaccineCard+CoreDataClass.swift in Sources */,
 				5BA177D527A1A70000D61F2A /* StorageServiceTests.swift in Sources */,
+				5BD38CFE27C7FA9300DC5C7B /* Perscription+CoreDataClass.swift in Sources */,
+				29736A432788EBD700CCB1D2 /* Patient+CoreDataProperties.swift in Sources */,
 				29736A4F2788EBD700CCB1D2 /* ImmunizationRecord+CoreDataProperties.swift in Sources */,
 				29736A552788EBD700CCB1D2 /* Patient+CoreDataClass.swift in Sources */,
 				29736A5B2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift in Sources */,
@@ -2917,7 +2920,7 @@
 				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-ADHOC";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEV;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
