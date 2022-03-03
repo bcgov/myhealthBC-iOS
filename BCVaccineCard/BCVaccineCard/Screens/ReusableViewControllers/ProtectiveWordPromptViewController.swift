@@ -11,13 +11,14 @@ class ProtectiveWordPromptViewController: BaseViewController {
     
     class func constructProtectiveWordPromptViewController() -> ProtectiveWordPromptViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: ProtectiveWordPromptViewController.self)) as? ProtectiveWordPromptViewController {
+            vc.modalPresentationStyle = .overFullScreen
             return vc
         }
         return ProtectiveWordPromptViewController()
     }
     
     @IBOutlet weak private var titleLabel: UILabel!
-    @IBOutlet weak private var subtitleLabel: UITextView!
+    @IBOutlet weak private var attributedSubtitleTextView: UITextView!
     @IBOutlet weak private var textFieldTitle: UILabel!
     @IBOutlet weak private var protectiveWordTextField: UITextField!
     @IBOutlet weak private var continueButton: AppStyleButton!
@@ -37,14 +38,14 @@ class ProtectiveWordPromptViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Putting this here in case user goes to help screen
-        self.tabBarController?.tabBar.isHidden = true
+//        self.tabBarController?.tabBar.isHidden = true
         navSetup()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Note - sometimes tabBarController will be nil due to when it's released in memory
-        self.tabBarController?.tabBar.isHidden = false
+//        self.tabBarController?.tabBar.isHidden = false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -61,7 +62,24 @@ class ProtectiveWordPromptViewController: BaseViewController {
     }
     
     private func uiSetup() {
-        // TODO: setup labels etc here
+        titleLabel.font = UIFont.bcSansBoldWithSize(size: 20)
+        titleLabel.textColor = AppColours.textBlack
+        titleLabel.text = "View your medication records"
+        attributedSubtitleTextView.font = UIFont.bcSansRegularWithSize(size: 15)
+        attributedSubtitleTextView.textColor = AppColours.textBlack
+        let attributedText = NSMutableAttributedString(string: "Please enter the protective word required to access these restricted PharmaNet records. For more information visit protective-word-for-a-pharmanet-record")
+        _ = attributedText.setAsLink(textToFind: "protective-word-for-a-pharmanet-record", linkURL: "http://www.IHaveNoIdeaWhatGoesHere.com")
+        attributedSubtitleTextView.attributedText = attributedText
+        attributedSubtitleTextView.delegate = self
+        attributedSubtitleTextView.isEditable = false
+        attributedSubtitleTextView.isScrollEnabled = false
+        attributedSubtitleTextView.isUserInteractionEnabled = true
+        
+        textFieldTitle.font = UIFont.bcSansBoldWithSize(size: 17)
+        textFieldTitle.textColor = AppColours.textBlack
+        textFieldTitle.text = "Protective Word"
+        protectiveWordTextField.textColor = AppColours.textBlack
+        protectiveWordTextField.delegate = self
     }
     
     private func setupButtons() {
@@ -86,6 +104,25 @@ extension ProtectiveWordPromptViewController {
     }
 }
 
+// MARK: For tapping on link in text view
+extension ProtectiveWordPromptViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        UIApplication.shared.open(URL)
+        return false
+    }
+}
+
+// MARK: For entering protective word in text field
+extension ProtectiveWordPromptViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text, let textRange = Range(range, in: text) {
+            let updatedText = text.replacingCharacters(in: textRange, with: string)
+            continueButtonEnabled = shouldButtonBeEnabled(text: updatedText)
+        }
+        return true
+    }
+}
+
 // MARK: For Button tap and enabling
 extension ProtectiveWordPromptViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
@@ -96,8 +133,8 @@ extension ProtectiveWordPromptViewController: AppStyleButtonDelegate {
         }
     }
     
-    func shouldButtonBeEnabled() -> Bool {
-        return protectiveWordTextField.text?.trimWhiteSpacesAndNewLines.count ?? 0 > 0
+    func shouldButtonBeEnabled(text: String?) -> Bool {
+        return text?.trimWhiteSpacesAndNewLines.count ?? 0 > 0
     }
 
 }
