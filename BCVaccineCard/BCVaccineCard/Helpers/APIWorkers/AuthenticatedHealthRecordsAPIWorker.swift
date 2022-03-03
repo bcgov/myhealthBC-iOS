@@ -14,7 +14,7 @@ protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func showFetchStartedBanner(showBanner: Bool)
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool)
 }
-
+// TODO: Check to see if we will in fact be pulling comments separately, or if they will be a part of the medication statement request. If separate, we should make the request synchronus
 enum AuthenticationFetchType {
     case PatientDetails
     case VaccineCard
