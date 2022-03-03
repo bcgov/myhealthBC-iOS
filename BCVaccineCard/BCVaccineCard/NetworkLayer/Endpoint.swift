@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2021-10-08.
-//
+// https://dev.healthgateway.gov.bc.ca/swagger/index.html
 
 import Foundation
 
@@ -16,30 +16,30 @@ protocol EndpointsAccessor {
     var getAuthenticatedLaboratoryOrders: URL { get }
     func getAuthenticatedPatientDetails(hdid: String) -> URL
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
+    func authenticatedComments(hdid: String) -> URL
 }
 
 struct UrlAccessor {
     #if PROD
-    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
+    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/")!
     #elseif DEV
-    let baseUrl = URL(string: "https://dev.healthgateway.gov.bc.ca/api/")!
-//    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/api/")!
+    let baseUrl = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
     #endif
     
     private var immunizationBaseUrl: URL {
-        return self.baseUrl.appendingPathComponent("immunizationservice")
+        return self.baseUrl.appendingPathComponent("api/immunizationservice")
     }
     
     private var laboratoryServiceBaseURL: URL {
-        return self.baseUrl.appendingPathComponent("laboratoryservice")
+        return self.baseUrl.appendingPathComponent("api/laboratoryservice")
     }
     
     private var patientServiceBaseURL: URL {
-        return self.baseUrl.appendingPathComponent("patientservice")
+        return self.baseUrl.appendingPathComponent("api/patientservice")
     }
     
     private var medicationServiceBaseURL: URL {
-        return self.baseUrl.appendingPathComponent("medicationservice")
+        return self.baseUrl.appendingPathComponent("api/medicationservice")
     }
 
 }
@@ -72,6 +72,10 @@ extension UrlAccessor: EndpointsAccessor {
     
     func getAuthenticatedMedicationStatement(hdid: String) -> URL {
         return self.medicationServiceBaseURL.appendingPathComponent("v1/api/MedicationStatement").appendingPathComponent(hdid)
+    }
+    
+    func authenticatedComments(hdid: String) -> URL {
+        return self.baseUrl.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Comment")
     }
 }
 
