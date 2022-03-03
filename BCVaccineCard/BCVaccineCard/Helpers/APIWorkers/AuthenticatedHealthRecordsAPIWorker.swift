@@ -142,15 +142,15 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
-    private func getAuthenticatedMedicationStatement(authCredentials: AuthenticationRequestObject) {
+    private func getAuthenticatedMedicationStatement(authCredentials: AuthenticationRequestObject, protectiveWord: String? = nil) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedMedicationStatementDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedMedicationStatementDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
-        apiClient.getAuthenticatedMedicationStatement(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+        apiClient.getAuthenticatedMedicationStatement(authCredentials, protectiveWord: protectiveWord, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else { return }
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
                 self.requestDetails.authenticatedMedicationStatementDetails?.queueItToken = queueItToken
-                self.apiClient.getAuthenticatedMedicationStatement(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                self.apiClient.getAuthenticatedMedicationStatement(authCredentials, protectiveWord: protectiveWord, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
                     guard let `self` = self else { return }
                     self.handleMedicationStatementResponse(result: result)
                 }
@@ -274,8 +274,13 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let medicationStatement):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = medicationStatement.resultError?.resultMessage, (medicationStatement.resourcePayload == nil || medicationStatement.resourcePayload?.count == 0) {
-                self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: medicationStatement.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
+            if let resultError = medicationStatement.resultError, (medicationStatement.resourcePayload == nil || medicationStatement.resourcePayload?.count == 0) {
+                if resultError.actionCode == "PROTECTED" {
+                    // TODO: Handle protectedWord logic here
+                    // Will show prompt to add protective word, then will start the request over again
+                } else {
+                    self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: medicationStatement.totalResultCount ?? 0, successfullCount: 0, error: resultError.resultMessage ?? .genericErrorMessage)
+                }
             }
             // NOTE: Currently the response object doesn't have "loaded" property - I could see that changing, so for now added the retry code below and leaving it commented out
 //            else if medicationStatement.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForMedicationStatement, let retryinMS = medicationStatement.resourcePayload?.retryin {
