@@ -178,14 +178,15 @@ extension TestResult {
     ///        - Positive
     ///        - Cancelled
     
-            // So - if the test result is "NotSet" or "Other", and status is pending, then for our purposes, result is pending. If said case but not pending, then indeterminate
     var resultType: CovidTestResult {
         let testOutcomeReduced = self.testOutcome?.removeWhiteSpaceFormatting
         let testStatusReduced = self.testStatus?.removeWhiteSpaceFormatting
         var testOutcome = GatewayTestResultResponseRecord.ResponseOutcomeTypes.init(rawValue: testOutcomeReduced ?? "") ?? .indeterminate
         let testStatus = GatewayTestResultResponseRecord.ResponseStatusTypes.init(rawValue: testStatusReduced ?? "") ?? .pending
-        if testOutcome == .notSet || testOutcome == .other {
-            testOutcome = testStatus == .pending ? .pending : .indeterminate
+        if testStatus == .pending {
+            testOutcome = .pending
+        } else if testOutcome == .notSet || testOutcome == .other {
+            testOutcome = .indeterminate
         }
         let rawValue = testOutcome.rawValue
         return CovidTestResult.init(rawValue: rawValue) ?? .indeterminate
