@@ -118,6 +118,17 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
+    func getAuthenticatedComments(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedCommentResponseObject>) {
+        let url = configureURL(token: token, endpoint: self.endpoints.authenticatedComments(hdid: authCredentials.hdid))
+        
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
+    
 }
 
 // MARK: QUEUEIT Logic here
