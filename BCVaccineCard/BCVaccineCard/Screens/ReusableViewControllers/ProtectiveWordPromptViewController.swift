@@ -18,7 +18,7 @@ class ProtectiveWordPromptViewController: BaseViewController {
     }
     
     @IBOutlet weak private var titleLabel: UILabel!
-    @IBOutlet weak private var attributedSubtitleTextView: UITextView!
+    @IBOutlet weak private var clickableSubtitleLabel: InteractiveLinkLabel!
     @IBOutlet weak private var textFieldTitle: UILabel!
     @IBOutlet weak private var protectiveWordTextField: UITextField!
     @IBOutlet weak private var continueButton: AppStyleButton!
@@ -65,16 +65,11 @@ class ProtectiveWordPromptViewController: BaseViewController {
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 20)
         titleLabel.textColor = AppColours.textBlack
         titleLabel.text = "View your medication records"
-        attributedSubtitleTextView.font = UIFont.bcSansRegularWithSize(size: 15)
-        attributedSubtitleTextView.textColor = AppColours.textBlack
-        let attributedText = NSMutableAttributedString(string: "Please enter the protective word required to access these restricted PharmaNet records. For more information visit protective-word-for-a-pharmanet-record")
-        _ = attributedText.setAsLink(textToFind: "protective-word-for-a-pharmanet-record", linkURL: "http://www.IHaveNoIdeaWhatGoesHere.com")
-        attributedSubtitleTextView.attributedText = attributedText
-        attributedSubtitleTextView.delegate = self
-        attributedSubtitleTextView.isEditable = false
-        attributedSubtitleTextView.isScrollEnabled = false
-        attributedSubtitleTextView.isUserInteractionEnabled = true
-        
+        clickableSubtitleLabel.attributedText = clickableSubtitleLabel.attributedText(withString: "Please enter the protective word required to access these restricted PharmaNet records. For more information visit protective-word-for-a-pharmanet-record",
+                                                                                      linkedStrings: [LinkedStrings(text: "protective-word-for-a-pharmanet-record", link: "http://www.IHaveNoIdeaWhatGoesHere.com")],
+                                                                                      textColor: AppColours.textBlack,
+                                                                                      font: UIFont.bcSansRegularWithSize(size: 15))
+        clickableSubtitleLabel.numberOfLines = 0
         textFieldTitle.font = UIFont.bcSansBoldWithSize(size: 17)
         textFieldTitle.textColor = AppColours.textBlack
         textFieldTitle.text = "Protective Word"
@@ -101,14 +96,6 @@ extension ProtectiveWordPromptViewController {
     
     @objc private func closeIconButton() {
         self.navigationController?.popViewController(animated: true)
-    }
-}
-
-// MARK: For tapping on link in text view
-extension ProtectiveWordPromptViewController: UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        UIApplication.shared.open(URL)
-        return false
     }
 }
 

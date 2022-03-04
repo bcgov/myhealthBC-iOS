@@ -16,9 +16,76 @@
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PcO-l0-Ul0">
+                                <rect key="frame" x="20" y="72" width="374" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hYK-Yj-8os" customClass="InteractiveLinkLabel" customModule="BCVaccineCard" customModuleProvider="target">
+                                <rect key="frame" x="20" y="102.5" width="374" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxp-JE-saz">
+                                <rect key="frame" x="20" y="153" width="374" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L2X-W0-Z24">
+                                <rect key="frame" x="20" y="183.5" width="374" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dz0-mC-Kb9" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                <rect key="frame" x="34" y="762" width="346" height="54"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="QXW-18-lqr"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYb-aQ-fWb" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                <rect key="frame" x="34" y="688" width="346" height="54"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="Hqu-eA-V8N"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="L2X-W0-Z24" firstAttribute="trailing" secondItem="uxp-JE-saz" secondAttribute="trailing" id="01f-oK-Bnz"/>
+                            <constraint firstItem="uxp-JE-saz" firstAttribute="leading" secondItem="hYK-Yj-8os" secondAttribute="leading" id="3GK-SS-DLl"/>
+                            <constraint firstItem="dz0-mC-Kb9" firstAttribute="top" secondItem="SYb-aQ-fWb" secondAttribute="bottom" constant="20" id="Fb3-uc-BF7"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="dz0-mC-Kb9" secondAttribute="bottom" constant="46" id="IFN-49-DWG"/>
+                            <constraint firstItem="hYK-Yj-8os" firstAttribute="top" secondItem="PcO-l0-Ul0" secondAttribute="bottom" constant="10" id="LvT-Pd-q9O"/>
+                            <constraint firstItem="dz0-mC-Kb9" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="34" id="PKT-LE-coh"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="PcO-l0-Ul0" secondAttribute="trailing" constant="20" id="PdM-iv-rpe"/>
+                            <constraint firstItem="hYK-Yj-8os" firstAttribute="trailing" secondItem="PcO-l0-Ul0" secondAttribute="trailing" id="RoI-7Z-PBQ"/>
+                            <constraint firstItem="hYK-Yj-8os" firstAttribute="leading" secondItem="PcO-l0-Ul0" secondAttribute="leading" id="Row-UI-dQ6"/>
+                            <constraint firstItem="SYb-aQ-fWb" firstAttribute="trailing" secondItem="dz0-mC-Kb9" secondAttribute="trailing" id="SVZ-h7-xfp"/>
+                            <constraint firstItem="L2X-W0-Z24" firstAttribute="top" secondItem="uxp-JE-saz" secondAttribute="bottom" constant="10" id="WB9-BX-oml"/>
+                            <constraint firstItem="PcO-l0-Ul0" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="Wj6-Qc-PcE"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dz0-mC-Kb9" secondAttribute="trailing" constant="34" id="WqL-jJ-RDH"/>
+                            <constraint firstItem="SYb-aQ-fWb" firstAttribute="leading" secondItem="dz0-mC-Kb9" secondAttribute="leading" id="ejV-RN-NPX"/>
+                            <constraint firstItem="uxp-JE-saz" firstAttribute="trailing" secondItem="hYK-Yj-8os" secondAttribute="trailing" id="f8C-TT-FNI"/>
+                            <constraint firstItem="uxp-JE-saz" firstAttribute="top" secondItem="hYK-Yj-8os" secondAttribute="bottom" constant="30" id="iLE-VX-iQW"/>
+                            <constraint firstItem="PcO-l0-Ul0" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="28" id="pQN-GG-RNr"/>
+                            <constraint firstItem="L2X-W0-Z24" firstAttribute="leading" secondItem="uxp-JE-saz" secondAttribute="leading" id="qFw-aN-HWi"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="cancelButton" destination="dz0-mC-Kb9" id="QBv-xf-ytn"/>
+                        <outlet property="clickableSubtitleLabel" destination="hYK-Yj-8os" id="ZgY-Oy-4CJ"/>
+                        <outlet property="continueButton" destination="SYb-aQ-fWb" id="hls-wK-YV7"/>
+                        <outlet property="protectiveWordTextField" destination="L2X-W0-Z24" id="mWe-U5-sSE"/>
+                        <outlet property="textFieldTitle" destination="uxp-JE-saz" id="4Rj-Mv-eXl"/>
+                        <outlet property="titleLabel" destination="PcO-l0-Ul0" id="ysF-o4-DuZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
