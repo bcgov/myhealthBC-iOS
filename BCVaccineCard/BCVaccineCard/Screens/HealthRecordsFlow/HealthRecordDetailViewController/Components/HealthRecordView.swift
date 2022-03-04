@@ -16,7 +16,7 @@ extension HealthRecordsDetailDataSource.Record {
         case .covidTestResultRecord:
             return [.Header, .Fields]
         case .medication:
-            return [.Fields]
+            return [.Fields, .Comments]
         case .laboratoryOrder:
             return [.Fields]
         }
@@ -27,6 +27,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     enum CellSection {
         case Header
         case Fields
+        case Comments
     }
     
     private var tableView: UITableView?
@@ -43,6 +44,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.addEqualSizeContraints(to: self)
         tableView.register(UINib.init(nibName: BannerViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BannerViewTableViewCell.getName)
         tableView.register(UINib.init(nibName: TextListViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextListViewTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CommentsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommentsTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.showsVerticalScrollIndicator = false
         tableView.estimatedRowHeight = 600
@@ -75,6 +77,8 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
             return headerCell(indexPath: indexPath, tableView: tableView)
         case .Fields:
             return textListCellWithIndexPathOffset(indexPath: indexPath, tableView: tableView)
+        case .Comments:
+            return commentsCell(indexPath: indexPath, tableView: tableView)
         }
     }
     
@@ -98,6 +102,19 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         let data = model.fields[indexPath.row]
         cell.configure(data: data)
+        cell.layoutIfNeeded()
+        return cell
+    }
+    
+    private func commentsCell(indexPath: IndexPath, tableView: UITableView) -> UITableViewCell {
+        guard
+            let model = self.model,
+            let cell = tableView.dequeueReusableCell(withIdentifier: CommentsTableViewCell.getName, for: indexPath) as? CommentsTableViewCell
+        else {
+            return UITableViewCell()
+        }
+        
+        cell.configure(comments: model.comments)
         cell.layoutIfNeeded()
         return cell
     }

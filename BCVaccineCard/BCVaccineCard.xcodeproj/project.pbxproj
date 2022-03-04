@@ -51,6 +51,8 @@
 		293B32BF27D262F70064BAAA /* CommentsViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32BC27D262F70064BAAA /* CommentsViewTableViewCell.swift */; };
 		293B32C027D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 293B32BD27D262F70064BAAA /* CommentsViewTableViewCell.xib */; };
 		293B32C127D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 293B32BD27D262F70064BAAA /* CommentsViewTableViewCell.xib */; };
+		293B32C527D27A880064BAAA /* CommentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32C327D27A880064BAAA /* CommentsTableViewCell.swift */; };
+		293B32C627D27A880064BAAA /* CommentsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 293B32C427D27A880064BAAA /* CommentsTableViewCell.xib */; };
 		2940A3502728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2940A3512728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2942AC56273AC30900A4A466 /* ToggleSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */; };
@@ -542,6 +544,8 @@
 		293B32B827D2628A0064BAAA /* CommentsListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentsListView.xib; sourceTree = "<group>"; };
 		293B32BC27D262F70064BAAA /* CommentsViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewTableViewCell.swift; sourceTree = "<group>"; };
 		293B32BD27D262F70064BAAA /* CommentsViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentsViewTableViewCell.xib; sourceTree = "<group>"; };
+		293B32C327D27A880064BAAA /* CommentsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsTableViewCell.swift; sourceTree = "<group>"; };
+		293B32C427D27A880064BAAA /* CommentsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentsTableViewCell.xib; sourceTree = "<group>"; };
 		2940A34F2728399B00132D7D /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		2942AC55273AC30900A4A466 /* ToggleSettingsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleSettingsTableViewCell.xib; sourceTree = "<group>"; };
@@ -824,19 +828,11 @@
 		291D43DA2762E18B005F5B94 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				291D43E42762E220005F5B94 /* Record */,
 				291D43DE2762E1C5005F5B94 /* HealthRecordsView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		291D43E42762E220005F5B94 /* Record */ = {
-			isa = PBXGroup;
-			children = (
 				291D43DB2762E196005F5B94 /* HealthRecordView.swift */,
 				291D43E12762E203005F5B94 /* HealthRecordCollectionViewCell.swift */,
 			);
-			path = Record;
+			path = Components;
 			sourceTree = "<group>";
 		};
 		293B32AD27D25C2C0064BAAA /* Comments */ = {
@@ -866,6 +862,15 @@
 				293B32BD27D262F70064BAAA /* CommentsViewTableViewCell.xib */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		293B32C227D27A710064BAAA /* CommentsTableVIewCell */ = {
+			isa = PBXGroup;
+			children = (
+				293B32C327D27A880064BAAA /* CommentsTableViewCell.swift */,
+				293B32C427D27A880064BAAA /* CommentsTableViewCell.xib */,
+			);
+			path = CommentsTableVIewCell;
 			sourceTree = "<group>";
 		};
 		2940A34E2728393100132D7D /* Storage */ = {
@@ -1596,6 +1601,7 @@
 		7944F6FB26F313EF006B9444 /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				293B32C227D27A710064BAAA /* CommentsTableVIewCell */,
 				2942AC53273AC2C300A4A466 /* ToggleSettingsTableViewCell */,
 				792834612731014400EE2710 /* CheckboxTableViewCell */,
 				7928345A2730E59900EE2710 /* InteractiveLabelTableViewCell */,
@@ -2133,6 +2139,7 @@
 				795AA757271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
 				795AA7752715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
 				79FDE426273335DC00DAD988 /* FederalPassView.xib in Resources */,
+				293B32C627D27A880064BAAA /* CommentsTableViewCell.xib in Resources */,
 				294BD3D327B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
 				297885262795F38500FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				791C27BB27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
@@ -2452,6 +2459,7 @@
 				795AA7732715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
 				79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				291D43DC2762E196005F5B94 /* HealthRecordView.swift in Sources */,
+				293B32C527D27A880064BAAA /* CommentsTableViewCell.swift in Sources */,
 				794BD6272702E0E90084ADA8 /* CustomNavigationController.swift in Sources */,
 				29736A452788EBD700CCB1D2 /* ImmunizationRecord+CoreDataClass.swift in Sources */,
 				5BA177D227A18CDD00D61F2A /* CoreDataStack.swift in Sources */,
