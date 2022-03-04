@@ -38,6 +38,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
     private var apiClient: APIClient
     weak private var delegate: AuthenticatedHealthRecordsAPIWorkerDelegate?
+    fileprivate let authManager = AuthManager()
     
     private var retryCount = 0
     private var requestDetails = AuthenticatedAPIWorkerRetryDetails()
@@ -46,11 +47,16 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private var patientDetails: AuthenticatedPatientDetailsResponseObject?
     private var authCredentials: AuthenticationRequestObject?
     private var showBanner = true
+    private var isManualAuthFetch = true
     
     init(delegateOwner: UIViewController) {
         self.apiClient = APIClient(delegateOwner: delegateOwner)
         self.delegate = delegateOwner as? AuthenticatedHealthRecordsAPIWorkerDelegate
         self.executingVC = delegateOwner
+    }
+    
+    private func setObservables() {
+        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
     }
     
     // Note: Choosing this instead of completion handlers as completion handlers were causing issues
@@ -66,7 +72,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
     // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
     func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool) {
+        self.setObservables()
         self.showBanner = showBanner
+        self.isManualAuthFetch = showBanner // Doing this for now, as we may decide to show the banner in the future for background fetches, but it won't be a manualAuthFetch
         delegate?.showFetchStartedBanner(showBanner: showBanner)
         self.initializeFetchStatusList()
         self.authCredentials = authCredentials
@@ -102,7 +110,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private func initializeRequests(authCredentials: AuthenticationRequestObject) {
         self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
         self.getAuthenticatedTestResults(authCredentials: authCredentials)
-        self.getAuthenticatedMedicationStatement(authCredentials: authCredentials)
+        self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: authManager.protectiveWord)
         self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
     }
         
@@ -152,10 +160,10 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 self.requestDetails.authenticatedMedicationStatementDetails?.queueItToken = queueItToken
                 self.apiClient.getAuthenticatedMedicationStatement(authCredentials, protectiveWord: protectiveWord, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
                     guard let `self` = self else { return }
-                    self.handleMedicationStatementResponse(result: result)
+                    self.handleMedicationStatementResponse(result: result, protectiveWord: protectiveWord)
                 }
             } else {
-                self.handleMedicationStatementResponse(result: result)
+                self.handleMedicationStatementResponse(result: result, protectiveWord: protectiveWord)
             }
         }
     }
@@ -270,13 +278,19 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
     }
     
-    private func handleMedicationStatementResponse(result: Result<AuthenticatedMedicationStatementResponseObject, ResultError>) {
+    private func handleMedicationStatementResponse(result: Result<AuthenticatedMedicationStatementResponseObject, ResultError>, protectiveWord: String?) {
         switch result {
         case .success(let medicationStatement):
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultError = medicationStatement.resultError, (medicationStatement.resourcePayload == nil || medicationStatement.resourcePayload?.count == 0) {
                 if resultError.actionCode == "PROTECTED" {
-                    // TODO: Handle protectedWord logic here
+                    if isManualAuthFetch {
+                        NotificationCenter.default.post(name: .protectedWordRequired, object: isManualAuthFetch, userInfo: nil)
+                    } else {
+                        guard let authCreds = self.authCredentials else { return }
+                        self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord)
+                    }
+                    
                     // Will show prompt to add protective word, then will start the request over again
                 } else {
                     self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: medicationStatement.totalResultCount ?? 0, successfullCount: 0, error: resultError.resultMessage ?? .genericErrorMessage)
@@ -290,7 +304,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
 //                self.perform(#selector(self.retryGetMedicationStatementRequest), with: nil, afterDelay: retryInSeconds)
 //            }
             else {
-                self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement)
+                self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement, protectiveWord: protectiveWord)
             }
         case .failure(let error):
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
@@ -311,11 +325,9 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.perform(#selector(self.retryGetLaboratoryOrdersRequest), with: nil, afterDelay: retryInSeconds)
             }
             else {
-                print("CONNOR LAB: ", labOrders)
                 self.handleLaboratoryOrdersInCoreData(labOrders: labOrders)
             }
         case .failure(let error):
-            print("CONNOR LAB: ", error)
             self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
@@ -414,7 +426,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
 
 // MARK: Handle Medication Statement in core data
 extension AuthenticatedHealthRecordsAPIWorker {
-    private func handleMedicationStatementInCoreData(medicationStatement: AuthenticatedMedicationStatementResponseObject) {
+    private func handleMedicationStatementInCoreData(medicationStatement: AuthenticatedMedicationStatementResponseObject, protectiveWord: String?) {
         guard let patient = self.patientDetails else { return }
         guard let payloads = medicationStatement.resourcePayload else { return }
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Prescription])
@@ -426,6 +438,9 @@ extension AuthenticatedHealthRecordsAPIWorker {
             } else {
                 errorArrayCount += 1
             }
+        }
+        if let protectiveWord = protectiveWord, completedCount > 0 {
+            authManager.storeProtectiveWord(protectiveWord: protectiveWord)
         }
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
         self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
@@ -545,5 +560,13 @@ extension AuthenticatedHealthRecordsAPIWorker {
             .MedicationStatement : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
             .LaboratoryOrders : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
         ])
+    }
+}
+
+// MARK: Protected word retry
+extension AuthenticatedHealthRecordsAPIWorker {
+    @objc private func protectedWordProvided(_ notification: Notification) {
+        guard let protectiveWord = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String, let authCreds = self.authCredentials else { return }
+        self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord)
     }
 }

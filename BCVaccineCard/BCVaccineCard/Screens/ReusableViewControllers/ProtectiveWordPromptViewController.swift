@@ -29,7 +29,7 @@ class ProtectiveWordPromptViewController: BaseViewController {
             continueButton.enabled = continueButtonEnabled
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -116,7 +116,9 @@ extension ProtectiveWordPromptViewController: AppStyleButtonDelegate {
         if type == .cancel {
             self.navigationController?.popViewController(animated: true)
         } else if type == .continueType {
-            // TODO: Completion handler here
+            guard let proWord = protectiveWordTextField.text else { return }
+            let protectedWordDictionary: [String: String] = [Constants.AuthenticatedMedicationStatementParameters.protectiveWord : proWord]
+            NotificationCenter.default.post(name: .protectedWordProvided, object: nil, userInfo: protectedWordDictionary)
         }
     }
     

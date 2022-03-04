@@ -84,6 +84,7 @@ class TabBarController: UITabBarController {
     private func setupObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
@@ -195,5 +196,16 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
 extension TabBarController {
     func goToUserRecordsScreenForPatient(_ patient: Patient) {
         resetHealthRecordsTab(goToRecordsForPatient: patient)
+    }
+}
+
+// MARK: This is to handle the protected word prompt
+extension TabBarController {
+    @objc private func protectedWordRequired(_ notification: Notification) {
+        guard let isManualFetch = notification.object as? Bool, isManualFetch == true else { return }
+        guard self.viewControllers?.count ?? 0 > self.selectedIndex else { return }
+        let navController = self.viewControllers?[self.selectedIndex] as? CustomNavigationController
+        let vc = ProtectiveWordPromptViewController.constructProtectiveWordPromptViewController()
+        navController?.pushViewController(vc, animated: true)
     }
 }
