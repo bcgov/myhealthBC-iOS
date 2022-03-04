@@ -68,6 +68,15 @@ struct HealthRecordsDetailDataSource {
         }
     }
     
+    var containsProtectedWord: Bool {
+        switch type {
+        case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder:
+            return false
+        case .medication:
+            return true
+        }
+    }
+    
     let deleteAlertTitle: String
     let deleteAlertMessage: String
     

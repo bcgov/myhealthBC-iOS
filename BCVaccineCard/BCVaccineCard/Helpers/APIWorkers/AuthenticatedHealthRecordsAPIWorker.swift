@@ -285,7 +285,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
             if let resultError = medicationStatement.resultError, (medicationStatement.resourcePayload == nil || medicationStatement.resourcePayload?.count == 0) {
                 if resultError.actionCode == "PROTECTED" {
                     if isManualAuthFetch {
-                        NotificationCenter.default.post(name: .protectedWordRequired, object: isManualAuthFetch, userInfo: nil)
+                        let userInfo: [String: String] = [ProtectiveWordPurpose.purposeKey: ProtectiveWordPurpose.manualFetch.rawValue]
+                        NotificationCenter.default.post(name: .protectedWordRequired, object: nil, userInfo: userInfo)
                     } else {
                         guard let authCreds = self.authCredentials else { return }
                         self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord)
@@ -567,6 +568,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
 extension AuthenticatedHealthRecordsAPIWorker {
     @objc private func protectedWordProvided(_ notification: Notification) {
         guard let protectiveWord = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String, let authCreds = self.authCredentials else { return }
+        guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw), purpose == .manualFetch else { return }
         self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord)
     }
 }

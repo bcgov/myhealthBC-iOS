@@ -7,16 +7,29 @@
 
 import UIKit
 
+enum ProtectiveWordPurpose: String {
+    case manualFetch = "manualFetch"
+    case viewingRecords = "viewingRecords"
+    
+    static var purposeKey: String {
+        return "purpose"
+    }
+}
+
 class ProtectiveWordPromptViewController: BaseViewController {
     
-    class func constructProtectiveWordPromptViewController() -> ProtectiveWordPromptViewController {
+    class func constructProtectiveWordPromptViewController(purpose: ProtectiveWordPurpose) -> ProtectiveWordPromptViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: ProtectiveWordPromptViewController.self)) as? ProtectiveWordPromptViewController {
+            vc.purpose = purpose
             vc.modalPresentationStyle = .overFullScreen
             return vc
         }
         return ProtectiveWordPromptViewController()
     }
     
+    @IBOutlet weak private var navHackCloseButton: UIButton!
+    @IBOutlet weak private var navHackTitleLabel: UILabel!
+    @IBOutlet weak private var navHackSeparatorView: UIView!
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var clickableSubtitleLabel: InteractiveLinkLabel!
     @IBOutlet weak private var textFieldTitle: UILabel!
@@ -30,22 +43,11 @@ class ProtectiveWordPromptViewController: BaseViewController {
         }
     }
     
+    private var purpose: ProtectiveWordPurpose?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // Putting this here in case user goes to help screen
-//        self.tabBarController?.tabBar.isHidden = true
-        navSetup()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Note - sometimes tabBarController will be nil due to when it's released in memory
-//        self.tabBarController?.tabBar.isHidden = false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -62,6 +64,12 @@ class ProtectiveWordPromptViewController: BaseViewController {
     }
     
     private func uiSetup() {
+        navHackCloseButton.setImage(UIImage(named: "close-icon-blue"), for: .normal)
+        navHackCloseButton.tintColor = AppColours.appBlue
+        navHackTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+        navHackTitleLabel.textColor = AppColours.appBlue
+        navHackTitleLabel.text = .protectedWordVCNavTitle
+        navHackSeparatorView.backgroundColor = AppColours.borderGray
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 20)
         titleLabel.textColor = AppColours.textBlack
         titleLabel.text = "View your medication records"
@@ -81,21 +89,9 @@ class ProtectiveWordPromptViewController: BaseViewController {
         continueButton.configure(withStyle: .blue, buttonType: .continueType, delegateOwner: self, enabled: false)
         cancelButton.configure(withStyle: .white, buttonType: .cancel, delegateOwner: self, enabled: true)
     }
-}
-
-// MARK: Navigation setup
-extension ProtectiveWordPromptViewController {
-    private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .protectedWordVCNavTitle,
-                                               leftNavButton: NavButton(image: UIImage(named: "close-icon-blue"), action: #selector(self.closeIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ProtectiveWordScreen.navLeftIconTitle, hint: AccessibilityLabels.ProtectiveWordScreen.navLeftIconHint)),
-                                               rightNavButton: nil,
-                                               navStyle: .small,
-                                               targetVC: self,
-                                               backButtonHintString: nil)
-    }
     
-    @objc private func closeIconButton() {
-        self.navigationController?.popViewController(animated: true)
+    @IBAction private func navHackCloseButtonAction(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -114,11 +110,15 @@ extension ProtectiveWordPromptViewController: UITextFieldDelegate {
 extension ProtectiveWordPromptViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .cancel {
-            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true, completion: nil)
         } else if type == .continueType {
             guard let proWord = protectiveWordTextField.text else { return }
-            let protectedWordDictionary: [String: String] = [Constants.AuthenticatedMedicationStatementParameters.protectiveWord : proWord]
-            NotificationCenter.default.post(name: .protectedWordProvided, object: nil, userInfo: protectedWordDictionary)
+            guard let purpose = self.purpose else { return }
+            let userInfo: [String: String] = [
+                Constants.AuthenticatedMedicationStatementParameters.protectiveWord : proWord,
+                ProtectiveWordPurpose.purposeKey: purpose.rawValue]
+            NotificationCenter.default.post(name: .protectedWordProvided, object: nil, userInfo: userInfo)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     

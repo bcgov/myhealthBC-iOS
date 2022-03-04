@@ -202,10 +202,9 @@ extension TabBarController {
 // MARK: This is to handle the protected word prompt
 extension TabBarController {
     @objc private func protectedWordRequired(_ notification: Notification) {
-        guard let isManualFetch = notification.object as? Bool, isManualFetch == true else { return }
-        guard self.viewControllers?.count ?? 0 > self.selectedIndex else { return }
-        let navController = self.viewControllers?[self.selectedIndex] as? CustomNavigationController
-        let vc = ProtectiveWordPromptViewController.constructProtectiveWordPromptViewController()
-        navController?.pushViewController(vc, animated: true)
+        guard let userInfo = notification.userInfo as? [String: String] else { return }
+        guard let purposeRawValue = userInfo[ProtectiveWordPurpose.purposeKey], let purpose = ProtectiveWordPurpose(rawValue: purposeRawValue) else { return }
+        let vc = ProtectiveWordPromptViewController.constructProtectiveWordPromptViewController(purpose: purpose)
+        self.present(vc, animated: true, completion: nil)
     }
 }
