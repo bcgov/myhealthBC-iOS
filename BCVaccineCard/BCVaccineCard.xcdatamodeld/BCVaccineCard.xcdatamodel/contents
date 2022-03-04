@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Comment" representedClassName="Comment" syncable="YES">
+        <attribute name="createdDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="entryTypeCode" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="parentEntryID" optional="YES" attributeType="String"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <attribute name="updatedBy" optional="YES" attributeType="String"/>
+        <attribute name="updatedDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="userProfileID" optional="YES" attributeType="String"/>
+        <attribute name="version" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="immunization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ImmunizationRecord" inverseName="comments" inverseEntity="ImmunizationRecord"/>
+    </entity>
     <entity name="CovidLabTestResult" representedClassName="CovidLabTestResult" syncable="YES">
         <attribute name="authenticated" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -12,6 +24,7 @@
         <attribute name="lotNumber" optional="YES" attributeType="String"/>
         <attribute name="provider" optional="YES" attributeType="String"/>
         <attribute name="snomed" optional="YES" attributeType="String"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="immunization" inverseEntity="Comment"/>
         <relationship name="vaccineCard" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="immunizationRecord" inverseEntity="VaccineCard"/>
     </entity>
     <entity name="LaboratoryOrder" representedClassName="LaboratoryOrder" syncable="YES">
@@ -113,7 +126,7 @@
     </entity>
     <elements>
         <element name="CovidLabTestResult" positionX="70.65234375" positionY="497.984375" width="128" height="104"/>
-        <element name="ImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="104"/>
+        <element name="ImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="119"/>
         <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="209"/>
         <element name="LaboratoryTest" positionX="171" positionY="405" width="128" height="119"/>
         <element name="Medication" positionX="180" positionY="414" width="128" height="194"/>
@@ -122,5 +135,6 @@
         <element name="Pharmacy" positionX="171" positionY="405" width="128" height="179"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
         <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="179"/>
+        <element name="Comment" positionX="162" positionY="396" width="128" height="179"/>
     </elements>
 </model>
