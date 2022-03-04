@@ -342,7 +342,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let comments):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = comments.resultError?.resultMessage, (comments.resourcePayload?.additionalProp1?.count == 0 && comments.resourcePayload?.additionalProp2?.count == 0 && comments.resourcePayload?.additionalProp3?.count == 0) {
+            if let resultMessage = comments.resultError?.resultMessage, (comments.resourcePayload.count == 0) {
                 self.fetchStatusList.fetchStatus[.Comments] = FetchStatus(requestCompleted: true, attemptedCount: comments.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
             } else {
                 self.handleCommentsInCoredata(comments: comments)

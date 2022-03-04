@@ -10,19 +10,18 @@ import CoreData
 
 protocol StorageCommentManager {
     func storeComments(in: AuthenticatedCommentResponseObject)
-    func storeComment(remoteObject: AuthenticatedCommentResponseObject.ResourcePayload.Comment)
+    func storeComment(remoteObject: AuthenticatedCommentResponseObject.Comment)
 }
 
 extension StorageService: StorageCommentManager {
     func storeComments(in object: AuthenticatedCommentResponseObject) {
-        guard let payload = object.resourcePayload else {
-            Logger.log(string: "Comments resouce payload is nil", type: .storage)
+        
+        var comments: [AuthenticatedCommentResponseObject.Comment] = object.resourcePayload.flatMap({$0.value})
+       
+        guard comments.isEmpty else {
+            Logger.log(string: "No Comments", type: .storage)
             return
         }
-        var comments: [AuthenticatedCommentResponseObject.ResourcePayload.Comment] = []
-        comments.append(contentsOf: payload.additionalProp1 ?? [])
-        comments.append(contentsOf: payload.additionalProp2 ?? [])
-        comments.append(contentsOf: payload.additionalProp3 ?? [])
         for comment in comments {
             storeComment(remoteObject: comment)
         }
@@ -30,7 +29,7 @@ extension StorageService: StorageCommentManager {
         self.notify(event: StorageEvent(event: .Save, entity: .Comments, object: []))
     }
     
-    func storeComment(remoteObject object: AuthenticatedCommentResponseObject.ResourcePayload.Comment) {
+    func storeComment(remoteObject object: AuthenticatedCommentResponseObject.Comment) {
         guard let id = object.id else {
             Logger.log(string: "Can't store comment: No id", type: .storage)
             return
@@ -69,7 +68,7 @@ extension StorageService: StorageCommentManager {
         }
     }
     
-    fileprivate func genCommentObject(in object: AuthenticatedCommentResponseObject.ResourcePayload.Comment, context: NSManagedObjectContext) -> Comment {
+    fileprivate func genCommentObject(in object: AuthenticatedCommentResponseObject.Comment, context: NSManagedObjectContext) -> Comment {
         let comment = Comment(context: context)
         if let versionInt = object.version {
             comment.version = Int64(versionInt)
