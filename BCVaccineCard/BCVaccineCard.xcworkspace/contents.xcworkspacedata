@@ -2,15 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/Comment+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
-      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/Pharmacy+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
-      location = "group:BCVaccineCard/Utility/Storage/CoreDataClass/Perscription+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
       location = "group:BCVaccineCard.xcodeproj">
    </FileRef>
    <FileRef
