@@ -2,7 +2,7 @@
 //  Pharmacy+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-02-10.
+//  Created by Amir on 2022-03-04.
 //
 //
 
@@ -26,5 +26,6 @@ extension Pharmacy {
     @NSManaged public var phoneNumber: String?
     @NSManaged public var postalCode: String?
     @NSManaged public var province: String?
+    @NSManaged public var prescription: Perscription?
 
 }

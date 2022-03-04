@@ -880,8 +880,8 @@
 				29245D3F275581C700F48642 /* StorageService+TestResults.swift */,
 				297967A327C5371C0019EE9B /* StorageService+LabOrder.swift */,
 				79218AEE275672110063004E /* StorageService+HealthRecords.swift */,
-				2932DCE6275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift */,
 				293B32AA27D25AEF0064BAAA /* Storage+Comments.swift */,
+				2932DCE6275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
