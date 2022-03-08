@@ -68,6 +68,11 @@ extension Date {
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
             return formatter
         }()
+        static let gatewayDateAndTimeWithMS: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+            return formatter
+        }()
         static let gatewayDateAndTimeWithTimeZone: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"

@@ -12,14 +12,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="CommentView" customModule="BCVaccineCard" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="667" height="193"/>
+            <rect key="frame" x="0.0" y="0.0" width="648" height="118"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Oeo-t2-5N0">
-                    <rect key="frame" x="5" y="10" width="657" height="139"/>
+                    <rect key="frame" x="5" y="10" width="638" height="98"/>
                     <subviews>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="pTD-wp-orC">
-                            <rect key="frame" x="0.0" y="0.0" width="657" height="105"/>
+                            <rect key="frame" x="0.0" y="0.0" width="638" height="69"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                             <color key="textColor" systemColor="labelColor"/>
@@ -27,10 +27,7 @@
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1nY-w0-u62">
-                            <rect key="frame" x="0.0" y="107" width="657" height="32"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="32" id="NRG-Xx-Wro"/>
-                            </constraints>
+                            <rect key="frame" x="0.0" y="71" width="638" height="27"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -45,18 +42,17 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Oeo-t2-5N0" secondAttribute="bottom" constant="10" id="3jf-T3-W09"/>
+                <constraint firstAttribute="bottom" secondItem="Oeo-t2-5N0" secondAttribute="bottom" constant="10" id="3jf-T3-W09"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Oeo-t2-5N0" secondAttribute="trailing" constant="5" id="BO2-go-Mfm"/>
                 <constraint firstItem="Oeo-t2-5N0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="V0Y-ew-WhJ"/>
                 <constraint firstItem="Oeo-t2-5N0" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="5" id="iWn-Ir-gcl"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="dateTimeHeightConstraint" destination="NRG-Xx-Wro" id="n6R-Av-7LL"/>
                 <outlet property="dateTimeLabel" destination="1nY-w0-u62" id="Pif-IO-xgm"/>
                 <outlet property="textView" destination="pTD-wp-orC" id="D1h-yV-Srn"/>
             </connections>
-            <point key="canvasLocation" x="319.56521739130437" y="-82.03125"/>
+            <point key="canvasLocation" x="305.79710144927537" y="-136.60714285714286"/>
         </view>
     </objects>
     <resources>

@@ -15,7 +15,6 @@ class CommentView: UIView {
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var dateTimeLabel: UILabel!
-    @IBOutlet weak var dateTimeHeightConstraint: NSLayoutConstraint!
     
     func configure(comment: Comment) {
         textView.text = comment.text
@@ -36,15 +35,7 @@ class CommentView: UIView {
         textView.font = CommentView.textFont
         dateTimeLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         
-        dateTimeHeightConstraint.constant = CommentView.dateTimeHeight
         self.layoutIfNeeded()
     }
 
-}
-
-extension Comment {
-    func height(width: CGFloat) -> CGFloat {
-        let textHeight = text?.heightForView(font: CommentView.textFont, width: width) ?? 0
-        return CommentView.dateTimeHeight + CommentView.verticalSpacing + textHeight
-    }
 }

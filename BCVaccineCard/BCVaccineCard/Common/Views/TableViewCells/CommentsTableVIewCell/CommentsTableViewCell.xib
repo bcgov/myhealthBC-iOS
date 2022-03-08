@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,33 +16,9 @@
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="375" height="232"/>
                 <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4f-cJ-1Iz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="232"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstAttribute="height" priority="750" constant="100" id="flf-9b-aOI"/>
-                        </constraints>
-                    </view>
-                </subviews>
-                <constraints>
-                    <constraint firstItem="b4f-cJ-1Iz" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="0zd-sk-7SR"/>
-                    <constraint firstAttribute="trailing" secondItem="b4f-cJ-1Iz" secondAttribute="trailing" id="102-Js-TV2"/>
-                    <constraint firstAttribute="bottom" secondItem="b4f-cJ-1Iz" secondAttribute="bottom" id="bQw-od-Nqs"/>
-                    <constraint firstItem="b4f-cJ-1Iz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="fyY-hO-hCs"/>
-                </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
-            <connections>
-                <outlet property="contentContainer" destination="H2p-sc-9uM" id="tT3-i0-X3P"/>
-                <outlet property="contentHeightConstraint" destination="flf-9b-aOI" id="NYz-45-AZb"/>
-            </connections>
             <point key="canvasLocation" x="177.536231884058" y="185.49107142857142"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>

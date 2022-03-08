@@ -18,6 +18,7 @@ class CommentsViewTableViewCell: UITableViewCell {
     
     func configure(comment: Comment) {
         commentView?.configure(comment: comment)
+        self.layoutIfNeeded()
     }
     
 }

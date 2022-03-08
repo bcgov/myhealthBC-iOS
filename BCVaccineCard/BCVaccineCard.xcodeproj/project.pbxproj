@@ -54,6 +54,8 @@
 		293B32C527D27A880064BAAA /* CommentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32C327D27A880064BAAA /* CommentsTableViewCell.swift */; };
 		293B32C627D27A880064BAAA /* CommentsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 293B32C427D27A880064BAAA /* CommentsTableViewCell.xib */; };
 		293B32C827D7AFF50064BAAA /* DummyCommentMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32C727D7AFF50064BAAA /* DummyCommentMaker.swift */; };
+		293B32CC27D814EB0064BAAA /* CommentViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32CA27D814EB0064BAAA /* CommentViewTableViewCell.swift */; };
+		293B32CD27D814EB0064BAAA /* CommentViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 293B32CB27D814EB0064BAAA /* CommentViewTableViewCell.xib */; };
 		2940A3502728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2940A3512728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2942AC56273AC30900A4A466 /* ToggleSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */; };
@@ -548,6 +550,8 @@
 		293B32C327D27A880064BAAA /* CommentsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsTableViewCell.swift; sourceTree = "<group>"; };
 		293B32C427D27A880064BAAA /* CommentsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentsTableViewCell.xib; sourceTree = "<group>"; };
 		293B32C727D7AFF50064BAAA /* DummyCommentMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyCommentMaker.swift; sourceTree = "<group>"; };
+		293B32CA27D814EB0064BAAA /* CommentViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CommentViewTableViewCell.swift; path = CommentViewCell/CommentViewTableViewCell.swift; sourceTree = "<group>"; };
+		293B32CB27D814EB0064BAAA /* CommentViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CommentViewTableViewCell.xib; path = CommentViewCell/CommentViewTableViewCell.xib; sourceTree = "<group>"; };
 		2940A34F2728399B00132D7D /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		2942AC55273AC30900A4A466 /* ToggleSettingsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleSettingsTableViewCell.xib; sourceTree = "<group>"; };
@@ -842,6 +846,8 @@
 			children = (
 				293B32C927D7B1E20064BAAA /* CommentView */,
 				293B32B427D262540064BAAA /* CommentsList */,
+				293B32CA27D814EB0064BAAA /* CommentViewTableViewCell.swift */,
+				293B32CB27D814EB0064BAAA /* CommentViewTableViewCell.xib */,
 			);
 			path = Comments;
 			sourceTree = "<group>";
@@ -2168,6 +2174,7 @@
 				79BDA089270CEE8000FF30AB /* Localizable.strings in Resources */,
 				7944F68526F1261B006B9444 /* Assets.xcassets in Resources */,
 				297885202795F16E00FF912D /* SettingsRowTableViewCell.xib in Resources */,
+				293B32CD27D814EB0064BAAA /* CommentViewTableViewCell.xib in Resources */,
 				7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */,
 				7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */,
 				791C27C12718315A001A6E12 /* AddCardsTableViewCell.xib in Resources */,
@@ -2533,6 +2540,7 @@
 				795AA74C2714018600E59FF1 /* APIClient.swift in Sources */,
 				795AA77F2715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
 				29547E5727A2EC5200562958 /* LocalAuthVIew.swift in Sources */,
+				293B32CC27D814EB0064BAAA /* CommentViewTableViewCell.swift in Sources */,
 				795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				2932DCE1275AA10D00532BC4 /* StorageService+Patient.swift in Sources */,
 				791C27B127179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */,
