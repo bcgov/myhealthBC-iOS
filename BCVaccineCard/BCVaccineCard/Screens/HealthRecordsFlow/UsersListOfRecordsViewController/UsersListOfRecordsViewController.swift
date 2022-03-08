@@ -28,6 +28,11 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var dataSource: [HealthRecordsDetailDataSource] = []
     private var hiddenRecords: [HealthRecordsDetailDataSource] = []
     
+    fileprivate let authManager = AuthManager()
+    private var protectiveWord: String?
+    private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
+    private var promptUser = true // Note: This is used because we fetch ds on view will appear, but protective word should be checked on view did load
+    
     private var inEditMode = false {
         didSet {
             self.tableView.setEditing(inEditMode, animated: false)
@@ -39,6 +44,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setObservables()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,6 +64,10 @@ class UsersListOfRecordsViewController: BaseViewController {
         } else {
             return UIStatusBarStyle.default
         }
+    }
+    
+    private func setObservables() {
+        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
     }
     
     private func setup() {
@@ -104,9 +114,9 @@ extension UsersListOfRecordsViewController {
         
         let records = StorageService.shared.getHeathRecords()
         let patientRecords = records.detailDataSource(patient: patient)
+        
         if AuthManager().isAuthenticated {
-            self.dataSource = patientRecords
-            self.hiddenRecords.removeAll()
+            handleAuthenticatedMedicalRecords(patientRecords: patientRecords)
         } else {
             let unauthenticatedRecords = patientRecords.filter({!$0.isAuthenticated})
             let authenticatedRecords = patientRecords.filter({$0.isAuthenticated})
@@ -122,6 +132,36 @@ extension UsersListOfRecordsViewController {
         self.tableView.reloadData()
         self.checkForTestResultsToUpdate(ds: self.dataSource)
         
+    }
+    
+    private func handleAuthenticatedMedicalRecords(patientRecords: [HealthRecordsDetailDataSource]) {
+        // Note: Assumption is, if protective word is not stored in keychain at this point, then user does not have protective word enabled
+        self.patientRecordsTemp = patientRecords
+        guard let protectiveWord = authManager.protectiveWord, promptUser == true else {
+            showAllRecords(patientRecords: patientRecords)
+            return
+        }
+        self.protectiveWord = protectiveWord
+        let visibleRecords = patientRecords.filter({!$0.containsProtectedWord})
+        self.dataSource = visibleRecords
+        self.hiddenRecords.removeAll()
+        if promptUser == true {
+            promptProtectiveVC()
+        }
+        
+    }
+    
+    private func showAllRecords(patientRecords: [HealthRecordsDetailDataSource]) {
+        self.dataSource = patientRecords
+        self.hiddenRecords.removeAll()
+        self.patientRecordsTemp = nil
+    }
+    
+    private func promptProtectiveVC() {
+        let userInfo: [String: String] = [
+            ProtectiveWordPurpose.purposeKey: ProtectiveWordPurpose.viewingRecords.rawValue,
+        ]
+        NotificationCenter.default.post(name: .protectedWordRequired, object: nil, userInfo: userInfo)
     }
     
     private func checkForTestResultsToUpdate(ds: [HealthRecordsDetailDataSource]) {
@@ -335,6 +375,25 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
         guard self.tableView.numberOfRows(inSection: 0) > indexPath.row else { return }
         self.tableView.cellForRow(at: indexPath)?.endLoadingIndicator()
     }
-    
-    
+}
+
+// MARK: Protected word retry
+extension UsersListOfRecordsViewController {
+    @objc private func protectedWordProvided(_ notification: Notification) {
+        guard let protectiveWordEntered = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String else { return }
+        guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw), purpose == .viewingRecords else { return }
+        if let proWord = self.protectiveWord, protectiveWordEntered == proWord {
+            let records = self.patientRecordsTemp ?? []
+            self.promptUser = false
+            showAllRecords(patientRecords: records)
+            self.tableView.reloadData()
+        } else {
+            alert(title: "Error", message: "The protective word you provided was incorrect. You must enter the correct protective word in order to view your medical records, would you like to try again?", buttonOneTitle: "Yes", buttonOneCompletion: {
+                self.promptProtectiveVC()
+            }, buttonTwoTitle: "No") {
+                // Do nothing
+            }
+        }
+        
+    }
 }

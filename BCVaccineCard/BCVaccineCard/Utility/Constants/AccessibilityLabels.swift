@@ -140,5 +140,10 @@ struct AccessibilityLabels {
     struct GatewayForm {
         static let navHint = String.theQRRetrievalMethods
     }
+    
+    struct ProtectiveWordScreen {
+        static let navLeftIconTitle = String.close
+        static let navLeftIconHint = String.tappingButtonTeturnToPreviousScreen
+    }
 }
 

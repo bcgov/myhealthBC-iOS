@@ -33,6 +33,7 @@ class AuthManager {
         case authToken
         case refreshToken
         case idToken
+        case protectiveWord
     }
     let defaultUserID = "default"
     private let keychain = Keychain(service: "ca.bc.gov.myhealth")
@@ -117,6 +118,13 @@ class AuthManager {
         return refreshExpiery > Date()
     }
     
+    var protectiveWord: String? {
+        guard let proWord = keychain[Key.protectiveWord.rawValue] else {
+            return nil
+        }
+        return proWord.isEmpty ? nil : proWord
+    }
+    
     // MARK: Network
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
         guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
@@ -179,6 +187,14 @@ class AuthManager {
                 }
             })
         }
+    }
+    
+    func storeProtectiveWord(protectiveWord: String) {
+        self.store(string: protectiveWord, for: .protectiveWord)
+    }
+    
+    private func removeProtectiveWord() {
+        self.delete(key: .protectiveWord)
     }
     
     private func refetchAuthToken() {
@@ -270,6 +286,7 @@ class AuthManager {
         delete(key: .refreshToken)
         delete(key: .authTokenExpiery)
         delete(key: .idToken)
+        self.removeProtectiveWord()
     }
     
     private func store(string: String, for key: Key) {
