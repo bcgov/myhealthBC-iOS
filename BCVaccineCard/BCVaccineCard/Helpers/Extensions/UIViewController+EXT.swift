@@ -424,7 +424,7 @@ extension UIViewController {
             vc.completionHandler = { [weak self] details in
                 DispatchQueue.main.async {
                     if let fedPass = details.fedPassId {
-                        self?.openFederalPass(pass: fedPass, vc: owner, id: details.id, completion: completion)
+                        self?.openPDFView(pdfString: fedPass, vc: owner, id: details.id, type: .fedPass, completion: completion)
                     } else {
                         self?.navigationController?.popViewController(animated: true)
                     }
@@ -436,14 +436,14 @@ extension UIViewController {
     }
 }
 
-// MARK: Open federal pass
+// MARK: Open PDF (used for federal pass and other PDF views)
 extension UIViewController {
-    func openFederalPass(pass: String, vc: UIViewController, id: String?, completion: ((String?) -> Void)?) {
-        guard let data = Data(base64URLEncoded: pass) else {
+    func openPDFView(pdfString: String, vc: UIViewController, id: String?, type: PDFType?, completion: ((String?) -> Void)?) {
+        guard let data = Data(base64URLEncoded: pdfString) else {
             return
         }
         let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
-        pdfView.show(data: data, in: vc.parent ?? vc, id: id)
+        pdfView.show(data: data, in: vc.parent ?? vc, id: id, type: type)
         pdfView.completionHandler = completion
     }
 }

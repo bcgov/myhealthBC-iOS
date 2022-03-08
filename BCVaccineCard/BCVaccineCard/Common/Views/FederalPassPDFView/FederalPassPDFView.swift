@@ -9,6 +9,11 @@ import Foundation
 import UIKit
 import PDFKit
 
+enum PDFType {
+    case fedPass
+    case labResults
+}
+
 class FederalPassPDFView: UIView {
     @IBOutlet weak var pdfContainer: UIView!
     @IBOutlet weak var navContainer: UIView!
@@ -20,16 +25,18 @@ class FederalPassPDFView: UIView {
     private var parent: UIViewController?
     private var pdfData: Data?
     private var id: String?
+    private var type: PDFType?
     // Completion
     var completionHandler: ((String?) -> Void)?
     
-    public func show(data: Data, in parent: UIViewController, id: String?) {
+    public func show(data: Data, in parent: UIViewController, id: String?, type: PDFType?) {
         guard let doc = PDFDocument(data: data) else {
             return
         }
         self.parent = parent
         self.pdfData = data
         self.id = id
+        self.type = type
         present(in: parent.view)
         display(document: doc)
         style()
