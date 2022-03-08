@@ -27,6 +27,7 @@ extension StorageService {
         case Medication
         case Pharmacy
         case LaboratoryOrder
+        case Comments
     }
     
     struct StorageEvent<T> {

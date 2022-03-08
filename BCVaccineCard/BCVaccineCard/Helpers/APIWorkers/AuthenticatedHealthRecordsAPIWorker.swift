@@ -21,6 +21,7 @@ enum AuthenticationFetchType {
     case TestResults
     case MedicationStatement
     case LaboratoryOrders
+    case Comments
     
     // NOTE: The reason this is not in localized file yet is because we don't know what loader will look like, so text will likely change
     var getName: String {
@@ -30,6 +31,7 @@ enum AuthenticationFetchType {
         case .TestResults: return "Test Results"
         case .MedicationStatement: return "Medication Statement"
         case .LaboratoryOrders: return "Laboratory Orders"
+        case .Comments: return "Comments"
         }
     }
 }
@@ -66,6 +68,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             if fetchStatusList.isCompleted {
                 self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner)
                 self.initializeFetchStatusList()
+            } else if fetchStatusList.canFetchComments {
+                guard let authCredentials = authCredentials else { return }
+                self.getAuthenticatedComments(authCredentials: authCredentials)
             }
         }
     }
@@ -182,6 +187,24 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 }
             } else {
                 self.handleLaboratoryOrdersResponse(result: result)
+            }
+        }
+    }
+    
+    private func getAuthenticatedComments(authCredentials: AuthenticationRequestObject) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedCommentsDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedCommentsDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        apiClient.getAuthenticatedComments(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else { return }
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedCommentsDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedComments(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else { return }
+                    self.handleCommentsResponse(result: result)
+                }
+            } else {
+                self.handleCommentsResponse(result: result)
             }
         }
     }
@@ -333,6 +356,20 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
     }
     
+    private func handleCommentsResponse(result: Result<AuthenticatedCommentResponseObject, ResultError>) {
+        switch result {
+        case .success(let comments):
+            // Note: Have to check for error here because error is being sent back on a 200 response
+            if let resultMessage = comments.resultError?.resultMessage, (comments.resourcePayload.count == 0) {
+                self.fetchStatusList.fetchStatus[.Comments] = FetchStatus(requestCompleted: true, attemptedCount: comments.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
+            } else {
+                self.handleCommentsInCoredata(comments: comments)
+            }
+        case .failure(let error):
+            self.fetchStatusList.fetchStatus[.Comments] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
+        }
+    }
+    
 }
 
 // MARK: Handle Vaccine results in core data
@@ -433,18 +470,23 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Prescription])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
+        let dispatchGroup = DispatchGroup()
         for payload in payloads {
+            dispatchGroup.enter()
             if let id = handleMedicationStatementInCoreData(object: payload, authenticated: true, patientObject: patient) {
                 completedCount += 1
             } else {
                 errorArrayCount += 1
             }
+            dispatchGroup.leave()
         }
-        if let protectiveWord = protectiveWord, completedCount > 0 {
+        dispatchGroup.notify(queue: .main) {
+          if let protectiveWord = protectiveWord, completedCount > 0 {
             authManager.storeProtectiveWord(protectiveWord: protectiveWord)
+          }
+            let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+            self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
         }
-        let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
-        self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
     private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
@@ -482,6 +524,16 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
 }
 
+// MARK: Handle Comments in core data
+extension AuthenticatedHealthRecordsAPIWorker {
+    private func handleCommentsInCoredata(comments: AuthenticatedCommentResponseObject) {
+        // TODO: Maybe we should look at making this synchronus
+        StorageService.shared.storeComments(in: comments)
+        // Note: Attempted and successful counts are 0 as we aren't displaying how many comments have been fetched, just happens in the background
+        self.fetchStatusList.fetchStatus[.Comments] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: nil)
+    }
+}
+
 // MARK: Structs used for various fetch types
 struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedPatientDetails: AuthenticatedPatientDetails?
@@ -489,6 +541,7 @@ struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedTestResultsDetails: AuthenticatedTestResultsDetails?
     var authenticatedMedicationStatementDetails: AuthenticatedMedicationStatementDetails?
     var authenticatedLaboratoryOrdersDetails: AuthenticatedLaboratoryOrdersDetails?
+    var authenticatedCommentsDetails: AuthenticatedCommentsDetails?
     
     struct AuthenticatedPatientDetails {
         var authCredentials: AuthenticationRequestObject
@@ -514,6 +567,11 @@ struct AuthenticatedAPIWorkerRetryDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?
     }
+    
+    struct AuthenticatedCommentsDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+    }
 }
 
 // MARK: Struct used to handle async requests
@@ -529,6 +587,12 @@ struct FetchStatusList {
     
     var isCompleted: Bool {
         return fetchStatus.count == fetchStatus.map({ $0.value.requestCompleted }).filter({ $0 == true }).count
+    }
+    
+    var canFetchComments: Bool {
+        var tempCommentsList = fetchStatus
+        tempCommentsList.removeValue(forKey: .Comments)
+        return tempCommentsList.count == tempCommentsList.map({ $0.value.requestCompleted }).filter({ $0 == true }).count
     }
     
     var getAttemptedCount: Int {
@@ -559,7 +623,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
             .VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
             .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
             .MedicationStatement : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
-            .LaboratoryOrders : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
+            .LaboratoryOrders : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+            .Comments : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
         ])
     }
 }
