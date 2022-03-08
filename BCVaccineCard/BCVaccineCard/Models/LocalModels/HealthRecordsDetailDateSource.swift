@@ -22,6 +22,20 @@ struct HealthRecordsDetailDataSource {
         let date: String?
         let fields: [[TextListModel]]
         
+        var comments: [Comment] {
+            switch type {
+            case .covidImmunizationRecord:
+                return []
+            case .covidTestResultRecord:
+                return []
+            case .medication(let medication):
+                return medication.commentsArray
+            case .laboratoryOrder(_):
+                // TODO: when supporting lab order comments
+                return []
+            }
+        }
+        
     }
     enum RecordType {
         case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])

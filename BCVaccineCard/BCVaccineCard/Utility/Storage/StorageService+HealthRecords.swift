@@ -22,6 +22,14 @@ extension StorageService {
         let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         let labOrders = fetchLaboratoryOrders().map({HealthRecord(type: .LaboratoryOrder($0))})
+         
+        let prescription = fetchPrescriptions()
+        for p in prescription {
+            if !p.commentsArray.isEmpty  {
+                print(p.dispensedDate)
+            }
+        }
+        
         return tests + vaccineCards + medications + labOrders
     }
     
