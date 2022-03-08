@@ -205,13 +205,14 @@ extension TestResult {
 //    }
 //}
 
-
+// MARK: Medication
 extension Medication {
     var id: String {
         return din ?? (genericName ?? "")
     }
 }
 
+// MARK: Lab Order
 extension LaboratoryOrder {
     public var labTests: [LaboratoryTest] {
         let set = laboratoryTests as? Set<LaboratoryTest> ?? []
@@ -220,3 +221,23 @@ extension LaboratoryOrder {
         }
     }
 }
+
+
+// MARK: Perscription
+extension Perscription {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
+
+// MARK: Comment
+extension Comment {
+    public var prescriptions: [Perscription] {
+        let set = prescription as? Set<Perscription> ?? []
+        return Array(set)
+    }
+}
+

@@ -16,17 +16,24 @@ extension HealthRecordsDetailDataSource.Record {
         case .covidTestResultRecord:
             return [.Header, .Fields]
         case .medication:
-            return [.Fields]
+            return [.Fields, .Comments]
         case .laboratoryOrder:
             return [.Fields]
         }
     }
 }
 
+fileprivate extension HealthRecordsDetailDataSource.Record {
+    var hasComments: Bool {
+        getCellSections().contains(.Comments)
+    }
+}
+
 class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
-    enum CellSection {
+    enum CellSection: Int, CaseIterable {
         case Header
         case Fields
+        case Comments
     }
     
     private var tableView: UITableView?
@@ -34,15 +41,27 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func configure(model: HealthRecordsDetailDataSource.Record) {
         self.model = model
+        createTableView()
         setupTableView()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {[weak self] in
+            self?.tableView?.reloadData()
+        }
     }
     
-    private func setupTableView() {
+    private func createTableView() {
         let tableView = UITableView(frame: .zero)
         addSubview(tableView)
         tableView.addEqualSizeContraints(to: self)
+        self.tableView = tableView
+    }
+    
+    private func setupTableView() {
+        guard let tableView = tableView else {
+            return
+        }
         tableView.register(UINib.init(nibName: BannerViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BannerViewTableViewCell.getName)
         tableView.register(UINib.init(nibName: TextListViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextListViewTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CommentViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommentViewTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.showsVerticalScrollIndicator = false
         tableView.estimatedRowHeight = 600
@@ -54,27 +73,48 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let model = self.model else {return 0}
-        return model.getCellSections().count
+        let availableSections = model.getCellSections()
+        return availableSections.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let model = self.model else {return 0}
-        let sections = model.getCellSections()
-        if sections.contains(where: {$0 == .Fields}), sections.last == .Fields && section == sections.count - 1 {
+        let currentSection = sectionEnum(for: section, availableSections: model.getCellSections())
+        switch currentSection {
+        case .Header:
+            return 1
+        case .Fields:
             return model.fields.count
+        case .Comments:
+            return model.comments.count
         }
-        return 1
+    }
+    
+    func sectionEnum(for section: Int, availableSections: [CellSection]) -> CellSection {
+        // All Sections being used
+        if availableSections.count == CellSection.allCases.count, let currentSection = CellSection(rawValue: section) {
+            return currentSection
+        }
+        
+        // Header not being used
+        if !availableSections.contains(.Header), availableSections.contains(.Fields), let currentSection = CellSection(rawValue: section + 1) {
+            return currentSection
+        }
+        
+        Logger.log(string: "ERROR: Case Not handled", type: .general)
+        return .Fields
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let model = self.model else { return UITableViewCell()}
-        let sections = model.getCellSections()
-        let currentSection = sections[indexPath.section]
+        let currentSection = sectionEnum(for: indexPath.section, availableSections: model.getCellSections())
         switch currentSection {
         case .Header:
             return headerCell(indexPath: indexPath, tableView: tableView)
         case .Fields:
             return textListCellWithIndexPathOffset(indexPath: indexPath, tableView: tableView)
+        case .Comments:
+            return commentCell(indexPath: indexPath, tableView: tableView)
         }
     }
     
@@ -99,6 +139,17 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         let data = model.fields[indexPath.row]
         cell.configure(data: data)
         cell.layoutIfNeeded()
+        return cell
+    }
+    
+    private func commentCell(indexPath: IndexPath, tableView: UITableView) -> UITableViewCell {
+        guard
+            let model = self.model,
+            let cell = tableView.dequeueReusableCell(withIdentifier: CommentViewTableViewCell.getName, for: indexPath) as? CommentViewTableViewCell
+        else {
+            return UITableViewCell()
+        }
+        cell.configure(comment: model.comments[indexPath.row])
         return cell
     }
 }

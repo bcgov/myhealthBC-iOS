@@ -29,6 +29,16 @@ extension UIView {
     }
 }
 
+extension UIView {
+    func placeIn(container: UIView, paddingVertical: CGFloat, paddingHorizontal: CGFloat) {
+        container.subviews.forEach { child in
+            child.removeFromSuperview()
+        }
+        container.addSubview(self)
+        self.addEqualSizeContraints(to: container, paddingVertical: paddingVertical, paddingHorizontal: paddingHorizontal)
+    }
+}
+
 // MARK: Loading indicator
 extension UIView {
     func startLoadingIndicator(backgroundColor: UIColor = Constants.UI.LoadingIndicator.backdropColor, containerSize: CGFloat = Constants.UI.LoadingIndicator.containerSize, size: CGFloat = Constants.UI.LoadingIndicator.size) {
