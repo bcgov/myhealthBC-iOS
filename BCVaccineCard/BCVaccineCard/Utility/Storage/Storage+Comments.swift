@@ -18,7 +18,7 @@ extension StorageService: StorageCommentManager {
         
         var comments: [AuthenticatedCommentResponseObject.Comment] = object.resourcePayload.flatMap({$0.value})
        
-        guard comments.isEmpty else {
+        guard !comments.isEmpty else {
             Logger.log(string: "No Comments", type: .storage)
             return
         }
@@ -30,7 +30,7 @@ extension StorageService: StorageCommentManager {
     }
     
     func storeComment(remoteObject object: AuthenticatedCommentResponseObject.Comment) {
-        guard let id = object.id else {
+        guard let id = object.parentEntryID else {
             Logger.log(string: "Can't store comment: No id", type: .storage)
             return
         }
@@ -41,7 +41,7 @@ extension StorageService: StorageCommentManager {
         
         let applicableRecords = findRecordsForComment(id: id)
         guard !applicableRecords.isEmpty else {
-            Logger.log(string: "Could not find record for comment with id \(String(describing: object.id))", type: .storage)
+            Logger.log(string: "Could not find record for comment with id \(String(describing: id))", type: .storage)
             return
         }
         
@@ -91,19 +91,9 @@ extension StorageService: StorageCommentManager {
     
     fileprivate func findRecordsForComment(id: String) -> [HealthRecord] {
         // TODO: This can be refactored to be faster with request predicates
-        let applicableRecords = getHeathRecords().filter { record in
-            switch record.type {
-                
-            case .CovidTest(_):
-                return false
-            case .CovidImmunization(_):
-                return false
-            case .Medication(let medication):
-                return medication.prescriptionIdentifier == id
-            case .LaboratoryOrder(let labTest):
-                // TODO: When supporting lab order comments
-                return labTest.laboratoryReportID == id
-            }
+        let applicableRecords = getHeathRecords().filter({$0.commentId == id})
+        if applicableRecords.isEmpty {
+            Logger.log(string: "Could not match comment id with a health record", type: .storage)
         }
         return applicableRecords
     }

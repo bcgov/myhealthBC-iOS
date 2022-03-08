@@ -57,6 +57,33 @@ struct HealthRecord {
     }
 }
 
+extension HealthRecord {
+    var commentId: String {
+        switch type {
+        case .CovidTest(_):
+            return ""
+        case .CovidImmunization(_):
+            return " "
+        case .Medication(let medication):
+            return medication.prescriptionIdentifier ?? ""
+        case .LaboratoryOrder(let labTest):
+            // TODO: When supporting lab order comments
+            return labTest.laboratoryReportID ?? ""
+        }
+    }
+    
+//    var sortDate: Date {
+//        switch type {
+//        case .CovidTest(let obj):
+//            return
+//        case .CovidImmunization(let obj):
+//            return
+//        case .Medication(let obj):
+//            return
+//        case .LaboratoryOrder(let obj):
+//            return
+//    }
+}
 
 // MARK: Helpers
 extension HealthRecord {

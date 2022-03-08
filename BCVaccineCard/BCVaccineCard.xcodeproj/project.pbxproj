@@ -53,6 +53,7 @@
 		293B32C127D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 293B32BD27D262F70064BAAA /* CommentsViewTableViewCell.xib */; };
 		293B32C527D27A880064BAAA /* CommentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32C327D27A880064BAAA /* CommentsTableViewCell.swift */; };
 		293B32C627D27A880064BAAA /* CommentsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 293B32C427D27A880064BAAA /* CommentsTableViewCell.xib */; };
+		293B32C827D7AFF50064BAAA /* DummyCommentMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32C727D7AFF50064BAAA /* DummyCommentMaker.swift */; };
 		2940A3502728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2940A3512728399B00132D7D /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2940A34F2728399B00132D7D /* StorageService.swift */; };
 		2942AC56273AC30900A4A466 /* ToggleSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */; };
@@ -546,6 +547,7 @@
 		293B32BD27D262F70064BAAA /* CommentsViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentsViewTableViewCell.xib; sourceTree = "<group>"; };
 		293B32C327D27A880064BAAA /* CommentsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsTableViewCell.swift; sourceTree = "<group>"; };
 		293B32C427D27A880064BAAA /* CommentsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentsTableViewCell.xib; sourceTree = "<group>"; };
+		293B32C727D7AFF50064BAAA /* DummyCommentMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyCommentMaker.swift; sourceTree = "<group>"; };
 		2940A34F2728399B00132D7D /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		2942AC54273AC30900A4A466 /* ToggleSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		2942AC55273AC30900A4A466 /* ToggleSettingsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleSettingsTableViewCell.xib; sourceTree = "<group>"; };
@@ -838,9 +840,8 @@
 		293B32AD27D25C2C0064BAAA /* Comments */ = {
 			isa = PBXGroup;
 			children = (
+				293B32C927D7B1E20064BAAA /* CommentView */,
 				293B32B427D262540064BAAA /* CommentsList */,
-				293B32AE27D25C4E0064BAAA /* CommentView.swift */,
-				293B32B127D25C5B0064BAAA /* CommentView.xib */,
 			);
 			path = Comments;
 			sourceTree = "<group>";
@@ -871,6 +872,15 @@
 				293B32C427D27A880064BAAA /* CommentsTableViewCell.xib */,
 			);
 			path = CommentsTableVIewCell;
+			sourceTree = "<group>";
+		};
+		293B32C927D7B1E20064BAAA /* CommentView */ = {
+			isa = PBXGroup;
+			children = (
+				293B32AE27D25C4E0064BAAA /* CommentView.swift */,
+				293B32B127D25C5B0064BAAA /* CommentView.xib */,
+			);
+			path = CommentView;
 			sourceTree = "<group>";
 		};
 		2940A34E2728393100132D7D /* Storage */ = {
@@ -916,6 +926,7 @@
 				29736A382788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift */,
 				29736A3D2788EBD700CCB1D2 /* VaccineCard+CoreDataClass.swift */,
 				29736A352788EBD600CCB1D2 /* VaccineCard+CoreDataProperties.swift */,
+				293B32C727D7AFF50064BAAA /* DummyCommentMaker.swift */,
 			);
 			path = CoreDataClass;
 			sourceTree = "<group>";
@@ -2563,6 +2574,7 @@
 				29AC25332790320F001C22B4 /* QRMaker.swift in Sources */,
 				294BD3D727B54AFE00BD8D46 /* StorageService+Medication.swift in Sources */,
 				291D43BB275FE0EC005F5B94 /* SettingsTextTableViewCell.swift in Sources */,
+				293B32C827D7AFF50064BAAA /* DummyCommentMaker.swift in Sources */,
 				29A5B6E027B55B6C006A9BA7 /* Medication+CoreDataProperties.swift in Sources */,
 				795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,

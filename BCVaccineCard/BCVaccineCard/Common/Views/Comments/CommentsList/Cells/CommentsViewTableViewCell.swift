@@ -13,7 +13,7 @@ class CommentsViewTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        commentView?.placeIn(container: self)
+        commentView?.placeIn(container: self, paddingVertical: 5, paddingHorizontal: 0)
     }
     
     func configure(comment: Comment) {

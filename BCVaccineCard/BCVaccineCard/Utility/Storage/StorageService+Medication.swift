@@ -66,13 +66,13 @@ protocol StorageMedicationManager {
     // MARK: Delete
     func deletePrescription(id: String, sendDeleteEvent: Bool)
     func deletePharmacy(id: String, sendDeleteEvent: Bool)
-    func deleteMedication(id: String, sendDeleteEvent: Bool)
+//    func deleteMedication(id: String, sendDeleteEvent: Bool)
     
     // MARK: Fetch
     func fetchPrescriptions()-> [Perscription]
     func fetchPrescription(id: String)-> Perscription?
     func fetchPharmacy(id: String)-> Pharmacy?
-    func fetchMedication(id: String)-> Medication?
+//    func fetchMedication(id: String)-> Medication?
 }
 
 extension StorageService: StorageMedicationManager {
@@ -109,12 +109,12 @@ extension StorageService: StorageMedicationManager {
         // Handle Medication
         var medication: Medication? = nil
         if let medicationSummary = object.medicationSummary {
-            if let din = medicationSummary.din, let storedMedication = fetchMedication(id: din) {
-                medication = storedMedication
-            } else {
-                medication = storeMedication(gateWayResponse: medicationSummary)
-            }
-            
+//            if let din = medicationSummary.din, let storedMedication = fetchMedication(id: din) {
+//                medication = storedMedication
+//            } else {
+//                medication = storeMedication(gateWayResponse: medicationSummary)
+//            }
+            medication = storeMedication(gateWayResponse: medicationSummary)
         }
         // Handle Pharmacy
         var pharmacy: Pharmacy? = nil
@@ -125,9 +125,8 @@ extension StorageService: StorageMedicationManager {
                 pharmacy = storePharmacy(gateWayResponse: dispensingPharmacy)
             }
         }
-        // Delete existing record if exists
-        let id = object.md5Hash() ?? UUID().uuidString
-        deletePrescription(id: id, sendDeleteEvent: false)
+        
+        let id = UUID().uuidString
         // Store new record
         // This is due to API inconsistencies with date formatting
         var dispenseDate: Date?
@@ -184,6 +183,10 @@ extension StorageService: StorageMedicationManager {
         prescription.authenticated = true
         prescription.pharmacy = pharmacy
         prescription.medication = medication
+        // TODO: FOR DEBUGGING, REMOVE THIS
+        if prescriptionIdentifier == "00019243" || Int(prescriptionIdentifier ?? "0") == 00019243 {
+            print("Found it")
+        }
         do {
             try context.save()
             return prescription
@@ -238,7 +241,7 @@ extension StorageService: StorageMedicationManager {
         medication.isPin = isPin ?? false
         do {
             try context.save()
-            self.notify(event: StorageEvent(event: .Save, entity: .Medication, object: medication))
+//            self.notify(event: StorageEvent(event: .Save, entity: .Medication, object: medication))
             return medication
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
@@ -321,16 +324,16 @@ extension StorageService: StorageMedicationManager {
         }
     }
     
-    func fetchMedication(id: String) -> Medication? {
-        guard let context = managedContext else {return nil}
-        do {
-            let medications = try context.fetch(Medication.fetchRequest())
-            return medications.first(where: {$0.id == id})
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            return nil
-        }
-    }
+//    func fetchMedication(id: String) -> Medication? {
+//        guard let context = managedContext else {return nil}
+//        do {
+//            let medications = try context.fetch(Medication.fetchRequest())
+//            return medications.first(where: {$0.id == id})
+//        } catch let error as NSError {
+//            print("Could not fetch. \(error), \(error.userInfo)")
+//            return nil
+//        }
+//    }
     
     // MARK: Delete
     func deletePrescription(id: String, sendDeleteEvent: Bool) {
@@ -349,11 +352,11 @@ extension StorageService: StorageMedicationManager {
         }
     }
     
-    func deleteMedication(id: String, sendDeleteEvent: Bool) {
-        guard let object = fetchMedication(id: id) else {return}
-        delete(object: object)
-        if sendDeleteEvent {
-            self.notify(event: StorageEvent(event: .Delete, entity: .Medication, object: object))
-        }
-    }
+//    func deleteMedication(id: String, sendDeleteEvent: Bool) {
+//        guard let object = fetchMedication(id: id) else {return}
+//        delete(object: object)
+//        if sendDeleteEvent {
+//            self.notify(event: StorageEvent(event: .Delete, entity: .Medication, object: object))
+//        }
+//    }
 }

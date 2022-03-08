@@ -452,15 +452,20 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Prescription])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
+        let dispatchGroup = DispatchGroup()
         for payload in payloads {
+            dispatchGroup.enter()
             if let id = handleMedicationStatementInCoreData(object: payload, authenticated: true, patientObject: patient) {
                 completedCount += 1
             } else {
                 errorArrayCount += 1
             }
+            dispatchGroup.leave()
         }
-        let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
-        self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+        dispatchGroup.notify(queue: .main) {
+            let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+            self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+        }
     }
     
     private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {

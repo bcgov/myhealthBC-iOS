@@ -23,6 +23,12 @@ extension HealthRecordsDetailDataSource.Record {
     }
 }
 
+fileprivate extension HealthRecordsDetailDataSource.Record {
+    var hasComments: Bool {
+        getCellSections().contains(.Comments)
+    }
+}
+
 class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     enum CellSection {
         case Header
@@ -31,17 +37,58 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     private var tableView: UITableView?
+    private var commentsListView: CommentsListView?
     private var model: HealthRecordsDetailDataSource.Record?
     
     func configure(model: HealthRecordsDetailDataSource.Record) {
         self.model = model
+        createViews()
         setupTableView()
     }
     
+    private func createViews() {
+        
+        
+        if let model = model, model.hasComments {
+            createCommentsView()
+        } else {
+            let tableView = UITableView(frame: .zero)
+            addSubview(tableView)
+            tableView.addEqualSizeContraints(to: self)
+        }
+        
+//        tableView.addEqualSizeContraints(to: self)
+    }
+    
+    private func createCommentsView() {
+        guard let model = self.model else {return}
+        if let existing = self.commentsListView {existing.removeFromSuperview()}
+        let commentsListView: CommentsListView = UIView.fromNib()
+        self.commentsListView = commentsListView
+        addSubview(commentsListView)
+        commentsListView.translatesAutoresizingMaskIntoConstraints = false
+        commentsListView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
+        commentsListView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0).isActive = true
+        commentsListView.bottomAnchor.constraint(equalTo: self.safeBottomAnchor, constant: 0).isActive = true
+        commentsListView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+//        commentsListView.addEqualSizeContraints(to: self)
+        
+        var comments: [Comment] = []
+        for i in 0...10 {
+            comments.append(DummyComments.getComment())
+        }
+//        commentsListView.configure(comments: model.comments)
+        commentsListView.configure(comments: comments)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            commentsListView.tableView.reloadData()
+        })
+       
+    }
+    
     private func setupTableView() {
-        let tableView = UITableView(frame: .zero)
-        addSubview(tableView)
-        tableView.addEqualSizeContraints(to: self)
+        guard let tableView = tableView else {
+            return
+        }
         tableView.register(UINib.init(nibName: BannerViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BannerViewTableViewCell.getName)
         tableView.register(UINib.init(nibName: TextListViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextListViewTableViewCell.getName)
         tableView.register(UINib.init(nibName: CommentsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommentsTableViewCell.getName)
@@ -52,6 +99,20 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.dataSource = self
         tableView.allowsSelection = false
         self.tableView = tableView
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let model = self.model else { return 0}
+        let sections = model.getCellSections()
+        let currentSection = sections[indexPath.section]
+        switch currentSection {
+        case .Header:
+            return 600
+        case .Fields:
+            return 600
+        case .Comments:
+            return 1000
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -114,7 +175,13 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        cell.configure(comments: model.comments)
+        // TODO: TEMP - For developement
+        var comments: [Comment] = []
+        for i in 0...10 {
+            comments.append(DummyComments.getComment())
+        }
+//        cell.configure(comments: model.comments)
+        cell.configure(comments: comments)
         cell.layoutIfNeeded()
         return cell
     }

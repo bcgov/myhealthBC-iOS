@@ -30,12 +30,12 @@ extension UIView {
 }
 
 extension UIView {
-    func placeIn(container: UIView) {
+    func placeIn(container: UIView, paddingVertical: CGFloat, paddingHorizontal: CGFloat) {
         container.subviews.forEach { child in
             child.removeFromSuperview()
         }
         container.addSubview(self)
-        self.addEqualSizeContraints(to: container)
+        self.addEqualSizeContraints(to: container, paddingVertical: paddingVertical, paddingHorizontal: paddingHorizontal)
     }
 }
 

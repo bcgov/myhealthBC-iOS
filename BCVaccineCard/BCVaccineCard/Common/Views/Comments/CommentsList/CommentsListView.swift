@@ -16,6 +16,17 @@ class CommentsListView: UIView {
     func configure(comments: [Comment]) {
         self.comments = comments
         setupTableView()
+        tableView.backgroundColor = .clear
+    }
+}
+
+extension CommentsListView {
+    func computeHeight(comments: [Comment]) -> CGFloat {
+        var total: CGFloat = 0
+        for comment in comments {
+            total += comment.height(width: self.bounds.width)
+        }
+        return total
     }
 }
 
