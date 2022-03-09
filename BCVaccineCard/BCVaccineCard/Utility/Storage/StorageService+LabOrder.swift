@@ -19,7 +19,8 @@ protocol StorageLaboratoryOrderManager {
     
     func storeLaboratoryOrder(
         patient: Patient,
-        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order
+        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
+        pdf: String?
     ) -> LaboratoryOrder?
     
     func storeLaboratoryOrder(
@@ -33,7 +34,8 @@ protocol StorageLaboratoryOrderManager {
         orderingProvider: String?,
         testStatus: String?,
         reportAvailable: Bool,
-        laboratoryTests: [LaboratoryTest]?
+        laboratoryTests: [LaboratoryTest]?,
+        pdf: String?
     ) -> LaboratoryOrder?
     
     func storeLaboratoryTest(
@@ -50,7 +52,8 @@ protocol StorageLaboratoryOrderManager {
     
     // MARK: Update
     func updateLaboratoryOrder(
-        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order
+        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
+        pdf: String?
     ) -> LaboratoryOrder?
     
     // MARK: Delete
@@ -77,7 +80,8 @@ extension StorageService: StorageLaboratoryOrderManager {
     
     func storeLaboratoryOrder(
         patient: Patient,
-        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order) -> LaboratoryOrder? {
+        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
+        pdf: String?) -> LaboratoryOrder? {
             let id = labOrderId(gateWayObject: gateWayObject)
             deleteLaboratoryOrder(id: id, sendDeleteEvent: false)
             var storedTests: [LaboratoryTest] = []
@@ -89,11 +93,11 @@ extension StorageService: StorageLaboratoryOrderManager {
                 }
             }
             let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
-            return storeLaboratoryOrder(patient: patient, id: id, laboratoryReportID: gateWayObject.laboratoryReportID, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests)
+            return storeLaboratoryOrder(patient: patient, id: id, laboratoryReportID: gateWayObject.laboratoryReportID, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf)
             
         }
     
-    func storeLaboratoryOrder(patient: Patient, id: String, laboratoryReportID: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?) -> LaboratoryOrder? {
+    func storeLaboratoryOrder(patient: Patient, id: String, laboratoryReportID: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?) -> LaboratoryOrder? {
         guard let context = managedContext else {return nil}
         let labOrder = LaboratoryOrder(context: context)
         labOrder.id = id
@@ -106,7 +110,7 @@ extension StorageService: StorageLaboratoryOrderManager {
         labOrder.commonName = commonName
         labOrder.orderingProvider = orderingProvider
         labOrder.reportAvailable = reportAvailable
-//        labOrder.laboratoryTests = laboratoryTests
+        labOrder.pdf = pdf
         var labTestsArray: [LaboratoryTest] = []
         let labTests = laboratoryTests ?? []
         for test in labTests {
@@ -158,10 +162,10 @@ extension StorageService: StorageLaboratoryOrderManager {
     }
     
     
-    func updateLaboratoryOrder(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order) -> LaboratoryOrder? {
+    func updateLaboratoryOrder(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?) -> LaboratoryOrder? {
         guard let existing = fetchLaboratoryOrder(id: labOrderId(gateWayObject: gateWayObject)), let patient = existing.patient else {return nil}
         // Store function will remove existing one
-        return storeLaboratoryOrder(patient: patient, gateWayObject: gateWayObject)
+        return storeLaboratoryOrder(patient: patient, gateWayObject: gateWayObject, pdf: pdf)
     }
     
     // MARK: Fetch
