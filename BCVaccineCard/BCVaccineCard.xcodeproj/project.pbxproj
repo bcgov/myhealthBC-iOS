@@ -136,6 +136,8 @@
 		297967A227C536E20019EE9B /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2979679827C536E10019EE9B /* Patient+CoreDataProperties.swift */; };
 		297967A427C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297967A327C5371C0019EE9B /* StorageService+LabOrder.swift */; };
 		297967A527C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297967A327C5371C0019EE9B /* StorageService+LabOrder.swift */; };
+		297D3BB227D9479D00B059CA /* TableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297D3BB127D9479D00B059CA /* TableSectionHeader.swift */; };
+		297D3BB427D947A900B059CA /* TableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 297D3BB327D947A900B059CA /* TableSectionHeader.xib */; };
 		29806693275970C8006FF3ED /* StorageModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29820CE527594CF600B53468 /* StorageModelExtensions.swift */; };
 		298190C42773B4090062F55E /* Authentication.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 298190C32773B4090062F55E /* Authentication.storyboard */; };
 		298190C72773B4350062F55E /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298190C62773B4350062F55E /* AuthenticationViewController.swift */; };
@@ -592,6 +594,8 @@
 		2979679727C536E10019EE9B /* LaboratoryTest+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LaboratoryTest+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2979679827C536E10019EE9B /* Patient+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		297967A327C5371C0019EE9B /* StorageService+LabOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+LabOrder.swift"; sourceTree = "<group>"; };
+		297D3BB127D9479D00B059CA /* TableSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSectionHeader.swift; sourceTree = "<group>"; };
+		297D3BB327D947A900B059CA /* TableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableSectionHeader.xib; sourceTree = "<group>"; };
 		298190C32773B4090062F55E /* Authentication.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Authentication.storyboard; sourceTree = "<group>"; };
 		298190C62773B4350062F55E /* AuthenticationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
 		29820CE527594CF600B53468 /* StorageModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageModelExtensions.swift; sourceTree = "<group>"; };
@@ -1043,6 +1047,15 @@
 				2978852A279624D800FF912D /* SettingsSectionHeaderView.xib */,
 			);
 			path = Header;
+			sourceTree = "<group>";
+		};
+		297D3BB027D9478700B059CA /* TableHeader */ = {
+			isa = PBXGroup;
+			children = (
+				297D3BB127D9479D00B059CA /* TableSectionHeader.swift */,
+				297D3BB327D947A900B059CA /* TableSectionHeader.xib */,
+			);
+			path = TableHeader;
 			sourceTree = "<group>";
 		};
 		298190C52773B4170062F55E /* Authentication */ = {
@@ -1546,6 +1559,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				297D3BB027D9478700B059CA /* TableHeader */,
 				293B32AD27D25C2C0064BAAA /* Comments */,
 				29921C902773A5D2005025D2 /* AuthenticationInfoView */,
 				29921C89277395D8005025D2 /* AuthenticationView */,
@@ -2199,6 +2213,7 @@
 				7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */,
 				79BDA092270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				293B32C027D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
+				297D3BB427D947A900B059CA /* TableSectionHeader.xib in Resources */,
 				29921C942773A5F8005025D2 /* AuthenticationInfoView.xib in Resources */,
 				29B07E0A2732109E007ABB46 /* exportOptions.plist in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
@@ -2619,6 +2634,7 @@
 				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29A5B6D627B55B65006A9BA7 /* Pharmacy+CoreDataClass.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
+				297D3BB227D9479D00B059CA /* TableSectionHeader.swift in Sources */,
 				79218ABE27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
 				792834542730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
 			);
