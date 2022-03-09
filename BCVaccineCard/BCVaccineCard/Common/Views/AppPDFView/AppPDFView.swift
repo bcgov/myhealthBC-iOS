@@ -83,11 +83,7 @@ class AppPDFView: UIView {
     }
     
     @IBAction func shareButtonTapped(_ sender: Any) {
-        // TODO: Remove from file system here for any previous files
-        self.removeFromFileSystem()
         guard let data = pdfData else { return }
-        // TODO: Write to file system here
-        guard let pdfToShare = writeToFileSystemAndLoadPDF(pdfData: data) else { return }
         let ac = UIActivityViewController(activityItems: [data], applicationActivities: [])
         parent?.present(ac, animated: true)
     }
@@ -122,29 +118,4 @@ class AppPDFView: UIView {
         UIAccessibility.post(notification: .screenChanged, argument: self)
         UIAccessibility.setFocusTo(pdfView)
     }
-    
-    private func writeToFileSystemAndLoadPDF(pdfData: Data) -> NSData? {
-        let fileManager = FileManager.default
-        let path = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(temporaryPath)
-        fileManager.createFile(atPath: path as String, contents: pdfData, attributes: nil)
-        if fileManager.fileExists(atPath: path) {
-            let document = NSData(contentsOfFile: path)
-            return document
-        } else {
-            return nil
-        }
-    }
-    
-    private func removeFromFileSystem() {
-        let fileManager = FileManager.default
-        let path = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(temporaryPath)
-        if fileManager.fileExists(atPath: path) {
-            do {
-                try fileManager.removeItem(atPath: path)
-            } catch {
-                print("Error removing PDF")
-            }
-        }
-    }
-    
 }
