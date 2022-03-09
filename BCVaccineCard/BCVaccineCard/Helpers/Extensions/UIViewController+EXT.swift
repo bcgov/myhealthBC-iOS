@@ -442,7 +442,7 @@ extension UIViewController {
         guard let data = Data(base64URLEncoded: pdfString) else {
             return
         }
-        let pdfView: FederalPassPDFView = FederalPassPDFView.fromNib()
+        let pdfView: AppPDFView = AppPDFView.fromNib()
         pdfView.show(data: data, in: vc.parent ?? vc, id: id, type: type)
         pdfView.completionHandler = completion
     }

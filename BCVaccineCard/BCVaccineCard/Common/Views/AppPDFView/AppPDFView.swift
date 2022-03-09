@@ -1,5 +1,5 @@
 //
-//  PDFView.swift
+//  AppPDFView.swift
 //  BCVaccineCard
 //
 //  Created by Amir Shayegh on 2021-11-05.
@@ -14,7 +14,7 @@ enum PDFType {
     case labResults
 }
 
-class FederalPassPDFView: UIView {
+class AppPDFView: UIView {
     @IBOutlet weak var pdfContainer: UIView!
     @IBOutlet weak var navContainer: UIView!
     @IBOutlet weak var closeButton: UIButton!

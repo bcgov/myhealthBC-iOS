@@ -97,11 +97,17 @@ class HealthRecordDetailViewController: BaseViewController {
 // MARK: Navigation setup
 extension HealthRecordDetailViewController {
     private func navSetup() {
-        let rightNavButton: NavButton? = self.authenticated ? nil :
-        NavButton(
-            title: .delete,
-            image: nil, action: #selector(self.deleteButton),
-            accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        var rightNavButton: NavButton?
+        switch dataSource.type {
+        case .laboratoryOrder:
+            rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        default:
+            rightNavButton = self.authenticated ? nil :
+            NavButton(
+                title: .delete,
+                image: nil, action: #selector(self.deleteButton),
+                accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        }
         
         self.navDelegate?.setNavigationBarWith(title: dataSource.title,
                                                leftNavButton: nil,

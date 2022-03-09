@@ -70,7 +70,8 @@ extension StorageService: StorageLaboratoryOrderManager {
         guard let orders = gateWayResponse.resourcePayload?.orders else {return []}
         var storedOrders: [LaboratoryOrder] = []
         for order in orders {
-            if let storedOrder = storeLaboratoryOrder(patient: patient, gateWayObject: order) {
+            // Note: Currently no easy way to get PDF, so in this case, we will store nil
+            if let storedOrder = storeLaboratoryOrder(patient: patient, gateWayObject: order, pdf: nil) {
                 storedOrders.append(storedOrder)
             }
         }

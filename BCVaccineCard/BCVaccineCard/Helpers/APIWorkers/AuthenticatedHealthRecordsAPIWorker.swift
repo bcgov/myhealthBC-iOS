@@ -201,20 +201,26 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
-    private func getAuthenticatedLaboratoryOrderPDF(authCredentials: AuthenticationRequestObject, reportId: String) -> String? {
+    private func getAuthenticatedLaboratoryOrderPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedLabOrderPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedLabOrderPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
         apiClient.getAuthenticatedLaboratoryOrderPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, queueItRetryStatus in
-            guard let `self` = self else { return nil }
+            guard let `self` = self else {
+                completion(nil)
+                return
+            }
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
                 self.requestDetails.authenticatedLabOrderPDFDetails?.queueItToken = queueItToken
                 self.apiClient.getAuthenticatedLaboratoryOrderPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
-                    guard let `self` = self else { return nil }
-                    return self.handlePDFResponse(result: result)
+                    guard let `self` = self else {
+                        completion(nil)
+                        return
+                    }
+                    return self.handlePDFResponse(result: result, completion: completion)
                 }
             } else {
-                return self.handlePDFResponse(result: result)
+                return self.handlePDFResponse(result: result, completion: completion)
             }
 
         }
@@ -371,19 +377,19 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
     }
     
-    private func handlePDFResponse(result: Result<AuthenticatedPDFResponseObject, ResultError>) -> String? {
+    private func handlePDFResponse(result: Result<AuthenticatedPDFResponseObject, ResultError>, completion: @escaping (String?) -> Void) {
         switch result {
         case .success(let pdfObject):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = comments.resultError?.resultMessage, (pdfObject.resourcePayload?.data?.isEmpty) {
+            if let resultMessage = pdfObject.resultError?.resultMessage, ((pdfObject.resourcePayload?.data ?? "").isEmpty) {
                 print("Error fetching PDF data")
-                return nil
+                completion(nil)
             } else {
-                return pdfObject.resourcePayload?.data
+                completion(pdfObject.resourcePayload?.data)
             }
         case .failure(let error):
             print("Error fetching PDF data: ", error.resultMessage)
-            return nil
+            completion(nil)
         }
     }
 
@@ -521,11 +527,12 @@ extension AuthenticatedHealthRecordsAPIWorker {
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else { return }
         for order in orders {
-            let pdf = self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.reportID)
-            if let id = handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
-                completedCount += 1
-            } else {
-                errorArrayCount += 1
+            self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.reportID ?? "") { pdf in
+                if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
+                    completedCount += 1
+                } else {
+                    errorArrayCount += 1
+                }
             }
         }
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
