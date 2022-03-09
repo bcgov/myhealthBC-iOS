@@ -104,6 +104,11 @@ extension ProtectiveWordPromptViewController: UITextFieldDelegate {
         }
         return true
     }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
 // MARK: For Button tap and enabling

@@ -482,7 +482,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
         dispatchGroup.notify(queue: .main) {
           if let protectiveWord = protectiveWord, completedCount > 0 {
-            authManager.storeProtectiveWord(protectiveWord: protectiveWord)
+              self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
           }
             let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
