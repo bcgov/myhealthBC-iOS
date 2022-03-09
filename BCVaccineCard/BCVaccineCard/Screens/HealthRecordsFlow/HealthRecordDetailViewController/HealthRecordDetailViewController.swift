@@ -25,6 +25,7 @@ class HealthRecordDetailViewController: BaseViewController {
     private var dataSource: HealthRecordsDetailDataSource!
     private var authenticated: Bool!
     private var userNumberHealthRecords: Int!
+    private var pdfData: String?
 
     
     override func viewDidLoad() {
@@ -99,8 +100,11 @@ extension HealthRecordDetailViewController {
     private func navSetup() {
         var rightNavButton: NavButton?
         switch dataSource.type {
-        case .laboratoryOrder:
-            rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        case .laboratoryOrder(model: let labOrder):
+            if let pdf = labOrder.pdf {
+                self.pdfData = pdf
+                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+            }
         default:
             rightNavButton = self.authenticated ? nil :
             NavButton(
@@ -127,10 +131,8 @@ extension HealthRecordDetailViewController {
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
-            case .medication:
-                print("Not able to delete medications currently, as they are auth-only records")
-            case .laboratoryOrder:
-                print("Not able to delete medications currently, as they are auth-only records")
+            case .medication, .laboratoryOrder:
+                print("Not able to delete these records currently, as they are auth-only records")
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)
@@ -139,5 +141,10 @@ extension HealthRecordDetailViewController {
             }
         } onCancel: {
         }
+    }
+    
+    @objc private func showPDFView() {
+        guard let pdf = self.pdfData else { return }
+        self.openPDFView(pdfString: pdf, vc: self, id: nil, type: .labResults, completion: nil)
     }
 }
