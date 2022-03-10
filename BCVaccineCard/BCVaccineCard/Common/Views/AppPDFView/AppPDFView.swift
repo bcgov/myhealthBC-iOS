@@ -84,7 +84,11 @@ class AppPDFView: UIView {
     
     @IBAction func shareButtonTapped(_ sender: Any) {
         guard let data = pdfData else { return }
-        let ac = UIActivityViewController(activityItems: [data], applicationActivities: [])
+        let img = formatPDFAsImageForFirstPage(pdfData: data)
+        let activityItem = CustomActivityItemProvider(placeholderItem: "")
+        activityItem.pdfItem = data
+        activityItem.imageItem = img
+        let ac = UIActivityViewController(activityItems: [activityItem], applicationActivities: [])
         parent?.present(ac, animated: true)
     }
     
@@ -117,5 +121,77 @@ class AppPDFView: UIView {
         self.accessibilityElements = [shareButton, closeButton, pdfView, closeButton]
         UIAccessibility.post(notification: .screenChanged, argument: self)
         UIAccessibility.setFocusTo(pdfView)
+    }
+    
+    private func formatPDFAsImageForFirstPage(pdfData: Data) -> UIImage? {
+        guard let doc = PDFDocument(data: pdfData) else { return nil }
+        let numberOfPages = doc.pageCount
+        guard let page = doc.page(at: 0) else { return nil }
+        let pageRect = page.bounds(for: .mediaBox)
+        let renderer = UIGraphicsImageRenderer(size: pageRect.size)
+        let img = renderer.image { ctx in
+            // Set and fill the background color.
+            UIColor.white.set()
+            ctx.fill(CGRect(x: 0, y: 0, width: pageRect.width, height: pageRect.height))
+            
+            // Translate the context so that we only draw the `cropRect`.
+            ctx.cgContext.translateBy(x: -pageRect.origin.x, y: pageRect.size.height - pageRect.origin.y)
+            
+            // Flip the context vertically because the Core Graphics coordinate system starts from the bottom.
+            ctx.cgContext.scaleBy(x: 1.0, y: -1.0)
+            
+            // Draw the PDF page.
+            page.draw(with: .mediaBox, to: ctx.cgContext)
+        }
+        return img
+    }
+    
+    // TODO: Play around with this some more
+//    private func formatPDFAsImages(pdfData: Data) -> [UIImage]? {
+//        guard let doc = PDFDocument(data: pdfData) else { return nil }
+//        let numberOfPages = doc.pageCount
+//        guard numberOfPages > 0 else { return nil }
+//        var imageArray: [UIImage] = []
+//        for i in 0...(numberOfPages - 1) {
+//            if let page = doc.page(at: i) {
+//                let pageRect = page.bounds(for: .mediaBox)
+//                let renderer = UIGraphicsImageRenderer(size: pageRect.size)
+//                let img = renderer.image { ctx in
+//                    // Set and fill the background color.
+//                    UIColor.white.set()
+//                    ctx.fill(CGRect(x: 0, y: 0, width: pageRect.width, height: pageRect.height))
+//
+//                    // Translate the context so that we only draw the `cropRect`.
+//                    ctx.cgContext.translateBy(x: -pageRect.origin.x, y: pageRect.size.height - pageRect.origin.y)
+//
+//                    // Flip the context vertically because the Core Graphics coordinate system starts from the bottom.
+//                    ctx.cgContext.scaleBy(x: 1.0, y: -1.0)
+//
+//                    // Draw the PDF page.
+//                    page.draw(with: .mediaBox, to: ctx.cgContext)
+//                }
+//                imageArray.append(img)
+//            }
+//        }
+//        return imageArray
+//    }
+}
+
+class CustomActivityItemProvider: UIActivityItemProvider {
+    
+    var pdfItem: Any?
+    var imageItem: Any?
+
+    override var item: Any {
+        guard let type = self.activityType else { return "" }
+        switch type {
+        case UIActivity.ActivityType.mail, UIActivity.ActivityType.message:
+            guard let pdfItem = pdfItem else { return "" }
+            return pdfItem
+        default:
+            guard let imageItem = imageItem else { return "" }
+            return imageItem
+        }
+        
     }
 }
