@@ -15,4 +15,5 @@ enum Storyboard {
     static var resource: UIStoryboard { return UIStoryboard(name: "Resource", bundle: nil) }
     static var booking: UIStoryboard { return UIStoryboard(name: "Booking", bundle: nil) }
     static var newsFeed: UIStoryboard { return UIStoryboard(name: "NewsFeed", bundle: nil) }
+    static var reusable: UIStoryboard { return UIStoryboard(name: "Reusable", bundle: nil) }
 }

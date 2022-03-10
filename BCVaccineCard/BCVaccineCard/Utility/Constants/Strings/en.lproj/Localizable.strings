@@ -17,6 +17,7 @@
 "Passes" = "Proofs";
 "Records" = "Records";
 "Cancel" = "Cancel";
+"Continue" = "Continue";
 //"Enter" = "Enter";
 "Submit" = "Submit";
 "Done" = "Done";
@@ -201,6 +202,23 @@
 "YouWillAutomaticallyReturned" = "You will then be automatically returned to the ";
 "MyHealthBC" = "My Health BC";
 "MobileApp" = " mobile app.";
+"LocalAuthPrivacyText" = "Biometric authenication is a security feature to protect your personal health information and are required to log on My Health BC.\n\nYour health information and the health information of your spouse, dependents, and claim details will be stored in your mobile device. Should you elect to use Touch ID offered by Apple Inc., or fingerprint sign in functionality offered by Android, or any other type of biometric identification managed on your device (collectively “biometrics”), you agree with acknowledge and consent to the terms and conditions, which can be accessed at here.";
+"Privacy" = "Privacy";
+"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
+"ProtectYourPersonalInformation" = "Protect your personal information";
+"LocalAuthViewDescription" = "Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure.";
+"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
+"UseTouchId" = "Use Touch ID";
+"UsePassCode" = "Use passcode";
+"UseFaceId" = "Use Face ID";
+"AllowSecurityAccessTitle" = "Allow Security Access";
+"and" = " and ";
+"AllowSecurityAccessMessage" = "\nMy Health BC needs permission to use %@%@Passcode for the device.\n\nGo to Settings > %@Passcode and change the settings to on.";
+"SetupAuthentication" = "Set up authentication";
+"ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication.";
+"ProtectedWordVCNavTitle" = "Restricted PharmaNet Records";
+
+
 
 // Accessibility only localized strings
 
@@ -223,7 +241,7 @@
 "TapToNavigateToRecordDetails" = "Tap to navigate to record details";
 "TappingWillDeleteThisRecord" = "Tapping this button will delete this record";
 "YourHealthRecord" = "Your Health Record";
-"back" = "back";
+"Back" = "back";
 "TappingWillTakeYouBackTo" = "Tapping this button will take you back to ";
 "TappingWillTakeToIntroductionOfNextFeature" = "Tapping this button will take you to the introduction of the next feature";
 "TappingWillTakeYouToHealthPassesHome" = "Tapping this button will take you to the Health Passes home screen";
@@ -255,19 +273,4 @@
 "Selected" = "Selected";
 "Unselected" = "Unselected";
 "SelectTo" = "Select To";
-
-"LocalAuthPrivacyText" = "Biometric authenication is a security feature to protect your personal health information and are required to log on My Health BC.\n\nYour health information and the health information of your spouse, dependents, and claim details will be stored in your mobile device. Should you elect to use Touch ID offered by Apple Inc., or fingerprint sign in functionality offered by Android, or any other type of biometric identification managed on your device (collectively “biometrics”), you agree with acknowledge and consent to the terms and conditions, which can be accessed at here.";
-"Privacy" = "Privacy";
-"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
-"ProtectYourPersonalInformation" = "Protect your personal information";
-"LocalAuthViewDescription" = "Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure.";
-"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
-"UseTouchId" = "Use Touch ID";
-"UsePassCode" = "Use passcode";
-"UseFaceId" = "Use Face ID";
-"AllowSecurityAccessTitle" = "Allow Security Access";
-"and" = " and ";
-"AllowSecurityAccessMessage" = "\nMy Health BC needs permission to use %@%@Passcode for the device.\n\nGo to Settings > %@Passcode and change the settings to on.";
-"SetupAuthentication" = "Set up authentication";
-"ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication.";
 "ActionAvailable" = "Action Available: ";

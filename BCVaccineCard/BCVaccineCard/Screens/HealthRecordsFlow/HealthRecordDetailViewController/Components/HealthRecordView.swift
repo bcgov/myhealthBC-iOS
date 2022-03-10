@@ -68,6 +68,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
+        tableView.separatorStyle = .none
         self.tableView = tableView
     }
     
@@ -75,6 +76,16 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         guard let model = self.model else {return 0}
         let availableSections = model.getCellSections()
         return availableSections.count
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let model = self.model else {return nil}
+        let currentSectionEnum = sectionEnum(for: section, availableSections: model.getCellSections())
+        guard currentSectionEnum == .Comments else {return nil}
+        let headerView: TableSectionHeader = TableSectionHeader.fromNib()
+        let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
+        headerView.configure(text: "\(model.comments.count) \(commentsString)")
+        return headerView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

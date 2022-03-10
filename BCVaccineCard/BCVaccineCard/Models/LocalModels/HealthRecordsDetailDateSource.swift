@@ -82,6 +82,15 @@ struct HealthRecordsDetailDataSource {
         }
     }
     
+    var containsProtectedWord: Bool {
+        switch type {
+        case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder:
+            return false
+        case .medication:
+            return true
+        }
+    }
+    
     let deleteAlertTitle: String
     let deleteAlertMessage: String
     
@@ -246,7 +255,8 @@ extension HealthRecordsDetailDataSource {
             TextListModel(header: TextListModel.TextProperties(text: "Filled date:", bolded: true), subtext: TextListModel.TextProperties(text: dateString ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Address:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.addressLine1 ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Phone number:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.phoneNumber ?? "", bolded: false)),
-            TextListModel(header: TextListModel.TextProperties(text: "Fax:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.faxNumber ?? "", bolded: false))
+            TextListModel(header: TextListModel.TextProperties(text: "Fax:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.faxNumber ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Direction for use:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.directions ?? "", bolded: false))
         ])
         
         // Notes:

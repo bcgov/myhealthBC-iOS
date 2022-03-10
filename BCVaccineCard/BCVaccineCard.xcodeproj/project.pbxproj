@@ -136,6 +136,8 @@
 		297967A227C536E20019EE9B /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2979679827C536E10019EE9B /* Patient+CoreDataProperties.swift */; };
 		297967A427C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297967A327C5371C0019EE9B /* StorageService+LabOrder.swift */; };
 		297967A527C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297967A327C5371C0019EE9B /* StorageService+LabOrder.swift */; };
+		297D3BB227D9479D00B059CA /* TableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297D3BB127D9479D00B059CA /* TableSectionHeader.swift */; };
+		297D3BB427D947A900B059CA /* TableSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 297D3BB327D947A900B059CA /* TableSectionHeader.xib */; };
 		29806693275970C8006FF3ED /* StorageModelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29820CE527594CF600B53468 /* StorageModelExtensions.swift */; };
 		298190C42773B4090062F55E /* Authentication.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 298190C32773B4090062F55E /* Authentication.storyboard */; };
 		298190C72773B4350062F55E /* AuthenticationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298190C62773B4350062F55E /* AuthenticationViewController.swift */; };
@@ -478,6 +480,10 @@
 		79932CAE2790FA38007E8D92 /* AuthenticationInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29921C912773A5F0005025D2 /* AuthenticationInfoView.swift */; };
 		79932CAF2790FA94007E8D92 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29921C8E27739F6C005025D2 /* Theme.swift */; };
 		79932CB02790FB4D007E8D92 /* AttributedString+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29921C952773B049005025D2 /* AttributedString+EXT.swift */; };
+		799E0AFC27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E0AFB27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift */; };
+		799E0AFD27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E0AFB27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift */; };
+		799E0AFF27D13F43009C68FE /* Reusable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 799E0AFE27D13F43009C68FE /* Reusable.storyboard */; };
+		799E0B0027D13F43009C68FE /* Reusable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 799E0AFE27D13F43009C68FE /* Reusable.storyboard */; };
 		79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
@@ -592,6 +598,8 @@
 		2979679727C536E10019EE9B /* LaboratoryTest+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LaboratoryTest+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2979679827C536E10019EE9B /* Patient+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		297967A327C5371C0019EE9B /* StorageService+LabOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+LabOrder.swift"; sourceTree = "<group>"; };
+		297D3BB127D9479D00B059CA /* TableSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSectionHeader.swift; sourceTree = "<group>"; };
+		297D3BB327D947A900B059CA /* TableSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableSectionHeader.xib; sourceTree = "<group>"; };
 		298190C32773B4090062F55E /* Authentication.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Authentication.storyboard; sourceTree = "<group>"; };
 		298190C62773B4350062F55E /* AuthenticationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewController.swift; sourceTree = "<group>"; };
 		29820CE527594CF600B53468 /* StorageModelExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageModelExtensions.swift; sourceTree = "<group>"; };
@@ -769,6 +777,8 @@
 		799050BF273C8344006CD726 /* GetRecordsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GetRecordsView.xib; sourceTree = "<group>"; };
 		799050C3273C8558006CD726 /* UserRecordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecordListView.swift; sourceTree = "<group>"; };
 		799050C6273C8567006CD726 /* UserRecordListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserRecordListView.xib; sourceTree = "<group>"; };
+		799E0AFB27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectiveWordPromptViewController.swift; sourceTree = "<group>"; };
+		799E0AFE27D13F43009C68FE /* Reusable.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Reusable.storyboard; sourceTree = "<group>"; };
 		79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargerTouchAreaButton.swift; sourceTree = "<group>"; };
 		79A63D032722172900F7C919 /* PROD Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PROD Info.plist"; sourceTree = "<group>"; };
 		79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HealthPass.storyboard; sourceTree = "<group>"; };
@@ -1043,6 +1053,15 @@
 				2978852A279624D800FF912D /* SettingsSectionHeaderView.xib */,
 			);
 			path = Header;
+			sourceTree = "<group>";
+		};
+		297D3BB027D9478700B059CA /* TableHeader */ = {
+			isa = PBXGroup;
+			children = (
+				297D3BB127D9479D00B059CA /* TableSectionHeader.swift */,
+				297D3BB327D947A900B059CA /* TableSectionHeader.xib */,
+			);
+			path = TableHeader;
 			sourceTree = "<group>";
 		};
 		298190C52773B4170062F55E /* Authentication */ = {
@@ -1344,6 +1363,7 @@
 			isa = PBXGroup;
 			children = (
 				7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */,
+				799E0AFB27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift */,
 			);
 			path = ReusableViewControllers;
 			sourceTree = "<group>";
@@ -1437,6 +1457,7 @@
 				7944F68626F1261B006B9444 /* LaunchScreen.storyboard */,
 				795AA76327155F6300E59FF1 /* NewsFeed.storyboard */,
 				298190C32773B4090062F55E /* Authentication.storyboard */,
+				799E0AFE27D13F43009C68FE /* Reusable.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -1544,6 +1565,7 @@
 		7944F6C226F12C00006B9444 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				297D3BB027D9478700B059CA /* TableHeader */,
 				293B32AD27D25C2C0064BAAA /* Comments */,
 				29921C902773A5D2005025D2 /* AuthenticationInfoView */,
 				29921C89277395D8005025D2 /* AuthenticationView */,
@@ -2199,6 +2221,7 @@
 				7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */,
 				79BDA092270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				293B32C027D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
+				297D3BB427D947A900B059CA /* TableSectionHeader.xib in Resources */,
 				29921C942773A5F8005025D2 /* AuthenticationInfoView.xib in Resources */,
 				29B07E0A2732109E007ABB46 /* exportOptions.plist in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
@@ -2208,6 +2231,7 @@
 				795AA76727155F7100E59FF1 /* Resource.storyboard in Resources */,
 				293B32B927D2628A0064BAAA /* CommentsListView.xib in Resources */,
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
+				799E0AFF27D13F43009C68FE /* Reusable.storyboard in Resources */,
 				79218AE027557F7D0063004E /* StaticPositiveTestTableViewCell.xib in Resources */,
 				7944F68026F12613006B9444 /* Main.storyboard in Resources */,
 			);
@@ -2273,6 +2297,7 @@
 				79FDE427273335DC00DAD988 /* FederalPassView.xib in Resources */,
 				799050C8273C8567006CD726 /* UserRecordListView.xib in Resources */,
 				79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */,
+				799E0B0027D13F43009C68FE /* Reusable.storyboard in Resources */,
 				79BDA085270CEE5E00FF30AB /* Records.storyboard in Resources */,
 				792834602730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */,
 				293B32C127D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
@@ -2602,6 +2627,7 @@
 				2932DCEA275ED82600532BC4 /* AnalyticsAppID.swift in Sources */,
 				795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				796653E127A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift in Sources */,
+				799E0AFC27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */,
 				296519A5272995680002B778 /* AuthManager.swift in Sources */,
 				2978851F2795F16E00FF912D /* SettingsRowTableViewCell.swift in Sources */,
 				79218AD727557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
@@ -2618,6 +2644,7 @@
 				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29A5B6D627B55B65006A9BA7 /* Pharmacy+CoreDataClass.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
+				297D3BB227D9479D00B059CA /* TableSectionHeader.swift in Sources */,
 				79218ABE27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
 				792834542730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
 			);
@@ -2813,6 +2840,7 @@
 				795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				296519A6272995680002B778 /* AuthManager.swift in Sources */,
 				79218AD827557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
+				799E0AFD27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */,
 				796653E227A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift in Sources */,
 				794BD6512702EEC00084ADA8 /* String+EXT.swift in Sources */,
 				29788532279624EA00FF912D /* SettingsRowTableViewCell.swift in Sources */,

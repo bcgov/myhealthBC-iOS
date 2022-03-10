@@ -107,11 +107,12 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
-    func getAuthenticatedMedicationStatement(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedMedicationStatementResponseObject>) {
+    func getAuthenticatedMedicationStatement(_ authCredentials: AuthenticationRequestObject, protectiveWord: String? = nil, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedMedicationStatementResponseObject>) {
         let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedMedicationStatement(hdid: authCredentials.hdid))
         
         let headerParameters: Headers = [
-            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+            Constants.AuthenticatedMedicationStatementParameters.protectiveWord: (protectiveWord ?? "")
         ]
         
         guard let unwrappedURL = url else { return }

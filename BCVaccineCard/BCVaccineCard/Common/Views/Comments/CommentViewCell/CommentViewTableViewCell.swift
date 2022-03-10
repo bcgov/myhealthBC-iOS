@@ -8,6 +8,8 @@
 import UIKit
 
 class CommentViewTableViewCell: UITableViewCell {
+    @IBOutlet weak var container: UIView!
+    @IBOutlet weak var stack: UIStackView!
     @IBOutlet weak var commentText: UILabel!
     @IBOutlet weak var dateTimeLabel: UILabel!
     override func awakeFromNib() {
@@ -24,7 +26,8 @@ class CommentViewTableViewCell: UITableViewCell {
             dateTimeLabel.text = ""
         }
         commentText.backgroundColor = .clear
-        self.backgroundColor = AppColours.commentBackground
+        self.backgroundColor = .clear
+        container.backgroundColor = AppColours.commentBackground
         dateTimeLabel.textColor = AppColours.commentDateTime
         commentText.textColor = AppColours.textBlack
         
