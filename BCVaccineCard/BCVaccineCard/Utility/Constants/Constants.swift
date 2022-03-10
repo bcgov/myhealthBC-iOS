@@ -60,6 +60,10 @@ struct Constants {
         static let hdid = "hdid"
     }
     
+    struct AuthenticatedMedicationStatementParameters {
+        static let protectiveWord = "protectiveWord"
+    }
+    
     struct KeychainPHNKey {
         static let key = "PHNKey" // Note: Data should be an array of
     }

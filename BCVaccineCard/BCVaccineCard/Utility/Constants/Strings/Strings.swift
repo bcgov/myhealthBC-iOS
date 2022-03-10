@@ -24,6 +24,7 @@ extension String {
     static var records: String { return "Records".localized }
     /// Button titles
     static var cancel: String { return "Cancel".localized }
+    static var continueText: String { return "Continue".localized }
 //    static var enter: String { return "Enter".localized }
     static var submit: String { return "Submit".localized }
     static var done: String { return "Done".localized }
@@ -175,7 +176,7 @@ extension String {
     static var covid19SymptomCheckerResource: String { return "Covid19SymptomCheckerResource".localized }
     static var schoolRelatedResource: String { return "SchoolRelatedResource".localized }
     
-    // Federal Paaa pdf
+    // Federal Pass pdf
     static var travelPass: String { return "TravelPass".localized }
     static var canadianCOVID19ProofOfVaccination: String { return "CanadianCOVID19ProofOfVaccination".localized }
 
@@ -268,6 +269,10 @@ extension String {
         return String(format: "AllowSecurityAccessMessage".localized, "", "", "")
     }
     static var reasonForRequestingAuthentication: String { return "ReasonForRequestingAuthentication".localized }
+
+    
+    // MARK: ProtectedWord
+    static var protectedWordVCNavTitle: String { return "ProtectedWordVCNavTitle".localized }
 }
 
 // Accessibility only localized strings
@@ -290,7 +295,7 @@ extension String {
     static var tapToNavigateToRecordDetails: String { return "TapToNavigateToRecordDetails".localized }
     static var tappingWillDeleteThisRecord: String { return "TappingWillDeleteThisRecord".localized }
     static var yourHealthRecord: String { return "YourHealthRecord".localized }
-    static var back: String { return "back".localized }
+    static var back: String { return "Back".localized }
     static var tappingWillTakeYouBackTo: String { return "TappingWillTakeYouBackTo".localized }
     static var tappingWillTakeToIntroductionOfNextFeature: String { return "TappingWillTakeToIntroductionOfNextFeature".localized }
     static var tappingWillTakeYouToHealthPassesHome: String { return "TappingWillTakeYouToHealthPassesHome".localized }

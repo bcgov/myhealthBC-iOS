@@ -23,4 +23,7 @@ extension Notification.Name {
     static let backgroundAuthFetch = Notification.Name("backgroundAuthFetch")
     
     static let settingsTableViewReload = Notification.Name("settingsTableViewReload")
+    
+    static let protectedWordRequired = Notification.Name("protectedWordRequired")
+    static let protectedWordProvided = Notification.Name("protectedWordProvided")
 }
