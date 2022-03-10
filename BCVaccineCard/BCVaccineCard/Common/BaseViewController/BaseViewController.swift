@@ -9,6 +9,7 @@ import UIKit
 
 protocol NavigationSetupProtocol: AnyObject {
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
+    func adjustNavStyleForPDF(targetVC vc: UIViewController)
 }
 
 class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
@@ -48,6 +49,11 @@ extension BaseViewController {
        
         guard let nav = self.navigationController as? CustomNavigationController else { return }
         nav.setupNavigation(leftNavButton: left, rightNavButton: right, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString)
+    }
+    
+    func adjustNavStyleForPDF(targetVC vc: UIViewController) {
+        guard let nav = self.navigationController as? CustomNavigationController else { return }
+        nav.adjustNavStyleForPDF(targetVC: vc)
     }
 }
 

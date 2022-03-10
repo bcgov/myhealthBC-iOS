@@ -437,6 +437,7 @@ extension UIViewController {
 }
 
 // MARK: Open PDF (used for federal pass and other PDF views)
+// FIXME: Can likely remove this as we shouldn't need to use custom PDF view anymore
 extension UIViewController {
     func openPDFView(pdfString: String, vc: UIViewController, id: String?, type: PDFType?, completion: ((String?) -> Void)?) {
         guard let data = Data(base64URLEncoded: pdfString) else {
@@ -445,5 +446,55 @@ extension UIViewController {
         let pdfView: AppPDFView = AppPDFView.fromNib()
         pdfView.show(data: data, in: vc.parent ?? vc, id: id, type: type)
         pdfView.completionHandler = completion
+    }
+}
+
+// MARK: Logic to open pdf natively
+extension UIViewController {
+    
+    func showPDFDocument(pdfString: String, navTitle: String, documentVCDelegate: UIViewController, navDelegate: NavigationSetupProtocol?) {
+        guard let data = Data(base64URLEncoded: pdfString) else { return }
+        removePDFFromFileSystem()
+        do {
+            try savePdf(pdfData: data)
+            loadPDFAndShare(documentVCDelegate: documentVCDelegate, name: navTitle, navDelegate: navDelegate)
+        } catch {
+            print("Couldn't load PDF view")
+        }
+    }
+    
+    private func savePdf(pdfData: Data) throws {
+        let documentsURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let pdfDocURL = documentsURL.appendingPathComponent(Constants.PDFDocumentName.name)
+        try pdfData.write(to: pdfDocURL)
+    }
+
+    private func loadPDFAndShare(documentVCDelegate: UIViewController, name: String, navDelegate: NavigationSetupProtocol?) {
+        do {
+            let documentsURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let pdfDocURL = documentsURL.appendingPathComponent(Constants.PDFDocumentName.name)
+            self.tabBarController?.tabBar.isHidden = true
+            let documentVC = UIDocumentInteractionController()
+            documentVC.url = pdfDocURL
+            documentVC.uti = pdfDocURL.uti
+            documentVC.name = name
+            documentVC.delegate = documentVCDelegate as? UIDocumentInteractionControllerDelegate
+            navDelegate?.adjustNavStyleForPDF(targetVC: documentVCDelegate)
+            documentVC.presentPreview(animated: true)
+        } catch  {
+            print("document was not found")
+        }
+      }
+    
+    private func removePDFFromFileSystem() {
+        do {
+            let fileManager = FileManager.default
+            let documentsURL = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let pdfDocURL = documentsURL.appendingPathComponent(Constants.PDFDocumentName.name)
+            try fileManager.removeItem(at: pdfDocURL)
+            print("document deleted properly")
+        } catch  {
+            print("document was not deleted")
+        }
     }
 }

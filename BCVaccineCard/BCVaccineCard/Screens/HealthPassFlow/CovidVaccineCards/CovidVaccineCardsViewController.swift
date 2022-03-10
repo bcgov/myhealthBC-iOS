@@ -52,6 +52,7 @@ class CovidVaccineCardsViewController: BaseViewController {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
         navSetup()
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -291,10 +292,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
 extension CovidVaccineCardsViewController: FederalPassViewDelegate {
     func federalPassButtonTapped(model: AppVaccinePassportModel?) {
         if let pass =  model?.codableModel.fedCode {
-            self.openPDFView(pdfString: pass, vc: self, id: nil, type: .fedPass, completion: { [weak self] _ in
-                guard let `self` = self else { return }
-                self.tabBarController?.tabBar.isHidden = false
-            })
+            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
             self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .vaccineCardsScreen, owner: self, completion: { [weak self] id in
@@ -307,6 +305,13 @@ extension CovidVaccineCardsViewController: FederalPassViewDelegate {
         }
     }
 
+}
+
+extension CovidVaccineCardsViewController: UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        guard let navController = self.navigationController else { return self }
+        return navController
+    }
 }
 
 // MARK: Adjusting data source functions

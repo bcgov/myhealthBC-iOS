@@ -26,7 +26,6 @@ class HealthRecordDetailViewController: BaseViewController {
     private var authenticated: Bool!
     private var userNumberHealthRecords: Int!
     private var pdfData: String?
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +64,7 @@ class HealthRecordDetailViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         setNeedsStatusBarAppearanceUpdate()
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -145,6 +145,14 @@ extension HealthRecordDetailViewController {
     
     @objc private func showPDFView() {
         guard let pdf = self.pdfData else { return }
-        self.openPDFView(pdfString: pdf, vc: self, id: nil, type: .labResults, completion: nil)
+        self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+    }
+}
+
+// MARK: This is for showing the PDF view using native behaviour
+extension HealthRecordDetailViewController: UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        guard let navController = self.navigationController else { return self }
+        return navController
     }
 }

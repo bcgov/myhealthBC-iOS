@@ -64,6 +64,10 @@ struct Constants {
         static let key = "PHNKey" // Note: Data should be an array of
     }
     
+    struct PDFDocumentName {
+        static let name = "MyHealth Document.pdf"
+    }
+    
     struct NetworkRetryAttempts {
         static let publicVaccineStatusRetryMaxForFedPass = 3
         static let publicRetryMaxForTestResults = 3
