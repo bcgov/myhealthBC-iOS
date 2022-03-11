@@ -123,7 +123,7 @@ extension HealthPassViewController {
         guard let pass = userInfo["pass"] as? String else { return }
         guard let source = userInfo["source"] as? GatewayFormSource, source == .healthPassHomeScreen else { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.showPDFDocument(pdfString: pass, navTitle: "Newly Added", documentVCDelegate: self, navDelegate: self.navDelegate)
+            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         }
     }
 }
