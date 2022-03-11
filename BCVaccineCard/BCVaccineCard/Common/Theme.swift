@@ -29,7 +29,7 @@ enum LabelColour {
 extension Theme {
     
     // Buttons
-    public func style(button: UIButton, style: ButtonStyle, title: String, bold: Bool? = false) {
+    public func style(button: UIButton, style: ButtonStyle, title: String, image: UIImage?, bold: Bool? = false) {
         switch style {
             
         case .Fill:
@@ -38,6 +38,7 @@ extension Theme {
             styleButtonHollow(button: button, bold: bold)
         }
         button.setTitle(title, for: .normal)
+        button.setImage(image, for: .normal)
         button.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
     }
     

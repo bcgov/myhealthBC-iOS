@@ -214,6 +214,7 @@ extension String {
     static var profileAndSettings: String { return "ProfileAndSettings".localized }
     static var viewProfile: String { return "ViewProfile".localized }
     static var bcscLogin: String { return "BcscLogin".localized }
+    static var accessRecords: String { return "AccessRecords".localized }
     static var notNow: String { return "notNow".localized }
     static var securityAndData: String { return "SecurityAndData".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
