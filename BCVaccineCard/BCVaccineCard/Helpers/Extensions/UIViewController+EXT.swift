@@ -407,13 +407,17 @@ extension UIViewController {
     func postCardAddedNotification(id: String) {
         NotificationCenter.default.post(name: .cardAddedNotification, object: nil, userInfo: ["id": id])
     }
+    
+    func postOpenPDFFromAddingFedPassOnlyNotification(pass: String, source: GatewayFormSource) {
+        NotificationCenter.default.post(name: .fedPassOnlyAdded, object: nil, userInfo: ["pass": pass, "source": source])
+    }
 }
 
 // MARK: GoTo Health Gateway Logic
 extension UIViewController {
     // Note: This is currently only being used for fetching fed pass only
     // TODO: May need to be refactored in the future if we use this function anywhere else
-    func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, completion: ((String?) -> Void)?) {
+    func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, navDelegate: NavigationSetupProtocol?, completion: ((String?) -> Void)?) {
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
         if let details = Defaults.rememberGatewayDetails {
             rememberDetails = details
@@ -422,11 +426,21 @@ extension UIViewController {
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
         if fetchType.isFedPassOnly {
             vc.completionHandler = { [weak self] details in
+                guard let `self` = self else { return }
                 DispatchQueue.main.async {
                     if let fedPass = details.fedPassId {
-                        self?.openPDFView(pdfString: fedPass, vc: owner, id: details.id, type: .fedPass, completion: completion)
+//                        self?.openPDFView(pdfString: fedPass, vc: owner, id: details.id, type: .fedPass, completion: completion)
+                        if source == .healthPassHomeScreen {
+                            self.popBack(toControllerType: HealthPassViewController.self)
+                            self.postOpenPDFFromAddingFedPassOnlyNotification(pass: fedPass, source: .healthPassHomeScreen)
+                        } else if source == .vaccineCardsScreen {
+                            self.popBack(toControllerType: CovidVaccineCardsViewController.self)
+                            self.postOpenPDFFromAddingFedPassOnlyNotification(pass: fedPass, source: .vaccineCardsScreen)
+                        }
+                        completion?(details.id)
+//                        owner.showPDFDocument(pdfString: fedPass, navTitle: "Newly Added", documentVCDelegate: owner, navDelegate: navDelegate)
                     } else {
-                        self?.navigationController?.popViewController(animated: true)
+                        self.navigationController?.popViewController(animated: true)
                     }
                 }
             }
