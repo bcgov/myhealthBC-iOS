@@ -7,14 +7,50 @@
 
 import UIKit
 
+enum HiddenRecordType {
+    case login(hiddenRecords: Int)
+    case medicalRecords
+    
+    var getButtonImage: UIImage? {
+        switch self {
+        case .login: return UIImage(named: "bcscLogo")
+        case .medicalRecords: return UIImage(named: "white-lock")
+        }
+    }
+    
+    var getButtonTitle: String {
+        switch self {
+        case .login: return .bcscLogin
+        case .medicalRecords: return .accessRecords
+        }
+    }
+    
+    var getTitleText: String {
+        switch self {
+        case .login(let hiddenRecords): return "\(hiddenRecords) hidden records"
+        case .medicalRecords: return "Hidden medication records"
+        }
+    }
+    
+    var getDescriptionText: String {
+        switch self {
+        case .login: return "Log in again with your BC Services Card to view all the records"
+        case .medicalRecords: return "Enter protective word to access your medication records."
+        }
+    }
+}
+
+//protocol
+
 class HiddenRecordsTableViewCell: UITableViewCell, Theme {
 
     @IBOutlet weak var numberOfHiddenRecordsLabel: UILabel!
     @IBOutlet weak var descLabel: UILabel!
-    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var actionButton: UIButton!
     @IBOutlet weak var backgroundContainer: UIView!
     
-    var loginCompletion: (()->Void)?
+    private var hiddenType: HiddenRecordType?
+    var completionHandler: ((HiddenRecordType?)->Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,23 +63,25 @@ class HiddenRecordsTableViewCell: UITableViewCell, Theme {
         // Configure the view for the selected state
     }
     
-    @IBAction func loginButtonTapped(_ sender: Any) {
-        guard let loginCompletion = loginCompletion else {
+    @IBAction func actionButtonTapped(_ sender: Any) {
+        guard let completionHandler = completionHandler else {
             return
         }
-        loginCompletion()
+        completionHandler(self.hiddenType)
     }
     
-    func configure(numberOfHiddenRecords: Int, onLogin: @escaping()->Void) {
-        numberOfHiddenRecordsLabel.text = "\(numberOfHiddenRecords) hidden records"
-        loginCompletion = onLogin
-        style()
+    func configure(forRecordType type: HiddenRecordType, onAction: @escaping(HiddenRecordType?)->Void) {
+        numberOfHiddenRecordsLabel.text = type.getTitleText
+        descLabel.text = type.getDescriptionText
+        completionHandler = onAction
+        style(forRecordType: type)
     }
     
-    func style() {
+    private func style(forRecordType type: HiddenRecordType) {
+        self.hiddenType = type
         style(label: numberOfHiddenRecordsLabel, style: .Bold, size: 17, colour: .Blue)
         style(label: descLabel, style: .Regular, size: 13, colour: .Black)
-        style(button: loginButton, style: .Fill, title: .bcscLogin, bold: true)
+        style(button: actionButton, style: .Fill, title: type.getButtonTitle, image: type.getButtonImage, bold: true)
         backgroundContainer.backgroundColor = AppColours.backgroundGray
     }
     

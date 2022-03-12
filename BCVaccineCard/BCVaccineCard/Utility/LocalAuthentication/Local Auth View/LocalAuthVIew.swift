@@ -134,13 +134,13 @@ class LocalAuthView: UIView, Theme {
             useTouchIDButton.isHidden = true
         case .touchID:
             useTouchIDButton.isHidden = false
-            style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication)
-            style(button: useTouchIDButton, style: .Fill, title: .useTouchId)
+            style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication, image: nil)
+            style(button: useTouchIDButton, style: .Fill, title: .useTouchId, image: nil)
             hasBiometric = true
         case .faceID:
             useTouchIDButton.isHidden = false
-            style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication)
-            style(button: useTouchIDButton, style: .Fill, title: .useFaceId)
+            style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication, image: nil)
+            style(button: useTouchIDButton, style: .Fill, title: .useFaceId, image: nil)
             hasBiometric = true
         @unknown default:
             useTouchIDButton.isHidden = true
@@ -181,9 +181,9 @@ class LocalAuthView: UIView, Theme {
         let underlineAttributedString = NSAttributedString(string: .learnMoreAboutLocalAuth, attributes: underlineAttribute)
         infoLabel.attributedText = underlineAttributedString
         
-        style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication)
-        style(button: useTouchIDButton, style: .Fill, title: .useTouchId)
-        style(button: usePasscodeButton, style: .Fill, title: .usePassCode)
+        style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication, image: nil)
+        style(button: useTouchIDButton, style: .Fill, title: .useTouchId, image: nil)
+        style(button: usePasscodeButton, style: .Fill, title: .usePassCode, image: nil)
         
         style(label: titleLabel, style: .Bold, size: 24, colour: .Blue)
         style(label: subtitleLabel, style: .Regular, size: 17, colour: .Grey)

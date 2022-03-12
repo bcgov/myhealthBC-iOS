@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
+    var protectiveWordEnteredThisSession = false
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
