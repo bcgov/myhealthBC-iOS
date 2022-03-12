@@ -1,5 +1,5 @@
 //
-//  PDFView.swift
+//  AppPDFView.swift
 //  BCVaccineCard
 //
 //  Created by Amir Shayegh on 2021-11-05.
@@ -9,7 +9,12 @@ import Foundation
 import UIKit
 import PDFKit
 
-class FederalPassPDFView: UIView {
+enum PDFType {
+    case fedPass
+    case labResults
+}
+
+class AppPDFView: UIView {
     @IBOutlet weak var pdfContainer: UIView!
     @IBOutlet weak var navContainer: UIView!
     @IBOutlet weak var closeButton: UIButton!
@@ -20,16 +25,19 @@ class FederalPassPDFView: UIView {
     private var parent: UIViewController?
     private var pdfData: Data?
     private var id: String?
+    private var type: PDFType?
+ 
     // Completion
     var completionHandler: ((String?) -> Void)?
     
-    public func show(data: Data, in parent: UIViewController, id: String?) {
+    public func show(data: Data, in parent: UIViewController, id: String?, type: PDFType?) {
         guard let doc = PDFDocument(data: data) else {
             return
         }
         self.parent = parent
         self.pdfData = data
         self.id = id
+        self.type = type
         present(in: parent.view)
         display(document: doc)
         style()
@@ -75,8 +83,8 @@ class FederalPassPDFView: UIView {
     }
     
     @IBAction func shareButtonTapped(_ sender: Any) {
-        guard let data = pdfData else {return}
-        let ac = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+        guard let data = pdfData else { return }
+        let ac = UIActivityViewController(activityItems: [data], applicationActivities: [])
         parent?.present(ac, animated: true)
     }
     
@@ -110,5 +118,4 @@ class FederalPassPDFView: UIView {
         UIAccessibility.post(notification: .screenChanged, argument: self)
         UIAccessibility.setFocusTo(pdfView)
     }
-    
 }

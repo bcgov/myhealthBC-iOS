@@ -25,7 +25,7 @@ class HealthRecordDetailViewController: BaseViewController {
     private var dataSource: HealthRecordsDetailDataSource!
     private var authenticated: Bool!
     private var userNumberHealthRecords: Int!
-
+    private var pdfData: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +64,7 @@ class HealthRecordDetailViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         setNeedsStatusBarAppearanceUpdate()
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -97,11 +98,20 @@ class HealthRecordDetailViewController: BaseViewController {
 // MARK: Navigation setup
 extension HealthRecordDetailViewController {
     private func navSetup() {
-        let rightNavButton: NavButton? = self.authenticated ? nil :
-        NavButton(
-            title: .delete,
-            image: nil, action: #selector(self.deleteButton),
-            accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        var rightNavButton: NavButton?
+        switch dataSource.type {
+        case .laboratoryOrder(model: let labOrder):
+            if let pdf = labOrder.pdf {
+                self.pdfData = pdf
+                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+            }
+        default:
+            rightNavButton = self.authenticated ? nil :
+            NavButton(
+                title: .delete,
+                image: nil, action: #selector(self.deleteButton),
+                accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        }
         
         self.navDelegate?.setNavigationBarWith(title: dataSource.title,
                                                leftNavButton: nil,
@@ -121,10 +131,8 @@ extension HealthRecordDetailViewController {
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
-            case .medication:
-                print("Not able to delete medications currently, as they are auth-only records")
-            case .laboratoryOrder:
-                print("Not able to delete medications currently, as they are auth-only records")
+            case .medication, .laboratoryOrder:
+                print("Not able to delete these records currently, as they are auth-only records")
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)
@@ -133,5 +141,18 @@ extension HealthRecordDetailViewController {
             }
         } onCancel: {
         }
+    }
+    
+    @objc private func showPDFView() {
+        guard let pdf = self.pdfData else { return }
+        self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+    }
+}
+
+// MARK: This is for showing the PDF view using native behaviour
+extension HealthRecordDetailViewController: UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        guard let navController = self.navigationController else { return self }
+        return navController
     }
 }

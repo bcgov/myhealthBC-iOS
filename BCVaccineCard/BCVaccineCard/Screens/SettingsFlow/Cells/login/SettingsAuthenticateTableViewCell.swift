@@ -35,7 +35,7 @@ class SettingsAuthenticateTableViewCell: UITableViewCell, Theme {
     
     // MARK: Style
     fileprivate func style() {
-        style(button: button, style: .Fill, title: .bcscLogin, bold: true)
+        style(button: button, style: .Fill, title: .bcscLogin, image: UIImage(named: "bcscLogo"), bold: true)
         if let icon = UIImage(named: "bcscLogo") {
             button.setImage(icon, for: .normal)
         }

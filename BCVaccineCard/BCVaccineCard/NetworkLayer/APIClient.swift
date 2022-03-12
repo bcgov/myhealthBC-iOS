@@ -130,6 +130,18 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
+    func getAuthenticatedLaboratoryOrderPDF(_ authCredentials: AuthenticationRequestObject, token: String?, reportId: String, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedPDFResponseObject>) {
+        let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedLaboratoryOrderPDF(repordId: reportId))
+        
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+            Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
+    
 }
 
 // MARK: QUEUEIT Logic here

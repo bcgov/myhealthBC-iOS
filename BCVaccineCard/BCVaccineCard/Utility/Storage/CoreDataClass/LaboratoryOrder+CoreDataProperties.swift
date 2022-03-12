@@ -28,6 +28,7 @@ extension LaboratoryOrder {
     @NSManaged public var reportAvailable: Bool
     @NSManaged public var laboratoryTests: NSSet?
     @NSManaged public var patient: Patient?
+    @NSManaged public var pdf: String?
 
 }
 

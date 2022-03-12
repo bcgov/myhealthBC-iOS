@@ -29,6 +29,7 @@ class HealthPassViewController: BaseViewController {
         super.viewDidLoad()
         authManager = AuthManager()
         refreshOnStorageChange()
+        setFedPassObservable()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,7 +39,7 @@ class HealthPassViewController: BaseViewController {
         setupTableView()
         // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
-        
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -107,6 +108,22 @@ extension HealthPassViewController {
                 break
             }
            
+        }
+    }
+}
+
+// MARK: For fed pass observable
+extension HealthPassViewController {
+    private func setFedPassObservable() {
+        NotificationCenter.default.addObserver(self, selector: #selector(fedPassOnlyAdded(notification:)), name: .fedPassOnlyAdded, object: nil)
+    }
+    
+    @objc func fedPassOnlyAdded(notification:Notification) {
+        guard let userInfo = notification.userInfo as? [String: Any] else { return }
+        guard let pass = userInfo["pass"] as? String else { return }
+        guard let source = userInfo["source"] as? GatewayFormSource, source == .healthPassHomeScreen else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         }
     }
 }
@@ -238,13 +255,14 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
 extension HealthPassViewController: FederalPassViewDelegate {
     func federalPassButtonTapped(model: AppVaccinePassportModel?) {
         if let pass = model?.codableModel.fedCode {
-            self.openFederalPass(pass: pass, vc: self, id: nil, completion: { [weak self] _ in
-                guard let `self` = self else { return }
-                self.tabBarController?.tabBar.isHidden = false
-            })
+//            self.openPDFView(pdfString: pass, vc: self, id: nil, type: .fedPass, completion: { [weak self] _ in
+//                guard let `self` = self else { return }
+//                self.tabBarController?.tabBar.isHidden = false
+//            })
+            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .healthPassHomeScreen, owner: self, completion: { [weak self] _ in
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .healthPassHomeScreen, owner: self, navDelegate: self.navDelegate, completion: { [weak self] _ in
                 guard let `self` = self else { return }
                 self.tabBarController?.tabBar.isHidden = false
                 self.navigationController?.popViewController(animated: true)
@@ -252,6 +270,13 @@ extension HealthPassViewController: FederalPassViewDelegate {
         }
     }
     
+}
+
+extension HealthPassViewController: UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        guard let navController = self.navigationController else { return self }
+        return navController
+    }
 }
 
 // MARK: Add card button table view cell delegate here
