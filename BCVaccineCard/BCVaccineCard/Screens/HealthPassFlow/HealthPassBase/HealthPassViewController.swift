@@ -38,7 +38,6 @@ class HealthPassViewController: BaseViewController {
         setupTableView()
         // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {

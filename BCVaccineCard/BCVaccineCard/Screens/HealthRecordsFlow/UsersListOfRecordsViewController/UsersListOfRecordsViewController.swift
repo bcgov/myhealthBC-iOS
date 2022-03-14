@@ -79,6 +79,7 @@ class UsersListOfRecordsViewController: BaseViewController {
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
+    /*
     private func navSetup() {
         let hasRecords = !self.dataSource.isEmpty
         let editModeNavButton = inEditMode ? NavButton(title: .done,
@@ -104,16 +105,88 @@ extension UsersListOfRecordsViewController {
         tableView.isEditing = false
         inEditMode = true
     }
+    */
+    private func navSetup() {
+        let filterButton = NavButton(title: "Filter" ,
+                  image: nil, action: #selector(self.showFilters),
+                  accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
+        self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
+                                               leftNavButton: nil,
+                                               rightNavButton: filterButton,
+                                               navStyle: .small,
+                                               targetVC: self,
+                                               backButtonHintString: nil)
+    }
+}
+
+// MARK: Filters
+extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
+    
+    @objc func showFilters() {
+        let fv: FilterRecordsView = UIView.fromNib()
+        fv.showModally(on: view.findTopMostVC()?.view ?? view)
+        fv.delegate = self
+    }
+    
+    func selected(filter: RecordsFilter) {
+        let patientRecords = fetchPatientRecords()
+        show(records: patientRecords, filter:filter)
+    }
 }
 
 // MARK: Data Source Setup
 extension UsersListOfRecordsViewController {
+    
     private func fetchDataSource() {
-        guard let patient = self.patient else {return}
-        self.view.startLoadingIndicator(backgroundColor: .clear)
+        let patientRecords = fetchPatientRecords()
+        show(records: patientRecords, filter: nil)
+        self.checkForTestResultsToUpdate(ds: self.dataSource)
         
+    }
+    
+    private func fetchPatientRecords() -> [HealthRecordsDetailDataSource] {
+        guard let patient = self.patient else {return []}
         let records = StorageService.shared.getHeathRecords()
         let patientRecords = records.detailDataSource(patient: patient)
+        return patientRecords
+    }
+    
+    private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil) {
+        var patientRecords: [HealthRecordsDetailDataSource] = records
+        if let filter = filter {
+            patientRecords = patientRecords.filter({ item in
+                var showItem = true
+                // Filter by type
+                if !filter.recordTypes.isEmpty {
+                    switch item.type {
+                    case .covidImmunizationRecord:
+                        showItem = filter.recordTypes.contains(.CovidImmunization)
+                    case .covidTestResultRecord:
+                        showItem = filter.recordTypes.contains(.Covid)
+                    case .medication:
+                        showItem = filter.recordTypes.contains(.Medication)
+                    case .laboratoryOrder:
+                        showItem = filter.recordTypes.contains(.LabTests)
+                    }
+                }
+                // Filter by date
+                if let dateString = item.mainRecord?.date,
+                   let recordDate = Date.Formatter.monthDayYearDate.date(from: dateString)
+                {
+                    if let fromDate = filter.fromDate, recordDate < fromDate {
+                        showItem = false
+                    }
+                    if let toDate = filter.toDate, recordDate > toDate {
+                        showItem = false
+                    }
+                    
+                }
+                
+                return showItem
+            })
+        }
+        
+        self.view.startLoadingIndicator(backgroundColor: .clear)
         
         if AuthManager().isAuthenticated {
             handleAuthenticatedMedicalRecords(patientRecords: patientRecords)
@@ -131,8 +204,8 @@ extension UsersListOfRecordsViewController {
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
         self.checkForTestResultsToUpdate(ds: self.dataSource)
-        
     }
+    
     
     private func handleAuthenticatedMedicalRecords(patientRecords: [HealthRecordsDetailDataSource]) {
         // Note: Assumption is, if protective word is not stored in keychain at this point, then user does not have protective word enabled
@@ -250,7 +323,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         } else {
             return recordCell(indexPath: indexPath)
         }
-       
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -357,7 +430,7 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
         print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
         StorageService.shared.updateCovidTestResult(gateWayResponse: result) { [weak self] covidLabTestResult in
             guard let `self` = self else {return}
- 
+            
             guard let covidLabTestResult = covidLabTestResult else { return }
             guard let healthRecordDetailDS = HealthRecord(type: .CovidTest(covidLabTestResult)).detailDataSource() else { return }
             guard self.dataSource.count > row else { return }

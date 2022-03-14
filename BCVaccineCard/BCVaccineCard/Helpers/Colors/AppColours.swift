@@ -22,6 +22,7 @@ class AppColours {
     static let borderGray = UIColor(red: 207/255, green: 207/255, blue: 207/255, alpha: 1.0)
     static let commentBackground = UIColor(red: 0.95, green: 0.95, blue: 0.95, alpha: 1)
     static let commentDateTime = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
+    static let divider = UIColor(red: 0.652, green: 0.751, blue: 0.85, alpha: 0.3)
     
     struct CovidTest {
         static let pendingText = appBlue

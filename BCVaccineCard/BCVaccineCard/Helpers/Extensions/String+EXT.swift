@@ -64,6 +64,14 @@ extension String {
         return ceil(boundingRect.height)
         
     }
+    func widthForView(font:UIFont, height:CGFloat)  -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingRect = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading],
+                                             attributes: [.font: font],
+                                             context: nil)
+        return ceil(boundingRect.width)
+    }
+    
 }
 
 // MARK: Convert String Code to UIImage
