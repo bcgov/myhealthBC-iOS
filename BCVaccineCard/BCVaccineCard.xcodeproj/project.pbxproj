@@ -182,9 +182,9 @@
 		29AC25332790320F001C22B4 /* QRMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AC25322790320F001C22B4 /* QRMaker.swift */; };
 		29B07E0A2732109E007ABB46 /* exportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 29B07E092732109E007ABB46 /* exportOptions.plist */; };
 		29B23B3F26FB88BB00A3AC79 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B23B3E26FB88BB00A3AC79 /* CameraViewController.swift */; };
-		29B446AB273575AA00E0F967 /* FederalPassPDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B446AA273575AA00E0F967 /* FederalPassPDFView.swift */; };
-		29B446AC2735766400E0F967 /* FederalPassPDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B446AA273575AA00E0F967 /* FederalPassPDFView.swift */; };
-		29B446AE27357F1700E0F967 /* FederalPassPDFView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B446AD27357F1700E0F967 /* FederalPassPDFView.xib */; };
+		29B446AB273575AA00E0F967 /* AppPDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B446AA273575AA00E0F967 /* AppPDFView.swift */; };
+		29B446AC2735766400E0F967 /* AppPDFView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B446AA273575AA00E0F967 /* AppPDFView.swift */; };
+		29B446AE27357F1700E0F967 /* AppPDFView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B446AD27357F1700E0F967 /* AppPDFView.xib */; };
 		29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */; };
 		29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
 		29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
@@ -386,6 +386,8 @@
 		794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7944F67E26F12613006B9444 /* Main.storyboard */; };
 		794BD6762703A3DB0084ADA8 /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794BD6742703A3DA0084ADA8 /* ImageTableViewCell.swift */; };
 		794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 794BD6752703A3DA0084ADA8 /* ImageTableViewCell.xib */; };
+		794FF0D127DAB08B00C98831 /* URL+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794FF0D027DAB08B00C98831 /* URL+EXT.swift */; };
+		794FF0D227DAB08B00C98831 /* URL+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794FF0D027DAB08B00C98831 /* URL+EXT.swift */; };
 		795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		795AA72F27108C1C00E59FF1 /* GatewayRequestObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72E27108C1C00E59FF1 /* GatewayRequestObjects.swift */; };
@@ -470,7 +472,9 @@
 		797BB9692767E7E000CD1645 /* HealthRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D43DB2762E196005F5B94 /* HealthRecordView.swift */; };
 		797BB96A2767E85D00CD1645 /* SettingsTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D43BA275FE0EC005F5B94 /* SettingsTextTableViewCell.swift */; };
 		797BB96B2767F17D00CD1645 /* PagingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29498CA12767EA7300E36406 /* PagingIndicatorView.swift */; };
-		799050AF27365111006CD726 /* FederalPassPDFView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B446AD27357F1700E0F967 /* FederalPassPDFView.xib */; };
+		797DE3C227D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797DE3C127D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift */; };
+		797DE3C327D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797DE3C127D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift */; };
+		799050AF27365111006CD726 /* AppPDFView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B446AD27357F1700E0F967 /* AppPDFView.xib */; };
 		799050B3273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
 		799050B4273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
 		799050BD273C8330006CD726 /* GetRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050BC273C832F006CD726 /* GetRecordsView.swift */; };
@@ -635,8 +639,8 @@
 		29AC25322790320F001C22B4 /* QRMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRMaker.swift; sourceTree = "<group>"; };
 		29B07E092732109E007ABB46 /* exportOptions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = exportOptions.plist; sourceTree = "<group>"; };
 		29B23B3E26FB88BB00A3AC79 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
-		29B446AA273575AA00E0F967 /* FederalPassPDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FederalPassPDFView.swift; sourceTree = "<group>"; };
-		29B446AD27357F1700E0F967 /* FederalPassPDFView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FederalPassPDFView.xib; sourceTree = "<group>"; };
+		29B446AA273575AA00E0F967 /* AppPDFView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPDFView.swift; sourceTree = "<group>"; };
+		29B446AD27357F1700E0F967 /* AppPDFView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AppPDFView.xib; sourceTree = "<group>"; };
 		29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+EXT.swift"; sourceTree = "<group>"; };
 		29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedOnBoardingScreen.swift; sourceTree = "<group>"; };
 		3C8DE5D2BEA6A851EB58B709 /* Pods_BCVaccineCard_Prod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BCVaccineCard_Prod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -736,6 +740,7 @@
 		794BD66F2702EEC00084ADA8 /* BCVaccineCard-Prod.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BCVaccineCard-Prod.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		794BD6742703A3DA0084ADA8 /* ImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
 		794BD6752703A3DA0084ADA8 /* ImageTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageTableViewCell.xib; sourceTree = "<group>"; };
+		794FF0D027DAB08B00C98831 /* URL+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+EXT.swift"; sourceTree = "<group>"; };
 		795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayVaccineCardResponse.swift; sourceTree = "<group>"; };
 		795AA72E27108C1C00E59FF1 /* GatewayRequestObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayRequestObjects.swift; sourceTree = "<group>"; };
 		795AA73127108F5900E59FF1 /* NetworkAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAccessor.swift; sourceTree = "<group>"; };
@@ -784,6 +789,7 @@
 		7967E75926F930E200EEF510 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		797BB9632767DCE100CD1645 /* HealthGatewayAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthGatewayAPIWorker.swift; sourceTree = "<group>"; };
+		797DE3C127D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPDFResponseObject.swift; sourceTree = "<group>"; };
 		799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsViewController.swift; sourceTree = "<group>"; };
 		799050BC273C832F006CD726 /* GetRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecordsView.swift; sourceTree = "<group>"; };
 		799050BF273C8344006CD726 /* GetRecordsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GetRecordsView.xib; sourceTree = "<group>"; };
@@ -1149,13 +1155,13 @@
 			path = Camera;
 			sourceTree = "<group>";
 		};
-		29B446A92735759400E0F967 /* FederalPassPDFView */ = {
+		29B446A92735759400E0F967 /* AppPDFView */ = {
 			isa = PBXGroup;
 			children = (
-				29B446AA273575AA00E0F967 /* FederalPassPDFView.swift */,
-				29B446AD27357F1700E0F967 /* FederalPassPDFView.xib */,
+				29B446AA273575AA00E0F967 /* AppPDFView.swift */,
+				29B446AD27357F1700E0F967 /* AppPDFView.xib */,
 			);
-			path = FederalPassPDFView;
+			path = AppPDFView;
 			sourceTree = "<group>";
 		};
 		7918A8C427482CB500D19D1C /* ReusableViews */ = {
@@ -1612,7 +1618,7 @@
 				29921C902773A5D2005025D2 /* AuthenticationInfoView */,
 				29921C89277395D8005025D2 /* AuthenticationView */,
 				79218ABC27555B040063004E /* ReusableHeaderAddView */,
-				29B446A92735759400E0F967 /* FederalPassPDFView */,
+				29B446A92735759400E0F967 /* AppPDFView */,
 				79A2582C2731FF260067DD50 /* LargerTouchAreaButton */,
 				7928346827311C3D00EE2710 /* DropDownView */,
 				792834562730E51200EE2710 /* InteractiveLinkLabel */,
@@ -1872,6 +1878,7 @@
 				796653ED27AE324A004D103E /* AuthenticatedMedicationResponseObject.swift */,
 				791D092B27BF5EC000AD7C89 /* AuthenticatedLaboratoryOrdersResponseObject.swift */,
 				79D93B1C27D048540083B603 /* AuthenticatedCommentResponseObject.swift */,
+				797DE3C127D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift */,
 			);
 			path = AuthenticatedResponseModels;
 			sourceTree = "<group>";
@@ -2004,6 +2011,7 @@
 			children = (
 				79BDA07D270CB8F300FF30AB /* String+Localizable.swift */,
 				29128F16272AF41F00358014 /* Array+EXT.swift */,
+				794FF0D027DAB08B00C98831 /* URL+EXT.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -2220,7 +2228,7 @@
 				792834662731016600EE2710 /* CheckboxTableViewCell.xib in Resources */,
 				29A4DF4E27DA678900D5E901 /* ChipsView.xib in Resources */,
 				7944F71A26F3B59C006B9444 /* TextTableViewCell.xib in Resources */,
-				29B446AE27357F1700E0F967 /* FederalPassPDFView.xib in Resources */,
+				29B446AE27357F1700E0F967 /* AppPDFView.xib in Resources */,
 				7967E74826F9071A00EEF510 /* SettingsTableViewCell.xib in Resources */,
 				79218AB2275196150063004E /* HealthRecordsUserView.xib in Resources */,
 				293B32B227D25C5B0064BAAA /* CommentView.xib in Resources */,
@@ -2327,7 +2335,7 @@
 				79BDA087270CEE6400FF30AB /* Booking.storyboard in Resources */,
 				791C27C22718315A001A6E12 /* AddCardsTableViewCell.xib in Resources */,
 				79218AE127557F7D0063004E /* StaticPositiveTestTableViewCell.xib in Resources */,
-				799050AF27365111006CD726 /* FederalPassPDFView.xib in Resources */,
+				799050AF27365111006CD726 /* AppPDFView.xib in Resources */,
 				794BD6642702EEC00084ADA8 /* Assets.xcassets in Resources */,
 				29A4DF5A27DEFCCC00D5E901 /* ChipsView.xib in Resources */,
 				791C27C927192C54001A6E12 /* ImageTableViewCell.xib in Resources */,
@@ -2531,6 +2539,7 @@
 				29A12AF4271F699000A106B5 /* AnalyticsService.swift in Sources */,
 				7944F67926F12613006B9444 /* AppDelegate.swift in Sources */,
 				795AA73E271094B400E59FF1 /* Endpoint.swift in Sources */,
+				797DE3C227D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */,
 				293B32AF27D25C4E0064BAAA /* CommentView.swift in Sources */,
 				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
@@ -2659,12 +2668,13 @@
 				29A5B6DA27B55B65006A9BA7 /* Perscription+CoreDataClass.swift in Sources */,
 				79218AA427518CC20063004E /* GatewayTestResultResponse.swift in Sources */,
 				795AA76127155F0900E59FF1 /* ResourceViewController.swift in Sources */,
-				29B446AB273575AA00E0F967 /* FederalPassPDFView.swift in Sources */,
+				29B446AB273575AA00E0F967 /* AppPDFView.swift in Sources */,
 				29AC25332790320F001C22B4 /* QRMaker.swift in Sources */,
 				294BD3D727B54AFE00BD8D46 /* StorageService+Medication.swift in Sources */,
 				291D43BB275FE0EC005F5B94 /* SettingsTextTableViewCell.swift in Sources */,
 				293B32C827D7AFF50064BAAA /* DummyCommentMaker.swift in Sources */,
 				29A5B6E027B55B6C006A9BA7 /* Medication+CoreDataProperties.swift in Sources */,
+				794FF0D127DAB08B00C98831 /* URL+EXT.swift in Sources */,
 				795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				2932DCDF275A9D2C00532BC4 /* StorageService+VaccineCard.swift in Sources */,
@@ -2748,6 +2758,7 @@
 				791C27B227179077001A6E12 /* NetworkRequestInterceptor.swift in Sources */,
 				795AA73327108F5900E59FF1 /* NetworkAccessor.swift in Sources */,
 				794BD6332702EEC00084ADA8 /* Date+Ext.swift in Sources */,
+				797DE3C327D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */,
 				293B32B027D25C4E0064BAAA /* CommentView.swift in Sources */,
 				79218AAA2751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				797BB9652767DCE100CD1645 /* HealthGatewayAPIWorker.swift in Sources */,
@@ -2803,6 +2814,7 @@
 				796653E527A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */,
 				29736A532788EBD700CCB1D2 /* CovidLabTestResult+CoreDataClass.swift in Sources */,
 				293B32AC27D25AEF0064BAAA /* Storage+Comments.swift in Sources */,
+				794FF0D227DAB08B00C98831 /* URL+EXT.swift in Sources */,
 				293B32A727D25A3A0064BAAA /* Comment+CoreDataClass.swift in Sources */,
 				297967A527C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */,
 				79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
@@ -2877,7 +2889,7 @@
 				795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */,
 				29A5B6E127B55B6C006A9BA7 /* Medication+CoreDataProperties.swift in Sources */,
 				2978852D279624DB00FF912D /* SettingsSectionHeaderView.swift in Sources */,
-				29B446AC2735766400E0F967 /* FederalPassPDFView.swift in Sources */,
+				29B446AC2735766400E0F967 /* AppPDFView.swift in Sources */,
 				291D43E32762E203005F5B94 /* HealthRecordCollectionViewCell.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
 				797BB95F276408B800CD1645 /* StorageService+VaccineCard.swift in Sources */,

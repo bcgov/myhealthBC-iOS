@@ -214,6 +214,7 @@ extension String {
     static var profileAndSettings: String { return "ProfileAndSettings".localized }
     static var viewProfile: String { return "ViewProfile".localized }
     static var bcscLogin: String { return "BcscLogin".localized }
+    static var accessRecords: String { return "AccessRecords".localized }
     static var notNow: String { return "notNow".localized }
     static var securityAndData: String { return "SecurityAndData".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
@@ -269,6 +270,7 @@ extension String {
         return String(format: "AllowSecurityAccessMessage".localized, "", "", "")
     }
     static var reasonForRequestingAuthentication: String { return "ReasonForRequestingAuthentication".localized }
+
     
     // MARK: ProtectedWord
     static var protectedWordVCNavTitle: String { return "ProtectedWordVCNavTitle".localized }

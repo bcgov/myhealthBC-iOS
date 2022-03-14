@@ -209,6 +209,31 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
+    private func getAuthenticatedLaboratoryOrderPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedLabOrderPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedLabOrderPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        apiClient.getAuthenticatedLaboratoryOrderPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {
+                completion(nil)
+                return
+            }
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedLabOrderPDFDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedLaboratoryOrderPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else {
+                        completion(nil)
+                        return
+                    }
+                    return self.handlePDFResponse(result: result, completion: completion)
+                }
+            } else {
+                return self.handlePDFResponse(result: result, completion: completion)
+            }
+
+        }
+    }
+    
 }
 
 // MARK: Retry functions
@@ -370,6 +395,23 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
     }
     
+    private func handlePDFResponse(result: Result<AuthenticatedPDFResponseObject, ResultError>, completion: @escaping (String?) -> Void) {
+        switch result {
+        case .success(let pdfObject):
+            // Note: Have to check for error here because error is being sent back on a 200 response
+            if let resultMessage = pdfObject.resultError?.resultMessage, ((pdfObject.resourcePayload?.data ?? "").isEmpty) {
+                print("Error fetching PDF data")
+                completion(nil)
+            } else {
+                completion(pdfObject.resourcePayload?.data)
+            }
+        case .failure(let error):
+            print("Error fetching PDF data: ", error.resultMessage)
+            completion(nil)
+        }
+    }
+
+    
 }
 
 // MARK: Handle Vaccine results in core data
@@ -504,12 +546,16 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.LaboratoryOrder])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
-        
+        guard let authCreds = self.authCredentials else { return }
         for order in orders {
-            if let id = handleLaboratoryOrdersInCoreData(object: order, authenticated: true, patientObject: patient) {
-                completedCount += 1
-            } else {
-                errorArrayCount += 1
+            self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.reportID ?? "") { pdf in
+                // FIXME: For testing - we will use static PDF data, remote next line after HG API is updated
+                let newPDFString = pdf ?? Constants.pdfStringForLabOrdersTesting
+                if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: newPDFString, authenticated: true, patientObject: patient) {
+                    completedCount += 1
+                } else {
+                    errorArrayCount += 1
+                }
             }
         }
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
@@ -517,9 +563,9 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
-    private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+    private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
-        guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object) else { return nil }
+        guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf) else { return nil }
         return object.id
     }
 }
@@ -542,6 +588,7 @@ struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedMedicationStatementDetails: AuthenticatedMedicationStatementDetails?
     var authenticatedLaboratoryOrdersDetails: AuthenticatedLaboratoryOrdersDetails?
     var authenticatedCommentsDetails: AuthenticatedCommentsDetails?
+    var authenticatedLabOrderPDFDetails: AuthenticatedLabOrderPDFDetails?
     
     struct AuthenticatedPatientDetails {
         var authCredentials: AuthenticationRequestObject
@@ -569,6 +616,11 @@ struct AuthenticatedAPIWorkerRetryDetails {
     }
     
     struct AuthenticatedCommentsDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+    }
+    
+    struct AuthenticatedLabOrderPDFDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?
     }

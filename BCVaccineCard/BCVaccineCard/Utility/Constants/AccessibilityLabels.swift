@@ -55,6 +55,9 @@ struct AccessibilityLabels {
         static let navRightIconTitle = String.delete
         static let navRightIconHint = String.tappingWillDeleteThisRecord
         static let navHint = String.yourHealthRecord
+        
+        static let navRightIconTitlePDF = "PDF View"
+        static let navRightIconHintPDF = "Double tapping will open a PDF view of your detailed health record"
     }
     
     struct OpenWebLink {

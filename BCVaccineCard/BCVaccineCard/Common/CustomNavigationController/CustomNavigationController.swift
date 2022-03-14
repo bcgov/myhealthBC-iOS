@@ -151,6 +151,10 @@ class CustomNavigationController: UINavigationController {
         return self.navigationItem.leftBarButtonItem
     }
     
+    func adjustNavStyleForPDF(targetVC vc: UIViewController) {
+        vc.navigationItem.largeTitleDisplayMode = .never
+    }
+    
 }
 
 extension CustomNavigationController {

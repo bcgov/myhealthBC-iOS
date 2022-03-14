@@ -27,11 +27,12 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     private var hiddenRecords: [HealthRecordsDetailDataSource] = []
+    private var hiddenCellType: HiddenRecordType?
     
     fileprivate let authManager = AuthManager()
     private var protectiveWord: String?
     private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
-    private var promptUser = true // Note: This is used because we fetch ds on view will appear, but protective word should be checked on view did load
+//    private var promptUser = true // Note: This is used because we fetch ds on view will appear, but protective word should be checked on view did load
     
     private var inEditMode = false {
         didSet {
@@ -195,6 +196,7 @@ extension UsersListOfRecordsViewController {
             let authenticatedRecords = patientRecords.filter({$0.isAuthenticated})
             self.dataSource = unauthenticatedRecords
             self.hiddenRecords = authenticatedRecords
+            self.hiddenCellType = .login(hiddenRecords: hiddenRecords.count)
         }
         self.setupTableView()
         self.navSetup()
@@ -210,23 +212,24 @@ extension UsersListOfRecordsViewController {
     private func handleAuthenticatedMedicalRecords(patientRecords: [HealthRecordsDetailDataSource]) {
         // Note: Assumption is, if protective word is not stored in keychain at this point, then user does not have protective word enabled
         self.patientRecordsTemp = patientRecords
-        guard let protectiveWord = authManager.protectiveWord, promptUser == true else {
+        guard let protectiveWord = authManager.protectiveWord, AppDelegate.sharedInstance?.protectiveWordEnteredThisSession == false else {
             showAllRecords(patientRecords: patientRecords)
             return
         }
         self.protectiveWord = protectiveWord
         let visibleRecords = patientRecords.filter({!$0.containsProtectedWord})
+        let hiddenRecords = patientRecords.filter({$0.containsProtectedWord})
         self.dataSource = visibleRecords
-        self.hiddenRecords.removeAll()
-        if promptUser == true {
-            promptProtectiveVC()
+        self.hiddenRecords = hiddenRecords
+        if hiddenRecords.count > 0 {
+            self.hiddenCellType = .medicalRecords
         }
-        
     }
     
     private func showAllRecords(patientRecords: [HealthRecordsDetailDataSource]) {
         self.dataSource = patientRecords
         self.hiddenRecords.removeAll()
+        self.hiddenCellType = nil
         self.patientRecordsTemp = nil
     }
     
@@ -309,11 +312,18 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             let cell = tableView.dequeueReusableCell(withIdentifier: HiddenRecordsTableViewCell.getName, for: indexPath) as? HiddenRecordsTableViewCell else {
                 return UITableViewCell()
             }
-        cell.configure(numberOfHiddenRecords: hiddenRecords.count, onLogin: {[weak self] in
-            guard let `self` = self else {return}
-            self.performBCSCLogin()
-            
-        })
+        // TODO: Configure fetch type elsewhere (when data source is being sorted) and pass in here
+        guard let hiddenType = self.hiddenCellType else { return cell }
+        cell.configure(forRecordType: hiddenType) { [weak self] hiddenType in
+            guard let `self` = self else { return }
+            guard let type = hiddenType else { return }
+            switch type {
+            case .login:
+                self.performBCSCLogin()
+            case .medicalRecords:
+                self.promptProtectiveVC()
+            }
+        }
         return cell
     }
     
@@ -457,7 +467,7 @@ extension UsersListOfRecordsViewController {
         guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw), purpose == .viewingRecords else { return }
         if let proWord = self.protectiveWord, protectiveWordEntered == proWord {
             let records = self.patientRecordsTemp ?? []
-            self.promptUser = false
+            AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
             showAllRecords(patientRecords: records)
             self.tableView.reloadData()
         } else {
