@@ -185,12 +185,11 @@ extension UsersListOfRecordsViewController {
         self.checkForTestResultsToUpdate(ds: self.dataSource)
     }
     
-    
     private func handleAuthenticatedMedicalRecords(patientRecords: [HealthRecordsDetailDataSource]) {
         // Note: Assumption is, if protective word is not stored in keychain at this point, then user does not have protective word enabled
         self.patientRecordsTemp = patientRecords
         guard let protectiveWord = authManager.protectiveWord, AppDelegate.sharedInstance?.protectiveWordEnteredThisSession == false else {
-            showAllRecords(patientRecords: patientRecords)
+            showAllRecords(patientRecords: patientRecords, medFetchRequired: authManager.medicalFetchRequired)
             return
         }
         self.protectiveWord = protectiveWord
@@ -203,16 +202,22 @@ extension UsersListOfRecordsViewController {
         }
     }
     
-    private func showAllRecords(patientRecords: [HealthRecordsDetailDataSource]) {
+    private func showAllRecords(patientRecords: [HealthRecordsDetailDataSource], medFetchRequired: Bool) {
         self.dataSource = patientRecords
-        self.hiddenRecords.removeAll()
-        self.hiddenCellType = nil
+        if medFetchRequired {
+            let tempRecord = HealthRecordsDetailDataSource(type: .medication(model: Perscription()))
+            self.hiddenRecords = [tempRecord] // Note: Just doing this to get the cell to show
+        } else {
+            self.hiddenRecords.removeAll()
+        }
+        self.hiddenCellType = medFetchRequired ? .medicalRecords : nil
         self.patientRecordsTemp = nil
     }
     
-    private func promptProtectiveVC() {
+    private func promptProtectiveVC(medFetchRequired: Bool) {
+        let value = medFetchRequired ? ProtectiveWordPurpose.initialFetch.rawValue : ProtectiveWordPurpose.viewingRecords.rawValue
         let userInfo: [String: String] = [
-            ProtectiveWordPurpose.purposeKey: ProtectiveWordPurpose.viewingRecords.rawValue,
+            ProtectiveWordPurpose.purposeKey: value,
         ]
         NotificationCenter.default.post(name: .protectedWordRequired, object: nil, userInfo: userInfo)
     }
@@ -298,14 +303,14 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             case .login:
                 self.performBCSCLogin()
             case .medicalRecords:
-                self.promptProtectiveVC()
+                self.promptProtectiveVC(medFetchRequired: <#Bool#>)
             }
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if !hiddenRecords.isEmpty && indexPath.section == 0 {
+        if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && indexPath.section == 0 {
             return hiddenRecordsCell(indexPath: indexPath)
         } else {
             return recordCell(indexPath: indexPath)
@@ -441,19 +446,34 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
 extension UsersListOfRecordsViewController {
     @objc private func protectedWordProvided(_ notification: Notification) {
         guard let protectiveWordEntered = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String else { return }
-        guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw), purpose == .viewingRecords else { return }
-        if let proWord = self.protectiveWord, protectiveWordEntered == proWord {
-            let records = self.patientRecordsTemp ?? []
-            AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
-            showAllRecords(patientRecords: records)
-            self.tableView.reloadData()
-        } else {
-            alert(title: "Error", message: "The protective word you provided was incorrect. You must enter the correct protective word in order to view your medical records, would you like to try again?", buttonOneTitle: "Yes", buttonOneCompletion: {
-                self.promptProtectiveVC()
-            }, buttonTwoTitle: "No") {
-                // Do nothing
+        guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw) else { return }
+        if purpose == .viewingRecords {
+            if let proWord = self.protectiveWord, protectiveWordEntered == proWord {
+                let records = self.patientRecordsTemp ?? []
+                AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
+                showAllRecords(patientRecords: records, medFetchRequired: false)
+                self.tableView.reloadData()
+            } else {
+                alert(title: "Error", message: "The protective word you provided was incorrect. You must enter the correct protective word in order to view your medical records, would you like to try again?", buttonOneTitle: "Yes", buttonOneCompletion: {
+                    self.promptProtectiveVC(medFetchRequired: false)
+                }, buttonTwoTitle: "No") {
+                    // Do nothing
+                }
             }
+        } else if purpose == .initialFetch {
+            // TODO: Need to test this out
+            self.performAuthenticatedBackgroundFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered)
         }
+        
         
     }
 }
+
+// MARK: Protected word retry
+//extension AuthenticatedHealthRecordsAPIWorker {
+//    @objc private func protectedWordProvided(_ notification: Notification) {
+//        guard let protectiveWord = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String, let authCreds = self.authCredentials else { return }
+//        guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw), purpose == .manualFetch else { return }
+//        self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord)
+//    }
+//}

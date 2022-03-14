@@ -8,7 +8,7 @@
 import UIKit
 
 enum ProtectiveWordPurpose: String {
-    case manualFetch = "manualFetch"
+    case initialFetch = "initialFetch"
     case viewingRecords = "viewingRecords"
     
     static var purposeKey: String {
