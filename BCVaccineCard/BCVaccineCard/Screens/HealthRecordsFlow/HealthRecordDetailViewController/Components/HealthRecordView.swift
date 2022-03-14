@@ -9,27 +9,29 @@ import Foundation
 import UIKit
 
 extension HealthRecordsDetailDataSource.Record {
-    fileprivate func getCellSections() -> [HealthRecordView.CellSection] {
+    fileprivate func getCellSectionAndOrder() -> [HealthRecordView.SectionAndOrder] {
         switch type {
-        case .covidImmunizationRecord:
-            return [.Header, .Fields]
-        case .covidTestResultRecord:
-            return [.Header, .Fields]
+        case .covidImmunizationRecord, .covidTestResultRecord:
+            return [HealthRecordView.SectionAndOrder(cellSection: .Header, sectionIndex: 0), HealthRecordView.SectionAndOrder(cellSection: .Fields, sectionIndex: 1)]
         case .medication:
-            return [.Fields, .Comments]
+            return [HealthRecordView.SectionAndOrder(cellSection: .Fields, sectionIndex: 0), HealthRecordView.SectionAndOrder(cellSection: .Comments, sectionIndex: 1)]
         case .laboratoryOrder:
-            return [.Fields]
+            return [HealthRecordView.SectionAndOrder(cellSection: .Fields, sectionIndex: 0)]
         }
     }
 }
 
 fileprivate extension HealthRecordsDetailDataSource.Record {
     var hasComments: Bool {
-        getCellSections().contains(.Comments)
+        getCellSectionAndOrder().filter { $0.cellSection == .Comments }.count > 0
     }
 }
 
 class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
+    struct SectionAndOrder: Equatable {
+        var cellSection: CellSection
+        var sectionIndex: Int
+    }
     enum CellSection: Int, CaseIterable {
         case Header
         case Fields
@@ -74,14 +76,14 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let model = self.model else {return 0}
-        let availableSections = model.getCellSections()
+        let availableSections = model.getCellSectionAndOrder()
         return availableSections.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let model = self.model else {return nil}
-        let currentSectionEnum = sectionEnum(for: section, availableSections: model.getCellSections())
-        guard currentSectionEnum == .Comments else {return nil}
+        let sectionAndOrder = model.getCellSectionAndOrder()[section]
+        guard sectionAndOrder.cellSection == .Comments else {return nil}
         let headerView: TableSectionHeader = TableSectionHeader.fromNib()
         let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
         headerView.configure(text: "\(model.comments.count) \(commentsString)")
@@ -90,8 +92,8 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let model = self.model else {return 0}
-        let currentSection = sectionEnum(for: section, availableSections: model.getCellSections())
-        switch currentSection {
+        let sectionAndOrder = model.getCellSectionAndOrder()[section]
+        switch sectionAndOrder.cellSection {
         case .Header:
             return 1
         case .Fields:
@@ -101,24 +103,9 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func sectionEnum(for section: Int, availableSections: [CellSection]) -> CellSection {
-        // All Sections being used
-        if availableSections.count == CellSection.allCases.count, let currentSection = CellSection(rawValue: section) {
-            return currentSection
-        }
-        
-        // Header not being used
-        if !availableSections.contains(.Header), availableSections.contains(.Fields), let currentSection = CellSection(rawValue: section + 1) {
-            return currentSection
-        }
-        
-        Logger.log(string: "ERROR: Case Not handled", type: .general)
-        return .Fields
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let model = self.model else { return UITableViewCell()}
-        let currentSection = sectionEnum(for: indexPath.section, availableSections: model.getCellSections())
+        let currentSection = model.getCellSectionAndOrder()[indexPath.section].cellSection
         switch currentSection {
         case .Header:
             return headerCell(indexPath: indexPath, tableView: tableView)
