@@ -74,7 +74,7 @@ class ProtectiveWordPromptViewController: BaseViewController {
         titleLabel.textColor = AppColours.textBlack
         titleLabel.text = "View your medication records"
         clickableSubtitleLabel.attributedText = clickableSubtitleLabel.attributedText(withString: "Please enter the protective word required to access these restricted PharmaNet records. For more information visit protective-word-for-a-pharmanet-record",
-                                                                                      linkedStrings: [LinkedStrings(text: "protective-word-for-a-pharmanet-record", link: "http://www.IHaveNoIdeaWhatGoesHere.com")],
+                                                                                      linkedStrings: [LinkedStrings(text: "protective-word-for-a-pharmanet-record", link: "https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/pharmacare-for-bc-residents/pharmanet/protective-word-for-a-pharmanet-record")],
                                                                                       textColor: AppColours.textBlack,
                                                                                       font: UIFont.bcSansRegularWithSize(size: 15))
         clickableSubtitleLabel.numberOfLines = 0
