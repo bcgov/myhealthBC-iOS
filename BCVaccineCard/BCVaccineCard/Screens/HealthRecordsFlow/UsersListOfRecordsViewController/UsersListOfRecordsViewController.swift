@@ -34,6 +34,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
 //    private var promptUser = true // Note: This is used because we fetch ds on view will appear, but protective word should be checked on view did load
     
+    private var currentFilter: RecordsFilter? = nil
+    
     private var inEditMode = false {
         didSet {
             self.tableView.setEditing(inEditMode, animated: false)
@@ -80,41 +82,15 @@ class UsersListOfRecordsViewController: BaseViewController {
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
-    /*
-    private func navSetup() {
-        let hasRecords = !self.dataSource.isEmpty
-        let editModeNavButton = inEditMode ? NavButton(title: .done,
-                                                       image: nil, action: #selector(self.doneButton),
-                                                       accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconHint)) :
-        NavButton(title: .edit,
-                  image: nil, action: #selector(self.editButton),
-                  accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
-        let rightNavButton = hasRecords ? editModeNavButton : nil
-        self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
-                                               leftNavButton: nil,
-                                               rightNavButton: rightNavButton,
-                                               navStyle: .small,
-                                               targetVC: self,
-                                               backButtonHintString: nil)
-    }
-    
-    @objc private func doneButton() {
-        inEditMode = false
-    }
-    
-    @objc private func editButton() {
-        tableView.isEditing = false
-        inEditMode = true
-    }
-    */
     private func navSetup() {
         let filterButton = NavButton(title: "Filter" ,
                   image: nil, action: #selector(self.showFilters),
                   accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
+        
         self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
                                                leftNavButton: nil,
                                                rightNavButton: filterButton,
-                                               navStyle: .small,
+                                               navStyle: .large,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
@@ -125,12 +101,13 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     
     @objc func showFilters() {
         let fv: FilterRecordsView = UIView.fromNib()
-        fv.showModally(on: view.findTopMostVC()?.view ?? view)
+        fv.showModally(on: view.findTopMostVC()?.view ?? view, filter: currentFilter)
         fv.delegate = self
     }
     
     func selected(filter: RecordsFilter) {
         let patientRecords = fetchPatientRecords()
+        currentFilter = filter
         show(records: patientRecords, filter:filter)
     }
 }

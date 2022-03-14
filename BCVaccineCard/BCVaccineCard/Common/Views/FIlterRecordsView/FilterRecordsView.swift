@@ -73,22 +73,36 @@ class FilterRecordsView: UIView, Theme {
     private var chipsView: ChipsView? = nil
     
     // MARK: Display
-    func showModally(on view: UIView) {
+    func showModally(on view: UIView, filter: RecordsFilter?) {
         view.addSubview(self)
         positionView(on: view)
         showRecordTypes()
         style()
+        if let existingFilter = filter {
+            currentFilter = existingFilter
+            populateCurrentFilter()
+        }
     }
     
     private func positionView(on view: UIView) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
         self.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
-        
-      
         self.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
-        
         self.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 16).isActive = true
+    }
+    
+    private func populateCurrentFilter() {
+        if let fromDate = currentFilter.fromDate {
+            let dateString = Date.Formatter.yearMonthDay.string(from: fromDate)
+            fromDateLabel.text = dateString
+        }
+        
+        if let toDate = currentFilter.toDate {
+            let dateString = Date.Formatter.yearMonthDay.string(from: toDate)
+            toDateLabel.text = dateString
+        }
+        showRecordTypes()
     }
     
     func dismiss() {
