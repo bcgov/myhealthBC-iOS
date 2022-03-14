@@ -62,6 +62,8 @@ class HealthRecordsViewController: BaseViewController {
         self.dataSource = records.dataSource()
         if self.dataSource.isEmpty {
             self.showFetchVC()
+        } else if dataSource.count == 1, let singleUser = dataSource.first {
+            showRecords(for: singleUser.patient, animated: false)
         } else {
             self.addRecordHeaderSetup()
             self.setupCollectionView()
@@ -119,9 +121,9 @@ class HealthRecordsViewController: BaseViewController {
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
-    func showRecords(for patient: Patient) {
+    func showRecords(for patient: Patient, animated: Bool) {
         let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient)
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(vc, animated: animated)
     }
     
     // MARK: Helpers
@@ -131,7 +133,7 @@ class HealthRecordsViewController: BaseViewController {
         if authManager.isAuthenticated {
             closeRecordWhenAuthExpires(patient: patient)
         }
-        showRecords(for: patient)
+        showRecords(for: patient, animated: true)
     }
     
     func closeRecordWhenAuthExpires(patient: Patient) {
