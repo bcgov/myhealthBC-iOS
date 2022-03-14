@@ -135,8 +135,8 @@ class FilterRecordsView: UIView, Theme {
         styleFromDate()
         styleToDate()
         
-        style(button: clearButton, style: .Hollow, title: "Clear")
-        style(button: continueButton, style: .Fill, title: "Continue")
+        style(button: clearButton, style: .Hollow, title: "Clear", image: nil)
+        style(button: continueButton, style: .Fill, title: "Continue", image: nil)
         closeButton.setTitle("", for: .normal)
         
         let fromDateAction = UITapGestureRecognizer(target: self, action: #selector(fromDateTapped))
