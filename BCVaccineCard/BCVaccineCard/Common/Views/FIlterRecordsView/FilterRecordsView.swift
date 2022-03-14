@@ -10,9 +10,9 @@ import UIKit
 struct RecordsFilter {
     enum RecordType: String, CaseIterable {
         case Medication = "Medications"
-        case CovidImmunization = "Immunizations"
         case Covid = "COVID-19"
         case LabTests = "Lab Tests"
+        case CovidImmunization = "Immunizations"
     }
     
     var fromDate: Date?

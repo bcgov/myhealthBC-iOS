@@ -10,10 +10,16 @@ import SwipeCellKit
 
 class UsersListOfRecordsViewController: BaseViewController {
     
+    enum NavStyle {
+        case singleUser
+        case multiUser
+    }
+    
     // TODO: Replace params with Patient after storage refactor
-    class func constructUsersListOfRecordsViewController(patient: Patient) -> UsersListOfRecordsViewController {
+    class func constructUsersListOfRecordsViewController(patient: Patient, navStyle: NavStyle) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.patient = patient
+            vc.navStyle = navStyle
             return vc
         }
         return UsersListOfRecordsViewController()
@@ -22,6 +28,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var patient: Patient?
+    private var navStyle: NavStyle = .multiUser
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
     
@@ -74,17 +81,31 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
+        switch navStyle {
+        case .singleUser:
+            setupNavForSingleUser()
+        case .multiUser:
+            setupNavForMultiUser()
+        }
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
     }
     
+    
+    private func setupNavForSingleUser() {
+        self.navigationItem.setHidesBackButton(true, animated: false)
+    }
+    
+    private func setupNavForMultiUser() {
+        self.navigationItem.setHidesBackButton(false, animated: false)
+    }
 }
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
     private func navSetup() {
-        let filterButton = NavButton(title: "Filter" ,
-                  image: nil, action: #selector(self.showFilters),
+        let filterButton = NavButton(title: nil,
+                  image: UIImage(named: "filter"), action: #selector(self.showFilters),
                   accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
         
         self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
@@ -94,6 +115,7 @@ extension UsersListOfRecordsViewController {
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
+    
 }
 
 // MARK: Filters
@@ -117,7 +139,7 @@ extension UsersListOfRecordsViewController {
     
     private func fetchDataSource() {
         let patientRecords = fetchPatientRecords()
-        show(records: patientRecords, filter: nil)
+        show(records: patientRecords, filter: currentFilter)
         self.checkForTestResultsToUpdate(ds: self.dataSource)
         
     }

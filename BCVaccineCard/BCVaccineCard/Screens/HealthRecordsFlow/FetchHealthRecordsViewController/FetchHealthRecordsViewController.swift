@@ -208,7 +208,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         
         if containsUserRecordsVC == false {
-            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient)
+            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, navStyle: .multiUser)
             navStack.append(secondVC)
         }
         
