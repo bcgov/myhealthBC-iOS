@@ -432,7 +432,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
 // MARK: Handle Vaccine results in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleVaccineCardInCoreData(vaccineCard: GatewayVaccineCardResponse) {
-        
+        guard let patient = self.patientDetails else { return }
         let qrResult = vaccineCard.transformResponseIntoQRCode()
         guard let code = qrResult.qrString else {
             self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: qrResult.error ?? .genericErrorMessage)
@@ -448,38 +448,39 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 guard let `self` = self else {return}
                 var model = self.executingVC.convertScanResultModelIntoLocalData(data: data, source: .healthGateway)
                 model.fedCode = vaccineCard.resourcePayload?.federalVaccineProof?.data
-                self.coreDataLogic(localModel: model)
+                self.coreDataLogic(localModel: model, patient: patient)
             }
         }
     }
     
-    private func coreDataLogic(localModel: LocallyStoredVaccinePassportModel) {
+    private func coreDataLogic(localModel: LocallyStoredVaccinePassportModel, patient: AuthenticatedPatientDetailsResponseObject) {
         let model = localModel.transform()
         model.state { [weak self] state in
             guard let `self` = self else {return}
             switch state {
             case .isNew:
-                self.storeCard(model: model)
+                self.storeCard(model: model, patient: patient)
             case .canUpdateExisting, .exists, .isOutdated, .UpdatedFederalPass:
-                self.updateCard(model: model)
+                self.updateCard(model: model, patient: patient)
             }
         }
     }
     
-    private func storeCard(model: AppVaccinePassportModel) {
+    private func storeCard(model: AppVaccinePassportModel, patient: AuthenticatedPatientDetailsResponseObject) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.executingVC.storeVaccineCard(model: model.transform(),
-                                  authenticated: true,
-                                  sortOrder: nil,
-                                  completion: {
+                                              authenticated: true,
+                                              sortOrder: nil,
+                                              patientAPI: patient,
+                                              completion: {
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
             })
         }
     }
     
-    private func updateCard(model: AppVaccinePassportModel) {
+    private func updateCard(model: AppVaccinePassportModel, patient: AuthenticatedPatientDetailsResponseObject) {
         let localModel = model.transform()
-        StorageService.shared.updateVaccineCard(newData: localModel, authenticated: true, completion: {[weak self] card in
+        StorageService.shared.updateVaccineCard(newData: localModel, authenticated: true, patient: patient, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
