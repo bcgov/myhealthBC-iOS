@@ -47,7 +47,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         didSet {
             self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
-            navSetup()
+            navSetup(style: navStyle)
             self.tableView.layoutSubviews()
         }
     }
@@ -93,29 +93,61 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     
     private func setupNavForSingleUser() {
-        self.navigationItem.setHidesBackButton(true, animated: false)
+        navSetup(style: .singleUser)
     }
     
     private func setupNavForMultiUser() {
-        self.navigationItem.setHidesBackButton(false, animated: false)
+        navSetup(style: .multiUser)
     }
 }
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
-    private func navSetup() {
+    private func navSetup(style: NavStyle) {
+        var buttons: [NavButton] = []
         let filterButton = NavButton(title: nil,
                   image: UIImage(named: "filter"), action: #selector(self.showFilters),
-                  accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
+                  accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+        buttons.append(filterButton)
+        if style == .singleUser {
+            self.navigationItem.setHidesBackButton(true, animated: false)
+            let addButton = NavButton(title: nil,
+                      image: UIImage(named: "add-circle-btn"), action: #selector(self.showAddRecord),
+                                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+            buttons.append(addButton)
+            let settingsButton = NavButton(title: nil,
+                      image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
+                                           accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+            buttons.append(settingsButton)
+        } else {
+            self.navigationItem.setHidesBackButton(false, animated: false)
+        }
+        
         
         self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
                                                leftNavButton: nil,
-                                               rightNavButton: filterButton,
+                                               rightNavButtons: buttons,
                                                navStyle: .large,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
     
+    @objc func showAddRecord() {
+        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, completion: {[weak self] in
+            self?.navigationController?.popToRootViewController(animated: true)
+        })
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func showSettings() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        goToSettingsScreen()
+    }
+    
+    private func goToSettingsScreen() {
+        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 // MARK: Filters
@@ -198,7 +230,7 @@ extension UsersListOfRecordsViewController {
             self.hiddenCellType = .login(hiddenRecords: hiddenRecords.count)
         }
         self.setupTableView()
-        self.navSetup()
+        self.navSetup(style: navStyle)
         
         self.view.endLoadingIndicator()
         

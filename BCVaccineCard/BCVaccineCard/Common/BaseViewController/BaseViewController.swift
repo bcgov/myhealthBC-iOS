@@ -9,11 +9,12 @@ import UIKit
 
 protocol NavigationSetupProtocol: AnyObject {
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
     func adjustNavStyleForPDF(targetVC vc: UIViewController)
 }
 
 class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
-    
+   
     weak var navDelegate: NavigationSetupProtocol?
 
     override func viewDidLoad() {
@@ -44,11 +45,20 @@ extension BaseViewController {
         self.navDelegate = self
     }
     
+    
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
+        var rightButtons: [NavButton] = []
+        if let rightButton = right {
+            rightButtons.append(rightButton)
+        }
+        setNavigationBarWith(title: title, leftNavButton: left, rightNavButtons: rightButtons, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString)
+    }
+    
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
         navigationItem.title = title
        
         guard let nav = self.navigationController as? CustomNavigationController else { return }
-        nav.setupNavigation(leftNavButton: left, rightNavButton: right, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString)
+        nav.setupNavigation(leftNavButton: left, rightNavButtons: right, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString)
     }
     
     func adjustNavStyleForPDF(targetVC vc: UIViewController) {
