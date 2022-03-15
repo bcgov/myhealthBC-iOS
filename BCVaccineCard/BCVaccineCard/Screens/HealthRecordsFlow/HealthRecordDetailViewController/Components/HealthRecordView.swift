@@ -79,11 +79,23 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let model = self.model else {return nil}
         let sectionType = model.getCellSection()[section]
-        guard sectionType == .Comments else {return nil}
         let headerView: TableSectionHeader = TableSectionHeader.fromNib()
+        guard sectionType == .Comments, !model.comments.isEmpty else {
+            headerView.configure(text: "")
+            return headerView
+        }
         let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
         headerView.configure(text: "\(model.comments.count) \(commentsString)")
         return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let model = self.model else {return 0}
+        let sectionType = model.getCellSection()[section]
+        guard sectionType == .Comments, !model.comments.isEmpty else {
+            return 0
+        }
+        return "Comments".heightForView(font: TableSectionHeader.font, width: bounds.width) + 10
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
