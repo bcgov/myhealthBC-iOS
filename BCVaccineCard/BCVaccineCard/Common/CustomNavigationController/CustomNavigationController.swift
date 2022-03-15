@@ -112,22 +112,31 @@ class CustomNavigationController: UINavigationController {
         
     }
     
-    func setupNavigation(leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
+    func setupNavigation(leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
         vc.navigationItem.largeTitleDisplayMode = navStyle.largeTitles ? .always : .never
         setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString)
         navigationBar.tintColor = navStyle.itemTintColor
-        if let right = right {
-            if let title = right.title {
-                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: right.action)
+        
+        var rightNavButtons: [UIBarButtonItem] = []
+        for rightButton in right {
+            var barButton: UIBarButtonItem? = nil
+            if let btnTitle = rightButton.title {
+               barButton = UIBarButtonItem(title: btnTitle, style: .plain, target: vc, action: rightButton.action)
             } else {
-                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: right.image, style: .plain, target: vc, action: right.action)
+                barButton = UIBarButtonItem(image: rightButton.image, style: .plain, target: vc, action: rightButton.action)
             }
-            if let trait = right.accessibility.traits {
-                vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
+            
+            if let trait = rightButton.accessibility.traits {
+                barButton?.accessibilityTraits = trait
             }
-            vc.navigationItem.rightBarButtonItem?.accessibilityLabel = right.accessibility.label
-            vc.navigationItem.rightBarButtonItem?.accessibilityHint = right.accessibility.hint
+            barButton?.accessibilityLabel = rightButton.accessibility.label
+            barButton?.accessibilityHint = rightButton.accessibility.hint
+            if let button = barButton {
+                rightNavButtons.append(button)
+            }
         }
+        vc.navigationItem.rightBarButtonItems = rightNavButtons
+        
         if let left = left {
             if let title = left.title {
                 vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: left.action)

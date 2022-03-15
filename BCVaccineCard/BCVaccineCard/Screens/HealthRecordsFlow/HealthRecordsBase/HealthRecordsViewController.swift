@@ -63,7 +63,7 @@ class HealthRecordsViewController: BaseViewController {
         if self.dataSource.isEmpty {
             self.showFetchVC()
         } else if dataSource.count == 1, let singleUser = dataSource.first {
-            showRecords(for: singleUser.patient, animated: false)
+            showRecords(for: singleUser.patient, animated: false, navStyle: .singleUser)
         } else {
             self.addRecordHeaderSetup()
             self.setupCollectionView()
@@ -117,12 +117,12 @@ class HealthRecordsViewController: BaseViewController {
 
     func showFetchVC() {
         // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
-        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true)
+        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, completion: {})
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
-    func showRecords(for patient: Patient, animated: Bool) {
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient)
+    func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle) {
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, navStyle: navStyle)
         self.navigationController?.pushViewController(vc, animated: animated)
     }
     
@@ -133,7 +133,7 @@ class HealthRecordsViewController: BaseViewController {
         if authManager.isAuthenticated {
             closeRecordWhenAuthExpires(patient: patient)
         }
-        showRecords(for: patient, animated: true)
+        showRecords(for: patient, animated: true, navStyle: .multiUser)
     }
     
     func closeRecordWhenAuthExpires(patient: Patient) {
@@ -167,7 +167,7 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
     
     func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
         if screenType == .healthRecords {
-            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false)
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, completion: {})
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -205,14 +205,7 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let defaultSize = defaultCellSize()
-        guard indexPath.row < dataSource.count else { return defaultSize}
-        let data = dataSource[indexPath.row]
-        
-        if data.authenticated {
-            return CGSize(width: UIScreen.main.bounds.width - (spacingPerItem * 2), height: defaultSize.height)
-        } else {
-            return defaultSize
-        }
+        return defaultSize
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

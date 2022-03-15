@@ -10,9 +10,9 @@ import UIKit
 struct RecordsFilter {
     enum RecordType: String, CaseIterable {
         case Medication = "Medications"
-        case CovidImmunization = "Immunizations"
         case Covid = "COVID-19"
         case LabTests = "Lab Tests"
+        case CovidImmunization = "Immunizations"
     }
     
     var fromDate: Date?
@@ -90,6 +90,7 @@ class FilterRecordsView: UIView, Theme {
         self.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
         self.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
         self.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 16).isActive = true
+        self.layoutIfNeeded()
     }
     
     private func populateCurrentFilter() {
@@ -132,6 +133,7 @@ class FilterRecordsView: UIView, Theme {
     
     // MARK: Style
     func style() {
+        self.alpha = 0
         navContainer.backgroundColor = .clear
         filterChipsContainer.backgroundColor = .clear
         
@@ -164,7 +166,10 @@ class FilterRecordsView: UIView, Theme {
         
         self.layer.cornerRadius = 5
         self.layoutIfNeeded()
-        
+        UIView.animate(withDuration: 0.1) {[weak self] in
+            self?.alpha = 1
+            self?.layoutIfNeeded()
+        }
         showBackDrop()
     }
     
@@ -175,11 +180,18 @@ class FilterRecordsView: UIView, Theme {
             existing.removeFromSuperview()
         }
         let backdropView = UIView(frame: .zero)
+        backdropView.alpha = 0
         parent.insertSubview(backdropView, belowSubview: self)
         backdropView.tag = backdropTag
         backDrop = backdropView
         backdropView.addEqualSizeContraints(to: parent)
-        backdropView.backgroundColor = AppColours.backgroundGray.withAlphaComponent(0.9)
+        backdropView.backgroundColor = AppColours.backgroundGray.withAlphaComponent(0.2)
+        backdropView.layoutIfNeeded()
+        UIView.animate(withDuration: 0.2) {
+            backdropView.backgroundColor = AppColours.backgroundGray.withAlphaComponent(0.8)
+            backdropView.alpha = 1
+            backdropView.layoutIfNeeded()
+        }
     }
     
     private func styleSectionHeading(label: UILabel) {

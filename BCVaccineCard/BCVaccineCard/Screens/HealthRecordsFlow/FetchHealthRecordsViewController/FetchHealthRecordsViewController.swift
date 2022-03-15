@@ -9,10 +9,11 @@ import UIKit
 
 class FetchHealthRecordsViewController: BaseViewController {
     
-    class func constructFetchHealthRecordsViewController(hideNavBackButton: Bool, showSettingsIcon: Bool) -> FetchHealthRecordsViewController {
+    class func constructFetchHealthRecordsViewController(hideNavBackButton: Bool, showSettingsIcon: Bool, completion: @escaping()->Void) -> FetchHealthRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: FetchHealthRecordsViewController.self)) as? FetchHealthRecordsViewController {
             vc.hideNavBackButton = hideNavBackButton
             vc.showSettingsIcon = showSettingsIcon
+            vc.completion = completion
             return vc
         }
         return FetchHealthRecordsViewController()
@@ -23,6 +24,7 @@ class FetchHealthRecordsViewController: BaseViewController {
     
     private var hideNavBackButton = false
     private var showSettingsIcon: Bool!
+    private var completion: (()->Void)?
     
     private var dataSource: [GetRecordsView.RecordType] = [.covidImmunizationRecord, .covidTestResult]
     
@@ -167,6 +169,9 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         self.navigationController?.pushViewController(vc, animated: true)
     }
     private func handleRouting(id: String, recordType: GetRecordsView.RecordType, details: GatewayFormCompletionHandlerDetails) {
+        if let completion = completion {
+            completion()
+        }
         let records = StorageService.shared.getHeathRecords()
         var recordsCount: Int
         if let name = details.name,
@@ -208,7 +213,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         
         if containsUserRecordsVC == false {
-            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient)
+            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, navStyle: .multiUser)
             navStack.append(secondVC)
         }
         

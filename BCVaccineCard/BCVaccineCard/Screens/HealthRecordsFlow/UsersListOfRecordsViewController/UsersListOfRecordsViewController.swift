@@ -10,10 +10,16 @@ import SwipeCellKit
 
 class UsersListOfRecordsViewController: BaseViewController {
     
+    enum NavStyle {
+        case singleUser
+        case multiUser
+    }
+    
     // TODO: Replace params with Patient after storage refactor
-    class func constructUsersListOfRecordsViewController(patient: Patient) -> UsersListOfRecordsViewController {
+    class func constructUsersListOfRecordsViewController(patient: Patient, navStyle: NavStyle) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.patient = patient
+            vc.navStyle = navStyle
             return vc
         }
         return UsersListOfRecordsViewController()
@@ -22,6 +28,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var patient: Patient?
+    private var navStyle: NavStyle = .multiUser
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
     
@@ -40,7 +47,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         didSet {
             self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
-            navSetup()
+            navSetup(style: navStyle)
             self.tableView.layoutSubviews()
         }
     }
@@ -75,25 +82,72 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
+        switch navStyle {
+        case .singleUser:
+            setupNavForSingleUser()
+        case .multiUser:
+            setupNavForMultiUser()
+        }
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
     }
     
+    
+    private func setupNavForSingleUser() {
+        navSetup(style: .singleUser)
+    }
+    
+    private func setupNavForMultiUser() {
+        navSetup(style: .multiUser)
+    }
 }
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
-    private func navSetup() {
-        let filterButton = NavButton(title: "Filter" ,
-                  image: nil, action: #selector(self.showFilters),
-                  accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
+    private func navSetup(style: NavStyle) {
+        var buttons: [NavButton] = []
+        let filterButton = NavButton(title: nil,
+                  image: UIImage(named: "filter"), action: #selector(self.showFilters),
+                  accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+        buttons.append(filterButton)
+        if style == .singleUser {
+            self.navigationItem.setHidesBackButton(true, animated: false)
+            let addButton = NavButton(title: nil,
+                      image: UIImage(named: "add-circle-btn"), action: #selector(self.showAddRecord),
+                                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+            buttons.append(addButton)
+            let settingsButton = NavButton(title: nil,
+                      image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
+                                           accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+            buttons.append(settingsButton)
+        } else {
+            self.navigationItem.setHidesBackButton(false, animated: false)
+        }
+        
         
         self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
                                                leftNavButton: nil,
-                                               rightNavButton: filterButton,
-                                               navStyle: .small,
+                                               rightNavButtons: buttons,
+                                               navStyle: .large,
                                                targetVC: self,
                                                backButtonHintString: nil)
+    }
+    
+    @objc func showAddRecord() {
+        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, completion: {[weak self] in
+            self?.navigationController?.popToRootViewController(animated: true)
+        })
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func showSettings() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        goToSettingsScreen()
+    }
+    
+    private func goToSettingsScreen() {
+        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -118,9 +172,8 @@ extension UsersListOfRecordsViewController {
     
     private func fetchDataSource(initialProtectedMedFetch: Bool = false) {
         let patientRecords = fetchPatientRecords()
-        show(records: patientRecords, filter: nil, initialProtectedMedFetch: initialProtectedMedFetch)
+        show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
         self.checkForTestResultsToUpdate(ds: self.dataSource)
-        
     }
     
     private func fetchPatientRecords() -> [HealthRecordsDetailDataSource] {
@@ -177,7 +230,7 @@ extension UsersListOfRecordsViewController {
             self.hiddenCellType = .login(hiddenRecords: hiddenRecords.count)
         }
         self.setupTableView()
-        self.navSetup()
+        self.navSetup(style: navStyle)
         
         self.view.endLoadingIndicator()
         

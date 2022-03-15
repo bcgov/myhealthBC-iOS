@@ -8,11 +8,12 @@
 import UIKit
 
 class ChipCollectionViewCell: UICollectionViewCell {
-    static let textHeight: CGFloat = 31
+    static let textHeight: CGFloat = 28
     static let paddingVertical: CGFloat = 4
     static let paddingHorizontal: CGFloat = 12
-    static let selectedFont = UIFont.bcSansBoldWithSize(size: 15)
+    static let selectedFont = UIFont.bcSansBoldWithSize(size: 14)
     static let unselectedFont = UIFont.bcSansRegularWithSize(size: 15)
+    static let selectedBackgroundColour = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
 
     @IBOutlet weak var textWidth: NSLayoutConstraint!
     @IBOutlet weak var label: UILabel!
@@ -37,23 +38,25 @@ class ChipCollectionViewCell: UICollectionViewCell {
     }
     
     func styleSelected() {
-        contentView.layer.borderWidth = 2
-        contentView.layer.borderColor = AppColours.appBlue.cgColor
+        contentView.layer.borderWidth = 1
+        contentView.layer.borderColor = ChipCollectionViewCell.selectedBackgroundColour.cgColor
+        contentView.backgroundColor = ChipCollectionViewCell.selectedBackgroundColour
         let font = ChipCollectionViewCell.selectedFont
         label.font = font
-        label.textColor = AppColours.appBlue
+        label.textColor = UIColor.white
         let text = label.text ?? ""
-        textWidth.constant = text.widthForView(font: font, height: 31)
+        textWidth.constant = text.widthForView(font: font, height: ChipCollectionViewCell.textHeight)
     }
     
     func styleUnselected() {
         contentView.layer.borderWidth = 1
         contentView.layer.borderColor = AppColours.appBlue.cgColor
+        contentView.backgroundColor = .clear
         let font = ChipCollectionViewCell.unselectedFont
         label.font = font
         label.textColor = AppColours.appBlue
         let text = label.text ?? ""
-        textWidth.constant = text.widthForView(font: font, height: 31)
+        textWidth.constant = text.widthForView(font: font, height: ChipCollectionViewCell.textHeight)
     }
 
 }
