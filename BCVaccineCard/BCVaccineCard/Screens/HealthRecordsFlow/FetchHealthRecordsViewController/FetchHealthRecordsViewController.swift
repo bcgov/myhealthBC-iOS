@@ -124,9 +124,6 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if AuthManager().isAuthenticated {
-            return dataSource.count + 1
-        }
         return dataSource.count
     }
     
