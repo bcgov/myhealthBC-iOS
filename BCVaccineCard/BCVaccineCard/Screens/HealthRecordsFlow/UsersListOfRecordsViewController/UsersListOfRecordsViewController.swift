@@ -128,7 +128,7 @@ extension UsersListOfRecordsViewController {
         self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
                                                leftNavButton: nil,
                                                rightNavButtons: buttons,
-                                               navStyle: .large,
+                                               navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
