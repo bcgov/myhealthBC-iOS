@@ -205,14 +205,7 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let defaultSize = defaultCellSize()
-        guard indexPath.row < dataSource.count else { return defaultSize}
-        let data = dataSource[indexPath.row]
-        
-        if data.authenticated {
-            return CGSize(width: UIScreen.main.bounds.width - (spacingPerItem * 2), height: defaultSize.height)
-        } else {
-            return defaultSize
-        }
+        return defaultSize
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
