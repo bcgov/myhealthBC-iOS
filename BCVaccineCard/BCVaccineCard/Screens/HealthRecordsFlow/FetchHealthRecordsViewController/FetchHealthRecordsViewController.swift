@@ -89,7 +89,7 @@ class FetchHealthRecordsViewController: BaseViewController {
             .recordType(type: .covidImmunizationRecord),
             .recordType(type: .covidTestResult)
         ]
-        if AuthManager().isAuthenticated {
+        if !AuthManager().isAuthenticated {
             self.dataSource.insert(.login(type: .authenticate), at: 0)
         }
         self.tableView.reloadData()
