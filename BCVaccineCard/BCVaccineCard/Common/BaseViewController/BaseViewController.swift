@@ -83,13 +83,13 @@ extension BaseViewController {
 
 // MARK: For Authenticated Fetch
 extension BaseViewController {
-    func performAuthenticatedBackgroundFetch() {
+    func performAuthenticatedBackgroundFetch(isManualFetch: Bool, showBanner: Bool = true, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil) {
         guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
             // TODO: Error handling here
             return
         }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true)
+        tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: showBanner, isManualFetch: isManualFetch, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
     }
 }
 

@@ -388,6 +388,7 @@
 		794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 794BD6752703A3DA0084ADA8 /* ImageTableViewCell.xib */; };
 		794FF0D127DAB08B00C98831 /* URL+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794FF0D027DAB08B00C98831 /* URL+EXT.swift */; };
 		794FF0D227DAB08B00C98831 /* URL+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794FF0D027DAB08B00C98831 /* URL+EXT.swift */; };
+		794FF0D327DFB2B500C98831 /* DummyCommentMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32C727D7AFF50064BAAA /* DummyCommentMaker.swift */; };
 		795AA72C271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		795AA72D271089F100E59FF1 /* GatewayVaccineCardResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */; };
 		795AA72F27108C1C00E59FF1 /* GatewayRequestObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA72E27108C1C00E59FF1 /* GatewayRequestObjects.swift */; };
@@ -950,7 +951,6 @@
 				293B32A527D25A3A0064BAAA /* Comment+CoreDataProperties.swift */,
 				2979679727C536E10019EE9B /* LaboratoryTest+CoreDataClass.swift */,
 				2979679427C536E10019EE9B /* LaboratoryTest+CoreDataProperties.swift */,
-				2979679827C536E10019EE9B /* Patient+CoreDataProperties.swift */,
 				29A5B6DC27B55B6C006A9BA7 /* Medication+CoreDataClass.swift */,
 				29A5B6DD27B55B6C006A9BA7 /* Medication+CoreDataProperties.swift */,
 				29A5B6D327B55B65006A9BA7 /* Perscription+CoreDataClass.swift */,
@@ -962,6 +962,7 @@
 				29736A372788EBD700CCB1D2 /* ImmunizationRecord+CoreDataClass.swift */,
 				29736A3A2788EBD700CCB1D2 /* ImmunizationRecord+CoreDataProperties.swift */,
 				29736A3C2788EBD700CCB1D2 /* Patient+CoreDataClass.swift */,
+				2979679827C536E10019EE9B /* Patient+CoreDataProperties.swift */,
 				29736A3E2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift */,
 				29736A382788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift */,
 				29736A3D2788EBD700CCB1D2 /* VaccineCard+CoreDataClass.swift */,
@@ -2769,6 +2770,7 @@
 				794BD6342702EEC00084ADA8 /* AppDelegate.swift in Sources */,
 				79218AF92756A0B30063004E /* HealthRecordsDetailDateSource.swift in Sources */,
 				29736A412788EBD700CCB1D2 /* VaccineCard+CoreDataProperties.swift in Sources */,
+				794FF0D327DFB2B500C98831 /* DummyCommentMaker.swift in Sources */,
 				29A5B6D527B55B65006A9BA7 /* Perscription+CoreDataProperties.swift in Sources */,
 				794BD6352702EEC00084ADA8 /* BCVaccineCard.xcdatamodeld in Sources */,
 				2908647B27A1B08E0003F9E3 /* LocalAuthManager.swift in Sources */,

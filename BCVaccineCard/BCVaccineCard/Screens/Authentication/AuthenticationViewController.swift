@@ -26,7 +26,7 @@ extension BaseViewController {
             case .Completed:
                 self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
                     // Will be fetching on completion, before user interacts with this message
-                    self.performAuthenticatedBackgroundFetch()
+                    self.performAuthenticatedBackgroundFetch(isManualFetch: true)
                     self.postAuthChangedSettingsReloadRequired()
                     completion(true)
                 }
@@ -185,7 +185,7 @@ class AuthenticationViewController: UIViewController {
         AppDelegate.sharedInstance?.window?.rootViewController = vc
         guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else {return}
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true)
+        vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true)
     }
     
     public static func displayFullScreen(returnToHealthPass: Bool, initialView: InitialView) {

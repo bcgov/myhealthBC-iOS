@@ -34,6 +34,7 @@ class AuthManager {
         case refreshToken
         case idToken
         case protectiveWord
+        case medicalFetchRequired
     }
     let defaultUserID = "default"
     private let keychain = Keychain(service: "ca.bc.gov.myhealth")
@@ -125,6 +126,16 @@ class AuthManager {
         return proWord.isEmpty ? nil : proWord
     }
     
+    var medicalFetchRequired: Bool {
+        guard let medFetch = keychain[Key.medicalFetchRequired.rawValue] else {
+            return false
+        }
+        if medFetch == "true" {
+            return true
+        }
+        return false
+    }
+    
     // MARK: Network
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
         guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
@@ -195,6 +206,14 @@ class AuthManager {
     
     private func removeProtectiveWord() {
         self.delete(key: .protectiveWord)
+    }
+    
+    func storeMedFetchRequired(bool: Bool) {
+        self.store(string: String(bool), for: .medicalFetchRequired)
+    }
+    
+    private func removeMedFetchRequired() {
+        self.delete(key: .medicalFetchRequired)
     }
     
     private func refetchAuthToken() {
@@ -287,6 +306,7 @@ class AuthManager {
         delete(key: .authTokenExpiery)
         delete(key: .idToken)
         self.removeProtectiveWord()
+        self.removeMedFetchRequired()
     }
     
     private func store(string: String, for key: Key) {

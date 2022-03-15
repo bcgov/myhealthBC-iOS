@@ -33,6 +33,7 @@ class HealthRecordDetailViewController: BaseViewController {
         setupStorageListener()
     }
     
+    // TODO: We should look into this - not sure we should pop to root VC from detail view on a storage change
     func setupStorageListener() {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) { [weak self] notification in
             guard let `self` = self else {return}

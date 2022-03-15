@@ -12,6 +12,7 @@ struct Defaults {
         case initialOnboardingScreensSeen
         case cachedQueueItObject
         case rememberGatewayDetails
+        case hasAppLaunchedBefore
     }
     
     static var cachedQueueItObject: QueueItCachedObject? {
@@ -30,6 +31,11 @@ struct Defaults {
             return details
         }
         set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.rememberGatewayDetails.rawValue) }
+    }
+    
+    static var hasAppLaunchedBefore: Bool {
+        get { return UserDefaults.standard.bool(forKey: self.Key.hasAppLaunchedBefore.rawValue) }
+        set { UserDefaults.standard.set(newValue, forKey: self.Key.hasAppLaunchedBefore.rawValue) }
     }
     
     static func unseenOnBoardingScreens() -> [OnboardingScreenType] {

@@ -80,7 +80,7 @@ class HealthRecordsViewController: BaseViewController {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
-            case .VaccineCard, .CovidLabTestResult, .Perscription:
+            case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
                 self.updateData()
             default:
                 break
