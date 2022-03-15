@@ -45,7 +45,7 @@ class HealthRecordsViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        updateData()
+        loadDataAndSetInitialVC()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -57,9 +57,15 @@ class HealthRecordsViewController: BaseViewController {
     }
  
     private func setup() {
+        loadDataAndSetInitialVC()
+        refreshOnStorageChange()
+    }
+    
+    private func loadDataAndSetInitialVC() {
         navSetup()
         let records = fetchData()
         self.dataSource = records.dataSource()
+        self.navigationController?.popToRootViewController(animated: false)
         if self.dataSource.isEmpty {
             self.showFetchVC()
         } else if dataSource.count == 1, let singleUser = dataSource.first {
@@ -70,8 +76,8 @@ class HealthRecordsViewController: BaseViewController {
             if let patient = authenticatedPatientToShow {
                 self.goToUserRecordsViewControllerForPatient(patient)
             }
+            collectionView.reloadData()
         }
-        refreshOnStorageChange()
     }
     
     
@@ -81,48 +87,52 @@ class HealthRecordsViewController: BaseViewController {
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
             case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
-                self.updateData()
+                self.loadDataAndSetInitialVC()
+                if let lastPatientSelected = self.lastPatientSelected, !self.dataSource.isEmpty, let lastPatientRecordInDataSouce = self.dataSource.first(where: {$0.patient == lastPatientSelected}) {
+                    self.showRecords(for: lastPatientRecordInDataSouce.patient, animated: false, navStyle: self.dataSource.count == 1 ? .singleUser :.multiUser)
+                }
             default:
                 break
             }
-           
         }
     }
     
-    private func updateData() {
-        let records = fetchData()
-        self.dataSource = records.dataSource()
-        self.addRecordHeaderSetup()
-        self.collectionView.reloadData()
-        if self.dataSource.isEmpty {
-            self.showFetchVC()
-        } else {
-            // FIXME: Need a way of dismissing dismissFetchHealthRecordsViewController() for the case where data is nil, user enters app, goes to health records tab (so it is instantiated and viewDidLoad is called), then user goes to healthPasses tab, scans a QR code, then user goes back to health records tab.... issue is that the fetchVC will still be shown
-            // Possible solution: Listener on tab bar controller, check when tab is changed - something like that. Need to think on this
-            self.dismissFetchHealthRecordsViewControllerIfNeeded()
-            
-        }
-    }
+//    private func updateData() {
+//        let records = fetchData()
+//        self.dataSource = records.dataSource()
+//        self.addRecordHeaderSetup()
+//        self.collectionView.reloadData()
+//        if self.dataSource.isEmpty {
+//            self.showFetchVC()
+//        } else {
+//            // FIXME: Need a way of dismissing dismissFetchHealthRecordsViewController() for the case where data is nil, user enters app, goes to health records tab (so it is instantiated and viewDidLoad is called), then user goes to healthPasses tab, scans a QR code, then user goes back to health records tab.... issue is that the fetchVC will still be shown
+//            // Possible solution: Listener on tab bar controller, check when tab is changed - something like that. Need to think on this
+//            self.dismissFetchHealthRecordsViewControllerIfNeeded()
+//
+//        }
+//    }
     
     private func fetchData() -> [HealthRecord] {
         StorageService.shared.getHeathRecords()
     }
     
     // MARK: Routing
-    func dismissFetchHealthRecordsViewControllerIfNeeded() {
-        guard let vcs = self.navigationController?.viewControllers.compactMap({$0 as? FetchHealthRecordsViewController}),
-              let vc = vcs.first else {return}
-        popBack(toControllerType: HealthRecordsViewController.self)
-    }
+//    func dismissFetchHealthRecordsViewControllerIfNeeded() {
+//        guard let vcs = self.navigationController?.viewControllers.compactMap({$0 as? FetchHealthRecordsViewController}),
+//              let vc = vcs.first else {return}
+//        popBack(toControllerType: HealthRecordsViewController.self)
+//    }
 
     func showFetchVC() {
         // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
         let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, completion: {})
+        lastPatientSelected = nil
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
     func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle) {
         let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, navStyle: navStyle)
+        lastPatientSelected = patient
         self.navigationController?.pushViewController(vc, animated: animated)
     }
     
