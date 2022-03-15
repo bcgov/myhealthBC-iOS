@@ -50,9 +50,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private var authCredentials: AuthenticationRequestObject?
     private var showBanner = true
     private var isManualAuthFetch = true
-    
-    private var specificFetchTypes: [AuthenticationFetchType]?
-    
+        
     init(delegateOwner: UIViewController) {
         self.apiClient = APIClient(delegateOwner: delegateOwner)
         self.delegate = delegateOwner as? AuthenticatedHealthRecordsAPIWorkerDelegate
@@ -69,7 +67,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         didSet {
             if fetchStatusList.isCompleted {
                 self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner)
-                self.initializeFetchStatusList(withSpecificTypes: self.specificFetchTypes)
+                self.deinitializeStatusList()
             } else if fetchStatusList.canFetchComments {
                 guard let authCredentials = authCredentials else { return }
                 self.getAuthenticatedComments(authCredentials: authCredentials)
@@ -80,11 +78,10 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
     func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil) {
 //        self.setObservables()
-        self.specificFetchTypes = specificFetchTypes
         self.showBanner = showBanner
         self.isManualAuthFetch = isManualFetch
         delegate?.showFetchStartedBanner(showBanner: showBanner)
-        self.initializeFetchStatusList(withSpecificTypes: self.specificFetchTypes)
+        self.initializeFetchStatusList(withSpecificTypes: specificFetchTypes)
         self.authCredentials = authCredentials
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
@@ -542,6 +539,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
           if let protectiveWord = protectiveWord, completedCount > 0 {
               self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
               self.authManager.storeMedFetchRequired(bool: false)
+              AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
           }
             let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
@@ -655,12 +653,14 @@ struct FetchStatusList {
     var fetchStatus: [AuthenticationFetchType: FetchStatus]
     
     var isCompleted: Bool {
+        guard fetchStatus.count > 0 else { return false }
         return fetchStatus.count == fetchStatus.map({ $0.value.requestCompleted }).filter({ $0 == true }).count
     }
     
     var canFetchComments: Bool {
         var tempCommentsList = fetchStatus
         tempCommentsList.removeValue(forKey: .Comments)
+        guard tempCommentsList.count > 0 else { return false }
         return tempCommentsList.count == tempCommentsList.map({ $0.value.requestCompleted }).filter({ $0 == true }).count
     }
     
@@ -698,18 +698,12 @@ extension AuthenticatedHealthRecordsAPIWorker {
             ])
             return
         }
-        self.fetchStatusList = FetchStatusList(fetchStatus: [:])
         for type in types {
             fetchStatusList.fetchStatus[type] = FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
         }
     }
+    
+    private func deinitializeStatusList() {
+        self.fetchStatusList = FetchStatusList(fetchStatus: [:])
+    }
 }
-
-// MARK: Protected word retry
-//extension AuthenticatedHealthRecordsAPIWorker {
-//    @objc private func protectedWordProvided(_ notification: Notification) {
-//        guard let protectiveWord = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String, let authCreds = self.authCredentials else { return }
-//        guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw), purpose == .manualFetch else { return }
-//        self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord)
-//    }
-//}

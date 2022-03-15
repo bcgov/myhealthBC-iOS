@@ -189,6 +189,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         guard showBanner else { return }
         // TODO: Connor - handle error case
         self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
+        NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
     }
 }
 
