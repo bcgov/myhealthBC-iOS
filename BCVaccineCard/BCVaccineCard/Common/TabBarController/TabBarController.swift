@@ -146,7 +146,7 @@ class TabBarController: UITabBarController {
     @objc private func backgroundAuthFetch(_ notification: Notification) {
         guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false)
+        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false)
     }
 
 }
@@ -189,6 +189,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         guard showBanner else { return }
         // TODO: Connor - handle error case
         self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
+        NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
     }
 }
 

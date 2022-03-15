@@ -332,18 +332,20 @@ extension UIViewController {
     func storeVaccineCard(model: LocallyStoredVaccinePassportModel,
                           authenticated: Bool,
                           sortOrder: Int64? = nil,
+                          patientAPI: AuthenticatedPatientDetailsResponseObject? = nil,
                           completion: @escaping()->Void
     ) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
-        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: model.name, birthday: birthdate) else {
+        let name = patientAPI?.getFullName ?? model.name
+        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: name, birthday: birthdate) else {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card", type: .storage)
             return completion()
         }
         StorageService.shared.storeVaccineCard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, completion: {_ in completion()})
     }
     
-    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, completion: @escaping(Bool)->Void) {
-        StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, completion: {[weak self] card in
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, patientAPI: AuthenticatedPatientDetailsResponseObject? = nil, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, patient: patientAPI, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
                 self.showBanner(message: .updatedCard, style: .Top)

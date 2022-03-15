@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum HiddenRecordType {
+enum HiddenRecordType: Equatable {
     case login(hiddenRecords: Int)
     case medicalRecords
     

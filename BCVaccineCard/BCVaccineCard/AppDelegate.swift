@@ -36,12 +36,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
 #endif
         AnalyticsService.shared.setup()
-        setupRootViewController()
         authManager = AuthManager()
+        clearKeychainIfNecessary(authManager: authManager)
+        setupRootViewController()
         authManager?.initTokenExpieryTimer()
         listenToAppState()
         localAuthManager = LocalAuthManager()
         localAuthManager?.listenToAppLaunch()
+    }
+    
+    private func clearKeychainIfNecessary(authManager: AuthManager?) {
+        if !Defaults.hasAppLaunchedBefore {
+            authManager?.clearData()
+            Defaults.hasAppLaunchedBefore = true
+        }
     }
     
     private func listenToAppState() {
