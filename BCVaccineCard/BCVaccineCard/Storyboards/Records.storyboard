@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2hG-gH-503">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -101,20 +101,20 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8C6-a4-6jl">
-                                <rect key="frame" x="24" y="84.5" width="366" height="777.5"/>
+                                <rect key="frame" x="0.0" y="84.5" width="414" height="777.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="dol-yA-rce"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6as-jW-Iil" firstAttribute="leading" secondItem="8C6-a4-6jl" secondAttribute="leading" id="C7h-uj-Aft"/>
-                            <constraint firstItem="8C6-a4-6jl" firstAttribute="leading" secondItem="dol-yA-rce" secondAttribute="leading" constant="24" id="FOX-Xu-ydA"/>
-                            <constraint firstItem="6as-jW-Iil" firstAttribute="trailing" secondItem="8C6-a4-6jl" secondAttribute="trailing" id="Gh6-vi-mq2"/>
+                            <constraint firstItem="6as-jW-Iil" firstAttribute="leading" secondItem="8C6-a4-6jl" secondAttribute="leading" constant="24" id="C7h-uj-Aft"/>
+                            <constraint firstItem="8C6-a4-6jl" firstAttribute="leading" secondItem="dol-yA-rce" secondAttribute="leading" id="FOX-Xu-ydA"/>
+                            <constraint firstItem="6as-jW-Iil" firstAttribute="trailing" secondItem="8C6-a4-6jl" secondAttribute="trailing" constant="-24" id="Gh6-vi-mq2"/>
                             <constraint firstItem="8C6-a4-6jl" firstAttribute="top" secondItem="6as-jW-Iil" secondAttribute="bottom" constant="10" id="WpT-pl-jW3"/>
                             <constraint firstItem="dol-yA-rce" firstAttribute="bottom" secondItem="8C6-a4-6jl" secondAttribute="bottom" id="hqN-K5-dVG"/>
                             <constraint firstItem="6as-jW-Iil" firstAttribute="top" secondItem="dol-yA-rce" secondAttribute="top" constant="10" id="mSD-5d-MXZ"/>
-                            <constraint firstItem="dol-yA-rce" firstAttribute="trailing" secondItem="8C6-a4-6jl" secondAttribute="trailing" constant="24" id="zNy-A7-v8R"/>
+                            <constraint firstItem="dol-yA-rce" firstAttribute="trailing" secondItem="8C6-a4-6jl" secondAttribute="trailing" id="zNy-A7-v8R"/>
                         </constraints>
                     </view>
                     <connections>
