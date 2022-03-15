@@ -189,11 +189,11 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         DispatchQueue.main.async {
             let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticated: ds.isAuthenticated, userNumberHealthRecords: recordsCount)
-            self.setupNavStack(details: details, detailVC: detailVC)
+            self.setupNavStack(details: details, detailVC: detailVC, authenticated: ds.isAuthenticated)
         }
     }
     
-    private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController) {
+    private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController, authenticated: Bool) {
         guard let name = details.name,
               let birthday = details.dob,
               let birthDate = Date.Formatter.yearMonthDay.date(from: birthday),
@@ -213,7 +213,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         
         if containsUserRecordsVC == false {
-            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, navStyle: .multiUser)
+            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: .multiUser)
             navStack.append(secondVC)
         }
         

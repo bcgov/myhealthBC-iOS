@@ -69,7 +69,7 @@ class HealthRecordsViewController: BaseViewController {
         if self.dataSource.isEmpty {
             self.showFetchVC()
         } else if dataSource.count == 1, let singleUser = dataSource.first {
-            showRecords(for: singleUser.patient, animated: false, navStyle: .singleUser)
+            showRecords(for: singleUser.patient, animated: false, navStyle: .singleUser, authenticated: singleUser.authenticated)
         } else {
             self.addRecordHeaderSetup()
             self.setupCollectionView()
@@ -89,7 +89,7 @@ class HealthRecordsViewController: BaseViewController {
             case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
                 self.loadDataAndSetInitialVC()
                 if let lastPatientSelected = self.lastPatientSelected, !self.dataSource.isEmpty, let lastPatientRecordInDataSouce = self.dataSource.first(where: {$0.patient == lastPatientSelected}) {
-                    self.showRecords(for: lastPatientRecordInDataSouce.patient, animated: false, navStyle: self.dataSource.count == 1 ? .singleUser :.multiUser)
+                    self.showRecords(for: lastPatientRecordInDataSouce.patient, animated: false, navStyle: self.dataSource.count == 1 ? .singleUser :.multiUser, authenticated: lastPatientRecordInDataSouce.authenticated)
                 }
             default:
                 break
@@ -130,8 +130,8 @@ class HealthRecordsViewController: BaseViewController {
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
-    func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle) {
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, navStyle: navStyle)
+    func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle, authenticated: Bool) {
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: navStyle)
         lastPatientSelected = patient
         self.navigationController?.pushViewController(vc, animated: animated)
     }
@@ -143,7 +143,7 @@ class HealthRecordsViewController: BaseViewController {
         if authManager.isAuthenticated {
             closeRecordWhenAuthExpires(patient: patient)
         }
-        showRecords(for: patient, animated: true, navStyle: .multiUser)
+        showRecords(for: patient, animated: true, navStyle: .multiUser, authenticated: data.authenticated)
     }
     
     func closeRecordWhenAuthExpires(patient: Patient) {
