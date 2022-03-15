@@ -9,29 +9,25 @@ import Foundation
 import UIKit
 
 extension HealthRecordsDetailDataSource.Record {
-    fileprivate func getCellSectionAndOrder() -> [HealthRecordView.SectionAndOrder] {
+    fileprivate func getCellSection() -> [HealthRecordView.CellSection] {
         switch type {
         case .covidImmunizationRecord, .covidTestResultRecord:
-            return [HealthRecordView.SectionAndOrder(cellSection: .Header, sectionIndex: 0), HealthRecordView.SectionAndOrder(cellSection: .Fields, sectionIndex: 1)]
+            return [.Header, .Fields]
         case .medication:
-            return [HealthRecordView.SectionAndOrder(cellSection: .Fields, sectionIndex: 0), HealthRecordView.SectionAndOrder(cellSection: .Comments, sectionIndex: 1)]
+            return [.Fields, .Comments]
         case .laboratoryOrder:
-            return [HealthRecordView.SectionAndOrder(cellSection: .Fields, sectionIndex: 0)]
+            return [.Fields]
         }
     }
 }
 
 fileprivate extension HealthRecordsDetailDataSource.Record {
     var hasComments: Bool {
-        getCellSectionAndOrder().filter { $0.cellSection == .Comments }.count > 0
+        getCellSection().contains(.Comments)
     }
 }
 
 class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
-    struct SectionAndOrder: Equatable {
-        var cellSection: CellSection
-        var sectionIndex: Int
-    }
     enum CellSection: Int, CaseIterable {
         case Header
         case Fields
@@ -76,14 +72,14 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         guard let model = self.model else {return 0}
-        let availableSections = model.getCellSectionAndOrder()
+        let availableSections = model.getCellSection()
         return availableSections.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let model = self.model else {return nil}
-        let sectionAndOrder = model.getCellSectionAndOrder()[section]
-        guard sectionAndOrder.cellSection == .Comments else {return nil}
+        let sectionType = model.getCellSection()[section]
+        guard sectionType == .Comments else {return nil}
         let headerView: TableSectionHeader = TableSectionHeader.fromNib()
         let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
         headerView.configure(text: "\(model.comments.count) \(commentsString)")
@@ -92,8 +88,8 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let model = self.model else {return 0}
-        let sectionAndOrder = model.getCellSectionAndOrder()[section]
-        switch sectionAndOrder.cellSection {
+        let sectionType = model.getCellSection()[section]
+        switch sectionType {
         case .Header:
             return 1
         case .Fields:
@@ -105,8 +101,8 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let model = self.model else { return UITableViewCell()}
-        let currentSection = model.getCellSectionAndOrder()[indexPath.section].cellSection
-        switch currentSection {
+        let sectionType = model.getCellSection()[indexPath.section]
+        switch sectionType {
         case .Header:
             return headerCell(indexPath: indexPath, tableView: tableView)
         case .Fields:
