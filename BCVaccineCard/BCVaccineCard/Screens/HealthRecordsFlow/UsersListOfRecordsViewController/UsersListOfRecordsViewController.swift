@@ -41,6 +41,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     fileprivate let authManager = AuthManager()
     private var protectiveWord: String?
     private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
+    private var selectedCellIndexPath: IndexPath?
     
     private var currentFilter: RecordsFilter? = nil
     
@@ -239,7 +240,7 @@ extension UsersListOfRecordsViewController {
             let authenticatedRecords = patientRecords.filter({$0.isAuthenticated})
             self.dataSource = unauthenticatedRecords
             self.hiddenRecords = authenticatedRecords
-            self.hiddenCellType = .login(hiddenRecords: hiddenRecords.count)
+            self.hiddenCellType = .loginToAccess(hiddenRecords: hiddenRecords.count)
         }
         self.setupTableView()
         self.navSetup(style: navStyle, authenticated: self.authenticated)
@@ -365,10 +366,15 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             guard let `self` = self else { return }
             guard let type = hiddenType else { return }
             switch type {
-            case .login:
+            case .loginToAccess:
                 self.performBCSCLogin()
             case .medicalRecords:
+                if self.authManager.medicalFetchRequired {
+                    self.selectedCellIndexPath = indexPath
+                }
                 self.promptProtectiveVC(medFetchRequired: self.authManager.medicalFetchRequired)
+            case .authenticate:
+                break
             }
         }
         return cell
@@ -526,8 +532,22 @@ extension UsersListOfRecordsViewController {
                 }
             }
         } else if purpose == .initialFetch {
-            // TODO: Show loading indicator here
+            adjustLoadingIndicator(show: true)
             self.performAuthenticatedBackgroundFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered)
+        }
+    }
+}
+
+// MARK: Handling hidden records loading indicator
+extension UsersListOfRecordsViewController {
+    private func adjustLoadingIndicator(show: Bool) {
+        if let indexPath = self.selectedCellIndexPath, let cell = self.tableView.cellForRow(at: indexPath) as? HiddenRecordsTableViewCell {
+            if show {
+                cell.startLoadingIndicator(backgroundColor: .clear)
+            } else {
+                cell.endLoadingIndicator()
+                self.selectedCellIndexPath = nil
+            }
         }
     }
 }
@@ -535,7 +555,7 @@ extension UsersListOfRecordsViewController {
 // MARK: Auth fetch completed, reload data
 extension UsersListOfRecordsViewController {
     @objc private func authFetchComplete(_ notification: Notification) {
-        // TODO: Hide loading indicator here
+        adjustLoadingIndicator(show: false)
         self.fetchDataSource(initialProtectedMedFetch: true)
     }
 }

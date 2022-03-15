@@ -8,34 +8,37 @@
 import UIKit
 
 enum HiddenRecordType: Equatable {
-    case login(hiddenRecords: Int)
+    case loginToAccess(hiddenRecords: Int)
     case medicalRecords
+    case authenticate
     
     var getButtonImage: UIImage? {
         switch self {
-        case .login: return UIImage(named: "bcscLogo")
+        case .loginToAccess, .authenticate: return UIImage(named: "bcscLogo")
         case .medicalRecords: return UIImage(named: "white-lock")
         }
     }
     
     var getButtonTitle: String {
         switch self {
-        case .login: return .bcscLogin
+        case .loginToAccess, .authenticate: return .bcscLogin
         case .medicalRecords: return .accessRecords
         }
     }
     
     var getTitleText: String {
         switch self {
-        case .login(let hiddenRecords): return "\(hiddenRecords) hidden records"
+        case .loginToAccess(let hiddenRecords): return "\(hiddenRecords) hidden records"
         case .medicalRecords: return "Hidden medication records"
+        case .authenticate: return "Manage your records"
         }
     }
     
     var getDescriptionText: String {
         switch self {
-        case .login: return "Log in again with your BC Services Card to view all the records"
+        case .loginToAccess: return "Log in again with your BC Services Card to view all the records"
         case .medicalRecords: return "Enter protective word to access your medication records."
+        case .authenticate: return "Log in again with your BC Services Card to view all the records and customize health plans"
         }
     }
 }
