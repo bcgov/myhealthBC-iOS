@@ -9,8 +9,8 @@ import UIKit
 
 class HomeScreenViewController: BaseViewController {
     
-    class func constructHealthPassViewController() -> HomeScreenViewController {
-        if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: HomeScreenViewController.self)) as? HomeScreenViewController {
+    class func constructHomeScreenViewController() -> HomeScreenViewController {
+        if let vc = Storyboard.home.instantiateViewController(withIdentifier: String(describing: HomeScreenViewController.self)) as? HomeScreenViewController {
             return vc
         }
         return HomeScreenViewController()
@@ -18,6 +18,7 @@ class HomeScreenViewController: BaseViewController {
     
     @IBOutlet weak private var introLabel: UILabel!
     @IBOutlet weak private var tableView: UITableView!
+    private var dataSource: [HomeScreenCellType] = [.Records, .Proofs, .Resources]
     private var authManager: AuthManager = AuthManager()
     
     override func viewDidLoad() {
@@ -42,7 +43,6 @@ class HomeScreenViewController: BaseViewController {
         navSetup()
         addObservablesForChangeInAuthenticationStatus()
         setupIntroLabel()
-        setupDataSource()
         setupTableView()
     }
     
@@ -70,35 +70,61 @@ extension HomeScreenViewController {
 
 // MARK: Observable logic for authentication status change
 extension HomeScreenViewController {
-    // TODO: Add observable here for when user is logged in or logged out
     private func addObservablesForChangeInAuthenticationStatus() {
-        // TODO: In notification function, we will adjust the nav bar
+        NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
+    }
+    
+    // Note: Not using authenticated value right now, may just remove it. Leaving in for now in case some requirements change or if there are any edge cases not considered
+    // FIXME: Either use the userInfo value or remove it - need to test more first (comment above)
+    @objc private func authStatusChanged(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: Bool] else { return }
+        guard let authenticated = userInfo[Constants.AuthStatusKey.key] else { return }
+        self.navSetup()
     }
 }
 
 // MARK: UI Setup
 extension HomeScreenViewController {
     private func setupIntroLabel() {
-        // TODO: Label setup here
-    }
-}
-
-// MARK: Data Source Setup
-extension HomeScreenViewController {
-    private func setupDataSource() {
-        // TODO: DataSource setup here
+        introLabel.font = UIFont.bcSansBoldWithSize(size: 20)
+        introLabel.textColor = AppColours.appBlue
+        introLabel.text = "What do you want to focus on today?"
     }
 }
 
 // MARK: Table View Setup
-extension HomeScreenViewController {
+extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
+    
     private func setupTableView() {
-        // TODO: Setup Table View here setup here
+        tableView.register(UINib.init(nibName: HomeScreenTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HomeScreenTableViewCell.getName)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 231
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource.count
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeScreenTableViewCell.getName, for: indexPath) as? HomeScreenTableViewCell else { return UITableViewCell() }
+        let type = dataSource[indexPath.row]
+        cell.configure(forType: type)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let type = dataSource[indexPath.row]
+        goToTabForType(type: type)
     }
 }
 
 // MARK: Navigation logic for each type here
 extension HomeScreenViewController {
-    // TODO: Create navigation functions to essentially switch the tab bar on the tab bar view controller
+    private func goToTabForType(type: HomeScreenCellType) {
+        guard let tabBarController = self.tabBarController as? TabBarController else { return }
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        tabBarController.selectedIndex = type.getTabIndex
+    }
 }
 

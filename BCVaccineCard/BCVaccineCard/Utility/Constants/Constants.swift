@@ -72,6 +72,10 @@ struct Constants {
         static let name = "MyHealth Document.pdf"
     }
     
+    struct AuthStatusKey {
+        static let key = "AuthStatus"
+    }
+    
     struct NetworkRetryAttempts {
         static let publicVaccineStatusRetryMaxForFedPass = 3
         static let publicRetryMaxForTestResults = 3

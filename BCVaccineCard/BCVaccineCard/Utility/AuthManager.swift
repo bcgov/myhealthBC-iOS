@@ -157,6 +157,7 @@ class AuthManager {
             OIDAuthState.authState(byPresenting: request, presenting: viewController) { authState, error in
                 if let authState = authState {
                     self.store(state: authState)
+                    self.authStatusChanged(authenticated: authState.isAuthorized)
                     return completion(.Success)
                 } else {
                     print("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
@@ -191,6 +192,7 @@ class AuthManager {
                         HTTPCookieStorage.shared.deleteCookie(cookie)
                     }
                     self.removeAuthTokens()
+                    self.authStatusChanged(authenticated: false)
                     return completion(true)
                 }
                 if error != nil {
@@ -335,6 +337,11 @@ class AuthManager {
         catch let error {
             print(error)
         }
+    }
+    
+    private func authStatusChanged(authenticated: Bool) {
+        let info: [String: Bool] = [Constants.AuthStatusKey.key: authenticated]
+        NotificationCenter.default.post(name: .authStatusChanged, object: nil, userInfo: info)
     }
 }
 

@@ -37,12 +37,11 @@ enum HomeScreenCellType {
         }
     }
     
-    // TODO: Replace with actual images
     var getButtonImage: UIImage? {
         switch self {
-        case .Records: return UIImage(named: "records-home-icon")
-        case .Proofs: return UIImage(named: "proofs-home-icon")
-        case .Resources: return UIImage(named: "resources-home-icon")
+        case .Records: return UIImage(named: "records-home-button")
+        case .Proofs: return UIImage(named: "proofs-home-button")
+        case .Resources: return UIImage(named: "resources-home-button")
         }
     }
     
@@ -77,6 +76,7 @@ class HomeScreenTableViewCell: UITableViewCell {
         shadowView.backgroundColor = UIColor.clear
         shadowView.layer.shadowColor = UIColor.black.cgColor
         shadowView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        shadowView.layer.shadowOpacity = 0.25
         shadowView.layer.shadowRadius = 6.0
         
         roundedView.layer.cornerRadius = 3

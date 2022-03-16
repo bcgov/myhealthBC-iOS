@@ -85,6 +85,7 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="buttonImageView" destination="R2F-xX-SXO" id="mgw-ch-qAf"/>
                 <outlet property="descriptionLabel" destination="2ol-NX-MHs" id="4vg-wG-p9t"/>

@@ -39,21 +39,6 @@
             </objects>
             <point key="canvasLocation" x="1106" y="-1707"/>
         </scene>
-        <!--Home Screen View Controller-->
-        <scene sceneID="MsL-XO-P8n">
-            <objects>
-                <viewController storyboardIdentifier="HomeScreenViewController" id="zpF-rA-VTd" customClass="HomeScreenViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Z5R-MG-XXO">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="xcM-ci-7Ym"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3sG-Fy-J6M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2206" y="-1700"/>
-        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="KpE-DL-QZC">
             <objects>

@@ -8,7 +8,7 @@
 import UIKit
 
 enum TabBarVCs: Int {
-    case healthPass = 0, records, resource, booking, newsFeed
+    case home = 0, healthPass, records, resource, booking, newsFeed
     
     var getIndexOfTab: Int {
         return self.rawValue
@@ -23,6 +23,8 @@ enum TabBarVCs: Int {
     
     var properties: Properties? {
         switch self {
+        case .home:
+            return Properties(title: "Home", selectedTabBarImage: #imageLiteral(resourceName: "home-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "home-tab-unselected"), baseViewController: HomeScreenViewController.constructHomeScreenViewController())
         case .healthPass:
             return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .records:
@@ -65,7 +67,7 @@ class TabBarController: UITabBarController {
         self.tabBar.tintColor = AppColours.appBlue
         self.tabBar.barTintColor = .white
         self.delegate = self
-        self.viewControllers = setViewControllers(withVCs: [.healthPass, .records, .resource, .newsFeed])
+        self.viewControllers = setViewControllers(withVCs: [.home, .healthPass, .records, .resource, .newsFeed])
         self.selectedIndex = selectedIndex
         setupObserver()
     }
