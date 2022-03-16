@@ -71,12 +71,13 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
+    // TODO: Adjust this so that we can handle under 12 case
     // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
     func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil) {
 //        self.setObservables()
         self.showBanner = showBanner
         self.isManualAuthFetch = isManualFetch
-        delegate?.showFetchStartedBanner(showBanner: showBanner)
+        delegate?.showFetchStartedBanner(showBanner: showBanner) // TODO: Need to move this to after the check for if 12 years old
         self.initializeFetchStatusList(withSpecificTypes: specificFetchTypes)
         self.authCredentials = authCredentials
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
@@ -101,6 +102,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
+            // TODO: Check here for user age
+            // If user is under 12, then return without doing anything, and notify auth manager to log user out (with an alert)
+            // If user is 12 or older, then start banner fetch here, and initialize requests
             initializeRequests(authCredentials: authCredentials, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
         case .failure(let error):
             print(error)
