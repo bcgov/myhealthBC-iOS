@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hLX-2c-hP3" customClass="GetRecordsView" customModule="BCVaccineCard" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="10" width="320" height="120"/>
+                        <rect key="frame" x="24" y="10" width="272" height="120"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="ah2-hw-dnL"/>
@@ -28,9 +28,9 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="hLX-2c-hP3" secondAttribute="bottom" constant="10" id="Yuw-WG-0fp"/>
-                    <constraint firstItem="hLX-2c-hP3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="izR-oY-AS0"/>
+                    <constraint firstItem="hLX-2c-hP3" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="24" id="izR-oY-AS0"/>
                     <constraint firstItem="hLX-2c-hP3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="mey-U7-Xwa"/>
-                    <constraint firstAttribute="trailing" secondItem="hLX-2c-hP3" secondAttribute="trailing" id="xrs-Pr-wDZ"/>
+                    <constraint firstAttribute="trailing" secondItem="hLX-2c-hP3" secondAttribute="trailing" constant="24" id="xrs-Pr-wDZ"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

@@ -9,6 +9,11 @@ import UIKit
 
 class FetchHealthRecordsViewController: BaseViewController {
     
+    enum DataSource {
+        case recordType(type: GetRecordsView.RecordType)
+        case login(type: HiddenRecordType)
+    }
+    
     class func constructFetchHealthRecordsViewController(hideNavBackButton: Bool, showSettingsIcon: Bool, completion: @escaping()->Void) -> FetchHealthRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: FetchHealthRecordsViewController.self)) as? FetchHealthRecordsViewController {
             vc.hideNavBackButton = hideNavBackButton
@@ -26,7 +31,8 @@ class FetchHealthRecordsViewController: BaseViewController {
     private var showSettingsIcon: Bool!
     private var completion: (()->Void)?
     
-    private var dataSource: [GetRecordsView.RecordType] = [.covidImmunizationRecord, .covidTestResult]
+    private var dataSource: [DataSource] = [.recordType(type: .covidImmunizationRecord),
+                                            .recordType(type: .covidTestResult)]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +56,7 @@ class FetchHealthRecordsViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.adjustDataSource()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -76,6 +83,17 @@ class FetchHealthRecordsViewController: BaseViewController {
     private func setupAccessibilty() {
         self.headerLabel.accessibilityLabel = .fetchHealthRecordsIntroText.capitalized
     }
+    
+    private func adjustDataSource() {
+        self.dataSource = [
+            .recordType(type: .covidImmunizationRecord),
+            .recordType(type: .covidTestResult)
+        ]
+        if !AuthManager().isAuthenticated {
+            self.dataSource.insert(.login(type: .authenticate), at: 0)
+        }
+        self.tableView.reloadData()
+    }
 }
 
 // MARK: Navigation setup
@@ -97,6 +115,7 @@ extension FetchHealthRecordsViewController {
 extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: GetARecordTableViewCell.getName, bundle: .main), forCellReuseIdentifier: GetARecordTableViewCell.getName)
+        tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 140
         tableView.delegate = self
@@ -109,20 +128,42 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: GetARecordTableViewCell.getName, for: indexPath) as? GetARecordTableViewCell {
-            cell.configure(type: dataSource[indexPath.row])
-            return cell
+        let data = dataSource[indexPath.row]
+        switch data {
+        case .recordType(type: let type):
+            if let cell = tableView.dequeueReusableCell(withIdentifier: GetARecordTableViewCell.getName, for: indexPath) as? GetARecordTableViewCell {
+                cell.configure(type: type)
+                return cell
+            }
+        case .login(type: let type):
+            if let cell = tableView.dequeueReusableCell(withIdentifier: HiddenRecordsTableViewCell.getName, for: indexPath) as? HiddenRecordsTableViewCell {
+                cell.configure(forRecordType: type) { recType in
+                    guard let recType = recType else { return }
+                    switch recType {
+                    case .authenticate:
+                        self.performBCSCLogin()
+                    default: break
+                    }
+                }
+                return cell
+            }
         }
+        
         return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let type = dataSource[indexPath.row]
-        var rememberDetails = RememberedGatewayDetails(storageArray: nil)
-        if let details = Defaults.rememberGatewayDetails {
-            rememberDetails = details
+        let data = dataSource[indexPath.row]
+        switch data {
+        case .recordType(type: let type):
+            var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+            if let details = Defaults.rememberGatewayDetails {
+                rememberDetails = details
+            }
+            showForm(type: type, rememberDetails: rememberDetails)
+        case .login: break
         }
-        showForm(type: type, rememberDetails: rememberDetails)
+        
     }
     
     
@@ -140,15 +181,16 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             }
         }
         
-        if !AuthManager().isAuthenticated {
-            showLogin(initialView: .Landing) { authenticated in
-                if !authenticated {
-                    showForm()
-                }
-            }
-        } else {
-            showForm()
-        }
+//        if !AuthManager().isAuthenticated {
+//            showLogin(initialView: .Landing) { authenticated in
+//                if !authenticated {
+//                    showForm()
+//                }
+//            }
+//        } else {
+//            showForm()
+//        }
+        showForm()
     }
     
     private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {
@@ -189,11 +231,11 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         DispatchQueue.main.async {
             let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticated: ds.isAuthenticated, userNumberHealthRecords: recordsCount)
-            self.setupNavStack(details: details, detailVC: detailVC)
+            self.setupNavStack(details: details, detailVC: detailVC, authenticated: ds.isAuthenticated)
         }
     }
     
-    private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController) {
+    private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController, authenticated: Bool) {
         guard let name = details.name,
               let birthday = details.dob,
               let birthDate = Date.Formatter.yearMonthDay.date(from: birthday),
@@ -213,7 +255,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         
         if containsUserRecordsVC == false {
-            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, navStyle: .multiUser)
+            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: .multiUser)
             navStack.append(secondVC)
         }
         
@@ -222,5 +264,16 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         guard let tabBarVC = self.tabBarController as? TabBarController else { return }
         AppDelegate.sharedInstance?.addLoadingViewHack()
         tabBarVC.resetHealthRecordsTab(viewControllersToInclude: navStack)
+    }
+}
+
+// MARK: BCSC Login
+extension FetchHealthRecordsViewController {
+    func performBCSCLogin() {
+        self.showLogin(initialView: .Landing) { [weak self] authenticated in
+            guard let `self` = self, authenticated else {return}
+            // TODO: Adjust nav stack here if necessary
+            self.adjustDataSource()
+        }
     }
 }

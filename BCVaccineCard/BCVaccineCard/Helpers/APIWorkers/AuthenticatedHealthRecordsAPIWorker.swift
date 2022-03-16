@@ -57,10 +57,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         self.executingVC = delegateOwner
     }
     
-//    private func setObservables() {
-//        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
-//    }
-    
     // Note: Choosing this instead of completion handlers as completion handlers were causing issues
     // TODO: Turn this into an array which will track the fetch status - construct this independendently (via init, perhaps) so that it is more reusable
     var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [:]) {

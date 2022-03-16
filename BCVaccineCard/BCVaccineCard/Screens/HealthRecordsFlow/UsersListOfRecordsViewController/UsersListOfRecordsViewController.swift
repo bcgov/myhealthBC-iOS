@@ -16,9 +16,10 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     // TODO: Replace params with Patient after storage refactor
-    class func constructUsersListOfRecordsViewController(patient: Patient, navStyle: NavStyle) -> UsersListOfRecordsViewController {
+    class func constructUsersListOfRecordsViewController(patient: Patient, authenticated: Bool, navStyle: NavStyle) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.patient = patient
+            vc.authenticated = authenticated
             vc.navStyle = navStyle
             return vc
         }
@@ -28,6 +29,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var patient: Patient?
+    private var authenticated: Bool = true
     private var navStyle: NavStyle = .multiUser
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
@@ -39,7 +41,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     fileprivate let authManager = AuthManager()
     private var protectiveWord: String?
     private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
-//    private var promptUser = true // Note: This is used because we fetch ds on view will appear, but protective word should be checked on view did load
+    private var selectedCellIndexPath: IndexPath?
     
     private var currentFilter: RecordsFilter? = nil
     
@@ -47,7 +49,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         didSet {
             self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
-            navSetup(style: navStyle)
+            navSetup(style: navStyle, authenticated: self.authenticated)
             self.tableView.layoutSubviews()
         }
     }
@@ -82,34 +84,36 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
-        switch navStyle {
-        case .singleUser:
-            setupNavForSingleUser()
-        case .multiUser:
-            setupNavForMultiUser()
-        }
+        navSetup(style: navStyle, authenticated: self.authenticated)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
     }
-    
-    
-    private func setupNavForSingleUser() {
-        navSetup(style: .singleUser)
-    }
-    
-    private func setupNavForMultiUser() {
-        navSetup(style: .multiUser)
-    }
+
 }
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
-    private func navSetup(style: NavStyle) {
+    private func navSetup(style: NavStyle, authenticated: Bool) {
         var buttons: [NavButton] = []
-        let filterButton = NavButton(title: nil,
-                  image: UIImage(named: "filter"), action: #selector(self.showFilters),
-                  accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-        buttons.append(filterButton)
+        if authenticated {
+            let filterButton = NavButton(title: nil,
+                      image: UIImage(named: "filter"), action: #selector(self.showFilters),
+                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+            buttons.append(filterButton)
+        } else {
+            var editModeNavButton: NavButton
+            if inEditMode {
+                editModeNavButton = NavButton(title: .done,
+                          image: nil, action: #selector(self.doneButton),
+                          accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconHint))
+            } else {
+                editModeNavButton = NavButton(title: nil,
+                          image: UIImage(named: "edit-icon"), action: #selector(self.editButton),
+                          accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
+            }
+            buttons.append(editModeNavButton)
+        }
+        
         if style == .singleUser {
             self.navigationItem.setHidesBackButton(true, animated: false)
             let addButton = NavButton(title: nil,
@@ -128,7 +132,7 @@ extension UsersListOfRecordsViewController {
         self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
                                                leftNavButton: nil,
                                                rightNavButtons: buttons,
-                                               navStyle: .large,
+                                               navStyle: .small,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
@@ -148,6 +152,15 @@ extension UsersListOfRecordsViewController {
     private func goToSettingsScreen() {
         let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc private func doneButton() {
+        inEditMode = false
+    }
+    
+    @objc private func editButton() {
+        tableView.isEditing = false
+        inEditMode = true
     }
 }
 
@@ -227,10 +240,10 @@ extension UsersListOfRecordsViewController {
             let authenticatedRecords = patientRecords.filter({$0.isAuthenticated})
             self.dataSource = unauthenticatedRecords
             self.hiddenRecords = authenticatedRecords
-            self.hiddenCellType = .login(hiddenRecords: hiddenRecords.count)
+            self.hiddenCellType = .loginToAccess(hiddenRecords: hiddenRecords.count)
         }
         self.setupTableView()
-        self.navSetup(style: navStyle)
+        self.navSetup(style: navStyle, authenticated: self.authenticated)
         
         self.view.endLoadingIndicator()
         
@@ -353,10 +366,15 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             guard let `self` = self else { return }
             guard let type = hiddenType else { return }
             switch type {
-            case .login:
+            case .loginToAccess:
                 self.performBCSCLogin()
             case .medicalRecords:
+                if self.authManager.medicalFetchRequired {
+                    self.selectedCellIndexPath = indexPath
+                }
                 self.promptProtectiveVC(medFetchRequired: self.authManager.medicalFetchRequired)
+            case .authenticate:
+                break
             }
         }
         return cell
@@ -514,7 +532,22 @@ extension UsersListOfRecordsViewController {
                 }
             }
         } else if purpose == .initialFetch {
+            adjustLoadingIndicator(show: true)
             self.performAuthenticatedBackgroundFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered)
+        }
+    }
+}
+
+// MARK: Handling hidden records loading indicator
+extension UsersListOfRecordsViewController {
+    private func adjustLoadingIndicator(show: Bool) {
+        if let indexPath = self.selectedCellIndexPath, let cell = self.tableView.cellForRow(at: indexPath) as? HiddenRecordsTableViewCell {
+            if show {
+                cell.startLoadingIndicator(backgroundColor: .clear)
+            } else {
+                cell.endLoadingIndicator()
+                self.selectedCellIndexPath = nil
+            }
         }
     }
 }
@@ -522,6 +555,7 @@ extension UsersListOfRecordsViewController {
 // MARK: Auth fetch completed, reload data
 extension UsersListOfRecordsViewController {
     @objc private func authFetchComplete(_ notification: Notification) {
+        adjustLoadingIndicator(show: false)
         self.fetchDataSource(initialProtectedMedFetch: true)
     }
 }
