@@ -270,7 +270,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 // MARK: BCSC Login
 extension FetchHealthRecordsViewController {
     func performBCSCLogin() {
-        self.showLogin(initialView: .Auth) { [weak self] authenticated in
+        self.showLogin(initialView: .Landing) { [weak self] authenticated in
             guard let `self` = self, authenticated else {return}
             // TODO: Adjust nav stack here if necessary
             self.adjustDataSource()
