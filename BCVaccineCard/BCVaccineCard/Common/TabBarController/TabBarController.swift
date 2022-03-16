@@ -7,8 +7,12 @@
 
 import UIKit
 
-enum TabBarVCs {
-    case healthPass, records, resource, booking, newsFeed
+enum TabBarVCs: Int {
+    case healthPass = 0, records, resource, booking, newsFeed
+    
+    var getIndexOfTab: Int {
+        return self.rawValue
+    }
     
     struct Properties {
         let title: String
@@ -112,11 +116,11 @@ class TabBarController: UITabBarController {
         viewController.tabBarItem = tabBarItem
         viewController.title = properties.title
         let navController = CustomNavigationController.init(rootViewController: viewController)
-        let isOnRecordsTab = self.selectedIndex == 1
-        viewControllers?.remove(at: 1)
-        viewControllers?.insert(navController, at: 1)
+        let isOnRecordsTab = self.selectedIndex == TabBarVCs.records.rawValue
+        viewControllers?.remove(at: TabBarVCs.records.rawValue)
+        viewControllers?.insert(navController, at: TabBarVCs.records.rawValue)
         if isOnRecordsTab {
-            selectedIndex = 1
+            selectedIndex = TabBarVCs.records.rawValue
             // This portion is used to handle the re-setting of the health records VC stack for proper routing - in order to maintain the correct Navigation UI, we must push the VC's onto the stack (and not set the VC's with .setViewControllers() as this causes issues) - the loading view on the app delegate window is to hide the consecutive pushes to make a smoother UI transition - tested and works
             if let vcs = vcs {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -129,7 +133,7 @@ class TabBarController: UITabBarController {
         }
         // TODO: Should probably find a cleaner way to do this - but the necessity of the function above will likely change with new design updates
         if let patient = patient {
-            selectedIndex = 1
+            selectedIndex = TabBarVCs.records.rawValue
             if let vc = navController.viewControllers.first as? HealthRecordsViewController {
                 vc.setPatientToShow(patient: patient)
             }
@@ -162,10 +166,10 @@ extension TabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
         // First we are checking if the health records screen state needs to be updated when a user taps on records tab - this is to handle the case where a user adds a vaccine pass via health pass flow, and we need to reflect the state change in the records tab. This boolean property is being set in a listener above
-        if self.selectedIndex == 1 && updateRecordsScreenState {
+        if self.selectedIndex == TabBarVCs.records.rawValue && updateRecordsScreenState {
             updateRecordsScreenState = false
             self.resetHealthRecordsTab()
-        } else if self.selectedIndex == 1 && self.previousSelectedIndex == 1 {
+        } else if self.selectedIndex == TabBarVCs.records.rawValue && self.previousSelectedIndex == TabBarVCs.records.rawValue {
             // This is called here to rest the records tab appropriately, when the tab is tapped
             self.resetHealthRecordsTab()
         }
