@@ -39,6 +39,15 @@ struct AuthenticatedPatientDetailsResponseObject: Codable {
         guard let birthdate = resourcePayload?.birthdate else { return nil }
         return Date.Formatter.gatewayDateAndTime.date(from: birthdate)
     }
+    
+    func isUserEqualToOrOlderThan(ageInYears age: Int) -> Bool {
+        guard let birthdate = resourcePayload?.birthdate, let birthday = Date.Formatter.gatewayDateAndTime.date(from: birthdate) else { return false }
+        if let referenceDate = Calendar.current.date(byAdding: .year, value: -12, to: Date()) {
+            return birthday <= referenceDate
+        }
+        return false
+    }
+
 }
 
 

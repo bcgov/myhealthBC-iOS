@@ -197,6 +197,10 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
     }
+    
+    func showAlertForUserUnder12() {
+        self.alert(title: "Age Restriction", message: "We're sorry, user's under 12 year's old are not allowed to access their own medical records. Please contact an adult for assistance.")
+    }
 }
 
 // MARK: To go to specific user records tab

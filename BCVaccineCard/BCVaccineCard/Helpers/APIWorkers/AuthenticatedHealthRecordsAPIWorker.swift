@@ -13,6 +13,7 @@ protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func showPatientDetailsError(error: String, showBanner: Bool)
     func showFetchStartedBanner(showBanner: Bool)
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool)
+    func showAlertForUserUnder12()
 }
 // TODO: Check to see if we will in fact be pulling comments separately, or if they will be a part of the medication statement request. If separate, we should make the request synchronus
 enum AuthenticationFetchType {
@@ -77,7 +78,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
 //        self.setObservables()
         self.showBanner = showBanner
         self.isManualAuthFetch = isManualFetch
-        delegate?.showFetchStartedBanner(showBanner: showBanner) // TODO: Need to move this to after the check for if 12 years old
         self.initializeFetchStatusList(withSpecificTypes: specificFetchTypes)
         self.authCredentials = authCredentials
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
@@ -102,9 +102,14 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
-            // TODO: Check here for user age
-            // If user is under 12, then return without doing anything, and notify auth manager to log user out (with an alert)
-            // If user is 12 or older, then start banner fetch here, and initialize requests
+            guard patientDetails.isUserEqualToOrOlderThan(ageInYears: 12) else {
+                authManager.clearData()
+                self.delegate?.showAlertForUserUnder12()
+                print("CONNOR: USER IS UNDER 12")
+                return
+            }
+            // User is 12 or older, so start banner fetch here, and initialize requests
+            delegate?.showFetchStartedBanner(showBanner: showBanner)
             initializeRequests(authCredentials: authCredentials, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
         case .failure(let error):
             print(error)
