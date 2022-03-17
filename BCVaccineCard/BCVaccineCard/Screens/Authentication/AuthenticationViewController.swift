@@ -53,11 +53,12 @@ class AuthenticationViewController: UIViewController {
         case Failed
     }
     
-    class func constructAuthenticationViewController(returnToHealthPass: Bool, isModal: Bool, initialView: InitialView, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
+    class func constructAuthenticationViewController(returnToHealthPass: Bool, isModal: Bool, initialView: InitialView, fromOnboardingFlow: Bool = false, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion
             vc.returnToHealthPass = returnToHealthPass
             vc.initialView = initialView
+            vc.fromOnboardingFlow = fromOnboardingFlow
             if #available(iOS 13.0, *) {
                 vc.isModalInPresentation = isModal
             }
@@ -72,13 +73,14 @@ class AuthenticationViewController: UIViewController {
     private var completion: ((AuthenticationStatus)->Void)?
     private var returnToHealthPass: Bool = true
     private var initialView: InitialView = .Landing
+    private var fromOnboardingFlow: Bool = false
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         switch initialView {
         case .Landing:
-            showLanding()
+            showLanding(fromOnboardingFlow: self.fromOnboardingFlow)
         case .AuthInfo:
             showInfo()
         case .Auth:
@@ -87,7 +89,7 @@ class AuthenticationViewController: UIViewController {
         
     }
     
-    private func showLanding() {
+    private func showLanding(fromOnboardingFlow: Bool = false) {
         removeChild()
         let authView: AuthenticationView = AuthenticationView.fromNib()
         authView.tag = childTag
@@ -95,14 +97,14 @@ class AuthenticationViewController: UIViewController {
             guard let self = self else {return}
             switch result {
             case .Login:
-                self.showInfo()
+                self.showInfo(fromOnboardingFlow: fromOnboardingFlow)
             case .Cancel:
-                self.dismissView(withDelay: false, status: .Cancelled)
+                self.dismissView(withDelay: false, status: .Cancelled, fromOnboardingFlow: fromOnboardingFlow)
             }
         }
     }
     
-    private func showInfo() {
+    private func showInfo(fromOnboardingFlow: Bool = false) {
         removeChild()
         let authInfoView: AuthenticationInfoView = AuthenticationInfoView.fromNib()
         authInfoView.tag = childTag
@@ -112,14 +114,14 @@ class AuthenticationViewController: UIViewController {
             case .Continue:
                 self.performAuthentication()
             case .Cancel:
-                self.dismissView(withDelay: false, status: .Cancelled)
+                self.dismissView(withDelay: false, status: .Cancelled, fromOnboardingFlow: fromOnboardingFlow)
             case .Back:
-                self.showLanding()
+                self.showLanding(fromOnboardingFlow: fromOnboardingFlow)
             }
         }
     }
     
-    private func performAuthentication() {
+    private func performAuthentication(fromOnboardingFlow: Bool = false) {
         self.view.startLoadingIndicator()
         AuthManager().authenticate(in: self, completion: { [weak self] result in
             guard let self = self else {return}
@@ -128,13 +130,13 @@ class AuthenticationViewController: UIViewController {
             case .Unavailable:
                 // TODO:
                 print("Handle Unavailable")
-                self.dismissView(withDelay: false, status: .Failed)
+                self.dismissView(withDelay: false, status: .Failed, fromOnboardingFlow: fromOnboardingFlow)
             case .Success:
-                self.dismissView(withDelay: true, status: .Completed)
+                self.dismissView(withDelay: true, status: .Completed, fromOnboardingFlow: fromOnboardingFlow)
             case .Fail:
                 // TODO:
                 print("Handle fail")
-                self.dismissView(withDelay: false, status: .Failed)
+                self.dismissView(withDelay: false, status: .Failed, fromOnboardingFlow: fromOnboardingFlow)
             }
         })
     }
@@ -145,7 +147,7 @@ class AuthenticationViewController: UIViewController {
         }
     }
     
-    private func dismissView(withDelay: Bool, status: AuthenticationStatus) {
+    private func dismissView(withDelay: Bool, status: AuthenticationStatus, fromOnboardingFlow: Bool = false) {
         
         if withDelay {
             self.view.startLoadingIndicator()
@@ -159,6 +161,8 @@ class AuthenticationViewController: UIViewController {
         dismissAndReturnCompletion(status: status)
         if self.returnToHealthPass && status == .Completed {
             dismissFullScreen()
+        } else if fromOnboardingFlow {
+            self.instantiateTabBar()
         }
     }
     
@@ -188,12 +192,21 @@ class AuthenticationViewController: UIViewController {
         vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true)
     }
     
-    public static func displayFullScreen(returnToHealthPass: Bool, initialView: InitialView) {
+    private func instantiateTabBar() {
         let transition = CATransition()
         transition.type = .fade
         transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: returnToHealthPass, isModal: false, initialView: initialView, completion: {_ in})
+        let vc = TabBarController.constructTabBarController()
+        AppDelegate.sharedInstance?.window?.rootViewController = vc
+    }
+    
+    public static func displayFullScreen(returnToHealthPass: Bool, initialView: InitialView, fromOnboardingFlow: Bool = false) {
+        let transition = CATransition()
+        transition.type = .fade
+        transition.duration = Constants.UI.Theme.animationDuration
+        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
+        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: returnToHealthPass, isModal: false, initialView: initialView, fromOnboardingFlow: fromOnboardingFlow, completion: {_ in})
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
     

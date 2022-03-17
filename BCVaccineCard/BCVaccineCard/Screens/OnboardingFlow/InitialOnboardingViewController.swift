@@ -49,16 +49,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
     }
     
     private func goToAuthentication() {
-        AuthenticationViewController.displayFullScreen(returnToHealthPass: true, initialView: .Landing)
-    }
-    
-    private func goToHomeTransition() {
-        let transition = CATransition()
-        transition.type = .fade
-        transition.duration = Constants.UI.Theme.animationDuration
-        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = TabBarController.constructTabBarController()
-        AppDelegate.sharedInstance?.window?.rootViewController = vc
+        AuthenticationViewController.displayFullScreen(returnToHealthPass: true, initialView: .Landing, fromOnboardingFlow: true)
     }
 }
 
