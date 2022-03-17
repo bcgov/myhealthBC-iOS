@@ -83,6 +83,7 @@ extension HomeScreenViewController {
         guard let userInfo = notification.userInfo as? [String: Bool] else { return }
         guard let authenticated = userInfo[Constants.AuthStatusKey.key] else { return }
         self.navSetup()
+        self.tableView.reloadData()
     }
 }
 
