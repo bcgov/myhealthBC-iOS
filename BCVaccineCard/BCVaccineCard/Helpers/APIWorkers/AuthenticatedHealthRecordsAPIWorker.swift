@@ -13,6 +13,7 @@ protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func showPatientDetailsError(error: String, showBanner: Bool)
     func showFetchStartedBanner(showBanner: Bool)
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool)
+    func showAlertForLoginAttemptDueToValidation(error: ResultError?)
     func showAlertForUserUnder(ageInYears age: Int)
 }
 // TODO: Check to see if we will in fact be pulling comments separately, or if they will be a part of the medication statement request. If separate, we should make the request synchronus
@@ -71,29 +72,53 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             }
         }
     }
+
+    // TODO Still:
+    // TODO: Notification here to reload current screen that user is on
+    // Note: Simplest solution (and reusable) will be to:
+    // 1DONE: Create a Notification class that will handle sending (non-visible) notifications within app(NotificationManager)
     
-    // TODO: Adjust this so that we can handle under 12 case
+    // 2: Add TODO to this class to refactor by adding other notifications here
+    // 3: Create a notification that will access the correct VC in the tab bar (may have to create an enum for what ViewControllers can allow a user to login
+    // 4: In this function in the tab bar VC, get current view controller at the current index, then send out a reload notification to reload this screen
+    // 5: Add this new notification to the notification class, then add the listeners to any view controller that a user can login from - implement the respective reload functions in each view controller
+    
     // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
     func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil) {
-//        self.setObservables()
-        self.showBanner = showBanner
-        self.isManualAuthFetch = isManualFetch
-        self.initializeFetchStatusList(withSpecificTypes: specificFetchTypes)
-        self.authCredentials = authCredentials
+        // TODO: Check if profile is valid here (age 12)
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-        requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
-        apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
-            guard let `self` = self else {return}
-            if let retry = queueItRetryStatus, retry.retry == true {
-                let queueItToken = retry.token
-                self.requestDetails.authenticatedPatientDetails?.queueItToken = queueItToken
-                self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
-                    guard let `self` = self else {return}
+        apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
+            guard let valid = valid else {
+                self.authManager.clearData()
+                self.delegate?.showAlertForLoginAttemptDueToValidation(error: error)
+                return
+            }
+            guard valid == true else {
+                self.authManager.clearData()
+                self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
+                return
+            }
+            // User is valid, so we can proceed here
+            self.showBanner = showBanner
+            self.isManualAuthFetch = isManualFetch
+            self.initializeFetchStatusList(withSpecificTypes: specificFetchTypes)
+            self.authCredentials = authCredentials
+            self.delegate?.showFetchStartedBanner(showBanner: showBanner)
+            let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+            self.requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+            self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+                guard let `self` = self else {return}
+                if let retry = queueItRetryStatus, retry.retry == true {
+                    let queueItToken = retry.token
+                    self.requestDetails.authenticatedPatientDetails?.queueItToken = queueItToken
+                    self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                        guard let `self` = self else {return}
+                        self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
+                        
+                    }
+                } else {
                     self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
-                    
                 }
-            } else {
-                self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
             }
         }
     }
@@ -102,21 +127,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
-            guard patientDetails.isUserEqualToOrOlderThan(ageInYears: Constants.AgeLimit.ageLimitForRecords) else {
-                authManager.clearData()
-                // TODO: Notification here to reload current screen that user is on
-                // Note: Simplest solution (and reusable) will be to:
-                // 1DONE: Create a Notification class that will handle sending (non-visible) notifications within app(NotificationManager)
-                
-                // 2: Add TODO to this class to refactor by adding other notifications here
-                // 3: Create a notification that will access the correct VC in the tab bar (may have to create an enum for what ViewControllers can allow a user to login
-                // 4: In this function in the tab bar VC, get current view controller at the current index, then send out a reload notification to reload this screen
-                // 5: Add this new notification to the notification class, then add the listeners to any view controller that a user can login from - implement the respective reload functions in each view controller
-                self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
-                return
-            }
-            // User is 12 or older, so start banner fetch here, and initialize requests
-            delegate?.showFetchStartedBanner(showBanner: showBanner)
             initializeRequests(authCredentials: authCredentials, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
         case .failure(let error):
             print(error)

@@ -40,14 +40,20 @@ struct AuthenticatedPatientDetailsResponseObject: Codable {
         return Date.Formatter.gatewayDateAndTime.date(from: birthdate)
     }
     
-    func isUserEqualToOrOlderThan(ageInYears age: Int) -> Bool {
-        guard let birthdate = resourcePayload?.birthdate, let birthday = Date.Formatter.gatewayDateAndTime.date(from: birthdate) else { return false }
-        if let referenceDate = Calendar.current.date(byAdding: .year, value: -age, to: Date()) {
-            return birthday <= referenceDate
-        }
-        return false
-    }
+//    func isUserEqualToOrOlderThan(ageInYears age: Int) -> Bool {
+//        guard let birthdate = resourcePayload?.birthdate, let birthday = Date.Formatter.gatewayDateAndTime.date(from: birthdate) else { return false }
+//        if let referenceDate = Calendar.current.date(byAdding: .year, value: -age, to: Date()) {
+//            return birthday <= referenceDate
+//        }
+//        return false
+//    }
 
+}
+
+struct AuthenticatedValidAgeCheck: Codable {
+    let resourcePayload: Bool?
+    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    let resultError: ResultError?
 }
 
 
