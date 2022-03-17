@@ -77,7 +77,7 @@ struct Constants {
     }
     
     struct AgeLimit {
-        static let ageLimitForRecords = 12
+        static let ageLimitForRecords = 60
     }
     
     struct NetworkRetryAttempts {

@@ -104,8 +104,15 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             self.patientDetails = patientDetails
             guard patientDetails.isUserEqualToOrOlderThan(ageInYears: Constants.AgeLimit.ageLimitForRecords) else {
                 authManager.clearData()
+                // TODO: Notification here to reload current screen that user is on
+                // Note: Simplest solution (and reusable) will be to:
+                // 1DONE: Create a Notification class that will handle sending (non-visible) notifications within app(NotificationManager)
+                
+                // 2: Add TODO to this class to refactor by adding other notifications here
+                // 3: Create a notification that will access the correct VC in the tab bar (may have to create an enum for what ViewControllers can allow a user to login
+                // 4: In this function in the tab bar VC, get current view controller at the current index, then send out a reload notification to reload this screen
+                // 5: Add this new notification to the notification class, then add the listeners to any view controller that a user can login from - implement the respective reload functions in each view controller
                 self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
-                print("CONNOR: USER IS UNDER 12")
                 return
             }
             // User is 12 or older, so start banner fetch here, and initialize requests
