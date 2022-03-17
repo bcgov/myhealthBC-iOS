@@ -76,6 +76,10 @@ struct Constants {
         static let key = "AuthStatus"
     }
     
+    struct AgeLimit {
+        static let ageLimitForRecords = 12
+    }
+    
     struct NetworkRetryAttempts {
         static let publicVaccineStatusRetryMaxForFedPass = 3
         static let publicRetryMaxForTestResults = 3

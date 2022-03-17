@@ -198,8 +198,8 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
     }
     
-    func showAlertForUserUnder12() {
-        self.alert(title: "Age Restriction", message: "We're sorry, user's under 12 year's old are not allowed to access their own medical records. Please contact an adult for assistance.")
+    func showAlertForUserUnder(ageInYears age: Int) {
+        self.alert(title: "Age Restriction", message: "We're sorry, user's under \(age) year's old are not allowed to access their own medical records. Please contact an adult for assistance.")
     }
 }
 

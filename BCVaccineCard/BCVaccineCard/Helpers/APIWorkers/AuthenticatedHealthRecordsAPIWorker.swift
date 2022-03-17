@@ -13,7 +13,7 @@ protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func showPatientDetailsError(error: String, showBanner: Bool)
     func showFetchStartedBanner(showBanner: Bool)
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool)
-    func showAlertForUserUnder12()
+    func showAlertForUserUnder(ageInYears age: Int)
 }
 // TODO: Check to see if we will in fact be pulling comments separately, or if they will be a part of the medication statement request. If separate, we should make the request synchronus
 enum AuthenticationFetchType {
@@ -102,9 +102,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
-            guard patientDetails.isUserEqualToOrOlderThan(ageInYears: 12) else {
+            guard patientDetails.isUserEqualToOrOlderThan(ageInYears: Constants.AgeLimit.ageLimitForRecords) else {
                 authManager.clearData()
-                self.delegate?.showAlertForUserUnder12()
+                self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
                 print("CONNOR: USER IS UNDER 12")
                 return
             }
