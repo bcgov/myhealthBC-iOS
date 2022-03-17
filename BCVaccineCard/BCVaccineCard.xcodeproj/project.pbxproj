@@ -499,6 +499,14 @@
 		799E0B0027D13F43009C68FE /* Reusable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 799E0AFE27D13F43009C68FE /* Reusable.storyboard */; };
 		79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
+		79B9D00D27E2788100987D9F /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B9D00C27E2788100987D9F /* HomeScreenViewController.swift */; };
+		79B9D00E27E2788100987D9F /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B9D00C27E2788100987D9F /* HomeScreenViewController.swift */; };
+		79B9D01227E2869D00987D9F /* HomeScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B9D01027E2869D00987D9F /* HomeScreenTableViewCell.swift */; };
+		79B9D01327E2869D00987D9F /* HomeScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B9D01027E2869D00987D9F /* HomeScreenTableViewCell.swift */; };
+		79B9D01427E2869D00987D9F /* HomeScreenTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79B9D01127E2869D00987D9F /* HomeScreenTableViewCell.xib */; };
+		79B9D01527E2869D00987D9F /* HomeScreenTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79B9D01127E2869D00987D9F /* HomeScreenTableViewCell.xib */; };
+		79B9D01727E2950000987D9F /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79B9D01627E2950000987D9F /* Home.storyboard */; };
+		79B9D01827E2950000987D9F /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79B9D01627E2950000987D9F /* Home.storyboard */; };
 		79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */; };
 		79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA071270CB71D00FF30AB /* Records.storyboard */; };
 		79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA075270CB73800FF30AB /* Booking.storyboard */; };
@@ -800,6 +808,10 @@
 		799E0AFE27D13F43009C68FE /* Reusable.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Reusable.storyboard; sourceTree = "<group>"; };
 		79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargerTouchAreaButton.swift; sourceTree = "<group>"; };
 		79A63D032722172900F7C919 /* PROD Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PROD Info.plist"; sourceTree = "<group>"; };
+		79B9D00C27E2788100987D9F /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
+		79B9D01027E2869D00987D9F /* HomeScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenTableViewCell.swift; sourceTree = "<group>"; };
+		79B9D01127E2869D00987D9F /* HomeScreenTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeScreenTableViewCell.xib; sourceTree = "<group>"; };
+		79B9D01627E2950000987D9F /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
 		79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HealthPass.storyboard; sourceTree = "<group>"; };
 		79BDA071270CB71D00FF30AB /* Records.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Records.storyboard; sourceTree = "<group>"; };
 		79BDA075270CB73800FF30AB /* Booking.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Booking.storyboard; sourceTree = "<group>"; };
@@ -1498,6 +1510,7 @@
 			isa = PBXGroup;
 			children = (
 				7944F67E26F12613006B9444 /* Main.storyboard */,
+				79B9D01627E2950000987D9F /* Home.storyboard */,
 				79BDA06F270CAC9E00FF30AB /* HealthPass.storyboard */,
 				79BDA071270CB71D00FF30AB /* Records.storyboard */,
 				795AA76627155F7100E59FF1 /* Resource.storyboard */,
@@ -1560,6 +1573,7 @@
 		7944F6B226F12AB3006B9444 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				79B9D00B27E2786800987D9F /* HomeScreen */,
 				298190C52773B4170062F55E /* Authentication */,
 				793504182761278E0098FEA7 /* ReusableViewControllers */,
 				791C27A52717472C001A6E12 /* OnboardingFlow */,
@@ -1995,6 +2009,24 @@
 			path = LargerTouchAreaButton;
 			sourceTree = "<group>";
 		};
+		79B9D00B27E2786800987D9F /* HomeScreen */ = {
+			isa = PBXGroup;
+			children = (
+				79B9D00C27E2788100987D9F /* HomeScreenViewController.swift */,
+				79B9D00F27E2868300987D9F /* Cells */,
+			);
+			path = HomeScreen;
+			sourceTree = "<group>";
+		};
+		79B9D00F27E2868300987D9F /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				79B9D01027E2869D00987D9F /* HomeScreenTableViewCell.swift */,
+				79B9D01127E2869D00987D9F /* HomeScreenTableViewCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		79BDA079270CB87600FF30AB /* Constants */ = {
 			isa = PBXGroup;
 			children = (
@@ -2250,10 +2282,12 @@
 				7967E75126F9145700EEF510 /* BCSans-Bold.otf in Resources */,
 				79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */,
 				79218AC127555B350063004E /* ReusableHeaderAddView.xib in Resources */,
+				79B9D01427E2869D00987D9F /* HomeScreenTableViewCell.xib in Resources */,
 				79218AD927557ED50063004E /* TextListViewTableViewCell.xib in Resources */,
 				794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */,
 				79BDA089270CEE8000FF30AB /* Localizable.strings in Resources */,
 				7944F68526F1261B006B9444 /* Assets.xcassets in Resources */,
+				79B9D01727E2950000987D9F /* Home.storyboard in Resources */,
 				297885202795F16E00FF912D /* SettingsRowTableViewCell.xib in Resources */,
 				293B32CD27D814EB0064BAAA /* CommentViewTableViewCell.xib in Resources */,
 				7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */,
@@ -2348,6 +2382,7 @@
 				2978852C279624DB00FF912D /* SettingsSectionHeaderView.xib in Resources */,
 				293B32B327D25C5B0064BAAA /* CommentView.xib in Resources */,
 				79BDA084270CEE5A00FF30AB /* HealthPass.storyboard in Resources */,
+				79B9D01827E2950000987D9F /* Home.storyboard in Resources */,
 				79FDE427273335DC00DAD988 /* FederalPassView.xib in Resources */,
 				799050C8273C8567006CD726 /* UserRecordListView.xib in Resources */,
 				79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */,
@@ -2363,6 +2398,7 @@
 				79218AD027556AA50063004E /* StatusBannerView.xib in Resources */,
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
 				79218A9F275141800063004E /* GetARecordTableViewCell.xib in Resources */,
+				79B9D01527E2869D00987D9F /* HomeScreenTableViewCell.xib in Resources */,
 				2978852F279624E100FF912D /* SettingsProfileTableViewCell.xib in Resources */,
 				795AA76527155F6300E59FF1 /* NewsFeed.storyboard in Resources */,
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
@@ -2679,6 +2715,7 @@
 				795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				2932DCDF275A9D2C00532BC4 /* StorageService+VaccineCard.swift in Sources */,
+				79B9D01227E2869D00987D9F /* HomeScreenTableViewCell.swift in Sources */,
 				796653DA27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */,
 				29245D40275581C700F48642 /* StorageService+TestResults.swift in Sources */,
 				2932DCEA275ED82600532BC4 /* AnalyticsAppID.swift in Sources */,
@@ -2699,6 +2736,7 @@
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				29736A482788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
+				79B9D00D27E2788100987D9F /* HomeScreenViewController.swift in Sources */,
 				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29A5B6D627B55B65006A9BA7 /* Pharmacy+CoreDataClass.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
@@ -2785,6 +2823,7 @@
 				795AA7492713FFF800E59FF1 /* QueueItEngine.swift in Sources */,
 				794BD6372702EEC00084ADA8 /* BaseViewController.swift in Sources */,
 				792834592730E53200EE2710 /* InteractiveLinkLabel.swift in Sources */,
+				79B9D01327E2869D00987D9F /* HomeScreenTableViewCell.swift in Sources */,
 				794BD6392702EEC00084ADA8 /* CovidVaccineCardsViewController.swift in Sources */,
 				794BD63A2702EEC00084ADA8 /* UIConstants.swift in Sources */,
 				795AA77A2715652C00E59FF1 /* ResourceTableViewCell.swift in Sources */,
@@ -2800,6 +2839,7 @@
 				794BD63D2702EEC00084ADA8 /* UINavigationItem+Ext.swift in Sources */,
 				29806693275970C8006FF3ED /* StorageModelExtensions.swift in Sources */,
 				795AA7552715189C00E59FF1 /* InitialOnboardingView.swift in Sources */,
+				79B9D00E27E2788100987D9F /* HomeScreenViewController.swift in Sources */,
 				79932CAE2790FA38007E8D92 /* AuthenticationInfoView.swift in Sources */,
 				794BD63E2702EEC00084ADA8 /* UIFont+Ext.swift in Sources */,
 				794BD63F2702EEC00084ADA8 /* UIViewController+EXT.swift in Sources */,
