@@ -17,32 +17,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xUm-WA-kyc">
-                                <rect key="frame" x="30" y="96" width="354" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="TuP-7n-r91">
-                                <rect key="frame" x="0.0" y="124.5" width="414" height="729.5"/>
+                                <rect key="frame" x="0.0" y="96" width="414" height="758"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="HoL-Hh-yqV"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="xUm-WA-kyc" firstAttribute="leading" secondItem="HoL-Hh-yqV" secondAttribute="leading" constant="30" id="2ar-6j-L8q"/>
-                            <constraint firstItem="xUm-WA-kyc" firstAttribute="top" secondItem="HoL-Hh-yqV" secondAttribute="top" constant="8" id="6gq-su-Y3u"/>
-                            <constraint firstItem="TuP-7n-r91" firstAttribute="top" secondItem="xUm-WA-kyc" secondAttribute="bottom" constant="8" id="9Cs-bU-GdG"/>
                             <constraint firstItem="HoL-Hh-yqV" firstAttribute="bottom" secondItem="TuP-7n-r91" secondAttribute="bottom" constant="8" id="Qih-om-Hiy"/>
+                            <constraint firstItem="TuP-7n-r91" firstAttribute="top" secondItem="HoL-Hh-yqV" secondAttribute="top" constant="8" id="bCx-kt-DP2"/>
                             <constraint firstItem="HoL-Hh-yqV" firstAttribute="trailing" secondItem="TuP-7n-r91" secondAttribute="trailing" id="ghP-eC-cNV"/>
                             <constraint firstItem="TuP-7n-r91" firstAttribute="leading" secondItem="HoL-Hh-yqV" secondAttribute="leading" id="nuu-ao-L64"/>
-                            <constraint firstItem="HoL-Hh-yqV" firstAttribute="trailing" secondItem="xUm-WA-kyc" secondAttribute="trailing" constant="30" id="o2O-dL-trj"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="TqY-JQ-xLP"/>
                     <connections>
-                        <outlet property="introLabel" destination="xUm-WA-kyc" id="EeT-Qb-bTR"/>
                         <outlet property="tableView" destination="TuP-7n-r91" id="bNm-t3-qHB"/>
                     </connections>
                 </viewController>
