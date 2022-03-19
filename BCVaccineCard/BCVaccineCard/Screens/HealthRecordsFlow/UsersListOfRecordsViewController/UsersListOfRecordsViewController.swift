@@ -81,6 +81,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private func setObservables() {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
+        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
     
     private func setup() {
@@ -89,6 +90,13 @@ class UsersListOfRecordsViewController: BaseViewController {
         fetchDataSource()
     }
 
+}
+
+// MARK: For reloading data on logout hack
+extension UsersListOfRecordsViewController {
+    @objc private func reloadFromForcedLogout(_ notification: Notification) {
+        setup()
+    }
 }
 
 // MARK: Navigation setup
@@ -315,7 +323,7 @@ extension UsersListOfRecordsViewController {
     }
     
     func performBCSCLogin() {
-        self.showLogin(initialView: .Auth) { [weak self] authenticated in
+        self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticated in
             guard let `self` = self, authenticated else {return}
             self.fetchDataSource()
         }
@@ -533,7 +541,7 @@ extension UsersListOfRecordsViewController {
             }
         } else if purpose == .initialFetch {
             adjustLoadingIndicator(show: true)
-            self.performAuthenticatedBackgroundFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered)
+            self.performAuthenticatedBackgroundFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC)
         }
     }
 }

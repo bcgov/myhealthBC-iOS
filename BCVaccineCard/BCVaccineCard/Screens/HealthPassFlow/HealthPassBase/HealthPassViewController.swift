@@ -30,6 +30,7 @@ class HealthPassViewController: BaseViewController {
         authManager = AuthManager()
         refreshOnStorageChange()
         setFedPassObservable()
+        setupListeners()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,6 +61,17 @@ class HealthPassViewController: BaseViewController {
     
 }
 
+// MARK: Listeners
+extension HealthPassViewController {
+    private func setupListeners() {
+        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+    }
+    
+    @objc private func reloadFromForcedLogout(_ notification: Notification) {
+        self.tableView.reloadData()
+    }
+}
+
 // MARK: Navigation setup
 extension HealthPassViewController {
     private func navSetup() {
@@ -80,7 +92,7 @@ extension HealthPassViewController {
         }
         
         if showAuth && !authManager.isAuthenticated {
-            showLogin(initialView: .Landing) { authenticated in
+            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticated in
                 if !authenticated {
                     showScreen()
                 }

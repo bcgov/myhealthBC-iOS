@@ -75,6 +75,12 @@ extension HomeScreenViewController {
 extension HomeScreenViewController {
     private func addObservablesForChangeInAuthenticationStatus() {
         NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
+        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+    }
+    
+    @objc private func reloadFromForcedLogout(_ notification: Notification) {
+        navSetup()
+        self.tableView.reloadData()
     }
     
     // Note: Not using authenticated value right now, may just remove it. Leaving in for now in case some requirements change or if there are any edge cases not considered

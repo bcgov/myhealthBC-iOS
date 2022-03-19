@@ -48,7 +48,7 @@ class ProfileAndSettingsViewController: BaseViewController {
     }
     
     func showLogin() {
-        showLogin(initialView: .Landing, completion: {success in})
+        showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: {success in})
     }
     
     func showSecurityAndData() {
@@ -75,9 +75,14 @@ extension ProfileAndSettingsViewController {
 extension ProfileAndSettingsViewController {
     private func setupListener() {
         NotificationCenter.default.addObserver(self, selector: #selector(settingsTableViewReload), name: .settingsTableViewReload, object: nil)
+        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
     
     @objc private func settingsTableViewReload() {
+        self.tableView.reloadData()
+    }
+    
+    @objc private func reloadFromForcedLogout(_ notification: Notification) {
         self.tableView.reloadData()
     }
 }

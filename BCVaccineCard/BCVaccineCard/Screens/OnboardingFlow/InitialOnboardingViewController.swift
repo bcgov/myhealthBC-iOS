@@ -49,7 +49,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
     }
     
     private func goToAuthentication() {
-        AuthenticationViewController.displayFullScreen(returnToHealthPass: true, initialView: .Landing, fromOnboardingFlow: true)
+        AuthenticationViewController.displayFullScreen(returnToHealthPass: true, initialView: .Landing, sourceVC: .AfterOnboarding)
     }
 }
 

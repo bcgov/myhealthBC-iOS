@@ -76,6 +76,10 @@ struct Constants {
         static let key = "AuthStatus"
     }
     
+    struct SourceVCReloadKey {
+        static let key = "source"
+    }
+    
     struct AgeLimit {
         static let ageLimitForRecords = 12
     }
