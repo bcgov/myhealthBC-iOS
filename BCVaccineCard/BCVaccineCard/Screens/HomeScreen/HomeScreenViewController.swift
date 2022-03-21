@@ -9,6 +9,11 @@ import UIKit
 
 class HomeScreenViewController: BaseViewController {
     
+    enum DataSource {
+        case text(text: String)
+        case button(type: HomeScreenCellType)
+    }
+    
     class func constructHomeScreenViewController() -> HomeScreenViewController {
         if let vc = Storyboard.home.instantiateViewController(withIdentifier: String(describing: HomeScreenViewController.self)) as? HomeScreenViewController {
             return vc
@@ -16,9 +21,8 @@ class HomeScreenViewController: BaseViewController {
         return HomeScreenViewController()
     }
     
-    @IBOutlet weak private var introLabel: UILabel!
     @IBOutlet weak private var tableView: UITableView!
-    private var dataSource: [HomeScreenCellType] = [.Records, .Proofs, .Resources]
+    private var dataSource: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Proofs), .button(type: .Resources)]
     private var authManager: AuthManager = AuthManager()
     
     override func viewDidLoad() {
@@ -42,7 +46,6 @@ class HomeScreenViewController: BaseViewController {
     private func setup() {
         navSetup()
         addObservablesForChangeInAuthenticationStatus()
-        setupIntroLabel()
         setupTableView()
     }
     
@@ -52,8 +55,8 @@ class HomeScreenViewController: BaseViewController {
 extension HomeScreenViewController {
     private func navSetup() {
         var title: String
-        if authManager.isAuthenticated, let name = authManager.displayName {
-            title = name
+        if authManager.isAuthenticated, let name = authManager.firstName {
+            title = "Hi \(name),"
         } else {
             title = "Hello"
         }
@@ -72,6 +75,12 @@ extension HomeScreenViewController {
 extension HomeScreenViewController {
     private func addObservablesForChangeInAuthenticationStatus() {
         NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
+        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+    }
+    
+    @objc private func reloadFromForcedLogout(_ notification: Notification) {
+        navSetup()
+        self.tableView.reloadData()
     }
     
     // Note: Not using authenticated value right now, may just remove it. Leaving in for now in case some requirements change or if there are any edge cases not considered
@@ -80,15 +89,7 @@ extension HomeScreenViewController {
         guard let userInfo = notification.userInfo as? [String: Bool] else { return }
         guard let authenticated = userInfo[Constants.AuthStatusKey.key] else { return }
         self.navSetup()
-    }
-}
-
-// MARK: UI Setup
-extension HomeScreenViewController {
-    private func setupIntroLabel() {
-        introLabel.font = UIFont.bcSansBoldWithSize(size: 20)
-        introLabel.textColor = AppColours.appBlue
-        introLabel.text = "What do you want to focus on today?"
+        self.tableView.reloadData()
     }
 }
 
@@ -96,6 +97,7 @@ extension HomeScreenViewController {
 extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
     
     private func setupTableView() {
+        tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: HomeScreenTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HomeScreenTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 231
@@ -107,15 +109,26 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
         return dataSource.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeScreenTableViewCell.getName, for: indexPath) as? HomeScreenTableViewCell else { return UITableViewCell() }
-        let type = dataSource[indexPath.row]
-        cell.configure(forType: type)
-        return cell
+        let data = dataSource[indexPath.row]
+        switch data {
+        case .text(text: let text):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell else { return UITableViewCell() }
+            cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansBoldWithSize(size: 20), labelSpacingAdjustment: 30, textColor: AppColours.appBlue)
+            return cell
+        case .button(type: let type):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeScreenTableViewCell.getName, for: indexPath) as? HomeScreenTableViewCell else { return UITableViewCell() }
+            cell.configure(forType: type, auth: authManager.isAuthenticated)
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let type = dataSource[indexPath.row]
-        goToTabForType(type: type)
+        let data = dataSource[indexPath.row]
+        switch data {
+        case .button(type: let type):
+            goToTabForType(type: type)
+        default: break
+        }
     }
 }
 

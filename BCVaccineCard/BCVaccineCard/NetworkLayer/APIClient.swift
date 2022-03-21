@@ -144,6 +144,52 @@ class APIClient {
     
 }
 
+// MARK: For validating age
+extension APIClient {
+    
+    func checkIfProfileIsValid(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping(Bool?, ResultError?) -> Void) {
+        self.getValidateProfileStatus(authCredentials, token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.getValidateProfileStatus(authCredentials, token: queueItToken, executingVC: executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else {return}
+                    self.handleValidationResponse(result: result, completion: completion)
+                }
+            } else {
+                self.handleValidationResponse(result: result, completion: completion)
+            }
+        }
+    }
+    
+    private func getValidateProfileStatus(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedValidAgeCheck>) {
+        let url = configureURL(token: token, endpoint: self.endpoints.validateProfile(hdid: authCredentials.hdid))
+        
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
+    
+    private func handleValidationResponse(result: Result<AuthenticatedValidAgeCheck, ResultError>, completion: @escaping(Bool?, ResultError?) -> Void) {
+        switch result {
+        case .success(let validation):
+            if let resultError = validation.resultError, validation.resourcePayload == nil {
+                completion(nil, resultError)
+            } else if let valid = validation.resourcePayload {
+                completion(valid, nil)
+            } else {
+                completion(false, nil)
+            }
+        case .failure(let error):
+            print(error)
+            completion(nil, error)
+        }
+    }
+}
+
 // MARK: QUEUEIT Logic here
 extension APIClient {
     

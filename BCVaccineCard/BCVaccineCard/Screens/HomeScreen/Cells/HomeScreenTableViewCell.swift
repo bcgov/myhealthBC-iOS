@@ -37,9 +37,11 @@ enum HomeScreenCellType {
         }
     }
     
-    var getButtonImage: UIImage? {
+    func getButtonImage(auth: Bool) -> UIImage? {
         switch self {
-        case .Records: return UIImage(named: "records-home-button")
+        case .Records:
+            let image = auth ? UIImage(named: "records-home-button-auth") : UIImage(named: "records-home-button-unauth")
+            return image
         case .Proofs: return UIImage(named: "proofs-home-button")
         case .Resources: return UIImage(named: "resources-home-button")
         }
@@ -52,6 +54,7 @@ enum HomeScreenCellType {
         case .Resources: return TabBarVCs.resource.rawValue
         }
     }
+
 }
 
 class HomeScreenTableViewCell: UITableViewCell {
@@ -88,11 +91,11 @@ class HomeScreenTableViewCell: UITableViewCell {
         descriptionLabel.textColor = AppColours.textBlack
     }
     
-    func configure(forType type: HomeScreenCellType) {
+    func configure(forType type: HomeScreenCellType, auth: Bool) {
         iconImageView.image = type.getIcon
         titleLabel.text = type.getTitle
         descriptionLabel.text = type.getDescriptionText
-        buttonImageView.image = type.getButtonImage
+        buttonImageView.image = type.getButtonImage(auth: auth)
     }
     
 }

@@ -83,7 +83,7 @@ class SecurityAndDataViewController: BaseViewController {
     
     func login() {
         self.view.startLoadingIndicator()
-        showLogin(initialView: .Landing) { [weak self] authenticated in
+        showLogin(initialView: .Landing, sourceVC: .SecurityAndDataVC) { [weak self] authenticated in
             guard let `self` = self else {return}
             self.view.endLoadingIndicator()
             self.tableView.reloadData()
@@ -135,6 +135,7 @@ class SecurityAndDataViewController: BaseViewController {
             guard let `self` = self else {return}
             // Regardless of the result of the async logout, clear tokens.
             // because user may be offline
+            // TODO: Note - sometimes prompt isn't shown after hitting logout, so the screen state (for records) remains. We should look at resetting tab bar and then switch index to current index after reset
             self.authManager.clearData()
             self.tableView.reloadData()
         })

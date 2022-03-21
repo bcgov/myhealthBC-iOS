@@ -152,7 +152,7 @@ class TabBarController: UITabBarController {
     @objc private func backgroundAuthFetch(_ notification: Notification) {
         guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false)
+        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, sourceVC: .BackgroundFetch)
     }
 
 }
@@ -196,6 +196,14 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         // TODO: Connor - handle error case
         self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
+    }
+    func showAlertForLoginAttemptDueToValidation(error: ResultError?) {
+        print(error)
+        self.alert(title: "Login Error", message: "We're sorry, there was an error logging in. Please try again later.")
+    }
+    
+    func showAlertForUserUnder(ageInYears age: Int) {
+        self.alert(title: "Age Restriction", message: "We're sorry, user's under \(age) year's old are not allowed to access their own medical records. Please contact an adult for assistance.")
     }
 }
 

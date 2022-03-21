@@ -71,6 +71,7 @@ class FetchHealthRecordsViewController: BaseViewController {
         navSetup()
         setupLabel()
         setupTableView()
+        setupListeners()
     }
     
     private func setupLabel() {
@@ -93,6 +94,18 @@ class FetchHealthRecordsViewController: BaseViewController {
             self.dataSource.insert(.login(type: .authenticate), at: 0)
         }
         self.tableView.reloadData()
+    }
+}
+
+// MARK: Listeners
+extension FetchHealthRecordsViewController {
+    // MARK: Listeners
+    private func setupListeners() {
+        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+    }
+    
+    @objc private func reloadFromForcedLogout(_ notification: Notification) {
+        self.adjustDataSource()
     }
 }
 
@@ -270,7 +283,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 // MARK: BCSC Login
 extension FetchHealthRecordsViewController {
     func performBCSCLogin() {
-        self.showLogin(initialView: .Landing) { [weak self] authenticated in
+        self.showLogin(initialView: .Landing, sourceVC: .FetchHealthRecordsVC) { [weak self] authenticated in
             guard let `self` = self, authenticated else {return}
             // TODO: Adjust nav stack here if necessary
             self.adjustDataSource()

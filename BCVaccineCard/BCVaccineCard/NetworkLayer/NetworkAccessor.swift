@@ -98,7 +98,6 @@ final class NetworkAccessor {
                 return self.decodeResponse(response: response, retryStatus: nil, withCompletion: completion)
             }
             if self.checkIfCookieIsSet(response: response) {
-                // TODO: Check retry status here, may have to make request again
                 self.decodeResponse(response: response, retryStatus: nil, withCompletion: completion)
             } else if let cAndE = self.checkForQueueItRedirect(response: response) {
                 let url = response.request?.url

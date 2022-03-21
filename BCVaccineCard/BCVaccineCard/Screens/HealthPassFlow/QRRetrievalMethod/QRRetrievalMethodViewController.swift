@@ -180,7 +180,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 extension QRRetrievalMethodViewController {
     func authenticateBeforeDisplayingGatewayForm() {
         if !AuthManager().isAuthenticated {
-            showLogin(initialView: .Landing, completion: {[weak self] authenticated in
+            showLogin(initialView: .Landing, sourceVC: .QRRetrievalVC, completion: {[weak self] authenticated in
                 guard let `self` = self else {return}
                 // TODO: Handle conditionally
                 self.goToEnterGateway()

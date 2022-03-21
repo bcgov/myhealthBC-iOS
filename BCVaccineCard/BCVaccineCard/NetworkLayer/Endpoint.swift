@@ -18,6 +18,7 @@ protocol EndpointsAccessor {
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
     func authenticatedComments(hdid: String) -> URL
     func getAuthenticatedLaboratoryOrderPDF(repordId: String) -> URL
+    func validateProfile(hdid: String) -> URL
 }
 
 struct UrlAccessor {
@@ -81,6 +82,10 @@ extension UrlAccessor: EndpointsAccessor {
     
     func getAuthenticatedLaboratoryOrderPDF(repordId: String) -> URL {
         return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory").appendingPathComponent(repordId).appendingPathComponent("Report")
+    }
+    
+    func validateProfile(hdid: String) -> URL {
+        return self.baseUrl.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Validate")
     }
 }
 

@@ -77,6 +77,20 @@ class AuthManager {
         }
     }
     
+    var firstName: String? {
+        guard let stringToken = authToken else {return nil}
+        do {
+            let jwt = try decode(jwt: stringToken)
+            let firstNameClaim = jwt.claim(name: "given_name")
+            if let first = firstNameClaim.string {
+                return first
+            }
+            return nil
+        } catch {
+            return nil
+        }
+    }
+    
     var refreshToken: String? {
         guard let token = keychain[Key.refreshToken.rawValue] else {
             return nil
