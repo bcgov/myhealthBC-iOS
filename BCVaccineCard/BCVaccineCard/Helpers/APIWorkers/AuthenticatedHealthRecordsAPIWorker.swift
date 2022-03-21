@@ -74,17 +74,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
 
-    // TODO Still:
-    // TODO: Notification here to reload current screen that user is on
-    // Note: Simplest solution (and reusable) will be to:
-    // 1DONE: Create a Notification class that will handle sending (non-visible) notifications within app(NotificationManager)
-    // 2DONE: Add TODO to this class to refactor by adding other notifications here
-    // 3DONE: Create a notification that will access the correct VC in the tab bar (may have to create an enum for what ViewControllers can allow a user to login
-    
-    // 4: In this function in the tab bar VC, get current view controller at the current index, then send out a reload notification to reload this screen
-    // 5: Add this new notification to the notification class, then add the listeners to any view controller that a user can login from - implement the respective reload functions in each view controller
-    
-    // Note: The reason we are calling the other requests within this request function is because we are using objc methods for retry methodology, which doesn't allow for an escaping completion block - otherwise, we would clean this function up and call 'initializeRequests' in the completion code
     func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in

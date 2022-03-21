@@ -24,9 +24,10 @@ extension BaseViewController {
             self.view.endLoadingIndicator()
             switch result {
             case .Completed:
+                // TODO: Need to check for user being 12 or not here, before alert
                 self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
                     // Will be fetching on completion, before user interacts with this message
-                    self.performAuthenticatedBackgroundFetch(isManualFetch: true, sourceVC: sourceVC)
+                    self.performAuthenticatedRecordsFetch(isManualFetch: true, sourceVC: sourceVC)
                     self.postAuthChangedSettingsReloadRequired()
                     completion(true)
                 }
