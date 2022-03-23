@@ -73,46 +73,53 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             }
         }
     }
-
-    func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource) {
+    
+    public func checkIfUserIsOver12(authCredentials: AuthenticationRequestObject, sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
             guard let valid = valid else {
                 self.authManager.clearData()
                 self.delegate?.showAlertForLoginAttemptDueToValidation(error: error)
                 NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: sourceVC)
+                completion(false)
                 return
             }
             guard valid == true else {
                 self.authManager.clearData()
                 self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
                 NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: sourceVC)
+                completion(false)
                 return
             }
-            // User is valid, so we can proceed here
-            self.showBanner = showBanner
-            self.isManualAuthFetch = isManualFetch
-            self.loginSourceVC = sourceVC
-            self.initializeFetchStatusList(withSpecificTypes: specificFetchTypes)
-            self.authCredentials = authCredentials
-            self.delegate?.showFetchStartedBanner(showBanner: showBanner)
-            let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-            self.requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
-            self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
-                guard let `self` = self else {return}
-                if let retry = queueItRetryStatus, retry.retry == true {
-                    let queueItToken = retry.token
-                    self.requestDetails.authenticatedPatientDetails?.queueItToken = queueItToken
-                    self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
-                        guard let `self` = self else {return}
-                        self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
-                        
-                    }
-                } else {
+            completion(true)
+        }
+    }
+
+    public func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        // User is valid, so we can proceed here
+        self.showBanner = showBanner
+        self.isManualAuthFetch = isManualFetch
+        self.loginSourceVC = sourceVC
+        self.initializeFetchStatusList(withSpecificTypes: specificFetchTypes)
+        self.authCredentials = authCredentials
+        self.delegate?.showFetchStartedBanner(showBanner: showBanner)
+        self.requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedPatientDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else {return}
                     self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
+                    
                 }
+            } else {
+                self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
             }
         }
+        
     }
     
     private func initializePatientDetails(authCredentials: AuthenticationRequestObject, result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?) {

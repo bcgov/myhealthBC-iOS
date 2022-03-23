@@ -19,18 +19,24 @@ We can call the BCSC auth in 2 ways:
 extension BaseViewController {
     func showLogin(initialView: AuthenticationViewController.InitialView, sourceVC: LoginVCSource, completion: @escaping(_ authenticated: Bool)->Void) {
         self.view.startLoadingIndicator()
-        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, initialView: initialView, sourceVC: sourceVC, completion: { [weak self] result in
+        let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: false, isModal: true, initialView: initialView, sourceVC: sourceVC, completion: { [weak self] result in
             guard let `self` = self else {return}
             self.view.endLoadingIndicator()
             switch result {
             case .Completed:
-                // TODO: Need to check for user being 12 or not here, before alert
-                self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
-                    // Will be fetching on completion, before user interacts with this message
-                    self.performAuthenticatedRecordsFetch(isManualFetch: true, sourceVC: sourceVC)
-                    self.postAuthChangedSettingsReloadRequired()
-                    completion(true)
+                let tabVC = self.tabBarController as? TabBarController
+                let authWorker = tabVC?.authWorker
+                AuthenticationViewController.checkIfUserIsOver12(authWorker: authWorker, sourceVC: sourceVC) { allowed in
+                    if allowed {
+                        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
+                            // Will be fetching on completion, before user interacts with this message
+                            self.performAuthenticatedRecordsFetch(isManualFetch: true, sourceVC: sourceVC)
+                            self.postAuthChangedSettingsReloadRequired()
+                        }
+                    }
+                    completion(allowed)
                 }
+                
             case .Cancelled, .Failed:
                 completion(false)
                 break
@@ -79,10 +85,10 @@ class AuthenticationViewController: UIViewController {
         case Failed
     }
     
-    class func constructAuthenticationViewController(returnToHealthPass: Bool, isModal: Bool, initialView: InitialView, sourceVC: LoginVCSource, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
+    class func constructAuthenticationViewController(createTabBarAndGoToHomeScreen: Bool, isModal: Bool, initialView: InitialView, sourceVC: LoginVCSource, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion
-            vc.returnToHealthPass = returnToHealthPass
+            vc.createTabBarAndGoToHomeScreen = createTabBarAndGoToHomeScreen
             vc.initialView = initialView
             vc.sourceVC = sourceVC
             if #available(iOS 13.0, *) {
@@ -97,7 +103,7 @@ class AuthenticationViewController: UIViewController {
     fileprivate let dismissDelay: TimeInterval = 1
     
     private var completion: ((AuthenticationStatus)->Void)?
-    private var returnToHealthPass: Bool = true
+    private var createTabBarAndGoToHomeScreen: Bool = true
     private var initialView: InitialView = .Landing
     private var sourceVC: LoginVCSource = .AfterOnboarding
     
@@ -185,10 +191,9 @@ class AuthenticationViewController: UIViewController {
         self.removeChild()
         
         dismissAndReturnCompletion(status: status)
-        if self.returnToHealthPass && status == .Completed {
-            dismissFullScreen(sourceVC: sourceVC)
-        } else if sourceVC == .AfterOnboarding {
-            self.instantiateTabBar()
+        if self.createTabBarAndGoToHomeScreen {
+            let authStatus: AuthenticationStatus? = status == .Completed ? .Completed : nil
+            dismissFullScreen(sourceVC: sourceVC, authStatus: authStatus)
         }
     }
     
@@ -204,36 +209,36 @@ class AuthenticationViewController: UIViewController {
         }
     }
     
-    func dismissFullScreen(sourceVC: LoginVCSource) {
-        // Note - prob not here
-        // TODO: FETCH RECORDS FOR AUTHENTICATED USER
+    // Note: This authStatus is to determine whether tab bar needs to prompt a login success message or not
+    func dismissFullScreen(sourceVC: LoginVCSource, authStatus: AuthenticationStatus?) {
         let transition = CATransition()
         transition.type = .fade
         transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = TabBarController.constructTabBarController()
+        let vc = TabBarController.constructTabBarController(status: authStatus)
         AppDelegate.sharedInstance?.window?.rootViewController = vc
-        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else {return}
+//        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else {return}
+//        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+//        vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, sourceVC: sourceVC)
+    }
+    
+    public static func displayFullScreen(createTabBarAndGoToHomeScreen: Bool, initialView: InitialView, sourceVC: LoginVCSource) {
+        let transition = CATransition()
+        transition.type = .fade
+        transition.duration = Constants.UI.Theme.animationDuration
+        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
+//        let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: returnToHealthPass, isModal: false, initialView: initialView, sourceVC: sourceVC, completion: {_ in})
+        let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: createTabBarAndGoToHomeScreen, isModal: false, initialView: initialView, sourceVC: sourceVC) {_ in}
+        AppDelegate.sharedInstance?.window?.rootViewController = vc
+    }
+    
+}
+
+// MARK: Over 12 user check
+extension AuthenticationViewController {
+    public static func checkIfUserIsOver12(authWorker: AuthenticatedHealthRecordsAPIWorker?, sourceVC: LoginVCSource, completion: @escaping (Bool) -> Void) {
+        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, sourceVC: sourceVC)
+        authWorker?.checkIfUserIsOver12(authCredentials: authCreds, sourceVC: sourceVC, completion: completion)
     }
-    
-    private func instantiateTabBar() {
-        let transition = CATransition()
-        transition.type = .fade
-        transition.duration = Constants.UI.Theme.animationDuration
-        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = TabBarController.constructTabBarController()
-        AppDelegate.sharedInstance?.window?.rootViewController = vc
-    }
-    
-    public static func displayFullScreen(returnToHealthPass: Bool, initialView: InitialView, sourceVC: LoginVCSource) {
-        let transition = CATransition()
-        transition.type = .fade
-        transition.duration = Constants.UI.Theme.animationDuration
-        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: returnToHealthPass, isModal: false, initialView: initialView, sourceVC: sourceVC, completion: {_ in})
-        AppDelegate.sharedInstance?.window?.rootViewController = vc
-    }
-    
 }

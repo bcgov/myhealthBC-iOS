@@ -41,8 +41,9 @@ enum TabBarVCs: Int {
 
 class TabBarController: UITabBarController {
     
-    class func constructTabBarController() -> TabBarController {
+    class func constructTabBarController(status: AuthenticationViewController.AuthenticationStatus? = nil) -> TabBarController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: TabBarController.self)) as? TabBarController {
+            vc.authenticationStatus = status
             return vc
         }
         return TabBarController()
@@ -54,14 +55,31 @@ class TabBarController: UITabBarController {
     
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
+    private var authenticationStatus: AuthenticationViewController.AuthenticationStatus?
     var authWorker: AuthenticatedHealthRecordsAPIWorker?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
         setup(selectedIndex: 0)
+        showLoginPromptIfNecessary()
     }
     
+    private func showLoginPromptIfNecessary() {
+        guard let authStatus = self.authenticationStatus else { return }
+        if authStatus == .Completed {
+            AuthenticationViewController.checkIfUserIsOver12(authWorker: self.authWorker, sourceVC: .AfterOnboarding) { allowed in
+                if allowed {
+                    self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
+                        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
+                        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+                        let protectiveWord = AuthManager().protectiveWord
+                        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, protectiveWord: protectiveWord, sourceVC: .AfterOnboarding)
+                    }
+                }
+            }
+        }
+    }
 
     private func setup(selectedIndex: Int) {
         self.tabBar.tintColor = AppColours.appBlue
@@ -203,7 +221,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     }
     
     func showAlertForUserUnder(ageInYears age: Int) {
-        self.alert(title: "Age Restriction", message: "We're sorry, user's under \(age) year's old are not allowed to access their own medical records. Please contact an adult for assistance.")
+        self.alert(title: "Age Restriction", message: "You must be \(age) year's of age or older to user Health Gateway.")
     }
 }
 
