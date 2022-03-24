@@ -73,6 +73,7 @@ class InitialOnboardingView: UIView {
     private var screenProgressImageDotsWidthConstraintCollection: [NSLayoutConstraint] = []
     private var rotatingImageView: UIImageView?
     private var rotatingImageViewConstraints: [NSLayoutConstraint]?
+    private var skipDelegate: OnboardSkipDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -104,7 +105,7 @@ class InitialOnboardingView: UIView {
     }
   
     @IBAction func skipButtonAction(_ sender: Any) {
-        AuthenticationViewController.displayFullScreen(returnToHealthPass: true, initialView: .Landing, sourceVC: .AfterOnboarding)
+        skipDelegate?.skip()
     }
     
     private func labelSetup() {
@@ -142,16 +143,16 @@ class InitialOnboardingView: UIView {
         rotatingImageView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func initialConfigure(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController) {
+    func initialConfigure(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController, skipDelegate: OnboardSkipDelegate) {
         configureScreenProgressDots(screenNumber: screenNumber, screensToShow: screensToShow)
         configurePhoneDots(screenNumber: screenNumber)
         showNewTextIfScreensAreNew(screensToShow: screensToShow)
-        commonConfigurationAndUpdates(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner)
+        commonConfigurationAndUpdates(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner, skipDelegate: skipDelegate)
     }
     
-    func adjustUI(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController) {
+    func adjustUI(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController, skipDelegate: OnboardSkipDelegate) {
         adjustPhoneImageDots(screenNumber: screenNumber)
-        commonConfigurationAndUpdates(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner)
+        commonConfigurationAndUpdates(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner, skipDelegate: skipDelegate)
         if screensToShow.count > 1 {
             adjustProgressImageDotsUI(screenNumber: screenNumber)
         }
@@ -166,12 +167,13 @@ class InitialOnboardingView: UIView {
         }
     }
     
-    private func commonConfigurationAndUpdates(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController) {
+    private func commonConfigurationAndUpdates(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType], delegateOwner: UIViewController, skipDelegate: OnboardSkipDelegate) {
         adjustText(screenNumber: screenNumber)
         adjustRotatingImageViewConstraints(screenNumber: screenNumber)
         updateRotatingImage(screenNumber: screenNumber)
         adjustBottomButton(screenNumber: screenNumber, screensToShow: screensToShow, delegateOwner: delegateOwner)
         self.contentView.layoutIfNeeded()
+        self.skipDelegate = skipDelegate
     }
     
     private func showNewTextIfScreensAreNew(screensToShow: [OnboardingScreenType]) {
