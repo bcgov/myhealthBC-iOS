@@ -53,16 +53,18 @@ class HealthRecordsUserView: UIView {
         backgroundWhiteView.layer.borderColor = AppColours.borderGray.cgColor
         backgroundWhiteView.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         nameLabel.font = HealthRecordsUserView.nameFont
-        nameLabel.textColor = AppColours.appBlue
+        nameLabel.textColor = AppColours.lightBlueText
         recordCountLabel.font = UIFont.bcSansRegularWithSize(size: 13)
-        recordCountLabel.textColor = AppColours.textBlack
+        recordCountLabel.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
         recordIconImageView.image = UIImage(named: "vaccine-record-icon")
     }
     
     func styleAuthStatus(authenticated: Bool) {
         if !authenticated {
-            recordIconImageView.image = UIImage(named: "vaccine-record-icon")
+            recordIconImageView.image = UIImage(named: "vaccine-record-icon")?.withRenderingMode(.alwaysTemplate)
+            recordIconImageView.tintColor = AppColours.appBlue
             recordIconImageView.alpha = 1
+            
             return
         } else {
             let bcscLogo = UIImage(named: "bcscLogo")

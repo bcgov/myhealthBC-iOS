@@ -200,7 +200,7 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
     
     func defaultCellSize() -> CGSize {
         let itemsPerRow: CGFloat = 2
-        let maxCellHeight: CGFloat = 130
+        let maxCellHeight: CGFloat = 140
         let availableWidth = UIScreen.main.bounds.width
         var width: CGFloat = (availableWidth / itemsPerRow) - (spacingPerItem * itemsPerRow)
         width += (spacingPerItem/itemsPerRow)

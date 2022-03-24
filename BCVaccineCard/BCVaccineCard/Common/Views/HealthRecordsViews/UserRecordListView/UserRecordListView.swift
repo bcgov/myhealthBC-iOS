@@ -47,14 +47,15 @@ class UserRecordListView: UIView {
     }
     
     private func uiSetup() {
-        greyRoundedBackgroundView.backgroundColor = AppColours.backgroundGray
+        greyRoundedBackgroundView.backgroundColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1)
         greyRoundedBackgroundView.layer.cornerRadius = 4.0
         greyRoundedBackgroundView.layer.masksToBounds = true
-        rightArrowImageView.image = UIImage(named: "resource-arrow")
+        rightArrowImageView.image = UIImage(named: "resource-arrow")?.withRenderingMode(.alwaysTemplate)
+        rightArrowImageView.tintColor = UIColor(red: 0, green: 0.2, blue: 0.4, alpha: 1)
         recordTypeTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
-        recordTypeTitleLabel.textColor = AppColours.appBlue
+        recordTypeTitleLabel.textColor = AppColours.lightBlueText
         recordTypeSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 13)
-        recordTypeSubtitleLabel.textColor = AppColours.textBlack
+        recordTypeSubtitleLabel.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
         self.layoutIfNeeded()
     }
     
