@@ -190,6 +190,22 @@ extension APIClient {
     }
 }
 
+// MARK: For handling user profile, used for terms of service check
+extension APIClient {
+    
+    func getUserProfile() {
+        
+    }
+    
+    // TODO: Private handling functions below
+    
+    func postUserProfile() {
+        
+    }
+    
+    // TODO: Private handling functions below
+}
+
 // MARK: For displaying terms of service
 extension APIClient {
     

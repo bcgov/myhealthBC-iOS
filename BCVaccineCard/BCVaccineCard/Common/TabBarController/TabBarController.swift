@@ -8,7 +8,7 @@
 import UIKit
 
 enum TabBarVCs: Int {
-    case home = 0, healthPass, records, resource, booking, newsFeed
+    case home = 0, records, healthPass, resource, newsFeed
     
     var getIndexOfTab: Int {
         return self.rawValue
@@ -25,14 +25,12 @@ enum TabBarVCs: Int {
         switch self {
         case .home:
             return Properties(title: "Home", selectedTabBarImage: #imageLiteral(resourceName: "home-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "home-tab-unselected"), baseViewController: HomeScreenViewController.constructHomeScreenViewController())
-        case .healthPass:
-            return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .records:
             return Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: HealthRecordsViewController.constructHealthRecordsViewController())
+        case .healthPass:
+            return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .resource:
             return Properties(title: .resources, selectedTabBarImage: #imageLiteral(resourceName: "resource-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "resource-tab-unselected"), baseViewController: ResourceViewController.constructResourceViewController())
-        case .booking:
-            return nil
         case .newsFeed:
             return Properties(title: .newsFeed, selectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-unselected"), baseViewController: NewsFeedViewController.constructNewsFeedViewController())
         }
