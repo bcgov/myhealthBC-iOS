@@ -83,7 +83,7 @@ class TabBarController: UITabBarController {
         self.tabBar.tintColor = AppColours.appBlue
         self.tabBar.barTintColor = .white
         self.delegate = self
-        self.viewControllers = setViewControllers(withVCs: [.home, .healthPass, .records, .resource, .newsFeed])
+        self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource, .newsFeed])
         self.selectedIndex = selectedIndex
         setupObserver()
     }

@@ -193,19 +193,115 @@ extension APIClient {
 // MARK: For handling user profile, used for terms of service check
 extension APIClient {
     
-    func getUserProfile() {
+    // This function is used to check if user has accepted terms of service or not
+    func hasUserAcceptedTermsOfService(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
+        self.getUserProfile(authCredentials, token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.getUserProfile(authCredentials, token: queueItToken, executingVC: executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else {return}
+                    self.handleGetUserProfileResponse(result: result, completion: completion)
+                }
+            } else {
+                self.handleGetUserProfileResponse(result: result, completion: completion)
+            }
+        }
         
     }
     
-    // TODO: Private handling functions below
-    
-    func postUserProfile() {
+    private func getUserProfile(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedUserProfileResponseObject>) {
+        let url = configureURL(token: token, endpoint: self.endpoints.userProfile(hdid: authCredentials.hdid))
         
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
-    // TODO: Private handling functions below
+    private func handleGetUserProfileResponse(result: Result<AuthenticatedUserProfileResponseObject, ResultError>, completion: @escaping(Bool?, ResultError?) -> Void) {
+        switch result {
+        case .success(let profile):
+            if profile.resourcePayload?.hdid == nil || profile.resourcePayload?.acceptedTermsOfService == false {
+                completion(false, nil)
+            } else if let accepted = profile.resourcePayload?.acceptedTermsOfService, accepted == true {
+                completion(true, nil)
+            } else if let resultError = profile.resultError {
+                completion(nil, resultError)
+            } else {
+                let error = ResultError(resultMessage: "An unexpected error has occured")
+                completion(nil, error)
+            }
+        case .failure(let error):
+            print(error)
+            completion(nil, error)
+        }
+    }
+    
+    // This function is used to respond to the displayed terms of service
+    func respondToTermsOfService(_ authCredentials: AuthenticationRequestObject, accepted: Bool, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
+        self.postUserProfile(authCredentials, accepted: accepted, token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.postUserProfile(authCredentials, accepted: accepted, token: queueItToken, executingVC: executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else {return}
+                    self.handlePostUserProfileResponse(result: result, completion: completion)
+                }
+            } else {
+                self.handlePostUserProfileResponse(result: result, completion: completion)
+            }
+        }
+    }
+    
+    private func postUserProfile(_ authCredentials: AuthenticationRequestObject, accepted: Bool, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedUserProfileResponseObject>) {
+        let url = configureURL(token: token, endpoint: self.endpoints.userProfile(hdid: authCredentials.hdid))
+        
+        let headerParameters: Headers = [
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
+        ]
+        
+        let parameters: RequestParameters = [
+            Constants.AuthenticatedUserProfileParameters.hdid: authCredentials.hdid,
+            Constants.AuthenticatedUserProfileParameters.acceptedTermsOfService: accepted
+        ]
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .post, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
+    
+    private func handlePostUserProfileResponse(result: Result<AuthenticatedUserProfileResponseObject, ResultError>, completion: @escaping(Bool?, ResultError?) -> Void) {
+        switch result {
+        case .success(let profile):
+            if profile.resourcePayload?.hdid == nil {
+                let error = ResultError(resultMessage: "There was an error with your request")
+                completion(nil, error)
+            } else if let _ = profile.resourcePayload?.hdid, let acceptedStatus = profile.resourcePayload?.acceptedTermsOfService {
+                completion(acceptedStatus, nil)
+            } else if let resultError = profile.resultError {
+                completion(nil, resultError)
+            } else {
+                let error = ResultError(resultMessage: "An unexpected error has occured")
+                completion(nil, error)
+            }
+        case .failure(let error):
+            print(error)
+            completion(nil, error)
+        }
+    }
 }
-
+struct Test: Codable {
+    let hdid: String
+    let accepted: Bool
+}
+extension Encodable {
+  var dictionary: [String: Any]? {
+    guard let data = try? JSONEncoder().encode(self) else { return nil }
+    return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+  }
+}
 // MARK: For displaying terms of service
 extension APIClient {
     
