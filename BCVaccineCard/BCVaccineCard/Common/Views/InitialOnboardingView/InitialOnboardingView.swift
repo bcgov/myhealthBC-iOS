@@ -116,7 +116,7 @@ class InitialOnboardingView: UIView {
         onboardingTitleLabel.textColor = AppColours.appBlue
         onboardingDescriptionLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         onboardingDescriptionLabel.textColor = AppColours.textBlack
-        
+        // TODO: put in AppColours
         let skipButtonColour = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
         skipButton.setTitleColor(skipButtonColour, for: .normal)
         if let skipTitleLabel = skipButton.titleLabel {

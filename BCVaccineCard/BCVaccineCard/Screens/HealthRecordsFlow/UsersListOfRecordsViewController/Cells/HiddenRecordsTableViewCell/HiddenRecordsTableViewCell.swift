@@ -85,6 +85,7 @@ class HiddenRecordsTableViewCell: UITableViewCell, Theme {
         style(label: numberOfHiddenRecordsLabel, style: .Bold, size: 17, colour: .Blue)
         style(label: descLabel, style: .Regular, size: 13, colour: .Black)
         style(button: actionButton, style: .Fill, title: type.getButtonTitle, image: type.getButtonImage, bold: true)
+        // TODO: put in AppColours
         backgroundContainer.backgroundColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1)
         backgroundContainer.layer.cornerRadius = 4
     }

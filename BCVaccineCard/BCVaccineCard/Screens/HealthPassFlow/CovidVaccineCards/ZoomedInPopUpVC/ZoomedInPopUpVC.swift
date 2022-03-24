@@ -46,6 +46,7 @@ class ZoomedInPopUpVC: UIViewController {
         if let parentVC = parentVC {
             let cover = UIView(frame: .zero)
             cover.tag = coverTag
+            // TODO: put in AppColours
             cover.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
             parentVC.view.addSubview(cover)
             cover.alpha = 0
