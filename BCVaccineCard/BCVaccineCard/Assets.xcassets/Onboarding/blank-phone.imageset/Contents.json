@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Group 5192@1x.png",
+      "filename" : "Phone_onboarding.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Group 5192@2x.png",
+      "filename" : "Phone_onboarding (1).png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Group 5192@3x.png",
+      "filename" : "Phone_onboarding (2).png",
       "idiom" : "universal",
       "scale" : "3x"
     }

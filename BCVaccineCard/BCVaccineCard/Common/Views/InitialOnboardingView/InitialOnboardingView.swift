@@ -66,6 +66,8 @@ class InitialOnboardingView: UIView {
     @IBOutlet weak private var bottomButton: AppStyleButton!
     @IBOutlet weak private var bottomButtonWidthConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var skipButton: UIButton!
+    
     private var phoneImageDotsCollection: [UIImageView] = []
     private var screenProgressImageDotsCollection: [UIImageView] = []
     private var screenProgressImageDotsWidthConstraintCollection: [NSLayoutConstraint] = []
@@ -109,6 +111,8 @@ class InitialOnboardingView: UIView {
         onboardingTitleLabel.textColor = AppColours.appBlue
         onboardingDescriptionLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         onboardingDescriptionLabel.textColor = AppColours.textBlack
+        skipButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 17)
+        skipButton.titleLabel?.textColor = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
     }
     
     private func stackViewSetup() {
@@ -119,6 +123,7 @@ class InitialOnboardingView: UIView {
         screenProgressImageDotsStackView.alignment = .fill
         screenProgressImageDotsStackView.distribution = .fill
         screenProgressImageDotsStackView.spacing = 10
+        phoneImageDotsStackView.alpha = 0
     }
     
     private func createInitialRotatingImageView() {
@@ -312,7 +317,9 @@ extension InitialOnboardingView {
                 bottomButtonWidthConstraint.constant = 162
                 accessibilityValue = AccessibilityLabels.Onboarding.buttonGetStartedTitle
                 accessibilityHint = AccessibilityLabels.Onboarding.buttonGetStartedHint
+                skipButton.alpha = 0
             } else {
+                skipButton.alpha = 1
                 buttonType = .next
                 accessibilityValue = AccessibilityLabels.Onboarding.buttonNextTitle
                 accessibilityHint = AccessibilityLabels.Onboarding.buttonNextHint
