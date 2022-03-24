@@ -82,7 +82,7 @@
                     <state key="normal" title="Button"/>
                     <buttonConfiguration key="configuration" style="plain" title="Skip"/>
                     <connections>
-                        <action selector="skipButtonAction:" destination="-1" eventType="touchUpInside" id="haZ-mI-WpP"/>
+                        <action selector="skipButtonAction:" destination="-1" eventType="touchUpInside" id="Hf8-hd-zwn"/>
                     </connections>
                 </button>
             </subviews>

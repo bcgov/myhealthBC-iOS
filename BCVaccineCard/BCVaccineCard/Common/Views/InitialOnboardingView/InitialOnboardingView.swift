@@ -102,6 +102,10 @@ class InitialOnboardingView: UIView {
         stackViewSetup()
         createInitialRotatingImageView()
     }
+  
+    @IBAction func skipButtonAction(_ sender: Any) {
+        AuthenticationViewController.displayFullScreen(returnToHealthPass: true, initialView: .Landing, sourceVC: .AfterOnboarding)
+    }
     
     private func labelSetup() {
         newTextLabel.font = UIFont.bcSansBoldWithSize(size: 13)
@@ -111,8 +115,13 @@ class InitialOnboardingView: UIView {
         onboardingTitleLabel.textColor = AppColours.appBlue
         onboardingDescriptionLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         onboardingDescriptionLabel.textColor = AppColours.textBlack
-        skipButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 17)
-        skipButton.titleLabel?.textColor = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
+        
+        let skipButtonColour = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
+        skipButton.setTitleColor(skipButtonColour, for: .normal)
+        if let skipTitleLabel = skipButton.titleLabel {
+            skipTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
+            skipTitleLabel.textColor = skipButtonColour
+        }
     }
     
     private func stackViewSetup() {
