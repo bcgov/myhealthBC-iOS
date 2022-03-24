@@ -24,3 +24,18 @@ struct AuthenticatedUserProfileResponseObject: Codable {
         }
     }
 }
+
+struct AuthenticatedUserProfileRequestObject: Codable {
+    let profile: ResourcePayload
+    
+    // MARK: ResourcePayload
+    struct ResourcePayload: Codable {
+        let hdid: String
+        let acceptedTermsOfService: Bool
+        
+        enum CodingKeys: String, CodingKey {
+            case hdid = "hdId"
+            case acceptedTermsOfService
+        }
+    }
+}

@@ -263,13 +263,10 @@ extension APIClient {
             Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
         ]
         
-        let parameters: RequestParameters = [
-            Constants.AuthenticatedUserProfileParameters.hdid: authCredentials.hdid,
-            Constants.AuthenticatedUserProfileParameters.acceptedTermsOfService: accepted
-        ]
+        let parameters = AuthenticatedUserProfileRequestObject(profile: AuthenticatedUserProfileRequestObject.ResourcePayload(hdid: authCredentials.hdid, acceptedTermsOfService: accepted))
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .post, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .post, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
     }
     
     private func handlePostUserProfileResponse(result: Result<AuthenticatedUserProfileResponseObject, ResultError>, completion: @escaping(Bool?, ResultError?) -> Void) {

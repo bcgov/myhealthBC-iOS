@@ -51,7 +51,7 @@ class TermsOfServiceViewController: BaseViewController {
     }
     
     @IBAction private func navHackCloseButtonAction(_ sender: UIButton) {
-        NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: .TabBar)
+        AuthManager().clearData()
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -126,17 +126,27 @@ extension TermsOfServiceViewController: AppStyleButtonDelegate {
 extension TermsOfServiceViewController {
     private func respondToTermsOfService(accepted: Bool) {
         guard let authCredentials = self.authCredentials else { return }
+        guard accepted == true else {
+            AuthManager().clearData()
+            let error = "Please note that you cannot authenticate with BCSC and fetch their records until they accept the terms of service"
+            NotificationManager.respondToTermsOfService(accepted: nil, error: error, errorTitle: "Notice")
+            self.dismiss(animated: true)
+            return
+        }
+        self.view.startLoadingIndicator()
         self.authWorker?.respondToTermsOfService(authCredentials, accepted: accepted, completion: { accepted, error in
             guard let accepted = accepted else {
-                NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: .TabBar)
-                NotificationManager.respondToTermsOfService(accepted: nil, error: error?.resultMessage ?? "Unknown error occured with terms of service")
+                AuthManager().clearData()
+                NotificationManager.respondToTermsOfService(accepted: nil, error: error?.resultMessage ?? "Unknown error occured with terms of service", errorTitle: .error)
+                self.view.endLoadingIndicator()
                 self.dismiss(animated: true)
                 return
             }
-            if !accepted {
-                NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: .TabBar)
-            }
-            NotificationManager.respondToTermsOfService(accepted: accepted, error: nil)
+//            if !accepted {
+//                AuthManager().clearData()
+//            }
+            NotificationManager.respondToTermsOfService(accepted: accepted, error: nil, errorTitle: nil)
+            self.view.endLoadingIndicator()
             self.dismiss(animated: true)
         })
     }

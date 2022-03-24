@@ -91,6 +91,7 @@ struct Constants {
     
     struct GenericErrorKey {
         static let key = "error"
+        static let titleKey = "errorTitle"
     }
     
     struct AgeLimit {

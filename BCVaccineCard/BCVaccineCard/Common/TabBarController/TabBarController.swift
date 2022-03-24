@@ -159,14 +159,16 @@ class TabBarController: UITabBarController {
         guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
         let creds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
         let vc = TermsOfServiceViewController.constructTermsOfServiceViewController(authWorker: self.authWorker, authCredentials: creds)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
             self.present(vc, animated: true)
         }
     }
     
     @objc private func termsOfServiceResponse(_ notification: Notification) {
         if let error = notification.userInfo?[Constants.GenericErrorKey.key] as? String {
-            showError(error: error)
+            let title = notification.userInfo?[Constants.GenericErrorKey.titleKey] as? String ?? .error
+            showError(error: error, title: title)
         } else {
             guard let response = notification.userInfo?[Constants.TermsOfServiceResponseKey.key] as? Bool, response == true else { return }
             self.showSuccessfulLoginAlert()
@@ -195,8 +197,8 @@ class TabBarController: UITabBarController {
         }
     }
     
-    private func showError(error: String) {
-        self.alert(title: .error, message: error)
+    private func showError(error: String, title: String) {
+        self.alert(title: title, message: error)
     }
 
 }

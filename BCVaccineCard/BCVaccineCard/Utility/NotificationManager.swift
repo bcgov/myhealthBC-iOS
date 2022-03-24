@@ -38,13 +38,15 @@ extension NotificationManager {
         NotificationCenter.default.addObserver(observer, selector: selector, name: name, object: nil)
     }
     
-    static func respondToTermsOfService(accepted: Bool?, error: String?) {
+    static func respondToTermsOfService(accepted: Bool?, error: String?, errorTitle: String?) {
         let name = Notification.Name.respondToTermsOfService
         let key = Constants.TermsOfServiceResponseKey.key
         let errorKey = Constants.GenericErrorKey.key
+        let errorTitleKey = Constants.GenericErrorKey.titleKey
         let info: [String: Any?] = [
             key: accepted,
-            errorKey: error
+            errorKey: error,
+            errorTitleKey: errorTitle
         ]
         NotificationCenter.default.post(name: name, object: nil, userInfo: info as [AnyHashable : Any])
     }
