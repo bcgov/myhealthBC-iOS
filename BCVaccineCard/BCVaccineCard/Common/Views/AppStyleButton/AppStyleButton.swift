@@ -36,6 +36,7 @@ class AppStyleButton: UIView {
         case getStarted
         case ok
         case continueType // note: Can't use word 'continue', so we use continueType
+        case agree
         
         var getTitle: String {
             switch self {
@@ -51,6 +52,7 @@ class AppStyleButton: UIView {
             case .getStarted: return .getStarted
             case .ok: return String.ok.capitalized
             case .continueType: return .continueText
+            case .agree: return .agree
             }
         }
     }

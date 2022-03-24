@@ -18,6 +18,7 @@
 "Records" = "Records";
 "Cancel" = "Cancel";
 "Continue" = "Continue";
+"Agree" = "Agree";
 //"Enter" = "Enter";
 "Submit" = "Submit";
 "Done" = "Done";
@@ -218,7 +219,7 @@
 "SetupAuthentication" = "Set up authentication";
 "ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication.";
 "ProtectedWordVCNavTitle" = "Restricted PharmaNet Records";
-
+"TermsOfService" = "Terms of service";
 
 
 // Accessibility only localized strings

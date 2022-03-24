@@ -96,6 +96,12 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             completion(true)
         }
     }
+    
+    // MARK: Show terms of service
+    public func fetchTermsOfService(completion: @escaping(String?, ResultError?) -> Void) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        apiClient.getTermsOfServiceString(token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
+    }
 
     public func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken

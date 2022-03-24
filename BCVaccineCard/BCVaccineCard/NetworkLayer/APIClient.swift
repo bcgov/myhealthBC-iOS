@@ -147,7 +147,7 @@ class APIClient {
 // MARK: For validating age
 extension APIClient {
     
-    func checkIfProfileIsValid(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping(Bool?, ResultError?) -> Void) {
+    func checkIfProfileIsValid(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
         self.getValidateProfileStatus(authCredentials, token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
@@ -182,6 +182,51 @@ extension APIClient {
                 completion(valid, nil)
             } else {
                 completion(false, nil)
+            }
+        case .failure(let error):
+            print(error)
+            completion(nil, error)
+        }
+    }
+}
+
+// MARK: For displaying terms of service
+extension APIClient {
+    
+    func getTermsOfServiceString(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (String?, ResultError?) -> Void) {
+        self.getTermsOfService(token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.getTermsOfService(token: queueItToken, executingVC: executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else {return}
+                    self.handleTermsOfServiceResponse(result: result, completion: completion)
+                }
+            } else {
+                self.handleTermsOfServiceResponse(result: result, completion: completion)
+            }
+        }
+        
+        
+    }
+    
+    private func getTermsOfService(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<TermsOfServiceResponse>) {
+        let url = configureURL(token: token, endpoint: self.endpoints.getTermsOfService)
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
+    
+    private func handleTermsOfServiceResponse(result: Result<TermsOfServiceResponse, ResultError>, completion: @escaping (String?, ResultError?) -> Void) {
+        switch result {
+        case .success(let termsOfService):
+            if let resultError = termsOfService.resultError, termsOfService.resourcePayload == nil {
+                completion(nil, resultError)
+            } else if let content = termsOfService.resourcePayload?.content {
+                completion(content, nil)
+            } else {
+                let error = ResultError(resultMessage: "We're sorry, there was an issue fetching terms of service.")
+                completion(nil, error)
             }
         case .failure(let error):
             print(error)
