@@ -85,6 +85,14 @@ struct Constants {
         static let key = "source"
     }
     
+    struct TermsOfServiceResponseKey {
+        static let key = "accepted"
+    }
+    
+    struct GenericErrorKey {
+        static let key = "error"
+    }
+    
     struct AgeLimit {
         static let ageLimitForRecords = 12
     }

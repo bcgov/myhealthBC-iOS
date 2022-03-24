@@ -15,6 +15,7 @@ protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool)
     func showAlertForLoginAttemptDueToValidation(error: ResultError?)
     func showAlertForUserUnder(ageInYears age: Int)
+    func showAlertForUserProfile(error: ResultError?)
 }
 // TODO: Check to see if we will in fact be pulling comments separately, or if they will be a part of the medication statement request. If separate, we should make the request synchronus
 enum AuthenticationFetchType {
@@ -92,15 +93,34 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 completion(false)
                 return
             }
-            // TODO: Check if user profile has been created here and has accepted terms and conditions
-            completion(true)
+            // NOTE: Check if user profile has been created here and has accepted terms and conditions
+            self.apiClient.hasUserAcceptedTermsOfService(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { hasAccepted, error in
+                guard let hasAccepted = hasAccepted else {
+                    self.delegate?.showAlertForUserProfile(error: error)
+                    completion(false)
+                    return
+                }
+                if hasAccepted {
+                    completion(true)
+                } else {
+                    // Note: May be an issue with when this is called here, we'll see
+                    NotificationManager.showTermsOfService()
+                    completion(false)
+                }
+
+            }
         }
     }
     
-    // MARK: Show terms of service
+    // MARK: Get terms of service string
     public func fetchTermsOfService(completion: @escaping(String?, ResultError?) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.getTermsOfServiceString(token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
+    }
+    
+    public func respondToTermsOfService(_ authCredentials: AuthenticationRequestObject, accepted: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        apiClient.respondToTermsOfService(authCredentials, accepted: accepted, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
     }
 
     public func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource) {

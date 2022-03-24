@@ -68,12 +68,7 @@ class TabBarController: UITabBarController {
         if authStatus == .Completed {
             AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: self.authWorker, sourceVC: .AfterOnboarding) { allowed in
                 if allowed {
-                    self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
-                        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
-                        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-                        let protectiveWord = AuthManager().protectiveWord
-                        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, protectiveWord: protectiveWord, sourceVC: .AfterOnboarding)
-                    }
+                    self.showSuccessfulLoginAlert()
                 }
             }
         }
@@ -104,6 +99,8 @@ class TabBarController: UITabBarController {
     }
     
     private func setupObserver() {
+        NotificationManager.listenToShowTermsOfService(observer: self, selector: #selector(showTermsOfService))
+        NotificationManager.listenToTermsOfServiceResponse(observer: self, selector: #selector(termsOfServiceResponse))
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
@@ -158,6 +155,24 @@ class TabBarController: UITabBarController {
         }
     }
     
+    @objc private func showTermsOfService(_ notification: Notification) {
+        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
+        let creds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+        let vc = TermsOfServiceViewController.constructTermsOfServiceViewController(authWorker: self.authWorker, authCredentials: creds)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.present(vc, animated: true)
+        }
+    }
+    
+    @objc private func termsOfServiceResponse(_ notification: Notification) {
+        if let error = notification.userInfo?[Constants.GenericErrorKey.key] as? String {
+            showError(error: error)
+        } else {
+            guard let response = notification.userInfo?[Constants.TermsOfServiceResponseKey.key] as? Bool, response == true else { return }
+            self.showSuccessfulLoginAlert()
+        }
+    }
+    
     @objc private func tabChanged(_ notification: Notification) {
         guard let viewController = (notification.userInfo?["viewController"] as? CustomNavigationController)?.visibleViewController else { return }
         if viewController is NewsFeedViewController {
@@ -169,6 +184,19 @@ class TabBarController: UITabBarController {
         guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
         self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, sourceVC: .BackgroundFetch)
+    }
+    
+    private func showSuccessfulLoginAlert() {
+        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
+            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
+            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+            let protectiveWord = AuthManager().protectiveWord
+            self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, protectiveWord: protectiveWord, sourceVC: .AfterOnboarding)
+        }
+    }
+    
+    private func showError(error: String) {
+        self.alert(title: .error, message: error)
     }
 
 }
@@ -192,7 +220,6 @@ extension TabBarController: UITabBarControllerDelegate {
             self.resetHealthRecordsTab()
         }
     }
-    
 }
 
 // MARK: Auth Fetch delegates
@@ -220,6 +247,10 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     
     func showAlertForUserUnder(ageInYears age: Int) {
         self.alert(title: "Age Restriction", message: "You must be \(age) year's of age or older to user Health Gateway.")
+    }
+    
+    func showAlertForUserProfile(error: ResultError?) {
+        self.alert(title: "Error", message: error?.resultMessage ?? "Unexpected error")
     }
 }
 

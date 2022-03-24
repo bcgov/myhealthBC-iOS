@@ -29,4 +29,7 @@ extension Notification.Name {
     static let protectedWordProvided = Notification.Name("protectedWordProvided")
     static let authStatusChanged = Notification.Name("authStatusChanged")
     static let reloadVCDueToUnderage = Notification.Name("reloadVCDueToUnderage")
+    
+    static let showTermsOfService = Notification.Name("showTermsOfService")
+    static let respondToTermsOfService = Notification.Name("respondToTermsOfService")
 }

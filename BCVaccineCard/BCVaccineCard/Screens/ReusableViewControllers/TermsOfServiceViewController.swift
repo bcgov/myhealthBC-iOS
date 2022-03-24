@@ -10,9 +10,10 @@ import WebKit
 
 class TermsOfServiceViewController: BaseViewController {
     
-    class func constructTermsOfServiceViewController(authWorker: AuthenticatedHealthRecordsAPIWorker?) -> TermsOfServiceViewController {
+    class func constructTermsOfServiceViewController(authWorker: AuthenticatedHealthRecordsAPIWorker?, authCredentials: AuthenticationRequestObject) -> TermsOfServiceViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: TermsOfServiceViewController.self)) as? TermsOfServiceViewController {
             vc.authWorker = authWorker
+            vc.authCredentials = authCredentials
             vc.modalPresentationStyle = .overFullScreen
             return vc
         }
@@ -28,6 +29,7 @@ class TermsOfServiceViewController: BaseViewController {
     @IBOutlet weak private var agreeButton: AppStyleButton!
     
     private var authWorker: AuthenticatedHealthRecordsAPIWorker?
+    private var authCredentials: AuthenticationRequestObject?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +51,7 @@ class TermsOfServiceViewController: BaseViewController {
     }
     
     @IBAction private func navHackCloseButtonAction(_ sender: UIButton) {
+        NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: .TabBar)
         self.dismiss(animated: true, completion: nil)
     }
 
@@ -111,19 +114,30 @@ extension TermsOfServiceViewController: WKNavigationDelegate {
 extension TermsOfServiceViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         switch type {
-        case .cancel:
-            // Note: Either this, or the user will create the TOS and set to false
-            self.dismiss(animated: true, completion: nil)
-            
-//            // ORRRR...
-//            guard let hdid = AuthManager().hdid, let token = AuthManager().authToken else { return }
-//            let authCreds = AuthenticationRequestObject(authToken: token, hdid: hdid)
-//            //TODO: Create request here, setting value to false
-        case .agree:
-            // TODO: Network request here, then dismiss once completed
-            print("TODO")
+        case .cancel: respondToTermsOfService(accepted: false)
+        case .agree: respondToTermsOfService(accepted: true)
         default: break
         }
     }
     
+}
+
+// MARK: For terms of service request
+extension TermsOfServiceViewController {
+    private func respondToTermsOfService(accepted: Bool) {
+        guard let authCredentials = self.authCredentials else { return }
+        self.authWorker?.respondToTermsOfService(authCredentials, accepted: accepted, completion: { accepted, error in
+            guard let accepted = accepted else {
+                NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: .TabBar)
+                NotificationManager.respondToTermsOfService(accepted: nil, error: error?.resultMessage ?? "Unknown error occured with terms of service")
+                self.dismiss(animated: true)
+                return
+            }
+            if !accepted {
+                NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: .TabBar)
+            }
+            NotificationManager.respondToTermsOfService(accepted: accepted, error: nil)
+            self.dismiss(animated: true)
+        })
+    }
 }

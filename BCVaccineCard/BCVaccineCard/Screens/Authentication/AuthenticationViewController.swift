@@ -56,6 +56,7 @@ enum LoginVCSource: String {
     case QRRetrievalVC = "QRRetrievalVC"
     case FetchHealthRecordsVC = "FetchHealthRecordsVC"
     case UserListOfRecordsVC = "UserListOfRecordsVC"
+    case TabBar = "TabBar"
     
     var getVCType: UIViewController.Type {
         switch self {
@@ -67,6 +68,7 @@ enum LoginVCSource: String {
         case .QRRetrievalVC: return QRRetrievalMethodViewController.self
         case .FetchHealthRecordsVC: return FetchHealthRecordsViewController.self
         case .UserListOfRecordsVC: return UsersListOfRecordsViewController.self
+        case .TabBar: return TabBarController.self
         }
     }
 }
