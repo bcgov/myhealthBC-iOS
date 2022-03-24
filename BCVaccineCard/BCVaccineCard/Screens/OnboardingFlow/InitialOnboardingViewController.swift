@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol OnboardSkipDelegate {
+    func skip()
+}
+
 class InitialOnboardingViewController: UIViewController {
     
     class func constructInitialOnboardingViewController(startScreenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType]) -> InitialOnboardingViewController {
@@ -29,16 +33,22 @@ class InitialOnboardingViewController: UIViewController {
     }
     
     private func setup() {
-        initialOnboardingView.initialConfigure(screenNumber: screenNumber, screensToShow: self.screensToShow, delegateOwner: self)
+        initialOnboardingView.initialConfigure(screenNumber: screenNumber, screensToShow: self.screensToShow, delegateOwner: self, skipDelegate: self)
     }
     
 }
 
-extension InitialOnboardingViewController: AppStyleButtonDelegate {
+extension InitialOnboardingViewController: AppStyleButtonDelegate, OnboardSkipDelegate {
+    func skip() {
+        // TODO: version
+        Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
+        goToAuthentication()
+    }
+    
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .next, let newScreenNumber = self.initialOnboardingView.increment(screenNumber: self.screenNumber, screensToShow: self.screensToShow) {
             self.screenNumber = newScreenNumber
-            self.initialOnboardingView.adjustUI(screenNumber: self.screenNumber, screensToShow: self.screensToShow, delegateOwner: self)
+            self.initialOnboardingView.adjustUI(screenNumber: self.screenNumber, screensToShow: self.screensToShow, delegateOwner: self, skipDelegate: self)
         }
         if type == .getStarted || type == .ok {
             // TODO: version

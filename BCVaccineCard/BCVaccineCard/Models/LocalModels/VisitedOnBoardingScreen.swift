@@ -25,8 +25,8 @@ struct VisitedOnboardingScreen: Encodable, Decodable {
  Check UI constraint logic in the adjustRotatingImageViewConstraints function, as constraints/assets may need to be updated
  */
 enum OnboardingScreenType: Int, CaseIterable {
-    case healthPasses = 0
-    case healthRecords
+    case healthRecords = 0
+    case healthPasses
     case healthResources
     case newsFeed
 }
