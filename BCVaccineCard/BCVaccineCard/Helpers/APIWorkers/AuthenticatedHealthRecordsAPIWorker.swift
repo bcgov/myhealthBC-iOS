@@ -74,7 +74,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
-    public func checkIfUserIsOver12(authCredentials: AuthenticationRequestObject, sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
+    // NOTE: This function handles the check if user is 12 and over, and if user has accepted terms and conditions
+    public func checkIfUserCanLoginAndFetchRecords(authCredentials: AuthenticationRequestObject, sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
             guard let valid = valid else {
@@ -91,6 +92,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 completion(false)
                 return
             }
+            // TODO: Check if user profile has been created here and has accepted terms and conditions
             completion(true)
         }
     }

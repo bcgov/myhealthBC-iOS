@@ -68,7 +68,7 @@ class TabBarController: UITabBarController {
     private func showLoginPromptIfNecessary() {
         guard let authStatus = self.authenticationStatus else { return }
         if authStatus == .Completed {
-            AuthenticationViewController.checkIfUserIsOver12(authWorker: self.authWorker, sourceVC: .AfterOnboarding) { allowed in
+            AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: self.authWorker, sourceVC: .AfterOnboarding) { allowed in
                 if allowed {
                     self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
                         guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }

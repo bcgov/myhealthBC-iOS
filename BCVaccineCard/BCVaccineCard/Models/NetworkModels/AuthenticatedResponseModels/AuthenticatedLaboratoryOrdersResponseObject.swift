@@ -21,13 +21,13 @@ struct AuthenticatedLaboratoryOrdersResponseObject: Codable {
         
         // MARK: - Order
         struct Order: Codable {
-            let laboratoryReportID, reportingSource, reportID, collectionDateTime: String?
+            let labPdfId, reportingSource, reportID, collectionDateTime: String?
             let commonName, orderingProvider, testStatus: String?
             let reportAvailable: Bool?
             let laboratoryTests: [LaboratoryTest]?
 
             enum CodingKeys: String, CodingKey {
-                case laboratoryReportID = "laboratoryReportId"
+                case labPdfId
                 case reportingSource
                 case reportID = "reportId"
                 case collectionDateTime, commonName, orderingProvider, testStatus, reportAvailable, laboratoryTests

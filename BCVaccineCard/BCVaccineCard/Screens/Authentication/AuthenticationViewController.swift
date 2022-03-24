@@ -26,7 +26,7 @@ extension BaseViewController {
             case .Completed:
                 let tabVC = self.tabBarController as? TabBarController
                 let authWorker = tabVC?.authWorker
-                AuthenticationViewController.checkIfUserIsOver12(authWorker: authWorker, sourceVC: sourceVC) { allowed in
+                AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: authWorker, sourceVC: sourceVC) { allowed in
                     if allowed {
                         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
                             // Will be fetching on completion, before user interacts with this message
@@ -234,11 +234,11 @@ class AuthenticationViewController: UIViewController {
     
 }
 
-// MARK: Over 12 user check
+// MARK: Checks if user is 12 and over AND has accepted terms and conditions
 extension AuthenticationViewController {
-    public static func checkIfUserIsOver12(authWorker: AuthenticatedHealthRecordsAPIWorker?, sourceVC: LoginVCSource, completion: @escaping (Bool) -> Void) {
+    public static func checkIfUserCanLoginAndFetchRecords(authWorker: AuthenticatedHealthRecordsAPIWorker?, sourceVC: LoginVCSource, completion: @escaping (Bool) -> Void) {
         guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        authWorker?.checkIfUserIsOver12(authCredentials: authCreds, sourceVC: sourceVC, completion: completion)
+        authWorker?.checkIfUserCanLoginAndFetchRecords(authCredentials: authCreds, sourceVC: sourceVC, completion: completion)
     }
 }

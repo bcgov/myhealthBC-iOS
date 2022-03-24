@@ -68,7 +68,7 @@ extension HealthRecord {
             return medication.prescriptionIdentifier ?? ""
         case .LaboratoryOrder(let labTest):
             // TODO: When supporting lab order comments
-            return labTest.laboratoryReportID ?? ""
+            return labTest.reportID ?? ""
         }
     }
     

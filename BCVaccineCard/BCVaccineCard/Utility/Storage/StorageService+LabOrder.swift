@@ -26,7 +26,7 @@ protocol StorageLaboratoryOrderManager {
     func storeLaboratoryOrder(
         patient: Patient,
         id: String,
-        laboratoryReportID: String?,
+        labPdfId: String?,
         reportingSource: String?,
         reportID: String?,
         collectionDateTime: Date?,
@@ -94,17 +94,17 @@ extension StorageService: StorageLaboratoryOrderManager {
                 }
             }
             let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
-            return storeLaboratoryOrder(patient: patient, id: id, laboratoryReportID: gateWayObject.laboratoryReportID, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf)
+            return storeLaboratoryOrder(patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf)
             
         }
     
-    func storeLaboratoryOrder(patient: Patient, id: String, laboratoryReportID: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?) -> LaboratoryOrder? {
+    func storeLaboratoryOrder(patient: Patient, id: String, labPdfId: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?) -> LaboratoryOrder? {
         guard let context = managedContext else {return nil}
         let labOrder = LaboratoryOrder(context: context)
         labOrder.id = id
         labOrder.authenticated = true
         labOrder.patient = patient
-        labOrder.laboratoryReportID = laboratoryReportID
+        labOrder.labPdfId = labPdfId
         labOrder.reportingSource = reportingSource
         labOrder.reportID = reportID
         labOrder.collectionDateTime = collectionDateTime
@@ -158,7 +158,7 @@ extension StorageService: StorageLaboratoryOrderManager {
     
     /// This function generates a hash to be used as an id without the laboratory tests.
     private func labOrderId(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order) -> String {
-        var copy = AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order(laboratoryReportID: gateWayObject.reportID, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: gateWayObject.collectionDateTime,commonName: gateWayObject.commonName, orderingProvider: gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable, laboratoryTests: [])
+        var copy = AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order(labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: gateWayObject.collectionDateTime,commonName: gateWayObject.commonName, orderingProvider: gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable, laboratoryTests: [])
         return copy.md5Hash() ?? UUID().uuidString
     }
     
