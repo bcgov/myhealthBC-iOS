@@ -292,16 +292,6 @@ extension APIClient {
         }
     }
 }
-struct Test: Codable {
-    let hdid: String
-    let accepted: Bool
-}
-extension Encodable {
-  var dictionary: [String: Any]? {
-    guard let data = try? JSONEncoder().encode(self) else { return nil }
-    return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
-  }
-}
 // MARK: For displaying terms of service
 extension APIClient {
     
