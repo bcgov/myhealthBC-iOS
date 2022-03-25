@@ -13,6 +13,7 @@ class ChipCollectionViewCell: UICollectionViewCell {
     static let paddingHorizontal: CGFloat = 12
     static let selectedFont = UIFont.bcSansBoldWithSize(size: 14)
     static let unselectedFont = UIFont.bcSansRegularWithSize(size: 15)
+    // TODO: put in AppColours
     static let selectedBackgroundColour = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
 
     @IBOutlet weak var textWidth: NSLayoutConstraint!

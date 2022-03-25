@@ -66,7 +66,7 @@
 "HealthResources" = "Health resources";
 "NewsFeed" = "News feed";
 "InitialOnboardingHealthPassesDescription" = "Keep your BC Vaccine Card and federal Covid-19 proof of vaccination document in a single place";
-"InitialOnboardingHealthRecordsDescription" = "Easily access all of your Covid-19 health records";
+"InitialOnboardingHealthRecordsDescription" = "Easily access your health records";
 "InitialOnboardingHealthResourcesDescription" = "Find Covid-19 health information and testing resources";
 "InitialOnboardingNewsFeedDescription" = "Get the latest BC government Covid-19 news";
 "NEW" = "NEW";
@@ -208,7 +208,7 @@
 "Privacy" = "Privacy";
 "LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
 "ProtectYourPersonalInformation" = "Protect your personal information";
-"LocalAuthViewDescription" = "Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure.";
+"LocalAuthViewDescription" = "My Health BC stores some personal health information. Enabling biometric security will help keep your data safe and secure.";
 "LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
 "UseTouchId" = "Use Touch ID";
 "UsePassCode" = "Use passcode";
