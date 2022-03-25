@@ -50,6 +50,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             authManager?.clearData()
             Defaults.hasAppLaunchedBefore = true
         }
+        guard let loginStatus = Defaults.loginProcessStatus else {
+            if authManager?.isAuthenticated == true {
+                authManager?.clearData()
+            }
+            return
+        }
+        if loginStatus.hasStartedLoginProcess && !loginStatus.hasCompletedLoginProcess {
+            authManager?.clearData()
+        }
+        // Note: This is also where we can handle refetch logic - though for now, we are going to adjust this to occur on app launch
     }
     
     private func listenToAppState() {

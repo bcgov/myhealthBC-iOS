@@ -86,7 +86,7 @@ class AuthenticationViewController: UIViewController {
         case Cancelled
         case Failed
     }
-    
+    // TODO: When show landing screen is shown, we should hit MobileConfiguration endpoint to see if we can login or not - then implement QueueIt UI on this view controller
     class func constructAuthenticationViewController(createTabBarAndGoToHomeScreen: Bool, isModal: Bool, initialView: InitialView, sourceVC: LoginVCSource, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion
@@ -166,6 +166,7 @@ class AuthenticationViewController: UIViewController {
                 print("Handle Unavailable")
                 self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
             case .Success:
+                Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false)
                 self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
             case .Fail:
                 // TODO:
@@ -243,4 +244,9 @@ extension AuthenticationViewController {
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
         authWorker?.checkIfUserCanLoginAndFetchRecords(authCredentials: authCreds, sourceVC: sourceVC, completion: completion)
     }
+}
+
+// MARK: QueueIt UI
+extension AuthenticationViewController {
+    
 }

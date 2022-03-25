@@ -76,6 +76,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     // NOTE: This function handles the check if user is 12 and over, and if user has accepted terms and conditions
+    // TODO: should do throttle function separately - build it directly on the authentication view controller
     public func checkIfUserCanLoginAndFetchRecords(authCredentials: AuthenticationRequestObject, sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
@@ -162,6 +163,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?) {
+        if self.isManualAuthFetch {
+            var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false)
+            loginProcessStatus.hasCompletedLoginProcess = true
+            Defaults.loginProcessStatus = loginProcessStatus
+        }
         guard let types = specificFetchTypes else {
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)

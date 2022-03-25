@@ -241,6 +241,9 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         // TODO: Connor - handle error case
         self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
+        var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false)
+        loginProcessStatus.hasFinishedFetchingRecords = true
+        Defaults.loginProcessStatus = loginProcessStatus
     }
     func showAlertForLoginAttemptDueToValidation(error: ResultError?) {
         print(error)
