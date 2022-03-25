@@ -18,7 +18,7 @@ extension LaboratoryOrder {
 
     @NSManaged public var id: String?
     @NSManaged public var authenticated: Bool
-    @NSManaged public var laboratoryReportID: String?
+    @NSManaged public var labPdfId: String?
     @NSManaged public var reportingSource: String?
     @NSManaged public var reportID: String?
     @NSManaged public var collectionDateTime: Date?

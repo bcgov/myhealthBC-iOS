@@ -475,6 +475,12 @@
 		797BB96B2767F17D00CD1645 /* PagingIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29498CA12767EA7300E36406 /* PagingIndicatorView.swift */; };
 		797DE3C227D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797DE3C127D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift */; };
 		797DE3C327D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797DE3C127D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift */; };
+		798CA1C127ECDCFC0096188C /* TermsOfServiceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C027ECDCFC0096188C /* TermsOfServiceResponse.swift */; };
+		798CA1C227ECDCFC0096188C /* TermsOfServiceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C027ECDCFC0096188C /* TermsOfServiceResponse.swift */; };
+		798CA1C427ECDF030096188C /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C327ECDF030096188C /* TermsOfServiceViewController.swift */; };
+		798CA1C527ECDF030096188C /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C327ECDF030096188C /* TermsOfServiceViewController.swift */; };
+		798CA1C727ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C627ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift */; };
+		798CA1C827ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C627ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift */; };
 		799050AF27365111006CD726 /* AppPDFView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B446AD27357F1700E0F967 /* AppPDFView.xib */; };
 		799050B3273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
 		799050B4273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
@@ -801,6 +807,9 @@
 		7967E75D26FBDD3900EEF510 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		797BB9632767DCE100CD1645 /* HealthGatewayAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthGatewayAPIWorker.swift; sourceTree = "<group>"; };
 		797DE3C127D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedPDFResponseObject.swift; sourceTree = "<group>"; };
+		798CA1C027ECDCFC0096188C /* TermsOfServiceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceResponse.swift; sourceTree = "<group>"; };
+		798CA1C327ECDF030096188C /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
+		798CA1C627ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedUserProfileResponseObject.swift; sourceTree = "<group>"; };
 		799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsViewController.swift; sourceTree = "<group>"; };
 		799050BC273C832F006CD726 /* GetRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecordsView.swift; sourceTree = "<group>"; };
 		799050BF273C8344006CD726 /* GetRecordsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GetRecordsView.xib; sourceTree = "<group>"; };
@@ -1427,6 +1436,7 @@
 			children = (
 				7944F6E026F12C4E006B9444 /* GatewayFormViewController.swift */,
 				799E0AFB27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift */,
+				798CA1C327ECDF030096188C /* TermsOfServiceViewController.swift */,
 			);
 			path = ReusableViewControllers;
 			sourceTree = "<group>";
@@ -1825,6 +1835,7 @@
 				795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */,
 				795AA769271560F100E59FF1 /* NewsFeedResponse.swift */,
 				79218AA327518CC20063004E /* GatewayTestResultResponse.swift */,
+				798CA1C027ECDCFC0096188C /* TermsOfServiceResponse.swift */,
 			);
 			path = NetworkModels;
 			sourceTree = "<group>";
@@ -1898,6 +1909,7 @@
 				791D092B27BF5EC000AD7C89 /* AuthenticatedLaboratoryOrdersResponseObject.swift */,
 				79D93B1C27D048540083B603 /* AuthenticatedCommentResponseObject.swift */,
 				797DE3C127D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift */,
+				798CA1C627ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift */,
 			);
 			path = AuthenticatedResponseModels;
 			sourceTree = "<group>";
@@ -2606,6 +2618,7 @@
 				79218AAF275196040063004E /* HealthRecordsUserView.swift in Sources */,
 				795AA7732715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
 				79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
+				798CA1C127ECDCFC0096188C /* TermsOfServiceResponse.swift in Sources */,
 				291D43DC2762E196005F5B94 /* HealthRecordView.swift in Sources */,
 				293B32C527D27A880064BAAA /* CommentsTableViewCell.swift in Sources */,
 				794BD6272702E0E90084ADA8 /* CustomNavigationController.swift in Sources */,
@@ -2620,6 +2633,7 @@
 				79218A9C275141800063004E /* GetARecordTableViewCell.swift in Sources */,
 				29921C962773B049005025D2 /* AttributedString+EXT.swift in Sources */,
 				795AA73B271092D500E59FF1 /* MIMEType.swift in Sources */,
+				798CA1C727ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift in Sources */,
 				7944F6FA26F30413006B9444 /* UINavigationItem+Ext.swift in Sources */,
 				29736A572788EBD700CCB1D2 /* VaccineCard+CoreDataClass.swift in Sources */,
 				795AA7382710920600E59FF1 /* ResultError.swift in Sources */,
@@ -2742,6 +2756,7 @@
 				29736A482788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
 				79B9D00D27E2788100987D9F /* HomeScreenViewController.swift in Sources */,
+				798CA1C427ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
 				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29A5B6D627B55B65006A9BA7 /* Pharmacy+CoreDataClass.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
@@ -2847,6 +2862,7 @@
 				79B9D00E27E2788100987D9F /* HomeScreenViewController.swift in Sources */,
 				79932CAE2790FA38007E8D92 /* AuthenticationInfoView.swift in Sources */,
 				794BD63E2702EEC00084ADA8 /* UIFont+Ext.swift in Sources */,
+				798CA1C227ECDCFC0096188C /* TermsOfServiceResponse.swift in Sources */,
 				794BD63F2702EEC00084ADA8 /* UIViewController+EXT.swift in Sources */,
 				293B32B727D2627B0064BAAA /* CommentsListView.swift in Sources */,
 				796653DE279876C9004D103E /* AuthenticationRequestObjects.swift in Sources */,
@@ -2905,6 +2921,7 @@
 				29736A4D2788EBD700CCB1D2 /* CovidLabTestResult+CoreDataProperties.swift in Sources */,
 				79218AC7275569B70063004E /* BannerViewTableViewCell.swift in Sources */,
 				299038CE27C01BA80079722B /* StorageService+Medication.swift in Sources */,
+				798CA1C827ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift in Sources */,
 				79FDE424273335D000DAD988 /* FederalPassView.swift in Sources */,
 				795AA76B271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
 				7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */,
@@ -2962,6 +2979,7 @@
 				79053CFA2773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
 				794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */,
 				7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */,
+				798CA1C527ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
 				79932CAF2790FA94007E8D92 /* Theme.swift in Sources */,
 				796653EF27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				79218ABF27555B230063004E /* ReusableHeaderAddView.swift in Sources */,

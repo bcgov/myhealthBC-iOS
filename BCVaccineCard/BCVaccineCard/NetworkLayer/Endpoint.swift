@@ -14,11 +14,13 @@ protocol EndpointsAccessor {
     var getAuthenticatedVaccineCard: URL { get }
     var getAuthenticatedTestResults: URL { get }
     var getAuthenticatedLaboratoryOrders: URL { get }
+    var getTermsOfService: URL { get }
     func getAuthenticatedPatientDetails(hdid: String) -> URL
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
     func authenticatedComments(hdid: String) -> URL
     func getAuthenticatedLaboratoryOrderPDF(repordId: String) -> URL
     func validateProfile(hdid: String) -> URL
+    func userProfile(hdid: String) -> URL
 }
 
 struct UrlAccessor {
@@ -26,6 +28,8 @@ struct UrlAccessor {
     let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/")!
     #elseif DEV
     let baseUrl = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
+    // NOTE: For terms of service builds, please use mock endpoint
+//    let baseUrl = URL(string: "https://mock.healthgateway.gov.bc.ca/")!
     #endif
     
     private var immunizationBaseUrl: URL {
@@ -68,6 +72,10 @@ extension UrlAccessor: EndpointsAccessor {
         return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory/LaboratoryOrders")
     }
     
+    var getTermsOfService: URL {
+        return self.baseUrl.appendingPathComponent("v1/api/UserProfile/termsofservice")
+    }
+    
     func getAuthenticatedPatientDetails(hdid: String) -> URL {
         return self.patientServiceBaseURL.appendingPathComponent("v1/api/Patient").appendingPathComponent(hdid)
     }
@@ -86,6 +94,10 @@ extension UrlAccessor: EndpointsAccessor {
     
     func validateProfile(hdid: String) -> URL {
         return self.baseUrl.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Validate")
+    }
+    
+    func userProfile(hdid: String) -> URL {
+        return self.baseUrl.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid)
     }
 }
 

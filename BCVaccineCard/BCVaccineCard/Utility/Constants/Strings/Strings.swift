@@ -25,6 +25,7 @@ extension String {
     /// Button titles
     static var cancel: String { return "Cancel".localized }
     static var continueText: String { return "Continue".localized }
+    static var agree: String { return "Agree".localized }
 //    static var enter: String { return "Enter".localized }
     static var submit: String { return "Submit".localized }
     static var done: String { return "Done".localized }
@@ -270,10 +271,8 @@ extension String {
         return String(format: "AllowSecurityAccessMessage".localized, "", "", "")
     }
     static var reasonForRequestingAuthentication: String { return "ReasonForRequestingAuthentication".localized }
-
-    
-    // MARK: ProtectedWord
     static var protectedWordVCNavTitle: String { return "ProtectedWordVCNavTitle".localized }
+    static var termsOfService: String { return "TermsOfService".localized }
 }
 
 // Accessibility only localized strings

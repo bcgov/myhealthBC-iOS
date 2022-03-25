@@ -8,7 +8,7 @@
 import UIKit
 
 enum TabBarVCs: Int {
-    case home = 0, healthPass, records, resource, booking, newsFeed
+    case home = 0, records, healthPass, resource, newsFeed
     
     var getIndexOfTab: Int {
         return self.rawValue
@@ -25,14 +25,12 @@ enum TabBarVCs: Int {
         switch self {
         case .home:
             return Properties(title: "Home", selectedTabBarImage: #imageLiteral(resourceName: "home-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "home-tab-unselected"), baseViewController: HomeScreenViewController.constructHomeScreenViewController())
-        case .healthPass:
-            return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .records:
             return Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: HealthRecordsViewController.constructHealthRecordsViewController())
+        case .healthPass:
+            return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .resource:
             return Properties(title: .resources, selectedTabBarImage: #imageLiteral(resourceName: "resource-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "resource-tab-unselected"), baseViewController: ResourceViewController.constructResourceViewController())
-        case .booking:
-            return nil
         case .newsFeed:
             return Properties(title: .newsFeed, selectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-unselected"), baseViewController: NewsFeedViewController.constructNewsFeedViewController())
         }
@@ -41,8 +39,9 @@ enum TabBarVCs: Int {
 
 class TabBarController: UITabBarController {
     
-    class func constructTabBarController() -> TabBarController {
+    class func constructTabBarController(status: AuthenticationViewController.AuthenticationStatus? = nil) -> TabBarController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: TabBarController.self)) as? TabBarController {
+            vc.authenticationStatus = status
             return vc
         }
         return TabBarController()
@@ -54,20 +53,32 @@ class TabBarController: UITabBarController {
     
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
+    private var authenticationStatus: AuthenticationViewController.AuthenticationStatus?
     var authWorker: AuthenticatedHealthRecordsAPIWorker?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
         setup(selectedIndex: 0)
+        showLoginPromptIfNecessary()
     }
     
+    private func showLoginPromptIfNecessary() {
+        guard let authStatus = self.authenticationStatus else { return }
+        if authStatus == .Completed {
+            AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: self.authWorker, sourceVC: .AfterOnboarding) { allowed in
+                if allowed {
+                    self.showSuccessfulLoginAlert()
+                }
+            }
+        }
+    }
 
     private func setup(selectedIndex: Int) {
         self.tabBar.tintColor = AppColours.appBlue
         self.tabBar.barTintColor = .white
         self.delegate = self
-        self.viewControllers = setViewControllers(withVCs: [.home, .healthPass, .records, .resource, .newsFeed])
+        self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource, .newsFeed])
         self.selectedIndex = selectedIndex
         setupObserver()
     }
@@ -88,6 +99,8 @@ class TabBarController: UITabBarController {
     }
     
     private func setupObserver() {
+        NotificationManager.listenToShowTermsOfService(observer: self, selector: #selector(showTermsOfService))
+        NotificationManager.listenToTermsOfServiceResponse(observer: self, selector: #selector(termsOfServiceResponse))
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
@@ -142,6 +155,26 @@ class TabBarController: UITabBarController {
         }
     }
     
+    @objc private func showTermsOfService(_ notification: Notification) {
+        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
+        let creds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+        let vc = TermsOfServiceViewController.constructTermsOfServiceViewController(authWorker: self.authWorker, authCredentials: creds)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            self.present(vc, animated: true)
+        }
+    }
+    
+    @objc private func termsOfServiceResponse(_ notification: Notification) {
+        if let error = notification.userInfo?[Constants.GenericErrorKey.key] as? String {
+            let title = notification.userInfo?[Constants.GenericErrorKey.titleKey] as? String ?? .error
+            showError(error: error, title: title)
+        } else {
+            guard let response = notification.userInfo?[Constants.TermsOfServiceResponseKey.key] as? Bool, response == true else { return }
+            self.showSuccessfulLoginAlert()
+        }
+    }
+    
     @objc private func tabChanged(_ notification: Notification) {
         guard let viewController = (notification.userInfo?["viewController"] as? CustomNavigationController)?.visibleViewController else { return }
         if viewController is NewsFeedViewController {
@@ -153,6 +186,19 @@ class TabBarController: UITabBarController {
         guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
         self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, sourceVC: .BackgroundFetch)
+    }
+    
+    private func showSuccessfulLoginAlert() {
+        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
+            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
+            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+            let protectiveWord = AuthManager().protectiveWord
+            self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, protectiveWord: protectiveWord, sourceVC: .AfterOnboarding)
+        }
+    }
+    
+    private func showError(error: String, title: String) {
+        self.alert(title: title, message: error)
     }
 
 }
@@ -176,7 +222,6 @@ extension TabBarController: UITabBarControllerDelegate {
             self.resetHealthRecordsTab()
         }
     }
-    
 }
 
 // MARK: Auth Fetch delegates
@@ -203,7 +248,11 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     }
     
     func showAlertForUserUnder(ageInYears age: Int) {
-        self.alert(title: "Age Restriction", message: "We're sorry, user's under \(age) year's old are not allowed to access their own medical records. Please contact an adult for assistance.")
+        self.alert(title: "Age Restriction", message: "You must be \(age) year's of age or older to user Health Gateway.")
+    }
+    
+    func showAlertForUserProfile(error: ResultError?) {
+        self.alert(title: "Error", message: error?.resultMessage ?? "Unexpected error")
     }
 }
 

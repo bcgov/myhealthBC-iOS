@@ -59,7 +59,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate, OnboardSkipDe
     }
     
     private func goToAuthentication() {
-        AuthenticationViewController.displayFullScreen(returnToHealthPass: true, initialView: .Landing, sourceVC: .AfterOnboarding)
+        AuthenticationViewController.displayFullScreen(createTabBarAndGoToHomeScreen: true, initialView: .Landing, sourceVC: .AfterOnboarding)
     }
 }
 

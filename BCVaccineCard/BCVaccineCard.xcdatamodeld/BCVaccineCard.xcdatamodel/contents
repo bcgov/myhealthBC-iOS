@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Comment" representedClassName="Comment" syncable="YES">
         <attribute name="createdBy" optional="YES" attributeType="String"/>
         <attribute name="createdDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -32,7 +32,7 @@
         <attribute name="collectionDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="commonName" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="laboratoryReportID" optional="YES" attributeType="String"/>
+        <attribute name="labPdfId" optional="YES" attributeType="String"/>
         <attribute name="orderingProvider" optional="YES" attributeType="String"/>
         <attribute name="pdf" optional="YES" attributeType="String"/>
         <attribute name="reportAvailable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>

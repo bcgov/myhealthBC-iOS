@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -178,6 +178,108 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zv5-OC-DGc" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1493" y="94"/>
+        </scene>
+        <!--Terms Of Service View Controller-->
+        <scene sceneID="j6D-b8-htq">
+            <objects>
+                <viewController storyboardIdentifier="TermsOfServiceViewController" id="fp7-Hw-c8d" customClass="TermsOfServiceViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="k5v-GH-fbG">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qr1-o2-m2J">
+                                <rect key="frame" x="186.5" y="86" width="41.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YAt-ER-dv7">
+                                <rect key="frame" x="20" y="84" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="WIU-YD-3Wm"/>
+                                    <constraint firstAttribute="width" constant="24" id="rvg-uy-Cob"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <connections>
+                                    <action selector="navHackCloseButtonAction:" destination="fp7-Hw-c8d" eventType="touchUpInside" id="NkZ-hO-rEi"/>
+                                    <action selector="navHackCloseButtonAction:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="eqX-OS-hag"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zSS-o8-vgF">
+                                <rect key="frame" x="20" y="116" width="374" height="1"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="gkm-vE-6Ma"/>
+                                </constraints>
+                            </view>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vNj-sg-QYx">
+                                <rect key="frame" x="20" y="137" width="374" height="605"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LQR-g5-0Dj">
+                                <rect key="frame" x="0.0" y="742" width="414" height="120"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="3ij-cz-gRV">
+                                        <rect key="frame" x="30" y="30" width="354" height="55"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qDJ-BW-7eg" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="165" height="55"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MnS-fG-3HZ" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                                <rect key="frame" x="189" y="0.0" width="165" height="55"/>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="3ij-cz-gRV" secondAttribute="trailing" constant="30" id="Czm-nb-U1t"/>
+                                    <constraint firstAttribute="bottom" secondItem="3ij-cz-gRV" secondAttribute="bottom" constant="35" id="J9z-vq-ZGE"/>
+                                    <constraint firstItem="3ij-cz-gRV" firstAttribute="centerX" secondItem="LQR-g5-0Dj" secondAttribute="centerX" id="Odg-BG-6oN"/>
+                                    <constraint firstAttribute="height" constant="120" id="RWj-hs-l0B"/>
+                                    <constraint firstItem="3ij-cz-gRV" firstAttribute="leading" secondItem="LQR-g5-0Dj" secondAttribute="leading" constant="30" id="T3Z-S6-y51"/>
+                                    <constraint firstItem="3ij-cz-gRV" firstAttribute="top" secondItem="LQR-g5-0Dj" secondAttribute="top" constant="30" id="dfV-nh-gnp"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="g2o-Sw-tKA"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Qr1-o2-m2J" firstAttribute="centerX" secondItem="k5v-GH-fbG" secondAttribute="centerX" id="3Jb-93-iF6"/>
+                            <constraint firstItem="LQR-g5-0Dj" firstAttribute="top" secondItem="vNj-sg-QYx" secondAttribute="bottom" id="4Nn-oG-aXI"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="zSS-o8-vgF" secondAttribute="trailing" id="4Qk-0q-qc0"/>
+                            <constraint firstItem="vNj-sg-QYx" firstAttribute="leading" secondItem="g2o-Sw-tKA" secondAttribute="leading" constant="20" id="Evc-vF-lSg"/>
+                            <constraint firstItem="YAt-ER-dv7" firstAttribute="leading" secondItem="g2o-Sw-tKA" secondAttribute="leading" constant="20" id="Ffx-mz-COz"/>
+                            <constraint firstItem="Qr1-o2-m2J" firstAttribute="centerY" secondItem="YAt-ER-dv7" secondAttribute="centerY" id="KaF-eC-ztO"/>
+                            <constraint firstItem="g2o-Sw-tKA" firstAttribute="trailing" secondItem="LQR-g5-0Dj" secondAttribute="trailing" id="OUi-rJ-IUc"/>
+                            <constraint firstItem="g2o-Sw-tKA" firstAttribute="bottom" secondItem="LQR-g5-0Dj" secondAttribute="bottom" id="Tc0-kF-bgw"/>
+                            <constraint firstItem="Qr1-o2-m2J" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="YAt-ER-dv7" secondAttribute="trailing" constant="5" id="XOv-u5-tGK"/>
+                            <constraint firstItem="zSS-o8-vgF" firstAttribute="leading" secondItem="k5v-GH-fbG" secondAttribute="leadingMargin" id="XtL-Ro-A1V"/>
+                            <constraint firstItem="zSS-o8-vgF" firstAttribute="top" secondItem="YAt-ER-dv7" secondAttribute="bottom" constant="8" id="cpU-Ik-lYN"/>
+                            <constraint firstItem="LQR-g5-0Dj" firstAttribute="leading" secondItem="g2o-Sw-tKA" secondAttribute="leading" id="hc7-lj-Ug6"/>
+                            <constraint firstItem="g2o-Sw-tKA" firstAttribute="trailing" secondItem="vNj-sg-QYx" secondAttribute="trailing" constant="20" id="mPP-DY-2Wl"/>
+                            <constraint firstItem="g2o-Sw-tKA" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Qr1-o2-m2J" secondAttribute="trailing" constant="5" id="r6Q-rL-T58"/>
+                            <constraint firstItem="vNj-sg-QYx" firstAttribute="top" secondItem="zSS-o8-vgF" secondAttribute="bottom" constant="20" id="r72-Sw-Job"/>
+                            <constraint firstItem="YAt-ER-dv7" firstAttribute="top" secondItem="g2o-Sw-tKA" secondAttribute="top" constant="40" id="srS-BU-kJ7"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="agreeButton" destination="MnS-fG-3HZ" id="exN-yi-V9A"/>
+                        <outlet property="buttonContainerView" destination="LQR-g5-0Dj" id="afx-6a-YRu"/>
+                        <outlet property="cancelButton" destination="qDJ-BW-7eg" id="nxG-Nq-c9H"/>
+                        <outlet property="navHackCloseButton" destination="YAt-ER-dv7" id="W6h-DI-aMJ"/>
+                        <outlet property="navHackSeparatorView" destination="zSS-o8-vgF" id="nHy-ZF-zJm"/>
+                        <outlet property="navHackTitleLabel" destination="Qr1-o2-m2J" id="akF-NX-hzz"/>
+                        <outlet property="termsWebView" destination="vNj-sg-QYx" id="gaF-a3-Iye"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="v3j-ie-J88" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2437.68115942029" y="93.75"/>
         </scene>
     </scenes>
     <resources>
