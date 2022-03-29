@@ -53,9 +53,9 @@ class HomeScreenViewController: BaseViewController {
 
 // MARK: Navigation setup
 extension HomeScreenViewController {
-    private func navSetup() {
+    private func navSetup(firstName: String? = nil) {
         var title: String
-        if authManager.isAuthenticated, let name = authManager.firstName {
+        if authManager.isAuthenticated, let name = StorageService.shared.fetchAuthenticatedPatient()?.name?.firstName ?? firstName ?? authManager.firstName  {
             title = "Hi \(name),"
         } else {
             title = "Hello"
@@ -75,6 +75,7 @@ extension HomeScreenViewController {
 extension HomeScreenViewController {
     private func addObservablesForChangeInAuthenticationStatus() {
         NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
     
@@ -89,6 +90,13 @@ extension HomeScreenViewController {
         guard let userInfo = notification.userInfo as? [String: Bool] else { return }
         guard let authenticated = userInfo[Constants.AuthStatusKey.key] else { return }
         self.navSetup()
+        self.tableView.reloadData()
+    }
+    
+    @objc private func patientAPIFetched(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: String?] else { return }
+        guard let firstName = userInfo["firstName"] else { return }
+        self.navSetup(firstName: firstName)
         self.tableView.reloadData()
     }
 }

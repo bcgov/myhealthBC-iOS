@@ -154,6 +154,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
+            let patientFirstName = patientDetails.resourcePayload?.firstname
+            let userInfo: [String: String?] = ["firstName": patientFirstName]
+            NotificationCenter.default.post(name: .patientAPIFetched, object: nil, userInfo: userInfo as [AnyHashable : Any])
             initializeRequests(authCredentials: authCredentials, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
         case .failure(let error):
             print(error)
@@ -564,7 +567,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
        
         guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
         return object.id
@@ -601,7 +604,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
         guard let object = StorageService.shared.storePrescription(patient: patient, object: object) else { return nil }
         return object.id
     }
@@ -633,7 +636,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
         guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf) else { return nil }
         return object.id
     }
