@@ -62,7 +62,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     // Note: Choosing this instead of completion handlers as completion handlers were causing issues
-    // TODO: Turn this into an array which will track the fetch status - construct this independendently (via init, perhaps) so that it is more reusable
     var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [:]) {
         didSet {
             if fetchStatusList.isCompleted {

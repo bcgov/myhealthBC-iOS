@@ -15,6 +15,7 @@ protocol EndpointsAccessor {
     var getAuthenticatedTestResults: URL { get }
     var getAuthenticatedLaboratoryOrders: URL { get }
     var getTermsOfService: URL { get }
+    var throttleHG: URL { get }
     func getAuthenticatedPatientDetails(hdid: String) -> URL
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
     func authenticatedComments(hdid: String) -> URL
@@ -74,6 +75,10 @@ extension UrlAccessor: EndpointsAccessor {
     
     var getTermsOfService: URL {
         return self.baseUrl.appendingPathComponent("v1/api/UserProfile/termsofservice")
+    }
+    
+    var throttleHG: URL {
+        return self.baseUrl.appendingPathComponent("/v1/api/MobileConfiguration")
     }
     
     func getAuthenticatedPatientDetails(hdid: String) -> URL {

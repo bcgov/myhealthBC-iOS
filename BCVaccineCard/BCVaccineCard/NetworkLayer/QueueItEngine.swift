@@ -150,6 +150,7 @@ extension QueueItEngine {
     @objc func closeWebView() {
         if let webViewController = self.delegateOwner.presentedViewController as? QueueITWKViewController {
             webViewController.close(nil)
+            NotificationCenter.default.post(name: .queueItUIManuallyClosed, object: nil, userInfo: nil)
             self.customDelegate?.adjustLoader(hidden: true)
         }
     }

@@ -108,19 +108,34 @@ class AuthenticationViewController: UIViewController {
     private var createTabBarAndGoToHomeScreen: Bool = true
     private var initialView: InitialView = .Landing
     private var sourceVC: LoginVCSource = .AfterOnboarding
+    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        switch initialView {
-        case .Landing:
-            showLanding(sourceVC: sourceVC)
-        case .AuthInfo:
-            showInfo(sourceVC: sourceVC)
-        case .Auth:
-            performAuthentication(sourceVC: sourceVC)
-        }
-        
+        initializeNecessaryProperties()
+        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { canProceed in
+            if canProceed {
+                switch self.initialView {
+                case .Landing:
+                    self.showLanding(sourceVC: self.sourceVC)
+                case .AuthInfo:
+                    self.showInfo(sourceVC: self.sourceVC)
+                case .Auth:
+                    self.performAuthentication(sourceVC: self.sourceVC)
+                }
+            } else {
+                print("Error")
+                self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
+                    self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
+                }
+            }
+        })
+    }
+    
+    private func initializeNecessaryProperties() {
+        NotificationCenter.default.addObserver(self, selector: #selector(queueItUIManuallyClosed), name: .queueItUIManuallyClosed, object: nil)
+        throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
     }
     
     private func showLanding(sourceVC: LoginVCSource) {
@@ -246,7 +261,9 @@ extension AuthenticationViewController {
     }
 }
 
-// MARK: QueueIt UI
+// MARK: QueueIt UI Hack
 extension AuthenticationViewController {
-    
+    @objc private func queueItUIManuallyClosed(_ notification: Notification) {
+        self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
+    }
 }

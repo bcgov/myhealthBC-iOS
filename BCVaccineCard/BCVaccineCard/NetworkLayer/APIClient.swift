@@ -144,6 +144,16 @@ class APIClient {
     
 }
 
+// MARK: For throttling HG
+extension APIClient {
+    func throttleHGMobileConfig(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<MobileConfigurationResponseObject>) {
+        let url = configureURL(token: token, endpoint: self.endpoints.throttleHG)
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
+}
+
 // MARK: For validating age
 extension APIClient {
     
