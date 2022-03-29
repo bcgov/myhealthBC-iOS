@@ -106,6 +106,7 @@ class TabBarController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            // Note: Not sure we need this anymore with health records tab logic
             switch event.entity {
             case .VaccineCard, .CovidLabTestResult, .Patient, .Medication, .LaboratoryOrder:
                 if event.event == .Delete, StorageService.shared.getHeathRecords().isEmpty {

@@ -526,6 +526,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                                               authenticated: true,
                                               sortOrder: nil,
                                               patientAPI: patient,
+                                              manuallyAdded: false,
                                               completion: {
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
             })
@@ -534,7 +535,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     private func updateCard(model: AppVaccinePassportModel, patient: AuthenticatedPatientDetailsResponseObject) {
         let localModel = model.transform()
-        StorageService.shared.updateVaccineCard(newData: localModel, authenticated: true, patient: patient, completion: {[weak self] card in
+        StorageService.shared.updateVaccineCard(newData: localModel, authenticated: true, patient: patient, manuallyAdded: false, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
@@ -569,7 +570,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
        
-        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
+        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false) else { return nil }
         return object.id
     }
 }

@@ -114,23 +114,14 @@ class AuthenticationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeNecessaryProperties()
-        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { canProceed in
-            if canProceed {
-                switch self.initialView {
-                case .Landing:
-                    self.showLanding(sourceVC: self.sourceVC)
-                case .AuthInfo:
-                    self.showInfo(sourceVC: self.sourceVC)
-                case .Auth:
-                    self.performAuthentication(sourceVC: self.sourceVC)
-                }
-            } else {
-                print("Error")
-                self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
-                    self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
-                }
-            }
-        })
+        switch self.initialView {
+        case .Landing:
+            self.showLanding(sourceVC: self.sourceVC)
+        case .AuthInfo:
+            self.showInfo(sourceVC: self.sourceVC)
+        case .Auth:
+            self.performAuthentication(sourceVC: self.sourceVC)
+        }
     }
     
     private func initializeNecessaryProperties() {
@@ -171,22 +162,31 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func performAuthentication(sourceVC: LoginVCSource) {
-        self.view.startLoadingIndicator()
-        AuthManager().authenticate(in: self, completion: { [weak self] result in
-            guard let self = self else {return}
-            self.view.endLoadingIndicator()
-            switch result {
-            case .Unavailable:
-                // TODO:
-                print("Handle Unavailable")
-                self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
-            case .Success:
-                Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false)
-                self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
-            case .Fail:
-                // TODO:
-                print("Handle fail")
-                self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { canProceed in
+            if canProceed {
+                self.view.startLoadingIndicator()
+                AuthManager().authenticate(in: self, completion: { [weak self] result in
+                    guard let self = self else {return}
+                    self.view.endLoadingIndicator()
+                    switch result {
+                    case .Unavailable:
+                        // TODO:
+                        print("Handle Unavailable")
+                        self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                    case .Success:
+                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false)
+                        self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
+                    case .Fail:
+                        // TODO:
+                        print("Handle fail")
+                        self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                    }
+                })
+            } else {
+                print("Error")
+                self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
+                    self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
+                }
             }
         })
     }

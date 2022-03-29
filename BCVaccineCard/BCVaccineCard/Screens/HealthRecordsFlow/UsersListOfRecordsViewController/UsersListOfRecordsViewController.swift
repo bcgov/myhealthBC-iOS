@@ -16,11 +16,12 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     // TODO: Replace params with Patient after storage refactor
-    class func constructUsersListOfRecordsViewController(patient: Patient, authenticated: Bool, navStyle: NavStyle) -> UsersListOfRecordsViewController {
+    class func constructUsersListOfRecordsViewController(patient: Patient, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.patient = patient
             vc.authenticated = authenticated
             vc.navStyle = navStyle
+            vc.hasUpdatedUnauthPendingTest = hasUpdatedUnauthPendingTest
             return vc
         }
         return UsersListOfRecordsViewController()
@@ -31,6 +32,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var patient: Patient?
     private var authenticated: Bool = true
     private var navStyle: NavStyle = .multiUser
+    private var hasUpdatedUnauthPendingTest = true
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
     
@@ -63,7 +65,6 @@ class UsersListOfRecordsViewController: BaseViewController {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
         setup()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -194,7 +195,12 @@ extension UsersListOfRecordsViewController {
     private func fetchDataSource(initialProtectedMedFetch: Bool = false) {
         let patientRecords = fetchPatientRecords()
         show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
-        self.checkForTestResultsToUpdate(ds: self.dataSource)
+        if !authenticated && hasUpdatedUnauthPendingTest {
+            // Don't check for test result to update again here, as this was causing an infinite loop
+            // TODO: We should really refactor the way screens are being updated due to storage updates, as it will cause issues in the future with edge cases, causing us to create numerous hot-fixes such as this, resulting in messy and hard to maintain code
+        } else {
+            self.checkForTestResultsToUpdate(ds: self.dataSource)
+        }
     }
     
     private func fetchPatientRecords() -> [HealthRecordsDetailDataSource] {
@@ -257,7 +263,7 @@ extension UsersListOfRecordsViewController {
         
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
-        self.checkForTestResultsToUpdate(ds: self.dataSource)
+//        self.checkForTestResultsToUpdate(ds: self.dataSource)
     }
     
     private func handleAuthenticatedMedicalRecords(patientRecords: [HealthRecordsDetailDataSource], initialProtectedMedFetch: Bool) {
@@ -416,7 +422,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            self.deleteRecord(at: indexPath.row, reInitEditMode: true)
+            self.deleteRecord(at: indexPath.row, reInitEditMode: true, manuallyAdded: true)
         }
     }
     
@@ -429,7 +435,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         guard orientation == .right, ableToDeleteRecord(at: indexPath.row) else {return nil}
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { [weak self] action, indexPath in
             guard let `self` = self else {return}
-            self.deleteRecord(at: indexPath.row, reInitEditMode: false)
+            self.deleteRecord(at: indexPath.row, reInitEditMode: false, manuallyAdded: true)
         }
         deleteAction.hidesWhenSelected = true
         deleteAction.image = UIImage(named: "unlink")
@@ -447,10 +453,10 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         return !record.isAuthenticated
     }
     
-    private func deleteRecord(at index: Int, reInitEditMode: Bool) {
+    private func deleteRecord(at index: Int, reInitEditMode: Bool, manuallyAdded: Bool) {
         guard dataSource.indices.contains(index) else {return}
         let record = dataSource[index]
-        self.delete(record: record, completion: { [weak self] deleted in
+        self.delete(record: record, manuallyAdded: manuallyAdded, completion: { [weak self] deleted in
             guard let `self` = self else {return}
             if deleted {
                 self.dataSource.remove(at: index)
@@ -469,11 +475,11 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         })
     }
     
-    private func delete(record: HealthRecordsDetailDataSource, completion: @escaping(_ deleted: Bool)-> Void) {
+    private func delete(record: HealthRecordsDetailDataSource, manuallyAdded: Bool, completion: @escaping(_ deleted: Bool)-> Void) {
         switch record.type {
         case .covidImmunizationRecord(model: let model, immunizations: _):
             alertConfirmation(title: .deleteRecord, message: .deleteCovidHealthRecord, confirmTitle: .delete, confirmStyle: .destructive) {
-                StorageService.shared.deleteVaccineCard(vaccineQR: model.code)
+                StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
                 completion(true)
             } onCancel: {
                 completion(false)
@@ -499,7 +505,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
 extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerDelegate {
     func handleTestResult(result: GatewayTestResultResponse, row: Int) {
         print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
-        StorageService.shared.updateCovidTestResult(gateWayResponse: result) { [weak self] covidLabTestResult in
+        StorageService.shared.updateCovidTestResult(gateWayResponse: result, manuallyAdded: false) { [weak self] covidLabTestResult in
             guard let `self` = self else {return}
             
             guard let covidLabTestResult = covidLabTestResult else { return }

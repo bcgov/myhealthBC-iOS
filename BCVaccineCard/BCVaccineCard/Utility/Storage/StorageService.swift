@@ -35,6 +35,7 @@ extension StorageService {
             case Delete
             case Save
             case Update
+            case ManuallyAddedRecord
         }
         
         let event: Event
