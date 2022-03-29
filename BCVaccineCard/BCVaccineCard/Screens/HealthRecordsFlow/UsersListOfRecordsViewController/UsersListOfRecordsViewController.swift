@@ -148,7 +148,8 @@ extension UsersListOfRecordsViewController {
     
     @objc func showAddRecord() {
         let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, completion: {[weak self] in
-            self?.navigationController?.popToRootViewController(animated: true)
+            // Note: Not sure what the purpose of this is?? - was only causing an issue with routing
+//            self?.navigationController?.popToRootViewController(animated: true)
         })
         self.navigationController?.pushViewController(vc, animated: true)
     }
