@@ -62,7 +62,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     // Note: Choosing this instead of completion handlers as completion handlers were causing issues
-    // TODO: Turn this into an array which will track the fetch status - construct this independendently (via init, perhaps) so that it is more reusable
     var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [:]) {
         didSet {
             if fetchStatusList.isCompleted {
@@ -76,6 +75,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     // NOTE: This function handles the check if user is 12 and over, and if user has accepted terms and conditions
+    // TODO: should do throttle function separately - build it directly on the authentication view controller
     public func checkIfUserCanLoginAndFetchRecords(authCredentials: AuthenticationRequestObject, sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
@@ -154,6 +154,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
+            let patientFirstName = patientDetails.resourcePayload?.firstname
+            let userInfo: [String: String?] = ["firstName": patientFirstName]
+            NotificationCenter.default.post(name: .patientAPIFetched, object: nil, userInfo: userInfo as [AnyHashable : Any])
             initializeRequests(authCredentials: authCredentials, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
         case .failure(let error):
             print(error)
@@ -162,6 +165,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?) {
+        if self.isManualAuthFetch {
+            var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false)
+            loginProcessStatus.hasCompletedLoginProcess = true
+            Defaults.loginProcessStatus = loginProcessStatus
+        }
         guard let types = specificFetchTypes else {
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
@@ -518,6 +526,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                                               authenticated: true,
                                               sortOrder: nil,
                                               patientAPI: patient,
+                                              manuallyAdded: false,
                                               completion: {
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
             })
@@ -526,7 +535,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     private func updateCard(model: AppVaccinePassportModel, patient: AuthenticatedPatientDetailsResponseObject) {
         let localModel = model.transform()
-        StorageService.shared.updateVaccineCard(newData: localModel, authenticated: true, patient: patient, completion: {[weak self] card in
+        StorageService.shared.updateVaccineCard(newData: localModel, authenticated: true, patient: patient, manuallyAdded: false, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
@@ -559,9 +568,9 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
        
-        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
+        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false) else { return nil }
         return object.id
     }
 }
@@ -596,7 +605,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
         guard let object = StorageService.shared.storePrescription(patient: patient, object: object) else { return nil }
         return object.id
     }
@@ -628,7 +637,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate) else { return nil }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
         guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf) else { return nil }
         return object.id
     }

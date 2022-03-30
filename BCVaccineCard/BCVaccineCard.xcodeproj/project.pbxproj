@@ -481,6 +481,12 @@
 		798CA1C527ECDF030096188C /* TermsOfServiceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C327ECDF030096188C /* TermsOfServiceViewController.swift */; };
 		798CA1C727ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C627ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift */; };
 		798CA1C827ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C627ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift */; };
+		798CA1CA27EE4B0A0096188C /* LoginProcessStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C927EE4B0A0096188C /* LoginProcessStatus.swift */; };
+		798CA1CB27EE4B0A0096188C /* LoginProcessStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1C927EE4B0A0096188C /* LoginProcessStatus.swift */; };
+		798CA1CD27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1CC27EED9ED0096188C /* LoginThrottleAPIWorker.swift */; };
+		798CA1CE27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1CC27EED9ED0096188C /* LoginThrottleAPIWorker.swift */; };
+		798CA1D027F2810C0096188C /* MobileConfigurationResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */; };
+		798CA1D127F2810C0096188C /* MobileConfigurationResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */; };
 		799050AF27365111006CD726 /* AppPDFView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B446AD27357F1700E0F967 /* AppPDFView.xib */; };
 		799050B3273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
 		799050B4273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
@@ -810,6 +816,9 @@
 		798CA1C027ECDCFC0096188C /* TermsOfServiceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceResponse.swift; sourceTree = "<group>"; };
 		798CA1C327ECDF030096188C /* TermsOfServiceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceViewController.swift; sourceTree = "<group>"; };
 		798CA1C627ECFEF90096188C /* AuthenticatedUserProfileResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedUserProfileResponseObject.swift; sourceTree = "<group>"; };
+		798CA1C927EE4B0A0096188C /* LoginProcessStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProcessStatus.swift; sourceTree = "<group>"; };
+		798CA1CC27EED9ED0096188C /* LoginThrottleAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginThrottleAPIWorker.swift; sourceTree = "<group>"; };
+		798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigurationResponseObject.swift; sourceTree = "<group>"; };
 		799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsViewController.swift; sourceTree = "<group>"; };
 		799050BC273C832F006CD726 /* GetRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecordsView.swift; sourceTree = "<group>"; };
 		799050BF273C8344006CD726 /* GetRecordsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GetRecordsView.xib; sourceTree = "<group>"; };
@@ -1447,6 +1456,7 @@
 				797BB9632767DCE100CD1645 /* HealthGatewayAPIWorker.swift */,
 				79053CF82773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift */,
 				796653D927981335004D103E /* AuthenticatedHealthRecordsAPIWorker.swift */,
+				798CA1CC27EED9ED0096188C /* LoginThrottleAPIWorker.swift */,
 			);
 			path = APIWorkers;
 			sourceTree = "<group>";
@@ -1833,6 +1843,7 @@
 			children = (
 				796653DF27A148AD004D103E /* AuthenticatedResponseModels */,
 				795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */,
+				798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */,
 				795AA769271560F100E59FF1 /* NewsFeedResponse.swift */,
 				79218AA327518CC20063004E /* GatewayTestResultResponse.swift */,
 				798CA1C027ECDCFC0096188C /* TermsOfServiceResponse.swift */,
@@ -1856,6 +1867,7 @@
 				79218AF427569CEA0063004E /* VaccineTable.swift */,
 				79218AF72756A0B20063004E /* HealthRecordsDetailDateSource.swift */,
 				796653DC279876C9004D103E /* AuthenticationRequestObjects.swift */,
+				798CA1C927EE4B0A0096188C /* LoginProcessStatus.swift */,
 			);
 			path = LocalModels;
 			sourceTree = "<group>";
@@ -2596,6 +2608,7 @@
 				293B32AF27D25C4E0064BAAA /* CommentView.swift in Sources */,
 				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
+				798CA1CD27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */,
 				79218AA92751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				797BB9642767DCE100CD1645 /* HealthGatewayAPIWorker.swift in Sources */,
 				297885252795F38500FF912D /* SettingsAuthenticateTableViewCell.swift in Sources */,
@@ -2661,6 +2674,7 @@
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				2942AC56273AC30900A4A466 /* ToggleSettingsTableViewCell.swift in Sources */,
 				79B9D01A27E31D7100987D9F /* NotificationManager.swift in Sources */,
+				798CA1D027F2810C0096188C /* MobileConfigurationResponseObject.swift in Sources */,
 				29921C8B27739609005025D2 /* AuthenticationView.swift in Sources */,
 				792834642731016600EE2710 /* CheckboxTableViewCell.swift in Sources */,
 				7944F6C126F12BF2006B9444 /* Defaults.swift in Sources */,
@@ -2725,6 +2739,7 @@
 				79218AA427518CC20063004E /* GatewayTestResultResponse.swift in Sources */,
 				795AA76127155F0900E59FF1 /* ResourceViewController.swift in Sources */,
 				29B446AB273575AA00E0F967 /* AppPDFView.swift in Sources */,
+				798CA1CA27EE4B0A0096188C /* LoginProcessStatus.swift in Sources */,
 				29AC25332790320F001C22B4 /* QRMaker.swift in Sources */,
 				294BD3D727B54AFE00BD8D46 /* StorageService+Medication.swift in Sources */,
 				291D43BB275FE0EC005F5B94 /* SettingsTextTableViewCell.swift in Sources */,
@@ -2877,6 +2892,7 @@
 				796653E527A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */,
 				29736A532788EBD700CCB1D2 /* CovidLabTestResult+CoreDataClass.swift in Sources */,
 				293B32AC27D25AEF0064BAAA /* Storage+Comments.swift in Sources */,
+				798CA1CE27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */,
 				794FF0D227DAB08B00C98831 /* URL+EXT.swift in Sources */,
 				293B32A727D25A3A0064BAAA /* Comment+CoreDataClass.swift in Sources */,
 				297967A527C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */,
@@ -2910,6 +2926,7 @@
 				797BB95E2764084300CD1645 /* StorageService+Patient.swift in Sources */,
 				29788535279624F000FF912D /* ProfileAndSettingsViewController.swift in Sources */,
 				791C27CA27192D7C001A6E12 /* String+Localizable.swift in Sources */,
+				798CA1D127F2810C0096188C /* MobileConfigurationResponseObject.swift in Sources */,
 				794BD6472702EEC00084ADA8 /* QRRetrievalMethodViewController.swift in Sources */,
 				29547E5827A2EC5200562958 /* LocalAuthVIew.swift in Sources */,
 				794BD6482702EEC00084ADA8 /* TabBarController.swift in Sources */,
@@ -2968,6 +2985,7 @@
 				799E0AFD27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */,
 				796653E227A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift in Sources */,
 				794BD6512702EEC00084ADA8 /* String+EXT.swift in Sources */,
+				798CA1CB27EE4B0A0096188C /* LoginProcessStatus.swift in Sources */,
 				29788532279624EA00FF912D /* SettingsRowTableViewCell.swift in Sources */,
 				791C27C02718315A001A6E12 /* AddCardsTableViewCell.swift in Sources */,
 				79D93B1E27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */,

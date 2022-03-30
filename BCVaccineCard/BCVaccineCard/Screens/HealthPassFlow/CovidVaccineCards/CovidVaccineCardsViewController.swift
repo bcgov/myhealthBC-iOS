@@ -258,7 +258,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true, manuallyAdded: true)
         }
     }
     
@@ -286,7 +286,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
         guard orientation == .right else {return nil}
         let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
             guard let `self` = self else {return}
-            self.deleteCardAt(indexPath: indexPath, reInitEditMode: false)
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: false, manuallyAdded: true)
         }
         deleteAction.hidesWhenSelected = true
         deleteAction.image = UIImage(named: "unlink")
@@ -327,7 +327,7 @@ extension CovidVaccineCardsViewController: UIDocumentInteractionControllerDelega
 
 // MARK: Adjusting data source functions
 extension CovidVaccineCardsViewController {
-    private func deleteCardAt(indexPath: IndexPath, reInitEditMode: Bool) {
+    private func deleteCardAt(indexPath: IndexPath, reInitEditMode: Bool, manuallyAdded: Bool) {
         alert(title: .unlinkCardTitle, message: .unlinkCardMessage,
               buttonOneTitle: .cancel, buttonOneCompletion: {
             if reInitEditMode {
@@ -338,7 +338,7 @@ extension CovidVaccineCardsViewController {
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
             let item = self.dataSource[indexPath.row]
-            StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "")
+            StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "", manuallyAdded: manuallyAdded)
         }
     }
 }

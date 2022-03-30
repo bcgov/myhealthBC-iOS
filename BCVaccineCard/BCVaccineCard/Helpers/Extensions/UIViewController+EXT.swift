@@ -333,19 +333,20 @@ extension UIViewController {
                           authenticated: Bool,
                           sortOrder: Int64? = nil,
                           patientAPI: AuthenticatedPatientDetailsResponseObject? = nil,
+                          manuallyAdded: Bool,
                           completion: @escaping()->Void
     ) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         let name = patientAPI?.getFullName ?? model.name
-        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: name, birthday: birthdate) else {
+        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: name, birthday: birthdate, authenticated: authenticated) else {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card", type: .storage)
             return completion()
         }
-        StorageService.shared.storeVaccineCard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, completion: {_ in completion()})
+        StorageService.shared.storeVaccineCard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, manuallyAdded: manuallyAdded, completion: {_ in completion()})
     }
     
-    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, patientAPI: AuthenticatedPatientDetailsResponseObject? = nil, completion: @escaping(Bool)->Void) {
-        StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, patient: patientAPI, completion: {[weak self] card in
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, patientAPI: AuthenticatedPatientDetailsResponseObject? = nil, manuallyAdded: Bool, completion: @escaping(Bool)->Void) {
+        StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, patient: patientAPI, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
                 self.showBanner(message: .updatedCard, style: .Top)
@@ -356,9 +357,9 @@ extension UIViewController {
         })
     }
     
-    func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, completion: @escaping(Bool)->Void) {
+    func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, manuallyAdded: Bool, completion: @escaping(Bool)->Void) {
         guard let card = StorageService.shared.fetchVaccineCard(code: model.code), let fedCode = model.fedCode else {return}
-        StorageService.shared.updateVaccineCard(card: card, federalPass: fedCode, completion: {[weak self] card in
+        StorageService.shared.updateVaccineCard(card: card, federalPass: fedCode, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
                 self.showBanner(message: .updatedCard, style: .Top)

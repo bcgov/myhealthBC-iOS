@@ -28,8 +28,11 @@ extension Notification.Name {
     static let protectedWordRequired = Notification.Name("protectedWordRequired")
     static let protectedWordProvided = Notification.Name("protectedWordProvided")
     static let authStatusChanged = Notification.Name("authStatusChanged")
+    static let patientAPIFetched = Notification.Name("patientAPIFetched")
     static let reloadVCDueToUnderage = Notification.Name("reloadVCDueToUnderage")
     
     static let showTermsOfService = Notification.Name("showTermsOfService")
     static let respondToTermsOfService = Notification.Name("respondToTermsOfService")
+    
+    static let queueItUIManuallyClosed = Notification.Name("queueItUIManuallyClosed")
 }

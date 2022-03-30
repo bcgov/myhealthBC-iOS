@@ -86,7 +86,7 @@ class AuthenticationViewController: UIViewController {
         case Cancelled
         case Failed
     }
-    
+    // TODO: When show landing screen is shown, we should hit MobileConfiguration endpoint to see if we can login or not - then implement QueueIt UI on this view controller
     class func constructAuthenticationViewController(createTabBarAndGoToHomeScreen: Bool, isModal: Bool, initialView: InitialView, sourceVC: LoginVCSource, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion
@@ -108,19 +108,25 @@ class AuthenticationViewController: UIViewController {
     private var createTabBarAndGoToHomeScreen: Bool = true
     private var initialView: InitialView = .Landing
     private var sourceVC: LoginVCSource = .AfterOnboarding
+    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        switch initialView {
+        initializeNecessaryProperties()
+        switch self.initialView {
         case .Landing:
-            showLanding(sourceVC: sourceVC)
+            self.showLanding(sourceVC: self.sourceVC)
         case .AuthInfo:
-            showInfo(sourceVC: sourceVC)
+            self.showInfo(sourceVC: self.sourceVC)
         case .Auth:
-            performAuthentication(sourceVC: sourceVC)
+            self.performAuthentication(sourceVC: self.sourceVC)
         }
-        
+    }
+    
+    private func initializeNecessaryProperties() {
+        NotificationCenter.default.addObserver(self, selector: #selector(queueItUIManuallyClosed), name: .queueItUIManuallyClosed, object: nil)
+        throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
     }
     
     private func showLanding(sourceVC: LoginVCSource) {
@@ -156,21 +162,31 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func performAuthentication(sourceVC: LoginVCSource) {
-        self.view.startLoadingIndicator()
-        AuthManager().authenticate(in: self, completion: { [weak self] result in
-            guard let self = self else {return}
-            self.view.endLoadingIndicator()
-            switch result {
-            case .Unavailable:
-                // TODO:
-                print("Handle Unavailable")
-                self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
-            case .Success:
-                self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
-            case .Fail:
-                // TODO:
-                print("Handle fail")
-                self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { canProceed in
+            if canProceed {
+                self.view.startLoadingIndicator()
+                AuthManager().authenticate(in: self, completion: { [weak self] result in
+                    guard let self = self else {return}
+                    self.view.endLoadingIndicator()
+                    switch result {
+                    case .Unavailable:
+                        // TODO:
+                        print("Handle Unavailable")
+                        self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                    case .Success:
+                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false)
+                        self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
+                    case .Fail:
+                        // TODO:
+                        print("Handle fail")
+                        self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                    }
+                })
+            } else {
+                print("Error")
+                self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
+                    self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
+                }
             }
         })
     }
@@ -242,5 +258,12 @@ extension AuthenticationViewController {
         guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
         authWorker?.checkIfUserCanLoginAndFetchRecords(authCredentials: authCreds, sourceVC: sourceVC, completion: completion)
+    }
+}
+
+// MARK: QueueIt UI Hack
+extension AuthenticationViewController {
+    @objc private func queueItUIManuallyClosed(_ notification: Notification) {
+        self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
     }
 }

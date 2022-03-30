@@ -69,7 +69,7 @@ class HealthRecordsViewController: BaseViewController {
         if self.dataSource.isEmpty {
             self.showFetchVC()
         } else if dataSource.count == 1, let singleUser = dataSource.first {
-            showRecords(for: singleUser.patient, animated: false, navStyle: .singleUser, authenticated: singleUser.authenticated)
+            showRecords(for: singleUser.patient, animated: false, navStyle: .singleUser, authenticated: singleUser.authenticated, hasUpdatedUnauthPendingTest: false)
         } else {
             self.addRecordHeaderSetup()
             self.setupCollectionView()
@@ -85,11 +85,12 @@ class HealthRecordsViewController: BaseViewController {
     private func refreshOnStorageChange() {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            guard event.event != .ManuallyAddedRecord else { return }
             switch event.entity {
             case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
                 self.loadDataAndSetInitialVC()
                 if let lastPatientSelected = self.lastPatientSelected, !self.dataSource.isEmpty, let lastPatientRecordInDataSouce = self.dataSource.first(where: {$0.patient == lastPatientSelected}) {
-                    self.showRecords(for: lastPatientRecordInDataSouce.patient, animated: false, navStyle: self.dataSource.count == 1 ? .singleUser :.multiUser, authenticated: lastPatientRecordInDataSouce.authenticated)
+                    self.showRecords(for: lastPatientRecordInDataSouce.patient, animated: false, navStyle: self.dataSource.count == 1 ? .singleUser :.multiUser, authenticated: lastPatientRecordInDataSouce.authenticated, hasUpdatedUnauthPendingTest: true)
                 }
             default:
                 break
@@ -130,8 +131,8 @@ class HealthRecordsViewController: BaseViewController {
         self.navigationController?.pushViewController(vc, animated: false)
     }
     
-    func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle, authenticated: Bool) {
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: navStyle)
+    func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle, authenticated: Bool, hasUpdatedUnauthPendingTest: Bool) {
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: navStyle, hasUpdatedUnauthPendingTest: hasUpdatedUnauthPendingTest)
         lastPatientSelected = patient
         self.navigationController?.pushViewController(vc, animated: animated)
     }
@@ -143,7 +144,7 @@ class HealthRecordsViewController: BaseViewController {
         if authManager.isAuthenticated {
             closeRecordWhenAuthExpires(patient: patient)
         }
-        showRecords(for: patient, animated: true, navStyle: .multiUser, authenticated: data.authenticated)
+        showRecords(for: patient, animated: true, navStyle: .multiUser, authenticated: data.authenticated, hasUpdatedUnauthPendingTest: false)
     }
     
     func closeRecordWhenAuthExpires(patient: Patient) {

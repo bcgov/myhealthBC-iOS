@@ -128,8 +128,8 @@ extension TermsOfServiceViewController {
         guard let authCredentials = self.authCredentials else { return }
         guard accepted == true else {
             AuthManager().clearData()
-            let error = "Please note that you cannot authenticate with BCSC and fetch their records until they accept the terms of service"
-            NotificationManager.respondToTermsOfService(accepted: nil, error: error, errorTitle: "Notice")
+            let error = "You must agree to the Health Gateway terms of service before using this app"
+            NotificationManager.respondToTermsOfService(accepted: nil, error: error, errorTitle: "Terms of service")
             self.dismiss(animated: true)
             return
         }

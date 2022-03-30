@@ -234,7 +234,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
         guard orientation == .right, savedCardsCount == 1, self.dataSource?.authenticated == false else {return nil}
         let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
             guard let `self` = self else {return}
-            self.deleteCard()
+            self.deleteCard(manuallyAdded: true)
         }
         deleteAction.hidesWhenSelected = true
         deleteAction.image = UIImage(named: "unlink")
@@ -246,7 +246,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
         return [deleteAction]
     }
     
-    private func deleteCard() {
+    private func deleteCard(manuallyAdded: Bool) {
         alert(title: .unlinkCardTitle, message: .unlinkCardMessage, buttonOneTitle: .cancel, buttonOneCompletion: {
             // This logic is so that a swipe to delete that is cancelled, gets reloaded and isn't showing a swiped state after cancelled
             self.tableView.isEditing = false
@@ -254,7 +254,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
             if let card = self.dataSource {
-                StorageService.shared.deleteVaccineCard(vaccineQR: card.code ?? "")
+                StorageService.shared.deleteVaccineCard(vaccineQR: card.code ?? "", manuallyAdded: manuallyAdded)
             }
             self.dataSource = nil
             AnalyticsService.shared.track(action: .RemoveCard)

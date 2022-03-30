@@ -52,6 +52,13 @@ extension String {
     
 }
 
+// MARK: To strip out first name of a string
+extension String {
+    var firstName: String? {
+        return self.components(separatedBy: " ").first
+    }
+}
+
 extension String {
     /// This method returns height of a string with specific `width` and `font`
     /// - Parameter width: Width of the view where string has to be displayed
