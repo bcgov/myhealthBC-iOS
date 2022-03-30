@@ -106,6 +106,7 @@ class TabBarController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            // Note: Not sure we need this anymore with health records tab logic
             switch event.entity {
             case .VaccineCard, .CovidLabTestResult, .Patient, .Medication, .LaboratoryOrder:
                 if event.event == .Delete, StorageService.shared.getHeathRecords().isEmpty {
@@ -140,7 +141,11 @@ class TabBarController: UITabBarController {
             if let vcs = vcs {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     for vc in vcs {
-                        navController.pushViewController(vc, animated: false)
+                        if vc.isKind(of: UsersListOfRecordsViewController.self) && navController.viewControllers.contains(where: { $0.isKind(of: UsersListOfRecordsViewController.self) }) {
+                            // Don't add duplicate here
+                        } else {
+                            navController.pushViewController(vc, animated: false)
+                        }
                     }
                     AppDelegate.sharedInstance?.removeLoadingViewHack()
                 }

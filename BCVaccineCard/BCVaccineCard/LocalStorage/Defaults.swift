@@ -14,7 +14,6 @@ struct Defaults {
         case rememberGatewayDetails
         case hasAppLaunchedBefore
         case loginProcessStatus
-//        case userHasFinishedFetchingRecordsOnLogin - actually, not going to need this, as we're launching
     }
     
     static var cachedQueueItObject: QueueItCachedObject? {

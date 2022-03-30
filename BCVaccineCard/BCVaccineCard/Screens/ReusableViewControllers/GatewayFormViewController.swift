@@ -642,7 +642,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     }
     
     func updateCardInLocalStorage(model: AppVaccinePassportModel) {
-        self.updateCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
+        self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] _ in
             guard let `self` = self else {return}
             let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
             let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
@@ -655,6 +655,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             self.storeVaccineCard(model: model.transform(),
                                   authenticated: false,
                                   sortOrder: sortOrder,
+                                  manuallyAdded: true,
                                   completion: {
                 let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
                 let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
@@ -668,7 +669,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             guard let fedCode = model.codableModel.fedCode else {
                 return
             }
-            self.updateFedCodeForCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
+            self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] _ in
                 guard let `self` = self else {return}
                 let fedCode = self.fetchType.isFedPassOnly ? fedCode : nil
                 let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
@@ -682,7 +683,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         let deletedCardSortOrder: Int64?
         if fetchType.isFedPassOnly, let codeToReplace = code {
             deletedCardSortOrder = StorageService.shared.fetchVaccineCard(code: codeToReplace)?.sortOrder
-            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace, reSort: false)
+            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace, reSort: false, manuallyAdded: false)
         } else {
             deletedCardSortOrder = nil
         }
@@ -731,8 +732,8 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         } else {
             bday = nil
         }
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday) else {return nil}
-        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday, authenticated: authenticated) else {return nil}
+        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: true) else { return nil }
         return object.id
     }
     

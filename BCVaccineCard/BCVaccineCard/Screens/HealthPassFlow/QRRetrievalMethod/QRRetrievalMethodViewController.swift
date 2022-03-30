@@ -262,7 +262,7 @@ extension QRRetrievalMethodViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .isNew:
-                self.storeVaccineCard(model: model.transform(), authenticated: false, completion: {
+                self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true, completion: {
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
                         self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
@@ -272,7 +272,7 @@ extension QRRetrievalMethodViewController {
             case .canUpdateExisting:
                 self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}
-                    self.updateCardInLocalStorage(model: model.transform(), completion: {[weak self] success in
+                    self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: {[weak self] success in
                         guard let `self` = self else {return}
                         if success {
                             DispatchQueue.main.async {
@@ -288,7 +288,7 @@ extension QRRetrievalMethodViewController {
                     }
                 }
             case .UpdatedFederalPass:
-                self.updateFedCodeForCardInLocalStorage(model: model.transform()) {[weak self] _ in
+                self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true) {[weak self] _ in
                     guard let self = self else {return}
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}

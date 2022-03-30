@@ -282,8 +282,8 @@ class StorageServiceTests: XCTestCase {
         let authenticated = true
         let gatewayTestResult = self.sampleTestResult(patietName: patietName, reportId: reportId)
         // when
-        let patient = self.storageService.storePatient(name: patietName, birthday: bday, phn: phn)!
-        _ = storageService.storeCovidTestResults(patient: patient, gateWayResponse: gatewayTestResult, authenticated: authenticated)
+        let patient = self.storageService.storePatient(name: patietName, birthday: bday, phn: phn, authenticated: true)!
+        _ = storageService.storeCovidTestResults(patient: patient, gateWayResponse: gatewayTestResult, authenticated: authenticated, manuallyAdded: true)
         let testResults = storageService.fetchCovidTestResults()
         let patients = storageService.fetchPatients()
         let testResult = testResults.first

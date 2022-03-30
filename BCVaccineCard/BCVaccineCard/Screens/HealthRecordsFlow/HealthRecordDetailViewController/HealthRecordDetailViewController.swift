@@ -122,13 +122,13 @@ extension HealthRecordDetailViewController {
                                                backButtonHintString: nil)
     }
     
-    @objc private func deleteButton() {
+    @objc private func deleteButton(manuallyAdded: Bool) {
         alertConfirmation(title: dataSource.deleteAlertTitle, message: dataSource.deleteAlertMessage, confirmTitle: .delete, confirmStyle: .destructive) {
             [weak self] in
             guard let `self` = self else {return}
             switch self.dataSource.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
-                StorageService.shared.deleteVaccineCard(vaccineQR: model.code)
+                StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
