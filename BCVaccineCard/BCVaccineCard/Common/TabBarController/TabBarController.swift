@@ -141,7 +141,11 @@ class TabBarController: UITabBarController {
             if let vcs = vcs {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     for vc in vcs {
-                        navController.pushViewController(vc, animated: false)
+                        if vc.isKind(of: UsersListOfRecordsViewController.self) && navController.viewControllers.contains(where: { $0.isKind(of: UsersListOfRecordsViewController.self) }) {
+                            // Don't add duplicate here
+                        } else {
+                            navController.pushViewController(vc, animated: false)
+                        }
                     }
                     AppDelegate.sharedInstance?.removeLoadingViewHack()
                 }
