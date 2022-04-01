@@ -27,6 +27,9 @@ class UsersListOfRecordsViewController: BaseViewController {
         return UsersListOfRecordsViewController()
     }
     
+    @IBOutlet weak private var clearFiltersButton: UIButton!
+    @IBOutlet weak private var filterStack: UIStackView!
+    @IBOutlet weak private var filterContainer: UIView!
     @IBOutlet weak private var tableView: UITableView!
     
     private var patient: Patient?
@@ -45,7 +48,15 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
     private var selectedCellIndexPath: IndexPath?
     
-    private var currentFilter: RecordsFilter? = nil
+    private var currentFilter: RecordsFilter? = nil {
+        didSet {
+            if let current = currentFilter, current.exists {
+                showSelectedFilters()
+            } else {
+                hideSelectedFilters()
+            }
+        }
+    }
     
     private var inEditMode = false {
         didSet {
@@ -89,8 +100,15 @@ class UsersListOfRecordsViewController: BaseViewController {
         navSetup(style: navStyle, authenticated: self.authenticated)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
+//        showSelectedFilters()
     }
 
+    @IBAction func removeFilters(_ sender: Any) {
+        currentFilter = nil
+        hideSelectedFilters()
+        let patientRecords = fetchPatientRecords()
+        show(records: patientRecords)
+    }
 }
 
 // MARK: For reloading data on logout hack
@@ -187,6 +205,51 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
         let patientRecords = fetchPatientRecords()
         currentFilter = filter
         show(records: patientRecords, filter:filter)
+    }
+    
+    func showSelectedFilters() {
+        clearFiltersButton.setImage(UIImage(named: "close-circle"), for: .normal)
+        guard let current = currentFilter, current.exists else {
+            hideSelectedFilters()
+            return
+        }
+        
+        let chipsView: ChipsView = UIView.fromNib()
+        filterContainer.subviews.forEach { sub in
+            sub.removeFromSuperview()
+        }
+        filterStack.isHidden = false
+        filterContainer.addSubview(chipsView)
+        chipsView.addEqualSizeContraints(to: filterContainer)
+        var selectedFilters: [String] = []
+        
+        
+        var fromDateText = ""
+        if let startDate = current.fromDate {
+            fromDateText = startDate.issuedOnDate
+        }
+        
+        var toDateText = ""
+        if let endDate = current.toDate {
+            toDateText = endDate.issuedOnDate
+        }
+        
+        var dateFilter = ""
+        if current.fromDate != nil || current.toDate != nil {
+            dateFilter = "\(fromDateText) - \(toDateText)"
+            selectedFilters.append(dateFilter)
+        }
+
+        selectedFilters += current.recordTypes.map({$0.rawValue})
+        
+        chipsView.setup(options: selectedFilters, selected: [], direction: .horizontal)
+    }
+    
+    func hideSelectedFilters() {
+        filterContainer.subviews.forEach { sub in
+            sub.removeFromSuperview()
+        }
+        filterStack.isHidden = true
     }
 }
 

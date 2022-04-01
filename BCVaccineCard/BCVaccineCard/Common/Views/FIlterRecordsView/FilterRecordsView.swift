@@ -18,6 +18,10 @@ struct RecordsFilter {
     var fromDate: Date?
     var toDate: Date?
     var recordTypes: [RecordType] = []
+    
+    var exists: Bool {
+        return fromDate != nil || toDate != nil || !recordTypes.isEmpty
+    }
 }
 
 protocol FilterRecordsViewDelegate {
@@ -287,7 +291,7 @@ extension FilterRecordsView: ChipsViewDelegate {
         selectedFilters = currentFilter.recordTypes.map({$0.rawValue})
        
         chipsView.delegate = self
-        chipsView.setup(options: RecordsFilter.RecordType.allCases.map({$0.rawValue}), selected: selectedFilters)
+        chipsView.setup(options: RecordsFilter.RecordType.allCases.map({$0.rawValue}), selected: selectedFilters, direction: .vertical)
     }
     
     func selected(value: String) {
