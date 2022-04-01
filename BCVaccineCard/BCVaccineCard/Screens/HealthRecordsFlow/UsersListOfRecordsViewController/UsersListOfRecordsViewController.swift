@@ -100,7 +100,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         navSetup(style: navStyle, authenticated: self.authenticated)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
-//        showSelectedFilters()
+        showSelectedFilters()
     }
 
     @IBAction func removeFilters(_ sender: Any) {
