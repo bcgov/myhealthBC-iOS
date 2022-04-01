@@ -241,15 +241,15 @@ extension UIViewController {
     }
     
     // MARK: Local Auth
-    func showLocalAuth() {
+    func showLocalAuth(onSuccess: @escaping()->Void) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {return}
             if let parent = self.parent as? CustomNavigationController {
-                parent.showLocalAuth()
+                parent.showLocalAuth(onSuccess: onSuccess)
                 return
             }
             if let parent = self.parent as? TabBarController {
-                parent.showLocalAuth()
+                parent.showLocalAuth(onSuccess: onSuccess)
                 return
             }
             if !LocalAuthManager.shouldAuthenticate {return}
@@ -257,6 +257,7 @@ extension UIViewController {
             LocalAuthManager.shared.performLocalAuth(on: self) { [weak self] status in
                 switch status {
                 case .Authorized:
+                    onSuccess()
                     self?.localAuthSucceded()
                 case .Unauthorized, .Unavailable:
                     self?.localAuthFailed()
