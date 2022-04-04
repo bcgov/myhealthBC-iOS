@@ -19,20 +19,21 @@ class ChipsView: UIView {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    func setup(options: [String], selected: [String]) {
+    func setup(options: [String], selected: [String], direction:  UICollectionView.ScrollDirection ) {
         self.dataSource = options
         self.selectedItems = selected
         collectionView.backgroundColor = .clear
-        setupCollectionView()
+        setupCollectionView(direction: direction)
     }
     
 }
 
 extension ChipsView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
-    private func setupCollectionView() {
+    private func setupCollectionView(direction:  UICollectionView.ScrollDirection ) {
         collectionView.register(UINib.init(nibName: ChipCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: ChipCollectionViewCell.getName)
         let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = direction
         layout.minimumInteritemSpacing = 3
         layout.minimumLineSpacing = 5
         collectionView.collectionViewLayout = layout

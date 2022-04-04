@@ -54,7 +54,9 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate, OnboardSkipDe
             // TODO: version
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
             
-            goToAuthentication()
+            showLocalAuth {[weak self] in
+                self?.goToAuthentication()
+            }
         }
     }
     

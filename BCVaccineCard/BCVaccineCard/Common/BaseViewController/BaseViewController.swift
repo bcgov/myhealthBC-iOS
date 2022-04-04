@@ -33,7 +33,7 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
     
     func performLocalAuthIfNeeded() {
         if LocalAuthManager.shouldAuthenticate {
-            showLocalAuth()
+            showLocalAuth(onSuccess: {})
         }
     }
     
