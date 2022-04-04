@@ -271,7 +271,7 @@ extension String {
         return String(format: "AllowSecurityAccessMessage".localized, "", "", "")
     }
     static var reasonForRequestingAuthentication: String { return "ReasonForRequestingAuthentication".localized }
-    static var protectedWordVCNavTitle: String { return "ProtectedWordVCNavTitle".localized }
+    static var unlockRecords: String { return "UnlockRecords".localized }
     static var termsOfService: String { return "TermsOfService".localized }
 }
 

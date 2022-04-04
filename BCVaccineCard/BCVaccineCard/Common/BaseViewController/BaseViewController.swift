@@ -8,6 +8,7 @@
 import UIKit
 
 protocol NavigationSetupProtocol: AnyObject {
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?, largeTitlesFontSize: CGFloat)
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
     func adjustNavStyleForPDF(targetVC vc: UIViewController)
@@ -45,6 +46,17 @@ extension BaseViewController {
         self.navDelegate = self
     }
     
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?, largeTitlesFontSize: CGFloat) {
+        var rightButtons: [NavButton] = []
+        if let rightButton = right {
+            rightButtons.append(rightButton)
+        }
+        navigationItem.title = title
+        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+       
+        guard let nav = self.navigationController as? CustomNavigationController else { return }
+        nav.setupNavigation(leftNavButton: left, rightNavButtons: rightButtons, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString, largeTitleFontSize: largeTitlesFontSize)
+    }
     
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
         var rightButtons: [NavButton] = []

@@ -30,7 +30,6 @@ class ProtectiveWordPromptViewController: BaseViewController {
     @IBOutlet weak private var navHackCloseButton: UIButton!
     @IBOutlet weak private var navHackTitleLabel: UILabel!
     @IBOutlet weak private var navHackSeparatorView: UIView!
-    @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var clickableSubtitleLabel: InteractiveLinkLabel!
     @IBOutlet weak private var textFieldTitle: UILabel!
     @IBOutlet weak private var protectiveWordTextField: UITextField!
@@ -68,21 +67,20 @@ class ProtectiveWordPromptViewController: BaseViewController {
         navHackCloseButton.tintColor = AppColours.appBlue
         navHackTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         navHackTitleLabel.textColor = AppColours.appBlue
-        navHackTitleLabel.text = .protectedWordVCNavTitle
+        navHackTitleLabel.text = .unlockRecords
         navHackSeparatorView.backgroundColor = AppColours.borderGray
-        titleLabel.font = UIFont.bcSansBoldWithSize(size: 20)
-        titleLabel.textColor = AppColours.textBlack
-        titleLabel.text = "View your medication records"
-        clickableSubtitleLabel.attributedText = clickableSubtitleLabel.attributedText(withString: "Please enter the protective word required to access these restricted PharmaNet records. For more information visit protective-word-for-a-pharmanet-record",
-                                                                                      linkedStrings: [LinkedStrings(text: "protective-word-for-a-pharmanet-record", link: "https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/pharmacare-for-bc-residents/pharmanet/protective-word-for-a-pharmanet-record")],
+        clickableSubtitleLabel.attributedText = clickableSubtitleLabel.attributedText(withString: "Enter the protective word to access your medication history from PharmaNet. Find out more",
+                                                                                      linkedStrings: [LinkedStrings(text: "more", link: "https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/pharmacare-for-bc-residents/pharmanet/protective-word-for-a-pharmanet-record")],
                                                                                       textColor: AppColours.textBlack,
                                                                                       font: UIFont.bcSansRegularWithSize(size: 15))
         clickableSubtitleLabel.numberOfLines = 0
         textFieldTitle.font = UIFont.bcSansBoldWithSize(size: 17)
         textFieldTitle.textColor = AppColours.textBlack
-        textFieldTitle.text = "Protective Word"
+        textFieldTitle.text = "Protective word"
         protectiveWordTextField.textColor = AppColours.textBlack
+        protectiveWordTextField.placeholder = "e.g. PA6729BC"
         protectiveWordTextField.delegate = self
+//        protectiveWordTextField.autocapitalizationType = .allCharacters
     }
     
     private func setupButtons() {
@@ -102,7 +100,12 @@ extension ProtectiveWordPromptViewController: UITextFieldDelegate {
             let updatedText = text.replacingCharacters(in: textRange, with: string)
             continueButtonEnabled = shouldButtonBeEnabled(text: updatedText)
         }
-        return true
+        if string == "" {
+            textField.deleteBackward()
+        } else {
+            textField.insertText(string.uppercased())
+        }
+        return false
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

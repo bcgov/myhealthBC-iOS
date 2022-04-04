@@ -17,7 +17,7 @@ class HealthRecordsUserCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(data: HealthRecordsDataSource) {
-        healthRecordsUserView.configure(name: data.patient.name ?? "", records: data.numberOfRecords, authenticated: data.authenticated)
+        healthRecordsUserView.configure(name: data.patient.name?.nameCase() ?? "", records: data.numberOfRecords, authenticated: data.authenticated)
     }
 
 }

@@ -17,43 +17,42 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PcO-l0-Ul0">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hYK-Yj-8os" customClass="InteractiveLinkLabel" customModule="BCVaccineCard" customModuleProvider="target">
                                 <rect key="frame" x="20" y="137" width="374" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hYK-Yj-8os" customClass="InteractiveLinkLabel" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="20" y="167.5" width="374" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxp-JE-saz">
-                                <rect key="frame" x="20" y="218" width="374" height="20.5"/>
+                                <rect key="frame" x="20" y="187.5" width="374" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="L2X-W0-Z24">
-                                <rect key="frame" x="20" y="248.5" width="374" height="34"/>
+                                <rect key="frame" x="20" y="218" width="374" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dz0-mC-Kb9" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="34" y="762" width="346" height="54"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="54" id="QXW-18-lqr"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYb-aQ-fWb" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="34" y="688" width="346" height="54"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="54" id="Hqu-eA-V8N"/>
-                                </constraints>
-                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="qAC-OS-5yw">
+                                <rect key="frame" x="30" y="772" width="354" height="54"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dz0-mC-Kb9" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="165" height="54"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="54" id="QXW-18-lqr"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SYb-aQ-fWb" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                        <rect key="frame" x="189" y="0.0" width="165" height="54"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="54" id="Hqu-eA-V8N"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                            </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yA9-tI-pgI">
                                 <rect key="frame" x="20" y="84" width="24" height="24"/>
                                 <constraints>
@@ -66,7 +65,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FlY-vZ-acY">
-                                <rect key="frame" x="186.5" y="85.5" width="41.5" height="21"/>
+                                <rect key="frame" x="186.5" y="86" width="41.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -85,28 +84,22 @@
                             <constraint firstItem="L2X-W0-Z24" firstAttribute="trailing" secondItem="uxp-JE-saz" secondAttribute="trailing" id="01f-oK-Bnz"/>
                             <constraint firstItem="FlY-vZ-acY" firstAttribute="centerY" secondItem="yA9-tI-pgI" secondAttribute="centerY" id="0BM-yc-7vd"/>
                             <constraint firstItem="8VS-Uq-fLG" firstAttribute="top" secondItem="yA9-tI-pgI" secondAttribute="bottom" constant="8" id="1On-LD-eQC"/>
+                            <constraint firstItem="hYK-Yj-8os" firstAttribute="top" secondItem="8VS-Uq-fLG" secondAttribute="bottom" constant="20" id="1xe-az-gS9"/>
                             <constraint firstItem="uxp-JE-saz" firstAttribute="leading" secondItem="hYK-Yj-8os" secondAttribute="leading" id="3GK-SS-DLl"/>
                             <constraint firstItem="yA9-tI-pgI" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="40" id="7cP-M9-RsI"/>
-                            <constraint firstItem="dz0-mC-Kb9" firstAttribute="top" secondItem="SYb-aQ-fWb" secondAttribute="bottom" constant="20" id="Fb3-uc-BF7"/>
-                            <constraint firstItem="PcO-l0-Ul0" firstAttribute="top" secondItem="8VS-Uq-fLG" secondAttribute="bottom" constant="20" id="GHX-wF-m17"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="dz0-mC-Kb9" secondAttribute="bottom" constant="46" id="IFN-49-DWG"/>
-                            <constraint firstItem="hYK-Yj-8os" firstAttribute="top" secondItem="PcO-l0-Ul0" secondAttribute="bottom" constant="10" id="LvT-Pd-q9O"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="hYK-Yj-8os" secondAttribute="trailing" constant="20" id="CoQ-GG-UhP"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="qAC-OS-5yw" secondAttribute="trailing" constant="30" id="LsN-8c-emh"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="FlY-vZ-acY" secondAttribute="trailing" constant="5" id="MBq-VT-UpD"/>
-                            <constraint firstItem="dz0-mC-Kb9" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="34" id="PKT-LE-coh"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="PcO-l0-Ul0" secondAttribute="trailing" constant="20" id="PdM-iv-rpe"/>
-                            <constraint firstItem="hYK-Yj-8os" firstAttribute="trailing" secondItem="PcO-l0-Ul0" secondAttribute="trailing" id="RoI-7Z-PBQ"/>
-                            <constraint firstItem="hYK-Yj-8os" firstAttribute="leading" secondItem="PcO-l0-Ul0" secondAttribute="leading" id="Row-UI-dQ6"/>
                             <constraint firstItem="yA9-tI-pgI" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="S3d-1u-flC"/>
-                            <constraint firstItem="SYb-aQ-fWb" firstAttribute="trailing" secondItem="dz0-mC-Kb9" secondAttribute="trailing" id="SVZ-h7-xfp"/>
                             <constraint firstItem="L2X-W0-Z24" firstAttribute="top" secondItem="uxp-JE-saz" secondAttribute="bottom" constant="10" id="WB9-BX-oml"/>
-                            <constraint firstItem="PcO-l0-Ul0" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="Wj6-Qc-PcE"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dz0-mC-Kb9" secondAttribute="trailing" constant="34" id="WqL-jJ-RDH"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="8VS-Uq-fLG" secondAttribute="trailing" id="YTn-YP-H1V"/>
                             <constraint firstItem="8VS-Uq-fLG" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="ZCw-FU-leg"/>
-                            <constraint firstItem="SYb-aQ-fWb" firstAttribute="leading" secondItem="dz0-mC-Kb9" secondAttribute="leading" id="ejV-RN-NPX"/>
                             <constraint firstItem="uxp-JE-saz" firstAttribute="trailing" secondItem="hYK-Yj-8os" secondAttribute="trailing" id="f8C-TT-FNI"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="qAC-OS-5yw" secondAttribute="bottom" constant="36" id="gYL-UR-yQv"/>
                             <constraint firstItem="uxp-JE-saz" firstAttribute="top" secondItem="hYK-Yj-8os" secondAttribute="bottom" constant="30" id="iLE-VX-iQW"/>
+                            <constraint firstItem="hYK-Yj-8os" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="20" id="q7v-RS-E8B"/>
                             <constraint firstItem="L2X-W0-Z24" firstAttribute="leading" secondItem="uxp-JE-saz" secondAttribute="leading" id="qFw-aN-HWi"/>
+                            <constraint firstItem="qAC-OS-5yw" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="30" id="qQY-nY-AlS"/>
                             <constraint firstItem="FlY-vZ-acY" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="r9D-Kj-AZ8"/>
                             <constraint firstItem="FlY-vZ-acY" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yA9-tI-pgI" secondAttribute="trailing" constant="5" id="rCp-LV-BY0"/>
                         </constraints>
@@ -120,7 +113,6 @@
                         <outlet property="navHackTitleLabel" destination="FlY-vZ-acY" id="pfo-BK-yyv"/>
                         <outlet property="protectiveWordTextField" destination="L2X-W0-Z24" id="mWe-U5-sSE"/>
                         <outlet property="textFieldTitle" destination="uxp-JE-saz" id="4Rj-Mv-eXl"/>
-                        <outlet property="titleLabel" destination="PcO-l0-Ul0" id="ysF-o4-DuZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

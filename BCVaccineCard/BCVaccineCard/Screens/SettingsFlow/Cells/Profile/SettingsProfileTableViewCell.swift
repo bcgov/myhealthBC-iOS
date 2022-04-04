@@ -34,7 +34,7 @@ class SettingsProfileTableViewCell: UITableViewCell, Theme {
         if let icon = UIImage(named: "profile-icon"), let imageView = iconImageView {
             imageView.image = icon
         }
-        nameLabel.text = StorageService.shared.fetchAuthenticatedPatient()?.name ?? AuthManager().displayName
+        nameLabel.text = StorageService.shared.fetchAuthenticatedPatient()?.name?.nameCase() ?? AuthManager().displayName?.nameCase()
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.contentView.gestureRecognizers?.removeAll()
         self.contentView.addGestureRecognizer(tap)

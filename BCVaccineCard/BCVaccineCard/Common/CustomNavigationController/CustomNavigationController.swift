@@ -65,14 +65,14 @@ class CustomNavigationController: UINavigationController {
         navigationBar.prefersLargeTitles = true
         navigationBar.sizeToFit()
     }
-    
-    private func setupAppearance(navStyle: NavStyle, backButtonHintString: String?) {
+    // TODO: We can use custom font here
+    private func setupAppearance(navStyle: NavStyle, backButtonHintString: String?, largeTitleFontSize: CGFloat = 34) {
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.backgroundColor = navStyle.navBarColor
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
-            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: largeTitleFontSize, weight: .bold)]
             if let image = UIImage(named: "app-back-arrow") {
                 appearance.setBackIndicatorImage(image, transitionMaskImage: image)
             }
@@ -95,7 +95,7 @@ class CustomNavigationController: UINavigationController {
         } else {
             // FIXME: Find a safe way to change color of status bar background color (just stays white here)
             navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
-            navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+            navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: largeTitleFontSize, weight: .bold)]
             navigationBar.backgroundColor = navStyle.navBarColor
             if let image = UIImage(named: "app-back-arrow") {
                 navigationBar.backIndicatorImage = image
@@ -112,9 +112,9 @@ class CustomNavigationController: UINavigationController {
         
     }
     
-    func setupNavigation(leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
+    func setupNavigation(leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?, largeTitleFontSize: CGFloat = 34) {
         vc.navigationItem.largeTitleDisplayMode = navStyle.largeTitles ? .always : .never
-        setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString)
+        setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString, largeTitleFontSize: largeTitleFontSize)
         navigationBar.tintColor = navStyle.itemTintColor
         
         var rightNavButtons: [UIBarButtonItem] = []

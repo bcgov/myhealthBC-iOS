@@ -8,7 +8,8 @@
 import UIKit
 
 enum TabBarVCs: Int {
-    case home = 0, records, healthPass, resource, newsFeed
+    case home = 0, records, healthPass, resource
+//    case newsFeed
     
     var getIndexOfTab: Int {
         return self.rawValue
@@ -31,8 +32,8 @@ enum TabBarVCs: Int {
             return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController())
         case .resource:
             return Properties(title: .resources, selectedTabBarImage: #imageLiteral(resourceName: "resource-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "resource-tab-unselected"), baseViewController: ResourceViewController.constructResourceViewController())
-        case .newsFeed:
-            return Properties(title: .newsFeed, selectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-unselected"), baseViewController: NewsFeedViewController.constructNewsFeedViewController())
+//        case .newsFeed:
+//            return Properties(title: .newsFeed, selectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "news-feed-tab-unselected"), baseViewController: NewsFeedViewController.constructNewsFeedViewController())
         }
     }
 }
@@ -78,7 +79,7 @@ class TabBarController: UITabBarController {
         self.tabBar.tintColor = AppColours.appBlue
         self.tabBar.barTintColor = .white
         self.delegate = self
-        self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource, .newsFeed])
+        self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource])
         self.selectedIndex = selectedIndex
         setupObserver()
     }

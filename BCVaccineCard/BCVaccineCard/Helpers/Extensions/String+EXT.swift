@@ -100,6 +100,10 @@ extension String {
     func sentenceCase() -> String {
         return self.lowercased().capitalizingFirstLetter()
     }
+    
+    func nameCase() -> String {
+        return self.capitalized
+    }
 }
 
 extension Optional where Wrapped == String {

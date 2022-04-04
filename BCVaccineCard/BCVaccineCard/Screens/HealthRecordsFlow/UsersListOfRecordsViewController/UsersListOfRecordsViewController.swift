@@ -156,7 +156,7 @@ extension UsersListOfRecordsViewController {
         }
         
         
-        self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
+        self.navDelegate?.setNavigationBarWith(title: self.patient?.name?.nameCase() ?? "" + " " + .recordText.capitalized,
                                                leftNavButton: nil,
                                                rightNavButtons: buttons,
                                                navStyle: .small,
