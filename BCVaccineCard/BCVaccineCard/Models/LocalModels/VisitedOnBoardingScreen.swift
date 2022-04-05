@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct VisitedOnboardingScreen: Encodable, Decodable {
     let type: String
@@ -64,6 +65,60 @@ extension OnboardingScreenTypeID {
             return .healthResources
         case .newsFeed:
             return .newsFeed
+        }
+    }
+}
+
+extension OnboardingScreenType {
+    var getPhoneImage: UIImage? {
+        switch self {
+        case .healthPasses:
+            return UIImage(named: "phone-proofs")
+        case .healthRecords:
+            return UIImage(named: "phone-records")
+        case .healthResources:
+            return UIImage(named: "phone-resources")
+        case .newsFeed:
+            return UIImage(named: "bubble-news") // TODO: Delete
+        }
+    }
+    // Note: Offset is width / 2
+    var getPhoneImageSizes: (width: CGFloat, height: CGFloat, offset: CGFloat) {
+        switch self {
+        case .healthRecords:
+            return (width: 124, height: 139, offset: 0)
+        case .healthPasses:
+            return (width: 175, height: 161, offset: (175/2))
+        case .healthResources:
+            return (width: 175, height: 161, offset: (-175/2))
+        case .newsFeed:
+            return (width: 0, height: 0, offset: 0)
+        }
+    }
+    
+    var getTitle: String {
+        switch self {
+        case .healthPasses:
+            return .healthPasses.sentenceCase()
+        case .healthRecords:
+            return .healthRecords.sentenceCase()
+        case .healthResources:
+            return .healthResources.sentenceCase()
+        case .newsFeed:
+            return .newsFeed.sentenceCase()
+        }
+    }
+    
+    var getDescription: String {
+        switch self {
+        case .healthPasses:
+            return .initialOnboardingHealthPassesDescription
+        case .healthRecords:
+            return .initialOnboardingHealthRecordsDescription
+        case .healthResources:
+            return .initialOnboardingHealthResourcesDescription
+        case .newsFeed:
+            return .initialOnboardingNewsFeedDescription
         }
     }
 }

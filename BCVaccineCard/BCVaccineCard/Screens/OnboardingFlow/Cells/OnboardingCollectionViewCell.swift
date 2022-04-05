@@ -6,65 +6,12 @@
 //
 
 import UIKit
-import SwiftUI
 
 class OnboardingCollectionViewCell: UICollectionViewCell {
-    
-    func getPhoneImage(for screen: OnboardingScreenType) -> UIImage? {
-        switch screen {
-        case .healthPasses:
-            return UIImage(named: "phone-proofs")
-        case .healthRecords:
-            return UIImage(named: "phone-records")
-        case .healthResources:
-            return UIImage(named: "phone-resources")
-        case .newsFeed:
-            return UIImage(named: "bubble-news") // TODO: Delete
-        }
-    }
-    // Note: Offset is width / 2
-    func getPhoneImageSizes(for screen: OnboardingScreenType) -> (width: CGFloat, height: CGFloat, offset: CGFloat) {
-        switch screen {
-        case .healthRecords:
-            return (width: 124, height: 139, offset: 0)
-        case .healthPasses:
-            return (width: 175, height: 161, offset: (175/2))
-        case .healthResources:
-            return (width: 175, height: 161, offset: (-175/2))
-        case .newsFeed:
-            return (width: 0, height: 0, offset: 0)
-        }
-    }
-    
-    func getTitle(for screen: OnboardingScreenType) -> String {
-        switch screen {
-        case .healthPasses:
-            return .healthPasses.sentenceCase()
-        case .healthRecords:
-            return .healthRecords.sentenceCase()
-        case .healthResources:
-            return .healthResources.sentenceCase()
-        case .newsFeed:
-            return .newsFeed.sentenceCase()
-        }
-    }
-    
-    func getDescription(for screen: OnboardingScreenType) -> String {
-        switch screen {
-        case .healthPasses:
-            return .initialOnboardingHealthPassesDescription
-        case .healthRecords:
-            return .initialOnboardingHealthRecordsDescription
-        case .healthResources:
-            return .initialOnboardingHealthResourcesDescription
-        case .newsFeed:
-            return .initialOnboardingNewsFeedDescription
-        }
-    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        setup()
     }
     
     @IBOutlet weak private var phoneImageView: UIImageView!
@@ -74,5 +21,25 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak private var newTextLabel: UILabel!
     @IBOutlet weak private var onboardingTitleLabel: UILabel!
     @IBOutlet weak private var onboardingDescriptionLabel: UILabel!
-
+    
+    private func setup() {
+        newTextLabel.font = UIFont.bcSansBoldWithSize(size: 13)
+        newTextLabel.textColor = AppColours.appBlue
+        newTextLabel.text = .new
+        onboardingTitleLabel.font = UIFont.bcSansBoldWithSize(size: 24)
+        onboardingTitleLabel.textColor = AppColours.appBlue
+        onboardingDescriptionLabel.font = UIFont.bcSansRegularWithSize(size: 17)
+        onboardingDescriptionLabel.textColor = AppColours.textBlack
+    }
+    
+    func configure(screenType: OnboardingScreenType, newTextShown: Bool) {
+        phoneImageView.image = screenType.getPhoneImage
+        let sizes = screenType.getPhoneImageSizes
+        phoneImageViewWidthConstraint.constant = sizes.width
+        phoneImageViewHeightConstraint.constant = sizes.height
+        phoneImageViewCenterXConstraint.constant = sizes.offset
+        newTextLabel.isHidden = newTextShown
+        onboardingTitleLabel.text = screenType.getTitle
+        onboardingDescriptionLabel.text = screenType.getDescription
+    }
 }
