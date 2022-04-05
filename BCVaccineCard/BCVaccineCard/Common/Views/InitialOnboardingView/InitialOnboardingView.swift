@@ -6,7 +6,7 @@
 // NOTE: leaving code commented as it will be uncommented (and replacing respective current code) when health records are shown
 
 import UIKit
-
+// NOTE: Won't be using this view anymore, however going to keep it as a reference in case we have to revert to something
 class InitialOnboardingView: UIView {
     
     

@@ -22,7 +22,13 @@ class InitialOnboardingViewController: UIViewController {
         return InitialOnboardingViewController()
     }
     
-    @IBOutlet weak var initialOnboardingView: InitialOnboardingView!
+    @IBOutlet weak private var initialOnboardingView: InitialOnboardingView! // TODO: Remove this
+//    @IBOutlet weak private var collectionView: UICollectionView!
+//    @IBOutlet weak private var progressStackView: UIStackView!
+//    @IBOutlet weak private var bottomButton: AppStyleButton!
+//    @IBOutlet weak private var bottomButtonWidthConstraint: NSLayoutConstraint!
+//    @IBOutlet weak private var skipButton: UIButton!
+    
     
     private var screensToShow: [OnboardingScreenType] = []
     private var screenNumber: OnboardingScreenType = .healthPasses
@@ -33,6 +39,7 @@ class InitialOnboardingViewController: UIViewController {
     }
     
     private func setup() {
+        // TODO: Collection view setup here
         initialOnboardingView.initialConfigure(screenNumber: screenNumber, screensToShow: self.screensToShow, delegateOwner: self, skipDelegate: self)
     }
     

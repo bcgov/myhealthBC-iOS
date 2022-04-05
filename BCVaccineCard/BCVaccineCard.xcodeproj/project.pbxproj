@@ -509,6 +509,10 @@
 		799E0AFD27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E0AFB27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift */; };
 		799E0AFF27D13F43009C68FE /* Reusable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 799E0AFE27D13F43009C68FE /* Reusable.storyboard */; };
 		799E0B0027D13F43009C68FE /* Reusable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 799E0AFE27D13F43009C68FE /* Reusable.storyboard */; };
+		79A15AFE27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A15AFC27FC07D500F8330D /* OnboardingCollectionViewCell.swift */; };
+		79A15AFF27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A15AFC27FC07D500F8330D /* OnboardingCollectionViewCell.swift */; };
+		79A15B0027FC07D500F8330D /* OnboardingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79A15AFD27FC07D500F8330D /* OnboardingCollectionViewCell.xib */; };
+		79A15B0127FC07D500F8330D /* OnboardingCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79A15AFD27FC07D500F8330D /* OnboardingCollectionViewCell.xib */; };
 		79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79B9D00D27E2788100987D9F /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B9D00C27E2788100987D9F /* HomeScreenViewController.swift */; };
@@ -826,6 +830,8 @@
 		799050C6273C8567006CD726 /* UserRecordListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserRecordListView.xib; sourceTree = "<group>"; };
 		799E0AFB27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectiveWordPromptViewController.swift; sourceTree = "<group>"; };
 		799E0AFE27D13F43009C68FE /* Reusable.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Reusable.storyboard; sourceTree = "<group>"; };
+		79A15AFC27FC07D500F8330D /* OnboardingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCollectionViewCell.swift; sourceTree = "<group>"; };
+		79A15AFD27FC07D500F8330D /* OnboardingCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OnboardingCollectionViewCell.xib; sourceTree = "<group>"; };
 		79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargerTouchAreaButton.swift; sourceTree = "<group>"; };
 		79A63D032722172900F7C919 /* PROD Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PROD Info.plist"; sourceTree = "<group>"; };
 		79B9D00C27E2788100987D9F /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
@@ -1230,6 +1236,7 @@
 			isa = PBXGroup;
 			children = (
 				795AA74F271514D600E59FF1 /* InitialOnboardingViewController.swift */,
+				79A15AFB27FC07B400F8330D /* Cells */,
 			);
 			path = OnboardingFlow;
 			sourceTree = "<group>";
@@ -2029,6 +2036,15 @@
 			path = UserRecordListView;
 			sourceTree = "<group>";
 		};
+		79A15AFB27FC07B400F8330D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				79A15AFC27FC07D500F8330D /* OnboardingCollectionViewCell.swift */,
+				79A15AFD27FC07D500F8330D /* OnboardingCollectionViewCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		79A2582C2731FF260067DD50 /* LargerTouchAreaButton */ = {
 			isa = PBXGroup;
 			children = (
@@ -2282,6 +2298,7 @@
 				29921C8D27739612005025D2 /* AuthenticationView.xib in Resources */,
 				29A4DF5327DA685100D5E901 /* ChipCollectionViewCell.xib in Resources */,
 				79218ABA27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */,
+				79A15B0027FC07D500F8330D /* OnboardingCollectionViewCell.xib in Resources */,
 				7967E75026F9145700EEF510 /* BCSans-Regular.otf in Resources */,
 				2978852B279624D800FF912D /* SettingsSectionHeaderView.xib in Resources */,
 				2978851A2795F13D00FF912D /* SettingsProfileTableViewCell.xib in Resources */,
@@ -2413,6 +2430,7 @@
 				79B9D01827E2950000987D9F /* Home.storyboard in Resources */,
 				79FDE427273335DC00DAD988 /* FederalPassView.xib in Resources */,
 				799050C8273C8567006CD726 /* UserRecordListView.xib in Resources */,
+				79A15B0127FC07D500F8330D /* OnboardingCollectionViewCell.xib in Resources */,
 				79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */,
 				799E0B0027D13F43009C68FE /* Reusable.storyboard in Resources */,
 				79BDA085270CEE5E00FF30AB /* Records.storyboard in Resources */,
@@ -2624,6 +2642,7 @@
 				2920AC20278E626500F7CAE7 /* ProfileAndSettingsViewController.swift in Sources */,
 				79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				7944F6F526F30293006B9444 /* CovidVaccineCardsViewController.swift in Sources */,
+				79A15AFE27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */,
 				293B32A827D25A3A0064BAAA /* Comment+CoreDataProperties.swift in Sources */,
 				2979679B27C536E20019EE9B /* LaboratoryOrder+CoreDataProperties.swift in Sources */,
 				79218AD2275576640063004E /* TextListModel.swift in Sources */,
@@ -2991,6 +3010,7 @@
 				79D93B1E27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */,
 				797BB9692767E7E000CD1645 /* HealthRecordView.swift in Sources */,
 				794BD6522702EEC00084ADA8 /* UIImage+EXT.swift in Sources */,
+				79A15AFF27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */,
 				794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */,
 				794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */,
 				294BD3D427B1D60B00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */,
