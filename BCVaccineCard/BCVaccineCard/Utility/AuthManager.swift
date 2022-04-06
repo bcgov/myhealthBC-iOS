@@ -9,6 +9,7 @@ import Foundation
 import AppAuth
 import KeychainAccess
 import JWTDecode
+import BCVaccineValidator
 
 extension Constants {
     struct Auth {
@@ -206,6 +207,7 @@ class AuthManager {
                         HTTPCookieStorage.shared.deleteCookie(cookie)
                     }
                     self.removeAuthTokens()
+                    self.removeAuthenticatedPatient()
                     self.authStatusChanged(authenticated: false)
                     return completion(true)
                 }
@@ -323,6 +325,17 @@ class AuthManager {
         delete(key: .idToken)
         self.removeProtectiveWord()
         self.removeMedFetchRequired()
+    }
+    
+    private func removeAuthenticatedPatient() {
+        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+        if let phn = patient.phn {
+            StorageService.shared.deletePatient(phn: phn)
+        } else if let dob = patient.birthday, let name = patient.name {
+            StorageService.shared.deletePatient(name: name, birthday: dob)
+        } else {
+            StorageService.shared.deleteAuthenticatedPatient()
+        }
     }
     
     private func store(string: String, for key: Key) {

@@ -23,12 +23,12 @@ class SettingsRowTableViewCell: UITableViewCell, Theme {
     }
     
     // MARK: Setup
-    public func setup(title: String, icon: UIImage?, onTap: @escaping ()->Void) {
+    public func setup(title: String, icon: UIImage?, labelColor: LabelColour = .Black, onTap: @escaping ()->Void) {
         self.callback = onTap
         rowRitle = title
         rowIcon = icon
         setup()
-        style()
+        style(labelColor: labelColor)
     }
     
     fileprivate func setup() {
@@ -52,8 +52,8 @@ class SettingsRowTableViewCell: UITableViewCell, Theme {
     }
     
     // MARK: Style
-    fileprivate func style() {
-        style(label: titleLabel, style: .Regular, size: 17, colour: .Black)
+    fileprivate func style(labelColor: LabelColour) {
+        style(label: titleLabel, style: .Regular, size: 17, colour: labelColor)
     }
     
     // MARK: setup accessibility

@@ -156,9 +156,9 @@
 "ViewDetailsOfCovidRecordsText" = "View the details of all your Covid Health Records";
 "FetchHealthRecordsIntroText" = "View the details of all your Covid Health Records";
 
-"DisableAnalytics" = "Disable Analytics";
-"EnableAnalytics" = "Enable Analytics";
-"AnalytyticsUsageDescription" = "Anonymized behavioural data is used to help improve the user experience";
+"DisableAnalytics" = "Turn off analytics";
+"EnableAnalytics" = "Turn on analytics";
+"AnalytyticsUsageDescription" = "Share data about how you use the app. This will help us know how we can make it better. All data is anonymous.";
 "DeleteData"= "Delete data";
 "ConfirmDeleteAllRecordsAndSaveData"= "Are you sure you want to delete all records and saved data?";
 "DeletedAllRecordsAndSavedData" = "Deleted all records and saved data";
@@ -188,7 +188,7 @@
 "LocalAuthDescription" = "When enabled, you can unlock the app with touch touch ID instead of passcode";
 "TouchId" = "Touch ID";
 "FaceId" = "Face ID";
-"DeleteAllRecordsAndSavedDataDescription" = "Log out of BC Services Card account and delete every records and saved personal information from My Health BC";
+"DeleteAllRecordsAndSavedDataDescription" = "Log out of the app and delete all records and saved information.";
 "DeleteAllRecordsAndSavedData" = "Delete all records and saved data";
 "LogoutTitle" = "Log out of BC Service Card";
 "LogoutDescription" = "All records under the account will be removed";

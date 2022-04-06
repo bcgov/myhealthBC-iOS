@@ -12,18 +12,18 @@ class SecurityAndDataViewController: BaseViewController {
     enum TableRow {
         case analytics
         case deleteAllRecords
-        case auth
-        case localAuth
+//        case auth
+//        case localAuth
     }
     
     fileprivate enum TableSection: Int, CaseIterable {
-        case Login = 0
-        case Data
+//        case Login = 0
+        case Data = 0
         
         var rows: [TableRow] {
             switch self {
-            case .Login:
-                return [.auth, .localAuth]
+//            case .Login:
+//                return [.auth, .localAuth]
             case .Data:
                 return [.analytics, .deleteAllRecords]
             }
@@ -70,25 +70,25 @@ class SecurityAndDataViewController: BaseViewController {
         setupTableView()
     }
     
-    // MARK: Login
-    func logout() {
-        self.alertConfirmation(title: .logoutTitle, message: .logoutDescription, confirmTitle: .logOut, confirmStyle: .destructive) {[weak self] in
-            guard let `self` = self else {return}
-            self.deleteRecordsForAuthenticatedUserAndLogout()
-        } onCancel: {[weak self] in
-            guard let `self` = self else {return}
-            self.tableView.reloadData()
-        }
-    }
-    
-    func login() {
-        self.view.startLoadingIndicator()
-        showLogin(initialView: .Landing, sourceVC: .SecurityAndDataVC) { [weak self] authenticated in
-            guard let `self` = self else {return}
-            self.view.endLoadingIndicator()
-            self.tableView.reloadData()
-        }
-    }
+//    // MARK: Login
+//    func logout() {
+//        self.alertConfirmation(title: .logoutTitle, message: .logoutDescription, confirmTitle: .logOut, confirmStyle: .destructive) {[weak self] in
+//            guard let `self` = self else {return}
+//            self.deleteRecordsForAuthenticatedUserAndLogout()
+//        } onCancel: {[weak self] in
+//            guard let `self` = self else {return}
+//            self.tableView.reloadData()
+//        }
+//    }
+//
+//    func login() {
+//        self.view.startLoadingIndicator()
+//        showLogin(initialView: .Landing, sourceVC: .SecurityAndDataVC) { [weak self] authenticated in
+//            guard let `self` = self else {return}
+//            self.view.endLoadingIndicator()
+//            self.tableView.reloadData()
+//        }
+//    }
     
     // MARK: Local Auth
     func enableLocalAuth() {
@@ -123,13 +123,13 @@ class SecurityAndDataViewController: BaseViewController {
         AnalyticsService.shared.disable()
     }
     
-    // MARK: Helpers
-    private func deleteRecordsForAuthenticatedUserAndLogout() {
-        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-        LocalAuthManager.block = true
-        performLogout(completion: {})
-    }
-    
+//    // MARK: Helpers
+//    private func deleteRecordsForAuthenticatedUserAndLogout() {
+//        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+//        LocalAuthManager.block = true
+//        performLogout(completion: {})
+//    }
+//
     private func performLogout(completion: @escaping()-> Void) {
         authManager.signout(in: self, completion: { [weak self] success in
             guard let `self` = self else {return}
@@ -165,17 +165,17 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         tableView.dataSource = self
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let section = TableSection.init(rawValue: section) else {
-            return nil
-        }
-        switch section {
-        case .Login:
-            return generateHeader(text: "Login", height: 54)
-        case .Data:
-            return generateHeader(text: "Data", height: 54)
-        }
-    }
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        guard let section = TableSection.init(rawValue: section) else {
+//            return nil
+//        }
+//        switch section {
+////        case .Login:
+////            return generateHeader(text: "Login", height: 54)
+//        case .Data:
+//            return generateHeader(text: "Data", height: 54)
+//        }
+//    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return TableSection.allCases.count
@@ -216,36 +216,36 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
                 self.deleteAllData()
             }
             return cell
-        case .auth:
-            let cell = toggleCell(for: indexPath,
-                                     onTitle: .bcscLogin,
-                                     offTitle: .bcscLogin,
-                                     subTitle: .loginDescription,
-                                     isOn: authManager.isAuthenticated,
-                                     onToggle: {
-                [weak self] enable in
-                guard let `self` = self else {return}
-                switch enable {
-                case true:
-                    self.login()
-                case false:
-                    self.logout()
-                }
-            })
-            return cell
-            
-        case .localAuth:
-            let cell = toggleCell(for: indexPath, onTitle: .touchId, offTitle: .touchId, subTitle: .localAuthDescription, isOn: false, onToggle: {[weak self] enable in
-                guard let `self` = self else {return}
-                // TODO: LOCAL AUTH
-                switch enable {
-                case true:
-                    self.enableLocalAuth()
-                case false:
-                    self.disableLocalAuth()
-                }
-            })
-            return cell
+//        case .auth:
+//            let cell = toggleCell(for: indexPath,
+//                                     onTitle: .bcscLogin,
+//                                     offTitle: .bcscLogin,
+//                                     subTitle: .loginDescription,
+//                                     isOn: authManager.isAuthenticated,
+//                                     onToggle: {
+//                [weak self] enable in
+//                guard let `self` = self else {return}
+//                switch enable {
+//                case true:
+//                    self.login()
+//                case false:
+//                    self.logout()
+//                }
+//            })
+//            return cell
+//
+//        case .localAuth:
+//            let cell = toggleCell(for: indexPath, onTitle: .touchId, offTitle: .touchId, subTitle: .localAuthDescription, isOn: false, onToggle: {[weak self] enable in
+//                guard let `self` = self else {return}
+//                // TODO: LOCAL AUTH
+//                switch enable {
+//                case true:
+//                    self.enableLocalAuth()
+//                case false:
+//                    self.disableLocalAuth()
+//                }
+//            })
+//            return cell
         }
     }
     
@@ -265,33 +265,33 @@ extension SecurityAndDataViewController: UITableViewDelegate, UITableViewDataSou
         return cell
     }
     
-    private func generateHeader(text: String, height: CGFloat) -> UIView {
-        let frame = CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: height)
-        let spacing: CGFloat = 8
-        let headerContainer = UIView.init(frame: frame)
-        headerContainer.backgroundColor = .white
-        let titleLabel = UILabel(frame: .zero)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.numberOfLines = 0
-        
-        headerContainer.addSubview(titleLabel)
-        
-        let top = titleLabel.topAnchor.constraint(greaterThanOrEqualTo: headerContainer.topAnchor, constant: spacing)
-        let center = titleLabel.centerYAnchor.constraint(equalTo: headerContainer.centerYAnchor, constant: 0)
-        let bottom = titleLabel.bottomAnchor.constraint(equalTo: headerContainer.bottomAnchor, constant: -spacing)
-        let leading = titleLabel.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor, constant: 32)
-        let trailing = titleLabel.trailingAnchor.constraint(greaterThanOrEqualTo: headerContainer.trailingAnchor, constant: 0)
-        
-        top.isActive = true
-        center.isActive = true
-        bottom.isActive = true
-        leading.isActive = true
-        trailing.isActive = true
-        titleLabel.text = text
-        style(label: titleLabel, style: .Bold, size: 17, colour: .Blue)
-        setupAccessibility(view: headerContainer, label: text)
-        return headerContainer
-    }
+//    private func generateHeader(text: String, height: CGFloat) -> UIView {
+//        let frame = CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: height)
+//        let spacing: CGFloat = 8
+//        let headerContainer = UIView.init(frame: frame)
+//        headerContainer.backgroundColor = .white
+//        let titleLabel = UILabel(frame: .zero)
+//        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+//        titleLabel.numberOfLines = 0
+//
+//        headerContainer.addSubview(titleLabel)
+//
+//        let top = titleLabel.topAnchor.constraint(greaterThanOrEqualTo: headerContainer.topAnchor, constant: spacing)
+//        let center = titleLabel.centerYAnchor.constraint(equalTo: headerContainer.centerYAnchor, constant: 0)
+//        let bottom = titleLabel.bottomAnchor.constraint(equalTo: headerContainer.bottomAnchor, constant: -spacing)
+//        let leading = titleLabel.leadingAnchor.constraint(equalTo: headerContainer.leadingAnchor, constant: 32)
+//        let trailing = titleLabel.trailingAnchor.constraint(greaterThanOrEqualTo: headerContainer.trailingAnchor, constant: 0)
+//
+//        top.isActive = true
+//        center.isActive = true
+//        bottom.isActive = true
+//        leading.isActive = true
+//        trailing.isActive = true
+//        titleLabel.text = text
+//        style(label: titleLabel, style: .Bold, size: 17, colour: .Blue)
+//        setupAccessibility(view: headerContainer, label: text)
+//        return headerContainer
+//    }
     
     //MARK: Accessibility
     
