@@ -33,6 +33,7 @@ protocol StoragePatientManager {
     // MARK: Delete
     func deletePatient(phn: String)
     func deletePatient(name: String, birthday: Date)
+    func deleteAuthenticatedPatient()
     
     // MARK: Fetch
     /// Returns all stored patients
@@ -149,6 +150,12 @@ extension StorageService: StoragePatientManager {
     
     func deletePatient(name: String, birthday: Date) {
         guard let patient = fetchPatient(name: name, birthday: birthday) else {return}
+        delete(object: patient)
+        notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
+    }
+    
+    func deleteAuthenticatedPatient() {
+        guard let patient = fetchAuthenticatedPatient() else { return }
         delete(object: patient)
         notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
     }
