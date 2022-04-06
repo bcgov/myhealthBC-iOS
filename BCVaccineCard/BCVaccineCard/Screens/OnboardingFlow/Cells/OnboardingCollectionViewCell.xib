@@ -11,15 +11,81 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="OnboardingCollectionViewCell" id="gTV-IL-0wX" customClass="OnboardingCollectionViewCell" customModule="BCVaccineCard" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="213" height="251"/>
+            <rect key="frame" x="0.0" y="0.0" width="410" height="500"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="213" height="251"/>
+                <rect key="frame" x="0.0" y="0.0" width="410" height="500"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blank-phone" translatesAutoresizingMaskIntoConstraints="NO" id="TBf-QY-0Ud">
+                        <rect key="frame" x="171" y="169.5" width="68" height="128"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="68" id="LgJ-et-V5k"/>
+                            <constraint firstAttribute="height" constant="128" id="Rn2-Lp-Xrs"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XmB-zU-1qa">
+                        <rect key="frame" x="60" y="389.5" width="290" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ZxB-XR-qZs">
+                        <rect key="frame" x="60" y="420" width="290" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EFF-Zp-gZg">
+                        <rect key="frame" x="60" y="365" width="290" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="afc-No-qc1">
+                        <rect key="frame" x="143" y="180" width="124" height="107"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="124" id="3Qo-aI-7gw"/>
+                            <constraint firstAttribute="height" constant="107" id="8ni-ZE-rwK"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="XmB-zU-1qa" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="A8n-ad-j4n"/>
+                <constraint firstItem="ZxB-XR-qZs" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leadingMargin" constant="40" id="Bvi-gC-u6G"/>
+                <constraint firstItem="XmB-zU-1qa" firstAttribute="top" secondItem="TBf-QY-0Ud" secondAttribute="bottom" constant="92" id="E7A-V9-WFh"/>
+                <constraint firstItem="XmB-zU-1qa" firstAttribute="trailing" secondItem="ZxB-XR-qZs" secondAttribute="trailing" id="NNu-NQ-VaY"/>
+                <constraint firstItem="afc-No-qc1" firstAttribute="centerY" secondItem="TBf-QY-0Ud" secondAttribute="centerY" id="Na1-u6-35M"/>
+                <constraint firstItem="XmB-zU-1qa" firstAttribute="leading" secondItem="ZxB-XR-qZs" secondAttribute="leading" id="XaG-nU-aFh"/>
+                <constraint firstAttribute="trailingMargin" secondItem="ZxB-XR-qZs" secondAttribute="trailing" constant="40" id="cXO-sN-z2C"/>
+                <constraint firstItem="TBf-QY-0Ud" firstAttribute="top" relation="greaterThanOrEqual" secondItem="gTV-IL-0wX" secondAttribute="top" constant="20" id="gni-QM-8qV"/>
+                <constraint firstItem="EFF-Zp-gZg" firstAttribute="leading" secondItem="XmB-zU-1qa" secondAttribute="leading" id="pQN-65-UON"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ZxB-XR-qZs" secondAttribute="bottom" constant="16" id="qe7-c6-vbm"/>
+                <constraint firstItem="ZxB-XR-qZs" firstAttribute="top" secondItem="XmB-zU-1qa" secondAttribute="bottom" constant="10" id="rWM-cD-LQb"/>
+                <constraint firstItem="afc-No-qc1" firstAttribute="centerX" secondItem="TBf-QY-0Ud" secondAttribute="centerX" id="s1O-6u-2Z2"/>
+                <constraint firstItem="EFF-Zp-gZg" firstAttribute="trailing" secondItem="XmB-zU-1qa" secondAttribute="trailing" id="tnr-8z-7To"/>
+                <constraint firstItem="TBf-QY-0Ud" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="uLb-yg-3fT"/>
+                <constraint firstItem="XmB-zU-1qa" firstAttribute="top" secondItem="EFF-Zp-gZg" secondAttribute="bottom" constant="4" id="yMQ-b5-08N"/>
+                <constraint firstAttribute="bottom" secondItem="XmB-zU-1qa" secondAttribute="bottom" constant="90" id="yY1-fR-2ii"/>
+            </constraints>
             <size key="customSize" width="213" height="251"/>
+            <connections>
+                <outlet property="newTextLabel" destination="EFF-Zp-gZg" id="Dkm-7x-pwG"/>
+                <outlet property="onboardingDescriptionLabel" destination="ZxB-XR-qZs" id="g4i-qT-lDk"/>
+                <outlet property="onboardingTitleLabel" destination="XmB-zU-1qa" id="UeU-y0-90E"/>
+                <outlet property="phoneImageView" destination="TBf-QY-0Ud" id="gbi-j5-YyN"/>
+                <outlet property="resourceImageView" destination="afc-No-qc1" id="hUa-6a-SeG"/>
+                <outlet property="resourceImageViewCenterXConstraint" destination="s1O-6u-2Z2" id="BUa-hW-J71"/>
+                <outlet property="resourceImageViewCenterYConstraint" destination="Na1-u6-35M" id="vNd-1c-vHr"/>
+                <outlet property="resourceImageViewHeightConstraint" destination="8ni-ZE-rwK" id="tTm-rO-bsC"/>
+                <outlet property="resourceImageViewWidthConstraint" destination="3Qo-aI-7gw" id="p2m-0Q-Yin"/>
+            </connections>
             <point key="canvasLocation" x="255.79710144927537" y="169.08482142857142"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="blank-phone" width="68.5" height="128"/>
+    </resources>
 </document>

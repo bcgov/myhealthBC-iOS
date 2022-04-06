@@ -29,14 +29,14 @@ enum OnboardingScreenType: Int, CaseIterable {
     case healthRecords = 0
     case healthPasses
     case healthResources
-    case newsFeed
+//    case newsFeed
 }
 
 enum OnboardingScreenTypeID: String {
     case healthPasses = "healthPasses"
     case healthRecords = "healthRecords"
     case healthResources = "healthResources"
-    case newsFeed = "newsFeed"
+//    case newsFeed = "newsFeed"
 }
 
 extension OnboardingScreenType {
@@ -48,8 +48,8 @@ extension OnboardingScreenType {
             return .healthRecords
         case .healthResources:
             return .healthResources
-        case .newsFeed:
-            return .newsFeed
+//        case .newsFeed:
+//            return .newsFeed
         }
     }
 }
@@ -63,36 +63,37 @@ extension OnboardingScreenTypeID {
             return .healthRecords
         case .healthResources:
             return .healthResources
-        case .newsFeed:
-            return .newsFeed
+//        case .newsFeed:
+//            return .newsFeed
         }
     }
 }
 
 extension OnboardingScreenType {
-    var getPhoneImage: UIImage? {
+    var getResourceImage: UIImage? {
         switch self {
         case .healthPasses:
-            return UIImage(named: "phone-proofs")
+            return UIImage(named: "bubble-proofs")
         case .healthRecords:
-            return UIImage(named: "phone-records")
+            return UIImage(named: "bubble-records")
         case .healthResources:
-            return UIImage(named: "phone-resources")
-        case .newsFeed:
-            return UIImage(named: "bubble-news") // TODO: Delete
+            return UIImage(named: "bubble-resources")
+//        case .newsFeed:
+//            return UIImage(named: "bubble-news")
         }
     }
-    // Note: Offset is width / 2
-    var getPhoneImageSizes: (width: CGFloat, height: CGFloat, offset: CGFloat) {
+    // Note: Offset is:
+    // Phone is 68 * 128
+    var getResourceImageSizes: (width: CGFloat, height: CGFloat, xOffset: CGFloat, yOffset: CGFloat) {
         switch self {
         case .healthRecords:
-            return (width: 124, height: 139, offset: 0)
+            return (width: 124, height: 139, xOffset: 0, yOffset: -20)
         case .healthPasses:
-            return (width: 175, height: 161, offset: (175/2))
+            return (width: 133, height: 99, xOffset: 64, yOffset: 48)
         case .healthResources:
-            return (width: 175, height: 161, offset: (-175/2))
-        case .newsFeed:
-            return (width: 0, height: 0, offset: 0)
+            return (width: 132, height: 99, xOffset: -60, yOffset: 48)
+//        case .newsFeed:
+//            return (width: 0, height: 0, xOffset: 0, yOffset: 0)
         }
     }
     
@@ -104,8 +105,8 @@ extension OnboardingScreenType {
             return .healthRecords.sentenceCase()
         case .healthResources:
             return .healthResources.sentenceCase()
-        case .newsFeed:
-            return .newsFeed.sentenceCase()
+//        case .newsFeed:
+//            return .newsFeed.sentenceCase()
         }
     }
     
@@ -117,8 +118,8 @@ extension OnboardingScreenType {
             return .initialOnboardingHealthRecordsDescription
         case .healthResources:
             return .initialOnboardingHealthResourcesDescription
-        case .newsFeed:
-            return .initialOnboardingNewsFeedDescription
+//        case .newsFeed:
+//            return .initialOnboardingNewsFeedDescription
         }
     }
 }

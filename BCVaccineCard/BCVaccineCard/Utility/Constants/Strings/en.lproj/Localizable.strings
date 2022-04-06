@@ -65,9 +65,9 @@
 "HealthRecords" = "Health records";
 "HealthResources" = "Health resources";
 "NewsFeed" = "News feed";
-"InitialOnboardingHealthPassesDescription" = "Keep your BC Vaccine Card and federal Covid-19 proof of vaccination document in a single place";
-"InitialOnboardingHealthRecordsDescription" = "Easily access your health records";
-"InitialOnboardingHealthResourcesDescription" = "Find Covid-19 health information and testing resources";
+"InitialOnboardingHealthPassesDescription" = "Save proof of vaccination documents for you and your family";
+"InitialOnboardingHealthRecordsDescription" = "Access your lab results, prescription history and vaccine records";
+"InitialOnboardingHealthResourcesDescription" = "Find trusted health information and resources";
 "InitialOnboardingNewsFeedDescription" = "Get the latest BC government Covid-19 news";
 "NEW" = "NEW";
 "PHNRequired" = "Personal Health Number is required";

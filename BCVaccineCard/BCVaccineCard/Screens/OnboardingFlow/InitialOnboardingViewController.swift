@@ -8,9 +8,10 @@
 
 import UIKit
 
-protocol OnboardSkipDelegate {
-    func skip()
-}
+// TODO: Delete
+//protocol OnboardSkipDelegate {
+//    func skip()
+//}
 
 class InitialOnboardingViewController: UIViewController {
     
@@ -23,7 +24,7 @@ class InitialOnboardingViewController: UIViewController {
         return InitialOnboardingViewController()
     }
     
-    @IBOutlet weak private var initialOnboardingView: InitialOnboardingView! // TODO: Remove this
+//    @IBOutlet weak private var DeleteThis: InitialOnboardingView! // TODO: Remove this
     @IBOutlet weak private var collectionView: UICollectionView!
     @IBOutlet weak private var progressStackView: UIStackView!
     @IBOutlet weak private var progressStackViewWidthConstraintToDelete: NSLayoutConstraint!
@@ -120,15 +121,11 @@ extension InitialOnboardingViewController {
 }
 
 // MARK: Collection View Delegate and Flow layout
-extension InitialOnboardingViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension InitialOnboardingViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
     private func setupCollectionView() {
         collectionView.register(UINib.init(nibName: OnboardingCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: OnboardingCollectionViewCell.getName)
-        collectionView.isPagingEnabled = true
-        collectionView.isUserInteractionEnabled = false
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-//        layout.minimumLineSpacing = spacingPerItem
-//        layout.sectionInset = UIEdgeInsets(top: 0, left: spacingPerItem, bottom: 0, right: spacingPerItem)
         layout.itemSize =  cellSize()
         collectionView.collectionViewLayout = layout
         collectionView.delegate = self
@@ -165,10 +162,43 @@ extension InitialOnboardingViewController: UICollectionViewDataSource, UICollect
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // As of now, no action here
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard let indexPath = findCenterIndex() else { return }
+        if let newScreen = getNewScreenTypeAfterScrollingValuesChanged(indexPath: indexPath, screensToShow: self.screensToShow) {
+            self.screenNumber = newScreen
+            adjustUI()
+        }
+        
+    }
+    
+    private func findCenterIndex() -> IndexPath? {
+        let center = self.view.convert(self.collectionView.center, to: self.collectionView)
+        let indexPath = collectionView.indexPathForItem(at: center)
+        return indexPath
+    }
 }
 
 // MARK: For adjusting button text
 extension InitialOnboardingViewController {
+    private func getNewScreenTypeAfterScrollingValuesChanged(indexPath: IndexPath, screensToShow: [OnboardingScreenType]) -> OnboardingScreenType? {
+        guard screensToShow.count > 1 else { return nil }
+        guard let newScreenNumber = OnboardingScreenType.init(rawValue: indexPath.row) else { return nil }
+        if let index = screensToShow.firstIndex(of: newScreenNumber) {
+            return screensToShow[index]
+        } else {
+            return nil
+        }
+    }
+    
     private func increment(screenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType]) -> OnboardingScreenType? {
         guard screensToShow.count > 1 else { return nil }
         if let index = screensToShow.firstIndex(of: screenNumber), screensToShow.count > index + 1 {
@@ -225,7 +255,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         if type == .next, let newScreenNumber = increment(screenNumber: screenNumber, screensToShow: screensToShow) {
             self.screenNumber = newScreenNumber
             let indexPath = IndexPath(row: screenNumber.rawValue, section: 0)
-            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            collectionView.scrollToItem(at: indexPath, at: .right, animated: true)
             adjustUI()
         }
         if type == .getStarted || type == .ok {

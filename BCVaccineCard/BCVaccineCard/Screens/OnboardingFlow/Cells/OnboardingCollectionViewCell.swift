@@ -15,9 +15,11 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     }
     
     @IBOutlet weak private var phoneImageView: UIImageView!
-    @IBOutlet weak private var phoneImageViewWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak private var phoneImageViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak private var phoneImageViewCenterXConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var resourceImageView: UIImageView!
+    @IBOutlet weak private var resourceImageViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var resourceImageViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var resourceImageViewCenterXConstraint: NSLayoutConstraint!
+    @IBOutlet weak private var resourceImageViewCenterYConstraint: NSLayoutConstraint!
     @IBOutlet weak private var newTextLabel: UILabel!
     @IBOutlet weak private var onboardingTitleLabel: UILabel!
     @IBOutlet weak private var onboardingDescriptionLabel: UILabel!
@@ -33,13 +35,15 @@ class OnboardingCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(screenType: OnboardingScreenType, newTextShown: Bool) {
-        phoneImageView.image = screenType.getPhoneImage
-        let sizes = screenType.getPhoneImageSizes
-        phoneImageViewWidthConstraint.constant = sizes.width
-        phoneImageViewHeightConstraint.constant = sizes.height
-        phoneImageViewCenterXConstraint.constant = sizes.offset
-        newTextLabel.isHidden = newTextShown
+        resourceImageView.image = screenType.getResourceImage
+        let sizes = screenType.getResourceImageSizes
+        resourceImageViewWidthConstraint.constant = sizes.width
+        resourceImageViewHeightConstraint.constant = sizes.height
+        resourceImageViewCenterXConstraint.constant = sizes.xOffset
+        resourceImageViewCenterYConstraint.constant = sizes.yOffset
+        newTextLabel.isHidden = !newTextShown
         onboardingTitleLabel.text = screenType.getTitle
         onboardingDescriptionLabel.text = screenType.getDescription
+        self.layoutIfNeeded()
     }
 }

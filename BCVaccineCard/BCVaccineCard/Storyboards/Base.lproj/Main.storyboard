@@ -17,22 +17,63 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fTa-et-vuc" customClass="InitialOnboardingView" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="czn-wZ-y80">
+                                <rect key="frame" x="0.0" y="44" width="414" height="586"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="dMw-Ba-Cxh">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                            </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Zf-dC-FaH" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                <rect key="frame" x="154" y="716" width="106" height="54"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="iUH-2y-jJf"/>
+                                    <constraint firstAttribute="width" constant="106" id="khV-vE-u2V"/>
+                                </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rn7-SN-I9H">
+                                <rect key="frame" x="192" y="782" width="30" height="30"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Skip"/>
+                                <connections>
+                                    <action selector="skipButtonTapped:" destination="iBs-fi-Wty" eventType="touchUpInside" id="0Eg-dK-8d6"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xbi-Hw-j3U">
+                                <rect key="frame" x="177" y="670" width="60" height="10"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="cyl-qr-7bi"/>
+                                    <constraint firstAttribute="height" constant="10" id="we0-yf-3zn"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="F7M-BB-aye"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="fTa-et-vuc" firstAttribute="leading" secondItem="F7M-BB-aye" secondAttribute="leading" id="9ID-28-o9D"/>
-                            <constraint firstItem="fTa-et-vuc" firstAttribute="top" secondItem="F7M-BB-aye" secondAttribute="top" id="QK1-cb-7Vk"/>
-                            <constraint firstItem="F7M-BB-aye" firstAttribute="trailing" secondItem="fTa-et-vuc" secondAttribute="trailing" id="kri-sB-sUg"/>
-                            <constraint firstItem="F7M-BB-aye" firstAttribute="bottom" secondItem="fTa-et-vuc" secondAttribute="bottom" id="oeK-ph-6ZL"/>
+                            <constraint firstItem="F7M-BB-aye" firstAttribute="bottom" secondItem="Rn7-SN-I9H" secondAttribute="bottom" constant="50" id="1ee-3c-ule"/>
+                            <constraint firstItem="czn-wZ-y80" firstAttribute="leading" secondItem="F7M-BB-aye" secondAttribute="leading" id="75a-bb-6Sh"/>
+                            <constraint firstItem="F7M-BB-aye" firstAttribute="trailing" secondItem="czn-wZ-y80" secondAttribute="trailing" id="E8X-eL-zgK"/>
+                            <constraint firstItem="Rn7-SN-I9H" firstAttribute="centerX" secondItem="TpP-ui-4I5" secondAttribute="centerX" id="I5A-fk-aWQ"/>
+                            <constraint firstItem="5Zf-dC-FaH" firstAttribute="centerX" secondItem="TpP-ui-4I5" secondAttribute="centerX" id="Kcm-D4-wse"/>
+                            <constraint firstItem="Rn7-SN-I9H" firstAttribute="top" secondItem="5Zf-dC-FaH" secondAttribute="bottom" constant="12" id="YCE-Wb-C50"/>
+                            <constraint firstItem="Xbi-Hw-j3U" firstAttribute="centerX" secondItem="TpP-ui-4I5" secondAttribute="centerX" id="bGp-lu-tam"/>
+                            <constraint firstItem="czn-wZ-y80" firstAttribute="top" secondItem="F7M-BB-aye" secondAttribute="top" id="rTJ-vr-3ex"/>
+                            <constraint firstItem="5Zf-dC-FaH" firstAttribute="top" secondItem="Xbi-Hw-j3U" secondAttribute="bottom" constant="36" id="tZd-QT-Spt"/>
+                            <constraint firstItem="Xbi-Hw-j3U" firstAttribute="top" secondItem="czn-wZ-y80" secondAttribute="bottom" constant="40" id="uLW-55-A7X"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="initialOnboardingView" destination="fTa-et-vuc" id="gHs-sN-H6u"/>
+                        <outlet property="bottomButton" destination="5Zf-dC-FaH" id="nOg-Mc-Ukg"/>
+                        <outlet property="bottomButtonWidthConstraint" destination="khV-vE-u2V" id="xhZ-0p-WEy"/>
+                        <outlet property="collectionView" destination="czn-wZ-y80" id="tct-uk-6Sc"/>
+                        <outlet property="progressStackView" destination="Xbi-Hw-j3U" id="p73-cC-QiD"/>
+                        <outlet property="progressStackViewWidthConstraintToDelete" destination="cyl-qr-7bi" id="rlw-Jd-osP"/>
+                        <outlet property="skipButton" destination="Rn7-SN-I9H" id="ip0-sA-plx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dIa-HM-aMg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
