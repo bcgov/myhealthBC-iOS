@@ -273,6 +273,8 @@ extension String {
     static var reasonForRequestingAuthentication: String { return "ReasonForRequestingAuthentication".localized }
     static var unlockRecords: String { return "UnlockRecords".localized }
     static var termsOfService: String { return "TermsOfService".localized }
+    // Protected word
+    static var protectedWordAlertError: String { return "ProtectedWordAlertError".localized }
 }
 
 // Accessibility only localized strings

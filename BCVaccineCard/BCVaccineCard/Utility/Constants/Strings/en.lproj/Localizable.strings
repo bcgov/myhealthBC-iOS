@@ -220,6 +220,7 @@
 "ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication.";
 "UnlockRecords" = "Unlock records";
 "TermsOfService" = "Terms of service";
+"ProtectedWordAlertError" = "The protective word you provided was incorrect. You must enter the correct protective word in order to view your medical records, would you like to try again?";
 
 
 // Accessibility only localized strings
