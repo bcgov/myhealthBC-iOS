@@ -336,7 +336,6 @@ class AuthManager {
         } else {
             StorageService.shared.deleteAuthenticatedPatient()
         }
-        
     }
     
     private func store(string: String, for key: Key) {

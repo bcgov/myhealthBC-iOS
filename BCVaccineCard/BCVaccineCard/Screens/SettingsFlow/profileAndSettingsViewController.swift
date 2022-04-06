@@ -13,6 +13,7 @@ class ProfileAndSettingsViewController: BaseViewController {
         case profile
         case securityAndData
         case privacyStatement
+        case logout
     }
     
     class func constructProfileAndSettingsViewController() -> ProfileAndSettingsViewController {
@@ -27,6 +28,8 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     // MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
+    
+    private var displayName: String?
     
     
     // MARK: Class funcs
@@ -75,10 +78,18 @@ extension ProfileAndSettingsViewController {
 extension ProfileAndSettingsViewController {
     private func setupListener() {
         NotificationCenter.default.addObserver(self, selector: #selector(settingsTableViewReload), name: .settingsTableViewReload, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
     
     @objc private func settingsTableViewReload() {
+        self.tableView.reloadData()
+    }
+    
+    @objc private func patientAPIFetched(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: String?] else { return }
+        guard let fullName = userInfo["fullName"] else { return }
+        self.displayName = fullName
         self.tableView.reloadData()
     }
     
@@ -101,7 +112,8 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return TableRow.allCases.count
+        let count = TableRow.allCases.count
+        return authManager.isAuthenticated ? count : count - 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -111,7 +123,8 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
             if authManager.isAuthenticated {
                 return profileCell(for: indexPath) {[weak self] in
                     guard let `self` = self else {return}
-                    self.showProfile()
+                    // Not using this right now
+//                    self.showProfile()
                 }
             } else {
                 return loginCell(for: indexPath) {[weak self] in
@@ -133,6 +146,13 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
                 guard let `self` = self else {return}
                 self.showPrivacyStatement()
             }
+        case .logout:
+            let title: String = .logOut
+            let icon = UIImage(named: "logout-icon")
+            return rowCell(for: indexPath, title: title, icon: icon, labelColor: .Red) {[weak self] in
+                guard let `self` = self else {return}
+                self.logout()
+            }
         }
         
     }
@@ -149,17 +169,45 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsProfileTableViewCell.getName, for: indexPath) as? SettingsProfileTableViewCell else {
             return SettingsProfileTableViewCell()
         }
-        cell.setup(onTap: onTap)
+        cell.setup(displayName: self.displayName, onTap: onTap)
         return cell
     }
     
-    func rowCell(for indexPath: IndexPath, title: String, icon: UIImage?, onTap: @escaping() -> Void) -> SettingsRowTableViewCell {
+    func rowCell(for indexPath: IndexPath, title: String, icon: UIImage?, labelColor: LabelColour = .Black, onTap: @escaping() -> Void) -> SettingsRowTableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsRowTableViewCell.getName, for: indexPath) as? SettingsRowTableViewCell else {
             return SettingsRowTableViewCell()
         }
-        cell.setup(title: title, icon: icon, onTap: onTap)
+        cell.setup(title: title, icon: icon, labelColor: labelColor, onTap: onTap)
         return cell
     }
     
+    // MARK: Logout
+    private func logout() {
+        self.alertConfirmation(title: .logoutTitle, message: .logoutDescription, confirmTitle: .logOut, confirmStyle: .destructive) {[weak self] in
+            guard let `self` = self else {return}
+            self.deleteRecordsForAuthenticatedUserAndLogout()
+        } onCancel: {[weak self] in
+            guard let `self` = self else {return}
+            self.tableView.reloadData()
+        }
+    }
+    
+    // MARK: Helpers
+    private func deleteRecordsForAuthenticatedUserAndLogout() {
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+        LocalAuthManager.block = true
+        performLogout(completion: {})
+    }
+    
+    private func performLogout(completion: @escaping()-> Void) {
+        authManager.signout(in: self, completion: { [weak self] success in
+            guard let `self` = self else {return}
+            // Regardless of the result of the async logout, clear tokens.
+            // because user may be offline
+            // TODO: Note - sometimes prompt isn't shown after hitting logout, so the screen state (for records) remains. We should look at resetting tab bar and then switch index to current index after reset
+            self.authManager.clearData()
+            self.tableView.reloadData()
+        })
+    }
     
 }

@@ -154,14 +154,20 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
+            self.storePatient(patientDetails: patientDetails)
             let patientFirstName = patientDetails.resourcePayload?.firstname
-            let userInfo: [String: String?] = ["firstName": patientFirstName]
+            let patientFullName = patientDetails.getFullName
+            let userInfo: [String: String?] = ["firstName": patientFirstName, "fullName": patientFullName]
             NotificationCenter.default.post(name: .patientAPIFetched, object: nil, userInfo: userInfo as [AnyHashable : Any])
             initializeRequests(authCredentials: authCredentials, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
         case .failure(let error):
             print(error)
             self.delegate?.showPatientDetailsError(error: error.resultMessage ?? .genericErrorMessage, showBanner: self.showBanner)
         }
+    }
+    
+    private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject) {
+        let _ = StorageService.shared.storePatient(name: patientDetails.getFullName, birthday: patientDetails.getBdayDate, phn: patientDetails.resourcePayload?.personalhealthnumber, authenticated: true)
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?) {
