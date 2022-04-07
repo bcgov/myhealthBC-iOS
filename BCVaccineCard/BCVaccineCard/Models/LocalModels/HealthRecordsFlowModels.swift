@@ -150,7 +150,7 @@ extension Array where Element == HealthRecord {
             case .medication(model: let model):
                 firstDate = model.dispensedDate
             case .laboratoryOrder(model: let model):
-                firstDate = model.collectionDateTime
+                firstDate = model.timelineDateTime
             }
             switch second.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
@@ -160,7 +160,7 @@ extension Array where Element == HealthRecord {
             case .medication(model: let model):
                 secondDate = model.dispensedDate
             case .laboratoryOrder(model: let model):
-                secondDate = model.collectionDateTime
+                secondDate = model.timelineDateTime
             }
             return firstDate ?? Date() > secondDate ?? Date()
         })

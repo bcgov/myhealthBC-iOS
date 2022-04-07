@@ -127,36 +127,37 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="VAM-Sy-M3A">
-                                <rect key="frame" x="24" y="64" width="366" height="710"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="VAM-Sy-M3A">
+                                <rect key="frame" x="24" y="64" width="366" height="700"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vIo-r9-rq8" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="24" y="794" width="115" height="44"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="q08-aq-bTM">
+                                <rect key="frame" x="24" y="784" width="366" height="54"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vIo-r9-rq8" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="171" height="54"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YPl-Tm-3LZ" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                                        <rect key="frame" x="195" y="0.0" width="171" height="54"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="EP4-Gg-GOP"/>
-                                    <constraint firstAttribute="width" constant="115" id="x5q-RS-0fj"/>
+                                    <constraint firstAttribute="height" constant="54" id="fPK-mD-ldM"/>
                                 </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YPl-Tm-3LZ" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="255" y="791" width="135" height="50"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="HiR-rm-78r"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="YPl-Tm-3LZ" firstAttribute="centerY" secondItem="vIo-r9-rq8" secondAttribute="centerY" id="BY3-Ee-N1Y"/>
-                            <constraint firstItem="HiR-rm-78r" firstAttribute="bottom" secondItem="vIo-r9-rq8" secondAttribute="bottom" constant="24" id="EQh-pp-5mV"/>
                             <constraint firstItem="VAM-Sy-M3A" firstAttribute="leading" secondItem="HiR-rm-78r" secondAttribute="leading" constant="24" id="Hc7-JM-X2k"/>
-                            <constraint firstItem="YPl-Tm-3LZ" firstAttribute="width" secondItem="vIo-r9-rq8" secondAttribute="width" multiplier="1.17391" id="Je8-47-trW"/>
-                            <constraint firstItem="YPl-Tm-3LZ" firstAttribute="height" secondItem="vIo-r9-rq8" secondAttribute="height" multiplier="1.13636" id="RNH-hK-kvb"/>
+                            <constraint firstItem="q08-aq-bTM" firstAttribute="top" secondItem="VAM-Sy-M3A" secondAttribute="bottom" constant="20" id="X7x-bA-em9"/>
                             <constraint firstItem="HiR-rm-78r" firstAttribute="trailing" secondItem="VAM-Sy-M3A" secondAttribute="trailing" constant="24" id="Xzs-25-MDd"/>
-                            <constraint firstItem="vIo-r9-rq8" firstAttribute="leading" secondItem="VAM-Sy-M3A" secondAttribute="leading" id="b4h-cl-Y2F"/>
-                            <constraint firstItem="YPl-Tm-3LZ" firstAttribute="trailing" secondItem="VAM-Sy-M3A" secondAttribute="trailing" id="gFP-m7-Pke"/>
-                            <constraint firstItem="vIo-r9-rq8" firstAttribute="top" secondItem="VAM-Sy-M3A" secondAttribute="bottom" constant="20" id="muY-uB-SlJ"/>
+                            <constraint firstItem="HiR-rm-78r" firstAttribute="bottom" secondItem="q08-aq-bTM" secondAttribute="bottom" constant="24" id="a9u-1z-CDf"/>
+                            <constraint firstItem="q08-aq-bTM" firstAttribute="trailing" secondItem="VAM-Sy-M3A" secondAttribute="trailing" id="gDE-MS-FBu"/>
+                            <constraint firstItem="q08-aq-bTM" firstAttribute="leading" secondItem="VAM-Sy-M3A" secondAttribute="leading" id="kWL-bf-dgg"/>
                             <constraint firstItem="VAM-Sy-M3A" firstAttribute="top" secondItem="HiR-rm-78r" secondAttribute="top" constant="20" id="xoQ-Lk-wxq"/>
                         </constraints>
                     </view>

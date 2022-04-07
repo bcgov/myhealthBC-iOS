@@ -9,20 +9,20 @@ import UIKit
 import BCVaccineValidator
 import SwipeCellKit
 
-fileprivate class VaccineCardTableViewCellCache {
-    static var validationResults: [String: CodeValidationResult] = [String: CodeValidationResult]()
-    
-    static func fromCache(code: String) -> CodeValidationResult? {
-        return validationResults[code]
-    }
-    
-    static func cache(code: String, result: CodeValidationResult) {
-        // FIXME: Noticed a crash here... BAD EXEC - Thread 5: EXC_BAD_ACCESS (code=1, address=0x18)
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 0.1) {
-            validationResults[code] = result
-        }
-    }
-}
+//fileprivate class VaccineCardTableViewCellCache {
+//    static var validationResults: [String: CodeValidationResult] = [String: CodeValidationResult]()
+//
+//    static func fromCache(code: String) -> CodeValidationResult? {
+//        return validationResults[code]
+//    }
+//    // NOTE: Amir - we need to remove this logic. Causing a crash too often
+//    static func cache(code: String, result: CodeValidationResult) {
+//        // FIXME: Noticed a crash here... BAD EXEC - Thread 5: EXC_BAD_ACCESS (code=1, address=0x18)
+//        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 0.1) {
+//            validationResults[code] = result
+//        }
+//    }
+//}
 
 class VaccineCardTableViewCell: SwipeTableViewCell {
     
@@ -56,7 +56,7 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
     }
     
     private func adjustShadow(expanded: Bool) {
-        shadowView.layer.shadowOpacity = expanded ? 0.7 : 0.0
+        shadowView.layer.shadowOpacity = expanded ? 0.1 : 0.0
     }
     
     func configure(model: VaccineCard, expanded: Bool, editMode: Bool, delegateOwner: UIViewController) {
@@ -77,12 +77,12 @@ class VaccineCardTableViewCell: SwipeTableViewCell {
     }
     
     private func validateCode(code: String, completion: @escaping (CodeValidationResult)->Void) {
-        if let cached = VaccineCardTableViewCellCache.fromCache(code: code.lowercased()) {
-            return completion(cached)
-        }
+//        if let cached = VaccineCardTableViewCellCache.fromCache(code: code.lowercased()) {
+//            return completion(cached)
+//        }
         self.contentView.startLoadingIndicator(backgroundColor: .white)
         BCVaccineValidator.shared.validate(code: code.lowercased()) { [weak self] result in
-            VaccineCardTableViewCellCache.cache(code: code, result: result)
+//            VaccineCardTableViewCellCache.cache(code: code, result: result)
             guard let `self` = self else {return}
             DispatchQueue.main.async {[weak self] in
                 guard let `self` = self else {return}

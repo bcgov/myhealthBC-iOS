@@ -39,6 +39,7 @@
         <attribute name="reportID" optional="YES" attributeType="String"/>
         <attribute name="reportingSource" optional="YES" attributeType="String"/>
         <attribute name="testStatus" optional="YES" attributeType="String"/>
+        <attribute name="timelineDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="laboratoryTests" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LaboratoryTest" inverseName="laboratoryOrder" inverseEntity="LaboratoryTest"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="laboratoryOrders" inverseEntity="Patient"/>
     </entity>
@@ -133,7 +134,7 @@
         <element name="Comment" positionX="162" positionY="396" width="128" height="194"/>
         <element name="CovidLabTestResult" positionX="70.65234375" positionY="497.984375" width="128" height="104"/>
         <element name="ImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="104"/>
-        <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="224"/>
+        <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="239"/>
         <element name="LaboratoryTest" positionX="171" positionY="405" width="128" height="119"/>
         <element name="Medication" positionX="180" positionY="414" width="128" height="209"/>
         <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="149"/>

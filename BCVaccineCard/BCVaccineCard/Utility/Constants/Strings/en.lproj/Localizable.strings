@@ -206,10 +206,10 @@
 "MobileApp" = " mobile app.";
 "LocalAuthPrivacyText" = "Biometric authenication is a security feature to protect your personal health information and are required to log on My Health BC.\n\nYour health information and the health information of your spouse, dependents, and claim details will be stored in your mobile device. Should you elect to use Touch ID offered by Apple Inc., or fingerprint sign in functionality offered by Android, or any other type of biometric identification managed on your device (collectively “biometrics”), you agree with acknowledge and consent to the terms and conditions, which can be accessed at here.";
 "Privacy" = "Privacy";
-"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
+"KeepingYourDataSecure" = "Keeping your data secure";
+"LearnMoreAboutLocalAuth" = "Learn more about keeping your data secure";
 "ProtectYourPersonalInformation" = "Protect your personal information";
-"LocalAuthViewDescription" = "My Health BC stores some personal health information. Enabling biometric security will help keep your data safe and secure.";
-"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
+"LocalAuthViewDescription" = "To keep your data safe, your device security features must be turned on.";
 "UseTouchId" = "Use Touch ID";
 "UsePassCode" = "Use passcode";
 "UseFaceId" = "Use Face ID";
@@ -220,6 +220,7 @@
 "ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication.";
 "UnlockRecords" = "Unlock records";
 "TermsOfService" = "Terms of service";
+"ProtectedWordAlertError" = "The protective word you provided was incorrect. You must enter the correct protective word in order to view your medical records, would you like to try again?";
 
 
 // Accessibility only localized strings
