@@ -89,13 +89,13 @@
                     <rect key="frame" x="16" y="238.5" width="544" height="633.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose date range" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uFb-7m-f3p">
-                            <rect key="frame" x="0.0" y="0.0" width="544" height="20.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="544" height="333.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="4ms-9G-L4P">
-                            <rect key="frame" x="0.0" y="20.5" width="544" height="180"/>
+                            <rect key="frame" x="0.0" y="333.5" width="544" height="180"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="From" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fFM-ft-PJy">
                                     <rect key="frame" x="0.0" y="0.0" width="544" height="45"/>
@@ -156,7 +156,10 @@
                             </subviews>
                         </stackView>
                         <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="n5R-DK-DqZ">
-                            <rect key="frame" x="0.0" y="200.5" width="544" height="433"/>
+                            <rect key="frame" x="0.0" y="513.5" width="544" height="120"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="120" id="b6E-W7-97F"/>
+                            </constraints>
                             <connections>
                                 <action selector="DatePickerEditingEnded:" destination="iN0-l3-epB" eventType="editingDidEnd" id="BYB-xX-Enw"/>
                                 <action selector="datePickerOnChange:" destination="iN0-l3-epB" eventType="valueChanged" id="ZHe-Qc-SCQ"/>
