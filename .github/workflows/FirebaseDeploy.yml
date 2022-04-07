@@ -11,25 +11,36 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
+        
       - name: Install gpg
         run: brew install gnupg
-      - name: Setup profiles and certs
+        
       - name: install xcpretty
         run: gem install xcpretty
+        
       - name: Setup provisioning profile
         env:
           FW_KEYS: ${{ secrets.FW_KEYS }}
         run: ./.github/secrets/decrypt_firebase.sh
+        
       - name: Archive project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
         run: ./.github/scripts/archive_adhoc.sh
+        
       - name: Export .ipa
         run: ./.github/scripts/export_adhoc_ipa.sh
+        
       - name: Upload .ipa to firebase
         if: success()
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID}}
         run: ./.github/scripts/publish_firebase.sh
-
+        
+      - name: Upload .ipa
+        uses: actions/upload-artifact@v1
+        with:
+          name: BCVaccineCard.ipa
+          path: build/Apps/BCVaccineCard.ipa
+          

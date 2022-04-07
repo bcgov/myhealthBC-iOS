@@ -54,6 +54,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private var showBanner = true
     private var isManualAuthFetch = true
     private var loginSourceVC: LoginVCSource = .AfterOnboarding
+    private var protectedWordAlreadyAttempted = false
         
     init(delegateOwner: UIViewController) {
         self.apiClient = APIClient(delegateOwner: delegateOwner)
@@ -418,12 +419,16 @@ extension AuthenticatedHealthRecordsAPIWorker {
                     if isManualAuthFetch {
                         self.authManager.storeMedFetchRequired(bool: true)
                         self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: nil)
-                    } else {
+                    } else if self.protectedWordAlreadyAttempted == false {
                         guard let authCreds = self.authCredentials else { return }
+                        self.protectedWordAlreadyAttempted = true
                         self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord)
+                    } else if self.protectedWordAlreadyAttempted == true {
+                        // In this case, there is an error with the protective word, so we must show an alert
+                        self.protectedWordAlreadyAttempted = false
+                        NotificationCenter.default.post(name: .protectedWordFailedPromptAgain, object: nil, userInfo: nil)
+                        self.deinitializeStatusList()
                     }
-                    
-                    // Will show prompt to add protective word, then will start the request over again
                 } else {
                     self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: medicationStatement.totalResultCount ?? 0, successfullCount: 0, error: resultError.resultMessage ?? .genericErrorMessage)
                 }

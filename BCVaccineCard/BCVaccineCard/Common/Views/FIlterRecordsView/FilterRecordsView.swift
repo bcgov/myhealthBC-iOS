@@ -54,13 +54,11 @@ class FilterRecordsView: UIView, Theme {
     @IBOutlet weak var fromDateContainer: UIView!
     @IBOutlet weak var fromDateIcon: UIImageView!
     @IBOutlet weak var fromDateLabel: UILabel!
-    @IBOutlet weak var fromDateDivider: UIView!
     
     @IBOutlet weak var toLabel: UILabel!
     @IBOutlet weak var toDateContainer: UIView!
     @IBOutlet weak var toDateIcon: UIImageView!
     @IBOutlet weak var toDateLabel: UILabel!
-    @IBOutlet weak var toDateDivider: UIView!
     
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var dateDivider: UIView!
@@ -157,8 +155,8 @@ class FilterRecordsView: UIView, Theme {
         styleFromDate()
         styleToDate()
         
-        style(button: clearButton, style: .Hollow, title: "Clear", image: nil)
-        style(button: continueButton, style: .Fill, title: "Continue", image: nil)
+        style(button: clearButton, style: .Hollow, title: "Clear all", image: nil)
+        style(button: continueButton, style: .Fill, title: "Apply", image: nil)
         closeButton.setTitle("", for: .normal)
         
         let fromDateAction = UITapGestureRecognizer(target: self, action: #selector(fromDateTapped))
@@ -206,25 +204,26 @@ class FilterRecordsView: UIView, Theme {
     }
     
     private func styleFromDate() {
-        fromLabel.font = UIFont.bcSansRegularWithSize(size: 15)
-        fromLabel.textColor = AppColours.textBlack
-        styleDateField(label: fromDateLabel, container: fromDateContainer, divider: fromDateDivider, icon: fromDateIcon)
+        styleDateField(label: fromLabel, valueLabel: fromDateLabel, container: fromDateContainer, icon: fromDateIcon)
     }
     
     private func styleToDate() {
-        toLabel.font = UIFont.bcSansRegularWithSize(size: 15)
-        toLabel.textColor = AppColours.textBlack
-        styleDateField(label: toDateLabel, container: toDateContainer, divider: toDateDivider, icon: toDateIcon)
+        styleDateField(label: toLabel, valueLabel: toDateLabel, container: toDateContainer, icon: toDateIcon)
     }
     
-    private func styleDateField(label: UILabel, container: UIView, divider: UIView, icon: UIImageView) {
-        container.backgroundColor = .clear
-        label.textColor = AppColours.textGray
+    private func styleDateField(label: UILabel, valueLabel: UILabel, container: UIView, icon: UIImageView) {
         label.font = UIFont.bcSansRegularWithSize(size: 15)
-        divider.backgroundColor = AppColours.borderGray
+        label.textColor = AppColours.textBlack
+        container.backgroundColor = .clear
+        container.layer.borderWidth = 1
+        container.layer.masksToBounds = true
+        container.layer.borderColor = AppColours.borderGray.cgColor
+        container.layer.cornerRadius = 5
+        valueLabel.textColor = AppColours.textGray
+        valueLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         icon.image = UIImage(named: "calendar-icon")?.withRenderingMode(.alwaysTemplate)
         icon.tintColor = AppColours.borderGray
-        label.isEnabled = false
+        valueLabel.isEnabled = false
     }
     
     // MARK: Date
