@@ -16,14 +16,16 @@ class ChipsView: UIView {
     var delegate: ChipsViewDelegate? = nil
     private var dataSource: [String] = []
     private var selectedItems: [String] = []
+    private var selectable: Bool = true
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    func setup(options: [String], selected: [String], direction:  UICollectionView.ScrollDirection ) {
+    func setup(options: [String], selected: [String], direction:  UICollectionView.ScrollDirection, selectable: Bool? = true) {
         self.dataSource = options
         self.selectedItems = selected
         collectionView.backgroundColor = .clear
         setupCollectionView(direction: direction)
+        self.selectable = selectable ?? true
     }
     
 }
@@ -87,7 +89,7 @@ extension ChipsView: UICollectionViewDelegate, UICollectionViewDataSource, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard dataSource.indices.contains(indexPath.row) else { return }
+        guard dataSource.indices.contains(indexPath.row), selectable else { return }
         let selectedText = dataSource[indexPath.row]
         if let existingIndex = selectedItems.firstIndex(where: {$0 == selectedText}){
             selectedItems.remove(at: existingIndex)

@@ -182,6 +182,26 @@ class AuthManager {
         }
     }
     
+    func topMostController() -> UIViewController? {
+        guard let window = UIApplication.shared.keyWindow, let rootViewController = window.rootViewController else {
+            return nil
+        }
+
+        var topController = rootViewController
+
+        while let newTopController = topController.presentedViewController {
+            topController = newTopController
+        }
+
+        return topController
+    }
+    
+    func signout(completion: @escaping(Bool)->Void) {
+        guard let topMost = topMostController() else {return completion(false)}
+        signout(in: topMost, completion: completion)
+    }
+    
+    
     func signout(in viewController: UIViewController, completion: @escaping(Bool)->Void) {
         guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
             return

@@ -21,7 +21,13 @@ extension UIViewController {
         controller.isAccessibilityElement = true
         controller.addAction(UIAlertAction(title: .ok, style: .default))
         DispatchQueue.main.async {
-            self.present(controller, animated: true)
+            if let presentedVC = self.presentedViewController {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.present(controller, animated: true)
+                }
+            } else {
+                self.present(controller, animated: true)
+            }
         }
     }
     
