@@ -54,6 +54,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private var showBanner = true
     private var isManualAuthFetch = true
     private var loginSourceVC: LoginVCSource = .AfterOnboarding
+    private var protectedWordAlreadyAttempted = false
         
     init(delegateOwner: UIViewController) {
         self.apiClient = APIClient(delegateOwner: delegateOwner)
@@ -154,14 +155,20 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
+            self.storePatient(patientDetails: patientDetails)
             let patientFirstName = patientDetails.resourcePayload?.firstname
-            let userInfo: [String: String?] = ["firstName": patientFirstName]
+            let patientFullName = patientDetails.getFullName
+            let userInfo: [String: String?] = ["firstName": patientFirstName, "fullName": patientFullName]
             NotificationCenter.default.post(name: .patientAPIFetched, object: nil, userInfo: userInfo as [AnyHashable : Any])
             initializeRequests(authCredentials: authCredentials, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord)
         case .failure(let error):
             print(error)
             self.delegate?.showPatientDetailsError(error: error.resultMessage ?? .genericErrorMessage, showBanner: self.showBanner)
         }
+    }
+    
+    private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject) {
+        let _ = StorageService.shared.storePatient(name: patientDetails.getFullName, birthday: patientDetails.getBdayDate, phn: patientDetails.resourcePayload?.personalhealthnumber, authenticated: true)
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?) {
@@ -404,12 +411,16 @@ extension AuthenticatedHealthRecordsAPIWorker {
                     if isManualAuthFetch {
                         self.authManager.storeMedFetchRequired(bool: true)
                         self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: nil)
-                    } else {
+                    } else if self.protectedWordAlreadyAttempted == false {
                         guard let authCreds = self.authCredentials else { return }
+                        self.protectedWordAlreadyAttempted = true
                         self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord)
+                    } else if self.protectedWordAlreadyAttempted == true {
+                        // In this case, there is an error with the protective word, so we must show an alert
+                        self.protectedWordAlreadyAttempted = false
+                        NotificationCenter.default.post(name: .protectedWordFailedPromptAgain, object: nil, userInfo: nil)
+                        self.deinitializeStatusList()
                     }
-                    
-                    // Will show prompt to add protective word, then will start the request over again
                 } else {
                     self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: medicationStatement.totalResultCount ?? 0, successfullCount: 0, error: resultError.resultMessage ?? .genericErrorMessage)
                 }

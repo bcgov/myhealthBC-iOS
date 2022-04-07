@@ -21,7 +21,7 @@ struct AuthenticatedLaboratoryOrdersResponseObject: Codable {
         
         // MARK: - Order
         struct Order: Codable {
-            let labPdfId, reportingSource, reportID, collectionDateTime: String?
+            let labPdfId, reportingSource, reportID, collectionDateTime, timelineDateTime: String?
             let commonName, orderingProvider, testStatus: String?
             let reportAvailable: Bool?
             let laboratoryTests: [LaboratoryTest]?
@@ -30,7 +30,7 @@ struct AuthenticatedLaboratoryOrdersResponseObject: Codable {
                 case labPdfId
                 case reportingSource
                 case reportID = "reportId"
-                case collectionDateTime, commonName, orderingProvider, testStatus, reportAvailable, laboratoryTests
+                case collectionDateTime, timelineDateTime, commonName, orderingProvider, testStatus, reportAvailable, laboratoryTests
             }
             
             // MARK: - LaboratoryTest

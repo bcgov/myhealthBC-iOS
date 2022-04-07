@@ -22,6 +22,7 @@ extension LaboratoryOrder {
     @NSManaged public var reportingSource: String?
     @NSManaged public var reportID: String?
     @NSManaged public var collectionDateTime: Date?
+    @NSManaged public var timelineDateTime: Date?
     @NSManaged public var commonName: String?
     @NSManaged public var orderingProvider: String?
     @NSManaged public var testStatus: String?

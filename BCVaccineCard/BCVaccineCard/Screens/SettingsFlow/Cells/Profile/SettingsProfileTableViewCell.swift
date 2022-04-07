@@ -19,22 +19,23 @@ class SettingsProfileTableViewCell: UITableViewCell, Theme {
     // MARK: Class functions
     override func awakeFromNib() {
         super.awakeFromNib()
-        setup()
+        setup(displayName: nil)
         style()
     }
     
     // MARK: Setup
-    public func setup(onTap: @escaping ()->Void) {
+    public func setup(displayName: String?, onTap: @escaping ()->Void) {
         self.callback = onTap
-        setup()
+        setup(displayName: displayName)
         style()
     }
     
-    fileprivate func setup() {
+    fileprivate func setup(displayName: String?) {
         if let icon = UIImage(named: "profile-icon"), let imageView = iconImageView {
             imageView.image = icon
         }
-        nameLabel.text = StorageService.shared.fetchAuthenticatedPatient()?.name ?? AuthManager().displayName
+        nameLabel.text = displayName ?? StorageService.shared.fetchAuthenticatedPatient()?.name?.nameCase() ?? AuthManager().displayName?.nameCase()
+        viewProfileLabel.isHidden = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.contentView.gestureRecognizers?.removeAll()
         self.contentView.addGestureRecognizer(tap)

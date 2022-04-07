@@ -21,8 +21,8 @@ struct Constants {
             return 1
         case .healthResources:
             return 1
-        case .newsFeed:
-            return 1
+//        case .newsFeed:
+//            return 1
         }
     }
     

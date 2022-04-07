@@ -65,9 +65,9 @@
 "HealthRecords" = "Health records";
 "HealthResources" = "Health resources";
 "NewsFeed" = "News feed";
-"InitialOnboardingHealthPassesDescription" = "Keep your BC Vaccine Card and federal Covid-19 proof of vaccination document in a single place";
-"InitialOnboardingHealthRecordsDescription" = "Easily access your health records";
-"InitialOnboardingHealthResourcesDescription" = "Find Covid-19 health information and testing resources";
+"InitialOnboardingHealthPassesDescription" = "Save proof of vaccination documents for you and your family";
+"InitialOnboardingHealthRecordsDescription" = "Access your lab results, prescription history and vaccine records";
+"InitialOnboardingHealthResourcesDescription" = "Find trusted health information and resources";
 "InitialOnboardingNewsFeedDescription" = "Get the latest BC government Covid-19 news";
 "NEW" = "NEW";
 "PHNRequired" = "Personal Health Number is required";
@@ -156,9 +156,9 @@
 "ViewDetailsOfCovidRecordsText" = "View the details of all your Covid Health Records";
 "FetchHealthRecordsIntroText" = "View the details of all your Covid Health Records";
 
-"DisableAnalytics" = "Disable Analytics";
-"EnableAnalytics" = "Enable Analytics";
-"AnalytyticsUsageDescription" = "Anonymized behavioural data is used to help improve the user experience";
+"DisableAnalytics" = "Turn off analytics";
+"EnableAnalytics" = "Turn on analytics";
+"AnalytyticsUsageDescription" = "Share data about how you use the app. This will help us know how we can make it better. All data is anonymous.";
 "DeleteData"= "Delete data";
 "ConfirmDeleteAllRecordsAndSaveData"= "Are you sure you want to delete all records and saved data?";
 "DeletedAllRecordsAndSavedData" = "Deleted all records and saved data";
@@ -188,7 +188,7 @@
 "LocalAuthDescription" = "When enabled, you can unlock the app with touch touch ID instead of passcode";
 "TouchId" = "Touch ID";
 "FaceId" = "Face ID";
-"DeleteAllRecordsAndSavedDataDescription" = "Log out of BC Services Card account and delete every records and saved personal information from My Health BC";
+"DeleteAllRecordsAndSavedDataDescription" = "Log out of the app and delete all records and saved information.";
 "DeleteAllRecordsAndSavedData" = "Delete all records and saved data";
 "LogoutTitle" = "Log out of BC Service Card";
 "LogoutDescription" = "All records under the account will be removed";
@@ -206,10 +206,10 @@
 "MobileApp" = " mobile app.";
 "LocalAuthPrivacyText" = "Biometric authenication is a security feature to protect your personal health information and are required to log on My Health BC.\n\nYour health information and the health information of your spouse, dependents, and claim details will be stored in your mobile device. Should you elect to use Touch ID offered by Apple Inc., or fingerprint sign in functionality offered by Android, or any other type of biometric identification managed on your device (collectively “biometrics”), you agree with acknowledge and consent to the terms and conditions, which can be accessed at here.";
 "Privacy" = "Privacy";
-"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
+"KeepingYourDataSecure" = "Keeping your data secure";
+"LearnMoreAboutLocalAuth" = "Learn more about keeping your data secure";
 "ProtectYourPersonalInformation" = "Protect your personal information";
-"LocalAuthViewDescription" = "My Health BC stores some personal health information. Enabling biometric security will help keep your data safe and secure.";
-"LearnMoreAboutLocalAuth" = "Learn more about enabling biometric on your device";
+"LocalAuthViewDescription" = "To keep your data safe, your device security features must be turned on.";
 "UseTouchId" = "Use Touch ID";
 "UsePassCode" = "Use passcode";
 "UseFaceId" = "Use Face ID";
@@ -218,8 +218,9 @@
 "AllowSecurityAccessMessage" = "\nMy Health BC needs permission to use %@%@Passcode for the device.\n\nGo to Settings > %@Passcode and change the settings to on.";
 "SetupAuthentication" = "Set up authentication";
 "ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication.";
-"ProtectedWordVCNavTitle" = "Restricted PharmaNet Records";
+"UnlockRecords" = "Unlock records";
 "TermsOfService" = "Terms of service";
+"ProtectedWordAlertError" = "The protective word you provided was incorrect. You must enter the correct protective word in order to view your medical records, would you like to try again?";
 
 
 // Accessibility only localized strings

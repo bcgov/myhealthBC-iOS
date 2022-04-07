@@ -93,6 +93,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private func setObservables() {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
     
@@ -156,7 +157,7 @@ extension UsersListOfRecordsViewController {
         }
         
         
-        self.navDelegate?.setNavigationBarWith(title: self.patient?.name ?? "" + " " + .recordText.capitalized,
+        self.navDelegate?.setNavigationBarWith(title: self.patient?.name?.nameCase() ?? "" + " " + .recordText.capitalized,
                                                leftNavButton: nil,
                                                rightNavButtons: buttons,
                                                navStyle: .small,
@@ -593,6 +594,15 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
 
 // MARK: Protected word retry
 extension UsersListOfRecordsViewController {
+    @objc private func protectedWordFailedPromptAgain(_ notification: Notification) {
+        adjustLoadingIndicator(show: false)
+        alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
+            self.promptProtectiveVC(medFetchRequired: self.authManager.medicalFetchRequired)
+        }, buttonTwoTitle: .no) {
+            // Do nothing
+        }
+    }
+    
     @objc private func protectedWordProvided(_ notification: Notification) {
         guard let protectiveWordEntered = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String else { return }
         guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw) else { return }
@@ -603,9 +613,9 @@ extension UsersListOfRecordsViewController {
                 showAllRecords(patientRecords: records, medFetchRequired: false)
                 self.tableView.reloadData()
             } else {
-                alert(title: "Error", message: "The protective word you provided was incorrect. You must enter the correct protective word in order to view your medical records, would you like to try again?", buttonOneTitle: "Yes", buttonOneCompletion: {
+                alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
                     self.promptProtectiveVC(medFetchRequired: false)
-                }, buttonTwoTitle: "No") {
+                }, buttonTwoTitle: .no) {
                     // Do nothing
                 }
             }

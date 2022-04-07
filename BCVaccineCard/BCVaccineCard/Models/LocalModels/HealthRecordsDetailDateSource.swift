@@ -267,11 +267,11 @@ extension HealthRecordsDetailDataSource {
     // MARK: Lab Orders
     private static func genRecord(labTests: [LaboratoryTest]) -> Record {
         let labOrder = labTests.first?.laboratoryOrder
-        let dateString = labOrder?.collectionDateTime?.monthDayYearString
+        let dateString = labOrder?.timelineDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         
         fields.append([
-            TextListModel(header: TextListModel.TextProperties(text: "Collection date:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.collectionDateTime?.labOrderDateTime ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Collection date:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.timelineDateTime?.labOrderDateTime ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Ordering provider:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.orderingProvider ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Reporting Lab:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.reportingSource ?? "", bolded: false))
         ])

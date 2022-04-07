@@ -56,7 +56,8 @@ extension HomeScreenViewController {
     private func navSetup(firstName: String? = nil) {
         var title: String
         if authManager.isAuthenticated, let name = StorageService.shared.fetchAuthenticatedPatient()?.name?.firstName ?? firstName ?? authManager.firstName  {
-            title = "Hi \(name),"
+            let sentenceCaseName = name.nameCase()
+            title = "Hi \(sentenceCaseName),"
         } else {
             title = "Hello"
         }

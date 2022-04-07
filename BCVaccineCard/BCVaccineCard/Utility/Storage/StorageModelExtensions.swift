@@ -38,7 +38,7 @@ extension Patient {
     public var labOrdersArray: [LaboratoryOrder] {
         let set = laboratoryOrders as? Set<LaboratoryOrder> ?? []
         return set.sorted {
-            $0.collectionDateTime ?? Date() > $1.collectionDateTime ?? Date()
+            $0.timelineDateTime ?? Date() > $1.timelineDateTime ?? Date()
         }
     }
     
