@@ -70,6 +70,12 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()
+        // When authentication is expired, reset filters
+        Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
+            guard let `self` = self else {return}
+            self.currentFilter = nil
+            self.hideSelectedFilters()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
