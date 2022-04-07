@@ -82,6 +82,13 @@ class TabBarController: UITabBarController {
         self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource])
         self.selectedIndex = selectedIndex
         setupObserver()
+        postBackgroundAuthFetch()
+    }
+    
+    private func postBackgroundAuthFetch() {
+        guard let token = AuthManager().authToken else { return }
+        guard let hdid = AuthManager().hdid else { return }
+        NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
     }
     
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {

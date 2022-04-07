@@ -24,7 +24,7 @@ class FetchHealthRecordsViewController: BaseViewController {
         return FetchHealthRecordsViewController()
     }
     
-    @IBOutlet weak private var headerLabel: UILabel!
+//    @IBOutlet weak private var headerLabel: UILabel!
     @IBOutlet weak private var tableView: UITableView!
     
     private var hideNavBackButton = false
@@ -69,21 +69,21 @@ class FetchHealthRecordsViewController: BaseViewController {
     
     private func setup() {
         navSetup()
-        setupLabel()
+//        setupLabel()
         setupTableView()
         setupListeners()
     }
     
-    private func setupLabel() {
-        headerLabel.font = UIFont.bcSansRegularWithSize(size: 17)
-        headerLabel.textColor = AppColours.textBlack
-        headerLabel.text = .fetchHealthRecordsIntroText
-        setupAccessibilty()
-    }
+//    private func setupLabel() {
+//        headerLabel.font = UIFont.bcSansRegularWithSize(size: 17)
+//        headerLabel.textColor = AppColours.textBlack
+//        headerLabel.text = .fetchHealthRecordsIntroText
+//        setupAccessibilty()
+//    }
     
-    private func setupAccessibilty() {
-        self.headerLabel.accessibilityLabel = .fetchHealthRecordsIntroText.capitalized
-    }
+//    private func setupAccessibilty() {
+//        self.headerLabel.accessibilityLabel = .fetchHealthRecordsIntroText.capitalized
+//    }
     
     private func adjustDataSource() {
         self.dataSource = [

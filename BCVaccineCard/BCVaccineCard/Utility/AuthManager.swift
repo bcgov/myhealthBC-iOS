@@ -423,8 +423,8 @@ extension AuthManager {
 // MARK: For refetch of authenticated data
 extension AuthManager {
     private func postRefetchNotification() {
-        guard let token = self.authToken else { return }
-        guard let hdid = self.hdid else { return }
-        NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
+//        guard let token = self.authToken else { return }
+//        guard let hdid = self.hdid else { return }
+//        NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
     }
 }
