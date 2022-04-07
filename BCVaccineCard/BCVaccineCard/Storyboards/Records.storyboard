@@ -134,8 +134,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="hZg-Ig-nE6">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="hZg-Ig-nE6">
+                                <rect key="frame" x="0.0" y="52" width="414" height="810"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="pg6-pY-ipG">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="42"/>
@@ -161,7 +161,7 @@
                                         </subviews>
                                     </stackView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="5KY-jQ-pFs">
-                                        <rect key="frame" x="0.0" y="44" width="414" height="774"/>
+                                        <rect key="frame" x="0.0" y="50" width="414" height="760"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </tableView>
                                 </subviews>
@@ -170,7 +170,7 @@
                         <viewLayoutGuide key="safeArea" id="mUF-13-Soo"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="hZg-Ig-nE6" firstAttribute="top" secondItem="mUF-13-Soo" secondAttribute="top" id="Enc-ns-5p8"/>
+                            <constraint firstItem="hZg-Ig-nE6" firstAttribute="top" secondItem="mUF-13-Soo" secondAttribute="top" constant="8" id="Enc-ns-5p8"/>
                             <constraint firstItem="mUF-13-Soo" firstAttribute="trailing" secondItem="hZg-Ig-nE6" secondAttribute="trailing" id="TMk-l1-bYw"/>
                             <constraint firstItem="hZg-Ig-nE6" firstAttribute="leading" secondItem="bXx-Sb-AcF" secondAttribute="leading" id="Xx4-0k-pRL"/>
                             <constraint firstItem="hZg-Ig-nE6" firstAttribute="bottom" secondItem="mUF-13-Soo" secondAttribute="bottom" id="ohz-a4-iRk"/>

@@ -242,7 +242,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
 
         selectedFilters += current.recordTypes.map({$0.rawValue})
         
-        chipsView.setup(options: selectedFilters, selected: [], direction: .horizontal)
+        chipsView.setup(options: selectedFilters, selected: [], direction: .horizontal, selectable: false)
     }
     
     func hideSelectedFilters() {

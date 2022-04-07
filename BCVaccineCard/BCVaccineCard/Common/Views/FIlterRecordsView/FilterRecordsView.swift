@@ -50,11 +50,13 @@ class FilterRecordsView: UIView, Theme {
     
     @IBOutlet weak var chooseDateRangeLabel: UILabel!
     
+    @IBOutlet weak var fromLabel: UILabel!
     @IBOutlet weak var fromDateContainer: UIView!
     @IBOutlet weak var fromDateIcon: UIImageView!
     @IBOutlet weak var fromDateLabel: UILabel!
     @IBOutlet weak var fromDateDivider: UIView!
     
+    @IBOutlet weak var toLabel: UILabel!
     @IBOutlet weak var toDateContainer: UIView!
     @IBOutlet weak var toDateIcon: UIImageView!
     @IBOutlet weak var toDateLabel: UILabel!
@@ -204,11 +206,14 @@ class FilterRecordsView: UIView, Theme {
     }
     
     private func styleFromDate() {
+        fromLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+        fromLabel.textColor = AppColours.textBlack
         styleDateField(label: fromDateLabel, container: fromDateContainer, divider: fromDateDivider, icon: fromDateIcon)
-        
     }
     
     private func styleToDate() {
+        toLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+        toLabel.textColor = AppColours.textBlack
         styleDateField(label: toDateLabel, container: toDateContainer, divider: toDateDivider, icon: toDateIcon)
     }
     
@@ -225,11 +230,15 @@ class FilterRecordsView: UIView, Theme {
     // MARK: Date
     @objc private func toDateTapped(sender:UITapGestureRecognizer) {
         datepickerType = .toDate
+        toLabel.textColor = AppColours.appBlue
+        fromLabel.textColor = AppColours.textBlack
         showDatePicker()
     }
     
     @objc private func fromDateTapped(sender:UITapGestureRecognizer) {
         datepickerType = .fromDate
+        fromLabel.textColor = AppColours.appBlue
+        toLabel.textColor = AppColours.textBlack
         showDatePicker()
     }
     
@@ -243,6 +252,8 @@ class FilterRecordsView: UIView, Theme {
     
     @objc private func hideDatePicker() {
         datePicker.isHidden = true
+        toLabel.textColor = AppColours.textBlack
+        fromLabel.textColor = AppColours.textBlack
         UIView.animate(withDuration: 0.3) {[weak self] in
             self?.layoutIfNeeded()
         }

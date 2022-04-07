@@ -74,6 +74,17 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
+    private func logoutForUnderAgeUser(sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.authManager.signout { done in
+                self.authManager.clearData()
+                self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
+                NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: sourceVC)
+                completion(false)
+            }
+        }
+    }
+    
     // NOTE: This function handles the check if user is 12 and over, and if user has accepted terms and conditions
     // TODO: should do throttle function separately - build it directly on the authentication view controller
     public func checkIfUserCanLoginAndFetchRecords(authCredentials: AuthenticationRequestObject, sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
@@ -86,11 +97,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 completion(false)
                 return
             }
-            guard valid == true else {
-                self.authManager.clearData()
-                self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
-                NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: sourceVC)
-                completion(false)
+            if valid == false {
+                self.logoutForUnderAgeUser(sourceVC: sourceVC, completion: completion)
                 return
             }
             // NOTE: Check if user profile has been created here and has accepted terms and conditions
