@@ -640,10 +640,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else { return }
         for order in orders {
-            self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.reportID ?? "") { pdf in
-                // FIXME: For testing - we will use static PDF data, remote next line after HG API is updated
-                let newPDFString = pdf ?? Constants.pdfStringForLabOrdersTesting
-                if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: newPDFString, authenticated: true, patientObject: patient) {
+            self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
+                if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
                     completedCount += 1
                 } else {
                     errorArrayCount += 1

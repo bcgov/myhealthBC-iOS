@@ -20,3 +20,8 @@ struct AuthenticatedPDFResponseObject: Codable {
         let data: String?
     }
 }
+
+struct AuthenticatedPDFRequestObject: Codable {
+    let hdid: String
+    let isCovid19: String
+}
