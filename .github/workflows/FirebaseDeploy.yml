@@ -32,4 +32,9 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID}}
         run: ./.github/scripts/publish_firebase.sh
-
+      - name: Upload .ipa
+        uses: actions/upload-artifact@v1
+        with:
+          name: BCVaccineCard.ipa
+          path: build/Apps/BCVaccineCard.ipa
+          
