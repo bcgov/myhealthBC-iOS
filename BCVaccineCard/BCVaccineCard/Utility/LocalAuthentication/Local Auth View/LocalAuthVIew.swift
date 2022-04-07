@@ -134,13 +134,13 @@ class LocalAuthView: UIView, Theme {
             useTouchIDButton.isHidden = true
         case .touchID:
             useTouchIDButton.isHidden = false
-            style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication, image: nil)
-            style(button: useTouchIDButton, style: .Fill, title: .useTouchId, image: nil)
+            style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication, image: nil, bold: true)
+            style(button: useTouchIDButton, style: .Fill, title: .useTouchId, image: nil, bold: true)
             hasBiometric = true
         case .faceID:
             useTouchIDButton.isHidden = false
-            style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication, image: nil)
-            style(button: useTouchIDButton, style: .Fill, title: .useFaceId, image: nil)
+            style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication, image: nil, bold: true)
+            style(button: useTouchIDButton, style: .Fill, title: .useFaceId, image: nil, bold: true)
             hasBiometric = true
         @unknown default:
             useTouchIDButton.isHidden = true

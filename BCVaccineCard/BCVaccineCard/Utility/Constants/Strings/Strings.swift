@@ -252,6 +252,7 @@ extension String {
     // MARK: Local Auth
     static var localAuthPrivacyText: String { return "LocalAuthPrivacyText".localized }
     static var privacy: String { return "Privacy".localized }
+    static var keepingYourDataSecure: String { return "KeepingYourDataSecure".localized }
     static var protectYourPersonalInformation: String { return "ProtectYourPersonalInformation".localized }
     static var localAuthViewDescription: String { return "LocalAuthViewDescription".localized }
     static var learnMoreAboutLocalAuth: String { return "LearnMoreAboutLocalAuth".localized }

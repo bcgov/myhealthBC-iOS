@@ -114,7 +114,8 @@ class LocalAuthManager {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if viewType == .Authenticate {
-                self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
+                // NOTE: For Amir: Commenting this out, as it will automatically authenticate user, and they won't be able to access the details of the local auth screen (Ticket HAPP-637)
+//                self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
             }
         }
     }
