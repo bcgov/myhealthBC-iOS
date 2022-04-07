@@ -252,6 +252,7 @@ extension String {
     // MARK: Local Auth
     static var localAuthPrivacyText: String { return "LocalAuthPrivacyText".localized }
     static var privacy: String { return "Privacy".localized }
+    static var keepingYourDataSecure: String { return "KeepingYourDataSecure".localized }
     static var protectYourPersonalInformation: String { return "ProtectYourPersonalInformation".localized }
     static var localAuthViewDescription: String { return "LocalAuthViewDescription".localized }
     static var learnMoreAboutLocalAuth: String { return "LearnMoreAboutLocalAuth".localized }
@@ -273,6 +274,8 @@ extension String {
     static var reasonForRequestingAuthentication: String { return "ReasonForRequestingAuthentication".localized }
     static var unlockRecords: String { return "UnlockRecords".localized }
     static var termsOfService: String { return "TermsOfService".localized }
+    // Protected word
+    static var protectedWordAlertError: String { return "ProtectedWordAlertError".localized }
 }
 
 // Accessibility only localized strings

@@ -73,6 +73,11 @@ extension Date {
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
             return formatter
         }()
+        static let gatewayDateAndTimeWithMSAndTimeZone: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            return formatter
+        }()
         static let gatewayDateAndTimeWithTimeZone: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -208,6 +213,8 @@ extension Date {
     var issuedOnDate: String { return Formatter.issuedOnDate.string(from: self) }
     var gatewayDateAndTime: String { return Formatter.gatewayDateAndTime.string(from: self) }
     var gatewayDateAndTimeWithTimeZone: String { return Formatter.gatewayDateAndTimeWithTimeZone.string(from: self) }
+    var gatewayDateAndTimeWithMS: String { return Formatter.gatewayDateAndTimeWithMS.string(from: self) }
+    var gatewayDateAndTimeWithMSAndTimeZone: String { return Formatter.gatewayDateAndTimeWithMSAndTimeZone.string(from: self) }
     var labOrderDateTime: String { return Formatter.labOrderDateTime.string(from: self) }
     
     //MARK: - Date Strings

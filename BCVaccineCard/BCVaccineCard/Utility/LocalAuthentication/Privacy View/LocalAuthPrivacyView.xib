@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -28,16 +28,6 @@
                         <constraint firstAttribute="height" constant="1" id="O1R-nX-bq0"/>
                     </constraints>
                 </view>
-                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="FeA-z6-TP5">
-                    <rect key="frame" x="32" y="122" width="350" height="708"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    <mutableString key="text">Biometric authenication is a security feature to protect your personal health information and are required to log on My Health BC.
-
-Your health information and the health information of your spouse, dependents, and claim details will be stored in your mobile device. Should you elect to use Touch ID offered by Apple Inc., or fingerprint sign in functionality offered by Android, or any other type of biometric identification managed on your device (collectively “biometrics”), you agree with acknowledge and consent to the terms and conditions, which can be accessed at here.</mutableString>
-                    <color key="textColor" systemColor="labelColor"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                </textView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="izr-md-9nq">
                     <rect key="frame" x="16" y="51.5" width="48" height="38"/>
                     <constraints>
@@ -49,25 +39,29 @@ Your health information and the health information of your spouse, dependents, a
                         <action selector="backButtonAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="1XB-5N-QL9"/>
                     </connections>
                 </button>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="T2t-fh-KsM">
+                    <rect key="frame" x="32" y="122" width="350" height="708"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="FeA-z6-TP5" firstAttribute="top" secondItem="XDB-qI-ZjH" secondAttribute="bottom" constant="32" id="6hA-U2-gXo"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="T2t-fh-KsM" secondAttribute="trailing" constant="32" id="B8X-UY-aOD"/>
                 <constraint firstItem="izr-md-9nq" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="FLv-ni-HX3"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="FeA-z6-TP5" secondAttribute="trailing" constant="32" id="OJ2-Ac-4Tt"/>
-                <constraint firstItem="FeA-z6-TP5" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="32" id="ZsV-q5-aup"/>
+                <constraint firstItem="T2t-fh-KsM" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="32" id="Pae-9H-Blg"/>
                 <constraint firstItem="XDB-qI-ZjH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="eoX-Ji-pJY"/>
                 <constraint firstItem="LlS-vB-eni" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="gkI-FX-ipQ"/>
                 <constraint firstItem="izr-md-9nq" firstAttribute="centerY" secondItem="LlS-vB-eni" secondAttribute="centerY" id="hdF-An-Qgj"/>
                 <constraint firstAttribute="trailing" secondItem="XDB-qI-ZjH" secondAttribute="trailing" id="lk5-Rr-0nb"/>
                 <constraint firstItem="LlS-vB-eni" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="mhq-Hf-BT9"/>
+                <constraint firstItem="T2t-fh-KsM" firstAttribute="top" secondItem="XDB-qI-ZjH" secondAttribute="bottom" constant="32" id="nu5-RY-mL9"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="T2t-fh-KsM" secondAttribute="bottom" constant="32" id="uK4-qc-kBG"/>
                 <constraint firstItem="XDB-qI-ZjH" firstAttribute="top" secondItem="LlS-vB-eni" secondAttribute="bottom" constant="8" id="vYZ-e7-ZA8"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="FeA-z6-TP5" secondAttribute="bottom" constant="32" id="yvQ-Aa-rsE"/>
             </constraints>
             <connections>
                 <outlet property="backButton" destination="izr-md-9nq" id="qL5-ti-So7"/>
-                <outlet property="textView" destination="FeA-z6-TP5" id="Vr9-CU-lUn"/>
+                <outlet property="tableView" destination="T2t-fh-KsM" id="3wG-Ed-6uO"/>
                 <outlet property="titleLabel" destination="LlS-vB-eni" id="jP7-5R-pUi"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="95.758928571428569"/>
@@ -75,9 +69,6 @@ Your health information and the health information of your spouse, dependents, a
     </objects>
     <resources>
         <image name="app-back-arrow" width="24" height="24"/>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
