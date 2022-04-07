@@ -85,6 +85,7 @@ class TabBarController: UITabBarController {
         postBackgroundAuthFetch()
     }
     
+    // Note: Leaving this in the notification pattern for now, as perhaps we will call it in a different location (if there are any issues calling it here, that is)
     private func postBackgroundAuthFetch() {
         guard let token = AuthManager().authToken else { return }
         guard let hdid = AuthManager().hdid else { return }
