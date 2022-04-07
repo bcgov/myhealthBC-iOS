@@ -14,9 +14,8 @@ security unlock-keychain -p "$FW_KEYS" health.keychain
 security default-keychain -s ~/Library/Keychains/health.keychain
 security set-keychain-settings -l -u -t 4000
 
-security import ./.github/secrets/dist.p12 -t agg -k ~/Library/Keychains/build.keychain -P "" -A
 security import ./.github/secrets/dist.p12 -t agg -k ~/Library/Keychains/health.keychain -P "" -A
 security import ./.github/secrets/dist.p12 -k ~/Library/Keychains/health.keychain -P "" -T /usr/bin/codesign
 
-security list-keychains -s ~/Library/Keychains/healthkeychain
+security list-keychains -s ~/Library/Keychains/health.keychain
 security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/health.keychain
