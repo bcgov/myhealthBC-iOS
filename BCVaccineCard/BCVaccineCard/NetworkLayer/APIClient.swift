@@ -134,12 +134,13 @@ class APIClient {
         let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedLaboratoryOrderPDF(repordId: reportId))
         
         let headerParameters: Headers = [
-            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
-            Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
+            Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
         ]
         
+        let parameters = AuthenticatedPDFRequestObject(hdid: authCredentials.hdid, isCovid19: "false")
+        
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
     }
     
 }
