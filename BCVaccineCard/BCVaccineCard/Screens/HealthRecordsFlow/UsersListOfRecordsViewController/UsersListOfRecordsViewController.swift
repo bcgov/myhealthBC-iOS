@@ -27,6 +27,10 @@ class UsersListOfRecordsViewController: BaseViewController {
         return UsersListOfRecordsViewController()
     }
     
+    @IBOutlet weak private var noRecordsFoundView: UIView!
+    @IBOutlet weak private var noRecordsFoundTitle: UILabel!
+    @IBOutlet weak private var noRecordsFoundSubTitle: UILabel!
+    
     @IBOutlet weak private var clearFiltersButton: UIButton!
     @IBOutlet weak private var filterStack: UIStackView!
     @IBOutlet weak private var filterContainer: UIView!
@@ -108,6 +112,11 @@ class UsersListOfRecordsViewController: BaseViewController {
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
         showSelectedFilters()
+        noRecordsFoundSubTitle.font = UIFont.bcSansRegularWithSize(size: 13)
+        noRecordsFoundTitle.font = UIFont.bcSansBoldWithSize(size: 20)
+        noRecordsFoundTitle.textColor = AppColours.appBlue
+        noRecordsFoundSubTitle.textColor = AppColours.textGray
+        noRecordsFoundView.isHidden = true
     }
 
     @IBAction func removeFilters(_ sender: Any) {
@@ -335,6 +344,14 @@ extension UsersListOfRecordsViewController {
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
 //        self.checkForTestResultsToUpdate(ds: self.dataSource)
+        
+        if patientRecords.isEmpty {
+            noRecordsFoundView.isHidden = false
+            tableView.isHidden = true
+        } else {
+            noRecordsFoundView.isHidden = true
+            tableView.isHidden = false
+        }
     }
     
     private func handleAuthenticatedMedicalRecords(patientRecords: [HealthRecordsDetailDataSource], initialProtectedMedFetch: Bool) {

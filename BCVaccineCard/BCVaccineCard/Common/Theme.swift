@@ -40,6 +40,8 @@ extension Theme {
         button.setTitle(title, for: .normal)
         button.setImage(image, for: .normal)
         button.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
+        button.titleLabel?.minimumScaleFactor = 0.5
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
     // Labels
