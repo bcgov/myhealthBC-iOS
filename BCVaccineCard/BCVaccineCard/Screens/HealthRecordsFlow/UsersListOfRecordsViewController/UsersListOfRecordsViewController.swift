@@ -303,10 +303,10 @@ extension UsersListOfRecordsViewController {
                 if let dateString = item.mainRecord?.date,
                    let recordDate = Date.Formatter.monthDayYearDate.date(from: dateString)
                 {
-                    if let fromDate = filter.fromDate, recordDate < fromDate {
+                    if let fromDate = filter.fromDate, recordDate <= fromDate {
                         showItem = false
                     }
-                    if let toDate = filter.toDate, recordDate > toDate {
+                    if let toDate = filter.toDate, recordDate >= toDate {
                         showItem = false
                     }
                     
