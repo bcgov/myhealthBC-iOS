@@ -194,19 +194,22 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
     
     // MARK: Helpers
     private func deleteRecordsForAuthenticatedUserAndLogout() {
-        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
         LocalAuthManager.block = true
-        performLogout(completion: {})
+        performLogout(completion: {success in
+            guard success else { return }
+            
+        })
     }
     
-    private func performLogout(completion: @escaping()-> Void) {
+    private func performLogout(completion: @escaping(_ success: Bool)-> Void) {
         authManager.signout(in: self, completion: { [weak self] success in
             guard let `self` = self else {return}
             // Regardless of the result of the async logout, clear tokens.
             // because user may be offline
             // TODO: Note - sometimes prompt isn't shown after hitting logout, so the screen state (for records) remains. We should look at resetting tab bar and then switch index to current index after reset
-            self.authManager.clearData()
+            
             self.tableView.reloadData()
+            completion(success)
         })
     }
     

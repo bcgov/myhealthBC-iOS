@@ -34,8 +34,15 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
     
     func performLocalAuthIfNeeded() {
         if LocalAuthManager.shouldAuthenticate {
-            showLocalAuth(onSuccess: {})
+            showLocalAuth(onSuccess: { [weak self] in
+                guard let `self` = self else {return}
+                self.localAuthPerformed()
+            })
         }
+    }
+    
+    func localAuthPerformed() {
+        
     }
     
 }

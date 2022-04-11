@@ -44,31 +44,31 @@ class HomeScreenViewController: BaseViewController {
     }
     
     private func setup() {
-        navSetup()
         addObservablesForChangeInAuthenticationStatus()
         setupTableView()
+        navSetup()
     }
     
 }
 
 // MARK: Navigation setup
 extension HomeScreenViewController {
-    private func navSetup(firstName: String? = nil) {
-        var title: String
+    fileprivate func navTitle(firstName: String? = nil) -> String {
         if authManager.isAuthenticated, let name = StorageService.shared.fetchAuthenticatedPatient()?.name?.firstName ?? firstName ?? authManager.firstName  {
             let sentenceCaseName = name.nameCase()
-            title = "Hi \(sentenceCaseName),"
+            return "Hi \(sentenceCaseName),"
         } else {
-            title = "Hello"
+            return "Hi"
         }
+    }
+    private func navSetup(firstName: String? = nil) {
+        var title: String = navTitle(firstName: firstName)
         self.navDelegate?.setNavigationBarWith(title: title,
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
                                                targetVC: self,
                                                backButtonHintString: nil)
-        
-        
     }
 }
 
