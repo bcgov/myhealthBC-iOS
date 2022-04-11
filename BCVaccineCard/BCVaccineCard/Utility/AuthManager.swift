@@ -227,8 +227,10 @@ class AuthManager {
                         HTTPCookieStorage.shared.deleteCookie(cookie)
                     }
                     self.removeAuthTokens()
+                    StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
                     self.removeAuthenticatedPatient()
                     self.authStatusChanged(authenticated: false)
+                    self.clearData()
                     return completion(true)
                 }
                 if error != nil {

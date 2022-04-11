@@ -205,13 +205,14 @@ class AuthenticationViewController: UIViewController {
                 guard let self = self else {return}
                 self.dismissView(withDelay: false, status: status, sourceVC: sourceVC)
             }
-        }
-        self.removeChild()
-        
-        dismissAndReturnCompletion(status: status)
-        if self.createTabBarAndGoToHomeScreen {
-            let authStatus: AuthenticationStatus? = status == .Completed ? .Completed : nil
-            dismissFullScreen(sourceVC: sourceVC, authStatus: authStatus)
+        } else {
+            self.removeChild()
+            
+            dismissAndReturnCompletion(status: status)
+            if self.createTabBarAndGoToHomeScreen {
+                let authStatus: AuthenticationStatus? = status == .Completed ? .Completed : nil
+                dismissFullScreen(sourceVC: sourceVC, authStatus: authStatus)
+            }
         }
     }
     

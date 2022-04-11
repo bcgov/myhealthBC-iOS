@@ -62,7 +62,9 @@ class InitialOnboardingViewController: UIViewController {
     
     @IBAction private func skipButtonTapped(_ sender: UIButton) {
         Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
-        goToAuthentication()
+        showLocalAuth {[weak self] in
+            self?.goToAuthentication()
+        }
     }
     
 }

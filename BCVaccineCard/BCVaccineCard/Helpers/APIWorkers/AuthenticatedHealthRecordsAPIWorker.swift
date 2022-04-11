@@ -41,6 +41,11 @@ enum AuthenticationFetchType {
 
 class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
+    private enum AutoLogoutReason {
+        case Underage
+        case FailedToValidate
+    }
+    
     private var apiClient: APIClient
     weak private var delegate: AuthenticatedHealthRecordsAPIWorkerDelegate?
     fileprivate let authManager = AuthManager()
@@ -75,11 +80,16 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
-    private func logoutForUnderAgeUser(sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.authManager.signout { done in
-                self.authManager.clearData()
-                self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
+    private func logoutUser(reason: AutoLogoutReason, sourceVC: LoginVCSource, error:  ResultError?, completion: @escaping(Bool) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.authManager.signout { suceess in
+                guard suceess else { return }
+                switch reason {
+                case .Underage:
+                    self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
+                case .FailedToValidate:
+                    self.delegate?.showAlertForLoginAttemptDueToValidation(error: error)
+                }
                 NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: sourceVC)
                 completion(false)
             }
@@ -92,14 +102,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
             guard let valid = valid else {
-                self.authManager.clearData()
-                self.delegate?.showAlertForLoginAttemptDueToValidation(error: error)
-                NotificationManager.postLoginDataClearedOnLoginRejection(sourceVC: sourceVC)
-                completion(false)
+                self.logoutUser(reason: .FailedToValidate, sourceVC: sourceVC, error: error, completion: completion)
                 return
             }
             if valid == false {
-                self.logoutForUnderAgeUser(sourceVC: sourceVC, completion: completion)
+                self.logoutUser(reason: .Underage, sourceVC: sourceVC, error: error, completion: completion)
                 return
             }
             // NOTE: Check if user profile has been created here and has accepted terms and conditions

@@ -138,6 +138,7 @@ class FilterRecordsView: UIView, Theme {
     // MARK: Style
     func style() {
         self.alpha = 0
+        datePicker.maximumDate = Date()
         navContainer.backgroundColor = .clear
         filterChipsContainer.backgroundColor = .clear
         
