@@ -41,9 +41,8 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
         }
     }
     
-    func localAuthPerformed() {
-        
-    }
+    /// Override this function to perform changes after local authentication
+    func localAuthPerformed() {}
     
 }
 

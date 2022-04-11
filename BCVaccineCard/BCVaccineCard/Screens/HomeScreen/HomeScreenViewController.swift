@@ -58,9 +58,10 @@ extension HomeScreenViewController {
             let sentenceCaseName = name.nameCase()
             return "Hi \(sentenceCaseName),"
         } else {
-            return "Hi"
+            return "Hello"
         }
     }
+    
     private func navSetup(firstName: String? = nil) {
         var title: String = navTitle(firstName: firstName)
         self.navDelegate?.setNavigationBarWith(title: title,
