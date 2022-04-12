@@ -71,6 +71,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     var fetchStatusList: FetchStatusList = FetchStatusList(fetchStatus: [:]) {
         didSet {
             if fetchStatusList.isCompleted {
+                // Check to make sure fetchStatusList isn't just comments
+                guard fetchStatusList.isStatusListMoreThanJustComments else {
+                    self.deinitializeStatusList()
+                    return
+                }
                 self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner)
                 self.deinitializeStatusList()
             } else if fetchStatusList.canFetchComments {
@@ -744,6 +749,12 @@ struct FetchStatusList {
         tempCommentsList.removeValue(forKey: .Comments)
         guard tempCommentsList.count > 0 else { return false }
         return tempCommentsList.count == tempCommentsList.map({ $0.value.requestCompleted }).filter({ $0 == true }).count
+    }
+    
+    var isStatusListMoreThanJustComments: Bool {
+        var tempList = fetchStatus
+        tempList.removeValue(forKey: .Comments)
+        return tempList.count > 0
     }
     
     var getAttemptedCount: Int {
