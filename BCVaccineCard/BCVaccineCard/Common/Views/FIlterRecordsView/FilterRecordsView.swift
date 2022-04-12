@@ -134,6 +134,7 @@ class FilterRecordsView: UIView, Theme {
         toDateLabel.text = "yyyy-mm-dd"
         fromDateLabel.text = "yyyy-mm-dd"
         delegate?.selected(filter: currentFilter)
+        errorLabel.isHidden = true
     }
     
     // MARK: Style

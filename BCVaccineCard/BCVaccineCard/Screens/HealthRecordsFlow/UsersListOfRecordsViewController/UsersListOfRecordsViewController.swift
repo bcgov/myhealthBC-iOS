@@ -252,7 +252,12 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
         
         var dateFilter = ""
         if current.fromDate != nil || current.toDate != nil {
-            dateFilter = "\(fromDateText) \(toDateText)"
+            if current.fromDate != nil && current.toDate != nil {
+                dateFilter = "\(fromDateText) - \(toDateText)"
+            } else {
+                dateFilter = "\(fromDateText) \(toDateText)"
+            }
+           
             selectedFilters.append(dateFilter)
         }
 
