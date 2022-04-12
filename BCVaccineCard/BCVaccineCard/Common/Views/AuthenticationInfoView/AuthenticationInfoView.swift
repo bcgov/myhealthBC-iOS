@@ -65,10 +65,8 @@ class AuthenticationInfoView: UIView, Theme {
         messageLabel.attributedText =
             NSMutableAttributedString()
             .normal(.youWillRedirected)
-            .bold(.healthGateway)
             .normal("\(String.toLoginWithYourBCServices)\n\n")
             .normal(.youWillAutomaticallyReturned)
-            .bold(.myHealthBC)
             .normal(.mobileApp)
         navBackButton.setTitle("", for: .normal)
         

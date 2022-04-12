@@ -10,7 +10,7 @@ import UIKit
 class SettingsAuthenticateTableViewCell: UITableViewCell, Theme {
     // MARK: Variables
     fileprivate var callback: (()->Void)?
-
+    
     // MARK: Outlets
     @IBOutlet weak var button: UIButton!
     
@@ -35,10 +35,6 @@ class SettingsAuthenticateTableViewCell: UITableViewCell, Theme {
     
     // MARK: Style
     fileprivate func style() {
-        style(button: button, style: .Fill, title: .bcscLogin, image: UIImage(named: "bcscLogo"), bold: true)
-        if let icon = UIImage(named: "bcscLogo") {
-            button.setImage(icon, for: .normal)
-        }
-       
+        style(button: button, style: .Fill, title: .bcscLogin, image: nil, bold: true)
     }
 }

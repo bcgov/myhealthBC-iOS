@@ -197,8 +197,8 @@
 "PublishedOn" = "Published on";
 "Title" = "Title";
 "Details" = "Details";
-"LeavingMyHealthBC" = "Leaving My Health BC";
-"YouWillRedirected" = "You will be temporarily redirected to ";
+"LeavingMyHealthBC" = "Leaving Health Gateway";
+"YouWillRedirected" = "You will be temporarily redirected ";
 "HealthGateway" = "Health Gateway ";
 "toLoginWithYourBCServices" = "to login with your BC Services Card.";
 "YouWillAutomaticallyReturned" = "You will then be automatically returned to the ";

@@ -66,6 +66,7 @@ class FilterRecordsView: UIView, Theme {
     @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
     
+    @IBOutlet weak var errorLabel: UILabel!
     
     // MARK: Variables
     var delegate: FilterRecordsViewDelegate? = nil
@@ -133,10 +134,12 @@ class FilterRecordsView: UIView, Theme {
         toDateLabel.text = "yyyy-mm-dd"
         fromDateLabel.text = "yyyy-mm-dd"
         delegate?.selected(filter: currentFilter)
+        errorLabel.isHidden = true
     }
     
     // MARK: Style
     func style() {
+        
         self.alpha = 0
         datePicker.maximumDate = Date()
         navContainer.backgroundColor = .clear
@@ -159,6 +162,10 @@ class FilterRecordsView: UIView, Theme {
         style(button: clearButton, style: .Hollow, title: "Clear all", image: nil)
         style(button: continueButton, style: .Fill, title: "Apply", image: nil)
         closeButton.setTitle("", for: .normal)
+        
+        errorLabel.font = UIFont.bcSansRegularWithSize(size: 13)
+        errorLabel.textColor = AppColours.appRed
+        errorLabel.isHidden = true
         
         let fromDateAction = UITapGestureRecognizer(target: self, action: #selector(fromDateTapped))
         fromDateContainer.isUserInteractionEnabled = true
@@ -282,6 +289,12 @@ class FilterRecordsView: UIView, Theme {
         } else {
             currentFilter.fromDate = selectedDate
             fromDateLabel.text = dateString
+        }
+        // Validation
+        if let from = currentFilter.fromDate, let to = currentFilter.toDate {
+            errorLabel.isHidden = to < from ? false : true
+        } else {
+            errorLabel.isHidden = true
         }
     }
     

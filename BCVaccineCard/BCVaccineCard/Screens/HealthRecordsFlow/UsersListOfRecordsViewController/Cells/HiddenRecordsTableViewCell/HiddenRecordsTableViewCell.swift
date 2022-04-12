@@ -14,30 +14,30 @@ enum HiddenRecordType: Equatable {
     
     var getButtonImage: UIImage? {
         switch self {
-        case .loginToAccess, .authenticate: return UIImage(named: "bcscLogo")
-        case .medicalRecords: return UIImage(named: "white-lock")
+        case .loginToAccess, .authenticate: return nil
+        case .medicalRecords: return UIImage(named: "lock")
         }
     }
     
     var getButtonTitle: String {
         switch self {
         case .loginToAccess, .authenticate: return .bcscLogin
-        case .medicalRecords: return .accessRecords
+        case .medicalRecords: return "Unlock records"
         }
     }
     
     var getTitleText: String {
         switch self {
-        case .loginToAccess(let hiddenRecords): return "\(hiddenRecords) hidden records"
-        case .medicalRecords: return "Hidden medication records"
+        case .loginToAccess(_): return "Your session has timed out"
+        case .medicalRecords: return "Medication history"
         case .authenticate: return "Manage your records"
         }
     }
     
     var getDescriptionText: String {
         switch self {
-        case .loginToAccess: return "Log in again with your BC Services Card to view all the records"
-        case .medicalRecords: return "Enter protective word to access your medication records."
+        case .loginToAccess: return "Log in again to view all the health records"
+        case .medicalRecords: return "Some of your health records are locked. You need to enter your protective word to unlock them."
         case .authenticate: return "Log in again with your BC Services Card to view all the records and customize health plans"
         }
     }

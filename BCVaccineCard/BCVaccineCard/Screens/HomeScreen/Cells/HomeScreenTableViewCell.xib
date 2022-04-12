@@ -38,7 +38,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ol-NX-MHs">
-                                        <rect key="frame" x="36" y="55" width="287" height="67"/>
+                                        <rect key="frame" x="36" y="55" width="276" height="67"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -58,13 +58,13 @@
                                     <constraint firstItem="G7h-5A-gI8" firstAttribute="centerY" secondItem="Zjw-tS-LPt" secondAttribute="centerY" id="CBt-gM-H9w"/>
                                     <constraint firstItem="R2F-xX-SXO" firstAttribute="top" secondItem="2ol-NX-MHs" secondAttribute="bottom" constant="24" id="HNG-g5-fzV"/>
                                     <constraint firstItem="R2F-xX-SXO" firstAttribute="leading" secondItem="2ol-NX-MHs" secondAttribute="leading" id="IGx-rN-Ib3"/>
+                                    <constraint firstAttribute="trailing" secondItem="2ol-NX-MHs" secondAttribute="trailing" constant="16" id="Kqy-17-Gvp"/>
                                     <constraint firstItem="G7h-5A-gI8" firstAttribute="leading" secondItem="Zjw-tS-LPt" secondAttribute="trailing" constant="12" id="UAJ-9v-vZG"/>
                                     <constraint firstItem="Zjw-tS-LPt" firstAttribute="top" secondItem="adl-r1-77e" secondAttribute="top" constant="24" id="ZZA-go-c1V"/>
                                     <constraint firstItem="2ol-NX-MHs" firstAttribute="top" relation="greaterThanOrEqual" secondItem="G7h-5A-gI8" secondAttribute="bottom" constant="5" id="hqn-hU-ZBv"/>
                                     <constraint firstItem="Zjw-tS-LPt" firstAttribute="leading" secondItem="adl-r1-77e" secondAttribute="leading" constant="36" id="j8y-KL-1HI"/>
                                     <constraint firstAttribute="trailing" secondItem="G7h-5A-gI8" secondAttribute="trailing" constant="5" id="xdE-sY-4mU"/>
                                     <constraint firstItem="2ol-NX-MHs" firstAttribute="leading" secondItem="Zjw-tS-LPt" secondAttribute="leading" id="yRZ-Lb-SOD"/>
-                                    <constraint firstItem="2ol-NX-MHs" firstAttribute="trailing" secondItem="G7h-5A-gI8" secondAttribute="trailing" id="zuO-XK-fYR"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -94,7 +94,7 @@
                 <outlet property="shadowView" destination="Gk8-vf-c7P" id="k4C-Ly-2nW"/>
                 <outlet property="titleLabel" destination="G7h-5A-gI8" id="uCd-pF-D33"/>
             </connections>
-            <point key="canvasLocation" x="139" y="90"/>
+            <point key="canvasLocation" x="137.68115942028987" y="89.397321428571431"/>
         </tableViewCell>
     </objects>
     <resources>

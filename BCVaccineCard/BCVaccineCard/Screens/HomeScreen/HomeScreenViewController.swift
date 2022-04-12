@@ -110,7 +110,7 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: HomeScreenTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HomeScreenTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 231
+//        tableView.estimatedRowHeight = 231
         tableView.delegate = self
         tableView.dataSource = self
     }

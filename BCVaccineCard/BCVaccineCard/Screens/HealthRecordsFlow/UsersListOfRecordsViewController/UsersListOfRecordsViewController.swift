@@ -240,19 +240,24 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
         var selectedFilters: [String] = []
         
         
-        var fromDateText = ""
+        var fromDateText = "or before"
         if let startDate = current.fromDate {
             fromDateText = startDate.issuedOnDate
         }
         
-        var toDateText = ""
+        var toDateText = "or later"
         if let endDate = current.toDate {
             toDateText = endDate.issuedOnDate
         }
         
         var dateFilter = ""
         if current.fromDate != nil || current.toDate != nil {
-            dateFilter = "\(fromDateText) - \(toDateText)"
+            if current.fromDate != nil && current.toDate != nil {
+                dateFilter = "\(fromDateText) - \(toDateText)"
+            } else {
+                dateFilter = "\(fromDateText) \(toDateText)"
+            }
+           
             selectedFilters.append(dateFilter)
         }
 
