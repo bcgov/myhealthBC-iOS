@@ -82,6 +82,14 @@ class TabBarController: UITabBarController {
         self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource])
         self.selectedIndex = selectedIndex
         setupObserver()
+        postBackgroundAuthFetch()
+    }
+    
+    // Note: Leaving this in the notification pattern for now, as perhaps we will call it in a different location (if there are any issues calling it here, that is)
+    private func postBackgroundAuthFetch() {
+        guard let token = AuthManager().authToken else { return }
+        guard let hdid = AuthManager().hdid else { return }
+        NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
     }
     
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {
@@ -245,6 +253,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool) {
         guard showBanner else { return }
         // TODO: Connor - handle error case
+        self.resetHealthRecordsTab()
         self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
         var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false)

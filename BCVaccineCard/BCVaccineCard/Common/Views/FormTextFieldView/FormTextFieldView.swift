@@ -180,8 +180,8 @@ class FormTextFieldView: UIView {
         formTextFieldSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         formTextFieldErrorLabel.textColor = AppColours.appRed
         formTextFieldErrorLabel.font = UIFont.bcSansItalicWithSize(size: 13)
-        formTextFieldFooterLabel.textColor = AppColours.lightGray
-        formTextFieldFooterLabel.font = UIFont.bcSansItalicWithSize(size: 13)
+        formTextFieldFooterLabel.textColor = AppColours.textGray
+        formTextFieldFooterLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         formTextFieldTitleLabel.isAccessibilityElement = false
         formTextFieldSubtitleLabel.isAccessibilityElement = false
         formTextFieldErrorLabel.isAccessibilityElement = false

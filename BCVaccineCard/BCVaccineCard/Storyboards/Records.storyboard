@@ -94,31 +94,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6as-jW-Iil">
-                                <rect key="frame" x="24" y="54" width="366" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8C6-a4-6jl">
-                                <rect key="frame" x="0.0" y="84.5" width="414" height="777.5"/>
+                                <rect key="frame" x="0.0" y="54" width="414" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="dol-yA-rce"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6as-jW-Iil" firstAttribute="leading" secondItem="8C6-a4-6jl" secondAttribute="leading" constant="24" id="C7h-uj-Aft"/>
                             <constraint firstItem="8C6-a4-6jl" firstAttribute="leading" secondItem="dol-yA-rce" secondAttribute="leading" id="FOX-Xu-ydA"/>
-                            <constraint firstItem="6as-jW-Iil" firstAttribute="trailing" secondItem="8C6-a4-6jl" secondAttribute="trailing" constant="-24" id="Gh6-vi-mq2"/>
-                            <constraint firstItem="8C6-a4-6jl" firstAttribute="top" secondItem="6as-jW-Iil" secondAttribute="bottom" constant="10" id="WpT-pl-jW3"/>
                             <constraint firstItem="dol-yA-rce" firstAttribute="bottom" secondItem="8C6-a4-6jl" secondAttribute="bottom" id="hqN-K5-dVG"/>
-                            <constraint firstItem="6as-jW-Iil" firstAttribute="top" secondItem="dol-yA-rce" secondAttribute="top" constant="10" id="mSD-5d-MXZ"/>
+                            <constraint firstItem="8C6-a4-6jl" firstAttribute="top" secondItem="dol-yA-rce" secondAttribute="top" constant="10" id="k75-aL-Hci"/>
                             <constraint firstItem="dol-yA-rce" firstAttribute="trailing" secondItem="8C6-a4-6jl" secondAttribute="trailing" id="zNy-A7-v8R"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="headerLabel" destination="6as-jW-Iil" id="duK-0J-e6j"/>
                         <outlet property="tableView" destination="8C6-a4-6jl" id="PkL-Qb-NMT"/>
                     </connections>
                 </viewController>
