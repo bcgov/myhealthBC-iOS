@@ -16,7 +16,7 @@ enum HomeScreenCellType {
     var getTitle: String {
         switch self {
         case .Records: return "Health Records"
-        case .Proofs: return "Proof of Vaccination"
+        case .Proofs: return "Proof of vaccination"
         case .Resources: return "Resources"
         }
     }
@@ -31,9 +31,9 @@ enum HomeScreenCellType {
     
     var getDescriptionText: String {
         switch self {
-        case .Records: return "View and manage all your available health records, including dispensed medications, health visits, COVID-19 test results, immunizations and more."
-        case .Proofs: return "View, download and print your BC Vaccine Card and federal proof of vaccination, to access events, businesses, services and to travel."
-        case .Resources: return "Find useful information and learn how to get vaccinated or tested for COVID-19."
+        case .Records: return "Access your lab results, medication history and vaccination records"
+        case .Proofs: return "Save proof of vaccination documents for you and your family"
+        case .Resources: return "Find trusted health information and resources"
         }
     }
     

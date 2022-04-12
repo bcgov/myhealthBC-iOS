@@ -19,7 +19,7 @@ class AddCardsTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func configure(savedCards: Int?, delegateOwner: UIViewController) {
+    func configure(savedCards: Int, delegateOwner: UIViewController) {
         reusableHeaderAddView.configureForHealthPass(savedCards: savedCards, delegateOwner: delegateOwner)
     }
 

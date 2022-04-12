@@ -30,6 +30,12 @@ extension Theme {
     
     // Buttons
     public func style(button: UIButton, style: ButtonStyle, title: String, image: UIImage?, bold: Bool? = false) {
+        
+        button.setTitle(title, for: .normal)
+        button.setImage(image, for: .normal)
+        button.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
+        button.titleLabel?.minimumScaleFactor = 0.5
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         switch style {
             
         case .Fill:
@@ -37,11 +43,6 @@ extension Theme {
         case .Hollow:
             styleButtonHollow(button: button, bold: bold)
         }
-        button.setTitle(title, for: .normal)
-        button.setImage(image, for: .normal)
-        button.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
-        button.titleLabel?.minimumScaleFactor = 0.5
-        button.titleLabel?.adjustsFontSizeToFitWidth = true
     }
     
     // Labels
@@ -83,6 +84,7 @@ extension Theme {
     fileprivate func styleButtonfill(button: UIButton, bold: Bool? = false) {
         button.backgroundColor = AppColours.appBlue
         button.setTitleColor(.white, for: .normal)
+        button.imageView?.tintColor = .white
         if let label = button.titleLabel {
             if let bolded = bold, bolded {
                 label.font = UIFont.bcSansBoldWithSize(size: 17)

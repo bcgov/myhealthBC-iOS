@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Group 5297.png",
+      "filename" : "Lock.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Group 5297 (1).png",
+      "filename" : "Lock-2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Group 5297 (2).png",
+      "filename" : "Lock-1.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -19,8 +19,5 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "template-rendering-intent" : "original"
   }
 }

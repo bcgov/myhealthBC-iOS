@@ -155,8 +155,14 @@
                                 </view>
                             </subviews>
                         </stackView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter a valid date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nNg-nv-51e">
+                            <rect key="frame" x="0.0" y="200.5" width="544" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="n5R-DK-DqZ">
-                            <rect key="frame" x="0.0" y="200.5" width="544" height="216"/>
+                            <rect key="frame" x="0.0" y="221" width="544" height="195.5"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="b6E-W7-97F"/>
                                 <constraint firstAttribute="height" priority="750" constant="120" id="u7O-Eq-aoo"/>
@@ -236,6 +242,7 @@
                 <outlet property="continueButton" destination="SbS-Xn-mAb" id="9lu-Rf-Im4"/>
                 <outlet property="dateDivider" destination="CE7-eo-F4B" id="PKh-eq-KgT"/>
                 <outlet property="datePicker" destination="n5R-DK-DqZ" id="Cep-fM-z2b"/>
+                <outlet property="errorLabel" destination="nNg-nv-51e" id="VdM-4d-pcw"/>
                 <outlet property="filterChipsContainer" destination="xjG-wd-zFJ" id="QFI-3J-AOo"/>
                 <outlet property="filterTypeDivider" destination="VIv-AC-G8t" id="qCC-w2-hQL"/>
                 <outlet property="fromDateContainer" destination="adg-vc-zQ8" id="egu-jN-4ik"/>

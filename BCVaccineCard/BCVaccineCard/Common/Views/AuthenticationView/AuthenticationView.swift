@@ -17,6 +17,7 @@ class AuthenticationView: UIView, Theme {
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var secondarySubtitle: UILabel!
     
     private var completion: ((Result)->Void)?
     
@@ -36,15 +37,24 @@ class AuthenticationView: UIView, Theme {
         self.addEqualSizeContraints(to: view)
         self.completion = completion
         style()
+        fillText()
     }
     
     func style() {
-        style(button: loginButton, style: .Fill, title: .bcscLogin, image: UIImage(named: "bcscLogo"))
-        style(button: cancelButton, style: .Hollow, title: .notNow, image: nil)
+        style(button: loginButton, style: .Fill, title: .bcscLogin, image: nil, bold: true)
+        style(button: cancelButton, style: .Hollow, title: .notNow, image: nil, bold: true)
         
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 24)
         subtitleLabel.font = UIFont.bcSansRegularWithSize(size: 17)
+        secondarySubtitle.font = UIFont.bcSansRegularWithSize(size: 13)
         
         titleLabel.textColor = AppColours.appBlue
+    }
+    
+    func fillText() {
+        titleLabel.text = "Log in with your BC Services Card to access all health records"
+        subtitleLabel.text = "The BC Services Card app is a secure way to prove who you are. Follow the instructions to get set up and log in."
+        secondarySubtitle.text = "You can complete this step any time. If you choose to skip it for now, you'll only be able to access your COVID-19 health records."
+        
     }
 }
