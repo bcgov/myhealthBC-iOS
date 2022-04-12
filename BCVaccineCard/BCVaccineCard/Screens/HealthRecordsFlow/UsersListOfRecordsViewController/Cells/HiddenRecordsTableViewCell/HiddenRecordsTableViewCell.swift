@@ -15,7 +15,7 @@ enum HiddenRecordType: Equatable {
     var getButtonImage: UIImage? {
         switch self {
         case .loginToAccess, .authenticate: return nil
-        case .medicalRecords: return UIImage(named: "lock")
+        case .medicalRecords: return UIImage(named: "lock-icon-new") // TODO: Check that this is working
         }
     }
     
