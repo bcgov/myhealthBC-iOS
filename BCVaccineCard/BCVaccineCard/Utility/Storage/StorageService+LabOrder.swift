@@ -94,8 +94,8 @@ extension StorageService: StorageLaboratoryOrderManager {
                     }
                 }
             }
-            let collectionDateTime = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
-            let timelineDateTime = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: gateWayObject.timelineDateTime ?? "") ?? Date()
+            let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
+            let timelineDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.timelineDateTime ?? "") ?? Date()
             return storeLaboratoryOrder(patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf)
             
         }
