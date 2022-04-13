@@ -135,7 +135,7 @@
 "Help" = "Help";
 "Resource" = "Resource";
 "Resources" = "Resources";
-"ResourceDescriptionText" = "Get Covid-19 information from official Government of B.C. sources.";
+"ResourceDescriptionText" = "Find trusted health information and resources";
 "GetVaccinatedResource" = "Get vaccinated";
 "GetTestedResource" = "Get a Covid-19 test";
 "GetTestkitResource" = "Get a Covid-19 Rapid Test Kit";
