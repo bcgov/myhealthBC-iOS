@@ -58,7 +58,7 @@ extension BaseViewController {
         self.navDelegate = self
     }
     
-    private func setNavHeaderLocation(navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, vc: UIViewController) {
+    private func setNavHeaderLocation(navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, vc: UIViewController, title: String) {
         if navStyle == .small && navTitleSmallAlignment == .Left {
             navigationItem.title = nil
             let label = UILabel()
@@ -77,7 +77,7 @@ extension BaseViewController {
         if let rightButton = right {
             rightButtons.append(rightButton)
         }
-        setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc)
+        setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc, title: title)
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
        
         guard let nav = self.navigationController as? CustomNavigationController else { return }
@@ -93,7 +93,7 @@ extension BaseViewController {
     }
     
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?) {
-        setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc)
+        setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc, title: title)
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
        
         guard let nav = self.navigationController as? CustomNavigationController else { return }
