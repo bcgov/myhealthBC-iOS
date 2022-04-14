@@ -134,6 +134,10 @@ extension Array where Element == HealthRecord {
                 result.append(HealthRecordsDataSource(patient: record.patient, numberOfRecords: 1, authenticated: record.isAuthenticated))
             }
         }
+        if let indexOfAuthenticated = result.firstIndex(where: {$0.authenticated}) {
+            let element = result.remove(at: indexOfAuthenticated)
+            result.insert(element, at: 0)
+        }
         return result
     }
     
