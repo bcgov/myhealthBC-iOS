@@ -102,11 +102,13 @@ class FilterRecordsView: UIView, Theme {
         if let fromDate = currentFilter.fromDate {
             let dateString = Date.Formatter.yearMonthDay.string(from: fromDate)
             fromDateLabel.text = dateString
+            fromDateIcon.image = UIImage(named: "close-icon")
         }
         
         if let toDate = currentFilter.toDate {
             let dateString = Date.Formatter.yearMonthDay.string(from: toDate)
             toDateLabel.text = dateString
+            toDateIcon.image = UIImage(named: "close-icon")
         }
         showRecordTypes()
     }
@@ -124,8 +126,14 @@ class FilterRecordsView: UIView, Theme {
     }
     
     @IBAction func continueAction(_ sender: Any) {
-        delegate?.selected(filter: currentFilter)
-        dismiss()
+        if let from = currentFilter.fromDate, let to = currentFilter.toDate, to < from {
+            // Invalid date
+            errorLabel.isHidden = false
+        } else {
+            // Is valid
+            delegate?.selected(filter: currentFilter)
+            dismiss()
+        }
     }
     
     @IBAction func clearAction(_ sender: Any) {
@@ -135,11 +143,26 @@ class FilterRecordsView: UIView, Theme {
         fromDateLabel.text = "yyyy-mm-dd"
         delegate?.selected(filter: currentFilter)
         errorLabel.isHidden = true
+        toDateIcon.image = UIImage(named: "calendar-icon")
+        fromDateIcon.image = UIImage(named: "calendar-icon")
+    }
+    
+    @objc func resetFromDate(sender : UITapGestureRecognizer) {
+        fromDateIcon.image = UIImage(named: "calendar-icon")
+        fromDateLabel.text = "yyyy-mm-dd"
+        currentFilter.fromDate = nil
+        errorLabel.isHidden = true
+    }
+    
+    @objc func resetToDate(sender : UITapGestureRecognizer) {
+        toDateIcon.image = UIImage(named: "calendar-icon")
+        toDateLabel.text = "yyyy-mm-dd"
+        currentFilter.toDate = nil
+        errorLabel.isHidden = true
     }
     
     // MARK: Style
     func style() {
-        
         self.alpha = 0
         datePicker.maximumDate = Date()
         navContainer.backgroundColor = .clear
@@ -183,6 +206,13 @@ class FilterRecordsView: UIView, Theme {
             self?.layoutIfNeeded()
         }
         showBackDrop()
+        
+        let restFromDateGesture = UITapGestureRecognizer(target: self, action:  #selector(self.resetFromDate))
+        let restToDateGesture = UITapGestureRecognizer(target: self, action:  #selector(self.resetToDate))
+        fromDateIcon.isUserInteractionEnabled = true
+        toDateIcon.isUserInteractionEnabled = true
+        fromDateIcon.addGestureRecognizer(restFromDateGesture)
+        toDateIcon.addGestureRecognizer(restToDateGesture)
     }
     
     private func showBackDrop() {
@@ -286,9 +316,11 @@ class FilterRecordsView: UIView, Theme {
         if datepickerType == .toDate {
             currentFilter.toDate = selectedDate
             toDateLabel.text = dateString
+            toDateIcon.image = UIImage(named: "close-icon")
         } else {
             currentFilter.fromDate = selectedDate
             fromDateLabel.text = dateString
+            fromDateIcon.image = UIImage(named: "close-icon")
         }
         // Validation
         if let from = currentFilter.fromDate, let to = currentFilter.toDate {
