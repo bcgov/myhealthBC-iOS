@@ -65,14 +65,14 @@ class CustomNavigationController: UINavigationController {
         navigationBar.prefersLargeTitles = true
         navigationBar.sizeToFit()
     }
-    
-    private func setupAppearance(navStyle: NavStyle, backButtonHintString: String?) {
+    // TODO: We can use custom font here
+    private func setupAppearance(navStyle: NavStyle, backButtonHintString: String?, largeTitleFontSize: CGFloat = 34) {
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
             appearance.configureWithOpaqueBackground()
             appearance.backgroundColor = navStyle.navBarColor
             appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
-            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: largeTitleFontSize, weight: .bold)]
             if let image = UIImage(named: "app-back-arrow") {
                 appearance.setBackIndicatorImage(image, transitionMaskImage: image)
             }
@@ -95,7 +95,7 @@ class CustomNavigationController: UINavigationController {
         } else {
             // FIXME: Find a safe way to change color of status bar background color (just stays white here)
             navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
-            navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+            navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: largeTitleFontSize, weight: .bold)]
             navigationBar.backgroundColor = navStyle.navBarColor
             if let image = UIImage(named: "app-back-arrow") {
                 navigationBar.backIndicatorImage = image
@@ -112,35 +112,44 @@ class CustomNavigationController: UINavigationController {
         
     }
     
-    func setupNavigation(leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
+    func setupNavigation(leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?, largeTitleFontSize: CGFloat = 34) {
         vc.navigationItem.largeTitleDisplayMode = navStyle.largeTitles ? .always : .never
-        setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString)
+        setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString, largeTitleFontSize: largeTitleFontSize)
         navigationBar.tintColor = navStyle.itemTintColor
-        if let right = right {
-            if let title = right.title {
-                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: right.action)
+        
+        var rightNavButtons: [UIBarButtonItem] = []
+        for rightButton in right {
+            var barButton: UIBarButtonItem? = nil
+            if let btnTitle = rightButton.title {
+               barButton = UIBarButtonItem(title: btnTitle, style: .plain, target: vc, action: rightButton.action)
             } else {
-                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(image: right.image, style: .plain, target: vc, action: right.action)
+                barButton = UIBarButtonItem(image: rightButton.image, style: .plain, target: vc, action: rightButton.action)
             }
-            if let trait = right.accessibility.traits {
-                vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
+            
+            if let trait = rightButton.accessibility.traits {
+                barButton?.accessibilityTraits = trait
             }
-            vc.navigationItem.rightBarButtonItem?.accessibilityLabel = right.accessibility.label
-            vc.navigationItem.rightBarButtonItem?.accessibilityHint = right.accessibility.hint
+            barButton?.accessibilityLabel = rightButton.accessibility.label
+            barButton?.accessibilityHint = rightButton.accessibility.hint
+            if let button = barButton {
+                rightNavButtons.append(button)
+            }
         }
+        vc.navigationItem.rightBarButtonItems = rightNavButtons
+        
         if let left = left {
             if let title = left.title {
-                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: left.action)
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: left.action)
             } else {
                 vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
             }
             if let trait = left.accessibility.traits {
-                vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
+                vc.navigationItem.leftBarButtonItem?.accessibilityTraits = trait
             }
-            vc.navigationItem.rightBarButtonItem?.accessibilityLabel = left.accessibility.label
-            vc.navigationItem.rightBarButtonItem?.accessibilityHint = left.accessibility.hint
+            vc.navigationItem.leftBarButtonItem?.accessibilityLabel = left.accessibility.label
+            vc.navigationItem.leftBarButtonItem?.accessibilityHint = left.accessibility.hint
         }
-        vc.navigationItem.backButtonTitle = ""
+        vc.navigationItem.setBackItemTitle(with: "")
     }
     
     func getRightBarButtonItem() -> UIBarButtonItem? {
@@ -149,6 +158,10 @@ class CustomNavigationController: UINavigationController {
     
     func getLeftBarButtonItem() -> UIBarButtonItem? {
         return self.navigationItem.leftBarButtonItem
+    }
+    
+    func adjustNavStyleForPDF(targetVC vc: UIViewController) {
+        vc.navigationItem.largeTitleDisplayMode = .never
     }
     
 }

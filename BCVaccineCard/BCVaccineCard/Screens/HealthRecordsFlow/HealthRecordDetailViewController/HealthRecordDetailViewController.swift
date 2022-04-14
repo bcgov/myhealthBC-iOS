@@ -10,9 +10,10 @@ import UIKit
 
 class HealthRecordDetailViewController: BaseViewController {
     
-    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
+    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticated: Bool, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
             vc.dataSource = dataSource
+            vc.authenticated = authenticated
             vc.userNumberHealthRecords = userNumberHealthRecords
             return vc
         }
@@ -22,8 +23,9 @@ class HealthRecordDetailViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var dataSource: HealthRecordsDetailDataSource!
+    private var authenticated: Bool!
     private var userNumberHealthRecords: Int!
-
+    private var pdfData: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +33,7 @@ class HealthRecordDetailViewController: BaseViewController {
         setupStorageListener()
     }
     
+    // TODO: We should look into this - not sure we should pop to root VC from detail view on a storage change
     func setupStorageListener() {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) { [weak self] notification in
             guard let `self` = self else {return}
@@ -44,6 +47,14 @@ class HealthRecordDetailViewController: BaseViewController {
                     if let object = event.object as? CovidLabTestResult, object.patient?.name == self.dataSource.name {
                         self.navigationController?.popToRootViewController(animated: true)
                     }
+                case .Medication:
+                    if let object = event.object as? Perscription, object.patient?.name == self.dataSource.name {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                case .LaboratoryOrder:
+                    if let object = event.object as? LaboratoryOrder, object.patient?.name == self.dataSource.name {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
                 default:
                     break
                 }
@@ -54,6 +65,7 @@ class HealthRecordDetailViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         setNeedsStatusBarAppearanceUpdate()
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -87,29 +99,42 @@ class HealthRecordDetailViewController: BaseViewController {
 // MARK: Navigation setup
 extension HealthRecordDetailViewController {
     private func navSetup() {
-        let rightNavButton = NavButton(
-            title: .delete,
-            image: nil, action: #selector(self.deleteButton),
-            accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        var rightNavButton: NavButton?
+        switch dataSource.type {
+        case .laboratoryOrder(model: let labOrder):
+            if let pdf = labOrder.pdf {
+                self.pdfData = pdf
+                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+            }
+        default:
+            rightNavButton = self.authenticated ? nil :
+            NavButton(
+                title: .delete,
+                image: nil, action: #selector(self.deleteButton),
+                accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+        }
         
         self.navDelegate?.setNavigationBarWith(title: dataSource.title,
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
     
-    @objc private func deleteButton() {
+    @objc private func deleteButton(manuallyAdded: Bool) {
         alertConfirmation(title: dataSource.deleteAlertTitle, message: dataSource.deleteAlertMessage, confirmTitle: .delete, confirmStyle: .destructive) {
             [weak self] in
             guard let `self` = self else {return}
             switch self.dataSource.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
-                StorageService.shared.deleteVaccineCard(vaccineQR: model.code)
+                StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
-                StorageService.shared.deleteTestResult(id: recordId, sendDeleteEvent: true)
+                StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
+            case .medication, .laboratoryOrder:
+                print("Not able to delete these records currently, as they are auth-only records")
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)
@@ -118,5 +143,18 @@ extension HealthRecordDetailViewController {
             }
         } onCancel: {
         }
+    }
+    
+    @objc private func showPDFView() {
+        guard let pdf = self.pdfData else { return }
+        self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+    }
+}
+
+// MARK: This is for showing the PDF view using native behaviour
+extension HealthRecordDetailViewController: UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        guard let navController = self.navigationController else { return self }
+        return navController
     }
 }

@@ -28,6 +28,9 @@ class HealthPassViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         authManager = AuthManager()
+        refreshOnStorageChange()
+        setFedPassObservable()
+        setupListeners()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,7 +40,7 @@ class HealthPassViewController: BaseViewController {
         setupTableView()
         // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
-        
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,6 +61,17 @@ class HealthPassViewController: BaseViewController {
     
 }
 
+// MARK: Listeners
+extension HealthPassViewController {
+    private func setupListeners() {
+        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+    }
+    
+    @objc private func reloadFromForcedLogout(_ notification: Notification) {
+        self.tableView.reloadData()
+    }
+}
+
 // MARK: Navigation setup
 extension HealthPassViewController {
     private func navSetup() {
@@ -65,6 +79,7 @@ extension HealthPassViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
         
@@ -77,31 +92,15 @@ extension HealthPassViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
-        // TODO: Enable Auth - comment below
-        showScreen()
-        // TODO: Enable Auth - uncomment below
-        /*
         if showAuth && !authManager.isAuthenticated {
-            self.view.startLoadingIndicator()
-            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
-                guard let self = self else {return}
-                self.view.endLoadingIndicator()
-                switch result {
-                case .Completed:
-                    self.alert(title: "Log in successful", message: "Your records will be automatically added and updated in My Health BC.") {
-                        
-                        // TODO: FETCH RECORDS FOR AUTHENTICATED USER
-                        showScreen()
-                    }
-                case .Cancelled, .Failed:
+            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticated in
+                if !authenticated {
                     showScreen()
-                    break
                 }
-            })
-            self.present(vc, animated: true, completion: nil)
+            }
         } else {
             showScreen()
-        }*/
+        }
     }
 }
 
@@ -110,6 +109,35 @@ extension HealthPassViewController {
 extension HealthPassViewController {
     private func retrieveDataSource() {
         fetchFromStorage()
+    }
+    
+    private func refreshOnStorageChange() {
+        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            switch event.entity {
+            case .VaccineCard:
+                self.fetchFromStorage()
+            default:
+                break
+            }
+           
+        }
+    }
+}
+
+// MARK: For fed pass observable
+extension HealthPassViewController {
+    private func setFedPassObservable() {
+        NotificationCenter.default.addObserver(self, selector: #selector(fedPassOnlyAdded(notification:)), name: .fedPassOnlyAdded, object: nil)
+    }
+    
+    @objc func fedPassOnlyAdded(notification:Notification) {
+        guard let userInfo = notification.userInfo as? [String: Any] else { return }
+        guard let pass = userInfo["pass"] as? String else { return }
+        guard let source = userInfo["source"] as? GatewayFormSource, source == .healthPassHomeScreen else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
+        }
     }
 }
 
@@ -204,22 +232,22 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right, savedCardsCount == 1 else {return nil}
+        guard orientation == .right, savedCardsCount == 1, self.dataSource?.authenticated == false else {return nil}
         let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
             guard let `self` = self else {return}
-            self.deleteCard()
+            self.deleteCard(manuallyAdded: true)
         }
         deleteAction.hidesWhenSelected = true
         deleteAction.image = UIImage(named: "unlink")
         deleteAction.backgroundColor = .white
         deleteAction.textColor = Constants.UI.Theme.primaryColor
         deleteAction.isAccessibilityElement = true
-        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkCard
         deleteAction.accessibilityTraits = .button
         return [deleteAction]
     }
     
-    private func deleteCard() {
+    private func deleteCard(manuallyAdded: Bool) {
         alert(title: .unlinkCardTitle, message: .unlinkCardMessage, buttonOneTitle: .cancel, buttonOneCompletion: {
             // This logic is so that a swipe to delete that is cancelled, gets reloaded and isn't showing a swiped state after cancelled
             self.tableView.isEditing = false
@@ -227,7 +255,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
             if let card = self.dataSource {
-                StorageService.shared.deleteVaccineCard(vaccineQR: card.code ?? "")
+                StorageService.shared.deleteVaccineCard(vaccineQR: card.code ?? "", manuallyAdded: manuallyAdded)
             }
             self.dataSource = nil
             AnalyticsService.shared.track(action: .RemoveCard)
@@ -240,13 +268,14 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
 extension HealthPassViewController: FederalPassViewDelegate {
     func federalPassButtonTapped(model: AppVaccinePassportModel?) {
         if let pass = model?.codableModel.fedCode {
-            self.openFederalPass(pass: pass, vc: self, id: nil, completion: { [weak self] _ in
-                guard let `self` = self else { return }
-                self.tabBarController?.tabBar.isHidden = false
-            })
+//            self.openPDFView(pdfString: pass, vc: self, id: nil, type: .fedPass, completion: { [weak self] _ in
+//                guard let `self` = self else { return }
+//                self.tabBarController?.tabBar.isHidden = false
+//            })
+            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .healthPassHomeScreen, owner: self, completion: { [weak self] _ in
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .healthPassHomeScreen, owner: self, navDelegate: self.navDelegate, completion: { [weak self] _ in
                 guard let `self` = self else { return }
                 self.tabBarController?.tabBar.isHidden = false
                 self.navigationController?.popViewController(animated: true)
@@ -254,6 +283,13 @@ extension HealthPassViewController: FederalPassViewDelegate {
         }
     }
     
+}
+
+extension HealthPassViewController: UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        guard let navController = self.navigationController else { return self }
+        return navController
+    }
 }
 
 // MARK: Add card button table view cell delegate here

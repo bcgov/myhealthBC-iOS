@@ -28,6 +28,27 @@ extension Patient {
         }
     }
     
+    public var prescriptionArray: [Perscription] {
+        let set = prescriptions as? Set<Perscription> ?? []
+        return set.sorted {
+            $0.dispensedDate ?? Date() > $1.dispensedDate ?? Date()
+        }
+    }
+    
+    public var labOrdersArray: [LaboratoryOrder] {
+        let set = laboratoryOrders as? Set<LaboratoryOrder> ?? []
+        return set.sorted {
+            $0.timelineDateTime ?? Date() > $1.timelineDateTime ?? Date()
+        }
+    }
+    
+    public func getComparableName() -> String? {
+        guard let name = self.name else {
+            return nil
+        }
+        return StorageService.getComparableName(from: name)
+    }
+    
 }
 
 // MARK: VaccineCard
@@ -147,22 +168,25 @@ extension TestResult {
     ///        Test Status:
     ///        - Pending
     ///        - Final
-    ///        - Status Change
+    ///        - StatusChange
     ///
     ///        Test Outcome:
-    ///        - Not Set - (Pending) - unknown
+    ///        - NotSet - (Pending) - unknown
     ///        - Other - unknown
     ///        - Indeterminate
     ///        - Negative
     ///        - Positive
     ///        - Cancelled
     
-            // So - if the test result is "NotSet" or "Other", and status is pending, then for our purposes, result is pending. If said case but not pending, then indeterminate
     var resultType: CovidTestResult {
-        var testOutcome = GatewayTestResultResponseRecord.ResponseOutcomeTypes.init(rawValue: self.testOutcome ?? "") ?? .indeterminate
-        let testStatus = GatewayTestResultResponseRecord.ResponseStatusTypes.init(rawValue: self.testStatus ?? "") ?? .pending
-        if testOutcome == .notSet || testOutcome == .other {
-            testOutcome = testStatus == .pending ? .pending : .indeterminate
+        let testOutcomeReduced = self.testOutcome?.removeWhiteSpaceFormatting
+        let testStatusReduced = self.testStatus?.removeWhiteSpaceFormatting
+        var testOutcome = GatewayTestResultResponseRecord.ResponseOutcomeTypes.init(rawValue: testOutcomeReduced ?? "") ?? .indeterminate
+        let testStatus = GatewayTestResultResponseRecord.ResponseStatusTypes.init(rawValue: testStatusReduced ?? "") ?? .pending
+        if testStatus == .pending {
+            testOutcome = .pending
+        } else if testOutcome == .notSet || testOutcome == .other {
+            testOutcome = .indeterminate
         }
         let rawValue = testOutcome.rawValue
         return CovidTestResult.init(rawValue: rawValue) ?? .indeterminate
@@ -180,3 +204,40 @@ extension TestResult {
 //        return self.map({HealthRecord(type: .Test($0))})
 //    }
 //}
+
+// MARK: Medication
+extension Medication {
+    var id: String {
+        return din ?? (genericName ?? "")
+    }
+}
+
+// MARK: Lab Order
+extension LaboratoryOrder {
+    public var labTests: [LaboratoryTest] {
+        let set = laboratoryTests as? Set<LaboratoryTest> ?? []
+        return set.sorted {
+            $0.batteryType ?? "" < $1.batteryType ?? ""
+        }
+    }
+}
+
+
+// MARK: Perscription
+extension Perscription {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
+
+// MARK: Comment
+extension Comment {
+    public var prescriptions: [Perscription] {
+        let set = prescription as? Set<Perscription> ?? []
+        return Array(set)
+    }
+}
+

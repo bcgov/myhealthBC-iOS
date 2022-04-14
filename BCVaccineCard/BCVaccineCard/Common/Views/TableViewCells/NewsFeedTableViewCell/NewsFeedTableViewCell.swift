@@ -22,9 +22,11 @@ class NewsFeedTableViewCell: UITableViewCell {
         newsTitleLabel.font = UIFont.bcSansBoldWithSize(size: 15)
         newsTitleLabel.textColor = AppColours.textBlack
         newsDetailsLabel.font = UIFont.bcSansRegularWithSize(size: 15)
-        newsDetailsLabel.textColor = AppColours.textBlack
+        // TODO: put in AppColours
+        newsDetailsLabel.textColor =  UIColor(red: 0.192, green: 0.192, blue: 0.196, alpha: 1)
         newsDateLabel.font = UIFont.bcSansRegularWithSize(size: 15)
-        newsDateLabel.textColor = AppColours.textGray
+        // TODO: put in AppColours
+        newsDateLabel.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
     }
 
 //    func configure(item: NewsFeedData.Channel.Item) {
@@ -55,21 +57,18 @@ class NewsFeedTableViewCell: UITableViewCell {
         
         var label = ""
         if let date = newsDateLabel.text, !date.isEmpty {
-            label = "Published on: \(date), \n"
+            label = "\(String.publishedOn): \(date). \n"
         }
         if let title = newsTitleLabel.text, !title.isEmpty {
-            label += "Title: \(title), \n"
+            label += "\(String.title): \(title). \n"
         }
         
         if let detail = newsDetailsLabel.text, !detail.isEmpty {
-            label += "Details: \(detail), \n"
+            label += "\(String.details): \(detail). \n"
         }
         
         self.accessibilityLabel = label
         self.accessibilityHint = AccessibilityLabels.OpenWebLink.openWebLinkHint
-        self.accessibilityTraits = [.selected, .link]
-        
-        
+        self.accessibilityTraits = .link
     }
-    
 }

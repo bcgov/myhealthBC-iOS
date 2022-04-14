@@ -12,5 +12,28 @@ extension Notification.Name {
     static let reloadNewsFeed = Notification.Name("ReloadNewsFeed")
     static let cardAddedNotification = Notification.Name("cardAddedNotification")
     static let storageChangeEvent = Notification.Name("StorageChangeEvent")
-    static let doubleTappedTab = Notification.Name("DoubleTappedTab")
+    static let fedPassOnlyAdded = Notification.Name("FedPassOnlyAdded")
+    
+    static let refreshTokenExpired = Notification.Name("refreshTokenExpired")
+    static let authTokenExpired = Notification.Name("authTokenExpired")
+    
+    static let launchedFromBackground = Notification.Name("launchedFromBackground")
+    static let shouldPerformLocalAuth = Notification.Name("shouldPerformLocalAuth")
+    
+    static let backgroundAuthFetch = Notification.Name("backgroundAuthFetch")
+    static let authFetchComplete = Notification.Name("AuthFetchComplete")
+    
+    static let settingsTableViewReload = Notification.Name("settingsTableViewReload")
+    
+    static let protectedWordRequired = Notification.Name("protectedWordRequired")
+    static let protectedWordProvided = Notification.Name("protectedWordProvided")
+    static let protectedWordFailedPromptAgain = Notification.Name("protectedWordFailedPromptAgain")
+    static let authStatusChanged = Notification.Name("authStatusChanged")
+    static let patientAPIFetched = Notification.Name("patientAPIFetched")
+    static let reloadVCDueToUnderage = Notification.Name("reloadVCDueToUnderage")
+    
+    static let showTermsOfService = Notification.Name("showTermsOfService")
+    static let respondToTermsOfService = Notification.Name("respondToTermsOfService")
+    
+    static let queueItUIManuallyClosed = Notification.Name("queueItUIManuallyClosed")
 }

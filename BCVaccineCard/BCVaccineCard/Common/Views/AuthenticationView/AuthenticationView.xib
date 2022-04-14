@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -15,26 +15,76 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="64" translatesAutoresizingMaskIntoConstraints="NO" id="YSG-jO-thH">
+                    <rect key="frame" x="24" y="79" width="366" height="386"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="zVS-Gn-Ohv">
+                            <rect key="frame" x="0.0" y="0.0" width="366" height="118"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in with your BC Services Card to access all health records" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999999999999996" translatesAutoresizingMaskIntoConstraints="NO" id="x7D-uH-HLP">
+                                    <rect key="frame" x="0.0" y="0.0" width="366" height="41"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The BC Services Card app is a secure way to prove who you are. Follow the instructions to get set up and log in." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="yzV-g2-YJ4">
+                                    <rect key="frame" x="0.0" y="57" width="366" height="61"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="yzV-g2-YJ4" secondAttribute="trailing" id="3iM-cY-tcd"/>
+                                <constraint firstItem="yzV-g2-YJ4" firstAttribute="leading" secondItem="zVS-Gn-Ohv" secondAttribute="leading" id="Kj0-Jp-vOM"/>
+                                <constraint firstItem="x7D-uH-HLP" firstAttribute="leading" secondItem="zVS-Gn-Ohv" secondAttribute="leading" id="M1s-bh-hyJ"/>
+                                <constraint firstAttribute="trailing" secondItem="x7D-uH-HLP" secondAttribute="trailing" id="UK1-A5-2PB"/>
+                            </constraints>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Pef-cy-8rS">
+                            <rect key="frame" x="6.5" y="182" width="353.5" height="204"/>
+                            <subviews>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="authLogo" translatesAutoresizingMaskIntoConstraints="NO" id="IUh-Gg-vhZ">
+                                    <rect key="frame" x="0.0" y="0.0" width="353.5" height="127"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="127" id="meX-gW-bZX"/>
+                                    </constraints>
+                                </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yDY-O4-kyu">
+                                    <rect key="frame" x="0.0" y="143" width="353.5" height="61"/>
+                                    <string key="text">You can complete this step any time. If you choose to skip it for now, you'll only be able to access your COVID-19 health records.</string>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="zVS-Gn-Ohv" firstAttribute="leading" secondItem="YSG-jO-thH" secondAttribute="leading" id="Hr1-e0-M1H"/>
+                        <constraint firstAttribute="trailing" secondItem="zVS-Gn-Ohv" secondAttribute="trailing" id="Ty0-BX-yn5"/>
+                    </constraints>
+                </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fZu-At-NBK">
                     <rect key="frame" x="24" y="714" width="366" height="116"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FZH-by-C09">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FZH-by-C09">
                             <rect key="frame" x="0.0" y="0.0" width="366" height="54"/>
                             <color key="backgroundColor" red="0.0" green="0.1960801482" blue="0.396075815" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="54" id="Myv-ao-Gd0"/>
                             </constraints>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" image="bcscLogo" title="Log in with BC Services Card"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Log in with BC Services Card"/>
                             <connections>
                                 <action selector="loginAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="LjA-be-Rdg"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u1Y-oU-mI9">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u1Y-oU-mI9">
                             <rect key="frame" x="0.0" y="62" width="366" height="54"/>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="Not now"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Not now"/>
                             <connections>
                                 <action selector="cancelAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="KaQ-a3-btn"/>
                             </connections>
@@ -48,55 +98,14 @@
                         <constraint firstItem="FZH-by-C09" firstAttribute="leading" secondItem="fZu-At-NBK" secondAttribute="leading" id="uQl-WW-tqO"/>
                     </constraints>
                 </stackView>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="64" translatesAutoresizingMaskIntoConstraints="NO" id="YSG-jO-thH">
-                    <rect key="frame" x="24" y="247" width="366" height="284.5"/>
-                    <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="authLogo" translatesAutoresizingMaskIntoConstraints="NO" id="IUh-Gg-vhZ">
-                            <rect key="frame" x="0.0" y="0.0" width="366" height="127"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="127" id="meX-gW-bZX"/>
-                            </constraints>
-                        </imageView>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="zVS-Gn-Ohv">
-                            <rect key="frame" x="0.0" y="191" width="366" height="93.5"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Access health records" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x7D-uH-HLP">
-                                    <rect key="frame" x="0.0" y="0.0" width="366" height="20.5"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in with BC Service Card to access all your health records in My Health BC." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yzV-g2-YJ4">
-                                    <rect key="frame" x="0.0" y="52.5" width="366" height="41"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <constraints>
-                                <constraint firstAttribute="trailing" secondItem="yzV-g2-YJ4" secondAttribute="trailing" id="3iM-cY-tcd"/>
-                                <constraint firstItem="yzV-g2-YJ4" firstAttribute="leading" secondItem="zVS-Gn-Ohv" secondAttribute="leading" id="Kj0-Jp-vOM"/>
-                                <constraint firstItem="x7D-uH-HLP" firstAttribute="leading" secondItem="zVS-Gn-Ohv" secondAttribute="leading" id="M1s-bh-hyJ"/>
-                                <constraint firstAttribute="trailing" secondItem="x7D-uH-HLP" secondAttribute="trailing" id="UK1-A5-2PB"/>
-                            </constraints>
-                        </stackView>
-                    </subviews>
-                    <constraints>
-                        <constraint firstItem="zVS-Gn-Ohv" firstAttribute="leading" secondItem="YSG-jO-thH" secondAttribute="leading" id="Hr1-e0-M1H"/>
-                        <constraint firstAttribute="trailing" secondItem="zVS-Gn-Ohv" secondAttribute="trailing" id="Ty0-BX-yn5"/>
-                        <constraint firstAttribute="trailing" secondItem="IUh-Gg-vhZ" secondAttribute="trailing" id="Zhg-Q2-HUL"/>
-                        <constraint firstItem="IUh-Gg-vhZ" firstAttribute="leading" secondItem="YSG-jO-thH" secondAttribute="leading" id="rBe-az-F6F"/>
-                    </constraints>
-                </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="fZu-At-NBK" secondAttribute="bottom" constant="32" id="1zq-Dl-Hrq"/>
-                <constraint firstItem="YSG-jO-thH" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vUN-kp-3ea" secondAttribute="top" constant="32" id="I6y-iw-UWN"/>
+                <constraint firstItem="YSG-jO-thH" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="35" id="I6y-iw-UWN"/>
                 <constraint firstAttribute="trailing" secondItem="YSG-jO-thH" secondAttribute="trailing" constant="24" id="Qyp-x9-d3P"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="fZu-At-NBK" secondAttribute="trailing" constant="24" id="UIp-pW-6uy"/>
-                <constraint firstItem="YSG-jO-thH" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" priority="750" constant="-64" id="UgX-dM-dfw"/>
                 <constraint firstItem="fZu-At-NBK" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YSG-jO-thH" secondAttribute="bottom" constant="32" id="aHK-Q1-VoG"/>
                 <constraint firstItem="YSG-jO-thH" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="pyA-9f-Jzx"/>
                 <constraint firstItem="fZu-At-NBK" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="tBN-iN-CIH"/>
@@ -104,6 +113,7 @@
             <connections>
                 <outlet property="cancelButton" destination="u1Y-oU-mI9" id="eSk-be-bDe"/>
                 <outlet property="loginButton" destination="FZH-by-C09" id="u9k-9X-W8U"/>
+                <outlet property="secondarySubtitle" destination="yDY-O4-kyu" id="zyx-iW-WDl"/>
                 <outlet property="subtitleLabel" destination="yzV-g2-YJ4" id="hub-fv-0Hx"/>
                 <outlet property="titleLabel" destination="x7D-uH-HLP" id="JeN-mF-4vT"/>
             </connections>
@@ -111,8 +121,7 @@
         </view>
     </objects>
     <resources>
-        <image name="authLogo" width="177" height="129"/>
-        <image name="bcscLogo" width="32" height="32"/>
+        <image name="authLogo" width="190" height="133"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

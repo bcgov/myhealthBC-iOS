@@ -3,23 +3,31 @@ on:
   pull_request:
     branches:
       - dev
-env:
-  DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
+      - main
 jobs:
   deploy:
     name: Build
     runs-on: macOS-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        
       - name: Install gpg
         run: brew install gnupg
-      - name: Setup provisioning profile
+        
+      - name: Setup profiles and certs
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
           FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
         run: ./.github/secrets/decrypt_secrets.sh
-      - name: Building project
+        
+      - name: Build Dev target
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
         run: ./.github/scripts/build.sh
+        
+      - name: Build Prod target
+        env:
+          PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+        run: ./.github/scripts/build_prod.sh

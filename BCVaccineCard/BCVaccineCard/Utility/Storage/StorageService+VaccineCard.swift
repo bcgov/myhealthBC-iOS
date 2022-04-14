@@ -22,7 +22,7 @@ protocol StorageVaccineCardManager {
     ///   - federalPass: federal pass if available
     ///   - vaxDates: vaccine dates
     /// - Returns: created object
-    func storeVaccineVard(
+    func storeVaccineCard(
         vaccineQR: String,
         name: String,
         issueDate: Date,
@@ -32,25 +32,26 @@ protocol StorageVaccineCardManager {
         federalPass: String?,
         vaxDates: [String]?,
         sortOrder: Int64?,
+        manuallyAdded: Bool,
         completion: @escaping(VaccineCard?)->Void
     )
     
-    func createImmunizationRecords(for card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void)
+    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([ImmunizationRecord])->Void)
     
     // MARK: Update
     
     /// Update a stored vaccine card to a add federal pass
-    func updateVaccineCard(card: VaccineCard, federalPass: String, completion: @escaping(VaccineCard?)->Void)
+    func updateVaccineCard(card: VaccineCard, federalPass: String, manuallyAdded: Bool, completion: @escaping(VaccineCard?)->Void)
     
     /// Updated a stored vaccine card with new data from
-    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping(VaccineCard?)->Void)
+    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, authenticated: Bool, patient: AuthenticatedPatientDetailsResponseObject?, manuallyAdded: Bool, completion: @escaping(VaccineCard?)->Void)
     
     /// Update a vaccine card's sort order
     func updateVaccineCardSortOrder(card: VaccineCard, newPosition: Int)
     
     
     // MARK: Delete
-    func deleteVaccineCard(vaccineQR code: String, reSort: Bool?)
+    func deleteVaccineCard(vaccineQR code: String, reSort: Bool?, manuallyAdded: Bool)
     
     // MARK: Fetch
     func fetchVaccineCards() -> [VaccineCard]
@@ -59,7 +60,7 @@ protocol StorageVaccineCardManager {
 
 extension StorageService: StorageVaccineCardManager {
     // MARK: Store
-    func storeVaccineVard(vaccineQR: String,
+    func storeVaccineCard(vaccineQR: String,
                           name: String,
                           issueDate: Date,
                           hash: String,
@@ -68,8 +69,11 @@ extension StorageService: StorageVaccineCardManager {
                           federalPass: String? = nil,
                           vaxDates: [String]? = nil,
                           sortOrder: Int64? = nil,
+                          manuallyAdded: Bool,
                           completion: @escaping(VaccineCard?)->Void
     ) {
+        deleteVaccineCard(vaccineQR: vaccineQR, manuallyAdded: manuallyAdded)
+        
         guard let context = managedContext else {return completion(nil)}
         let cardSortOrder: Int64
         if let sortOrderPosition = sortOrder {
@@ -88,13 +92,13 @@ extension StorageService: StorageVaccineCardManager {
         card.sortOrder = cardSortOrder
         card.firHash = hash
         card.issueDate = issueDate
-        createImmunizationRecords(for: card) { records in
+        createImmunizationRecords(for: card, manuallyAdded: manuallyAdded) { records in
             for record in records {
                 card.addToImmunizationRecord(record)
             }
             do {
                 try context.save()
-                self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
+                let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card)) : self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
                 completion(card)
             } catch let error as NSError {
                 print("Could not save. \(error), \(error.userInfo)")
@@ -104,14 +108,14 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Update
-    func updateVaccineCard(card: VaccineCard, federalPass: String, completion: @escaping (VaccineCard?) -> Void) {
+    func updateVaccineCard(card: VaccineCard, federalPass: String, manuallyAdded: Bool, completion: @escaping (VaccineCard?) -> Void) {
         guard let context = managedContext else {return completion(nil)}
         do {
             card.federalPass = federalPass
             try context.save()
             DispatchQueue.main.async {[weak self] in
                 guard let `self` = self else {return}
-                self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+                let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card)) : self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
                 return completion(card)
                 
             }
@@ -123,25 +127,26 @@ extension StorageService: StorageVaccineCardManager {
         }
     }
     
-    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, completion: @escaping (VaccineCard?) -> Void) {
+    func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, authenticated: Bool, patient: AuthenticatedPatientDetailsResponseObject?, manuallyAdded: Bool, completion: @escaping (VaccineCard?) -> Void) {
         guard let context = managedContext, let card = fetchVaccineCards().filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return completion(nil)}
         card.code = model.code
         card.vaxDates = model.vaxDates
         card.federalPass = model.fedCode
+        card.authenticated = authenticated
         card.firHash = model.hash
         card.issueDate = Date(timeIntervalSince1970: model.issueDate)
-        card.name = model.name
+        card.name = patient?.getFullName ?? model.name
         if let immunizations = card.immunizationRecord {
             card.removeFromImmunizationRecord(immunizations)
         }
-        createImmunizationRecords(for: card) { records in
+        createImmunizationRecords(for: card, manuallyAdded: manuallyAdded) { records in
             for record in records {
                 card.addToImmunizationRecord(record)
             }
             do {
                 try context.save()
                 DispatchQueue.main.async {
-                    self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+                    let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card)) : self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
                     return completion(card)
                 }
             } catch let error as NSError {
@@ -173,7 +178,7 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Delete
-    func deleteVaccineCard(vaccineQR code: String, reSort: Bool? = true) {
+    func deleteVaccineCard(vaccineQR code: String, reSort: Bool? = true, manuallyAdded: Bool) {
         guard let context = managedContext else {return}
         
         var cards = fetchVaccineCards()
@@ -199,7 +204,7 @@ extension StorageService: StorageVaccineCardManager {
             for (index, card) in cards.enumerated() {
                 card.sortOrder = Int64(index)
             }
-            notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: item))
+            let _ = manuallyAdded == true ? notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: item)) : notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: item))
             try context.save()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
@@ -219,7 +224,7 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Helpers
-    func createImmunizationRecords(for card: VaccineCard, completion: @escaping([ImmunizationRecord])->Void) {
+    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([ImmunizationRecord])->Void) {
         guard let qrCode = card.code, let context = managedContext else {return completion([])}
         BCVaccineValidator.shared.validate(code: qrCode) { result in
             guard let result = result.result else {return completion([])}

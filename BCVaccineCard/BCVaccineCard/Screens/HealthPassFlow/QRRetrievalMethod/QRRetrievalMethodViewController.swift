@@ -83,6 +83,7 @@ extension QRRetrievalMethodViewController {
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: backScreenString)
     }
@@ -179,33 +180,15 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 // MARK: Table View Button Methods
 extension QRRetrievalMethodViewController {
     func authenticateBeforeDisplayingGatewayForm() {
-        
-        // TODO: Enable Auth - comment below
-        goToEnterGateway()
-        // TODO: Enable Auth - uncomment below
-        /*
         if !AuthManager().isAuthenticated {
-            let vc = AuthenticationViewController.constructAuthenticationViewController(returnToHealthPass: false, isModal: true, completion: { [weak self] result in
+            showLogin(initialView: .Landing, sourceVC: .QRRetrievalVC, completion: {[weak self] authenticated in
                 guard let `self` = self else {return}
-                switch result {
-                case .Completed:
-                    self.alert(title: "Log in successful",
-                               message: "Your records will be automatically added and updated in My Health BC.")
-                    {
-                        [weak self] in
-                        guard let `self` = self else {return}
-                        // TODO: FETCH RECORDS FOR AUTHENTICATED USER 
-                        self.goToEnterGateway()
-                    }
-                case .Cancelled, .Failed:
-                    break
-                }
-                
+                // TODO: Handle conditionally
+                self.goToEnterGateway()
             })
-            self.present(vc, animated: true, completion: nil)
         } else {
             goToEnterGateway()
-        }*/
+        }
     }
     func goToEnterGateway() {
         // TODO: Should look at refactoring this a bit
@@ -280,7 +263,7 @@ extension QRRetrievalMethodViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .isNew:
-                self.storeVaccineCard(model: model.transform(), authenticated: false, completion: {
+                self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true, completion: {
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
                         self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
@@ -290,7 +273,7 @@ extension QRRetrievalMethodViewController {
             case .canUpdateExisting:
                 self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}
-                    self.updateCardInLocalStorage(model: model.transform(), completion: {[weak self] success in
+                    self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: {[weak self] success in
                         guard let `self` = self else {return}
                         if success {
                             DispatchQueue.main.async {
@@ -306,7 +289,7 @@ extension QRRetrievalMethodViewController {
                     }
                 }
             case .UpdatedFederalPass:
-                self.updateFedCodeForCardInLocalStorage(model: model.transform()) {[weak self] _ in
+                self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true) {[weak self] _ in
                     guard let self = self else {return}
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}

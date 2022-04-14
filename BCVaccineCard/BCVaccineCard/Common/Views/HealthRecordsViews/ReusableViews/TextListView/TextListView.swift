@@ -12,6 +12,7 @@ class TextListView: UIView {
     
     @IBOutlet weak private var contentView: UIView!
     @IBOutlet weak private var baseStackView: UIStackView!
+    private var listOfStacks: [UIStackView]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,11 +42,12 @@ class TextListView: UIView {
     }
     
     func configure(data: [TextListModel]) {
-        setupAccessibility()
         self.setupStackViews(data: data)
     }
     
     private func setupStackViews(data: [TextListModel]) {
+        removeOldStacks()
+        listOfStacks = []
         for listComponent in data {
             let stack = initializeStackView()
             if let header = initializeLabel(textListProperties: listComponent.header) {
@@ -54,7 +56,9 @@ class TextListView: UIView {
             if let subtext = initializeLabel(textListProperties: listComponent.subtext) {
                 stack.addArrangedSubview(subtext)
             }
+            self.setupAccessibility(stack: stack, listComponent: listComponent)
             self.baseStackView.addArrangedSubview(stack)
+            self.listOfStacks?.append(stack)
         }
     }
     
@@ -73,12 +77,12 @@ class TextListView: UIView {
             let label = InteractiveLinkLabel()
             let textSize = properties.fontSize
             let font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
-            label.attributedText = label.attributedText(withString: properties.text, linkedStrings: links, textColor: AppColours.textBlack, font: font)
+            label.attributedText = label.attributedText(withString: properties.text, linkedStrings: links, textColor: textListProperties?.textColor.getUIColor ?? AppColours.textBlack, font: font)
             label.numberOfLines = 0
             return label
         } else {
             let label = UILabel()
-            label.textColor = AppColours.textBlack
+            label.textColor = textListProperties?.textColor.getUIColor ?? AppColours.textBlack
             let textSize = properties.fontSize
             label.font = properties.bolded ? UIFont.bcSansBoldWithSize(size: textSize) : UIFont.bcSansRegularWithSize(size: textSize)
             label.text = properties.text
@@ -87,13 +91,17 @@ class TextListView: UIView {
         }
     }
     
+    private func removeOldStacks() {
+        guard let listOfStacks = listOfStacks else { return }
+        for stack in listOfStacks {
+            stack.removeFromSuperview()
+        }
+    }
+    
     // TODO: Setup accessibility
-    private func setupAccessibility() {
-        self.isAccessibilityElement = true
-        let accessibilityLabel = ""
-        self.accessibilityLabel = accessibilityLabel
-//        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-//        self.accessibilityValue = accessibilityValue
-        self.accessibilityHint = ""
+    private func setupAccessibility(stack: UIStackView, listComponent: TextListModel) {
+        stack.isAccessibilityElement = true
+        stack.accessibilityLabel = listComponent.header.text
+        stack.accessibilityValue = listComponent.subtext?.text
     }
 }

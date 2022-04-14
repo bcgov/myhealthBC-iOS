@@ -28,11 +28,13 @@ class AuthenticationInfoView: UIView, Theme {
     
     @IBAction func continueAction(_ sender: Any) {
         guard let completion = self.completion else {return}
+        continueButton.isUserInteractionEnabled = false
         completion(.Continue)
     }
     
     @IBAction func cancelAction(_ sender: Any) {
         guard let completion = self.completion else {return}
+        continueButton.isUserInteractionEnabled = false
         completion(.Cancel)
     }
     
@@ -47,26 +49,25 @@ class AuthenticationInfoView: UIView, Theme {
         self.addEqualSizeContraints(to: view)
         self.completion = completion
         style()
+        setupAccessibility()
     }
     
     func style() {
-        style(button: continueButton, style: .Fill, title: "Continue")
-        style(button: cancelButton, style: .Hollow, title: .cancel)
+        style(button: continueButton, style: .Fill, title: .continueText, image: nil, bold: true)
+        style(button: cancelButton, style: .Hollow, title: .cancel, image: nil, bold: true)
         
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 24)
         messageLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         
         titleLabel.textColor = AppColours.appBlue
         
-        titleLabel.text = "Leaving My Health BC"
+        titleLabel.text = .leavingMyHealthBC
         messageLabel.attributedText =
             NSMutableAttributedString()
-                .normal("You will be temporarily redirected to ")
-                .bold("Health Gateway ")
-                .normal("to login with your BC Services Card.\n\n")
-                .normal("You will then be automatically returned to the")
-                .bold("My Health BC")
-                .normal("mobile app.")
+            .normal(.youWillRedirected)
+            .normal("\(String.toLoginWithYourBCServices)\n\n")
+            .normal(.youWillAutomaticallyReturned)
+            .normal(.mobileApp)
         navBackButton.setTitle("", for: .normal)
         
         let backIcon = UIImage(named: "app-back-arrow")?.withRenderingMode(.alwaysTemplate)
@@ -77,5 +78,10 @@ class AuthenticationInfoView: UIView, Theme {
         navTitle.font = UIFont.bcSansBoldWithSize(size: 17)
         navTitle.textColor = AppColours.appBlue
         navDivider.backgroundColor = .lightGray.withAlphaComponent(0.3)
+    }
+    
+    func setupAccessibility() {
+        navBackButton.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
+        navTitle.accessibilityTraits = .header
     }
 }

@@ -18,6 +18,7 @@ class HealthRecordsUserView: UIView {
     @IBOutlet weak var recordCountLabel: UILabel!
     @IBOutlet weak var recordIconImageView: UIImageView!
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -52,14 +53,33 @@ class HealthRecordsUserView: UIView {
         backgroundWhiteView.layer.borderColor = AppColours.borderGray.cgColor
         backgroundWhiteView.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         nameLabel.font = HealthRecordsUserView.nameFont
-        nameLabel.textColor = AppColours.appBlue
+        nameLabel.textColor = AppColours.lightBlueText
         recordCountLabel.font = UIFont.bcSansRegularWithSize(size: 13)
-        recordCountLabel.textColor = AppColours.textBlack
+        // TODO: put in AppColours
+        recordCountLabel.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
         recordIconImageView.image = UIImage(named: "vaccine-record-icon")
     }
     
-    func configure(name: String, records: Int) {
-        setupAccessibility()
+    func styleAuthStatus(authenticated: Bool) {
+        if !authenticated {
+            recordIconImageView.image = UIImage(named: "vaccine-record-icon")?.withRenderingMode(.alwaysTemplate)
+            recordIconImageView.tintColor = AppColours.appBlue
+            recordIconImageView.alpha = 1
+            
+            return
+        } else {
+            let bcscLogo = UIImage(named: "profile-icon")
+            recordIconImageView.image = bcscLogo
+            let isAuthenticated = AuthManager().isAuthenticated
+            recordIconImageView.alpha = isAuthenticated ? 1 : 0.3
+            Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
+                guard let `self` = self else {return}
+                self.recordIconImageView.alpha = 0.3
+            }
+        }
+    }
+    
+    func configure(name: String, records: Int, authenticated: Bool) {
         // NOTE: This is for weird logic where we word wrap, unless there is a name that is really long and hyphenated (so, going to make assumptions here)
         let numberOfSpaces = name.reduce(0) { $1 == " " ? $0 + 1 : $0 }
         nameLabel.lineBreakMode = name.count >= 20 && numberOfSpaces <= 1 ? .byTruncatingTail : .byWordWrapping
@@ -69,16 +89,15 @@ class HealthRecordsUserView: UIView {
             recordText.append("s")
         }
         recordCountLabel.text = recordText
-        
+        styleAuthStatus(authenticated: authenticated)
+        setupAccessibility()
     }
     
     // TODO: Setup accessibility
     private func setupAccessibility() {
         self.isAccessibilityElement = true
-        let accessibilityLabel = ""
-        self.accessibilityLabel = accessibilityLabel
-//        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-//        self.accessibilityValue = accessibilityValue
-        self.accessibilityHint = ""
+        self.accessibilityLabel = nameLabel.text
+        self.accessibilityValue = recordCountLabel.text
+        self.accessibilityHint = AccessibilityLabels.HealthRecords.cardHint
     }
 }

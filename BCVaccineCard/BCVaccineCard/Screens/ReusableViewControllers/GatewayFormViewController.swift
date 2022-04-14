@@ -142,7 +142,7 @@ struct GatewayFormCompletionHandlerDetails {
 class GatewayFormViewController: BaseViewController {
     
     class func constructGatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType) -> GatewayFormViewController {
-        if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
+        if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
             vc.rememberDetails = rememberDetails
             vc.fetchType = fetchType
             vc.navTitle = fetchType.getNavTitle
@@ -236,6 +236,7 @@ extension GatewayFormViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthGatewayScreen.navRightIconTitle, hint: AccessibilityLabels.HealthGatewayScreen.navRightIconHint)),
                                                navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self, backButtonHintString: AccessibilityLabels.GatewayForm.navHint)
     }
     
@@ -511,16 +512,68 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     }
 }
 
+// MARK: Check for authenticated patient
+extension GatewayFormViewController {
+    private func isPHNOfAuthenticatedPatient() -> (auth: Bool, patient: Patient?) {
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return (false, nil) }
+        guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return (false, nil) }
+        guard let patient = StorageService.shared.fetchPatient(phn: phn) else { return (false, nil) }
+        return (hasAuthRecords(patient: patient), patient)
+    }
+    
+    private func hasAuthRecords(patient: Patient) -> Bool {
+        for vaccineCard in patient.vaccineCardArray {
+            if vaccineCard.authenticated {
+                return true
+            }
+        }
+        for testResult in patient.testResultArray {
+            if testResult.authenticated {
+                return true
+            }
+        }
+        for prescription in patient.prescriptionArray {
+            if prescription.authenticated {
+                return true
+            }
+        }
+        for labOrder in patient.labOrdersArray {
+            if labOrder.authenticated {
+                return true
+            }
+        }
+        return false
+    }
+    
+    private func showAlertToRedirectAuthenticatedUserToRecordsView(patient: Patient) {
+        alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
+            guard let `self` = self else {return}
+            self.handleAuthNavigation(patient: patient)
+        }, buttonTwoTitle: "Retry") {}
+    }
+    
+    private func handleAuthNavigation(patient: Patient) {
+        if let tabBar = self.tabBarController as? TabBarController {
+            tabBar.goToUserRecordsScreenForPatient(patient)
+        }
+    }
+}
+
 // MARK: For Button tap and enabling
 extension GatewayFormViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .cancel {
             self.navigationController?.popViewController(animated: true)
         } else if type == .submit {
-            if fetchType.getRequestType == .getTestResults {
-                prepareRequestForTestResult()
-            } else if fetchType.getRequestType == .getVaccineCard {
-                prepareRequestForVaccineCard()
+            let tuple = isPHNOfAuthenticatedPatient()
+            if tuple.auth, let patient = tuple.patient {
+                showAlertToRedirectAuthenticatedUserToRecordsView(patient: patient)
+            } else {
+                if fetchType.getRequestType == .getTestResults {
+                    prepareRequestForTestResult()
+                } else if fetchType.getRequestType == .getVaccineCard {
+                    prepareRequestForVaccineCard()
+                }
             }
         }
     }
@@ -555,7 +608,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         // store prefered PHN if needed here
         self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
         hideLoader()
-        if StorageService.shared.testExists(from: result) {
+        if StorageService.shared.covidTestExists(from: result) {
             alert(title: .duplicateTitle, message: .duplicateTestMessage)
             return
         }
@@ -590,7 +643,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     }
     
     func updateCardInLocalStorage(model: AppVaccinePassportModel) {
-        self.updateCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
+        self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] _ in
             guard let `self` = self else {return}
             let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
             let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
@@ -603,6 +656,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             self.storeVaccineCard(model: model.transform(),
                                   authenticated: false,
                                   sortOrder: sortOrder,
+                                  manuallyAdded: true,
                                   completion: {
                 let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
                 let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
@@ -616,7 +670,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             guard let fedCode = model.codableModel.fedCode else {
                 return
             }
-            self.updateFedCodeForCardInLocalStorage(model: model.transform(), completion: { [weak self] _ in
+            self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] _ in
                 guard let `self` = self else {return}
                 let fedCode = self.fetchType.isFedPassOnly ? fedCode : nil
                 let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
@@ -630,7 +684,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         let deletedCardSortOrder: Int64?
         if fetchType.isFedPassOnly, let codeToReplace = code {
             deletedCardSortOrder = StorageService.shared.fetchVaccineCard(code: codeToReplace)?.sortOrder
-            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace, reSort: false)
+            StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace, reSort: false, manuallyAdded: false)
         } else {
             deletedCardSortOrder = nil
         }
@@ -679,8 +733,8 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         } else {
             bday = nil
         }
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday) else {return nil}
-        guard let object = StorageService.shared.storeTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated) else { return nil }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday, authenticated: authenticated) else {return nil}
+        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: true) else { return nil }
         return object.id
     }
     

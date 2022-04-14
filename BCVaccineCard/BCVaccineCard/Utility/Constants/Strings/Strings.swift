@@ -24,6 +24,8 @@ extension String {
     static var records: String { return "Records".localized }
     /// Button titles
     static var cancel: String { return "Cancel".localized }
+    static var continueText: String { return "Continue".localized }
+    static var agree: String { return "Agree".localized }
 //    static var enter: String { return "Enter".localized }
     static var submit: String { return "Submit".localized }
     static var done: String { return "Done".localized }
@@ -101,7 +103,7 @@ extension String {
     /// Labels and other text
 //    static var formTitle: String { return "FormTitle".localized }
 //    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
-    static var addAHealthRecord: String { return "AddAHealthRecord".localized }
+    static var addHealthRecord: String { return "AddHealthRecord".localized }
     static var addAHealthPass: String { return "AddAHealthPass".localized }
     static var formDescription: String { return "FormDescription".localized }
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }
@@ -110,8 +112,8 @@ extension String {
     static var anyDose: String { return "AnyDose".localized }
     static var dateOfTest: String{ return "DateOfTest".localized }
     static var phnFooter: String { return "PHNFooter".localized }
-    static var privacyStatement: String { return "PrivacyStatement".localized }
-    static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized } //Don't think we're using this
+    static var gatewayPrivacyStatementDescription: String { return "GatewayPrivacyStatementDescription".localized }
+    static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
 //    static var privacyPolicyStatement: String { return "PrivacyPolicyStatement".localized }
     static func privacyPolicyStatement(context: String) -> String {
         return String(format: "PrivacyPolicyStatement".localized, context)
@@ -148,6 +150,7 @@ extension String {
     static var tapToZoomIn: String { return "TapToZoomIn".localized }
     static var presentForScanning: String { return "PresentForScanning".localized }
     static var unlinkCardTitle: String { return "UnlinkCardTitle".localized }
+    static var unlinkTitle: String { return "UnlinkTitle".localized }
     static var unlinkCardMessage: String { return "UnlinkCardMessage".localized }
     static var noName: String { return "NoName".localized }
     static var showFederalProof: String { return "ShowFederalProof".localized }
@@ -174,7 +177,7 @@ extension String {
     static var covid19SymptomCheckerResource: String { return "Covid19SymptomCheckerResource".localized }
     static var schoolRelatedResource: String { return "SchoolRelatedResource".localized }
     
-    // Federal Paaa pdf
+    // Federal Pass pdf
     static var travelPass: String { return "TravelPass".localized }
     static var canadianCOVID19ProofOfVaccination: String { return "CanadianCOVID19ProofOfVaccination".localized }
 
@@ -209,17 +212,125 @@ extension String {
     static var pending: String { return "Pending".localized }
     
     // MARK: Settings
+    static var profileAndSettings: String { return "ProfileAndSettings".localized }
+    static var viewProfile: String { return "ViewProfile".localized }
+    static var bcscLogin: String { return "BcscLogin".localized }
+    static var accessRecords: String { return "AccessRecords".localized }
+    static var notNow: String { return "notNow".localized }
+    static var securityAndData: String { return "SecurityAndData".localized }
+    static var privacyStatement: String { return "PrivacyStatement".localized }
+    
+    static var deleteAllRecordsAndSavedDataDescription: String { return "DeleteAllRecordsAndSavedDataDescription".localized }
     static var deleteAllRecordsAndSavedData: String { return "DeleteAllRecordsAndSavedData".localized }
     static var disableAnalytics: String { return "DisableAnalytics".localized }
     static var enableAnalytics: String { return "EnableAnalytics".localized }
     static var analytyticsUsageDescription: String { return "AnalytyticsUsageDescription".localized }
     static var deleteData: String { return "DeleteData".localized }
     static var confirmDeleteAllRecordsAndSaveData: String { return "ConfirmDeleteAllRecordsAndSaveData".localized }
+    static var loginSuccess: String { return "LoginSuccess".localized }
+    static var recordsWillBeAutomaticallyAdded: String { return "RecordsWillBeAutomaticallyAdded".localized }
+    static var loginDescription: String { return "LoginDescription".localized }
+    static var localAuthDescription: String { return "LocalAuthDescription".localized }
+    static var touchId: String { return "TouchId".localized }
+    static var faceId: String { return "FaceId".localized }
+    static var logoutTitle: String { return "LogoutTitle".localized }
+    static var logoutDescription: String { return "LogoutDescription".localized }
+    static var logOut: String { return "LogOut".localized }
+    static var reAuthenticateMessage: String { return "ReAuthenticateMessage".localized }
     static var deletedAllRecordsAndSavedData: String { return "DeletedAllRecordsAndSavedData".localized }
+    static var publishedOn: String { return "PublishedOn".localized }
+    static var title: String { return "Title".localized }
+    static var details: String { return "Details".localized }
+    static var leavingMyHealthBC: String { return "LeavingMyHealthBC".localized }
+    static var youWillRedirected: String { return "YouWillRedirected".localized }
+    static var healthGateway: String { return "HealthGateway".localized }
+    static var toLoginWithYourBCServices: String { return "toLoginWithYourBCServices".localized }
+    static var youWillAutomaticallyReturned: String { return "YouWillAutomaticallyReturned".localized }
+    static var myHealthBC: String { return "MyHealthBC".localized }
+    static var mobileApp: String { return "MobileApp".localized }
+    
+    // MARK: Local Auth
+    static var localAuthPrivacyText: String { return "LocalAuthPrivacyText".localized }
+    static var privacy: String { return "Privacy".localized }
+    static var keepingYourDataSecure: String { return "KeepingYourDataSecure".localized }
+    static var protectYourPersonalInformation: String { return "ProtectYourPersonalInformation".localized }
+    static var localAuthViewDescription: String { return "LocalAuthViewDescription".localized }
+    static var learnMoreAboutLocalAuth: String { return "LearnMoreAboutLocalAuth".localized }
+    
+    static var useTouchId: String { return "UseTouchId".localized }
+    static var usePassCode: String { return "UsePassCode".localized }
+    static var useFaceId: String { return "UseFaceId".localized }
+    static var setupAuthentication: String { return "SetupAuthentication".localized }
+    static var allowSecurityAccessTitle: String { return "AllowSecurityAccessTitle".localized }
+    static var allowSecurityAccessForFaceIdMessage: String {
+        return String(format: "AllowSecurityAccessMessage".localized, String.faceId, "and".localized, "\(String.faceId) & ")
+    }
+    static var allowSecurityAccessForTouchIdMessage: String {
+        return String(format: "AllowSecurityAccessMessage".localized, String.touchId, "and".localized, "\(String.touchId) & ")
+    }
+    static var allowSecurityAccessDefaultMessage: String {
+        return String(format: "AllowSecurityAccessMessage".localized, "", "", "")
+    }
+    static var reasonForRequestingAuthentication: String { return "ReasonForRequestingAuthentication".localized }
+    static var unlockRecords: String { return "UnlockRecords".localized }
+    static var termsOfService: String { return "TermsOfService".localized }
+    // Protected word
+    static var protectedWordAlertError: String { return "ProtectedWordAlertError".localized }
 }
 
 // Accessibility only localized strings
 extension String {
-    
+    static var tappingButtonBringToSettings: String { return "TappingButtonBringToSettings".localized }
+    static var tappingButtonTeturnToPreviousScreen: String { return "TappingButtonTeturnToPreviousScreen".localized }
+    static var tappingButtonBringHelpScreen: StringLiteralType { return "TappingButtonBringHelpScreen".localized }
+    static var tappingWillFinishEditing: String { return "TappingWillFinishEditing".localized }
+    static var tappingWillAllowYouEditYourListOfCards: String { return "TappingWillAllowYouEditYourListOfCards".localized }
+    static var tappingWillBringNewScreenWithOptionsRetrieveQR: String { return "TappingWillBringNewScreenWithOptionsRetrieveQR".localized }
+    static var tappingDoneStopEditing: String { return "TappingDoneStopEditing".localized }
+    static var tappingManageCardsWillAllowEditTheOrderOfCards: String { return "TappingManageCardsWillAllowEditTheOrderOfCards".localized }
+    static var yourCovidVaccineCards: String { return "YourCovidVaccineCards".localized }
+    static var yourProofOfVaccinationAddedToYourPasses: String { return "YourProofOfVaccinationAddedToYourPasses".localized }
+    static var vaccinationCardExpanded: String { return "VaccinationCardExpanded".localized }
+    static var tappingButtonAllowYouEditRecords: String { return "TappingButtonAllowYouEditRecords".localized }
+    static var tappingDoneWillStopEditingRecords: String { return "TappingDoneWillStopEditingRecords&SaveChanges".localized }
+    static var yourHealthRecords: String { return "YourHealthRecords".localized }
+    static var doubleTapNavigateToUsersRecords: String { return "DoubleTapNavigateToUsersRecords".localized }
+    static var tapToNavigateToRecordDetails: String { return "TapToNavigateToRecordDetails".localized }
+    static var tappingWillDeleteThisRecord: String { return "TappingWillDeleteThisRecord".localized }
+    static var yourHealthRecord: String { return "YourHealthRecord".localized }
+    static var back: String { return "Back".localized }
+    static var tappingWillTakeYouBackTo: String { return "TappingWillTakeYouBackTo".localized }
+    static var tappingWillTakeToIntroductionOfNextFeature: String { return "TappingWillTakeToIntroductionOfNextFeature".localized }
+    static var tappingWillTakeYouToHealthPassesHome: String { return "TappingWillTakeYouToHealthPassesHome".localized }
+    static var okay: String { return "Okay".localized }
+    static var tappingWillOpenYourCameraToScanQRcode: String { return "TappingWillOpenYourCameraToScanQRcode".localized }
+    static var tappingWillOpenYourCameraRollToSelectSavedQRCode: String { return "TappingWillOpenYourCameraRollToSelectSavedQRCode".localized }
+    static var tappingButtonWillTakeYouWhereYouEnterPrsonalHealthInfo: String { return "TappingButtonWillTakeYouWhereYouEnterPrsonalHealthInfo".localized }
+    static var tapToAddVaccineCard: String { return "TapToAddVaccineCard".localized }
+    static var tappingWillShowAllSavedCovid19VaccineCards: String { return "TappingWillShowAllSavedCovid-19VaccineCards".localized }
+    static var vaccinationCardCollapsed: String { return "VaccinationCardCollapsed".localized }
+    static var qrCodeImage: String { return "QRcodeImage".localized }
+    static var inEditModeSwipeUpOrDownForSpecialActions: String { return "InEditMode:SwipeUpOrDownForSpecialActions".localized }
+    static var actionAvailableTapToZoomIn: String { return "ActionAvailableTapToZoomIn".localized }
+    static var actionAvailableTapToExpandVaccinationCard: String { return "ActionAvailableTapToExpandVaccinationCard".localized }
+    static var zoomedInQRCodePresented: String { return "ZoomedInQRCodePresented".localized }
+    static var numberFormat: String { return "NumberFormat".localized }
+    static var dateFormat: String { return "DateFormat".localized }
+    static var required: String { return "Required".localized }
+    static var theQRRetrievalMethods: String { return "TheQRRetrievalMethods".localized }
+    static var cameraOpenedToScanQR: String { return "CameraOpenedToScanQR".localized }
+    static var tappingCloseWillDismissCamera: String { return "TappingCloseWillDismissCamera".localized }
+    static var privacyStatementLink: String { return "PrivacyStatementLink".localized }
+    static var actionAvailableTappingPrivacyLinkToWebPage: String { return "ActionAvailableTappingPrivacyLinkToWebPage".localized }
+    static var federalProofOfVaccinationLink: String { return "federalProofOfVaccinationLink".localized }
+    static var federalProofOfVaccinationLinkToHealthGateway: String { return "federalProofOfVaccinationLinkToHealthGateway".localized }
+    static var doubleTappingWillOpenFederalProofPDF: String { return "DoubleTappingWillOpenFederalProofPDF".localized }
+    static var doubleTappingWillTakeYouToHealthGatewayForPersonalHealthNumber: String { return "DoubleTappingWillTakeYouToHealthGatewayForPersonalHealthNumber".localized }
+    static var openWebsiteLinkForMoreInformation: String { return "OpenWebsiteLinkForMoreInformation".localized }
+    static var checkBox: String { return "CheckBox".localized }
+    static var selected: String { return "Selected".localized }
+    static var unselected: String { return "Unselected".localized }
+    static var selectTo: String { return "SelectTo".localized }
+    static var actionAvailable: String { return "ActionAvailable".localized }
 }
 

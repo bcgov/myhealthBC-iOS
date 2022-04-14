@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -23,16 +23,16 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="BgM-Qn-NmY">
-                    <rect key="frame" x="16" y="16" width="269" height="46"/>
+                    <rect key="frame" x="16" y="8" width="277" height="58"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sk6-Ay-tQ8">
-                            <rect key="frame" x="0.0" y="0.0" width="269" height="20.5"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sk6-Ay-tQ8">
+                            <rect key="frame" x="0.0" y="0.0" width="277" height="32.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Biv-QA-dLb">
-                            <rect key="frame" x="0.0" y="25.5" width="269" height="20.5"/>
+                            <rect key="frame" x="0.0" y="37.5" width="277" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -40,9 +40,9 @@
                     </subviews>
                 </stackView>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sM2-3I-hpB">
-                    <rect key="frame" x="290" y="19" width="40" height="40"/>
+                    <rect key="frame" x="298" y="21" width="32" height="32"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="40" id="fBP-ZE-8ZG"/>
+                        <constraint firstAttribute="width" constant="32" id="fBP-ZE-8ZG"/>
                         <constraint firstAttribute="width" secondItem="sM2-3I-hpB" secondAttribute="height" multiplier="1:1" id="vVD-jt-qzV"/>
                     </constraints>
                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -56,8 +56,8 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="BgM-Qn-NmY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="2Jt-MC-2ku"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="BgM-Qn-NmY" secondAttribute="bottom" constant="12" id="Bin-Mv-dJX"/>
+                <constraint firstItem="BgM-Qn-NmY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="2Jt-MC-2ku"/>
+                <constraint firstAttribute="bottom" secondItem="BgM-Qn-NmY" secondAttribute="bottom" constant="8" id="Bin-Mv-dJX"/>
                 <constraint firstItem="sM2-3I-hpB" firstAttribute="leading" secondItem="BgM-Qn-NmY" secondAttribute="trailing" constant="5" id="Nwx-xj-brm"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sM2-3I-hpB" secondAttribute="bottom" constant="12" id="Oit-rK-wCc"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="sM2-3I-hpB" secondAttribute="trailing" constant="16" id="Ond-ZQ-i5l"/>

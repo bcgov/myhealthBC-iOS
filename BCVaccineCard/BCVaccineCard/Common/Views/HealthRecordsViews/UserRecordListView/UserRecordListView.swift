@@ -47,38 +47,42 @@ class UserRecordListView: UIView {
     }
     
     private func uiSetup() {
-        greyRoundedBackgroundView.backgroundColor = AppColours.backgroundGray
+        // TODO: put in AppColours
+        greyRoundedBackgroundView.backgroundColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1)
         greyRoundedBackgroundView.layer.cornerRadius = 4.0
         greyRoundedBackgroundView.layer.masksToBounds = true
-        rightArrowImageView.image = UIImage(named: "resource-arrow")
+        rightArrowImageView.image = UIImage(named: "resource-arrow")?.withRenderingMode(.alwaysTemplate)
+        // TODO: put in AppColours
+        rightArrowImageView.tintColor = UIColor(red: 0, green: 0.2, blue: 0.4, alpha: 1)
         recordTypeTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
-        recordTypeTitleLabel.textColor = AppColours.appBlue
+        recordTypeTitleLabel.textColor = AppColours.lightBlueText
         recordTypeSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 13)
-        recordTypeSubtitleLabel.textColor = AppColours.textBlack
+        // TODO: put in AppColours
+        recordTypeSubtitleLabel.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
         self.layoutIfNeeded()
     }
     
     func configure(record: HealthRecordsDetailDataSource) {
         self.type = record.type
-        setupAccessibility()
         iconImageView.image = record.image
         recordTypeTitleLabel.text = record.title
         var statusToInclude: String?
         switch record.type {
         case .covidImmunizationRecord: statusToInclude = nil
         case .covidTestResultRecord: statusToInclude = record.mainRecord?.status
+        case .medication: statusToInclude = record.mainRecord?.status
+        case .laboratoryOrder: statusToInclude = record.mainRecord?.status
         }
         let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
         recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"
+        setupAccessibility()
     }
     
     // TODO: Setup accessibility
     private func setupAccessibility() {
         self.isAccessibilityElement = true
-        let accessibilityLabel = ""
-        self.accessibilityLabel = accessibilityLabel
-//        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-//        self.accessibilityValue = accessibilityValue
-        self.accessibilityHint = ""
+        self.accessibilityLabel = recordTypeTitleLabel.text
+        self.accessibilityValue = recordTypeSubtitleLabel.text
+        self.accessibilityHint = AccessibilityLabels.UserRecord.cardHint
     }
 }

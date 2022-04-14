@@ -14,37 +14,84 @@ enum ButtonStyle {
     case Hollow
 }
 
+enum FontStyle {
+    case Regular
+    case Bold
+}
+
+enum LabelColour {
+    case Grey
+    case Blue
+    case Black
+    case Red
+}
+
 extension Theme {
     
     // Buttons
-    public func style(button: UIButton, style: ButtonStyle, title: String) {
+    public func style(button: UIButton, style: ButtonStyle, title: String, image: UIImage?, bold: Bool? = false) {
+        
+        button.setTitle(title, for: .normal)
+        button.setImage(image, for: .normal)
+        button.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
+        button.titleLabel?.minimumScaleFactor = 0.5
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         switch style {
             
         case .Fill:
-            styleButtonfill(button: button)
+            styleButtonfill(button: button, bold: bold)
         case .Hollow:
-            styleButtonHollow(button: button)
+            styleButtonHollow(button: button, bold: bold)
         }
-        button.setTitle(title, for: .normal)
-        button.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
     }
     
-    fileprivate func styleButtonHollow(button: UIButton) {
+    // Labels
+    public func style(label: UILabel, style: FontStyle, size: CGFloat, colour: LabelColour) {
+        switch style {
+        case .Regular:
+            label.font = UIFont.bcSansRegularWithSize(size: size)
+        case .Bold:
+            label.font = UIFont.bcSansBoldWithSize(size: size)
+        }
+        
+        switch colour {
+        case .Grey:
+            label.textColor = AppColours.textGray
+        case .Blue:
+            label.textColor = AppColours.appBlue
+        case .Black:
+            label.textColor = AppColours.textBlack
+        case .Red:
+            label.textColor = AppColours.appRed
+        }
+    }
+    
+    fileprivate func styleButtonHollow(button: UIButton, bold: Bool? = false) {
         button.backgroundColor = .white
         button.setTitleColor(AppColours.appBlue, for: .normal)
         button.borderColor = AppColours.appBlue
         button.borderWidth = 1
         if let label = button.titleLabel {
-            label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+            if let bolded = bold, bolded {
+                label.font = UIFont.bcSansBoldWithSize(size: 17)
+            } else {
+                label.font = UIFont.bcSansRegularWithSize(size: 17)
+            }
             label.minimumScaleFactor = 0.6
         }
     }
     
-    fileprivate func styleButtonfill(button: UIButton) {
+    fileprivate func styleButtonfill(button: UIButton, bold: Bool? = false) {
         button.backgroundColor = AppColours.appBlue
         button.setTitleColor(.white, for: .normal)
+        button.imageView?.tintColor = .white
         if let label = button.titleLabel {
-            label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+            if let bolded = bold, bolded {
+                label.font = UIFont.bcSansBoldWithSize(size: 17)
+            } else {
+                label.font = UIFont.bcSansRegularWithSize(size: 17)
+            }
+            
             label.minimumScaleFactor = 0.6
         }
     }

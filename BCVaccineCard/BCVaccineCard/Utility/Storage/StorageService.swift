@@ -23,6 +23,11 @@ extension StorageService {
         case TestResult
         case ImmunizationRecord
         case VaccineCard
+        case Perscription
+        case Medication
+        case Pharmacy
+        case LaboratoryOrder
+        case Comments
     }
     
     struct StorageEvent<T> {
@@ -30,6 +35,7 @@ extension StorageService {
             case Delete
             case Save
             case Update
+            case ManuallyAddedRecord
         }
         
         let event: Event
@@ -44,18 +50,14 @@ class StorageService: StorageManagerProtocol {
     
     var managedContext: NSManagedObjectContext?
     
-    init() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-            return
-        }
-        
-        appDelegate.persistentContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        managedContext = appDelegate.persistentContainer.viewContext
-        
+    init(managedContext: NSManagedObjectContext = CoreDataStack.shared.managedContext,
+         mergePolicy: Any = NSMergeByPropertyObjectTrumpMergePolicy) {
+        self.managedContext = managedContext
+        self.managedContext?.mergePolicy = mergePolicy
     }
     
     func notify(event: StorageEvent<Any>) {
-        Logger.log(string: "StorageEvent \(event.entity) - \(event.event)")
+        Logger.log(string: "StorageEvent \(event.entity) - \(event.event)", type: .storage)
         NotificationCenter.default.post(name: .storageChangeEvent, object: event)
     }
     
@@ -63,6 +65,7 @@ class StorageService: StorageManagerProtocol {
         // this will delete objects related to it as well because of the
         let patients = fetchPatients()
         deleteAllRecords(in: patients)
+        deleteAllHealthRecords()
         self.notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patients))
     }
     

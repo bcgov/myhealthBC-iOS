@@ -12,11 +12,15 @@ class GetRecordsView: UIView {
     enum RecordType {
         case covidImmunizationRecord
         case covidTestResult
+        case medication
+        case laboratoryOrder
         
         var getTitle: String {
             switch self {
             case .covidImmunizationRecord: return .getVaccinationRecordsTitle
             case .covidTestResult: return .getCovidTestResultsTitle
+            case .medication: return ""
+            case .laboratoryOrder: return ""
             }
         }
         
@@ -24,6 +28,8 @@ class GetRecordsView: UIView {
             switch self {
             case .covidImmunizationRecord: return .getVaccinationRecordsDescription
             case .covidTestResult: return .getCovidTestResultsDescription
+            case .medication: return ""
+            case .laboratoryOrder: return ""
             }
         }
         
@@ -31,6 +37,8 @@ class GetRecordsView: UIView {
             switch self {
             case .covidImmunizationRecord: return UIImage(named: "vaccine-record-icon")
             case .covidTestResult: return UIImage(named: "test-result-icon")
+            case .medication: return nil
+            case .laboratoryOrder: return nil
             }
         }
     }
@@ -85,20 +93,18 @@ class GetRecordsView: UIView {
     
     func configure(type: RecordType) {
         self.type = type
-        setupAccessibility()
         titleLabel.text = type.getTitle
         descriptionLabel.text = type.getDescription
         recordTypeImageView.image = type.getImage
+        setupAccessibility()
     }
     
     // TODO: Setup accessibility
     private func setupAccessibility() {
         self.isAccessibilityElement = true
-        let accessibilityLabel = ""
-        self.accessibilityLabel = accessibilityLabel
-//        let accessibilityValue = expanded ? "\(model.codableModel.name), \(model.codableModel.status.getTitle), \(model.getFormattedIssueDate()), \(AccessibilityLabels.VaccineCardView.qrCodeImage)" : "\(model.codableModel.name), \(model.codableModel.status.getTitle)"
-//        self.accessibilityValue = accessibilityValue
-        self.accessibilityHint = ""
+        self.accessibilityLabel = titleLabel.text
+        self.accessibilityHint = descriptionLabel.text
+        self.accessibilityTraits = .button
     }
 }
 

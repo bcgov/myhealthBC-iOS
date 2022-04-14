@@ -68,7 +68,6 @@ class FederalPassView: UIView {
     }
     
     private func setupAccessibility(model: AppVaccinePassportModel) {
-//        self.isAccessibilityElement = true
         let accessibilityLabel = model.codableModel.fedCode != nil ? AccessibilityLabels.FederalPassView.fedPassDescriptionHasPass : AccessibilityLabels.FederalPassView.fedPassDescriptionDoesNotHavePass
         self.passButtonForAction.accessibilityLabel = accessibilityLabel
         self.accessibilityHint = model.codableModel.fedCode != nil ? AccessibilityLabels.FederalPassView.hasPassHint : AccessibilityLabels.FederalPassView.noPassHint

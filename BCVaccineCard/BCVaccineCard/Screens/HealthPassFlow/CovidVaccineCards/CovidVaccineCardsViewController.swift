@@ -52,6 +52,7 @@ class CovidVaccineCardsViewController: BaseViewController {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
         navSetup()
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -89,6 +90,7 @@ class CovidVaccineCardsViewController: BaseViewController {
 extension CovidVaccineCardsViewController {
     private func cardChangedObservableSetup() {
         NotificationCenter.default.addObserver(self, selector: #selector(onNotification(notification:)), name: .cardAddedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(fedPassOnlyAdded(notification:)), name: .fedPassOnlyAdded, object: nil)
     }
     
     @objc func onNotification(notification:Notification) {
@@ -112,6 +114,16 @@ extension CovidVaccineCardsViewController {
             UIAccessibility.setFocusTo(cell)
         }
     }
+    
+    @objc func fedPassOnlyAdded(notification:Notification) {
+        guard let userInfo = notification.userInfo as? [String: Any] else { return }
+        guard let pass = userInfo["pass"] as? String else { return }
+        guard let source = userInfo["source"] as? GatewayFormSource, source == .vaccineCardsScreen else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
+        }
+    }
+
 }
 
 // MARK: Navigation setup
@@ -129,6 +141,7 @@ extension CovidVaccineCardsViewController {
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: .healthPasses)
     }
@@ -238,21 +251,23 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         guard !dataSource.isEmpty || !inEditMode else { return .none }
+        if !dataSource.isEmpty && dataSource[indexPath.row].authenticated {
+            return .none
+        }
         return .delete
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true, manuallyAdded: true)
         }
     }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        if inEditMode {
-            self.deleteCardAt(indexPath: indexPath, reInitEditMode: true)
+        if !dataSource.isEmpty && dataSource[indexPath.row].authenticated {
+            return nil
         }
-    
-        return "Unlink"
+        return .unlinkTitle
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -266,17 +281,20 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        if !dataSource.isEmpty && dataSource[indexPath.row].authenticated {
+            return nil
+        }
         guard orientation == .right else {return nil}
         let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
             guard let `self` = self else {return}
-            self.deleteCardAt(indexPath: indexPath, reInitEditMode: false)
+            self.deleteCardAt(indexPath: indexPath, reInitEditMode: false, manuallyAdded: true)
         }
         deleteAction.hidesWhenSelected = true
         deleteAction.image = UIImage(named: "unlink")
         deleteAction.backgroundColor = .white
         deleteAction.textColor = Constants.UI.Theme.primaryColor
         deleteAction.isAccessibilityElement = true
-        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkButton
+        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkCard
         deleteAction.accessibilityTraits = .button
         return [deleteAction]
     }
@@ -286,13 +304,10 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
 extension CovidVaccineCardsViewController: FederalPassViewDelegate {
     func federalPassButtonTapped(model: AppVaccinePassportModel?) {
         if let pass =  model?.codableModel.fedCode {
-            self.openFederalPass(pass: pass, vc: self, id: nil, completion: { [weak self] _ in
-                guard let `self` = self else { return }
-                self.tabBarController?.tabBar.isHidden = false
-            })
+            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .vaccineCardsScreen, owner: self, completion: { [weak self] id in
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .vaccineCardsScreen, owner: self, navDelegate: self.navDelegate, completion: { [weak self] id in
                 guard let `self` = self else { return }
                 self.tabBarController?.tabBar.isHidden = false
                 self.navigationController?.popViewController(animated: true)
@@ -304,9 +319,16 @@ extension CovidVaccineCardsViewController: FederalPassViewDelegate {
 
 }
 
+extension CovidVaccineCardsViewController: UIDocumentInteractionControllerDelegate {
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        guard let navController = self.navigationController else { return self }
+        return navController
+    }
+}
+
 // MARK: Adjusting data source functions
 extension CovidVaccineCardsViewController {
-    private func deleteCardAt(indexPath: IndexPath, reInitEditMode: Bool) {
+    private func deleteCardAt(indexPath: IndexPath, reInitEditMode: Bool, manuallyAdded: Bool) {
         alert(title: .unlinkCardTitle, message: .unlinkCardMessage,
               buttonOneTitle: .cancel, buttonOneCompletion: {
             if reInitEditMode {
@@ -317,7 +339,7 @@ extension CovidVaccineCardsViewController {
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
             let item = self.dataSource[indexPath.row]
-            StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "")
+            StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "", manuallyAdded: manuallyAdded)
         }
     }
 }

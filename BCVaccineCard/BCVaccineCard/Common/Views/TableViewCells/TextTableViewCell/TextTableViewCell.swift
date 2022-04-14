@@ -34,16 +34,16 @@ class TextTableViewCell: UITableViewCell {
         // Initialization code
     }
 
-    func configure(forType type: TextCellType, text: String, withFont font: UIFont, labelSpacingAdjustment: CGFloat? = nil) {
+    func configure(forType type: TextCellType, text: String, withFont font: UIFont, labelSpacingAdjustment: CGFloat? = nil, textColor: UIColor = AppColours.textBlack) {
         self.type = type
-        formatCell(type: type, text: text, font: font)
+        formatCell(type: type, text: text, font: font, textColor: textColor)
         guard let constant = labelSpacingAdjustment else { return }
         adjustLabelSpacing(by: constant)
         self.accessibilityTraits = [.staticText]
         
     }
     
-    private func formatCell(type: TextCellType, text: String, font: UIFont) {
+    private func formatCell(type: TextCellType, text: String, font: UIFont, textColor: UIColor = AppColours.textBlack) {
         leadingImageView.isHidden = type != .underlinedWithImage
         imageViewWidthConstraint.constant = type != .underlinedWithImage ? 0 : 14
         textLabelLeadingConstraint.constant = type != .underlinedWithImage ? 0 : 3
@@ -51,12 +51,12 @@ class TextTableViewCell: UITableViewCell {
         case .plainText:
             cellTextLabel.text = text
             cellTextLabel.font = font
-            cellTextLabel.textColor = AppColours.textBlack
+            cellTextLabel.textColor = textColor
         case .underlinedWithImage:
             formatUnderlinedText(text: text, font: font)
             leadingImageView.image = type.getImage
         case .partiallyBoldedText(let boldTexts, let boldFont):
-            cellTextLabel.attributedText = attributedText(withString: text, boldStrings: boldTexts, normalFont: font, boldFont: boldFont, textColor: AppColours.textBlack)
+            cellTextLabel.attributedText = attributedText(withString: text, boldStrings: boldTexts, normalFont: font, boldFont: boldFont, textColor: textColor)
         }
     }
     

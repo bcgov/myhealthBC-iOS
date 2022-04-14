@@ -12,6 +12,8 @@ struct Defaults {
         case initialOnboardingScreensSeen
         case cachedQueueItObject
         case rememberGatewayDetails
+        case hasAppLaunchedBefore
+        case loginProcessStatus
     }
     
     static var cachedQueueItObject: QueueItCachedObject? {
@@ -30,6 +32,21 @@ struct Defaults {
             return details
         }
         set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.rememberGatewayDetails.rawValue) }
+    }
+    
+    static var hasAppLaunchedBefore: Bool {
+        get { return UserDefaults.standard.bool(forKey: self.Key.hasAppLaunchedBefore.rawValue) }
+        set { UserDefaults.standard.set(newValue, forKey: self.Key.hasAppLaunchedBefore.rawValue) }
+    }
+    
+    // Note: This is to handle edge cases where user kills the app during the login flow and we have to handle logging a user out when app is launched again, or fetching records when app is launched again
+    static var loginProcessStatus: LoginProcessStatus? {
+        get {
+            guard let data = UserDefaults.standard.value(forKey: self.Key.loginProcessStatus.rawValue) as? Data else { return nil }
+            let loginProcess = try? PropertyListDecoder().decode(LoginProcessStatus.self, from: data)
+            return loginProcess
+        }
+        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.loginProcessStatus.rawValue) }
     }
     
     static func unseenOnBoardingScreens() -> [OnboardingScreenType] {

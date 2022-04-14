@@ -19,7 +19,7 @@ class ResourceViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var dataSource: [ResourceDataSourceSection] = []
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -40,7 +40,7 @@ class ResourceViewController: BaseViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
+        //        return .lightContent
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
         } else {
@@ -52,7 +52,7 @@ class ResourceViewController: BaseViewController {
         setupDataSource()
         setupTableView()
     }
-
+    
 }
 
 // MARK: Navigation setup
@@ -62,6 +62,7 @@ extension ResourceViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
@@ -72,12 +73,14 @@ extension ResourceViewController {
     private func setupDataSource() {
         // TODO: Get actual links for resources http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc
         self.dataSource = [
+            
             ResourceDataSourceSection(sectionTitle: nil, section: [ResourceDataSource(type: .text(type: .plainText, font: UIFont.bcSansRegularWithSize(size: 17)), cellStringData: .resourceDescriptionText)]),
             ResourceDataSourceSection(sectionTitle: nil, section: [
+                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-health-advice-resource")!, text: "Get health advice", link: "https://www.healthlinkbc.ca/"))),
                 ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-vaccinated-resource")!, text: .getVaccinatedResource, link: "https://www2.gov.bc.ca/gov/content/covid-19/vaccine/register"))),
                 ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "get-tested-resource")!, text: .getTestedResource, link: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/where-to-get-a-covid-19-test-in-bc"))),
                 ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "symptom-checker-resource")!, text: .covid19SymptomCheckerResource, link: "https://bc.thrive.health/covid19/en")))
-//                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "school-resource")!, text: .schoolRelatedResource, link: "https://www.k12dailycheck.gov.bc.ca/healthcheck?execution=e1s1")))
+                //                ResourceDataSource(type: .resource(type: Resource(image: UIImage(named: "school-resource")!, text: .schoolRelatedResource, link: "https://www.k12dailycheck.gov.bc.ca/healthcheck?execution=e1s1")))
             ])
         ]
     }
@@ -130,24 +133,24 @@ extension ResourceViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        guard let title = dataSource[section].sectionTitle else { return nil }
-//        let headerView = UIView()
-//        headerView.backgroundColor = .white
-//
-//        let sectionLabel = UILabel(frame: CGRect(x: 8, y: 28, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
-//        sectionLabel.font = UIFont.bcSansBoldWithSize(size: 15)
-//        sectionLabel.textColor = AppColours.textBlack
-//        sectionLabel.text = title
-//        sectionLabel.sizeToFit()
-//        headerView.addSubview(sectionLabel)
-//
-//        return headerView
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        guard dataSource[section].sectionTitle != nil else { return 0 }
-//        return 50
-//    }
+    //    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    //        guard let title = dataSource[section].sectionTitle else { return nil }
+    //        let headerView = UIView()
+    //        headerView.backgroundColor = .white
+    //
+    //        let sectionLabel = UILabel(frame: CGRect(x: 8, y: 28, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+    //        sectionLabel.font = UIFont.bcSansBoldWithSize(size: 15)
+    //        sectionLabel.textColor = AppColours.textBlack
+    //        sectionLabel.text = title
+    //        sectionLabel.sizeToFit()
+    //        headerView.addSubview(sectionLabel)
+    //
+    //        return headerView
+    //    }
+    //
+    //    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    //        guard dataSource[section].sectionTitle != nil else { return 0 }
+    //        return 50
+    //    }
     
 }

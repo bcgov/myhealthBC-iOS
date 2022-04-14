@@ -8,8 +8,19 @@
 import Foundation
 
 class Logger {
-    public static func log(string: String) {
+    
+    enum LogType {
+        case general
+        case storage
+        case localAuth
+    }
+    
+    /// Add LogType to array to hide logs of that type
+    private static let hiddenLogTypes: [LogType] = [.localAuth, .general]
+    
+    public static func log(string: String, type: LogType) {
         #if DEV
+        if hiddenLogTypes.contains(type) {return}
         print(string)
         #endif
     }

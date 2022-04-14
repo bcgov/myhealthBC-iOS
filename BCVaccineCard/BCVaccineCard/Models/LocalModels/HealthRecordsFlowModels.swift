@@ -11,13 +11,16 @@ import Foundation
 struct HealthRecordsDataSource {
     let patient: Patient
     var numberOfRecords: Int
+    var authenticated: Bool
 }
 
 
 struct HealthRecord {
     public enum Record {
-        case Test(CovidLabTestResult)
+        case CovidTest(CovidLabTestResult)
         case CovidImmunization(VaccineCard)
+        case Medication(Perscription)
+        case LaboratoryOrder(LaboratoryOrder)
     }
     
     public let type: Record
@@ -28,7 +31,7 @@ struct HealthRecord {
     init(type: HealthRecord.Record) {
         self.type = type
         switch type {
-        case .Test(let test):
+        case .CovidTest(let test):
             let results = test.resultArray
             patient = test.patient!
             birthDate = test.patient?.birthday
@@ -42,10 +45,45 @@ struct HealthRecord {
             patient = card.patient!
             patientName = card.name ?? ""
             birthDate = card.patient?.birthday
+        case .Medication(let prescription):
+            patient = prescription.patient!
+            patientName = prescription.patient?.name ?? ""
+            birthDate = prescription.patient?.birthday
+        case .LaboratoryOrder(let labOrder):
+            patient = labOrder.patient!
+            patientName = patient.name ?? ""
+            birthDate = patient.birthday
         }
     }
 }
 
+extension HealthRecord {
+    var commentId: String {
+        switch type {
+        case .CovidTest(_):
+            return ""
+        case .CovidImmunization(_):
+            return " "
+        case .Medication(let medication):
+            return medication.prescriptionIdentifier ?? ""
+        case .LaboratoryOrder(let labTest):
+            // TODO: When supporting lab order comments
+            return labTest.reportID ?? ""
+        }
+    }
+    
+//    var sortDate: Date {
+//        switch type {
+//        case .CovidTest(let obj):
+//            return
+//        case .CovidImmunization(let obj):
+//            return
+//        case .Medication(let obj):
+//            return
+//        case .LaboratoryOrder(let obj):
+//            return
+//    }
+}
 
 // MARK: Helpers
 extension HealthRecord {
@@ -54,11 +92,28 @@ extension HealthRecord {
     /// - Returns: Detail Data Source
     func detailDataSource() -> HealthRecordsDetailDataSource? {
         switch type {
-        case .Test(let test):
+        case .CovidTest(let test):
             return HealthRecordsDetailDataSource(type: .covidTestResultRecord(model: test))
         case .CovidImmunization(let covidImmunization):
             guard let model = covidImmunization.toLocal() else {return nil}
             return HealthRecordsDetailDataSource(type: .covidImmunizationRecord(model: model, immunizations: covidImmunization.immunizations))
+        case .Medication(let prescription):
+            return HealthRecordsDetailDataSource(type: .medication(model: prescription))
+        case .LaboratoryOrder(let labOrder):
+            return HealthRecordsDetailDataSource(type: .laboratoryOrder(model: labOrder))
+        }
+    }
+    
+    var isAuthenticated: Bool {
+        switch type {
+        case .CovidTest(let test):
+            return test.authenticated
+        case .CovidImmunization(let covidImmunization):
+            return covidImmunization.authenticated
+        case .Medication(let prescription):
+            return prescription.authenticated
+        case .LaboratoryOrder(let labOrder):
+            return labOrder.authenticated
         }
     }
 }
@@ -70,12 +125,18 @@ extension Array where Element == HealthRecord {
     func dataSource() -> [HealthRecordsDataSource] {
         var result: [HealthRecordsDataSource] = []
         for record in self {
-            // TODO: check for birthday too
             if let i = result.firstIndex(where: {$0.patient == record.patient}) {
+                if record.isAuthenticated {
+                    result[i].authenticated = true
+                }
                 result[i].numberOfRecords += 1
             } else {
-                result.append(HealthRecordsDataSource(patient: record.patient, numberOfRecords: 1))
+                result.append(HealthRecordsDataSource(patient: record.patient, numberOfRecords: 1, authenticated: record.isAuthenticated))
             }
+        }
+        if let indexOfAuthenticated = result.firstIndex(where: {$0.authenticated}) {
+            let element = result.remove(at: indexOfAuthenticated)
+            result.insert(element, at: 0)
         }
         return result
     }
@@ -89,22 +150,30 @@ extension Array where Element == HealthRecord {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 firstDate = Date(timeIntervalSince1970: model.issueDate)
             case .covidTestResultRecord(model: let model):
-                firstDate = model.createdAt
+                firstDate = model.mainResult?.resultDateTime
+            case .medication(model: let model):
+                firstDate = model.dispensedDate
+            case .laboratoryOrder(model: let model):
+                firstDate = model.timelineDateTime
             }
             switch second.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 secondDate = Date(timeIntervalSince1970: model.issueDate)
             case .covidTestResultRecord(model: let model):
-                secondDate = model.createdAt
+                secondDate = model.mainResult?.resultDateTime
+            case .medication(model: let model):
+                secondDate = model.dispensedDate
+            case .laboratoryOrder(model: let model):
+                secondDate = model.timelineDateTime
             }
-            return firstDate ?? Date() < secondDate ?? Date()
+            return firstDate ?? Date() > secondDate ?? Date()
         })
     }
     
     func fetchDetailDataSourceWithID(id: String, recordType: GetRecordsView.RecordType) -> HealthRecordsDetailDataSource? {
         if let index = self.firstIndex(where: { record in
             switch record.type {
-            case .Test(let testResult):
+            case .CovidTest(let testResult):
                 if recordType == .covidTestResult {
                     return testResult.id == id
                 }
@@ -112,6 +181,16 @@ extension Array where Element == HealthRecord {
             case .CovidImmunization(let immunizationRecord):
                 if recordType == .covidImmunizationRecord {
                     return immunizationRecord.id == id
+                }
+                return false
+            case .Medication(let prescription):
+                if recordType == .medication {
+                    return prescription.id == id
+                }
+                return false
+            case .LaboratoryOrder(let labOrder):
+                if recordType == .laboratoryOrder {
+                    return labOrder.id == id
                 }
                 return false
             }

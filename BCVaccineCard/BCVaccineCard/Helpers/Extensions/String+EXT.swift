@@ -52,6 +52,13 @@ extension String {
     
 }
 
+// MARK: To strip out first name of a string
+extension String {
+    var firstName: String? {
+        return self.components(separatedBy: " ").first
+    }
+}
+
 extension String {
     /// This method returns height of a string with specific `width` and `font`
     /// - Parameter width: Width of the view where string has to be displayed
@@ -64,6 +71,14 @@ extension String {
         return ceil(boundingRect.height)
         
     }
+    func widthForView(font:UIFont, height:CGFloat)  -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingRect = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading],
+                                             attributes: [.font: font],
+                                             context: nil)
+        return ceil(boundingRect.width)
+    }
+    
 }
 
 // MARK: Convert String Code to UIImage
@@ -84,6 +99,10 @@ extension String {
 
     func sentenceCase() -> String {
         return self.lowercased().capitalizingFirstLetter()
+    }
+    
+    func nameCase() -> String {
+        return self.capitalized
     }
 }
 

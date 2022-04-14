@@ -7,23 +7,31 @@ jobs:
   deploy:
     name: Deploying to TestFlight
     runs-on: macOS-latest
+    timeout-minutes: 60
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
+        
       - name: Install gpg
         run: brew install gnupg
+        
+      - name: install xcpretty
+        run: gem install xcpretty
+        
       - name: Setup provisioning profile
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
-          FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
         run: ./.github/secrets/decrypt_secrets.sh
-      - name: Archiving project
+        
+      - name: Archive project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
         run: ./.github/scripts/archive_app.sh
-      - name: Exporting .ipa
+        
+      - name: Export .ipa
         run: ./.github/scripts/export_ipa.sh
-      - name: Publishing app
+        
+      - name: Upload to testflight
         if: success()
         env:
           APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}

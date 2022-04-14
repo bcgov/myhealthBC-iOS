@@ -21,6 +21,7 @@ class ToggleSettingsTableViewCell: UITableViewCell {
         if let callback = callback {
             titleLabel.text = settingSwitch.isOn ? onTitle : offTitle
             callback(settingSwitch.isOn)
+            setupAccessibilty()
         }
     }
     
@@ -44,5 +45,23 @@ class ToggleSettingsTableViewCell: UITableViewCell {
         subtitleLabel.text = subTitle
         settingSwitch.isOn = isOn
         callback = onToggle
+        setupAccessibilty()
+    }
+    
+    //MARK: setup accessibility
+    
+    private func setupAccessibilty() {
+        self.isAccessibilityElement = true
+        self.accessibilityLabel = titleLabel.text
+        self.accessibilityTraits = .button
+        self.accessibilityValue = settingSwitch.isOn ? .selected : .unselected
+        self.accessibilityHint = String.actionAvailable +  (subtitleLabel.text ?? "")
+    }
+    
+    override func accessibilityActivate() -> Bool {
+        guard let settingSwitch = settingSwitch else { return false }
+        settingSwitch.isOn.toggle()
+        self.settingSwitchToggled(settingSwitch)
+        return true
     }
 }
