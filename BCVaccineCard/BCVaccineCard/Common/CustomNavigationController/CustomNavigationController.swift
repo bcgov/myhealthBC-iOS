@@ -139,15 +139,15 @@ class CustomNavigationController: UINavigationController {
         
         if let left = left {
             if let title = left.title {
-                vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: left.action)
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: left.action)
             } else {
                 vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
             }
             if let trait = left.accessibility.traits {
-                vc.navigationItem.rightBarButtonItem?.accessibilityTraits = trait
+                vc.navigationItem.leftBarButtonItem?.accessibilityTraits = trait
             }
-            vc.navigationItem.rightBarButtonItem?.accessibilityLabel = left.accessibility.label
-            vc.navigationItem.rightBarButtonItem?.accessibilityHint = left.accessibility.hint
+            vc.navigationItem.leftBarButtonItem?.accessibilityLabel = left.accessibility.label
+            vc.navigationItem.leftBarButtonItem?.accessibilityHint = left.accessibility.hint
         }
         vc.navigationItem.setBackItemTitle(with: "")
     }

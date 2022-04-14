@@ -7,6 +7,11 @@
 
 import UIKit
 
+enum NavTitleSmallAlignment {
+    case Center
+    case Left
+}
+
 protocol NavigationSetupProtocol: AnyObject {
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?, largeTitlesFontSize: CGFloat)
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
