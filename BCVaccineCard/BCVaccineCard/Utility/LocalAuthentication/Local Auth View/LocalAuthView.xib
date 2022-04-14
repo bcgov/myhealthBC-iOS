@@ -50,7 +50,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="9hQ-KH-g8G">
-                    <rect key="frame" x="32" y="631" width="350" height="178"/>
+                    <rect key="frame" x="32" y="668" width="350" height="178"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wR8-Zs-2ep">
                             <rect key="frame" x="0.0" y="0.0" width="350" height="54"/>
@@ -100,12 +100,12 @@
                 <constraint firstItem="a3P-xz-QNo" firstAttribute="leading" secondItem="06m-DN-SXG" secondAttribute="leading" id="Lx3-bq-VND"/>
                 <constraint firstItem="a3P-xz-QNo" firstAttribute="trailing" secondItem="06m-DN-SXG" secondAttribute="trailing" id="OwS-mK-mvS"/>
                 <constraint firstItem="apv-wL-qmr" firstAttribute="top" secondItem="7zX-d2-qNL" secondAttribute="bottom" constant="16" id="SDk-kR-6Pu"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="9hQ-KH-g8G" secondAttribute="bottom" constant="16" id="Sbt-H0-9Vr"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="9hQ-KH-g8G" secondAttribute="bottom" constant="16" id="Sbt-H0-9Vr"/>
                 <constraint firstItem="06m-DN-SXG" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="32" id="c70-Et-Y6T"/>
                 <constraint firstItem="apv-wL-qmr" firstAttribute="width" secondItem="7zX-d2-qNL" secondAttribute="width" multiplier="1.3" id="hgI-v2-Stl"/>
                 <constraint firstItem="a3P-xz-QNo" firstAttribute="top" secondItem="06m-DN-SXG" secondAttribute="bottom" constant="16" id="ko9-bb-odD"/>
                 <constraint firstItem="06m-DN-SXG" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="32" id="msM-K4-s4L"/>
-                <constraint firstItem="9hQ-KH-g8G" firstAttribute="top" secondItem="apv-wL-qmr" secondAttribute="bottom" constant="16" id="nnR-PL-gGj"/>
+                <constraint firstItem="9hQ-KH-g8G" firstAttribute="top" relation="greaterThanOrEqual" secondItem="apv-wL-qmr" secondAttribute="bottom" constant="16" id="nnR-PL-gGj"/>
                 <constraint firstItem="7zX-d2-qNL" firstAttribute="top" relation="greaterThanOrEqual" secondItem="a3P-xz-QNo" secondAttribute="bottom" constant="32" id="oJD-Pz-kPU"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="9hQ-KH-g8G" secondAttribute="bottom" priority="250" constant="70" id="zak-SP-DTl"/>
             </constraints>
