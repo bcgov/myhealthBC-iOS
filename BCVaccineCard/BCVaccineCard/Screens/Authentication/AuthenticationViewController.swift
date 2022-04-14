@@ -234,9 +234,6 @@ class AuthenticationViewController: UIViewController {
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
         let vc = TabBarController.constructTabBarController(status: authStatus)
         AppDelegate.sharedInstance?.window?.rootViewController = vc
-//        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else {return}
-//        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-//        vc.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, sourceVC: sourceVC)
     }
     
     public static func displayFullScreen(createTabBarAndGoToHomeScreen: Bool, initialView: InitialView, sourceVC: LoginVCSource) {
@@ -244,7 +241,6 @@ class AuthenticationViewController: UIViewController {
         transition.type = .fade
         transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-//        let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: returnToHealthPass, isModal: false, initialView: initialView, sourceVC: sourceVC, completion: {_ in})
         let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: createTabBarAndGoToHomeScreen, isModal: false, initialView: initialView, sourceVC: sourceVC) {_ in}
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
