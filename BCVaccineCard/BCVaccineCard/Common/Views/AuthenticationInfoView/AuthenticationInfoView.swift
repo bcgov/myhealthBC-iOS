@@ -53,8 +53,8 @@ class AuthenticationInfoView: UIView, Theme {
     }
     
     func style() {
-        style(button: continueButton, style: .Fill, title: .continueText, image: nil)
-        style(button: cancelButton, style: .Hollow, title: .cancel, image: nil)
+        style(button: continueButton, style: .Fill, title: .continueText, image: nil, bold: true)
+        style(button: cancelButton, style: .Hollow, title: .cancel, image: nil, bold: true)
         
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 24)
         messageLabel.font = UIFont.bcSansRegularWithSize(size: 17)

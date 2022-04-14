@@ -181,9 +181,9 @@ class LocalAuthView: UIView, Theme {
         let underlineAttributedString = NSAttributedString(string: .learnMoreAboutLocalAuth, attributes: underlineAttribute)
         infoLabel.attributedText = underlineAttributedString
         
-        style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication, image: nil)
-        style(button: useTouchIDButton, style: .Fill, title: .useTouchId, image: nil)
-        style(button: usePasscodeButton, style: .Fill, title: .usePassCode, image: nil)
+        style(button: turnOnTouchIDButton, style: .Fill, title: .setupAuthentication, image: nil, bold: true)
+        style(button: useTouchIDButton, style: .Fill, title: .useTouchId, image: nil, bold: true)
+        style(button: usePasscodeButton, style: .Fill, title: .usePassCode, image: nil, bold: true)
         
         style(label: titleLabel, style: .Bold, size: 24, colour: .Blue)
         style(label: subtitleLabel, style: .Regular, size: 17, colour: .Grey)
