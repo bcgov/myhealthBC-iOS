@@ -85,7 +85,7 @@ class HealthRecordsViewController: BaseViewController {
     private func refreshOnStorageChange() {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
-            if event.event == .ManuallyAddedRecord && event.entity == .VaccineCard {
+            if event.event == .ManuallyAddedRecord {
                 self.loadDataAndSetInitialVC()
             }
             guard event.event != .ManuallyAddedRecord else { return }
