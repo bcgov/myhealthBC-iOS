@@ -1599,8 +1599,8 @@
 		7944F6B126F12AAA006B9444 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				794BD6252702E0CC0084ADA8 /* CustomNavigationController */,
 				7967E74126F9004300EEF510 /* TabBarController */,
+				794BD6252702E0CC0084ADA8 /* CustomNavigationController */,
 				7944F6F626F302C0006B9444 /* BaseViewController */,
 				7944F6C226F12C00006B9444 /* Views */,
 				29921C8E27739F6C005025D2 /* Theme.swift */,
