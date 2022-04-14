@@ -58,11 +58,7 @@ extension BaseViewController {
         self.navDelegate = self
     }
     
-    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?, largeTitlesFontSize: CGFloat) {
-        var rightButtons: [NavButton] = []
-        if let rightButton = right {
-            rightButtons.append(rightButton)
-        }
+    private func setNavHeaderLocation(navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, vc: UIViewController) {
         if navStyle == .small && navTitleSmallAlignment == .Left {
             navigationItem.title = nil
             let label = UILabel()
@@ -74,6 +70,14 @@ extension BaseViewController {
         } else {
             navigationItem.title = title
         }
+    }
+    
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?, largeTitlesFontSize: CGFloat) {
+        var rightButtons: [NavButton] = []
+        if let rightButton = right {
+            rightButtons.append(rightButton)
+        }
+        setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc)
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
        
         guard let nav = self.navigationController as? CustomNavigationController else { return }
@@ -89,17 +93,7 @@ extension BaseViewController {
     }
     
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?) {
-        if navStyle == .small && navTitleSmallAlignment == .Left {
-            navigationItem.title = nil
-            let label = UILabel()
-            label.textColor = AppColours.appBlue
-            label.font = UIFont.bcSansBoldWithSize(size: 17)
-            label.text = title
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: label)
-            vc.navigationItem.leftItemsSupplementBackButton = true
-        } else {
-            navigationItem.title = title
-        }
+        setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc)
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
        
         guard let nav = self.navigationController as? CustomNavigationController else { return }

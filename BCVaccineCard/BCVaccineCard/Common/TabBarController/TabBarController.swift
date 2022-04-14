@@ -51,9 +51,6 @@ class TabBarController: UITabBarController {
     private func addHealthRecords(hasHealthRecords: Bool) -> TabBarVCs.Properties {
         return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {}))
     }
-//    fileprivate var addHeathRecords: TabBarVCs.Properties {
-//        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: false, completion: {}))
-//    }
     
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
