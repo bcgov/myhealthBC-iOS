@@ -52,35 +52,35 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="9hQ-KH-g8G">
                     <rect key="frame" x="32" y="668" width="350" height="178"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wR8-Zs-2ep">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wR8-Zs-2ep">
                             <rect key="frame" x="0.0" y="0.0" width="350" height="54"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="54" id="mCV-ka-Jw1"/>
                             </constraints>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="Turn on Touch ID"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Turn on Touch ID"/>
                             <connections>
                                 <action selector="turnOnTouchID:" destination="iN0-l3-epB" eventType="touchUpInside" id="xwW-lZ-8kv"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hbk-Ym-pRK">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hbk-Ym-pRK">
                             <rect key="frame" x="0.0" y="62" width="350" height="54"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="54" id="fPI-Cm-3h9"/>
                             </constraints>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="Use Touch ID"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Use Touch ID"/>
                             <connections>
                                 <action selector="useTouchID:" destination="iN0-l3-epB" eventType="touchUpInside" id="6jW-iH-Aqr"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAq-Fs-cFk">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fAq-Fs-cFk">
                             <rect key="frame" x="0.0" y="124" width="350" height="54"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="54" id="QwM-lJ-ccd"/>
                             </constraints>
-                            <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" title="Use passcode"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            <state key="normal" title="Use passcode"/>
                             <connections>
                                 <action selector="usePasscode:" destination="iN0-l3-epB" eventType="touchUpInside" id="j5R-QA-u1j"/>
                             </connections>

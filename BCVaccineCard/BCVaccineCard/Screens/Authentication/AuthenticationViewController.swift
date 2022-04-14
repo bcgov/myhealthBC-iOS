@@ -28,11 +28,9 @@ extension BaseViewController {
                 let authWorker = tabVC?.authWorker
                 AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: authWorker, sourceVC: sourceVC) { allowed in
                     if allowed {
-                        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
-                            // Will be fetching on completion, before user interacts with this message
-                            self.performAuthenticatedRecordsFetch(isManualFetch: true, sourceVC: sourceVC)
-                            self.postAuthChangedSettingsReloadRequired()
-                        }
+                        self.performAuthenticatedRecordsFetch(isManualFetch: true, sourceVC: sourceVC)
+                        self.postAuthChangedSettingsReloadRequired()
+                        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
                     }
                     completion(allowed)
                 }
@@ -174,7 +172,7 @@ class AuthenticationViewController: UIViewController {
                         print("Handle Unavailable")
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     case .Success:
-                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false)
+                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false)
                         self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
                     case .Fail:
                         // TODO:

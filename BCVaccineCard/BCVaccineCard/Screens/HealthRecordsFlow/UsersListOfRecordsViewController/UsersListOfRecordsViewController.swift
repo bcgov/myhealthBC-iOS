@@ -176,12 +176,13 @@ extension UsersListOfRecordsViewController {
                                                leftNavButton: nil,
                                                rightNavButtons: buttons,
                                                navStyle: .small,
+                                               navTitleSmallAlignment: style == .singleUser ? .Left : .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
-    
+    // This screen has to have health records by rule (with the exception being a screen state issue, but that is a separate bug)
     @objc func showAddRecord() {
-        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, completion: {[weak self] in
+        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, hasHealthRecords: true, completion: {[weak self] in
             // Note: Not sure what the purpose of this is?? - was only causing an issue with routing
 //            self?.navigationController?.popToRootViewController(animated: true)
         })
@@ -625,11 +626,12 @@ extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerD
 // MARK: Protected word retry
 extension UsersListOfRecordsViewController {
     @objc private func protectedWordFailedPromptAgain(_ notification: Notification) {
-        adjustLoadingIndicator(show: false)
         alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
             self.promptProtectiveVC(medFetchRequired: self.authManager.medicalFetchRequired)
+            self.adjustLoadingIndicator(show: false, tryingAgain: true)
         }, buttonTwoTitle: .no) {
             // Do nothing
+            self.adjustLoadingIndicator(show: false, tryingAgain: false)
         }
     }
     
@@ -658,13 +660,17 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Handling hidden records loading indicator
 extension UsersListOfRecordsViewController {
-    private func adjustLoadingIndicator(show: Bool) {
+    private func adjustLoadingIndicator(show: Bool, tryingAgain: Bool? = nil) {
         if let indexPath = self.selectedCellIndexPath, let cell = self.tableView.cellForRow(at: indexPath) as? HiddenRecordsTableViewCell {
             if show {
                 cell.startLoadingIndicator(backgroundColor: .clear)
             } else {
                 cell.endLoadingIndicator()
-                self.selectedCellIndexPath = nil
+                if let tryingAgain = tryingAgain, tryingAgain == true {
+                    // Don't remove selectedCellIndexPath here
+                } else {
+                    self.selectedCellIndexPath = nil
+                }
             }
         }
     }

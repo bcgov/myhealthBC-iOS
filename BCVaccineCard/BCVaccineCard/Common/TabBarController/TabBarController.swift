@@ -48,9 +48,12 @@ class TabBarController: UITabBarController {
         return TabBarController()
     }
     
-    fileprivate var addHeathRecords: TabBarVCs.Properties {
-        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, completion: {}))
+    private func addHealthRecords(hasHealthRecords: Bool) -> TabBarVCs.Properties {
+        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {}))
     }
+//    fileprivate var addHeathRecords: TabBarVCs.Properties {
+//        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: false, completion: {}))
+//    }
     
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
@@ -95,7 +98,7 @@ class TabBarController: UITabBarController {
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {
         var viewControllers: [UIViewController] = []
         vcs.forEach { vc in
-            guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHeathRecords : vc.properties  else { return }
+            guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHealthRecords(hasHealthRecords: false) : vc.properties  else { return }
             let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
             tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
             let viewController = properties.baseViewController
@@ -134,7 +137,7 @@ class TabBarController: UITabBarController {
     // This function is called within the tab bar 1.) (when records are deleted and go to zero, called in the listener above), and called when the 2.) health records tab is selected, to appropriately show the correct VC, and is called 3.) on the FetchHealthRecordsViewController in the routing section to apporiately reset the health records tab's vc stack and route to the details screen
     func resetHealthRecordsTab(viewControllersToInclude vcs: [UIViewController]? = nil, goToRecordsForPatient patient: Patient? = nil) {
         let vc: TabBarVCs = .records
-        guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHeathRecords : vc.properties  else { return }
+        guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHealthRecords(hasHealthRecords: false) : vc.properties  else { return }
         let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
         tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
         let viewController = properties.baseViewController
@@ -203,12 +206,12 @@ class TabBarController: UITabBarController {
     }
     
     private func showSuccessfulLoginAlert() {
-        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded) {
-            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
-            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-            let protectiveWord = AuthManager().protectiveWord
-            self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, protectiveWord: protectiveWord, sourceVC: .AfterOnboarding)
-        }
+        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
+        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
+        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+        let protectiveWord = AuthManager().protectiveWord
+        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, protectiveWord: protectiveWord, sourceVC: .AfterOnboarding)
+        
     }
     
     private func showError(error: String, title: String) {
@@ -254,7 +257,8 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         guard showBanner else { return }
         // TODO: Connor - handle error case
         self.resetHealthRecordsTab()
-        self.showBanner(message: "\(recordsSuccessful)/\(recordsAttempted) records fetched", style: .Bottom)
+        let message = (recordsSuccessful > 0 || errors?.count == 0) ? "Records retrieved" : "No records fetched"
+        self.showBanner(message: message, style: .Bottom)
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
         var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false)
         loginProcessStatus.hasFinishedFetchingRecords = true

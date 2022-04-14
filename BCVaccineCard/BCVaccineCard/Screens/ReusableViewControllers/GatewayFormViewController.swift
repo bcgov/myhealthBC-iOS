@@ -236,6 +236,7 @@ extension GatewayFormViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthGatewayScreen.navRightIconTitle, hint: AccessibilityLabels.HealthGatewayScreen.navRightIconHint)),
                                                navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self, backButtonHintString: AccessibilityLabels.GatewayForm.navHint)
     }
     
