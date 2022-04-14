@@ -83,7 +83,7 @@
 "DOVRange" = "Test date must be in valid range";
 "AddCovid19TestResult" = "Add Covid-19 test result";
 "AddABCVaccineRecord" = "Add a BC vaccine record";
-"AddAHealthRecord" = "Add a health record";
+"AddHealthRecord" = "Add health record";
 "AddAHealthPass" = "Add proof of vaccination";
 "FormDescription" = "To access your BC Vaccine Card, please provide the following information:";
 "PersonalHealthNumber" = "Personal Health Number (PHN)";
@@ -91,7 +91,7 @@
 "DateOfVaccine" = "Date of vaccination";
 "Dose1OrDose2" = "Dose 1 or Dose 2";
 "Covid19vaccination" = "Covid-19 vaccination";
-"AnyDose" = "Add the date of vaccination for any dose.";
+"AnyDose" = "Any dose";
 "DateOfTest" = "Date of test";
 "PHNFooter" = "Find PHN on care card or the back of driver's license.";
 "PrivacyStatement" = "Privacy Statement";

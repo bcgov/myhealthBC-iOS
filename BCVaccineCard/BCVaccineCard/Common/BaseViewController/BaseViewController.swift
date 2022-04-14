@@ -5,12 +5,18 @@
 //  Created by Connor Ogilvie on 2021-09-15.
 //
 
+
 import UIKit
 
+enum NavTitleSmallAlignment {
+    case Center
+    case Left
+}
+
 protocol NavigationSetupProtocol: AnyObject {
-    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?, largeTitlesFontSize: CGFloat)
-    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
-    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?)
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?, largeTitlesFontSize: CGFloat)
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?)
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?)
     func adjustNavStyleForPDF(targetVC vc: UIViewController)
 }
 
@@ -52,28 +58,42 @@ extension BaseViewController {
         self.navDelegate = self
     }
     
-    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?, largeTitlesFontSize: CGFloat) {
+    private func setNavHeaderLocation(navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, vc: UIViewController) {
+        if navStyle == .small && navTitleSmallAlignment == .Left {
+            navigationItem.title = nil
+            let label = UILabel()
+            label.textColor = AppColours.appBlue
+            label.font = UIFont.bcSansBoldWithSize(size: 17)
+            label.text = title
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: label)
+            vc.navigationItem.leftItemsSupplementBackButton = true
+        } else {
+            navigationItem.title = title
+        }
+    }
+    
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?, largeTitlesFontSize: CGFloat) {
         var rightButtons: [NavButton] = []
         if let rightButton = right {
             rightButtons.append(rightButton)
         }
-        navigationItem.title = title
+        setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc)
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
        
         guard let nav = self.navigationController as? CustomNavigationController else { return }
         nav.setupNavigation(leftNavButton: left, rightNavButtons: rightButtons, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString, largeTitleFontSize: largeTitlesFontSize)
     }
     
-    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButton right: NavButton?, navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?) {
         var rightButtons: [NavButton] = []
         if let rightButton = right {
             rightButtons.append(rightButton)
         }
-        setNavigationBarWith(title: title, leftNavButton: left, rightNavButtons: rightButtons, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString)
+        setNavigationBarWith(title: title, leftNavButton: left, rightNavButtons: rightButtons, navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, targetVC: vc, backButtonHintString: backButtonHintString)
     }
     
-    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?) {
-        navigationItem.title = title
+    func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?) {
+        setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc)
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
        
         guard let nav = self.navigationController as? CustomNavigationController else { return }

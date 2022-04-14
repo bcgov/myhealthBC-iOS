@@ -15,7 +15,7 @@ enum HomeScreenCellType {
     
     var getTitle: String {
         switch self {
-        case .Records: return "Health Records"
+        case .Records: return "Health records"
         case .Proofs: return "Proof of vaccination"
         case .Resources: return "Resources"
         }

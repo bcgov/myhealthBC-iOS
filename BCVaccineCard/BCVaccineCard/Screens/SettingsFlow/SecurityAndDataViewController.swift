@@ -150,6 +150,7 @@ extension SecurityAndDataViewController {
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: .profileAndSettings)
     }

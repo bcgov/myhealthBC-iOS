@@ -68,7 +68,7 @@ class HealthRecordsUserView: UIView {
             
             return
         } else {
-            let bcscLogo = UIImage(named: "bcscLogo")
+            let bcscLogo = UIImage(named: "profile-icon")
             recordIconImageView.image = bcscLogo
             let isAuthenticated = AuthManager().isAuthenticated
             recordIconImageView.alpha = isAuthenticated ? 1 : 0.3

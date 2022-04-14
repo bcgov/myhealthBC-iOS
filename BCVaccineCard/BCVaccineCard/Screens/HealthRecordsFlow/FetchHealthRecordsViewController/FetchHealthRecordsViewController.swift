@@ -14,10 +14,11 @@ class FetchHealthRecordsViewController: BaseViewController {
         case login(type: HiddenRecordType)
     }
     
-    class func constructFetchHealthRecordsViewController(hideNavBackButton: Bool, showSettingsIcon: Bool, completion: @escaping()->Void) -> FetchHealthRecordsViewController {
+    class func constructFetchHealthRecordsViewController(hideNavBackButton: Bool, showSettingsIcon: Bool, hasHealthRecords: Bool, completion: @escaping()->Void) -> FetchHealthRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: FetchHealthRecordsViewController.self)) as? FetchHealthRecordsViewController {
             vc.hideNavBackButton = hideNavBackButton
             vc.showSettingsIcon = showSettingsIcon
+            vc.hasHealthRecords = hasHealthRecords
             vc.completion = completion
             return vc
         }
@@ -29,6 +30,7 @@ class FetchHealthRecordsViewController: BaseViewController {
     
     private var hideNavBackButton = false
     private var showSettingsIcon: Bool!
+    private var hasHealthRecords: Bool!
     private var completion: (()->Void)?
     
     private var dataSource: [DataSource] = [.recordType(type: .covidImmunizationRecord),
@@ -43,6 +45,7 @@ class FetchHealthRecordsViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        self.adjustDataSource()
         self.tabBarController?.tabBar.isHidden = false
         if hideNavBackButton {
             self.navigationItem.setHidesBackButton(true, animated: animated)
@@ -52,11 +55,6 @@ class FetchHealthRecordsViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.navigationItem.setHidesBackButton(false, animated: animated)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.adjustDataSource()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -113,10 +111,11 @@ extension FetchHealthRecordsViewController {
 extension FetchHealthRecordsViewController {
     private func navSetup() {
         let navButton: NavButton? = showSettingsIcon ? NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)) : nil
-        self.navDelegate?.setNavigationBarWith(title: .healthRecords,
+        self.navDelegate?.setNavigationBarWith(title: hasHealthRecords ? .addHealthRecord : .healthRecords,
                                                leftNavButton: nil,
                                                rightNavButton: navButton,
-                                               navStyle: .large,
+                                               navStyle: hasHealthRecords ? .small : .large,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
         

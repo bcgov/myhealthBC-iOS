@@ -103,7 +103,7 @@ extension String {
     /// Labels and other text
 //    static var formTitle: String { return "FormTitle".localized }
 //    static var addABCVaccineCard: String { return "AddABCVaccineCard".localized }
-    static var addAHealthRecord: String { return "AddAHealthRecord".localized }
+    static var addHealthRecord: String { return "AddHealthRecord".localized }
     static var addAHealthPass: String { return "AddAHealthPass".localized }
     static var formDescription: String { return "FormDescription".localized }
     static var personalHealthNumber: String { return "PersonalHealthNumber".localized }

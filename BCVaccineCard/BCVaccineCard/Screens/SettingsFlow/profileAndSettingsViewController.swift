@@ -70,6 +70,7 @@ extension ProfileAndSettingsViewController {
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }

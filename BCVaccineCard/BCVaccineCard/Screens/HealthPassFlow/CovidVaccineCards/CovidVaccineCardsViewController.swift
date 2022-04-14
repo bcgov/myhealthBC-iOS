@@ -141,6 +141,7 @@ extension CovidVaccineCardsViewController {
                                                leftNavButton: nil,
                                                rightNavButton: rightNavButton,
                                                navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: .healthPasses)
     }

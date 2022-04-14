@@ -67,7 +67,7 @@ class HealthRecordsViewController: BaseViewController {
         self.dataSource = records.dataSource()
         self.navigationController?.popToRootViewController(animated: false)
         if self.dataSource.isEmpty {
-            self.showFetchVC()
+            self.showFetchVC(hasHealthRecords: false)
         } else if dataSource.count == 1, let singleUser = dataSource.first {
             showRecords(for: singleUser.patient, animated: false, navStyle: .singleUser, authenticated: singleUser.authenticated, hasUpdatedUnauthPendingTest: false)
         } else {
@@ -85,6 +85,9 @@ class HealthRecordsViewController: BaseViewController {
     private func refreshOnStorageChange() {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+            if event.event == .ManuallyAddedRecord {
+                self.loadDataAndSetInitialVC()
+            }
             guard event.event != .ManuallyAddedRecord else { return }
             switch event.entity {
             case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
@@ -124,9 +127,9 @@ class HealthRecordsViewController: BaseViewController {
 //        popBack(toControllerType: HealthRecordsViewController.self)
 //    }
 
-    func showFetchVC() {
+    func showFetchVC(hasHealthRecords: Bool) {
         // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
-        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, completion: {})
+        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {})
         lastPatientSelected = nil
         self.navigationController?.pushViewController(vc, animated: false)
     }
@@ -163,6 +166,7 @@ extension HealthRecordsViewController {
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
                                                navStyle: .large,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
         
@@ -178,7 +182,7 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
     
     func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
         if screenType == .healthRecords {
-            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, completion: {})
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, hasHealthRecords: !self.dataSource.isEmpty, completion: {})
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
