@@ -517,6 +517,8 @@
 		79A15B0727FE9F5600F8330D /* DataSecurityTipsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A15B0427FE9F5600F8330D /* DataSecurityTipsTableViewCell.swift */; };
 		79A15B0827FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79A15B0527FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib */; };
 		79A15B0927FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79A15B0527FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib */; };
+		79A15B0A2808B27600F8330D /* CommentViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32CA27D814EB0064BAAA /* CommentViewTableViewCell.swift */; };
+		79A15B0B2808B28200F8330D /* TableSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 297D3BB127D9479D00B059CA /* TableSectionHeader.swift */; };
 		79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A2582D2731FF940067DD50 /* LargerTouchAreaButton.swift */; };
 		79B9D00D27E2788100987D9F /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B9D00C27E2788100987D9F /* HomeScreenViewController.swift */; };
@@ -2894,6 +2896,7 @@
 				29788531279624E600FF912D /* SettingsAuthenticateTableViewCell.swift in Sources */,
 				79218AB0275196040063004E /* HealthRecordsUserView.swift in Sources */,
 				795AA74D2714018600E59FF1 /* APIClient.swift in Sources */,
+				79A15B0A2808B27600F8330D /* CommentViewTableViewCell.swift in Sources */,
 				795AA7492713FFF800E59FF1 /* QueueItEngine.swift in Sources */,
 				794BD6372702EEC00084ADA8 /* BaseViewController.swift in Sources */,
 				792834592730E53200EE2710 /* InteractiveLinkLabel.swift in Sources */,
@@ -3015,6 +3018,7 @@
 				797BB95F276408B800CD1645 /* StorageService+VaccineCard.swift in Sources */,
 				79B9D01B27E31D7100987D9F /* NotificationManager.swift in Sources */,
 				29245D41275581C700F48642 /* StorageService+TestResults.swift in Sources */,
+				79A15B0B2808B28200F8330D /* TableSectionHeader.swift in Sources */,
 				29736A472788EBD700CCB1D2 /* ImmunizationRecord+CoreDataClass.swift in Sources */,
 				2932DCEB275ED8C800532BC4 /* AnalyticsAppID.swift in Sources */,
 				796653DB27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */,
