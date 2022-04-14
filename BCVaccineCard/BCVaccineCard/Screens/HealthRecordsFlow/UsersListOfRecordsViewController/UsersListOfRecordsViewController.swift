@@ -176,6 +176,7 @@ extension UsersListOfRecordsViewController {
                                                leftNavButton: nil,
                                                rightNavButtons: buttons,
                                                navStyle: .small,
+                                               navTitleSmallAlignment: style == .singleUser ? .Left : .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }

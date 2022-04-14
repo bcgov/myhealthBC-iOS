@@ -115,6 +115,7 @@ extension FetchHealthRecordsViewController {
                                                leftNavButton: nil,
                                                rightNavButton: navButton,
                                                navStyle: hasHealthRecords ? .small : .large,
+                                               navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
         
