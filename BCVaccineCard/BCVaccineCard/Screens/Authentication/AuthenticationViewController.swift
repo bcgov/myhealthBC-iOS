@@ -172,7 +172,7 @@ class AuthenticationViewController: UIViewController {
                         print("Handle Unavailable")
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     case .Success:
-                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false)
+                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
                         self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
                     case .Fail:
                         // TODO:

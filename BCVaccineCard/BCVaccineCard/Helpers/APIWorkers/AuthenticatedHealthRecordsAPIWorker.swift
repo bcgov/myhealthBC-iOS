@@ -192,7 +192,20 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?) {
-        // TODO: Here, might have to check if patient is same as currently stored patient or not - if isManualFetch, is currently stored exists, is authenticated, and patient details shows they are different, then delete current patient and all associated records
+        // Note: Check if patient is same as currently stored patient or not - if isManualFetch, is currently stored exists, is authenticated, and patient details shows they are different, then delete current patient and all associated records
+        if isManualAuthFetch,
+            let currentlyStoredPatient = StorageService.shared.fetchAuthenticatedPatient(),
+            let newPatient = self.patientDetails,
+            currentlyStoredPatient.birthday != newPatient.getBdayDate,
+            currentlyStoredPatient.name != newPatient.getFullName {
+            // This means that we have to delete the current patient and all associated records
+            StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+            if let name = currentlyStoredPatient.name, let birthday = currentlyStoredPatient.birthday {
+                StorageService.shared.deletePatient(name: name, birthday: birthday)
+            } else {
+                StorageService.shared.deleteAuthenticatedPatient()
+            }
+        }
         guard let types = specificFetchTypes else {
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)

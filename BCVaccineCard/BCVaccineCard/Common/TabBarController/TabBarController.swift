@@ -89,7 +89,21 @@ class TabBarController: UITabBarController {
     private func postBackgroundAuthFetch() {
         guard let token = AuthManager().authToken else { return }
         guard let hdid = AuthManager().hdid else { return }
+        checkForExpiredUser()
         NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
+    }
+    
+    // Note: This will handle the edge case where we have an authenticated user who's token expired, then user logged in with different credentials, and then killed the app before the check for this edge case could be executed in the AuthenticatedHealthRecordsAPIWorker
+    private func checkForExpiredUser() {
+        if let authStatus = Defaults.loginProcessStatus,
+            authStatus.hasCompletedLoginProcess == true,
+        authStatus.hasFinishedFetchingRecords == false,
+        let storedName = authStatus.loggedInUserAuthManagerDisplayName,
+            let currentName = AuthManager().displayName,
+            storedName != currentName {
+                StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+            }
     }
     
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {
@@ -254,10 +268,10 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         guard showBanner else { return }
         // TODO: Connor - handle error case
         self.resetHealthRecordsTab()
-        let message = (recordsSuccessful > 0 || errors?.count == 0) ? "Records retrieved" : "No records fetched"
-        self.showBanner(message: message, style: .Bottom)
+//        let message = (recordsSuccessful > 0 || errors?.count == 0) ? "Records retrieved" : "No records fetched"
+        self.showBanner(message: "Records retrieved", style: .Bottom)
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
-        var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false)
+        var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
         loginProcessStatus.hasFinishedFetchingRecords = true
         Defaults.loginProcessStatus = loginProcessStatus
     }

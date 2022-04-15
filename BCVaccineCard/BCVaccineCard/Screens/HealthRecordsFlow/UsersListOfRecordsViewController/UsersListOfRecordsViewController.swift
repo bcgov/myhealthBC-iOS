@@ -171,8 +171,11 @@ extension UsersListOfRecordsViewController {
             self.navigationItem.setHidesBackButton(false, animated: false)
         }
         
-        
-        self.navDelegate?.setNavigationBarWith(title: self.patient?.name?.nameCase() ?? "" + " " + .recordText.capitalized,
+        var name = self.patient?.name?.nameCase() ?? ""
+        if name.count >= 20 {
+            name = self.patient?.name?.firstName?.nameCase() ?? ""
+        }
+        self.navDelegate?.setNavigationBarWith(title: name,
                                                leftNavButton: nil,
                                                rightNavButtons: buttons,
                                                navStyle: .small,

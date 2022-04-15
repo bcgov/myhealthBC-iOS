@@ -36,6 +36,13 @@ struct HealthRecordsDetailDataSource {
             }
         }
         
+        var includesSeparatorUI: Bool {
+            switch self.type {
+            case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder: return true
+            case .medication: return false
+            }
+        }
+        
     }
     enum RecordType {
         case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])

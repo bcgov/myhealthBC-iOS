@@ -228,9 +228,11 @@ class AuthManager {
                     }
                     self.removeAuthTokens()
                     StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                    StorageService.shared.deleteAuthenticatedPatient()
                     self.removeAuthenticatedPatient()
                     self.authStatusChanged(authenticated: false)
                     self.clearData()
+                    Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: false, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: nil)
                     return completion(true)
                 }
                 if error != nil {
