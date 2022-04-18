@@ -34,6 +34,7 @@ protocol StoragePatientManager {
     func deletePatient(phn: String)
     func deletePatient(name: String, birthday: Date)
     func deleteAuthenticatedPatient()
+    func deleteAuthenticatedPatient(with authManagerDisplayName: String)
     
     // MARK: Fetch
     /// Returns all stored patients
@@ -44,6 +45,9 @@ protocol StoragePatientManager {
     /// - Returns: patient
     func fetchAuthenticatedPatient() -> Patient?
     
+    /// Returns the patient with authenticated results
+    /// - Returns: patients
+    func fetchAuthenticatedPatients() -> [Patient]?
     /// Returns the patient with matching phn
     /// - Returns: patient
     func fetchPatient(phn: String) -> Patient?
@@ -91,6 +95,7 @@ extension StorageService: StoragePatientManager {
         patient.name = name
         patient.phn = phn
         patient.authenticated = authenticated
+        patient.authManagerDisplayName = AuthManager().displayName
         do {
             try context.save()
             notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
@@ -132,6 +137,7 @@ extension StorageService: StoragePatientManager {
             if authenticated != patient.authenticated {
                 patient.authenticated = authenticated
             }
+            // Unsure if we need to set patient.authManagerDisplayName = AuthManager().displayName here
             try context.save()
             notify(event: StorageEvent(event: .Update, entity: .Patient, object: patient))
             return patient
@@ -160,6 +166,12 @@ extension StorageService: StoragePatientManager {
         notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
     }
     
+    func deleteAuthenticatedPatient(with authManagerDisplayName: String) {
+        guard let patient = fetchAuthenticatedPatients()?.filter({ $0.authManagerDisplayName == authManagerDisplayName }).first else { return }
+        delete(object: patient)
+        notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
+    }
+    
     // MARK: Fetch
     
     /// returns all stored patients
@@ -179,6 +191,15 @@ extension StorageService: StoragePatientManager {
     public func fetchAuthenticatedPatient() -> Patient? {
         let patients = fetchPatients()
         return patients.filter { $0.authenticated == true }.first
+    }
+    
+    /// fetch patient by auth status
+    /// - Returns: authenticated patient
+    public func fetchAuthenticatedPatients() -> [Patient]? {
+        let patients = fetchPatients()
+        let authenticatedPatients = patients.filter { $0.authenticated == true }
+        guard authenticatedPatients.count > 0 else { return nil }
+        return authenticatedPatients
     }
     
     /// fetch patient by phn

@@ -40,9 +40,10 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     func configure(model: HealthRecordsDetailDataSource.Record) {
         self.model = model
         createTableView()
-        setupTableView()
+        setupTableView(withSeparator: model.includesSeparatorUI)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {[weak self] in
             self?.tableView?.reloadData()
+            // FIXME: For AMIR: I know we have this due to sync issue with Vaccine Card (I believe - when fetching individually, unauthenticated-style), however when the tableView gets reloaded here, we lose the separator at the bottom of the BannerViewTableViewCell, and I'm not sure why
         }
     }
     
@@ -53,7 +54,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         self.tableView = tableView
     }
     
-    private func setupTableView() {
+    private func setupTableView(withSeparator: Bool) {
         guard let tableView = tableView else {
             return
         }
@@ -66,7 +67,8 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = withSeparator ?  .singleLine : .none
+        tableView.separatorInset = .zero
         self.tableView = tableView
     }
     

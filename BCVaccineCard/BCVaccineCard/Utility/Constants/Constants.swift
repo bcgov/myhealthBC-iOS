@@ -32,7 +32,7 @@ struct Constants {
     }
     
     struct PrivacyPolicy {
-        static let urlString = "https://www2.gov.bc.ca/gov/content/health/managing-your-health/health-gateway/myhealth-app-privacy"
+        static let urlString = "https://www.healthgateway.gov.bc.ca/termsofservice"
     }
     
     struct Help {

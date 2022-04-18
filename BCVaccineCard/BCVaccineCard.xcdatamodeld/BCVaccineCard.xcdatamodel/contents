@@ -67,6 +67,7 @@
     </entity>
     <entity name="Patient" representedClassName="Patient" syncable="YES">
         <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="authManagerDisplayName" optional="YES" attributeType="String"/>
         <attribute name="birthday" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
@@ -137,7 +138,7 @@
         <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="239"/>
         <element name="LaboratoryTest" positionX="171" positionY="405" width="128" height="119"/>
         <element name="Medication" positionX="180" positionY="414" width="128" height="209"/>
-        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="149"/>
+        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="164"/>
         <element name="Perscription" positionX="162" positionY="396" width="128" height="209"/>
         <element name="Pharmacy" positionX="171" positionY="405" width="128" height="194"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
