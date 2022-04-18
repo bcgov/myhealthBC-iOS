@@ -124,7 +124,7 @@ extension StorageService: StorageCovidTestResultManager {
     {
         guard let context = managedContext else {return nil}
         let testResult = TestResult(context: context)
-        testResult.id = reportId
+        testResult.id = UUID().uuidString
         testResult.patientDisplayName = patientDisplayName
         testResult.lab = lab
         testResult.reportId = reportId
@@ -159,7 +159,7 @@ extension StorageService: StorageCovidTestResultManager {
         let authStatus = existing.authenticated
         
         // Delete existing
-        deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
+         deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
         // Store the new one.
         if let object = storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus, manuallyAdded: manuallyAdded) {
             let _ = manuallyAdded == true ? notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: object)) : notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
