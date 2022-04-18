@@ -20,6 +20,7 @@ extension Patient {
     @NSManaged public var name: String?
     @NSManaged public var phn: String?
     @NSManaged public var authenticated: Bool
+    @NSManaged public var authManagerDisplayName: String?
     @NSManaged public var covidTestResults: NSSet?
     @NSManaged public var prescriptions: NSSet?
     @NSManaged public var vaccineCard: NSSet?
