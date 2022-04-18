@@ -124,30 +124,47 @@ extension TermsOfServiceViewController: AppStyleButtonDelegate {
 
 // MARK: For terms of service request
 extension TermsOfServiceViewController {
+    private enum signoutReason {
+        case Error
+        case DidntAgree
+    }
     private func respondToTermsOfService(accepted: Bool) {
         guard let authCredentials = self.authCredentials else { return }
         guard accepted == true else {
-            AuthManager().clearData()
-            let error = "You must agree to the Health Gateway terms of service before using this app"
-            NotificationManager.respondToTermsOfService(accepted: nil, error: error, errorTitle: "Terms of service")
-            self.dismiss(animated: true)
+            signout(error: nil, reason: .DidntAgree)
             return
         }
         self.view.startLoadingIndicator()
         self.authWorker?.respondToTermsOfService(authCredentials, accepted: accepted, completion: { accepted, error in
             guard let accepted = accepted else {
-                AuthManager().clearData()
-                NotificationManager.respondToTermsOfService(accepted: nil, error: error?.resultMessage ?? "Unknown error occured with terms of service", errorTitle: .error)
-                self.view.endLoadingIndicator()
-                self.dismiss(animated: true)
+                self.signout(error: error, reason: .Error)
                 return
             }
-//            if !accepted {
-//                AuthManager().clearData()
-//            }
+
             NotificationManager.respondToTermsOfService(accepted: accepted, error: nil, errorTitle: nil)
             self.view.endLoadingIndicator()
             self.dismiss(animated: true)
+            
         })
+    }
+    
+    private func signout(error: ResultError?, reason: signoutReason) {
+        let manager = AuthManager()
+        manager.signout(in: self) { success in
+            if !success {
+                AuthManager().clearData()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.view.endLoadingIndicator()
+                self.dismiss(animated: true)
+                switch reason {
+                case .Error:
+                    NotificationManager.respondToTermsOfService(accepted: nil, error: error?.resultMessage ?? "Unknown error occured with terms of service", errorTitle: .error)
+                case .DidntAgree:
+                    let error = "You must agree to the Health Gateway terms of service before using this app"
+                    NotificationManager.respondToTermsOfService(accepted: nil, error: error, errorTitle: "Terms of service")
+                }
+            }
+        }
     }
 }

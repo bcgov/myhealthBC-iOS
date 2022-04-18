@@ -103,11 +103,11 @@ class SecurityAndDataViewController: BaseViewController {
     func deleteAllData() {
         self.alertConfirmation(title: .deleteData, message: .confirmDeleteAllRecordsAndSaveData, confirmTitle: .delete, confirmStyle: .destructive) {[weak self] in
             guard let `self` = self else {return}
-            Defaults.rememberGatewayDetails = nil
-            StorageService.shared.deleteAllStoredData()
             LocalAuthManager.block = true
             self.performLogout(completion: {[weak self] in
                 guard let `self` = self else {return}
+                Defaults.rememberGatewayDetails = nil
+                StorageService.shared.deleteAllStoredData()
                 self.showBanner(message: .deletedAllRecordsAndSavedData, style: .Top)
             })
             
