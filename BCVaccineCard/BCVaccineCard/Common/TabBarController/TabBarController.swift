@@ -226,7 +226,9 @@ class TabBarController: UITabBarController {
     }
     
     private func showError(error: String, title: String) {
-        self.alert(title: title, message: error)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.alert(title: title, message: error)
+        }
     }
 
 }

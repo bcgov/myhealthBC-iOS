@@ -84,8 +84,8 @@ extension StorageService: StorageLaboratoryOrderManager {
         patient: Patient,
         gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
         pdf: String?) -> LaboratoryOrder? {
-            let id = labOrderId(gateWayObject: gateWayObject)
-            deleteLaboratoryOrder(id: id, sendDeleteEvent: false)
+            let id = UUID().uuidString
+//            deleteLaboratoryOrder(id: id, sendDeleteEvent: false)
             var storedTests: [LaboratoryTest] = []
             if let tests = gateWayObject.laboratoryTests {
                 for test in tests {
@@ -176,7 +176,8 @@ extension StorageService: StorageLaboratoryOrderManager {
     func fetchLaboratoryOrders() -> [LaboratoryOrder] {
         guard let context = managedContext else {return []}
         do {
-            return try context.fetch(LaboratoryOrder.fetchRequest())
+            let results = try context.fetch(LaboratoryOrder.fetchRequest())
+            return results
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
             return []

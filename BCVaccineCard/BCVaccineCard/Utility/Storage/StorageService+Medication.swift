@@ -13,7 +13,7 @@ protocol StorageMedicationManager {
     func storePrescription(
         patient: Patient,
         object: AuthenticatedMedicationStatementResponseObject.ResourcePayload
-    )-> Perscription?
+    ) -> Perscription?
     
     func storePrescription(
         patient: Patient,
@@ -26,7 +26,7 @@ protocol StorageMedicationManager {
         dateEntered: Date?,
         pharmacy: Pharmacy?,
         medication: Medication?
-    )-> Perscription?
+    ) -> Perscription?
     
     func storeMedication(
         gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary
@@ -61,7 +61,7 @@ protocol StorageMedicationManager {
         countryCode: String?,
         phoneNumber: String?,
         faxNumber: String?
-    )-> Pharmacy?
+    ) -> Pharmacy?
     
     // MARK: Delete
     func deletePrescription(id: String, sendDeleteEvent: Bool)
