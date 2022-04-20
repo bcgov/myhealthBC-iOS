@@ -54,7 +54,7 @@ class HomeScreenViewController: BaseViewController {
 // MARK: Navigation setup
 extension HomeScreenViewController {
     fileprivate func navTitle(firstName: String? = nil) -> String {
-        if authManager.isAuthenticated, let name = StorageService.shared.fetchAuthenticatedPatient()?.name?.firstName ?? firstName ?? authManager.firstName  {
+        if authManager.isAuthenticated, let name = firstName ?? StorageService.shared.fetchAuthenticatedPatient()?.name?.firstName ?? authManager.firstName  {
             let sentenceCaseName = name.nameCase()
             return "Hi \(sentenceCaseName),"
         } else {

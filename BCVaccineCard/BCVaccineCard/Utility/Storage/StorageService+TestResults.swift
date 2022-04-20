@@ -46,6 +46,7 @@ protocol StorageCovidTestResultManager {
     func updateCovidTestResult(
         gateWayResponse: GatewayTestResultResponse,
         manuallyAdded: Bool,
+        pendingBackgroundRefetch: Bool,
         completion: @escaping(CovidLabTestResult?)->Void)
     
     // MARK: Delete
@@ -149,7 +150,7 @@ extension StorageService: StorageCovidTestResultManager {
     
     
     // MARK: Update
-    func updateCovidTestResult(gateWayResponse: GatewayTestResultResponse, manuallyAdded: Bool, completion: @escaping(CovidLabTestResult?)->Void) {
+    func updateCovidTestResult(gateWayResponse: GatewayTestResultResponse, manuallyAdded: Bool, pendingBackgroundRefetch: Bool, completion: @escaping(CovidLabTestResult?)->Void) {
         guard
             let existing = findExistingResult(gateWayResponse: gateWayResponse),
             let existingId = existing.id,
@@ -162,7 +163,7 @@ extension StorageService: StorageCovidTestResultManager {
          deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
         // Store the new one.
         if let object = storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus, manuallyAdded: manuallyAdded) {
-            let _ = manuallyAdded == true ? notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: object)) : notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
+            let _ = manuallyAdded == true ? notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: object)) : pendingBackgroundRefetch == true ? notify(event: StorageEvent(event: .ManuallyAddedPendingTestBackgroundRefetch, entity: .CovidLabTestResult, object: object)) : notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
             return completion(object)
         }
         return completion(nil)

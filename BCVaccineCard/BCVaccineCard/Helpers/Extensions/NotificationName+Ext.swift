@@ -31,6 +31,7 @@ extension Notification.Name {
     static let authStatusChanged = Notification.Name("authStatusChanged")
     static let patientAPIFetched = Notification.Name("patientAPIFetched")
     static let reloadVCDueToUnderage = Notification.Name("reloadVCDueToUnderage")
+    static let resetHealthRecordsScreenOnLogout = Notification.Name("resetHealthRecordsScreenOnLogout")
     
     static let showTermsOfService = Notification.Name("showTermsOfService")
     static let respondToTermsOfService = Notification.Name("respondToTermsOfService")

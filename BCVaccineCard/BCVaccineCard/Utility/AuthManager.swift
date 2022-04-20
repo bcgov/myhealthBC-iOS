@@ -258,6 +258,12 @@ class AuthManager {
         self.delete(key: .medicalFetchRequired)
     }
     
+    // Note: This is called when user session expired and user logs in with new credentials
+    func clearMedFetchProtectiveWordDetails() {
+        removeProtectiveWord()
+        removeMedFetchRequired()
+    }
+    
     private func refetchAuthToken() {
         discoverConfiguration { result in
             guard let configuration = result, let refreshToken = self.refreshToken else { return }

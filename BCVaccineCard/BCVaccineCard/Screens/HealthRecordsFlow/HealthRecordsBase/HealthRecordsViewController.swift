@@ -88,7 +88,7 @@ class HealthRecordsViewController: BaseViewController {
             if event.event == .ManuallyAddedRecord {
                 self.loadDataAndSetInitialVC()
             }
-            guard event.event != .ManuallyAddedRecord else { return }
+            guard event.event != .ManuallyAddedRecord || event.event != .ProtectedMedicalRecordsInitialFetch || event.event != .ManuallyAddedPendingTestBackgroundRefetch else { return }
             switch event.entity {
             case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
                 self.loadDataAndSetInitialVC()
