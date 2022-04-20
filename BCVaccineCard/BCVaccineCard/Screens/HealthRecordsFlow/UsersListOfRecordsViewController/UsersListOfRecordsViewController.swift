@@ -634,7 +634,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
 extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerDelegate {
     func handleTestResult(result: GatewayTestResultResponse, row: Int) {
         print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
-        StorageService.shared.updateCovidTestResult(gateWayResponse: result, manuallyAdded: false) { [weak self] covidLabTestResult in
+        StorageService.shared.updateCovidTestResult(gateWayResponse: result, manuallyAdded: false, pendingBackgroundRefetch: true) { [weak self] covidLabTestResult in
             guard let `self` = self else {return}
             
             guard let covidLabTestResult = covidLabTestResult else { return }
