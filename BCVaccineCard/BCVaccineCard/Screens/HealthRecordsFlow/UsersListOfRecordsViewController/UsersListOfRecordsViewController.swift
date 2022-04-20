@@ -102,6 +102,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setObservables() {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
@@ -136,7 +137,7 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
-    private func navSetup(style: NavStyle, authenticated: Bool) {
+    private func navSetup(style: NavStyle, authenticated: Bool, showLoadingTitle: Bool = false, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
         if authenticated {
             let filterButton = NavButton(title: nil,
@@ -171,9 +172,12 @@ extension UsersListOfRecordsViewController {
             self.navigationItem.setHidesBackButton(false, animated: false)
         }
         
-        var name = self.patient?.name?.nameCase() ?? ""
+        var name = self.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
         if name.count >= 20 {
-            name = self.patient?.name?.firstName?.nameCase() ?? ""
+            name = self.patient?.name?.firstName?.nameCase() ?? defaultFirstNameIfFailure?.nameCase() ?? ""
+        }
+        if showLoadingTitle {
+            name = "Fetching User"
         }
         self.navDelegate?.setNavigationBarWith(title: name,
                                                leftNavButton: nil,
@@ -438,10 +442,23 @@ extension UsersListOfRecordsViewController {
                storedName != currentName {
                     StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
                     StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+                self.patient = nil
+                if self.navStyle == .multiUser {
+                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
+                    self.tableView.startLoadingIndicator()
+                }
             } else {
                 self.fetchDataSource()
             }
         }
+    }
+    
+    @objc private func patientAPIFetched(_ notification: Notification) {
+        let userInfo = notification.userInfo as? [String: String]
+        let firstName = userInfo?["firstName"]
+        let fullName = userInfo?["fullName"]
+        self.patient = StorageService.shared.fetchAuthenticatedPatient()
+        self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
     }
 }
 
@@ -693,6 +710,7 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController {
     @objc private func authFetchComplete(_ notification: Notification) {
         adjustLoadingIndicator(show: false)
+        self.tableView.endLoadingIndicator()
         self.fetchDataSource(initialProtectedMedFetch: true)
     }
 }
