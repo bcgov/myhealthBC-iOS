@@ -85,6 +85,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        self.tabBarController?.tabBar.isHidden = false
         setup()
     }
     
@@ -102,7 +103,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setObservables() {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
@@ -435,17 +436,19 @@ extension UsersListOfRecordsViewController {
         self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticated in
             guard let `self` = self, authenticated else {return}
             if let authStatus = Defaults.loginProcessStatus,
-                authStatus.hasCompletedLoginProcess == true,
-            let storedName = authStatus.loggedInUserAuthManagerDisplayName,
+               authStatus.hasCompletedLoginProcess == true,
+               let storedName = authStatus.loggedInUserAuthManagerDisplayName,
                let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
                let currentName = currentAuthPatient.authManagerDisplayName,
                storedName != currentName {
-                    StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-                    StorageService.shared.deleteAuthenticatedPatient(with: storedName)
-                self.patient = nil
+                StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+                self.authManager.clearMedFetchProtectiveWordDetails()
+                //                self.patient = nil
                 if self.navStyle == .multiUser {
-                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
-                    self.tableView.startLoadingIndicator()
+                    //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
+                    //                    self.tableView.startLoadingIndicator()
+                    self.navigationController?.popViewController(animated: true)
                 }
             } else {
                 self.fetchDataSource()
@@ -453,13 +456,13 @@ extension UsersListOfRecordsViewController {
         }
     }
     
-    @objc private func patientAPIFetched(_ notification: Notification) {
-        let userInfo = notification.userInfo as? [String: String]
-        let firstName = userInfo?["firstName"]
-        let fullName = userInfo?["fullName"]
-        self.patient = StorageService.shared.fetchAuthenticatedPatient()
-        self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
-    }
+//    @objc private func patientAPIFetched(_ notification: Notification) {
+//        let userInfo = notification.userInfo as? [String: String]
+//        let firstName = userInfo?["firstName"]
+//        let fullName = userInfo?["fullName"]
+//        self.patient = StorageService.shared.fetchAuthenticatedPatient()
+//        self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
+//    }
 }
 
 // MARK: TableView setup
@@ -710,7 +713,7 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController {
     @objc private func authFetchComplete(_ notification: Notification) {
         adjustLoadingIndicator(show: false)
-        self.tableView.endLoadingIndicator()
+//        self.tableView.endLoadingIndicator()
         self.fetchDataSource(initialProtectedMedFetch: true)
     }
 }

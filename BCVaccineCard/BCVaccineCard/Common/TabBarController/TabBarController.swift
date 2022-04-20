@@ -96,14 +96,15 @@ class TabBarController: UITabBarController {
     // Note: This will handle the edge case where we have an authenticated user who's token expired, then user logged in with different credentials, and then killed the app before the check for this edge case could be executed in the AuthenticatedHealthRecordsAPIWorker
     private func checkForExpiredUser() {
         if let authStatus = Defaults.loginProcessStatus,
-            authStatus.hasCompletedLoginProcess == true,
-        authStatus.hasFinishedFetchingRecords == false,
-        let storedName = authStatus.loggedInUserAuthManagerDisplayName,
-            let currentName = AuthManager().displayName,
-            storedName != currentName {
-                StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-                StorageService.shared.deleteAuthenticatedPatient(with: storedName)
-            }
+           authStatus.hasCompletedLoginProcess == true,
+           authStatus.hasFinishedFetchingRecords == false,
+           let storedName = authStatus.loggedInUserAuthManagerDisplayName,
+           let currentName = AuthManager().displayName,
+           storedName != currentName {
+            StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+            StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+            AuthManager().clearMedFetchProtectiveWordDetails()
+        }
     }
     
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {

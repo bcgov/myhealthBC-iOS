@@ -199,6 +199,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             currentlyStoredPatient.birthday != newPatient.getBdayDate,
             currentlyStoredPatient.name != newPatient.getFullName {
             // This means that we have to delete the current patient and all associated records
+            self.authManager.clearMedFetchProtectiveWordDetails()
             StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
             if let name = currentlyStoredPatient.name, let birthday = currentlyStoredPatient.birthday {
                 StorageService.shared.deletePatient(name: name, birthday: birthday)
