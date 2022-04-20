@@ -56,8 +56,14 @@ class UsersListOfRecordsViewController: BaseViewController {
         didSet {
             if let current = currentFilter, current.exists {
                 showSelectedFilters()
+                if let patient = patient, let patientName = patient.name {
+                    UserFilters.save(filter: current, for: patientName)
+                }
             } else {
                 hideSelectedFilters()
+                if let patient = patient, let patientName = patient.name {
+                    UserFilters.removeFilterFor(name: patientName)
+                }
             }
         }
     }
@@ -74,6 +80,9 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()
+        if let patient = patient, let patientName = patient.name, let existingFilter = UserFilters.filterFor(name: patientName) {
+            currentFilter = existingFilter
+        }
         // When authentication is expired, reset filters
         Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
             guard let `self` = self else {return}

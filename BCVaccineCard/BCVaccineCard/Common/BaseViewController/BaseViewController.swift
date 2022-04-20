@@ -43,6 +43,10 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
             showLocalAuth(onSuccess: { [weak self] in
                 guard let `self` = self else {return}
                 self.localAuthPerformed()
+                if !Defaults.hasSeenFirstLogin {
+                    Defaults.hasSeenFirstLogin = true
+                    self.showLocalAuth {}
+                }
             })
         }
     }
