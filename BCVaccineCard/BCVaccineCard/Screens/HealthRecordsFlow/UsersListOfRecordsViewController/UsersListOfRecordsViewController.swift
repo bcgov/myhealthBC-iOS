@@ -94,6 +94,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        self.tabBarController?.tabBar.isHidden = false
         setup()
     }
     
@@ -111,6 +112,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setObservables() {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
@@ -145,7 +147,7 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
-    private func navSetup(style: NavStyle, authenticated: Bool) {
+    private func navSetup(style: NavStyle, authenticated: Bool, showLoadingTitle: Bool = false, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
         if authenticated {
             let filterButton = NavButton(title: nil,
@@ -180,9 +182,12 @@ extension UsersListOfRecordsViewController {
             self.navigationItem.setHidesBackButton(false, animated: false)
         }
         
-        var name = self.patient?.name?.nameCase() ?? ""
+        var name = self.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
         if name.count >= 20 {
-            name = self.patient?.name?.firstName?.nameCase() ?? ""
+            name = self.patient?.name?.firstName?.nameCase() ?? defaultFirstNameIfFailure?.nameCase() ?? ""
+        }
+        if showLoadingTitle {
+            name = "Fetching User"
         }
         self.navDelegate?.setNavigationBarWith(title: name,
                                                leftNavButton: nil,
@@ -436,12 +441,37 @@ extension UsersListOfRecordsViewController {
         }
     }
     
-    func performBCSCLogin() {
+    private func performBCSCLogin() {
         self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticated in
             guard let `self` = self, authenticated else {return}
-            self.fetchDataSource()
+            if let authStatus = Defaults.loginProcessStatus,
+               authStatus.hasCompletedLoginProcess == true,
+               let storedName = authStatus.loggedInUserAuthManagerDisplayName,
+               let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
+               let currentName = currentAuthPatient.authManagerDisplayName,
+               storedName != currentName {
+                StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+                self.authManager.clearMedFetchProtectiveWordDetails()
+                //                self.patient = nil
+                if self.navStyle == .multiUser {
+                    //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
+                    //                    self.tableView.startLoadingIndicator()
+                    self.navigationController?.popViewController(animated: true)
+                }
+            } else {
+                self.fetchDataSource()
+            }
         }
     }
+    
+//    @objc private func patientAPIFetched(_ notification: Notification) {
+//        let userInfo = notification.userInfo as? [String: String]
+//        let firstName = userInfo?["firstName"]
+//        let fullName = userInfo?["fullName"]
+//        self.patient = StorageService.shared.fetchAuthenticatedPatient()
+//        self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
+//    }
 }
 
 // MARK: TableView setup
@@ -613,7 +643,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
 extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerDelegate {
     func handleTestResult(result: GatewayTestResultResponse, row: Int) {
         print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
-        StorageService.shared.updateCovidTestResult(gateWayResponse: result, manuallyAdded: false) { [weak self] covidLabTestResult in
+        StorageService.shared.updateCovidTestResult(gateWayResponse: result, manuallyAdded: false, pendingBackgroundRefetch: true) { [weak self] covidLabTestResult in
             guard let `self` = self else {return}
             
             guard let covidLabTestResult = covidLabTestResult else { return }
@@ -665,7 +695,7 @@ extension UsersListOfRecordsViewController {
             }
         } else if purpose == .initialFetch {
             adjustLoadingIndicator(show: true)
-            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC)
+            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
         }
     }
 }
@@ -692,6 +722,7 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController {
     @objc private func authFetchComplete(_ notification: Notification) {
         adjustLoadingIndicator(show: false)
+//        self.tableView.endLoadingIndicator()
         self.fetchDataSource(initialProtectedMedFetch: true)
     }
 }

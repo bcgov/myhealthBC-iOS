@@ -36,6 +36,8 @@ extension StorageService {
             case Save
             case Update
             case ManuallyAddedRecord
+            case ProtectedMedicalRecordsInitialFetch
+            case ManuallyAddedPendingTestBackgroundRefetch
         }
         
         let event: Event

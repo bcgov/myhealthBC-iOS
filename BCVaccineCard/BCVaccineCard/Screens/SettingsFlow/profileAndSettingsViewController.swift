@@ -40,9 +40,19 @@ class ProfileAndSettingsViewController: BaseViewController {
         setupListener()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         tableView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     // MARK: Routing
@@ -198,7 +208,7 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
         LocalAuthManager.block = true
         performLogout(completion: {success in
             guard success else { return }
-            
+            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
         })
     }
     
