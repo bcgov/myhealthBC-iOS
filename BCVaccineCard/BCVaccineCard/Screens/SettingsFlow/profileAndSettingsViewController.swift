@@ -208,7 +208,7 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
         LocalAuthManager.block = true
         performLogout(completion: {success in
             guard success else { return }
-            
+            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
         })
     }
     

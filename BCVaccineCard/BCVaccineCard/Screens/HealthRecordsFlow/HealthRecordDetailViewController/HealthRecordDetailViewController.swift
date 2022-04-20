@@ -43,6 +43,7 @@ class HealthRecordDetailViewController: BaseViewController {
                     if let object = event.object as? VaccineCard, object.patient?.name == self.dataSource.name {
                         self.navigationController?.popToRootViewController(animated: true)
                     }
+                    // TODO: Check this - this appears to be where the issue is - will have to check lines below, as this appears to be what's causing the issue
                 case .CovidLabTestResult:
                     if let object = event.object as? CovidLabTestResult, object.patient?.name == self.dataSource.name {
                         self.navigationController?.popToRootViewController(animated: true)

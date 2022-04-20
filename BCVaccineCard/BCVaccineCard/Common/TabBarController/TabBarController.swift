@@ -128,6 +128,7 @@ class TabBarController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resetHealthRecordsScreenOnLogout), name: .resetHealthRecordsScreenOnLogout, object: nil)
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             // Note: Not sure we need this anymore with health records tab logic
@@ -267,10 +268,12 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         self.showBanner(message: "Retrieving records", style: .Bottom)
     }
     
-    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool) {
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool) {
         guard showBanner else { return }
         // TODO: Connor - handle error case
-        self.resetHealthRecordsTab()
+        if resetHealthRecordsTab {
+            self.resetHealthRecordsTab()
+        }
 //        let message = (recordsSuccessful > 0 || errors?.count == 0) ? "Records retrieved" : "No records fetched"
         self.showBanner(message: "Records retrieved", style: .Bottom)
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
@@ -306,5 +309,12 @@ extension TabBarController {
         guard let purposeRawValue = userInfo[ProtectiveWordPurpose.purposeKey], let purpose = ProtectiveWordPurpose(rawValue: purposeRawValue) else { return }
         let vc = ProtectiveWordPromptViewController.constructProtectiveWordPromptViewController(purpose: purpose)
         self.present(vc, animated: true, completion: nil)
+    }
+}
+
+// MARK: This is for when a user logs out, we should reset screen state
+extension TabBarController {
+    @objc private func resetHealthRecordsScreenOnLogout(_ notification: Notification) {
+        self.resetHealthRecordsTab()
     }
 }

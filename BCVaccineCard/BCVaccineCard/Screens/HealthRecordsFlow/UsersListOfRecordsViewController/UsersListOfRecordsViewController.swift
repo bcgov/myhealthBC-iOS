@@ -686,7 +686,7 @@ extension UsersListOfRecordsViewController {
             }
         } else if purpose == .initialFetch {
             adjustLoadingIndicator(show: true)
-            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC)
+            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
         }
     }
 }

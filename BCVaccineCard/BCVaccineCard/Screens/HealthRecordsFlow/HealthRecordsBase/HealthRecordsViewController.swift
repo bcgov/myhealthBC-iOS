@@ -88,7 +88,8 @@ class HealthRecordsViewController: BaseViewController {
             if event.event == .ManuallyAddedRecord {
                 self.loadDataAndSetInitialVC()
             }
-            guard event.event != .ManuallyAddedRecord else { return }
+            // TODO: Here we will need to check for the case where we are doing the initial medical records fetch for protective word - easiest might just be an event type, same as ManuallyAddedRecord
+            guard event.event != .ManuallyAddedRecord || event.event != .ProtectedMedicalRecordsInitialFetch else { return }
             switch event.entity {
             case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
                 self.loadDataAndSetInitialVC()
