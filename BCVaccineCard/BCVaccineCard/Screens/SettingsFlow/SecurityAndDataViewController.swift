@@ -55,6 +55,7 @@ class SecurityAndDataViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        self.tabBarController?.tabBar.isHidden = true
         navSetup()
     }
     
