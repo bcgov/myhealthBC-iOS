@@ -84,7 +84,7 @@ class AuthenticationViewController: UIViewController {
         case Cancelled
         case Failed
     }
-    // TODO: When show landing screen is shown, we should hit MobileConfiguration endpoint to see if we can login or not - then implement QueueIt UI on this view controller
+   
     class func constructAuthenticationViewController(createTabBarAndGoToHomeScreen: Bool, isModal: Bool, initialView: InitialView, sourceVC: LoginVCSource, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion

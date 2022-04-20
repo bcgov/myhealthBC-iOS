@@ -427,10 +427,20 @@ extension UsersListOfRecordsViewController {
         }
     }
     
-    func performBCSCLogin() {
+    private func performBCSCLogin() {
         self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticated in
             guard let `self` = self, authenticated else {return}
-            self.fetchDataSource()
+            if let authStatus = Defaults.loginProcessStatus,
+                authStatus.hasCompletedLoginProcess == true,
+            let storedName = authStatus.loggedInUserAuthManagerDisplayName,
+               let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
+               let currentName = currentAuthPatient.authManagerDisplayName,
+               storedName != currentName {
+                    StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                    StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+            } else {
+                self.fetchDataSource()
+            }
         }
     }
 }
