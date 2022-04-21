@@ -13,7 +13,7 @@ import BCVaccineValidator
 
 extension Constants {
     struct Auth {
-        static let issuer = "https://test.oidc.gov.bc.ca/auth/realms/ff09qn3f"
+        static let issuer = "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f"
         static let clientID = "myhealthapp"
         static let redirectURI = "myhealthbc://*"
         static let params = ["kc_idp_hint": "bcsc"]
