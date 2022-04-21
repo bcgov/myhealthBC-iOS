@@ -92,15 +92,19 @@ extension HomeScreenViewController {
     @objc private func authStatusChanged(_ notification: Notification) {
         guard let userInfo = notification.userInfo as? [String: Bool] else { return }
         guard let authenticated = userInfo[Constants.AuthStatusKey.key] else { return }
-        self.navSetup()
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.navSetup()
+            self.tableView.reloadData()
+        }
     }
     
     @objc private func patientAPIFetched(_ notification: Notification) {
         guard let userInfo = notification.userInfo as? [String: String?] else { return }
         guard let firstName = userInfo["firstName"] else { return }
-        self.navSetup(firstName: firstName)
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.navSetup(firstName: firstName)
+            self.tableView.reloadData()
+        }
     }
 }
 

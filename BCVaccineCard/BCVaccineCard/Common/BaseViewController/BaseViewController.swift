@@ -43,12 +43,11 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
             showLocalAuth(onSuccess: { [weak self] in
                 guard let `self` = self else {return}
                 self.localAuthPerformed()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {[weak self] in
+                    guard let `self` = self else {return}
                     if !Defaults.hasSeenFirstLogin {
                         Defaults.hasSeenFirstLogin = true
-                        self.showLogin(initialView: .Landing, sourceVC: .AfterOnboarding) { authenticated in
-                            
-                        }
+                        self.showLogin(initialView: .Landing, sourceVC: .AfterOnboarding) { authenticated in }
                     }
                 }
             })
@@ -67,16 +66,18 @@ extension BaseViewController {
     }
     
     private func setNavHeaderLocation(navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, vc: UIViewController, title: String) {
-        if navStyle == .small && navTitleSmallAlignment == .Left {
-            navigationItem.title = nil
-            let label = UILabel()
-            label.textColor = AppColours.appBlue
-            label.font = UIFont.bcSansBoldWithSize(size: 17)
-            label.text = title
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: label)
-            vc.navigationItem.leftItemsSupplementBackButton = true
-        } else {
-            navigationItem.title = title
+        DispatchQueue.main.async {
+            if navStyle == .small && navTitleSmallAlignment == .Left {
+                self.navigationItem.title = nil
+                let label = UILabel()
+                label.textColor = AppColours.appBlue
+                label.font = UIFont.bcSansBoldWithSize(size: 17)
+                label.text = title
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: label)
+                vc.navigationItem.leftItemsSupplementBackButton = true
+            } else {
+                self.navigationItem.title = title
+            }
         }
     }
     
@@ -101,11 +102,13 @@ extension BaseViewController {
     }
     
     func setNavigationBarWith(title: String, leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, navTitleSmallAlignment: NavTitleSmallAlignment, targetVC vc: UIViewController, backButtonHintString: String?) {
-        setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc, title: title)
-        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
-       
-        guard let nav = self.navigationController as? CustomNavigationController else { return }
-        nav.setupNavigation(leftNavButton: left, rightNavButtons: right, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString)
+        DispatchQueue.main.async {
+            self.setNavHeaderLocation(navStyle: navStyle, navTitleSmallAlignment: navTitleSmallAlignment, vc: vc, title: title)
+            UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
+           
+            guard let nav = self.navigationController as? CustomNavigationController else { return }
+            nav.setupNavigation(leftNavButton: left, rightNavButtons: right, navStyle: navStyle, targetVC: vc, backButtonHintString: backButtonHintString)
+        }
     }
     
     func adjustNavStyleForPDF(targetVC vc: UIViewController) {
@@ -130,12 +133,14 @@ extension BaseViewController {
 // MARK: For Authenticated Fetch
 extension BaseViewController {
     func performAuthenticatedRecordsFetch(isManualFetch: Bool, showBanner: Bool = true, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource, initialProtectedMedFetch: Bool = false) {
-        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
-            // TODO: Error handling here
-            return
+        DispatchQueue.main.async {
+            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
+                // TODO: Error handling here
+                return
+            }
+            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+            tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: showBanner, isManualFetch: isManualFetch, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, sourceVC: sourceVC, initialProtectedMedFetch: initialProtectedMedFetch)
         }
-        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: showBanner, isManualFetch: isManualFetch, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, sourceVC: sourceVC, initialProtectedMedFetch: initialProtectedMedFetch)
     }
 }
 

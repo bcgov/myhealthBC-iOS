@@ -8,12 +8,12 @@
 import UIKit
 
 /*
-We can call the BCSC auth in 2 ways:
-1) AuthenticationViewController.displayFullScreen()
-    - Replaces the VC in window with AuthenticationViewController
-    - then sets the VC in window to be Tab Bar
-2) BaseViewController.showLogin()
-    - Shows AuthenticationViewController as a modal on the current view controller
+ We can call the BCSC auth in 2 ways:
+ 1) AuthenticationViewController.displayFullScreen()
+ - Replaces the VC in window with AuthenticationViewController
+ - then sets the VC in window to be Tab Bar
+ 2) BaseViewController.showLogin()
+ - Shows AuthenticationViewController as a modal on the current view controller
  */
 
 extension BaseViewController {
@@ -84,7 +84,7 @@ class AuthenticationViewController: UIViewController {
         case Cancelled
         case Failed
     }
-   
+    
     class func constructAuthenticationViewController(createTabBarAndGoToHomeScreen: Bool, isModal: Bool, initialView: InitialView, sourceVC: LoginVCSource, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion
@@ -162,28 +162,32 @@ class AuthenticationViewController: UIViewController {
     private func performAuthentication(sourceVC: LoginVCSource) {
         throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { canProceed in
             if canProceed {
-                self.view.startLoadingIndicator()
-                AuthManager().authenticate(in: self, completion: { [weak self] result in
-                    guard let self = self else {return}
-                    self.view.endLoadingIndicator()
-                    switch result {
-                    case .Unavailable:
-                        // TODO:
-                        print("Handle Unavailable")
-                        self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
-                    case .Success:
-                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
-                        self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
-                    case .Fail:
-                        // TODO:
-                        print("Handle fail")
-                        self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
-                    }
-                })
+                DispatchQueue.main.async {
+                    self.view.startLoadingIndicator()
+                    AuthManager().authenticate(in: self, completion: { [weak self] result in
+                        guard let self = self else {return}
+                        self.view.endLoadingIndicator()
+                        switch result {
+                        case .Unavailable:
+                            // TODO:
+                            print("Handle Unavailable")
+                            self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                        case .Success:
+                            Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
+                            self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
+                        case .Fail:
+                            // TODO:
+                            print("Handle fail")
+                            self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                        }
+                    })
+                }
             } else {
                 print("Error")
-                self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
-                    self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
+                DispatchQueue.main.async {
+                    self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
+                        self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
+                    }
                 }
             }
         })

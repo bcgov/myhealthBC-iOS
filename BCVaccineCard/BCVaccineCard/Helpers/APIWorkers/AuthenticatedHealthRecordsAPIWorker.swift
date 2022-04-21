@@ -61,7 +61,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private var loginSourceVC: LoginVCSource = .AfterOnboarding
     private var protectedWordAlreadyAttempted = false
     private var initialProtectedMedFetch = false
-        
+    
     init(delegateOwner: UIViewController) {
         self.apiClient = APIClient(delegateOwner: delegateOwner)
         self.delegate = delegateOwner as? AuthenticatedHealthRecordsAPIWorkerDelegate
@@ -129,7 +129,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                     NotificationManager.showTermsOfService()
                     completion(false)
                 }
-
+                
             }
         }
     }
@@ -144,7 +144,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.respondToTermsOfService(authCredentials, accepted: accepted, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
     }
-
+    
     public func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource, initialProtectedMedFetch: Bool = false) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         // User is valid, so we can proceed here
@@ -185,7 +185,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             initializeRequests(authCredentials: authCredentials, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
         case .failure(let error):
             print(error)
-            self.delegate?.showPatientDetailsError(error: error.resultMessage ?? .genericErrorMessage, showBanner: self.showBanner)
+            DispatchQueue.main.async {
+                self.delegate?.showPatientDetailsError(error: error.resultMessage ?? .genericErrorMessage, showBanner: self.showBanner)
+            }
         }
     }
     
@@ -196,10 +198,10 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?, initialProtectedMedFetch: Bool) {
         // Note: Check if patient is same as currently stored patient or not - if isManualFetch, is currently stored exists, is authenticated, and patient details shows they are different, then delete current patient and all associated records
         if isManualAuthFetch,
-            let currentlyStoredPatient = StorageService.shared.fetchAuthenticatedPatient(),
-            let newPatient = self.patientDetails,
-            currentlyStoredPatient.birthday != newPatient.getBdayDate,
-            currentlyStoredPatient.name != newPatient.getFullName {
+           let currentlyStoredPatient = StorageService.shared.fetchAuthenticatedPatient(),
+           let newPatient = self.patientDetails,
+           currentlyStoredPatient.birthday != newPatient.getBdayDate,
+           currentlyStoredPatient.name != newPatient.getFullName {
             // This means that we have to delete the current patient and all associated records
             self.authManager.clearMedFetchProtectiveWordDetails()
             StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
@@ -226,7 +228,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             }
         }
     }
-        
+    
     private func getAuthenticatedTestResults(authCredentials: AuthenticationRequestObject) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedTestResultsDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedTestResultsDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
@@ -338,7 +340,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             } else {
                 return self.handlePDFResponse(result: result, completion: completion)
             }
-
+            
         }
     }
     
@@ -413,7 +415,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
-        
+    
     private func handleVaccineCardResponse(result: Result<GatewayVaccineCardResponse, ResultError>) {
         switch result {
         case .success(let vaccineCard):
@@ -458,12 +460,12 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 }
             }
             // NOTE: Currently the response object doesn't have "loaded" property - I could see that changing, so for now added the retry code below and leaving it commented out
-//            else if medicationStatement.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForMedicationStatement, let retryinMS = medicationStatement.resourcePayload?.retryin {
-//                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
-//                self.retryCount += 1
-//                let retryInSeconds = Double(retryinMS/1000)
-//                self.perform(#selector(self.retryGetMedicationStatementRequest), with: nil, afterDelay: retryInSeconds)
-//            }
+            //            else if medicationStatement.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForMedicationStatement, let retryinMS = medicationStatement.resourcePayload?.retryin {
+            //                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+            //                self.retryCount += 1
+            //                let retryInSeconds = Double(retryinMS/1000)
+            //                self.perform(#selector(self.retryGetMedicationStatementRequest), with: nil, afterDelay: retryInSeconds)
+            //            }
             else {
                 self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             }
@@ -522,7 +524,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             completion(nil)
         }
     }
-
+    
     
 }
 
@@ -612,7 +614,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
-       
+        
         guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false) else { return nil }
         return object.id
     }
@@ -627,9 +629,10 @@ extension AuthenticatedHealthRecordsAPIWorker {
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         let dispatchGroup = DispatchGroup()
+        
         for payload in payloads {
             dispatchGroup.enter()
-            if let id = handleMedicationStatementInCoreData(object: payload, authenticated: true, patientObject: patient, initialProtectedMedFetch: initialProtectedMedFetch) {
+            if self.handleMedicationStatementInCoreData(object: payload, authenticated: true, patientObject: patient, initialProtectedMedFetch: initialProtectedMedFetch) != nil {
                 completedCount += 1
             } else {
                 errorArrayCount += 1
@@ -637,11 +640,11 @@ extension AuthenticatedHealthRecordsAPIWorker {
             dispatchGroup.leave()
         }
         dispatchGroup.notify(queue: .main) {
-          if let protectiveWord = protectiveWord, completedCount > 0 {
-              self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
-              self.authManager.storeMedFetchRequired(bool: false)
-              AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
-          }
+            if let protectiveWord = protectiveWord, completedCount > 0 {
+                self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
+                self.authManager.storeMedFetchRequired(bool: false)
+                AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
+            }
             let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
         }
@@ -663,18 +666,29 @@ extension AuthenticatedHealthRecordsAPIWorker {
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else { return }
+        
+        let dispatchGroup = DispatchGroup()
         for order in orders {
-            self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
-                if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
-                    completedCount += 1
-                } else {
-                    errorArrayCount += 1
+            dispatchGroup.enter()
+            DispatchQueue.global(qos: .background).async {
+                self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
+                    if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
+                        completedCount += 1
+                    } else {
+                        errorArrayCount += 1
+                    }
+                    dispatchGroup.leave()
                 }
             }
+            
         }
-        let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
-        // For now, just calling success so that the entire fetch can pass
-        self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+        
+        dispatchGroup.notify(queue: .main) {
+            let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+            // For now, just calling success so that the entire fetch can pass
+            self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+        }
+        
     }
     
     private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
@@ -713,7 +727,7 @@ struct AuthenticatedAPIWorkerRetryDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?
     }
-
+    
     struct AuthenticatedTestResultsDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?

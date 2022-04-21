@@ -85,7 +85,6 @@ extension StorageService: StorageLaboratoryOrderManager {
         gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
         pdf: String?) -> LaboratoryOrder? {
             let id = UUID().uuidString
-//            deleteLaboratoryOrder(id: id, sendDeleteEvent: false)
             var storedTests: [LaboratoryTest] = []
             if let tests = gateWayObject.laboratoryTests {
                 for test in tests {

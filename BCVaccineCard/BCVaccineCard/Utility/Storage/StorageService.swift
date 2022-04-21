@@ -79,12 +79,14 @@ class StorageService: StorageManagerProtocol {
     }
     
     func delete(object: NSManagedObject) {
-        let context = managedContext
-        do {
-            context?.delete(object)
-            try context?.save()
-        } catch {
-            return
+        DispatchQueue.main.async {
+            let context = self.managedContext
+            do {
+                context?.delete(object)
+                try context?.save()
+            } catch {
+                return
+            }
         }
     }
 }

@@ -42,36 +42,40 @@ extension UIView {
 // MARK: Loading indicator
 extension UIView {
     func startLoadingIndicator(backgroundColor: UIColor = Constants.UI.LoadingIndicator.backdropColor, containerSize: CGFloat = Constants.UI.LoadingIndicator.containerSize, size: CGFloat = Constants.UI.LoadingIndicator.size) {
-        if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
-            existing.removeFromSuperview()
+        DispatchQueue.main.async {
+            if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
+                existing.removeFromSuperview()
+            }
+            
+            let backdrop = UIView(frame: .zero)
+            backdrop.tag = Constants.UI.LoadingIndicator.backdropTag
+            let indicator = UIActivityIndicatorView(frame: .zero)
+            indicator.color = AppColours.appBlue
+            indicator.tintColor = AppColours.appBlue
+            let loadingContainer = UIView(frame:.zero)
+            
+            self.addSubview(backdrop)
+            backdrop.addSubview(loadingContainer)
+            loadingContainer.addSubview(indicator)
+            
+            backdrop.backgroundColor = backgroundColor
+            loadingContainer.backgroundColor = Constants.UI.LoadingIndicator.containerColor
+            loadingContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
+            
+            backdrop.addEqualSizeContraints(to: self)
+            
+            loadingContainer.center(in: backdrop, width: containerSize, height: containerSize)
+            indicator.center(in: loadingContainer, width: size, height: size)
+            
+            indicator.startAnimating()
         }
-        
-        let backdrop = UIView(frame: .zero)
-        backdrop.tag = Constants.UI.LoadingIndicator.backdropTag
-        let indicator = UIActivityIndicatorView(frame: .zero)
-        indicator.color = AppColours.appBlue
-        indicator.tintColor = AppColours.appBlue
-        let loadingContainer = UIView(frame:.zero)
-        
-        self.addSubview(backdrop)
-        backdrop.addSubview(loadingContainer)
-        loadingContainer.addSubview(indicator)
-        
-        backdrop.backgroundColor = backgroundColor
-        loadingContainer.backgroundColor = Constants.UI.LoadingIndicator.containerColor
-        loadingContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
-        
-        backdrop.addEqualSizeContraints(to: self)
-        
-        loadingContainer.center(in: backdrop, width: containerSize, height: containerSize)
-        indicator.center(in: loadingContainer, width: size, height: size)
-        
-        indicator.startAnimating()
     }
     
     func endLoadingIndicator() {
-        if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
-            existing.removeFromSuperview()
+        DispatchQueue.main.async {
+            if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
+                existing.removeFromSuperview()
+            }
         }
     }
     

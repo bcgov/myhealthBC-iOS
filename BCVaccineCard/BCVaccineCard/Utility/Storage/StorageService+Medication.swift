@@ -116,11 +116,6 @@ extension StorageService: StorageMedicationManager {
         // Handle Medication
         var medication: Medication? = nil
         if let medicationSummary = object.medicationSummary {
-//            if let din = medicationSummary.din, let storedMedication = fetchMedication(id: din) {
-//                medication = storedMedication
-//            } else {
-//                medication = storeMedication(gateWayResponse: medicationSummary)
-//            }
             medication = storeMedication(gateWayResponse: medicationSummary, initialProtectedMedFetch: initialProtectedMedFetch)
         }
         // Handle Pharmacy
@@ -253,7 +248,6 @@ extension StorageService: StorageMedicationManager {
         medication.isPin = isPin ?? false
         do {
             try context.save()
-//            let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Medication, object: medication)) : self.notify(event: StorageEvent(event: .Save, entity: .Medication, object: medication))
             return medication
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")

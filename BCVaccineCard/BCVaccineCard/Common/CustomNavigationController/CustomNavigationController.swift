@@ -67,89 +67,86 @@ class CustomNavigationController: UINavigationController {
     }
     // TODO: We can use custom font here
     private func setupAppearance(navStyle: NavStyle, backButtonHintString: String?, largeTitleFontSize: CGFloat = 34) {
-        if #available(iOS 13.0, *) {
-            let appearance = UINavigationBarAppearance()
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = navStyle.navBarColor
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
-            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: largeTitleFontSize, weight: .bold)]
-            if let image = UIImage(named: "app-back-arrow") {
-                appearance.setBackIndicatorImage(image, transitionMaskImage: image)
-            }
-//            appearance.shadowImage = nil
-            navigationBar.standardAppearance = appearance
-//            if navStyle == .small {
-//                navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
-//            } else {
-//                navigationBar.scrollEdgeAppearance = navigationBar.scrollEdgeAppearance
-//            }
-            navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance
-            if let hint = backButtonHintString {
-                // NOTE: This logic isn't working, but I'm leaving it in here for now, just in case QA pushes it back
-                navigationBar.standardAppearance.backIndicatorImage.isAccessibilityElement = true
-                navigationBar.standardAppearance.backIndicatorImage.accessibilityTraits = .button
-                navigationBar.standardAppearance.backIndicatorImage.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
-                navigationBar.standardAppearance.backIndicatorImage.accessibilityHint = AccessibilityLabels.Navigation.backButtonHint + "\(hint)"
-            }
-            
-        } else {
-            // FIXME: Find a safe way to change color of status bar background color (just stays white here)
-            navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
-            navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: largeTitleFontSize, weight: .bold)]
-            navigationBar.backgroundColor = navStyle.navBarColor
-            if let image = UIImage(named: "app-back-arrow") {
-                navigationBar.backIndicatorImage = image
-                navigationBar.backIndicatorTransitionMaskImage = image
+        DispatchQueue.main.async {
+            if #available(iOS 13.0, *) {
+                let appearance = UINavigationBarAppearance()
+                appearance.configureWithOpaqueBackground()
+                appearance.backgroundColor = navStyle.navBarColor
+                appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+                appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: largeTitleFontSize, weight: .bold)]
+                if let image = UIImage(named: "app-back-arrow") {
+                    appearance.setBackIndicatorImage(image, transitionMaskImage: image)
+                }
+                self.navigationBar.standardAppearance = appearance
+                self.navigationBar.scrollEdgeAppearance = self.navigationBar.standardAppearance
                 if let hint = backButtonHintString {
-                    navigationBar.backIndicatorImage?.isAccessibilityElement = true
-                    navigationBar.backIndicatorImage?.accessibilityTraits = .button
-                    navigationBar.backIndicatorImage?.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
-                    navigationBar.backIndicatorImage?.accessibilityHint = AccessibilityLabels.Navigation.backButtonHint + "\(hint)"
+                    // NOTE: This logic isn't working, but I'm leaving it in here for now, just in case QA pushes it back
+                    self.navigationBar.standardAppearance.backIndicatorImage.isAccessibilityElement = true
+                    self.navigationBar.standardAppearance.backIndicatorImage.accessibilityTraits = .button
+                    self.navigationBar.standardAppearance.backIndicatorImage.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
+                    self.navigationBar.standardAppearance.backIndicatorImage.accessibilityHint = AccessibilityLabels.Navigation.backButtonHint + "\(hint)"
+                }
+                
+            } else {
+                // FIXME: Find a safe way to change color of status bar background color (just stays white here)
+                self.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor]
+                self.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: navStyle.textColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: largeTitleFontSize, weight: .bold)]
+                self.navigationBar.backgroundColor = navStyle.navBarColor
+                if let image = UIImage(named: "app-back-arrow") {
+                    self.navigationBar.backIndicatorImage = image
+                    self.navigationBar.backIndicatorTransitionMaskImage = image
+                    if let hint = backButtonHintString {
+                        self.navigationBar.backIndicatorImage?.isAccessibilityElement = true
+                        self.navigationBar.backIndicatorImage?.accessibilityTraits = .button
+                        self.navigationBar.backIndicatorImage?.accessibilityLabel = AccessibilityLabels.Navigation.backButtonTitle
+                        self.navigationBar.backIndicatorImage?.accessibilityHint = AccessibilityLabels.Navigation.backButtonHint + "\(hint)"
+                    }
                 }
             }
-//            navigationBar.shadowImage = UIImage()
         }
         
     }
     
     func setupNavigation(leftNavButton left: NavButton?, rightNavButtons right: [NavButton], navStyle: NavStyle, targetVC vc: UIViewController, backButtonHintString: String?, largeTitleFontSize: CGFloat = 34) {
-        vc.navigationItem.largeTitleDisplayMode = navStyle.largeTitles ? .always : .never
-        setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString, largeTitleFontSize: largeTitleFontSize)
-        navigationBar.tintColor = navStyle.itemTintColor
-        
-        var rightNavButtons: [UIBarButtonItem] = []
-        for rightButton in right {
-            var barButton: UIBarButtonItem? = nil
-            if let btnTitle = rightButton.title {
-               barButton = UIBarButtonItem(title: btnTitle, style: .plain, target: vc, action: rightButton.action)
-            } else {
-                barButton = UIBarButtonItem(image: rightButton.image, style: .plain, target: vc, action: rightButton.action)
-            }
+        DispatchQueue.main.async {
+            vc.navigationItem.largeTitleDisplayMode = navStyle.largeTitles ? .always : .never
+            self.setupAppearance(navStyle: navStyle, backButtonHintString: backButtonHintString, largeTitleFontSize: largeTitleFontSize)
+            self.navigationBar.tintColor = navStyle.itemTintColor
             
-            if let trait = rightButton.accessibility.traits {
-                barButton?.accessibilityTraits = trait
+            var rightNavButtons: [UIBarButtonItem] = []
+            for rightButton in right {
+                var barButton: UIBarButtonItem? = nil
+                if let btnTitle = rightButton.title {
+                   barButton = UIBarButtonItem(title: btnTitle, style: .plain, target: vc, action: rightButton.action)
+                } else {
+                    barButton = UIBarButtonItem(image: rightButton.image, style: .plain, target: vc, action: rightButton.action)
+                }
+                
+                if let trait = rightButton.accessibility.traits {
+                    barButton?.accessibilityTraits = trait
+                }
+                barButton?.accessibilityLabel = rightButton.accessibility.label
+                barButton?.accessibilityHint = rightButton.accessibility.hint
+                if let button = barButton {
+                    rightNavButtons.append(button)
+                }
             }
-            barButton?.accessibilityLabel = rightButton.accessibility.label
-            barButton?.accessibilityHint = rightButton.accessibility.hint
-            if let button = barButton {
-                rightNavButtons.append(button)
+            vc.navigationItem.rightBarButtonItems = rightNavButtons
+            
+            if let left = left {
+                if let title = left.title {
+                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: left.action)
+                } else {
+                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
+                }
+                if let trait = left.accessibility.traits {
+                    vc.navigationItem.leftBarButtonItem?.accessibilityTraits = trait
+                }
+                vc.navigationItem.leftBarButtonItem?.accessibilityLabel = left.accessibility.label
+                vc.navigationItem.leftBarButtonItem?.accessibilityHint = left.accessibility.hint
             }
+            vc.navigationItem.setBackItemTitle(with: "")
         }
-        vc.navigationItem.rightBarButtonItems = rightNavButtons
-        
-        if let left = left {
-            if let title = left.title {
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: vc, action: left.action)
-            } else {
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(image: left.image, style: .plain, target: vc, action: left.action)
-            }
-            if let trait = left.accessibility.traits {
-                vc.navigationItem.leftBarButtonItem?.accessibilityTraits = trait
-            }
-            vc.navigationItem.leftBarButtonItem?.accessibilityLabel = left.accessibility.label
-            vc.navigationItem.leftBarButtonItem?.accessibilityHint = left.accessibility.hint
-        }
-        vc.navigationItem.setBackItemTitle(with: "")
     }
     
     func getRightBarButtonItem() -> UIBarButtonItem? {
