@@ -91,7 +91,7 @@ extension RouterWorker {
         case .ManualFetch(let actioningPatient, let addedRecord):
             return manualUnauthFetch(actioningPatient: actioningPatient, addedRecord: addedRecord)
         case .ManuallyDeletedAllOfThisUnauthPatientRecords(let actioningPatient):
-            <#code#>
+            return manuallyDeletedAllUnauthPatientRecordsForPatient(actioningPatient: actioningPatient)
         case .Logout(let actioningPatient):
             <#code#>
         case .SessionExpired(let actioningPatient):
@@ -153,6 +153,7 @@ extension RouterWorker {
             let vc2 = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: record, authenticatedRecord: false, userNumberHealthRecords: recordsCount)
             return [vc1, vc2]
         case .MoreThanOneUnauthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
+            // Stack should be HealthRecordsViewController, UsersListOfRecordsViewController, then HealthRecordDetailViewController
             let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
             let authenticated = self.currentPatientScenario == .MoreThanOneUnauthUser ? false : true
             let vc2 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
@@ -163,7 +164,45 @@ extension RouterWorker {
     }
     
     private func manuallyDeletedAllUnauthPatientRecordsForPatient(actioningPatient patient: Patient) -> [UIViewController] {
-        
+        switch self.currentPatientScenario {
+        case .NoUsers:
+            // In this case, show initial fetch screen - stack should be FetchHealthRecordsViewController
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: false, completion: {})
+            return [vc]
+        case .OneAuthUser:
+            // This means that we have removed the only other unauth user and should show the auth user records by default UsersListOfRecordsViewController
+            // Note - hasUpdatedUnauthPendingTest doesnt matter here
+            guard let remainingAuthPatient = self.getAuthenticatedPatient else { return [] }
+            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: remainingAuthPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
+            return [vc]
+        case .OneUnauthUser:
+            // This means that we have removed an unauth user and should show the remaining unauth user records by default UsersListOfRecordsViewController
+            // Note - hasUpdatedUnauthPendingTest should be false here, to make sure that pending covid test result can be fetched in the background, just in case an update is required
+            guard let remainingUnauthPatient = self.getUnathenticatedPatients?.first else { return [] }
+            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: remainingUnauthPatient, authenticated: false, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
+            return [vc]
+        case .MoreThanOneUnauthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
+            // In this case, just show the health records home screen with a list of folders
+            let vc = HealthRecordsViewController.constructHealthRecordsViewController()
+            return [vc]
+        }
+    }
+    // TODO: Continue here
+    private func manualLogOut(actioningPatient patient: Patient) -> [UIViewController] {
+        switch self.currentPatientScenario {
+        case .NoUsers:
+            <#code#>
+        case .OneAuthUser:
+            <#code#>
+        case .OneUnauthUser:
+            <#code#>
+        case .MoreThanOneUnauthUser:
+            <#code#>
+        case .OneAuthUserAndOneUnauthUser:
+            <#code#>
+        case .OneAuthUserAndMoreThanOneUnauthUser:
+            <#code#>
+        }
     }
 }
 
