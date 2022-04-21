@@ -131,7 +131,7 @@
 "CameraScanOption" = "Scan QR using your camera";
 "ImageUploadOption" = "Upload from your device";
 "HealthGatewayOption" = "Enter information";
-"SettingsOpeningText" = "My Health BC app is the official mobile application from the Government of British Columbia which allow you to store and organize the proof of vaccination of you and your family members.";
+"SettingsOpeningText" = "Health Gateway app is the official mobile application from the Government of British Columbia which allow you to store and organize the proof of vaccination of you and your family members.";
 "Help" = "Help";
 "Resource" = "Resource";
 "Resources" = "Resources";
@@ -183,7 +183,7 @@
 "AccessRecords" = "Access records";
 "notNow" = "Not Now";
 "LoginSuccess" = "Log in successful";
-"RecordsWillBeAutomaticallyAdded" = "Your records will be automatically added and updated in My Health BC.";
+"RecordsWillBeAutomaticallyAdded" = "Your records will be automatically added and updated in Health Gateway.";
 "LoginDescription" = "When logged in, recrods will be automatically added and updated";
 "LocalAuthDescription" = "When enabled, you can unlock the app with touch touch ID instead of passcode";
 "TouchId" = "Touch ID";
@@ -202,9 +202,9 @@
 "HealthGateway" = "Health Gateway ";
 "toLoginWithYourBCServices" = "to login with your BC Services Card.";
 "YouWillAutomaticallyReturned" = "You will then be automatically returned to the ";
-"MyHealthBC" = "My Health BC";
+"MyHealthBC" = "Health Gateway";
 "MobileApp" = " mobile app.";
-"LocalAuthPrivacyText" = "Biometric authenication is a security feature to protect your personal health information and are required to log on My Health BC.\n\nYour health information and the health information of your spouse, dependents, and claim details will be stored in your mobile device. Should you elect to use Touch ID offered by Apple Inc., or fingerprint sign in functionality offered by Android, or any other type of biometric identification managed on your device (collectively “biometrics”), you agree with acknowledge and consent to the terms and conditions, which can be accessed at here.";
+"LocalAuthPrivacyText" = "Biometric authenication is a security feature to protect your personal health information and are required to log on Health Gateway.\n\nYour health information and the health information of your spouse, dependents, and claim details will be stored in your mobile device. Should you elect to use Touch ID offered by Apple Inc., or fingerprint sign in functionality offered by Android, or any other type of biometric identification managed on your device (collectively “biometrics”), you agree with acknowledge and consent to the terms and conditions, which can be accessed at here.";
 "Privacy" = "Privacy";
 "KeepingYourDataSecure" = "Keeping your data secure";
 "LearnMoreAboutLocalAuth" = "Learn more about keeping your data secure";
@@ -215,9 +215,9 @@
 "UseFaceId" = "Use Face ID";
 "AllowSecurityAccessTitle" = "Allow Security Access";
 "and" = " and ";
-"AllowSecurityAccessMessage" = "\nMy Health BC needs permission to use %@%@Passcode for the device.\n\nGo to Settings > %@Passcode and change the settings to on.";
+"AllowSecurityAccessMessage" = "\nHealth Gateway needs permission to use %@%@Passcode for the device.\n\nGo to Settings > %@Passcode and change the settings to on.";
 "SetupAuthentication" = "Set up authentication";
-"ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock My Health BC with biometric authentication.";
+"ReasonForRequestingAuthentication" = "Your records contain your personal infromation. Unlock Health Gateway with biometric authentication.";
 "UnlockRecords" = "Unlock records";
 "TermsOfService" = "Terms of service";
 "ProtectedWordAlertError" = "The protective word you provided was incorrect. You must enter the correct protective word in order to view your medical records, would you like to try again?";

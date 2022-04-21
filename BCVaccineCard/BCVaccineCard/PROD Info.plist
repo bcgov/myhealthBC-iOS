@@ -44,7 +44,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>We need permission to access your camera to be able to scan QR codes</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure.</string>
+	<string>Unlock Health Gateway with biometric authentication is mandatory, to make sure your health information safe and secure.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>BCSans-Bold.otf</string>
