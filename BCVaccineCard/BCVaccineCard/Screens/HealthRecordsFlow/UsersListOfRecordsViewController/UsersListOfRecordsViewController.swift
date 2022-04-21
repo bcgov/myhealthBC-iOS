@@ -536,7 +536,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
-        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticated: ds.isAuthenticated, userNumberHealthRecords: dataSource.count)
+        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: dataSource.count)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

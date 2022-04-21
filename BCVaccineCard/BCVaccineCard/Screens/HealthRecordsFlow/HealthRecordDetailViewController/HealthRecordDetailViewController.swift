@@ -10,10 +10,10 @@ import UIKit
 
 class HealthRecordDetailViewController: BaseViewController {
     
-    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticated: Bool, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
+    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticatedRecord: Bool, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
             vc.dataSource = dataSource
-            vc.authenticated = authenticated
+            vc.authenticatedRecord = authenticatedRecord
             vc.userNumberHealthRecords = userNumberHealthRecords
             return vc
         }
@@ -23,7 +23,7 @@ class HealthRecordDetailViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var dataSource: HealthRecordsDetailDataSource!
-    private var authenticated: Bool!
+    private var authenticatedRecord: Bool!
     private var userNumberHealthRecords: Int!
     private var pdfData: String?
     
@@ -109,7 +109,7 @@ extension HealthRecordDetailViewController {
                 rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         default:
-            rightNavButton = self.authenticated ? nil :
+            rightNavButton = self.authenticatedRecord ? nil :
             NavButton(
                 title: .delete,
                 image: nil, action: #selector(self.deleteButton),
