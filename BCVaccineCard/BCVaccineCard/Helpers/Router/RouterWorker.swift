@@ -33,8 +33,8 @@ enum CurrentPatientScenarios {
         }
     }
 }
-// Note for Developer: HealthRecordsStackActionScenarios should be called at the completion of the action in question (after core data changes)
-enum HealthRecordsStackActionScenarios {
+// Note for Developer: AppUserActionScenarios should be called at the completion of the action in question (after core data changes)
+enum AppUserActionScenarios {
     case AuthenticatedFetch(actioningPatient: Patient)
     case SessionExpiredAuthenticatedFetch(actioningPatient: Patient)
     case ManualFetch(actioningPatient: Patient, addedRecord: HealthRecordsDetailDataSource)
@@ -47,6 +47,7 @@ enum HealthRecordsStackActionScenarios {
 
 protocol HealthRecordsRouterDelegate: AnyObject  {
     func recordsActionScenario(viewControllerStack: [UIViewController])
+    func passesActionScenario(viewControllerStack: [UIViewController])
 }
 
 class RouterWorker: NSObject {
@@ -71,15 +72,21 @@ class RouterWorker: NSObject {
         self.delegate = delegateOwner as? HealthRecordsRouterDelegate
     }
     
-    public func healthRecordsAction(scenario: HealthRecordsStackActionScenarios) {
-        let stack = setupNavStackForScenario(scenario: scenario)
+    public func healthRecordsAction(scenario: AppUserActionScenarios) {
+        let stack = setupHealthRecordsNavStackForScenario(scenario: scenario)
         self.delegate?.recordsActionScenario(viewControllerStack: stack)
+    }
+    
+    public func healthPassAction(scenario: AppUserActionScenarios) {
+        // TODO: Nav stack setup for health passes here
+//        let stack = setupHealthPassNavStackForScenario(scenario: scenario)
+//        self.delegate?.passesActionScenario(viewControllerStack: stack)
     }
 }
 
 // Nav stack setup
 extension RouterWorker {
-    private func setupNavStackForScenario(scenario: HealthRecordsStackActionScenarios) -> [UIViewController] {
+    private func setupHealthRecordsNavStackForScenario(scenario: AppUserActionScenarios) -> [UIViewController] {
         // TODO: Delete this once this is implemented
         return []
         
