@@ -272,6 +272,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
     
     private func goToAuthentication() {
         AuthenticationViewController.displayFullScreen(createTabBarAndGoToHomeScreen: true, initialView: .Landing, sourceVC: .AfterOnboarding)
+        Defaults.hasSeenFirstLogin = true
     }
 }
 

@@ -28,6 +28,27 @@ protocol FilterRecordsViewDelegate {
     func selected(filter: RecordsFilter)
 }
 
+class UserFilters {
+    private struct UserFilter {
+        let name: String
+        var filter: RecordsFilter
+    }
+    private static var filters: [UserFilter] = []
+    
+    static func filterFor(name: String) -> RecordsFilter? {
+        return filters.first(where: {$0.name == name})?.filter
+    }
+    
+    static func removeFilterFor(name: String) {
+        filters.removeAll(where: {$0.name == name})
+    }
+    
+    static func save(filter: RecordsFilter, for name: String) {
+        filters.removeAll(where: {$0.name == name})
+        filters.append(UserFilter(name: name, filter: filter))
+    }
+}
+
 class FilterRecordsView: UIView, Theme {
     
     // MARK: Constants:
