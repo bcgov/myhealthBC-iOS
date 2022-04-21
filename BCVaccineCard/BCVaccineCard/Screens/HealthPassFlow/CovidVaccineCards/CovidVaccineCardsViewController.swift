@@ -72,7 +72,7 @@ class CovidVaccineCardsViewController: BaseViewController {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
-            case .VaccineCard:
+            case .VaccineCard, .Patient:
                 self.fetchFromStorage()
                 if self.expandedIndexRow > self.dataSource.count - 1 {
                     self.expandedIndexRow = 0
