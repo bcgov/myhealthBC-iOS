@@ -138,7 +138,7 @@ extension Constants {
 // MARK: Auth Issuer
 extension Constants {
 #if PROD
-    static let authIssuer = "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f"
+    static let authIssuer = "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f" // Note: Prod instance not configured yet
 #elseif DEV
     static let authIssuer = "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f"
 #endif
