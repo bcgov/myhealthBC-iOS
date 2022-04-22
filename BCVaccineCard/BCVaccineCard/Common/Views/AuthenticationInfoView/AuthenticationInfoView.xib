@@ -46,8 +46,8 @@
                         <constraint firstItem="d5A-rN-SYS" firstAttribute="height" secondItem="QX7-ah-6Od" secondAttribute="height" id="pFJ-RV-Tcx"/>
                     </constraints>
                 </stackView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Leaving My Health BC" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sNr-OU-hU6">
-                    <rect key="frame" x="27" y="130.5" width="167.5" height="20.5"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Leaving Health Gateway" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sNr-OU-hU6">
+                    <rect key="frame" x="27" y="130.5" width="183" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -61,7 +61,7 @@
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oam-iP-5r9">
                     <rect key="frame" x="77" y="183" width="322" height="101.5"/>
-                    <string key="text">You will be temporarily redirected to Health Gateway to login with your BC Services Card.\nYou will then be automatically returned to the My Health BC mobile app.</string>
+                    <string key="text">You will be temporarily redirected to Health Gateway to login with your BC Services Card.\nYou will then be automatically returned to the Health Gateway mobile app.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>

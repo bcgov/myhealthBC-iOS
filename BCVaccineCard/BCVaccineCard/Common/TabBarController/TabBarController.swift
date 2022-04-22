@@ -287,7 +287,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     }
     
     func showAlertForUserUnder(ageInYears age: Int) {
-        self.alert(title: "Age Restriction", message: "You must be \(age) year's of age or older to user Health Gateway.")
+        self.alert(title: "Age Restriction", message: "You must be \(age) year's of age or older to use Health Gateway.")
     }
     
     func showAlertForUserProfile(error: ResultError?) {

@@ -43,6 +43,14 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
             showLocalAuth(onSuccess: { [weak self] in
                 guard let `self` = self else {return}
                 self.localAuthPerformed()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    if !Defaults.hasSeenFirstLogin {
+                        Defaults.hasSeenFirstLogin = true
+                        self.showLogin(initialView: .Landing, sourceVC: .AfterOnboarding) { authenticated in
+                            
+                        }
+                    }
+                }
             })
         }
     }
