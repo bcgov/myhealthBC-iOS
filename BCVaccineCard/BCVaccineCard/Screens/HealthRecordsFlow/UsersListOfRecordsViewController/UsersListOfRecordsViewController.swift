@@ -299,12 +299,15 @@ extension UsersListOfRecordsViewController {
     
     private func fetchDataSource(initialProtectedMedFetch: Bool = false) {
         let patientRecords = fetchPatientRecords()
-        show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
-        if !authenticated && hasUpdatedUnauthPendingTest {
-            // Don't check for test result to update again here, as this was causing an infinite loop
-            // TODO: We should really refactor the way screens are being updated due to storage updates, as it will cause issues in the future with edge cases, causing us to create numerous hot-fixes such as this, resulting in messy and hard to maintain code
-        } else {
-            self.checkForTestResultsToUpdate(ds: self.dataSource)
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else {return}
+            self.show(records: patientRecords, filter: self.currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
+            if !self.authenticated && self.hasUpdatedUnauthPendingTest {
+                // Don't check for test result to update again here, as this was causing an infinite loop
+                // TODO: We should really refactor the way screens are being updated due to storage updates, as it will cause issues in the future with edge cases, causing us to create numerous hot-fixes such as this, resulting in messy and hard to maintain code
+            } else {
+                self.checkForTestResultsToUpdate(ds: self.dataSource)
+            }
         }
     }
     

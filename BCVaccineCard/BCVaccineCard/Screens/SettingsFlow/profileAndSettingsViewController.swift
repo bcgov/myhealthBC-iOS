@@ -94,7 +94,10 @@ extension ProfileAndSettingsViewController {
     }
     
     @objc private func settingsTableViewReload() {
-        self.tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else {return}
+            self.tableView.reloadData()
+        }
     }
     
     @objc private func patientAPIFetched(_ notification: Notification) {

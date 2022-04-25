@@ -408,8 +408,9 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.perform(#selector(self.retryGetTestResultsRequest), with: nil, afterDelay: retryInSeconds)
             }
             else {
-                self.handleTestResultsInCoreData(testResult: testResult)
-                
+                DispatchQueue.main.async {
+                    self.handleTestResultsInCoreData(testResult: testResult)
+                }
             }
         case .failure(let error):
             self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
@@ -467,7 +468,9 @@ extension AuthenticatedHealthRecordsAPIWorker {
             //                self.perform(#selector(self.retryGetMedicationStatementRequest), with: nil, afterDelay: retryInSeconds)
             //            }
             else {
-                self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
+                DispatchQueue.main.async {
+                    self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
+                }
             }
         case .failure(let error):
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
@@ -672,12 +675,14 @@ extension AuthenticatedHealthRecordsAPIWorker {
             dispatchGroup.enter()
             DispatchQueue.global(qos: .background).async {
                 self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
-                    if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
-                        completedCount += 1
-                    } else {
-                        errorArrayCount += 1
+                    DispatchQueue.main.async {
+                        if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
+                            completedCount += 1
+                        } else {
+                            errorArrayCount += 1
+                        }
+                        dispatchGroup.leave()
                     }
-                    dispatchGroup.leave()
                 }
             }
             
