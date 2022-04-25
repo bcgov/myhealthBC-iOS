@@ -3,7 +3,6 @@
 //  BCVaccineCard
 //
 //  Created by Connor Ogilvie on 2022-04-20.
-//
 
 import UIKit
 // Note for Developer: CurrentPatientScenarios are for the result after the action
@@ -35,24 +34,25 @@ enum CurrentPatientScenarios {
 }
 // Note for Developer: AppUserActionScenarios should be called at the completion of the action in question (after core data changes)
 enum AppUserActionScenarios {
+    case InitialAppLaunch(actioningPatient: Patient)
     case AuthenticatedFetch(actioningPatient: Patient)
-    case SessionExpiredAuthenticatedFetch(actioningPatient: Patient)
+//    case SessionExpiredAuthenticatedFetch(actioningPatient: Patient)
     case ManualFetch(actioningPatient: Patient, addedRecord: HealthRecordsDetailDataSource)
     case ManuallyDeletedAllOfThisUnauthPatientRecords(actioningPatient: Patient)
-    case Logout(actioningPatient: Patient)
-    case SessionExpired(actioningPatient: Patient)
-    case InitialProtectedMedicalRecordsFetch(actioningPatient: Patient)
-    case ClearAllData(actioningPatient: Patient)
+    case Logout(actioningPatient: Patient, isOnHealthRecordsTab: Bool)
+//    case SessionExpired(actioningPatient: Patient)
+//    case InitialProtectedMedicalRecordsFetch(actioningPatient: Patient)
+    case ClearAllData(actioningPatient: Patient, isOnHealthRecordsTab: Bool)
 }
 
-protocol HealthRecordsRouterDelegate: AnyObject  {
+protocol RouterWorkerDelegate: AnyObject  {
     func recordsActionScenario(viewControllerStack: [UIViewController])
     func passesActionScenario(viewControllerStack: [UIViewController])
 }
 
 class RouterWorker: NSObject {
     
-    weak private var delegate: HealthRecordsRouterDelegate?
+    weak private var delegate: RouterWorkerDelegate?
     
     private var getAuthenticatedPatient: Patient? {
         return StorageService.shared.fetchAuthenticatedPatient()
@@ -69,7 +69,7 @@ class RouterWorker: NSObject {
     }
     
     init(delegateOwner: UIViewController) {
-        self.delegate = delegateOwner as? HealthRecordsRouterDelegate
+        self.delegate = delegateOwner as? RouterWorkerDelegate
     }
     
     public func healthRecordsAction(scenario: AppUserActionScenarios) {
@@ -87,26 +87,42 @@ class RouterWorker: NSObject {
 // Nav stack setup
 extension RouterWorker {
     private func setupHealthRecordsNavStackForScenario(scenario: AppUserActionScenarios) -> [UIViewController] {
-        // TODO: Delete this once this is implemented
-        return []
-        
         switch scenario {
+        case .InitialAppLaunch(let actioningPatient):
+            return initialAppLaunchStack(actioningPatient: actioningPatient)
         case .AuthenticatedFetch(let actioningPatient):
             return authenticatedFetch(actioningPatient: actioningPatient)
-        case .SessionExpiredAuthenticatedFetch(actioningPatient: let actioningPatient):
-            return sessionExpiredAuthFetch(actioningPatient: actioningPatient)
+//        case .SessionExpiredAuthenticatedFetch(actioningPatient: let actioningPatient):
+//            return sessionExpiredAuthFetch(actioningPatient: actioningPatient)
         case .ManualFetch(let actioningPatient, let addedRecord):
             return manualUnauthFetch(actioningPatient: actioningPatient, addedRecord: addedRecord)
         case .ManuallyDeletedAllOfThisUnauthPatientRecords(let actioningPatient):
             return manuallyDeletedAllUnauthPatientRecordsForPatient(actioningPatient: actioningPatient)
-        case .Logout(let actioningPatient):
-            <#code#>
-        case .SessionExpired(let actioningPatient):
-            <#code#>
-        case .InitialProtectedMedicalRecordsFetch(let actioningPatient):
-            <#code#>
-        case .ClearAllData(let actioningPatient):
-            <#code#>
+        case .Logout(let actioningPatient, let isOnHealthRecordsTab):
+            return manualLogOut(actioningPatient: actioningPatient, isOnHealthRecordsTab: isOnHealthRecordsTab)
+//        case .SessionExpired(let actioningPatient):
+//            <#code#>
+//        case .InitialProtectedMedicalRecordsFetch(let actioningPatient):
+//            <#code#>
+        case .ClearAllData(let actioningPatient, let isOnHealthRecordsTab):
+            return self.clearAllData(actioningPatient: actioningPatient, isOnHealthRecordsTab: isOnHealthRecordsTab)
+        }
+    }
+    
+    private func initialAppLaunchStack(actioningPatient patient: Patient) -> [UIViewController] {
+        switch self.currentPatientScenario {
+        case .NoUsers:
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: false, completion: {})
+            return [vc]
+        case .OneAuthUser:
+            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
+            return [vc]
+        case .OneUnauthUser:
+            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: false, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
+            return [vc]
+        case .MoreThanOneUnauthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
+            let vc = HealthRecordsViewController.constructHealthRecordsViewController()
+            return [vc]
         }
     }
     
@@ -129,24 +145,24 @@ extension RouterWorker {
         }
     }
     
-    private func sessionExpiredAuthFetch(actioningPatient patient: Patient) -> [UIViewController] {
-        switch self.currentPatientScenario {
-        case .NoUsers, .OneUnauthUser, .MoreThanOneUnauthUser:
-            // Not possible here - for a session to expire, there has to be an authenticed user, so do nothing
-            return []
-        case .OneAuthUser:
-            // Stack should be UsersListOfRecordsViewController (after fetch is completed)
-            // Note - hasUpdatedUnauthPendingTest is irrelevant here
-            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true)
-            return [vc]
-        case .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
-            // Stack should be HealthRecordsViewController, then UsersListOfRecordsViewController (after fetch is completed)
-            // Note - setting hasUpdatedUnauthPendingTest to false just in case unauth user has to check for background update for pending covid test
-            let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
-            let vc2 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
-            return [vc1, vc2]
-        }
-    }
+//    private func sessionExpiredAuthFetch(actioningPatient patient: Patient) -> [UIViewController] {
+//        switch self.currentPatientScenario {
+//        case .NoUsers, .OneUnauthUser, .MoreThanOneUnauthUser:
+//            // Not possible here - for a session to expire, there has to be an authenticed user, so do nothing
+//            return []
+//        case .OneAuthUser:
+//            // Stack should be UsersListOfRecordsViewController (after fetch is completed)
+//            // Note - hasUpdatedUnauthPendingTest is irrelevant here
+//            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true)
+//            return [vc]
+//        case .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
+//            // Stack should be HealthRecordsViewController, then UsersListOfRecordsViewController (after fetch is completed)
+//            // Note - setting hasUpdatedUnauthPendingTest to false just in case unauth user has to check for background update for pending covid test
+//            let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
+//            let vc2 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
+//            return [vc1, vc2]
+//        }
+//    }
     
     private func manualUnauthFetch(actioningPatient patient: Patient, addedRecord record: HealthRecordsDetailDataSource) -> [UIViewController] {
         switch self.currentPatientScenario {
@@ -194,62 +210,40 @@ extension RouterWorker {
             return [vc]
         }
     }
-    // TODO: Continue here
-    private func manualLogOut(actioningPatient patient: Patient) -> [UIViewController] {
+    
+    private func manualLogOut(actioningPatient patient: Patient, isOnHealthRecordsTab: Bool) -> [UIViewController] {
+        // Note - this is a unique case as we need to reset the stack in some cases, but still need to show the same screen
         switch self.currentPatientScenario {
         case .NoUsers:
-            <#code#>
-        case .OneAuthUser:
-            <#code#>
+            let vc1 = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: false, completion: {})
+            guard isOnHealthRecordsTab else { return [vc1] }
+            let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+            return [vc1, vc2]
+        case .OneAuthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
+            // This isn't possible - after logout, there is no auth user
+            return []
         case .OneUnauthUser:
-            <#code#>
+            guard let remainingUnauthPatient = self.getUnathenticatedPatients?.first else { return [] }
+            let vc1 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: remainingUnauthPatient, authenticated: false, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
+            guard isOnHealthRecordsTab else { return [vc1] }
+            let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+            return [vc1, vc2]
         case .MoreThanOneUnauthUser:
-            <#code#>
-        case .OneAuthUserAndOneUnauthUser:
-            <#code#>
-        case .OneAuthUserAndMoreThanOneUnauthUser:
-            <#code#>
+            let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
+            guard isOnHealthRecordsTab else { return [vc1] }
+            let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+            return [vc1, vc2]
         }
     }
+    
+    private func clearAllData(actioningPatient patient: Patient, isOnHealthRecordsTab: Bool) -> [UIViewController] {
+        let vc1 = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: false, completion: {})
+        guard isOnHealthRecordsTab else { return [vc1] }
+        let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+        return [vc1, vc2]
+    }
+    
 }
 
 // Rules are - Use router worker to construct the nav stack
 // Use Storage changes to adjust screen state on a given screen (storage change should not pop or push or adjust nav stack on its own)
-
-/* Various cases:
- 1.) No users:
- - Existing stack:
- - AuthFetch:
- - ManualFetch:
- - DeletedAllOfThisPatientsRecords:
- - Logout
- - SessionExpired
- - InitialProtectedMedicalRecordsFetch
- 
- 2.) 1 Auth user:
- - Existing stack:
- - AuthFetch:
- - ManualFetch:
- - DeletedAllOfThisPatientsRecords:
- - Logout
- - SessionExpired
- - InitialProtectedMedicalRecordsFetch
- 
- 3.) 1 Unauth user:
- - Existing stack:
- - AuthFetch:
- - ManualFetch:
- - DeletedAllOfThisPatientsRecords:
- - Logout
- - SessionExpired
- - InitialProtectedMedicalRecordsFetch
- 
- 4.) 1 Auth user and 1 Unauth user:
- - Existing stack:
- - AuthFetch:
- - ManualFetch:
- - DeletedAllOfThisPatientsRecords:
- - Logout
- - SessionExpired
- - InitialProtectedMedicalRecordsFetch
-*/

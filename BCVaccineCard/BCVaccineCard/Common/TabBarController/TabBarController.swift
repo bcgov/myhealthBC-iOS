@@ -56,10 +56,12 @@ class TabBarController: UITabBarController {
     private var updateRecordsScreenState = false
     private var authenticationStatus: AuthenticationViewController.AuthenticationStatus?
     var authWorker: AuthenticatedHealthRecordsAPIWorker?
+    var routerWorker: RouterWorker?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
+        self.routerWorker = RouterWorker(delegateOwner: self)
         setup(selectedIndex: 0)
         showLoginPromptIfNecessary()
     }
@@ -316,5 +318,40 @@ extension TabBarController {
 extension TabBarController {
     @objc private func resetHealthRecordsScreenOnLogout(_ notification: Notification) {
         self.resetHealthRecordsTab()
+    }
+}
+
+// MARK: Router worker
+extension TabBarController: RouterWorkerDelegate {
+    func recordsActionScenario(viewControllerStack: [UIViewController]) {
+        self.resetTab(tabBarVC: .records, viewControllerStack: viewControllerStack)
+    }
+    
+    func passesActionScenario(viewControllerStack: [UIViewController]) {
+        self.resetTab(tabBarVC: .healthPass, viewControllerStack: viewControllerStack)
+    }
+
+}
+
+// MARK: Router helper functions
+extension TabBarController {
+    private func resetTab(tabBarVC: TabBarVCs, viewControllerStack: [UIViewController]) {
+        guard viewControllerStack.count > 0 else { return }
+        let vc = tabBarVC
+        guard let properties = vc.properties else { return }
+        let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
+        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+        guard let rootViewController = viewControllerStack.first else { return }
+        rootViewController.tabBarItem = tabBarItem
+        rootViewController.title = properties.title
+        let navController = CustomNavigationController.init(rootViewController: rootViewController)
+        // TODO: Likely need a loading hack here
+        for (index, viewController) in viewControllerStack.enumerated() {
+            if index > 0 {
+                navController.pushViewController(viewController, animated: false)
+            }
+        }
+        viewControllers?.remove(at: TabBarVCs.records.rawValue)
+        viewControllers?.insert(navController, at: TabBarVCs.records.rawValue)
     }
 }

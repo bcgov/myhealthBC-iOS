@@ -23,6 +23,14 @@ protocol NavigationSetupProtocol: AnyObject {
 class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
    
     weak var navDelegate: NavigationSetupProtocol?
+    
+    var routerWorker: RouterWorker? {
+        return (self.tabBarController as? TabBarController)?.routerWorker
+    }
+    
+    var getCurrentTab: TabBarVCs {
+        return TabBarVCs.init(rawValue: (self.tabBarController as? TabBarController)?.selectedIndex ?? 0) ?? .home
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
