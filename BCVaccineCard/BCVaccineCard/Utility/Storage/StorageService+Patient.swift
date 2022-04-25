@@ -19,7 +19,9 @@ protocol StoragePatientManager {
     func storePatient(name: String?,
                       birthday: Date?,
                       phn: String?,
-                      authenticated: Bool) -> Patient?
+                      authenticated: Bool,
+                      completion: @escaping(Patient?)-> Void
+    )
     // MARK: Update
     /// Update a patient entity to add phn or add name and birthday.
     /// This function will find the patient based on the data given and update it. if not found, returns nil
@@ -63,7 +65,7 @@ protocol StoragePatientManager {
     ///   - name: name
     ///   - birthday: birthday
     /// - Returns: stored patient
-    func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool) -> Patient?
+    func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool, completion: @escaping(Patient?)-> Void)
 }
 
 extension StorageService: StoragePatientManager {
@@ -77,9 +79,10 @@ extension StorageService: StoragePatientManager {
         name: String? = nil,
         birthday: Date? = nil,
         phn: String? = nil,
-        authenticated: Bool
-    ) -> Patient? {
-        return fetchOrCreatePatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated)
+        authenticated: Bool,
+        completion: @escaping(Patient?)-> Void
+    ) {
+        fetchOrCreatePatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated, completion: completion)
     }
     
     /// Create a new patient entry in storage.
@@ -87,22 +90,30 @@ extension StorageService: StoragePatientManager {
         name: String? = nil,
         birthday: Date? = nil,
         phn: String? = nil,
-        authenticated: Bool
-    ) -> Patient? {
-        guard let context = managedContext else {return nil}
-        let patient = Patient(context: context)
-        patient.birthday = birthday
-        patient.name = name
-        patient.phn = phn
-        patient.authenticated = authenticated
-        patient.authManagerDisplayName = AuthManager().displayName
-        do {
-            try context.save()
-            notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
-            return patient
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            return nil
+        authenticated: Bool,
+        completion: @escaping (Patient?)-> Void
+    ) {
+        guard let container = container else {return}
+        
+        let context = container.newBackgroundContext()
+        context.automaticallyMergesChangesFromParent = true
+       
+        context.perform {
+            do {
+                let patient = Patient(context: context)
+                patient.birthday = birthday
+                patient.name = name
+                patient.phn = phn
+                patient.authenticated = authenticated
+                patient.authManagerDisplayName = AuthManager().displayName
+                try context.save()
+                self.notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
+                return completion(patient)
+            }
+            catch let error {
+                print("Could not save. \(error), \(error.localizedDescription)")
+                return completion(nil)
+            }
         }
     }
     
@@ -228,7 +239,7 @@ extension StorageService: StoragePatientManager {
     ///   - name: name
     ///   - birthday: birthday
     /// - Returns: stored patient
-    public func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool) -> Patient? {
+    public func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool, completion: @escaping (Patient?)-> Void) {
         var phnPatient: Patient?
         var dobPatient: Patient?
         
@@ -242,24 +253,24 @@ extension StorageService: StoragePatientManager {
         
         // If patient doesnt exist, create it
         let foundPatient = phnPatient ?? dobPatient
-        guard let patient = foundPatient else {
-            return createPatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated)
+        if let patient = foundPatient {
+            // otherwise update user data if needed and return
+            _ = update(phn: phn, name: name, birthday: birthday, authenticated: authenticated, for: patient)
+            
+            return completion(patient)
+        } else {
+            createPatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated, completion: completion)
         }
-        
-        // otherwise update user data if needed and return
-        _ = update(phn: phn, name: name, birthday: birthday, authenticated: authenticated, for: patient)
-        
-        return patient
     }
     
     /// This function is meant to be used by fetchOrCreatePatient
     /// All is does is verify
-    fileprivate func createPatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool) -> Patient? {
+    fileprivate func createPatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool, completion: @escaping (Patient?)-> Void) {
         if (phn != nil) || (birthday != nil && name != nil) {
-            return savePatient(name: name, birthday: birthday, phn: phn, authenticated: authenticated)
+            savePatient(name: name, birthday: birthday, phn: phn, authenticated: authenticated, completion: completion)
         }
         
-        return nil
+        return completion(nil)
     }
     
     /// Returns first name + first letter of last name (if exists)

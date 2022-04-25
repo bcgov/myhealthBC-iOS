@@ -51,8 +51,10 @@ class StorageService: StorageManagerProtocol {
     public static let shared = StorageService()
     
     var managedContext: NSManagedObjectContext?
+    var container: NSPersistentContainer?
     
     init(managedContext: NSManagedObjectContext = CoreDataStack.shared.managedContext,
+         container: NSPersistentContainer = CoreDataStack.shared.container,
          mergePolicy: Any = NSMergeByPropertyObjectTrumpMergePolicy) {
         self.managedContext = managedContext
         self.managedContext?.mergePolicy = mergePolicy

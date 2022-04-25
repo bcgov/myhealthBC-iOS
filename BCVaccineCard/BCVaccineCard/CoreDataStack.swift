@@ -14,6 +14,9 @@ public protocol CoreDataStackProtocol {
 }
 
 extension CoreDataStackProtocol {
+    var container: NSPersistentContainer {
+        return persistentContainer
+    }
     var managedContext: NSManagedObjectContext {
         return persistentContainer.viewContext
     }

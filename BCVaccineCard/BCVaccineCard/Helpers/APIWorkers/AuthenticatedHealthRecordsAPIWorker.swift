@@ -192,7 +192,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject) {
-        let _ = StorageService.shared.storePatient(name: patientDetails.getFullName, birthday: patientDetails.getBdayDate, phn: patientDetails.resourcePayload?.personalhealthnumber, authenticated: true)
+        StorageService.shared.storePatient(name: patientDetails.getFullName, birthday: patientDetails.getBdayDate, phn: patientDetails.resourcePayload?.personalhealthnumber, authenticated: true, completion: {_ in })
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?, initialProtectedMedFetch: Bool) {
@@ -605,21 +605,21 @@ extension AuthenticatedHealthRecordsAPIWorker {
         var completedCount: Int = 0
         for order in orders {
             let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
-            if let id = handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient) {
-                completedCount += 1
-            } else {
-                errorArrayCount += 1
-            }
+            handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient)
         }
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
         self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
-    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
+    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) {
         
-        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false) else { return nil }
-        return object.id
+        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
+            guard let patient = patient else {
+                return
+            }
+
+            StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false)
+        })
     }
 }
 
@@ -653,10 +653,15 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
     }
     
-    private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, initialProtectedMedFetch: Bool) -> String? {
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
-        guard let object = StorageService.shared.storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch) else { return nil }
-        return object.id
+    private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, initialProtectedMedFetch: Bool) {
+        
+        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
+            guard let patient = patient else {
+                return
+            }
+
+            StorageService.shared.storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch)
+        })
     }
 }
 
@@ -676,11 +681,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             DispatchQueue.global(qos: .background).async {
                 self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
                     DispatchQueue.main.async {
-                        if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
-                            completedCount += 1
-                        } else {
-                            errorArrayCount += 1
-                        }
+                        self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient)
                         dispatchGroup.leave()
                     }
                 }
@@ -696,10 +697,15 @@ extension AuthenticatedHealthRecordsAPIWorker {
         
     }
     
-    private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
-        guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf) else { return nil }
-        return object.id
+    private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) {
+        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
+            guard let patient = patient else {
+                return
+            }
+            StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf)
+            
+        })
+        
     }
 }
 
