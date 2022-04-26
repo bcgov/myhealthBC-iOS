@@ -10,8 +10,9 @@ import SwipeCellKit
 
 class HealthPassViewController: BaseViewController {
     
-    class func constructHealthPassViewController() -> HealthPassViewController {
+    class func constructHealthPassViewController(fedPassStringToOpen: String?) -> HealthPassViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: HealthPassViewController.self)) as? HealthPassViewController {
+            vc.fedPassStringToOpen = fedPassStringToOpen
             return vc
         }
         return HealthPassViewController()
@@ -24,6 +25,7 @@ class HealthPassViewController: BaseViewController {
     private var savedCardsCount: Int {
         return StorageService.shared.fetchVaccineCards().count
     }
+    private var fedPassStringToOpen: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -303,7 +305,7 @@ extension HealthPassViewController: AddCardsTableViewCellDelegate {
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .viewAll {
-            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil)
+            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
             self.navigationController?.pushViewController(vc, animated: true)
         }
         if type == .addAHealthPass {

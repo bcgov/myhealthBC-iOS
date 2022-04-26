@@ -21,3 +21,23 @@
 
 import UIKit
 
+// Just putting this here for now so that I have a reference somewhere for what my though process was...
+
+//    private func sessionExpiredAuthFetch(actioningPatient patient: Patient) -> [UIViewController] {
+//        switch self.currentPatientScenario {
+//        case .NoUsers, .OneUnauthUser, .MoreThanOneUnauthUser:
+//            // Not possible here - for a session to expire, there has to be an authenticed user, so do nothing
+//            return []
+//        case .OneAuthUser:
+//            // Stack should be UsersListOfRecordsViewController (after fetch is completed)
+//            // Note - hasUpdatedUnauthPendingTest is irrelevant here
+//            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true)
+//            return [vc]
+//        case .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
+//            // Stack should be HealthRecordsViewController, then UsersListOfRecordsViewController (after fetch is completed)
+//            // Note - setting hasUpdatedUnauthPendingTest to false just in case unauth user has to check for background update for pending covid test
+//            let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
+//            let vc2 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
+//            return [vc1, vc2]
+//        }
+//    }
