@@ -328,7 +328,7 @@ extension QRRetrievalMethodViewController {
         }
         guard viewControllerStack.count > 0 else { return }
         guard viewControllerStack[0] is HealthPassViewController else { return }
-        let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
+        let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: id)
         self.navigationController?.viewControllers.insert(vc, at: 1)
         // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {

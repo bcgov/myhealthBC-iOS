@@ -303,7 +303,7 @@ extension HealthPassViewController: AddCardsTableViewCellDelegate {
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .viewAll {
-            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
+            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil)
             self.navigationController?.pushViewController(vc, animated: true)
         }
         if type == .addAHealthPass {

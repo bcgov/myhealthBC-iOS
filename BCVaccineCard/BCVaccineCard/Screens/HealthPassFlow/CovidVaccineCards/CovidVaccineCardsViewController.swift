@@ -12,8 +12,9 @@ import SwipeCellKit
 
 class CovidVaccineCardsViewController: BaseViewController {
     
-    class func constructCovidVaccineCardsViewController() -> CovidVaccineCardsViewController {
+    class func constructCovidVaccineCardsViewController(recentlyAddedCardId: String?) -> CovidVaccineCardsViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: CovidVaccineCardsViewController.self)) as? CovidVaccineCardsViewController {
+            vc.recentlyAddedCardId = recentlyAddedCardId
             return vc
         }
         return CovidVaccineCardsViewController()
@@ -25,6 +26,7 @@ class CovidVaccineCardsViewController: BaseViewController {
     @IBOutlet weak private var tableViewTrailingConstraint: NSLayoutConstraint!
     
     private var expandedIndexRow = 0
+    private var recentlyAddedCardId: String?
     
     private var dataSource: [VaccineCard] = [] {
         didSet {
