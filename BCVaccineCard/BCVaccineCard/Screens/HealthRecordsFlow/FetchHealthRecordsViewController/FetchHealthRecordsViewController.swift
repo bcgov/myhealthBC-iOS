@@ -204,7 +204,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 //        }
         showForm()
     }
-    
+    //FIXME: CONNOR: Adjust routing here to use router worker
     private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
         vc.completionHandler = { [weak self] details in
@@ -213,7 +213,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
-    
+    //FIXME: CONNOR: Adjust routing here to use router worker
     private func showTestForm(rememberDetails: RememberedGatewayDetails) {
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
         vc.completionHandler = { [weak self] details in

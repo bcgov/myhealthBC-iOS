@@ -82,6 +82,7 @@ class TabBarController: UITabBarController {
         self.tabBar.barTintColor = .white
         self.delegate = self
         self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource])
+        self.routerWorker?.routingAction(scenario: .InitialAppLaunch)
         self.selectedIndex = selectedIndex
         setupObserver()
         postBackgroundAuthFetch()
@@ -148,7 +149,7 @@ class TabBarController: UITabBarController {
             }
         }
     }
-    
+    // FIXME: CONNOR: Remove this function
     // This function is called within the tab bar 1.) (when records are deleted and go to zero, called in the listener above), and called when the 2.) health records tab is selected, to appropriately show the correct VC, and is called 3.) on the FetchHealthRecordsViewController in the routing section to apporiately reset the health records tab's vc stack and route to the details screen
     func resetHealthRecordsTab(viewControllersToInclude vcs: [UIViewController]? = nil, goToRecordsForPatient patient: Patient? = nil) {
         let vc: TabBarVCs = .records
@@ -346,6 +347,9 @@ extension TabBarController {
         rootViewController.title = properties.title
         let navController = CustomNavigationController.init(rootViewController: rootViewController)
         // TODO: Likely need a loading hack here
+//        if tabBarVC.rawValue == self.selectedIndex {
+//            AppDelegate.sharedInstance?.addLoadingViewHack()
+//        }
         for (index, viewController) in viewControllerStack.enumerated() {
             if index > 0 {
                 navController.pushViewController(viewController, animated: false)
@@ -353,5 +357,10 @@ extension TabBarController {
         }
         viewControllers?.remove(at: TabBarVCs.records.rawValue)
         viewControllers?.insert(navController, at: TabBarVCs.records.rawValue)
+//        if tabBarVC.rawValue == self.selectedIndex {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                AppDelegate.sharedInstance?.removeLoadingViewHack()
+//            }
+//        }
     }
 }

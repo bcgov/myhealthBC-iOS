@@ -427,6 +427,7 @@ extension UIViewController {
 extension UIViewController {
     // Note: This is currently only being used for fetching fed pass only
     // TODO: May need to be refactored in the future if we use this function anywhere else
+//FIXME: CONNOR: Move this function to base view controller and then user router worker within this function
     func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, navDelegate: NavigationSetupProtocol?, completion: ((String?) -> Void)?) {
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
         if let details = Defaults.rememberGatewayDetails {

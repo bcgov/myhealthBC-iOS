@@ -126,14 +126,14 @@ class HealthRecordsViewController: BaseViewController {
 //              let vc = vcs.first else {return}
 //        popBack(toControllerType: HealthRecordsViewController.self)
 //    }
-
+//FIXME: CONNOR: Remove this function - stack will be set from router worker
     func showFetchVC(hasHealthRecords: Bool) {
         // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
         let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {})
         lastPatientSelected = nil
         self.navigationController?.pushViewController(vc, animated: false)
     }
-    
+    //FIXME: CONNOR: Remove this function - stack will be set from router worker (keep this function only for "selected" function below
     func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle, authenticated: Bool, hasUpdatedUnauthPendingTest: Bool) {
         let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: navStyle, hasUpdatedUnauthPendingTest: hasUpdatedUnauthPendingTest)
         lastPatientSelected = patient
@@ -253,7 +253,7 @@ extension HealthRecordsViewController {
     func setPatientToShow(patient: Patient) {
         authenticatedPatientToShow = patient
     }
-    
+    //FIXME: CONNOR: Remove this function - stack will be set from router worker
     private func goToUserRecordsViewControllerForPatient(_ patient: Patient) {
         if let index = dataSource.firstIndex(where: { $0.patient == patient }) {
             let data = dataSource[index]

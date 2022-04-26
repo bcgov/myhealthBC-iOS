@@ -155,14 +155,21 @@ extension AppDelegate {
     func addLoadingViewHack() {
         let rect = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         loadingViewHack = UIView(frame: rect)
+        loadingViewHack?.isUserInteractionEnabled = true
         loadingViewHack?.backgroundColor = .white
         loadingViewHack?.startLoadingIndicator(backgroundColor: .white)
+        let tap = UIGestureRecognizer(target: self, action: #selector(dismissLoadingHack))
+        loadingViewHack?.addGestureRecognizer(tap)
         self.window?.addSubview(loadingViewHack!)
     }
     
     func removeLoadingViewHack() {
         loadingViewHack?.endLoadingIndicator()
         loadingViewHack?.removeFromSuperview()
+    }
+    
+    @objc private func dismissLoadingHack(_ sender: UIGestureRecognizer? = nil) {
+        self.removeLoadingViewHack()
     }
 }
 

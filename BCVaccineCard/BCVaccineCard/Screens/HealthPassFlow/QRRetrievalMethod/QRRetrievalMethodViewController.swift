@@ -5,6 +5,8 @@
 //  Created by Connor Ogilvie on 2021-09-16.
 //
 
+//FIXME: CONNOR: Adjust this entire file to properly use Router Worker
+
 import UIKit
 import BCVaccineValidator
 import SwiftUI
@@ -190,6 +192,7 @@ extension QRRetrievalMethodViewController {
             goToEnterGateway()
         }
     }
+    //FIXME: CONNOR: Adjust this function - stack will be set from router worker
     func goToEnterGateway() {
         // TODO: Should look at refactoring this a bit
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
