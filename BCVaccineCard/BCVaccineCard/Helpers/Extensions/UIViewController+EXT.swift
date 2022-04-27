@@ -341,18 +341,18 @@ extension UIViewController {
                           sortOrder: Int64? = nil,
                           patientAPI: AuthenticatedPatientDetailsResponseObject? = nil,
                           manuallyAdded: Bool,
-                          completion: @escaping()->Void
+                          completion: @escaping(CoreDataReturnObject)->Void
     ) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         let name = patientAPI?.getFullName ?? model.name
         guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: name, birthday: birthdate, authenticated: authenticated) else {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card", type: .storage)
-            return completion()
+            return completion(CoreDataReturnObject(id: model.id, patient: nil))
         }
-        StorageService.shared.storeVaccineCard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, manuallyAdded: manuallyAdded, completion: {_ in completion()})
+        StorageService.shared.storeVaccineCard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, manuallyAdded: manuallyAdded, completion: {_ in completion(CoreDataReturnObject(id: model.id, patient: patient))})
     }
     
-    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, patientAPI: AuthenticatedPatientDetailsResponseObject? = nil, manuallyAdded: Bool, completion: @escaping(Bool)->Void) {
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, patientAPI: AuthenticatedPatientDetailsResponseObject? = nil, manuallyAdded: Bool, completion: @escaping(CoreDataReturnObject)->Void) {
         StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, patient: patientAPI, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
@@ -360,11 +360,11 @@ extension UIViewController {
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
-            completion(true)
+            completion(CoreDataReturnObject(id: card?.id, patient: card?.patient))
         })
     }
     
-    func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, manuallyAdded: Bool, completion: @escaping(Bool)->Void) {
+    func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, manuallyAdded: Bool, completion: @escaping(CoreDataReturnObject)->Void) {
         guard let card = StorageService.shared.fetchVaccineCard(code: model.code), let fedCode = model.fedCode else {return}
         StorageService.shared.updateVaccineCard(card: card, federalPass: fedCode, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
@@ -373,7 +373,7 @@ extension UIViewController {
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
-            completion(true)
+            completion(CoreDataReturnObject(id: card?.id, patient: card?.patient))
         })
     }
     
@@ -414,65 +414,27 @@ extension UIViewController {
 
 // MARK: Notification Center posting
 extension UIViewController {
-    func postCardAddedNotification(id: String) {
-        NotificationCenter.default.post(name: .cardAddedNotification, object: nil, userInfo: ["id": id])
-    }
+//    func postCardAddedNotification(id: String) {
+//        NotificationCenter.default.post(name: .cardAddedNotification, object: nil, userInfo: ["id": id])
+//    }
     
-    func postOpenPDFFromAddingFedPassOnlyNotification(pass: String, source: GatewayFormSource) {
-        NotificationCenter.default.post(name: .fedPassOnlyAdded, object: nil, userInfo: ["pass": pass, "source": source])
-    }
-}
-
-// MARK: GoTo Health Gateway Logic
-extension UIViewController {
-    // Note: This is currently only being used for fetching fed pass only
-    // TODO: May need to be refactored in the future if we use this function anywhere else
-//FIXME: CONNOR: Move this function to base view controller and then user router worker within this function
-    func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, navDelegate: NavigationSetupProtocol?, completion: ((String?) -> Void)?) {
-        var rememberDetails = RememberedGatewayDetails(storageArray: nil)
-        if let details = Defaults.rememberGatewayDetails {
-            rememberDetails = details
-        }
-        
-        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
-        if fetchType.isFedPassOnly {
-            vc.completionHandler = { [weak self] details in
-                guard let `self` = self else { return }
-                DispatchQueue.main.async {
-                    if let fedPass = details.fedPassId {
-//                        self?.openPDFView(pdfString: fedPass, vc: owner, id: details.id, type: .fedPass, completion: completion)
-                        if source == .healthPassHomeScreen {
-                            self.popBack(toControllerType: HealthPassViewController.self)
-                            self.postOpenPDFFromAddingFedPassOnlyNotification(pass: fedPass, source: .healthPassHomeScreen)
-                        } else if source == .vaccineCardsScreen {
-                            self.popBack(toControllerType: CovidVaccineCardsViewController.self)
-                            self.postOpenPDFFromAddingFedPassOnlyNotification(pass: fedPass, source: .vaccineCardsScreen)
-                        }
-                        completion?(details.id)
-//                        owner.showPDFDocument(pdfString: fedPass, navTitle: "Newly Added", documentVCDelegate: owner, navDelegate: navDelegate)
-                    } else {
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                }
-            }
-        }
-        self.tabBarController?.tabBar.isHidden = true
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+//    func postOpenPDFFromAddingFedPassOnlyNotification(pass: String, source: GatewayFormSource) {
+//        NotificationCenter.default.post(name: .fedPassOnlyAdded, object: nil, userInfo: ["pass": pass, "source": source])
+//    }
 }
 
 // MARK: Open PDF (used for federal pass and other PDF views)
 // FIXME: Can likely remove this as we shouldn't need to use custom PDF view anymore
-extension UIViewController {
-    func openPDFView(pdfString: String, vc: UIViewController, id: String?, type: PDFType?, completion: ((String?) -> Void)?) {
-        guard let data = Data(base64URLEncoded: pdfString) else {
-            return
-        }
-        let pdfView: AppPDFView = AppPDFView.fromNib()
-        pdfView.show(data: data, in: vc.parent ?? vc, id: id, type: type)
-        pdfView.completionHandler = completion
-    }
-}
+//extension UIViewController {
+//    func openPDFView(pdfString: String, vc: UIViewController, id: String?, type: PDFType?, completion: ((String?) -> Void)?) {
+//        guard let data = Data(base64URLEncoded: pdfString) else {
+//            return
+//        }
+//        let pdfView: AppPDFView = AppPDFView.fromNib()
+//        pdfView.show(data: data, in: vc.parent ?? vc, id: id, type: type)
+//        pdfView.completionHandler = completion
+//    }
+//}
 
 // MARK: Logic to open pdf natively
 extension UIViewController {

@@ -591,7 +591,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                 self.dataSource.remove(at: index)
                 if self.dataSource.isEmpty {
                     self.inEditMode = false
-                    self.popBack(toControllerType: HealthRecordsViewController.self)
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
                 } else {
                     self.tableView.reloadData()
                 }
@@ -609,11 +609,11 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         case .covidImmunizationRecord(model: let model, immunizations: _):
             alertConfirmation(title: .deleteRecord, message: .deleteCovidHealthRecord, confirmTitle: .delete, confirmStyle: .destructive) {
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
+                self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.healthPass]))
                 completion(true)
             } onCancel: {
                 completion(false)
             }
-            
         case .covidTestResultRecord:
             guard let recordId = record.id else {return}
             alertConfirmation(title: .deleteTestResult, message: .deleteTestResultMessage, confirmTitle: .delete, confirmStyle: .destructive) {

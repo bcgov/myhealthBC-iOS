@@ -110,7 +110,8 @@ class SecurityAndDataViewController: BaseViewController {
                 Defaults.rememberGatewayDetails = nil
                 StorageService.shared.deleteAllStoredData()
                 self.showBanner(message: .deletedAllRecordsAndSavedData, style: .Top)
-                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
+//                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
+                self.routerWorker?.routingAction(scenario: .ClearAllData(currentTab: self.getCurrentTab))
             })
             
         } onCancel: {}

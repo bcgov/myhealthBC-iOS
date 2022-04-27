@@ -137,6 +137,7 @@ struct GatewayFormCompletionHandlerDetails {
     let fedPassId: String?
     let name: String?
     let dob: String?
+    let patient: Patient?
 }
 
 class GatewayFormViewController: BaseViewController {
@@ -548,15 +549,16 @@ extension GatewayFormViewController {
     private func showAlertToRedirectAuthenticatedUserToRecordsView(patient: Patient) {
         alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
             guard let `self` = self else {return}
-            self.handleAuthNavigation(patient: patient)
+            // TODO: Maybe we show the record that has been added here?
+            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: patient, addedRecord: nil, recentlyAddedCardId: nil, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
         }, buttonTwoTitle: "Retry") {}
     }
     
-    private func handleAuthNavigation(patient: Patient) {
-        if let tabBar = self.tabBarController as? TabBarController {
-            tabBar.goToUserRecordsScreenForPatient(patient)
-        }
-    }
+//    private func handleAuthNavigation(patient: Patient) {
+//        if let tabBar = self.tabBarController as? TabBarController {
+//            tabBar.goToUserRecordsScreenForPatient(patient)
+//        }
+//    }
 }
 
 // MARK: For Button tap and enabling
@@ -612,12 +614,12 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             alert(title: .duplicateTitle, message: .duplicateTestMessage)
             return
         }
-        if let id = handleTestResultInCoreData(gatewayResponse: result, authenticated: false) {
+        if let coreDataReturnObject = handleTestResultInCoreData(gatewayResponse: result, authenticated: false), let id = coreDataReturnObject.id {
             var birthday: String?
             if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) {
                 birthday = dataSource[dobIndexPath.row].configuration.text
             }
-            let handlerDetails = GatewayFormCompletionHandlerDetails(id: id, fedPassId: nil, name: result.resourcePayload?.records.first?.patientDisplayName, dob: birthday)
+            let handlerDetails = GatewayFormCompletionHandlerDetails(id: id, fedPassId: nil, name: result.resourcePayload?.records.first?.patientDisplayName, dob: birthday, patient: coreDataReturnObject.patient)
             completionHandler?(handlerDetails)
         } else {
             alert(title: .error, message: .healthGatewayError)
@@ -643,10 +645,10 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     }
     
     func updateCardInLocalStorage(model: AppVaccinePassportModel) {
-        self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] _ in
+        self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
             guard let `self` = self else {return}
             let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-            let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
+            let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate, patient: coreDataReturnObject.patient)
             self.completionHandler?(handlerDetails)
         })
     }
@@ -657,9 +659,10 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
                                   authenticated: false,
                                   sortOrder: sortOrder,
                                   manuallyAdded: true,
-                                  completion: {
+                                  completion: { [weak self] coreDataReturnObject in
+                guard let `self` = self else {return}
                 let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-                let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
+                let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate, patient: coreDataReturnObject.patient)
                 self.completionHandler?(handlerDetails)
             })
         }
@@ -670,10 +673,10 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             guard let fedCode = model.codableModel.fedCode else {
                 return
             }
-            self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] _ in
+            self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                 guard let `self` = self else {return}
                 let fedCode = self.fetchType.isFedPassOnly ? fedCode : nil
-                let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate)
+                let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate, patient: coreDataReturnObject.patient)
                 self.completionHandler?(handlerDetails)
             })
         }
@@ -698,7 +701,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
                     DispatchQueue.main.async {
                         self.navigationController?.popViewController(animated: true)
                     }
-                    let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: nil, name: localModel.name, dob: localModel.birthdate)
+                    let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: nil, name: localModel.name, dob: localModel.birthdate, patient: nil)
                     self.completionHandler?(handlerDetails)
                 }
             case .isNew:
@@ -709,7 +712,10 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
                     self.updateCardInLocalStorage(model: model)
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
-                    let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: nil, name: localModel.name, dob: localModel.birthdate)
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: nil, name: localModel.name, dob: localModel.birthdate, patient: nil)
                     self.completionHandler?(handlerDetails)
                 }
             case .UpdatedFederalPass:
@@ -718,7 +724,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         }
     }
     
-    func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool) -> String? {
+    func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool) -> CoreDataReturnObject? {
         // Note, this first guard statement is to handle the case when health gateway is wonky - throws success with no error but has key nil values, so in this case we don't want to store a dummy patient value, as that's what was happening
         guard let collectionDate = gatewayResponse.resourcePayload?.records.first?.collectionDateTime,
               !collectionDate.trimWhiteSpacesAndNewLines.isEmpty, let reportID = gatewayResponse.resourcePayload?.records.first?.reportId,
@@ -735,10 +741,15 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         }
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday, authenticated: authenticated) else {return nil}
         guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: true) else { return nil }
-        return object.id
+        return CoreDataReturnObject(id: object.id, patient: patient)
     }
     
     
+}
+
+struct CoreDataReturnObject {
+    let id: String?
+    let patient: Patient?
 }
 
 struct HGStorageModel {

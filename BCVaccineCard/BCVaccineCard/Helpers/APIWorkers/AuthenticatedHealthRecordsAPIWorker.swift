@@ -570,7 +570,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                                               sortOrder: nil,
                                               patientAPI: patient,
                                               manuallyAdded: false,
-                                              completion: {
+                                              completion: { _ in
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
             })
         }

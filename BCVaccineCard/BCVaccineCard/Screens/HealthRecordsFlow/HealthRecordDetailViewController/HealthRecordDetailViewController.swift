@@ -132,6 +132,7 @@ extension HealthRecordDetailViewController {
             switch self.dataSource.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
+                self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.healthPass]))
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
@@ -141,7 +142,7 @@ extension HealthRecordDetailViewController {
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)
             } else {
-                self.popBack(toControllerType: HealthRecordsViewController.self)
+                self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
             }
         } onCancel: {
         }

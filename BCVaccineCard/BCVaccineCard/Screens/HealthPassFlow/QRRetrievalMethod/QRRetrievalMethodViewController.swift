@@ -5,7 +5,7 @@
 //  Created by Connor Ogilvie on 2021-09-16.
 //
 
-//FIXME: CONNOR: Adjust this entire file to properly use Router Worker
+//FIXME: CONNOR: - Ready To Test: Adjust this entire file to properly use Router Worker
 
 import UIKit
 import BCVaccineValidator
@@ -192,7 +192,7 @@ extension QRRetrievalMethodViewController {
             goToEnterGateway()
         }
     }
-    //FIXME: CONNOR: Adjust this function - stack will be set from router worker
+    //FIXME: CONNOR: - Ready To Test: Adjust this function - stack will be set from router worker
     func goToEnterGateway() {
         // TODO: Should look at refactoring this a bit
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
@@ -209,7 +209,8 @@ extension QRRetrievalMethodViewController {
                 self.view.isAccessibilityElement = false
                 self.tableView.isAccessibilityElement = false
                 AnalyticsService.shared.track(action: .AddQR, text: .Get)
-                self.popBackToProperViewController(id: details.id)
+//                self.popBackToProperViewController(id: details.id)
+                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
             }
         }
         self.tabBarController?.tabBar.isHidden = true
@@ -266,38 +267,39 @@ extension QRRetrievalMethodViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .isNew:
-                self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true, completion: {
+                self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
-                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                        self.popBackToProperViewController(id: model.id ?? "")
+                        // TODO: Maybe show this on tab bar controller instead?
+                        self.tabBarController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+//                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+//                        self.popBackToProperViewController(id: model.id ?? "")
+                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
                     }
                 })
             case .canUpdateExisting:
                 self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}
-                    self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: {[weak self] success in
+                    self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                         guard let `self` = self else {return}
-                        if success {
-                            DispatchQueue.main.async {
-                                self.popBackToProperViewController(id: model.id ?? "")
-                            }
-                        }
+                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
                     })
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
                     //                    self.navigationController?.popViewController(animated: true)
-                    DispatchQueue.main.async {
-                        self.popBackToProperViewController(id: model.id ?? "")
-                    }
+//                    DispatchQueue.main.async {
+//                        self.popBackToProperViewController(id: model.id ?? "")
+//                    }
+                    // Note: May need to look into this and see if we require something else
+                    self.navigationController?.popViewController(animated: true)
                 }
             case .UpdatedFederalPass:
-                self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true) {[weak self] _ in
+                self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true) { [weak self] coreDataReturnObject in
                     guard let self = self else {return}
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
-                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                        self.popBackToProperViewController(id: model.id ?? "")
+                        self.tabBarController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
                     }
                 }
                 
@@ -308,37 +310,37 @@ extension QRRetrievalMethodViewController {
 
 // MARK: Logic for handling what screen to go back to
 extension QRRetrievalMethodViewController {
-    func popBackToProperViewController(id: String) {
-        // If we only have one card (or no cards), then go back to health pass with popBackTo
-        // If we have more than one card, we should check if 2nd controller in stack is CovidVaccineCardsViewController, if so, pop back, if not, instantiate, insert at 1, then pop back
-        guard StorageService.shared.fetchVaccineCards().count > 1 else {
-            self.popBack(toControllerType: HealthPassViewController.self)
-            return
-        }
-        // check for controller in stack
-        guard let viewControllerStack = self.navigationController?.viewControllers else { return }
-        var containsCovidVaxCardsVC = false
-        for (index, vc) in viewControllerStack.enumerated() {
-            if vc is CovidVaccineCardsViewController {
-                containsCovidVaxCardsVC = true
-            }
-        }
-        guard containsCovidVaxCardsVC == false else {
-            postCardAddedNotification(id: id)
-            //            self.navigationController?.popViewController(animated: true)
-            self.popBack(toControllerType: CovidVaccineCardsViewController.self)
-            return
-        }
-        guard viewControllerStack.count > 0 else { return }
-        guard viewControllerStack[0] is HealthPassViewController else { return }
-        let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: id, fedPassStringToOpen: nil)
-        self.navigationController?.viewControllers.insert(vc, at: 1)
-        // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.postCardAddedNotification(id: id)
-        }
-        self.popBack(toControllerType: CovidVaccineCardsViewController.self)
-    }
+//    func popBackToProperViewController(id: String) {
+//        // If we only have one card (or no cards), then go back to health pass with popBackTo
+//        // If we have more than one card, we should check if 2nd controller in stack is CovidVaccineCardsViewController, if so, pop back, if not, instantiate, insert at 1, then pop back
+//        guard StorageService.shared.fetchVaccineCards().count > 1 else {
+//            self.popBack(toControllerType: HealthPassViewController.self)
+//            return
+//        }
+//        // check for controller in stack
+//        guard let viewControllerStack = self.navigationController?.viewControllers else { return }
+//        var containsCovidVaxCardsVC = false
+//        for (index, vc) in viewControllerStack.enumerated() {
+//            if vc is CovidVaccineCardsViewController {
+//                containsCovidVaxCardsVC = true
+//            }
+//        }
+//        guard containsCovidVaxCardsVC == false else {
+//            postCardAddedNotification(id: id)
+//            //            self.navigationController?.popViewController(animated: true)
+//            self.popBack(toControllerType: CovidVaccineCardsViewController.self)
+//            return
+//        }
+//        guard viewControllerStack.count > 0 else { return }
+//        guard viewControllerStack[0] is HealthPassViewController else { return }
+//        let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: id, fedPassStringToOpen: nil)
+//        self.navigationController?.viewControllers.insert(vc, at: 1)
+//        // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//            self.postCardAddedNotification(id: id)
+//        }
+//        self.popBack(toControllerType: CovidVaccineCardsViewController.self)
+//    }
 }
 
 // MARK: Image Picker

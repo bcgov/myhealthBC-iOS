@@ -145,3 +145,40 @@ extension BaseViewController {
         NotificationCenter.default.post(name: .settingsTableViewReload, object: nil, userInfo: nil)
     }
 }
+
+// MARK: GoTo Health Gateway Logic from passes flow
+extension BaseViewController {
+    //FIXME: CONNOR: - Ready To Test: Move this function to base view controller and then user router worker within this function
+        func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, navDelegate: NavigationSetupProtocol?) {
+            var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+            if let details = Defaults.rememberGatewayDetails {
+                rememberDetails = details
+            }
+            
+            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
+            if fetchType.isFedPassOnly {
+                vc.completionHandler = { [weak self] details in
+                    guard let `self` = self else { return }
+                    DispatchQueue.main.async {
+                        if let fedPass = details.fedPassId {
+                            // Added record set to nil means that the records tab will either show UserRecordsVC or HealthRecordsVC, depending on number of users - if we want to display the detail screen, then we need to provide the addedRecord - this function is only being called from HealthPassVC and CovidVaccineCardsVC as of now though
+                            let fedPassAddedFromHealthPassVC = source == .healthPassHomeScreen ? true : false
+                            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC))
+//                            if source == .healthPassHomeScreen {
+//                                self.popBack(toControllerType: HealthPassViewController.self)
+//                                self.postOpenPDFFromAddingFedPassOnlyNotification(pass: fedPass, source: .healthPassHomeScreen)
+//                            } else if source == .vaccineCardsScreen {
+//                                self.popBack(toControllerType: CovidVaccineCardsViewController.self)
+//                                self.postOpenPDFFromAddingFedPassOnlyNotification(pass: fedPass, source: .vaccineCardsScreen)
+//                            }
+//                            completion?(details.id)
+                        } else {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
+                }
+            }
+            self.tabBarController?.tabBar.isHidden = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+}

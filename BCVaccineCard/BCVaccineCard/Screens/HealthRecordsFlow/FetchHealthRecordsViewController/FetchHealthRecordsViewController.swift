@@ -209,7 +209,9 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
         vc.completionHandler = { [weak self] details in
             guard let `self` = self else { return }
-            self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
+//            self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
+            let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidImmunizationRecord)
+            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -218,65 +220,67 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
         vc.completionHandler = { [weak self] details in
             guard let `self` = self else { return }
-            self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
+//            self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
+            let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidTestResult)
+            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
-    private func handleRouting(id: String, recordType: GetRecordsView.RecordType, details: GatewayFormCompletionHandlerDetails) {
-        if let completion = completion {
-            completion()
-        }
-        let records = StorageService.shared.getHeathRecords()
-        var recordsCount: Int
-        if let name = details.name,
-           let birthday = details.dob,
-           let birthDate = Date.Formatter.yearMonthDay.date(from: birthday),
-           let patient = StorageService.shared.fetchPatient(name: name, birthday: birthDate) {
-            recordsCount = records.detailDataSource(patient: patient).count
-        } else {
-            recordsCount = 1
-        }
-        let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: recordType)
-        guard let ds = dataSource else {
-            self.popBack(toControllerType: HealthRecordsViewController.self)
-            return
-        }
-        DispatchQueue.main.async {
-            let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: recordsCount)
-            self.setupNavStack(details: details, detailVC: detailVC, authenticated: ds.isAuthenticated)
-        }
-    }
+//    private func handleRouting(id: String, recordType: GetRecordsView.RecordType, details: GatewayFormCompletionHandlerDetails) {
+//        if let completion = completion {
+//            completion()
+//        }
+//        let records = StorageService.shared.getHeathRecords()
+//        var recordsCount: Int
+//        if let name = details.name,
+//           let birthday = details.dob,
+//           let birthDate = Date.Formatter.yearMonthDay.date(from: birthday),
+//           let patient = StorageService.shared.fetchPatient(name: name, birthday: birthDate) {
+//            recordsCount = records.detailDataSource(patient: patient).count
+//        } else {
+//            recordsCount = 1
+//        }
+//        let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: recordType)
+//        guard let ds = dataSource else {
+//            self.popBack(toControllerType: HealthRecordsViewController.self)
+//            return
+//        }
+//        DispatchQueue.main.async {
+//            let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: recordsCount)
+//            self.setupNavStack(details: details, detailVC: detailVC, authenticated: ds.isAuthenticated)
+//        }
+//    }
     
-    private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController, authenticated: Bool) {
-        guard let name = details.name,
-              let birthday = details.dob,
-              let birthDate = Date.Formatter.yearMonthDay.date(from: birthday),
-              let patient = StorageService.shared.fetchPatient(name: name, birthday: birthDate),
-              let stack = self.navigationController?.viewControllers, stack.count > 0
-        else {
-            return
-        }
-        
-        var navStack: [UIViewController] = []
-
-        var containsUserRecordsVC = false
-        for (_, vc) in stack.enumerated() {
-            if vc is UsersListOfRecordsViewController {
-                containsUserRecordsVC = true
-            }
-        }
-        
-        if containsUserRecordsVC == false {
-            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
-            navStack.append(secondVC)
-        }
-        
-        navStack.append(detailVC)
-        self.tabBarController?.tabBar.isHidden = false
-        guard let tabBarVC = self.tabBarController as? TabBarController else { return }
-        AppDelegate.sharedInstance?.addLoadingViewHack()
-        tabBarVC.resetHealthRecordsTab(viewControllersToInclude: navStack)
-    }
+//    private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController, authenticated: Bool) {
+//        guard let name = details.name,
+//              let birthday = details.dob,
+//              let birthDate = Date.Formatter.yearMonthDay.date(from: birthday),
+//              let patient = StorageService.shared.fetchPatient(name: name, birthday: birthDate),
+//              let stack = self.navigationController?.viewControllers, stack.count > 0
+//        else {
+//            return
+//        }
+//
+//        var navStack: [UIViewController] = []
+//
+//        var containsUserRecordsVC = false
+//        for (_, vc) in stack.enumerated() {
+//            if vc is UsersListOfRecordsViewController {
+//                containsUserRecordsVC = true
+//            }
+//        }
+//
+//        if containsUserRecordsVC == false {
+//            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
+//            navStack.append(secondVC)
+//        }
+//
+//        navStack.append(detailVC)
+//        self.tabBarController?.tabBar.isHidden = false
+//        guard let tabBarVC = self.tabBarController as? TabBarController else { return }
+//        AppDelegate.sharedInstance?.addLoadingViewHack()
+//        tabBarVC.resetHealthRecordsTab(viewControllersToInclude: navStack)
+//    }
 }
 
 // MARK: BCSC Login

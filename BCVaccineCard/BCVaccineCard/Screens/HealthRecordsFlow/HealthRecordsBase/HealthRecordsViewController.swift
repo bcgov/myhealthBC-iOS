@@ -66,18 +66,19 @@ class HealthRecordsViewController: BaseViewController {
         let records = fetchData()
         self.dataSource = records.dataSource()
         self.navigationController?.popToRootViewController(animated: false)
-        if self.dataSource.isEmpty {
-            self.showFetchVC(hasHealthRecords: false)
-        } else if dataSource.count == 1, let singleUser = dataSource.first {
-            showRecords(for: singleUser.patient, animated: false, navStyle: .singleUser, authenticated: singleUser.authenticated, hasUpdatedUnauthPendingTest: false)
-        } else {
+//        if self.dataSource.isEmpty {
+//            self.showFetchVC(hasHealthRecords: false)
+//        } else
+//        if dataSource.count == 1, let singleUser = dataSource.first {
+//            showRecords(for: singleUser.patient, animated: false, navStyle: .singleUser, authenticated: singleUser.authenticated, hasUpdatedUnauthPendingTest: false)
+//        } else {
             self.addRecordHeaderSetup()
             self.setupCollectionView()
-            if let patient = authenticatedPatientToShow {
-                self.goToUserRecordsViewControllerForPatient(patient)
-            }
+//            if let patient = authenticatedPatientToShow {
+//                self.goToUserRecordsViewControllerForPatient(patient)
+//            }
             collectionView.reloadData()
-        }
+//        }
     }
     
     
@@ -85,19 +86,20 @@ class HealthRecordsViewController: BaseViewController {
     private func refreshOnStorageChange() {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
-            if event.event == .ManuallyAddedRecord {
-                self.loadDataAndSetInitialVC()
-            }
-            guard event.event != .ManuallyAddedRecord || event.event != .ProtectedMedicalRecordsInitialFetch || event.event != .ManuallyAddedPendingTestBackgroundRefetch else { return }
-            switch event.entity {
-            case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
-                self.loadDataAndSetInitialVC()
-                if let lastPatientSelected = self.lastPatientSelected, !self.dataSource.isEmpty, let lastPatientRecordInDataSouce = self.dataSource.first(where: {$0.patient == lastPatientSelected}) {
-                    self.showRecords(for: lastPatientRecordInDataSouce.patient, animated: false, navStyle: self.dataSource.count == 1 ? .singleUser :.multiUser, authenticated: lastPatientRecordInDataSouce.authenticated, hasUpdatedUnauthPendingTest: true)
-                }
-            default:
-                break
-            }
+            self.loadDataAndSetInitialVC()
+//            if event.event == .ManuallyAddedRecord {
+//                self.loadDataAndSetInitialVC()
+//            }
+//            guard event.event != .ManuallyAddedRecord || event.event != .ProtectedMedicalRecordsInitialFetch || event.event != .ManuallyAddedPendingTestBackgroundRefetch else { return }
+//            switch event.entity {
+//            case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
+//                self.loadDataAndSetInitialVC()
+//                if let lastPatientSelected = self.lastPatientSelected, !self.dataSource.isEmpty, let lastPatientRecordInDataSouce = self.dataSource.first(where: {$0.patient == lastPatientSelected}) {
+//                    self.showRecords(for: lastPatientRecordInDataSouce.patient, animated: false, navStyle: self.dataSource.count == 1 ? .singleUser :.multiUser, authenticated: lastPatientRecordInDataSouce.authenticated, hasUpdatedUnauthPendingTest: true)
+//                }
+//            default:
+//                break
+//            }
         }
     }
     
@@ -126,22 +128,22 @@ class HealthRecordsViewController: BaseViewController {
 //              let vc = vcs.first else {return}
 //        popBack(toControllerType: HealthRecordsViewController.self)
 //    }
-//FIXME: CONNOR: Remove this function - stack will be set from router worker
-    func showFetchVC(hasHealthRecords: Bool) {
-        // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
-        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {})
-        lastPatientSelected = nil
-        self.navigationController?.pushViewController(vc, animated: false)
-    }
-    //FIXME: CONNOR: Remove this function - stack will be set from router worker (keep this function only for "selected" function below
-    func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle, authenticated: Bool, hasUpdatedUnauthPendingTest: Bool) {
+//FIXME: CONNOR: - Ready To Test: Remove this function - stack will be set from router worker
+//    func showFetchVC(hasHealthRecords: Bool) {
+//        // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
+//        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {})
+//        lastPatientSelected = nil
+//        self.navigationController?.pushViewController(vc, animated: false)
+//    }
+    //FIXME: CONNOR: - Ready To Test: Remove this function - stack will be set from router worker (keep this function only for "selected" function below
+    private func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle, authenticated: Bool, hasUpdatedUnauthPendingTest: Bool) {
         let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: navStyle, hasUpdatedUnauthPendingTest: hasUpdatedUnauthPendingTest)
         lastPatientSelected = patient
         self.navigationController?.pushViewController(vc, animated: animated)
     }
     
     // MARK: Helpers
-    func selected(data: HealthRecordsDataSource) {
+    private func selected(data: HealthRecordsDataSource) {
         let patient = data.patient
 
         if authManager.isAuthenticated {
@@ -150,7 +152,7 @@ class HealthRecordsViewController: BaseViewController {
         showRecords(for: patient, animated: true, navStyle: .multiUser, authenticated: data.authenticated, hasUpdatedUnauthPendingTest: false)
     }
     
-    func closeRecordWhenAuthExpires(patient: Patient) {
+    private func closeRecordWhenAuthExpires(patient: Patient) {
         lastPatientSelected = patient
         Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
             guard let `self` = self, patient == self.lastPatientSelected else {return}
@@ -249,18 +251,18 @@ extension HealthRecordsViewController: UICollectionViewDataSource, UICollectionV
 }
 
 // MARK: Function to go to user records view controller
-extension HealthRecordsViewController {
-    func setPatientToShow(patient: Patient) {
-        authenticatedPatientToShow = patient
-    }
-    //FIXME: CONNOR: Remove this function - stack will be set from router worker
-    private func goToUserRecordsViewControllerForPatient(_ patient: Patient) {
-        if let index = dataSource.firstIndex(where: { $0.patient == patient }) {
-            let data = dataSource[index]
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.selected(data: data)
-                self.authenticatedPatientToShow = nil
-            }
-        }
-    }
-}
+//extension HealthRecordsViewController {
+//    func setPatientToShow(patient: Patient) {
+//        authenticatedPatientToShow = patient
+//    }
+//    //FIXME: CONNOR: - Ready To Test: Remove this function - stack will be set from router worker
+//    private func goToUserRecordsViewControllerForPatient(_ patient: Patient) {
+//        if let index = dataSource.firstIndex(where: { $0.patient == patient }) {
+//            let data = dataSource[index]
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//                self.selected(data: data)
+//                self.authenticatedPatientToShow = nil
+//            }
+//        }
+//    }
+//}
