@@ -50,14 +50,22 @@ class StorageService: StorageManagerProtocol {
     
     public static let shared = StorageService()
     
-    var managedContext: NSManagedObjectContext?
-    var container: NSPersistentContainer?
+    private var container: NSPersistentContainer?
+    var managedContext: NSManagedObjectContext? {
+        let context =  container?.newBackgroundContext()
+        context?.automaticallyMergesChangesFromParent = true
+        return context
+    }
     
     init(managedContext: NSManagedObjectContext = CoreDataStack.shared.managedContext,
          container: NSPersistentContainer = CoreDataStack.shared.container,
          mergePolicy: Any = NSMergeByPropertyObjectTrumpMergePolicy) {
-        self.managedContext = managedContext
-        self.managedContext?.mergePolicy = mergePolicy
+        self.container = container
+//        let context = container.newBackgroundContext()
+//        context.automaticallyMergesChangesFromParent = true
+//        self.managedContext = context
+//        self.managedContext?.mergePolicy = mergePolicy
+//        self.managedContext?.automaticallyMergesChangesFromParent = true
     }
     
     func notify(event: StorageEvent<Any>) {
@@ -83,11 +91,17 @@ class StorageService: StorageManagerProtocol {
     func delete(object: NSManagedObject) {
         DispatchQueue.main.async {
             let context = self.managedContext
-            do {
-                context?.delete(object)
-                try context?.save()
-            } catch {
+            let contextObject = context?.object(with: object.objectID)
+            guard let context = context, let contextObject = contextObject else {
                 return
+            }
+            context.perform {
+                do {
+                    context.delete(contextObject)
+                    try context.save()
+                } catch {
+                    return
+                }
             }
         }
     }

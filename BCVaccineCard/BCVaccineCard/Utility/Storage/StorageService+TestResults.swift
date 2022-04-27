@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 protocol StorageCovidTestResultManager {
     
@@ -20,12 +21,14 @@ protocol StorageCovidTestResultManager {
         patient: Patient,
         gateWayResponse: GatewayTestResultResponse,
         authenticated: Bool,
-        manuallyAdded: Bool
-    ) -> CovidLabTestResult?
+        manuallyAdded: Bool,
+        completion: @escaping(CovidLabTestResult?)->Void
+    )
     
     /// Store a single test result
     /// - Returns: String id of record if stored successfully
     func storeCovidTestResult(
+        context: NSManagedObjectContext,
         resultId: String,
         patientDisplayName: String?,
         lab: String?,
@@ -38,7 +41,9 @@ protocol StorageCovidTestResultManager {
         testOutcome: String?,
         resultTitle: String?,
         resultDescription: [String]?,
-        resultLink: String?) -> TestResult?
+        resultLink: String?,
+        completion: @escaping(TestResult?)->Void
+    )
     
     // MARK: Update
     /// Update a test result from a HealthGateway response
@@ -62,53 +67,68 @@ protocol StorageCovidTestResultManager {
 
 extension StorageService: StorageCovidTestResultManager {
     // MARK: Store
-    public func storeCovidTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool, manuallyAdded: Bool) -> CovidLabTestResult? {
+    public func storeCovidTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool, manuallyAdded: Bool, completion: @escaping(CovidLabTestResult?)->Void) {
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
         deleteCovidTestResult(id: id, sendDeleteEvent: false)
-        guard let context = managedContext else {return nil}
-        let model = CovidLabTestResult(context: context)
-        model.patient = patient
-        model.id = id
-        model.createdAt = Date()
-        model.authenticated = authenticated
-        var testResults: [TestResult] = []
-        guard let records = gateWayResponse.resourcePayload?.records else { return nil }
-        for record in records {
-            // Note: For Amir - Adding this here as a fallback for computed propertied
-            // FIXME: Remove the next two lines once we decide on how we are going to handle the new authenticated test result core data model
-            let collectionDateTime = record.collectionDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.collectionDateTime ?? "")
-            let resultDateTime = record.resultDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.resultDateTime ?? "")
-            if let resultModel = storeCovidTestResult(
-                resultId: id,
-                patientDisplayName: record.patientDisplayName,
-                lab: record.lab,
-                reportId: record.reportId,
-                collectionDateTime: collectionDateTime,
-                resultDateTime: resultDateTime,
-                testName: record.testName,
-                testType: record.testType,
-                testStatus: record.testStatus,
-                testOutcome: record.testOutcome,
-                resultTitle: record.resultTitle,
-                resultDescription: record.resultDescription,
-                resultLink: record.resultLink) {
-                
-                testResults.append(resultModel)
-                model.addToResults(resultModel)
+        
+        guard let records = gateWayResponse.resourcePayload?.records else { return completion(nil) }
+        guard let context = self.managedContext else {return}
+        fetchPatient(phn: patient.phn, name: patient.name, birthday: patient.birthday, context: context) { patient in
+            guard let patient = patient else {
+                return completion(nil)
             }
-            
-        }
-        do {
-            try context.save()
-            let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: model)) : self.notify(event: StorageEvent(event: .Save, entity: .CovidLabTestResult, object: model))
-            return model
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            return nil
+            let dispatchGroup = DispatchGroup()
+            var testResults: [TestResult] = []
+            for record in records {
+                dispatchGroup.enter()
+                // Note: For Amir - Adding this here as a fallback for computed propertied
+                // FIXME: Remove the next two lines once we decide on how we are going to handle the new authenticated test result core data model
+                let collectionDateTime = record.collectionDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.collectionDateTime ?? "")
+                let resultDateTime = record.resultDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.resultDateTime ?? "")
+                self.storeCovidTestResult(
+                    context: context,
+                    resultId: id,
+                    patientDisplayName: record.patientDisplayName,
+                    lab: record.lab,
+                    reportId: record.reportId,
+                    collectionDateTime: collectionDateTime,
+                    resultDateTime: resultDateTime,
+                    testName: record.testName,
+                    testType: record.testType,
+                    testStatus: record.testStatus,
+                    testOutcome: record.testOutcome,
+                    resultTitle: record.resultTitle,
+                    resultDescription: record.resultDescription,
+                    resultLink: record.resultLink, completion: {resultModel in
+                        if let resultModel = resultModel {
+                            testResults.append(resultModel)
+                        }
+                        dispatchGroup.leave()
+                    })
+            }
+            dispatchGroup.notify(queue: .global(qos: .background)) {
+                context.perform {
+                    let model = CovidLabTestResult(context: context)
+                    model.patient = patient
+                    model.id = id
+                    model.createdAt = Date()
+                    model.authenticated = authenticated
+                    testResults.forEach({model.addToResults($0)})
+                    do {
+                        try context.save()
+                        self.notify(event: StorageEvent(event: .Save, entity: .CovidLabTestResult, object: model))
+                    } catch let error {
+                        print("Could not save. \(error), \(error.localizedDescription)")
+                        return completion(nil)
+                    }
+                    
+                }
+            }
         }
     }
     
     internal func storeCovidTestResult(
+        context: NSManagedObjectContext,
         resultId: String,
         patientDisplayName: String?,
         lab: String?,
@@ -121,9 +141,10 @@ extension StorageService: StorageCovidTestResultManager {
         testOutcome: String?,
         resultTitle: String?,
         resultDescription: [String]?,
-        resultLink: String?) -> TestResult?
+        resultLink: String?,
+        completion: @escaping(TestResult?)->Void
+    )
     {
-        guard let context = managedContext else {return nil}
         let testResult = TestResult(context: context)
         testResult.id = UUID().uuidString
         testResult.patientDisplayName = patientDisplayName
@@ -138,13 +159,16 @@ extension StorageService: StorageCovidTestResultManager {
         testResult.resultTitle = resultTitle
         testResult.resultDescription = resultDescription
         testResult.resultLink = resultLink
-        do {
-            try context.save()
-            self.notify(event: StorageEvent(event: .Save, entity: .TestResult, object: testResult))
-            return testResult
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            return nil
+        context.perform {
+            do {
+                try context.save()
+                self.notify(event: StorageEvent(event: .Save, entity: .TestResult, object: testResult))
+                return completion(testResult)
+            }
+            catch let error {
+                print("Could not save. \(error), \(error.localizedDescription)")
+                return completion(nil)
+            }
         }
     }
     
@@ -162,11 +186,14 @@ extension StorageService: StorageCovidTestResultManager {
         // Delete existing
          deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
         // Store the new one.
-        if let object = storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus, manuallyAdded: manuallyAdded) {
-            let _ = manuallyAdded == true ? notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: object)) : pendingBackgroundRefetch == true ? notify(event: StorageEvent(event: .ManuallyAddedPendingTestBackgroundRefetch, entity: .CovidLabTestResult, object: object)) : notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
+        storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus, manuallyAdded: manuallyAdded, completion: { object in
+            guard let object = object else {
+                return completion(nil)
+            }
+            let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: object)) : pendingBackgroundRefetch == true ? self.notify(event: StorageEvent(event: .ManuallyAddedPendingTestBackgroundRefetch, entity: .CovidLabTestResult, object: object)) : self.notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
             return completion(object)
-        }
-        return completion(nil)
+            
+        })
         
     }
     

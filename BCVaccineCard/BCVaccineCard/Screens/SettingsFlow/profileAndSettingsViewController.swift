@@ -103,8 +103,11 @@ extension ProfileAndSettingsViewController {
     @objc private func patientAPIFetched(_ notification: Notification) {
         guard let userInfo = notification.userInfo as? [String: String?] else { return }
         guard let fullName = userInfo["fullName"] else { return }
-        self.displayName = fullName
-        self.tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            guard let `self` = self else {return}
+            self.displayName = fullName
+            self.tableView.reloadData()
+        }
     }
     
     @objc private func reloadFromForcedLogout(_ notification: Notification) {

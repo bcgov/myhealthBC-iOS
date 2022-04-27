@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 import BCVaccineValidator
 
 protocol StorageVaccineCardManager {
@@ -36,7 +37,7 @@ protocol StorageVaccineCardManager {
         completion: @escaping(VaccineCard?)->Void
     )
     
-    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([ImmunizationRecord])->Void)
+    func createImmunizationRecords(context:  NSManagedObjectContext, for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([ImmunizationRecord])->Void)
     
     // MARK: Update
     
@@ -75,6 +76,10 @@ extension StorageService: StorageVaccineCardManager {
         deleteVaccineCard(vaccineQR: vaccineQR, manuallyAdded: manuallyAdded)
         
         guard let context = managedContext else {return completion(nil)}
+        let contextPatientObject = context.object(with: patient.objectID)
+        guard let contextPatient = contextPatientObject as? Patient else {
+            return completion(nil)
+        }
         let cardSortOrder: Int64
         if let sortOrderPosition = sortOrder {
             cardSortOrder = sortOrderPosition
@@ -86,13 +91,13 @@ extension StorageService: StorageVaccineCardManager {
         card.authenticated = authenticated
         card.code = vaccineQR
         card.name = name
-        card.patient = patient
+        card.patient = contextPatient
         card.federalPass = federalPass
         card.vaxDates = vaxDates
         card.sortOrder = cardSortOrder
         card.firHash = hash
         card.issueDate = issueDate
-        createImmunizationRecords(for: card, manuallyAdded: manuallyAdded) { records in
+        createImmunizationRecords(context: context, for: card, manuallyAdded: manuallyAdded) { records in
             for record in records {
                 card.addToImmunizationRecord(record)
             }
@@ -139,7 +144,7 @@ extension StorageService: StorageVaccineCardManager {
         if let immunizations = card.immunizationRecord {
             card.removeFromImmunizationRecord(immunizations)
         }
-        createImmunizationRecords(for: card, manuallyAdded: manuallyAdded) { records in
+        createImmunizationRecords(context: context, for: card, manuallyAdded: manuallyAdded) { records in
             for record in records {
                 card.addToImmunizationRecord(record)
             }
@@ -224,8 +229,8 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Helpers
-    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([ImmunizationRecord])->Void) {
-        guard let qrCode = card.code, let context = managedContext else {return completion([])}
+    func createImmunizationRecords(context:  NSManagedObjectContext, for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([ImmunizationRecord])->Void) {
+        guard let qrCode = card.code else {return completion([])}
         BCVaccineValidator.shared.validate(code: qrCode) { result in
             guard let result = result.result else {return completion([])}
             var immunizations: [ImmunizationRecord] = []

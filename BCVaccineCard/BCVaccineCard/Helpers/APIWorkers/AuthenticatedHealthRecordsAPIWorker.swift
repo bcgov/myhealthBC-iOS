@@ -603,22 +603,36 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.CovidTest])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
-        for order in orders {
-            let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
-            handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient)
+        
+        DispatchQueue.global(qos: .background).async {
+            let dispatchGroup = DispatchGroup()
+            for order in orders {
+                dispatchGroup.enter()
+                let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
+                self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient, completion: { storedObject in
+                    if let storedObject = storedObject {
+                        completedCount += 1
+                    } else {
+                        errorArrayCount += 1
+                    }
+                    dispatchGroup.leave()
+                })
+            }
+            dispatchGroup.notify(queue: .main) {
+                let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+                self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+            }
         }
-        let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
-        self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
-    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) {
+    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, completion: @escaping(CovidLabTestResult?)->Void) {
         
         StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
             guard let patient = patient else {
-                return
+                return completion(nil)
             }
 
-            StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false)
+            StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false, completion: completion)
         })
     }
 }
@@ -631,25 +645,27 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Prescription])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
-        let dispatchGroup = DispatchGroup()
-        
-        for payload in payloads {
-            dispatchGroup.enter()
-            if self.handleMedicationStatementInCoreData(object: payload, authenticated: true, patientObject: patient, initialProtectedMedFetch: initialProtectedMedFetch) != nil {
-                completedCount += 1
-            } else {
-                errorArrayCount += 1
+        DispatchQueue.global(qos: .background).async {
+            let dispatchGroup = DispatchGroup()
+            for payload in payloads {
+                dispatchGroup.enter()
+                if self.handleMedicationStatementInCoreData(object: payload, authenticated: true, patientObject: patient, initialProtectedMedFetch: initialProtectedMedFetch) != nil {
+                    completedCount += 1
+                } else {
+                    errorArrayCount += 1
+                }
+                dispatchGroup.leave()
             }
-            dispatchGroup.leave()
-        }
-        dispatchGroup.notify(queue: .main) {
-            if let protectiveWord = protectiveWord, completedCount > 0 {
-                self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
-                self.authManager.storeMedFetchRequired(bool: false)
-                AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
+            
+            dispatchGroup.notify(queue: .main) {
+                if let protectiveWord = protectiveWord, completedCount > 0 {
+                    self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
+                    self.authManager.storeMedFetchRequired(bool: false)
+                    AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
+                }
+                let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+                self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
             }
-            let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
-            self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
         }
     }
     
@@ -675,26 +691,23 @@ extension AuthenticatedHealthRecordsAPIWorker {
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else { return }
         
-        let dispatchGroup = DispatchGroup()
-        for order in orders {
-            dispatchGroup.enter()
-            DispatchQueue.global(qos: .background).async {
+        
+        DispatchQueue.global(qos: .background).async {
+            let dispatchGroup = DispatchGroup()
+            for order in orders {
+                dispatchGroup.enter()
                 self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
-                    DispatchQueue.main.async {
-                        self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient)
-                        dispatchGroup.leave()
-                    }
+                    self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient)
+                    dispatchGroup.leave()
                 }
             }
             
+            dispatchGroup.notify(queue: .main) {
+                let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+                // For now, just calling success so that the entire fetch can pass
+                self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+            }
         }
-        
-        dispatchGroup.notify(queue: .main) {
-            let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
-            // For now, just calling success so that the entire fetch can pass
-            self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
-        }
-        
     }
     
     private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) {

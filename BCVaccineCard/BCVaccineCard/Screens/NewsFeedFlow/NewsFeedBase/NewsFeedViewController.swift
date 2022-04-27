@@ -92,16 +92,6 @@ extension NewsFeedViewController {
 extension NewsFeedViewController {
     private func fetchDataSource() {
         guard let url = URL(string: "https://news.gov.bc.ca/news-subscribe/covid-19/feed") else { return }
-//        AF.request(url, method: .get, parameters: nil).response { response in
-//            guard let xmlData = response.data else { return }
-//            guard let xmlString = String(data: xmlData, encoding: .utf8) as? String else { return }
-//            let jsonString = ParseXMLData(xml: xmlString).parseXML()
-//            guard let jsonData = jsonString.data(using: .utf8) else {return}
-////            guard let jsonResponse = (try? JSONSerialization.jsonObject(with: jsonData)) as? [[String:Any]] else {return}
-////            print("CONNOR RESPONSE: ", jsonResponse)
-//            let newsFeed = try? JSONDecoder().decode(NewsFeedData.self, from: jsonData)
-//            print("CONNOR: ", newsFeed)
-//        }
         self.tableView.startLoadingIndicator(backgroundColor: .clear)
         AF.request(url).responseRSS() { (response) -> Void in
             if let feed: RSSFeed = response.value {
@@ -125,17 +115,10 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return dataSource?.channel.item.count ?? 0
         return dataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let dataSource = self.dataSource, dataSource.channel.item.count > 0 else { return UITableViewCell() }
-//        if let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.getName, for: indexPath) as? NewsFeedTableViewCell {
-//            cell.configure(item: dataSource.channel.item[indexPath.row])
-//            return cell
-//        }
-//        return UITableViewCell()
         if let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.getName, for: indexPath) as? NewsFeedTableViewCell {
             cell.configure(item: dataSource[indexPath.row])
             return cell
@@ -144,9 +127,6 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        guard let dataSource = self.dataSource else { return }
-//        let link = dataSource.channel.item[indexPath.row].link
-//        self.openURLInSafariVC(withURL: link)
         guard let link = dataSource[indexPath.row].link else { return }
         AnalyticsService.shared.track(action: .NewsLinkSelected, text: link)
         self.openURLInSafariVC(withURL: link)

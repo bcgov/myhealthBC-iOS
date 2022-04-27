@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 protocol StoragePatientManager {
     
@@ -93,11 +94,8 @@ extension StorageService: StoragePatientManager {
         authenticated: Bool,
         completion: @escaping (Patient?)-> Void
     ) {
-        guard let container = container else {return}
+        guard let context = managedContext else {return}
         
-        let context = container.newBackgroundContext()
-        context.automaticallyMergesChangesFromParent = true
-       
         context.perform {
             do {
                 let patient = Patient(context: context)
@@ -240,26 +238,37 @@ extension StorageService: StoragePatientManager {
     ///   - birthday: birthday
     /// - Returns: stored patient
     public func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool, completion: @escaping (Patient?)-> Void) {
-        var phnPatient: Patient?
-        var dobPatient: Patient?
-        
-        if let heathNumber = phn {
-            phnPatient = fetchPatient(phn: heathNumber)
+        guard let contextAsync = managedContext else {return completion(nil)}
+        fetchPatient(phn: phn, name: name, birthday: birthday, context: contextAsync) { foundPatient in
+            if let patient = foundPatient {
+                // otherwise update user data if needed and return
+                _ = self.update(phn: phn, name: name, birthday: birthday, authenticated: authenticated, for: patient)
+                
+                return completion(patient)
+            } else {
+                self.createPatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated, completion: completion)
+            }
         }
-        
-        if let bday = birthday, let patientName = name {
-            dobPatient = fetchPatient(name: patientName, birthday: bday)
-        }
-        
-        // If patient doesnt exist, create it
-        let foundPatient = phnPatient ?? dobPatient
-        if let patient = foundPatient {
-            // otherwise update user data if needed and return
-            _ = update(phn: phn, name: name, birthday: birthday, authenticated: authenticated, for: patient)
-            
-            return completion(patient)
-        } else {
-            createPatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated, completion: completion)
+       
+    }
+    
+    public func fetchPatient(phn: String?, name: String?, birthday: Date?, context:  NSManagedObjectContext, completion: @escaping (Patient?)-> Void) {
+        context.perform {
+            do {
+                let patients = try context.fetch(Patient.fetchRequest())
+                if let phn = phn, let byPHN = patients.filter({$0.phn == phn}).first {
+                    return completion(byPHN)
+                } else if let name = name,
+                          let birthday = birthday,
+                          let byInfo = patients.filter({$0.getComparableName() == StorageService.getComparableName(from: name) && $0.birthday == birthday}).first {
+                    return completion(byInfo)
+                }
+                return completion(nil)
+            }
+            catch let error {
+                print("Could not fetch. \(error), \(error.localizedDescription)")
+                return completion(nil)
+            }
         }
     }
     
@@ -268,9 +277,9 @@ extension StorageService: StoragePatientManager {
     fileprivate func createPatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool, completion: @escaping (Patient?)-> Void) {
         if (phn != nil) || (birthday != nil && name != nil) {
             savePatient(name: name, birthday: birthday, phn: phn, authenticated: authenticated, completion: completion)
+        } else {
+            return completion(nil)
         }
-        
-        return completion(nil)
     }
     
     /// Returns first name + first letter of last name (if exists)

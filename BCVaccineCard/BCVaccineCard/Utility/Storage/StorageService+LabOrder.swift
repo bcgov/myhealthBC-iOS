@@ -7,7 +7,7 @@
 
 import Foundation
 import BCVaccineValidator
-import SwiftUI
+import CoreData
 
 protocol StorageLaboratoryOrderManager {
     
@@ -24,6 +24,7 @@ protocol StorageLaboratoryOrderManager {
     ) -> LaboratoryOrder?
     
     func storeLaboratoryOrder(
+        context:  NSManagedObjectContext,
         patient: Patient,
         id: String,
         labPdfId: String?,
@@ -40,7 +41,8 @@ protocol StorageLaboratoryOrderManager {
     ) -> LaboratoryOrder?
     
     func storeLaboratoryTest(
-        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order.LaboratoryTest
+        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order.LaboratoryTest,
+        context:  NSManagedObjectContext
     ) -> LaboratoryTest?
     
     func storeLaboratoryTest(
@@ -48,7 +50,8 @@ protocol StorageLaboratoryOrderManager {
         obxID: String?,
         outOfRange: Bool?,
         loinc: String?,
-        testStatus: String?
+        testStatus: String?,
+        context:  NSManagedObjectContext
     ) -> LaboratoryTest?
     
     // MARK: Update
@@ -84,27 +87,31 @@ extension StorageService: StorageLaboratoryOrderManager {
         patient: Patient,
         gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
         pdf: String?) -> LaboratoryOrder? {
+            guard let context = managedContext else {return nil}
             let id = UUID().uuidString
             var storedTests: [LaboratoryTest] = []
             if let tests = gateWayObject.laboratoryTests {
                 for test in tests {
-                    if let storedTest = storeLaboratoryTest(gateWayObject: test) {
+                    if let storedTest = storeLaboratoryTest(gateWayObject: test, context: context) {
                         storedTests.append(storedTest)
                     }
                 }
             }
             let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
             let timelineDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.timelineDateTime ?? "") ?? Date()
-            return storeLaboratoryOrder(patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf)
+            return storeLaboratoryOrder(context: context, patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf)
             
         }
     
-    func storeLaboratoryOrder(patient: Patient, id: String, labPdfId: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, timelineDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?) -> LaboratoryOrder? {
-        guard let context = managedContext else {return nil}
+    func storeLaboratoryOrder(context:  NSManagedObjectContext, patient: Patient, id: String, labPdfId: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, timelineDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?) -> LaboratoryOrder? {
+        let contextPatientObject = context.object(with: patient.objectID)
+        guard let contextPatient = contextPatientObject as? Patient else {
+            return nil
+        }
         let labOrder = LaboratoryOrder(context: context)
         labOrder.id = id
         labOrder.authenticated = true
-        labOrder.patient = patient
+        labOrder.patient = contextPatient
         labOrder.labPdfId = labPdfId
         labOrder.reportingSource = reportingSource
         labOrder.reportID = reportID
@@ -122,7 +129,7 @@ extension StorageService: StorageLaboratoryOrderManager {
                 obxID: test.obxID,
                 outOfRange: test.outOfRange,
                 loinc: test.loinc,
-                testStatus: test.testStatus) {
+                testStatus: test.testStatus, context: context) {
                 
                 labTestsArray.append(model)
                 labOrder.addToLaboratoryTests(model)
@@ -137,11 +144,11 @@ extension StorageService: StorageLaboratoryOrderManager {
         }
     }
     
-    func storeLaboratoryTest(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order.LaboratoryTest) -> LaboratoryTest? {
-        return storeLaboratoryTest(batteryType: gateWayObject.batteryType, obxID: gateWayObject.obxID, outOfRange: gateWayObject.outOfRange, loinc: gateWayObject.loinc, testStatus: gateWayObject.testStatus)
+    func storeLaboratoryTest(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order.LaboratoryTest, context:  NSManagedObjectContext) -> LaboratoryTest? {
+        return storeLaboratoryTest(batteryType: gateWayObject.batteryType, obxID: gateWayObject.obxID, outOfRange: gateWayObject.outOfRange, loinc: gateWayObject.loinc, testStatus: gateWayObject.testStatus, context: context)
     }
     
-    func storeLaboratoryTest(batteryType: String?, obxID: String?, outOfRange: Bool?, loinc: String?, testStatus: String?) -> LaboratoryTest? {
+    func storeLaboratoryTest(batteryType: String?, obxID: String?, outOfRange: Bool?, loinc: String?, testStatus: String?, context:  NSManagedObjectContext) -> LaboratoryTest? {
         guard let context = managedContext else {return nil}
         let labTest = LaboratoryTest(context: context)
         labTest.batteryType = batteryType

@@ -175,6 +175,10 @@ extension StorageService: StorageMedicationManager {
         initialProtectedMedFetch: Bool
     ) -> Perscription? {
         guard let context = managedContext else {return nil}
+        let contextPatientObject = context.object(with: patient.objectID)
+        guard let contextPatient = contextPatientObject as? Patient else {
+            return nil
+        }
         let prescription = Perscription(context: context)
         prescription.id = id
         prescription.prescriptionIdentifier = prescriptionIdentifier
@@ -183,14 +187,10 @@ extension StorageService: StorageMedicationManager {
         prescription.practitionerSurname = practitionerSurname
         prescription.directions = directions
         prescription.dateEntered = dateEntered
-        prescription.patient = patient
+        prescription.patient = contextPatient
         prescription.authenticated = true
         prescription.pharmacy = pharmacy
         prescription.medication = medication
-        // TODO: FOR DEBUGGING, REMOVE THIS
-        if prescriptionIdentifier == "00019243" || Int(prescriptionIdentifier ?? "0") == 00019243 {
-            print("Found it")
-        }
         do {
             try context.save()
             return prescription
