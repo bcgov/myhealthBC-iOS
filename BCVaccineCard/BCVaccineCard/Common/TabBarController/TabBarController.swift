@@ -363,7 +363,7 @@ extension TabBarController {
 //        }
         for (index, viewController) in viewControllerStack.enumerated() {
             if index > 0 {
-                navController.pushViewController(viewController, animated: false)
+                navController.pushViewController(viewController, animated: true)
             }
         }
         viewControllers?.remove(at: tabBarVC.rawValue)
