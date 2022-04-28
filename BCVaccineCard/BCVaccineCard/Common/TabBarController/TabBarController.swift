@@ -131,7 +131,7 @@ class TabBarController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(resetHealthRecordsScreenOnLogout), name: .resetHealthRecordsScreenOnLogout, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(resetHealthRecordsScreenOnLogout), name: .resetHealthRecordsScreenOnLogout, object: nil)
 //        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
 //            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
 //            // Note: Not sure we need this anymore with health records tab logic
@@ -325,20 +325,20 @@ extension TabBarController {
 }
 
 // MARK: This is for when a user logs out, we should reset screen state
-extension TabBarController {
-    @objc private func resetHealthRecordsScreenOnLogout(_ notification: Notification) {
-        // FIXME: CONNOR - see if we need this function here, may have to reconstruct tabs on this flow here
-//        self.resetHealthRecordsTab()
-    }
-}
+//extension TabBarController {
+//    @objc private func resetHealthRecordsScreenOnLogout(_ notification: Notification) {
+//        // FIXME: CONNOR - see if we need this function here, may have to reconstruct tabs on this flow here
+////        self.resetHealthRecordsTab()
+//    }
+//}
 
 // MARK: Router worker
 extension TabBarController: RouterWorkerDelegate {
-    func recordsActionScenario(viewControllerStack: [UIViewController]) {
+    func recordsActionScenario(viewControllerStack: [BaseViewController]) {
         self.resetTab(tabBarVC: .records, viewControllerStack: viewControllerStack)
     }
     
-    func passesActionScenario(viewControllerStack: [UIViewController]) {
+    func passesActionScenario(viewControllerStack: [BaseViewController]) {
         self.resetTab(tabBarVC: .healthPass, viewControllerStack: viewControllerStack)
     }
 
@@ -346,8 +346,8 @@ extension TabBarController: RouterWorkerDelegate {
 
 // MARK: Router helper functions
 extension TabBarController {
-    private func resetTab(tabBarVC: TabBarVCs, viewControllerStack: [UIViewController]) {
-        let currentIndex = self.selectedIndex
+    private func resetTab(tabBarVC: TabBarVCs, viewControllerStack: [BaseViewController]) {
+//        let currentIndex = self.selectedIndex
         guard viewControllerStack.count > 0 else { return }
         let vc = tabBarVC
         guard let properties = vc.properties else { return }
@@ -356,19 +356,25 @@ extension TabBarController {
         guard let rootViewController = viewControllerStack.first else { return }
         rootViewController.tabBarItem = tabBarItem
         rootViewController.title = properties.title
-        let navController = CustomNavigationController.init(rootViewController: rootViewController)
+//        let navController = CustomNavigationController.init(rootViewController: rootViewController)
         // TODO: Likely need a loading hack here
 //        if tabBarVC.rawValue == self.selectedIndex {
 //            AppDelegate.sharedInstance?.addLoadingViewHack()
 //        }
-        for (index, viewController) in viewControllerStack.enumerated() {
-            if index > 0 {
-                navController.pushViewController(viewController, animated: true)
+        DispatchQueue.main.async {
+            if let nav = self.viewControllers?[tabBarVC.rawValue] as? CustomNavigationController {
+                nav.viewControllers = viewControllerStack
             }
         }
-        viewControllers?.remove(at: tabBarVC.rawValue)
-        viewControllers?.insert(navController, at: tabBarVC.rawValue)
-        self.selectedIndex = currentIndex
+        
+//        for (index, viewController) in viewControllerStack.enumerated() {
+//            if index > 0 {
+//                navController.pushViewController(viewController, animated: true)
+//            }
+//        }
+//        viewControllers?.remove(at: tabBarVC.rawValue)
+//        viewControllers?.insert(navController, at: tabBarVC.rawValue)
+//        self.selectedIndex = currentIndex
 //        if tabBarVC.rawValue == self.selectedIndex {
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 //                AppDelegate.sharedInstance?.removeLoadingViewHack()
