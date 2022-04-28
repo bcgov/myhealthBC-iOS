@@ -88,6 +88,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
         headerView.configure(text: "\(model.comments.count) \(commentsString)")
+        headerView.backgroundColor = .white
         return headerView
     }
     

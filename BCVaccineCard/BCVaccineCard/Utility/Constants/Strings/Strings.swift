@@ -241,7 +241,7 @@ extension String {
     static var publishedOn: String { return "PublishedOn".localized }
     static var title: String { return "Title".localized }
     static var details: String { return "Details".localized }
-    static var leavingMyHealthBC: String { return "LeavingMyHealthBC".localized }
+    static var leavingHealthGateway: String { return "LeavingHealthGateway".localized }
     static var youWillRedirected: String { return "YouWillRedirected".localized }
     static var healthGateway: String { return "HealthGateway".localized }
     static var toLoginWithYourBCServices: String { return "toLoginWithYourBCServices".localized }
