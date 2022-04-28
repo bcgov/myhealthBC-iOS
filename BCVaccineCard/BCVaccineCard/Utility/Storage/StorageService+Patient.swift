@@ -65,7 +65,6 @@ protocol StoragePatientManager {
     ///   - phn: phn
     ///   - name: name
     ///   - birthday: birthday
-    /// - Returns: stored patient
     func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool, completion: @escaping(Patient?)-> Void)
 }
 

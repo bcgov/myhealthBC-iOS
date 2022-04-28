@@ -229,6 +229,7 @@ extension StorageService: StorageMedicationManager {
             prescription.medication = medication
             do {
                 try context.save()
+                self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: prescription))
                 return completion(prescription)
             } catch let error as NSError {
                 print("Could not save. \(error), \(error.userInfo)")
@@ -293,6 +294,7 @@ extension StorageService: StorageMedicationManager {
             medication.isPin = isPin ?? false
             do {
                 try context.save()
+                self.notify(event: StorageEvent(event: .Save, entity: .Medication, object: medication))
                 return completion(medication)
             } catch let error as NSError {
                 print("Could not save. \(error), \(error.userInfo)")
