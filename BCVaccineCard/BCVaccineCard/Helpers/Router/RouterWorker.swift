@@ -62,12 +62,41 @@ enum AppUserActionScenarios {
     case ClearAllData(currentTab: TabBarVCs)
 }
 
-enum CurrentRecordsStackPreAction {
-    
+struct ActionScenarioValues {
+    let currentTab: TabBarVCs
+    var affectedTabs: [TabBarVCs] = [.healthPass, .records]
+    let recordFlowDetails: RecordsFlowDetails
+    let passesFlowDetails: PassesFlowDetails
 }
 
-enum CurrentPassesStackPreAction {
-    
+enum RecordsFlowVCs {
+    case HealthRecordsViewController
+    case UsersListOfRecordsViewController
+    case FetchHealthRecordsViewController
+    case HealthRecordDetailViewController
+    case ProfileAndSettingsViewController
+    case SecurityAndDataViewController
+}
+
+enum PassesFlowVCs {
+    case HealthPassViewController
+    case CovidVaccineCardsViewController
+    case QRRetrievalMethodViewController
+    case ProfileAndSettingsViewController
+    case SecurityAndDataViewController
+}
+
+struct RecordsFlowDetails {
+    let currentStack: [RecordsFlowVCs]
+    var actioningPatient: Patient? = nil
+    var addedRecord: HealthRecordsDetailDataSource? = nil
+}
+
+struct PassesFlowDetails {
+    let currentStack: [PassesFlowVCs]
+    var recentlyAddedCardId: String? = nil
+    var fedPassStringToOpen: String? = nil
+    var fedPassAddedFromHealthPassVC: Bool? = nil
 }
 
 protocol RouterWorkerDelegate: AnyObject  {
