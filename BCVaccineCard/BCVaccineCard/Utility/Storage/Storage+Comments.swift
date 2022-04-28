@@ -73,10 +73,10 @@ extension StorageService: StorageCommentManager {
         if let versionInt = object.version {
             comment.version = Int64(versionInt)
         }
-        if let createdDateTime = Date.Formatter.gatewayDateAndTimeWithMS.date(from: object.createdDateTime ?? "") {
+        if let createdDateTime = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: object.createdDateTime ?? "") {
             comment.createdDateTime = createdDateTime
         }
-        if let updatedDateTime = Date.Formatter.gatewayDateAndTimeWithMS.date(from: object.updatedDateTime ?? "") {
+        if let updatedDateTime = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: object.updatedDateTime ?? "") {
             comment.updatedDateTime = updatedDateTime
         }
         comment.id = object.id

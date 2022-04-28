@@ -268,6 +268,9 @@ extension QRRetrievalMethodViewController {
                 self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
+//                    DispatchQueue.main.async {
+////                        self.routerWorker?.routingAction(scenario: <#T##AppUserActionScenarios#>)
+//                    }
                 }
             case .isNew:
                 self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true, completion: { [weak self] coreDataReturnObject in

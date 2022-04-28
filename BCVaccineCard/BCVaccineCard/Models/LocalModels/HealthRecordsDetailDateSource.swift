@@ -193,7 +193,7 @@ extension HealthRecordsDetailDataSource {
     // MARK: Covid Test Results
     private static func genRecord(testResult: TestResult, parentResult: CovidLabTestResult) -> Record {
         let status: String = testResult.resultType.getTitle
-        let date: String? = testResult.resultDateTime?.monthDayYearString
+        let date: String? = testResult.collectionDateTime?.monthDayYearString
         var fields: [[TextListModel]] = []
         fields.append([
             TextListModel(header: TextListModel.TextProperties(text: "Date of testing:", bolded: true), subtext: TextListModel.TextProperties(text: testResult.collectionDateTime?.issuedOnDate ?? "", bolded: false)),

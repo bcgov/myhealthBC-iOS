@@ -62,6 +62,14 @@ enum AppUserActionScenarios {
     case ClearAllData(currentTab: TabBarVCs)
 }
 
+enum CurrentRecordsStackPreAction {
+    
+}
+
+enum CurrentPassesStackPreAction {
+    
+}
+
 protocol RouterWorkerDelegate: AnyObject  {
     func recordsActionScenario(viewControllerStack: [BaseViewController])
     func passesActionScenario(viewControllerStack: [BaseViewController])
