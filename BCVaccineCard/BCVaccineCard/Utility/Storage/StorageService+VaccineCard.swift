@@ -55,11 +55,12 @@ protocol StorageVaccineCardManager {
     func deleteVaccineCard(vaccineQR code: String, reSort: Bool?, manuallyAdded: Bool)
     
     // MARK: Fetch
-    func fetchVaccineCards() -> [VaccineCard]
+    func fetchVaccineCards(context: NSManagedObjectContext?) -> [VaccineCard]
     func fetchVaccineCard(code: String) -> VaccineCard?
 }
 
 extension StorageService: StorageVaccineCardManager {
+    
     // MARK: Store
     func storeVaccineCard(vaccineQR: String,
                           name: String,
@@ -86,7 +87,6 @@ extension StorageService: StorageVaccineCardManager {
         } else {
             cardSortOrder = Int64(fetchVaccineCards().count)
         }
-        
         let card = VaccineCard(context: context)
         card.authenticated = authenticated
         card.code = vaccineQR
@@ -97,17 +97,17 @@ extension StorageService: StorageVaccineCardManager {
         card.sortOrder = cardSortOrder
         card.firHash = hash
         card.issueDate = issueDate
-        createImmunizationRecords(context: context, for: card, manuallyAdded: manuallyAdded) { records in
-            for record in records {
-                card.addToImmunizationRecord(record)
-            }
-            do {
-                try context.save()
-                let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card)) : self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
-                completion(card)
-            } catch let error as NSError {
-                print("Could not save. \(error), \(error.userInfo)")
-                completion(nil)
+        self.createImmunizationRecords(context: context, for: card, manuallyAdded: manuallyAdded) { records in
+            records.forEach({card.addToImmunizationRecord($0)})
+            context.perform {
+                do {
+                    try context.save()
+                    let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card)) : self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
+                    completion(card)
+                } catch let error as NSError {
+                    print("Could not save. \(error), \(error.userInfo)")
+                    completion(nil)
+                }
             }
         }
     }
@@ -115,25 +115,29 @@ extension StorageService: StorageVaccineCardManager {
     // MARK: Update
     func updateVaccineCard(card: VaccineCard, federalPass: String, manuallyAdded: Bool, completion: @escaping (VaccineCard?) -> Void) {
         guard let context = managedContext else {return completion(nil)}
-        do {
-            card.federalPass = federalPass
-            try context.save()
-            DispatchQueue.main.async {[weak self] in
-                guard let `self` = self else {return}
-                let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card)) : self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
-                return completion(card)
-                
-            }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-            DispatchQueue.main.async {
-                return completion(nil)
+        context.perform {
+            do {
+                card.federalPass = federalPass
+                try context.save()
+                DispatchQueue.main.async {[weak self] in
+                    guard let `self` = self else {return}
+                    let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card)) : self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+                    return completion(card)
+                    
+                }
+            } catch let error as NSError {
+                print("Could not fetch. \(error), \(error.userInfo)")
+                DispatchQueue.main.async {
+                    return completion(nil)
+                }
             }
         }
     }
     
     func updateVaccineCard(newData model: LocallyStoredVaccinePassportModel, authenticated: Bool, patient: AuthenticatedPatientDetailsResponseObject?, manuallyAdded: Bool, completion: @escaping (VaccineCard?) -> Void) {
-        guard let context = managedContext, let card = fetchVaccineCards().filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return completion(nil)}
+        guard let context = managedContext, let fetchedCard = fetchVaccineCards().filter({$0.name == model.name && $0.birthDateString == model.birthdate}).first else {return completion(nil)}
+        let contextObject = context.object(with: fetchedCard.objectID)
+        guard let card = contextObject as? VaccineCard else {return completion(nil)}
         card.code = model.code
         card.vaxDates = model.vaxDates
         card.federalPass = model.fedCode
@@ -148,15 +152,17 @@ extension StorageService: StorageVaccineCardManager {
             for record in records {
                 card.addToImmunizationRecord(record)
             }
-            do {
-                try context.save()
-                DispatchQueue.main.async {
-                    let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card)) : self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
-                    return completion(card)
+            context.perform {
+                do {
+                    try context.save()
+                    DispatchQueue.main.async {
+                        let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card)) : self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+                        return completion(card)
+                    }
+                } catch let error as NSError {
+                    print("Could not save. \(error), \(error.userInfo)")
+                    completion(nil)
                 }
-            } catch let error as NSError {
-                print("Could not save. \(error), \(error.userInfo)")
-                completion(nil)
             }
         }
     }
@@ -164,7 +170,7 @@ extension StorageService: StorageVaccineCardManager {
     func updateVaccineCardSortOrder(card: VaccineCard, newPosition: Int) {
         guard let context = managedContext else {return}
         do {
-            var cards = fetchVaccineCards()
+            var cards = fetchVaccineCards(context: context)
             guard let cardToMove = cards.filter({$0.code == card.code}).first else {return}
             cards = cards.sorted {
                 $0.sortOrder < $1.sortOrder
@@ -186,7 +192,7 @@ extension StorageService: StorageVaccineCardManager {
     func deleteVaccineCard(vaccineQR code: String, reSort: Bool? = true, manuallyAdded: Bool) {
         guard let context = managedContext else {return}
         
-        var cards = fetchVaccineCards()
+        var cards = fetchVaccineCards(context: context)
         guard let item = cards.filter({$0.code == code}).first else {return}
         
         cards = cards.sorted {
@@ -218,10 +224,15 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Fetch
-    func fetchVaccineCards() -> [VaccineCard] {
+    func fetchVaccineCards(context: NSManagedObjectContext? = nil) -> [VaccineCard] {
         let patients = fetchPatients()
         let cards = patients.map({$0.vaccineCardArray})
-        return Array(cards.joined()).sorted(by: {$0.sortOrder < $1.sortOrder})
+        let sorted = Array(cards.joined()).sorted(by: {$0.sortOrder < $1.sortOrder})
+        guard let context = context else {
+            return sorted
+        }
+        let contextSorted = sorted.compactMap({context.object(with: $0.objectID) as? VaccineCard})
+        return contextSorted
     }
     
     func fetchVaccineCard(code: String) -> VaccineCard? {

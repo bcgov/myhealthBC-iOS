@@ -14,14 +14,16 @@ protocol StorageLaboratoryOrderManager {
     // MARK: Store
     func storeLaboratoryOrders(
         patient: Patient,
-        gateWayResponse: AuthenticatedLaboratoryOrdersResponseObject
-    ) -> [LaboratoryOrder]
+        gateWayResponse: AuthenticatedLaboratoryOrdersResponseObject,
+        completion: @escaping([LaboratoryOrder])->Void
+    )
     
     func storeLaboratoryOrder(
         patient: Patient,
         gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
-        pdf: String?
-    ) -> LaboratoryOrder?
+        pdf: String?,
+        completion: @escaping(LaboratoryOrder?)->Void
+    )
     
     func storeLaboratoryOrder(
         context:  NSManagedObjectContext,
@@ -37,13 +39,15 @@ protocol StorageLaboratoryOrderManager {
         testStatus: String?,
         reportAvailable: Bool,
         laboratoryTests: [LaboratoryTest]?,
-        pdf: String?
-    ) -> LaboratoryOrder?
+        pdf: String?,
+        completion: @escaping(LaboratoryOrder?)->Void
+    )
     
     func storeLaboratoryTest(
         gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order.LaboratoryTest,
-        context:  NSManagedObjectContext
-    ) -> LaboratoryTest?
+        context:  NSManagedObjectContext,
+        completion: @escaping(LaboratoryTest?)->Void
+    )
     
     func storeLaboratoryTest(
         batteryType: String?,
@@ -51,14 +55,15 @@ protocol StorageLaboratoryOrderManager {
         outOfRange: Bool?,
         loinc: String?,
         testStatus: String?,
-        context:  NSManagedObjectContext
-    ) -> LaboratoryTest?
+        context:  NSManagedObjectContext,
+        completion: @escaping(LaboratoryTest?)->Void
+    )
     
     // MARK: Update
-    func updateLaboratoryOrder(
-        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
-        pdf: String?
-    ) -> LaboratoryOrder?
+//    func updateLaboratoryOrder(
+//        gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
+//        pdf: String?
+//    ) -> LaboratoryOrder?
     
     // MARK: Delete
     func deleteLaboratoryOrder(id: String, sendDeleteEvent: Bool)
@@ -70,43 +75,61 @@ protocol StorageLaboratoryOrderManager {
 
 extension StorageService: StorageLaboratoryOrderManager {
 
-    func storeLaboratoryOrders(patient: Patient, gateWayResponse: AuthenticatedLaboratoryOrdersResponseObject) -> [LaboratoryOrder] {
-        guard let orders = gateWayResponse.resourcePayload?.orders else {return []}
+    func storeLaboratoryOrders(patient: Patient, gateWayResponse: AuthenticatedLaboratoryOrdersResponseObject, completion: @escaping([LaboratoryOrder])->Void) {
+        guard let orders = gateWayResponse.resourcePayload?.orders else {return completion([])}
         var storedOrders: [LaboratoryOrder] = []
+        let dispatchGroup = DispatchGroup()
         for order in orders {
             // Note: Currently no easy way to get PDF, so in this case, we will store nil
-            if let storedOrder = storeLaboratoryOrder(patient: patient, gateWayObject: order, pdf: nil) {
-                storedOrders.append(storedOrder)
-            }
+            dispatchGroup.enter()
+            storeLaboratoryOrder(patient: patient, gateWayObject: order, pdf: nil, completion: { storedOrder in
+                if let result = storedOrder {
+                    storedOrders.append(result)
+                }
+                dispatchGroup.leave()
+            })
         }
-        self.notify(event: StorageEvent(event: .Save, entity: .LaboratoryOrder, object: storedOrders))
-        return storedOrders
+        dispatchGroup.notify(queue: .global(qos: .background)) {
+            self.notify(event: StorageEvent(event: .Save, entity: .LaboratoryOrder, object: storedOrders))
+            return completion(storedOrders)
+        }
+        
     }
     
     func storeLaboratoryOrder(
         patient: Patient,
         gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
-        pdf: String?) -> LaboratoryOrder? {
-            guard let context = managedContext else {return nil}
+        pdf: String?,
+        completion: @escaping(LaboratoryOrder?)->Void
+    ) {
+            guard let context = managedContext else {return completion(nil)}
             let id = UUID().uuidString
             var storedTests: [LaboratoryTest] = []
+            let dispatchGroup = DispatchGroup()
             if let tests = gateWayObject.laboratoryTests {
                 for test in tests {
-                    if let storedTest = storeLaboratoryTest(gateWayObject: test, context: context) {
-                        storedTests.append(storedTest)
-                    }
+                    dispatchGroup.enter()
+                    storeLaboratoryTest(gateWayObject: test, context: context, completion: { result in
+                        if let storedTest = result {
+                            storedTests.append(storedTest)
+                        }
+                        dispatchGroup.leave()
+                    })
                 }
             }
-            let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
-            let timelineDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.timelineDateTime ?? "") ?? Date()
-            return storeLaboratoryOrder(context: context, patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf)
+            dispatchGroup.notify(queue: .global(qos: .background)) {
+                let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
+                let timelineDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.timelineDateTime ?? "") ?? Date()
+                return self.storeLaboratoryOrder(context: context, patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf, completion: completion)
+            }
+            
             
         }
     
-    func storeLaboratoryOrder(context:  NSManagedObjectContext, patient: Patient, id: String, labPdfId: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, timelineDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?) -> LaboratoryOrder? {
+    func storeLaboratoryOrder(context:  NSManagedObjectContext, patient: Patient, id: String, labPdfId: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, timelineDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?, completion: @escaping(LaboratoryOrder?)->Void) {
         let contextPatientObject = context.object(with: patient.objectID)
         guard let contextPatient = contextPatientObject as? Patient else {
-            return nil
+            return completion(nil)
         }
         let labOrder = LaboratoryOrder(context: context)
         labOrder.id = id
@@ -123,45 +146,56 @@ extension StorageService: StorageLaboratoryOrderManager {
         labOrder.pdf = pdf
         var labTestsArray: [LaboratoryTest] = []
         let labTests = laboratoryTests ?? []
+        // dispatch group
+        let dispatchGroup = DispatchGroup()
         for test in labTests {
-            if let model = storeLaboratoryTest(
+            dispatchGroup.enter()
+            storeLaboratoryTest(
                 batteryType: test.batteryType,
                 obxID: test.obxID,
                 outOfRange: test.outOfRange,
                 loinc: test.loinc,
-                testStatus: test.testStatus, context: context) {
-                
-                labTestsArray.append(model)
-                labOrder.addToLaboratoryTests(model)
+                testStatus: test.testStatus, context: context, completion: { model in
+                    if let model = model {
+                        labTestsArray.append(model)
+                    }
+                    dispatchGroup.leave()
+                })
+        }
+        dispatchGroup.notify(queue: .global(qos: .background)) {
+            context.perform {
+                do {
+                    labTestsArray.forEach({labOrder.addToLaboratoryTests($0)})
+                    try context.save()
+                    return completion(labOrder)
+                } catch let error as NSError {
+                    print("Could not save. \(error), \(error.userInfo)")
+                    return completion(nil)
+                }
             }
         }
-        do {
-            try context.save()
-            return labOrder
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            return nil
-        }
+        
     }
     
-    func storeLaboratoryTest(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order.LaboratoryTest, context:  NSManagedObjectContext) -> LaboratoryTest? {
-        return storeLaboratoryTest(batteryType: gateWayObject.batteryType, obxID: gateWayObject.obxID, outOfRange: gateWayObject.outOfRange, loinc: gateWayObject.loinc, testStatus: gateWayObject.testStatus, context: context)
+    func storeLaboratoryTest(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order.LaboratoryTest, context:  NSManagedObjectContext, completion: @escaping(LaboratoryTest?)->Void){
+        return storeLaboratoryTest(batteryType: gateWayObject.batteryType, obxID: gateWayObject.obxID, outOfRange: gateWayObject.outOfRange, loinc: gateWayObject.loinc, testStatus: gateWayObject.testStatus, context: context, completion: completion)
     }
     
-    func storeLaboratoryTest(batteryType: String?, obxID: String?, outOfRange: Bool?, loinc: String?, testStatus: String?, context:  NSManagedObjectContext) -> LaboratoryTest? {
-        guard let context = managedContext else {return nil}
+    func storeLaboratoryTest(batteryType: String?, obxID: String?, outOfRange: Bool?, loinc: String?, testStatus: String?, context:  NSManagedObjectContext, completion: @escaping(LaboratoryTest?)->Void) {
         let labTest = LaboratoryTest(context: context)
         labTest.batteryType = batteryType
         labTest.obxID = obxID
         labTest.outOfRange = outOfRange ?? false
         labTest.loinc = loinc
         labTest.testStatus = testStatus
-        do {
-            try context.save()
-            return labTest
-        } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
-            return nil
+        context.perform {
+            do {
+                try context.save()
+                return completion(labTest)
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+                return completion(nil)
+            }
         }
     }
     
@@ -172,11 +206,11 @@ extension StorageService: StorageLaboratoryOrderManager {
     }
     
     
-    func updateLaboratoryOrder(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?) -> LaboratoryOrder? {
-        guard let existing = fetchLaboratoryOrder(id: labOrderId(gateWayObject: gateWayObject)), let patient = existing.patient else {return nil}
-        // Store function will remove existing one
-        return storeLaboratoryOrder(patient: patient, gateWayObject: gateWayObject, pdf: pdf)
-    }
+//    func updateLaboratoryOrder(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?) -> LaboratoryOrder? {
+//        guard let existing = fetchLaboratoryOrder(id: labOrderId(gateWayObject: gateWayObject)), let patient = existing.patient else {return nil}
+//        // Store function will remove existing one
+//        return storeLaboratoryOrder(patient: patient, gateWayObject: gateWayObject, pdf: pdf)
+//    }
     
     // MARK: Fetch
     func fetchLaboratoryOrders() -> [LaboratoryOrder] {

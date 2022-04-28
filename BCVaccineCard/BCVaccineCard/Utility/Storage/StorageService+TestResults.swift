@@ -73,56 +73,52 @@ extension StorageService: StorageCovidTestResultManager {
         
         guard let records = gateWayResponse.resourcePayload?.records else { return completion(nil) }
         guard let context = self.managedContext else {return}
-        fetchPatient(phn: patient.phn, name: patient.name, birthday: patient.birthday, context: context) { patient in
-            guard let patient = patient else {
-                return completion(nil)
-            }
-            let dispatchGroup = DispatchGroup()
-            var testResults: [TestResult] = []
-            for record in records {
-                dispatchGroup.enter()
-                // Note: For Amir - Adding this here as a fallback for computed propertied
-                // FIXME: Remove the next two lines once we decide on how we are going to handle the new authenticated test result core data model
-                let collectionDateTime = record.collectionDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.collectionDateTime ?? "")
-                let resultDateTime = record.resultDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.resultDateTime ?? "")
-                self.storeCovidTestResult(
-                    context: context,
-                    resultId: id,
-                    patientDisplayName: record.patientDisplayName,
-                    lab: record.lab,
-                    reportId: record.reportId,
-                    collectionDateTime: collectionDateTime,
-                    resultDateTime: resultDateTime,
-                    testName: record.testName,
-                    testType: record.testType,
-                    testStatus: record.testStatus,
-                    testOutcome: record.testOutcome,
-                    resultTitle: record.resultTitle,
-                    resultDescription: record.resultDescription,
-                    resultLink: record.resultLink, completion: {resultModel in
-                        if let resultModel = resultModel {
-                            testResults.append(resultModel)
-                        }
-                        dispatchGroup.leave()
-                    })
-            }
-            dispatchGroup.notify(queue: .global(qos: .background)) {
-                context.perform {
-                    let model = CovidLabTestResult(context: context)
-                    model.patient = patient
-                    model.id = id
-                    model.createdAt = Date()
-                    model.authenticated = authenticated
-                    testResults.forEach({model.addToResults($0)})
-                    do {
-                        try context.save()
-                        self.notify(event: StorageEvent(event: .Save, entity: .CovidLabTestResult, object: model))
-                    } catch let error {
-                        print("Could not save. \(error), \(error.localizedDescription)")
-                        return completion(nil)
+        guard let contextPatient = context.object(with: patient.objectID) as? Patient else { return completion(nil) }
+        let dispatchGroup = DispatchGroup()
+        var testResults: [TestResult] = []
+        for record in records {
+            dispatchGroup.enter()
+            // Note: For Amir - Adding this here as a fallback for computed propertied
+            // FIXME: Remove the next two lines once we decide on how we are going to handle the new authenticated test result core data model
+            let collectionDateTime = record.collectionDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.collectionDateTime ?? "")
+            let resultDateTime = record.resultDateTimeDate ?? Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: record.resultDateTime ?? "")
+            self.storeCovidTestResult(
+                context: context,
+                resultId: id,
+                patientDisplayName: record.patientDisplayName,
+                lab: record.lab,
+                reportId: record.reportId,
+                collectionDateTime: collectionDateTime,
+                resultDateTime: resultDateTime,
+                testName: record.testName,
+                testType: record.testType,
+                testStatus: record.testStatus,
+                testOutcome: record.testOutcome,
+                resultTitle: record.resultTitle,
+                resultDescription: record.resultDescription,
+                resultLink: record.resultLink, completion: {resultModel in
+                    if let resultModel = resultModel {
+                        testResults.append(resultModel)
                     }
-                    
+                    dispatchGroup.leave()
+                })
+        }
+        dispatchGroup.notify(queue: .global(qos: .background)) {
+            context.perform {
+                let model = CovidLabTestResult(context: context)
+                model.patient = contextPatient
+                model.id = id
+                model.createdAt = Date()
+                model.authenticated = authenticated
+                testResults.forEach({model.addToResults($0)})
+                do {
+                    try context.save()
+                    self.notify(event: StorageEvent(event: .Save, entity: .CovidLabTestResult, object: model))
+                } catch let error {
+                    print("Could not save. \(error), \(error.localizedDescription)")
+                    return completion(nil)
                 }
+                
             }
         }
     }
@@ -184,7 +180,7 @@ extension StorageService: StorageCovidTestResultManager {
         let authStatus = existing.authenticated
         
         // Delete existing
-         deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
+        deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
         // Store the new one.
         storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus, manuallyAdded: manuallyAdded, completion: { object in
             guard let object = object else {

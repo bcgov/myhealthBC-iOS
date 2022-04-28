@@ -262,8 +262,10 @@ extension StorageService: StoragePatientManager {
                           let birthday = birthday,
                           let byInfo = patients.filter({$0.getComparableName() == StorageService.getComparableName(from: name) && $0.birthday == birthday}).first {
                     return completion(byInfo)
+                } else {
+                    return completion(nil)
                 }
-                return completion(nil)
+                
             }
             catch let error {
                 print("Could not fetch. \(error), \(error.localizedDescription)")

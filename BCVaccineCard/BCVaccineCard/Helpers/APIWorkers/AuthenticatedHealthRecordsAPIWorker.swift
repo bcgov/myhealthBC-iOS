@@ -676,7 +676,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 return
             }
 
-            StorageService.shared.storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch)
+            StorageService.shared.storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch, completion: {_ in})
         })
     }
 }
@@ -690,7 +690,6 @@ extension AuthenticatedHealthRecordsAPIWorker {
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else { return }
-        
         
         DispatchQueue.global(qos: .background).async {
             let dispatchGroup = DispatchGroup()
@@ -715,8 +714,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             guard let patient = patient else {
                 return
             }
-            StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf)
-            
+            StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf, completion: {_ in})
         })
         
     }
