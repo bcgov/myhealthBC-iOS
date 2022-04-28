@@ -367,8 +367,16 @@ extension CovidVaccineCardsViewController {
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
             let item = self.dataSource[indexPath.row]
+            let patient = item.patient
             StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "", manuallyAdded: manuallyAdded)
             let cards = StorageService.shared.fetchVaccineCards()
+            // Handle deleting a patient if necessary here
+            if let patient = patient, patient.authenticated == false {
+                let records = StorageService.shared.getHeathRecords().detailDataSource(patient: patient)
+                if records.count == 0, let name = patient.name, let birthday = patient.birthday {
+                    StorageService.shared.deletePatient(name: name, birthday: birthday)
+                }
+            }
             if cards.count == 0 || (cards.count == 1 && cards.first?.authenticated == true) {
                 // This means that the user has removed all unauthenticated
                 self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records, .healthPass]))

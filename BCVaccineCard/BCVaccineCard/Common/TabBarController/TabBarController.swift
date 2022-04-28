@@ -263,12 +263,20 @@ extension TabBarController: UITabBarControllerDelegate {
 extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     func showPatientDetailsError(error: String, showBanner: Bool) {
         guard showBanner else { return }
-        self.showBanner(message: error, style: .Bottom)
+        if self.selectedIndex < (self.viewControllers?.count ?? 0) {
+            let navController = self.viewControllers?[self.selectedIndex] as? CustomNavigationController
+            navController?.showBanner(message: error, style: .Bottom)
+        }
+//        self.showBanner(message: error, style: .Bottom)
     }
     
     func showFetchStartedBanner(showBanner: Bool) {
         guard showBanner else { return }
-        self.showBanner(message: "Retrieving records", style: .Bottom)
+        if self.selectedIndex < (self.viewControllers?.count ?? 0) {
+            let navController = self.viewControllers?[self.selectedIndex] as? CustomNavigationController
+            navController?.showBanner(message: "Retrieving records", style: .Bottom)
+        }
+//        self.showBanner(message: "Retrieving records", style: .Bottom)
     }
     
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool) {
@@ -339,6 +347,7 @@ extension TabBarController: RouterWorkerDelegate {
 // MARK: Router helper functions
 extension TabBarController {
     private func resetTab(tabBarVC: TabBarVCs, viewControllerStack: [UIViewController]) {
+        let currentIndex = self.selectedIndex
         guard viewControllerStack.count > 0 else { return }
         let vc = tabBarVC
         guard let properties = vc.properties else { return }
@@ -357,8 +366,9 @@ extension TabBarController {
                 navController.pushViewController(viewController, animated: false)
             }
         }
-        viewControllers?.remove(at: TabBarVCs.records.rawValue)
-        viewControllers?.insert(navController, at: TabBarVCs.records.rawValue)
+        viewControllers?.remove(at: tabBarVC.rawValue)
+        viewControllers?.insert(navController, at: tabBarVC.rawValue)
+        self.selectedIndex = currentIndex
 //        if tabBarVC.rawValue == self.selectedIndex {
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 //                AppDelegate.sharedInstance?.removeLoadingViewHack()

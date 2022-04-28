@@ -536,7 +536,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
-        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: dataSource.count)
+        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: dataSource.count, patient: self.patient)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -609,6 +609,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         case .covidImmunizationRecord(model: let model, immunizations: _):
             alertConfirmation(title: .deleteRecord, message: .deleteCovidHealthRecord, confirmTitle: .delete, confirmStyle: .destructive) {
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
+                if self.dataSource.count == 1, let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
+                    StorageService.shared.deletePatient(name: name, birthday: birthday)
+                }
                 self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.healthPass]))
                 completion(true)
             } onCancel: {
@@ -618,6 +621,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             guard let recordId = record.id else {return}
             alertConfirmation(title: .deleteTestResult, message: .deleteTestResultMessage, confirmTitle: .delete, confirmStyle: .destructive) {
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
+                if self.dataSource.count == 1, let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
+                    StorageService.shared.deletePatient(name: name, birthday: birthday)
+                }
                 completion(true)
             } onCancel: {
                 completion(false)

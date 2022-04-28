@@ -263,7 +263,14 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
             if let card = self.dataSource {
+                let patient = card.patient
                 StorageService.shared.deleteVaccineCard(vaccineQR: card.code ?? "", manuallyAdded: manuallyAdded)
+                if let patient = patient, patient.authenticated == false {
+                    let records = StorageService.shared.getHeathRecords().detailDataSource(patient: patient)
+                    if records.count == 0, let name = patient.name, let birthday = patient.birthday {
+                        StorageService.shared.deletePatient(name: name, birthday: birthday)
+                    }
+                }
                 self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
             }
             self.dataSource = nil

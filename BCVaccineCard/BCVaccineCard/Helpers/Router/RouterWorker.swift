@@ -158,7 +158,7 @@ extension RouterWorker {
             let vc1 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: false, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
             let recordsCount = StorageService.shared.getHeathRecords().detailDataSource(patient: patient).count
             guard let record = record else { return [vc1] }
-            let vc2 = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: record, authenticatedRecord: false, userNumberHealthRecords: recordsCount)
+            let vc2 = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: record, authenticatedRecord: false, userNumberHealthRecords: recordsCount, patient: patient)
             return [vc1, vc2]
         case .MoreThanOneUnauthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
             // Stack should be HealthRecordsViewController, UsersListOfRecordsViewController, then HealthRecordDetailViewController
@@ -168,7 +168,7 @@ extension RouterWorker {
             let vc2 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
             guard let record = record else { return [vc1, vc2] }
             let recordsCount = StorageService.shared.getHeathRecords().detailDataSource(patient: patient).count
-            let vc3 = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: record, authenticatedRecord: false, userNumberHealthRecords: recordsCount)
+            let vc3 = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: record, authenticatedRecord: false, userNumberHealthRecords: recordsCount, patient: patient)
             return [vc1, vc2, vc3]
         }
     }
@@ -319,7 +319,7 @@ extension RouterWorker {
         switch self.currentPatientScenario {
         case .NoUsers, .OneUnauthUser, .MoreThanOneUnauthUser:
             let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
-            guard currentTab == .records else { return [vc1] }
+            guard currentTab == .healthPass else { return [vc1] }
             let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
             return [vc1, vc2]
         case .OneAuthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:

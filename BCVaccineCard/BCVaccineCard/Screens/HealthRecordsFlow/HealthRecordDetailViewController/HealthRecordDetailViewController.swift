@@ -10,11 +10,12 @@ import UIKit
 
 class HealthRecordDetailViewController: BaseViewController {
     
-    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticatedRecord: Bool, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
+    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticatedRecord: Bool, userNumberHealthRecords: Int, patient: Patient?) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
             vc.dataSource = dataSource
             vc.authenticatedRecord = authenticatedRecord
             vc.userNumberHealthRecords = userNumberHealthRecords
+            vc.patient = patient
             return vc
         }
         return HealthRecordDetailViewController()
@@ -25,6 +26,7 @@ class HealthRecordDetailViewController: BaseViewController {
     private var dataSource: HealthRecordsDetailDataSource!
     private var authenticatedRecord: Bool!
     private var userNumberHealthRecords: Int!
+    private var patient: Patient?
     private var pdfData: String?
     
     override func viewDidLoad() {
@@ -142,6 +144,9 @@ extension HealthRecordDetailViewController {
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)
             } else {
+                if let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
+                    StorageService.shared.deletePatient(name: name, birthday: birthday)
+                }
                 self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
             }
         } onCancel: {

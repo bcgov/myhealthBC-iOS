@@ -65,7 +65,7 @@ class HealthRecordsViewController: BaseViewController {
         navSetup()
         let records = fetchData()
         self.dataSource = records.dataSource()
-        self.navigationController?.popToRootViewController(animated: false)
+//        self.navigationController?.popToRootViewController(animated: false)
 //        if self.dataSource.isEmpty {
 //            self.showFetchVC(hasHealthRecords: false)
 //        } else
