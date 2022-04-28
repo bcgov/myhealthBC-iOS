@@ -216,7 +216,12 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 //            self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidImmunizationRecord)
             DispatchQueue.main.async {
-                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+//                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                
+                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
+                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
             }
         }
         self.navigationController?.pushViewController(vc, animated: true)
@@ -229,7 +234,12 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 //            self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidTestResult)
             DispatchQueue.main.async {
-                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+//                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                
+                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
+                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
             }
         }
         self.navigationController?.pushViewController(vc, animated: true)

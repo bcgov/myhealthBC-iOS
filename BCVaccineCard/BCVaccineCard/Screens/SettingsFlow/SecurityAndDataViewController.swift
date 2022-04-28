@@ -120,13 +120,13 @@ class SecurityAndDataViewController: BaseViewController {
                 self.showBanner(message: .deletedAllRecordsAndSavedData, style: .Top)
 //                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
                 DispatchQueue.main.async {
-                    self.routerWorker?.routingAction(scenario: .ClearAllData(currentTab: self.getCurrentTab))
-                    
-//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: patient, addedRecord: nil)
-//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: nil, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                    self.routerWorker?.routingAction(scenario: .ClearAllData(currentTab: self.getCurrentTab))
 //                    
-//                    self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+
+                    self.routerWorker?.routingAction(scenario: .ClearAllData(values: values))
                 }
             })
             

@@ -214,7 +214,12 @@ extension QRRetrievalMethodViewController {
                 AnalyticsService.shared.track(action: .AddQR, text: .Get)
 //                self.popBackToProperViewController(id: details.id)
                 DispatchQueue.main.async {
-                    self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+//                    self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                    
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: nil)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                    self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
                 }
                 
             }
@@ -274,6 +279,7 @@ extension QRRetrievalMethodViewController {
 //                    DispatchQueue.main.async {
 ////                        self.routerWorker?.routingAction(scenario: <#T##AppUserActionScenarios#>)
 //                    }
+                        // TODO: Create another scenario for going to a record that already exists
                 }
             case .isNew:
                 self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
@@ -283,7 +289,12 @@ extension QRRetrievalMethodViewController {
                         self.tabBarController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
                         //                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
                         //                        self.popBackToProperViewController(id: model.id ?? "")
-                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+//                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                        
+                        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
+                        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+                        let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                        self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
                     }
                 })
             case .canUpdateExisting:
@@ -292,7 +303,11 @@ extension QRRetrievalMethodViewController {
                     self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                         guard let `self` = self else {return}
                         DispatchQueue.main.async {
-                            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+//                            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
+                            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+                            let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                            self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
                         }
                     })
                 }, buttonTwoTitle: "No") { [weak self] in
@@ -310,7 +325,12 @@ extension QRRetrievalMethodViewController {
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
                         self.tabBarController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+//                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                        // TODO: Double check this flow here - may need to adjust to show federal pass
+                        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
+                        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+                        let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                        self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
                     }
                 }
                 

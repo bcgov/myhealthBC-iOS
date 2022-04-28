@@ -381,16 +381,25 @@ extension CovidVaccineCardsViewController {
                     StorageService.shared.deletePatient(name: name, birthday: birthday)
                 }
             }
-            if cards.count == 0 || (cards.count == 1 && cards.first?.authenticated == true) {
-                // This means that the user has removed all unauthenticated
-                DispatchQueue.main.async {
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records, .healthPass]))
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+            DispatchQueue.main.async {
+                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                if cards.count == 0 || (cards.count == 1 && cards.first?.authenticated == true) {
+                    // This means that the user has removed all unauthenticated
+                    
+                    //                        self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records, .healthPass]))
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                    
+                } else {
+                    
+                    //                        self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                    
                 }
             }
+            
         }
     }
 }

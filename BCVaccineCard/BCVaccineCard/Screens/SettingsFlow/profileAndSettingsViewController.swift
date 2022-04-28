@@ -217,7 +217,12 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
             guard success else { return }
 //            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
             DispatchQueue.main.async {
-                self.routerWorker?.routingAction(scenario: .Logout(currentTab: self.getCurrentTab))
+//                self.routerWorker?.routingAction(scenario: .Logout(currentTab: self.getCurrentTab))
+                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                self.routerWorker?.routingAction(scenario: .Logout(values: values))
+                
             }
         })
     }
