@@ -363,7 +363,13 @@ extension TabBarController {
 //        }
         DispatchQueue.main.async {
             if let nav = self.viewControllers?[tabBarVC.rawValue] as? CustomNavigationController {
-                nav.viewControllers = viewControllerStack
+                var vcStack: [BaseViewController] = []
+                for vc in viewControllerStack {
+                    // Not sure why, but I have to do this to get rid of the text - can look into removind navigationItem.title text from nav controll itself
+                    vc.navigationItem.setBackItemTitle(with: "")
+                    vcStack.append(vc)
+                }
+                nav.viewControllers = vcStack
             }
         }
         
