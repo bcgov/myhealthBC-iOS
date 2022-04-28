@@ -550,7 +550,9 @@ extension GatewayFormViewController {
         alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
             guard let `self` = self else {return}
             // TODO: Maybe we show the record that has been added here?
-            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: patient, addedRecord: nil, recentlyAddedCardId: nil, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+            DispatchQueue.main.async {
+                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: patient, addedRecord: nil, recentlyAddedCardId: nil, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+            }
         }, buttonTwoTitle: "Retry") {}
     }
     

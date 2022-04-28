@@ -209,7 +209,9 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
         performLogout(completion: {success in
             guard success else { return }
 //            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
-            self.routerWorker?.routingAction(scenario: .Logout(currentTab: self.getCurrentTab))
+            DispatchQueue.main.async {
+                self.routerWorker?.routingAction(scenario: .Logout(currentTab: self.getCurrentTab))
+            }
         })
     }
     

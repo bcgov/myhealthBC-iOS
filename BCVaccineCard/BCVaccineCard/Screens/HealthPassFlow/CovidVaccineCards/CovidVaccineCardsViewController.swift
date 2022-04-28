@@ -379,9 +379,13 @@ extension CovidVaccineCardsViewController {
             }
             if cards.count == 0 || (cards.count == 1 && cards.first?.authenticated == true) {
                 // This means that the user has removed all unauthenticated
-                self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records, .healthPass]))
+                DispatchQueue.main.async {
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records, .healthPass]))
+                }
             } else {
-                self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+                DispatchQueue.main.async {
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+                }
             }
         }
     }

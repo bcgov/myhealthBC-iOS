@@ -36,6 +36,22 @@ enum CurrentPatientScenarios {
         }
     }
 }
+
+enum VaccineCardNumber {
+    case NoCards
+    case OneCard
+    case MultiplCards
+    
+    static func getCurrentNumber(cards: Int) -> Self {
+        if cards == 0 {
+            return .NoCards
+        } else if cards == 1 {
+            return .OneCard
+        } else {
+            return .MultiplCards
+        }
+    }
+}
 // Note for Developer: AppUserActionScenarios should be called at the completion of the action in question (after core data changes)
 enum AppUserActionScenarios {
     case InitialAppLaunch(affectedTabs: [TabBarVCs])
@@ -67,6 +83,11 @@ class RouterWorker: NSObject {
         let authPatientCount = StorageService.shared.fetchAuthenticatedPatient() != nil ? 1 : 0
         let unauthPatientsCount = StorageService.shared.fetchUnauthenticatedPatients()?.count ?? 0
         return CurrentPatientScenarios.getCurrentScenario(authCount: authPatientCount, unauthCount: unauthPatientsCount)
+    }
+    
+    private var currentNumberOfVaccineCards: VaccineCardNumber {
+        let count = StorageService.shared.fetchVaccineCards().count
+        return VaccineCardNumber.getCurrentNumber(cards: count)
     }
     
     init(delegateOwner: UIViewController) {
@@ -260,28 +281,23 @@ extension RouterWorker {
     }
     // Patient scenario doesn't matter here, because a patient doesn't necessarily have a vaccine card
     private func authenticatedFetchPassesStack(recentlyAddedCardId: String?, fedPassStringToOpen: String?) -> [BaseViewController] {
-        let cards = StorageService.shared.fetchVaccineCards()
-        if cards.count > 1 {
+        switch currentNumberOfVaccineCards {
+        case .NoCards, .OneCard:
+            let vc = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: fedPassStringToOpen)
+            return [vc]
+        case .MultiplCards:
             let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
             let vc2 = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: recentlyAddedCardId, fedPassStringToOpen: fedPassStringToOpen)
             return [vc1, vc2]
-        } else {
-            let vc = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: fedPassStringToOpen)
-            return [vc]
         }
     }
     
     private func manualUnauthFetchPassessStack(recentlyAddedCardId: String?, fedPassStringToOpen: String?, fedPassAddedFromHealthPassVC: Bool?) -> [BaseViewController] {
-        switch self.currentPatientScenario {
-        case .NoUsers, .OneAuthUser:
-            // Not possible here - after a successful manual fetch, there has to be at least 1 unauth patient
-            return []
-        case .OneUnauthUser:
-            // In this case, user is just shown base view controller
+        switch currentNumberOfVaccineCards {
+        case .NoCards, .OneCard:
             let vc = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: fedPassStringToOpen)
             return [vc]
-        case .MoreThanOneUnauthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
-            // Stack should be HealthPassViewController, CovidVaccineCardsViewController
+        case .MultiplCards:
             if fedPassAddedFromHealthPassVC == true {
                 let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: fedPassStringToOpen)
                 return [vc1]
@@ -292,16 +308,14 @@ extension RouterWorker {
             }
         }
     }
-    
+    // Patient scenario doesn't matter here, because a patient doesn't necessarily have a vaccine card
     private func manuallyDeletedVaccineCardForPatientPassesStack(affectedTabs: [TabBarVCs]) -> [BaseViewController] {
         guard affectedTabs.contains(.healthPass) else { return [] }
-        switch self.currentPatientScenario {
-        case .NoUsers, .OneAuthUser, .OneUnauthUser:
-            // In this case, show initial screen
+        switch currentNumberOfVaccineCards {
+        case .NoCards, .OneCard:
             let vc = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
             return [vc]
-        case .MoreThanOneUnauthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
-            // In this case, just show health records screen and vaccine cards screen
+        case .MultiplCards:
             let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
             let vc2 = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
             return [vc1, vc2]
@@ -310,15 +324,18 @@ extension RouterWorker {
     
     private func manualLogOutPassesStack(currentTab: TabBarVCs) -> [BaseViewController] {
         // Note - this is a unique case as we need to reset the stack in some cases, but still need to show the same screen
-        switch self.currentPatientScenario {
-        case .NoUsers, .OneUnauthUser, .MoreThanOneUnauthUser:
+        switch currentNumberOfVaccineCards {
+        case .NoCards, .OneCard:
             let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
             guard currentTab == .healthPass else { return [vc1] }
             let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
             return [vc1, vc2]
-        case .OneAuthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
-            // This isn't possible - after logout, there is no auth user
-            return []
+        case .MultiplCards:
+            let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
+            let vc2 = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
+            guard currentTab == .healthPass else { return [vc1, vc2] }
+            let vc3 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+            return [vc1, vc2, vc3]
         }
     }
     

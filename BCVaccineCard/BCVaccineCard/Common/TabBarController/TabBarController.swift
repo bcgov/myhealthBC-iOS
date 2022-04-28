@@ -284,7 +284,9 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         // TODO: Connor - handle error case
         if resetHealthRecordsTab {
             guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-            self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(actioningPatient: patient, recentlyAddedCardId: nil, fedPassStringToOpen: nil))
+            DispatchQueue.main.async {
+                self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(actioningPatient: patient, recentlyAddedCardId: nil, fedPassStringToOpen: nil))
+            }
         }
 //        let message = (recordsSuccessful > 0 || errors?.count == 0) ? "Records retrieved" : "No records fetched"
         self.showBanner(message: "Records retrieved", style: .Bottom)
@@ -335,11 +337,15 @@ extension TabBarController {
 // MARK: Router worker
 extension TabBarController: RouterWorkerDelegate {
     func recordsActionScenario(viewControllerStack: [BaseViewController]) {
-        self.resetTab(tabBarVC: .records, viewControllerStack: viewControllerStack)
+        DispatchQueue.main.async {
+            self.resetTab(tabBarVC: .records, viewControllerStack: viewControllerStack)
+        }
     }
     
     func passesActionScenario(viewControllerStack: [BaseViewController]) {
-        self.resetTab(tabBarVC: .healthPass, viewControllerStack: viewControllerStack)
+        DispatchQueue.main.async {
+            self.resetTab(tabBarVC: .healthPass, viewControllerStack: viewControllerStack)
+        }
     }
 
 }

@@ -210,7 +210,10 @@ extension QRRetrievalMethodViewController {
                 self.tableView.isAccessibilityElement = false
                 AnalyticsService.shared.track(action: .AddQR, text: .Get)
 //                self.popBackToProperViewController(id: details.id)
-                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                DispatchQueue.main.async {
+                    self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                }
+                
             }
         }
         self.tabBarController?.tabBar.isHidden = true
@@ -272,8 +275,8 @@ extension QRRetrievalMethodViewController {
                         guard let self = self else {return}
                         // TODO: Maybe show this on tab bar controller instead?
                         self.tabBarController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-//                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-//                        self.popBackToProperViewController(id: model.id ?? "")
+                        //                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
+                        //                        self.popBackToProperViewController(id: model.id ?? "")
                         self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
                     }
                 })
@@ -282,7 +285,9 @@ extension QRRetrievalMethodViewController {
                     guard let `self` = self else {return}
                     self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                         guard let `self` = self else {return}
-                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                        DispatchQueue.main.async {
+                            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+                        }
                     })
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}

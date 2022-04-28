@@ -163,7 +163,9 @@ extension BaseViewController {
                         if let fedPass = details.fedPassId {
                             // Added record set to nil means that the records tab will either show UserRecordsVC or HealthRecordsVC, depending on number of users - if we want to display the detail screen, then we need to provide the addedRecord - this function is only being called from HealthPassVC and CovidVaccineCardsVC as of now though
                             let fedPassAddedFromHealthPassVC = source == .healthPassHomeScreen ? true : false
-                            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC))
+                            DispatchQueue.main.async {
+                                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC))
+                            }
 //                            if source == .healthPassHomeScreen {
 //                                self.popBack(toControllerType: HealthPassViewController.self)
 //                                self.postOpenPDFFromAddingFedPassOnlyNotification(pass: fedPass, source: .healthPassHomeScreen)

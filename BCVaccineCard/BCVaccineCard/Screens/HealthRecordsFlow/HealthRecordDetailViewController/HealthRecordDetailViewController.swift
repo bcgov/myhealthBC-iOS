@@ -134,7 +134,9 @@ extension HealthRecordDetailViewController {
             switch self.dataSource.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
-                self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.healthPass]))
+                DispatchQueue.main.async {
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.healthPass]))
+                }
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
@@ -147,7 +149,9 @@ extension HealthRecordDetailViewController {
                 if let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
                     StorageService.shared.deletePatient(name: name, birthday: birthday)
                 }
-                self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+                DispatchQueue.main.async {
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+                }
             }
         } onCancel: {
         }

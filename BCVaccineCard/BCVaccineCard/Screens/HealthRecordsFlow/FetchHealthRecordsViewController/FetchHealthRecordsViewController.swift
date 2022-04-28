@@ -211,7 +211,9 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             guard let `self` = self else { return }
 //            self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidImmunizationRecord)
-            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+            DispatchQueue.main.async {
+                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+            }
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -222,7 +224,9 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             guard let `self` = self else { return }
 //            self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidTestResult)
-            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+            DispatchQueue.main.async {
+                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+            }
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }

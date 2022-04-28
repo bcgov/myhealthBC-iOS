@@ -591,7 +591,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                 self.dataSource.remove(at: index)
                 if self.dataSource.isEmpty {
                     self.inEditMode = false
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+                    DispatchQueue.main.async {
+                        self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+                    }
                 } else {
                     self.tableView.reloadData()
                 }
@@ -612,7 +614,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                 if self.dataSource.count == 1, let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
                     StorageService.shared.deletePatient(name: name, birthday: birthday)
                 }
-                self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.healthPass]))
+                DispatchQueue.main.async {
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.healthPass]))
+                }
                 completion(true)
             } onCancel: {
                 completion(false)

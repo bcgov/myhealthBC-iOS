@@ -271,7 +271,9 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
                         StorageService.shared.deletePatient(name: name, birthday: birthday)
                     }
                 }
-                self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+                DispatchQueue.main.async {
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
+                }
             }
             self.dataSource = nil
             AnalyticsService.shared.track(action: .RemoveCard)
