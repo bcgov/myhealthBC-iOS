@@ -31,6 +31,13 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     private var displayName: String?
     
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .ProfileAndSettingsViewController
+    }
+    
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .ProfileAndSettingsViewController
+    }
     
     // MARK: Class funcs
     override func viewDidLoad() {

@@ -32,6 +32,9 @@ class QRRetrievalMethodViewController: BaseViewController {
     private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
     private weak var imagePicker: UIImagePickerController? = nil
     
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .QRRetrievalMethodViewController
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

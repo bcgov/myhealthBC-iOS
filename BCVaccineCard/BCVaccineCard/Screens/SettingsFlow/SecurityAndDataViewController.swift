@@ -42,6 +42,14 @@ class SecurityAndDataViewController: BaseViewController {
     
     fileprivate let authManager = AuthManager()
     
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .SecurityAndDataViewController
+    }
+    
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .SecurityAndDataViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -113,6 +121,12 @@ class SecurityAndDataViewController: BaseViewController {
 //                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
                 DispatchQueue.main.async {
                     self.routerWorker?.routingAction(scenario: .ClearAllData(currentTab: self.getCurrentTab))
+                    
+//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: patient, addedRecord: nil)
+//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: nil, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                    
+//                    self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
                 }
             })
             

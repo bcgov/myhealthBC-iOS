@@ -36,6 +36,10 @@ class FetchHealthRecordsViewController: BaseViewController {
     private var dataSource: [DataSource] = [.recordType(type: .covidImmunizationRecord),
                                             .recordType(type: .covidTestResult)]
     
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .FetchHealthRecordsViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()

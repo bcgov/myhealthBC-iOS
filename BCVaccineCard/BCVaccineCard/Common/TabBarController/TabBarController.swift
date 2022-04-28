@@ -82,7 +82,7 @@ class TabBarController: UITabBarController {
         self.tabBar.barTintColor = .white
         self.delegate = self
         self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource])
-        self.routerWorker?.routingAction(scenario: .InitialAppLaunch(affectedTabs: [.records]))
+        self.routerWorker?.routingAction(scenario: .InitialAppLaunch(values: ActionScenarioValues(currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, affectedTabs: [.records], recordFlowDetails: nil, passesFlowDetails: nil)))
         self.selectedIndex = selectedIndex
         setupObserver()
         postBackgroundAuthFetch()
@@ -285,7 +285,12 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         if resetHealthRecordsTab {
             guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
             DispatchQueue.main.async {
-                self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(actioningPatient: patient, recentlyAddedCardId: nil, fedPassStringToOpen: nil))
+//                self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(actioningPatient: patient, recentlyAddedCardId: nil, fedPassStringToOpen: nil))
+                let currentTab = TabBarVCs.init(rawValue: self.selectedIndex) ?? .home
+                let flowStack = self.getCurrentRecordsAndPassesFlows()
+                let recordFlowDetails = RecordsFlowDetails(currentStack: flowStack.recordsStack, actioningPatient: patient, addedRecord: nil)
+                let passesFlowDetails = PassesFlowDetails(currentStack: flowStack.passesStack)
+                self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)))
             }
         }
 //        let message = (recordsSuccessful > 0 || errors?.count == 0) ? "Records retrieved" : "No records fetched"
@@ -392,5 +397,36 @@ extension TabBarController {
 //                AppDelegate.sharedInstance?.removeLoadingViewHack()
 //            }
 //        }
+    }
+}
+
+// MARK: Router helper to construct current tabs in enum values
+extension TabBarController {
+    public func getCurrentRecordsAndPassesFlows() -> CurrentRecordsAndPassesStacks {
+        let recordsStack = self.getCurrentRecordsFlow()
+        let passesStack = self.getCurrentPassesFlow()
+        return CurrentRecordsAndPassesStacks(recordsStack: recordsStack, passesStack: passesStack)
+    }
+    
+    private func getCurrentRecordsFlow() -> [RecordsFlowVCs] {
+        guard let vcs = (self.viewControllers?[TabBarVCs.records.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController] else { return [] }
+        var flow: [RecordsFlowVCs] = []
+        for vc in vcs {
+            if let type = vc.getRecordFlowType {
+                flow.append(type)
+            }
+        }
+        return flow
+    }
+    
+    private func getCurrentPassesFlow() -> [PassesFlowVCs] {
+        guard let vcs = (self.viewControllers?[TabBarVCs.healthPass.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController] else { return [] }
+        var flow: [PassesFlowVCs] = []
+        for vc in vcs {
+            if let type = vc.getPassesFlowType {
+                flow.append(type)
+            }
+        }
+        return flow
     }
 }

@@ -71,6 +71,10 @@ class UsersListOfRecordsViewController: BaseViewController {
         }
     }
     
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .UsersListOfRecordsViewController(patient: self.patient)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()

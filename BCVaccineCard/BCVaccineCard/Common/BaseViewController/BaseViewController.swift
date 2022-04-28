@@ -28,8 +28,19 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
         return (self.tabBarController as? TabBarController)?.routerWorker
     }
     
+    var getCurrentStacks: CurrentRecordsAndPassesStacks {
+        return (self.tabBarController as? TabBarController)?.getCurrentRecordsAndPassesFlows() ?? CurrentRecordsAndPassesStacks(recordsStack: [], passesStack: [])
+    }
+    
     var getCurrentTab: TabBarVCs {
         return TabBarVCs.init(rawValue: (self.tabBarController as? TabBarController)?.selectedIndex ?? 0) ?? .home
+    }
+    
+    var getRecordFlowType: RecordsFlowVCs? {
+        return nil
+    }
+    var getPassesFlowType: PassesFlowVCs? {
+        return nil
     }
 
     override func viewDidLoad() {
@@ -164,7 +175,12 @@ extension BaseViewController {
                             // Added record set to nil means that the records tab will either show UserRecordsVC or HealthRecordsVC, depending on number of users - if we want to display the detail screen, then we need to provide the addedRecord - this function is only being called from HealthPassVC and CovidVaccineCardsVC as of now though
                             let fedPassAddedFromHealthPassVC = source == .healthPassHomeScreen ? true : false
                             DispatchQueue.main.async {
-                                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC))
+//                                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC))
+//                                
+                                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: nil)
+                                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC)
+                                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
                             }
 //                            if source == .healthPassHomeScreen {
 //                                self.popBack(toControllerType: HealthPassViewController.self)

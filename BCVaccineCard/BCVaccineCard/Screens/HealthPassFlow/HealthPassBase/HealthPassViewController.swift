@@ -27,6 +27,10 @@ class HealthPassViewController: BaseViewController {
     }
     private var fedPassStringToOpen: String?
     
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .HealthPassViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         authManager = AuthManager()

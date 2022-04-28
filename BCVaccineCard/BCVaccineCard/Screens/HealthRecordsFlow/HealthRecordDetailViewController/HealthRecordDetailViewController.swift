@@ -29,6 +29,10 @@ class HealthRecordDetailViewController: BaseViewController {
     private var patient: Patient?
     private var pdfData: String?
     
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navSetup()

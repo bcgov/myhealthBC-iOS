@@ -31,6 +31,10 @@ class HealthRecordsViewController: BaseViewController {
    
     var lastPatientSelected: Patient? = nil
     
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .HealthRecordsViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()

@@ -47,6 +47,10 @@ class CovidVaccineCardsViewController: BaseViewController {
         }
     }
     
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .CovidVaccineCardsViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
