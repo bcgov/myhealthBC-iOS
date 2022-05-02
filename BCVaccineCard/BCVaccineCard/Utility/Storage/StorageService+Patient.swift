@@ -238,7 +238,7 @@ extension StorageService: StoragePatientManager {
     /// - Returns: stored patient
     public func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool, completion: @escaping (Patient?)-> Void) {
         guard let contextAsync = managedContext else {return completion(nil)}
-        fetchPatient(phn: phn, name: name, birthday: birthday, context: contextAsync) { foundPatient in
+         fetchPatient(phn: phn, name: name, birthday: birthday, context: contextAsync) { foundPatient in
             if let patient = foundPatient {
                 // otherwise update user data if needed and return
                 _ = self.update(phn: phn, name: name, birthday: birthday, authenticated: authenticated, for: patient)

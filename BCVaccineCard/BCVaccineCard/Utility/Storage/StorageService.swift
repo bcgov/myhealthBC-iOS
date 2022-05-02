@@ -51,6 +51,8 @@ class StorageService: StorageManagerProtocol {
     public static let shared = StorageService()
     
     private var container: NSPersistentContainer?
+    let classQueue = DispatchQueue(label: "storageClassQueue", qos: .userInitiated)
+    
     var managedContext: NSManagedObjectContext? {
         let context =  container?.newBackgroundContext()
         context?.automaticallyMergesChangesFromParent = true

@@ -78,22 +78,26 @@ extension StorageService: StorageLaboratoryOrderManager {
     func storeLaboratoryOrders(patient: Patient, gateWayResponse: AuthenticatedLaboratoryOrdersResponseObject, completion: @escaping([LaboratoryOrder])->Void) {
         guard let orders = gateWayResponse.resourcePayload?.orders else {return completion([])}
         var storedOrders: [LaboratoryOrder] = []
-        let dispatchGroup = DispatchGroup()
-        for order in orders {
-            // Note: Currently no easy way to get PDF, so in this case, we will store nil
-            dispatchGroup.enter()
-            storeLaboratoryOrder(patient: patient, gateWayObject: order, pdf: nil, completion: { storedOrder in
-                if let result = storedOrder {
-                    storedOrders.append(result)
+        let queue = DispatchQueue(label: "labOrders", qos: .userInitiated)
+        classQueue.async {
+            let dispatchGroup = DispatchGroup()
+            for order in orders {
+                // Note: Currently no easy way to get PDF, so in this case, we will store nil
+                dispatchGroup.enter()
+                queue.async {
+                    self.storeLaboratoryOrder(patient: patient, gateWayObject: order, pdf: nil, completion: { storedOrder in
+                        if let result = storedOrder {
+                            storedOrders.append(result)
+                        }
+                        dispatchGroup.leave()
+                    })
                 }
-                dispatchGroup.leave()
-            })
+            }
+            dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+                self.notify(event: StorageEvent(event: .Save, entity: .LaboratoryOrder, object: storedOrders))
+                return completion(storedOrders)
+            }
         }
-        dispatchGroup.notify(queue: .global(qos: .background)) {
-            self.notify(event: StorageEvent(event: .Save, entity: .LaboratoryOrder, object: storedOrders))
-            return completion(storedOrders)
-        }
-        
     }
     
     func storeLaboratoryOrder(
@@ -105,25 +109,32 @@ extension StorageService: StorageLaboratoryOrderManager {
             guard let context = managedContext else {return completion(nil)}
             let id = UUID().uuidString
             var storedTests: [LaboratoryTest] = []
-            let dispatchGroup = DispatchGroup()
-            if let tests = gateWayObject.laboratoryTests {
-                for test in tests {
-                    dispatchGroup.enter()
-                    storeLaboratoryTest(gateWayObject: test, context: context, completion: { result in
-                        if let storedTest = result {
-                            storedTests.append(storedTest)
+            let queue = DispatchQueue(label: "labOrderTests", qos: .userInitiated)
+            classQueue.async {
+                let dispatchGroup = DispatchGroup()
+                if let tests = gateWayObject.laboratoryTests {
+                    for test in tests {
+                        dispatchGroup.enter()
+                        queue.async {
+                            self.storeLaboratoryTest(gateWayObject: test, context: context, completion: { result in
+                                if let storedTest = result {
+                                    storedTests.append(storedTest)
+                                }
+                                dispatchGroup.leave()
+                            })
                         }
-                        dispatchGroup.leave()
-                    })
+                        
+                    }
                 }
+                dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+                    let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
+                    let timelineDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.timelineDateTime ?? "") ?? Date()
+                    return self.storeLaboratoryOrder(context: context, patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf, completion: completion)
+                }
+                
+                
             }
-            dispatchGroup.notify(queue: .global(qos: .background)) {
-                let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
-                let timelineDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.timelineDateTime ?? "") ?? Date()
-                return self.storeLaboratoryOrder(context: context, patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf, completion: completion)
-            }
-            
-            
+           
         }
     
     func storeLaboratoryOrder(context:  NSManagedObjectContext, patient: Patient, id: String, labPdfId: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, timelineDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?, completion: @escaping(LaboratoryOrder?)->Void) {
@@ -146,35 +157,38 @@ extension StorageService: StorageLaboratoryOrderManager {
         labOrder.pdf = pdf
         var labTestsArray: [LaboratoryTest] = []
         let labTests = laboratoryTests ?? []
-        // dispatch group
+        let queue = DispatchQueue(label: "labOrderTests2", qos: .userInitiated)
         let dispatchGroup = DispatchGroup()
-        for test in labTests {
-            dispatchGroup.enter()
-            storeLaboratoryTest(
-                batteryType: test.batteryType,
-                obxID: test.obxID,
-                outOfRange: test.outOfRange,
-                loinc: test.loinc,
-                testStatus: test.testStatus, context: context, completion: { model in
-                    if let model = model {
-                        labTestsArray.append(model)
+        classQueue.async {
+            for test in labTests {
+                dispatchGroup.enter()
+                queue.async {
+                    self.storeLaboratoryTest(
+                        batteryType: test.batteryType,
+                        obxID: test.obxID,
+                        outOfRange: test.outOfRange,
+                        loinc: test.loinc,
+                        testStatus: test.testStatus, context: context, completion: { model in
+                            if let model = model {
+                                labTestsArray.append(model)
+                            }
+                            dispatchGroup.leave()
+                        })
+                }
+            }
+            dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+                context.perform {
+                    do {
+                        labTestsArray.forEach({labOrder.addToLaboratoryTests($0)})
+                        try context.save()
+                        return completion(labOrder)
+                    } catch let error as NSError {
+                        print("Could not save. \(error), \(error.userInfo)")
+                        return completion(nil)
                     }
-                    dispatchGroup.leave()
-                })
-        }
-        dispatchGroup.notify(queue: .global(qos: .background)) {
-            context.perform {
-                do {
-                    labTestsArray.forEach({labOrder.addToLaboratoryTests($0)})
-                    try context.save()
-                    return completion(labOrder)
-                } catch let error as NSError {
-                    print("Could not save. \(error), \(error.userInfo)")
-                    return completion(nil)
                 }
             }
         }
-        
     }
     
     func storeLaboratoryTest(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order.LaboratoryTest, context:  NSManagedObjectContext, completion: @escaping(LaboratoryTest?)->Void){

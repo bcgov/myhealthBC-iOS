@@ -109,29 +109,34 @@ extension StorageService: StorageMedicationManager {
         
         guard let perscriptionObjects = gatewayResponse.resourcePayload else {return}
         var storedObjects: [Perscription] = []
-        let dispatchGroup = DispatchGroup()
-        for object in perscriptionObjects {
-            dispatchGroup.enter()
-            storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch, completion: { result in
-                if let storedObject = result {
-                    storedObjects.append(storedObject)
-                } else {
-                    Logger.log(string: "*Failed while storing perscription", type: .storage)
+        classQueue.async {
+            let dispatchGroup = DispatchGroup()
+            let queue = DispatchQueue(label: "prescriptions", qos: .userInitiated)
+            for object in perscriptionObjects {
+                dispatchGroup.enter()
+                queue.async {
+                    self.storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch, completion: { result in
+                        if let storedObject = result {
+                            storedObjects.append(storedObject)
+                        } else {
+                            Logger.log(string: "*Failed while storing perscription", type: .storage)
+                        }
+                        dispatchGroup.leave()
+                    })
                 }
-                dispatchGroup.leave()
-            })
-            
-        }
-        dispatchGroup.notify(queue: .global(qos: .background)) {
-            Logger.log(string: "Stored \(storedObjects.count) items", type: .storage)
-            let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Perscription, object: storedObjects)) : self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: storedObjects))
-            return completion(storedObjects)
+            }
+            dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+                Logger.log(string: "Stored \(storedObjects.count) items", type: .storage)
+                let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Perscription, object: storedObjects)) : self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: storedObjects))
+                return completion(storedObjects)
+            }
         }
         
     }
     
     func storePrescription(patient: Patient, object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, initialProtectedMedFetch: Bool, completion: @escaping(Perscription?)->Void) {
         guard let context = managedContext else {return completion(nil)}
+
         let dispatchGroup = DispatchGroup()
         
         // Handle Medication
@@ -157,7 +162,7 @@ extension StorageService: StorageMedicationManager {
             }
         }
         
-        dispatchGroup.notify(queue: .global(qos: .background)) {
+        dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
             let id = UUID().uuidString
             // Store new record
             // This is due to API inconsistencies with date formatting
