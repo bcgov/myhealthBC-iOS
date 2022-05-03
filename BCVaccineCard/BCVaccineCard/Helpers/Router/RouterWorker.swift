@@ -83,7 +83,10 @@ struct CurrentRecordsAndPassesStacks {
     let passesStack: [PassesFlowVCs]
 }
 
-enum RecordsFlowVCs {
+enum RecordsFlowVCs: Equatable {
+    static func == (lhs: RecordsFlowVCs, rhs: RecordsFlowVCs) -> Bool {
+        <#code#>
+    }
     case HealthRecordsViewController
     case UsersListOfRecordsViewController(patient: Patient?)
     case FetchHealthRecordsViewController
@@ -93,7 +96,10 @@ enum RecordsFlowVCs {
     case GatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType, gatewayInProgressDetails: GatewayInProgressDetails?)
 }
 
-enum PassesFlowVCs {
+enum PassesFlowVCs: Equatable {
+    static func == (lhs: PassesFlowVCs, rhs: PassesFlowVCs) -> Bool {
+        <#code#>
+    }
     case HealthPassViewController(fedPassToOpen: String?)
     case CovidVaccineCardsViewController(fedPassToOpen: String?, recentlyAddedCardId: String?)
     case QRRetrievalMethodViewController
@@ -223,6 +229,29 @@ extension RouterWorker {
     }
     
     private func authFetchRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
+//        if values.currentTab == .records {
+            switch self.currentPatientScenario {
+            case .NoUsers, .OneUnauthUser, .MoreThanOneUnauthUser:
+                // Not possible here - after an authFetch, there has to be at least one Auth user, so do nothing
+                return []
+            case .OneAuthUser:
+                // Stack should be UsersListOfRecordsViewController (after fetch is completed)
+                // Note - hasUpdatedUnauthPendingTest is irrelevant here
+                guard let patient = values.recordFlowDetails?.actioningPatient else { return [] }
+                let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true)
+                return [vc]
+            case .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
+                // Stack should be HealthRecordsViewController, then UsersListOfRecordsViewController (after fetch is completed)
+                // Note - setting hasUpdatedUnauthPendingTest to false just in case unauth user has to check for background update for pending covid test
+                let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
+                guard let patient = values.recordFlowDetails?.actioningPatient else { return [vc1] }
+                let vc2 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
+                return [vc1, vc2]
+            }
+//        }
+//        else {
+//
+//        }
         
     }
     
@@ -233,9 +262,10 @@ extension RouterWorker {
 
 // MARK: Setting up stack from current view controllers
 extension RouterWorker {
-    private func getNewRecordsStackFromCurrent(currentStack: [RecordsFlowVCs]) -> [BaseViewController] {
-        var newStack: [BaseViewController] = []
-        currentStack.forEach { stack in
+    
+    private func constructNewRecordsStack(newStack: [RecordsFlowVCs]) -> [BaseViewController] {
+        var newVCStack: [BaseViewController] = []
+        newStack.forEach { stack in
             let vc: BaseViewController?
             switch stack {
             case .HealthRecordsViewController:
@@ -256,15 +286,33 @@ extension RouterWorker {
                 vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType, currentProgress: currentProgress)
             }
             if let vc = vc {
-                newStack.append(vc)
+                newVCStack.append(vc)
             }
         }
-        return newStack
+        return newVCStack
     }
     
-    private func getNewPassesStackFromCurrent(currentStack: [PassesFlowVCs]) -> [BaseViewController] {
-        var newStack: [BaseViewController] = []
-        currentStack.forEach { stack in
+    private func modifyRecordsStackIfNecessary(currentPatientScenarioAfterAction scenario: CurrentPatientScenarios, proposedRecordsStack: [RecordsFlowVCs]) {
+        switch scenario {
+        case .NoUsers:
+            // TODO: Check if proposedRecordsStack contains healthRecordsVC or userListOfRecordsVC or recordsDetailVC - if so, then remove those from the stack. Make sure fetchVC is the base VC here
+            print("TODO")
+        case .OneAuthUser:
+            <#code#>
+        case .OneUnauthUser:
+            <#code#>
+        case .MoreThanOneUnauthUser:
+            <#code#>
+        case .OneAuthUserAndOneUnauthUser:
+            <#code#>
+        case .OneAuthUserAndMoreThanOneUnauthUser:
+            <#code#>
+        }
+    }
+    
+    private func constructNewPassesStack(newStack: [PassesFlowVCs]) -> [BaseViewController] {
+        var newVCStack: [BaseViewController] = []
+        newStack.forEach { stack in
             let vc: BaseViewController?
             switch stack {
             case .HealthPassViewController(fedPassToOpen: let fedPassStringToOpen):
@@ -281,10 +329,10 @@ extension RouterWorker {
                 vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType, currentProgress: currentProgress)
             }
             if let vc = vc {
-                newStack.append(vc)
+                newVCStack.append(vc)
             }
         }
-        return newStack
+        return newVCStack
     }
 }
 
