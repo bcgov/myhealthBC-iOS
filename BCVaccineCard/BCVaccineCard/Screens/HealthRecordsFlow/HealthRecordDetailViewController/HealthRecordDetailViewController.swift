@@ -30,7 +30,7 @@ class HealthRecordDetailViewController: BaseViewController {
     private var pdfData: String?
     
     override var getRecordFlowType: RecordsFlowVCs? {
-        return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource)
+        return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource, userNumberHealthRecords: userNumberHealthRecords)
     }
     
     override func viewDidLoad() {

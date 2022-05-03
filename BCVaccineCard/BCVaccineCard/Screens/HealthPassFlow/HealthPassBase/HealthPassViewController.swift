@@ -28,7 +28,7 @@ class HealthPassViewController: BaseViewController {
     private var fedPassStringToOpen: String?
     
     override var getPassesFlowType: PassesFlowVCs? {
-        return .HealthPassViewController
+        return .HealthPassViewController(fedPassToOpen: self.fedPassStringToOpen)
     }
     
     override func viewDidLoad() {
@@ -100,7 +100,7 @@ extension HealthPassViewController {
     
     private func goToAddCardOptionScreen(showAuth: Bool) {
         func showScreen() {
-            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
+            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
             self.navigationController?.pushViewController(vc, animated: true)
         }
         

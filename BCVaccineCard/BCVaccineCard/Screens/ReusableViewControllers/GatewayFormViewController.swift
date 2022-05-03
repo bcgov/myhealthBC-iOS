@@ -79,13 +79,13 @@ enum GatewayFormViewControllerFetchType: Equatable {
         }
     }
     
-    var getDataSource: [FormData] {
+    func getDataSource(currentProgress: GatewayInProgressDetails?) -> [FormData] {
         switch self {
         case .bcVaccineCardAndFederalPass:
             return [
-                FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
-                FormData(specificCell: .dobForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
-                FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .phnForm, configuration: FormData.Configuration(text: currentProgress?.phn, isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: currentProgress?.dob, isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dovForm, configuration: FormData.Configuration(text: currentProgress?.dateOfVax, isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
                             FormData.Configuration(text: .privacyPolicyStatement(context: .privacyVaccineStatusText),
@@ -95,7 +95,7 @@ enum GatewayFormViewControllerFetchType: Equatable {
                     LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
         case .federalPassOnly(let dob, let dov, _):
             return [
-                FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .phnForm, configuration: FormData.Configuration(text: currentProgress?.phn, isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: dob, isTextField: true), isFieldVisible: false),
                 FormData(specificCell: .dovForm, configuration: FormData.Configuration(text: dov, isTextField: true), isFieldVisible: false),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
@@ -106,9 +106,9 @@ enum GatewayFormViewControllerFetchType: Equatable {
                     LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
         case .vaccinationRecord:
             return [
-                FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
-                FormData(specificCell: .dobForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
-                FormData(specificCell: .dovForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .phnForm, configuration: FormData.Configuration(text: currentProgress?.phn, isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: currentProgress?.dob, isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dovForm, configuration: FormData.Configuration(text: currentProgress?.dateOfVax, isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
                             FormData.Configuration(text: .privacyPolicyStatement(context: .privacyVaccineStatusText),
@@ -118,9 +118,9 @@ enum GatewayFormViewControllerFetchType: Equatable {
                     LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
         case .covid19TestResult:
             return [
-                FormData(specificCell: .phnForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
-                FormData(specificCell: .dobForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
-                FormData(specificCell: .dotForm, configuration: FormData.Configuration(isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .phnForm, configuration: FormData.Configuration(text: currentProgress?.phn, isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: currentProgress?.dob, isTextField: true), isFieldVisible: true),
+                FormData(specificCell: .dotForm, configuration: FormData.Configuration(text: currentProgress?.dateOfTest, isTextField: true), isFieldVisible: true),
                 FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
                 FormData(specificCell: .clickablePrivacyPolicy, configuration:
                             FormData.Configuration(text: .privacyPolicyStatement(context: .privacyTestResultText),
@@ -140,14 +140,22 @@ struct GatewayFormCompletionHandlerDetails {
     let patient: Patient?
 }
 
+struct GatewayInProgressDetails {
+    var phn: String?
+    var dob: String?
+    var dateOfTest: String?
+    var dateOfVax: String?
+}
+
 class GatewayFormViewController: BaseViewController {
     
-    class func constructGatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType) -> GatewayFormViewController {
+    class func constructGatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType, currentProgress: GatewayInProgressDetails? = nil) -> GatewayFormViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
             vc.rememberDetails = rememberDetails
             vc.fetchType = fetchType
             vc.navTitle = fetchType.getNavTitle
-            vc.dataSource = fetchType.getDataSource
+            vc.currentProgress = currentProgress
+            vc.dataSource = fetchType.getDataSource(currentProgress: currentProgress)
             return vc
         }
         return GatewayFormViewController()
@@ -183,8 +191,19 @@ class GatewayFormViewController: BaseViewController {
     private var storageModel: HGStorageModel?
     private var worker: HealthGatewayAPIWorker?
     
+    // Note: This is for
+    private var currentProgress: GatewayInProgressDetails?
+    
     // Completion - first string is for the ID for core data, second string is optional for fed pass only, third string is optional for name, fourth string is optional for birthday
     var completionHandler: ((GatewayFormCompletionHandlerDetails) -> Void)?
+    
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
+    }
+    
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -226,6 +245,19 @@ class GatewayFormViewController: BaseViewController {
     
     private func setupAPIWorker() {
         self.worker = HealthGatewayAPIWorker(delegateOwner: self)
+    }
+    
+    private func updateCurrentProgress(type: FormTextFieldType, text: String?) {
+        switch type {
+        case .personalHealthNumber:
+            self.currentProgress?.phn = text
+        case .dateOfBirth:
+            self.currentProgress?.dob = text
+        case .dateOfVaccination:
+            self.currentProgress?.dateOfVax = text
+        case .dateOfTest:
+            self.currentProgress?.dateOfTest = text
+        }
     }
 
 }
@@ -482,6 +514,7 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     func textFieldTextDidChange(formField: FormTextFieldType, newText: String) {
         updateDataSource(formField: formField, text: newText)
         submitButtonEnabled = shouldButtonBeEnabled()
+        self.updateCurrentProgress(type: formField, text: newText)
     }
     
     func rightTextFieldButtonTapped(formField: FormTextFieldType) {

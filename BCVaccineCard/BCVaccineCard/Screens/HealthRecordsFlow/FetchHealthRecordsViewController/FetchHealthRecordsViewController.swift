@@ -14,12 +14,12 @@ class FetchHealthRecordsViewController: BaseViewController {
         case login(type: HiddenRecordType)
     }
     
-    class func constructFetchHealthRecordsViewController(hideNavBackButton: Bool, showSettingsIcon: Bool, hasHealthRecords: Bool, completion: @escaping()->Void) -> FetchHealthRecordsViewController {
+    class func constructFetchHealthRecordsViewController(hasHealthRecords: Bool) -> FetchHealthRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: FetchHealthRecordsViewController.self)) as? FetchHealthRecordsViewController {
-            vc.hideNavBackButton = hideNavBackButton
-            vc.showSettingsIcon = showSettingsIcon
+//            vc.hideNavBackButton = hideNavBackButton
+//            vc.showSettingsIcon = showSettingsIcon
             vc.hasHealthRecords = hasHealthRecords
-            vc.completion = completion
+//            vc.completion = completion
             return vc
         }
         return FetchHealthRecordsViewController()
@@ -28,10 +28,10 @@ class FetchHealthRecordsViewController: BaseViewController {
 //    @IBOutlet weak private var headerLabel: UILabel!
     @IBOutlet weak private var tableView: UITableView!
     
-    private var hideNavBackButton = false
-    private var showSettingsIcon: Bool!
+//    private var hideNavBackButton = false
+    private var showSettingsIcon: Bool = true
     private var hasHealthRecords: Bool!
-    private var completion: (()->Void)?
+//    private var completion: (()->Void)?
     
     private var dataSource: [DataSource] = [.recordType(type: .covidImmunizationRecord),
                                             .recordType(type: .covidTestResult)]
@@ -51,9 +51,9 @@ class FetchHealthRecordsViewController: BaseViewController {
         setNeedsStatusBarAppearanceUpdate()
         self.adjustDataSource()
         self.tabBarController?.tabBar.isHidden = false
-        if hideNavBackButton {
-            self.navigationItem.setHidesBackButton(true, animated: animated)
-        }
+//        if hideNavBackButton {
+//            self.navigationItem.setHidesBackButton(true, animated: animated)
+//        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -70,12 +70,17 @@ class FetchHealthRecordsViewController: BaseViewController {
     }
     
     private func setup() {
+        checkIfIsRootVCInStack()
         navSetup()
 //        setupLabel()
         setupTableView()
         setupListeners()
     }
-    
+    // TODO: Make this safer?
+    private func checkIfIsRootVCInStack() {
+        self.showSettingsIcon = (((self.tabBarController as? TabBarController)?.viewControllers?[TabBarVCs.records.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController])?.first is FetchHealthRecordsViewController ? true : false
+    }
+//    (self.viewControllers?[TabBarVCs.records.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController]
 //    private func setupLabel() {
 //        headerLabel.font = UIFont.bcSansRegularWithSize(size: 17)
 //        headerLabel.textColor = AppColours.textBlack

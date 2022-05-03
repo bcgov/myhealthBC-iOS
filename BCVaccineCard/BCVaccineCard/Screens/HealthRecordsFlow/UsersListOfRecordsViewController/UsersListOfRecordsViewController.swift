@@ -194,10 +194,7 @@ extension UsersListOfRecordsViewController {
     }
     // This screen has to have health records by rule (with the exception being a screen state issue, but that is a separate bug)
     @objc func showAddRecord() {
-        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, hasHealthRecords: true, completion: {[weak self] in
-            // Note: Not sure what the purpose of this is?? - was only causing an issue with routing
-//            self?.navigationController?.popToRootViewController(animated: true)
-        })
+        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: true)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -710,7 +707,7 @@ extension UsersListOfRecordsViewController {
             }
         } else if purpose == .initialFetch {
             adjustLoadingIndicator(show: true)
-            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
         }
     }
 }

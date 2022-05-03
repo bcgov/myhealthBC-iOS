@@ -13,9 +13,9 @@ import SwiftUI
 
 class QRRetrievalMethodViewController: BaseViewController {
     
-    class func constructQRRetrievalMethodViewController(backScreenString: String) -> QRRetrievalMethodViewController {
+    class func constructQRRetrievalMethodViewController() -> QRRetrievalMethodViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: QRRetrievalMethodViewController.self)) as? QRRetrievalMethodViewController {
-            vc.backScreenString = backScreenString
+//            vc.backScreenString = backScreenString
             return vc
         }
         return QRRetrievalMethodViewController()
@@ -27,7 +27,7 @@ class QRRetrievalMethodViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     private var dataSource: [CellType] = []
-    private var backScreenString: String!
+//    private var backScreenString: String!
     
     private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
     private weak var imagePicker: UIImagePickerController? = nil
@@ -90,7 +90,7 @@ extension QRRetrievalMethodViewController {
                                                navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
-                                               backButtonHintString: backScreenString)
+                                               backButtonHintString: .healthPasses)
     }
 }
 

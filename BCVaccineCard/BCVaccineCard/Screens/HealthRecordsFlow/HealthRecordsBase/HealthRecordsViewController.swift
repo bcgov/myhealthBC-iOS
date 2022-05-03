@@ -188,7 +188,7 @@ extension HealthRecordsViewController: AddCardsTableViewCellDelegate {
     
     func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
         if screenType == .healthRecords {
-            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, hasHealthRecords: !self.dataSource.isEmpty, completion: {})
+            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: !self.dataSource.isEmpty)
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }

@@ -48,7 +48,7 @@ class CovidVaccineCardsViewController: BaseViewController {
     }
     
     override var getPassesFlowType: PassesFlowVCs? {
-        return .CovidVaccineCardsViewController
+        return .CovidVaccineCardsViewController(fedPassToOpen: self.fedPassStringToOpen, recentlyAddedCardId: self.recentlyAddedCardId)
     }
     
     override func viewDidLoad() {

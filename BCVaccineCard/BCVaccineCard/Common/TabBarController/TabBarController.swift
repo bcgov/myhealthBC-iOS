@@ -48,9 +48,9 @@ class TabBarController: UITabBarController {
         return TabBarController()
     }
     
-    private func addHealthRecords(hasHealthRecords: Bool) -> TabBarVCs.Properties {
-        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {}))
-    }
+//    private func addHealthRecords(hasHealthRecords: Bool) -> TabBarVCs.Properties {
+//        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {}))
+//    }
     
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
@@ -113,7 +113,7 @@ class TabBarController: UITabBarController {
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {
         var viewControllers: [UIViewController] = []
         vcs.forEach { vc in
-            guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHealthRecords(hasHealthRecords: false) : vc.properties  else { return }
+            guard let properties = vc.properties  else { return }
             let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
             tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
             let viewController = properties.baseViewController
@@ -279,7 +279,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
 //        self.showBanner(message: "Retrieving records", style: .Bottom)
     }
     
-    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool) {
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource) {
         guard showBanner else { return }
         // TODO: Connor - handle error case
         if resetHealthRecordsTab {
@@ -290,7 +290,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
                 let flowStack = self.getCurrentRecordsAndPassesFlows()
                 let recordFlowDetails = RecordsFlowDetails(currentStack: flowStack.recordsStack, actioningPatient: patient, addedRecord: nil)
                 let passesFlowDetails = PassesFlowDetails(currentStack: flowStack.passesStack)
-                self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)))
+                self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: loginSourceVC)))
             }
         }
 //        let message = (recordsSuccessful > 0 || errors?.count == 0) ? "Records retrieved" : "No records fetched"
