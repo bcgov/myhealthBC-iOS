@@ -55,6 +55,7 @@ class StorageService: StorageManagerProtocol {
     
     var managedContext: NSManagedObjectContext? {
         let context =  container?.newBackgroundContext()
+        context?.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         context?.automaticallyMergesChangesFromParent = true
         return context
     }

@@ -125,7 +125,7 @@ extension StorageService: StorageMedicationManager {
                     })
                 }
             }
-            dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+            dispatchGroup.notify(queue: self.classQueue) {
                 Logger.log(string: "Stored \(storedObjects.count) items", type: .storage)
                 let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Perscription, object: storedObjects)) : self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: storedObjects))
                 return completion(storedObjects)
@@ -137,65 +137,67 @@ extension StorageService: StorageMedicationManager {
     func storePrescription(patient: Patient, object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, initialProtectedMedFetch: Bool, completion: @escaping(Perscription?)->Void) {
         guard let context = managedContext else {return completion(nil)}
 
-        let dispatchGroup = DispatchGroup()
-        
-        // Handle Medication
-        dispatchGroup.enter()
-        var medication: Medication? = nil
-        if let medicationSummary = object.medicationSummary {
-            storeMedication(context: context, gateWayResponse: medicationSummary, initialProtectedMedFetch: initialProtectedMedFetch, completion: { result in
-                medication = result
-                dispatchGroup.leave()
-            })
-        }
-        // Handle Pharmacy
-        dispatchGroup.enter()
-        var pharmacy: Pharmacy? = nil
-        if let dispensingPharmacy = object.dispensingPharmacy {
-            if let pharmacyId = dispensingPharmacy.pharmacyID, let storedPharmacy = fetchPharmacy(id: pharmacyId) {
-                pharmacy = storedPharmacy
-            } else {
-                storePharmacy(context: context, gateWayResponse: dispensingPharmacy, initialProtectedMedFetch: initialProtectedMedFetch, completion: { result in
-                    pharmacy = result
+        classQueue.async {
+            let dispatchGroup = DispatchGroup()
+            
+            // Handle Medication
+            dispatchGroup.enter()
+            var medication: Medication? = nil
+            if let medicationSummary = object.medicationSummary {
+                self.storeMedication(context: context, gateWayResponse: medicationSummary, initialProtectedMedFetch: initialProtectedMedFetch, completion: { result in
+                    medication = result
                     dispatchGroup.leave()
                 })
             }
-        }
-        
-        dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
-            let id = UUID().uuidString
-            // Store new record
-            // This is due to API inconsistencies with date formatting
-            var dispenseDate: Date?
-            var dateEntered: Date?
-            
-            if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dispensedDate ?? "") {
-                dispenseDate = timezoneDate
-            } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dispensedDate ?? "") {
-                dispenseDate = nozoneDate
+            // Handle Pharmacy
+            dispatchGroup.enter()
+            var pharmacy: Pharmacy? = nil
+            if let dispensingPharmacy = object.dispensingPharmacy {
+                if let pharmacyId = dispensingPharmacy.pharmacyID, let storedPharmacy = self.fetchPharmacy(id: pharmacyId) {
+                    pharmacy = storedPharmacy
+                } else {
+                    self.storePharmacy(context: context, gateWayResponse: dispensingPharmacy, initialProtectedMedFetch: initialProtectedMedFetch, completion: { result in
+                        pharmacy = result
+                        dispatchGroup.leave()
+                    })
+                }
             }
             
-            if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dateEntered ?? "") {
-                dateEntered = timezoneDate
-            } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dateEntered ?? "") {
-                dateEntered = nozoneDate
+            dispatchGroup.notify(queue: self.classQueue) {
+                let id = UUID().uuidString
+                // Store new record
+                // This is due to API inconsistencies with date formatting
+                var dispenseDate: Date?
+                var dateEntered: Date?
+                
+                if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dispensedDate ?? "") {
+                    dispenseDate = timezoneDate
+                } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dispensedDate ?? "") {
+                    dispenseDate = nozoneDate
+                }
+                
+                if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dateEntered ?? "") {
+                    dateEntered = timezoneDate
+                } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dateEntered ?? "") {
+                    dateEntered = nozoneDate
+                }
+                
+                self.storePrescription(
+                    context: context,
+                    patient: patient,
+                    id: id,
+                    prescriptionIdentifier: object.prescriptionIdentifier,
+                    prescriptionStatus: object.prescriptionStatus,
+                    dispensedDate: dispenseDate,
+                    practitionerSurname: object.practitionerSurname,
+                    directions: object.directions,
+                    dateEntered: dateEntered,
+                    pharmacy: pharmacy,
+                    medication: medication,
+                    initialProtectedMedFetch: initialProtectedMedFetch,
+                    completion: completion
+                )
             }
-            
-            self.storePrescription(
-                context: context,
-                patient: patient,
-                id: id,
-                prescriptionIdentifier: object.prescriptionIdentifier,
-                prescriptionStatus: object.prescriptionStatus,
-                dispensedDate: dispenseDate,
-                practitionerSurname: object.practitionerSurname,
-                directions: object.directions,
-                dateEntered: dateEntered,
-                pharmacy: pharmacy,
-                medication: medication,
-                initialProtectedMedFetch: initialProtectedMedFetch,
-                completion: completion
-            )
         }
     }
     
@@ -219,19 +221,19 @@ extension StorageService: StorageMedicationManager {
         guard let contextPatient = contextPatientObject as? Patient else {
             return completion(nil)
         }
+        let prescription = Perscription(context: context)
+        prescription.id = id
+        prescription.prescriptionIdentifier = prescriptionIdentifier
+        prescription.status = prescriptionStatus
+        prescription.dispensedDate = dispensedDate
+        prescription.practitionerSurname = practitionerSurname
+        prescription.directions = directions
+        prescription.dateEntered = dateEntered
+        prescription.patient = contextPatient
+        prescription.authenticated = true
+        prescription.pharmacy = pharmacy
+        prescription.medication = medication
         context.perform {
-            let prescription = Perscription(context: context)
-            prescription.id = id
-            prescription.prescriptionIdentifier = prescriptionIdentifier
-            prescription.status = prescriptionStatus
-            prescription.dispensedDate = dispensedDate
-            prescription.practitionerSurname = practitionerSurname
-            prescription.directions = directions
-            prescription.dateEntered = dateEntered
-            prescription.patient = contextPatient
-            prescription.authenticated = true
-            prescription.pharmacy = pharmacy
-            prescription.medication = medication
             do {
                 try context.save()
                 self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: prescription))
@@ -284,19 +286,19 @@ extension StorageService: StorageMedicationManager {
         initialProtectedMedFetch: Bool,
         completion: @escaping(Medication?)->Void
     ) {
+        let medication = Medication(context: context)
+        medication.din = din
+        medication.brandName = brandName
+        medication.genericName = genericName
+        medication.quantity = quantity ?? 0
+        medication.maxDailyDosage = Int64(maxDailyDosage ?? 0)
+        medication.drugDiscontinuedDate = drugDiscontinuedDate
+        medication.form = form
+        medication.manufacturer = manufacturer
+        medication.strength = strength
+        medication.strengthUnit = strengthUnit
+        medication.isPin = isPin ?? false
         context.perform {
-            let medication = Medication(context: context)
-            medication.din = din
-            medication.brandName = brandName
-            medication.genericName = genericName
-            medication.quantity = quantity ?? 0
-            medication.maxDailyDosage = Int64(maxDailyDosage ?? 0)
-            medication.drugDiscontinuedDate = drugDiscontinuedDate
-            medication.form = form
-            medication.manufacturer = manufacturer
-            medication.strength = strength
-            medication.strengthUnit = strengthUnit
-            medication.isPin = isPin ?? false
             do {
                 try context.save()
                 self.notify(event: StorageEvent(event: .Save, entity: .Medication, object: medication))

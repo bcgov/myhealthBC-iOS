@@ -91,19 +91,26 @@ extension StorageService: StoragePatientManager {
         birthday: Date? = nil,
         phn: String? = nil,
         authenticated: Bool,
+        context: NSManagedObjectContext? = nil,
         completion: @escaping (Patient?)-> Void
     ) {
-        guard let context = managedContext else {return}
+        var storeContext: NSManagedObjectContext?
+        if let context = context {
+            storeContext = context
+        } else {
+            storeContext = managedContext
+        }
+        guard let unwrappedContext = storeContext else {return}
         
-        context.perform {
+        unwrappedContext.perform {
             do {
-                let patient = Patient(context: context)
+                let patient = Patient(context: unwrappedContext)
                 patient.birthday = birthday
                 patient.name = name
                 patient.phn = phn
                 patient.authenticated = authenticated
                 patient.authManagerDisplayName = AuthManager().displayName
-                try context.save()
+                try unwrappedContext.save()
                 self.notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
                 return completion(patient)
             }
@@ -245,7 +252,7 @@ extension StorageService: StoragePatientManager {
                 
                 return completion(patient)
             } else {
-                self.createPatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated, completion: completion)
+                self.createPatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated, context: contextAsync, completion: completion)
             }
         }
        
@@ -255,6 +262,7 @@ extension StorageService: StoragePatientManager {
         context.perform {
             do {
                 let patients = try context.fetch(Patient.fetchRequest())
+                
                 if let phn = phn, let byPHN = patients.filter({$0.phn == phn}).first {
                     return completion(byPHN)
                 } else if let name = name,
@@ -275,9 +283,9 @@ extension StorageService: StoragePatientManager {
     
     /// This function is meant to be used by fetchOrCreatePatient
     /// All is does is verify
-    fileprivate func createPatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool, completion: @escaping (Patient?)-> Void) {
+    fileprivate func createPatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool, context: NSManagedObjectContext? = nil, completion: @escaping (Patient?)-> Void) {
         if (phn != nil) || (birthday != nil && name != nil) {
-            savePatient(name: name, birthday: birthday, phn: phn, authenticated: authenticated, completion: completion)
+            savePatient(name: name, birthday: birthday, phn: phn, authenticated: authenticated, context: context, completion: completion)
         } else {
             return completion(nil)
         }

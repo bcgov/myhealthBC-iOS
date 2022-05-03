@@ -61,6 +61,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private var loginSourceVC: LoginVCSource = .AfterOnboarding
     private var protectedWordAlreadyAttempted = false
     private var initialProtectedMedFetch = false
+    private var classQueue = DispatchQueue(label: "AuthenticatedHealthRecordsAPIWorkerClassQueue", qos: .userInitiated)
     
     init(delegateOwner: UIViewController) {
         self.apiClient = APIClient(delegateOwner: delegateOwner)
@@ -408,9 +409,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.perform(#selector(self.retryGetTestResultsRequest), with: nil, afterDelay: retryInSeconds)
             }
             else {
-                DispatchQueue.main.async {
-                    self.handleTestResultsInCoreData(testResult: testResult)
-                }
+                self.handleTestResultsInCoreData(testResult: testResult)
             }
         case .failure(let error):
             self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
@@ -601,38 +600,82 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.CovidTest])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
-        let queue = DispatchQueue(label: "labOrderTests2", qos: .userInitiated)
-        let dispatchGroup = DispatchGroup()
-        for order in orders {
-            dispatchGroup.enter()
-            queue.async {
-                let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
-                self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient, completion: { storedObject in
-                    if let storedObject = storedObject {
-                        completedCount += 1
-                    } else {
-                        errorArrayCount += 1
-                    }
-                    dispatchGroup.leave()
-                })
-            }
-        }
-        dispatchGroup.notify(queue: .main) {
+        let testResults = orders.map({AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: $0, patient: patient)})
+        handleTestResultsInCoreData(gatewayResponse: testResults, authenticated: true, patientObject: patient) { result in
+            completedCount = result.count
+            errorArrayCount = testResults.count - result.count
             let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
             self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
         }
+        
+//        let queue = DispatchQueue(label: "handleTestResultsInCoreData", qos: .userInitiated)
+//        let dispatchGroup = DispatchGroup()
+//        classQueue.async {
+//            for order in orders {
+//                dispatchGroup.enter()
+//                queue.async {
+//                    let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
+//                    self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient, completion: { storedObject in
+//                        if let storedObject = storedObject {
+//                            completedCount += 1
+//                        } else {
+//                            errorArrayCount += 1
+//                        }
+//                        dispatchGroup.leave()
+//                    })
+//                }
+//            }
+//            dispatchGroup.notify(queue: .main) {
+//                let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+//                self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+//            }
+//        }
     }
     
-    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, completion: @escaping(CovidLabTestResult?)->Void) {
+    private func handleTestResultsInCoreData(gatewayResponse: [GatewayTestResultResponse],
+                                             authenticated: Bool,
+                                             patientObject: AuthenticatedPatientDetailsResponseObject,
+                                             completion: @escaping([CovidLabTestResult])->Void) {
         
         StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
             guard let patient = patient else {
-                return completion(nil)
+                return completion([])
             }
 
-            StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false, completion: completion)
+            self.recursiveHandleTestResultsInCoreData(objects: gatewayResponse, completed: [], authenticated: authenticated, patientObject: patient, completion: completion)
         })
     }
+    
+    private func recursiveHandleTestResultsInCoreData(objects: [GatewayTestResultResponse],
+                                                      completed: [CovidLabTestResult],
+                                                      authenticated: Bool,
+                                                      patientObject: Patient,
+                                                      completion: @escaping([CovidLabTestResult])->Void) {
+        var remainingObjects = objects
+        var storedObjects = completed
+        guard !objects.isEmpty,  let currentObjectToStore = remainingObjects.popLast() else {
+            return completion(completed)
+        }
+        classQueue.async {
+            StorageService.shared.storeCovidTestResults(patient: patientObject ,gateWayResponse: currentObjectToStore, authenticated: authenticated, manuallyAdded: false, completion: { result in
+                if let testResult = result {
+                    storedObjects.append(testResult)
+                }
+                self.recursiveHandleTestResultsInCoreData(objects: remainingObjects, completed: storedObjects, authenticated: authenticated, patientObject: patientObject, completion: completion)
+            })
+        }
+    }
+    
+//    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, completion: @escaping(CovidLabTestResult?)->Void) {
+//
+//        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
+//            guard let patient = patient else {
+//                return completion(nil)
+//            }
+//
+//            StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false, completion: completion)
+//        })
+//    }
 }
 
 // MARK: Handle Medication Statement in core data
@@ -643,42 +686,85 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Prescription])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
-        let queue = DispatchQueue(label: "labOrderTests2", qos: .userInitiated)
-        let dispatchGroup = DispatchGroup()
-        for payload in payloads {
-            dispatchGroup.enter()
-            queue.async {
-                // TODO: AMIR
-                if self.handleMedicationStatementInCoreData(object: payload, authenticated: true, patientObject: patient, initialProtectedMedFetch: initialProtectedMedFetch) != nil {
-                    completedCount += 1
-                } else {
-                    errorArrayCount += 1
+        classQueue.async {
+            self.handleMedicationStatementsInCoreData(objects: payloads, authenticated: true, patientObject: patient, initialProtectedMedFetch: initialProtectedMedFetch, completion: { result in
+
+                completedCount = result.count
+                errorArrayCount = payloads.count - result.count
+                
+                if let protectiveWord = protectiveWord, completedCount > 0 {
+                    self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
+                    self.authManager.storeMedFetchRequired(bool: false)
                 }
-                dispatchGroup.leave()
-            }
+                let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+                self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+            })
         }
+//
+//        classQueue.async {
+//            let dispatchGroup = DispatchGroup()
+//            for payload in payloads {
+//                dispatchGroup.enter()
+//                queue.async {
+//                    self.handleMedicationStatementsInCoreData(object: payload, authenticated: true, patientObject: patient, initialProtectedMedFetch: initialProtectedMedFetch, completion: { result in
+//                        if result != nil {
+//                            completedCount += 1
+//                        } else {
+//                            errorArrayCount += 1
+//                        }
+//                        dispatchGroup.leave()
+//                    })
+//                }
+//            }
+//
+//            dispatchGroup.notify(queue: .main) {
+//                if let protectiveWord = protectiveWord, completedCount > 0 {
+//                    self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
+//                    self.authManager.storeMedFetchRequired(bool: false)
+//                    AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
+//                }
+//                let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+//                self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+//            }
+//        }
         
-        dispatchGroup.notify(queue: .main) {
-            if let protectiveWord = protectiveWord, completedCount > 0 {
-                self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
-                self.authManager.storeMedFetchRequired(bool: false)
-                AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
+    }
+    
+    private func handleMedicationStatementsInCoreData(objects: [AuthenticatedMedicationStatementResponseObject.ResourcePayload], authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, initialProtectedMedFetch: Bool, completion: @escaping([Perscription])->Void) {
+        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
+            guard let patient = patient else {
+                return completion([])
             }
-            let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
-            self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+            self.recursiveHandleMedicationStatementsInCoreData(objects: objects, completed: [], authenticated: authenticated, patientObject: patient, initialProtectedMedFetch: initialProtectedMedFetch, completion: completion)
+        })
+    }
+    
+    private func recursiveHandleMedicationStatementsInCoreData(objects: [AuthenticatedMedicationStatementResponseObject.ResourcePayload], completed: [Perscription], authenticated: Bool, patientObject: Patient, initialProtectedMedFetch: Bool, completion: @escaping([Perscription])->Void) {
+        var remainingObjects = objects
+        var storedObjects = completed
+        guard !objects.isEmpty,  let currentObjectToStore = remainingObjects.popLast() else {
+            return completion(completed)
+        }
+        classQueue.async {
+            StorageService.shared.storePrescription(patient: patientObject, object: currentObjectToStore, initialProtectedMedFetch: initialProtectedMedFetch) { result in
+                if let prescription = result {
+                    storedObjects.append(prescription)
+                }
+                self.recursiveHandleMedicationStatementsInCoreData(objects: remainingObjects, completed: storedObjects, authenticated: authenticated, patientObject: patientObject, initialProtectedMedFetch: initialProtectedMedFetch, completion: completion)
+            }
         }
     }
     
-    private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, initialProtectedMedFetch: Bool) {
-        
-        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
-            guard let patient = patient else {
-                return
-            }
-
-            StorageService.shared.storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch, completion: {_ in})
-        })
-    }
+//    private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, initialProtectedMedFetch: Bool, completion: @escaping(Perscription?)->Void) {
+//        
+//        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
+//            guard let patient = patient else {
+//                return completion(nil)
+//            }
+//
+//            StorageService.shared.storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch, completion: completion)
+//        })
+//    }
 }
 
 // MARK: Handle Laboratory Orders in core data
@@ -689,34 +775,99 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.LaboratoryOrder])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
-        guard let authCreds = self.authCredentials else { return }
-        let queue = DispatchQueue(label: "labOrderTests2", qos: .userInitiated)
-        let dispatchGroup = DispatchGroup()
-        for order in orders {
-            dispatchGroup.enter()
-            queue.async {
-                self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
-                    self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient)
-                    dispatchGroup.leave()
-                }
-            }
-        }
         
-        dispatchGroup.notify(queue: .main) {
+        handleLaboratoryOrdersInCoreData(objects: orders, authenticated: true, patientObject: patient) { result in
+            completedCount = result.count
+            errorArrayCount = orders.count - result.count
+            
             let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
             // For now, just calling success so that the entire fetch can pass
             self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
         }
+//        let queue = DispatchQueue(label: "handleLaboratoryOrdersInCoreData", qos: .userInitiated)
+//        let dispatchGroup = DispatchGroup()
+//        classQueue.async {
+//            for order in orders {
+//                dispatchGroup.enter()
+//                queue.async {
+//
+//                    self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
+//                        self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient, completion: {result in
+//                            if result != nil {
+//                                completedCount += 1
+//                            } else {
+//                                errorArrayCount += 1
+//                            }
+//                            dispatchGroup.leave()
+//                        })
+//                    }
+//                }
+//            }
+//
+//            dispatchGroup.notify(queue: .main) {
+//
+//            }
+//        }
     }
     
-    private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) {
-        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
-            guard let patient = patient else {
-                return
-            }
-            StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf, completion: {_ in})
-        })
+//    private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, completion: @escaping(LaboratoryOrder?)->Void) {
+//        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated, completion: { patient in
+//            guard let patient = patient else {
+//                return completion(nil)
+//            }
+//            StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf, completion: completion)
+//        })
+//
+//    }
+    
+    private func handleLaboratoryOrdersInCoreData(objects: [AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order], authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, completion: @escaping([LaboratoryOrder])->Void) {
         
+        StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber,
+                                                   name: patientObject.getFullName,
+                                                   birthday: patientObject.getBdayDate,
+                                                   authenticated: authenticated,
+                                                   completion: { patient in
+            guard let patient = patient else {
+                return completion([])
+            }
+            self.recursiveHandleLaboratoryOrdersInCoreData(objects: objects,
+                                                      completed: [],
+                                                      patientObject: patient,
+                                                      authenticated: authenticated,
+                                                      completion: completion)
+            
+        })
+    }
+    
+    private func recursiveHandleLaboratoryOrdersInCoreData(objects: [AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order],
+                                                           completed: [LaboratoryOrder],
+                                                           patientObject: Patient,
+                                                           authenticated: Bool,
+                                                           completion: @escaping([LaboratoryOrder])->Void) {
+        var remainingObjects = objects
+        var storedObjects = completed
+        guard !objects.isEmpty,  let currentObjectToStore = remainingObjects.popLast(), let authCreds = self.authCredentials else {
+            return completion(completed)
+        }
+        
+        classQueue.async {
+            self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds,
+                                                    reportId: currentObjectToStore.labPdfId ?? "") { pdf in
+                StorageService.shared.storeLaboratoryOrder(patient: patientObject,
+                                                           gateWayObject: currentObjectToStore,
+                                                           pdf: pdf,
+                                                           completion: { result in
+                    if let labOrder = result {
+                        storedObjects.append(labOrder)
+                    }
+                    self.recursiveHandleLaboratoryOrdersInCoreData(objects: remainingObjects,
+                                                                          completed: storedObjects,
+                                                                          patientObject: patientObject,
+                                                                          authenticated: authenticated,
+                                                                          completion: completion)
+                })
+            }
+        }
     }
 }
 

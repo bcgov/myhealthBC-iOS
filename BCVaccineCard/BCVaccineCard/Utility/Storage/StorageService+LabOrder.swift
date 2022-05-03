@@ -93,7 +93,7 @@ extension StorageService: StorageLaboratoryOrderManager {
                     })
                 }
             }
-            dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+            dispatchGroup.notify(queue: self.classQueue) {
                 self.notify(event: StorageEvent(event: .Save, entity: .LaboratoryOrder, object: storedOrders))
                 return completion(storedOrders)
             }
@@ -126,7 +126,7 @@ extension StorageService: StorageLaboratoryOrderManager {
                         
                     }
                 }
-                dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+                dispatchGroup.notify(queue: self.classQueue) {
                     let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
                     let timelineDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.timelineDateTime ?? "") ?? Date()
                     return self.storeLaboratoryOrder(context: context, patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf, completion: completion)
@@ -157,7 +157,7 @@ extension StorageService: StorageLaboratoryOrderManager {
         labOrder.pdf = pdf
         var labTestsArray: [LaboratoryTest] = []
         let labTests = laboratoryTests ?? []
-        let queue = DispatchQueue(label: "labOrderTests2", qos: .userInitiated)
+        let queue = DispatchQueue(label: "labOrderStore", qos: .userInitiated)
         let dispatchGroup = DispatchGroup()
         classQueue.async {
             for test in labTests {
@@ -176,7 +176,7 @@ extension StorageService: StorageLaboratoryOrderManager {
                         })
                 }
             }
-            dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+            dispatchGroup.notify(queue: self.classQueue) {
                 context.perform {
                     do {
                         labTestsArray.forEach({labOrder.addToLaboratoryTests($0)})

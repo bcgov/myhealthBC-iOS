@@ -106,7 +106,7 @@ extension StorageService: StorageCovidTestResultManager {
                         })
                 }
             }
-            dispatchGroup.notify(queue: .global(qos: .userInitiated)) {
+            dispatchGroup.notify(queue: self.classQueue) {
                 context.perform {
                     let model = CovidLabTestResult(context: context)
                     guard let contextPatient = context.object(with: patient.objectID) as? Patient else { return completion(nil) }
