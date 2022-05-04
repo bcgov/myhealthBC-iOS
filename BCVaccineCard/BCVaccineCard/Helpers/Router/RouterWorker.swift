@@ -85,7 +85,23 @@ struct CurrentRecordsAndPassesStacks {
 
 enum RecordsFlowVCs: Equatable {
     static func == (lhs: RecordsFlowVCs, rhs: RecordsFlowVCs) -> Bool {
-        <#code#>
+        switch (lhs, rhs) {
+        case (.HealthRecordsViewController, .HealthRecordsViewController):
+            return true
+        case (.UsersListOfRecordsViewController, .UsersListOfRecordsViewController):
+            return true
+        case (.FetchHealthRecordsViewController, .FetchHealthRecordsViewController):
+            return true
+        case (.HealthRecordDetailViewController, .HealthRecordDetailViewController):
+            return true
+        case (.ProfileAndSettingsViewController, .ProfileAndSettingsViewController):
+            return true
+        case (.SecurityAndDataViewController, .SecurityAndDataViewController):
+            return true
+        case (.GatewayFormViewController, .GatewayFormViewController):
+            return true
+        default: return false
+        }
     }
     case HealthRecordsViewController
     case UsersListOfRecordsViewController(patient: Patient?)
@@ -94,11 +110,79 @@ enum RecordsFlowVCs: Equatable {
     case ProfileAndSettingsViewController
     case SecurityAndDataViewController
     case GatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType, gatewayInProgressDetails: GatewayInProgressDetails?)
+    
+    enum NonAssociatedVersion {
+        case HealthRecordsViewController
+        case UsersListOfRecordsViewController
+        case FetchHealthRecordsViewController
+        case HealthRecordDetailViewController
+        case ProfileAndSettingsViewController
+        case SecurityAndDataViewController
+        case GatewayFormViewController
+        
+        func getIndexFromArray(array: [RecordsFlowVCs]) -> Int? {
+            return array.map { $0.getNonAssociatedVersion }.firstIndex(of: self)
+        }
+    }
+    
+    private var getNonAssociatedVersion: NonAssociatedVersion {
+        switch self {
+        case .HealthRecordsViewController:
+            return .HealthRecordsViewController
+        case .UsersListOfRecordsViewController:
+            return .UsersListOfRecordsViewController
+        case .FetchHealthRecordsViewController:
+            return .FetchHealthRecordsViewController
+        case .HealthRecordDetailViewController:
+            return .HealthRecordDetailViewController
+        case .ProfileAndSettingsViewController:
+            return .ProfileAndSettingsViewController
+        case .SecurityAndDataViewController:
+            return .SecurityAndDataViewController
+        case .GatewayFormViewController:
+            return .GatewayFormViewController
+        }
+    }
+    
+//    func indexFromArray(array: [Self]) -> Int? {
+//        return array.firstIndex(of: self)
+////        switch self {
+////        case .HealthRecordsViewController:
+////            return array.firstIndex(of: <#T##RecordsFlowVCs#>)
+////        case .UsersListOfRecordsViewController(let patient):
+////            <#code#>
+////        case .FetchHealthRecordsViewController:
+////            <#code#>
+////        case .HealthRecordDetailViewController(let patient, let dataSource, let userNumberHealthRecords):
+////            <#code#>
+////        case .ProfileAndSettingsViewController:
+////            <#code#>
+////        case .SecurityAndDataViewController:
+////            <#code#>
+////        case .GatewayFormViewController(let rememberDetails, let fetchType, let gatewayInProgressDetails):
+////            <#code#>
+////        }
+//    }
 }
 
 enum PassesFlowVCs: Equatable {
     static func == (lhs: PassesFlowVCs, rhs: PassesFlowVCs) -> Bool {
-        <#code#>
+        switch (lhs, rhs) {
+        case (.HealthPassViewController, .HealthPassViewController):
+            return true
+        case (.CovidVaccineCardsViewController, .CovidVaccineCardsViewController):
+            return true
+        case (.QRRetrievalMethodViewController, .QRRetrievalMethodViewController):
+            return true
+        case (.ProfileAndSettingsViewController, .ProfileAndSettingsViewController):
+            return true
+        case (.SecurityAndDataViewController, .SecurityAndDataViewController):
+            return true
+        case (.GatewayFormViewController, .GatewayFormViewController):
+            return true
+        default: return false
+        }
+
     }
     case HealthPassViewController(fedPassToOpen: String?)
     case CovidVaccineCardsViewController(fedPassToOpen: String?, recentlyAddedCardId: String?)
@@ -229,7 +313,7 @@ extension RouterWorker {
     }
     
     private func authFetchRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        if values.currentTab == .records {
+        if values.currentTab == .records {
             switch self.currentPatientScenario {
             case .NoUsers, .OneUnauthUser, .MoreThanOneUnauthUser:
                 // Not possible here - after an authFetch, there has to be at least one Auth user, so do nothing
@@ -248,10 +332,10 @@ extension RouterWorker {
                 let vc2 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
                 return [vc1, vc2]
             }
-//        }
-//        else {
-//
-//        }
+        }
+        else {
+            
+        }
         
     }
     
@@ -291,12 +375,28 @@ extension RouterWorker {
         }
         return newVCStack
     }
-    
-    private func modifyRecordsStackIfNecessary(currentPatientScenarioAfterAction scenario: CurrentPatientScenarios, proposedRecordsStack: [RecordsFlowVCs]) {
+    // Note: Use this if user is not currently on records tab
+    private func modifyRecordsStackIfNecessary(currentPatientScenarioAfterAction scenario: CurrentPatientScenarios, currentRecordsStack: [RecordsFlowVCs], relevantPatient: Patient) -> [RecordsFlowVCs] {
         switch scenario {
         case .NoUsers:
-            // TODO: Check if proposedRecordsStack contains healthRecordsVC or userListOfRecordsVC or recordsDetailVC - if so, then remove those from the stack. Make sure fetchVC is the base VC here
-            print("TODO")
+            // Check if currentRecordsStack contains healthRecordsVC or userListOfRecordsVC or recordsDetailVC - if so, then remove those from the stack. Make sure fetchVC is the base VC here
+            var recordsStack = currentRecordsStack
+            if let index = RecordsFlowVCs.NonAssociatedVersion.HealthRecordsViewController.getIndexFromArray(array: recordsStack) {
+                recordsStack.remove(at: index)
+            }
+            if let index = RecordsFlowVCs.NonAssociatedVersion.UsersListOfRecordsViewController.getIndexFromArray(array: recordsStack) {
+                recordsStack.remove(at: index)
+            }
+            if let index = RecordsFlowVCs.NonAssociatedVersion.HealthRecordDetailViewController.getIndexFromArray(array: recordsStack) {
+                recordsStack.remove(at: index)
+            }
+            if let index = RecordsFlowVCs.NonAssociatedVersion.FetchHealthRecordsViewController.getIndexFromArray(array: recordsStack) {
+                let fetchVC = recordsStack.remove(at: index)
+                recordsStack.insert(fetchVC, at: 0)
+            } else {
+                let fetchVC = RecordsFlowVCs.FetchHealthRecordsViewController
+                recordsStack.insert(fetchVC, at: 0)
+            }
         case .OneAuthUser:
             <#code#>
         case .OneUnauthUser:
