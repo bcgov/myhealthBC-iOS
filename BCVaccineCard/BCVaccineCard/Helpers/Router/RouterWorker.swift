@@ -84,25 +84,6 @@ struct CurrentRecordsAndPassesStacks {
 }
 
 enum RecordsFlowVCs {
-//    static func == (lhs: RecordsFlowVCs, rhs: RecordsFlowVCs) -> Bool {
-//        switch (lhs, rhs) {
-//        case (.HealthRecordsViewController, .HealthRecordsViewController):
-//            return true
-//        case (.UsersListOfRecordsViewController, .UsersListOfRecordsViewController):
-//            return true
-//        case (.FetchHealthRecordsViewController, .FetchHealthRecordsViewController):
-//            return true
-//        case (.HealthRecordDetailViewController, .HealthRecordDetailViewController):
-//            return true
-//        case (.ProfileAndSettingsViewController, .ProfileAndSettingsViewController):
-//            return true
-//        case (.SecurityAndDataViewController, .SecurityAndDataViewController):
-//            return true
-//        case (.GatewayFormViewController, .GatewayFormViewController):
-//            return true
-//        default: return false
-//        }
-//    }
     case HealthRecordsViewController
     case UsersListOfRecordsViewController(patient: Patient?)
     case FetchHealthRecordsViewController
@@ -143,53 +124,45 @@ enum RecordsFlowVCs {
             return .GatewayFormViewController
         }
     }
-    
-//    func indexFromArray(array: [Self]) -> Int? {
-//        return array.firstIndex(of: self)
-////        switch self {
-////        case .HealthRecordsViewController:
-////            return array.firstIndex(of: <#T##RecordsFlowVCs#>)
-////        case .UsersListOfRecordsViewController(let patient):
-////            <#code#>
-////        case .FetchHealthRecordsViewController:
-////            <#code#>
-////        case .HealthRecordDetailViewController(let patient, let dataSource, let userNumberHealthRecords):
-////            <#code#>
-////        case .ProfileAndSettingsViewController:
-////            <#code#>
-////        case .SecurityAndDataViewController:
-////            <#code#>
-////        case .GatewayFormViewController(let rememberDetails, let fetchType, let gatewayInProgressDetails):
-////            <#code#>
-////        }
-//    }
 }
 
-enum PassesFlowVCs: Equatable {
-    static func == (lhs: PassesFlowVCs, rhs: PassesFlowVCs) -> Bool {
-        switch (lhs, rhs) {
-        case (.HealthPassViewController, .HealthPassViewController):
-            return true
-        case (.CovidVaccineCardsViewController, .CovidVaccineCardsViewController):
-            return true
-        case (.QRRetrievalMethodViewController, .QRRetrievalMethodViewController):
-            return true
-        case (.ProfileAndSettingsViewController, .ProfileAndSettingsViewController):
-            return true
-        case (.SecurityAndDataViewController, .SecurityAndDataViewController):
-            return true
-        case (.GatewayFormViewController, .GatewayFormViewController):
-            return true
-        default: return false
-        }
-
-    }
+enum PassesFlowVCs {
     case HealthPassViewController(fedPassToOpen: String?)
     case CovidVaccineCardsViewController(fedPassToOpen: String?, recentlyAddedCardId: String?)
     case QRRetrievalMethodViewController
     case ProfileAndSettingsViewController
     case SecurityAndDataViewController
     case GatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType, gatewayInProgressDetails: GatewayInProgressDetails?)
+    
+    enum NonAssociatedVersion {
+        case HealthPassViewController
+        case CovidVaccineCardsViewController
+        case QRRetrievalMethodViewController
+        case ProfileAndSettingsViewController
+        case SecurityAndDataViewController
+        case GatewayFormViewController
+        
+        func getIndexFromArray(array: [PassesFlowVCs]) -> Int? {
+            return array.map { $0.getNonAssociatedVersion }.firstIndex(of: self)
+        }
+    }
+    
+    private var getNonAssociatedVersion: NonAssociatedVersion {
+        switch self {
+        case .HealthPassViewController:
+            return .HealthPassViewController
+        case .CovidVaccineCardsViewController:
+            return .CovidVaccineCardsViewController
+        case .QRRetrievalMethodViewController:
+            return .QRRetrievalMethodViewController
+        case .ProfileAndSettingsViewController:
+            return .ProfileAndSettingsViewController
+        case .SecurityAndDataViewController:
+            return .SecurityAndDataViewController
+        case .GatewayFormViewController:
+            return .GatewayFormViewController
+        }
+    }
 }
 
 struct RecordsFlowDetails {
