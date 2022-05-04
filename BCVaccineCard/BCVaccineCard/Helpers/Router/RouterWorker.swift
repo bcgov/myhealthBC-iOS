@@ -1,7 +1,7 @@
 //
 //  RouterWorker.swift
 //  BCVaccineCard
-//
+
 //  Created by Connor Ogilvie on 2022-04-20.
 
 // Rules are - Use router worker to construct the nav stack
