@@ -10,6 +10,9 @@ import LocalAuthentication
 import UIKit
 
 class LocalAuthManager {
+    // Local auth will not be shown for this time after its been shown
+    // in one session.
+    private static let timout = 2 // minutes
     
     public static let shared = LocalAuthManager()
     
@@ -30,17 +33,40 @@ class LocalAuthManager {
             Logger.log(string: "Local Auth is blocked, not showing challenge", type: .localAuth)
             return
         }
+        if let delegate = UIApplication.shared.delegate as? AppDelegate,
+           let lastAuth = delegate.lastLocalAuth {
+            let timeElapsedInMinutes = (Int(Int(Date().timeIntervalSince(lastAuth))) / 60 ) % 60
+            
+            if timeElapsedInMinutes <= (LocalAuthManager.timout) {
+                Logger.log(string: "Last local auth was less than \(LocalAuthManager.timout) minutes ago", type: .localAuth)
+                return
+            }
+        }
         LocalAuthManager.shouldAuthenticate = true
         Logger.log(string: "Should perfom local authentication", type: .localAuth)
         Notification.Name.shouldPerformLocalAuth.post(object: nil, userInfo: nil)
     }
     
-    public func listenToAppLaunch() {
+    public func listenToAppStates() {
+        listenToAppLaunch()
+        listenToAppGoingToBackground()
+    }
+    
+    private func listenToAppLaunch() {
         Notification.Name.launchedFromBackground.onPost(object: nil, queue: .main) {[weak self] _ in
             guard let `self` = self else {return}
             Logger.log(string: "App launched from background", type: .localAuth)
             self.launchedFromBackground()
             LocalAuthManager.block = false
+        }
+    }
+    
+    private func listenToAppGoingToBackground() {
+        Notification.Name.didEnterBackground.onPost(object: nil, queue: .main) { _ in
+            if let delegate = UIApplication.shared.delegate as? AppDelegate {
+                delegate.lastLocalAuth = Date()
+            }
+            Logger.log(string: "App going to background", type: .localAuth)
         }
     }
     
@@ -174,6 +200,9 @@ class LocalAuthManager {
                 success, authenticationError in
                 DispatchQueue.main.async {
                     if success {
+                        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+                            delegate.lastLocalAuth = Date()
+                        }
                         return completion(.Authorized)
                     } else {
                         return completion(.Unauthorized)
