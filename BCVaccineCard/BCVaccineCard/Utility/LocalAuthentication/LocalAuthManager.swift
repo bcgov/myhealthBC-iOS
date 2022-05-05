@@ -12,7 +12,7 @@ import UIKit
 class LocalAuthManager {
     // Local auth will not be shown for this time after its been shown
     // in one session.
-    private static let timout = 2 // minutes
+    private static let timout = 10 // minutes
     
     public static let shared = LocalAuthManager()
     
