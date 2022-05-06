@@ -51,6 +51,7 @@ enum LoginVCSource: String {
     case SecurityAndDataVC = "SecurityAndDataVC"
     case ProfileAndSettingsVC = "ProfileAndSettingsVC"
     case HealthPassVC = "HealthPassVC"
+    case HealthRecordsVC = "HealthRecordsVC"
     case QRRetrievalVC = "QRRetrievalVC"
     case FetchHealthRecordsVC = "FetchHealthRecordsVC"
     case UserListOfRecordsVC = "UserListOfRecordsVC"
@@ -63,6 +64,7 @@ enum LoginVCSource: String {
         case .SecurityAndDataVC: return SecurityAndDataViewController.self
         case .ProfileAndSettingsVC: return ProfileAndSettingsViewController.self
         case .HealthPassVC: return HealthPassViewController.self
+        case .HealthRecordsVC: return HealthRecordsViewController.self
         case .QRRetrievalVC: return QRRetrievalMethodViewController.self
         case .FetchHealthRecordsVC: return FetchHealthRecordsViewController.self
         case .UserListOfRecordsVC: return UsersListOfRecordsViewController.self

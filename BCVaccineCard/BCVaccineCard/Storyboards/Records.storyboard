@@ -10,23 +10,23 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Health Records View Controller-->
+        <!--Folder Records View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="HealthRecordsViewController" id="Y6W-OH-hqX" customClass="HealthRecordsViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FolderRecordsViewController" id="Y6W-OH-hqX" customClass="FolderRecordsViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YPN-ao-axn" customClass="ReusableHeaderAddView" customModule="BCVaccineCard" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="88" width="414" height="90"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="90"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="90" id="Icg-yq-uQF"/>
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="IAZ-cd-qXE">
-                                <rect key="frame" x="0.0" y="178" width="414" height="684"/>
+                                <rect key="frame" x="0.0" y="134" width="414" height="728"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="uJw-uT-GxH">
                                     <size key="itemSize" width="128" height="128"/>
@@ -66,7 +66,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1047.8260869565217" y="79.6875"/>
+            <point key="canvasLocation" x="2903" y="980"/>
         </scene>
         <!--Custom Navigation Controller-->
         <scene sceneID="yP5-DZ-D9l">
@@ -79,12 +79,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="ouD-qS-xKp"/>
+                        <segue destination="XoV-2z-Nwy" kind="relationship" relationship="rootViewController" id="t5c-VF-Pc6"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dF2-7i-M3H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="79.6875"/>
+            <point key="canvasLocation" x="810" y="80"/>
         </scene>
         <!--Fetch Health Records View Controller-->
         <scene sceneID="wlQ-fj-YdB">
@@ -114,7 +114,38 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SEL-Gm-WR5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1922" y="80"/>
+            <point key="canvasLocation" x="3958" y="944"/>
+        </scene>
+        <!--Health Records View Controller-->
+        <scene sceneID="cZD-N0-SFP">
+            <objects>
+                <viewController storyboardIdentifier="HealthRecordsViewController" id="XoV-2z-Nwy" customClass="HealthRecordsViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="oGh-hj-DZ6">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mlp-u0-ZJ8" customClass="HealthRecordsHomeView" customModule="BCVaccineCard" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="WuY-Hr-K7v"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="WuY-Hr-K7v" firstAttribute="trailing" secondItem="mlp-u0-ZJ8" secondAttribute="trailing" id="Nmr-TG-sya"/>
+                            <constraint firstItem="mlp-u0-ZJ8" firstAttribute="leading" secondItem="WuY-Hr-K7v" secondAttribute="leading" id="kD1-Mi-1q9"/>
+                            <constraint firstItem="WuY-Hr-K7v" firstAttribute="bottom" secondItem="mlp-u0-ZJ8" secondAttribute="bottom" id="n1y-B2-au7"/>
+                            <constraint firstItem="mlp-u0-ZJ8" firstAttribute="top" secondItem="WuY-Hr-K7v" secondAttribute="top" id="ufF-rv-GlA"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="tIw-8X-fdo"/>
+                    <connections>
+                        <outlet property="homeRecordsView" destination="mlp-u0-ZJ8" id="jh8-q2-HxN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iWf-JM-Qbd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1903" y="80"/>
         </scene>
         <!--Users List Of Records View Controller-->
         <scene sceneID="euA-09-vEQ">
