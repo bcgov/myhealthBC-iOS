@@ -18,6 +18,7 @@ extension Notification.Name {
     static let authTokenExpired = Notification.Name("authTokenExpired")
     
     static let launchedFromBackground = Notification.Name("launchedFromBackground")
+    static let didEnterBackground = Notification.Name("didEnterBackground")
     static let shouldPerformLocalAuth = Notification.Name("shouldPerformLocalAuth")
     
     static let backgroundAuthFetch = Notification.Name("backgroundAuthFetch")

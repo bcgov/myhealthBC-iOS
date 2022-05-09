@@ -1,7 +1,7 @@
 //
 //  RouterWorker.swift
 //  BCVaccineCard
-//
+
 //  Created by Connor Ogilvie on 2022-04-20.
 
 // Rules are - Use router worker to construct the nav stack
@@ -189,10 +189,6 @@ class RouterWorker: NSObject {
     private var getAuthenticatedPatient: Patient? {
         return StorageService.shared.fetchAuthenticatedPatient()
     }
-    
-//    private var getUnathenticatedPatients: [Patient]? {
-//        return StorageService.shared.fetchUnauthenticatedPatients()
-//    }
     
     private var currentPatientScenario: CurrentPatientScenarios {
         let authPatientCount = self.getAuthenticatedPatient != nil ? 1 : 0
