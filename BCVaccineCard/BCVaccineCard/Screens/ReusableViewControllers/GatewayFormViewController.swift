@@ -201,9 +201,9 @@ class GatewayFormViewController: BaseViewController {
         return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
     }
     
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
-    }
+//    override var getRecordFlowType: RecordsFlowVCs? {
+//        return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
