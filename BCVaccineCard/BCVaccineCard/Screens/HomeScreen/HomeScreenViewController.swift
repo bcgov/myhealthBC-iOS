@@ -158,7 +158,7 @@ extension HomeScreenViewController {
     private func handleGetStartedScenario(tabBarController: TabBarController) {
         self.showLogin(initialView: .Landing, sourceVC: .HomeScreen) { authenticationStatus in
             guard authenticationStatus != .Cancelled else { return }
-//            tabBarController.selectedIndex = TabBarVCs.records.rawValue
+            AppDelegate.sharedInstance?.addLoadingViewHack()
             let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
             let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
             let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HomeScreen, authenticationStatus: authenticationStatus))

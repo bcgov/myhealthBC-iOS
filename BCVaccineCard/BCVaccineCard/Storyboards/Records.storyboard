@@ -240,6 +240,7 @@
                         <outlet property="noRecordsFoundSubTitle" destination="7gx-Hz-mnf" id="S4E-9M-jPM"/>
                         <outlet property="noRecordsFoundTitle" destination="JOE-hg-i4O" id="zg2-nS-4zv"/>
                         <outlet property="noRecordsFoundView" destination="X0v-Xx-ZMU" id="H1K-5B-TzM"/>
+                        <outlet property="parentContainerStackView" destination="hZg-Ig-nE6" id="ITZ-Cv-MxW"/>
                         <outlet property="tableView" destination="5KY-jQ-pFs" id="WiD-Hs-Qa2"/>
                     </connections>
                 </viewController>

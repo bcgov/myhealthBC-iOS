@@ -382,11 +382,17 @@ extension TabBarController {
                     vc.navigationItem.setBackItemTitle(with: "")
                     vcStack.append(vc)
                 }
-                print("CONNOR STACK BEFORE: ", nav.viewControllers, vcStack)
+                
                 nav.viewControllers = vcStack
-                print("CONNOR STACK AFTER: ", nav.viewControllers, vcStack)
+    
                 if let goToTab = goToTab {
-                    self.selectedIndex = goToTab.rawValue
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        nav.viewControllers = vcStack
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        self.selectedIndex = goToTab.rawValue
+                        AppDelegate.sharedInstance?.removeLoadingViewHack()
+                    }
+                    
                 }
             }
         }

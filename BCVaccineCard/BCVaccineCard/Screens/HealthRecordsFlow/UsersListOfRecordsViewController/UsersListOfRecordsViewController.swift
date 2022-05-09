@@ -36,6 +36,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var filterContainer: UIView!
     @IBOutlet weak private var tableView: UITableView!
     
+    @IBOutlet weak private var parentContainerStackView: UIStackView!
+    
     private var patient: Patient?
     private var authenticated: Bool = true
     private var navStyle: NavStyle = .singleUser
@@ -114,9 +116,9 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
-        self.view.endLoadingIndicator()
+        self.parentContainerStackView.endLoadingIndicator()
         let showLoadingTitle = (self.patient == nil && self.authenticated == true)
-        navSetup(style: navStyle, authenticated: self.authenticated, showLoadingTitle: showLoadingTitle)
+        navSetup(style: navStyle, authenticated: self.authenticated)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
         showSelectedFilters()
@@ -126,7 +128,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
         if showLoadingTitle {
-            self.view.startLoadingIndicator()
+            self.parentContainerStackView.startLoadingIndicator(backgroundColor: .clear)
         }
     }
 
@@ -147,7 +149,7 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
-    private func navSetup(style: NavStyle, authenticated: Bool, showLoadingTitle: Bool = false, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
+    private func navSetup(style: NavStyle, authenticated: Bool, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
         if authenticated {
             let filterButton = NavButton(title: nil,
@@ -186,6 +188,7 @@ extension UsersListOfRecordsViewController {
         if name.count >= 20 {
             name = self.patient?.name?.firstName?.nameCase() ?? defaultFirstNameIfFailure?.nameCase() ?? ""
         }
+        let showLoadingTitle = (self.patient == nil && self.authenticated == true)
         if showLoadingTitle {
             name = "Fetching User"
         }
