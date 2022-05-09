@@ -16,7 +16,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     // TODO: Replace params with Patient after storage refactor
-    class func constructUsersListOfRecordsViewController(patient: Patient, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool) -> UsersListOfRecordsViewController {
+    class func constructUsersListOfRecordsViewController(patient: Patient?, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.patient = patient
             vc.authenticated = authenticated
@@ -38,7 +38,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private var patient: Patient?
     private var authenticated: Bool = true
-    private var navStyle: NavStyle = .multiUser
+    private var navStyle: NavStyle = .singleUser
     private var hasUpdatedUnauthPendingTest = true
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
@@ -114,7 +114,9 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
-        navSetup(style: navStyle, authenticated: self.authenticated)
+        self.view.endLoadingIndicator()
+        let showLoadingTitle = (self.patient == nil && self.authenticated == true)
+        navSetup(style: navStyle, authenticated: self.authenticated, showLoadingTitle: showLoadingTitle)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
         showSelectedFilters()
@@ -123,6 +125,9 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
+        if showLoadingTitle {
+            self.view.startLoadingIndicator()
+        }
     }
 
     @IBAction func removeFilters(_ sender: Any) {
@@ -437,8 +442,8 @@ extension UsersListOfRecordsViewController {
 //    }
     
     private func performBCSCLogin() {
-        self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticated in
-            guard let `self` = self, authenticated else {return}
+        self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
+            guard let `self` = self, authenticationStatus == .Completed else {return}
             if let authStatus = Defaults.loginProcessStatus,
                authStatus.hasCompletedLoginProcess == true,
                let storedName = authStatus.loggedInUserAuthManagerDisplayName,

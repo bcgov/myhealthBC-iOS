@@ -68,7 +68,7 @@ class ProfileAndSettingsViewController: BaseViewController {
     }
     
     func showLogin() {
-        showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: {success in})
+        showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: {authenticationStatus in})
     }
     
     func showSecurityAndData() {

@@ -55,6 +55,7 @@ enum VaccineCardNumber {
 
 enum AppUserActionScenarios {
     case InitialAppLaunch(values: ActionScenarioValues)
+    case LoginSpecialRouting(values: ActionScenarioValues)
     case AuthenticatedFetch(values: ActionScenarioValues)
     case ManualFetch(values: ActionScenarioValues)
     case ManuallyDeletedAllOfAnUnauthPatientRecords(values: ActionScenarioValues)
@@ -68,6 +69,7 @@ struct ActionScenarioValues {
     var recordFlowDetails: RecordsFlowDetails?
     var passesFlowDetails: PassesFlowDetails?
     var loginSourceVC: LoginVCSource?
+    var authenticationStatus: AuthenticationViewController.AuthenticationStatus?
 }
 
 struct CurrentRecordsAndPassesStacks {
@@ -171,8 +173,8 @@ struct PassesFlowDetails {
 }
 
 protocol RouterWorkerDelegate: AnyObject  {
-    func recordsActionScenario(viewControllerStack: [BaseViewController])
-    func passesActionScenario(viewControllerStack: [BaseViewController])
+    func recordsActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool)
+    func passesActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool)
 }
 
 struct NavStacks {
@@ -212,12 +214,12 @@ class RouterWorker: NSObject {
         self.delegate = delegateOwner as? RouterWorkerDelegate
     }
     
-    public func routingAction(scenario: AppUserActionScenarios) {
+    public func routingAction(scenario: AppUserActionScenarios, goToTab: TabBarVCs? = nil) {
 //        let recordsStack = setupHealthRecordsNavStackForScenario(scenario: scenario)
         let stack = setupRecordsAndPassesNavStacks(scenario: scenario)
-        self.delegate?.recordsActionScenario(viewControllerStack: stack.recordsStack)
+        self.delegate?.recordsActionScenario(viewControllerStack: stack.recordsStack, goToTab: goToTab == .records)
 //        let passesStack = setupHealthPassNavStackForScenario(scenario: scenario)
-        self.delegate?.passesActionScenario(viewControllerStack: stack.passesStack)
+        self.delegate?.passesActionScenario(viewControllerStack: stack.passesStack, goToTab: goToTab == .healthPass)
     }
 }
 
@@ -230,6 +232,9 @@ extension RouterWorker {
         case .InitialAppLaunch(let values):
             recordsStack = initialLaunchRecordsStacks(values: values)
             passesStack = initialLaunchPassesStack(values: values)
+        case .LoginSpecialRouting(let values):
+            recordsStack = loginSpecialRoutingRecordsStack(values: values)
+            passesStack = loginSpecialRoutingPassesStack(values: values)
         case .AuthenticatedFetch(let values):
             recordsStack = authFetchRecordsStack(values: values)
             passesStack = authFetchPassesStack(values: values)
@@ -269,6 +274,25 @@ extension RouterWorker {
         guard values.affectedTabs.contains(.healthPass) else { return [] }
         let vc = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
         return [vc]
+    }
+    
+    private func loginSpecialRoutingRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
+        guard let authenticationStatus = values.authenticationStatus else { return [] }
+        switch authenticationStatus {
+        case .Completed:
+            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: nil, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true)
+            return [vc]
+        case .Cancelled:
+            return []
+        case .Failed:
+            let vc = HealthRecordsViewController.constructHealthRecordsViewController()
+            return [vc]
+        }
+    }
+    
+    // Note - we don't need to do anything here
+    private func loginSpecialRoutingPassesStack(values: ActionScenarioValues) -> [BaseViewController] {
+        return []
     }
     
     private func authFetchRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {

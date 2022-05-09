@@ -17,7 +17,7 @@ We can call the BCSC auth in 2 ways:
  */
 
 extension BaseViewController {
-    func showLogin(initialView: AuthenticationViewController.InitialView, sourceVC: LoginVCSource, completion: @escaping(_ authenticated: Bool)->Void) {
+    func showLogin(initialView: AuthenticationViewController.InitialView, sourceVC: LoginVCSource, completion: @escaping(_ authenticationStatus: AuthenticationViewController.AuthenticationStatus)->Void) {
         self.view.startLoadingIndicator()
         let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: false, isModal: true, initialView: initialView, sourceVC: sourceVC, completion: { [weak self] result in
             guard let `self` = self else {return}
@@ -32,11 +32,11 @@ extension BaseViewController {
                         self.postAuthChangedSettingsReloadRequired()
                         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
                     }
-                    completion(allowed)
+                    completion(.Completed)
                 }
                 
             case .Cancelled, .Failed:
-                completion(false)
+                completion(result)
                 break
             }
         })
@@ -56,6 +56,7 @@ enum LoginVCSource: String {
     case FetchHealthRecordsVC = "FetchHealthRecordsVC"
     case UserListOfRecordsVC = "UserListOfRecordsVC"
     case TabBar = "TabBar"
+    case HomeScreen = "HomeScreenVC"
     
     var getVCType: UIViewController.Type {
         switch self {
@@ -69,6 +70,7 @@ enum LoginVCSource: String {
         case .FetchHealthRecordsVC: return FetchHealthRecordsViewController.self
         case .UserListOfRecordsVC: return UsersListOfRecordsViewController.self
         case .TabBar: return TabBarController.self
+        case .HomeScreen: return HomeScreenViewController.self
         }
     }
 }

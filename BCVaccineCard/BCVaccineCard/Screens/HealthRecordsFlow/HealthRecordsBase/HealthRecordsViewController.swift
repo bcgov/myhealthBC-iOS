@@ -76,7 +76,7 @@ extension HealthRecordsViewController: AppStyleButtonDelegate {
     }
     
     private func performBCSCLogin() {
-        self.showLogin(initialView: .Landing, sourceVC: .HealthRecordsVC) { authenticated in
+        self.showLogin(initialView: .Landing, sourceVC: .HealthRecordsVC) { authenticationStatus in
             // TODO: Any work here if necessary while records are fetching (maybe show loader)
             // Perhaps do routing work here, show the UserRecordsViewController, let user know records are fetching, then show the custom loader when needed
         }

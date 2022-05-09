@@ -205,8 +205,8 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         
 //        if !AuthManager().isAuthenticated {
-//            showLogin(initialView: .Landing) { authenticated in
-//                if !authenticated {
+//            showLogin(initialView: .Landing) { authenticationStatus in
+//                if authenticationStatus != .Completed {
 //                    showForm()
 //                }
 //            }
@@ -311,8 +311,8 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 // MARK: BCSC Login
 extension FetchHealthRecordsViewController {
     func performBCSCLogin() {
-        self.showLogin(initialView: .Landing, sourceVC: .FetchHealthRecordsVC) { [weak self] authenticated in
-            guard let `self` = self, authenticated else {return}
+        self.showLogin(initialView: .Landing, sourceVC: .FetchHealthRecordsVC) { [weak self] authenticationStatus in
+            guard let `self` = self, authenticationStatus == .Completed else {return}
             // TODO: Adjust nav stack here if necessary
             self.adjustDataSource()
         }
