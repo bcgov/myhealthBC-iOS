@@ -201,9 +201,10 @@ class RouterWorker: NSObject {
     }
     
     private var currentPatientScenario: CurrentPatientScenarios {
-        let authPatientCount = StorageService.shared.fetchAuthenticatedPatient() != nil ? 1 : 0
-        let unauthPatientsCount = StorageService.shared.fetchUnauthenticatedPatients()?.count ?? 0
-        return CurrentPatientScenarios.getCurrentScenario(authCount: authPatientCount, unauthCount: unauthPatientsCount)
+        let healthRecords = StorageService.shared.getHeathRecords().dataSource()
+        let authenticated = healthRecords.filter({$0.authenticated}).count
+        let unauthenticated = healthRecords.filter({!$0.authenticated}).count
+        return CurrentPatientScenarios.getCurrentScenario(authCount: authenticated, unauthCount: unauthenticated)
     }
     
     private var userRecordsNavStyle: UsersListOfRecordsViewController.NavStyle {
