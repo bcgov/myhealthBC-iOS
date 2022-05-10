@@ -105,8 +105,8 @@ extension HealthPassViewController {
         }
         
         if showAuth && !authManager.isAuthenticated {
-            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticated in
-                if !authenticated {
+            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticationStatus in
+                if authenticationStatus != .Completed {
                     showScreen()
                 }
             }

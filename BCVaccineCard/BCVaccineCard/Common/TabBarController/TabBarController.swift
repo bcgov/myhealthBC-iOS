@@ -341,15 +341,17 @@ extension TabBarController {
 
 // MARK: Router worker
 extension TabBarController: RouterWorkerDelegate {
-    func recordsActionScenario(viewControllerStack: [BaseViewController]) {
+    func recordsActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool) {
         DispatchQueue.main.async {
-            self.resetTab(tabBarVC: .records, viewControllerStack: viewControllerStack)
+            let goToRecordsTab = goToTab ? TabBarVCs.records : nil
+            self.resetTab(tabBarVC: .records, viewControllerStack: viewControllerStack, goToTab: goToRecordsTab)
         }
     }
     
-    func passesActionScenario(viewControllerStack: [BaseViewController]) {
+    func passesActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool) {
         DispatchQueue.main.async {
-            self.resetTab(tabBarVC: .healthPass, viewControllerStack: viewControllerStack)
+            let goToPassesTab = goToTab ? TabBarVCs.healthPass : nil
+            self.resetTab(tabBarVC: .healthPass, viewControllerStack: viewControllerStack, goToTab: goToPassesTab)
         }
     }
 
@@ -357,7 +359,7 @@ extension TabBarController: RouterWorkerDelegate {
 
 // MARK: Router helper functions
 extension TabBarController {
-    private func resetTab(tabBarVC: TabBarVCs, viewControllerStack: [BaseViewController]) {
+    private func resetTab(tabBarVC: TabBarVCs, viewControllerStack: [BaseViewController], goToTab: TabBarVCs?) {
 //        let currentIndex = self.selectedIndex
         guard viewControllerStack.count > 0 else { return }
         let vc = tabBarVC
@@ -380,7 +382,18 @@ extension TabBarController {
                     vc.navigationItem.setBackItemTitle(with: "")
                     vcStack.append(vc)
                 }
+                
                 nav.viewControllers = vcStack
+    
+                if let goToTab = goToTab {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        nav.viewControllers = vcStack
+                        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        self.selectedIndex = goToTab.rawValue
+                        AppDelegate.sharedInstance?.removeLoadingViewHack()
+                    }
+                    
+                }
             }
         }
         

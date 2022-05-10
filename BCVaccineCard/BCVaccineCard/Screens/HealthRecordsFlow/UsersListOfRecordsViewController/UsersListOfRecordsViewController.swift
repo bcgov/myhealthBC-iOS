@@ -16,7 +16,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     // TODO: Replace params with Patient after storage refactor
-    class func constructUsersListOfRecordsViewController(patient: Patient, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool) -> UsersListOfRecordsViewController {
+    class func constructUsersListOfRecordsViewController(patient: Patient?, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.patient = patient
             vc.authenticated = authenticated
@@ -36,9 +36,11 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var filterContainer: UIView!
     @IBOutlet weak private var tableView: UITableView!
     
+    @IBOutlet weak private var parentContainerStackView: UIStackView!
+    
     private var patient: Patient?
     private var authenticated: Bool = true
-    private var navStyle: NavStyle = .multiUser
+    private var navStyle: NavStyle = .singleUser
     private var hasUpdatedUnauthPendingTest = true
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
@@ -114,6 +116,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
+        self.parentContainerStackView.endLoadingIndicator()
+        let showLoadingTitle = (self.patient == nil && self.authenticated == true)
         navSetup(style: navStyle, authenticated: self.authenticated)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
@@ -123,6 +127,9 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
+        if showLoadingTitle {
+            self.parentContainerStackView.startLoadingIndicator(backgroundColor: .clear)
+        }
     }
 
     @IBAction func removeFilters(_ sender: Any) {
@@ -142,7 +149,7 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
-    private func navSetup(style: NavStyle, authenticated: Bool, showLoadingTitle: Bool = false, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
+    private func navSetup(style: NavStyle, authenticated: Bool, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
         if authenticated {
             let filterButton = NavButton(title: nil,
@@ -165,10 +172,10 @@ extension UsersListOfRecordsViewController {
         
         if style == .singleUser {
             self.navigationItem.setHidesBackButton(true, animated: false)
-            let addButton = NavButton(title: nil,
-                      image: UIImage(named: "add-circle-btn"), action: #selector(self.showAddRecord),
-                                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-            buttons.append(addButton)
+//            let addButton = NavButton(title: nil,
+//                      image: UIImage(named: "add-circle-btn"), action: #selector(self.showAddRecord),
+//                                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+//            buttons.append(addButton)
             let settingsButton = NavButton(title: nil,
                       image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
                                            accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
@@ -181,6 +188,7 @@ extension UsersListOfRecordsViewController {
         if name.count >= 20 {
             name = self.patient?.name?.firstName?.nameCase() ?? defaultFirstNameIfFailure?.nameCase() ?? ""
         }
+        let showLoadingTitle = (self.patient == nil && self.authenticated == true)
         if showLoadingTitle {
             name = "Fetching User"
         }
@@ -193,10 +201,11 @@ extension UsersListOfRecordsViewController {
                                                backButtonHintString: nil)
     }
     // This screen has to have health records by rule (with the exception being a screen state issue, but that is a separate bug)
-    @objc func showAddRecord() {
-        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: true)
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+    // TODO: CONNOR: Remove this
+//    @objc func showAddRecord() {
+//        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: true)
+//        self.navigationController?.pushViewController(vc, animated: true)
+//    }
     
     @objc func showSettings() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -292,12 +301,13 @@ extension UsersListOfRecordsViewController {
     private func fetchDataSource(initialProtectedMedFetch: Bool = false) {
         let patientRecords = fetchPatientRecords()
         show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
-        if !authenticated && hasUpdatedUnauthPendingTest {
+//        if !authenticated && hasUpdatedUnauthPendingTest {
             // Don't check for test result to update again here, as this was causing an infinite loop
             // TODO: We should really refactor the way screens are being updated due to storage updates, as it will cause issues in the future with edge cases, causing us to create numerous hot-fixes such as this, resulting in messy and hard to maintain code
-        } else {
-            self.checkForTestResultsToUpdate(ds: self.dataSource)
-        }
+//        } else {
+            // NOTE: We don't need to do this anymore - should check with the team though
+//            self.checkForTestResultsToUpdate(ds: self.dataSource)
+//        }
     }
     
     private func fetchPatientRecords() -> [HealthRecordsDetailDataSource] {
@@ -407,35 +417,36 @@ extension UsersListOfRecordsViewController {
         NotificationCenter.default.post(name: .protectedWordRequired, object: nil, userInfo: userInfo)
     }
     
-    private func checkForTestResultsToUpdate(ds: [HealthRecordsDetailDataSource]) {
-        for (indexPathRow, record) in ds.enumerated() {
-            switch record.type {
-            case .covidTestResultRecord(model: let model):
-                let listOfStatuses = record.records.map { ($0.status, $0.date) }
-                for (index, data) in listOfStatuses.enumerated() {
-                    if data.0 == CovidTestResult.pending.rawValue {
-                        
-                        guard
-                            let patient = model.patient,
-                            let dateOfBirth = patient.birthday?.yearMonthDayString,
-                            let phn = patient.phn,
-                            let collectionDatePresentableFormat = listOfStatuses[index].1,
-                            let collectionDate = Date.Formatter.monthDayYearDate.date(from: collectionDatePresentableFormat)?.yearMonthDayString, model.authenticated == false
-                        else { return }
-                        
-                        let model = GatewayTestResultRequest(phn: phn, dateOfBirth: dateOfBirth, collectionDate: collectionDate)
-                        tableView.cellForRow(at: IndexPath(row: indexPathRow, section: 0))?.startLoadingIndicator(backgroundColor: .clear, containerSize: 20, size: 8)
-                        backgroundWorker?.getTestResult(model: model, executingVC: self, row: indexPathRow)
-                    }
-                }
-            default: print("")
-            }
-        }
-    }
+    // NOTE: We won't need this anymore I don't believe - double check
+//    private func checkForTestResultsToUpdate(ds: [HealthRecordsDetailDataSource]) {
+//        for (indexPathRow, record) in ds.enumerated() {
+//            switch record.type {
+//            case .covidTestResultRecord(model: let model):
+//                let listOfStatuses = record.records.map { ($0.status, $0.date) }
+//                for (index, data) in listOfStatuses.enumerated() {
+//                    if data.0 == CovidTestResult.pending.rawValue {
+//
+//                        guard
+//                            let patient = model.patient,
+//                            let dateOfBirth = patient.birthday?.yearMonthDayString,
+//                            let phn = patient.phn,
+//                            let collectionDatePresentableFormat = listOfStatuses[index].1,
+//                            let collectionDate = Date.Formatter.monthDayYearDate.date(from: collectionDatePresentableFormat)?.yearMonthDayString, model.authenticated == false
+//                        else { return }
+//
+//                        let model = GatewayTestResultRequest(phn: phn, dateOfBirth: dateOfBirth, collectionDate: collectionDate)
+//                        tableView.cellForRow(at: IndexPath(row: indexPathRow, section: 0))?.startLoadingIndicator(backgroundColor: .clear, containerSize: 20, size: 8)
+//                        backgroundWorker?.getTestResult(model: model, executingVC: self, row: indexPathRow)
+//                    }
+//                }
+//            default: print("")
+//            }
+//        }
+//    }
     
     private func performBCSCLogin() {
-        self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticated in
-            guard let `self` = self, authenticated else {return}
+        self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
+            guard let `self` = self, authenticationStatus == .Completed else {return}
             if let authStatus = Defaults.loginProcessStatus,
                authStatus.hasCompletedLoginProcess == true,
                let storedName = authStatus.loggedInUserAuthManagerDisplayName,

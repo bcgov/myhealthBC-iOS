@@ -201,9 +201,9 @@ class GatewayFormViewController: BaseViewController {
         return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
     }
     
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
-    }
+//    override var getRecordFlowType: RecordsFlowVCs? {
+//        return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -328,11 +328,11 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
         }
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? FormTableViewCell {
-            cell.formTextFieldView.openKeyboardAction()
-        }
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        if let cell = tableView.cellForRow(at: indexPath) as? FormTableViewCell {
+//            cell.formTextFieldView.openKeyboardAction()
+//        }
+//    }
 }
 
 // MARK: Remember PHN and DOB
@@ -494,6 +494,11 @@ extension GatewayFormViewController {
 
 // MARK: Custom Text Field Delegates
 extension GatewayFormViewController: FormTextFieldViewDelegate {
+    func fieldTapped(field: UITextField) {
+        self.resignFirstResponder()
+        field.becomeFirstResponder()
+    }
+    
     func resignFirstResponderUI(formField: FormTextFieldType) {
         self.view.endEditing(true)
     }

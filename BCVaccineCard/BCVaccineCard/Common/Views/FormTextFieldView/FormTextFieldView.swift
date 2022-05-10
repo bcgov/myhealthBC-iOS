@@ -120,6 +120,7 @@ protocol FormTextFieldViewDelegate: AnyObject {
     func goToNextFormTextField(formField: FormTextFieldType)
     func rightTextFieldButtonTapped(formField: FormTextFieldType)
     func resizeForm(formField: FormTextFieldType)
+    func fieldTapped(field: UITextField)
 }
 // NOTE: Date Formatter is of type longType
 class FormTextFieldView: UIView {
@@ -222,7 +223,6 @@ class FormTextFieldView: UIView {
         self.formTextField.accessibilityHint = AccessibilityLabels.FormTextField.required
     }
     
-    // This is called from didSelectRow to open the keyboard
     func openKeyboardAction() {
         self.formTextField.becomeFirstResponder()
     }

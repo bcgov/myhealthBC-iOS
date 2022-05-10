@@ -8,6 +8,7 @@ import UIKit
 import CoreData
 import BCVaccineValidator
 import EncryptedCoreData
+import IQKeyboardManagerSwift
 import AppAuth
 
 @main
@@ -19,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
     var protectiveWordEnteredThisSession = false
+    
+    var lastLocalAuth: Date? = nil
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -42,7 +45,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         authManager?.initTokenExpieryTimer()
         listenToAppState()
         localAuthManager = LocalAuthManager()
-        localAuthManager?.listenToAppLaunch()
+        localAuthManager?.listenToAppStates()
+        
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enableAutoToolbar = false
+        IQKeyboardManager.shared.shouldResignOnTouchOutside = true
+        IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
     }
     
     private func clearKeychainIfNecessary(authManager: AuthManager?) {
@@ -64,11 +72,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func listenToAppState() {
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
     
     @objc func didBecomeActive(_ notification: Notification) {
         NotificationCenter.default.post(name: .launchedFromBackground, object: nil)
     }
+    
+    @objc func didEnterBackground(_ notification: Notification) {
+        NotificationCenter.default.post(name: .didEnterBackground, object: nil)
+    }
+    
+    
     
     // MARK: - Core Data stack
     lazy var persistentContainer: NSPersistentContainer = {
