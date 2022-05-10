@@ -167,7 +167,7 @@ extension AppDelegate {
 
 // MARK: For custom navigation routing hack with multiple pushes
 extension AppDelegate {
-    func addLoadingViewHack() {
+    func addLoadingViewHack(addToView view: UIView? = nil) {
         let rect = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         loadingViewHack = UIView(frame: rect)
         loadingViewHack?.isUserInteractionEnabled = true
@@ -175,7 +175,12 @@ extension AppDelegate {
         loadingViewHack?.startLoadingIndicator(backgroundColor: .white)
         let tap = UIGestureRecognizer(target: self, action: #selector(dismissLoadingHack))
         loadingViewHack?.addGestureRecognizer(tap)
-        self.window?.addSubview(loadingViewHack!)
+        if let view = view {
+            view.addSubview(loadingViewHack!)
+        } else {
+            self.window?.addSubview(loadingViewHack!)
+        }
+        
     }
     
     func removeLoadingViewHack() {
