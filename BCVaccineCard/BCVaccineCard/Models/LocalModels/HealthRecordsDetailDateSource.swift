@@ -290,7 +290,8 @@ extension HealthRecordsDetailDataSource {
                 TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: test.testStatus ?? "", bolded: false))
             ]
             if index == 0 {
-                section.insert(TextListModel(header: TextListModel.TextProperties(text: "Test summary", bolded: true), subtext: nil), at: 0)
+                let links = [LinkedStrings(text: "Learn more", link: "https://www.healthgateway.gov.bc.ca/faq")]
+                section.insert(TextListModel(header: TextListModel.TextProperties(text: "Test summary", bolded: true), subtext: TextListModel.TextProperties(text: "Find resources to learn about your lab test and what the results mean. Learn more", bolded: false, links: links)), at: 0)
             }
             fields.append(section)
         }

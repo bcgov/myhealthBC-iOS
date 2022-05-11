@@ -109,7 +109,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setObservables() {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
@@ -118,6 +118,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private func setup() {
         self.parentContainerStackView.endLoadingIndicator()
         let showLoadingTitle = (self.patient == nil && self.authenticated == true)
+        updatePatientIfNecessary()
         navSetup(style: navStyle, authenticated: self.authenticated)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
@@ -129,6 +130,12 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundView.isHidden = true
         if showLoadingTitle {
             self.parentContainerStackView.startLoadingIndicator(backgroundColor: .clear)
+        }
+    }
+    
+    private func updatePatientIfNecessary() {
+        if self.patient == nil {
+            self.patient = StorageService.shared.fetchAuthenticatedPatient()
         }
     }
 
@@ -468,13 +475,16 @@ extension UsersListOfRecordsViewController {
         }
     }
     
-//    @objc private func patientAPIFetched(_ notification: Notification) {
-//        let userInfo = notification.userInfo as? [String: String]
-//        let firstName = userInfo?["firstName"]
-//        let fullName = userInfo?["fullName"]
-//        self.patient = StorageService.shared.fetchAuthenticatedPatient()
-//        self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
-//    }
+    @objc private func patientAPIFetched(_ notification: Notification) {
+        let userInfo = notification.userInfo as? [String: String]
+        let firstName = userInfo?["firstName"]
+        let fullName = userInfo?["fullName"]
+        guard self.patient == nil else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.patient = StorageService.shared.fetchAuthenticatedPatient()
+            self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
+        }
+    }
 }
 
 // MARK: TableView setup
