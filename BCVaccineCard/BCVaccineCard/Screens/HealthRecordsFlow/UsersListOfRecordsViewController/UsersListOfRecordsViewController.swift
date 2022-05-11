@@ -116,6 +116,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
+        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: self.authManager, currentTab: .records)
         self.parentContainerStackView.endLoadingIndicator()
         let showLoadingTitle = (self.patient == nil && self.authenticated == true)
         updatePatientIfNecessary()
@@ -129,7 +130,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
         if showLoadingTitle {
-            self.parentContainerStackView.startLoadingIndicator(backgroundColor: .clear)
+            self.parentContainerStackView.startLoadingIndicator(backgroundColor: .white)
         }
     }
     
@@ -138,7 +139,7 @@ class UsersListOfRecordsViewController: BaseViewController {
             self.patient = StorageService.shared.fetchAuthenticatedPatient()
         }
     }
-
+    
     @IBAction func removeFilters(_ sender: Any) {
         currentFilter = nil
         hideSelectedFilters()
@@ -450,7 +451,7 @@ extension UsersListOfRecordsViewController {
 //            }
 //        }
 //    }
-    
+    // NOTE: No special routing required here on login, as the user should remain on the same screen
     private func performBCSCLogin() {
         self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
             guard let `self` = self, authenticationStatus == .Completed else {return}

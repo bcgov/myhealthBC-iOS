@@ -68,7 +68,14 @@ class ProfileAndSettingsViewController: BaseViewController {
     }
     
     func showLogin() {
-        showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: {authenticationStatus in})
+        showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: { authenticationStatus in
+            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
+            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+            let currentTab = self.getCurrentTab
+            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .ProfileAndSettingsVC, authenticationStatus: authenticationStatus))
+            self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
+        })
     }
     
     func showSecurityAndData() {

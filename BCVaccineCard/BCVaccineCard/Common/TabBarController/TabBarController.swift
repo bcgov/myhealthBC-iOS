@@ -82,7 +82,7 @@ class TabBarController: UITabBarController {
         self.tabBar.barTintColor = .white
         self.delegate = self
         self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource])
-        self.routerWorker?.routingAction(scenario: .InitialAppLaunch(values: ActionScenarioValues(currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, affectedTabs: [.records], recordFlowDetails: nil, passesFlowDetails: nil)))
+        self.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, onActualLaunchCheck: true)
         self.selectedIndex = selectedIndex
         setupObserver()
         postBackgroundAuthFetch()
@@ -339,19 +339,37 @@ extension TabBarController {
 //    }
 //}
 
+// MARK: This is an edge case function that we will use in both HealthRecordsVC and UserListOfRecords VC
+extension TabBarController {
+    // NOTE: This is a hacky check to see if there are patient records that are stored that shouldn't be stored (This occurs if a user logs out while they are fetching records in the background - new records will continue to be stored after the user logs out)
+    func scrapeDBForEdgeCaseRecords(authManager: AuthManager, currentTab: TabBarVCs, onActualLaunchCheck: Bool? = nil) {
+        if authManager.authToken == nil, let _ = StorageService.shared.fetchAuthenticatedPatient() {
+            // This means the user has manually logged out, but there are still remainning records - Scrub records
+            StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+            StorageService.shared.deleteAuthenticatedPatient()
+            let values = ActionScenarioValues(currentTab: currentTab, affectedTabs: [.records])
+            self.routerWorker?.routingAction(scenario: AppUserActionScenarios.InitialAppLaunch(values: values))
+        } else if onActualLaunchCheck == true {
+            // In the event that there is an auth token, then user us logged in and we have to reset stack accordingly
+            self.routerWorker?.routingAction(scenario: .InitialAppLaunch(values: ActionScenarioValues(currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, affectedTabs: [.records], recordFlowDetails: nil, passesFlowDetails: nil)))
+        }
+    }
+
+}
+
 // MARK: Router worker
-extension TabBarController: RouterWorkerDelegate {
-    func recordsActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool) {
+extension TabBarController: RouterWorkerDelegate {    
+    func recordsActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool, delayInSeconds: Double) {
         DispatchQueue.main.async {
             let goToRecordsTab = goToTab ? TabBarVCs.records : nil
-            self.resetTab(tabBarVC: .records, viewControllerStack: viewControllerStack, goToTab: goToRecordsTab)
+            self.resetTab(tabBarVC: .records, viewControllerStack: viewControllerStack, goToTab: goToRecordsTab, delayInSeconds: delayInSeconds)
         }
     }
     
-    func passesActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool) {
+    func passesActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool, delayInSeconds: Double) {
         DispatchQueue.main.async {
             let goToPassesTab = goToTab ? TabBarVCs.healthPass : nil
-            self.resetTab(tabBarVC: .healthPass, viewControllerStack: viewControllerStack, goToTab: goToPassesTab)
+            self.resetTab(tabBarVC: .healthPass, viewControllerStack: viewControllerStack, goToTab: goToPassesTab, delayInSeconds: delayInSeconds)
         }
     }
 
@@ -359,7 +377,7 @@ extension TabBarController: RouterWorkerDelegate {
 
 // MARK: Router helper functions
 extension TabBarController {
-    private func resetTab(tabBarVC: TabBarVCs, viewControllerStack: [BaseViewController], goToTab: TabBarVCs?) {
+    private func resetTab(tabBarVC: TabBarVCs, viewControllerStack: [BaseViewController], goToTab: TabBarVCs?, delayInSeconds: Double) {
 //        let currentIndex = self.selectedIndex
         guard viewControllerStack.count > 0 else { return }
         let vc = tabBarVC
@@ -385,11 +403,13 @@ extension TabBarController {
                 
                 nav.viewControllers = vcStack
     
-                if let goToTab = goToTab {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                if delayInSeconds > 0 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
                         nav.viewControllers = vcStack
                         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                        self.selectedIndex = goToTab.rawValue
+                        if let goToTab = goToTab {
+                            self.selectedIndex = goToTab.rawValue
+                        }
                         AppDelegate.sharedInstance?.removeLoadingViewHack()
                     }
                     

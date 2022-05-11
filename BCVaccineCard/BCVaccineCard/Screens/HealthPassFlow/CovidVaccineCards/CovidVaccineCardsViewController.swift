@@ -86,6 +86,7 @@ class CovidVaccineCardsViewController: BaseViewController {
             switch event.entity {
             case .VaccineCard:
                 self.fetchFromStorage()
+                print("CONNOR CALLED HERE: ", self.expandedIndexRow, self.dataSource.count - 1)
                 if self.expandedIndexRow > self.dataSource.count - 1 {
                     self.expandedIndexRow = 0
                     self.tableView.reloadData()
@@ -102,6 +103,7 @@ class CovidVaccineCardsViewController: BaseViewController {
     }
     
     private func scrollToRecentlyAddedCardAndExpand() {
+        print("CONNOR INFO: ", recentlyAddedCardId, dataSource.map({ $0.id }))
         guard let recentlyAddedCardId = recentlyAddedCardId else { return }
         var indexPath: IndexPath?
         if let index = self.dataSource.firstIndex(where: { $0.id == recentlyAddedCardId }) {
@@ -112,6 +114,7 @@ class CovidVaccineCardsViewController: BaseViewController {
         if let indexPath = indexPath {
             guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            print("CONNOR SCROLL TO ROW CALLED")
             guard let cell = self.tableView.cellForRow(at: indexPath), self.dataSource.count > indexPath.row else { return }
             let model = self.dataSource[indexPath.row]
             cell.accessibilityLabel = AccessibilityLabels.CovidVaccineCardsScreen.proofOfVaccineCardAdded

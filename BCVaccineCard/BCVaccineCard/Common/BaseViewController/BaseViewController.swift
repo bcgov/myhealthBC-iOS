@@ -36,6 +36,10 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
         return TabBarVCs.init(rawValue: (self.tabBarController as? TabBarController)?.selectedIndex ?? 0) ?? .home
     }
     
+    var getTabBarController: TabBarController? {
+        return self.tabBarController as? TabBarController
+    }
+    
     var getRecordFlowType: RecordsFlowVCs? {
         return nil
     }

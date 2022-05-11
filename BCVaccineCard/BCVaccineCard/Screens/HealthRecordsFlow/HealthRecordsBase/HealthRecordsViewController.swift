@@ -44,6 +44,7 @@ class HealthRecordsViewController: BaseViewController {
     private func setup() {
         navSetup()
         setupView()
+        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
     }
 
 }
@@ -77,8 +78,11 @@ extension HealthRecordsViewController: AppStyleButtonDelegate {
     
     private func performBCSCLogin() {
         self.showLogin(initialView: .Landing, sourceVC: .HealthRecordsVC) { authenticationStatus in
-            // TODO: Any work here if necessary while records are fetching (maybe show loader)
-            // Perhaps do routing work here, show the UserRecordsViewController, let user know records are fetching, then show the custom loader when needed
+            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
+            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthRecordsVC, authenticationStatus: authenticationStatus))
+            self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
         }
     }
 }

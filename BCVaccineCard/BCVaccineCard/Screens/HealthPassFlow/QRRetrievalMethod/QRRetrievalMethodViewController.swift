@@ -188,8 +188,14 @@ extension QRRetrievalMethodViewController {
         if !AuthManager().isAuthenticated {
             showLogin(initialView: .Landing, sourceVC: .QRRetrievalVC, completion: {[weak self] authenticationStatus in
                 guard let `self` = self else {return}
-                // TODO: Handle conditionally
-                self.goToEnterGateway()
+                if authenticationStatus != .Completed {
+                    self.goToEnterGateway()
+                } else {
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .QRRetrievalVC, authenticationStatus: authenticationStatus))
+                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
+                }
             })
         } else {
             goToEnterGateway()

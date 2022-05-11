@@ -100,7 +100,7 @@ enum RecordsFlowVCs {
         }
     }
     
-    private var getNonAssociatedVersion: NonAssociatedVersion {
+    var getNonAssociatedVersion: NonAssociatedVersion {
         switch self {
         case .HealthRecordsViewController:
             return .HealthRecordsViewController
@@ -141,7 +141,7 @@ enum PassesFlowVCs {
         }
     }
     
-    private var getNonAssociatedVersion: NonAssociatedVersion {
+    var getNonAssociatedVersion: NonAssociatedVersion {
         switch self {
         case .HealthPassViewController:
             return .HealthPassViewController
@@ -173,8 +173,8 @@ struct PassesFlowDetails {
 }
 
 protocol RouterWorkerDelegate: AnyObject  {
-    func recordsActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool)
-    func passesActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool)
+    func recordsActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool, delayInSeconds: Double)
+    func passesActionScenario(viewControllerStack: [BaseViewController], goToTab: Bool, delayInSeconds: Double)
 }
 
 struct NavStacks {
@@ -210,12 +210,12 @@ class RouterWorker: NSObject {
         self.delegate = delegateOwner as? RouterWorkerDelegate
     }
     
-    public func routingAction(scenario: AppUserActionScenarios, goToTab: TabBarVCs? = nil) {
+    public func routingAction(scenario: AppUserActionScenarios, goToTab: TabBarVCs? = nil, delayInSeconds: Double = 0.0) {
 //        let recordsStack = setupHealthRecordsNavStackForScenario(scenario: scenario)
         let stack = setupRecordsAndPassesNavStacks(scenario: scenario)
-        self.delegate?.recordsActionScenario(viewControllerStack: stack.recordsStack, goToTab: goToTab == .records)
+        self.delegate?.recordsActionScenario(viewControllerStack: stack.recordsStack, goToTab: goToTab == .records, delayInSeconds: delayInSeconds)
 //        let passesStack = setupHealthPassNavStackForScenario(scenario: scenario)
-        self.delegate?.passesActionScenario(viewControllerStack: stack.passesStack, goToTab: goToTab == .healthPass)
+        self.delegate?.passesActionScenario(viewControllerStack: stack.passesStack, goToTab: goToTab == .healthPass, delayInSeconds: delayInSeconds)
     }
 }
 
@@ -276,8 +276,10 @@ extension RouterWorker {
         guard let authenticationStatus = values.authenticationStatus else { return [] }
         switch authenticationStatus {
         case .Completed:
-            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: nil, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true)
-            return [vc]
+            let vc1 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: nil, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true)
+            guard let profileScreen = values.recordFlowDetails?.currentStack.last?.getNonAssociatedVersion, profileScreen == RecordsFlowVCs.NonAssociatedVersion.ProfileAndSettingsViewController, values.currentTab == TabBarVCs.records else { return [vc1] }
+            let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+            return [vc1, vc2]
         case .Cancelled:
             return []
         case .Failed:
