@@ -5,7 +5,7 @@
 //  Created by Connor Ogilvie on 2021-11-10.
 
 import UIKit
-// TODO: CONNOR: Rename this view controller (not using rename functionality) so that we have a reference to the folder logic
+// NOTE: This View Controller is currently not being used, but we will be using it (or at least components of it) down the line. Leaving for now
 class FolderRecordsViewController: BaseViewController {
     
     class func constructFolderRecordsViewController() -> FolderRecordsViewController {
@@ -27,10 +27,6 @@ class FolderRecordsViewController: BaseViewController {
     private var authenticatedPatientToShow: Patient?
    
     var lastPatientSelected: Patient? = nil
-    
-//    override var getRecordFlowType: RecordsFlowVCs? {
-//        return .HealthRecordsViewController
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,20 +62,9 @@ class FolderRecordsViewController: BaseViewController {
         navSetup()
         let records = fetchData()
         self.dataSource = records.dataSource()
-//        self.navigationController?.popToRootViewController(animated: false)
-//        if self.dataSource.isEmpty {
-//            self.showFetchVC(hasHealthRecords: false)
-//        } else
-//        if dataSource.count == 1, let singleUser = dataSource.first {
-//            showRecords(for: singleUser.patient, animated: false, navStyle: .singleUser, authenticated: singleUser.authenticated, hasUpdatedUnauthPendingTest: false)
-//        } else {
-            self.addRecordHeaderSetup()
-            self.setupCollectionView()
-//            if let patient = authenticatedPatientToShow {
-//                self.goToUserRecordsViewControllerForPatient(patient)
-//            }
-            collectionView.reloadData()
-//        }
+        self.addRecordHeaderSetup()
+        self.setupCollectionView()
+        collectionView.reloadData()
     }
     
     
@@ -88,55 +73,14 @@ class FolderRecordsViewController: BaseViewController {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             self.loadDataAndSetInitialVC()
-//            if event.event == .ManuallyAddedRecord {
-//                self.loadDataAndSetInitialVC()
-//            }
-//            guard event.event != .ManuallyAddedRecord || event.event != .ProtectedMedicalRecordsInitialFetch || event.event != .ManuallyAddedPendingTestBackgroundRefetch else { return }
-//            switch event.entity {
-//            case .VaccineCard, .CovidLabTestResult, .Perscription, .LaboratoryOrder:
-//                self.loadDataAndSetInitialVC()
-//                if let lastPatientSelected = self.lastPatientSelected, !self.dataSource.isEmpty, let lastPatientRecordInDataSouce = self.dataSource.first(where: {$0.patient == lastPatientSelected}) {
-//                    self.showRecords(for: lastPatientRecordInDataSouce.patient, animated: false, navStyle: self.dataSource.count == 1 ? .singleUser :.multiUser, authenticated: lastPatientRecordInDataSouce.authenticated, hasUpdatedUnauthPendingTest: true)
-//                }
-//            default:
-//                break
-//            }
         }
     }
-    
-//    private func updateData() {
-//        let records = fetchData()
-//        self.dataSource = records.dataSource()
-//        self.addRecordHeaderSetup()
-//        self.collectionView.reloadData()
-//        if self.dataSource.isEmpty {
-//            self.showFetchVC()
-//        } else {
-//            // FIXME: Need a way of dismissing dismissFetchHealthRecordsViewController() for the case where data is nil, user enters app, goes to health records tab (so it is instantiated and viewDidLoad is called), then user goes to healthPasses tab, scans a QR code, then user goes back to health records tab.... issue is that the fetchVC will still be shown
-//            // Possible solution: Listener on tab bar controller, check when tab is changed - something like that. Need to think on this
-//            self.dismissFetchHealthRecordsViewControllerIfNeeded()
-//
-//        }
-//    }
     
     private func fetchData() -> [HealthRecord] {
         StorageService.shared.getHeathRecords()
     }
     
-    // MARK: Routing
-//    func dismissFetchHealthRecordsViewControllerIfNeeded() {
-//        guard let vcs = self.navigationController?.viewControllers.compactMap({$0 as? FetchHealthRecordsViewController}),
-//              let vc = vcs.first else {return}
-//        popBack(toControllerType: HealthRecordsViewController.self)
-//    }
-//FIXME: CONNOR: - Ready To Test: Remove this function - stack will be set from router worker
-//    func showFetchVC(hasHealthRecords: Bool) {
-//        // Leaving this for now, but I feel like this logic in setup function can get removed now with the check added in tab bar controller
-//        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {})
-//        lastPatientSelected = nil
-//        self.navigationController?.pushViewController(vc, animated: false)
-//    }
-    //FIXME: CONNOR: - Ready To Test: Remove this function - stack will be set from router worker (keep this function only for "selected" function below
+    // Note: stack will be set from router worker (keep this function only for "selected" function below
     private func showRecords(for patient: Patient, animated: Bool, navStyle: UsersListOfRecordsViewController.NavStyle, authenticated: Bool, hasUpdatedUnauthPendingTest: Bool) {
         let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: navStyle, hasUpdatedUnauthPendingTest: hasUpdatedUnauthPendingTest)
         lastPatientSelected = patient
@@ -186,8 +130,7 @@ extension FolderRecordsViewController: AddCardsTableViewCellDelegate {
     // TODO: CONNOR: Remove this
     func addCardButtonTapped(screenType: ReusableHeaderAddView.ScreenType) {
         if screenType == .healthRecords {
-            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: !self.dataSource.isEmpty)
-//            self.navigationController?.pushViewController(vc, animated: true)
+            // Leaving for now
         }
     }
 }
@@ -197,8 +140,6 @@ extension FolderRecordsViewController: UICollectionViewDataSource, UICollectionV
     private func setupCollectionView() {
         collectionView.register(UINib.init(nibName: HealthRecordsUserCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: HealthRecordsUserCollectionViewCell.getName)
         let layout = UICollectionViewFlowLayout()
-        // TODO: Need to test this on larger screen sizes, as this works on SE - then add values to constants file
-        // FIXME: Name label doesnt quite fit for anything other than short names - also weird UI issue when returning to screen
         layout.minimumLineSpacing = spacingPerItem
         layout.sectionInset = UIEdgeInsets(top: 0, left: spacingPerItem, bottom: 0, right: spacingPerItem)
         layout.itemSize =  defaultCellSize()
@@ -251,20 +192,3 @@ extension FolderRecordsViewController: UICollectionViewDataSource, UICollectionV
         selected(data: data)
     }
 }
-
-// MARK: Function to go to user records view controller
-//extension HealthRecordsViewController {
-//    func setPatientToShow(patient: Patient) {
-//        authenticatedPatientToShow = patient
-//    }
-//    //FIXME: CONNOR: - Ready To Test: Remove this function - stack will be set from router worker
-//    private func goToUserRecordsViewControllerForPatient(_ patient: Patient) {
-//        if let index = dataSource.firstIndex(where: { $0.patient == patient }) {
-//            let data = dataSource[index]
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-//                self.selected(data: data)
-//                self.authenticatedPatientToShow = nil
-//            }
-//        }
-//    }
-//}

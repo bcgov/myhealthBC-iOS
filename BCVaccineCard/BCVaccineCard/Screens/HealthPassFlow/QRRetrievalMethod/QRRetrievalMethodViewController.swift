@@ -188,8 +188,14 @@ extension QRRetrievalMethodViewController {
         if !AuthManager().isAuthenticated {
             showLogin(initialView: .Landing, sourceVC: .QRRetrievalVC, completion: {[weak self] authenticationStatus in
                 guard let `self` = self else {return}
-                // TODO: Handle conditionally
-                self.goToEnterGateway()
+                if authenticationStatus != .Completed {
+                    self.goToEnterGateway()
+                } else {
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .QRRetrievalVC, authenticationStatus: authenticationStatus))
+                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
+                }
             })
         } else {
             goToEnterGateway()
@@ -214,8 +220,6 @@ extension QRRetrievalMethodViewController {
                 AnalyticsService.shared.track(action: .AddQR, text: .Get)
 //                self.popBackToProperViewController(id: details.id)
                 DispatchQueue.main.async {
-//                    self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
-                    
                     let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: nil)
                     let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
                     let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
@@ -276,20 +280,13 @@ extension QRRetrievalMethodViewController {
                 self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                     guard let `self` = self else {return}
                     self.navigationController?.popViewController(animated: true)
-//                    DispatchQueue.main.async {
-////                        self.routerWorker?.routingAction(scenario: <#T##AppUserActionScenarios#>)
-//                    }
                         // TODO: Create another scenario for going to a record that already exists
                 }
             case .isNew:
                 self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
-                        // TODO: Maybe show this on tab bar controller instead?
                         self.tabBarController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                        //                        self.navigationController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                        //                        self.popBackToProperViewController(id: model.id ?? "")
-//                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
                         
                         let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
                         let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
@@ -303,7 +300,7 @@ extension QRRetrievalMethodViewController {
                     self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                         guard let `self` = self else {return}
                         DispatchQueue.main.async {
-//                            self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
+
                             let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
                             let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
                             let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
@@ -312,10 +309,7 @@ extension QRRetrievalMethodViewController {
                     })
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
-                    //                    self.navigationController?.popViewController(animated: true)
-//                    DispatchQueue.main.async {
-//                        self.popBackToProperViewController(id: model.id ?? "")
-//                    }
+
                     // Note: May need to look into this and see if we require something else
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -325,8 +319,7 @@ extension QRRetrievalMethodViewController {
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
                         self.tabBarController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-//                        self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: coreDataReturnObject.patient, addedRecord: nil, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
-                        // TODO: Double check this flow here - may need to adjust to show federal pass
+
                         let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
                         let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
                         let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
@@ -337,41 +330,6 @@ extension QRRetrievalMethodViewController {
             }
         }
     }
-}
-
-// MARK: Logic for handling what screen to go back to
-extension QRRetrievalMethodViewController {
-//    func popBackToProperViewController(id: String) {
-//        // If we only have one card (or no cards), then go back to health pass with popBackTo
-//        // If we have more than one card, we should check if 2nd controller in stack is CovidVaccineCardsViewController, if so, pop back, if not, instantiate, insert at 1, then pop back
-//        guard StorageService.shared.fetchVaccineCards().count > 1 else {
-//            self.popBack(toControllerType: HealthPassViewController.self)
-//            return
-//        }
-//        // check for controller in stack
-//        guard let viewControllerStack = self.navigationController?.viewControllers else { return }
-//        var containsCovidVaxCardsVC = false
-//        for (index, vc) in viewControllerStack.enumerated() {
-//            if vc is CovidVaccineCardsViewController {
-//                containsCovidVaxCardsVC = true
-//            }
-//        }
-//        guard containsCovidVaxCardsVC == false else {
-//            postCardAddedNotification(id: id)
-//            //            self.navigationController?.popViewController(animated: true)
-//            self.popBack(toControllerType: CovidVaccineCardsViewController.self)
-//            return
-//        }
-//        guard viewControllerStack.count > 0 else { return }
-//        guard viewControllerStack[0] is HealthPassViewController else { return }
-//        let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: id, fedPassStringToOpen: nil)
-//        self.navigationController?.viewControllers.insert(vc, at: 1)
-//        // Note for Amir - This is because calling post notification wont work as the view did load hasn't been called yet where we add the notification observer, and we do this here, as there is logic in that view controller that refers to outlets, so it has to load first, otherwise we'll get a crash with outlets not being set yet.
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//            self.postCardAddedNotification(id: id)
-//        }
-//        self.popBack(toControllerType: CovidVaccineCardsViewController.self)
-//    }
 }
 
 // MARK: Image Picker

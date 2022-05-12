@@ -109,15 +109,17 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setObservables() {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
     
     private func setup() {
+        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: self.authManager, currentTab: .records)
         self.parentContainerStackView.endLoadingIndicator()
         let showLoadingTitle = (self.patient == nil && self.authenticated == true)
+        updatePatientIfNecessary()
         navSetup(style: navStyle, authenticated: self.authenticated)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
@@ -128,10 +130,16 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
         if showLoadingTitle {
-            self.parentContainerStackView.startLoadingIndicator(backgroundColor: .clear)
+            self.parentContainerStackView.startLoadingIndicator(backgroundColor: .white)
         }
     }
-
+    
+    private func updatePatientIfNecessary() {
+        if self.patient == nil {
+            self.patient = StorageService.shared.fetchAuthenticatedPatient()
+        }
+    }
+    
     @IBAction func removeFilters(_ sender: Any) {
         currentFilter = nil
         hideSelectedFilters()
@@ -200,12 +208,6 @@ extension UsersListOfRecordsViewController {
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
-    // This screen has to have health records by rule (with the exception being a screen state issue, but that is a separate bug)
-    // TODO: CONNOR: Remove this
-//    @objc func showAddRecord() {
-//        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: true)
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
     
     @objc func showSettings() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -301,13 +303,6 @@ extension UsersListOfRecordsViewController {
     private func fetchDataSource(initialProtectedMedFetch: Bool = false) {
         let patientRecords = fetchPatientRecords()
         show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
-//        if !authenticated && hasUpdatedUnauthPendingTest {
-            // Don't check for test result to update again here, as this was causing an infinite loop
-            // TODO: We should really refactor the way screens are being updated due to storage updates, as it will cause issues in the future with edge cases, causing us to create numerous hot-fixes such as this, resulting in messy and hard to maintain code
-//        } else {
-            // NOTE: We don't need to do this anymore - should check with the team though
-//            self.checkForTestResultsToUpdate(ds: self.dataSource)
-//        }
     }
     
     private func fetchPatientRecords() -> [HealthRecordsDetailDataSource] {
@@ -417,33 +412,7 @@ extension UsersListOfRecordsViewController {
         NotificationCenter.default.post(name: .protectedWordRequired, object: nil, userInfo: userInfo)
     }
     
-    // NOTE: We won't need this anymore I don't believe - double check
-//    private func checkForTestResultsToUpdate(ds: [HealthRecordsDetailDataSource]) {
-//        for (indexPathRow, record) in ds.enumerated() {
-//            switch record.type {
-//            case .covidTestResultRecord(model: let model):
-//                let listOfStatuses = record.records.map { ($0.status, $0.date) }
-//                for (index, data) in listOfStatuses.enumerated() {
-//                    if data.0 == CovidTestResult.pending.rawValue {
-//
-//                        guard
-//                            let patient = model.patient,
-//                            let dateOfBirth = patient.birthday?.yearMonthDayString,
-//                            let phn = patient.phn,
-//                            let collectionDatePresentableFormat = listOfStatuses[index].1,
-//                            let collectionDate = Date.Formatter.monthDayYearDate.date(from: collectionDatePresentableFormat)?.yearMonthDayString, model.authenticated == false
-//                        else { return }
-//
-//                        let model = GatewayTestResultRequest(phn: phn, dateOfBirth: dateOfBirth, collectionDate: collectionDate)
-//                        tableView.cellForRow(at: IndexPath(row: indexPathRow, section: 0))?.startLoadingIndicator(backgroundColor: .clear, containerSize: 20, size: 8)
-//                        backgroundWorker?.getTestResult(model: model, executingVC: self, row: indexPathRow)
-//                    }
-//                }
-//            default: print("")
-//            }
-//        }
-//    }
-    
+    // NOTE: No special routing required here on login, as the user should remain on the same screen
     private func performBCSCLogin() {
         self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
             guard let `self` = self, authenticationStatus == .Completed else {return}
@@ -468,13 +437,16 @@ extension UsersListOfRecordsViewController {
         }
     }
     
-//    @objc private func patientAPIFetched(_ notification: Notification) {
-//        let userInfo = notification.userInfo as? [String: String]
-//        let firstName = userInfo?["firstName"]
-//        let fullName = userInfo?["fullName"]
-//        self.patient = StorageService.shared.fetchAuthenticatedPatient()
-//        self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
-//    }
+    @objc private func patientAPIFetched(_ notification: Notification) {
+        let userInfo = notification.userInfo as? [String: String]
+        let firstName = userInfo?["firstName"]
+        let fullName = userInfo?["fullName"]
+        guard self.patient == nil else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.patient = StorageService.shared.fetchAuthenticatedPatient()
+            self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
+        }
+    }
 }
 
 // MARK: TableView setup
@@ -604,7 +576,6 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                 if self.dataSource.isEmpty {
                     self.inEditMode = false
                     DispatchQueue.main.async {
-//                        self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
                         
                         let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
                         let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
@@ -632,7 +603,6 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                     StorageService.shared.deletePatient(name: name, birthday: birthday)
                 }
                 DispatchQueue.main.async {
-//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.healthPass]))
                     
                     let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
                     let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)

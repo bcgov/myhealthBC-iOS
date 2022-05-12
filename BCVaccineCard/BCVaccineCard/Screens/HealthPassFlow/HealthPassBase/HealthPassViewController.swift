@@ -37,6 +37,7 @@ class HealthPassViewController: BaseViewController {
         refreshOnStorageChange()
         setFedPassObservable()
         setupListeners()
+        showFedPassIfNeccessary()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +63,6 @@ class HealthPassViewController: BaseViewController {
     }
     
     private func setup() {
-        showFedPassIfNeccessary()
         retrieveDataSource()
     }
     
@@ -108,6 +108,11 @@ extension HealthPassViewController {
             showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticationStatus in
                 if authenticationStatus != .Completed {
                     showScreen()
+                } else {
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthPassVC, authenticationStatus: authenticationStatus))
+                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
                 }
             }
         } else {
@@ -276,7 +281,6 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
                     }
                 }
                 DispatchQueue.main.async {
-//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
                     
                     let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
                     let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)

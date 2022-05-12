@@ -589,8 +589,7 @@ extension GatewayFormViewController {
             guard let `self` = self else {return}
             // TODO: Maybe we show the record that has been added here?
             DispatchQueue.main.async {
-//                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: patient, addedRecord: nil, recentlyAddedCardId: nil, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
-//
+
                 let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: patient, addedRecord: nil)
                 let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: nil, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
                 let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
@@ -599,12 +598,6 @@ extension GatewayFormViewController {
             }
         }, buttonTwoTitle: "Retry") {}
     }
-    
-//    private func handleAuthNavigation(patient: Patient) {
-//        if let tabBar = self.tabBarController as? TabBarController {
-//            tabBar.goToUserRecordsScreenForPatient(patient)
-//        }
-//    }
 }
 
 // MARK: For Button tap and enabling

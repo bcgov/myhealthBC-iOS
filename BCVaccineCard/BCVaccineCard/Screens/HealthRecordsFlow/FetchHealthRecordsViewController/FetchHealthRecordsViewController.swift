@@ -5,7 +5,7 @@
 //  Created by Connor Ogilvie on 2021-11-29.
 // TODO: This will contain a table view with the two cells for immunization record and test results. This view controller will be shown automatically on top of the healthRecordsViewController when no health records exist - will have to show a loading indicator
 
-// TODO: CONNOR: Delete this view controller
+// TODO: CONNOR: Delete this view controller when we know that we for sure won't be using it anymore
 
 import UIKit
 
@@ -53,9 +53,7 @@ class FetchHealthRecordsViewController: BaseViewController {
         setNeedsStatusBarAppearanceUpdate()
         self.adjustDataSource()
         self.tabBarController?.tabBar.isHidden = false
-//        if hideNavBackButton {
-//            self.navigationItem.setHidesBackButton(true, animated: animated)
-//        }
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -82,17 +80,6 @@ class FetchHealthRecordsViewController: BaseViewController {
     private func checkIfIsRootVCInStack() {
         self.showSettingsIcon = (((self.tabBarController as? TabBarController)?.viewControllers?[TabBarVCs.records.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController])?.first is FetchHealthRecordsViewController ? true : false
     }
-//    (self.viewControllers?[TabBarVCs.records.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController]
-//    private func setupLabel() {
-//        headerLabel.font = UIFont.bcSansRegularWithSize(size: 17)
-//        headerLabel.textColor = AppColours.textBlack
-//        headerLabel.text = .fetchHealthRecordsIntroText
-//        setupAccessibilty()
-//    }
-    
-//    private func setupAccessibilty() {
-//        self.headerLabel.accessibilityLabel = .fetchHealthRecordsIntroText.capitalized
-//    }
     
     private func adjustDataSource() {
         self.dataSource = [
@@ -204,15 +191,6 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
             }
         }
         
-//        if !AuthManager().isAuthenticated {
-//            showLogin(initialView: .Landing) { authenticationStatus in
-//                if authenticationStatus != .Completed {
-//                    showForm()
-//                }
-//            }
-//        } else {
-//            showForm()
-//        }
         showForm()
     }
     //FIXME: CONNOR: Adjust routing here to use router worker
@@ -223,7 +201,6 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 //            self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidImmunizationRecord)
             DispatchQueue.main.async {
-//                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
                 
                 let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
                 let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
@@ -241,7 +218,6 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 //            self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidTestResult)
             DispatchQueue.main.async {
-//                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: record, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil))
                 
                 let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
                 let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
@@ -251,61 +227,6 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
-//    private func handleRouting(id: String, recordType: GetRecordsView.RecordType, details: GatewayFormCompletionHandlerDetails) {
-//        if let completion = completion {
-//            completion()
-//        }
-//        let records = StorageService.shared.getHeathRecords()
-//        var recordsCount: Int
-//        if let name = details.name,
-//           let birthday = details.dob,
-//           let birthDate = Date.Formatter.yearMonthDay.date(from: birthday),
-//           let patient = StorageService.shared.fetchPatient(name: name, birthday: birthDate) {
-//            recordsCount = records.detailDataSource(patient: patient).count
-//        } else {
-//            recordsCount = 1
-//        }
-//        let dataSource = records.fetchDetailDataSourceWithID(id: id, recordType: recordType)
-//        guard let ds = dataSource else {
-//            self.popBack(toControllerType: HealthRecordsViewController.self)
-//            return
-//        }
-//        DispatchQueue.main.async {
-//            let detailVC = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: recordsCount)
-//            self.setupNavStack(details: details, detailVC: detailVC, authenticated: ds.isAuthenticated)
-//        }
-//    }
-    
-//    private func setupNavStack(details: GatewayFormCompletionHandlerDetails, detailVC: HealthRecordDetailViewController, authenticated: Bool) {
-//        guard let name = details.name,
-//              let birthday = details.dob,
-//              let birthDate = Date.Formatter.yearMonthDay.date(from: birthday),
-//              let patient = StorageService.shared.fetchPatient(name: name, birthday: birthDate),
-//              let stack = self.navigationController?.viewControllers, stack.count > 0
-//        else {
-//            return
-//        }
-//
-//        var navStack: [UIViewController] = []
-//
-//        var containsUserRecordsVC = false
-//        for (_, vc) in stack.enumerated() {
-//            if vc is UsersListOfRecordsViewController {
-//                containsUserRecordsVC = true
-//            }
-//        }
-//
-//        if containsUserRecordsVC == false {
-//            let secondVC = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
-//            navStack.append(secondVC)
-//        }
-//
-//        navStack.append(detailVC)
-//        self.tabBarController?.tabBar.isHidden = false
-//        guard let tabBarVC = self.tabBarController as? TabBarController else { return }
-//        AppDelegate.sharedInstance?.addLoadingViewHack()
-//        tabBarVC.resetHealthRecordsTab(viewControllersToInclude: navStack)
-//    }
 }
 
 // MARK: BCSC Login
