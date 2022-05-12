@@ -224,7 +224,6 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
             guard success else { return }
 //            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
             DispatchQueue.main.async {
-//                self.routerWorker?.routingAction(scenario: .Logout(currentTab: self.getCurrentTab))
                 let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
                 let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
                 let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
@@ -239,8 +238,6 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
             guard let `self` = self else {return}
             // Regardless of the result of the async logout, clear tokens.
             // because user may be offline
-            // TODO: Note - sometimes prompt isn't shown after hitting logout, so the screen state (for records) remains. We should look at resetting tab bar and then switch index to current index after reset
-            
             self.tableView.reloadData()
             completion(success)
         })

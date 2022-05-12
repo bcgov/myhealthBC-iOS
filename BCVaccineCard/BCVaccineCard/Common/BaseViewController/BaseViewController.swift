@@ -179,21 +179,12 @@ extension BaseViewController {
                             // Added record set to nil means that the records tab will either show UserRecordsVC or HealthRecordsVC, depending on number of users - if we want to display the detail screen, then we need to provide the addedRecord - this function is only being called from HealthPassVC and CovidVaccineCardsVC as of now though
                             let fedPassAddedFromHealthPassVC = source == .healthPassHomeScreen ? true : false
                             DispatchQueue.main.async {
-//                                self.routerWorker?.routingAction(scenario: .ManualFetch(actioningPatient: details.patient, addedRecord: nil, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC))
-//                                
+
                                 let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: nil)
                                 let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC)
                                 let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
                                 self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
                             }
-//                            if source == .healthPassHomeScreen {
-//                                self.popBack(toControllerType: HealthPassViewController.self)
-//                                self.postOpenPDFFromAddingFedPassOnlyNotification(pass: fedPass, source: .healthPassHomeScreen)
-//                            } else if source == .vaccineCardsScreen {
-//                                self.popBack(toControllerType: CovidVaccineCardsViewController.self)
-//                                self.postOpenPDFFromAddingFedPassOnlyNotification(pass: fedPass, source: .vaccineCardsScreen)
-//                            }
-//                            completion?(details.id)
                         } else {
                             self.navigationController?.popViewController(animated: true)
                         }

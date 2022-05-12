@@ -12,10 +12,6 @@ import UIKit
 enum CurrentPatientScenarios {
     case NoUsers
     case OneAuthUser
-//    case OneUnauthUser
-//    case MoreThanOneUnauthUser
-//    case OneAuthUserAndOneUnauthUser
-//    case OneAuthUserAndMoreThanOneUnauthUser
     
     static func getCurrentScenario(authCount: Int) -> Self {
         if authCount == 0 {
@@ -43,15 +39,6 @@ enum VaccineCardNumber {
         }
     }
 }
-// Note for Developer: AppUserActionScenarios should be called at the completion of the action in question (after core data changes)
-//enum AppUserActionScenarios {
-//    case InitialAppLaunch(affectedTabs: [TabBarVCs])
-//    case AuthenticatedFetch(actioningPatient: Patient?, recentlyAddedCardId: String?, fedPassStringToOpen: String?)
-//    case ManualFetch(actioningPatient: Patient?, addedRecord: HealthRecordsDetailDataSource?, recentlyAddedCardId: String?, fedPassStringToOpen: String?, fedPassAddedFromHealthPassVC: Bool?)
-//    case ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [TabBarVCs])
-//    case Logout(currentTab: TabBarVCs)
-//    case ClearAllData(currentTab: TabBarVCs)
-//}
 
 enum AppUserActionScenarios {
     case InitialAppLaunch(values: ActionScenarioValues)
@@ -80,20 +67,16 @@ struct CurrentRecordsAndPassesStacks {
 enum RecordsFlowVCs {
     case HealthRecordsViewController
     case UsersListOfRecordsViewController(patient: Patient?)
-//    case FetchHealthRecordsViewController
     case HealthRecordDetailViewController(patient: Patient?, dataSource: HealthRecordsDetailDataSource, userNumberHealthRecords: Int)
     case ProfileAndSettingsViewController
     case SecurityAndDataViewController
-//    case GatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType, gatewayInProgressDetails: GatewayInProgressDetails?)
     
     enum NonAssociatedVersion {
         case HealthRecordsViewController
         case UsersListOfRecordsViewController
-//        case FetchHealthRecordsViewController
         case HealthRecordDetailViewController
         case ProfileAndSettingsViewController
         case SecurityAndDataViewController
-//        case GatewayFormViewController
         
         func getIndexFromArray(array: [RecordsFlowVCs]) -> Int? {
             return array.map { $0.getNonAssociatedVersion }.firstIndex(of: self)
@@ -106,16 +89,12 @@ enum RecordsFlowVCs {
             return .HealthRecordsViewController
         case .UsersListOfRecordsViewController:
             return .UsersListOfRecordsViewController
-//        case .FetchHealthRecordsViewController:
-//            return .FetchHealthRecordsViewController
         case .HealthRecordDetailViewController:
             return .HealthRecordDetailViewController
         case .ProfileAndSettingsViewController:
             return .ProfileAndSettingsViewController
         case .SecurityAndDataViewController:
             return .SecurityAndDataViewController
-//        case .GatewayFormViewController:
-//            return .GatewayFormViewController
         }
     }
 }
@@ -211,10 +190,8 @@ class RouterWorker: NSObject {
     }
     
     public func routingAction(scenario: AppUserActionScenarios, goToTab: TabBarVCs? = nil, delayInSeconds: Double = 0.0) {
-//        let recordsStack = setupHealthRecordsNavStackForScenario(scenario: scenario)
         let stack = setupRecordsAndPassesNavStacks(scenario: scenario)
         self.delegate?.recordsActionScenario(viewControllerStack: stack.recordsStack, goToTab: goToTab == .records, delayInSeconds: delayInSeconds)
-//        let passesStack = setupHealthPassNavStackForScenario(scenario: scenario)
         self.delegate?.passesActionScenario(viewControllerStack: stack.passesStack, goToTab: goToTab == .healthPass, delayInSeconds: delayInSeconds)
     }
 }
@@ -501,17 +478,12 @@ extension RouterWorker {
             case .UsersListOfRecordsViewController(patient: let patient):
                 guard let patient = patient else { return }
                 vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: patient.authenticated, navStyle: self.userRecordsNavStyle, hasUpdatedUnauthPendingTest: false)
-//            case .FetchHealthRecordsViewController:
-//                let hasRecords = !(StorageService.shared.getHeathRecords().isEmpty)
-//                vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: hasRecords)
             case .HealthRecordDetailViewController(patient: let patient, dataSource: let dataSource, userNumberHealthRecords: let userNumberHealthRecords):
                 vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: dataSource, authenticatedRecord: dataSource.isAuthenticated, userNumberHealthRecords: userNumberHealthRecords, patient: patient)
             case .ProfileAndSettingsViewController:
                 vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
             case .SecurityAndDataViewController:
                 vc = SecurityAndDataViewController.constructSecurityAndDataViewController()
-//            case .GatewayFormViewController(rememberDetails: let rememberDetails, fetchType: let fetchType, gatewayInProgressDetails: let currentProgress):
-//                vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType, currentProgress: currentProgress)
             }
             if let vc = vc {
                 newVCStack.append(vc)
@@ -542,14 +514,6 @@ extension RouterWorker {
             return recordsStack
 //        case .OneAuthUser:
 //            <#code#>
-//        case .OneUnauthUser:
-//            <#code#>
-//        case .MoreThanOneUnauthUser:
-//            <#code#>
-//        case .OneAuthUserAndOneUnauthUser:
-//            <#code#>
-//        case .OneAuthUserAndMoreThanOneUnauthUser:
-//            <#code#>
         default: return []
         }
     }
@@ -579,287 +543,3 @@ extension RouterWorker {
         return newVCStack
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// TODO: Delete the commented code below once the above code has been tested
-
-
-
-// MARK: Nav stack setup Health Records
-extension RouterWorker {
-//    private func setupHealthRecordsNavStackForScenario(scenario: AppUserActionScenarios) -> [BaseViewController] {
-//        switch scenario {
-//        case .InitialAppLaunch(let values):
-//            return initialAppLaunchRecordsStack(values: values)
-//        case .AuthenticatedFetch(let values):
-//            return authenticatedFetchRecordsStack(values: values)
-//        case .ManualFetch(let values):
-//            return manualUnauthFetchRecordsStack(values: values)
-//        case .ManuallyDeletedAllOfAnUnauthPatientRecords(let values):
-//            return manuallyDeletedAllOfAnUnauthPatientRecordsForPatientRecordsStack(values: values)
-//        case .Logout(let values):
-//            return manualLogOutRecordsStack(values: values)
-//        case .ClearAllData(let values):
-//            return self.clearAllDataRecordsStack(values: values)
-//        }
-//    }
-    
-//    private func initialAppLaunchRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        guard values.affectedTabs.contains(.records) else { return [] }
-//        switch self.currentPatientScenario {
-//        case .NoUsers:
-//            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: false, completion: {})
-//            return [vc]
-//        case .OneAuthUser:
-//            guard let patient = self.getAuthenticatedPatient else {
-//                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: false, completion: {})
-//                return [vc]
-//            }
-//            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
-//            return [vc]
-//        case .OneUnauthUser:
-//            guard let patient = self.getUnathenticatedPatients?.first else {
-//                let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: false, completion: {})
-//                return [vc]
-//            }
-//            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: false, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
-//            return [vc]
-//        case .MoreThanOneUnauthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
-//            let vc = HealthRecordsViewController.constructHealthRecordsViewController()
-//            return [vc]
-//        }
-//    }
-    
-//    private func authenticatedFetchRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        switch self.currentPatientScenario {
-//        case .NoUsers, .OneUnauthUser, .MoreThanOneUnauthUser:
-//            // Not possible here - after an authFetch, there has to be at least one Auth user, so do nothing
-//            return []
-//        case .OneAuthUser:
-//            // Stack should be UsersListOfRecordsViewController (after fetch is completed)
-//            // Note - hasUpdatedUnauthPendingTest is irrelevant here
-//            guard let patient = values.recordFlowDetails?.actioningPatient else { return [] }
-//            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true)
-//            return [vc]
-//        case .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
-//            // Stack should be HealthRecordsViewController, then UsersListOfRecordsViewController (after fetch is completed)
-//            // Note - setting hasUpdatedUnauthPendingTest to false just in case unauth user has to check for background update for pending covid test
-//            let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
-//            guard let patient = values.recordFlowDetails?.actioningPatient else { return [vc1] }
-//            let vc2 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: true, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
-//            return [vc1, vc2]
-//        }
-//    }
-    
-//    private func manualUnauthFetchRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        switch self.currentPatientScenario {
-//        case .NoUsers, .OneAuthUser:
-//            // Not possible here - after a successful manual fetch, there has to be at least 1 unauth patient
-//            return []
-//        case .OneUnauthUser:
-//            // Stack should be UsersListOfRecordsViewController, then HealthRecordDetailViewController
-//            guard let patient = values.recordFlowDetails?.actioningPatient else { return [] }
-//            let vc1 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: false, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
-//            let recordsCount = StorageService.shared.getHeathRecords().detailDataSource(patient: patient).count
-//            guard let record = values.recordFlowDetails?.addedRecord else { return [vc1] }
-//            let vc2 = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: record, authenticatedRecord: false, userNumberHealthRecords: recordsCount, patient: patient)
-//            return [vc1, vc2]
-//        case .MoreThanOneUnauthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
-//            // Stack should be HealthRecordsViewController, UsersListOfRecordsViewController, then HealthRecordDetailViewController
-//            let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
-//            guard let patient = values.recordFlowDetails?.actioningPatient else { return [vc1] }
-//            let authenticated = self.currentPatientScenario == .MoreThanOneUnauthUser ? false : true
-//            let vc2 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: patient, authenticated: authenticated, navStyle: .multiUser, hasUpdatedUnauthPendingTest: false)
-//            guard let record = values.recordFlowDetails?.addedRecord else { return [vc1, vc2] }
-//            let recordsCount = StorageService.shared.getHeathRecords().detailDataSource(patient: patient).count
-//            let vc3 = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: record, authenticatedRecord: false, userNumberHealthRecords: recordsCount, patient: patient)
-//            return [vc1, vc2, vc3]
-//        }
-//    }
-    
-//    private func manuallyDeletedAllOfAnUnauthPatientRecordsForPatientRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        guard values.affectedTabs.contains(.records) else { return [] }
-//        switch self.currentPatientScenario {
-//        case .NoUsers:
-//            // In this case, show initial fetch screen - stack should be FetchHealthRecordsViewController
-//            let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: false)
-//            return [vc]
-//        case .OneAuthUser:
-//            // This means that we have removed the only other unauth user and should show the auth user records by default UsersListOfRecordsViewController
-//            // Note - hasUpdatedUnauthPendingTest doesnt matter here
-//            guard let remainingAuthPatient = self.getAuthenticatedPatient else { return [] }
-//            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: remainingAuthPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
-//            return [vc]
-//        case .OneUnauthUser:
-//            // This means that we have removed an unauth user and should show the remaining unauth user records by default UsersListOfRecordsViewController
-//            // Note - hasUpdatedUnauthPendingTest should be false here, to make sure that pending covid test result can be fetched in the background, just in case an update is required
-//            guard let remainingUnauthPatient = self.getUnathenticatedPatients?.first else { return [] }
-//            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: remainingUnauthPatient, authenticated: false, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
-//            return [vc]
-//        case .MoreThanOneUnauthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
-//            // In this case, just show the health records home screen with a list of folders
-//            let vc = HealthRecordsViewController.constructHealthRecordsViewController()
-//            return [vc]
-//        }
-//    }
-    
-//    private func manualLogOutRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        // Note - this is a unique case as we need to reset the stack in some cases, but still need to show the same screen
-//        switch self.currentPatientScenario {
-//        case .NoUsers:
-//            let vc1 = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: false)
-//            guard values.currentTab == .records else { return [vc1] }
-//            let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-//            return [vc1, vc2]
-//        case .OneAuthUser, .OneAuthUserAndOneUnauthUser, .OneAuthUserAndMoreThanOneUnauthUser:
-//            // This isn't possible - after logout, there is no auth user
-//            return []
-//        case .OneUnauthUser:
-//            guard let remainingUnauthPatient = self.getUnathenticatedPatients?.first else { return [] }
-//            let vc1 = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: remainingUnauthPatient, authenticated: false, navStyle: .singleUser, hasUpdatedUnauthPendingTest: false)
-//            guard values.currentTab == .records else { return [vc1] }
-//            let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-//            return [vc1, vc2]
-//        case .MoreThanOneUnauthUser:
-//            let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
-//            guard values.currentTab == .records else { return [vc1] }
-//            let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-//            return [vc1, vc2]
-//        }
-//    }
-    
-//    private func clearAllDataRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        let vc1 = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: false)
-//        guard values.currentTab == .records else { return [vc1] }
-//        let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-//        let vc3 = SecurityAndDataViewController.constructSecurityAndDataViewController()
-//        return [vc1, vc2, vc3]
-//    }
-    
-}
-
-// MARK: Nav stack setup Health Passes
-extension RouterWorker {
-//    private func setupHealthPassNavStackForScenario(scenario: AppUserActionScenarios) -> [BaseViewController] {
-//        switch scenario {
-//        case .InitialAppLaunch(let values):
-//            return initialAppLaunchPassesStack(values: values)
-//        case .AuthenticatedFetch(let values):
-//            return authenticatedFetchPassesStack(values: values)
-//        case .ManualFetch(let values):
-//            return manualUnauthFetchPassessStack(values: values)
-//        case .ManuallyDeletedAllOfAnUnauthPatientRecords(let values):
-//            return manuallyDeletedVaccineCardForPatientPassesStack(values: values)
-//        case .Logout(let values):
-//            return manualLogOutPassesStack(values: values)
-//        case .ClearAllData(let values):
-//            return clearAllDataPassesStack(values: values)
-//        }
-//    }
-    
-//    private func initialAppLaunchPassesStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        guard values.affectedTabs.contains(.healthPass) else { return [] }
-//        let vc = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
-//        return [vc]
-//    }
-    // Patient scenario doesn't matter here, because a patient doesn't necessarily have a vaccine card
-//    private func authenticatedFetchPassesStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        switch currentNumberOfVaccineCards {
-//        case .NoCards, .OneCard:
-//            let vc = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: values.passesFlowDetails?.fedPassStringToOpen)
-//            return [vc]
-//        case .MultiplCards:
-//            let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
-//            let vc2 = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: values.passesFlowDetails?.recentlyAddedCardId, fedPassStringToOpen: values.passesFlowDetails?.fedPassStringToOpen)
-//            return [vc1, vc2]
-//        }
-//    }
-    
-//    private func manualUnauthFetchPassessStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        switch currentNumberOfVaccineCards {
-//        case .NoCards, .OneCard:
-//            let vc = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: values.passesFlowDetails?.fedPassStringToOpen)
-//            return [vc]
-//        case .MultiplCards:
-//            if values.passesFlowDetails?.fedPassAddedFromHealthPassVC == true {
-//                let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: values.passesFlowDetails?.fedPassStringToOpen)
-//                return [vc1]
-//            } else {
-//                let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
-//                let vc2 = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: values.passesFlowDetails?.recentlyAddedCardId, fedPassStringToOpen: values.passesFlowDetails?.fedPassStringToOpen)
-//                return [vc1, vc2]
-//            }
-//        }
-//    }
-    // Patient scenario doesn't matter here, because a patient doesn't necessarily have a vaccine card
-//    private func manuallyDeletedVaccineCardForPatientPassesStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        guard values.affectedTabs.contains(.healthPass) else { return [] }
-//        switch currentNumberOfVaccineCards {
-//        case .NoCards, .OneCard:
-//            let vc = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
-//            return [vc]
-//        case .MultiplCards:
-//            let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
-//            let vc2 = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
-//            return [vc1, vc2]
-//        }
-//    }
-    
-//    private func manualLogOutPassesStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        // Note - this is a unique case as we need to reset the stack in some cases, but still need to show the same screen
-//        switch currentNumberOfVaccineCards {
-//        case .NoCards, .OneCard:
-//            let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
-//            guard values.currentTab == .healthPass else { return [vc1] }
-//            let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-//            return [vc1, vc2]
-//        case .MultiplCards:
-//            let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
-//            let vc2 = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
-//            guard values.currentTab == .healthPass else { return [vc1, vc2] }
-//            let vc3 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-//            return [vc1, vc2, vc3]
-//        }
-//    }
-    
-//    private func clearAllDataPassesStack(values: ActionScenarioValues) -> [BaseViewController] {
-//        let vc1 = HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil)
-//        guard values.currentTab == .healthPass else { return [vc1] }
-//        let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-//        let vc3 = SecurityAndDataViewController.constructSecurityAndDataViewController()
-//        return [vc1, vc2, vc3]
-//    }
-    
-}
-
-// Essentially, here are the scenarios:
-// 1: Action from passes tab:
-/// - Passes tab will update accordingly, correct screen will show (and underlying stack)
-/// - Records tab will retain same presented screen, but stack will be updated accordingly - exception is logging out, clearing data, and deleting vaccine card (if vaccine card is last record remaining of an unauth patient, and user is on his detailed record or that user list of records screen)
-// 2: Action from records tab:
-/// - Records tab will update accordingly, correct screen will show (and underlying stack)
-/// - Passes tab will retain same presented screen, but stack will be updated accordingly - exception is logging out, clearing data, and deleting record (if record is vaccine pass)

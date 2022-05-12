@@ -48,10 +48,6 @@ class TabBarController: UITabBarController {
         return TabBarController()
     }
     
-//    private func addHealthRecords(hasHealthRecords: Bool) -> TabBarVCs.Properties {
-//        return TabBarVCs.Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: true, showSettingsIcon: true, hasHealthRecords: hasHealthRecords, completion: {}))
-//    }
-    
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
     private var authenticationStatus: AuthenticationViewController.AuthenticationStatus?
@@ -131,62 +127,7 @@ class TabBarController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(resetHealthRecordsScreenOnLogout), name: .resetHealthRecordsScreenOnLogout, object: nil)
-//        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
-//            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
-//            // Note: Not sure we need this anymore with health records tab logic
-//            switch event.entity {
-//            case .VaccineCard, .CovidLabTestResult, .Patient, .Medication, .LaboratoryOrder:
-//                if event.event == .Delete, StorageService.shared.getHeathRecords().isEmpty {
-//                    // If data was deleted and now health records are empty
-////                    self.resetHealthRecordsTab()
-//                }
-//                if event.event == .Save, StorageService.shared.getHeathRecords().count == 1 {
-//                    self.updateRecordsScreenState = true
-//                }
-//            default:
-//                break
-//            }
-//        }
     }
-    // FIXME: CONNOR: - Ready To Test: Remove this function
-    // This function is called within the tab bar 1.) (when records are deleted and go to zero, called in the listener above), and called when the 2.) health records tab is selected, to appropriately show the correct VC, and is called 3.) on the FetchHealthRecordsViewController in the routing section to apporiately reset the health records tab's vc stack and route to the details screen
-//    func resetHealthRecordsTab(viewControllersToInclude vcs: [UIViewController]? = nil, goToRecordsForPatient patient: Patient? = nil) {
-//        let vc: TabBarVCs = .records
-//        guard let properties = (vc == .records && StorageService.shared.getHeathRecords().isEmpty) ? addHealthRecords(hasHealthRecords: false) : vc.properties  else { return }
-//        let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
-//        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
-//        let viewController = properties.baseViewController
-//        viewController.tabBarItem = tabBarItem
-//        viewController.title = properties.title
-//        let navController = CustomNavigationController.init(rootViewController: viewController)
-//        let isOnRecordsTab = self.selectedIndex == TabBarVCs.records.rawValue
-//        viewControllers?.remove(at: TabBarVCs.records.rawValue)
-//        viewControllers?.insert(navController, at: TabBarVCs.records.rawValue)
-//        if isOnRecordsTab {
-//            selectedIndex = TabBarVCs.records.rawValue
-//            // This portion is used to handle the re-setting of the health records VC stack for proper routing - in order to maintain the correct Navigation UI, we must push the VC's onto the stack (and not set the VC's with .setViewControllers() as this causes issues) - the loading view on the app delegate window is to hide the consecutive pushes to make a smoother UI transition - tested and works
-//            if let vcs = vcs {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                    for vc in vcs {
-//                        if vc.isKind(of: UsersListOfRecordsViewController.self) && navController.viewControllers.contains(where: { $0.isKind(of: UsersListOfRecordsViewController.self) }) {
-//                            // Don't add duplicate here
-//                        } else {
-//                            navController.pushViewController(vc, animated: false)
-//                        }
-//                    }
-//                    AppDelegate.sharedInstance?.removeLoadingViewHack()
-//                }
-//            }
-//        }
-//        // TODO: Should probably find a cleaner way to do this - but the necessity of the function above will likely change with new design updates
-//        if let patient = patient {
-//            selectedIndex = TabBarVCs.records.rawValue
-//            if let vc = navController.viewControllers.first as? HealthRecordsViewController {
-//                vc.setPatientToShow(patient: patient)
-//            }
-//        }
-//    }
     
     @objc private func showTermsOfService(_ notification: Notification) {
         guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
@@ -248,14 +189,6 @@ extension TabBarController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         NotificationCenter.default.post(name: .tabChanged, object: nil, userInfo: ["viewController": viewController])
-        // First we are checking if the health records screen state needs to be updated when a user taps on records tab - this is to handle the case where a user adds a vaccine pass via health pass flow, and we need to reflect the state change in the records tab. This boolean property is being set in a listener above
-//        if self.selectedIndex == TabBarVCs.records.rawValue && updateRecordsScreenState {
-//            updateRecordsScreenState = false
-//            self.resetHealthRecordsTab()
-//        } else if self.selectedIndex == TabBarVCs.records.rawValue && self.previousSelectedIndex == TabBarVCs.records.rawValue {
-//            // This is called here to rest the records tab appropriately, when the tab is tapped
-//            self.resetHealthRecordsTab()
-//        }
     }
 }
 
@@ -285,7 +218,6 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         if resetHealthRecordsTab {
             guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
             DispatchQueue.main.async {
-//                self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(actioningPatient: patient, recentlyAddedCardId: nil, fedPassStringToOpen: nil))
                 let currentTab = TabBarVCs.init(rawValue: self.selectedIndex) ?? .home
                 let flowStack = self.getCurrentRecordsAndPassesFlows()
                 let recordFlowDetails = RecordsFlowDetails(currentStack: flowStack.recordsStack, actioningPatient: patient, addedRecord: nil)
@@ -314,13 +246,6 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     }
 }
 
-// MARK: To go to specific user records tab
-//extension TabBarController {
-//    func goToUserRecordsScreenForPatient(_ patient: Patient) {
-//        resetHealthRecordsTab(goToRecordsForPatient: patient)
-//    }
-//}
-
 // MARK: This is to handle the protected word prompt
 extension TabBarController {
     @objc private func protectedWordRequired(_ notification: Notification) {
@@ -330,14 +255,6 @@ extension TabBarController {
         self.present(vc, animated: true, completion: nil)
     }
 }
-
-// MARK: This is for when a user logs out, we should reset screen state
-//extension TabBarController {
-//    @objc private func resetHealthRecordsScreenOnLogout(_ notification: Notification) {
-//        // FIXME: CONNOR - see if we need this function here, may have to reconstruct tabs on this flow here
-////        self.resetHealthRecordsTab()
-//    }
-//}
 
 // MARK: This is an edge case function that we will use in both HealthRecordsVC and UserListOfRecords VC
 extension TabBarController {
@@ -378,7 +295,6 @@ extension TabBarController: RouterWorkerDelegate {
 // MARK: Router helper functions
 extension TabBarController {
     private func resetTab(tabBarVC: TabBarVCs, viewControllerStack: [BaseViewController], goToTab: TabBarVCs?, delayInSeconds: Double) {
-//        let currentIndex = self.selectedIndex
         guard viewControllerStack.count > 0 else { return }
         let vc = tabBarVC
         guard let properties = vc.properties else { return }
@@ -387,11 +303,7 @@ extension TabBarController {
         guard let rootViewController = viewControllerStack.first else { return }
         rootViewController.tabBarItem = tabBarItem
         rootViewController.title = properties.title
-//        let navController = CustomNavigationController.init(rootViewController: rootViewController)
-        // TODO: Likely need a loading hack here
-//        if tabBarVC.rawValue == self.selectedIndex {
-//            AppDelegate.sharedInstance?.addLoadingViewHack()
-//        }
+
         DispatchQueue.main.async {
             if let nav = self.viewControllers?[tabBarVC.rawValue] as? CustomNavigationController {
                 var vcStack: [BaseViewController] = []
@@ -416,20 +328,6 @@ extension TabBarController {
                 }
             }
         }
-        
-//        for (index, viewController) in viewControllerStack.enumerated() {
-//            if index > 0 {
-//                navController.pushViewController(viewController, animated: true)
-//            }
-//        }
-//        viewControllers?.remove(at: tabBarVC.rawValue)
-//        viewControllers?.insert(navController, at: tabBarVC.rawValue)
-//        self.selectedIndex = currentIndex
-//        if tabBarVC.rawValue == self.selectedIndex {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                AppDelegate.sharedInstance?.removeLoadingViewHack()
-//            }
-//        }
     }
 }
 

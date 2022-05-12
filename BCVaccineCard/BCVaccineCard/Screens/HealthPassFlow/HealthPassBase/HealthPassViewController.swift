@@ -281,7 +281,6 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
                     }
                 }
                 DispatchQueue.main.async {
-//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(affectedTabs: [.records]))
                     
                     let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
                     let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
