@@ -36,6 +36,30 @@ class StatusBannerView: UIView, UITextViewDelegate {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     
+    var largeFontSize: CGFloat {
+        if Device.IS_IPHONE_5 {
+            return 16
+        } else {
+            return 18
+        }
+    }
+    
+    var mediumFontSize: CGFloat {
+        if Device.IS_IPHONE_5 {
+            return 14
+        } else {
+            return 16
+        }
+    }
+    
+    var smallFontSize: CGFloat {
+        if Device.IS_IPHONE_5 {
+            return 12
+        } else {
+            return 15
+        }
+    }
+    
     private var labels: [UILabel?] {
         return [recordTypeLabel, statusLabel, nameLabel, timeLabel]
     }
@@ -123,15 +147,15 @@ class StatusBannerView: UIView, UITextViewDelegate {
         case .CovidTest:
             textView.isHidden = true
             
-            nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
-            statusLabel.font = UIFont.bcSansBoldWithSize(size: 18)
-            timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+            nameLabel.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
+            statusLabel.font = UIFont.bcSansBoldWithSize(size: largeFontSize)
+            timeLabel.font = UIFont.bcSansRegularWithSize(size: smallFontSize)
         case .VaccineRecord:
             textView.isHidden = true
             
-            nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
-            statusLabel.font = UIFont.bcSansRegularWithSize(size: 18)
-            timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+            nameLabel.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
+            statusLabel.font = UIFont.bcSansRegularWithSize(size: largeFontSize)
+            timeLabel.font = UIFont.bcSansRegularWithSize(size: smallFontSize)
         case .Message:
             topContainer.isHidden = true
             statusStack.isHidden = true
@@ -140,7 +164,7 @@ class StatusBannerView: UIView, UITextViewDelegate {
             
             textView.isUserInteractionEnabled = true
             textView.delegate = self
-            textView.font = UIFont.bcSansBoldWithSize(size: 16)
+            textView.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
             textView.translatesAutoresizingMaskIntoConstraints = true
             textView.sizeToFit()
             textView.isScrollEnabled = false

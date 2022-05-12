@@ -63,7 +63,12 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.register(UINib.init(nibName: CommentViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommentViewTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.showsVerticalScrollIndicator = false
-        tableView.estimatedRowHeight = 600
+        if Device.IS_IPHONE_5 || Device.IS_IPHONE_4 {
+            tableView.estimatedRowHeight = 1000
+        } else {
+            tableView.estimatedRowHeight = 600
+        }
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
@@ -95,10 +100,11 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let model = self.model else {return 0}
         let sectionType = model.getCellSection()[section]
-        guard sectionType == .Comments, !model.comments.isEmpty else {
-            return 0
+        if sectionType == .Comments, !model.comments.isEmpty {
+            return "Comments".heightForView(font: TableSectionHeader.font, width: bounds.width) + 10
         }
-        return "Comments".heightForView(font: TableSectionHeader.font, width: bounds.width) + 10
+        
+        return 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
