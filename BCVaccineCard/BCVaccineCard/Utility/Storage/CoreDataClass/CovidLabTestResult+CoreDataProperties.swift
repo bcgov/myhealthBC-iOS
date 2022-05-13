@@ -21,6 +21,7 @@ extension CovidLabTestResult {
     @NSManaged public var authenticated: Bool
     @NSManaged public var patient: Patient?
     @NSManaged public var results: NSSet?
+    @NSManaged public var pdf: String?
 
 }
 

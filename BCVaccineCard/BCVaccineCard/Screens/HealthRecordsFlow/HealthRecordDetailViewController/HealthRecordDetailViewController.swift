@@ -114,6 +114,11 @@ extension HealthRecordDetailViewController {
                 self.pdfData = pdf
                 rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
+        case .covidTestResultRecord(model: let covidTestOrder):
+            if let pdf = covidTestOrder.pdf {
+                self.pdfData = pdf
+                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+            }
         default:
             rightNavButton = self.authenticatedRecord ? nil :
             NavButton(

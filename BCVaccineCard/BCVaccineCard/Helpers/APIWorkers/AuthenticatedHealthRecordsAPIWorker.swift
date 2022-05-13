@@ -628,7 +628,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             self.getAuthenticatedCovidTestPDF(authCredentials: authCreds, reportId: order.id ?? "") { pdf in
                 let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
                 // TODO: Adjust core data to save covid test PDF - do the same as lab order
-                if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient) {
+                if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, pdf: pdf, authenticated: true, patientObject: patient) {
                     completedCount += 1
                 } else {
                     errorArrayCount += 1
@@ -639,10 +639,10 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
-    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
        
-        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false) else { return nil }
+        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false, pdf: pdf) else { return nil }
         return object.id
     }
 }
