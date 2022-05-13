@@ -52,7 +52,7 @@
 "QueueItClosedTitle" = "QueueIt Waiting Room Closed";
 "QueueItClosedMessage" = "You have closed the QueueIt waiting room";
 "ErrorParsingPHNFromHG" = "Error parsing phn";
-"ErrorParsingPHNMessage" = "There was an error with your Personal Health Number. Please check that it is correct and try again.";
+"ErrorParsingPHNMessage" = "The information you entered does not match our records. Please try again.";
 "DuplicateTitle" = "Duplicate";
 "DuplicateMessage" = "This QR code is already saved in your list of cards.";
 "DuplicateTestMessage" = "This test is already saved in your list of records.";
