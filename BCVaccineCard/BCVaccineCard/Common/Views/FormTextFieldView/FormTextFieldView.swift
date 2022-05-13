@@ -91,8 +91,8 @@ enum FormTextFieldType {
         case .personalHealthNumber:
             guard text.trimWhiteSpacesAndNewLines.count > 0 else { return .phnRequired }
             guard text.isValidNumber else { return .phnNumber }
-            guard text.removeWhiteSpaceFormatting.isValidLength(length: 10) else { return .phnLength }
-            guard text.first == "9" else { return .phnNotValid }
+//            guard text.removeWhiteSpaceFormatting.isValidLength(length: 10) else { return .phnLength }
+//            guard text.first == "9" else { return .phnNotValid }
             return nil
         case .dateOfBirth:
             guard text.trimWhiteSpacesAndNewLines.count > 0 else { return .dobRequired }
