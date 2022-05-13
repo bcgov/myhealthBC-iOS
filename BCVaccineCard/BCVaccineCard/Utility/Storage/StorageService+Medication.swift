@@ -126,11 +126,11 @@ extension StorageService: StorageMedicationManager {
         // Handle Pharmacy
         var pharmacy: Pharmacy? = nil
         if let dispensingPharmacy = object.dispensingPharmacy {
-            if let pharmacyId = dispensingPharmacy.pharmacyID, let storedPharmacy = fetchPharmacy(id: pharmacyId) {
-                pharmacy = storedPharmacy
-            } else {
+//            if let pharmacyId = dispensingPharmacy.pharmacyID, let storedPharmacy = fetchPharmacy(id: pharmacyId) {
+//                pharmacy = storedPharmacy
+//            } else {
                 pharmacy = storePharmacy(gateWayResponse: dispensingPharmacy, initialProtectedMedFetch: initialProtectedMedFetch)
-            }
+//            }
         }
         
         let id = UUID().uuidString

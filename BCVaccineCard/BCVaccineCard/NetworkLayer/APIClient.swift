@@ -130,14 +130,14 @@ class APIClient {
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
-    func getAuthenticatedLaboratoryOrderPDF(_ authCredentials: AuthenticationRequestObject, token: String?, reportId: String, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedPDFResponseObject>) {
-        let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedLaboratoryOrderPDF(repordId: reportId))
+    func getAuthenticatedLabTestPDF(_ authCredentials: AuthenticationRequestObject, token: String?, reportId: String, executingVC: UIViewController, includeQueueItUI: Bool, type: LabTestType, completion: @escaping NetworkRequestCompletion<AuthenticatedPDFResponseObject>) {
+        let url = configureURL(token: token, endpoint: self.endpoints.getAuthenticatedLabTestPDF(repordId: reportId))
         
         let headerParameters: Headers = [
             Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
         ]
         
-        let parameters = AuthenticatedPDFRequestObject(hdid: authCredentials.hdid, isCovid19: "false")
+        let parameters = AuthenticatedPDFRequestObject(hdid: authCredentials.hdid, isCovid19: type.getBoolStringValue)
         
         guard let unwrappedURL = url else { return }
         self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)

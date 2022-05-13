@@ -1406,12 +1406,12 @@
 			path = StaticPositiveTestInstructionsTableViewCell;
 			sourceTree = "<group>";
 		};
-		79218AE22755E1240063004E /* FetchHealthRecordsViewController */ = {
+		79218AE22755E1240063004E /* NOTUSINGFetchHealthRecordsViewController */ = {
 			isa = PBXGroup;
 			children = (
 				79218AE32755E14E0063004E /* FetchHealthRecordsViewController.swift */,
 			);
-			path = FetchHealthRecordsViewController;
+			path = NOTUSINGFetchHealthRecordsViewController;
 			sourceTree = "<group>";
 		};
 		79218AE62755E2410063004E /* UsersListOfRecordsViewController */ = {
@@ -2031,7 +2031,7 @@
 			isa = PBXGroup;
 			children = (
 				799050B1273C4D1F006CD726 /* HealthRecordsBase */,
-				79218AE22755E1240063004E /* FetchHealthRecordsViewController */,
+				79218AE22755E1240063004E /* NOTUSINGFetchHealthRecordsViewController */,
 				79218AE62755E2410063004E /* UsersListOfRecordsViewController */,
 				79218AEA2755E2940063004E /* HealthRecordDetailViewController */,
 			);

@@ -779,7 +779,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             bday = nil
         }
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn, name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName, birthday: bday, authenticated: authenticated) else {return nil}
-        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: true) else { return nil }
+        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: true, pdf: nil) else { return nil }
         return CoreDataReturnObject(id: object.id, patient: patient)
     }
     

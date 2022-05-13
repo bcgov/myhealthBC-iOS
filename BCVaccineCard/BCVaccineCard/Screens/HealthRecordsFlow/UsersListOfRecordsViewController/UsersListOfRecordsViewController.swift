@@ -633,31 +633,6 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     
 }
 
-extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerDelegate {
-    func handleTestResult(result: GatewayTestResultResponse, row: Int) {
-        print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
-        StorageService.shared.updateCovidTestResult(gateWayResponse: result, manuallyAdded: false, pendingBackgroundRefetch: true) { [weak self] covidLabTestResult in
-            guard let `self` = self else {return}
-            
-            guard let covidLabTestResult = covidLabTestResult else { return }
-            guard let healthRecordDetailDS = HealthRecord(type: .CovidTest(covidLabTestResult)).detailDataSource() else { return }
-            guard self.dataSource.count > row else { return }
-            self.dataSource[row] = healthRecordDetailDS
-            let indexPath = IndexPath(row: row, section: 0)
-            guard self.tableView.numberOfRows(inSection: 0) > indexPath.row else { return }
-            self.tableView.reloadRows(at: [indexPath], with: .automatic)
-            self.tableView.cellForRow(at: indexPath)?.endLoadingIndicator()
-        }
-    }
-    
-    func handleError(title: String, error: ResultError, row: Int) {
-        print("BACKGROUND FETCH INFO: Error: ", title, error, "For Row: ", row)
-        let indexPath = IndexPath(row: row, section: 0)
-        guard self.tableView.numberOfRows(inSection: 0) > indexPath.row else { return }
-        self.tableView.cellForRow(at: indexPath)?.endLoadingIndicator()
-    }
-}
-
 // MARK: Protected word retry
 extension UsersListOfRecordsViewController {
     @objc private func protectedWordFailedPromptAgain(_ notification: Notification) {
