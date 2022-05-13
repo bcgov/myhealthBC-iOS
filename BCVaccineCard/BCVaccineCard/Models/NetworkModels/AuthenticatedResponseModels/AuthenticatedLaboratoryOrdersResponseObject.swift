@@ -7,6 +7,20 @@
 
 import Foundation
 
+enum LabTestType {
+    case normal
+    case covid
+    
+    var getBoolStringValue: String {
+        switch self {
+        case .normal:
+            return "false"
+        case .covid:
+            return "true"
+        }
+    }
+}
+
 // MARK: - Welcome
 struct AuthenticatedLaboratoryOrdersResponseObject: Codable {
     let resourcePayload: ResourcePayload?

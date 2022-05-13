@@ -320,7 +320,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private func getAuthenticatedLaboratoryOrderPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedLabOrderPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedLabOrderPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
-        apiClient.getAuthenticatedLaboratoryOrderPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, queueItRetryStatus in
+        apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .normal) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {
                 completion(nil)
                 return
@@ -328,7 +328,32 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
                 self.requestDetails.authenticatedLabOrderPDFDetails?.queueItToken = queueItToken
-                self.apiClient.getAuthenticatedLaboratoryOrderPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                self.apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .normal) { [weak self] result, _ in
+                    guard let `self` = self else {
+                        completion(nil)
+                        return
+                    }
+                    return self.handlePDFResponse(result: result, completion: completion)
+                }
+            } else {
+                return self.handlePDFResponse(result: result, completion: completion)
+            }
+
+        }
+    }
+    
+    private func getAuthenticatedCovidTestPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedCovidTestPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedCovidTestPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .covid) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {
+                completion(nil)
+                return
+            }
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedCovidTestPDFDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .covid) { [weak self] result, _ in
                     guard let `self` = self else {
                         completion(nil)
                         return
@@ -589,7 +614,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
 }
 
-// MARK: Handle test results in core data
+// MARK: Handle covid test results in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     // TODO: Handle test results response in core data here
     private func handleTestResultsInCoreData(testResult: AuthenticatedTestResultsResponseModel) {
@@ -598,12 +623,16 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.CovidTest])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
+        guard let authCreds = self.authCredentials else { return }
         for order in orders {
-            let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
-            if let id = handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient) {
-                completedCount += 1
-            } else {
-                errorArrayCount += 1
+            self.getAuthenticatedCovidTestPDF(authCredentials: authCreds, reportId: order.id ?? "") { pdf in
+                let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
+                // TODO: Adjust core data to save covid test PDF - do the same as lab order
+                if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient) {
+                    completedCount += 1
+                } else {
+                    errorArrayCount += 1
+                }
             }
         }
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
@@ -703,6 +732,7 @@ struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedLaboratoryOrdersDetails: AuthenticatedLaboratoryOrdersDetails?
     var authenticatedCommentsDetails: AuthenticatedCommentsDetails?
     var authenticatedLabOrderPDFDetails: AuthenticatedLabOrderPDFDetails?
+    var authenticatedCovidTestPDFDetails: AuthenticatedCovidTestPDFDetails?
     
     struct AuthenticatedPatientDetails {
         var authCredentials: AuthenticationRequestObject
@@ -735,6 +765,11 @@ struct AuthenticatedAPIWorkerRetryDetails {
     }
     
     struct AuthenticatedLabOrderPDFDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+    }
+    
+    struct AuthenticatedCovidTestPDFDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?
     }
