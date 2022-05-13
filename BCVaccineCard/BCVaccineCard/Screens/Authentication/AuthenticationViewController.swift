@@ -17,7 +17,7 @@ We can call the BCSC auth in 2 ways:
  */
 
 extension BaseViewController {
-    func showLogin(initialView: AuthenticationViewController.InitialView, sourceVC: LoginVCSource, completion: @escaping(_ authenticated: Bool)->Void) {
+    func showLogin(initialView: AuthenticationViewController.InitialView, sourceVC: LoginVCSource, presentingViewControllerReference viewController: UIViewController? = nil, completion: @escaping(_ authenticationStatus: AuthenticationViewController.AuthenticationStatus)->Void) {
         self.view.startLoadingIndicator()
         let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: false, isModal: true, initialView: initialView, sourceVC: sourceVC, completion: { [weak self] result in
             guard let `self` = self else {return}
@@ -32,11 +32,11 @@ extension BaseViewController {
                         self.postAuthChangedSettingsReloadRequired()
                         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
                     }
-                    completion(allowed)
+                    completion(.Completed)
                 }
                 
             case .Cancelled, .Failed:
-                completion(false)
+                completion(result)
                 break
             }
         })
@@ -51,10 +51,12 @@ enum LoginVCSource: String {
     case SecurityAndDataVC = "SecurityAndDataVC"
     case ProfileAndSettingsVC = "ProfileAndSettingsVC"
     case HealthPassVC = "HealthPassVC"
+    case HealthRecordsVC = "HealthRecordsVC"
     case QRRetrievalVC = "QRRetrievalVC"
     case FetchHealthRecordsVC = "FetchHealthRecordsVC"
     case UserListOfRecordsVC = "UserListOfRecordsVC"
     case TabBar = "TabBar"
+    case HomeScreen = "HomeScreenVC"
     
     var getVCType: UIViewController.Type {
         switch self {
@@ -63,10 +65,12 @@ enum LoginVCSource: String {
         case .SecurityAndDataVC: return SecurityAndDataViewController.self
         case .ProfileAndSettingsVC: return ProfileAndSettingsViewController.self
         case .HealthPassVC: return HealthPassViewController.self
+        case .HealthRecordsVC: return HealthRecordsViewController.self
         case .QRRetrievalVC: return QRRetrievalMethodViewController.self
         case .FetchHealthRecordsVC: return FetchHealthRecordsViewController.self
         case .UserListOfRecordsVC: return UsersListOfRecordsViewController.self
         case .TabBar: return TabBarController.self
+        case .HomeScreen: return HomeScreenViewController.self
         }
     }
 }
@@ -85,12 +89,13 @@ class AuthenticationViewController: UIViewController {
         case Failed
     }
    
-    class func constructAuthenticationViewController(createTabBarAndGoToHomeScreen: Bool, isModal: Bool, initialView: InitialView, sourceVC: LoginVCSource, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
+    class func constructAuthenticationViewController(createTabBarAndGoToHomeScreen: Bool, isModal: Bool, initialView: InitialView, sourceVC: LoginVCSource, presentingViewControllerReference viewController: UIViewController? = nil, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = completion
             vc.createTabBarAndGoToHomeScreen = createTabBarAndGoToHomeScreen
             vc.initialView = initialView
             vc.sourceVC = sourceVC
+            vc.presentingVCReference = viewController
             if #available(iOS 13.0, *) {
                 vc.isModalInPresentation = isModal
             }
@@ -106,6 +111,7 @@ class AuthenticationViewController: UIViewController {
     private var createTabBarAndGoToHomeScreen: Bool = true
     private var initialView: InitialView = .Landing
     private var sourceVC: LoginVCSource = .AfterOnboarding
+    private var presentingVCReference: UIViewController?
     private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     
@@ -215,6 +221,11 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func dismissAndReturnCompletion(status: AuthenticationStatus) {
+        if sourceVC == .HomeScreen && status == .Completed {
+            // Note: This is so that the user doesn't see the home screen after a successfull login
+            let view = self.presentingVCReference?.view
+            AppDelegate.sharedInstance?.addLoadingViewHack(addToView: view)
+        }
         self.dismiss(animated: true, completion: {
             self.returnCompletion(status: status)
         })

@@ -15,6 +15,7 @@
 		2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2912314426F9440600CF5F3B /* UIColor+EXT.swift */; };
 		29128F17272AF41F00358014 /* Array+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29128F16272AF41F00358014 /* Array+EXT.swift */; };
 		29128F18272AF41F00358014 /* Array+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29128F16272AF41F00358014 /* Array+EXT.swift */; };
+		291A0CB9282AC33B00035B0F /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291A0CB8282AC33B00035B0F /* Device.swift */; };
 		291D43BB275FE0EC005F5B94 /* SettingsTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D43BA275FE0EC005F5B94 /* SettingsTextTableViewCell.swift */; };
 		291D43DC2762E196005F5B94 /* HealthRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D43DB2762E196005F5B94 /* HealthRecordView.swift */; };
 		291D43DF2762E1C5005F5B94 /* HealthRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291D43DE2762E1C5005F5B94 /* HealthRecordsView.swift */; };
@@ -497,8 +498,8 @@
 		798CA1D027F2810C0096188C /* MobileConfigurationResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */; };
 		798CA1D127F2810C0096188C /* MobileConfigurationResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */; };
 		799050AF27365111006CD726 /* AppPDFView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B446AD27357F1700E0F967 /* AppPDFView.xib */; };
-		799050B3273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
-		799050B4273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */; };
+		799050B3273C4D3F006CD726 /* FolderRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* FolderRecordsViewController.swift */; };
+		799050B4273C4D3F006CD726 /* FolderRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* FolderRecordsViewController.swift */; };
 		799050BD273C8330006CD726 /* GetRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050BC273C832F006CD726 /* GetRecordsView.swift */; };
 		799050BE273C8330006CD726 /* GetRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050BC273C832F006CD726 /* GetRecordsView.swift */; };
 		799050C0273C8344006CD726 /* GetRecordsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799050BF273C8344006CD726 /* GetRecordsView.xib */; };
@@ -557,6 +558,14 @@
 		79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79BDA091270E9E2800FF30AB /* VaccineCardView.xib */; };
 		79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA095270EA44D00FF30AB /* HealthPassViewController.swift */; };
 		79BDA097270EA44D00FF30AB /* HealthPassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79BDA095270EA44D00FF30AB /* HealthPassViewController.swift */; };
+		79CF236028171D4300510489 /* ScreenStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF235F28171D4300510489 /* ScreenStateManager.swift */; };
+		79CF236128171D4300510489 /* ScreenStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF235F28171D4300510489 /* ScreenStateManager.swift */; };
+		79CF23642825769B00510489 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF23632825769B00510489 /* HealthRecordsViewController.swift */; };
+		79CF23652825769B00510489 /* HealthRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF23632825769B00510489 /* HealthRecordsViewController.swift */; };
+		79CF23682825787900510489 /* HealthRecordsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF23672825787900510489 /* HealthRecordsHomeView.swift */; };
+		79CF23692825787900510489 /* HealthRecordsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF23672825787900510489 /* HealthRecordsHomeView.swift */; };
+		79CF236B2825789600510489 /* HealthRecordsHomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79CF236A2825789600510489 /* HealthRecordsHomeView.xib */; };
+		79CF236C2825789600510489 /* HealthRecordsHomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79CF236A2825789600510489 /* HealthRecordsHomeView.xib */; };
 		79D93B1D27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D93B1C27D048540083B603 /* AuthenticatedCommentResponseObject.swift */; };
 		79D93B1E27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D93B1C27D048540083B603 /* AuthenticatedCommentResponseObject.swift */; };
 		79FDE423273335D000DAD988 /* FederalPassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FDE422273335D000DAD988 /* FederalPassView.swift */; };
@@ -590,6 +599,7 @@
 		2912314226F9433600CF5F3B /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		2912314426F9440600CF5F3B /* UIColor+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+EXT.swift"; sourceTree = "<group>"; };
 		29128F16272AF41F00358014 /* Array+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+EXT.swift"; sourceTree = "<group>"; };
+		291A0CB8282AC33B00035B0F /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		291D43BA275FE0EC005F5B94 /* SettingsTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTextTableViewCell.swift; sourceTree = "<group>"; };
 		291D43DB2762E196005F5B94 /* HealthRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordView.swift; sourceTree = "<group>"; };
 		291D43DE2762E1C5005F5B94 /* HealthRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsView.swift; sourceTree = "<group>"; };
@@ -839,7 +849,7 @@
 		798CA1C927EE4B0A0096188C /* LoginProcessStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProcessStatus.swift; sourceTree = "<group>"; };
 		798CA1CC27EED9ED0096188C /* LoginThrottleAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginThrottleAPIWorker.swift; sourceTree = "<group>"; };
 		798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigurationResponseObject.swift; sourceTree = "<group>"; };
-		799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsViewController.swift; sourceTree = "<group>"; };
+		799050B2273C4D3F006CD726 /* FolderRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderRecordsViewController.swift; sourceTree = "<group>"; };
 		799050BC273C832F006CD726 /* GetRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecordsView.swift; sourceTree = "<group>"; };
 		799050BF273C8344006CD726 /* GetRecordsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GetRecordsView.xib; sourceTree = "<group>"; };
 		799050C3273C8558006CD726 /* UserRecordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecordListView.swift; sourceTree = "<group>"; };
@@ -866,6 +876,10 @@
 		79BDA08E270E9E0800FF30AB /* VaccineCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineCardView.swift; sourceTree = "<group>"; };
 		79BDA091270E9E2800FF30AB /* VaccineCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VaccineCardView.xib; sourceTree = "<group>"; };
 		79BDA095270EA44D00FF30AB /* HealthPassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthPassViewController.swift; sourceTree = "<group>"; };
+		79CF235F28171D4300510489 /* ScreenStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenStateManager.swift; sourceTree = "<group>"; };
+		79CF23632825769B00510489 /* HealthRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsViewController.swift; sourceTree = "<group>"; };
+		79CF23672825787900510489 /* HealthRecordsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsHomeView.swift; sourceTree = "<group>"; };
+		79CF236A2825789600510489 /* HealthRecordsHomeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HealthRecordsHomeView.xib; sourceTree = "<group>"; };
 		79D93B1C27D048540083B603 /* AuthenticatedCommentResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedCommentResponseObject.swift; sourceTree = "<group>"; };
 		79FDE422273335D000DAD988 /* FederalPassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FederalPassView.swift; sourceTree = "<group>"; };
 		79FDE425273335DC00DAD988 /* FederalPassView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FederalPassView.xib; sourceTree = "<group>"; };
@@ -1396,12 +1410,12 @@
 			path = StaticPositiveTestInstructionsTableViewCell;
 			sourceTree = "<group>";
 		};
-		79218AE22755E1240063004E /* FetchHealthRecordsViewController */ = {
+		79218AE22755E1240063004E /* NOTUSINGFetchHealthRecordsViewController */ = {
 			isa = PBXGroup;
 			children = (
 				79218AE32755E14E0063004E /* FetchHealthRecordsViewController.swift */,
 			);
-			path = FetchHealthRecordsViewController;
+			path = NOTUSINGFetchHealthRecordsViewController;
 			sourceTree = "<group>";
 		};
 		79218AE62755E2410063004E /* UsersListOfRecordsViewController */ = {
@@ -1584,6 +1598,7 @@
 		7944F6AF26F12A95006B9444 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				79CF235E28171D3000510489 /* ScreenStateManager */,
 				79590D94280FFB71006EB59F /* Router */,
 				793504192763DFA20098FEA7 /* APIWorkers */,
 				795AA77D2715FC7D00E59FF1 /* XMLConverter */,
@@ -1605,6 +1620,7 @@
 				79B9D01927E31D7100987D9F /* NotificationManager.swift */,
 				29AC25322790320F001C22B4 /* QRMaker.swift */,
 				29547E5927A2EC5A00562958 /* LocalAuthentication */,
+				291A0CB8282AC33B00035B0F /* Device.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -2019,7 +2035,7 @@
 			isa = PBXGroup;
 			children = (
 				799050B1273C4D1F006CD726 /* HealthRecordsBase */,
-				79218AE22755E1240063004E /* FetchHealthRecordsViewController */,
+				79218AE22755E1240063004E /* NOTUSINGFetchHealthRecordsViewController */,
 				79218AE62755E2410063004E /* UsersListOfRecordsViewController */,
 				79218AEA2755E2940063004E /* HealthRecordDetailViewController */,
 			);
@@ -2029,7 +2045,9 @@
 		799050B1273C4D1F006CD726 /* HealthRecordsBase */ = {
 			isa = PBXGroup;
 			children = (
-				799050B2273C4D3F006CD726 /* HealthRecordsViewController.swift */,
+				79CF23632825769B00510489 /* HealthRecordsViewController.swift */,
+				79CF23662825785D00510489 /* HealthRecordsHomeView */,
+				79CF2362282575BE00510489 /* FolderViewControllerForLater */,
 			);
 			path = HealthRecordsBase;
 			sourceTree = "<group>";
@@ -2154,6 +2172,31 @@
 				79BDA095270EA44D00FF30AB /* HealthPassViewController.swift */,
 			);
 			path = HealthPassBase;
+			sourceTree = "<group>";
+		};
+		79CF235E28171D3000510489 /* ScreenStateManager */ = {
+			isa = PBXGroup;
+			children = (
+				79CF235F28171D4300510489 /* ScreenStateManager.swift */,
+			);
+			path = ScreenStateManager;
+			sourceTree = "<group>";
+		};
+		79CF2362282575BE00510489 /* FolderViewControllerForLater */ = {
+			isa = PBXGroup;
+			children = (
+				799050B2273C4D3F006CD726 /* FolderRecordsViewController.swift */,
+			);
+			path = FolderViewControllerForLater;
+			sourceTree = "<group>";
+		};
+		79CF23662825785D00510489 /* HealthRecordsHomeView */ = {
+			isa = PBXGroup;
+			children = (
+				79CF23672825787900510489 /* HealthRecordsHomeView.swift */,
+				79CF236A2825789600510489 /* HealthRecordsHomeView.xib */,
+			);
+			path = HealthRecordsHomeView;
 			sourceTree = "<group>";
 		};
 		79FDE421273335B200DAD988 /* FederalPassView */ = {
@@ -2389,6 +2432,7 @@
 				7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */,
 				79BDA092270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
 				293B32C027D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
+				79CF236B2825789600510489 /* HealthRecordsHomeView.xib in Resources */,
 				297D3BB427D947A900B059CA /* TableSectionHeader.xib in Resources */,
 				29921C942773A5F8005025D2 /* AuthenticationInfoView.xib in Resources */,
 				29B07E0A2732109E007ABB46 /* exportOptions.plist in Resources */,
@@ -2440,6 +2484,7 @@
 				79590D982811E68A006EB59F /* CommentViewTableViewCell.xib in Resources */,
 				294BD3CB27AACFB600BD8D46 /* LocalAuthPrivacyView.xib in Resources */,
 				294BD3D527B1D60B00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
+				79CF236C2825789600510489 /* HealthRecordsHomeView.xib in Resources */,
 				794BD65F2702EEC00084ADA8 /* SettingsTableViewCell.xib in Resources */,
 				79218ABB27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */,
 				794BD6602702EEC00084ADA8 /* BCSans-Italic.otf in Resources */,
@@ -2697,6 +2742,7 @@
 				79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				798CA1C127ECDCFC0096188C /* TermsOfServiceResponse.swift in Sources */,
 				79A15B0627FE9F5600F8330D /* DataSecurityTipsTableViewCell.swift in Sources */,
+				79CF23642825769B00510489 /* HealthRecordsViewController.swift in Sources */,
 				291D43DC2762E196005F5B94 /* HealthRecordView.swift in Sources */,
 				293B32C527D27A880064BAAA /* CommentsTableViewCell.swift in Sources */,
 				794BD6272702E0E90084ADA8 /* CustomNavigationController.swift in Sources */,
@@ -2717,9 +2763,10 @@
 				795AA7382710920600E59FF1 /* ResultError.swift in Sources */,
 				796653DD279876C9004D103E /* AuthenticationRequestObjects.swift in Sources */,
 				79218ADE27557F7D0063004E /* StaticPositiveTestTableViewCell.swift in Sources */,
-				799050B3273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */,
+				799050B3273C4D3F006CD726 /* FolderRecordsViewController.swift in Sources */,
 				293B32B627D2627B0064BAAA /* CommentsListView.swift in Sources */,
 				7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */,
+				79CF236028171D4300510489 /* ScreenStateManager.swift in Sources */,
 				2912314126F942CC00CF5F3B /* UIViewController+EXT.swift in Sources */,
 				794BD6762703A3DB0084ADA8 /* ImageTableViewCell.swift in Sources */,
 				7944F6BB26F12BC3006B9444 /* UIButton+EXT.swift in Sources */,
@@ -2829,10 +2876,12 @@
 				79D93B1D27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
 				29A4DF4927DA675000D5E901 /* FilterRecordsView.swift in Sources */,
+				79CF23682825787900510489 /* HealthRecordsHomeView.swift in Sources */,
 				29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */,
 				29B23B3F26FB88BB00A3AC79 /* CameraViewController.swift in Sources */,
 				294BD3D227B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */,
 				79053CF92773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
+				291A0CB9282AC33B00035B0F /* Device.swift in Sources */,
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				29736A482788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
@@ -2905,6 +2954,7 @@
 				79BDA097270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				29A7442D2762E304008A7DA2 /* HealthRecordDetailViewController.swift in Sources */,
 				79218AB927519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */,
+				79CF236128171D4300510489 /* ScreenStateManager.swift in Sources */,
 				79A15B0727FE9F5600F8330D /* DataSecurityTipsTableViewCell.swift in Sources */,
 				79218AE92755E25C0063004E /* UsersListOfRecordsViewController.swift in Sources */,
 				794BD6342702EEC00084ADA8 /* AppDelegate.swift in Sources */,
@@ -2916,6 +2966,7 @@
 				2908647B27A1B08E0003F9E3 /* LocalAuthManager.swift in Sources */,
 				794BD6362702EEC00084ADA8 /* Constants.swift in Sources */,
 				79218AD3275576640063004E /* TextListModel.swift in Sources */,
+				79CF23692825787900510489 /* HealthRecordsHomeView.swift in Sources */,
 				795AA73F271094B400E59FF1 /* Endpoint.swift in Sources */,
 				2979679C27C536E20019EE9B /* LaboratoryOrder+CoreDataProperties.swift in Sources */,
 				293B32A927D25A3A0064BAAA /* Comment+CoreDataProperties.swift in Sources */,
@@ -2938,7 +2989,7 @@
 				794BD63C2702EEC00084ADA8 /* AppStyleButton.swift in Sources */,
 				795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				79218ADF27557F7D0063004E /* StaticPositiveTestTableViewCell.swift in Sources */,
-				799050B4273C4D3F006CD726 /* HealthRecordsViewController.swift in Sources */,
+				799050B4273C4D3F006CD726 /* FolderRecordsViewController.swift in Sources */,
 				794BD63D2702EEC00084ADA8 /* UINavigationItem+Ext.swift in Sources */,
 				29806693275970C8006FF3ED /* StorageModelExtensions.swift in Sources */,
 				795AA7552715189C00E59FF1 /* InitialOnboardingView.swift in Sources */,
@@ -3049,6 +3100,7 @@
 				79A15B0B2808B28200F8330D /* TableSectionHeader.swift in Sources */,
 				29736A472788EBD700CCB1D2 /* ImmunizationRecord+CoreDataClass.swift in Sources */,
 				2932DCEB275ED8C800532BC4 /* AnalyticsAppID.swift in Sources */,
+				79CF23652825769B00510489 /* HealthRecordsViewController.swift in Sources */,
 				796653DB27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */,
 				795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				296519A6272995680002B778 /* AuthManager.swift in Sources */,

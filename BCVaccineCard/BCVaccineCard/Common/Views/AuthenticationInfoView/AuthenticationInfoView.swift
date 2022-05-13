@@ -61,13 +61,13 @@ class AuthenticationInfoView: UIView, Theme {
         
         titleLabel.textColor = AppColours.appBlue
         
-        titleLabel.text = .leavingMyHealthBC
+        titleLabel.text = .leavingHealthGateway
         messageLabel.attributedText =
             NSMutableAttributedString()
             .normal(.youWillRedirected)
             .normal("\(String.toLoginWithYourBCServices)\n\n")
             .normal(.youWillAutomaticallyReturned)
-            .normal(.mobileApp)
+            .normal(.healthGateway)
         navBackButton.setTitle("", for: .normal)
         
         let backIcon = UIImage(named: "app-back-arrow")?.withRenderingMode(.alwaysTemplate)

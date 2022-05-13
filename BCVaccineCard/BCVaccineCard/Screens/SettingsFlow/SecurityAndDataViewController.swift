@@ -42,6 +42,14 @@ class SecurityAndDataViewController: BaseViewController {
     
     fileprivate let authManager = AuthManager()
     
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .SecurityAndDataViewController
+    }
+    
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .SecurityAndDataViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -110,7 +118,14 @@ class SecurityAndDataViewController: BaseViewController {
                 Defaults.rememberGatewayDetails = nil
                 StorageService.shared.deleteAllStoredData()
                 self.showBanner(message: .deletedAllRecordsAndSavedData, style: .Top)
-                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
+//                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
+                DispatchQueue.main.async {
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+
+                    self.routerWorker?.routingAction(scenario: .ClearAllData(values: values))
+                }
             })
             
         } onCancel: {}

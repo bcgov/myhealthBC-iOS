@@ -48,6 +48,11 @@ protocol StoragePatientManager {
     /// Returns the patient with authenticated results
     /// - Returns: patients
     func fetchAuthenticatedPatients() -> [Patient]?
+    
+    /// Returns the list of unauthenticated patients
+    /// - Returns: patients
+    func fetchUnauthenticatedPatients() -> [Patient]?
+    
     /// Returns the patient with matching phn
     /// - Returns: patient
     func fetchPatient(phn: String) -> Patient?
@@ -194,12 +199,21 @@ extension StorageService: StoragePatientManager {
     }
     
     /// fetch patient by auth status
-    /// - Returns: authenticated patient
+    /// - Returns: authenticated patients
     public func fetchAuthenticatedPatients() -> [Patient]? {
         let patients = fetchPatients()
         let authenticatedPatients = patients.filter { $0.authenticated == true }
         guard authenticatedPatients.count > 0 else { return nil }
         return authenticatedPatients
+    }
+    
+    /// fetch patient by auth status
+    /// - Returns: unauthenticated patients
+    public func fetchUnauthenticatedPatients() -> [Patient]? {
+        let patients = fetchPatients()
+        let unauthenticatedPatients = patients.filter { $0.authenticated == false }
+        guard unauthenticatedPatients.count > 0 else { return nil }
+        return unauthenticatedPatients
     }
     
     /// fetch patient by phn

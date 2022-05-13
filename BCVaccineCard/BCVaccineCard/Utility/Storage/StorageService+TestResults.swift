@@ -20,7 +20,8 @@ protocol StorageCovidTestResultManager {
         patient: Patient,
         gateWayResponse: GatewayTestResultResponse,
         authenticated: Bool,
-        manuallyAdded: Bool
+        manuallyAdded: Bool,
+        pdf: String?
     ) -> CovidLabTestResult?
     
     /// Store a single test result
@@ -47,6 +48,7 @@ protocol StorageCovidTestResultManager {
         gateWayResponse: GatewayTestResultResponse,
         manuallyAdded: Bool,
         pendingBackgroundRefetch: Bool,
+        pdf: String?,
         completion: @escaping(CovidLabTestResult?)->Void)
     
     // MARK: Delete
@@ -62,7 +64,7 @@ protocol StorageCovidTestResultManager {
 
 extension StorageService: StorageCovidTestResultManager {
     // MARK: Store
-    public func storeCovidTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool, manuallyAdded: Bool) -> CovidLabTestResult? {
+    public func storeCovidTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool, manuallyAdded: Bool, pdf: String?) -> CovidLabTestResult? {
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
         deleteCovidTestResult(id: id, sendDeleteEvent: false)
         guard let context = managedContext else {return nil}
@@ -71,6 +73,7 @@ extension StorageService: StorageCovidTestResultManager {
         model.id = id
         model.createdAt = Date()
         model.authenticated = authenticated
+        model.pdf = pdf
         var testResults: [TestResult] = []
         guard let records = gateWayResponse.resourcePayload?.records else { return nil }
         for record in records {
@@ -150,7 +153,7 @@ extension StorageService: StorageCovidTestResultManager {
     
     
     // MARK: Update
-    func updateCovidTestResult(gateWayResponse: GatewayTestResultResponse, manuallyAdded: Bool, pendingBackgroundRefetch: Bool, completion: @escaping(CovidLabTestResult?)->Void) {
+    func updateCovidTestResult(gateWayResponse: GatewayTestResultResponse, manuallyAdded: Bool, pendingBackgroundRefetch: Bool, pdf: String?, completion: @escaping(CovidLabTestResult?)->Void) {
         guard
             let existing = findExistingResult(gateWayResponse: gateWayResponse),
             let existingId = existing.id,
@@ -162,7 +165,7 @@ extension StorageService: StorageCovidTestResultManager {
         // Delete existing
          deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
         // Store the new one.
-        if let object = storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus, manuallyAdded: manuallyAdded) {
+        if let object = storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus, manuallyAdded: manuallyAdded, pdf: pdf) {
             let _ = manuallyAdded == true ? notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: object)) : pendingBackgroundRefetch == true ? notify(event: StorageEvent(event: .ManuallyAddedPendingTestBackgroundRefetch, entity: .CovidLabTestResult, object: object)) : notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
             return completion(object)
         }

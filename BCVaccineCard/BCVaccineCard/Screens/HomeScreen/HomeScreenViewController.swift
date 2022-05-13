@@ -148,7 +148,21 @@ extension HomeScreenViewController {
     private func goToTabForType(type: HomeScreenCellType) {
         guard let tabBarController = self.tabBarController as? TabBarController else { return }
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        tabBarController.selectedIndex = type.getTabIndex
+        guard type == .Records && !authManager.isAuthenticated else {
+            tabBarController.selectedIndex = type.getTabIndex
+            return
+        }
+        handleGetStartedScenario(tabBarController: tabBarController)
+    }
+    
+    private func handleGetStartedScenario(tabBarController: TabBarController) {
+        self.showLogin(initialView: .Landing, sourceVC: .HomeScreen, presentingViewControllerReference: self) { authenticationStatus in
+            guard authenticationStatus != .Cancelled else { return }
+            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HomeScreen, authenticationStatus: authenticationStatus))
+            self.routerWorker?.routingAction(scenario: scenario, goToTab: .records, delayInSeconds: 0.5)
+        }
     }
 }
 

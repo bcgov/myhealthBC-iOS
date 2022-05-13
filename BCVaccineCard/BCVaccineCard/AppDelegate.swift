@@ -8,6 +8,7 @@ import UIKit
 import CoreData
 import BCVaccineValidator
 import EncryptedCoreData
+import IQKeyboardManagerSwift
 import AppAuth
 
 @main
@@ -19,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
     var protectiveWordEnteredThisSession = false
+    
+    var lastLocalAuth: Date? = nil
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -42,7 +45,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         authManager?.initTokenExpieryTimer()
         listenToAppState()
         localAuthManager = LocalAuthManager()
-        localAuthManager?.listenToAppLaunch()
+        localAuthManager?.listenToAppStates()
+        
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enableAutoToolbar = false
+        IQKeyboardManager.shared.shouldResignOnTouchOutside = true
+        IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
     }
     
     private func clearKeychainIfNecessary(authManager: AuthManager?) {
@@ -64,11 +72,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func listenToAppState() {
         NotificationCenter.default.addObserver(self, selector: #selector(didBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
     
     @objc func didBecomeActive(_ notification: Notification) {
         NotificationCenter.default.post(name: .launchedFromBackground, object: nil)
     }
+    
+    @objc func didEnterBackground(_ notification: Notification) {
+        NotificationCenter.default.post(name: .didEnterBackground, object: nil)
+    }
+    
+    
     
     // MARK: - Core Data stack
     lazy var persistentContainer: NSPersistentContainer = {
@@ -152,17 +167,29 @@ extension AppDelegate {
 
 // MARK: For custom navigation routing hack with multiple pushes
 extension AppDelegate {
-    func addLoadingViewHack() {
+    func addLoadingViewHack(addToView view: UIView? = nil) {
         let rect = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         loadingViewHack = UIView(frame: rect)
+        loadingViewHack?.isUserInteractionEnabled = true
         loadingViewHack?.backgroundColor = .white
         loadingViewHack?.startLoadingIndicator(backgroundColor: .white)
-        self.window?.addSubview(loadingViewHack!)
+        let tap = UIGestureRecognizer(target: self, action: #selector(dismissLoadingHack))
+        loadingViewHack?.addGestureRecognizer(tap)
+        if let view = view {
+            view.addSubview(loadingViewHack!)
+        } else {
+            self.window?.addSubview(loadingViewHack!)
+        }
+        
     }
     
     func removeLoadingViewHack() {
         loadingViewHack?.endLoadingIndicator()
         loadingViewHack?.removeFromSuperview()
+    }
+    
+    @objc private func dismissLoadingHack(_ sender: UIGestureRecognizer? = nil) {
+        self.removeLoadingViewHack()
     }
 }
 

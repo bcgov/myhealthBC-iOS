@@ -61,6 +61,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
+  - IQKeyboardManagerSwift (6.5.9)
   - JOSESwift (2.4.0)
   - JWTDecode (2.6.3)
   - KeychainAccess (4.2.2)
@@ -89,6 +90,7 @@ DEPENDENCIES:
   - BCVaccineValidator (from `https://github.com/bcgov/iOSVaccineValidator`)
   - EncryptedCoreData (from `https://github.com/project-imas/encrypted-core-data.git`)
   - Firebase/AppDistribution
+  - IQKeyboardManagerSwift
   - JWTDecode (~> 2.6)
   - KeychainAccess
   - PocketSVG (~> 2.6)
@@ -111,6 +113,7 @@ SPEC REPOS:
     - FMDB
     - GoogleDataTransport
     - GoogleUtilities
+    - IQKeyboardManagerSwift
     - JOSESwift
     - JWTDecode
     - KeychainAccess
@@ -152,6 +155,7 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  IQKeyboardManagerSwift: 6e839c575c4aa1078d58a596e41244e77abe918f
   JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
   JWTDecode: 33e5e26e5ddbd21b2065820894c08fef0cad9509
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
@@ -165,6 +169,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 3d05b923a9795ab7d0acda4b49bf320269f3aaf1
+PODFILE CHECKSUM: 3f9b356d9fb7371bf622d0a7889723a4a529d010
 
 COCOAPODS: 1.11.3

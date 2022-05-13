@@ -6,6 +6,7 @@ target 'BCVaccineCard' do
   use_frameworks!
 
   # Pods for BCVaccineCard
+  pod 'IQKeyboardManagerSwift'
   pod 'QueueITLibrary', '~> 3.0.3'
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
@@ -36,6 +37,7 @@ target 'BCVaccineCard-Prod' do
   use_frameworks!
 
   # Pods for BCVaccineCard-Prod
+  pod 'IQKeyboardManagerSwift'
   pod 'QueueITLibrary', '~> 3.0.3'
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'

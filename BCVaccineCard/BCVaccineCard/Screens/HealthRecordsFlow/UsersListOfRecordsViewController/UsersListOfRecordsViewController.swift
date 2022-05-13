@@ -16,7 +16,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     // TODO: Replace params with Patient after storage refactor
-    class func constructUsersListOfRecordsViewController(patient: Patient, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool) -> UsersListOfRecordsViewController {
+    class func constructUsersListOfRecordsViewController(patient: Patient?, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.patient = patient
             vc.authenticated = authenticated
@@ -36,9 +36,11 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var filterContainer: UIView!
     @IBOutlet weak private var tableView: UITableView!
     
+    @IBOutlet weak private var parentContainerStackView: UIStackView!
+    
     private var patient: Patient?
     private var authenticated: Bool = true
-    private var navStyle: NavStyle = .multiUser
+    private var navStyle: NavStyle = .singleUser
     private var hasUpdatedUnauthPendingTest = true
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
@@ -77,6 +79,10 @@ class UsersListOfRecordsViewController: BaseViewController {
         }
     }
     
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .UsersListOfRecordsViewController(patient: self.patient)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()
@@ -112,13 +118,17 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setObservables() {
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
     
     private func setup() {
+        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: self.authManager, currentTab: .records)
+        self.parentContainerStackView.endLoadingIndicator()
+        let showLoadingTitle = (self.patient == nil && self.authenticated == true)
+        updatePatientIfNecessary()
         navSetup(style: navStyle, authenticated: self.authenticated)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         fetchDataSource()
@@ -128,8 +138,17 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
+        if showLoadingTitle {
+            self.parentContainerStackView.startLoadingIndicator(backgroundColor: .white)
+        }
     }
-
+    
+    private func updatePatientIfNecessary() {
+        if self.patient == nil {
+            self.patient = StorageService.shared.fetchAuthenticatedPatient()
+        }
+    }
+    
     @IBAction func removeFilters(_ sender: Any) {
         currentFilter = nil
         hideSelectedFilters()
@@ -147,7 +166,7 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
-    private func navSetup(style: NavStyle, authenticated: Bool, showLoadingTitle: Bool = false, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
+    private func navSetup(style: NavStyle, authenticated: Bool, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
         if authenticated {
             let filterButton = NavButton(title: nil,
@@ -170,10 +189,10 @@ extension UsersListOfRecordsViewController {
         
         if style == .singleUser {
             self.navigationItem.setHidesBackButton(true, animated: false)
-            let addButton = NavButton(title: nil,
-                      image: UIImage(named: "add-circle-btn"), action: #selector(self.showAddRecord),
-                                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-            buttons.append(addButton)
+//            let addButton = NavButton(title: nil,
+//                      image: UIImage(named: "add-circle-btn"), action: #selector(self.showAddRecord),
+//                                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+//            buttons.append(addButton)
             let settingsButton = NavButton(title: nil,
                       image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
                                            accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
@@ -186,6 +205,7 @@ extension UsersListOfRecordsViewController {
         if name.count >= 20 {
             name = self.patient?.name?.firstName?.nameCase() ?? defaultFirstNameIfFailure?.nameCase() ?? ""
         }
+        let showLoadingTitle = (self.patient == nil && self.authenticated == true)
         if showLoadingTitle {
             name = "Fetching User"
         }
@@ -196,14 +216,6 @@ extension UsersListOfRecordsViewController {
                                                navTitleSmallAlignment: style == .singleUser ? .Left : .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
-    }
-    // This screen has to have health records by rule (with the exception being a screen state issue, but that is a separate bug)
-    @objc func showAddRecord() {
-        let vc = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hideNavBackButton: false, showSettingsIcon: false, hasHealthRecords: true, completion: {[weak self] in
-            // Note: Not sure what the purpose of this is?? - was only causing an issue with routing
-//            self?.navigationController?.popToRootViewController(animated: true)
-        })
-        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func showSettings() {
@@ -300,12 +312,6 @@ extension UsersListOfRecordsViewController {
     private func fetchDataSource(initialProtectedMedFetch: Bool = false) {
         let patientRecords = fetchPatientRecords()
         show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
-        if !authenticated && hasUpdatedUnauthPendingTest {
-            // Don't check for test result to update again here, as this was causing an infinite loop
-            // TODO: We should really refactor the way screens are being updated due to storage updates, as it will cause issues in the future with edge cases, causing us to create numerous hot-fixes such as this, resulting in messy and hard to maintain code
-        } else {
-            self.checkForTestResultsToUpdate(ds: self.dataSource)
-        }
     }
     
     private func fetchPatientRecords() -> [HealthRecordsDetailDataSource] {
@@ -415,35 +421,10 @@ extension UsersListOfRecordsViewController {
         NotificationCenter.default.post(name: .protectedWordRequired, object: nil, userInfo: userInfo)
     }
     
-    private func checkForTestResultsToUpdate(ds: [HealthRecordsDetailDataSource]) {
-        for (indexPathRow, record) in ds.enumerated() {
-            switch record.type {
-            case .covidTestResultRecord(model: let model):
-                let listOfStatuses = record.records.map { ($0.status, $0.date) }
-                for (index, data) in listOfStatuses.enumerated() {
-                    if data.0 == CovidTestResult.pending.rawValue {
-                        
-                        guard
-                            let patient = model.patient,
-                            let dateOfBirth = patient.birthday?.yearMonthDayString,
-                            let phn = patient.phn,
-                            let collectionDatePresentableFormat = listOfStatuses[index].1,
-                            let collectionDate = Date.Formatter.monthDayYearDate.date(from: collectionDatePresentableFormat)?.yearMonthDayString, model.authenticated == false
-                        else { return }
-                        
-                        let model = GatewayTestResultRequest(phn: phn, dateOfBirth: dateOfBirth, collectionDate: collectionDate)
-                        tableView.cellForRow(at: IndexPath(row: indexPathRow, section: 0))?.startLoadingIndicator(backgroundColor: .clear, containerSize: 20, size: 8)
-                        backgroundWorker?.getTestResult(model: model, executingVC: self, row: indexPathRow)
-                    }
-                }
-            default: print("")
-            }
-        }
-    }
-    
+    // NOTE: No special routing required here on login, as the user should remain on the same screen
     private func performBCSCLogin() {
-        self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticated in
-            guard let `self` = self, authenticated else {return}
+        self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
+            guard let `self` = self, authenticationStatus == .Completed else {return}
             if let authStatus = Defaults.loginProcessStatus,
                authStatus.hasCompletedLoginProcess == true,
                let storedName = authStatus.loggedInUserAuthManagerDisplayName,
@@ -465,13 +446,16 @@ extension UsersListOfRecordsViewController {
         }
     }
     
-//    @objc private func patientAPIFetched(_ notification: Notification) {
-//        let userInfo = notification.userInfo as? [String: String]
-//        let firstName = userInfo?["firstName"]
-//        let fullName = userInfo?["fullName"]
-//        self.patient = StorageService.shared.fetchAuthenticatedPatient()
-//        self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
-//    }
+    @objc private func patientAPIFetched(_ notification: Notification) {
+        let userInfo = notification.userInfo as? [String: String]
+        let firstName = userInfo?["firstName"]
+        let fullName = userInfo?["fullName"]
+        guard self.patient == nil else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.patient = StorageService.shared.fetchAuthenticatedPatient()
+            self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
+        }
+    }
 }
 
 // MARK: TableView setup
@@ -545,7 +529,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
-        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticated: ds.isAuthenticated, userNumberHealthRecords: dataSource.count)
+        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: dataSource.count, patient: self.patient)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -600,7 +584,13 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                 self.dataSource.remove(at: index)
                 if self.dataSource.isEmpty {
                     self.inEditMode = false
-                    self.popBack(toControllerType: HealthRecordsViewController.self)
+                    DispatchQueue.main.async {
+                        
+                        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                        let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                        self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                    }
                 } else {
                     self.tableView.reloadData()
                 }
@@ -618,15 +608,27 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         case .covidImmunizationRecord(model: let model, immunizations: _):
             alertConfirmation(title: .deleteRecord, message: .deleteCovidHealthRecord, confirmTitle: .delete, confirmStyle: .destructive) {
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
+                if self.dataSource.count == 1, let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
+                    StorageService.shared.deletePatient(name: name, birthday: birthday)
+                }
+                DispatchQueue.main.async {
+                    
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.healthPass], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                }
                 completion(true)
             } onCancel: {
                 completion(false)
             }
-            
         case .covidTestResultRecord:
             guard let recordId = record.id else {return}
             alertConfirmation(title: .deleteTestResult, message: .deleteTestResultMessage, confirmTitle: .delete, confirmStyle: .destructive) {
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
+                if self.dataSource.count == 1, let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
+                    StorageService.shared.deletePatient(name: name, birthday: birthday)
+                }
                 completion(true)
             } onCancel: {
                 completion(false)
@@ -638,31 +640,6 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         }
     }
     
-}
-
-extension UsersListOfRecordsViewController: BackgroundTestResultUpdateAPIWorkerDelegate {
-    func handleTestResult(result: GatewayTestResultResponse, row: Int) {
-        print("BACKGROUND FETCH INFO: Response: ", result, "Row to update: ", row)
-        StorageService.shared.updateCovidTestResult(gateWayResponse: result, manuallyAdded: false, pendingBackgroundRefetch: true) { [weak self] covidLabTestResult in
-            guard let `self` = self else {return}
-            
-            guard let covidLabTestResult = covidLabTestResult else { return }
-            guard let healthRecordDetailDS = HealthRecord(type: .CovidTest(covidLabTestResult)).detailDataSource() else { return }
-            guard self.dataSource.count > row else { return }
-            self.dataSource[row] = healthRecordDetailDS
-            let indexPath = IndexPath(row: row, section: 0)
-            guard self.tableView.numberOfRows(inSection: 0) > indexPath.row else { return }
-            self.tableView.reloadRows(at: [indexPath], with: .automatic)
-            self.tableView.cellForRow(at: indexPath)?.endLoadingIndicator()
-        }
-    }
-    
-    func handleError(title: String, error: ResultError, row: Int) {
-        print("BACKGROUND FETCH INFO: Error: ", title, error, "For Row: ", row)
-        let indexPath = IndexPath(row: row, section: 0)
-        guard self.tableView.numberOfRows(inSection: 0) > indexPath.row else { return }
-        self.tableView.cellForRow(at: indexPath)?.endLoadingIndicator()
-    }
 }
 
 // MARK: Protected word retry
@@ -695,7 +672,7 @@ extension UsersListOfRecordsViewController {
             }
         } else if purpose == .initialFetch {
             adjustLoadingIndicator(show: true)
-            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
         }
     }
 }

@@ -31,6 +31,13 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     private var displayName: String?
     
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .ProfileAndSettingsViewController
+    }
+    
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .ProfileAndSettingsViewController
+    }
     
     // MARK: Class funcs
     override func viewDidLoad() {
@@ -61,7 +68,14 @@ class ProfileAndSettingsViewController: BaseViewController {
     }
     
     func showLogin() {
-        showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: {success in})
+        showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: { authenticationStatus in
+            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
+            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+            let currentTab = self.getCurrentTab
+            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .ProfileAndSettingsVC, authenticationStatus: authenticationStatus))
+            self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
+        })
     }
     
     func showSecurityAndData() {
@@ -208,7 +222,14 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
         LocalAuthManager.block = true
         performLogout(completion: {success in
             guard success else { return }
-            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
+//            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
+            DispatchQueue.main.async {
+                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                self.routerWorker?.routingAction(scenario: .Logout(values: values))
+                
+            }
         })
     }
     
@@ -217,8 +238,6 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
             guard let `self` = self else {return}
             // Regardless of the result of the async logout, clear tokens.
             // because user may be offline
-            // TODO: Note - sometimes prompt isn't shown after hitting logout, so the screen state (for records) remains. We should look at resetting tab bar and then switch index to current index after reset
-            
             self.tableView.reloadData()
             completion(success)
         })

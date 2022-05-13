@@ -19,16 +19,9 @@ extension StorageService {
     
     func getHeathRecords() -> [HealthRecord] {
         let tests = fetchCovidTestResults().map({HealthRecord(type: .CovidTest($0))})
-        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))})
+        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))}).filter({$0.patient.authenticated})
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         let labOrders = fetchLaboratoryOrders().map({HealthRecord(type: .LaboratoryOrder($0))})
-         
-        let prescription = fetchPrescriptions()
-        for p in prescription {
-            if !p.commentsArray.isEmpty  {
-                print(p.dispensedDate)
-            }
-        }
         
         return tests + vaccineCards + medications + labOrders
     }

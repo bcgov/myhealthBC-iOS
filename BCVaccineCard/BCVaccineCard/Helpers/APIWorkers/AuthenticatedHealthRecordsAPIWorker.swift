@@ -12,7 +12,7 @@ import BCVaccineValidator
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func showPatientDetailsError(error: String, showBanner: Bool)
     func showFetchStartedBanner(showBanner: Bool)
-    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool, resetHealthRecordsTab: Bool)
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource)
     func showAlertForLoginAttemptDueToValidation(error: ResultError?)
     func showAlertForUserUnder(ageInYears age: Int)
     func showAlertForUserProfile(error: ResultError?)
@@ -77,7 +77,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                     self.deinitializeStatusList()
                     return
                 }
-                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner, resetHealthRecordsTab: !self.initialProtectedMedFetch)
+                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner, resetHealthRecordsTab: !self.initialProtectedMedFetch, loginSourceVC: self.loginSourceVC)
                 self.deinitializeStatusList()
             } else if fetchStatusList.canFetchComments {
                 guard let authCredentials = authCredentials else { return }
@@ -298,7 +298,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             }
         }
     }
-    
+    // TODO: Refactor this to get comments for specific types - or at least filter them - for the case when we fetch comments with protective word initial fetch
     private func getAuthenticatedComments(authCredentials: AuthenticationRequestObject) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedCommentsDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedCommentsDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
@@ -320,7 +320,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private func getAuthenticatedLaboratoryOrderPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedLabOrderPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedLabOrderPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
-        apiClient.getAuthenticatedLaboratoryOrderPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, queueItRetryStatus in
+        apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .normal) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {
                 completion(nil)
                 return
@@ -328,7 +328,32 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
                 self.requestDetails.authenticatedLabOrderPDFDetails?.queueItToken = queueItToken
-                self.apiClient.getAuthenticatedLaboratoryOrderPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                self.apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .normal) { [weak self] result, _ in
+                    guard let `self` = self else {
+                        completion(nil)
+                        return
+                    }
+                    return self.handlePDFResponse(result: result, completion: completion)
+                }
+            } else {
+                return self.handlePDFResponse(result: result, completion: completion)
+            }
+
+        }
+    }
+    
+    private func getAuthenticatedCovidTestPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedCovidTestPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedCovidTestPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .covid) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {
+                completion(nil)
+                return
+            }
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedCovidTestPDFDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .covid) { [weak self] result, _ in
                     guard let `self` = self else {
                         completion(nil)
                         return
@@ -570,7 +595,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                                               sortOrder: nil,
                                               patientAPI: patient,
                                               manuallyAdded: false,
-                                              completion: {
+                                              completion: { _ in
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 1, error: nil)
             })
         }
@@ -589,7 +614,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
 }
 
-// MARK: Handle test results in core data
+// MARK: Handle covid test results in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     // TODO: Handle test results response in core data here
     private func handleTestResultsInCoreData(testResult: AuthenticatedTestResultsResponseModel) {
@@ -598,22 +623,26 @@ extension AuthenticatedHealthRecordsAPIWorker {
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.CovidTest])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
+        guard let authCreds = self.authCredentials else { return }
         for order in orders {
-            let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
-            if let id = handleTestResultInCoreData(gatewayResponse: gatewayResponse, authenticated: true, patientObject: patient) {
-                completedCount += 1
-            } else {
-                errorArrayCount += 1
+            self.getAuthenticatedCovidTestPDF(authCredentials: authCreds, reportId: order.id ?? "") { pdf in
+                let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
+                // TODO: Adjust core data to save covid test PDF - do the same as lab order
+                if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, pdf: pdf, authenticated: true, patientObject: patient) {
+                    completedCount += 1
+                } else {
+                    errorArrayCount += 1
+                }
             }
         }
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
         self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
-    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+    private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else { return nil }
        
-        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false) else { return nil }
+        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false, pdf: pdf) else { return nil }
         return object.id
     }
 }
@@ -703,6 +732,7 @@ struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedLaboratoryOrdersDetails: AuthenticatedLaboratoryOrdersDetails?
     var authenticatedCommentsDetails: AuthenticatedCommentsDetails?
     var authenticatedLabOrderPDFDetails: AuthenticatedLabOrderPDFDetails?
+    var authenticatedCovidTestPDFDetails: AuthenticatedCovidTestPDFDetails?
     
     struct AuthenticatedPatientDetails {
         var authCredentials: AuthenticationRequestObject
@@ -735,6 +765,11 @@ struct AuthenticatedAPIWorkerRetryDetails {
     }
     
     struct AuthenticatedLabOrderPDFDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+    }
+    
+    struct AuthenticatedCovidTestPDFDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?
     }

@@ -19,7 +19,7 @@ protocol EndpointsAccessor {
     func getAuthenticatedPatientDetails(hdid: String) -> URL
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
     func authenticatedComments(hdid: String) -> URL
-    func getAuthenticatedLaboratoryOrderPDF(repordId: String) -> URL
+    func getAuthenticatedLabTestPDF(repordId: String) -> URL
     func validateProfile(hdid: String) -> URL
     func userProfile(hdid: String) -> URL
 }
@@ -93,7 +93,7 @@ extension UrlAccessor: EndpointsAccessor {
         return self.baseUrl.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Comment")
     }
     
-    func getAuthenticatedLaboratoryOrderPDF(repordId: String) -> URL {
+    func getAuthenticatedLabTestPDF(repordId: String) -> URL {
         return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory").appendingPathComponent(repordId).appendingPathComponent("Report")
     }
     

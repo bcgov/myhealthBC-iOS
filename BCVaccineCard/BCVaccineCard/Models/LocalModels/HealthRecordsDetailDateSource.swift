@@ -284,13 +284,15 @@ extension HealthRecordsDetailDataSource {
         ])
         for (index, test) in labTests.enumerated() {
             let resultTuple = formatResultField(test: test)
+            let statusTuple = formatStatusField(test: test)
             var section: [TextListModel] = [
                 TextListModel(header: TextListModel.TextProperties(text: "Test name:", bolded: true), subtext: TextListModel.TextProperties(text: test.batteryType ?? "", bolded: false)),
                 TextListModel(header: TextListModel.TextProperties(text: "Result:", bolded: true), subtext: TextListModel.TextProperties(text: resultTuple.text, bolded: resultTuple.bolded, textColor: resultTuple.color)),
-                TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: test.testStatus ?? "", bolded: false))
+                TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: statusTuple.text ,bolded: statusTuple.bolded))
             ]
             if index == 0 {
-                section.insert(TextListModel(header: TextListModel.TextProperties(text: "Test summary", bolded: true), subtext: nil), at: 0)
+                let links = [LinkedStrings(text: "Learn more", link: "https://www.healthgateway.gov.bc.ca/faq")]
+                section.insert(TextListModel(header: TextListModel.TextProperties(text: "Test summary", bolded: true), subtext: TextListModel.TextProperties(text: "Find resources to learn about your lab test and what the results mean. Learn more", bolded: false, links: links)), at: 0)
             }
             fields.append(section)
         }
@@ -298,14 +300,29 @@ extension HealthRecordsDetailDataSource {
         return Record(id: labOrder?.id ?? UUID().uuidString, name: labOrder?.patient?.name ?? "", type: .laboratoryOrder(model: labTests), status: "\(labOrder?.laboratoryTests?.count ?? 0) tests", date: dateString, fields: fields)
     }
     
-    private static func formatResultField(test: LaboratoryTest) -> (text: String, color: TextListModel.TextProperties.CodableColors, bolded: Bool) {
-        if test.testStatus == "Partial" || test.testStatus == "Cancelled" {
+    private static func formatStatusField(test: LaboratoryTest) -> (text: String, color: TextListModel.TextProperties.CodableColors, bolded: Bool) {
+        if test.testStatus == "Active" {
             return ("Pending", .black, false)
-        } else {
+        } else if test.testStatus == "Cancelled" {
+            return ("Cancelled", .black, false)
+        } else if test.testStatus == "Completed" {
+            return ("Completed", .black, false)
+        }
+        return ("Unknown", .black, false)
+    }
+    
+    private static func formatResultField(test: LaboratoryTest) -> (text: String, color: TextListModel.TextProperties.CodableColors, bolded: Bool) {
+        if test.testStatus == "Active" {
+            return ("Pending", .black, false)
+        } else if test.testStatus == "Cancelled" {
+            return ("Cancelled", .black, false)
+        } else if test.testStatus == "Completed" {
             let text = test.outOfRange ? "Out of Range" : "In Range"
             let color: TextListModel.TextProperties.CodableColors = test.outOfRange ? .red : .green
             return (text, color, true)
         }
+        
+        return ("Unknown", .black, false)
     }
 }
 
