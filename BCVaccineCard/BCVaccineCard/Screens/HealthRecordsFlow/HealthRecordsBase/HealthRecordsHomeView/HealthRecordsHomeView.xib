@@ -32,10 +32,10 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="43K-n7-ZFr">
-                            <rect key="frame" x="106" y="307" width="154" height="147"/>
+                            <rect key="frame" x="64" y="280" width="238" height="201"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="154" id="0P9-Og-oXG"/>
-                                <constraint firstAttribute="height" constant="147" id="17y-UJ-qc7"/>
+                                <constraint firstAttribute="width" constant="238" id="0P9-Og-oXG"/>
+                                <constraint firstAttribute="height" constant="201" id="17y-UJ-qc7"/>
                             </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="duQ-oz-5os" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
