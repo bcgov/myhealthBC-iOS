@@ -625,10 +625,20 @@ extension AuthenticatedHealthRecordsAPIWorker {
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else { return }
         for order in orders {
-            self.getAuthenticatedCovidTestPDF(authCredentials: authCreds, reportId: order.id ?? "") { pdf in
+            if order.reportAvailable == true {
+                self.getAuthenticatedCovidTestPDF(authCredentials: authCreds, reportId: order.id ?? "") { pdf in
+                    let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
+                    // TODO: Adjust core data to save covid test PDF - do the same as lab order
+                    if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, pdf: pdf, authenticated: true, patientObject: patient) {
+                        completedCount += 1
+                    } else {
+                        errorArrayCount += 1
+                    }
+                }
+            } else {
                 let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
                 // TODO: Adjust core data to save covid test PDF - do the same as lab order
-                if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, pdf: pdf, authenticated: true, patientObject: patient) {
+                if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, pdf: nil, authenticated: true, patientObject: patient) {
                     completedCount += 1
                 } else {
                     errorArrayCount += 1

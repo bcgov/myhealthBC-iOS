@@ -249,7 +249,26 @@ extension HealthRecordsDetailDataSource {
     // MARK: Medications
     private static func genRecord(prescription: Perscription) -> Record {
         let dateString = prescription.dispensedDate?.monthDayYearString
-        
+        var address = ""
+        if let addy = prescription.pharmacy?.addressLine1 {
+            address = addy
+        }
+        if let city = prescription.pharmacy?.city {
+            if address.count > 0 {
+                address.append(", ")
+                address.append(city)
+            } else {
+                address = city
+            }
+        }
+        if let province = prescription.pharmacy?.province {
+            if address.count > 0 {
+                address.append(", ")
+                address.append(province)
+            } else {
+                address = province
+            }
+        }
         var fields: [[TextListModel]] = []
         fields.append([
             TextListModel(header: TextListModel.TextProperties(text: "Practitioner:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.practitionerSurname ?? "", bolded: false)),
@@ -260,7 +279,7 @@ extension HealthRecordsDetailDataSource {
             TextListModel(header: TextListModel.TextProperties(text: "Din:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.medication?.din ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Filled at:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.name ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Filled date:", bolded: true), subtext: TextListModel.TextProperties(text: dateString ?? "", bolded: false)),
-            TextListModel(header: TextListModel.TextProperties(text: "Address:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.addressLine1 ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Address:", bolded: true), subtext: TextListModel.TextProperties(text: address, bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Phone number:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.phoneNumber ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Fax:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.faxNumber ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Direction for use:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.directions ?? "", bolded: false))

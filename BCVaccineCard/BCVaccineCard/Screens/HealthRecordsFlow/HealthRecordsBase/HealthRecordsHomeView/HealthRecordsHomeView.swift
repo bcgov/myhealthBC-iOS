@@ -44,7 +44,7 @@ class HealthRecordsHomeView: UIView {
     private func setupUI() {
         introTextLabel.font = UIFont.bcSansRegularWithSize(size: 17)
         introTextLabel.textColor = AppColours.textBlack
-        introTextLabel.text = "Log in with your BC Service Card to view, manage all the health records." // TODO: Put in strings file
+        introTextLabel.text = "View your lab results, medication history and immunization records. Keep track of what’s important to you and your health." // TODO: Put in strings file
         recordsImageView.image = UIImage(named: "health-records-home-image")
     }
     
