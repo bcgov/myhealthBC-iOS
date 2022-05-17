@@ -56,6 +56,7 @@ class APIClient {
         
         let headerParameters: Headers = [
             Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+            "accept": "application/json"
         ]
         
         let parameters: [String: String] = [
@@ -71,6 +72,7 @@ class APIClient {
         
         let headerParameters: Headers = [
             Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+            "accept": "application/json"
         ]
         
         let parameters: [String: String] = [

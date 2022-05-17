@@ -125,6 +125,7 @@ final class NetworkAccessor {
         case .failure(let error):
             guard let responseData = response.data, let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
                 print(error.errorDescription.unwrapped)
+                print(error)
                 let unexpectedErrorResponse = ResultError(resultMessage: .genericErrorMessage)
                 return completion(.failure(unexpectedErrorResponse), retryStatus)
             }
@@ -178,7 +179,7 @@ extension NetworkAccessor {
 extension NetworkAccessor: RemoteAccessor {
     
     func authorizationHeader(fromToken token: String) -> Headers {
-        return [Constants.authorizationHeaderKey: token]
+        return [Constants.authorizationHeaderKey: token, "Accept": "application/json"]
     }
     
     func request<T: Decodable>(withURL url: URL, method: MethodType, encoding: Encoding,
@@ -201,7 +202,10 @@ extension NetworkAccessor: RemoteAccessor {
         includeQueueItUI: Bool,
         andCompletionHandler completion: @escaping NetworkRequestCompletion<T>) {
         
-        let request = AF.request(url, method: method, parameters: parameters, encoder: encoder, headers: headers, interceptor: interceptor)
+//            let hdid = parameters["hdid"]
+//            let editedURL = url.appendingPathComponent("P6FFO433A5WPMVTGM7T4ZVWBKCSVNAYGTWTU3J2LWMGUMERKI72A/")
+//            let hardCodedURL = "https://test.healthgateway.gov.bc.ca/api/immunizationservice/v1/api/AuthenticatedVaccineStatus/P6FFO433A5WPMVTGM7T4ZVWBKCSVNAYGTWTU3J2LWMGUMERKI72A/"
+            let request = AF.request(url, method: method, parameters: [String: String](), encoder: encoder, headers: headers, interceptor: interceptor)
             self.execute(request: request, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, withCompletion: completion)
     }
     
