@@ -26,11 +26,13 @@ protocol EndpointsAccessor {
 
 struct UrlAccessor {
     #if PROD
-    let baseUrl = URL(string: "https://hg.api.gov.bc.ca/")!
+//    let baseUrl = URL(string: "https://hg.api.gov.bc.ca/")!
     let webClientURL = URL(string: "https://healthgateway.gov.bc.ca/")!
+    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/")!
     #elseif DEV
-    let baseUrl = URL(string: "https://hg-dev.api.gov.bc.ca/")!
+//    let baseUrl = URL(string: "https://hg-dev.api.gov.bc.ca/")!
     let webClientURL = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
+    let baseUrl = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
     // NOTE: For terms of service builds, please use mock endpoint
     // let baseUrl = URL(string: "https://mock.healthgateway.gov.bc.ca/")!
     #endif

@@ -68,9 +68,17 @@ class TabBarController: UITabBarController {
             AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: self.authWorker, sourceVC: .AfterOnboarding) { allowed in
                 if allowed {
                     self.showSuccessfulLoginAlert()
+                    self.customRoutingForRecordsTab(authStatus: authStatus)
                 }
             }
         }
+    }
+    
+    private func customRoutingForRecordsTab(authStatus: AuthenticationViewController.AuthenticationStatus) {
+        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentRecordsFlow())
+        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentPassesFlow())
+        let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .home, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .AfterOnboarding, authenticationStatus: authStatus))
+        self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
     }
 
     private func setup(selectedIndex: Int) {

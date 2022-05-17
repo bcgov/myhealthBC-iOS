@@ -87,7 +87,7 @@ extension OnboardingScreenType {
     var getResourceImageSizes: (width: CGFloat, height: CGFloat, xOffset: CGFloat, yOffset: CGFloat) {
         switch self {
         case .healthRecords:
-            return (width: 124, height: 139, xOffset: 0, yOffset: -20)
+            return (width: 124, height: 107, xOffset: -45, yOffset: -40)
         case .healthPasses:
             return (width: 133, height: 99, xOffset: 64, yOffset: 48)
         case .healthResources:
