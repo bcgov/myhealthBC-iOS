@@ -61,7 +61,7 @@ class AuthenticationInfoView: UIView, Theme {
         
         titleLabel.textColor = AppColours.appBlue
         
-        titleLabel.text = .leavingHealthGateway
+        titleLabel.text = .bcServicesCard
         messageLabel.attributedText =
             NSMutableAttributedString()
             .normal(.youWillRedirected)
