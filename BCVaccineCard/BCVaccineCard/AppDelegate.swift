@@ -44,9 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func showLoader() {
+        if (self.window?.viewWithTag(dataLoadTag)) != nil {
+            return
+        }
         self.window?.viewWithTag(dataLoadTag)?.removeFromSuperview()
         let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
-        loaderView.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        loaderView.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         
         let indicator = UIActivityIndicatorView(frame: .zero)
         let label = UILabel(frame: .zero)
