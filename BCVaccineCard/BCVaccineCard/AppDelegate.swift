@@ -22,6 +22,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var protectiveWordEnteredThisSession = false
     
     var lastLocalAuth: Date? = nil
+    var dataLoadCount: Int = 0 {
+        didSet {
+            print(dataLoadCount)
+            if dataLoadCount > 0 {
+                showLoader()
+            } else {
+                hideLoaded()
+            }
+        }
+    }
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -29,6 +39,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         configure()
         return true
+    }
+    
+    func showLoader() {
+        self.window?.viewWithTag(9912341)?.removeFromSuperview()
+        let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
+        loaderView.backgroundColor = .orange
+        loaderView.tag = 9912341
+        self.window?.addSubview(loaderView)
+        loaderView.alpha = 0.5
+    }
+    
+    func hideLoaded() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            guard self.dataLoadCount < 1 else {return}
+            self.window?.viewWithTag(9912341)?.removeFromSuperview()
+        }
     }
     
     private func configure() {
@@ -126,7 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-    } 
+    }
 }
 
 // MARK: Auth {
@@ -160,7 +186,7 @@ extension AppDelegate {
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
-       
+        
         
     }
 }
@@ -194,14 +220,14 @@ extension AppDelegate {
 }
 
 public extension UIApplication {
-
+    
     class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return topViewController(base: nav.visibleViewController)
         }
         if let tab = base as? UITabBarController {
             let moreNavigationController = tab.moreNavigationController
-
+            
             if let top = moreNavigationController.topViewController, top.view.window != nil {
                 return topViewController(base: top)
             } else if let selected = tab.selectedViewController {
@@ -222,10 +248,10 @@ extension UIApplication {
         guard
             let settingsURL = URL(string: UIApplication.openSettingsURLString),
             UIApplication.shared.canOpenURL(settingsURL)
-            else {
-                return false
+        else {
+            return false
         }
-
+        
         UIApplication.shared.open(settingsURL)
         return true
     }
