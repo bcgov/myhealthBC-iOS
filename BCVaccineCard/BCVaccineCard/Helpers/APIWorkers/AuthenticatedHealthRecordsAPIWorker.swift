@@ -553,18 +553,10 @@ extension AuthenticatedHealthRecordsAPIWorker {
 
 // MARK: Handle Vaccine results in core data
 extension AuthenticatedHealthRecordsAPIWorker {
-    private func decrementLoadCounter() {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount -= 1
-        }
-    }
-    
     private func handleVaccineCardInCoreData(vaccineCard: GatewayVaccineCardResponse) {
         guard let patient = self.patientDetails else { return }
         
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
-        }
+        incrementLoadCounter()
         
         func endLoadCounter() {
             decrementLoadCounter()
@@ -645,9 +637,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let patient = self.patientDetails else { return }
         guard let orders = testResult.resourcePayload?.orders else { return }
         
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
-        }
+        incrementLoadCounter()
         
         func endLoadCounter() {
             decrementLoadCounter()
@@ -688,9 +678,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
-        }
+        incrementLoadCounter()
         
         func endLoadCounter() {
             decrementLoadCounter()
@@ -715,9 +703,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleMedicationStatementInCoreData(medicationStatement: AuthenticatedMedicationStatementResponseObject, protectiveWord: String?, initialProtectedMedFetch: Bool) {
         guard let patient = self.patientDetails else { return }
         guard let payloads = medicationStatement.resourcePayload else { return }
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
-        }
+        incrementLoadCounter()
         
         func endLoadCounter() {
             decrementLoadCounter()
@@ -748,9 +734,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, initialProtectedMedFetch: Bool) -> String? {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
-        }
+        incrementLoadCounter()
         
         func endLoadCounter() {
             decrementLoadCounter()
@@ -773,9 +757,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleLaboratoryOrdersInCoreData(labOrders: AuthenticatedLaboratoryOrdersResponseObject) {
         guard let patient = self.patientDetails else { return }
         guard let orders = labOrders.resourcePayload?.orders else { return }
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
-        }
+        incrementLoadCounter()
         
         func endLoadCounter() {
             decrementLoadCounter()
@@ -803,9 +785,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
-        }
+        incrementLoadCounter()
         
         func endLoadCounter() {
             decrementLoadCounter()
@@ -826,9 +806,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
 // MARK: Handle Comments in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleCommentsInCoredata(comments: AuthenticatedCommentResponseObject) {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
-        }
+        incrementLoadCounter()
         // TODO: Maybe we should look at making this synchronus
         StorageService.shared.storeComments(in: comments)
         // Note: Attempted and successful counts are 0 as we aren't displaying how many comments have been fetched, just happens in the background
@@ -959,5 +937,19 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     private func deinitializeStatusList() {
         self.fetchStatusList = FetchStatusList(fetchStatus: [:])
+    }
+}
+
+extension AuthenticatedHealthRecordsAPIWorker {
+    private func decrementLoadCounter() {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.dataLoadCount -= 1
+        }
+    }
+    
+    private func incrementLoadCounter() {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.dataLoadCount += 1
+        }
     }
 }

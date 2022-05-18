@@ -24,14 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var lastLocalAuth: Date? = nil
     var dataLoadCount: Int = 0 {
         didSet {
+            dataLoadHideTimer?.invalidate()
             if dataLoadCount > 0 {
                 showLoader()
             } else {
-                hideLoaded()
+                dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoaded), userInfo: nil, repeats: false)
             }
         }
     }
-    
+    private var dataLoadHideTimer: Timer? = nil
     private var dataLoadTag = 9912341
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
@@ -48,9 +49,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if (self.window?.viewWithTag(dataLoadTag)) != nil {
             return
         }
+        
+        if window?.rootViewController?.presentedViewController is UIAlertController {
+            print("Alert is blocking loader")
+            // Should handle this OR remove the alert saying data is being fetched afrer login
+        }
+        
         // if somehow you're here and its already shown... remove it
         self.window?.viewWithTag(dataLoadTag)?.removeFromSuperview()
-        
+        print("showing loader")
         // create container and add it to the window
         let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
         self.window?.addSubview(loaderView)
@@ -70,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         label.textColor = AppColours.appBlue
         label.text = "Syncing Recods"
-        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        label.font = UIFont.bcSansBoldWithSize(size: 17)
         label.textAlignment = .center
         
         indicator.tintColor = AppColours.appBlue
@@ -79,11 +86,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // Triggered by dataLoadCount
-    private func hideLoaded() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            guard self.dataLoadCount < 1 else {return}
-            self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
-        }
+    @objc private func hideLoaded() {
+        self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
     }
     
     private func configure() {
