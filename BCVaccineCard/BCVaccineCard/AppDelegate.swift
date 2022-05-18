@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    private var dataLoadTag = 9912341
+    
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
     
@@ -42,18 +44,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func showLoader() {
-        self.window?.viewWithTag(9912341)?.removeFromSuperview()
+        self.window?.viewWithTag(dataLoadTag)?.removeFromSuperview()
         let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
-        loaderView.backgroundColor = .orange
-        loaderView.tag = 9912341
+        loaderView.backgroundColor = UIColor.white.withAlphaComponent(0.7)
+        
+        let indicator = UIActivityIndicatorView(frame: .zero)
+        let label = UILabel(frame: .zero)
+        
+        loaderView.tag = dataLoadTag
         self.window?.addSubview(loaderView)
-        loaderView.alpha = 0.5
+        loaderView.alpha = 1
+        
+        loaderView.addSubview(indicator)
+        loaderView.addSubview(label)
+        
+        indicator.center(in: loaderView, width: 30, height: 30)
+        label.center(in: loaderView, width: loaderView.bounds.width, height: 32, verticalOffset: 32, horizontalOffset: 0)
+        indicator.tintColor = AppColours.appBlue
+        label.textColor = AppColours.appBlue
+        label.text = "Syncing Recods"
+        label.textAlignment = .center
+        indicator.startAnimating()
     }
     
     func hideLoaded() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             guard self.dataLoadCount < 1 else {return}
-            self.window?.viewWithTag(9912341)?.removeFromSuperview()
+            self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
         }
     }
     
