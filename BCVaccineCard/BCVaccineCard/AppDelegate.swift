@@ -43,34 +43,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func showLoader() {
+    // Triggered by dataLoadCount
+    private func showLoader() {
+        // If already shown, dont do anything
         if (self.window?.viewWithTag(dataLoadTag)) != nil {
             return
         }
+        // if somehow you're here and its already shown... remove it
         self.window?.viewWithTag(dataLoadTag)?.removeFromSuperview()
-        let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
-        loaderView.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         
+        // create container and add it to the window
+        let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
+        self.window?.addSubview(loaderView)
+        loaderView.tag = dataLoadTag
+        
+        // Create subviews for indicator and label
         let indicator = UIActivityIndicatorView(frame: .zero)
         let label = UILabel(frame: .zero)
         
-        loaderView.tag = dataLoadTag
-        self.window?.addSubview(loaderView)
-        loaderView.alpha = 1
-        
         loaderView.addSubview(indicator)
         loaderView.addSubview(label)
-        
         indicator.center(in: loaderView, width: 30, height: 30)
         label.center(in: loaderView, width: loaderView.bounds.width, height: 32, verticalOffset: 32, horizontalOffset: 0)
-        indicator.tintColor = AppColours.appBlue
+        
+        // Style
+        loaderView.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        
         label.textColor = AppColours.appBlue
         label.text = "Syncing Recods"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         label.textAlignment = .center
+        
+        indicator.tintColor = AppColours.appBlue
+        indicator.color = AppColours.appBlue
         indicator.startAnimating()
     }
     
-    func hideLoaded() {
+    // Triggered by dataLoadCount
+    private func hideLoaded() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             guard self.dataLoadCount < 1 else {return}
             self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
