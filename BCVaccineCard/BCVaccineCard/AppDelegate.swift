@@ -24,7 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var lastLocalAuth: Date? = nil
     var dataLoadCount: Int = 0 {
         didSet {
-            print(dataLoadCount)
             if dataLoadCount > 0 {
                 showLoader()
             } else {
