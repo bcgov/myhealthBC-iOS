@@ -22,6 +22,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var protectiveWordEnteredThisSession = false
     
     var lastLocalAuth: Date? = nil
+    var dataLoadCount: Int = 0 {
+        didSet {
+            dataLoadHideTimer?.invalidate()
+            if dataLoadCount > 0 {
+                showLoader()
+            } else {
+                dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoaded), userInfo: nil, repeats: false)
+            }
+        }
+    }
+    internal var dataLoadHideTimer: Timer? = nil
+    internal var dataLoadTag = 9912341
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -126,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-    } 
+    }
 }
 
 // MARK: Auth {
@@ -160,7 +172,7 @@ extension AppDelegate {
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
-       
+        
         
     }
 }
@@ -194,14 +206,14 @@ extension AppDelegate {
 }
 
 public extension UIApplication {
-
+    
     class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return topViewController(base: nav.visibleViewController)
         }
         if let tab = base as? UITabBarController {
             let moreNavigationController = tab.moreNavigationController
-
+            
             if let top = moreNavigationController.topViewController, top.view.window != nil {
                 return topViewController(base: top)
             } else if let selected = tab.selectedViewController {
@@ -222,10 +234,10 @@ extension UIApplication {
         guard
             let settingsURL = URL(string: UIApplication.openSettingsURLString),
             UIApplication.shared.canOpenURL(settingsURL)
-            else {
-                return false
+        else {
+            return false
         }
-
+        
         UIApplication.shared.open(settingsURL)
         return true
     }

@@ -101,12 +101,12 @@ extension UIView {
         self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0 - paddingHorizontal).isActive = true
     }
     
-    public func center(in view: UIView, width: CGFloat, height: CGFloat) {
+    public func center(in view: UIView, width: CGFloat, height: CGFloat, verticalOffset: CGFloat? = nil, horizontalOffset: CGFloat? = 0) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.heightAnchor.constraint(equalToConstant: height).isActive = true
         self.widthAnchor.constraint(equalToConstant: width).isActive = true
-        self.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        self.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
+        self.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: horizontalOffset ?? 0).isActive = true
+        self.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: verticalOffset ?? 0).isActive = true
     }
     
     public func roundTopCorners(radius: CGFloat) {
