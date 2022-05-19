@@ -32,8 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    private var dataLoadHideTimer: Timer? = nil
-    private var dataLoadTag = 9912341
+    internal var dataLoadHideTimer: Timer? = nil
+    internal var dataLoadTag = 9912341
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -41,53 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         configure()
         return true
-    }
-    
-    // Triggered by dataLoadCount
-    private func showLoader() {
-        // If already shown, dont do anything
-        if (self.window?.viewWithTag(dataLoadTag)) != nil {
-            return
-        }
-        
-        if window?.rootViewController?.presentedViewController is UIAlertController {
-            print("Alert is blocking loader")
-            // Should handle this OR remove the alert saying data is being fetched afrer login
-        }
-        
-        // if somehow you're here and its already shown... remove it
-        self.window?.viewWithTag(dataLoadTag)?.removeFromSuperview()
-        print("showing loader")
-        // create container and add it to the window
-        let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
-        self.window?.addSubview(loaderView)
-        loaderView.tag = dataLoadTag
-        
-        // Create subviews for indicator and label
-        let indicator = UIActivityIndicatorView(frame: .zero)
-        let label = UILabel(frame: .zero)
-        
-        loaderView.addSubview(indicator)
-        loaderView.addSubview(label)
-        indicator.center(in: loaderView, width: 30, height: 30)
-        label.center(in: loaderView, width: loaderView.bounds.width, height: 32, verticalOffset: 32, horizontalOffset: 0)
-        
-        // Style
-        loaderView.backgroundColor = UIColor.white.withAlphaComponent(0.9)
-        
-        label.textColor = AppColours.appBlue
-        label.text = "Syncing Recods"
-        label.font = UIFont.bcSansBoldWithSize(size: 17)
-        label.textAlignment = .center
-        
-        indicator.tintColor = AppColours.appBlue
-        indicator.color = AppColours.appBlue
-        indicator.startAnimating()
-    }
-    
-    // Triggered by dataLoadCount
-    @objc private func hideLoaded() {
-        self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
     }
     
     private func configure() {
