@@ -89,7 +89,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     private func logoutUser(reason: AutoLogoutReason, sourceVC: LoginVCSource, error:  ResultError?, completion: @escaping(Bool) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.authManager.signout { suceess in
-                guard suceess else { return }
+                guard suceess else {
+                    self.authManager.logoutPermissionCancelled()
+                    completion(false)
+                    return
+                }
                 switch reason {
                 case .Underage:
                     self.delegate?.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)

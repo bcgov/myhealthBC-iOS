@@ -51,8 +51,8 @@ class TermsOfServiceViewController: BaseViewController {
     }
     
     @IBAction private func navHackCloseButtonAction(_ sender: UIButton) {
-        AuthManager().clearData()
-        self.dismiss(animated: true, completion: nil)
+        respondToTermsOfService(accepted: false)
+//        self.dismiss(animated: true, completion: nil)
     }
 
 }
@@ -124,7 +124,7 @@ extension TermsOfServiceViewController: AppStyleButtonDelegate {
 
 // MARK: For terms of service request
 extension TermsOfServiceViewController {
-    private enum signoutReason {
+    private enum SignoutReason {
         case Error
         case DidntAgree
     }
@@ -148,7 +148,15 @@ extension TermsOfServiceViewController {
         })
     }
     
-    private func signout(error: ResultError?, reason: signoutReason) {
+//    private func resetRecordsTab() {
+//        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+//        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+//        let currentTab = self.getCurrentTab
+//        let scenario = AppUserActionScenarios.TermsOfServiceRejected(values: ActionScenarioValues(currentTab: currentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: nil, authenticationStatus: nil))
+//        self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.0)
+//    }
+    
+    private func signout(error: ResultError?, reason: SignoutReason) {
         let manager = AuthManager()
         manager.signout(in: self) { success in
             if !success {
@@ -156,6 +164,9 @@ extension TermsOfServiceViewController {
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.view.endLoadingIndicator()
+//                self.dismiss(animated: true) {
+//                    self.resetRecordsTab()
+//                }
                 self.dismiss(animated: true)
                 switch reason {
                 case .Error:

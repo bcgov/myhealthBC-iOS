@@ -150,7 +150,7 @@ class TabBarController: UITabBarController {
     @objc private func termsOfServiceResponse(_ notification: Notification) {
         if let error = notification.userInfo?[Constants.GenericErrorKey.key] as? String {
             let title = notification.userInfo?[Constants.GenericErrorKey.titleKey] as? String ?? .error
-            showError(error: error, title: title)
+            showError(error: error, title: title, resetRecordsTab: true)
         } else {
             guard let response = notification.userInfo?[Constants.TermsOfServiceResponseKey.key] as? Bool, response == true else { return }
             self.showSuccessfulLoginAlert()
@@ -179,12 +179,27 @@ class TabBarController: UITabBarController {
         
     }
     
-    private func showError(error: String, title: String) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.alert(title: title, message: error)
+    private func showError(error: String, title: String, resetRecordsTab: Bool) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.alert(title: title, message: error) {
+                if resetRecordsTab {
+                    self.resetRecordsTab()
+                }
+            }
         }
     }
 
+}
+
+// MARK: Reset Records Tab
+extension TabBarController {
+    private func resetRecordsTab() {
+        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentRecordsFlow())
+        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentPassesFlow())
+        let currentTab = TabBarVCs.init(rawValue: self.selectedIndex) ?? .home
+        let scenario = AppUserActionScenarios.TermsOfServiceRejected(values: ActionScenarioValues(currentTab: currentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: nil, authenticationStatus: nil))
+        self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.0)
+    }
 }
 
 extension TabBarController: UITabBarControllerDelegate {

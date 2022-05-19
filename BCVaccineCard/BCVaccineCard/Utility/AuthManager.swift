@@ -400,6 +400,11 @@ class AuthManager {
         let info: [String: Bool] = [Constants.AuthStatusKey.key: authenticated]
         NotificationCenter.default.post(name: .authStatusChanged, object: nil, userInfo: info)
     }
+    
+    func logoutPermissionCancelled() {
+        self.clearData()
+        self.authStatusChanged(authenticated: false)
+    }
 }
 
 

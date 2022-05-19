@@ -104,6 +104,7 @@ extension ProfileAndSettingsViewController {
     private func setupListener() {
         NotificationCenter.default.addObserver(self, selector: #selector(settingsTableViewReload), name: .settingsTableViewReload, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
     
@@ -115,6 +116,15 @@ extension ProfileAndSettingsViewController {
         guard let userInfo = notification.userInfo as? [String: String?] else { return }
         guard let fullName = userInfo["fullName"] else { return }
         self.displayName = fullName
+        self.tableView.reloadData()
+    }
+    
+    @objc private func authStatusChanged(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: Bool] else { return }
+        guard let authenticated = userInfo[Constants.AuthStatusKey.key] else { return }
+        if !authenticated {
+            self.displayName = nil
+        }
         self.tableView.reloadData()
     }
     

@@ -43,6 +43,7 @@ enum VaccineCardNumber {
 enum AppUserActionScenarios {
     case InitialAppLaunch(values: ActionScenarioValues)
     case LoginSpecialRouting(values: ActionScenarioValues)
+    case TermsOfServiceRejected(values: ActionScenarioValues)
     case AuthenticatedFetch(values: ActionScenarioValues)
     case ManualFetch(values: ActionScenarioValues)
     case ManuallyDeletedAllOfAnUnauthPatientRecords(values: ActionScenarioValues)
@@ -208,6 +209,9 @@ extension RouterWorker {
         case .LoginSpecialRouting(let values):
             recordsStack = loginSpecialRoutingRecordsStack(values: values)
             passesStack = loginSpecialRoutingPassesStack(values: values)
+        case .TermsOfServiceRejected(let values):
+            recordsStack = termsOfServiceRejectedRecordsStack(values: values)
+            passesStack = termsOfServiceRejectedPassesStack(values: values)
         case .AuthenticatedFetch(let values):
             recordsStack = authFetchRecordsStack(values: values)
             passesStack = authFetchPassesStack(values: values)
@@ -267,6 +271,19 @@ extension RouterWorker {
     
     // Note - we don't need to do anything here
     private func loginSpecialRoutingPassesStack(values: ActionScenarioValues) -> [BaseViewController] {
+        return []
+    }
+    
+    private func termsOfServiceRejectedRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
+        // Terms of service have been rejected, so records tab should be reset to default
+        let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
+        guard let profileScreen = values.recordFlowDetails?.currentStack.last?.getNonAssociatedVersion, profileScreen == RecordsFlowVCs.NonAssociatedVersion.ProfileAndSettingsViewController, values.currentTab == TabBarVCs.records else { return [vc1] }
+        let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+        return [vc1, vc2]
+    }
+    
+    private func termsOfServiceRejectedPassesStack(values: ActionScenarioValues) -> [BaseViewController] {
+        // Shouldn't need to do anything here
         return []
     }
     
