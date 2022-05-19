@@ -61,7 +61,7 @@ class AuthenticationInfoView: UIView, Theme {
         
         titleLabel.textColor = AppColours.appBlue
         
-        titleLabel.text = .bcServicesCard
+        titleLabel.text = .leavingHealthGateway
         messageLabel.attributedText =
             NSMutableAttributedString()
             .normal(.youWillRedirected)
@@ -74,7 +74,7 @@ class AuthenticationInfoView: UIView, Theme {
         navBackButton.setImage(backIcon, for: .normal)
         navBackButton.tintColor = AppColours.appBlue
         
-        navTitle.text = "Go To Health Gateway"
+        navTitle.text = .bcServicesCard
         navTitle.font = UIFont.bcSansBoldWithSize(size: 17)
         navTitle.textColor = AppColours.appBlue
         navDivider.backgroundColor = .lightGray.withAlphaComponent(0.3)
