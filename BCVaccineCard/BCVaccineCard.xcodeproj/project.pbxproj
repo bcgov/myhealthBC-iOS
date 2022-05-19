@@ -80,6 +80,7 @@
 		296519A5272995680002B778 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296519A4272995680002B778 /* AuthManager.swift */; };
 		296519A6272995680002B778 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296519A4272995680002B778 /* AuthManager.swift */; };
 		2965281728358F4800C411E1 /* AppDelegate+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2965281628358F4800C411E1 /* AppDelegate+EXT.swift */; };
+		296528182836A13700C411E1 /* AppDelegate+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2965281628358F4800C411E1 /* AppDelegate+EXT.swift */; };
 		29736A252787A78A00CCB1D2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A242787A78A00CCB1D2 /* Logger.swift */; };
 		29736A3F2788EBD700CCB1D2 /* VaccineCard+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A352788EBD600CCB1D2 /* VaccineCard+CoreDataProperties.swift */; };
 		29736A402788EBD700CCB1D2 /* VaccineCard+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29736A352788EBD600CCB1D2 /* VaccineCard+CoreDataProperties.swift */; };
@@ -3029,6 +3030,7 @@
 				79BDA090270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				79218AF627569CEA0063004E /* VaccineTable.swift in Sources */,
 				794BD6422702EEC00084ADA8 /* QRScannerView.swift in Sources */,
+				296528182836A13700C411E1 /* AppDelegate+EXT.swift in Sources */,
 				29736A5C2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift in Sources */,
 				794BD6432702EEC00084ADA8 /* SettingsTableViewCell.swift in Sources */,
 				79590D97280FFB83006EB59F /* RouterWorker.swift in Sources */,
