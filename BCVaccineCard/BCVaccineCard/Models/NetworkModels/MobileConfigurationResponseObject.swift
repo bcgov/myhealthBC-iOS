@@ -9,4 +9,5 @@ import Foundation
 
 struct MobileConfigurationResponseObject: Codable {
     let online: Bool
+    let baseUrl: String
 }

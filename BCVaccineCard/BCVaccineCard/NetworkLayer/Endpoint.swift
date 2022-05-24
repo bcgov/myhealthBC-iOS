@@ -9,6 +9,7 @@ import Foundation
 
 /// This accessor helps accessing all the endpoints being used in the app.
 protocol EndpointsAccessor {
+    var getBaseURL: URL { get }
     var getVaccineCard: URL { get }
     var getTestResults: URL { get }
     var getAuthenticatedVaccineCard: URL { get }
@@ -27,35 +28,43 @@ protocol EndpointsAccessor {
 struct UrlAccessor {
     #if PROD
 //    let baseUrl = URL(string: "https://hg.api.gov.bc.ca/")!
-    let webClientURL = URL(string: "https://healthgateway.gov.bc.ca/")!
-    let baseUrl = URL(string: "https://healthgateway.gov.bc.ca/")!
+    let mobileConfigURL = URL(string: "https://healthgateway.gov.bc.ca/mobileconfiguration")!
+//    let webClientURL = URL(string: "https://healthgateway.gov.bc.ca/")!
+//    let fallbackBaseUrl = URL(string: "https://healthgateway.gov.bc.ca/")!
+    let baseURL = BaseURLWorker.shared.baseURL ?? URL(string: "https://healthgateway.gov.bc.ca/")!
     #elseif DEV
 //    let baseUrl = URL(string: "https://hg-dev.api.gov.bc.ca/")!
-    let webClientURL = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
-    let baseUrl = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
+    let mobileConfigURL = URL(string: "https://dev.healthgateway.gov.bc.ca/mobileconfiguration")!
+//    let webClientURL = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
+//    let fallbackBaseUrl = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
+    let baseURL = BaseURLWorker.shared.baseURL ?? URL(string: "https://dev.healthgateway.gov.bc.ca/")!
     // NOTE: For terms of service builds, please use mock endpoint
     // let baseUrl = URL(string: "https://mock.healthgateway.gov.bc.ca/")!
     #endif
     
     private var immunizationBaseUrl: URL {
-        return self.baseUrl.appendingPathComponent("api/immunizationservice")
+        return baseURL.appendingPathComponent("api/immunizationservice")
     }
     
     private var laboratoryServiceBaseURL: URL {
-        return self.baseUrl.appendingPathComponent("api/laboratoryservice")
+        return baseURL.appendingPathComponent("api/laboratoryservice")
     }
     
     private var patientServiceBaseURL: URL {
-        return self.baseUrl.appendingPathComponent("api/patientservice")
+        return baseURL.appendingPathComponent("api/patientservice")
     }
     
     private var medicationServiceBaseURL: URL {
-        return self.baseUrl.appendingPathComponent("api/medicationservice")
+        return baseURL.appendingPathComponent("api/medicationservice")
     }
 
 }
 
 extension UrlAccessor: EndpointsAccessor {
+    
+    var getBaseURL: URL {
+        return mobileConfigURL
+    }
     
     var getVaccineCard: URL {
         return self.immunizationBaseUrl.appendingPathComponent("v1/api/PublicVaccineStatus")
@@ -78,11 +87,11 @@ extension UrlAccessor: EndpointsAccessor {
     }
     
     var getTermsOfService: URL {
-        return self.webClientURL.appendingPathComponent("v1/api/UserProfile/termsofservice")
+        return self.baseURL.appendingPathComponent("v1/api/UserProfile/termsofservice")
     }
     
     var throttleHG: URL {
-        return self.webClientURL.appendingPathComponent("v1/api/MobileConfiguration")
+        return self.baseURL.appendingPathComponent("v1/api/MobileConfiguration")
     }
     
     func getAuthenticatedPatientDetails(hdid: String) -> URL {
@@ -94,7 +103,7 @@ extension UrlAccessor: EndpointsAccessor {
     }
     
     func authenticatedComments(hdid: String) -> URL {
-        return self.webClientURL.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Comment")
+        return self.baseURL.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Comment")
     }
     
     func getAuthenticatedLabTestPDF(repordId: String) -> URL {
@@ -102,11 +111,11 @@ extension UrlAccessor: EndpointsAccessor {
     }
     
     func validateProfile(hdid: String) -> URL {
-        return self.webClientURL.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Validate")
+        return self.baseURL.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Validate")
     }
     
     func userProfile(hdid: String) -> URL {
-        return self.webClientURL.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid)
+        return self.baseURL.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid)
     }
 }
 
