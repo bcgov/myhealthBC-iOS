@@ -65,8 +65,8 @@
                         <constraint firstAttribute="trailing" secondItem="zVS-Gn-Ohv" secondAttribute="trailing" id="Ty0-BX-yn5"/>
                     </constraints>
                 </stackView>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fZu-At-NBK">
-                    <rect key="frame" x="24" y="714" width="366" height="116"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fZu-At-NBK">
+                    <rect key="frame" x="24" y="652" width="366" height="178"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FZH-by-C09">
                             <rect key="frame" x="0.0" y="0.0" width="366" height="54"/>
@@ -89,6 +89,12 @@
                                 <action selector="cancelAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="KaQ-a3-btn"/>
                             </connections>
                         </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don’t have BC Service Card app, please download here. " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="DzU-Ht-4yU">
+                            <rect key="frame" x="0.0" y="124" width="366" height="54"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="FZH-by-C09" secondAttribute="trailing" id="MAY-dd-l1K"/>
@@ -112,6 +118,7 @@
             </constraints>
             <connections>
                 <outlet property="cancelButton" destination="u1Y-oU-mI9" id="eSk-be-bDe"/>
+                <outlet property="downloadBCSCLabel" destination="DzU-Ht-4yU" id="lr0-tZ-zXr"/>
                 <outlet property="loginButton" destination="FZH-by-C09" id="u9k-9X-W8U"/>
                 <outlet property="secondarySubtitle" destination="yDY-O4-kyu" id="zyx-iW-WDl"/>
                 <outlet property="subtitleLabel" destination="yzV-g2-YJ4" id="hub-fv-0Hx"/>

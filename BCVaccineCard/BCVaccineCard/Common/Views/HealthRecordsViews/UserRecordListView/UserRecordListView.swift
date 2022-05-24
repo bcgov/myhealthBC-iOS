@@ -80,7 +80,7 @@ class UserRecordListView: UIView {
             case "cancelled":
                 statusToInclude = "cancelled"
             default:
-                statusToInclude = record.mainRecord?.status
+                statusToInclude = "Amended"
             }
         }
         let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
