@@ -91,7 +91,8 @@ extension UrlAccessor: EndpointsAccessor {
     }
     
     var throttleHG: URL {
-        return self.baseURL.appendingPathComponent("api/gatewayapiservice/MobileConfiguration")
+//        return self.baseURL.appendingPathComponent("api/gatewayapiservice/MobileConfiguration")
+        return self.mobileConfigURL
     }
     
     func getAuthenticatedPatientDetails(hdid: String) -> URL {
