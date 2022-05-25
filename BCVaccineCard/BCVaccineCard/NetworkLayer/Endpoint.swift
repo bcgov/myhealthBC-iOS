@@ -67,55 +67,55 @@ extension UrlAccessor: EndpointsAccessor {
     }
     
     var getVaccineCard: URL {
-        return self.immunizationBaseUrl.appendingPathComponent("v1/api/PublicVaccineStatus")
+        return self.immunizationBaseUrl.appendingPathComponent("PublicVaccineStatus")
     }
     
     var getTestResults: URL {
-        return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/PublicLaboratory/CovidTests")
+        return self.laboratoryServiceBaseURL.appendingPathComponent("PublicLaboratory/CovidTests")
     }
     
     var getAuthenticatedVaccineCard: URL {
-        return self.immunizationBaseUrl.appendingPathComponent("v1/api/AuthenticatedVaccineStatus")
+        return self.immunizationBaseUrl.appendingPathComponent("AuthenticatedVaccineStatus")
     }
     
     var getAuthenticatedTestResults: URL {
-        return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory/Covid19Orders")
+        return self.laboratoryServiceBaseURL.appendingPathComponent("Laboratory/Covid19Orders")
     }
     
     var getAuthenticatedLaboratoryOrders: URL {
-        return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory/LaboratoryOrders")
+        return self.laboratoryServiceBaseURL.appendingPathComponent("Laboratory/LaboratoryOrders")
     }
     
     var getTermsOfService: URL {
-        return self.baseURL.appendingPathComponent("v1/api/UserProfile/termsofservice")
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile/termsofservice")
     }
     
     var throttleHG: URL {
-        return self.baseURL.appendingPathComponent("v1/api/MobileConfiguration")
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/MobileConfiguration")
     }
     
     func getAuthenticatedPatientDetails(hdid: String) -> URL {
-        return self.patientServiceBaseURL.appendingPathComponent("v1/api/Patient").appendingPathComponent(hdid)
+        return self.patientServiceBaseURL.appendingPathComponent("Patient").appendingPathComponent(hdid)
     }
     
     func getAuthenticatedMedicationStatement(hdid: String) -> URL {
-        return self.medicationServiceBaseURL.appendingPathComponent("v1/api/MedicationStatement").appendingPathComponent(hdid)
+        return self.medicationServiceBaseURL.appendingPathComponent("MedicationStatement").appendingPathComponent(hdid)
     }
     
     func authenticatedComments(hdid: String) -> URL {
-        return self.baseURL.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Comment")
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Comment")
     }
     
     func getAuthenticatedLabTestPDF(repordId: String) -> URL {
-        return self.laboratoryServiceBaseURL.appendingPathComponent("v1/api/Laboratory").appendingPathComponent(repordId).appendingPathComponent("Report")
+        return self.laboratoryServiceBaseURL.appendingPathComponent("Laboratory").appendingPathComponent(repordId).appendingPathComponent("Report")
     }
     
     func validateProfile(hdid: String) -> URL {
-        return self.baseURL.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Validate")
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Validate")
     }
     
     func userProfile(hdid: String) -> URL {
-        return self.baseURL.appendingPathComponent("v1/api/UserProfile").appendingPathComponent(hdid)
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid)
     }
 }
 
