@@ -446,7 +446,9 @@ extension GatewayFormViewController {
         self.whiteSpaceFormattedPHN = phn
         self.storageModel = HGStorageModel(phn: model.phn, dob: model.dateOfBirth)
         showLoader()
-        worker?.getVaccineCard(model: model, executingVC: self)
+        BaseURLWorker.shared.setBaseURL {
+            self.worker?.getVaccineCard(model: model, executingVC: self)
+        }
     }
     
     private func formatGatewayDataForVaccineRequest(phn: String, birthday: String, vax: String) -> GatewayVaccineCardRequest? {
