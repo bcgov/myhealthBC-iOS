@@ -12,6 +12,8 @@ import UIKit
 // MARK: Loading UI
 extension AppDelegate {
     // Triggered by dataLoadCount
+    
+    /// Do not call this function manually. use dataLoadCount
     internal func showLoader() {
         // If already shown, dont do anything
         if (self.window?.viewWithTag(dataLoadTag)) != nil {
@@ -44,7 +46,7 @@ extension AppDelegate {
         loaderView.backgroundColor = UIColor.white.withAlphaComponent(0.9)
         
         label.textColor = AppColours.appBlue
-        label.text = "Syncing Recods"
+        label.text = "Syncing Records"
         label.font = UIFont.bcSansBoldWithSize(size: 17)
         label.textAlignment = .center
         

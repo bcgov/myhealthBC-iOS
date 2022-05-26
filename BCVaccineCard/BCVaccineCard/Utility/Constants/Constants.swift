@@ -10,6 +10,11 @@ import UIKit
 
 struct Constants {
     
+    struct BCSC {
+        static let downloadURL = "https://apps.apple.com/us/app/id1234298467"
+        static let scheme = "ca.bc.gov.id.servicescard://"
+    }
+    
     /// Authorization Header Key
     static let authorizationHeaderKey = "Authorization"
     

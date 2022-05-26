@@ -38,6 +38,8 @@
 		<string>servicescard</string>
 		<string>myhealthapp</string>
 		<string>ca.bc.gov.idtest.servicescard</string>
+        <string>ca.bc.gov.iddev.servicescard</string>
+        <string>ca.bc.gov.id.servicescard</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
