@@ -13,10 +13,17 @@ import BCVaccineValidator
 
 extension Constants {
     struct Auth {
+        #if PROD
+        static let issuer = Constants.authIssuer
+        static let clientID = "hgmobileapp"
+        static let redirectURI = "myhealthbc://*"
+        static let params = ["kc_idp_hint": "bcsc2"]
+        #else
         static let issuer = Constants.authIssuer
         static let clientID = "myhealthapp"
         static let redirectURI = "myhealthbc://*"
         static let params = ["kc_idp_hint": "bcsc"]
+        #endif
     }
 }
 
