@@ -14,7 +14,7 @@ extension Constants {
             static let primaryColor = UIColor(hexString: "#003366")
             static let secondaryColor = UIColor(hexString: "#eea73b")
             static let primaryConstractColor = UIColor.white
-            static let animationDuration = 0.3
+            static let animationDuration = 0.5
             static let cornerRadiusRegular: CGFloat = 5
         }
         

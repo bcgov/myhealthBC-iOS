@@ -254,6 +254,9 @@ class AuthenticationViewController: UIViewController {
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
         let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: createTabBarAndGoToHomeScreen, isModal: false, initialView: initialView, sourceVC: sourceVC) {_ in}
         AppDelegate.sharedInstance?.window?.rootViewController = vc
+        // Note: This is required for the edge case where a user logs in from onboarding flow
+        BaseURLWorker.setup(BaseURLWorker.Config(delegateOwner: vc))
+        BaseURLWorker.shared.setBaseURL {}
     }
     
 }

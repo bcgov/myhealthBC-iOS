@@ -568,6 +568,8 @@
 		79CF23692825787900510489 /* HealthRecordsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF23672825787900510489 /* HealthRecordsHomeView.swift */; };
 		79CF236B2825789600510489 /* HealthRecordsHomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79CF236A2825789600510489 /* HealthRecordsHomeView.xib */; };
 		79CF236C2825789600510489 /* HealthRecordsHomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79CF236A2825789600510489 /* HealthRecordsHomeView.xib */; };
+		79CF236E283D8DDF00510489 /* BaseURLWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF236D283D8DDF00510489 /* BaseURLWorker.swift */; };
+		79CF236F283D8DDF00510489 /* BaseURLWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF236D283D8DDF00510489 /* BaseURLWorker.swift */; };
 		79D93B1D27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D93B1C27D048540083B603 /* AuthenticatedCommentResponseObject.swift */; };
 		79D93B1E27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D93B1C27D048540083B603 /* AuthenticatedCommentResponseObject.swift */; };
 		79FDE423273335D000DAD988 /* FederalPassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FDE422273335D000DAD988 /* FederalPassView.swift */; };
@@ -883,6 +885,7 @@
 		79CF23632825769B00510489 /* HealthRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsViewController.swift; sourceTree = "<group>"; };
 		79CF23672825787900510489 /* HealthRecordsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsHomeView.swift; sourceTree = "<group>"; };
 		79CF236A2825789600510489 /* HealthRecordsHomeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HealthRecordsHomeView.xib; sourceTree = "<group>"; };
+		79CF236D283D8DDF00510489 /* BaseURLWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseURLWorker.swift; sourceTree = "<group>"; };
 		79D93B1C27D048540083B603 /* AuthenticatedCommentResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedCommentResponseObject.swift; sourceTree = "<group>"; };
 		79FDE422273335D000DAD988 /* FederalPassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FederalPassView.swift; sourceTree = "<group>"; };
 		79FDE425273335DC00DAD988 /* FederalPassView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FederalPassView.xib; sourceTree = "<group>"; };
@@ -1889,6 +1892,7 @@
 				795AA73127108F5900E59FF1 /* NetworkAccessor.swift */,
 				795AA7472713FFF800E59FF1 /* QueueItEngine.swift */,
 				795AA7402713FB1400E59FF1 /* QueueItLocal.swift */,
+				79CF236D283D8DDF00510489 /* BaseURLWorker.swift */,
 			);
 			path = NetworkLayer;
 			sourceTree = "<group>";
@@ -2848,6 +2852,7 @@
 				791D092C27BF5EC000AD7C89 /* AuthenticatedLaboratoryOrdersResponseObject.swift in Sources */,
 				7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
 				29245D432755877A00F48642 /* Encodable+EXT.swift in Sources */,
+				79CF236E283D8DDF00510489 /* BaseURLWorker.swift in Sources */,
 				795AA75C27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
 				297885292796213800FF912D /* SettingsSectionHeaderView.swift in Sources */,
 				79218AA127518A5E0063004E /* CovidTestResultModel.swift in Sources */,
@@ -3076,6 +3081,7 @@
 				797BB96A2767E85D00CD1645 /* SettingsTextTableViewCell.swift in Sources */,
 				794BD64D2702EEC00084ADA8 /* NoCardsTableViewCell.swift in Sources */,
 				79218AF0275672120063004E /* StorageService+HealthRecords.swift in Sources */,
+				79CF236F283D8DDF00510489 /* BaseURLWorker.swift in Sources */,
 				29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */,
 				29A5B6DF27B55B6C006A9BA7 /* Medication+CoreDataClass.swift in Sources */,
 				79218AE52755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */,

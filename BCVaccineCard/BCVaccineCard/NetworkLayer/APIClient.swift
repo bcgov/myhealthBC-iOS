@@ -155,6 +155,41 @@ extension APIClient {
     }
 }
 
+// MARK: For fetching the base URL
+extension APIClient {
+    func getBaseURLFromMobileConfig(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping(String?) -> Void) {
+        self.getBaseUrlAPILogic(token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.getBaseUrlAPILogic(token: queueItToken, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, _ in
+                    guard let `self` = self else {return}
+                    self.handleBaseURLResponse(result: result, completion: completion)
+                }
+            } else {
+                self.handleBaseURLResponse(result: result, completion: completion)
+            }
+        }
+    }
+    
+    private func getBaseUrlAPILogic(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<MobileConfigurationResponseObject>) {
+        let url = configureURL(token: token, endpoint: self.endpoints.getBaseURL)
+        
+        guard let unwrappedURL = url else { return }
+        self.remote.request(withURL: unwrappedURL, method: .get, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+    }
+    
+    private func handleBaseURLResponse(result: Result<MobileConfigurationResponseObject, ResultError>, completion: @escaping(String?) -> Void) {
+        switch result {
+        case .success(let configResponse):
+            completion(configResponse.baseUrl)
+        case .failure(let error):
+            print(error)
+            completion(nil)
+        }
+    }
+}
+
 // MARK: For validating age
 extension APIClient {
     
