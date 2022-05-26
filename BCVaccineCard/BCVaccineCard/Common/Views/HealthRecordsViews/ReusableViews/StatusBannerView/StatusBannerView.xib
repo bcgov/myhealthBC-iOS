@@ -51,14 +51,26 @@
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="O19-ah-Ftr">
                                     <rect key="frame" x="16" y="16" width="444" height="222"/>
                                     <subviews>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="748" scrollEnabled="NO" editable="NO" text="There was a problem with your test. Please visit BC CDC Test Results  for more information" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="YaN-ja-v8N">
+                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="bfB-B9-sFo">
                                             <rect key="frame" x="0.0" y="0.0" width="444" height="49.5"/>
-                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                            <color key="textColor" systemColor="labelColor"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                            <dataDetectorType key="dataDetectorTypes" link="YES"/>
-                                        </textView>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KRj-Q7-Oal">
+                                                    <rect key="frame" x="0.0" y="13" width="24" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="24" id="BrA-OO-RM9"/>
+                                                        <constraint firstAttribute="height" constant="24" id="QDS-D5-Vv6"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="748" scrollEnabled="NO" editable="NO" text="There was a problem with your test. Please visit BC CDC Test Results  for more information" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="YaN-ja-v8N">
+                                                    <rect key="frame" x="36" y="0.0" width="408" height="49.5"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="textColor" systemColor="labelColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                                </textView>
+                                            </subviews>
+                                        </stackView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ptk-5T-NVf">
                                             <rect key="frame" x="0.0" y="85.5" width="444" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -117,6 +129,8 @@
                 <outlet property="bannerImage" destination="Yzd-3X-6Wp" id="aJ6-la-LaG"/>
                 <outlet property="contentStackView" destination="90N-qv-ToR" id="yAT-GS-EE6"/>
                 <outlet property="mainContainer" destination="SM4-1L-XtY" id="5mw-bN-bgQ"/>
+                <outlet property="messageIcon" destination="KRj-Q7-Oal" id="gPE-Vh-82d"/>
+                <outlet property="messageStack" destination="bfB-B9-sFo" id="mI8-bn-q0l"/>
                 <outlet property="nameLabel" destination="Ptk-5T-NVf" id="RKP-YF-Jrz"/>
                 <outlet property="recordTypeLabel" destination="xrY-Rx-XPb" id="rzO-K8-d9f"/>
                 <outlet property="statusIcon" destination="hK1-rV-Q1X" id="eyt-9A-atL"/>
@@ -126,7 +140,7 @@
                 <outlet property="timeLabel" destination="kbU-4N-9Gb" id="pXg-Fa-WpI"/>
                 <outlet property="topContainer" destination="yJi-w6-0h3" id="da6-kt-bIP"/>
             </connections>
-            <point key="canvasLocation" x="76.811594202898561" y="-32.477678571428569"/>
+            <point key="canvasLocation" x="90" y="-126"/>
         </view>
     </objects>
     <resources>

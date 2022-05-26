@@ -69,4 +69,11 @@ extension NSMutableAttributedString {
         }
         return nil
     }
+    
+    public func boldText(textToFind:String, font: UIFont) {
+        let foundRange = self.mutableString.range(of: textToFind)
+        if foundRange.location != NSNotFound {
+            self.addAttribute(.font, value: font, range: foundRange)
+        }
+    }
 }

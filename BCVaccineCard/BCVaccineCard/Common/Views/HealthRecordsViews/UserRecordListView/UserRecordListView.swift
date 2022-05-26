@@ -78,7 +78,7 @@ class UserRecordListView: UIView {
             case "complete", "completed":
                 statusToInclude = "Completed"
             case "cancelled":
-                statusToInclude = "cancelled"
+                statusToInclude = "Cancelled"
             default:
                 statusToInclude = record.mainRecord?.status ?? ""
             }
