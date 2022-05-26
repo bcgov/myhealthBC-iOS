@@ -115,6 +115,7 @@ extension StorageService: StorageLaboratoryOrderManager {
         labOrder.orderingProvider = orderingProvider
         labOrder.reportAvailable = reportAvailable
         labOrder.pdf = pdf
+        labOrder.testStatus = testStatus
         var labTestsArray: [LaboratoryTest] = []
         let labTests = laboratoryTests ?? []
         for test in labTests {

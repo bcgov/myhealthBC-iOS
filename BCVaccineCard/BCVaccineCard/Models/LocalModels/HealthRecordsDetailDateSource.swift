@@ -21,6 +21,7 @@ struct HealthRecordsDetailDataSource {
         let status: String?
         let date: String?
         let fields: [[TextListModel]]
+        let listStatus: String
         
         var comments: [Comment] {
             switch type {
@@ -72,7 +73,13 @@ struct HealthRecordsDetailDataSource {
         case .medication(model: let model):
             return records.first
         case .laboratoryOrder(model: let model):
-            return records.first
+            if records.isEmpty {
+                print("No Records")
+                return nil
+            } else {
+                return records.first
+            }
+            
         }
     }
     
@@ -187,7 +194,7 @@ extension HealthRecordsDetailDataSource {
             fields.append(imsSet)
         }
         let modifiedDate = Date.Formatter.yearMonthDay.date(from: date ?? "")?.monthDayYearString ?? date
-        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: modifiedDate, fields: fields)
+        return Record(id: model.md5Hash() ?? UUID().uuidString, name: model.name, type: .covidImmunizationRecord(model: model, immunizations: immunizations), status: model.status.getTitle, date: modifiedDate, fields: fields, listStatus: model.status.getTitle)
     }
     
     // MARK: Covid Test Results
@@ -206,7 +213,7 @@ extension HealthRecordsDetailDataSource {
             let resultDescriptionfield = TextListModel(header: TextListModel.TextProperties(text: "Result description:", bolded: true), subtext: TextListModel.TextProperties(text: tuple.text, bolded: false, links: tuple.links))
             fields[0].append(resultDescriptionfield)
         }
-        return Record(id: testResult.id ?? UUID().uuidString, name: testResult.patientDisplayName ?? "", type: .covidTestResultRecord(model: testResult), status: status, date: date, fields: fields)
+        return Record(id: testResult.id ?? UUID().uuidString, name: testResult.patientDisplayName ?? "", type: .covidTestResultRecord(model: testResult), status: status, date: date, fields: fields, listStatus: status)
     }
     
     // Note this funcion is used to append "this page" text with link from API to end of result description. In the event where there is a positive test, there is no link, but there are links embedded in the text. For this, we use NSDataDetector to create links
@@ -287,7 +294,7 @@ extension HealthRecordsDetailDataSource {
         
         // Notes:
         /// Unsure about status field - this is what it appears to be in designs though
-        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.medication?.genericName, date: dateString, fields: fields)
+        return Record(id: prescription.id ?? UUID().uuidString, name: prescription.patient?.name ?? "", type: .medication(model: prescription), status: prescription.medication?.genericName, date: dateString, fields: fields, listStatus: prescription.medication?.genericName ?? "")
     }
     
     // MARK: Lab Orders
@@ -301,22 +308,25 @@ extension HealthRecordsDetailDataSource {
             TextListModel(header: TextListModel.TextProperties(text: "Ordering provider:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.orderingProvider ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Reporting Lab:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.reportingSource ?? "", bolded: false))
         ])
-        for (index, test) in labTests.enumerated() {
-            let resultTuple = formatResultField(test: test)
-            let statusTuple = formatStatusField(test: test)
-            var section: [TextListModel] = [
-                TextListModel(header: TextListModel.TextProperties(text: "Test name:", bolded: true), subtext: TextListModel.TextProperties(text: test.batteryType ?? "", bolded: false)),
-                TextListModel(header: TextListModel.TextProperties(text: "Result:", bolded: true), subtext: TextListModel.TextProperties(text: resultTuple.text, bolded: resultTuple.bolded, textColor: resultTuple.color)),
-                TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: statusTuple.text ,bolded: statusTuple.bolded))
-            ]
-            if index == 0 {
-                let links = [LinkedStrings(text: "Learn more", link: "https://www.healthgateway.gov.bc.ca/faq")]
-                section.insert(TextListModel(header: TextListModel.TextProperties(text: "Test summary", bolded: true), subtext: TextListModel.TextProperties(text: "Find resources to learn about your lab test and what the results mean. Learn more", bolded: false, links: links)), at: 0)
+        
+        if !labTests.isEmpty {
+            for (index, test) in labTests.enumerated() {
+                let resultTuple = formatResultField(test: test)
+                let statusTuple = formatStatusField(test: test)
+                var section: [TextListModel] = [
+                    TextListModel(header: TextListModel.TextProperties(text: "Test name:", bolded: true), subtext: TextListModel.TextProperties(text: test.batteryType ?? "", bolded: false)),
+                    TextListModel(header: TextListModel.TextProperties(text: "Result:", bolded: true), subtext: TextListModel.TextProperties(text: resultTuple.text, bolded: resultTuple.bolded, textColor: resultTuple.color)),
+                    TextListModel(header: TextListModel.TextProperties(text: "Test status:", bolded: true), subtext: TextListModel.TextProperties(text: statusTuple.text ,bolded: statusTuple.bolded))
+                ]
+                if index == 0 {
+                    let links = [LinkedStrings(text: "Learn more", link: "https://www.healthgateway.gov.bc.ca/faq")]
+                    section.insert(TextListModel(header: TextListModel.TextProperties(text: "Test summary", bolded: true), subtext: TextListModel.TextProperties(text: "Find resources to learn about your lab test and what the results mean. Learn more", bolded: false, links: links)), at: 0)
+                }
+                fields.append(section)
             }
-            fields.append(section)
         }
         
-        return Record(id: labOrder?.id ?? UUID().uuidString, name: labOrder?.patient?.name ?? "", type: .laboratoryOrder(model: labTests), status: "\(labOrder?.laboratoryTests?.count ?? 0) tests", date: dateString, fields: fields)
+        return Record(id: labOrder?.id ?? UUID().uuidString, name: labOrder?.patient?.name ?? "", type: .laboratoryOrder(model: labTests), status: labOrder?.testStatus, date: dateString, fields: fields, listStatus: "\(labOrder?.laboratoryTests?.count ?? 0) tests")
     }
     
     private static func formatStatusField(test: LaboratoryTest) -> (text: String, color: TextListModel.TextProperties.CodableColors, bolded: Bool) {
