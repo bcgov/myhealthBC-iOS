@@ -73,10 +73,10 @@ class UserRecordListView: UIView {
         case .medication: statusToInclude = record.mainRecord?.listStatus
         case .laboratoryOrder:
             switch record.mainRecord?.status?.lowercased() {
-            case "held", "pending", "Partial":
+            case "held", "pending", "partial":
                 statusToInclude = "Pending"
             case "complete", "completed":
-                statusToInclude = "Complete"
+                statusToInclude = "Completed"
             case "cancelled":
                 statusToInclude = "cancelled"
             default:
