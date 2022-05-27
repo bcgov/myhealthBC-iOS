@@ -97,7 +97,7 @@ extension String {
     static var validDate: String { return "ValidDate".localized }
     static var dobRange: String { return "DOBRange".localized }
     static var dovRange: String { return "DOVRange".localized }
-    static var dotRange: String { return "DOVRange".localized }
+    static var dotRange: String { return "DOTRange".localized }
     static var formTestNavTitle: String { return "AddCovid19TestResult".localized }
     static var formRecordNavTitle: String { return "AddABCVaccineRecord".localized }
     /// Labels and other text
@@ -216,7 +216,7 @@ extension String {
     static var viewProfile: String { return "ViewProfile".localized }
     static var bcscLogin: String { return "BcscLogin".localized }
     static var accessRecords: String { return "AccessRecords".localized }
-    static var notNow: String { return "notNow".localized }
+    static var notNow: String { return "NotNow".localized }
     static var securityAndData: String { return "SecurityAndData".localized }
     static var privacyStatement: String { return "PrivacyStatement".localized }
     

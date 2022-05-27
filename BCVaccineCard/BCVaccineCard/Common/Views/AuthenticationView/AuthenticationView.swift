@@ -55,7 +55,7 @@ class AuthenticationView: UIView, Theme {
     func fillText() {
         titleLabel.text = "Log in with your BC Services Card to access all health records"
         subtitleLabel.text = "The BC Services Card app is a secure way to prove who you are. Follow the instructions to get set up and log in."
-        secondarySubtitle.text = "You can complete this step any time. If you choose to skip it for now, you'll only be able to access your COVID-19 health records."
+        secondarySubtitle.text = "You can complete this step any time. If you choose to skip it for now, you'll only be able to access proof of vaccination and health resources."
         
         let fontAttribute = [NSAttributedString.Key.font: UIFont.bcSansBoldWithSize(size: 13)]
         let attributedString = NSMutableAttributedString(string:"Don’t have BC Service Card app, please download here.", attributes: fontAttribute)
