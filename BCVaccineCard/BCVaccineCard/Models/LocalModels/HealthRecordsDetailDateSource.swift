@@ -326,7 +326,7 @@ extension HealthRecordsDetailDataSource {
             }
         }
         
-        return Record(id: labOrder?.id ?? UUID().uuidString, name: labOrder?.patient?.name ?? "", type: .laboratoryOrder(model: labTests), status: labOrder?.testStatus, date: dateString, fields: fields, listStatus: "\(labOrder?.laboratoryTests?.count ?? 0) tests")
+        return Record(id: labOrder?.id ?? UUID().uuidString, name: labOrder?.patient?.name ?? "", type: .laboratoryOrder(model: labTests), status: labOrder?.orderStatus, date: dateString, fields: fields, listStatus: "\(labOrder?.laboratoryTests?.count ?? 0) tests")
     }
     
     private static func formatStatusField(test: LaboratoryTest) -> (text: String, color: TextListModel.TextProperties.CodableColors, bolded: Bool) {

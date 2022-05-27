@@ -35,6 +35,8 @@ class StatusBannerView: UIView, UITextViewDelegate {
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var messageIcon: UIImageView!
+    @IBOutlet weak var messageStack: UIStackView!
     
     var largeFontSize: CGFloat {
         if Device.IS_IPHONE_5 {
@@ -68,6 +70,8 @@ class StatusBannerView: UIView, UITextViewDelegate {
         case Message
         case CovidTest
         case VaccineRecord
+        case LabOrderPending
+        case LabOrderWithoutTests
         case NoBanner
     }
     
@@ -116,9 +120,10 @@ class StatusBannerView: UIView, UITextViewDelegate {
         
         // Set Status Icon if needed
         if let icon = statusIconImage {
-            statusIcon.image = icon
+            setImage(type: type, icon: icon)
         } else {
             statusIcon.isHidden = true
+            messageIcon.isHidden = true
         }
         
         // Set backgerund and text colours
@@ -141,41 +146,65 @@ class StatusBannerView: UIView, UITextViewDelegate {
         style(for: type)
     }
     
+    func setImage(type: BannerType, icon: UIImage) {
+        switch type {
+        case .VaccineRecord:
+            statusIcon.isHidden = false
+            statusIcon.image = icon
+        case .LabOrderPending, .LabOrderWithoutTests:
+            messageIcon.isHidden = false
+            messageIcon.image = icon
+        default:
+            statusIcon.isHidden = true
+            messageIcon.isHidden = true
+        }
+    }
+    
     func style(for type: BannerType) {
         self.layoutIfNeeded()
         switch type {
         case .CovidTest:
-            textView.isHidden = true
-            
+            messageStack.isHidden = true
             nameLabel.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
             statusLabel.font = UIFont.bcSansBoldWithSize(size: largeFontSize)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: smallFontSize)
         case .VaccineRecord:
-            textView.isHidden = true
-            
+            messageStack.isHidden = true
             nameLabel.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
             statusLabel.font = UIFont.bcSansRegularWithSize(size: largeFontSize)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: smallFontSize)
         case .Message:
+            messageStack.isHidden = false
+            setupTextView()
+            textView.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
             topContainer.isHidden = true
             statusStack.isHidden = true
             timeLabel.isHidden = true
             nameLabel.isHidden = true
-            
+        case .LabOrderPending, .LabOrderWithoutTests:
+            messageStack.isHidden = false
+            setupTextView()
+            nameLabel.isHidden = true
+            topContainer.isHidden = true
             textView.isUserInteractionEnabled = true
             textView.delegate = self
-            textView.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
-            textView.translatesAutoresizingMaskIntoConstraints = true
-            textView.sizeToFit()
-            textView.isScrollEnabled = false
-            textView.isEditable = false
-            textView.backgroundColor = .clear
+            timeLabel.isHidden = true
+            statusStack.isHidden = true
         case .NoBanner:
             print("Not using this cell here")
         }
         self.layoutIfNeeded()
     }
     
+    func setupTextView() {
+        textView.isUserInteractionEnabled = true
+        textView.delegate = self
+        textView.translatesAutoresizingMaskIntoConstraints = true
+        textView.sizeToFit()
+        textView.isScrollEnabled = false
+        textView.isEditable = false
+        textView.backgroundColor = .clear
+    }
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         UIApplication.shared.open(URL)
