@@ -78,8 +78,8 @@
 "DOVRequired" = "Date of vaccination is required";
 "DOTRequired" = "Date of test is required";
 "ValidDate" = "Please choose a valid date from the date picker";
-"DOBRange" = "Birthday cannot be in the future";
-"DOVRange" = "Vaccination date must be in valid range";
+"DOBRange" = "Date of birth cannot be in the future.";
+"DOVRange" = "Date of vaccination cannot be in the future.";
 "DOTRange" = "Test date must be in valid range";
 "AddCovid19TestResult" = "Add COVID-19 test result";
 "AddABCVaccineRecord" = "Add a BC vaccine record";
