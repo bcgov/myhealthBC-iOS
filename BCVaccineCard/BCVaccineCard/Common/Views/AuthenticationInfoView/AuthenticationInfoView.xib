@@ -60,8 +60,8 @@
                     </constraints>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oam-iP-5r9">
-                    <rect key="frame" x="77" y="183" width="322" height="101.5"/>
-                    <string key="text">You will be temporarily redirected to Health Gateway to login with your BC Services Card.\nYou will then be automatically returned to the Health Gateway mobile app.</string>
+                    <rect key="frame" x="77" y="183" width="322" height="81.5"/>
+                    <string key="text">You will be temporarily redirected to login with your BC Services Card.\nYou will then be automatically returned to Health Gateway.</string>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>

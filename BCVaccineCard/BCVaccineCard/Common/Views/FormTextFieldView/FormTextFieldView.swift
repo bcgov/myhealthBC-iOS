@@ -282,10 +282,10 @@ extension FormTextFieldView {
         datePicker.addTarget(self, action: #selector(datePickerChanged(datePicker:)), for: .valueChanged)
         
         // date picker min and max values
-        datePicker.maximumDate = Date()
-        if formField == .dateOfVaccination {
-            datePicker.minimumDate = Constants.DateConstants.firstVaxDate
-        }
+//        datePicker.maximumDate = Date()
+//        if formField == .dateOfVaccination {
+//            datePicker.minimumDate = Constants.DateConstants.firstVaxDate
+//        }
     }
     
     @objc func doneButtonTapped() {
