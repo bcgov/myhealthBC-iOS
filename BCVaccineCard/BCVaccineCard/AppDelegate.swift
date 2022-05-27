@@ -45,11 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func configure() {
         //use .Prod or .Test for different endpoints for keys
-#if PROD
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
-#elseif DEV
-        BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
-#endif
+
         AnalyticsService.shared.setup()
         authManager = AuthManager()
         clearKeychainIfNecessary(authManager: authManager)
