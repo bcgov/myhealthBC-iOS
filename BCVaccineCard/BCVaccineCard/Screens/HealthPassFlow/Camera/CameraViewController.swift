@@ -50,7 +50,7 @@ class CameraViewController: UIViewController {
     private func style() {
         navBarView.backgroundColor = Constants.UI.Theme.primaryColor
         divider.backgroundColor = Constants.UI.Theme.secondaryColor
-        closeButton.tintColor = Constants.UI.Theme.primaryConstractColor
+        closeButton.tintColor = Constants.UI.Theme.primaryConstrastColor
         closeButton.setTitle("", for: .normal)
     }
 

@@ -246,14 +246,13 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
             validate(code: stringValue)
         } else {
             // Show message
-            self.parentViewController?.showBanner(message: .invalidQRCodeMessage, style: .Bottom)
+            AppDelegate.sharedInstance?.showToast(message: .invalidQRCodeMessage, style: .Warn)
             // Show code location
             showQRCodeLocation(for: metadataObject, isInValid: false, tag: Constants.UI.CameraView.QRCodeHighlighter.tag)
         }
     }
     
     fileprivate func validate(code: String) {
-        self.parentViewController?.hideBanner()
         self.startLoadingIndicator()
         // Validate
         BCVaccineValidator.shared.validate(code: code.lowercased()) { [weak self] result in
@@ -268,7 +267,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
                     case .ValidCode:
                         break
                     case .InvalidCode, .ForgedCode, .MissingData:
-                        self.parentViewController?.showBanner(message: .invalidQRCodeMessage, style: .Bottom)
+                        AppDelegate.sharedInstance?.showToast(message: .invalidQRCodeMessage, style: .Warn)
                     }
                     self.startCamera()
                     self.invalidScannedCodes.append(code)
@@ -293,7 +292,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         for (index, item) in metadataObjects.enumerated() {
             showQRCodeLocation(for: item, isInValid: true, tag: 1000 + index)
         }
-        self.parentViewController?.showBanner(message: .multipleQRCodesMessage, style: .Bottom)
+        AppDelegate.sharedInstance?.showToast(message: .multipleQRCodesMessage, style: .Warn)
     }
     
     fileprivate func showQRCodeLocation(for object: AVMetadataObject, isInValid: Bool, tag: Int) {

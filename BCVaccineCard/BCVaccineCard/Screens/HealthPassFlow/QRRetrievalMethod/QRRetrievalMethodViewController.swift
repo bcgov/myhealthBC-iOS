@@ -286,8 +286,7 @@ extension QRRetrievalMethodViewController {
                 self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
-                        self.tabBarController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-                        
+                        AppDelegate.sharedInstance?.showToast(message: .vaxAddedBannerAlert)
                         let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
                         let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
                         let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
@@ -318,8 +317,7 @@ extension QRRetrievalMethodViewController {
                     guard let self = self else {return}
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
-                        self.tabBarController?.showBanner(message: .vaxAddedBannerAlert, style: .Top)
-
+                        AppDelegate.sharedInstance?.showToast(message: .vaxAddedBannerAlert)
                         let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
                         let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
                         let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)

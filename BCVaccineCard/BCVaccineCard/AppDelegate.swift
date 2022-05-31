@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let sharedInstance = UIApplication.shared.delegate as? AppDelegate
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
-    var window: UIWindow?
+    var window: UIWindow? 
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
     var protectiveWordEnteredThisSession = false
