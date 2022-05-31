@@ -96,7 +96,7 @@
 "PHNFooter" = "Find PHN on the back of BC driver's license or CareCard.";
 "PrivacyStatement" = "Privacy Statement";
 "GatewayPrivacyStatementDescription" = "Your information is being collected to provide you with your COVID-19 vaccination status under s. 26(c) of the Freedom of Information and Protection of Privacy Act. Contact the Ministry Privacy Officer at MOH.Privacy.Officer@gov.bc.ca if you have any questions about this collection.";
-"PrivacyPolicyStatement" = "Your information is being collected to provide you with your %@ under s. 26(c) of the Freedom of Information and Protection of Privacy Act. Contact the Ministry Privacy Officer at MOH.Privacy.Officer@gov.bc.ca or 778-698-5849";
+"PrivacyPolicyStatement" = "Your information is being collected to provide you with your %@ under s. 26(c) of the Freedom of Information and Protection of Privacy Act. If you have any questions, contact the Ministry Privacy Officer at MOH.Privacy.Officer@gov.bc.ca or 778-698-5849";
 "PrivacyPolicyStatementEmail" = "MOH.Privacy.Officer@gov.bc.ca";
 "PrivacyPolicyStatementEmailLink" = "mailto:MOH.Privacy.Officer@gov.bc.ca";
 "PrivacyPolicyStatementPhoneNumber" = "778-698-5849";
@@ -130,7 +130,7 @@
 "QRDescriptionText" = "Choose one of the options below to add a proof of vaccination document";
 "CameraScanOption" = "Scan QR using your camera";
 "ImageUploadOption" = "Upload from your device";
-"HealthGatewayOption" = "Enter information";
+"HealthGatewayOption" = "Enter vaccination information";
 "SettingsOpeningText" = "Health Gateway app is the official mobile application from the Government of British Columbia which allow you to store and organize the proof of vaccination of you and your family members.";
 "Help" = "Help";
 "Resource" = "Resource";
@@ -201,7 +201,7 @@
 "LeavingHealthGateway" = "Leaving Health Gateway";
 "YouWillRedirected" = "You will be temporarily redirected ";
 "HealthGateway" = "Health Gateway.";
-"toLoginWithYourBCServices" = "to login with your BC Services Card.";
+"toLoginWithYourBCServices" = "to log in with your BC Services Card.";
 "YouWillAutomaticallyReturned" = "You will then be automatically returned to the ";
 "MyHealthBC" = "Health Gateway";
 "MobileApp" = " mobile app.";
