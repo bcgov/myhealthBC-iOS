@@ -130,7 +130,7 @@
 "QRDescriptionText" = "Choose one of the options below to add a proof of vaccination document";
 "CameraScanOption" = "Scan QR using your camera";
 "ImageUploadOption" = "Upload from your device";
-"HealthGatewayOption" = "Enter vaccination information";
+"HealthGatewayOption" = "Enter information";
 "SettingsOpeningText" = "Health Gateway app is the official mobile application from the Government of British Columbia which allow you to store and organize the proof of vaccination of you and your family members.";
 "Help" = "Help";
 "Resource" = "Resource";

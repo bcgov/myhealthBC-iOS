@@ -336,6 +336,8 @@ extension HealthRecordsDetailDataSource {
             return ("Cancelled", .black, false)
         } else if test.testStatus == "Completed" {
             return ("Completed", .black, false)
+        } else if test.testStatus == "Corrected" {
+            return ("Corrected", .black, false)
         }
         return ("Unknown", .black, false)
     }
@@ -345,7 +347,7 @@ extension HealthRecordsDetailDataSource {
             return ("Pending", .black, false)
         } else if test.testStatus == "Cancelled" {
             return ("Cancelled", .black, false)
-        } else if test.testStatus == "Completed" {
+        } else if test.testStatus == "Completed" || test.testStatus == "Corrected" {
             let text = test.outOfRange ? "Out of Range" : "In Range"
             let color: TextListModel.TextProperties.CodableColors = test.outOfRange ? .red : .green
             return (text, color, true)
