@@ -147,14 +147,21 @@ class FilterRecordsView: UIView, Theme {
     }
     
     @IBAction func continueAction(_ sender: Any) {
-        if let from = currentFilter.fromDate, let to = currentFilter.toDate, to < from {
-            // Invalid date
+        // TODO: Add in further validation here on date's themselves
+        if !datePickerValidationPassed() {
             errorLabel.isHidden = false
         } else {
-            // Is valid
             delegate?.selected(filter: currentFilter)
             dismiss()
         }
+//        if let from = currentFilter.fromDate, let to = currentFilter.toDate, to < from {
+//            // Invalid date
+//            errorLabel.isHidden = false
+//        } else {
+//            // Is valid
+//            delegate?.selected(filter: currentFilter)
+//            dismiss()
+//        }
     }
     
     @IBAction func clearAction(_ sender: Any) {
@@ -185,7 +192,8 @@ class FilterRecordsView: UIView, Theme {
     // MARK: Style
     func style() {
         self.alpha = 0
-        datePicker.maximumDate = Date()
+        // TODO: Remove this check
+//        datePicker.maximumDate = Date()
         navContainer.backgroundColor = .clear
         filterChipsContainer.backgroundColor = .clear
         
@@ -344,11 +352,30 @@ class FilterRecordsView: UIView, Theme {
             fromDateIcon.image = UIImage(named: "close-icon")
         }
         // Validation
-        if let from = currentFilter.fromDate, let to = currentFilter.toDate {
-            errorLabel.isHidden = to < from ? false : true
-        } else {
-            errorLabel.isHidden = true
+        // TODO: Add more validation here - to check for future dates
+        errorLabel.isHidden = datePickerValidationPassed()
+//        if let from = currentFilter.fromDate, let to = currentFilter.toDate {
+//            errorLabel.isHidden = to < from ? false : true
+//        } else {
+//            errorLabel.isHidden = true
+//        }
+    }
+    
+    private func datePickerValidationPassed() -> Bool {
+        if let from = currentFilter.fromDate, from > Date() {
+            errorLabel.text = "'From' date cannot be in the future"
+            return false
         }
+        if let to = currentFilter.toDate, to > Date() {
+            errorLabel.text = "'To' date cannot be in the future"
+            return false
+        }
+        if let from = currentFilter.fromDate, let to = currentFilter.toDate {
+            errorLabel.text = to < from ? "'From' date should be on or before 'To' date" : ""
+            return !(to < from)
+        }
+        errorLabel.text = ""
+        return true
     }
     
 }

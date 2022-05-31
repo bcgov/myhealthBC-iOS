@@ -283,7 +283,7 @@ extension HealthRecordsDetailDataSource {
             TextListModel(header: TextListModel.TextProperties(text: "Strength:", bolded: true), subtext: TextListModel.TextProperties(text: (prescription.medication?.strength ?? "") + " " + (prescription.medication?.strengthUnit ?? ""), bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Form:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.medication?.form ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Manufacturer:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.medication?.manufacturer ?? "", bolded: false)),
-            TextListModel(header: TextListModel.TextProperties(text: "Din:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.medication?.din ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "DIN:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.medication?.din ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Filled at:", bolded: true), subtext: TextListModel.TextProperties(text: prescription.pharmacy?.name ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Filled date:", bolded: true), subtext: TextListModel.TextProperties(text: dateString ?? "", bolded: false)),
             TextListModel(header: TextListModel.TextProperties(text: "Address:", bolded: true), subtext: TextListModel.TextProperties(text: address, bolded: false)),
@@ -336,6 +336,8 @@ extension HealthRecordsDetailDataSource {
             return ("Cancelled", .black, false)
         } else if test.testStatus == "Completed" {
             return ("Completed", .black, false)
+        } else if test.testStatus == "Corrected" {
+            return ("Corrected", .black, false)
         }
         return ("Unknown", .black, false)
     }
@@ -345,7 +347,7 @@ extension HealthRecordsDetailDataSource {
             return ("Pending", .black, false)
         } else if test.testStatus == "Cancelled" {
             return ("Cancelled", .black, false)
-        } else if test.testStatus == "Completed" {
+        } else if test.testStatus == "Completed" || test.testStatus == "Corrected" {
             let text = test.outOfRange ? "Out of Range" : "In Range"
             let color: TextListModel.TextProperties.CodableColors = test.outOfRange ? .red : .green
             return (text, color, true)
