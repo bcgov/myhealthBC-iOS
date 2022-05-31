@@ -345,6 +345,7 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
         guard let model = self.storageModel else { return }
         if model.phn == self.whiteSpaceFormattedPHN?.removeWhiteSpaceFormatting, self.whiteSpaceFormattedPHN != nil {
             let rememberProperties = GatewayStorageProperties(phn: self.whiteSpaceFormattedPHN!, dob: model.dob)
+           // Store new remember details if necessary
             guard rememberProperties.phn != self.rememberDetails.storageArray?.first?.phn else { return }
             // NOTE: This is where we can append data to existing storage for abilitly to store multiple pieces of data
             let rememberKeychainStorage = RememberedGatewayDetails(storageArray: [rememberProperties])
@@ -352,12 +353,13 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
         }
     }
     
+    // TODO: Adjust this logic here
     private func removePHNDetailsIfNeccessary() {
         let rememberKeychainStorage = RememberedGatewayDetails(storageArray: nil)
         // Note: If remember details is unchecked, and the phn used is not the same as the remembered phn, then we do nothing
-        if self.storageModel?.phn.removeWhiteSpaceFormatting == self.rememberDetails.storageArray?.first?.phn.removeWhiteSpaceFormatting {
-            Defaults.rememberGatewayDetails = rememberKeychainStorage
-        }
+//        if self.storageModel?.phn.removeWhiteSpaceFormatting == self.rememberDetails.storageArray?.first?.phn.removeWhiteSpaceFormatting {
+//            Defaults.rememberGatewayDetails = rememberKeychainStorage
+//        }
     }
     
 }
@@ -386,7 +388,6 @@ extension GatewayFormViewController: DropDownViewDelegate {
             guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
             indexPaths.append(firstIP)
             dataSource[firstIP.row].configuration.text = details.phn
-            // TODO: Here, should probably put if fetchType.canGoToNextField
             if fetchType.canGoToNextFormField {
                 guard let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: true) else {
                     return
@@ -484,9 +485,11 @@ extension GatewayFormViewController {
         self.dataSource[indexPath.row].configuration.text = text
         if formField == .personalHealthNumber {
             // Basically - if the user updates the text and it is not equal to the stored PHN, then remove the data
-            if text != self.rememberDetails.storageArray?.first?.phn {
-                self.rememberedPHNSelected = false
-            } else if text == self.rememberDetails.storageArray?.first?.phn {
+            // TODO: CONNOR: Need to update logic here - keep it simple. Only time remembered details are removed is if they are overwritten by a new phn
+//            if text != self.rememberDetails.storageArray?.first?.phn {
+//                self.rememberedPHNSelected = false
+//            } else
+            if text == self.rememberDetails.storageArray?.first?.phn {
                 self.rememberedPHNSelected = true
             }
         }

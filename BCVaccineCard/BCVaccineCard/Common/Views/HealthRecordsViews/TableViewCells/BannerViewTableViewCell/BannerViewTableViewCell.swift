@@ -147,7 +147,10 @@ class BannerViewTableViewCell: UITableViewCell {
         self.bannerView?.alpha = 0
         self.startLoadingIndicator()
         record.toBannerViewTableViewCellViewModel { [weak self] model in
-            guard let `self` = self, let model = model else {return}
+            guard let `self` = self, let model = model else {
+                self?.removeBannerWhenNotRequired()
+                return
+            }
             self.bannerView?.update(
                 type: model.type,
                 name: model.name,
@@ -170,6 +173,14 @@ class BannerViewTableViewCell: UITableViewCell {
         
     }
     
+    private func removeBannerWhenNotRequired() {
+        self.bannerView = nil
+        self.endLoadingIndicator()
+        let heightConstraint = self.contentView.heightAnchor.constraint(equalToConstant: 0)
+        self.addConstraint(heightConstraint)
+        self.layoutIfNeeded()
+    }
+    
     private func createView() -> StatusBannerView {
         if let existing = self.bannerView {existing.removeFromSuperview()}
         let banner: StatusBannerView = UIView.fromNib()
@@ -179,7 +190,7 @@ class BannerViewTableViewCell: UITableViewCell {
 }
 
 extension HealthRecordsDetailDataSource.Record.RecordType {
-    
+    // FIXME: Is this being used still?
     func toBannerType() -> StatusBannerView.BannerType {
         switch self {
         case .covidImmunizationRecord:
