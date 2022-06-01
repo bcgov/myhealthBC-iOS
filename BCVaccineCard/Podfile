@@ -1,7 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '11.0'
 
-target 'BCVaccineCard' do
+target 'Health Gateway Dev' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
@@ -20,6 +20,7 @@ target 'BCVaccineCard' do
   pod 'KeychainAccess'
   pod 'AppAuth'
   pod 'JWTDecode', '~> 2.6'
+  pod 'ReachabilitySwift'
   
   target 'BCVaccineCardTests' do
     inherit! :search_paths
@@ -32,7 +33,7 @@ target 'BCVaccineCard' do
 
 end
 
-target 'BCVaccineCard-Prod' do
+target 'Health Gateway' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
@@ -50,6 +51,7 @@ target 'BCVaccineCard-Prod' do
   pod 'KeychainAccess'
   pod 'AppAuth'
   pod 'JWTDecode', '~> 2.6'
+  pod 'ReachabilitySwift'
   
 end
 
