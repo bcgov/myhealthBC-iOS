@@ -154,7 +154,7 @@ extension HealthRecordDetailViewController {
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
             case .medication, .laboratoryOrder:
-                print("Not able to delete these records currently, as they are auth-only records")
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)

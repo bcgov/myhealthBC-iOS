@@ -184,7 +184,7 @@ extension APIClient {
         case .success(let configResponse):
             completion(configResponse.baseUrl)
         case .failure(let error):
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Network)
             completion(nil)
         }
     }
@@ -230,7 +230,7 @@ extension APIClient {
                 completion(false, nil)
             }
         case .failure(let error):
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Network)
             completion(nil, error)
         }
     }
@@ -281,7 +281,7 @@ extension APIClient {
                 completion(nil, error)
             }
         case .failure(let error):
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Network)
             completion(nil, error)
         }
     }
@@ -330,7 +330,7 @@ extension APIClient {
                 completion(nil, error)
             }
         case .failure(let error):
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Network)
             completion(nil, error)
         }
     }
@@ -374,7 +374,7 @@ extension APIClient {
                 completion(nil, error)
             }
         case .failure(let error):
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Network)
             completion(nil, error)
         }
     }

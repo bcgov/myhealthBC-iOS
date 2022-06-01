@@ -106,7 +106,7 @@ extension StorageService: StorageCovidTestResultManager {
             let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: model)) : self.notify(event: StorageEvent(event: .Save, entity: .CovidLabTestResult, object: model))
             return model
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -146,7 +146,7 @@ extension StorageService: StorageCovidTestResultManager {
             self.notify(event: StorageEvent(event: .Save, entity: .TestResult, object: testResult))
             return testResult
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -190,7 +190,7 @@ extension StorageService: StorageCovidTestResultManager {
             let tests = patients.map({$0.testResultArray})
             return Array(tests.joined())
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }
@@ -201,7 +201,7 @@ extension StorageService: StorageCovidTestResultManager {
             let tests = try context.fetch(CovidLabTestResult.fetchRequest())
             return tests.filter({ ($0.id == id) }).first
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }

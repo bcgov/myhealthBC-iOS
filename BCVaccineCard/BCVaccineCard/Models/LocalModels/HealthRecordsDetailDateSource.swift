@@ -74,7 +74,7 @@ struct HealthRecordsDetailDataSource {
             return records.first
         case .laboratoryOrder(model: let model):
             if records.isEmpty {
-                print("No Records")
+                Logger.log(string: "No Records in lab order \(model.id)", type: .general)
                 return nil
             } else {
                 return records.first

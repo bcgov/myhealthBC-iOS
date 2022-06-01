@@ -192,15 +192,12 @@ extension StorageService: StorageMedicationManager {
         prescription.authenticated = true
         prescription.pharmacy = pharmacy
         prescription.medication = medication
-        // TODO: FOR DEBUGGING, REMOVE THIS
-        if prescriptionIdentifier == "00019243" || Int(prescriptionIdentifier ?? "0") == 00019243 {
-            print("Found it")
-        }
+        
         do {
             try context.save()
             return prescription
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -256,7 +253,7 @@ extension StorageService: StorageMedicationManager {
 //            let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Medication, object: medication)) : self.notify(event: StorageEvent(event: .Save, entity: .Medication, object: medication))
             return medication
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -307,7 +304,7 @@ extension StorageService: StorageMedicationManager {
             let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Pharmacy, object: pharmacy)) : self.notify(event: StorageEvent(event: .Save, entity: .Pharmacy, object: pharmacy))
             return pharmacy
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -318,7 +315,7 @@ extension StorageService: StorageMedicationManager {
         do {
             return try context.fetch(Perscription.fetchRequest())
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }
@@ -334,7 +331,7 @@ extension StorageService: StorageMedicationManager {
             let pharmacies = try context.fetch(Pharmacy.fetchRequest())
             return pharmacies.first(where: {$0.id == id})
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }

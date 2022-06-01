@@ -106,7 +106,7 @@ extension StorageService: StoragePatientManager {
             notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
             return patient
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -147,7 +147,7 @@ extension StorageService: StoragePatientManager {
             notify(event: StorageEvent(event: .Update, entity: .Patient, object: patient))
             return patient
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -186,7 +186,7 @@ extension StorageService: StoragePatientManager {
         do {
             return try context.fetch(Patient.fetchRequest())
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }

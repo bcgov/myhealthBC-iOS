@@ -191,7 +191,7 @@ class StatusBannerView: UIView, UITextViewDelegate {
             timeLabel.isHidden = true
             statusStack.isHidden = true
         case .NoBanner:
-            print("Not using this cell here")
+            Logger.log(string: "Not using this cell here", type: .general)
         }
         self.layoutIfNeeded()
     }

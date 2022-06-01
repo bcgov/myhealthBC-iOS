@@ -102,7 +102,7 @@ extension StorageService: StorageVaccineCardManager {
                     self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
                     completion(card)
                 } catch let error as NSError {
-                    print("Could not save. \(error), \(error.userInfo)")
+                    Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
                     completion(nil)
                 }
             }
@@ -112,7 +112,7 @@ extension StorageService: StorageVaccineCardManager {
                 self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: card))
                 completion(card)
             } catch let error as NSError {
-                print("Could not save. \(error), \(error.userInfo)")
+                Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
                 completion(nil)
             }
         }
@@ -132,7 +132,7 @@ extension StorageService: StorageVaccineCardManager {
                 
             }
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             DispatchQueue.main.async {
                 return completion(nil)
             }
@@ -163,7 +163,7 @@ extension StorageService: StorageVaccineCardManager {
                         return completion(card)
                     }
                 } catch let error as NSError {
-                    print("Could not save. \(error), \(error.userInfo)")
+                    Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
                     completion(nil)
                 }
             }
@@ -175,7 +175,7 @@ extension StorageService: StorageVaccineCardManager {
                     return completion(card)
                 }
             } catch let error as NSError {
-                print("Could not save. \(error), \(error.userInfo)")
+                Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
                 completion(nil)
             }
         }
@@ -198,7 +198,7 @@ extension StorageService: StorageVaccineCardManager {
             }
             try context.save()
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return
         }
     }
@@ -233,7 +233,7 @@ extension StorageService: StorageVaccineCardManager {
             let _ = manuallyAdded == true ? notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .VaccineCard, object: item)) : notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: item))
             try context.save()
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return
         }
     }
@@ -245,7 +245,7 @@ extension StorageService: StorageVaccineCardManager {
             let cards = try context.fetch(VaccineCard.fetchRequest())
             return cards.sorted(by: {$0.sortOrder < $1.sortOrder})
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }

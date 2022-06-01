@@ -20,14 +20,8 @@ extension AppDelegate {
             return
         }
         
-        if window?.rootViewController?.presentedViewController is UIAlertController {
-            print("An alert is being hidden")
-            // Should handle this OR remove the alert saying data is being fetched afrer login
-        }
-        
         // if somehow you're here and its already shown... remove it
         self.window?.viewWithTag(dataLoadTag)?.removeFromSuperview()
-        print("showing loader")
         // create container and add it to the window
         let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
         // Add below toast if toast is shown
@@ -36,6 +30,15 @@ extension AppDelegate {
         } else {
             window?.addSubview(loaderView)
         }
+        
+        if window?.rootViewController?.presentedViewController is UIAlertController {
+            Logger.log(string: "An alert is being hidden", type: .general)
+            // Should handle this OR remove the alert saying data is being fetched afrer login
+//            if let alert = window?.rootViewController?.presentedViewController as? UIAlertController  {
+//                window?.insertSubview(loaderView, at: <#T##Int#>)
+//            }
+        }
+       
         
         loaderView.tag = dataLoadTag
         

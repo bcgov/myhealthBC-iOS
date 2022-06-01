@@ -124,7 +124,7 @@ final class NetworkAccessor {
             completion(.success(successResponse), retryStatus)
         case .failure(let error):
             guard let responseData = response.data, let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
-                print(error.errorDescription.unwrapped)
+                Logger.log(string: error.errorDescription.unwrapped, type: .Network)
                 let unexpectedErrorResponse = ResultError(resultMessage: .genericErrorMessage)
                 return completion(.failure(unexpectedErrorResponse), retryStatus)
             }
