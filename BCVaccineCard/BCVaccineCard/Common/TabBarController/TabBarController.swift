@@ -244,15 +244,15 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
                 self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: loginSourceVC)))
             }
         }
-//        let message = (recordsSuccessful > 0 || errors?.count == 0) ? "Records retrieved" : "No records fetched"
-        AppDelegate.sharedInstance?.showToast(message: "Records retrieved")
+        let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
+        AppDelegate.sharedInstance?.showToast(message: message)
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
         var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
         loginProcessStatus.hasFinishedFetchingRecords = true
         Defaults.loginProcessStatus = loginProcessStatus
     }
     func showAlertForLoginAttemptDueToValidation(error: ResultError?) {
-        print(error)
+        Logger.log(string: error?.localizedDescription ?? "", type: .Network)
         self.alert(title: "Login Error", message: "We're sorry, there was an error logging in. Please try again later.")
     }
     
