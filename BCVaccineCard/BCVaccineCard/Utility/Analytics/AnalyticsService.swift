@@ -126,23 +126,23 @@ class AnalyticsService: NSObject, RequestCallback {
 
 extension AnalyticsService: LoggerDelegate {
     func error(_ tag: String, message: String) {
-        print("[Error] \(tag): \(message)")
+        Logger.log(string: "[Error] \(tag): \(message)", type: .Analytics)
     }
     
     func debug(_ tag: String, message: String) {
-        print("[Debug] \(tag): \(message)")
+        Logger.log(string: "[Debug] \(tag): \(message)", type: .Analytics)
     }
     
     func verbose(_ tag: String, message: String) {
-        print("[Verbose] \(tag): \(message)")
+        Logger.log(string: "[Verbose] \(tag): \(message)", type: .Analytics)
     }
     
     func onSuccess(withCount successCount: Int) {
-        print(successCount)
+        Logger.log(string: "\(successCount)", type: .Analytics)
     }
     
     func onFailure(withCount failureCount: Int, successCount: Int) {
-        print(failureCount)
+        Logger.log(string: "\(failureCount)", type: .Analytics)
     }
 }
 

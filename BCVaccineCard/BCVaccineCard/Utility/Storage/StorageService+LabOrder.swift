@@ -136,7 +136,7 @@ extension StorageService: StorageLaboratoryOrderManager {
             try context.save()
             return labOrder
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -157,7 +157,7 @@ extension StorageService: StorageLaboratoryOrderManager {
             try context.save()
             return labTest
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -182,7 +182,7 @@ extension StorageService: StorageLaboratoryOrderManager {
             let results = try context.fetch(LaboratoryOrder.fetchRequest())
             return results
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }

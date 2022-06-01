@@ -44,9 +44,8 @@ class LoginThrottleAPIWorker: NSObject {
             }
             completion(mobileConfig.online)
         case .failure(let error):
-            // TODO: Show error that network isn't available? Have to test it out
-            print("CONNOR: ERROR: ", error)
-            // Note - if this happens, it's not a throttling issue, it's a network issue
+            Logger.log(string: error.localizedDescription, type: .Network)
+            AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
             completion(false)
         }
     }

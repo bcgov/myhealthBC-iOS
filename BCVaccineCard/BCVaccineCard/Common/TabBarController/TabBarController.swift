@@ -223,20 +223,12 @@ extension TabBarController: UITabBarControllerDelegate {
 extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     func showPatientDetailsError(error: String, showBanner: Bool) {
         guard showBanner else { return }
-        if self.selectedIndex < (self.viewControllers?.count ?? 0) {
-            let navController = self.viewControllers?[self.selectedIndex] as? CustomNavigationController
-            navController?.showBanner(message: error, style: .Bottom)
-        }
-//        self.showBanner(message: error, style: .Bottom)
+        AppDelegate.sharedInstance?.showToast(message: error, style: .Warn)
     }
     
     func showFetchStartedBanner(showBanner: Bool) {
         guard showBanner else { return }
-        if self.selectedIndex < (self.viewControllers?.count ?? 0) {
-            let navController = self.viewControllers?[self.selectedIndex] as? CustomNavigationController
-            navController?.showBanner(message: "Retrieving records", style: .Bottom)
-        }
-//        self.showBanner(message: "Retrieving records", style: .Bottom)
+        AppDelegate.sharedInstance?.showToast(message: "Retrieving records", style: .Default)
     }
     
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource) {
@@ -252,15 +244,15 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
                 self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: loginSourceVC)))
             }
         }
-//        let message = (recordsSuccessful > 0 || errors?.count == 0) ? "Records retrieved" : "No records fetched"
-        self.showBanner(message: "Records retrieved", style: .Bottom)
+        let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
+        AppDelegate.sharedInstance?.showToast(message: message)
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
         var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
         loginProcessStatus.hasFinishedFetchingRecords = true
         Defaults.loginProcessStatus = loginProcessStatus
     }
     func showAlertForLoginAttemptDueToValidation(error: ResultError?) {
-        print(error)
+        Logger.log(string: error?.localizedDescription ?? "", type: .Network)
         self.alert(title: "Login Error", message: "We're sorry, there was an error logging in. Please try again later.")
     }
     

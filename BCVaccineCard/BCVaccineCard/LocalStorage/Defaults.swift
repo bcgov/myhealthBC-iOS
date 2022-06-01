@@ -74,7 +74,7 @@ struct Defaults {
             let decoded = try PropertyListDecoder().decode([VisitedOnboardingScreen].self, from: data)
             return decoded
         } catch {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .general)
             return []
         }
         
@@ -88,7 +88,7 @@ struct Defaults {
             let encoded = try PropertyListEncoder().encode(allVisits)
             UserDefaults.standard.set(encoded, forKey: self.Key.initialOnboardingScreensSeen.rawValue)
         } catch {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .general)
             return
         }
     }

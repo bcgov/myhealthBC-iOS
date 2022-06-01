@@ -182,7 +182,7 @@ class AuthManager {
                     self.authStatusChanged(authenticated: authState.isAuthorized)
                     return completion(.Success)
                 } else {
-                    print("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
+                    Logger.log(string: "Authorization error: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
                     return completion(.Fail)
                 }
             }
@@ -291,7 +291,7 @@ class AuthManager {
                 if let tokenResponse = tokenResponse {
                     self.store(tokenResponse: tokenResponse)
                 } else {
-                    print("Refetch error: \(error?.localizedDescription ?? "Unknown error")")
+                    Logger.log(string: "Refetch error: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
                 }
             }
         }
@@ -303,7 +303,7 @@ class AuthManager {
         }
         OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { result, error in
             guard let configuration = result else {
-                print("Error retrieving discovery document: \(error?.localizedDescription ?? "Unknown error")")
+                Logger.log(string: "Error retrieving discovery document: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
                 return completion(nil)
             }
             return completion(configuration)
@@ -380,7 +380,7 @@ class AuthManager {
             try keychain.set(string, key: key.rawValue)
         }
         catch let error {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Auth)
         }
     }
     
@@ -389,7 +389,7 @@ class AuthManager {
             try keychain.remove(key.rawValue)
         }
         catch let error {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Auth)
         }
     }
     
@@ -399,7 +399,7 @@ class AuthManager {
             try keychain.set(String(dateDouble), key: key.rawValue)
         }
         catch let error {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Auth)
         }
     }
     

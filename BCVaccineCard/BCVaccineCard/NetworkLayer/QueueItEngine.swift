@@ -115,15 +115,11 @@ extension QueueItEngine: QueuePassedDelegate, QueueViewWillOpenDelegate, QueueDi
     }
     
     func notifyUserExited() {
-        #if DEBUG
-            print("notifyUserExited")
-        #endif
+        Logger.log(string: "notifyUserExited", type: .Network)
     }
     
     func notifyViewClosed() {
-        #if DEBUG
-            print("notifyViewClosed")
-        #endif
+        Logger.log(string: "notifyViewClosed", type: .Network)
     }
 }
 

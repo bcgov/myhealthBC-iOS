@@ -74,7 +74,7 @@ struct HealthRecordsDetailDataSource {
             return records.first
         case .laboratoryOrder(model: let model):
             if records.isEmpty {
-                print("No Records")
+                Logger.log(string: "No Records in lab order \(model.id)", type: .general)
                 return nil
             } else {
                 return records.first
@@ -167,8 +167,7 @@ extension HealthRecordsDetailDataSource {
             result.append(genRecord(prescription: model))
             return result
         case .laboratoryOrder(model: let model):
-            let labTests = model.labTests
-            result.append(genRecord(labTests: labTests))
+            result.append(genRecord(labOrder: model))
             return result
         }
     }
@@ -298,15 +297,15 @@ extension HealthRecordsDetailDataSource {
     }
     
     // MARK: Lab Orders
-    private static func genRecord(labTests: [LaboratoryTest]) -> Record {
-        let labOrder = labTests.first?.laboratoryOrder
-        let dateString = labOrder?.timelineDateTime?.monthDayYearString
+    private static func genRecord(labOrder:  LaboratoryOrder) -> Record {
+        let dateString = labOrder.timelineDateTime?.monthDayYearString
+        let labTests = labOrder.labTests
         var fields: [[TextListModel]] = []
         
         fields.append([
-            TextListModel(header: TextListModel.TextProperties(text: "Collection date:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.timelineDateTime?.labOrderDateTime ?? "", bolded: false)),
-            TextListModel(header: TextListModel.TextProperties(text: "Ordering provider:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.orderingProvider ?? "", bolded: false)),
-            TextListModel(header: TextListModel.TextProperties(text: "Reporting Lab:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder?.reportingSource ?? "", bolded: false))
+            TextListModel(header: TextListModel.TextProperties(text: "Collection date:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder.timelineDateTime?.labOrderDateTime ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Ordering provider:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder.orderingProvider ?? "", bolded: false)),
+            TextListModel(header: TextListModel.TextProperties(text: "Reporting Lab:", bolded: true), subtext: TextListModel.TextProperties(text: labOrder.reportingSource ?? "", bolded: false))
         ])
         
         if !labTests.isEmpty {
@@ -326,7 +325,7 @@ extension HealthRecordsDetailDataSource {
             }
         }
         
-        return Record(id: labOrder?.id ?? UUID().uuidString, name: labOrder?.patient?.name ?? "", type: .laboratoryOrder(model: labTests), status: labOrder?.orderStatus, date: dateString, fields: fields, listStatus: "\(labOrder?.laboratoryTests?.count ?? 0) tests")
+        return Record(id: labOrder.id ?? UUID().uuidString, name: labOrder.patient?.name ?? "", type: .laboratoryOrder(model: labTests), status: labOrder.orderStatus, date: dateString, fields: fields, listStatus: "\(labOrder.laboratoryTests?.count ?? 0) tests")
     }
     
     private static func formatStatusField(test: LaboratoryTest) -> (text: String, color: TextListModel.TextProperties.CodableColors, bolded: Bool) {

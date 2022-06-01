@@ -81,171 +81,6 @@ extension UIViewController {
         }
     }
     
-    // MARK: Banner
-    func showBanner(message: String, style: BannerStyle) {
-        // Create label and container
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else {return}
-            if let parent = self.parent as? CustomNavigationController {
-                parent.showBanner(message: message, style: style)
-                return
-            }
-            if let parent = self.parent as? TabBarController {
-                parent.showBanner(message: message, style: style)
-                return
-            }
-            let container = UIView(frame: .zero)
-            let label = UILabel(frame: .zero)
-            
-            if style == .Bottom {
-                label.isAccessibilityElement = true
-                label.accessibilityTraits = .staticText
-                label.accessibilityValue = "\(message)"
-            }
-            
-            
-            // Remove existing Banner / Container
-            if let existing = self.view.viewWithTag(Constants.UI.Banner.tag) {
-                existing.removeFromSuperview()
-            }
-            
-            // Add subviews
-            container.tag = Constants.UI.Banner.tag
-            let labelTAG = Int.random(in: 4000..<9000)
-            label.tag = labelTAG
-            self.view.addSubview(container)
-            container.addSubview(label)
-            label.text = message
-            
-            switch style {
-            case .Top:
-                self.presentBannerFromTop(container: container, label: label, labelTAG: labelTAG)
-            case .Bottom:
-                self.presentBannerAtBottom(container: container, label: label, labelTAG: labelTAG)
-            }
-        }
-    }
-    
-    func hideBanner() {
-        guard let banner = view.viewWithTag(Constants.UI.Banner.tag) else {
-            return
-        }
-        UIView.animate(withDuration: Constants.UI.Theme.animationDuration) {
-            banner.alpha = 0
-            banner.layoutIfNeeded()
-        } completion: { done in
-            banner.removeFromSuperview()
-        }
-        
-    }
-    fileprivate func presentBannerFromTop(container: UIView, label: UILabel, labelTAG: Int) {
-        let textPadding: CGFloat = Constants.UI.Banner.labelPadding
-        let containerPadding: CGFloat = Constants.UI.Banner.containerPadding
-        let messageHeight = label.text?.heightForView(font: Constants.UI.Banner.labelFont, width: container.bounds.width) ?? 32
-        let bannerHeight = messageHeight + (textPadding * 2) + 45
-        let closedTopAnchor = 0 - bannerHeight
-        let openTopAnchor: CGFloat = 0
-        
-        // Position container
-        container.translatesAutoresizingMaskIntoConstraints = false
-        let topContraint = container.topAnchor.constraint(equalTo: self.view.topAnchor, constant: closedTopAnchor)
-        container.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-        container.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-        container.heightAnchor.constraint(equalToConstant: bannerHeight).isActive = true
-        
-        NSLayoutConstraint.activate([topContraint])
-        
-        // Position Label
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.topAnchor.constraint(greaterThanOrEqualTo: container.topAnchor, constant: textPadding).isActive = true
-        label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 0 - textPadding * 2).isActive = true
-        label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: textPadding).isActive = true
-        label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 0 - textPadding).isActive = true
-        
-        // Style
-        label.textAlignment = .center
-        label.font = Constants.UI.Banner.labelFont
-        label.textColor = Constants.UI.Banner.labelColor
-        container.backgroundColor = Constants.UI.Banner.backgroundColor
-        container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
-        
-        self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut) {[weak self] in
-            guard let `self` = self else {return}
-            topContraint.constant = openTopAnchor
-            self.view.layoutIfNeeded()
-        }
-        
-        //        UIAccessibility.setFocusTo(label)
-        
-        // Remove banner after x seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.UI.Banner.displayDuration) {[weak self] in
-            guard let `self` = self else {return}
-            /*
-             We Randomly generated labelTAG.
-             here we check if after the display duration, the same label is still displayed.
-             this helps us avoid removing a banner that was just displayed
-             */
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {[weak self] in
-                guard let `self` = self,
-                      let container = self.view.viewWithTag(Constants.UI.Banner.tag),
-                      container.viewWithTag(labelTAG) != nil
-                else {return}
-                container.alpha = 0
-            } completion: { done in
-                container.removeFromSuperview()
-            }
-        }
-    }
-    
-    fileprivate func presentBannerAtBottom(container: UIView, label: UILabel, labelTAG: Int) {
-        let textPadding: CGFloat = Constants.UI.Banner.labelPadding
-        let containerPadding: CGFloat = Constants.UI.Banner.containerPadding
-        let messageHeight = label.text?.heightForView(font: Constants.UI.Banner.labelFont, width: container.bounds.width) ?? 32
-        let bannerHeight = messageHeight + (textPadding * 2)
-        
-        // Position container
-        container.translatesAutoresizingMaskIntoConstraints = false
-        container.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant:  0 - containerPadding).isActive = true
-        container.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-        container.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-        container.heightAnchor.constraint(equalToConstant: bannerHeight).isActive = true
-        
-        // Position Label
-        label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.topAnchor.constraint(greaterThanOrEqualTo: container.topAnchor, constant: textPadding).isActive = true
-        label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 0 - textPadding).isActive = true
-        label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: textPadding).isActive = true
-        label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 0 - textPadding).isActive = true
-        
-        // Style
-        label.textAlignment = .center
-        label.font = Constants.UI.Banner.labelFont
-        label.textColor = Constants.UI.Banner.labelColor
-        container.backgroundColor = Constants.UI.Banner.backgroundColor
-        container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
-        
-        self.view.layoutIfNeeded()
-        
-        UIAccessibility.setFocusTo(label)
-        
-        // Remove banner after x seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.UI.Banner.displayDuration) {[weak self] in
-            guard let `self` = self,
-                  let container = self.view.viewWithTag(Constants.UI.Banner.tag),
-                  container.viewWithTag(labelTAG) != nil
-            else {return}
-            /*
-             We Randomly generated labelTAG.
-             here we check if after the display duration, the same label is still displayed.
-             this helps us avoid removing a banner that was just displayed
-             */
-            container.removeFromSuperview()
-        }
-    }
-    
     // MARK: Local Auth
     func showLocalAuth(onSuccess: @escaping()->Void) {
         DispatchQueue.main.async { [weak self] in
@@ -358,7 +193,7 @@ extension UIViewController {
         StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, patient: patientAPI, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
-                self.showBanner(message: .updatedCard, style: .Top)
+                AppDelegate.sharedInstance?.showToast(message: .updatedCard)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
@@ -371,7 +206,7 @@ extension UIViewController {
         StorageService.shared.updateVaccineCard(card: card, federalPass: fedCode, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
-                self.showBanner(message: .updatedCard, style: .Top)
+                AppDelegate.sharedInstance?.showToast(message: .updatedCard)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }

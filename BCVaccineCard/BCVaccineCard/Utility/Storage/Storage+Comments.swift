@@ -63,7 +63,7 @@ extension StorageService: StorageCommentManager {
         do {
             try context.save()
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return
         }
     }
