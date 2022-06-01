@@ -188,7 +188,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             NotificationCenter.default.post(name: .patientAPIFetched, object: nil, userInfo: userInfo as [AnyHashable : Any])
             initializeRequests(authCredentials: authCredentials, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
         case .failure(let error):
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Network)
             self.delegate?.showPatientDetailsError(error: error.resultMessage ?? .genericErrorMessage, showBanner: self.showBanner)
         }
     }
@@ -421,6 +421,10 @@ extension AuthenticatedHealthRecordsAPIWorker {
 // MARK: Handling responses
 extension AuthenticatedHealthRecordsAPIWorker {
     
+    private func showFetchFailed() {
+        AppDelegate.sharedInstance?.showToast(message: "Not all records were fetched successfully", style: .Warn)
+    }
+    
     private func handleTestResultsResponse(result: Result<AuthenticatedTestResultsResponseModel, ResultError>) {
         switch result {
         case .success(let testResult):
@@ -439,6 +443,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 
             }
         case .failure(let error):
+            showFetchFailed()
             self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
@@ -459,6 +464,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.handleVaccineCardInCoreData(vaccineCard: vaccineCard)
             }
         case .failure(let error):
+            showFetchFailed()
             self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
@@ -497,6 +503,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             }
         case .failure(let error):
+            showFetchFailed()
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
@@ -518,6 +525,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.handleLaboratoryOrdersInCoreData(labOrders: labOrders)
             }
         case .failure(let error):
+            showFetchFailed()
             self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
@@ -532,6 +540,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 self.handleCommentsInCoredata(comments: comments)
             }
         case .failure(let error):
+            showFetchFailed()
             self.fetchStatusList.fetchStatus[.Comments] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
         }
     }
@@ -541,13 +550,14 @@ extension AuthenticatedHealthRecordsAPIWorker {
         case .success(let pdfObject):
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = pdfObject.resultError?.resultMessage, ((pdfObject.resourcePayload?.data ?? "").isEmpty) {
-                print("Error fetching PDF data")
+                Logger.log(string: "Error fetching PDF data", type: .Network)
                 completion(nil)
             } else {
                 completion(pdfObject.resourcePayload?.data)
             }
         case .failure(let error):
-            print("Error fetching PDF data: ", error.resultMessage)
+            showFetchFailed()
+            Logger.log(string: "Error fetching PDF data: " + (error.resultMessage ?? ""), type: .Network)
             completion(nil)
         }
     }

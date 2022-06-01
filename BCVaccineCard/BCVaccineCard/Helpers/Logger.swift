@@ -13,6 +13,7 @@ class Logger {
         case general
         case storage
         case localAuth
+        case Network
     }
     
     /// Add LogType to array to hide logs of that type
