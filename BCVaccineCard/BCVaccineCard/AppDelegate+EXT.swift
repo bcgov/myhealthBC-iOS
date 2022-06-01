@@ -92,6 +92,12 @@ extension AppDelegate {
         
         // Remove existing Toast / Container
         if let existing = window.viewWithTag(Constants.UI.Toast.tag) {
+            if let labelView = existing.subviews.first(where: {$0 is UILabel}), let label = labelView as? UILabel {
+                // If the same message is already being shown, return
+                if label.text == message {
+                    return
+                }
+            }
             existing.removeFromSuperview()
         }
         
