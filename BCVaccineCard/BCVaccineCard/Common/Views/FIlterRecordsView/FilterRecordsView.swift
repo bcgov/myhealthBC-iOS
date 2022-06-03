@@ -330,6 +330,7 @@ class FilterRecordsView: UIView, Theme {
     }
     
     private func resetDatePickerHideTimer() {
+        datePickerHideTimer?.invalidate()
         datePickerHideTimer = Timer.scheduledTimer(timeInterval: datePickerDismissTime, target: self, selector: #selector(hideDatePicker), userInfo: nil, repeats: true)
        
     }

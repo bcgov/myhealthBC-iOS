@@ -133,7 +133,7 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <datePicker contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="UJL-26-KOx">
+                        <datePicker contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="UJL-26-KOx">
                             <rect key="frame" x="0.0" y="131" width="544" height="120"/>
                             <constraints>
                                 <constraint firstAttribute="height" priority="750" constant="120" id="Nzt-LT-s5O"/>
