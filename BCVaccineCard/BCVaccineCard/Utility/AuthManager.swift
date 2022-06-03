@@ -116,6 +116,7 @@ class AuthManager {
     var authTokenExpiery: Date? {
         if let timeIntervalString = keychain[Key.authTokenExpiery.rawValue],
            let  timeInterval = Double(timeIntervalString) {
+            print("CONNOR: ", Date(timeIntervalSince1970: timeInterval))
             return Date(timeIntervalSince1970: timeInterval)
         }
         return nil
@@ -130,15 +131,17 @@ class AuthManager {
             return nil
         }
     }
-    
+    // Note: Below is a hacky solution where we have to use access token expiry
     var isAuthenticated: Bool {
         guard authToken != nil else {
             return false
         }
-        guard let refreshExpiery = refreshTokenExpiery else {
-            return false
-        }
-        return refreshExpiery > Date()
+//        guard let refreshExpiery = refreshTokenExpiery else {
+//            return false
+//        }
+        guard let accessExpiry = authTokenExpiery else { return false }
+//        return refreshExpiery > Date()
+        return accessExpiry > Date()
     }
     
     var protectiveWord: String? {
@@ -416,11 +419,12 @@ class AuthManager {
 
 
 extension AuthManager {
+    // NOTE: This is a hacky solution where we are relying on the access token expiry and not using the refresh token. This is due to a keycloak issue that the HG team can't work around - so we just have a longer lasting access token. Once expired, user is considered logged out
     func initTokenExpieryTimer() {
-        if let refreshTokenExpiery = refreshTokenExpiery {
-            let timer = Timer(fireAt: refreshTokenExpiery, interval: 0, target: self, selector: #selector(refreshTokenExpired), userInfo: nil, repeats: false)
-            RunLoop.main.add(timer, forMode: .common)
-        }
+//        if let refreshTokenExpiery = refreshTokenExpiery {
+//            let timer = Timer(fireAt: refreshTokenExpiery, interval: 0, target: self, selector: #selector(refreshTokenExpired), userInfo: nil, repeats: false)
+//            RunLoop.main.add(timer, forMode: .common)
+//        }
         
         if let authTokenExpiery = authTokenExpiery {
             let timer = Timer(fireAt: authTokenExpiery, interval: 0, target: self, selector: #selector(authTokenExpired), userInfo: nil, repeats: false)
@@ -428,14 +432,16 @@ extension AuthManager {
         }
     }
     
-    @objc func refreshTokenExpired() {
+//    @objc func refreshTokenExpired() {
+//        NotificationCenter.default.post(name: .refreshTokenExpired, object: nil)
+//    }
+    @objc func authTokenExpired() {
+//        NotificationCenter.default.post(name: .authTokenExpired, object: nil)
+//        fetchAccessTokenWithRefeshToken()
         NotificationCenter.default.post(name: .refreshTokenExpired, object: nil)
     }
-    @objc func authTokenExpired() {
-        NotificationCenter.default.post(name: .authTokenExpired, object: nil)
-        fetchAccessTokenWithRefeshToken()
-    }
     
+    // Note - due to hack, we won't be using this function, currently
     private func fetchAccessTokenWithRefeshToken() {
         refetchAuthToken()
     }
