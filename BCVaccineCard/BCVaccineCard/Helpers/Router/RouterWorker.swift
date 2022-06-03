@@ -429,7 +429,7 @@ extension RouterWorker {
     
     private func clearAllDataRecordsStack(values: ActionScenarioValues) -> [BaseViewController] {
         if values.currentTab == .records {
-            let vc1 = FetchHealthRecordsViewController.constructFetchHealthRecordsViewController(hasHealthRecords: false)
+            let vc1 = HealthRecordsViewController.constructHealthRecordsViewController()
             guard values.currentTab == .records else { return [vc1] }
             let vc2 = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
             let vc3 = SecurityAndDataViewController.constructSecurityAndDataViewController()
