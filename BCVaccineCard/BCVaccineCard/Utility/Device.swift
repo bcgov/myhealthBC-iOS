@@ -27,5 +27,7 @@ struct Device {
     static let IS_IPHONE_XS_MAX         = IS_IPHONE && SCREEN_MAX_LENGTH == 896 // XR, XS Max, 11, 11 Pro Max
     static let IS_IPAD_PRO_11           = IS_IPAD && SCREEN_MAX_LENGTH == 1024 // iPad Pro 11"
     static let IS_IPAD_PRO_13           = IS_IPAD && SCREEN_MAX_LENGTH == 1366 // iPad Pro 12.9"
+    
+    static let HasNotch = IS_IPHONE && SCREEN_MAX_LENGTH >= 812
 }
 

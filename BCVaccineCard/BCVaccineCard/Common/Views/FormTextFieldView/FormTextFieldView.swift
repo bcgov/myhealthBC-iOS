@@ -271,8 +271,16 @@ extension FormTextFieldView {
     private func createDatePicker(datePicker: UIDatePicker, formField: FormTextFieldType) {
         createKeyboardToolbar()
         
-        // assign date picker to text field
-        formTextField.inputView = datePicker
+        if Device.HasNotch {
+            let containerView = UIView(frame: CGRect(x: 0, y: 0, width: window?.bounds.width ?? 300, height: 250))
+            containerView.addSubview(datePicker)
+            datePicker.addEqualSizeContraints(to: containerView, paddingBottom: 32)
+            
+            formTextField.inputView = containerView
+        } else {
+            formTextField.inputView = datePicker
+        }
+        
         
         // date picker mode
         datePicker.datePickerMode = .date
