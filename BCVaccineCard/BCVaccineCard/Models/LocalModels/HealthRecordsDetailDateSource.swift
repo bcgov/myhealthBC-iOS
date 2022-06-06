@@ -139,7 +139,7 @@ struct HealthRecordsDetailDataSource {
             deleteAlertMessage = "Shouldn't see this" // Showing these values for testing purposes
         case .laboratoryOrder(model: let model):
             id = model.id
-            title = "Lab Test"
+            title = model.commonName ?? ""
             detailNavTitle = "Lab test"
             name = model.patient?.name ?? ""
             image = UIImage(named: "blue-bg-laboratory-record-icon")
