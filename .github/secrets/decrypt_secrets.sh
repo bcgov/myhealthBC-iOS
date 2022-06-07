@@ -18,4 +18,4 @@ security import ./.github/secrets/cert.p12 -t agg -k ~/Library/Keychains/health.
 security import ./.github/secrets/cert.p12 -k ~/Library/Keychains/health.keychain -P "" -T /usr/bin/codesign
 
 security list-keychains -s ~/Library/Keychains/health.keychain
-security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/health.keychain
+security set-key-partition-list -S apple-tool:,apple: -s -k "$IOS_KEYS" ~/Library/Keychains/health.keychain
