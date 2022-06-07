@@ -11,7 +11,7 @@ cp ./.github/secrets/ClientVaccineCard-ADHOC.mobileprovision ~/Library/MobileDev
 
 security create-keychain -p "temp_Password" health.keychain
 security list-keychains -s ~/Library/Keychains/health.keychain
-security unlock-keychain -p "temp_Password" health.keychain
+security unlock-keychain -p "temp_Password" health.keychain-db
 security default-keychain -s ~/Library/Keychains/health.keychain
 security set-keychain-settings -l -u -t 4000
 security list-keychains -s ~/Library/Keychains/health.keychain
