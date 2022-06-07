@@ -9,8 +9,8 @@ mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
 cp ./.github/secrets/ClientVaccineCard-ADHOC.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/ClientVaccineCard-ADHOC.mobileprovision
 
-security create-keychain -p "$FW_KEYS" health.keychain
-security unlock-keychain -p "$FW_KEYS" health.keychain
+security create-keychain -p "temp_Password" health.keychain
+security unlock-keychain -p "temp_Password" health.keychain
 security default-keychain -s ~/Library/Keychains/health.keychain
 security set-keychain-settings -l -u -t 4000
 
