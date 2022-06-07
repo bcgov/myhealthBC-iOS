@@ -41,8 +41,8 @@ jobs:
       - name: Upload .ipa
         uses: actions/upload-artifact@v1
         with:
-          name: BCVaccineCard.ipa
-          path: build/Apps/BCVaccineCard.ipa
+          name: Health_Gateway_Dev.ipa
+          path: build/Apps/Health\ Gateway\ Dev.ipa
           
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.2.0
