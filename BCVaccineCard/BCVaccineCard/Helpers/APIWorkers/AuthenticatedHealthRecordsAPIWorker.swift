@@ -213,6 +213,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 StorageService.shared.deleteAuthenticatedPatient()
             }
         }
+        // TODO: Isolate for vaccine card, see if I can get that working first
         guard let types = specificFetchTypes else {
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
