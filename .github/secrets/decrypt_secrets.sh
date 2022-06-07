@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+
 set -eo pipefail
 
 gpg --quiet --batch --yes --decrypt --passphrase="$IOS_KEYS" --output ./.github/secrets/prov.mobileprovision ./.github/secrets/prov.mobileprovision.gpg
@@ -8,8 +9,8 @@ mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
 cp ./.github/secrets/prov.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/prov.mobileprovision
 
-security create-keychain -p "$FW_KEYS" health.keychain
-security unlock-keychain -p "$FW_KEYS" health.keychain
+security create-keychain -p "$IOS_KEYS" health.keychain
+security unlock-keychain -p "$IOS_KEYS" health.keychain
 security default-keychain -s ~/Library/Keychains/health.keychain
 security set-keychain-settings -l -u -t 4000
 
