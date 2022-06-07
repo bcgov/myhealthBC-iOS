@@ -31,3 +31,13 @@ jobs:
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
         run: ./.github/scripts/build_prod.sh
+        
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK_PR }}
+          SLACK_CHANNEL: bc-vaccine-card-ios
+          SLACK_USERNAME: "My Health iOS Bot"
+          SLACK_TITLE: "NEW PR"
+          SLACK_LINK_NAMES: true
+          SLACK_MESSAGE: "There is a new PR! - it did build"

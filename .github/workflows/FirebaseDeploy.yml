@@ -41,7 +41,7 @@ jobs:
       - name: Upload .ipa
         uses: actions/upload-artifact@v1
         with:
-          name: Health_Gateway_Dev.ipa
+          name: Health\ Gateway\ Dev.ipa
           path: build/Apps/Health\ Gateway\ Dev.ipa
           
       - name: Slack Notification
