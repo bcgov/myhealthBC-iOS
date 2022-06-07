@@ -8,7 +8,7 @@ jobs:
   deploy:
     name: Build
     runs-on: macOS-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
