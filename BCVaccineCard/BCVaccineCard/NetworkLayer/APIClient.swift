@@ -11,6 +11,7 @@ class APIClient {
     
     private var delegateOwner: UIViewController
     private var interceptor: Interceptor
+    private let checkQueueIt: Bool = true
     
     init(delegateOwner: UIViewController, interceptor: Interceptor = NetworkRequestInterceptor()) {
         self.delegateOwner = delegateOwner
@@ -35,7 +36,7 @@ class APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     func getTestResult(_ model: GatewayTestResultRequest, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayTestResultResponse>) {
@@ -48,7 +49,7 @@ class APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     func getAuthenticatedVaccineCard(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<GatewayVaccineCardResponse>) {
@@ -63,7 +64,7 @@ class APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
     }
     
     func getAuthenticatedTestResults(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedTestResultsResponseModel>) {
@@ -78,7 +79,7 @@ class APIClient {
         ]
        
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
     }
     
     func getAuthenticatedLaboratoryOrders(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedLaboratoryOrdersResponseObject>) {
@@ -93,7 +94,7 @@ class APIClient {
         ]
        
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
     }
     
     func getAuthenticatedPatientDetails(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedPatientDetailsResponseObject>) {
@@ -104,7 +105,7 @@ class APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     func getAuthenticatedMedicationStatement(_ authCredentials: AuthenticationRequestObject, protectiveWord: String? = nil, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedMedicationStatementResponseObject>) {
@@ -116,7 +117,7 @@ class APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     func getAuthenticatedComments(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedCommentResponseObject>) {
@@ -127,7 +128,7 @@ class APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     func getAuthenticatedLabTestPDF(_ authCredentials: AuthenticationRequestObject, token: String?, reportId: String, executingVC: UIViewController, includeQueueItUI: Bool, type: LabTestType, completion: @escaping NetworkRequestCompletion<AuthenticatedPDFResponseObject>) {
@@ -140,7 +141,7 @@ class APIClient {
         let parameters = AuthenticatedPDFRequestObject(hdid: authCredentials.hdid, isCovid19: type.getBoolStringValue)
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
     }
     
 }
@@ -151,7 +152,7 @@ extension APIClient {
         let url = configureURL(token: token, endpoint: self.endpoints.throttleHG)
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
 }
 
@@ -176,7 +177,7 @@ extension APIClient {
         let url = configureURL(token: token, endpoint: self.endpoints.getBaseURL)
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     private func handleBaseURLResponse(result: Result<MobileConfigurationResponseObject, ResultError>, completion: @escaping(String?) -> Void) {
@@ -216,7 +217,7 @@ extension APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     private func handleValidationResponse(result: Result<AuthenticatedValidAgeCheck, ResultError>, completion: @escaping(Bool?, ResultError?) -> Void) {
@@ -264,7 +265,7 @@ extension APIClient {
         ]
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     private func handleGetUserProfileResponse(result: Result<AuthenticatedUserProfileResponseObject, ResultError>, completion: @escaping(Bool?, ResultError?) -> Void) {
@@ -312,7 +313,7 @@ extension APIClient {
         let parameters = AuthenticatedUserProfileRequestObject(profile: AuthenticatedUserProfileRequestObject.ResourcePayload(hdid: authCredentials.hdid, acceptedTermsOfService: accepted))
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .post, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
+        self.remote.request(withURL: unwrappedURL, method: .post, headers: headerParameters, parameters: parameters, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
     }
     
     private func handlePostUserProfileResponse(result: Result<AuthenticatedUserProfileResponseObject, ResultError>, completion: @escaping(Bool?, ResultError?) -> Void) {
@@ -359,7 +360,7 @@ extension APIClient {
         let url = configureURL(token: token, endpoint: self.endpoints.getTermsOfService)
         
         guard let unwrappedURL = url else { return }
-        self.remote.request(withURL: unwrappedURL, method: .get, interceptor: interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        self.remote.request(withURL: unwrappedURL, method: .get, interceptor: interceptor, checkQueueIt: checkQueueIt, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
     }
     
     private func handleTermsOfServiceResponse(result: Result<TermsOfServiceResponse, ResultError>, completion: @escaping (String?, ResultError?) -> Void) {
