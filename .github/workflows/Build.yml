@@ -18,7 +18,7 @@ jobs:
       - name: Notify Slack - Success
         uses: act10ns/slack@v1
         with:
-          status: ${{ job.status }}
+          status: In Progress
           channel: 'bc-vaccine-card-ios'
           message: There is a new PR! Building...
 #     - name: Notify Slack - start
@@ -53,6 +53,6 @@ jobs:
       - name: Notify Slack - Success
         uses: act10ns/slack@v1
         with:
-          status: ${{ job.status }}
+          status: Completed
           channel: 'bc-vaccine-card-ios'
           message: PR did build successfully
