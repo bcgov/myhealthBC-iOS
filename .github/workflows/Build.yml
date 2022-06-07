@@ -20,6 +20,7 @@ jobs:
         with:
           status: ${{ job.status }}
           channel: 'bc-vaccine-card-ios'
+          message: There is a new PR! Building...
 #     - name: Notify Slack - start
 #       uses: rtCamp/action-slack-notify@v2.2.0
 #       env:
@@ -54,3 +55,4 @@ jobs:
         with:
           status: ${{ job.status }}
           channel: 'bc-vaccine-card-ios'
+          message: PR did build successfully
