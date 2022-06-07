@@ -9,19 +9,26 @@ jobs:
     name: Build
     runs-on: macOS-latest
     timeout-minutes: 25
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEB_HOOK_PR }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      - name: Notify Slack - start
-        uses: rtCamp/action-slack-notify@v2.2.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK_PR }}
-          SLACK_CHANNEL: bc-vaccine-card-ios
-          SLACK_USERNAME: "My Health iOS Bot"
-          SLACK_TITLE: "There is a new PR!"
-          SLACK_LINK_NAMES: true
-          SLACK_MESSAGE: "building..."
+      - name: Notify Slack - Success
+        uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          channel: 'bc-vaccine-card-ios'
+#     - name: Notify Slack - start
+#       uses: rtCamp/action-slack-notify@v2.2.0
+#       env:
+#         SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK_PR }}
+#         SLACK_CHANNEL: bc-vaccine-card-ios
+#         SLACK_USERNAME: "My Health iOS Bot"
+#         SLACK_TITLE: "There is a new PR!"
+#         SLACK_LINK_NAMES: true
+#         SLACK_MESSAGE: "building..."
         
       - name: Install gpg
         run: brew install gnupg
@@ -43,11 +50,7 @@ jobs:
         run: ./.github/scripts/build_prod.sh
         
       - name: Notify Slack - Success
-        uses: rtCamp/action-slack-notify@v2.2.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK_PR }}
-          SLACK_CHANNEL: bc-vaccine-card-ios
-          SLACK_USERNAME: "My Health iOS Bot"
-          SLACK_TITLE: "PR is ready"
-          SLACK_LINK_NAMES: true
-          SLACK_MESSAGE: "PR did build successfully."
+        uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          channel: 'bc-vaccine-card-ios'
