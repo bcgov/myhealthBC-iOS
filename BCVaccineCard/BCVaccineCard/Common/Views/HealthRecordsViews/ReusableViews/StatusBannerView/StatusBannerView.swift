@@ -134,7 +134,6 @@ class StatusBannerView: UIView, UITextViewDelegate {
             }
         }
         statusLabel.textColor = statusColour
-        textView.textColor = statusColour
         
         // set texts
         nameLabel.text = name
@@ -144,6 +143,7 @@ class StatusBannerView: UIView, UITextViewDelegate {
         
         self.layoutIfNeeded()
         style(for: type)
+        textView.textColor = statusColour
     }
     
     func setImage(type: BannerType, icon: UIImage) {
@@ -174,13 +174,17 @@ class StatusBannerView: UIView, UITextViewDelegate {
             statusLabel.font = UIFont.bcSansRegularWithSize(size: largeFontSize)
             timeLabel.font = UIFont.bcSansRegularWithSize(size: smallFontSize)
         case .Message:
-            messageStack.isHidden = false
-            setupTextView()
-            textView.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
             topContainer.isHidden = true
             statusStack.isHidden = true
             timeLabel.isHidden = true
             nameLabel.isHidden = true
+            messageStack.isHidden = false
+            messageIcon.isHidden = true
+            messageStack.alignment = .fill
+            
+            setupTextView()
+            textView.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
+            textView.sizeToFit()
         case .LabOrderPending, .LabOrderWithoutTests:
             messageStack.isHidden = false
             setupTextView()
@@ -190,6 +194,7 @@ class StatusBannerView: UIView, UITextViewDelegate {
             textView.delegate = self
             timeLabel.isHidden = true
             statusStack.isHidden = true
+            textView.sizeToFit()
         case .NoBanner:
             Logger.log(string: "Not using this cell here", type: .general)
         }
@@ -200,10 +205,10 @@ class StatusBannerView: UIView, UITextViewDelegate {
         textView.isUserInteractionEnabled = true
         textView.delegate = self
         textView.translatesAutoresizingMaskIntoConstraints = true
-        textView.sizeToFit()
         textView.isScrollEnabled = false
         textView.isEditable = false
         textView.backgroundColor = .clear
+        textView.sizeToFit()
     }
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {

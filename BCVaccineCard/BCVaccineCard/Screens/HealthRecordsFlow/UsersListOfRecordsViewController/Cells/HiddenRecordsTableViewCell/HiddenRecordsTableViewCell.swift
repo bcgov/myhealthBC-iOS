@@ -36,7 +36,7 @@ enum HiddenRecordType: Equatable {
     
     var getDescriptionText: String {
         switch self {
-        case .loginToAccess: return "Log in with your BC Services Card to view your health records"
+        case .loginToAccess: return "Log in to view your health records"
         case .medicalRecords: return "Some of your health records are locked. You need to enter your protective word to unlock them."
         case .authenticate: return "Log in with your BC Services Card to view your health records"
         }
