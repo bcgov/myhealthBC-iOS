@@ -10,8 +10,8 @@ mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 cp ./.github/secrets/ClientVaccineCard-ADHOC.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/ClientVaccineCard-ADHOC.mobileprovision
 
 security create-keychain -p "temp_Password" health
-security unlock-keychain -p "temp_Password" health
-security default-keychain -s ~/Library/Keychains/health
+security unlock-keychain -p "temp_Password" health-db
+security default-keychain -s ~/Library/Keychains/health-db
 security set-keychain-settings -l -u -t 4000
 
 security import ./.github/secrets/dist.p12 -t agg -k ~/Library/Keychains/health -P "" -A
