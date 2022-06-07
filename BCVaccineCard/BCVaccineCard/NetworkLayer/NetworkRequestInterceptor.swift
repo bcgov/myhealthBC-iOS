@@ -16,6 +16,7 @@ class NetworkRequestInterceptor: Interceptor {
   func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
       var urlRequest = urlRequest
       // Note: We would add cookie here
+      // TODO: Test without using queueit here on prod
       guard let urlString = urlRequest.url?.absoluteString else { return }
       urlRequest.addValue(urlString, forHTTPHeaderField: "x-queueit-ajaxpageurl")
       completion(.success(urlRequest))
