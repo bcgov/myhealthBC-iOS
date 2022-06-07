@@ -31,12 +31,12 @@ jobs:
       - name: Export .ipa
         run: ./.github/scripts/export_adhoc_ipa.sh
         
-      - name: Upload .ipa to firebase
-        if: success()
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID}}
-        run: ./.github/scripts/publish_firebase.sh
+#     - name: Upload .ipa to firebase
+#       if: success()
+#       env:
+#         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+#         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID}}
+#       run: ./.github/scripts/publish_firebase.sh
         
       - name: Upload .ipa
         uses: actions/upload-artifact@v1
@@ -44,3 +44,12 @@ jobs:
           name: BCVaccineCard.ipa
           path: build/Apps/BCVaccineCard.ipa
           
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK }}
+          SLACK_CHANNEL: bc-vaccine-card
+          SLACK_USERNAME: "My Health iOS Bot"
+          SLACK_TITLE: "Dev build uploaded"
+          SLACK_LINK_NAMES: true
+          SLACK_MESSAGE: "New iOS build is available :rocket:"
