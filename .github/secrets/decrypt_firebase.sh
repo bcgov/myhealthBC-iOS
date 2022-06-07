@@ -9,13 +9,15 @@ mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
 cp ./.github/secrets/ClientVaccineCard-ADHOC.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/ClientVaccineCard-ADHOC.mobileprovision
 
-security create-keychain -p "temp_Password" health
-security unlock-keychain -p "temp_Password" health-db
-security default-keychain -s ~/Library/Keychains/health-db
+security create-keychain -p "temp_Password" health.keychain
+security list-keychains -s ~/Library/Keychains/health.keychain
+security unlock-keychain -p "temp_Password" health.keychain
+security default-keychain -s ~/Library/Keychains/health.keychain
 security set-keychain-settings -l -u -t 4000
+security list-keychains -s ~/Library/Keychains/health.keychain
 
-security import ./.github/secrets/dist.p12 -t agg -k ~/Library/Keychains/health -P "" -A
-security import ./.github/secrets/dist.p12 -k ~/Library/Keychains/health -P "" -T /usr/bin/codesign
+security import ./.github/secrets/dist.p12 -t agg -k ~/Library/Keychains/health.keychain -P "" -A
+security import ./.github/secrets/dist.p12 -k ~/Library/Keychains/health.keychain -P "" -T /usr/bin/codesign
 
-security list-keychains -s ~/Library/Keychains/health
-security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/health
+security list-keychains -s ~/Library/Keychains/health.keychain
+security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/health.keychain
