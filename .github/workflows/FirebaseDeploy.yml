@@ -52,4 +52,4 @@ jobs:
           SLACK_USERNAME: "My Health iOS Bot"
           SLACK_TITLE: "Dev build uploaded"
           SLACK_LINK_NAMES: true
-          SLACK_MESSAGE: "New iOS build is available :rocket:"
+          SLACK_MESSAGE: "New iOS build is available at https://github.com/bcgov/myhealthBC-iOS/actions/runs/${{ github.run_id }} :rocket:"
