@@ -174,15 +174,13 @@ class AuthenticationViewController: UIViewController {
                     self.view.endLoadingIndicator()
                     switch result {
                     case .Unavailable:
-                        // TODO:
-                        print("Handle Unavailable")
+                        AppDelegate.sharedInstance?.showToast(message: "Authentication server is unavailable", style: .Warn)
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     case .Success:
                         Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
                         self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
                     case .Fail:
-                        // TODO:
-                        print("Handle fail")
+                        AppDelegate.sharedInstance?.showToast(message: "Authentication Failed", style: .Warn)
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     }
                 })
