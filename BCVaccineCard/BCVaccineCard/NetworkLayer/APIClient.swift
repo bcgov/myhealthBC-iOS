@@ -207,7 +207,7 @@ extension APIClient {
     }
     
     private func getBaseUrlAPILogic(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<MobileConfigurationResponseObject>) {
-        configureURL(token: token, endpoint: self.endpoints.getBaseURL, completion: { url in
+        configureURL(token: nil, endpoint: self.endpoints.getBaseURL, completion: { url in
             guard let unwrappedURL = url else { return }
             self.remote.request(withURL: unwrappedURL, method: .get, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
         })
@@ -426,18 +426,17 @@ extension APIClient {
 extension APIClient {
     
     func configureURL(token: String?, endpoint: URL, completion: @escaping(URL?)->Void) {
-        if APIClientCache.isCookieSet {
-            return completion(endpoint)
-        }
-        
-        if APIClientCache.settingCookie {
-            APIClientCache.configureURLQueue.append(APIClientCache.ConfigureURLQueueObject(endpoint: endpoint, callback: completion))
-            return
-        }
-        
-        APIClientCache.settingCookie = true
         var url: URL?
         if let token = token {
+            if APIClientCache.isCookieSet {
+                return completion(endpoint)
+            }
+            
+            if APIClientCache.settingCookie {
+                APIClientCache.configureURLQueue.append(APIClientCache.ConfigureURLQueueObject(endpoint: endpoint, callback: completion))
+                return
+            }
+            APIClientCache.settingCookie = true
             let queryItems = [URLQueryItem(name: Constants.QueueItStrings.queueittoken, value: token)]
             var urlComps = URLComponents(string: endpoint.absoluteString)
             urlComps?.queryItems = queryItems
@@ -446,5 +445,12 @@ extension APIClient {
             url = endpoint
         }
         completion(url)
+    }
+}
+
+extension URL {
+    func hasQueueItToken() -> Bool {
+        let urlString = self.absoluteString
+        return urlString.contains("queueittoken")
     }
 }

@@ -123,7 +123,7 @@ final class NetworkAccessor {
         case .success(let successResponse):
             completion(.success(successResponse), retryStatus)
             // TODO: Find better place for this:
-            if !APIClientCache.isCookieSet {
+            if response.request?.url?.hasQueueItToken() ?? false && !APIClientCache.isCookieSet {
                 APIClientCache.isCookieSet = true
             }
         case .failure(let error):
