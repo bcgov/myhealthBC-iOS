@@ -426,7 +426,7 @@ extension APIClient {
 extension APIClient {
     
     func configureURL(token: String?, endpoint: URL, completion: @escaping(URL?)->Void) {
-        var url: URL?
+        
         if let token = token {
             if APIClientCache.isCookieSet {
                 return completion(endpoint)
@@ -440,11 +440,11 @@ extension APIClient {
             let queryItems = [URLQueryItem(name: Constants.QueueItStrings.queueittoken, value: token)]
             var urlComps = URLComponents(string: endpoint.absoluteString)
             urlComps?.queryItems = queryItems
-            url = urlComps?.url
+            return completion(urlComps?.url)
         } else {
-            url = endpoint
+            return completion(endpoint)
         }
-        completion(url)
+        
     }
 }
 
