@@ -43,13 +43,10 @@ jobs:
         with:
           name: Health\ Gateway\ Dev.ipa
           path: build/Apps/Health\ Gateway\ Dev.ipa
-          
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@v2.2.0
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK }}
-          SLACK_CHANNEL: bc-vaccine-card
-          SLACK_USERNAME: "My Health iOS Bot"
-          SLACK_TITLE: "Dev build uploaded"
-          SLACK_LINK_NAMES: true
-          SLACK_MESSAGE: "New iOS build is available at https://github.com/bcgov/myhealthBC-iOS/actions/runs/${{ github.run_id }} :rocket:"
+
+      - name: Notify Slack - Success
+        uses: act10ns/slack@v1
+        with:
+          status: Completed
+          channel: 'bc-vaccine-card'
+          message: New iOS build is available at https://github.com/bcgov/myhealthBC-iOS/actions/runs/${{ github.run_id }}
