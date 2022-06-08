@@ -127,13 +127,13 @@ class APIClient {
     }
     
     func getAuthenticatedPatientDetails(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedPatientDetailsResponseObject>) {
-        configureURL(token: token, endpoint: self.endpoints.getAuthenticatedPatientDetails(hdid: authCredentials.hdid), completion: { url in
+        configureURL(token: nil, endpoint: self.endpoints.getAuthenticatedPatientDetails(hdid: authCredentials.hdid), completion: { url in
             let headerParameters: Headers = [
                 Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
             ]
             
             guard let unwrappedURL = url else { return }
-            self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+            self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
         })
         
         
@@ -182,9 +182,9 @@ class APIClient {
 // MARK: For throttling HG
 extension APIClient {
     func throttleHGMobileConfig(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<MobileConfigurationResponseObject>) {
-        configureURL(token: token, endpoint: self.endpoints.throttleHG, completion: { url in
+        configureURL(token: nil, endpoint: self.endpoints.throttleHG, completion: { url in
             guard let unwrappedURL = url else { return }
-            self.remote.request(withURL: unwrappedURL, method: .get, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+            self.remote.request(withURL: unwrappedURL, method: .get, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
         })
     }
 }
@@ -209,7 +209,7 @@ extension APIClient {
     private func getBaseUrlAPILogic(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<MobileConfigurationResponseObject>) {
         configureURL(token: nil, endpoint: self.endpoints.getBaseURL, completion: { url in
             guard let unwrappedURL = url else { return }
-            self.remote.request(withURL: unwrappedURL, method: .get, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+            self.remote.request(withURL: unwrappedURL, method: .get, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
         })
     }
     
@@ -228,7 +228,7 @@ extension APIClient {
 extension APIClient {
     
     func checkIfProfileIsValid(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
-        self.getValidateProfileStatus(authCredentials, token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+        self.getValidateProfileStatus(authCredentials, token: nil, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
@@ -243,7 +243,7 @@ extension APIClient {
     }
     
     private func getValidateProfileStatus(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedValidAgeCheck>) {
-        configureURL(token: token, endpoint: self.endpoints.validateProfile(hdid: authCredentials.hdid), completion: { url in
+        configureURL(token: nil, endpoint: self.endpoints.validateProfile(hdid: authCredentials.hdid), completion: { url in
             
             
             let headerParameters: Headers = [
@@ -251,7 +251,7 @@ extension APIClient {
             ]
             
             guard let unwrappedURL = url else { return }
-            self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+            self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
         })
     }
     
@@ -277,7 +277,7 @@ extension APIClient {
     
     // This function is used to check if user has accepted terms of service or not
     func hasUserAcceptedTermsOfService(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
-        self.getUserProfile(authCredentials, token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+        self.getUserProfile(authCredentials, token: nil, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
@@ -293,13 +293,13 @@ extension APIClient {
     }
     
     private func getUserProfile(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedUserProfileResponseObject>) {
-        configureURL(token: token, endpoint: self.endpoints.userProfile(hdid: authCredentials.hdid), completion: { url in
+        configureURL(token: nil, endpoint: self.endpoints.userProfile(hdid: authCredentials.hdid), completion: { url in
             let headerParameters: Headers = [
                 Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
             ]
             
             guard let unwrappedURL = url else { return }
-            self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+            self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
         })
     }
     
@@ -324,7 +324,7 @@ extension APIClient {
     
     // This function is used to respond to the displayed terms of service
     func respondToTermsOfService(_ authCredentials: AuthenticationRequestObject, accepted: Bool, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
-        self.postUserProfile(authCredentials, accepted: accepted, token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+        self.postUserProfile(authCredentials, accepted: accepted, token: nil, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
@@ -339,7 +339,7 @@ extension APIClient {
     }
     
     private func postUserProfile(_ authCredentials: AuthenticationRequestObject, accepted: Bool, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedUserProfileResponseObject>) {
-        configureURL(token: token, endpoint: self.endpoints.userProfile(hdid: authCredentials.hdid), completion: { url in
+        configureURL(token: nil, endpoint: self.endpoints.userProfile(hdid: authCredentials.hdid), completion: { url in
             
             let headerParameters: Headers = [
                 Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
@@ -348,7 +348,7 @@ extension APIClient {
             let parameters = AuthenticatedUserProfileRequestObject(profile: AuthenticatedUserProfileRequestObject.ResourcePayload(hdid: authCredentials.hdid, acceptedTermsOfService: accepted))
             
             guard let unwrappedURL = url else { return }
-            self.remote.request(withURL: unwrappedURL, method: .post, headers: headerParameters, parameters: parameters, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
+            self.remote.request(withURL: unwrappedURL, method: .post, headers: headerParameters, parameters: parameters, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
         })
         
     }
@@ -377,7 +377,7 @@ extension APIClient {
 extension APIClient {
     
     func getTermsOfServiceString(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (String?, ResultError?) -> Void) {
-        self.getTermsOfService(token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+        self.getTermsOfService(token: nil, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
@@ -394,10 +394,10 @@ extension APIClient {
     }
     
     private func getTermsOfService(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<TermsOfServiceResponse>) {
-        configureURL(token: token, endpoint: self.endpoints.getTermsOfService, completion: { url
+        configureURL(token: nil, endpoint: self.endpoints.getTermsOfService, completion: { url
             in
             guard let unwrappedURL = url else { return }
-            self.remote.request(withURL: unwrappedURL, method: .get, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+            self.remote.request(withURL: unwrappedURL, method: .get, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
         })
         
         
