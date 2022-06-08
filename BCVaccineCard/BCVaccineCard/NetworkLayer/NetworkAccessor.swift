@@ -94,6 +94,11 @@ final class NetworkAccessor {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
         request.responseDecodable(of: T.self, decoder: decoder) { response in
+            // TODO: Find better place for this:
+            if !APIClientCache.isCookieSet {
+                APIClientCache.isCookieSet = true
+            }
+            
             guard checkQueueIt else {
                 return self.decodeResponse(response: response, retryStatus: nil, withCompletion: completion)
             }
