@@ -94,11 +94,6 @@ final class NetworkAccessor {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
         request.responseDecodable(of: T.self, decoder: decoder) { response in
-            // TODO: Find better place for this:
-            if !APIClientCache.isCookieSet {
-                APIClientCache.isCookieSet = true
-            }
-            
             guard checkQueueIt else {
                 return self.decodeResponse(response: response, retryStatus: nil, withCompletion: completion)
             }
@@ -127,6 +122,10 @@ final class NetworkAccessor {
         switch response.result {
         case .success(let successResponse):
             completion(.success(successResponse), retryStatus)
+            // TODO: Find better place for this:
+            if !APIClientCache.isCookieSet {
+                APIClientCache.isCookieSet = true
+            }
         case .failure(let error):
             guard let responseData = response.data, let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
                 Logger.log(string: error.errorDescription.unwrapped, type: .Network)
