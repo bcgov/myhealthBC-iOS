@@ -214,10 +214,12 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             }
         }
         guard let types = specificFetchTypes else {
-            self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
+            self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord ?? authManager.protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
+            // Note: Calling this again for queueit issue
+            self.getAuthenticatedTestResults(authCredentials: authCredentials)
             return
         }
         for type in types {

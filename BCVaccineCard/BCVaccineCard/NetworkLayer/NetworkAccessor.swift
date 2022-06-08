@@ -119,13 +119,14 @@ final class NetworkAccessor {
     }
     
     private func decodeResponse<T: Decodable>(response: DataResponse<T, AFError>, retryStatus: NetworkRetryStatus?, withCompletion completion: @escaping NetworkRequestCompletion<T>) {
+        // TODO: Find better place for this:
+        if response.request?.url?.hasQueueItToken() ?? false && !APIClientCache.isCookieSet {
+            APIClientCache.isCookieSet = true
+        }
         switch response.result {
         case .success(let successResponse):
             completion(.success(successResponse), retryStatus)
-            // TODO: Find better place for this:
-            if response.request?.url?.hasQueueItToken() ?? false && !APIClientCache.isCookieSet {
-                APIClientCache.isCookieSet = true
-            }
+            
         case .failure(let error):
             guard let responseData = response.data, let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
                 Logger.log(string: error.errorDescription.unwrapped, type: .Network)
