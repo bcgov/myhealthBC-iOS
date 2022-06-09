@@ -214,12 +214,15 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             }
         }
         guard let types = specificFetchTypes else {
+            // Note: We use a dummy call first to handle the queue it issues, then afterwards we have the rest of our normal calls
+            self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
-            self.getAuthenticatedTestResults(authCredentials: authCredentials)
             self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord ?? authManager.protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
+            self.getAuthenticatedTestResults(authCredentials: authCredentials)
             return
         }
+        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
         for type in types {
             switch type {
             case .VaccineCard: self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
@@ -227,6 +230,24 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             case .MedicationStatement: self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord ?? authManager.protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             case .LaboratoryOrders: self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             default: break
+            }
+        }
+    }
+    // Temporary workaround for dumb queueit issues on prod
+    private func getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: AuthenticationRequestObject) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedQueueItPingTestResultsDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedQueueItPingTestResultsDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        apiClient.getAuthenticatedTestResults(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else {return}
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedQueueItPingTestResultsDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedTestResults(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else {return}
+                    self.handleQueueItTestResultsResponse(result: result)
+                }
+            } else {
+                self.handleQueueItTestResultsResponse(result: result)
             }
         }
     }
@@ -384,6 +405,14 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.getAuthenticatedPatientDetails(authCredentials: authCredentials, showBanner: self.showBanner, isManualFetch: self.isManualAuthFetch, sourceVC: self.loginSourceVC)
     }
     
+    @objc private func retryGetQueueItTestResultsRequest() {
+        guard let authCredentials = self.requestDetails.authenticatedQueueItPingTestResultsDetails?.authCredentials else {
+            print("Error")
+            return
+        }
+        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
+    }
+    
     @objc private func retryGetTestResultsRequest() {
         guard let authCredentials = self.requestDetails.authenticatedTestResultsDetails?.authCredentials else {
             self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: .genericErrorMessage)
@@ -423,6 +452,29 @@ extension AuthenticatedHealthRecordsAPIWorker {
     
     private func showFetchFailed() {
         AppDelegate.sharedInstance?.showToast(message: "Not all records were fetched successfully", style: .Warn)
+    }
+    
+    private func handleQueueItTestResultsResponse(result: Result<AuthenticatedTestResultsResponseModel, ResultError>) {
+        switch result {
+        case .success(let testResult):
+            // Note: Have to check for error here because error is being sent back on a 200 response
+            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders.count == 0 {
+                print("Error with queue it??")
+            }
+            else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
+                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+                self.retryCount += 1
+                let retryInSeconds = Double(retryinMS/1000)
+                self.perform(#selector(self.retryGetQueueItTestResultsRequest), with: nil, afterDelay: retryInSeconds)
+            }
+            else {
+                // Doesn't matter, just for queue it
+                
+            }
+        case .failure(let error):
+            print("Error")
+            // Doesn't matter, just for queue it
+        }
     }
     
     private func handleTestResultsResponse(result: Result<AuthenticatedTestResultsResponseModel, ResultError>) {
@@ -832,6 +884,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
 // MARK: Structs used for various fetch types
 struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedPatientDetails: AuthenticatedPatientDetails?
+    var authenticatedQueueItPingTestResultsDetails: AuthenticatedQueueItPingTestResultsDetails?
     var authenticatedVaccineCardDetails: AuthenticatedVaccineCardDetails?
     var authenticatedTestResultsDetails: AuthenticatedTestResultsDetails?
     var authenticatedMedicationStatementDetails: AuthenticatedMedicationStatementDetails?
@@ -841,6 +894,11 @@ struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedCovidTestPDFDetails: AuthenticatedCovidTestPDFDetails?
     
     struct AuthenticatedPatientDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+    }
+    
+    struct AuthenticatedQueueItPingTestResultsDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?
     }
