@@ -15,8 +15,10 @@ class APIClientCache {
     
     static var isCookieSet: Bool = false {
         didSet {
-            settingCookie = false
-            executeConfigureURLQueue()
+            if isCookieSet {
+                settingCookie = false
+                executeConfigureURLQueue()
+            }
         }
     }
     static var settingCookie: Bool = false
@@ -28,6 +30,12 @@ class APIClientCache {
                 element.callback(element.endpoint)
             }
         }
+    }
+    
+    static func reset() {
+        configureURLQueue.removeAll()
+        isCookieSet = false
+        settingCookie = false
     }
 }
 
