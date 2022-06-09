@@ -8,6 +8,8 @@ jobs:
     name: Deploying to Firebase
     runs-on: macOS-latest
     timeout-minutes: 60
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEB_HOOK }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -42,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: Health\ Gateway\ Dev.ipa
-          path: build/Apps/Health\ Gateway\ Dev.ipa
+          path: build/Apps/HealthGatewayDev.ipa
 
       - name: Notify Slack - Success
         uses: act10ns/slack@v1
