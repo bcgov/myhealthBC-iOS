@@ -29,6 +29,12 @@ class APIClientCache {
             }
         }
     }
+    
+    static func reset() {
+        configureURLQueue.removeAll()
+        isCookieSet = false
+        settingCookie = false
+    }
 }
 
 class APIClient {
