@@ -72,8 +72,10 @@ extension UIView {
     }
     
     func endLoadingIndicator() {
-        if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
-            existing.removeFromSuperview()
+        DispatchQueue.main.async {
+            if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
+                existing.removeFromSuperview()
+            }
         }
     }
     

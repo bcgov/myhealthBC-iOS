@@ -119,12 +119,10 @@ final class NetworkAccessor {
     }
     
     private func decodeResponse<T: Decodable>(response: DataResponse<T, AFError>, retryStatus: NetworkRetryStatus?, withCompletion completion: @escaping NetworkRequestCompletion<T>) {
-        
         // TODO: Find better place for this:
         if response.request?.url?.hasQueueItToken() ?? false && !APIClientCache.isCookieSet {
             APIClientCache.isCookieSet = true
         }
-        
         switch response.result {
         case .success(let successResponse):
             completion(.success(successResponse), retryStatus)
