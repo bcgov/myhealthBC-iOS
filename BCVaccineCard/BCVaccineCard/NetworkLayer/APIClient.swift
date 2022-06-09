@@ -15,8 +15,10 @@ class APIClientCache {
     
     static var isCookieSet: Bool = false {
         didSet {
-            settingCookie = false
-            executeConfigureURLQueue()
+            if isCookieSet {
+                settingCookie = false
+                executeConfigureURLQueue()
+            }
         }
     }
     static var settingCookie: Bool = false
