@@ -214,6 +214,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             }
         }
         guard let types = specificFetchTypes else {
+            // Note: We use a dummy call first to handle the queue it issues, then afterwards we have the rest of our normal calls
             self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord ?? authManager.protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
