@@ -13,8 +13,8 @@ extension Constants {
         struct Theme {
             static let primaryColor = UIColor(hexString: "#003366")
             static let secondaryColor = UIColor(hexString: "#eea73b")
-            static let primaryConstractColor = UIColor.white
-            static let animationDuration = 0.3
+            static let primaryConstrastColor = UIColor.white
+            static let animationDuration = 0.5
             static let cornerRadiusRegular: CGFloat = 5
         }
         
@@ -68,14 +68,29 @@ extension Constants {
             static let size: CGFloat = 30
         }
         
-        struct Banner {
+        // MARK: Toast
+        struct Toast {
             static let tag = 232213
             static let displayDuration: Double = 2.0 // seconds
-            static let backgroundColor = Constants.UI.Theme.primaryColor
-            static let labelColor = Constants.UI.Theme.primaryConstractColor
-            static let labelFont: UIFont = UIFont.init(name: "BCSans-Regular", size: 14) ?? UIFont.systemFont(ofSize: 14)
+
+            // Font
+            static let labelFont: UIFont = UIFont.bcSansRegularWithSize(size: 14)
+            // Padding
             static let labelPadding: CGFloat = 8
-            static let containerPadding: CGFloat = 16
+            static let containerPadding: CGFloat = 14
+            static let bottomPadding: CGFloat = 64
+            static let defaultHeight: CGFloat = 40
+            
+            // Colors
+            static let shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07).cgColor
+            struct WarnColors {
+                static let backgroundColor = UIColor(red: 0.976, green: 0.945, blue: 0.776, alpha: 1)
+                static let labelColor = UIColor(red: 0.424, green: 0.29, blue: 0, alpha: 1)
+            }
+            struct defaultColors {
+                static let backgroundColor = Constants.UI.Theme.primaryColor
+                static let labelColor =  Constants.UI.Theme.primaryConstrastColor
+            }
         }
         
         struct CellSpacing {

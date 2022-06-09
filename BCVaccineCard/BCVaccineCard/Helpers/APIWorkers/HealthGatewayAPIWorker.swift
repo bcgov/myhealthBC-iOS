@@ -70,7 +70,6 @@ extension HealthGatewayAPIWorker {
     private func handleVaccineCardResponse(result: Result<GatewayVaccineCardResponse, ResultError>) {
         switch result {
         case .success(let vaccineCard):
-            print(vaccineCard)
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = vaccineCard.resultError?.resultMessage, (vaccineCard.resourcePayload?.qrCode?.data == nil && vaccineCard.resourcePayload?.federalVaccineProof?.data == nil) {
                 let adjustedMessage = resultMessage == .errorParsingPHNFromHG ? .errorParsingPHNMessage : resultMessage
@@ -100,7 +99,7 @@ extension HealthGatewayAPIWorker {
                 }
             }
         case .failure(let error):
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Network)
             self.delegate?.handleError(title: .error, error: error)
         }
     }

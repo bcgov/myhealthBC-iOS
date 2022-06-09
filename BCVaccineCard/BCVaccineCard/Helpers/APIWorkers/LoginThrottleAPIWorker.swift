@@ -38,11 +38,14 @@ class LoginThrottleAPIWorker: NSObject {
     private func handleResponse(result: Result<MobileConfigurationResponseObject, ResultError>, completion: @escaping (Bool) -> Void) {
         switch result {
         case .success(let mobileConfig):
+            // Note: This is a quickfix for now - should rework so that either we only do this here instead of in tabBar controller
+            if let url = URL(string: mobileConfig.baseUrl) {
+                BaseURLWorker.shared.baseURL = url
+            }
             completion(mobileConfig.online)
         case .failure(let error):
-            // TODO: Show error that network isn't available? Have to test it out
-            print("CONNOR: ERROR: ", error)
-            // Note - if this happens, it's not a throttling issue, it's a network issue
+            Logger.log(string: error.localizedDescription, type: .Network)
+            AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
             completion(false)
         }
     }

@@ -20,7 +20,8 @@ protocol StorageCovidTestResultManager {
         patient: Patient,
         gateWayResponse: GatewayTestResultResponse,
         authenticated: Bool,
-        manuallyAdded: Bool
+        manuallyAdded: Bool,
+        pdf: String?
     ) -> CovidLabTestResult?
     
     /// Store a single test result
@@ -46,6 +47,8 @@ protocol StorageCovidTestResultManager {
     func updateCovidTestResult(
         gateWayResponse: GatewayTestResultResponse,
         manuallyAdded: Bool,
+        pendingBackgroundRefetch: Bool,
+        pdf: String?,
         completion: @escaping(CovidLabTestResult?)->Void)
     
     // MARK: Delete
@@ -61,7 +64,7 @@ protocol StorageCovidTestResultManager {
 
 extension StorageService: StorageCovidTestResultManager {
     // MARK: Store
-    public func storeCovidTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool, manuallyAdded: Bool) -> CovidLabTestResult? {
+    public func storeCovidTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool, manuallyAdded: Bool, pdf: String?) -> CovidLabTestResult? {
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
         deleteCovidTestResult(id: id, sendDeleteEvent: false)
         guard let context = managedContext else {return nil}
@@ -70,6 +73,7 @@ extension StorageService: StorageCovidTestResultManager {
         model.id = id
         model.createdAt = Date()
         model.authenticated = authenticated
+        model.pdf = pdf
         var testResults: [TestResult] = []
         guard let records = gateWayResponse.resourcePayload?.records else { return nil }
         for record in records {
@@ -102,7 +106,7 @@ extension StorageService: StorageCovidTestResultManager {
             let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: model)) : self.notify(event: StorageEvent(event: .Save, entity: .CovidLabTestResult, object: model))
             return model
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -124,7 +128,7 @@ extension StorageService: StorageCovidTestResultManager {
     {
         guard let context = managedContext else {return nil}
         let testResult = TestResult(context: context)
-        testResult.id = reportId
+        testResult.id = UUID().uuidString
         testResult.patientDisplayName = patientDisplayName
         testResult.lab = lab
         testResult.reportId = reportId
@@ -142,14 +146,14 @@ extension StorageService: StorageCovidTestResultManager {
             self.notify(event: StorageEvent(event: .Save, entity: .TestResult, object: testResult))
             return testResult
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
     
     
     // MARK: Update
-    func updateCovidTestResult(gateWayResponse: GatewayTestResultResponse, manuallyAdded: Bool, completion: @escaping(CovidLabTestResult?)->Void) {
+    func updateCovidTestResult(gateWayResponse: GatewayTestResultResponse, manuallyAdded: Bool, pendingBackgroundRefetch: Bool, pdf: String?, completion: @escaping(CovidLabTestResult?)->Void) {
         guard
             let existing = findExistingResult(gateWayResponse: gateWayResponse),
             let existingId = existing.id,
@@ -159,10 +163,10 @@ extension StorageService: StorageCovidTestResultManager {
         let authStatus = existing.authenticated
         
         // Delete existing
-        deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
+         deleteCovidTestResult(id: existingId, sendDeleteEvent: false)
         // Store the new one.
-        if let object = storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus, manuallyAdded: manuallyAdded) {
-            let _ = manuallyAdded == true ? notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: object)) : notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
+        if let object = storeCovidTestResults(patient: existingPatient, gateWayResponse: gateWayResponse, authenticated: authStatus, manuallyAdded: manuallyAdded, pdf: pdf) {
+            let _ = manuallyAdded == true ? notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: object)) : pendingBackgroundRefetch == true ? notify(event: StorageEvent(event: .ManuallyAddedPendingTestBackgroundRefetch, entity: .CovidLabTestResult, object: object)) : notify(event: StorageEvent(event: .Update, entity: .CovidLabTestResult, object: object))
             return completion(object)
         }
         return completion(nil)
@@ -186,7 +190,7 @@ extension StorageService: StorageCovidTestResultManager {
             let tests = patients.map({$0.testResultArray})
             return Array(tests.joined())
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }
@@ -197,7 +201,7 @@ extension StorageService: StorageCovidTestResultManager {
             let tests = try context.fetch(CovidLabTestResult.fetchRequest())
             return tests.filter({ ($0.id == id) }).first
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }

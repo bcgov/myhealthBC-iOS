@@ -16,7 +16,7 @@ extension HealthRecordsDetailDataSource.Record {
         case .medication:
             return [.Fields, .Comments]
         case .laboratoryOrder:
-            return [.Fields]
+            return [.Header, .Fields]
         }
     }
 }
@@ -40,9 +40,10 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
     func configure(model: HealthRecordsDetailDataSource.Record) {
         self.model = model
         createTableView()
-        setupTableView()
+        setupTableView(withSeparator: model.includesSeparatorUI)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {[weak self] in
             self?.tableView?.reloadData()
+            // FIXME: For AMIR: I know we have this due to sync issue with Vaccine Card (I believe - when fetching individually, unauthenticated-style), however when the tableView gets reloaded here, we lose the separator at the bottom of the BannerViewTableViewCell, and I'm not sure why
         }
     }
     
@@ -53,7 +54,7 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         self.tableView = tableView
     }
     
-    private func setupTableView() {
+    private func setupTableView(withSeparator: Bool) {
         guard let tableView = tableView else {
             return
         }
@@ -62,11 +63,17 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         tableView.register(UINib.init(nibName: CommentViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommentViewTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.showsVerticalScrollIndicator = false
-        tableView.estimatedRowHeight = 600
+        if Device.IS_IPHONE_5 || Device.IS_IPHONE_4 {
+            tableView.estimatedRowHeight = 1000
+        } else {
+            tableView.estimatedRowHeight = 600
+        }
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = withSeparator ?  .singleLine : .none
+        tableView.separatorInset = .zero
         self.tableView = tableView
     }
     
@@ -86,16 +93,18 @@ class HealthRecordView: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
         headerView.configure(text: "\(model.comments.count) \(commentsString)")
+        headerView.backgroundColor = .white
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let model = self.model else {return 0}
         let sectionType = model.getCellSection()[section]
-        guard sectionType == .Comments, !model.comments.isEmpty else {
-            return 0
+        if sectionType == .Comments, !model.comments.isEmpty {
+            return "Comments".heightForView(font: TableSectionHeader.font, width: bounds.width) + 10
         }
-        return "Comments".heightForView(font: TableSectionHeader.font, width: bounds.width) + 10
+        
+        return 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

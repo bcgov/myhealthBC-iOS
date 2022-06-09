@@ -21,7 +21,7 @@ class CommentViewTableViewCell: UITableViewCell {
         commentText.text = comment.text
         
         if let createdDate = comment.createdDateTime {
-            dateTimeLabel.text = Date.Formatter.issuedOnDateTime.string(from: createdDate)
+            dateTimeLabel.text = Date.Formatter.commentsDateTime.string(from: createdDate)
         } else {
             dateTimeLabel.text = ""
         }

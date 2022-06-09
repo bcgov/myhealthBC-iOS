@@ -10,11 +10,12 @@ import UIKit
 
 class HealthRecordDetailViewController: BaseViewController {
     
-    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticated: Bool, userNumberHealthRecords: Int) -> HealthRecordDetailViewController {
+    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticatedRecord: Bool, userNumberHealthRecords: Int, patient: Patient?) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
             vc.dataSource = dataSource
-            vc.authenticated = authenticated
+            vc.authenticatedRecord = authenticatedRecord
             vc.userNumberHealthRecords = userNumberHealthRecords
+            vc.patient = patient
             return vc
         }
         return HealthRecordDetailViewController()
@@ -23,9 +24,14 @@ class HealthRecordDetailViewController: BaseViewController {
     @IBOutlet weak private var tableView: UITableView!
     
     private var dataSource: HealthRecordsDetailDataSource!
-    private var authenticated: Bool!
+    private var authenticatedRecord: Bool!
     private var userNumberHealthRecords: Int!
+    private var patient: Patient?
     private var pdfData: String?
+    
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource, userNumberHealthRecords: userNumberHealthRecords)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,8 +49,10 @@ class HealthRecordDetailViewController: BaseViewController {
                     if let object = event.object as? VaccineCard, object.patient?.name == self.dataSource.name {
                         self.navigationController?.popToRootViewController(animated: true)
                     }
+                    // Note: Check this - this appears to be where the issue is - will have to check lines below, as this appears to be what's causing the issue
                 case .CovidLabTestResult:
                     if let object = event.object as? CovidLabTestResult, object.patient?.name == self.dataSource.name {
+                        guard event.event != .ManuallyAddedPendingTestBackgroundRefetch else { return }
                         self.navigationController?.popToRootViewController(animated: true)
                     }
                 case .Medication:
@@ -106,8 +114,13 @@ extension HealthRecordDetailViewController {
                 self.pdfData = pdf
                 rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
+        case .covidTestResultRecord(model: let covidTestOrder):
+            if let pdf = covidTestOrder.pdf {
+                self.pdfData = pdf
+                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+            }
         default:
-            rightNavButton = self.authenticated ? nil :
+            rightNavButton = self.authenticatedRecord ? nil :
             NavButton(
                 title: .delete,
                 image: nil, action: #selector(self.deleteButton),
@@ -130,16 +143,31 @@ extension HealthRecordDetailViewController {
             switch self.dataSource.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
+                DispatchQueue.main.async {
+
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.healthPass], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                }
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
             case .medication, .laboratoryOrder:
-                print("Not able to delete these records currently, as they are auth-only records")
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)
             } else {
-                self.popBack(toControllerType: HealthRecordsViewController.self)
+                if let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
+                    StorageService.shared.deletePatient(name: name, birthday: birthday)
+                }
+                DispatchQueue.main.async {
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                }
             }
         } onCancel: {
         }

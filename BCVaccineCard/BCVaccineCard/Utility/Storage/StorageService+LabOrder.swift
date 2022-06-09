@@ -30,6 +30,7 @@ protocol StorageLaboratoryOrderManager {
         reportingSource: String?,
         reportID: String?,
         collectionDateTime: Date?,
+        orderStatus: String?,
         timelineDateTime: Date?,
         commonName: String?,
         orderingProvider: String?,
@@ -84,8 +85,8 @@ extension StorageService: StorageLaboratoryOrderManager {
         patient: Patient,
         gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order,
         pdf: String?) -> LaboratoryOrder? {
-            let id = labOrderId(gateWayObject: gateWayObject)
-            deleteLaboratoryOrder(id: id, sendDeleteEvent: false)
+            let id = UUID().uuidString
+//            deleteLaboratoryOrder(id: id, sendDeleteEvent: false)
             var storedTests: [LaboratoryTest] = []
             if let tests = gateWayObject.laboratoryTests {
                 for test in tests {
@@ -96,11 +97,11 @@ extension StorageService: StorageLaboratoryOrderManager {
             }
             let collectionDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.collectionDateTime ?? "") ?? Date()
             let timelineDateTime = Date.Formatter.gatewayDateAndTime.date(from: gateWayObject.timelineDateTime ?? "") ?? Date()
-            return storeLaboratoryOrder(patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf)
+            return storeLaboratoryOrder(patient: patient, id: id, labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: collectionDateTime, orderStatus: gateWayObject.orderStatus, timelineDateTime: timelineDateTime, commonName: gateWayObject.commonName, orderingProvider:gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable ?? false, laboratoryTests: storedTests, pdf: pdf)
             
         }
     
-    func storeLaboratoryOrder(patient: Patient, id: String, labPdfId: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, timelineDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?) -> LaboratoryOrder? {
+    func storeLaboratoryOrder(patient: Patient, id: String, labPdfId: String?, reportingSource: String?, reportID: String?, collectionDateTime: Date?, orderStatus: String?, timelineDateTime: Date?, commonName: String?, orderingProvider: String?, testStatus: String?, reportAvailable: Bool, laboratoryTests: [LaboratoryTest]?, pdf: String?) -> LaboratoryOrder? {
         guard let context = managedContext else {return nil}
         let labOrder = LaboratoryOrder(context: context)
         labOrder.id = id
@@ -115,6 +116,8 @@ extension StorageService: StorageLaboratoryOrderManager {
         labOrder.orderingProvider = orderingProvider
         labOrder.reportAvailable = reportAvailable
         labOrder.pdf = pdf
+        labOrder.testStatus = testStatus
+        labOrder.orderStatus = orderStatus
         var labTestsArray: [LaboratoryTest] = []
         let labTests = laboratoryTests ?? []
         for test in labTests {
@@ -133,7 +136,7 @@ extension StorageService: StorageLaboratoryOrderManager {
             try context.save()
             return labOrder
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -154,14 +157,14 @@ extension StorageService: StorageLaboratoryOrderManager {
             try context.save()
             return labTest
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
     
     /// This function generates a hash to be used as an id without the laboratory tests.
     private func labOrderId(gateWayObject: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order) -> String {
-        var copy = AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order(labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: gateWayObject.collectionDateTime, timelineDateTime: gateWayObject.timelineDateTime, commonName: gateWayObject.commonName, orderingProvider: gateWayObject.orderingProvider, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable, laboratoryTests: [])
+        var copy = AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order(labPdfId: gateWayObject.labPdfId, reportingSource: gateWayObject.reportingSource, reportID: gateWayObject.reportID, collectionDateTime: gateWayObject.collectionDateTime, timelineDateTime: gateWayObject.timelineDateTime, commonName: gateWayObject.commonName, orderingProvider: gateWayObject.orderingProvider, orderStatus: gateWayObject.orderStatus, testStatus: gateWayObject.testStatus, reportAvailable: gateWayObject.reportAvailable, laboratoryTests: [])
         return copy.md5Hash() ?? UUID().uuidString
     }
     
@@ -176,9 +179,10 @@ extension StorageService: StorageLaboratoryOrderManager {
     func fetchLaboratoryOrders() -> [LaboratoryOrder] {
         guard let context = managedContext else {return []}
         do {
-            return try context.fetch(LaboratoryOrder.fetchRequest())
+            let results = try context.fetch(LaboratoryOrder.fetchRequest())
+            return results
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }

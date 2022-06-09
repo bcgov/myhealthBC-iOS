@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>MyHealth BC</string>
+	<string>Health Gateway Dev</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -38,13 +38,15 @@
 		<string>servicescard</string>
 		<string>myhealthapp</string>
 		<string>ca.bc.gov.idtest.servicescard</string>
+		<string>ca.bc.gov.iddev.servicescard</string>
+		<string>ca.bc.gov.id.servicescard</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>We need permission to access your camera to be able to scan QR codes</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure.</string>
+	<string>Unlock Health Gateway with biometric authentication is mandatory, to make sure your health information safe and secure.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>BCSans-Bold.otf</string>

@@ -28,6 +28,27 @@ protocol FilterRecordsViewDelegate {
     func selected(filter: RecordsFilter)
 }
 
+class UserFilters {
+    private struct UserFilter {
+        let name: String
+        var filter: RecordsFilter
+    }
+    private static var filters: [UserFilter] = []
+    
+    static func filterFor(name: String) -> RecordsFilter? {
+        return filters.first(where: {$0.name == name})?.filter
+    }
+    
+    static func removeFilterFor(name: String) {
+        filters.removeAll(where: {$0.name == name})
+    }
+    
+    static func save(filter: RecordsFilter, for name: String) {
+        filters.removeAll(where: {$0.name == name})
+        filters.append(UserFilter(name: name, filter: filter))
+    }
+}
+
 class FilterRecordsView: UIView, Theme {
     
     // MARK: Constants:
@@ -54,19 +75,22 @@ class FilterRecordsView: UIView, Theme {
     @IBOutlet weak var fromDateContainer: UIView!
     @IBOutlet weak var fromDateIcon: UIImageView!
     @IBOutlet weak var fromDateLabel: UILabel!
+
+    @IBOutlet weak var errorLabelFrom: UILabel!
+    @IBOutlet weak var datePickerFrom: UIDatePicker!
     
     @IBOutlet weak var toLabel: UILabel!
     @IBOutlet weak var toDateContainer: UIView!
     @IBOutlet weak var toDateIcon: UIImageView!
     @IBOutlet weak var toDateLabel: UILabel!
     
-    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var errorLabelTo: UILabel!
+    @IBOutlet weak var datePickerTo: UIDatePicker!
+    
     @IBOutlet weak var dateDivider: UIView!
     
     @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
-    
-    @IBOutlet weak var errorLabel: UILabel!
     
     // MARK: Variables
     var delegate: FilterRecordsViewDelegate? = nil
@@ -74,6 +98,7 @@ class FilterRecordsView: UIView, Theme {
     
     private var datepickerType: SelectedDatePickerType = .fromDate
     private var datePickerHideTimer: Timer? = nil
+    
     private var currentFilter: RecordsFilter = RecordsFilter()
     private var chipsView: ChipsView? = nil
     
@@ -126,11 +151,9 @@ class FilterRecordsView: UIView, Theme {
     }
     
     @IBAction func continueAction(_ sender: Any) {
-        if let from = currentFilter.fromDate, let to = currentFilter.toDate, to < from {
-            // Invalid date
-            errorLabel.isHidden = false
+        if showErrorMessagesIfNeeded() {
+            return
         } else {
-            // Is valid
             delegate?.selected(filter: currentFilter)
             dismiss()
         }
@@ -142,7 +165,8 @@ class FilterRecordsView: UIView, Theme {
         toDateLabel.text = "yyyy-mm-dd"
         fromDateLabel.text = "yyyy-mm-dd"
         delegate?.selected(filter: currentFilter)
-        errorLabel.isHidden = true
+        errorLabelTo.isHidden = true
+        errorLabelFrom.isHidden = true
         toDateIcon.image = UIImage(named: "calendar-icon")
         fromDateIcon.image = UIImage(named: "calendar-icon")
     }
@@ -151,20 +175,23 @@ class FilterRecordsView: UIView, Theme {
         fromDateIcon.image = UIImage(named: "calendar-icon")
         fromDateLabel.text = "yyyy-mm-dd"
         currentFilter.fromDate = nil
-        errorLabel.isHidden = true
+        errorLabelTo.isHidden = true
+        errorLabelFrom.isHidden = true
     }
     
     @objc func resetToDate(sender : UITapGestureRecognizer) {
         toDateIcon.image = UIImage(named: "calendar-icon")
         toDateLabel.text = "yyyy-mm-dd"
         currentFilter.toDate = nil
-        errorLabel.isHidden = true
+        errorLabelTo.isHidden = true
+        errorLabelFrom.isHidden = true
     }
     
     // MARK: Style
     func style() {
         self.alpha = 0
-        datePicker.maximumDate = Date()
+        // TODO: Remove this check
+//        datePicker.maximumDate = Date()
         navContainer.backgroundColor = .clear
         filterChipsContainer.backgroundColor = .clear
         
@@ -186,18 +213,22 @@ class FilterRecordsView: UIView, Theme {
         style(button: continueButton, style: .Fill, title: "Apply", image: nil)
         closeButton.setTitle("", for: .normal)
         
-        errorLabel.font = UIFont.bcSansRegularWithSize(size: 13)
-        errorLabel.textColor = AppColours.appRed
-        errorLabel.isHidden = true
+        errorLabelTo.font = UIFont.bcSansRegularWithSize(size: 13)
+        errorLabelTo.textColor = AppColours.appRed
+        errorLabelTo.isHidden = true
+        errorLabelFrom.font = UIFont.bcSansRegularWithSize(size: 13)
+        errorLabelFrom.textColor = AppColours.appRed
+        errorLabelFrom.isHidden = true
         
         let fromDateAction = UITapGestureRecognizer(target: self, action: #selector(fromDateTapped))
         fromDateContainer.isUserInteractionEnabled = true
         fromDateContainer.addGestureRecognizer(fromDateAction)
+        datePickerFrom.isHidden = true
         
         let toDateAction = UITapGestureRecognizer(target: self, action: #selector(toDateTapped))
         toDateContainer.isUserInteractionEnabled = true
         toDateContainer.addGestureRecognizer(toDateAction)
-        datePicker.isHidden = true
+        datePickerTo.isHidden = true
         
         self.layer.cornerRadius = 5
         self.layoutIfNeeded()
@@ -267,20 +298,23 @@ class FilterRecordsView: UIView, Theme {
     // MARK: Date
     @objc private func toDateTapped(sender:UITapGestureRecognizer) {
         datepickerType = .toDate
-        toLabel.textColor = AppColours.appBlue
-        fromLabel.textColor = AppColours.textBlack
-        showDatePicker()
+        showDatePicker(type: .toDate)
     }
     
     @objc private func fromDateTapped(sender:UITapGestureRecognizer) {
         datepickerType = .fromDate
-        fromLabel.textColor = AppColours.appBlue
-        toLabel.textColor = AppColours.textBlack
-        showDatePicker()
+        showDatePicker(type: .fromDate)
     }
     
-    private func showDatePicker() {
-        datePicker.isHidden = false
+    private func showDatePicker(type: SelectedDatePickerType) {
+        switch type {
+        case .fromDate:
+            datePickerFrom.isHidden = false
+            datePickerTo.isHidden = true
+        case .toDate:
+            datePickerTo.isHidden = false
+            datePickerFrom.isHidden = true
+        }
         UIView.animate(withDuration: 0.3) {[weak self] in
             self?.layoutIfNeeded()
         }
@@ -288,17 +322,16 @@ class FilterRecordsView: UIView, Theme {
     }
     
     @objc private func hideDatePicker() {
-        datePicker.isHidden = true
-        toLabel.textColor = AppColours.textBlack
-        fromLabel.textColor = AppColours.textBlack
+        datePickerTo.isHidden = true
+        datePickerFrom.isHidden = true
         UIView.animate(withDuration: 0.3) {[weak self] in
             self?.layoutIfNeeded()
         }
     }
     
     private func resetDatePickerHideTimer() {
-        datePickerHideTimer?.invalidate()
         datePickerHideTimer = Timer.scheduledTimer(timeInterval: datePickerDismissTime, target: self, selector: #selector(hideDatePicker), userInfo: nil, repeats: true)
+       
     }
     
     @IBAction func DatePickerEditingEnded(_ sender: Any) {
@@ -322,12 +355,38 @@ class FilterRecordsView: UIView, Theme {
             fromDateLabel.text = dateString
             fromDateIcon.image = UIImage(named: "close-icon")
         }
-        // Validation
-        if let from = currentFilter.fromDate, let to = currentFilter.toDate {
-            errorLabel.isHidden = to < from ? false : true
-        } else {
-            errorLabel.isHidden = true
+        
+        _ = showErrorMessagesIfNeeded()
+        
+//        if let from = currentFilter.fromDate, let to = currentFilter.toDate {
+//            errorLabel.isHidden = to < from ? false : true
+//        } else {
+//            errorLabel.isHidden = true
+//        }
+    }
+    
+    private func showErrorMessagesIfNeeded() -> Bool {
+        errorLabelFrom.text = ""
+        errorLabelTo.text = ""
+        errorLabelTo.isHidden = true
+        errorLabelFrom.isHidden = true
+        if let from = currentFilter.fromDate, from > Date() {
+            errorLabelFrom.isHidden = false
+            errorLabelFrom.text = "'From' date cannot be in the future"
+            return true
         }
+        if let to = currentFilter.toDate, to > Date() {
+            errorLabelTo.isHidden = false
+            errorLabelTo.text = "'To' date cannot be in the future"
+            return true
+        }
+        if let from = currentFilter.fromDate, let to = currentFilter.toDate {
+            errorLabelFrom.isHidden = false
+            errorLabelFrom.text = to < from ? "'From' date should be on or before 'To' date" : ""
+            return to < from
+        }
+        
+        return false
     }
     
 }

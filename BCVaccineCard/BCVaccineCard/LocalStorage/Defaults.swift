@@ -14,6 +14,7 @@ struct Defaults {
         case rememberGatewayDetails
         case hasAppLaunchedBefore
         case loginProcessStatus
+        case hasSeenFirstLogin
     }
     
     static var cachedQueueItObject: QueueItCachedObject? {
@@ -37,6 +38,11 @@ struct Defaults {
     static var hasAppLaunchedBefore: Bool {
         get { return UserDefaults.standard.bool(forKey: self.Key.hasAppLaunchedBefore.rawValue) }
         set { UserDefaults.standard.set(newValue, forKey: self.Key.hasAppLaunchedBefore.rawValue) }
+    }
+    
+    static var hasSeenFirstLogin: Bool {
+        get { return UserDefaults.standard.bool(forKey: self.Key.hasSeenFirstLogin.rawValue) }
+        set { UserDefaults.standard.set(newValue, forKey: self.Key.hasSeenFirstLogin.rawValue) }
     }
     
     // Note: This is to handle edge cases where user kills the app during the login flow and we have to handle logging a user out when app is launched again, or fetching records when app is launched again
@@ -68,7 +74,7 @@ struct Defaults {
             let decoded = try PropertyListDecoder().decode([VisitedOnboardingScreen].self, from: data)
             return decoded
         } catch {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .general)
             return []
         }
         
@@ -82,7 +88,7 @@ struct Defaults {
             let encoded = try PropertyListEncoder().encode(allVisits)
             UserDefaults.standard.set(encoded, forKey: self.Key.initialOnboardingScreensSeen.rawValue)
         } catch {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .general)
             return
         }
     }

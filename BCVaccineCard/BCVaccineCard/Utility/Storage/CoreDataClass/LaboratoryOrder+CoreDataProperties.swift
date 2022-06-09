@@ -25,6 +25,7 @@ extension LaboratoryOrder {
     @NSManaged public var timelineDateTime: Date?
     @NSManaged public var commonName: String?
     @NSManaged public var orderingProvider: String?
+    @NSManaged public var orderStatus: String?
     @NSManaged public var testStatus: String?
     @NSManaged public var reportAvailable: Bool
     @NSManaged public var laboratoryTests: NSSet?

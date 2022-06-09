@@ -11,4 +11,5 @@ struct LoginProcessStatus: Codable {
     var hasStartedLoginProcess: Bool
     var hasCompletedLoginProcess: Bool
     var hasFinishedFetchingRecords: Bool
+    var loggedInUserAuthManagerDisplayName: String?
 }

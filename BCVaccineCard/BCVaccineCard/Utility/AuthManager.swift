@@ -13,10 +13,17 @@ import BCVaccineValidator
 
 extension Constants {
     struct Auth {
-        static let issuer = "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f"
+        #if PROD
+        static let issuer = Constants.authIssuer
+        static let clientID = "hgmobileapp"
+        static let redirectURI = "myhealthbc://*"
+        static let params = ["kc_idp_hint": "bcsc2"]
+        #else
+        static let issuer = Constants.authIssuer
         static let clientID = "myhealthapp"
         static let redirectURI = "myhealthbc://*"
         static let params = ["kc_idp_hint": "bcsc"]
+        #endif
     }
 }
 
@@ -109,6 +116,7 @@ class AuthManager {
     var authTokenExpiery: Date? {
         if let timeIntervalString = keychain[Key.authTokenExpiery.rawValue],
            let  timeInterval = Double(timeIntervalString) {
+            print("CONNOR: ", Date(timeIntervalSince1970: timeInterval))
             return Date(timeIntervalSince1970: timeInterval)
         }
         return nil
@@ -123,15 +131,17 @@ class AuthManager {
             return nil
         }
     }
-    
+    // Note: Below is a hacky solution where we have to use access token expiry
     var isAuthenticated: Bool {
         guard authToken != nil else {
             return false
         }
-        guard let refreshExpiery = refreshTokenExpiery else {
-            return false
-        }
-        return refreshExpiery > Date()
+//        guard let refreshExpiery = refreshTokenExpiery else {
+//            return false
+//        }
+        guard let accessExpiry = authTokenExpiery else { return false }
+//        return refreshExpiery > Date()
+        return accessExpiry > Date()
     }
     
     var protectiveWord: String? {
@@ -175,7 +185,7 @@ class AuthManager {
                     self.authStatusChanged(authenticated: authState.isAuthorized)
                     return completion(.Success)
                 } else {
-                    print("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
+                    Logger.log(string: "Authorization error: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
                     return completion(.Fail)
                 }
             }
@@ -228,9 +238,11 @@ class AuthManager {
                     }
                     self.removeAuthTokens()
                     StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                    StorageService.shared.deleteAuthenticatedPatient()
                     self.removeAuthenticatedPatient()
                     self.authStatusChanged(authenticated: false)
                     self.clearData()
+                    Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: false, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: nil)
                     return completion(true)
                 }
                 if error != nil {
@@ -256,6 +268,12 @@ class AuthManager {
         self.delete(key: .medicalFetchRequired)
     }
     
+    // Note: This is called when user session expired and user logs in with new credentials
+    func clearMedFetchProtectiveWordDetails() {
+        removeProtectiveWord()
+        removeMedFetchRequired()
+    }
+    
     private func refetchAuthToken() {
         discoverConfiguration { result in
             guard let configuration = result, let refreshToken = self.refreshToken else { return }
@@ -276,7 +294,7 @@ class AuthManager {
                 if let tokenResponse = tokenResponse {
                     self.store(tokenResponse: tokenResponse)
                 } else {
-                    print("Refetch error: \(error?.localizedDescription ?? "Unknown error")")
+                    Logger.log(string: "Refetch error: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
                 }
             }
         }
@@ -288,7 +306,7 @@ class AuthManager {
         }
         OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { result, error in
             guard let configuration = result else {
-                print("Error retrieving discovery document: \(error?.localizedDescription ?? "Unknown error")")
+                Logger.log(string: "Error retrieving discovery document: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
                 return completion(nil)
             }
             return completion(configuration)
@@ -365,7 +383,7 @@ class AuthManager {
             try keychain.set(string, key: key.rawValue)
         }
         catch let error {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Auth)
         }
     }
     
@@ -374,7 +392,7 @@ class AuthManager {
             try keychain.remove(key.rawValue)
         }
         catch let error {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Auth)
         }
     }
     
@@ -384,7 +402,7 @@ class AuthManager {
             try keychain.set(String(dateDouble), key: key.rawValue)
         }
         catch let error {
-            print(error)
+            Logger.log(string: error.localizedDescription, type: .Auth)
         }
     }
     
@@ -392,15 +410,21 @@ class AuthManager {
         let info: [String: Bool] = [Constants.AuthStatusKey.key: authenticated]
         NotificationCenter.default.post(name: .authStatusChanged, object: nil, userInfo: info)
     }
+    
+    func logoutPermissionCancelled() {
+        self.clearData()
+        self.authStatusChanged(authenticated: false)
+    }
 }
 
 
 extension AuthManager {
+    // NOTE: This is a hacky solution where we are relying on the access token expiry and not using the refresh token. This is due to a keycloak issue that the HG team can't work around - so we just have a longer lasting access token. Once expired, user is considered logged out
     func initTokenExpieryTimer() {
-        if let refreshTokenExpiery = refreshTokenExpiery {
-            let timer = Timer(fireAt: refreshTokenExpiery, interval: 0, target: self, selector: #selector(refreshTokenExpired), userInfo: nil, repeats: false)
-            RunLoop.main.add(timer, forMode: .common)
-        }
+//        if let refreshTokenExpiery = refreshTokenExpiery {
+//            let timer = Timer(fireAt: refreshTokenExpiery, interval: 0, target: self, selector: #selector(refreshTokenExpired), userInfo: nil, repeats: false)
+//            RunLoop.main.add(timer, forMode: .common)
+//        }
         
         if let authTokenExpiery = authTokenExpiery {
             let timer = Timer(fireAt: authTokenExpiery, interval: 0, target: self, selector: #selector(authTokenExpired), userInfo: nil, repeats: false)
@@ -408,14 +432,16 @@ extension AuthManager {
         }
     }
     
-    @objc func refreshTokenExpired() {
+//    @objc func refreshTokenExpired() {
+//        NotificationCenter.default.post(name: .refreshTokenExpired, object: nil)
+//    }
+    @objc func authTokenExpired() {
+//        NotificationCenter.default.post(name: .authTokenExpired, object: nil)
+//        fetchAccessTokenWithRefeshToken()
         NotificationCenter.default.post(name: .refreshTokenExpired, object: nil)
     }
-    @objc func authTokenExpired() {
-        NotificationCenter.default.post(name: .authTokenExpired, object: nil)
-        fetchAccessTokenWithRefeshToken()
-    }
     
+    // Note - due to hack, we won't be using this function, currently
     private func fetchAccessTokenWithRefeshToken() {
         refetchAuthToken()
     }

@@ -37,8 +37,17 @@ extension HealthRecordsDetailDataSource.Record {
                 type = .Message
             }
             return type
-        case .medication, .laboratoryOrder:
+        case .medication:
             return .NoBanner
+        case .laboratoryOrder(let tests):
+            if tests.isEmpty {
+                return .LabOrderWithoutTests
+            } else if status?.lowercased() == "pending"{
+                return .LabOrderPending
+            } else {
+                return .NoBanner
+            }
+            
         }
     }
     
@@ -84,8 +93,29 @@ extension HealthRecordsDetailDataSource.Record {
             }
             
             return completion(BannerViewTableViewCell.ViewModel(statusImage: nil, textColor: textColor, backgroundColor: backgroundColor, statusColor: statusColor, issueDate: issueDate, name: name ,status: status, type: type, attributedString: attributedString))
-        case .medication, .laboratoryOrder:
+        case .medication:
             return completion(nil)
+        case .laboratoryOrder:
+            let bannerType = statusBannerViewType()
+            if bannerType == .NoBanner {return completion(nil)}
+            
+            let image: UIImage? = UIImage(named: "info-icon-fill")
+            let textColor = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
+            let backgroundColor = UIColor(red: 0.851, green: 0.918, blue: 0.969, alpha: 1)
+            
+            let fontAttribute = [NSAttributedString.Key.font: UIFont.bcSansRegularWithSize(size: 15), NSAttributedString.Key.foregroundColor: textColor]
+            let body: NSMutableAttributedString
+            if bannerType == .LabOrderWithoutTests {
+                body = NSMutableAttributedString(string: "Results are pending\nIt can take between 1 and 7 days to complete. Find resources to learn about your lab test and what the results mean. Learn more", attributes: fontAttribute)
+                _ = body.setAsLink(textToFind: "Learn more", linkURL: "https://www.healthgateway.gov.bc.ca/faq")
+                
+            } else {
+                body = NSMutableAttributedString(string: "Results are pending\nIt can take between 1 and 7 days to complete.", attributes: fontAttribute)
+            }
+            
+            body.boldText(textToFind: "Results are pending", font:  UIFont.bcSansBoldWithSize(size: 15))
+            let model = BannerViewTableViewCell.ViewModel(statusImage: image, textColor: textColor, backgroundColor: backgroundColor, statusColor: textColor, issueDate: "", name: "", status: nil, type: bannerType, attributedString: body)
+            return completion(model)
         }
     }
 }
@@ -117,7 +147,10 @@ class BannerViewTableViewCell: UITableViewCell {
         self.bannerView?.alpha = 0
         self.startLoadingIndicator()
         record.toBannerViewTableViewCellViewModel { [weak self] model in
-            guard let `self` = self, let model = model else {return}
+            guard let `self` = self, let model = model else {
+                self?.removeBannerWhenNotRequired()
+                return
+            }
             self.bannerView?.update(
                 type: model.type,
                 name: model.name,
@@ -140,6 +173,14 @@ class BannerViewTableViewCell: UITableViewCell {
         
     }
     
+    private func removeBannerWhenNotRequired() {
+        self.bannerView = nil
+        self.endLoadingIndicator()
+        let heightConstraint = self.contentView.heightAnchor.constraint(equalToConstant: 0)
+        self.addConstraint(heightConstraint)
+        self.layoutIfNeeded()
+    }
+    
     private func createView() -> StatusBannerView {
         if let existing = self.bannerView {existing.removeFromSuperview()}
         let banner: StatusBannerView = UIView.fromNib()
@@ -149,7 +190,7 @@ class BannerViewTableViewCell: UITableViewCell {
 }
 
 extension HealthRecordsDetailDataSource.Record.RecordType {
-    
+    // FIXME: Is this being used still?
     func toBannerType() -> StatusBannerView.BannerType {
         switch self {
         case .covidImmunizationRecord:

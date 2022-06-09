@@ -42,6 +42,14 @@ class SecurityAndDataViewController: BaseViewController {
     
     fileprivate let authManager = AuthManager()
     
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .SecurityAndDataViewController
+    }
+    
+    override var getRecordFlowType: RecordsFlowVCs? {
+        return .SecurityAndDataViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -55,6 +63,7 @@ class SecurityAndDataViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        self.tabBarController?.tabBar.isHidden = true
         navSetup()
     }
     
@@ -103,12 +112,20 @@ class SecurityAndDataViewController: BaseViewController {
     func deleteAllData() {
         self.alertConfirmation(title: .deleteData, message: .confirmDeleteAllRecordsAndSaveData, confirmTitle: .delete, confirmStyle: .destructive) {[weak self] in
             guard let `self` = self else {return}
-            Defaults.rememberGatewayDetails = nil
-            StorageService.shared.deleteAllStoredData()
             LocalAuthManager.block = true
-            self.performLogout(completion: {[weak self] in
+            self.performLogout(completion: {[weak self] success in
                 guard let `self` = self else {return}
-                self.showBanner(message: .deletedAllRecordsAndSavedData, style: .Top)
+                Defaults.rememberGatewayDetails = nil
+                StorageService.shared.deleteAllStoredData()
+                AppDelegate.sharedInstance?.showToast(message: .deletedAllRecordsAndSavedData)
+//                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
+                DispatchQueue.main.async {
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+
+                    self.routerWorker?.routingAction(scenario: .ClearAllData(values: values))
+                }
             })
             
         } onCancel: {}
@@ -130,7 +147,7 @@ class SecurityAndDataViewController: BaseViewController {
 //        performLogout(completion: {})
 //    }
 //
-    private func performLogout(completion: @escaping()-> Void) {
+    private func performLogout(completion: @escaping(_ success: Bool)-> Void) {
         authManager.signout(in: self, completion: { [weak self] success in
             guard let `self` = self else {return}
             // Regardless of the result of the async logout, clear tokens.
@@ -138,6 +155,7 @@ class SecurityAndDataViewController: BaseViewController {
             // TODO: Note - sometimes prompt isn't shown after hitting logout, so the screen state (for records) remains. We should look at resetting tab bar and then switch index to current index after reset
             self.authManager.clearData()
             self.tableView.reloadData()
+            completion(success)
         })
     }
     

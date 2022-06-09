@@ -61,6 +61,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
+  - IQKeyboardManagerSwift (6.5.9)
   - JOSESwift (2.4.0)
   - JWTDecode (2.6.3)
   - KeychainAccess (4.2.2)
@@ -72,6 +73,7 @@ PODS:
   - PocketSVG (2.7.2)
   - PromisesObjC (2.0.0)
   - QueueITLibrary (3.0.9)
+  - ReachabilitySwift (5.0.0)
   - SnowplowTracker (2.2.2):
     - FMDB (~> 2.7)
   - SQLCipher (3.4.2):
@@ -89,10 +91,12 @@ DEPENDENCIES:
   - BCVaccineValidator (from `https://github.com/bcgov/iOSVaccineValidator`)
   - EncryptedCoreData (from `https://github.com/project-imas/encrypted-core-data.git`)
   - Firebase/AppDistribution
+  - IQKeyboardManagerSwift
   - JWTDecode (~> 2.6)
   - KeychainAccess
   - PocketSVG (~> 2.6)
   - QueueITLibrary (~> 3.0.3)
+  - ReachabilitySwift
   - SnowplowTracker (~> 2.0)
   - SwiftQRCodeGenerator (~> 1.0.3)
   - SwiftyJSON (~> 4.0)
@@ -111,6 +115,7 @@ SPEC REPOS:
     - FMDB
     - GoogleDataTransport
     - GoogleUtilities
+    - IQKeyboardManagerSwift
     - JOSESwift
     - JWTDecode
     - KeychainAccess
@@ -118,6 +123,7 @@ SPEC REPOS:
     - PocketSVG
     - PromisesObjC
     - QueueITLibrary
+    - ReachabilitySwift
     - SnowplowTracker
     - SQLCipher
     - SwiftQRCodeGenerator
@@ -152,6 +158,7 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  IQKeyboardManagerSwift: 6e839c575c4aa1078d58a596e41244e77abe918f
   JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
   JWTDecode: 33e5e26e5ddbd21b2065820894c08fef0cad9509
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
@@ -159,12 +166,13 @@ SPEC CHECKSUMS:
   PocketSVG: c597e6916641fd2674d2f0cabca0d1869cb82880
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   QueueITLibrary: 840b877e4a4aad67b9b1941f31a56988bc03be71
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   SnowplowTracker: 2eee2d6606a60db98f7c4e1515499bb216b6c8ad
   SQLCipher: f9fcf29b2e59ced7defc2a2bdd0ebe79b40d4990
   SwiftQRCodeGenerator: c5cdef1603699784b07af0fd3cc1c2f45ac26ada
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 3d05b923a9795ab7d0acda4b49bf320269f3aaf1
+PODFILE CHECKSUM: acd9d0052f71d24e6cb030c8912becfa4d0748a9
 
 COCOAPODS: 1.11.3

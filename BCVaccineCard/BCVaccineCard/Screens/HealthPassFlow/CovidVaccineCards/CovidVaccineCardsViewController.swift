@@ -12,8 +12,10 @@ import SwipeCellKit
 
 class CovidVaccineCardsViewController: BaseViewController {
     
-    class func constructCovidVaccineCardsViewController() -> CovidVaccineCardsViewController {
+    class func constructCovidVaccineCardsViewController(recentlyAddedCardId: String?, fedPassStringToOpen: String?) -> CovidVaccineCardsViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: CovidVaccineCardsViewController.self)) as? CovidVaccineCardsViewController {
+            vc.recentlyAddedCardId = recentlyAddedCardId
+            vc.fedPassStringToOpen = fedPassStringToOpen
             return vc
         }
         return CovidVaccineCardsViewController()
@@ -25,6 +27,8 @@ class CovidVaccineCardsViewController: BaseViewController {
     @IBOutlet weak private var tableViewTrailingConstraint: NSLayoutConstraint!
     
     private var expandedIndexRow = 0
+    private var recentlyAddedCardId: String?
+    private var fedPassStringToOpen: String?
     
     private var dataSource: [VaccineCard] = [] {
         didSet {
@@ -41,6 +45,10 @@ class CovidVaccineCardsViewController: BaseViewController {
             adjustNavBar()
             self.tableView.layoutSubviews()
         }
+    }
+    
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .CovidVaccineCardsViewController(fedPassToOpen: self.fedPassStringToOpen, recentlyAddedCardId: self.recentlyAddedCardId)
     }
     
     override func viewDidLoad() {
@@ -65,15 +73,20 @@ class CovidVaccineCardsViewController: BaseViewController {
     }
     
     private func setup() {
+        showFedPassIfNeccessary()
         cardChangedObservableSetup()
         retrieveDataSource()
         setupTableView()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            self.scrollToRecentlyAddedCardAndExpand()
+        }
         
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
-            case .VaccineCard:
+            case .VaccineCard, .Patient:
                 self.fetchFromStorage()
+                print("CONNOR CALLED HERE: ", self.expandedIndexRow, self.dataSource.count - 1)
                 if self.expandedIndexRow > self.dataSource.count - 1 {
                     self.expandedIndexRow = 0
                     self.tableView.reloadData()
@@ -84,20 +97,16 @@ class CovidVaccineCardsViewController: BaseViewController {
         }
     }
     
-}
-
-// MARK: Card change observable setup
-extension CovidVaccineCardsViewController {
-    private func cardChangedObservableSetup() {
-        NotificationCenter.default.addObserver(self, selector: #selector(onNotification(notification:)), name: .cardAddedNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(fedPassOnlyAdded(notification:)), name: .fedPassOnlyAdded, object: nil)
+    private func showFedPassIfNeccessary() {
+        guard let fedPassStringToOpen = fedPassStringToOpen else { return }
+        self.showPDFDocument(pdfString: fedPassStringToOpen, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
     }
     
-    @objc func onNotification(notification:Notification) {
-        fetchFromStorage()
-        guard let id = notification.userInfo?["id"] as? String else { return }
+    private func scrollToRecentlyAddedCardAndExpand() {
+        print("CONNOR INFO: ", recentlyAddedCardId, dataSource.map({ $0.id }))
+        guard let recentlyAddedCardId = recentlyAddedCardId else { return }
         var indexPath: IndexPath?
-        if let index = self.dataSource.firstIndex(where: { $0.id == id }) {
+        if let index = self.dataSource.firstIndex(where: { $0.id == recentlyAddedCardId }) {
             expandedIndexRow = index
             indexPath = IndexPath(row: expandedIndexRow, section: 0)
         }
@@ -105,6 +114,7 @@ extension CovidVaccineCardsViewController {
         if let indexPath = indexPath {
             guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            print("CONNOR SCROLL TO ROW CALLED")
             guard let cell = self.tableView.cellForRow(at: indexPath), self.dataSource.count > indexPath.row else { return }
             let model = self.dataSource[indexPath.row]
             cell.accessibilityLabel = AccessibilityLabels.CovidVaccineCardsScreen.proofOfVaccineCardAdded
@@ -115,14 +125,45 @@ extension CovidVaccineCardsViewController {
         }
     }
     
-    @objc func fedPassOnlyAdded(notification:Notification) {
-        guard let userInfo = notification.userInfo as? [String: Any] else { return }
-        guard let pass = userInfo["pass"] as? String else { return }
-        guard let source = userInfo["source"] as? GatewayFormSource, source == .vaccineCardsScreen else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
-        }
+}
+
+// MARK: Card change observable setup
+extension CovidVaccineCardsViewController {
+    private func cardChangedObservableSetup() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(onNotification(notification:)), name: .cardAddedNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(fedPassOnlyAdded(notification:)), name: .fedPassOnlyAdded, object: nil)
     }
+    
+//    @objc func onNotification(notification:Notification) {
+//        fetchFromStorage()
+//        guard let id = notification.userInfo?["id"] as? String else { return }
+//        var indexPath: IndexPath?
+//        if let index = self.dataSource.firstIndex(where: { $0.id == id }) {
+//            expandedIndexRow = index
+//            indexPath = IndexPath(row: expandedIndexRow, section: 0)
+//        }
+//        inEditMode = false
+//        if let indexPath = indexPath {
+//            guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
+//            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+//            guard let cell = self.tableView.cellForRow(at: indexPath), self.dataSource.count > indexPath.row else { return }
+//            let model = self.dataSource[indexPath.row]
+//            cell.accessibilityLabel = AccessibilityLabels.CovidVaccineCardsScreen.proofOfVaccineCardAdded
+//            let accessibilityValue = "\(model.name ?? ""), \(AccessibilityLabels.VaccineCardView.qrCodeImage)"
+//            cell.accessibilityValue = accessibilityValue
+//            cell.accessibilityHint = AccessibilityLabels.VaccineCardView.expandedAction
+//            UIAccessibility.setFocusTo(cell)
+//        }
+//    }
+    
+//    @objc func fedPassOnlyAdded(notification:Notification) {
+//        guard let userInfo = notification.userInfo as? [String: Any] else { return }
+//        guard let pass = userInfo["pass"] as? String else { return }
+//        guard let source = userInfo["source"] as? GatewayFormSource, source == .vaccineCardsScreen else { return }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
+//        }
+//    }
 
 }
 
@@ -307,13 +348,7 @@ extension CovidVaccineCardsViewController: FederalPassViewDelegate {
             self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .vaccineCardsScreen, owner: self, navDelegate: self.navDelegate, completion: { [weak self] id in
-                guard let `self` = self else { return }
-                self.tabBarController?.tabBar.isHidden = false
-                self.navigationController?.popViewController(animated: true)
-                guard let id = id else { return }
-                self.postCardAddedNotification(id: id)
-            })
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .vaccineCardsScreen, owner: self, navDelegate: self.navDelegate)
         }
     }
 
@@ -339,7 +374,30 @@ extension CovidVaccineCardsViewController {
             guard let `self` = self else {return}
             guard self.dataSource.count > indexPath.row else { return }
             let item = self.dataSource[indexPath.row]
+            let patient = item.patient
             StorageService.shared.deleteVaccineCard(vaccineQR: item.code ?? "", manuallyAdded: manuallyAdded)
+            let cards = StorageService.shared.fetchVaccineCards()
+            // Handle deleting a patient if necessary here
+            if let patient = patient, patient.authenticated == false {
+                let records = StorageService.shared.getHeathRecords().detailDataSource(patient: patient)
+                if records.count == 0, let name = patient.name, let birthday = patient.birthday {
+                    StorageService.shared.deletePatient(name: name, birthday: birthday)
+                }
+            }
+            DispatchQueue.main.async {
+                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                if cards.count == 0 || (cards.count == 1 && cards.first?.authenticated == true) {
+                    // This means that the user has removed all unauthenticated
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                } else {
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                    
+                }
+            }
+            
         }
     }
 }

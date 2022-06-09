@@ -35,6 +35,32 @@ class StatusBannerView: UIView, UITextViewDelegate {
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var messageIcon: UIImageView!
+    @IBOutlet weak var messageStack: UIStackView!
+    
+    var largeFontSize: CGFloat {
+        if Device.IS_IPHONE_5 {
+            return 16
+        } else {
+            return 18
+        }
+    }
+    
+    var mediumFontSize: CGFloat {
+        if Device.IS_IPHONE_5 {
+            return 14
+        } else {
+            return 16
+        }
+    }
+    
+    var smallFontSize: CGFloat {
+        if Device.IS_IPHONE_5 {
+            return 12
+        } else {
+            return 15
+        }
+    }
     
     private var labels: [UILabel?] {
         return [recordTypeLabel, statusLabel, nameLabel, timeLabel]
@@ -44,6 +70,8 @@ class StatusBannerView: UIView, UITextViewDelegate {
         case Message
         case CovidTest
         case VaccineRecord
+        case LabOrderPending
+        case LabOrderWithoutTests
         case NoBanner
     }
     
@@ -92,9 +120,10 @@ class StatusBannerView: UIView, UITextViewDelegate {
         
         // Set Status Icon if needed
         if let icon = statusIconImage {
-            statusIcon.image = icon
+            setImage(type: type, icon: icon)
         } else {
             statusIcon.isHidden = true
+            messageIcon.isHidden = true
         }
         
         // Set backgerund and text colours
@@ -105,7 +134,6 @@ class StatusBannerView: UIView, UITextViewDelegate {
             }
         }
         statusLabel.textColor = statusColour
-        textView.textColor = statusColour
         
         // set texts
         nameLabel.text = name
@@ -115,43 +143,73 @@ class StatusBannerView: UIView, UITextViewDelegate {
         
         self.layoutIfNeeded()
         style(for: type)
+        textView.textColor = statusColour
+    }
+    
+    func setImage(type: BannerType, icon: UIImage) {
+        switch type {
+        case .VaccineRecord:
+            statusIcon.isHidden = false
+            statusIcon.image = icon
+        case .LabOrderPending, .LabOrderWithoutTests:
+            messageIcon.isHidden = false
+            messageIcon.image = icon
+        default:
+            statusIcon.isHidden = true
+            messageIcon.isHidden = true
+        }
     }
     
     func style(for type: BannerType) {
         self.layoutIfNeeded()
         switch type {
         case .CovidTest:
-            textView.isHidden = true
-            
-            nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
-            statusLabel.font = UIFont.bcSansBoldWithSize(size: 18)
-            timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+            messageStack.isHidden = true
+            nameLabel.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
+            statusLabel.font = UIFont.bcSansBoldWithSize(size: largeFontSize)
+            timeLabel.font = UIFont.bcSansRegularWithSize(size: smallFontSize)
         case .VaccineRecord:
-            textView.isHidden = true
-            
-            nameLabel.font = UIFont.bcSansBoldWithSize(size: 16)
-            statusLabel.font = UIFont.bcSansRegularWithSize(size: 18)
-            timeLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+            messageStack.isHidden = true
+            nameLabel.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
+            statusLabel.font = UIFont.bcSansRegularWithSize(size: largeFontSize)
+            timeLabel.font = UIFont.bcSansRegularWithSize(size: smallFontSize)
         case .Message:
             topContainer.isHidden = true
             statusStack.isHidden = true
             timeLabel.isHidden = true
             nameLabel.isHidden = true
+            messageStack.isHidden = false
+            messageIcon.isHidden = true
+            messageStack.alignment = .fill
             
+            setupTextView()
+            textView.font = UIFont.bcSansBoldWithSize(size: mediumFontSize)
+            textView.sizeToFit()
+        case .LabOrderPending, .LabOrderWithoutTests:
+            messageStack.isHidden = false
+            setupTextView()
+            nameLabel.isHidden = true
+            topContainer.isHidden = true
             textView.isUserInteractionEnabled = true
             textView.delegate = self
-            textView.font = UIFont.bcSansBoldWithSize(size: 16)
-            textView.translatesAutoresizingMaskIntoConstraints = true
+            timeLabel.isHidden = true
+            statusStack.isHidden = true
             textView.sizeToFit()
-            textView.isScrollEnabled = false
-            textView.isEditable = false
-            textView.backgroundColor = .clear
         case .NoBanner:
-            print("Not using this cell here")
+            Logger.log(string: "Not using this cell here", type: .general)
         }
         self.layoutIfNeeded()
     }
     
+    func setupTextView() {
+        textView.isUserInteractionEnabled = true
+        textView.delegate = self
+        textView.translatesAutoresizingMaskIntoConstraints = true
+        textView.isScrollEnabled = false
+        textView.isEditable = false
+        textView.backgroundColor = .clear
+        textView.sizeToFit()
+    }
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         UIApplication.shared.open(URL)

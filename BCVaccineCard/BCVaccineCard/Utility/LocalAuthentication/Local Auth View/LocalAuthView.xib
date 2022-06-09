@@ -24,7 +24,7 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unlock My Health BC with biometric authentication is mandatory, to make sure your health information safe and secure." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="a3P-xz-QNo">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unlock Health Gateway with biometric authentication is mandatory, to make sure your health information safe and secure." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="a3P-xz-QNo">
                     <rect key="frame" x="32" y="167" width="350" height="61"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="61" id="aHp-6N-ABT"/>

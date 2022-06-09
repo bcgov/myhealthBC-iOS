@@ -89,6 +89,12 @@ extension Date {
             formatter.dateFormat = "yyyy-MMMM-dd, hh:mm a"
             return formatter
         }()
+        static let commentsDateTime: DateFormatter = {
+            let formatter = DateFormatter()
+//            2012-Apr-14, 4:35 PM
+            formatter.dateFormat = "yyyy-MMM-dd, hh:mm a"
+            return formatter
+        }()
         
         //MARK: - Date
         static let shortDate: DateFormatter = {
@@ -216,6 +222,7 @@ extension Date {
     var gatewayDateAndTimeWithMS: String { return Formatter.gatewayDateAndTimeWithMS.string(from: self) }
     var gatewayDateAndTimeWithMSAndTimeZone: String { return Formatter.gatewayDateAndTimeWithMSAndTimeZone.string(from: self) }
     var labOrderDateTime: String { return Formatter.labOrderDateTime.string(from: self) }
+    var commentsDateTime: String { return Formatter.commentsDateTime.string(from: self) }
     
     //MARK: - Date Strings
     var shortDateString: String { return Formatter.shortDate.string(from: self) }

@@ -1,6 +1,0 @@
-framework module Pods_BCVaccineCard_BCVaccineCardUITests {
-  umbrella header "Pods-BCVaccineCard-BCVaccineCardUITests-umbrella.h"
-
-  export *
-  module * { export * }
-}

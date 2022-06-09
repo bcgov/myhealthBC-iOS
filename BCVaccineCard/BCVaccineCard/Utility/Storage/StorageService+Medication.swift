@@ -12,8 +12,9 @@ protocol StorageMedicationManager {
     // MARK: Store
     func storePrescription(
         patient: Patient,
-        object: AuthenticatedMedicationStatementResponseObject.ResourcePayload
-    )-> Perscription?
+        object: AuthenticatedMedicationStatementResponseObject.ResourcePayload,
+        initialProtectedMedFetch: Bool
+    ) -> Perscription?
     
     func storePrescription(
         patient: Patient,
@@ -25,11 +26,13 @@ protocol StorageMedicationManager {
         directions: String?,
         dateEntered: Date?,
         pharmacy: Pharmacy?,
-        medication: Medication?
-    )-> Perscription?
+        medication: Medication?,
+        initialProtectedMedFetch: Bool
+    ) -> Perscription?
     
     func storeMedication(
-        gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary
+        gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary,
+        initialProtectedMedFetch: Bool
     ) -> Medication?
     
     func storeMedication(
@@ -43,11 +46,13 @@ protocol StorageMedicationManager {
         manufacturer: String?,
         strength: String?,
         strengthUnit: String?,
-        isPin: Bool?
+        isPin: Bool?,
+        initialProtectedMedFetch: Bool
     ) -> Medication?
     
     func storePharmacy(
-        gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.DispensingPharmacy
+        gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.DispensingPharmacy,
+        initialProtectedMedFetch: Bool
     ) -> Pharmacy?
     
     func storePharmacy(
@@ -60,8 +65,9 @@ protocol StorageMedicationManager {
         postalCode: String?,
         countryCode: String?,
         phoneNumber: String?,
-        faxNumber: String?
-    )-> Pharmacy?
+        faxNumber: String?,
+        initialProtectedMedFetch: Bool
+    ) -> Pharmacy?
     
     // MARK: Delete
     func deletePrescription(id: String, sendDeleteEvent: Bool)
@@ -84,7 +90,7 @@ extension StorageService: StorageMedicationManager {
     ///   - gatewayResponse: Object retrieved from API containing array of Perscriptions
     ///   - patient: patient to store object for
     ///   - completion:  returns array of stored perscriptions
-    func storePrescriptions(in gatewayResponse: AuthenticatedMedicationStatementResponseObject, patient: Patient, completion: @escaping([Perscription])->Void) {
+    func storePrescriptions(in gatewayResponse: AuthenticatedMedicationStatementResponseObject, patient: Patient, initialProtectedMedFetch: Bool, completion: @escaping([Perscription])->Void) {
         /**
          Note the return is Async but function doesnt do anything async yet.
          This is in case the proccess is slow in the future and we want to handle it asynchronously.
@@ -93,18 +99,19 @@ extension StorageService: StorageMedicationManager {
         guard let perscriptionObjects = gatewayResponse.resourcePayload else {return}
         var storedObjects: [Perscription] = []
         for object in perscriptionObjects {
-            if let storedObject = storePrescription(patient: patient, object: object) {
+            if let storedObject = storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch) {
                 storedObjects.append(storedObject)
             } else {
                 Logger.log(string: "*Failed while storing perscription", type: .storage)
             }
         }
         Logger.log(string: "Stored \(storedObjects.count) items", type: .storage)
-        self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: storedObjects))
+        let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Perscription, object: storedObjects)) : self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: storedObjects))
+        
         return completion(storedObjects)
     }
     
-    func storePrescription(patient: Patient, object: AuthenticatedMedicationStatementResponseObject.ResourcePayload) -> Perscription? {
+    func storePrescription(patient: Patient, object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, initialProtectedMedFetch: Bool) -> Perscription? {
         
         // Handle Medication
         var medication: Medication? = nil
@@ -114,16 +121,16 @@ extension StorageService: StorageMedicationManager {
 //            } else {
 //                medication = storeMedication(gateWayResponse: medicationSummary)
 //            }
-            medication = storeMedication(gateWayResponse: medicationSummary)
+            medication = storeMedication(gateWayResponse: medicationSummary, initialProtectedMedFetch: initialProtectedMedFetch)
         }
         // Handle Pharmacy
         var pharmacy: Pharmacy? = nil
         if let dispensingPharmacy = object.dispensingPharmacy {
-            if let pharmacyId = dispensingPharmacy.pharmacyID, let storedPharmacy = fetchPharmacy(id: pharmacyId) {
-                pharmacy = storedPharmacy
-            } else {
-                pharmacy = storePharmacy(gateWayResponse: dispensingPharmacy)
-            }
+//            if let pharmacyId = dispensingPharmacy.pharmacyID, let storedPharmacy = fetchPharmacy(id: pharmacyId) {
+//                pharmacy = storedPharmacy
+//            } else {
+                pharmacy = storePharmacy(gateWayResponse: dispensingPharmacy, initialProtectedMedFetch: initialProtectedMedFetch)
+//            }
         }
         
         let id = UUID().uuidString
@@ -154,7 +161,8 @@ extension StorageService: StorageMedicationManager {
             directions: object.directions,
             dateEntered: dateEntered,
             pharmacy: pharmacy,
-            medication: medication
+            medication: medication,
+            initialProtectedMedFetch: initialProtectedMedFetch
         )
     }
    
@@ -168,7 +176,8 @@ extension StorageService: StorageMedicationManager {
         directions: String?,
         dateEntered: Date?,
         pharmacy: Pharmacy?,
-        medication: Medication?
+        medication: Medication?,
+        initialProtectedMedFetch: Bool
     ) -> Perscription? {
         guard let context = managedContext else {return nil}
         let prescription = Perscription(context: context)
@@ -183,34 +192,33 @@ extension StorageService: StorageMedicationManager {
         prescription.authenticated = true
         prescription.pharmacy = pharmacy
         prescription.medication = medication
-        // TODO: FOR DEBUGGING, REMOVE THIS
-        if prescriptionIdentifier == "00019243" || Int(prescriptionIdentifier ?? "0") == 00019243 {
-            print("Found it")
-        }
+        
         do {
             try context.save()
             return prescription
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
     
     func storeMedication(
-        gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary
+        gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.MedicationSummary,
+        initialProtectedMedFetch: Bool
     ) -> Medication? {
         let drugDiscontinuedDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: gateWayResponse.drugDiscontinuedDate ?? "")
         return storeMedication(din: gateWayResponse.din,
-                        brandName: gateWayResponse.brandName,
-                        genericName: gateWayResponse.genericName,
-                        quantity: gateWayResponse.quantity,
-                        maxDailyDosage: gateWayResponse.maxDailyDosage,
-                        drugDiscontinuedDate: drugDiscontinuedDate,
-                        form: gateWayResponse.form,
-                        manufacturer: gateWayResponse.manufacturer,
-                        strength: gateWayResponse.strength,
-                        strengthUnit: gateWayResponse.strengthUnit,
-                        isPin: gateWayResponse.isPin
+                               brandName: gateWayResponse.brandName,
+                               genericName: gateWayResponse.genericName,
+                               quantity: gateWayResponse.quantity,
+                               maxDailyDosage: gateWayResponse.maxDailyDosage,
+                               drugDiscontinuedDate: drugDiscontinuedDate,
+                               form: gateWayResponse.form,
+                               manufacturer: gateWayResponse.manufacturer,
+                               strength: gateWayResponse.strength,
+                               strengthUnit: gateWayResponse.strengthUnit,
+                               isPin: gateWayResponse.isPin,
+                               initialProtectedMedFetch: initialProtectedMedFetch
         )
     }
     
@@ -224,7 +232,8 @@ extension StorageService: StorageMedicationManager {
                          manufacturer: String?,
                          strength: String?,
                          strengthUnit: String?,
-                         isPin: Bool?
+                         isPin: Bool?,
+                         initialProtectedMedFetch: Bool
     ) -> Medication? {
         guard let context = managedContext else {return nil}
         let medication = Medication(context: context)
@@ -241,16 +250,17 @@ extension StorageService: StorageMedicationManager {
         medication.isPin = isPin ?? false
         do {
             try context.save()
-//            self.notify(event: StorageEvent(event: .Save, entity: .Medication, object: medication))
+//            let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Medication, object: medication)) : self.notify(event: StorageEvent(event: .Save, entity: .Medication, object: medication))
             return medication
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
     
     func storePharmacy(
-        gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.DispensingPharmacy
+        gateWayResponse: AuthenticatedMedicationStatementResponseObject.ResourcePayload.DispensingPharmacy,
+        initialProtectedMedFetch: Bool
     ) -> Pharmacy? {
         storePharmacy(pharmacyID: gateWayResponse.pharmacyID,
                       name: gateWayResponse.name,
@@ -261,7 +271,8 @@ extension StorageService: StorageMedicationManager {
                       postalCode: gateWayResponse.postalCode,
                       countryCode: gateWayResponse.countryCode,
                       phoneNumber: gateWayResponse.phoneNumber,
-                      faxNumber: gateWayResponse.faxNumber)
+                      faxNumber: gateWayResponse.faxNumber,
+                      initialProtectedMedFetch: initialProtectedMedFetch)
     }
     
     func storePharmacy(pharmacyID: String?,
@@ -273,7 +284,8 @@ extension StorageService: StorageMedicationManager {
                        postalCode: String?,
                        countryCode: String?,
                        phoneNumber: String?,
-                       faxNumber: String?
+                       faxNumber: String?,
+                       initialProtectedMedFetch: Bool
     ) -> Pharmacy? {
         guard let context = managedContext else {return nil}
         let pharmacy = Pharmacy(context: context)
@@ -289,10 +301,10 @@ extension StorageService: StorageMedicationManager {
         pharmacy.faxNumber = faxNumber
         do {
             try context.save()
-            self.notify(event: StorageEvent(event: .Save, entity: .Pharmacy, object: pharmacy))
+            let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Pharmacy, object: pharmacy)) : self.notify(event: StorageEvent(event: .Save, entity: .Pharmacy, object: pharmacy))
             return pharmacy
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -303,7 +315,7 @@ extension StorageService: StorageMedicationManager {
         do {
             return try context.fetch(Perscription.fetchRequest())
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }
@@ -319,7 +331,7 @@ extension StorageService: StorageMedicationManager {
             let pharmacies = try context.fetch(Pharmacy.fetchRequest())
             return pharmacies.first(where: {$0.id == id})
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }

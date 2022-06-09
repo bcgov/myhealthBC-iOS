@@ -7,6 +7,20 @@
 
 import Foundation
 
+enum LabTestType {
+    case normal
+    case covid
+    
+    var getBoolStringValue: String {
+        switch self {
+        case .normal:
+            return "false"
+        case .covid:
+            return "true"
+        }
+    }
+}
+
 // MARK: - Welcome
 struct AuthenticatedLaboratoryOrdersResponseObject: Codable {
     let resourcePayload: ResourcePayload?
@@ -22,7 +36,7 @@ struct AuthenticatedLaboratoryOrdersResponseObject: Codable {
         // MARK: - Order
         struct Order: Codable {
             let labPdfId, reportingSource, reportID, collectionDateTime, timelineDateTime: String?
-            let commonName, orderingProvider, testStatus: String?
+            let commonName, orderingProvider, orderStatus, testStatus: String?
             let reportAvailable: Bool?
             let laboratoryTests: [LaboratoryTest]?
 
@@ -30,7 +44,7 @@ struct AuthenticatedLaboratoryOrdersResponseObject: Codable {
                 case labPdfId
                 case reportingSource
                 case reportID = "reportId"
-                case collectionDateTime, timelineDateTime, commonName, orderingProvider, testStatus, reportAvailable, laboratoryTests
+                case collectionDateTime, timelineDateTime, commonName, orderingProvider, testStatus, reportAvailable, laboratoryTests, orderStatus
             }
             
             // MARK: - LaboratoryTest

@@ -34,6 +34,7 @@ protocol StoragePatientManager {
     func deletePatient(phn: String)
     func deletePatient(name: String, birthday: Date)
     func deleteAuthenticatedPatient()
+    func deleteAuthenticatedPatient(with authManagerDisplayName: String)
     
     // MARK: Fetch
     /// Returns all stored patients
@@ -43,6 +44,14 @@ protocol StoragePatientManager {
     /// Returns the patient with authenticated results
     /// - Returns: patient
     func fetchAuthenticatedPatient() -> Patient?
+    
+    /// Returns the patient with authenticated results
+    /// - Returns: patients
+    func fetchAuthenticatedPatients() -> [Patient]?
+    
+    /// Returns the list of unauthenticated patients
+    /// - Returns: patients
+    func fetchUnauthenticatedPatients() -> [Patient]?
     
     /// Returns the patient with matching phn
     /// - Returns: patient
@@ -91,12 +100,13 @@ extension StorageService: StoragePatientManager {
         patient.name = name
         patient.phn = phn
         patient.authenticated = authenticated
+        patient.authManagerDisplayName = AuthManager().displayName
         do {
             try context.save()
             notify(event: StorageEvent(event: .Save, entity: .Patient, object: patient))
             return patient
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -132,11 +142,12 @@ extension StorageService: StoragePatientManager {
             if authenticated != patient.authenticated {
                 patient.authenticated = authenticated
             }
+            // Unsure if we need to set patient.authManagerDisplayName = AuthManager().displayName here
             try context.save()
             notify(event: StorageEvent(event: .Update, entity: .Patient, object: patient))
             return patient
         } catch let error as NSError {
-            print("Could not save. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
         }
     }
@@ -160,6 +171,12 @@ extension StorageService: StoragePatientManager {
         notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
     }
     
+    func deleteAuthenticatedPatient(with authManagerDisplayName: String) {
+        guard let patient = fetchAuthenticatedPatients()?.filter({ $0.authManagerDisplayName == authManagerDisplayName }).first else { return }
+        delete(object: patient)
+        notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
+    }
+    
     // MARK: Fetch
     
     /// returns all stored patients
@@ -169,7 +186,7 @@ extension StorageService: StoragePatientManager {
         do {
             return try context.fetch(Patient.fetchRequest())
         } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }
@@ -179,6 +196,24 @@ extension StorageService: StoragePatientManager {
     public func fetchAuthenticatedPatient() -> Patient? {
         let patients = fetchPatients()
         return patients.filter { $0.authenticated == true }.first
+    }
+    
+    /// fetch patient by auth status
+    /// - Returns: authenticated patients
+    public func fetchAuthenticatedPatients() -> [Patient]? {
+        let patients = fetchPatients()
+        let authenticatedPatients = patients.filter { $0.authenticated == true }
+        guard authenticatedPatients.count > 0 else { return nil }
+        return authenticatedPatients
+    }
+    
+    /// fetch patient by auth status
+    /// - Returns: unauthenticated patients
+    public func fetchUnauthenticatedPatients() -> [Patient]? {
+        let patients = fetchPatients()
+        let unauthenticatedPatients = patients.filter { $0.authenticated == false }
+        guard unauthenticatedPatients.count > 0 else { return nil }
+        return unauthenticatedPatients
     }
     
     /// fetch patient by phn

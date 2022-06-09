@@ -10,8 +10,9 @@ import SwipeCellKit
 
 class HealthPassViewController: BaseViewController {
     
-    class func constructHealthPassViewController() -> HealthPassViewController {
+    class func constructHealthPassViewController(fedPassStringToOpen: String?) -> HealthPassViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: HealthPassViewController.self)) as? HealthPassViewController {
+            vc.fedPassStringToOpen = fedPassStringToOpen
             return vc
         }
         return HealthPassViewController()
@@ -24,6 +25,11 @@ class HealthPassViewController: BaseViewController {
     private var savedCardsCount: Int {
         return StorageService.shared.fetchVaccineCards().count
     }
+    private var fedPassStringToOpen: String?
+    
+    override var getPassesFlowType: PassesFlowVCs? {
+        return .HealthPassViewController(fedPassToOpen: self.fedPassStringToOpen)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +37,7 @@ class HealthPassViewController: BaseViewController {
         refreshOnStorageChange()
         setFedPassObservable()
         setupListeners()
+        showFedPassIfNeccessary()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,6 +64,11 @@ class HealthPassViewController: BaseViewController {
     
     private func setup() {
         retrieveDataSource()
+    }
+    
+    private func showFedPassIfNeccessary() {
+        guard let fedPassStringToOpen = fedPassStringToOpen else { return }
+        self.showPDFDocument(pdfString: fedPassStringToOpen, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
     }
     
 }
@@ -88,14 +100,19 @@ extension HealthPassViewController {
     
     private func goToAddCardOptionScreen(showAuth: Bool) {
         func showScreen() {
-            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController(backScreenString: .healthPasses)
+            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
             self.navigationController?.pushViewController(vc, animated: true)
         }
         
         if showAuth && !authManager.isAuthenticated {
-            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticated in
-                if !authenticated {
+            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticationStatus in
+                if authenticationStatus != .Completed {
                     showScreen()
+                } else {
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthPassVC, authenticationStatus: authenticationStatus))
+                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
                 }
             }
         } else {
@@ -115,7 +132,7 @@ extension HealthPassViewController {
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
             switch event.entity {
-            case .VaccineCard:
+            case .VaccineCard, .Patient:
                 self.fetchFromStorage()
             default:
                 break
@@ -128,17 +145,17 @@ extension HealthPassViewController {
 // MARK: For fed pass observable
 extension HealthPassViewController {
     private func setFedPassObservable() {
-        NotificationCenter.default.addObserver(self, selector: #selector(fedPassOnlyAdded(notification:)), name: .fedPassOnlyAdded, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(fedPassOnlyAdded(notification:)), name: .fedPassOnlyAdded, object: nil)
     }
     
-    @objc func fedPassOnlyAdded(notification:Notification) {
-        guard let userInfo = notification.userInfo as? [String: Any] else { return }
-        guard let pass = userInfo["pass"] as? String else { return }
-        guard let source = userInfo["source"] as? GatewayFormSource, source == .healthPassHomeScreen else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
-        }
-    }
+//    @objc func fedPassOnlyAdded(notification:Notification) {
+//        guard let userInfo = notification.userInfo as? [String: Any] else { return }
+//        guard let pass = userInfo["pass"] as? String else { return }
+//        guard let source = userInfo["source"] as? GatewayFormSource, source == .healthPassHomeScreen else { return }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
+//        }
+//    }
 }
 
 // MARK: Fetching and Saving conversions between local data source and app data source
@@ -255,7 +272,21 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
             if let card = self.dataSource {
+                let patient = card.patient
                 StorageService.shared.deleteVaccineCard(vaccineQR: card.code ?? "", manuallyAdded: manuallyAdded)
+                if let patient = patient, patient.authenticated == false {
+                    let records = StorageService.shared.getHeathRecords().detailDataSource(patient: patient)
+                    if records.count == 0, let name = patient.name, let birthday = patient.birthday {
+                        StorageService.shared.deletePatient(name: name, birthday: birthday)
+                    }
+                }
+                DispatchQueue.main.async {
+                    
+                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                }
             }
             self.dataSource = nil
             AnalyticsService.shared.track(action: .RemoveCard)
@@ -275,11 +306,7 @@ extension HealthPassViewController: FederalPassViewDelegate {
             self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .healthPassHomeScreen, owner: self, navDelegate: self.navDelegate, completion: { [weak self] _ in
-                guard let `self` = self else { return }
-                self.tabBarController?.tabBar.isHidden = false
-                self.navigationController?.popViewController(animated: true)
-            })
+            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .healthPassHomeScreen, owner: self, navDelegate: self.navDelegate)
         }
     }
     
@@ -303,7 +330,7 @@ extension HealthPassViewController: AddCardsTableViewCellDelegate {
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .viewAll {
-            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController()
+            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
             self.navigationController?.pushViewController(vc, animated: true)
         }
         if type == .addAHealthPass {

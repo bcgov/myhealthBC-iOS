@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HealthRecordsHomeView" customModule="BCVaccineCard" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="iN0-l3-epB" id="se4-lw-kVi"/>
+                <outlet property="introTextLabel" destination="Sjr-eL-eHz" id="YuK-as-NGw"/>
+                <outlet property="loginWithBCServiceCardButton" destination="duQ-oz-5os" id="naK-UI-mPI"/>
+                <outlet property="recordsImageView" destination="43K-n7-ZFr" id="db4-0H-eLD"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Tg6-bF-MX6">
+                    <rect key="frame" x="24" y="54" width="366" height="778"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sjr-eL-eHz">
+                            <rect key="frame" x="0.0" y="0.0" width="366" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="43K-n7-ZFr">
+                            <rect key="frame" x="64" y="280" width="238" height="201"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="238" id="0P9-Og-oXG"/>
+                                <constraint firstAttribute="height" constant="201" id="17y-UJ-qc7"/>
+                            </constraints>
+                        </imageView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="duQ-oz-5os" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="724" width="366" height="54"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="54" id="Mkr-Od-4n1"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="Sjr-eL-eHz" firstAttribute="leading" secondItem="Tg6-bF-MX6" secondAttribute="leading" id="P1N-9D-DOb"/>
+                        <constraint firstAttribute="trailing" secondItem="duQ-oz-5os" secondAttribute="trailing" id="YSh-zG-Pvq"/>
+                        <constraint firstItem="duQ-oz-5os" firstAttribute="leading" secondItem="Tg6-bF-MX6" secondAttribute="leading" id="er4-rO-nYH"/>
+                        <constraint firstAttribute="trailing" secondItem="Sjr-eL-eHz" secondAttribute="trailing" id="lbT-Ri-BS0"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Tg6-bF-MX6" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="4W7-g9-iCs"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Tg6-bF-MX6" secondAttribute="trailing" constant="24" id="7Gg-Q5-344"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Tg6-bF-MX6" secondAttribute="bottom" constant="30" id="HfM-hI-PhA"/>
+                <constraint firstItem="Tg6-bF-MX6" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="24" id="dFh-Vz-fWU"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="139" y="101"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

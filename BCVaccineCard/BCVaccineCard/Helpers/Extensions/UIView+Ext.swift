@@ -42,36 +42,40 @@ extension UIView {
 // MARK: Loading indicator
 extension UIView {
     func startLoadingIndicator(backgroundColor: UIColor = Constants.UI.LoadingIndicator.backdropColor, containerSize: CGFloat = Constants.UI.LoadingIndicator.containerSize, size: CGFloat = Constants.UI.LoadingIndicator.size) {
-        if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
-            existing.removeFromSuperview()
+        DispatchQueue.main.async {
+            if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
+                existing.removeFromSuperview()
+            }
+            
+            let backdrop = UIView(frame: .zero)
+            backdrop.tag = Constants.UI.LoadingIndicator.backdropTag
+            let indicator = UIActivityIndicatorView(frame: .zero)
+            indicator.color = AppColours.appBlue
+            indicator.tintColor = AppColours.appBlue
+            let loadingContainer = UIView(frame:.zero)
+            
+            self.addSubview(backdrop)
+            backdrop.addSubview(loadingContainer)
+            loadingContainer.addSubview(indicator)
+            
+            backdrop.backgroundColor = backgroundColor
+            loadingContainer.backgroundColor = Constants.UI.LoadingIndicator.containerColor
+            loadingContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
+            
+            backdrop.addEqualSizeContraints(to: self)
+            
+            loadingContainer.center(in: backdrop, width: containerSize, height: containerSize)
+            indicator.center(in: loadingContainer, width: size, height: size)
+            
+            indicator.startAnimating()
         }
-        
-        let backdrop = UIView(frame: .zero)
-        backdrop.tag = Constants.UI.LoadingIndicator.backdropTag
-        let indicator = UIActivityIndicatorView(frame: .zero)
-        indicator.color = AppColours.appBlue
-        indicator.tintColor = AppColours.appBlue
-        let loadingContainer = UIView(frame:.zero)
-        
-        self.addSubview(backdrop)
-        backdrop.addSubview(loadingContainer)
-        loadingContainer.addSubview(indicator)
-        
-        backdrop.backgroundColor = backgroundColor
-        loadingContainer.backgroundColor = Constants.UI.LoadingIndicator.containerColor
-        loadingContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
-        
-        backdrop.addEqualSizeContraints(to: self)
-        
-        loadingContainer.center(in: backdrop, width: containerSize, height: containerSize)
-        indicator.center(in: loadingContainer, width: size, height: size)
-        
-        indicator.startAnimating()
     }
     
     func endLoadingIndicator() {
-        if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
-            existing.removeFromSuperview()
+        DispatchQueue.main.async {
+            if let existing = self.viewWithTag(Constants.UI.LoadingIndicator.backdropTag) {
+                existing.removeFromSuperview()
+            }
         }
     }
     
@@ -101,12 +105,20 @@ extension UIView {
         self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0 - paddingHorizontal).isActive = true
     }
     
-    public func center(in view: UIView, width: CGFloat, height: CGFloat) {
+    public func addEqualSizeContraints(to toView: UIView, paddingBottom: CGFloat) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: toView.topAnchor, constant: 0).isActive = true
+        self.bottomAnchor.constraint(equalTo: toView.bottomAnchor, constant: 0 - paddingBottom).isActive = true
+        self.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: 0).isActive = true
+        self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0).isActive = true
+    }
+    
+    public func center(in view: UIView, width: CGFloat, height: CGFloat, verticalOffset: CGFloat? = nil, horizontalOffset: CGFloat? = 0) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.heightAnchor.constraint(equalToConstant: height).isActive = true
         self.widthAnchor.constraint(equalToConstant: width).isActive = true
-        self.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        self.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
+        self.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: horizontalOffset ?? 0).isActive = true
+        self.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: verticalOffset ?? 0).isActive = true
     }
     
     public func roundTopCorners(radius: CGFloat) {

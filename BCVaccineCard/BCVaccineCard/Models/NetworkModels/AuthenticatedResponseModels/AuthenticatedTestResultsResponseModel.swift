@@ -23,7 +23,7 @@ struct AuthenticatedTestResultsResponseModel: Codable {
             let id: String?
             let phn: String?
             let orderingProviderIDS, orderingProviders, reportingLab, location: String?
-            let ormOrOru: ORMOrOru?
+            let labType: ORMOrOru?
             let messageDateTime: String?
             let messageID: String?
             let additionalData: String?
@@ -33,7 +33,7 @@ struct AuthenticatedTestResultsResponseModel: Codable {
             enum CodingKeys: String, CodingKey {
                 case id, phn
                 case orderingProviderIDS = "orderingProviderIds"
-                case orderingProviders, reportingLab, location, ormOrOru, messageDateTime
+                case orderingProviders, reportingLab, location, labType, messageDateTime
                 case messageID = "messageId"
                 case additionalData, reportAvailable, labResults
             }

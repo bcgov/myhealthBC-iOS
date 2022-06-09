@@ -18,6 +18,7 @@ extension Notification.Name {
     static let authTokenExpired = Notification.Name("authTokenExpired")
     
     static let launchedFromBackground = Notification.Name("launchedFromBackground")
+    static let didEnterBackground = Notification.Name("didEnterBackground")
     static let shouldPerformLocalAuth = Notification.Name("shouldPerformLocalAuth")
     
     static let backgroundAuthFetch = Notification.Name("backgroundAuthFetch")
@@ -31,6 +32,7 @@ extension Notification.Name {
     static let authStatusChanged = Notification.Name("authStatusChanged")
     static let patientAPIFetched = Notification.Name("patientAPIFetched")
     static let reloadVCDueToUnderage = Notification.Name("reloadVCDueToUnderage")
+    static let resetHealthRecordsScreenOnLogout = Notification.Name("resetHealthRecordsScreenOnLogout")
     
     static let showTermsOfService = Notification.Name("showTermsOfService")
     static let respondToTermsOfService = Notification.Name("respondToTermsOfService")
