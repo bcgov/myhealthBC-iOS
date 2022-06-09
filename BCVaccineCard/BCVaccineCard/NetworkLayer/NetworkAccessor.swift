@@ -126,7 +126,6 @@ final class NetworkAccessor {
         switch response.result {
         case .success(let successResponse):
             completion(.success(successResponse), retryStatus)
-            
         case .failure(let error):
             guard let responseData = response.data, let errorResponse = try? JSONDecoder().decode(ResultError.self, from: responseData) else {
                 Logger.log(string: error.errorDescription.unwrapped, type: .Network)
