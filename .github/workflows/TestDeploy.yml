@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: Health\ Gateway\ Dev.ipa
-          path: build/Apps/HealthGatewayDev.ipa
+          path: build/Apps/HealthGatewayTest.ipa
 
       - name: Notify Slack - Success
         uses: act10ns/slack@v1
