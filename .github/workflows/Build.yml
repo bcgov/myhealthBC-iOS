@@ -29,7 +29,7 @@ jobs:
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
           FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
-        run: ./.github/secrets/decrypt_secrets.sh
+        run: ./.github/secrets/decrypt_prod.sh
         
       - name: Build Dev target
         env:
