@@ -121,7 +121,7 @@ class AuthManager {
     var authTokenExpiery: Date? {
         if let timeIntervalString = keychain[Key.authTokenExpiery.rawValue],
            let  timeInterval = Double(timeIntervalString) {
-            print("CONNOR: ", Date(timeIntervalSince1970: timeInterval))
+            Logger.log(string: "Auth Token Expires in:  \(Date(timeIntervalSince1970: timeInterval))", type: .Auth)
             return Date(timeIntervalSince1970: timeInterval)
         }
         return nil
@@ -171,6 +171,7 @@ class AuthManager {
         guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
             return
         }
+        APIClientCache.reset()
         discoverConfiguration { result in
             guard let configuration = result, let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 return completion(.Unavailable)
