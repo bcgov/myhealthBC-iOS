@@ -1,0 +1,54 @@
+name: Build and deploy to Firebase
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  deploy:
+    name: Creating DEV ipa
+    runs-on: macOS-latest
+    timeout-minutes: 60
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEB_HOOK }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+        
+      - name: Install gpg
+        run: brew install gnupg
+        
+      - name: install xcpretty
+        run: gem install xcpretty
+        
+      - name: Setup provisioning profile
+        env:
+          FW_KEYS: ${{ secrets.FW_KEYS }}
+        run: ./.github/secrets/decrypt_adhoc.sh
+        
+      - name: Archive project
+        env:
+          PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+        run: ./.github/scripts/archive_dev.sh
+        
+      - name: Export .ipa
+        run: ./.github/scripts/export_dev.sh
+        
+#     - name: Upload .ipa to firebase
+#       if: success()
+#       env:
+#         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+#         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID}}
+#       run: ./.github/scripts/publish_firebase.sh
+        
+      - name: Upload .ipa
+        uses: actions/upload-artifact@v1
+        with:
+          name: Health\ Gateway\ Dev.ipa
+          path: build/Apps/HealthGatewayDev.ipa
+
+      - name: Notify Slack - Success
+        uses: act10ns/slack@v1
+        with:
+          status: Completed
+          channel: 'bc-vaccine-card'
+          message: New iOS DEV build is available at https://github.com/bcgov/myhealthBC-iOS/actions/runs/${{ github.run_id }}

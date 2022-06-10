@@ -23,15 +23,15 @@ jobs:
       - name: Setup provisioning profile
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
-        run: ./.github/secrets/decrypt_secrets.sh
+        run: ./.github/secrets/decrypt_prod.sh
         
       - name: Archive project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        run: ./.github/scripts/archive_app.sh
+        run: ./.github/scripts/archive_prod.sh
         
       - name: Export .ipa
-        run: ./.github/scripts/export_ipa.sh
+        run: ./.github/scripts/export_prod.sh
         
       - name: Upload to testflight
         if: success()

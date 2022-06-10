@@ -18,7 +18,12 @@ extension Constants {
         static let clientID = "hgmobileapp"
         static let redirectURI = "myhealthbc://*"
         static let params = ["kc_idp_hint": "bcsc2"]
-        #else
+        #elseif TEST
+        static let issuer = Constants.authIssuer
+        static let clientID = "myhealthapp"
+        static let redirectURI = "myhealthbc://*"
+        static let params = ["kc_idp_hint": "bcsc"]
+        #elseif DEV
         static let issuer = Constants.authIssuer
         static let clientID = "myhealthapp"
         static let redirectURI = "myhealthbc://*"
