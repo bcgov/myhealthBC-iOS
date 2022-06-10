@@ -3,7 +3,7 @@
 set -eo pipefail
 
 xcodebuild -workspace BCVaccineCard/BCVaccineCard.xcworkspace \
-            -scheme BCVaccineCard-Prod \
+            -scheme HealthGateway \
             -sdk iphoneos \
             -configuration AppStoreDistribution \
             -archivePath $PWD/build/BCVaccineCard-Prod.xcarchive \

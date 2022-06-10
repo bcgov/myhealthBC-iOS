@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7980052C2852C66E006E390F"
-               BuildableName = "HealthGatewayDev copy.app"
+               BuildableName = "HealthGatewayTest.app"
                BlueprintName = "HealthGatewayTest"
                ReferencedContainer = "container:BCVaccineCard.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7980052C2852C66E006E390F"
-            BuildableName = "HealthGatewayDev copy.app"
+            BuildableName = "HealthGatewayTest.app"
             BlueprintName = "HealthGatewayTest"
             ReferencedContainer = "container:BCVaccineCard.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7980052C2852C66E006E390F"
-            BuildableName = "HealthGatewayDev copy.app"
+            BuildableName = "HealthGatewayTest.app"
             BlueprintName = "HealthGatewayTest"
             ReferencedContainer = "container:BCVaccineCard.xcodeproj">
          </BuildableReference>

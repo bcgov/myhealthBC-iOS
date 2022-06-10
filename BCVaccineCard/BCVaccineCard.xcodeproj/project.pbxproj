@@ -2687,11 +2687,11 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				7980052C2852C66E006E390F /* HealthGatewayTest */,
 				7944F67426F12613006B9444 /* HealthGatewayDev */,
+				794BD6282702EEC00084ADA8 /* HealthGateway */,
 				7944F68D26F1261B006B9444 /* BCVaccineCardTests */,
 				7944F69826F1261B006B9444 /* BCVaccineCardUITests */,
-				794BD6282702EEC00084ADA8 /* HealthGateway */,
-				7980052C2852C66E006E390F /* HealthGatewayTest */,
 			);
 		};
 /* End PBXProject section */
