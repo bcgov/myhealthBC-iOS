@@ -30,6 +30,8 @@ class TermsOfServiceViewController: BaseViewController {
     
     private var authWorker: AuthenticatedHealthRecordsAPIWorker?
     private var authCredentials: AuthenticationRequestObject?
+    
+    private var tosPayload: TermsOfServiceResponse.ResourcePayload?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,9 +89,10 @@ extension TermsOfServiceViewController {
     private func fetchTermsOfService() {
         termsWebView.navigationDelegate = self
         self.view.startLoadingIndicator()
-        authWorker?.fetchTermsOfService(completion: { termsString, error in
+        authWorker?.fetchTermsOfService(completion: { tos, error in
             var displayString: String
-            if let termsString = termsString {
+            self.tosPayload = tos
+            if let terms = tos, let termsString = terms.content, terms.id != nil {
                 displayString = termsString
             } else if let error = error?.resultMessage {
                 displayString = error
@@ -129,13 +132,13 @@ extension TermsOfServiceViewController {
         case DidntAgree
     }
     private func respondToTermsOfService(accepted: Bool) {
-        guard let authCredentials = self.authCredentials else { return }
+        guard let authCredentials = self.authCredentials, let termsOfServiceId = tosPayload?.id else { return }
         guard accepted == true else {
             signout(error: nil, reason: .DidntAgree)
             return
         }
         self.view.startLoadingIndicator()
-        self.authWorker?.respondToTermsOfService(authCredentials, accepted: accepted, completion: { accepted, error in
+        self.authWorker?.respondToTermsOfService(authCredentials, accepted: accepted, termsOfServiceId: termsOfServiceId, completion: { accepted, error in
             guard let accepted = accepted else {
                 self.signout(error: error, reason: .Error)
                 return

@@ -139,14 +139,14 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     // MARK: Get terms of service string
-    public func fetchTermsOfService(completion: @escaping(String?, ResultError?) -> Void) {
+    public func fetchTermsOfService(completion: @escaping(TermsOfServiceResponse.ResourcePayload?, ResultError?) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.getTermsOfServiceString(token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
     }
     
-    public func respondToTermsOfService(_ authCredentials: AuthenticationRequestObject, accepted: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
+    public func respondToTermsOfService(_ authCredentials: AuthenticationRequestObject, accepted: Bool, termsOfServiceId: String, completion: @escaping (Bool?, ResultError?) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-        apiClient.respondToTermsOfService(authCredentials, accepted: accepted, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
+        apiClient.respondToTermsOfService(authCredentials, accepted: accepted, termsOfServiceId: termsOfServiceId, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
     }
 
     public func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource, initialProtectedMedFetch: Bool = false) {

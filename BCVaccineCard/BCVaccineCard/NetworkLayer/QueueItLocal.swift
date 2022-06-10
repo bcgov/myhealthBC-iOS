@@ -42,4 +42,8 @@ class QueueItLocal {
         guard let cached = Defaults.cachedQueueItObject else { return nil }
         return cached
     }
+    
+    static func reset() {
+        Defaults.cachedQueueItObject = nil
+    }
 }
