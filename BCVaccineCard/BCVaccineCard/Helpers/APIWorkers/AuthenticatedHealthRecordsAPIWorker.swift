@@ -109,31 +109,32 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     // NOTE: This function handles the check if user is 12 and over, and if user has accepted terms and conditions
     // TODO: should do throttle function separately - build it directly on the authentication view controller
     public func checkIfUserCanLoginAndFetchRecords(authCredentials: AuthenticationRequestObject, sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
-        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-        apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
-            guard let valid = valid else {
-                self.logoutUser(reason: .FailedToValidate, sourceVC: sourceVC, error: error, completion: completion)
-                return
-            }
-            if valid == false {
-                self.logoutUser(reason: .Underage, sourceVC: sourceVC, error: error, completion: completion)
-                return
-            }
-            // NOTE: Check if user profile has been created here and has accepted terms and conditions
-            self.apiClient.hasUserAcceptedTermsOfService(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { hasAccepted, error in
-                guard let hasAccepted = hasAccepted else {
-                    self.delegate?.showAlertForUserProfile(error: error)
-                    completion(false)
+        getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials) {
+            let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+            self.apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
+                guard let valid = valid else {
+                    self.logoutUser(reason: .FailedToValidate, sourceVC: sourceVC, error: error, completion: completion)
                     return
                 }
-                if hasAccepted {
-                    completion(true)
-                } else {
-                    // Note: May be an issue with when this is called here, we'll see
-                    NotificationManager.showTermsOfService()
-                    completion(false)
+                if valid == false {
+                    self.logoutUser(reason: .Underage, sourceVC: sourceVC, error: error, completion: completion)
+                    return
                 }
-
+                // NOTE: Check if user profile has been created here and has accepted terms and conditions
+                self.apiClient.hasUserAcceptedTermsOfService(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { hasAccepted, error in
+                    guard let hasAccepted = hasAccepted else {
+                        self.delegate?.showAlertForUserProfile(error: error)
+                        completion(false)
+                        return
+                    }
+                    if hasAccepted {
+                        completion(true)
+                    } else {
+                        // Note: May be an issue with when this is called here, we'll see
+                        NotificationManager.showTermsOfService()
+                        completion(false)
+                    }
+                }
             }
         }
     }
@@ -215,14 +216,14 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
         guard let types = specificFetchTypes else {
             // Note: We use a dummy call first to handle the queue it issues, then afterwards we have the rest of our normal calls
-            self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
+            self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials, completion: {})
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
             return
         }
-        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
+        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials, completion: {})
         for type in types {
             switch type {
             case .VaccineCard: self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
@@ -234,7 +235,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     // Temporary workaround for dumb queueit issues on prod
-    private func getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: AuthenticationRequestObject) {
+    private func getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: AuthenticationRequestObject, completion: @escaping()->Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedQueueItPingTestResultsDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedQueueItPingTestResultsDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
         apiClient.getAuthenticatedTestResults(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
@@ -244,10 +245,10 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 self.requestDetails.authenticatedQueueItPingTestResultsDetails?.queueItToken = queueItToken
                 self.apiClient.getAuthenticatedTestResults(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
                     guard let `self` = self else {return}
-                    self.handleQueueItTestResultsResponse(result: result)
+                    self.handleQueueItTestResultsResponse(result: result, completion: completion)
                 }
             } else {
-                self.handleQueueItTestResultsResponse(result: result)
+                self.handleQueueItTestResultsResponse(result: result, completion: completion)
             }
         }
     }
@@ -405,12 +406,13 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.getAuthenticatedPatientDetails(authCredentials: authCredentials, showBanner: self.showBanner, isManualFetch: self.isManualAuthFetch, sourceVC: self.loginSourceVC)
     }
     
-    @objc private func retryGetQueueItTestResultsRequest() {
+    @objc private func retryGetQueueItTestResultsRequest(completion: @escaping()->Void) {
         guard let authCredentials = self.requestDetails.authenticatedQueueItPingTestResultsDetails?.authCredentials else {
             print("Error")
-            return
+            
+            return completion()
         }
-        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
+        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials, completion: completion)
     }
     
     @objc private func retryGetTestResultsRequest() {
@@ -454,26 +456,26 @@ extension AuthenticatedHealthRecordsAPIWorker {
         AppDelegate.sharedInstance?.showToast(message: "Not all records were fetched successfully", style: .Warn)
     }
     
-    private func handleQueueItTestResultsResponse(result: Result<AuthenticatedTestResultsResponseModel, ResultError>) {
+    private func handleQueueItTestResultsResponse(result: Result<AuthenticatedTestResultsResponseModel, ResultError>, completion: @escaping()->Void) {
         switch result {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders.count == 0 {
-                print("Error with queue it??")
-            }
-            else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
-                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+                Logger.log(string: resultMessage, type: .Network)
+                completion()
+            } else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
                 self.retryCount += 1
                 let retryInSeconds = Double(retryinMS/1000)
-                self.perform(#selector(self.retryGetQueueItTestResultsRequest), with: nil, afterDelay: retryInSeconds)
-            }
-            else {
-                // Doesn't matter, just for queue it
-                
+                DispatchQueue.main.asyncAfter(deadline: .now() + retryInSeconds, execute: {
+                    self.retryGetQueueItTestResultsRequest(completion: completion)
+                })
+            } else {
+                Logger.log(string: "QUEUEIT Test call completed", type: .Network)
+                completion()
             }
         case .failure(let error):
-            print("Error")
-            // Doesn't matter, just for queue it
+            Logger.log(string: "Error: \(error.localizedDescription)", type: .Network)
+            return completion()
         }
     }
     
