@@ -166,8 +166,8 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func performAuthentication(sourceVC: LoginVCSource) {
-        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { canProceed in
-            if canProceed {
+        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+            if response == .Online {
                 self.view.startLoadingIndicator()
                 AuthManager().authenticate(in: self, completion: { [weak self] result in
                     guard let self = self else {return}
@@ -186,6 +186,7 @@ class AuthenticationViewController: UIViewController {
                 })
             } else {
                 print("Error")
+                // TODO: Check on this - Either add a delay and dismiss the screen, or still just show both
                 self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
                     self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
                 }

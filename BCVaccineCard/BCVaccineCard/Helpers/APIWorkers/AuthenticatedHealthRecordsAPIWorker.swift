@@ -12,7 +12,7 @@ import BCVaccineValidator
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func showPatientDetailsError(error: String, showBanner: Bool)
     func showFetchStartedBanner(showBanner: Bool)
-    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource)
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource, fetchStatusTypes: [AuthenticationFetchType])
     func showAlertForLoginAttemptDueToValidation(error: ResultError?)
     func showAlertForUserUnder(ageInYears age: Int)
     func showAlertForUserProfile(error: ResultError?)
@@ -77,7 +77,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                     self.deinitializeStatusList()
                     return
                 }
-                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner, resetHealthRecordsTab: !self.initialProtectedMedFetch, loginSourceVC: self.loginSourceVC)
+                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner, resetHealthRecordsTab: !self.initialProtectedMedFetch, loginSourceVC: self.loginSourceVC, fetchStatusTypes: fetchStatusList.getFetchStatusTypes)
                 self.deinitializeStatusList()
             } else if fetchStatusList.canFetchComments {
                 guard let authCredentials = authCredentials else { return }
@@ -625,36 +625,32 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let patient = self.patientDetails else { return }
         
         incrementLoadCounter()
-        
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
-        
+                
         let qrResult = vaccineCard.transformResponseIntoQRCode()
         guard let code = qrResult.qrString else {
             self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: qrResult.error ?? .genericErrorMessage)
-            endLoadCounter()
+            self.decrementLoadCounter()
             return
         }
         BCVaccineValidator.shared.validate(code: code) { [weak self] result in
             guard let `self` = self else {
-                endLoadCounter()
+                self?.decrementLoadCounter()
                 return
             }
             guard let data = result.result else {
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: .invalidQRCodeMessage)
-                endLoadCounter()
+                self.decrementLoadCounter()
                 return
             }
             DispatchQueue.main.async { [weak self] in
                 guard let `self` = self else {
-                    endLoadCounter()
+                    self?.decrementLoadCounter()
                     return
                 }
                 var model = self.executingVC.convertScanResultModelIntoLocalData(data: data, source: .healthGateway)
                 model.fedCode = vaccineCard.resourcePayload?.federalVaccineProof?.data
                 self.coreDataLogic(localModel: model, patient: patient)
-                endLoadCounter()
+                self.decrementLoadCounter()
             }
         }
     }
@@ -707,15 +703,11 @@ extension AuthenticatedHealthRecordsAPIWorker {
         
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
-        
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.CovidTest])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return
         }
         for order in orders {
@@ -741,27 +733,23 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
         self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
-        endLoadCounter()
+        self.decrementLoadCounter()
     }
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
-        
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
        
         guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false, pdf: pdf) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
-        endLoadCounter()
+        self.decrementLoadCounter()
         return object.id
     }
 }
@@ -773,9 +761,6 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let payloads = medicationStatement.resourcePayload else { return }
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Prescription])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
@@ -790,7 +775,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             dispatchGroup.leave()
         }
         dispatchGroup.notify(queue: .main) {
-            endLoadCounter()
+            self.decrementLoadCounter()
           if let protectiveWord = protectiveWord, completedCount > 0 {
               self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
               self.authManager.storeMedFetchRequired(bool: false)
@@ -804,18 +789,15 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, initialProtectedMedFetch: Bool) -> String? {
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
         guard let object = StorageService.shared.storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
-        endLoadCounter()
+        self.decrementLoadCounter()
         return object.id
     }
 }
@@ -827,26 +809,32 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let orders = labOrders.resourcePayload?.orders else { return }
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.LaboratoryOrder])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return
         }
         for order in orders {
-            self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
-                if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
+            if order.reportAvailable == true {
+                self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
+                    if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
+                        completedCount += 1
+                    } else {
+                        errorArrayCount += 1
+                    }
+                }
+                
+            } else {
+                if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: nil, authenticated: true, patientObject: patient) {
                     completedCount += 1
                 } else {
                     errorArrayCount += 1
                 }
             }
         }
-        endLoadCounter()
+        self.decrementLoadCounter()
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
         // For now, just calling success so that the entire fetch can pass
         self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
@@ -855,18 +843,15 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
         guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
-        endLoadCounter()
+        self.decrementLoadCounter()
         return object.id
     }
 }
@@ -951,6 +936,11 @@ struct FetchStatus {
 
 struct FetchStatusList {
     var fetchStatus: [AuthenticationFetchType: FetchStatus]
+    
+    var getFetchStatusTypes: [AuthenticationFetchType] {
+        guard fetchStatus.count > 0 else { return [] }
+        return fetchStatus.map { $0.key }
+    }
     
     var isCompleted: Bool {
         guard fetchStatus.count > 0 else { return false }

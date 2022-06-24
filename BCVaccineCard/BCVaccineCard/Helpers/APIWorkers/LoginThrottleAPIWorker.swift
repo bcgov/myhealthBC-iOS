@@ -5,6 +5,12 @@
 //  Created by Connor Ogilvie on 2022-03-25.
 //
 
+enum ThrottleResponseValues {
+    case Online
+    case Offline
+    case NoInternet
+}
+
 import Foundation
 import UIKit
 
@@ -19,7 +25,7 @@ class LoginThrottleAPIWorker: NSObject {
         self.queueItDelegateOwner = delegateOwner
     }
 
-    func throttleHGMobileConfigEndpoint(completion: @escaping (Bool) -> Void) {
+    func throttleHGMobileConfigEndpoint(completion: @escaping (ThrottleResponseValues) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.throttleHGMobileConfig(token: queueItTokenCached, executingVC: queueItDelegateOwner, includeQueueItUI: true) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
@@ -35,18 +41,22 @@ class LoginThrottleAPIWorker: NSObject {
         }
     }
 
-    private func handleResponse(result: Result<MobileConfigurationResponseObject, ResultError>, completion: @escaping (Bool) -> Void) {
+    private func handleResponse(result: Result<MobileConfigurationResponseObject, ResultError>, completion: @escaping (ThrottleResponseValues) -> Void) {
         switch result {
         case .success(let mobileConfig):
             // Note: This is a quickfix for now - should rework so that either we only do this here instead of in tabBar controller
             if let url = URL(string: mobileConfig.baseUrl) {
                 BaseURLWorker.shared.baseURL = url
             }
-            completion(mobileConfig.online)
+            if mobileConfig.online == false {
+                AppDelegate.sharedInstance?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+            }
+            let val = mobileConfig.online ? ThrottleResponseValues.Online : ThrottleResponseValues.Offline
+            completion(val)
         case .failure(let error):
             Logger.log(string: error.localizedDescription, type: .Network)
-            AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
-            completion(false)
+            AppDelegate.sharedInstance?.showToast(message: "Unable to refresh your data. Please check your internet connection", style: .Warn)
+            completion(ThrottleResponseValues.NoInternet)
         }
     }
     
