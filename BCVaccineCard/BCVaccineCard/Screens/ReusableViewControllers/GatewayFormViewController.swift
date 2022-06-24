@@ -449,10 +449,10 @@ extension GatewayFormViewController {
         guard let model = formatGatewayDataForVaccineRequest(phn: phn, birthday: birthday, vax: vaxDate) else { return }
         self.whiteSpaceFormattedPHN = phn
         self.storageModel = HGStorageModel(phn: model.phn, dob: model.dateOfBirth)
-        showLoader()
         BaseURLWorker.shared.setBaseURL {
             self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
                 if response == .Online {
+                    self.showLoader()
                     self.worker?.getVaccineCard(model: model, executingVC: self)
                 }
             })

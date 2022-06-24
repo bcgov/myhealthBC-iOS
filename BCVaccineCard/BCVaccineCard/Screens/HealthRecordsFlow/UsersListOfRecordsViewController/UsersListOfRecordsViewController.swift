@@ -678,9 +678,9 @@ extension UsersListOfRecordsViewController {
                 }
             }
         } else if purpose == .initialFetch {
-            adjustLoadingIndicator(show: true)
             self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
                 if response == .Online {
+                    self.adjustLoadingIndicator(show: true)
                     self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
                 }
             })
