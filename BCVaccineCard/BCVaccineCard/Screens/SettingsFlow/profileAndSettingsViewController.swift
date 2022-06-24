@@ -249,7 +249,7 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
     private func performLogout(completion: @escaping(_ success: Bool)-> Void) {
         self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
             if response != .NoInternet {
-                authManager.signout(in: self, completion: { [weak self] success in
+                self.authManager.signout(in: self, completion: { [weak self] success in
                     guard let `self` = self else {return}
                     // Regardless of the result of the async logout, clear tokens.
                     // because user may be offline
