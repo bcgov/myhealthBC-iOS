@@ -44,6 +44,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var hasUpdatedUnauthPendingTest = true
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
+    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     private var hiddenRecords: [HealthRecordsDetailDataSource] = []
@@ -86,6 +87,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()
+        self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
         if let patient = patient, let patientName = patient.name, let existingFilter = UserFilters.filterFor(name: patientName) {
             currentFilter = existingFilter
         }
@@ -106,6 +108,11 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.throttleAPIWorker = nil
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -672,7 +679,11 @@ extension UsersListOfRecordsViewController {
             }
         } else if purpose == .initialFetch {
             adjustLoadingIndicator(show: true)
-            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+            self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+                if response == .Online {
+                    self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+                }
+            })
         }
     }
 }

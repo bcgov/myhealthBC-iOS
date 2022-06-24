@@ -166,8 +166,8 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func performAuthentication(sourceVC: LoginVCSource) {
-        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { canProceed in
-            if canProceed {
+        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+            if response == .Online {
                 self.view.startLoadingIndicator()
                 AuthManager().authenticate(in: self, completion: { [weak self] result in
                     guard let self = self else {return}
@@ -184,12 +184,8 @@ class AuthenticationViewController: UIViewController {
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     }
                 })
-            } else {
-                print("Error")
-                self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
-                    self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
-                }
             }
+            // Note: Toast will be shown if response is not "Online", so we don't need an else statement here, as we won't be showing a pop-up and won't be dismissing the screen
         })
     }
     
