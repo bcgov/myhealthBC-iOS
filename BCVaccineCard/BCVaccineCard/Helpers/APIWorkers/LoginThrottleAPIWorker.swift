@@ -55,7 +55,7 @@ class LoginThrottleAPIWorker: NSObject {
             completion(val)
         case .failure(let error):
             Logger.log(string: error.localizedDescription, type: .Network)
-            AppDelegate.sharedInstance?.showToast(message: "Unable to refresh your data. Please check your internet connection", style: .Warn)
+            AppDelegate.sharedInstance?.showToast(message: "Please check your internet connection", style: .Warn)
             completion(ThrottleResponseValues.NoInternet)
         }
     }

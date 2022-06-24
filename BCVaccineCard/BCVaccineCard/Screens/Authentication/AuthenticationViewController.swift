@@ -184,13 +184,8 @@ class AuthenticationViewController: UIViewController {
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     }
                 })
-            } else {
-                print("Error")
-                // TODO: Check on this - Either add a delay and dismiss the screen, or still just show both
-                self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
-                    self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
-                }
             }
+            // Note: Toast will be shown if response is not "Online", so we don't need an else statement here, as we won't be showing a pop-up and won't be dismissing the screen
         })
     }
     
