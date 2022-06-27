@@ -124,7 +124,7 @@ class AuthenticationViewController: UIViewController {
         case .AuthInfo:
             self.showInfo(sourceVC: self.sourceVC)
         case .Auth:
-            self.performAuthentication(sourceVC: self.sourceVC)
+            self.performAuthentication(sourceVC: self.sourceVC, completion: nil)
         }
     }
     
@@ -156,7 +156,11 @@ class AuthenticationViewController: UIViewController {
             guard let self = self else {return}
             switch result {
             case .Continue:
-                self.performAuthentication(sourceVC: sourceVC)
+                self.performAuthentication(sourceVC: sourceVC) { online in
+                    if !online {
+                        authInfoView.continueButton.isUserInteractionEnabled = true
+                    }
+                }
             case .Cancel:
                 self.dismissView(withDelay: false, status: .Cancelled, sourceVC: sourceVC)
             case .Back:
@@ -165,7 +169,7 @@ class AuthenticationViewController: UIViewController {
         }
     }
     
-    private func performAuthentication(sourceVC: LoginVCSource) {
+    private func performAuthentication(sourceVC: LoginVCSource, completion: ((Bool) -> Void)?) {
         throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
             if response == .Online {
                 self.view.startLoadingIndicator()
@@ -184,6 +188,8 @@ class AuthenticationViewController: UIViewController {
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     }
                 })
+            } else {
+                completion?(false)
             }
             // Note: Toast will be shown if response is not "Online", so we don't need an else statement here, as we won't be showing a pop-up and won't be dismissing the screen
         })
