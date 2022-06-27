@@ -537,6 +537,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
+        if self.hiddenCellType == .medicalRecords && indexPath.section == 0 { return }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
         let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: dataSource.count, patient: self.patient)
