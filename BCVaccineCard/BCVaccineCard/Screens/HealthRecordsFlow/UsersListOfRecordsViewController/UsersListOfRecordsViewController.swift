@@ -112,7 +112,6 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.throttleAPIWorker = nil
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
