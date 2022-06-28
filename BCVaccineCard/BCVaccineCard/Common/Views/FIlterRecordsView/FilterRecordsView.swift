@@ -101,6 +101,7 @@ class FilterRecordsView: UIView, Theme {
     
     private var currentFilter: RecordsFilter = RecordsFilter()
     private var chipsView: ChipsView? = nil
+
     
     // MARK: Display
     func showModally(on view: UIView, filter: RecordsFilter?) {
@@ -330,7 +331,8 @@ class FilterRecordsView: UIView, Theme {
     }
     
     private func resetDatePickerHideTimer() {
-        datePickerHideTimer = Timer.scheduledTimer(timeInterval: datePickerDismissTime, target: self, selector: #selector(hideDatePicker), userInfo: nil, repeats: true)
+        datePickerHideTimer?.invalidate()
+        datePickerHideTimer = Timer.scheduledTimer(timeInterval: datePickerDismissTime, target: self, selector: #selector(hideDatePicker), userInfo: nil, repeats: false)
        
     }
     

@@ -36,6 +36,7 @@ class APIClientCache {
         configureURLQueue.removeAll()
         isCookieSet = false
         settingCookie = false
+        QueueItLocal.reset()
     }
 }
 
@@ -314,7 +315,7 @@ extension APIClient {
     private func handleGetUserProfileResponse(result: Result<AuthenticatedUserProfileResponseObject, ResultError>, completion: @escaping(Bool?, ResultError?) -> Void) {
         switch result {
         case .success(let profile):
-            if profile.resourcePayload?.hdid == nil || profile.resourcePayload?.acceptedTermsOfService == false {
+            if profile.resourcePayload?.hdID == nil || profile.resourcePayload?.acceptedTermsOfService == false {
                 completion(false, nil)
             } else if let accepted = profile.resourcePayload?.acceptedTermsOfService, accepted == true {
                 completion(true, nil)
@@ -331,12 +332,13 @@ extension APIClient {
     }
     
     // This function is used to respond to the displayed terms of service
-    func respondToTermsOfService(_ authCredentials: AuthenticationRequestObject, accepted: Bool, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
-        self.postUserProfile(authCredentials, accepted: accepted, token: nil, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
+    func respondToTermsOfService(_ authCredentials: AuthenticationRequestObject, accepted: Bool, termsOfServiceId: String, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
+        //here add tos id
+        self.postUserProfile(authCredentials, accepted: accepted, termsOfServiceId: termsOfServiceId ,token: nil, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
-                self.postUserProfile(authCredentials, accepted: accepted, token: queueItToken, executingVC: executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                self.postUserProfile(authCredentials, accepted: accepted, termsOfServiceId: termsOfServiceId, token: queueItToken, executingVC: executingVC, includeQueueItUI: false) { [weak self] result, _ in
                     guard let `self` = self else {return}
                     self.handlePostUserProfileResponse(result: result, completion: completion)
                 }
@@ -346,14 +348,15 @@ extension APIClient {
         }
     }
     
-    private func postUserProfile(_ authCredentials: AuthenticationRequestObject, accepted: Bool, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedUserProfileResponseObject>) {
+    private func postUserProfile(_ authCredentials: AuthenticationRequestObject, accepted: Bool, termsOfServiceId: String, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedUserProfileResponseObject>) {
+        //here add tos id
         configureURL(token: nil, endpoint: self.endpoints.userProfile(hdid: authCredentials.hdid), completion: { url in
             
             let headerParameters: Headers = [
                 Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
             ]
             
-            let parameters = AuthenticatedUserProfileRequestObject(profile: AuthenticatedUserProfileRequestObject.ResourcePayload(hdid: authCredentials.hdid, acceptedTermsOfService: accepted))
+            let parameters = AuthenticatedUserProfileRequestObject(profile: AuthenticatedUserProfileRequestObject.ResourcePayload(hdid: authCredentials.hdid, termsOfServiceId: termsOfServiceId))
             
             guard let unwrappedURL = url else { return }
             self.remote.request(withURL: unwrappedURL, method: .post, headers: headerParameters, parameters: parameters, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
@@ -364,10 +367,10 @@ extension APIClient {
     private func handlePostUserProfileResponse(result: Result<AuthenticatedUserProfileResponseObject, ResultError>, completion: @escaping(Bool?, ResultError?) -> Void) {
         switch result {
         case .success(let profile):
-            if profile.resourcePayload?.hdid == nil {
+            if profile.resourcePayload?.hdID == nil {
                 let error = ResultError(resultMessage: "There was an error with your request")
                 completion(nil, error)
-            } else if let _ = profile.resourcePayload?.hdid, let acceptedStatus = profile.resourcePayload?.acceptedTermsOfService {
+            } else if let _ = profile.resourcePayload?.hdID, let acceptedStatus = profile.resourcePayload?.acceptedTermsOfService {
                 completion(acceptedStatus, nil)
             } else if let resultError = profile.resultError {
                 completion(nil, resultError)
@@ -384,7 +387,7 @@ extension APIClient {
 // MARK: For displaying terms of service
 extension APIClient {
     
-    func getTermsOfServiceString(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (String?, ResultError?) -> Void) {
+    func getTermsOfServiceString(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (TermsOfServiceResponse.ResourcePayload?, ResultError?) -> Void) {
         self.getTermsOfService(token: nil, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
@@ -397,27 +400,22 @@ extension APIClient {
                 self.handleTermsOfServiceResponse(result: result, completion: completion)
             }
         }
-        
-        
     }
     
     private func getTermsOfService(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<TermsOfServiceResponse>) {
-        configureURL(token: nil, endpoint: self.endpoints.getTermsOfService, completion: { url
-            in
+        configureURL(token: nil, endpoint: self.endpoints.getTermsOfService, completion: { url in
             guard let unwrappedURL = url else { return }
             self.remote.request(withURL: unwrappedURL, method: .get, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
         })
-        
-        
     }
     
-    private func handleTermsOfServiceResponse(result: Result<TermsOfServiceResponse, ResultError>, completion: @escaping (String?, ResultError?) -> Void) {
+    private func handleTermsOfServiceResponse(result: Result<TermsOfServiceResponse, ResultError>, completion: @escaping (TermsOfServiceResponse.ResourcePayload?, ResultError?) -> Void) {
         switch result {
         case .success(let termsOfService):
             if let resultError = termsOfService.resultError, termsOfService.resourcePayload == nil {
                 completion(nil, resultError)
-            } else if let content = termsOfService.resourcePayload?.content {
-                completion(content, nil)
+            } else if (termsOfService.resourcePayload?.content) != nil {
+                completion(termsOfService.resourcePayload, nil)
             } else {
                 let error = ResultError(resultMessage: "We're sorry, there was an issue fetching terms of service.")
                 completion(nil, error)

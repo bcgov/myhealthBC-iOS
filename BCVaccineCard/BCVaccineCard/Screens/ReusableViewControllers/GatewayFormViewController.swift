@@ -190,6 +190,7 @@ class GatewayFormViewController: BaseViewController {
     // TODO: Will need to refactor this a bit when we get the endpoint for test results
     private var storageModel: HGStorageModel?
     private var worker: HealthGatewayAPIWorker?
+    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     // Note: This is for
     private var currentProgress: GatewayInProgressDetails?
@@ -222,6 +223,7 @@ class GatewayFormViewController: BaseViewController {
         // Note - sometimes tabBarController will be nil due to when it's released in memory
         self.tabBarController?.tabBar.isHidden = false
         self.worker = nil
+        self.throttleAPIWorker = nil
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -245,6 +247,7 @@ class GatewayFormViewController: BaseViewController {
     
     private func setupAPIWorker() {
         self.worker = HealthGatewayAPIWorker(delegateOwner: self)
+        self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
     }
     
     private func updateCurrentProgress(type: FormTextFieldType, text: String?) {
@@ -446,9 +449,13 @@ extension GatewayFormViewController {
         guard let model = formatGatewayDataForVaccineRequest(phn: phn, birthday: birthday, vax: vaxDate) else { return }
         self.whiteSpaceFormattedPHN = phn
         self.storageModel = HGStorageModel(phn: model.phn, dob: model.dateOfBirth)
-        showLoader()
         BaseURLWorker.shared.setBaseURL {
-            self.worker?.getVaccineCard(model: model, executingVC: self)
+            self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+                if response == .Online {
+                    self.showLoader()
+                    self.worker?.getVaccineCard(model: model, executingVC: self)
+                }
+            })
         }
     }
     

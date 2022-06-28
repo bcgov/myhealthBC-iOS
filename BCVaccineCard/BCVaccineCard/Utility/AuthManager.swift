@@ -18,7 +18,12 @@ extension Constants {
         static let clientID = "hgmobileapp"
         static let redirectURI = "myhealthbc://*"
         static let params = ["kc_idp_hint": "bcsc2"]
-        #else
+        #elseif TEST
+        static let issuer = Constants.authIssuer
+        static let clientID = "myhealthapp"
+        static let redirectURI = "myhealthbc://*"
+        static let params = ["kc_idp_hint": "bcsc"]
+        #elseif DEV
         static let issuer = Constants.authIssuer
         static let clientID = "myhealthapp"
         static let redirectURI = "myhealthbc://*"
@@ -116,7 +121,7 @@ class AuthManager {
     var authTokenExpiery: Date? {
         if let timeIntervalString = keychain[Key.authTokenExpiery.rawValue],
            let  timeInterval = Double(timeIntervalString) {
-            print("CONNOR: ", Date(timeIntervalSince1970: timeInterval))
+            Logger.log(string: "Auth Token Expires in:  \(Date(timeIntervalSince1970: timeInterval))", type: .Auth)
             return Date(timeIntervalSince1970: timeInterval)
         }
         return nil
@@ -166,6 +171,7 @@ class AuthManager {
         guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
             return
         }
+        APIClientCache.reset()
         discoverConfiguration { result in
             guard let configuration = result, let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 return completion(.Unavailable)

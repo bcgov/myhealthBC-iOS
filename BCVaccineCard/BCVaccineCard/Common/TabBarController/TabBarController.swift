@@ -52,6 +52,7 @@ class TabBarController: UITabBarController {
     private var updateRecordsScreenState = false
     private var authenticationStatus: AuthenticationViewController.AuthenticationStatus?
     var authWorker: AuthenticatedHealthRecordsAPIWorker?
+    private var throttleAPIWorker: LoginThrottleAPIWorker?
     var routerWorker: RouterWorker?
 
     override func viewDidLoad() {
@@ -59,6 +60,7 @@ class TabBarController: UITabBarController {
         BaseURLWorker.setup(BaseURLWorker.Config(delegateOwner: self))
         BaseURLWorker.shared.setBaseURL {
             self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
+            self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
             self.routerWorker = RouterWorker(delegateOwner: self)
             self.setup(selectedIndex: 0)
             self.showLoginPromptIfNecessary()
@@ -171,7 +173,11 @@ class TabBarController: UITabBarController {
     @objc private func backgroundAuthFetch(_ notification: Notification) {
         guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, sourceVC: .BackgroundFetch)
+        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+            if response == .Online {
+                self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, sourceVC: .BackgroundFetch)
+            }
+        })
     }
     
     private func showSuccessfulLoginAlert() {
@@ -231,7 +237,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         AppDelegate.sharedInstance?.showToast(message: "Retrieving records", style: .Default)
     }
     
-    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource) {
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource, fetchStatusTypes: [AuthenticationFetchType]) {
         guard showBanner else { return }
         // TODO: Connor - handle error case
         if resetHealthRecordsTab {
@@ -244,8 +250,11 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
                 self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: loginSourceVC)))
             }
         }
-        let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
-        AppDelegate.sharedInstance?.showToast(message: message)
+        // TODO: Test this out
+        if (fetchStatusTypes.contains(.LaboratoryOrders) && fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.TestResults) && fetchStatusTypes.contains(.VaccineCard)) || (fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.Comments)) {
+            let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
+            AppDelegate.sharedInstance?.showToast(message: message)
+        }
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
         var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
         loginProcessStatus.hasFinishedFetchingRecords = true

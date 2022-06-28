@@ -86,7 +86,7 @@ class CovidVaccineCardsViewController: BaseViewController {
             switch event.entity {
             case .VaccineCard, .Patient:
                 self.fetchFromStorage()
-                print("CONNOR CALLED HERE: ", self.expandedIndexRow, self.dataSource.count - 1)
+                Logger.log(string: "CONNOR CALLED HERE: \(self.expandedIndexRow) \(self.dataSource.count - 1)", type: .general)
                 if self.expandedIndexRow > self.dataSource.count - 1 {
                     self.expandedIndexRow = 0
                     self.tableView.reloadData()
@@ -103,7 +103,7 @@ class CovidVaccineCardsViewController: BaseViewController {
     }
     
     private func scrollToRecentlyAddedCardAndExpand() {
-        print("CONNOR INFO: ", recentlyAddedCardId, dataSource.map({ $0.id }))
+        Logger.log(string: "CONNOR CALLED HERE: \(recentlyAddedCardId) \(dataSource.map({ $0.id }))", type: .general)
         guard let recentlyAddedCardId = recentlyAddedCardId else { return }
         var indexPath: IndexPath?
         if let index = self.dataSource.firstIndex(where: { $0.id == recentlyAddedCardId }) {
@@ -114,7 +114,7 @@ class CovidVaccineCardsViewController: BaseViewController {
         if let indexPath = indexPath {
             guard self.tableView.numberOfRows(inSection: 0) == self.dataSource.count else { return }
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
-            print("CONNOR SCROLL TO ROW CALLED")
+            Logger.log(string: "CONNOR SCROLL TO ROW CALLED", type: .general)
             guard let cell = self.tableView.cellForRow(at: indexPath), self.dataSource.count > indexPath.row else { return }
             let model = self.dataSource[indexPath.row]
             cell.accessibilityLabel = AccessibilityLabels.CovidVaccineCardsScreen.proofOfVaccineCardAdded

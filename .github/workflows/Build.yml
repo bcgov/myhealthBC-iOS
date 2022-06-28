@@ -15,21 +15,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
-      - name: Notify Slack - Success
+      - name: Notify Slack - Start
         uses: act10ns/slack@v1
         with:
           status: In Progress
           channel: 'bc-vaccine-card-ios'
           message: There is a new PR! Building...
-#     - name: Notify Slack - start
-#       uses: rtCamp/action-slack-notify@v2.2.0
-#       env:
-#         SLACK_WEBHOOK: ${{ secrets.SLACK_WEB_HOOK_PR }}
-#         SLACK_CHANNEL: bc-vaccine-card-ios
-#         SLACK_USERNAME: "My Health iOS Bot"
-#         SLACK_TITLE: "There is a new PR!"
-#         SLACK_LINK_NAMES: true
-#         SLACK_MESSAGE: "building..."
         
       - name: Install gpg
         run: brew install gnupg
@@ -38,12 +29,17 @@ jobs:
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
           FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
-        run: ./.github/secrets/decrypt_secrets.sh
+        run: ./.github/secrets/decrypt_prod.sh
         
       - name: Build Dev target
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        run: ./.github/scripts/build.sh
+        run: ./.github/scripts/build_dev.sh
+        
+      - name: Build Test target
+        env:
+          PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+        run: ./.github/scripts/build_test.sh
         
       - name: Build Prod target
         env:

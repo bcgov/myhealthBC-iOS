@@ -144,6 +144,8 @@ extension Constants {
 extension Constants {
 #if PROD
     static let authIssuer = "https://oidc.gov.bc.ca/auth/realms/ff09qn3f"
+#elseif TEST
+    static let authIssuer = "https://test.oidc.gov.bc.ca/auth/realms/ff09qn3f"
 #elseif DEV
     static let authIssuer = "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f"
 #endif

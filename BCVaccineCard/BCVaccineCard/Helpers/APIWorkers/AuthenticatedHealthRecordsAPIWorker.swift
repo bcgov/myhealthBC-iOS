@@ -12,7 +12,7 @@ import BCVaccineValidator
 protocol AuthenticatedHealthRecordsAPIWorkerDelegate: AnyObject {
     func showPatientDetailsError(error: String, showBanner: Bool)
     func showFetchStartedBanner(showBanner: Bool)
-    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource)
+    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType: String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource, fetchStatusTypes: [AuthenticationFetchType])
     func showAlertForLoginAttemptDueToValidation(error: ResultError?)
     func showAlertForUserUnder(ageInYears age: Int)
     func showAlertForUserProfile(error: ResultError?)
@@ -77,7 +77,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                     self.deinitializeStatusList()
                     return
                 }
-                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner, resetHealthRecordsTab: !self.initialProtectedMedFetch, loginSourceVC: self.loginSourceVC)
+                self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner, resetHealthRecordsTab: !self.initialProtectedMedFetch, loginSourceVC: self.loginSourceVC, fetchStatusTypes: fetchStatusList.getFetchStatusTypes)
                 self.deinitializeStatusList()
             } else if fetchStatusList.canFetchComments {
                 guard let authCredentials = authCredentials else { return }
@@ -109,44 +109,45 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     // NOTE: This function handles the check if user is 12 and over, and if user has accepted terms and conditions
     // TODO: should do throttle function separately - build it directly on the authentication view controller
     public func checkIfUserCanLoginAndFetchRecords(authCredentials: AuthenticationRequestObject, sourceVC: LoginVCSource, completion: @escaping(Bool) -> Void) {
-        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-        apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
-            guard let valid = valid else {
-                self.logoutUser(reason: .FailedToValidate, sourceVC: sourceVC, error: error, completion: completion)
-                return
-            }
-            if valid == false {
-                self.logoutUser(reason: .Underage, sourceVC: sourceVC, error: error, completion: completion)
-                return
-            }
-            // NOTE: Check if user profile has been created here and has accepted terms and conditions
-            self.apiClient.hasUserAcceptedTermsOfService(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { hasAccepted, error in
-                guard let hasAccepted = hasAccepted else {
-                    self.delegate?.showAlertForUserProfile(error: error)
-                    completion(false)
+        getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials) {
+            let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+            self.apiClient.checkIfProfileIsValid(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { valid, error in
+                guard let valid = valid else {
+                    self.logoutUser(reason: .FailedToValidate, sourceVC: sourceVC, error: error, completion: completion)
                     return
                 }
-                if hasAccepted {
-                    completion(true)
-                } else {
-                    // Note: May be an issue with when this is called here, we'll see
-                    NotificationManager.showTermsOfService()
-                    completion(false)
+                if valid == false {
+                    self.logoutUser(reason: .Underage, sourceVC: sourceVC, error: error, completion: completion)
+                    return
                 }
-
+                // NOTE: Check if user profile has been created here and has accepted terms and conditions
+                self.apiClient.hasUserAcceptedTermsOfService(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { hasAccepted, error in
+                    guard let hasAccepted = hasAccepted else {
+                        self.delegate?.showAlertForUserProfile(error: error)
+                        completion(false)
+                        return
+                    }
+                    if hasAccepted {
+                        completion(true)
+                    } else {
+                        // Note: May be an issue with when this is called here, we'll see
+                        NotificationManager.showTermsOfService()
+                        completion(false)
+                    }
+                }
             }
         }
     }
     
     // MARK: Get terms of service string
-    public func fetchTermsOfService(completion: @escaping(String?, ResultError?) -> Void) {
+    public func fetchTermsOfService(completion: @escaping(TermsOfServiceResponse.ResourcePayload?, ResultError?) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         apiClient.getTermsOfServiceString(token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
     }
     
-    public func respondToTermsOfService(_ authCredentials: AuthenticationRequestObject, accepted: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
+    public func respondToTermsOfService(_ authCredentials: AuthenticationRequestObject, accepted: Bool, termsOfServiceId: String, completion: @escaping (Bool?, ResultError?) -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-        apiClient.respondToTermsOfService(authCredentials, accepted: accepted, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
+        apiClient.respondToTermsOfService(authCredentials, accepted: accepted, termsOfServiceId: termsOfServiceId, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
     }
 
     public func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource, initialProtectedMedFetch: Bool = false) {
@@ -215,14 +216,14 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
         guard let types = specificFetchTypes else {
             // Note: We use a dummy call first to handle the queue it issues, then afterwards we have the rest of our normal calls
-            self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
+            self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials, completion: {})
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
-            self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord ?? authManager.protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
+            self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
             return
         }
-        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
+        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials, completion: {})
         for type in types {
             switch type {
             case .VaccineCard: self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
@@ -234,7 +235,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     // Temporary workaround for dumb queueit issues on prod
-    private func getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: AuthenticationRequestObject) {
+    private func getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: AuthenticationRequestObject, completion: @escaping()->Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         requestDetails.authenticatedQueueItPingTestResultsDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedQueueItPingTestResultsDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
         apiClient.getAuthenticatedTestResults(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
@@ -244,10 +245,10 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 self.requestDetails.authenticatedQueueItPingTestResultsDetails?.queueItToken = queueItToken
                 self.apiClient.getAuthenticatedTestResults(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
                     guard let `self` = self else {return}
-                    self.handleQueueItTestResultsResponse(result: result)
+                    self.handleQueueItTestResultsResponse(result: result, completion: completion)
                 }
             } else {
-                self.handleQueueItTestResultsResponse(result: result)
+                self.handleQueueItTestResultsResponse(result: result, completion: completion)
             }
         }
     }
@@ -405,12 +406,13 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.getAuthenticatedPatientDetails(authCredentials: authCredentials, showBanner: self.showBanner, isManualFetch: self.isManualAuthFetch, sourceVC: self.loginSourceVC)
     }
     
-    @objc private func retryGetQueueItTestResultsRequest() {
+    @objc private func retryGetQueueItTestResultsRequest(completion: @escaping()->Void) {
         guard let authCredentials = self.requestDetails.authenticatedQueueItPingTestResultsDetails?.authCredentials else {
             print("Error")
-            return
+            
+            return completion()
         }
-        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials)
+        self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials, completion: completion)
     }
     
     @objc private func retryGetTestResultsRequest() {
@@ -454,26 +456,26 @@ extension AuthenticatedHealthRecordsAPIWorker {
         AppDelegate.sharedInstance?.showToast(message: "Not all records were fetched successfully", style: .Warn)
     }
     
-    private func handleQueueItTestResultsResponse(result: Result<AuthenticatedTestResultsResponseModel, ResultError>) {
+    private func handleQueueItTestResultsResponse(result: Result<AuthenticatedTestResultsResponseModel, ResultError>, completion: @escaping()->Void) {
         switch result {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders.count == 0 {
-                print("Error with queue it??")
-            }
-            else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
-                // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
+                Logger.log(string: resultMessage, type: .Network)
+                completion()
+            } else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
                 self.retryCount += 1
                 let retryInSeconds = Double(retryinMS/1000)
-                self.perform(#selector(self.retryGetQueueItTestResultsRequest), with: nil, afterDelay: retryInSeconds)
-            }
-            else {
-                // Doesn't matter, just for queue it
-                
+                DispatchQueue.main.asyncAfter(deadline: .now() + retryInSeconds, execute: {
+                    self.retryGetQueueItTestResultsRequest(completion: completion)
+                })
+            } else {
+                Logger.log(string: "QUEUEIT Test call completed", type: .Network)
+                completion()
             }
         case .failure(let error):
-            print("Error")
-            // Doesn't matter, just for queue it
+            Logger.log(string: "Error: \(error.localizedDescription)", type: .Network)
+            return completion()
         }
     }
     
@@ -623,36 +625,32 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let patient = self.patientDetails else { return }
         
         incrementLoadCounter()
-        
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
-        
+                
         let qrResult = vaccineCard.transformResponseIntoQRCode()
         guard let code = qrResult.qrString else {
             self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: qrResult.error ?? .genericErrorMessage)
-            endLoadCounter()
+            self.decrementLoadCounter()
             return
         }
         BCVaccineValidator.shared.validate(code: code) { [weak self] result in
             guard let `self` = self else {
-                endLoadCounter()
+                self?.decrementLoadCounter()
                 return
             }
             guard let data = result.result else {
                 self.fetchStatusList.fetchStatus[.VaccineCard] = FetchStatus(requestCompleted: true, attemptedCount: 1, successfullCount: 0, error: .invalidQRCodeMessage)
-                endLoadCounter()
+                self.decrementLoadCounter()
                 return
             }
             DispatchQueue.main.async { [weak self] in
                 guard let `self` = self else {
-                    endLoadCounter()
+                    self?.decrementLoadCounter()
                     return
                 }
                 var model = self.executingVC.convertScanResultModelIntoLocalData(data: data, source: .healthGateway)
                 model.fedCode = vaccineCard.resourcePayload?.federalVaccineProof?.data
                 self.coreDataLogic(localModel: model, patient: patient)
-                endLoadCounter()
+                self.decrementLoadCounter()
             }
         }
     }
@@ -705,15 +703,11 @@ extension AuthenticatedHealthRecordsAPIWorker {
         
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
-        
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.CovidTest])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return
         }
         for order in orders {
@@ -739,27 +733,23 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
         self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
-        endLoadCounter()
+        self.decrementLoadCounter()
     }
     
     private func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
-        
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
        
         guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: false, pdf: pdf) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
-        endLoadCounter()
+        self.decrementLoadCounter()
         return object.id
     }
 }
@@ -771,9 +761,6 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let payloads = medicationStatement.resourcePayload else { return }
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Prescription])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
@@ -788,7 +775,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             dispatchGroup.leave()
         }
         dispatchGroup.notify(queue: .main) {
-            endLoadCounter()
+            self.decrementLoadCounter()
           if let protectiveWord = protectiveWord, completedCount > 0 {
               self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
               self.authManager.storeMedFetchRequired(bool: false)
@@ -802,18 +789,15 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, initialProtectedMedFetch: Bool) -> String? {
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
         guard let object = StorageService.shared.storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
-        endLoadCounter()
+        self.decrementLoadCounter()
         return object.id
     }
 }
@@ -825,26 +809,32 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let orders = labOrders.resourcePayload?.orders else { return }
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
         StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.LaboratoryOrder])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return
         }
         for order in orders {
-            self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
-                if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
+            if order.reportAvailable == true {
+                self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
+                    if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
+                        completedCount += 1
+                    } else {
+                        errorArrayCount += 1
+                    }
+                }
+                
+            } else {
+                if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: nil, authenticated: true, patientObject: patient) {
                     completedCount += 1
                 } else {
                     errorArrayCount += 1
                 }
             }
         }
-        endLoadCounter()
+        self.decrementLoadCounter()
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
         // For now, just calling success so that the entire fetch can pass
         self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
@@ -853,18 +843,15 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         incrementLoadCounter()
         
-        func endLoadCounter() {
-            decrementLoadCounter()
-        }
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
         guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf) else {
-            endLoadCounter()
+            self.decrementLoadCounter()
             return nil
         }
-        endLoadCounter()
+        self.decrementLoadCounter()
         return object.id
     }
 }
@@ -949,6 +936,11 @@ struct FetchStatus {
 
 struct FetchStatusList {
     var fetchStatus: [AuthenticationFetchType: FetchStatus]
+    
+    var getFetchStatusTypes: [AuthenticationFetchType] {
+        guard fetchStatus.count > 0 else { return [] }
+        return fetchStatus.map { $0.key }
+    }
     
     var isCompleted: Bool {
         guard fetchStatus.count > 0 else { return false }

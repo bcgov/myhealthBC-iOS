@@ -44,6 +44,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var hasUpdatedUnauthPendingTest = true
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
+    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     private var hiddenRecords: [HealthRecordsDetailDataSource] = []
@@ -53,7 +54,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var protectiveWord: String?
     private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
     private var selectedCellIndexPath: IndexPath?
-    
+        
     private var currentFilter: RecordsFilter? = nil {
         didSet {
             if let current = currentFilter, current.exists {
@@ -86,6 +87,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()
+        self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
         if let patient = patient, let patientName = patient.name, let existingFilter = UserFilters.filterFor(name: patientName) {
             currentFilter = existingFilter
         }
@@ -106,6 +108,10 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -131,13 +137,13 @@ class UsersListOfRecordsViewController: BaseViewController {
         updatePatientIfNecessary()
         navSetup(style: navStyle, authenticated: self.authenticated)
         self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
-        fetchDataSource()
         showSelectedFilters()
         noRecordsFoundSubTitle.font = UIFont.bcSansRegularWithSize(size: 13)
         noRecordsFoundTitle.font = UIFont.bcSansBoldWithSize(size: 20)
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
+        fetchDataSource()
         if showLoadingTitle {
             self.parentContainerStackView.startLoadingIndicator(backgroundColor: .white)
         }
@@ -423,27 +429,31 @@ extension UsersListOfRecordsViewController {
     
     // NOTE: No special routing required here on login, as the user should remain on the same screen
     private func performBCSCLogin() {
-        self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
-            guard let `self` = self, authenticationStatus == .Completed else {return}
-            if let authStatus = Defaults.loginProcessStatus,
-               authStatus.hasCompletedLoginProcess == true,
-               let storedName = authStatus.loggedInUserAuthManagerDisplayName,
-               let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
-               let currentName = currentAuthPatient.authManagerDisplayName,
-               storedName != currentName {
-                StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-                StorageService.shared.deleteAuthenticatedPatient(with: storedName)
-                self.authManager.clearMedFetchProtectiveWordDetails()
-                //                self.patient = nil
-                if self.navStyle == .multiUser {
-                    //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
-                    //                    self.tableView.startLoadingIndicator()
-                    self.navigationController?.popViewController(animated: true)
+        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+            if response == .Online {
+                self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
+                    guard let `self` = self, authenticationStatus == .Completed else {return}
+                    if let authStatus = Defaults.loginProcessStatus,
+                       authStatus.hasCompletedLoginProcess == true,
+                       let storedName = authStatus.loggedInUserAuthManagerDisplayName,
+                       let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
+                       let currentName = currentAuthPatient.authManagerDisplayName,
+                       storedName != currentName {
+                        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                        StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+                        self.authManager.clearMedFetchProtectiveWordDetails()
+                        //                self.patient = nil
+                        if self.navStyle == .multiUser {
+                            //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
+                            //                    self.tableView.startLoadingIndicator()
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    } else {
+                        self.fetchDataSource()
+                    }
                 }
-            } else {
-                self.fetchDataSource()
             }
-        }
+        })
     }
     
     @objc private func patientAPIFetched(_ notification: Notification) {
@@ -527,6 +537,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
+        if self.hiddenCellType == .medicalRecords && indexPath.section == 0 { return }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
         let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: dataSource.count, patient: self.patient)
@@ -671,8 +682,12 @@ extension UsersListOfRecordsViewController {
                 }
             }
         } else if purpose == .initialFetch {
-            adjustLoadingIndicator(show: true)
-            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+            self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+                if response == .Online {
+                    self.adjustLoadingIndicator(show: true)
+                    self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+                }
+            })
         }
     }
 }

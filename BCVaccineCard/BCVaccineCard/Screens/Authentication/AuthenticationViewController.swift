@@ -124,7 +124,7 @@ class AuthenticationViewController: UIViewController {
         case .AuthInfo:
             self.showInfo(sourceVC: self.sourceVC)
         case .Auth:
-            self.performAuthentication(sourceVC: self.sourceVC)
+            self.performAuthentication(sourceVC: self.sourceVC, completion: nil)
         }
     }
     
@@ -156,7 +156,11 @@ class AuthenticationViewController: UIViewController {
             guard let self = self else {return}
             switch result {
             case .Continue:
-                self.performAuthentication(sourceVC: sourceVC)
+                self.performAuthentication(sourceVC: sourceVC) { online in
+                    if !online {
+                        authInfoView.continueButton.isUserInteractionEnabled = true
+                    }
+                }
             case .Cancel:
                 self.dismissView(withDelay: false, status: .Cancelled, sourceVC: sourceVC)
             case .Back:
@@ -165,9 +169,9 @@ class AuthenticationViewController: UIViewController {
         }
     }
     
-    private func performAuthentication(sourceVC: LoginVCSource) {
-        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { canProceed in
-            if canProceed {
+    private func performAuthentication(sourceVC: LoginVCSource, completion: ((Bool) -> Void)?) {
+        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+            if response == .Online {
                 self.view.startLoadingIndicator()
                 AuthManager().authenticate(in: self, completion: { [weak self] result in
                     guard let self = self else {return}
@@ -185,11 +189,9 @@ class AuthenticationViewController: UIViewController {
                     }
                 })
             } else {
-                print("Error")
-                self.alert(title: .error, message: "There was an error trying to login, please try again later.") {
-                    self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
-                }
+                completion?(false)
             }
+            // Note: Toast will be shown if response is not "Online", so we don't need an else statement here, as we won't be showing a pop-up and won't be dismissing the screen
         })
     }
     

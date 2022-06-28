@@ -5,7 +5,7 @@ on:
       - dev
 jobs:
   deploy:
-    name: Deploying to Firebase
+    name: Creating TEST ipa
     runs-on: macOS-latest
     timeout-minutes: 60
     env:
@@ -23,15 +23,15 @@ jobs:
       - name: Setup provisioning profile
         env:
           FW_KEYS: ${{ secrets.FW_KEYS }}
-        run: ./.github/secrets/decrypt_firebase.sh
+        run: ./.github/secrets/decrypt_adhoc.sh
         
       - name: Archive project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        run: ./.github/scripts/archive_adhoc.sh
+        run: ./.github/scripts/archive_test.sh
         
       - name: Export .ipa
-        run: ./.github/scripts/export_adhoc_ipa.sh
+        run: ./.github/scripts/export_test.sh
         
 #     - name: Upload .ipa to firebase
 #       if: success()
@@ -44,11 +44,11 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: Health\ Gateway\ Dev.ipa
-          path: build/Apps/HealthGatewayDev.ipa
+          path: build/Apps/HealthGatewayTest.ipa
 
       - name: Notify Slack - Success
         uses: act10ns/slack@v1
         with:
           status: Completed
           channel: 'bc-vaccine-card'
-          message: New iOS build is available at https://github.com/bcgov/myhealthBC-iOS/actions/runs/${{ github.run_id }}
+          message: New iOS TEST build is available at https://github.com/bcgov/myhealthBC-iOS/actions/runs/${{ github.run_id }}
