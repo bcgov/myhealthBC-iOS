@@ -8,7 +8,7 @@
 import UIKit
 
 
-class ImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
+class CovidImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
     
     private var fields: [[TextListModel]] = [[]]
 
@@ -57,7 +57,7 @@ class ImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDele
     
 }
 
-extension ImmunizationRecordDetailView {
+extension CovidImmunizationRecordDetailView {
     
     private func createFields() -> [[TextListModel]] {
         guard let model = model else {return []}

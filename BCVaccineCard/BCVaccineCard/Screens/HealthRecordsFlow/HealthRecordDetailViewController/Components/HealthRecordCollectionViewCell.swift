@@ -28,9 +28,9 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
         switch model.type {
             
         case .covidImmunizationRecord:
-            recordView = ImmunizationRecordDetailView(frame: .zero)
+            recordView = CovidImmunizationRecordDetailView(frame: .zero)
         case .covidTestResultRecord:
-            recordView = TestResultRecordDetailView(frame: .zero)
+            recordView = CovidTestResultRecordDetailView(frame: .zero)
         case .medication:
             recordView = MedicationRecordDetailView(frame: .zero)
         case .laboratoryOrder:

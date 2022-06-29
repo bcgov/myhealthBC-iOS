@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
+class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
     
     enum Section: Int, CaseIterable {
         case Header
@@ -61,7 +61,7 @@ class TestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelega
     }
 }
 
-extension TestResultRecordDetailView {
+extension CovidTestResultRecordDetailView {
     private func createFields() -> [TextListModel] {
         guard let model = model else {return []}
         
