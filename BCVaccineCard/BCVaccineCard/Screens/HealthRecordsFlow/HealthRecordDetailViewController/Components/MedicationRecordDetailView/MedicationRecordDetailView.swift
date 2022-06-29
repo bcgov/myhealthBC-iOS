@@ -105,18 +105,42 @@ extension MedicationRecordDetailView {
             
             let dinText = (prescription.medication?.isPin ?? false) ? "PIN:" : "DIN:"
             let fields: [TextListModel] = [
-                TextListModel(header: TextProperties(text: "Practitioner:", bolded: true), subtext: TextProperties(text: prescription.practitionerSurname ?? "", bolded: false)),
-                TextListModel(header: TextProperties(text: "Quantity:", bolded: true), subtext: TextProperties(text: String(prescription.medication?.quantity ?? 0), bolded: false)),
-                TextListModel(header: TextProperties(text: "Strength:", bolded: true), subtext: TextProperties(text: (prescription.medication?.strength ?? "") + " " + (prescription.medication?.strengthUnit ?? ""), bolded: false)),
-                TextListModel(header: TextProperties(text: "Form:", bolded: true), subtext: TextProperties(text: prescription.medication?.form ?? "", bolded: false)),
-                TextListModel(header: TextProperties(text: "Manufacturer:", bolded: true), subtext: TextProperties(text: prescription.medication?.manufacturer ?? "", bolded: false)),
-                TextListModel(header: TextProperties(text: dinText, bolded: true), subtext: TextProperties(text: prescription.medication?.din ?? "", bolded: false)),
-                TextListModel(header: TextProperties(text: "Filled at:", bolded: true), subtext: TextProperties(text: prescription.pharmacy?.name ?? "", bolded: false)),
-                TextListModel(header: TextProperties(text: "Filled date:", bolded: true), subtext: TextProperties(text: dateString ?? "", bolded: false)),
-                TextListModel(header: TextProperties(text: "Address:", bolded: true), subtext: TextProperties(text: address, bolded: false)),
-                TextListModel(header: TextProperties(text: "Phone number:", bolded: true), subtext: TextProperties(text: prescription.pharmacy?.phoneNumber ?? "", bolded: false)),
-                TextListModel(header: TextProperties(text: "Fax:", bolded: true), subtext: TextProperties(text: prescription.pharmacy?.faxNumber ?? "", bolded: false)),
-                TextListModel(header: TextProperties(text: "Direction for use:", bolded: true), subtext: TextProperties(text: prescription.directions ?? "", bolded: false))
+                TextListModel(
+                    header: TextProperties(text: "Practitioner:", bolded: true),
+                    subtext: TextProperties(text: prescription.practitionerSurname ?? "", bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Quantity:", bolded: true),
+                    subtext: TextProperties(text: String(prescription.medication?.quantity ?? 0), bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Strength:", bolded: true),
+                    subtext: TextProperties(text: (prescription.medication?.strength ?? "") + " " + (prescription.medication?.strengthUnit ?? ""), bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Form:", bolded: true),
+                    subtext: TextProperties(text: prescription.medication?.form ?? "", bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Manufacturer:", bolded: true),
+                    subtext: TextProperties(text: prescription.medication?.manufacturer ?? "", bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: dinText, bolded: true),
+                    subtext: TextProperties(text: prescription.medication?.din ?? "", bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Filled at:", bolded: true),
+                    subtext: TextProperties(text: prescription.pharmacy?.name ?? "", bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Filled date:", bolded: true),
+                    subtext: TextProperties(text: dateString ?? "", bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Address:", bolded: true),
+                    subtext: TextProperties(text: address, bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Phone number:", bolded: true),
+                    subtext: TextProperties(text: prescription.pharmacy?.phoneNumber ?? "", bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Fax:", bolded: true),
+                    subtext: TextProperties(text: prescription.pharmacy?.faxNumber ?? "", bolded: false)),
+                TextListModel(
+                    header: TextProperties(text: "Direction for use:", bolded: true),
+                    subtext: TextProperties(text: prescription.directions ?? "", bolded: false))
             ]
             return fields
         default:

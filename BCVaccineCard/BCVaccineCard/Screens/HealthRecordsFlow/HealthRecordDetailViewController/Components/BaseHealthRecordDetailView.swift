@@ -97,8 +97,4 @@ class BaseHealthRecordsDetailView: UIView {
     public func textCell(indexPath: IndexPath, tableView: UITableView) -> HealthRecordDetailFieldTableViewCell? {
         return tableView.dequeueReusableCell(withIdentifier: HealthRecordDetailFieldTableViewCell.getName, for: indexPath) as? HealthRecordDetailFieldTableViewCell
     }
-    
-    public func separatorCell(indexPath: IndexPath, tableView: UITableView) -> SeparatorTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: SeparatorTableViewCell.getName, for: indexPath) as? SeparatorTableViewCell
-    }
 }
