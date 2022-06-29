@@ -30,18 +30,6 @@
 		2922C0AC286C73EA000FF4F7 /* HealthRecordDetailFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E19FF6286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.swift */; };
 		2922C0AD286C73F8000FF4F7 /* HealthRecordDetailFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29E19FF7286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.xib */; };
 		2922C0AE286C73F9000FF4F7 /* HealthRecordDetailFieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29E19FF7286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.xib */; };
-		2922C0B2286C81F2000FF4F7 /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2922C0B0286C81F2000FF4F7 /* SeparatorTableViewCell.swift */; };
-		2922C0B3286C81F2000FF4F7 /* SeparatorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0B1286C81F2000FF4F7 /* SeparatorTableViewCell.xib */; };
-		2922C0B4286C81F6000FF4F7 /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2922C0B0286C81F2000FF4F7 /* SeparatorTableViewCell.swift */; };
-		2922C0B5286C81F6000FF4F7 /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2922C0B0286C81F2000FF4F7 /* SeparatorTableViewCell.swift */; };
-		2922C0B6286C81F9000FF4F7 /* SeparatorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0B1286C81F2000FF4F7 /* SeparatorTableViewCell.xib */; };
-		2922C0B7286C81F9000FF4F7 /* SeparatorTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0B1286C81F2000FF4F7 /* SeparatorTableViewCell.xib */; };
-		2922C0B9286C842D000FF4F7 /* SeparatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0B8286C842D000FF4F7 /* SeparatorView.xib */; };
-		2922C0BA286C842D000FF4F7 /* SeparatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0B8286C842D000FF4F7 /* SeparatorView.xib */; };
-		2922C0BB286C842D000FF4F7 /* SeparatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0B8286C842D000FF4F7 /* SeparatorView.xib */; };
-		2922C0BD286C8479000FF4F7 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2922C0BC286C8479000FF4F7 /* SeparatorView.swift */; };
-		2922C0BE286C8479000FF4F7 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2922C0BC286C8479000FF4F7 /* SeparatorView.swift */; };
-		2922C0BF286C8479000FF4F7 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2922C0BC286C8479000FF4F7 /* SeparatorView.swift */; };
 		29245D40275581C700F48642 /* StorageService+TestResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D3F275581C700F48642 /* StorageService+TestResults.swift */; };
 		29245D41275581C700F48642 /* StorageService+TestResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D3F275581C700F48642 /* StorageService+TestResults.swift */; };
 		29245D432755877A00F48642 /* Encodable+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D422755877A00F48642 /* Encodable+EXT.swift */; };
@@ -926,10 +914,6 @@
 		291D43E12762E203005F5B94 /* HealthRecordCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordCollectionViewCell.swift; sourceTree = "<group>"; };
 		2920AC1D278E3DA300F7CAE7 /* SecurityAndDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityAndDataViewController.swift; sourceTree = "<group>"; };
 		2920AC1F278E626500F7CAE7 /* ProfileAndSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAndSettingsViewController.swift; sourceTree = "<group>"; };
-		2922C0B0286C81F2000FF4F7 /* SeparatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorTableViewCell.swift; sourceTree = "<group>"; };
-		2922C0B1286C81F2000FF4F7 /* SeparatorTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SeparatorTableViewCell.xib; sourceTree = "<group>"; };
-		2922C0B8286C842D000FF4F7 /* SeparatorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SeparatorView.xib; sourceTree = "<group>"; };
-		2922C0BC286C8479000FF4F7 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		29245D3F275581C700F48642 /* StorageService+TestResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+TestResults.swift"; sourceTree = "<group>"; };
 		29245D422755877A00F48642 /* Encodable+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+EXT.swift"; sourceTree = "<group>"; };
 		2932DCDE275A9D2C00532BC4 /* StorageService+VaccineCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+VaccineCard.swift"; sourceTree = "<group>"; };
@@ -1301,17 +1285,6 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		2922C0AF286C81DF000FF4F7 /* Separator */ = {
-			isa = PBXGroup;
-			children = (
-				2922C0B0286C81F2000FF4F7 /* SeparatorTableViewCell.swift */,
-				2922C0B1286C81F2000FF4F7 /* SeparatorTableViewCell.xib */,
-				2922C0B8286C842D000FF4F7 /* SeparatorView.xib */,
-				2922C0BC286C8479000FF4F7 /* SeparatorView.swift */,
-			);
-			path = Separator;
-			sourceTree = "<group>";
-		};
 		293B32AD27D25C2C0064BAAA /* Comments */ = {
 			isa = PBXGroup;
 			children = (
@@ -1637,7 +1610,6 @@
 		29E19FF5286C713800C235EF /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				2922C0AF286C81DF000FF4F7 /* Separator */,
 				29E19FFA286C716700C235EF /* Detail Field */,
 			);
 			path = Common;
@@ -2838,7 +2810,6 @@
 				293B32C627D27A880064BAAA /* CommentsTableViewCell.xib in Resources */,
 				294BD3D327B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
 				297885262795F38500FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
-				2922C0BA286C842D000FF4F7 /* SeparatorView.xib in Resources */,
 				791C27BB27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
 				7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */,
 				79218AAB2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */,
@@ -2885,7 +2856,6 @@
 				795AA76727155F7100E59FF1 /* Resource.storyboard in Resources */,
 				293B32B927D2628A0064BAAA /* CommentsListView.xib in Resources */,
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
-				2922C0B6286C81F9000FF4F7 /* SeparatorTableViewCell.xib in Resources */,
 				799E0AFF27D13F43009C68FE /* Reusable.storyboard in Resources */,
 				29A4DF4727DA674100D5E901 /* FilterRecordsView.xib in Resources */,
 				79218AE027557F7D0063004E /* StaticPositiveTestTableViewCell.xib in Resources */,
@@ -2966,12 +2936,10 @@
 				79A15B0127FC07D500F8330D /* OnboardingCollectionViewCell.xib in Resources */,
 				79BDA08A270CEE8000FF30AB /* Localizable.strings in Resources */,
 				799E0B0027D13F43009C68FE /* Reusable.storyboard in Resources */,
-				2922C0BB286C842D000FF4F7 /* SeparatorView.xib in Resources */,
 				79BDA085270CEE5E00FF30AB /* Records.storyboard in Resources */,
 				792834602730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */,
 				29A4DF5B27DEFCCC00D5E901 /* ChipCollectionViewCell.xib in Resources */,
 				293B32C127D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
-				2922C0B7286C81F9000FF4F7 /* SeparatorTableViewCell.xib in Resources */,
 				7928346E27311C9000EE2710 /* DropDownView.xib in Resources */,
 				29547E5C27A2EC7700562958 /* LocalAuthView.xib in Resources */,
 				79A15B0927FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */,
@@ -3021,7 +2989,6 @@
 				798006122852C66E006E390F /* CommentsTableViewCell.xib in Resources */,
 				798006132852C66E006E390F /* HiddenRecordsTableViewCell.xib in Resources */,
 				798006142852C66E006E390F /* SettingsAuthenticateTableViewCell.xib in Resources */,
-				2922C0B9286C842D000FF4F7 /* SeparatorView.xib in Resources */,
 				798006152852C66E006E390F /* ButtonTableViewCell.xib in Resources */,
 				798006162852C66E006E390F /* BCSans-Italic.otf in Resources */,
 				798006172852C66E006E390F /* UserRecordListTableViewCell.xib in Resources */,
@@ -3068,7 +3035,6 @@
 				798006402852C66E006E390F /* Resource.storyboard in Resources */,
 				798006412852C66E006E390F /* CommentsListView.xib in Resources */,
 				798006422852C66E006E390F /* BCSans-BoldItalic.otf in Resources */,
-				2922C0B3286C81F2000FF4F7 /* SeparatorTableViewCell.xib in Resources */,
 				798006432852C66E006E390F /* Reusable.storyboard in Resources */,
 				798006442852C66E006E390F /* FilterRecordsView.xib in Resources */,
 				798006452852C66E006E390F /* StaticPositiveTestTableViewCell.xib in Resources */,
@@ -3323,7 +3289,6 @@
 				29A4DF5227DA685100D5E901 /* ChipCollectionViewCell.swift in Sources */,
 				5BA177D227A18CDD00D61F2A /* CoreDataStack.swift in Sources */,
 				2920AC1E278E3DA300F7CAE7 /* SecurityAndDataViewController.swift in Sources */,
-				2922C0B4286C81F6000FF4F7 /* SeparatorTableViewCell.swift in Sources */,
 				792834582730E53200EE2710 /* InteractiveLinkLabel.swift in Sources */,
 				795AA7482713FFF800E59FF1 /* QueueItEngine.swift in Sources */,
 				795AA72F27108C1C00E59FF1 /* GatewayRequestObjects.swift in Sources */,
@@ -3456,7 +3421,6 @@
 				29A4DF4927DA675000D5E901 /* FilterRecordsView.swift in Sources */,
 				79CF23682825787900510489 /* HealthRecordsHomeView.swift in Sources */,
 				29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */,
-				2922C0BE286C8479000FF4F7 /* SeparatorView.swift in Sources */,
 				29B23B3F26FB88BB00A3AC79 /* CameraViewController.swift in Sources */,
 				29E19FED286C11C900C235EF /* LabOrderRecordDetailView.swift in Sources */,
 				294BD3D227B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */,
@@ -3569,7 +3533,6 @@
 				79218A9D275141800063004E /* GetARecordTableViewCell.swift in Sources */,
 				2978852E279624E100FF912D /* SettingsProfileTableViewCell.swift in Sources */,
 				5BA177D327A18CDD00D61F2A /* CoreDataStack.swift in Sources */,
-				2922C0B5286C81F6000FF4F7 /* SeparatorTableViewCell.swift in Sources */,
 				794BD63B2702EEC00084ADA8 /* CustomNavigationController.swift in Sources */,
 				794BD63C2702EEC00084ADA8 /* AppStyleButton.swift in Sources */,
 				795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
@@ -3702,7 +3665,6 @@
 				29788532279624EA00FF912D /* SettingsRowTableViewCell.swift in Sources */,
 				791C27C02718315A001A6E12 /* AddCardsTableViewCell.swift in Sources */,
 				79D93B1E27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */,
-				2922C0BF286C8479000FF4F7 /* SeparatorView.swift in Sources */,
 				797BB9692767E7E000CD1645 /* HealthRecordView.swift in Sources */,
 				29E19FEF286C11CA00C235EF /* LabOrderRecordDetailView.swift in Sources */,
 				794BD6522702EEC00084ADA8 /* UIImage+EXT.swift in Sources */,
@@ -3786,7 +3748,6 @@
 				798005652852C66E006E390F /* ChipCollectionViewCell.swift in Sources */,
 				798005662852C66E006E390F /* CoreDataStack.swift in Sources */,
 				798005672852C66E006E390F /* SecurityAndDataViewController.swift in Sources */,
-				2922C0B2286C81F2000FF4F7 /* SeparatorTableViewCell.swift in Sources */,
 				798005682852C66E006E390F /* InteractiveLinkLabel.swift in Sources */,
 				798005692852C66E006E390F /* QueueItEngine.swift in Sources */,
 				7980056A2852C66E006E390F /* GatewayRequestObjects.swift in Sources */,
@@ -3919,7 +3880,6 @@
 				798005E52852C66E006E390F /* AuthenticatedCommentResponseObject.swift in Sources */,
 				798005E62852C66E006E390F /* String+EXT.swift in Sources */,
 				798005E72852C66E006E390F /* FilterRecordsView.swift in Sources */,
-				2922C0BD286C8479000FF4F7 /* SeparatorView.swift in Sources */,
 				798005E82852C66E006E390F /* HealthRecordsHomeView.swift in Sources */,
 				798005E92852C66E006E390F /* UIImage+EXT.swift in Sources */,
 				798005EA2852C66E006E390F /* CameraViewController.swift in Sources */,
