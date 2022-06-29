@@ -39,10 +39,10 @@ extension HealthRecordsDetailDataSource.Record {
             return type
         case .medication:
             return .NoBanner
-        case .laboratoryOrder(let tests):
+        case .laboratoryOrder(let model, let tests):
             if tests.isEmpty {
                 return .LabOrderWithoutTests
-            } else if status?.lowercased() == "pending"{
+            } else if status?.lowercased() == "pending" {
                 return .LabOrderPending
             } else {
                 return .NoBanner

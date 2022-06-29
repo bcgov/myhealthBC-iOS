@@ -11,7 +11,7 @@ import UIKit
 class HealthRecordCollectionViewCell: UICollectionViewCell {
     
     private var model: HealthRecordsDetailDataSource.Record?
-    private weak var recordView: HealthRecordView?
+    private weak var recordView: BaseHealthRecordsDetailView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -24,11 +24,22 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
     func configure(model: HealthRecordsDetailDataSource.Record) {
         self.model = model
         self.recordView?.removeFromSuperview()
-        let recordView: HealthRecordView = HealthRecordView(frame: .zero)
+        let recordView: BaseHealthRecordsDetailView
+        switch model.type {
+            
+        case .covidImmunizationRecord:
+            recordView = ImmunizationRecordDetailView(frame: .zero)
+        case .covidTestResultRecord:
+            recordView = TestResultRecordDetailView(frame: .zero)
+        case .medication:
+            recordView = MedicationRecordDetailView(frame: .zero)
+        case .laboratoryOrder:
+            recordView = LabOrderRecordDetailView(frame: .zero)
+        }
         self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(recordView)
         recordView.addEqualSizeContraints(to: self.contentView, paddingVertical: 0, paddingHorizontal: 20)
-        recordView.configure(model: model)
+        recordView.setup(model: model)
         self.recordView = recordView
     }
 }
