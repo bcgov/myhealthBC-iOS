@@ -21,7 +21,7 @@ extension StorageService {
         case Patient
         case CovidLabTestResult
         case TestResult
-        case ImmunizationRecord
+        case CovidImmunizationRecord
         case VaccineCard
         case Perscription
         case Medication

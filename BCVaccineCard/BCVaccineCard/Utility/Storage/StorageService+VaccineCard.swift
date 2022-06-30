@@ -36,7 +36,7 @@ protocol StorageVaccineCardManager {
         completion: @escaping(VaccineCard?)->Void
     )
     
-    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([ImmunizationRecord])->Void)
+    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([CovidImmunizationRecord])->Void)
     
     // MARK: Update
     
@@ -255,13 +255,13 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Helpers
-    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([ImmunizationRecord])->Void) {
+    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([CovidImmunizationRecord])->Void) {
         guard let qrCode = card.code, let context = managedContext else {return completion([])}
         BCVaccineValidator.shared.validate(code: qrCode) { result in
             guard let result = result.result else {return completion([])}
-            var immunizations: [ImmunizationRecord] = []
+            var immunizations: [CovidImmunizationRecord] = []
             for record in result.immunizations {
-                let model = ImmunizationRecord(context: context)
+                let model = CovidImmunizationRecord(context: context)
                 model.snomed = record.snomed
                 if let dateString = record.date, let date = Date.Formatter.yearMonthDay.date(from: dateString) {
                     model.date = date

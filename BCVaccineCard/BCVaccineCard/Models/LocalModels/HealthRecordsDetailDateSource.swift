@@ -10,7 +10,7 @@ import UIKit
 struct HealthRecordsDetailDataSource {
     struct Record {
         enum RecordType {
-            case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
+            case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord])
             case covidTestResultRecord(model: TestResult)
             case medication(model: Perscription)
             case laboratoryOrder(model: [LaboratoryTest])
@@ -46,7 +46,7 @@ struct HealthRecordsDetailDataSource {
         
     }
     enum RecordType {
-        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord])
+        case covidImmunizationRecord(model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord])
         case covidTestResultRecord(model: CovidLabTestResult)
         case medication(model: Perscription)
         case laboratoryOrder(model: LaboratoryOrder)
@@ -173,7 +173,7 @@ extension HealthRecordsDetailDataSource {
     }
     
     // MARK: Immunization Records
-    private static func genRecord(vaccineModel model: LocallyStoredVaccinePassportModel, immunizations: [ImmunizationRecord]) -> Record {
+    private static func genRecord(vaccineModel model: LocallyStoredVaccinePassportModel, immunizations: [CovidImmunizationRecord]) -> Record {
         let date: String? = model.vaxDates.last
         var fields: [[TextListModel]] = []
         for (index, imsModel) in immunizations.enumerated() {

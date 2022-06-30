@@ -10,10 +10,10 @@ import Foundation
 import CoreData
 
 
-extension ImmunizationRecord {
+extension CovidImmunizationRecord {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<ImmunizationRecord> {
-        return NSFetchRequest<ImmunizationRecord>(entityName: "ImmunizationRecord")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<CovidImmunizationRecord> {
+        return NSFetchRequest<CovidImmunizationRecord>(entityName: "CovidImmunizationRecord")
     }
 
     @NSManaged public var date: Date?

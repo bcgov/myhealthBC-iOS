@@ -16,33 +16,25 @@ struct AuthenticatedImmunizationsResponseObject: Codable {
     // MARK: - ResourcePayload
     struct ResourcePayload: Codable {
         let loadState: LoadState?
-        let immunizations: [ImmunizationElement]?
+        let immunizations: [Immunization]?
         let recommendations: [Recommendation]?
-        
-        // MARK: - ImmunizationImmunization
-        struct ImmunizationImmunization: Codable {
-            let name: String?
-            let immunizationAgents: [ImmunizationAgent]?
-            
-            // MARK: - ImmunizationAgent
-            struct ImmunizationAgent: Codable {
-                let code, name, lotNumber, productName: String?
-            }
-        }
-        
-        // MARK: - TargetDisease
-        struct TargetDisease: Codable {
-            let code, name: String?
+           
+        // MARK: - LoadState
+        struct LoadState: Codable {
+            let refreshInProgress: Bool
         }
         
         // MARK: - ImmunizationElement
-        struct ImmunizationElement: Codable {
-            let id, dateOfImmunization, providerOrClinic: String?
-            let status: Status?
+        struct Immunization: Codable {
+            let id, dateOfImmunization, providerOrClinic, status, targetedDisease: String?
             let valid: Bool?
-            let targetedDisease: TargetedDisease?
-            let immunization: ImmunizationImmunization?
+            let immunizationDetails: ImmunizationDetails?
             let forecast: Forecast?
+            
+            enum CodingKeys: String, CodingKey {
+                case immunizationDetails = "immunization"
+                case id, dateOfImmunization, providerOrClinic, status, targetedDisease, valid, forecast
+            }
             
             // MARK: - Forecast
             struct Forecast: Codable {
@@ -53,33 +45,34 @@ struct AuthenticatedImmunizationsResponseObject: Codable {
                     case createDate, status, displayName, eligibleDate, dueDate
                 }
             }
-            
-            enum Status: String, Codable {
-                case completed = "Completed"
-            }
-            
-            enum TargetedDisease: String, Codable {
-                case covid19 = "COVID19"
-                case notset = "NOTSET"
-            }
-        }
-        
-        // MARK: - LoadState
-        struct LoadState: Codable {
-            let refreshInProgress: Bool
         }
         
         // MARK: - Recommendation
         struct Recommendation: Codable {
             let recommendationSetID, status, diseaseEligibleDate, diseaseDueDate, agentEligibleDate, agentDueDate: String?
             let targetDiseases: [TargetDisease]?
-            let immunization: ImmunizationImmunization?
+            let immunization: ImmunizationDetails?
 
             enum CodingKeys: String, CodingKey {
                 case recommendationSetID = "recommendationSetId"
                 case diseaseEligibleDate, diseaseDueDate, agentEligibleDate, agentDueDate, status, targetDiseases, immunization
             }
+            
+            // MARK: - TargetDisease
+            struct TargetDisease: Codable {
+                let code, name: String?
+            }
         }
-
+        
+        // MARK: - ImmunizationImmunization
+        struct ImmunizationDetails: Codable {
+            let name: String?
+            let immunizationAgents: [ImmunizationAgent]?
+            
+            // MARK: - ImmunizationAgent
+            struct ImmunizationAgent: Codable {
+                let code, name, lotNumber, productName: String?
+            }
+        }
     }
 }

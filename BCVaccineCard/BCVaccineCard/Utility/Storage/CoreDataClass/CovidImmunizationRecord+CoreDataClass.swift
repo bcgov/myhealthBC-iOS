@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-
-public class ImmunizationRecord: NSManagedObject {
+@objc(CovidImmunizationRecord)
+public class CovidImmunizationRecord: NSManagedObject {
 
 }

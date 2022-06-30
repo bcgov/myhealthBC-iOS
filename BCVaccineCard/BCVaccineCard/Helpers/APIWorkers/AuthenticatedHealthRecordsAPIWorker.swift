@@ -933,7 +933,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.fetchStatusList.fetchStatus[.Immunizations] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
-    private func handleImmunizationsInCoreData(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.ImmunizationElement, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+    private func handleImmunizationsInCoreData(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Immunization, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         // TODO: Handle core data logic here
 //        incrementLoadCounter()
 //

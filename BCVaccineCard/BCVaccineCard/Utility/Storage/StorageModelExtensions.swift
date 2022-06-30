@@ -62,8 +62,8 @@ extension VaccineCard {
         return firHash
     }
     
-    public var immunizations: [ImmunizationRecord] {
-        let set = immunizationRecord as? Set<ImmunizationRecord> ?? []
+    public var immunizations: [CovidImmunizationRecord] {
+        let set = immunizationRecord as? Set<CovidImmunizationRecord> ?? []
         return set.sorted {
             $0.date ?? Date() < $1.date ?? Date()
         }
@@ -73,16 +73,16 @@ extension VaccineCard {
         return patient?.birthday?.yearMonthDayString ?? ""
     }
     
-    public var getCovidImmunizations: [ImmunizationRecord] {
-        guard let array = immunizationRecord?.allObjects as? [ImmunizationRecord] else { return [] }
+    public var getCovidImmunizations: [CovidImmunizationRecord] {
+        guard let array = immunizationRecord?.allObjects as? [CovidImmunizationRecord] else { return [] }
         return array
     }
 
 }
 
 extension Array where Element == VaccineCard {
-    func immunizations() -> [ImmunizationRecord] {
-        var result: [ImmunizationRecord] = []
+    func immunizations() -> [CovidImmunizationRecord] {
+        var result: [CovidImmunizationRecord] = []
         for card in self {
             result.append(contentsOf: card.immunizations)
         }
