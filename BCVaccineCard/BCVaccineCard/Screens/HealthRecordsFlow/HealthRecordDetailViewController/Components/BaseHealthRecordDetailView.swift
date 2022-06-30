@@ -47,11 +47,9 @@ class BaseHealthRecordsDetailView: UIView {
         }
         
         tableView.register(UINib.init(nibName: BannerViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BannerViewTableViewCell.getName)
-        
         tableView.register(UINib.init(nibName: CovidImmunizationBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CovidImmunizationBannerTableViewCell.getName)
-        
+        tableView.register(UINib.init(nibName: LabOrderBsnnerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: LabOrderBsnnerTableViewCell.getName)
         tableView.register(UINib.init(nibName: HealthRecordDetailFieldTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HealthRecordDetailFieldTableViewCell.getName)
-        
         tableView.register(UINib.init(nibName: CommentViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommentViewTableViewCell.getName)
         
         
@@ -77,13 +75,13 @@ class BaseHealthRecordsDetailView: UIView {
     public func covidTestHeaderCell(indexPath: IndexPath, tableView: UITableView) -> BannerViewTableViewCell? {
         return tableView.dequeueReusableCell(withIdentifier: BannerViewTableViewCell.getName, for: indexPath) as? BannerViewTableViewCell
     }
-    // TODO:
+
     public func CovidImmunizationBannerCell(indexPath: IndexPath, tableView: UITableView) -> CovidImmunizationBannerTableViewCell? {
         return tableView.dequeueReusableCell(withIdentifier: CovidImmunizationBannerTableViewCell.getName, for: indexPath) as? CovidImmunizationBannerTableViewCell
     }
-    // TODO:
-    public func labOrderHeaderCell(indexPath: IndexPath, tableView: UITableView) -> BannerViewTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: BannerViewTableViewCell.getName, for: indexPath) as? BannerViewTableViewCell
+  
+    public func labOrderHeaderCell(indexPath: IndexPath, tableView: UITableView) -> LabOrderBsnnerTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: LabOrderBsnnerTableViewCell.getName, for: indexPath) as? LabOrderBsnnerTableViewCell
     }
     
     public func commentCell(indexPath: IndexPath, tableView: UITableView) -> CommentViewTableViewCell? {

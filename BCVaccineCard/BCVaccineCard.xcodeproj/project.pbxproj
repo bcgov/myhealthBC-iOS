@@ -35,6 +35,12 @@
 		2922C0CB286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0C7286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib */; };
 		2922C0CC286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0C7286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib */; };
 		2922C0CD286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0C7286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib */; };
+		2922C0D1286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2922C0CF286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift */; };
+		2922C0D2286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2922C0CF286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift */; };
+		2922C0D3286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2922C0CF286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift */; };
+		2922C0D4286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0D0286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib */; };
+		2922C0D5286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0D0286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib */; };
+		2922C0D6286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2922C0D0286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib */; };
 		29245D40275581C700F48642 /* StorageService+TestResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D3F275581C700F48642 /* StorageService+TestResults.swift */; };
 		29245D41275581C700F48642 /* StorageService+TestResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D3F275581C700F48642 /* StorageService+TestResults.swift */; };
 		29245D432755877A00F48642 /* Encodable+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29245D422755877A00F48642 /* Encodable+EXT.swift */; };
@@ -918,6 +924,8 @@
 		2920AC1F278E626500F7CAE7 /* ProfileAndSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAndSettingsViewController.swift; sourceTree = "<group>"; };
 		2922C0C6286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CovidImmunizationBannerTableViewCell.swift; sourceTree = "<group>"; };
 		2922C0C7286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CovidImmunizationBannerTableViewCell.xib; sourceTree = "<group>"; };
+		2922C0CF286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabOrderBsnnerTableViewCell.swift; sourceTree = "<group>"; };
+		2922C0D0286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LabOrderBsnnerTableViewCell.xib; sourceTree = "<group>"; };
 		29245D3F275581C700F48642 /* StorageService+TestResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+TestResults.swift"; sourceTree = "<group>"; };
 		29245D422755877A00F48642 /* Encodable+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+EXT.swift"; sourceTree = "<group>"; };
 		2932DCDE275A9D2C00532BC4 /* StorageService+VaccineCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+VaccineCard.swift"; sourceTree = "<group>"; };
@@ -1309,6 +1317,8 @@
 		2922C0CE286E0936000FF4F7 /* LabOrderBanner */ = {
 			isa = PBXGroup;
 			children = (
+				2922C0CF286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift */,
+				2922C0D0286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib */,
 			);
 			path = LabOrderBanner;
 			sourceTree = "<group>";
@@ -2821,6 +2831,7 @@
 				79218ABA27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */,
 				79A15B0027FC07D500F8330D /* OnboardingCollectionViewCell.xib in Resources */,
 				7967E75026F9145700EEF510 /* BCSans-Regular.otf in Resources */,
+				2922C0D5286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib in Resources */,
 				2922C0AD286C73F8000FF4F7 /* HealthRecordDetailFieldTableViewCell.xib in Resources */,
 				2978852B279624D800FF912D /* SettingsSectionHeaderView.xib in Resources */,
 				2978851A2795F13D00FF912D /* SettingsProfileTableViewCell.xib in Resources */,
@@ -2923,6 +2934,7 @@
 				79590D9B2811EA25006EB59F /* CommentsTableViewCell.xib in Resources */,
 				297F6DB5280F16540023E89C /* AuthenticationView.xib in Resources */,
 				297F6DB6280F16A70023E89C /* AuthenticationInfoView.xib in Resources */,
+				2922C0D6286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib in Resources */,
 				794BD65E2702EEC00084ADA8 /* TextTableViewCell.xib in Resources */,
 				79590D982811E68A006EB59F /* CommentViewTableViewCell.xib in Resources */,
 				294BD3CB27AACFB600BD8D46 /* LocalAuthPrivacyView.xib in Resources */,
@@ -3002,6 +3014,7 @@
 				798006012852C66E006E390F /* HealthRecordsUserCollectionViewCell.xib in Resources */,
 				798006022852C66E006E390F /* OnboardingCollectionViewCell.xib in Resources */,
 				798006032852C66E006E390F /* BCSans-Regular.otf in Resources */,
+				2922C0D4286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.xib in Resources */,
 				29E19FF9286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.xib in Resources */,
 				798006042852C66E006E390F /* SettingsSectionHeaderView.xib in Resources */,
 				798006052852C66E006E390F /* SettingsProfileTableViewCell.xib in Resources */,
@@ -3396,6 +3409,7 @@
 				79FDE423273335D000DAD988 /* FederalPassView.swift in Sources */,
 				29E19FE5286C11BF00C235EF /* CovidImmunizationRecordDetailView.swift in Sources */,
 				2965281728358F4800C411E1 /* AppDelegate+EXT.swift in Sources */,
+				2922C0D2286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift in Sources */,
 				29736A5A2788EBD700CCB1D2 /* TestResult+CoreDataClass.swift in Sources */,
 				795AA76D271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
 				29921C922773A5F0005025D2 /* AuthenticationInfoView.swift in Sources */,
@@ -3640,6 +3654,7 @@
 				794BD6492702EEC00084ADA8 /* FormTableViewCell.swift in Sources */,
 				794BD64B2702EEC00084ADA8 /* AccessibilityLabels.swift in Sources */,
 				29E19FE6286C11BF00C235EF /* CovidImmunizationRecordDetailView.swift in Sources */,
+				2922C0D3286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift in Sources */,
 				29736A4D2788EBD700CCB1D2 /* CovidLabTestResult+CoreDataProperties.swift in Sources */,
 				79218AC7275569B70063004E /* BannerViewTableViewCell.swift in Sources */,
 				299038CE27C01BA80079722B /* StorageService+Medication.swift in Sources */,
@@ -3855,6 +3870,7 @@
 				798005AE2852C66E006E390F /* BannerViewTableViewCell.swift in Sources */,
 				798005AF2852C66E006E390F /* FederalPassView.swift in Sources */,
 				798005B02852C66E006E390F /* AppDelegate+EXT.swift in Sources */,
+				2922C0D1286E17DC000FF4F7 /* LabOrderBsnnerTableViewCell.swift in Sources */,
 				798005B12852C66E006E390F /* TestResult+CoreDataClass.swift in Sources */,
 				798005B22852C66E006E390F /* ResourceDataSource.swift in Sources */,
 				798005B32852C66E006E390F /* AuthenticationInfoView.swift in Sources */,

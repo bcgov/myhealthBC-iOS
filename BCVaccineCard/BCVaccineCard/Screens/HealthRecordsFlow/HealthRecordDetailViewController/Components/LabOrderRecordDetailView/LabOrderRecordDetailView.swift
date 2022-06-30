@@ -7,20 +7,44 @@
 
 import UIKit
 
+extension HealthRecordsDetailDataSource.Record {
+    fileprivate func labOrder() -> LaboratoryOrder? {
+        switch self.type {
+        case .laboratoryOrder(let model, _):
+            return model
+        default:
+            return nil
+        }
+    }
+    
+    fileprivate func LabTests() -> [LaboratoryTest]? {
+        switch self.type {
+        case .laboratoryOrder(_, let tests):
+            return tests
+        default:
+            return nil
+        }
+    }
+    
+    fileprivate func labOrderBannerType() -> LabOrderBsnnerTableViewCell.LabOrderBsnnerType? {
+        guard let labTests = LabTests()  else {return .NoTests}
+        return .NoTests
+        if labTests.isEmpty {
+            return .NoTests
+        } else if status?.lowercased() == "pending" {
+            return .Pending
+        } else if status?.lowercased() == "cancelled" {
+            return .Cancelled
+        }
+        return nil
+    }
+}
+
 class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
     private var fields: [[TextListModel]] = [[]]
     
     var hasHeader: Bool {
-        switch model?.type {
-        case .laboratoryOrder(_, let labTests):
-            if labTests.isEmpty || model?.status?.lowercased() == "pending"  {
-                return true
-            } else {
-                return false
-            }
-        default:
-            return false
-        }
+        return model?.labOrderBannerType() != nil
     }
     
     override func setup() {
@@ -47,9 +71,9 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let model = self.model else {return UITableViewCell()}
-        if hasHeader, indexPath.section == 0 {
+        if hasHeader, indexPath.section == 0, let bannerType = model.labOrderBannerType() {
             guard let cell = labOrderHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(record: model)
+            cell.setup(type: bannerType)
             return cell
         }
         
@@ -74,49 +98,44 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
 extension LabOrderRecordDetailView {
     
     private func createFields() -> [[TextListModel]] {
-        guard let model = model else {return []}
-        switch model.type {
-        case .laboratoryOrder(let labOrder, let labTests):
-            var fields: [[TextListModel]] = []
-            
-            fields.append([
-                TextListModel(
-                    header: TextProperties(text: "Collection date:", bolded: true),
-                    subtext: TextProperties(text: labOrder.timelineDateTime?.labOrderDateTime ?? "", bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Ordering provider:", bolded: true),
-                    subtext: TextProperties(text: labOrder.orderingProvider ?? "", bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Reporting Lab:", bolded: true),
-                    subtext: TextProperties(text: labOrder.reportingSource ?? "", bolded: false))
-            ])
-            
-            if !labTests.isEmpty {
-                for (index, test) in labTests.enumerated() {
-                    let resultTuple = formatResultField(test: test)
-                    let statusTuple = formatStatusField(test: test)
-                    var section: [TextListModel] = [
-                        TextListModel(
-                            header: TextProperties(text: "Test name:", bolded: true),
-                            subtext: TextProperties(text: test.batteryType ?? "", bolded: false)),
-                        TextListModel(
-                            header: TextProperties(text: "Result:", bolded: true),
-                            subtext: TextProperties(text: resultTuple.text, bolded: resultTuple.bolded, textColor: resultTuple.color)),
-                        TextListModel(
-                            header: TextProperties(text: "Test status:", bolded: true),
-                            subtext: TextProperties(text: statusTuple.text ,bolded: statusTuple.bolded))
-                    ]
-                    if index == 0 {
-                        let links = [LinkedStrings(text: "Learn more", link: "https://www.healthgateway.gov.bc.ca/faq")]
-                        section.insert(TextListModel(header: TextProperties(text: "Test summary", bolded: true), subtext: TextProperties(text: "Find resources to learn about your lab test and what the results mean. Learn more", bolded: false, links: links)), at: 0)
-                    }
-                    fields.append(section)
+        guard let model = model, let labOrder = model.labOrder(), let labTests = model.LabTests() else {return []}
+        var fields: [[TextListModel]] = []
+        
+        fields.append([
+            TextListModel(
+                header: TextProperties(text: "Collection date:", bolded: true),
+                subtext: TextProperties(text: labOrder.timelineDateTime?.labOrderDateTime ?? "", bolded: false)),
+            TextListModel(
+                header: TextProperties(text: "Ordering provider:", bolded: true),
+                subtext: TextProperties(text: labOrder.orderingProvider ?? "", bolded: false)),
+            TextListModel(
+                header: TextProperties(text: "Reporting Lab:", bolded: true),
+                subtext: TextProperties(text: labOrder.reportingSource ?? "", bolded: false))
+        ])
+        
+        if !labTests.isEmpty {
+            for (index, test) in labTests.enumerated() {
+                let resultTuple = formatResultField(test: test)
+                let statusTuple = formatStatusField(test: test)
+                var section: [TextListModel] = [
+                    TextListModel(
+                        header: TextProperties(text: "Test name:", bolded: true),
+                        subtext: TextProperties(text: test.batteryType ?? "", bolded: false)),
+                    TextListModel(
+                        header: TextProperties(text: "Result:", bolded: true),
+                        subtext: TextProperties(text: resultTuple.text, bolded: resultTuple.bolded, textColor: resultTuple.color)),
+                    TextListModel(
+                        header: TextProperties(text: "Test status:", bolded: true),
+                        subtext: TextProperties(text: statusTuple.text ,bolded: statusTuple.bolded))
+                ]
+                if index == 0 {
+                    let links = [LinkedStrings(text: "Learn more", link: "https://www.healthgateway.gov.bc.ca/faq")]
+                    section.insert(TextListModel(header: TextProperties(text: "Test summary", bolded: true), subtext: TextProperties(text: "Find resources to learn about your lab test and what the results mean. Learn more", bolded: false, links: links)), at: 0)
                 }
+                fields.append(section)
             }
-            return fields
-        default:
-            return []
         }
+        return fields
     }
     
     private func formatStatusField(test: LaboratoryTest) -> (text: String, color:  TextProperties.CodableColors, bolded: Bool) {
