@@ -8,6 +8,26 @@
 import UIKit
 
 
+extension HealthRecordsDetailDataSource.Record {
+    fileprivate func covidImmunization() -> LocallyStoredVaccinePassportModel? {
+        switch self.type {
+        case .covidImmunizationRecord(model: let model, immunizations: _):
+            return model
+        default:
+            return nil
+        }
+    }
+    
+    fileprivate func covidImmunizations() -> [ImmunizationRecord]? {
+        switch self.type {
+        case .covidImmunizationRecord(model: _, immunizations: let imms):
+            return imms
+        default:
+            return nil
+        }
+    }
+}
+
 class CovidImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
     
     private var fields: [[TextListModel]] = [[]]
@@ -32,11 +52,11 @@ class CovidImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let model = self.model else {return UITableViewCell()}
+        guard let model = self.model, let immunizationModel = model.covidImmunization() else {return UITableViewCell()}
         switch indexPath.section {
         case 0:
-            guard let cell = vaccineRecordHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(record: model)
+            guard let cell = CovidImmunizationBannerCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+            cell.setup(model: immunizationModel)
             return cell
         default:
             guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
@@ -60,57 +80,51 @@ class CovidImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableVie
 extension CovidImmunizationRecordDetailView {
     
     private func createFields() -> [[TextListModel]] {
-        guard let model = model else {return []}
-        switch model.type {
-        case .covidImmunizationRecord(model: _, immunizations: let immunizations):
-            var fields: [[TextListModel]] = []
-            for (index, imsModel) in immunizations.enumerated() {
-                var stringDate = ""
-                if let date = imsModel.date {
-                    stringDate = date.issuedOnDate
-                }
-                let product = Constants.vaccineInfo(snowMedCode: Int(imsModel.snomed ?? "1") ?? 1)?.displayName ?? ""
-                let imsSet = [
-                    TextListModel(
-                        header: TextProperties(
-                            text: "Dose \(index + 1)",
-                            bolded: true),
-                        subtext: nil),
-                    TextListModel(
-                        header: TextProperties(
-                            text: "Date:",
-                            bolded: true),
-                        subtext: TextProperties(
-                            text: stringDate,
-                            bolded: false)),
-                    TextListModel(
-                        header: TextProperties(
-                            text: "Product:",
-                            bolded: true),
-                        subtext: TextProperties(
-                            text: product,
-                            bolded: false)),
-                    TextListModel(
-                        header: TextProperties(
-                            text: "Provide / Clinic:",
-                            bolded: true),
-                        subtext: TextProperties(
-                            text: imsModel.provider ?? "N/A",
-                            bolded: false)),
-                    TextListModel(
-                        header: TextProperties(
-                            text: "Lot number:",
-                            bolded: true),
-                        subtext: TextProperties(
-                            text: imsModel.lotNumber ?? "N/A",
-                            bolded: false))
-                ]
-                fields.append(imsSet)
+        guard let model = model, let immunizations = model.covidImmunizations() else {return []}
+        var fields: [[TextListModel]] = []
+        for (index, imsModel) in immunizations.enumerated() {
+            var stringDate = ""
+            if let date = imsModel.date {
+                stringDate = date.issuedOnDate
             }
-            return fields
-        default:
-            return [[]]
+            let product = Constants.vaccineInfo(snowMedCode: Int(imsModel.snomed ?? "1") ?? 1)?.displayName ?? ""
+            let imsSet = [
+                TextListModel(
+                    header: TextProperties(
+                        text: "Dose \(index + 1)",
+                        bolded: true),
+                    subtext: nil),
+                TextListModel(
+                    header: TextProperties(
+                        text: "Date:",
+                        bolded: true),
+                    subtext: TextProperties(
+                        text: stringDate,
+                        bolded: false)),
+                TextListModel(
+                    header: TextProperties(
+                        text: "Product:",
+                        bolded: true),
+                    subtext: TextProperties(
+                        text: product,
+                        bolded: false)),
+                TextListModel(
+                    header: TextProperties(
+                        text: "Provide / Clinic:",
+                        bolded: true),
+                    subtext: TextProperties(
+                        text: imsModel.provider ?? "N/A",
+                        bolded: false)),
+                TextListModel(
+                    header: TextProperties(
+                        text: "Lot number:",
+                        bolded: true),
+                    subtext: TextProperties(
+                        text: imsModel.lotNumber ?? "N/A",
+                        bolded: false))
+            ]
+            fields.append(imsSet)
         }
-        
+        return fields
     }
 }
