@@ -12,8 +12,8 @@ class BaseHealthRecordsDetailView: UIView {
     public var tableView: UITableView?
     public var model: HealthRecordsDetailDataSource.Record?
     
-    let separatorHeight: CGFloat = 2
-    let separatorBottomSpace: CGFloat = 28
+    let separatorHeight: CGFloat = 1
+    let separatorBottomSpace: CGFloat = 12
     
     func setup(model: HealthRecordsDetailDataSource.Record) {
         self.model = model

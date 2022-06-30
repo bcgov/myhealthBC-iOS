@@ -1291,6 +1291,7 @@
 		2922C0C0286DFD6C000FF4F7 /* Banners */ = {
 			isa = PBXGroup;
 			children = (
+				2922C0CE286E0936000FF4F7 /* LabOrderBanner */,
 				2922C0C1286DFD7E000FF4F7 /* CovidImmunizationBanner */,
 			);
 			path = Banners;
@@ -1303,6 +1304,13 @@
 				2922C0C7286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib */,
 			);
 			path = CovidImmunizationBanner;
+			sourceTree = "<group>";
+		};
+		2922C0CE286E0936000FF4F7 /* LabOrderBanner */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = LabOrderBanner;
 			sourceTree = "<group>";
 		};
 		293B32AD27D25C2C0064BAAA /* Comments */ = {
