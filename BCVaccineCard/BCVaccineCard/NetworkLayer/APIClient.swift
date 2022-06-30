@@ -135,6 +135,22 @@ class APIClient {
         
     }
     
+    func getAuthenticatedImmunizations(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedImmunizationsResponseObject>) {
+        configureURL(token: token, endpoint: self.endpoints.getAuthenticatedImmunizations, completion: { url in
+            let headerParameters: Headers = [
+                Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken,
+            ]
+            
+            let parameters: [String: String] = [
+                Constants.AuthenticationHeaderKeys.hdid: authCredentials.hdid
+            ]
+            
+            guard let unwrappedURL = url else { return }
+            self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, parameters: parameters, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletionHandler: completion)
+        })
+        
+    }
+    
     func getAuthenticatedPatientDetails(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedPatientDetailsResponseObject>) {
         configureURL(token: nil, endpoint: self.endpoints.getAuthenticatedPatientDetails(hdid: authCredentials.hdid), completion: { url in
             let headerParameters: Headers = [

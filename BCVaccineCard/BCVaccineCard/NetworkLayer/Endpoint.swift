@@ -15,6 +15,7 @@ protocol EndpointsAccessor {
     var getAuthenticatedVaccineCard: URL { get }
     var getAuthenticatedTestResults: URL { get }
     var getAuthenticatedLaboratoryOrders: URL { get }
+    var getAuthenticatedImmunizations: URL { get }
     var getTermsOfService: URL { get }
     var throttleHG: URL { get }
     func getAuthenticatedPatientDetails(hdid: String) -> URL
@@ -87,6 +88,10 @@ extension UrlAccessor: EndpointsAccessor {
     
     var getAuthenticatedLaboratoryOrders: URL {
         return self.laboratoryServiceBaseURL.appendingPathComponent("Laboratory/LaboratoryOrders")
+    }
+    
+    var getAuthenticatedImmunizations: URL {
+        return self.immunizationBaseUrl.appendingPathComponent("Immunization")
     }
     
     var getTermsOfService: URL {
