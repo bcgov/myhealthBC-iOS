@@ -28,7 +28,7 @@ extension HealthRecordsDetailDataSource.Record {
     
     fileprivate func labOrderBannerType() -> LabOrderBsnnerTableViewCell.LabOrderBsnnerType? {
         guard let labTests = LabTests()  else {return .NoTests}
-        return .NoTests
+        
         if labTests.isEmpty {
             return .NoTests
         } else if status?.lowercased() == "pending" {
