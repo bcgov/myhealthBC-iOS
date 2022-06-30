@@ -8,36 +8,13 @@
 import UIKit
 import BCVaccineValidator
 
-class CovidImmunizationBannerTableViewCell: UITableViewCell {
+class CovidImmunizationBannerTableViewCell: BaseHeaderTableViewCell {
     
     @IBOutlet weak var statusIcon: UIImageView!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
 
-    private var largeFontSize: CGFloat {
-        if Device.IS_IPHONE_5 {
-            return 16
-        } else {
-            return 18
-        }
-    }
-    
-    private var mediumFontSize: CGFloat {
-        if Device.IS_IPHONE_5 {
-            return 14
-        } else {
-            return 16
-        }
-    }
-    
-    private var smallFontSize: CGFloat {
-        if Device.IS_IPHONE_5 {
-            return 12
-        } else {
-            return 15
-        }
-    }
     
     func setup(model: LocallyStoredVaccinePassportModel) {
         style()

@@ -7,6 +7,17 @@
 
 import UIKit
 
+extension HealthRecordsDetailDataSource.Record {
+    fileprivate func testResult() -> TestResult? {
+        switch self.type {
+        case .covidTestResultRecord(let model):
+            return model
+        default:
+            return nil
+        }
+    }
+}
+
 class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
     
     enum Section: Int, CaseIterable {
@@ -15,6 +26,21 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
     }
     
     private var fields: [TextListModel] = []
+    
+
+    private var message: NSMutableAttributedString? {
+        if model?.status?.lowercased() == .pending.lowercased() {
+            return NSMutableAttributedString(string: .pendingTestRecordMessage)
+            
+        }
+        if model?.status?.lowercased() == .cancelled.lowercased() {
+           let  attributedString = NSMutableAttributedString(string: .cancelledTestRecordMessage)
+            _ = attributedString.setAsLink(textToFind: "BC CDC Test Results", linkURL: "http://www.bccdc.ca/health-info/diseases-conditions/covid-19/testing/test-results")
+            return attributedString
+        }
+        
+        return nil
+    }
     
     override func setup() {
         tableView?.dataSource = self
@@ -37,12 +63,19 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = Section(rawValue: indexPath.section),  let model = self.model else {return UITableViewCell()}
+        guard let section = Section(rawValue: indexPath.section),  let testResult = model?.testResult() else {return UITableViewCell()}
         switch section {
         case .Header:
-            guard let cell = covidTestHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(record: model)
-            return cell
+            if let message = message {
+                guard let cell = messageHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+                cell.setup(text: message)
+                return cell
+            } else {
+                guard let cell = covidTestHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+                cell.setup(for: testResult, status: model?.status ?? "")
+                return cell
+            }
+           
         case .Fields:
             guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
             cell.setup(with: fields[indexPath.row])
@@ -64,39 +97,34 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
 extension CovidTestResultRecordDetailView {
     private func createFields() -> [TextListModel] {
         guard let model = model else {return []}
-        
-        switch model.type {
-        case .covidTestResultRecord(model: let testResult):
-            var fields: [TextListModel] = [
-                TextListModel(
-                    header: TextProperties(text: "Date of testing:", bolded: true),
-                    subtext: TextProperties(text: testResult.collectionDateTime?.issuedOnDate ?? "", bolded: false)
-                ),
-                TextListModel(
-                    header: TextProperties(text: "Test status:", bolded: true),
-                    subtext: TextProperties(text: testResult.testStatus ?? "Pending", bolded: false)
-                ),
-                TextListModel(
-                    header: TextProperties(text: "Type name:", bolded: true),
-                    subtext: TextProperties(text: testResult.testType ?? "", bolded: false)
-                ),
-                TextListModel(
-                    header: TextProperties(text: "Provider / Clinic:", bolded: true),
-                    subtext: TextProperties(text: testResult.lab ?? "", bolded: false)
-                )
-            ]
-            if let resultDescription = testResult.resultDescription, !resultDescription.isEmpty {
-                let tuple = handleResultDescriptionAndLinks(resultDescription: resultDescription, testResult: testResult)
-                let resultDescriptionfield = TextListModel(
-                    header: TextProperties(text: "Result description:", bolded: true),
-                    subtext: TextProperties(text: tuple.text, bolded: false, links: tuple.links)
-                )
-                fields.append(resultDescriptionfield)
-            }
-            return fields
-        default:
-            return []
+        guard let testResult = model.testResult() else {return []}
+        var fields: [TextListModel] = [
+            TextListModel(
+                header: TextProperties(text: "Date of testing:", bolded: true),
+                subtext: TextProperties(text: testResult.collectionDateTime?.issuedOnDate ?? "", bolded: false)
+            ),
+            TextListModel(
+                header: TextProperties(text: "Test status:", bolded: true),
+                subtext: TextProperties(text: testResult.testStatus ?? "Pending", bolded: false)
+            ),
+            TextListModel(
+                header: TextProperties(text: "Type name:", bolded: true),
+                subtext: TextProperties(text: testResult.testType ?? "", bolded: false)
+            ),
+            TextListModel(
+                header: TextProperties(text: "Provider / Clinic:", bolded: true),
+                subtext: TextProperties(text: testResult.lab ?? "", bolded: false)
+            )
+        ]
+        if let resultDescription = testResult.resultDescription, !resultDescription.isEmpty {
+            let tuple = handleResultDescriptionAndLinks(resultDescription: resultDescription, testResult: testResult)
+            let resultDescriptionfield = TextListModel(
+                header: TextProperties(text: "Result description:", bolded: true),
+                subtext: TextProperties(text: tuple.text, bolded: false, links: tuple.links)
+            )
+            fields.append(resultDescriptionfield)
         }
+        return fields
     }
     
     // Note this funcion is used to append "this page" text with link from API to end of result description. In the event where there is a positive test, there is no link, but there are links embedded in the text. For this, we use NSDataDetector to create links

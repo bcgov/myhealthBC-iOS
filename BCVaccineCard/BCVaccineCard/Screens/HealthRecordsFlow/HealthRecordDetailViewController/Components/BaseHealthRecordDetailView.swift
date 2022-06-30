@@ -46,7 +46,10 @@ class BaseHealthRecordsDetailView: UIView {
             return
         }
         
-        tableView.register(UINib.init(nibName: BannerViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BannerViewTableViewCell.getName)
+//        tableView.register(UINib.init(nibName: BannerViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: BannerViewTableViewCell.getName)
+        
+        tableView.register(UINib.init(nibName: MessageBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: MessageBannerTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CovidTestResultBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CovidTestResultBannerTableViewCell.getName)
         tableView.register(UINib.init(nibName: CovidImmunizationBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CovidImmunizationBannerTableViewCell.getName)
         tableView.register(UINib.init(nibName: LabOrderBsnnerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: LabOrderBsnnerTableViewCell.getName)
         tableView.register(UINib.init(nibName: HealthRecordDetailFieldTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HealthRecordDetailFieldTableViewCell.getName)
@@ -67,13 +70,13 @@ class BaseHealthRecordsDetailView: UIView {
         self.tableView = tableView
     }
     
-    // TODO:
-    public func messageHeaderCell(indexPath: IndexPath, tableView: UITableView) -> BannerViewTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: BannerViewTableViewCell.getName, for: indexPath) as? BannerViewTableViewCell
+    
+    public func messageHeaderCell(indexPath: IndexPath, tableView: UITableView) -> MessageBannerTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: MessageBannerTableViewCell.getName, for: indexPath) as? MessageBannerTableViewCell
     }
-    // TODO:
-    public func covidTestHeaderCell(indexPath: IndexPath, tableView: UITableView) -> BannerViewTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: BannerViewTableViewCell.getName, for: indexPath) as? BannerViewTableViewCell
+    
+    public func covidTestHeaderCell(indexPath: IndexPath, tableView: UITableView) -> CovidTestResultBannerTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: CovidTestResultBannerTableViewCell.getName, for: indexPath) as? CovidTestResultBannerTableViewCell
     }
 
     public func CovidImmunizationBannerCell(indexPath: IndexPath, tableView: UITableView) -> CovidImmunizationBannerTableViewCell? {
