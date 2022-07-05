@@ -68,7 +68,7 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
         case .Header:
             if let message = message {
                 guard let cell = messageHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-                cell.setup(text: message)
+                cell.setup(text: message, bgColor: testResult.resultType.getColor, messageColor: testResult.resultType.getResultTextColor)
                 return cell
             } else {
                 guard let cell = covidTestHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
