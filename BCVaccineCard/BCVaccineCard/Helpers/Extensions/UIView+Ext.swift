@@ -113,6 +113,15 @@ extension UIView {
         self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0).isActive = true
     }
     
+    public func place(in toView: UIView, paddingBottom: CGFloat, height: CGFloat) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: toView.topAnchor, constant: 0).isActive = true
+        self.bottomAnchor.constraint(greaterThanOrEqualTo: toView.bottomAnchor, constant: 0 - paddingBottom).isActive = true
+        self.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: 0).isActive = true
+        self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0).isActive = true
+        self.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+    
     public func center(in view: UIView, width: CGFloat, height: CGFloat, verticalOffset: CGFloat? = nil, horizontalOffset: CGFloat? = 0) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.heightAnchor.constraint(equalToConstant: height).isActive = true

@@ -7,10 +7,6 @@
 
 import UIKit
 
-struct LinkedStrings: Codable, Equatable {
-    let text: String
-    let link: String
-}
 
 class InteractiveLabelTableViewCell: UITableViewCell {
     

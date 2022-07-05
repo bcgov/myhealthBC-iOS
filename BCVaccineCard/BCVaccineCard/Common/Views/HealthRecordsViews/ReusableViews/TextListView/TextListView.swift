@@ -71,7 +71,7 @@ class TextListView: UIView {
         return stackView
     }
     
-    private func initializeLabel(textListProperties: TextListModel.TextProperties?) -> UILabel? {
+    private func initializeLabel(textListProperties: TextProperties?) -> UILabel? {
         guard let properties = textListProperties else { return nil }
         if let links = properties.links, !links.isEmpty {
             let label = InteractiveLinkLabel()
