@@ -18,7 +18,7 @@ extension HealthRecordsDetailDataSource.Record {
         }
     }
     
-    fileprivate func covidImmunizations() -> [ImmunizationRecord]? {
+    fileprivate func covidImmunizations() -> [CovidImmunizationRecord]? {
         switch self.type {
         case .covidImmunizationRecord(model: _, immunizations: let imms):
             return imms
