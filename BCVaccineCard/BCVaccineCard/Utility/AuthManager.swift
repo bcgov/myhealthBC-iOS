@@ -138,7 +138,6 @@ class AuthManager {
     }
     // Note: Below is a hacky solution where we have to use access token expiry
     var isAuthenticated: Bool {
-        return true
         guard authToken != nil else {
             return false
         }
