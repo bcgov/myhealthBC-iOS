@@ -40,6 +40,9 @@ extension StorageService {
         case .LaboratoryOrder(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .LaboratoryOrder, object: object))
+        case .Immunization(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .Immunization, object: object))
         }
     }
     

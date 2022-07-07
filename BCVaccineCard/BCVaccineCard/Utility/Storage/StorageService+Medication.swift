@@ -192,7 +192,7 @@ extension StorageService: StorageMedicationManager {
         prescription.authenticated = true
         prescription.pharmacy = pharmacy
         prescription.medication = medication
-        
+        prescription.patient = patient
         do {
             try context.save()
             return prescription
