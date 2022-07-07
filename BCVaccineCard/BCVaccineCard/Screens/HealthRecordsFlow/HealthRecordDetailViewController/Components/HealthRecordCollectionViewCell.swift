@@ -26,7 +26,6 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
         self.recordView?.removeFromSuperview()
         let recordView: BaseHealthRecordsDetailView
         switch model.type {
-            
         case .covidImmunizationRecord:
             recordView = CovidImmunizationRecordDetailView(frame: .zero)
         case .covidTestResultRecord:
@@ -35,6 +34,8 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
             recordView = MedicationRecordDetailView(frame: .zero)
         case .laboratoryOrder:
             recordView = LabOrderRecordDetailView(frame: .zero)
+        case .immunization(model: let model):
+            recordView = ImmunizationRecordDetailView(frame: .zero)
         }
         self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(recordView)

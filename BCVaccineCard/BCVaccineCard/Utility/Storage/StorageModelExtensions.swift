@@ -241,3 +241,11 @@ extension Comment {
     }
 }
 
+// MARK: ImmunizationDetails
+extension ImmunizationDetails {
+    public var agents: [ImmunizationAgent] {
+        let set = immunizationAgents as? Set<ImmunizationAgent> ?? []
+        return Array(set)
+    }
+}
+
