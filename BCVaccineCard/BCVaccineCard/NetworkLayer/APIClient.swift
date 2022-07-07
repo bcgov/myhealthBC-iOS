@@ -176,6 +176,17 @@ class APIClient {
         })
     }
     
+    func getAuthenticatedSpecialAuthorityDrugs(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedSpecialAuthorityDrugsResponseModel>) {
+        configureURL(token: token, endpoint: self.endpoints.getAuthenticatedMedicationRequest(hdid: authCredentials.hdid), completion: { url in
+            let headerParameters: Headers = [
+                Constants.AuthenticationHeaderKeys.authToken: authCredentials.bearerAuthToken
+            ]
+            
+            guard let unwrappedURL = url else { return }
+            self.remote.request(withURL: unwrappedURL, method: .get, headers: headerParameters, interceptor: self.interceptor, checkQueueIt: true, executingVC: executingVC, includeQueueItUI: includeQueueItUI, andCompletion: completion)
+        })
+    }
+    
     func getAuthenticatedHealthVisits(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping NetworkRequestCompletion<AuthenticatedHealthVisitsResponseObject>) {
         configureURL(token: token, endpoint: self.endpoints.getAuthenticatedHealthVisits(hdid: authCredentials.hdid), completion: { url in
             let headerParameters: Headers = [

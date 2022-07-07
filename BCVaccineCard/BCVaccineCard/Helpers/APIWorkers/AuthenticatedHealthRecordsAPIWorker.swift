@@ -23,6 +23,7 @@ enum AuthenticationFetchType {
     case VaccineCard
     case TestResults
     case MedicationStatement
+    case SpecialAuthorityDrugs
     case LaboratoryOrders
     case Immunizations
     case HealthVisits
@@ -35,6 +36,7 @@ enum AuthenticationFetchType {
         case .VaccineCard: return "Vaccine Card"
         case .TestResults: return "Test Results"
         case .MedicationStatement: return "Medication Statement"
+        case .SpecialAuthorityDrugs: return "Special Authority Drugs"
         case .LaboratoryOrders: return "Laboratory Orders"
         case .Immunizations: return "Immunizations"
         case .HealthVisits: return "HealthVisits"
@@ -223,6 +225,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials, completion: {})
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
+            self.getAuthenticatedSpecialAuthorityDrugs(authCredentials: authCredentials)
             self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
@@ -235,6 +238,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             case .VaccineCard: self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             case .TestResults: self.getAuthenticatedTestResults(authCredentials: authCredentials)
             case .MedicationStatement: self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord ?? authManager.protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
+            case .SpecialAuthorityDrugs: self.getAuthenticatedSpecialAuthorityDrugs(authCredentials: authCredentials)
             case .LaboratoryOrders: self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             case .Immunizations: self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             case .HealthVisits: self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
@@ -311,6 +315,24 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 }
             } else {
                 self.handleMedicationStatementResponse(result: result, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
+            }
+        }
+    }
+    
+    private func getAuthenticatedSpecialAuthorityDrugs(authCredentials: AuthenticationRequestObject) {
+        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+        requestDetails.authenticatedSpecialAuthorityDrugsDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedSpecialAuthorityDrugsDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        apiClient.getAuthenticatedSpecialAuthorityDrugs(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
+            guard let `self` = self else { return }
+            if let retry = queueItRetryStatus, retry.retry == true {
+                let queueItToken = retry.token
+                self.requestDetails.authenticatedSpecialAuthorityDrugsDetails?.queueItToken = queueItToken
+                self.apiClient.getAuthenticatedSpecialAuthorityDrugs(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
+                    guard let `self` = self else { return }
+                    self.handleSpecialAuthorityDrugsResponse(result: result)
+                }
+            } else {
+                self.handleSpecialAuthorityDrugsResponse(result: result)
             }
         }
     }
@@ -607,6 +629,22 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
     }
     
+    private func handleSpecialAuthorityDrugsResponse(result: Result<AuthenticatedSpecialAuthorityDrugsResponseModel, ResultError>) {
+        switch result {
+        case .success(let drugs):
+            // Note: Have to check for error here because error is being sent back on a 200 response
+            if let resultMessage = drugs.resultError?.resultMessage, (drugs.resourcePayload?.count == 0 || drugs.resourcePayload == nil) {
+                self.fetchStatusList.fetchStatus[.SpecialAuthorityDrugs] = FetchStatus(requestCompleted: true, attemptedCount: drugs.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
+            }
+            else {
+                self.handleSpecialAuthorityDrugsInCoreData(specialAuthDrugs: drugs)
+            }
+        case .failure(let error):
+//            showFetchFailed()
+            self.fetchStatusList.fetchStatus[.SpecialAuthorityDrugs] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: error.resultMessage ?? .genericErrorMessage)
+        }
+    }
+    
     private func handleLaboratoryOrdersResponse(result: Result<AuthenticatedLaboratoryOrdersResponseObject, ResultError>) {
         switch result {
         case .success(let labOrders):
@@ -881,6 +919,62 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
 }
 
+// MARK: Handle Special Authority Drugs in core data
+extension AuthenticatedHealthRecordsAPIWorker {
+    private func handleSpecialAuthorityDrugsInCoreData(specialAuthDrugs: AuthenticatedSpecialAuthorityDrugsResponseModel) {
+        if let drugs = specialAuthDrugs.resourcePayload {
+            print("CONNOR: ", drugs)
+            self.fetchStatusList.fetchStatus[.SpecialAuthorityDrugs] = FetchStatus(requestCompleted: true, attemptedCount: drugs.count, successfullCount: drugs.count, error: nil)
+            return
+        } else {
+            print("CONNOR: Error fetching Special Authority Drugs")
+            self.fetchStatusList.fetchStatus[.SpecialAuthorityDrugs] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: "Error Fetching Special Authority Drugs")
+            return
+        }
+        guard let patient = self.patientDetails else { return }
+        guard let drugs = specialAuthDrugs.resourcePayload else { return }
+        incrementLoadCounter()
+        
+        // TODO: Fix this
+//        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.SpecialAuthorityDrugs])
+        var errorArrayCount: Int = 0
+        var completedCount: Int = 0
+        guard let authCreds = self.authCredentials else {
+            self.decrementLoadCounter()
+            return
+        }
+        for drug in drugs {
+                if let id = self.handleSpecialAuthorityDrugsInCoreData(object: drug, authenticated: true, patientObject: patient) {
+                    completedCount += 1
+                } else {
+                    errorArrayCount += 1
+                }
+            
+        }
+        self.decrementLoadCounter()
+        let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
+        // For now, just calling success so that the entire fetch can pass
+        self.fetchStatusList.fetchStatus[.SpecialAuthorityDrugs] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
+    }
+    
+    private func handleSpecialAuthorityDrugsInCoreData(object: AuthenticatedSpecialAuthorityDrugsResponseModel.SpecialAuthorityDrug, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+        // TODO: Handle core data logic here
+//        incrementLoadCounter()
+//
+//        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+//            self.decrementLoadCounter()
+//            return nil
+//        }
+//        guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf) else {
+//            self.decrementLoadCounter()
+//            return nil
+//        }
+//        self.decrementLoadCounter()
+//        return object.id
+        return nil
+    }
+}
+
 // MARK: Handle Laboratory Orders in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleLaboratoryOrdersInCoreData(labOrders: AuthenticatedLaboratoryOrdersResponseObject) {
@@ -1066,6 +1160,7 @@ struct AuthenticatedAPIWorkerRetryDetails {
     var authenticatedVaccineCardDetails: AuthenticatedVaccineCardDetails?
     var authenticatedTestResultsDetails: AuthenticatedTestResultsDetails?
     var authenticatedMedicationStatementDetails: AuthenticatedMedicationStatementDetails?
+    var authenticatedSpecialAuthorityDrugsDetails: AuthenticatedSpecialAuthorityDrugsDetails?
     var authenticatedLaboratoryOrdersDetails: AuthenticatedLaboratoryOrdersDetails?
     var authenticatedImmunizationsDetails: AuthenticatedImmunizationsDetails?
     var authenticatedHealthVisitsDetails: AuthenticatedHealthVisitsDetails?
@@ -1094,6 +1189,11 @@ struct AuthenticatedAPIWorkerRetryDetails {
     }
     
     struct AuthenticatedMedicationStatementDetails {
+        var authCredentials: AuthenticationRequestObject
+        var queueItToken: String?
+    }
+    
+    struct AuthenticatedSpecialAuthorityDrugsDetails {
         var authCredentials: AuthenticationRequestObject
         var queueItToken: String?
     }
@@ -1192,6 +1292,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 .VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
                 .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
                 .MedicationStatement : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+                .SpecialAuthorityDrugs: FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
                 .LaboratoryOrders : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
                 .Immunizations: FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
                 .HealthVisits: FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),

@@ -16,11 +16,11 @@ struct AuthenticatedHealthVisitsResponseObject: Codable {
     // MARK: - ResourcePayload
     struct HealthVisit: Codable {
         let id, encounterDate, specialtyDescription, practitionerName: String?
-        let clinic: Clinic
+        let clinic: Clinic?
         
         // MARK: - Clinic
         struct Clinic: Codable {
-            let name: String
+            let name: String?
         }
     }
 }

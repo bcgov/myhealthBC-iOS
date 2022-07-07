@@ -250,8 +250,8 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
                 self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: loginSourceVC)))
             }
         }
-        // TODO: Test this out
-        if (fetchStatusTypes.contains(.LaboratoryOrders) && fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.TestResults) && fetchStatusTypes.contains(.VaccineCard)) && fetchStatusTypes.contains(.Immunizations) && fetchStatusTypes.contains(.HealthVisits) || (fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.Comments)) {
+        // TODO: Make this a little more reusable - hacky approach
+        if (fetchStatusTypes.contains(.LaboratoryOrders) && fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.SpecialAuthorityDrugs) && fetchStatusTypes.contains(.TestResults) && fetchStatusTypes.contains(.VaccineCard)) && fetchStatusTypes.contains(.Immunizations) && fetchStatusTypes.contains(.HealthVisits) || (fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.Comments)) {
             let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
             AppDelegate.sharedInstance?.showToast(message: message)
         }
