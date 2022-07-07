@@ -22,8 +22,9 @@ extension StorageService {
         let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))}).filter({$0.patient.authenticated})
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         let labOrders = fetchLaboratoryOrders().map({HealthRecord(type: .LaboratoryOrder($0))})
+        let immunizations = fetchImmunization().map({HealthRecord(type: .Immunization($0))})
         
-        return tests + vaccineCards + medications + labOrders
+        return tests + vaccineCards + medications + labOrders + immunizations
     }
     
     func delete(healthRecord: HealthRecord) {

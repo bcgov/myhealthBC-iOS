@@ -73,7 +73,7 @@ extension ImmunizationRecordDetailView {
                     bolded: false)),
             TextListModel(
                 header: TextProperties(
-                    text: "Provide / Clinic:",
+                    text: "Provider / Clinic:",
                     bolded: true),
                 subtext: TextProperties(
                     text: immunization.providerOrClinic ?? "--",

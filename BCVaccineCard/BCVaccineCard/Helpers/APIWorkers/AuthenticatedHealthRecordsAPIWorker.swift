@@ -898,21 +898,11 @@ extension AuthenticatedHealthRecordsAPIWorker {
 // MARK: Handle Immunizations in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleImmunizationsInCoreData(immunizations: AuthenticatedImmunizationsResponseObject) {
-        if let immz = immunizations.resourcePayload?.immunizations {
-            print("CONNOR: ", immz)
-            self.fetchStatusList.fetchStatus[.Immunizations] = FetchStatus(requestCompleted: true, attemptedCount: immz.count, successfullCount: immz.count, error: nil)
-            return
-        } else {
-            print("CONNOR: Error fetching IMMZ")
-            self.fetchStatusList.fetchStatus[.Immunizations] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: "Error Fetching IMMZ")
-            return
-        }
+
         guard let patient = self.patientDetails else { return }
         guard let immz = immunizations.resourcePayload?.immunizations else { return }
         incrementLoadCounter()
-        
-        // TODO: Fix this
-//        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Immunizations])
+
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {
@@ -934,9 +924,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
     }
     
     private func handleImmunizationsInCoreData(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Immunization, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        // TODO: Handle core data logic here
-//        incrementLoadCounter()
-//
+
+        incrementLoadCounter()
         guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
             self.decrementLoadCounter()
             return nil
@@ -949,7 +938,6 @@ extension AuthenticatedHealthRecordsAPIWorker {
         }
         self.decrementLoadCounter()
         return object.id
-        return nil
     }
 }
 

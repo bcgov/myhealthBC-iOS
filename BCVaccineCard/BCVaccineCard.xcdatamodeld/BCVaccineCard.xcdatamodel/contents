@@ -97,8 +97,8 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
-        <relationship name="immunizations" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Immunization" inverseName="patient" inverseEntity="Immunization"/>
-        <relationship name="laboratoryOrders" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LaboratoryOrder" inverseName="patient" inverseEntity="LaboratoryOrder"/>
+        <relationship name="immunizations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Immunization" inverseName="patient" inverseEntity="Immunization"/>
+        <relationship name="laboratoryOrders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LaboratoryOrder" inverseName="patient" inverseEntity="LaboratoryOrder"/>
         <relationship name="prescriptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Perscription" inverseName="patient" inverseEntity="Perscription"/>
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="patient" inverseEntity="VaccineCard"/>
     </entity>
@@ -167,7 +167,7 @@
         <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="254"/>
         <element name="LaboratoryTest" positionX="171" positionY="405" width="128" height="119"/>
         <element name="Medication" positionX="180" positionY="414" width="128" height="209"/>
-        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="193"/>
+        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="179"/>
         <element name="Perscription" positionX="162" positionY="396" width="128" height="209"/>
         <element name="Pharmacy" positionX="171" positionY="405" width="128" height="194"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>

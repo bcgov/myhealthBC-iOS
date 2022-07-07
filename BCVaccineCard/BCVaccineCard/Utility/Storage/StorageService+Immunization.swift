@@ -73,6 +73,7 @@ extension StorageService: StorageImmunizationManager {
         immunization.patient = patient
         do {
             try context.save()
+            self.notify(event: StorageEvent(event: .Save, entity: .Immunization, object: immunization))
             return immunization
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
