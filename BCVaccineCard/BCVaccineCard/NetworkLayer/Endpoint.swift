@@ -20,6 +20,8 @@ protocol EndpointsAccessor {
     var throttleHG: URL { get }
     func getAuthenticatedPatientDetails(hdid: String) -> URL
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
+    func getAuthenticatedMedicationRequest(hdid: String) -> URL
+    func getAuthenticatedHealthVisits(hdid: String) -> URL
     func authenticatedComments(hdid: String) -> URL
     func getAuthenticatedLabTestPDF(repordId: String) -> URL
     func validateProfile(hdid: String) -> URL
@@ -60,6 +62,10 @@ struct UrlAccessor {
     
     private var medicationServiceBaseURL: URL {
         return baseURL.appendingPathComponent("api/medicationservice")
+    }
+    
+    private var encounterServiceBaseURL: URL {
+        return baseURL.appendingPathComponent("api/encounterservice")
     }
 
 }
@@ -109,6 +115,14 @@ extension UrlAccessor: EndpointsAccessor {
     
     func getAuthenticatedMedicationStatement(hdid: String) -> URL {
         return self.medicationServiceBaseURL.appendingPathComponent("MedicationStatement").appendingPathComponent(hdid)
+    }
+    
+    func getAuthenticatedMedicationRequest(hdid: String) -> URL {
+        return self.medicationServiceBaseURL.appendingPathComponent("MedicationRequest").appendingPathComponent(hdid)
+    }
+    
+    func getAuthenticatedHealthVisits(hdid: String) -> URL {
+        return self.encounterServiceBaseURL.appendingPathComponent("Encounter").appendingPathComponent(hdid)
     }
     
     func authenticatedComments(hdid: String) -> URL {
