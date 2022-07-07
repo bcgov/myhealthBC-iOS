@@ -12,7 +12,7 @@ struct RecordsFilter {
         case Medication = "Medications"
         case Covid = "COVID-19"
         case LabTests = "Lab Tests"
-        case CovidImmunization = "Immunizations"
+        case Immunizations = "Immunizations"
     }
     
     var fromDate: Date?

@@ -14,6 +14,7 @@ struct HealthRecordsDetailDataSource {
             case covidTestResultRecord(model: TestResult)
             case medication(model: Perscription)
             case laboratoryOrder(model: LaboratoryOrder, tests: [LaboratoryTest])
+            case immunization(model: Immunization)
         }
         let id: String
         let name: String
@@ -33,12 +34,14 @@ struct HealthRecordsDetailDataSource {
             case .laboratoryOrder:
                 // TODO: when supporting lab order comments
                 return []
+            case .immunization:
+                return []
             }
         }
         
         var includesSeparatorUI: Bool {
             switch self.type {
-            case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder: return true
+            case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder, .immunization: return true
             case .medication: return false
             }
         }
@@ -50,6 +53,7 @@ struct HealthRecordsDetailDataSource {
         case covidTestResultRecord(model: CovidLabTestResult)
         case medication(model: Perscription)
         case laboratoryOrder(model: LaboratoryOrder)
+        case immunization(model: Immunization)
     }
     
     let id: String?
@@ -79,6 +83,8 @@ struct HealthRecordsDetailDataSource {
             } else {
                 return records.first
             }
+        case .immunization:
+            return records.first
         }
     }
     
@@ -92,12 +98,14 @@ struct HealthRecordsDetailDataSource {
             return model.authenticated
         case .laboratoryOrder(model: let model):
             return model.authenticated
+        case .immunization(model: let model):
+            return model.authenticated
         }
     }
     
     var containsProtectedWord: Bool {
         switch type {
-        case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder:
+        case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder, .immunization:
             return false
         case .medication:
             return true
@@ -144,6 +152,14 @@ struct HealthRecordsDetailDataSource {
             image = UIImage(named: "blue-bg-laboratory-record-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated lab result
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+        case .immunization(model: let model):
+            id = model.id
+            title = model.immunizationDetails?.name ?? ""
+            detailNavTitle = model.immunizationDetails?.name ?? ""
+            name = model.immunizationDetails?.name ?? ""
+            image = UIImage(named: "blue-bg-vaccine-record-icon")
+            deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
+            deleteAlertMessage = "Should not see this" // Showing for testing purposes
         }
     }
 }
@@ -167,6 +183,9 @@ extension HealthRecordsDetailDataSource {
             return result
         case .laboratoryOrder(model: let model):
             result.append(genRecord(labOrder: model))
+            return result
+        case .immunization(model: let model):
+            result.append(genRecord(immunization: model))
             return result
         }
     }
@@ -220,6 +239,14 @@ extension HealthRecordsDetailDataSource {
         let labTests = labOrder.labTests
       
         return Record(id: labOrder.id ?? UUID().uuidString, name: labOrder.patient?.name ?? "", type: .laboratoryOrder(model: labOrder, tests: labTests), status: labOrder.orderStatus, date: dateString, listStatus: "\(labOrder.laboratoryTests?.count ?? 0) tests")
+    }
+    
+    // MARK: Immunization
+    private static func genRecord(immunization: Immunization) -> Record {
+        let dateString = immunization.dateOfImmunization?.monthDayYearString
+        
+        return Record(id: immunization.id ?? UUID().uuidString, name: immunization.patient?.name ?? "" , type: .immunization(model: immunization), status: immunization.status, date: dateString, listStatus: immunization.status ?? "")
+      
     }
 }
 

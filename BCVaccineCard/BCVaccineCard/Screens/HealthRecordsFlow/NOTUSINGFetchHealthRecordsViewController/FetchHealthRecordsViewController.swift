@@ -185,7 +185,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
                 self.showVaccineForm(rememberDetails: rememberDetails)
             case .covidTestResult:
                 self.showTestForm(rememberDetails: rememberDetails)
-            case .medication, .laboratoryOrder:
+            case .medication, .laboratoryOrder, .immunization:
                 // Currently we are not going to allow user to manually fetch meds or lab orders, so no action here
                 return
             }

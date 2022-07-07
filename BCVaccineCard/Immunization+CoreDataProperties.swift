@@ -16,14 +16,14 @@ extension Immunization {
         return NSFetchRequest<Immunization>(entityName: "Immunization")
     }
 
-    @NSManaged public var dateOfImmunization: String?
+    @NSManaged public var authenticated: Bool
+    @NSManaged public var dateOfImmunization: Date?
     @NSManaged public var id: String?
     @NSManaged public var providerOrClinic: String?
     @NSManaged public var status: String?
     @NSManaged public var targetedDisease: String?
     @NSManaged public var valid: Bool
     @NSManaged public var immunizationDetails: ImmunizationDetails?
-    @NSManaged public var immunizationRecord: ImmunizationRecord?
     @NSManaged public var patient: Patient?
 
 }

@@ -192,9 +192,10 @@ extension StorageService: StorageMedicationManager {
         prescription.authenticated = true
         prescription.pharmacy = pharmacy
         prescription.medication = medication
-        
+        prescription.patient = patient
         do {
             try context.save()
+            self.notify(event: StorageEvent(event: .Save, entity: .Perscription, object: prescription))
             return prescription
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
@@ -250,7 +251,6 @@ extension StorageService: StorageMedicationManager {
         medication.isPin = isPin ?? false
         do {
             try context.save()
-//            let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Medication, object: medication)) : self.notify(event: StorageEvent(event: .Save, entity: .Medication, object: medication))
             return medication
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
@@ -301,7 +301,9 @@ extension StorageService: StorageMedicationManager {
         pharmacy.faxNumber = faxNumber
         do {
             try context.save()
-            let _ = initialProtectedMedFetch ? self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Pharmacy, object: pharmacy)) : self.notify(event: StorageEvent(event: .Save, entity: .Pharmacy, object: pharmacy))
+            if initialProtectedMedFetch {
+                self.notify(event: StorageEvent(event: .ProtectedMedicalRecordsInitialFetch, entity: .Pharmacy, object: pharmacy))
+            }
             return pharmacy
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)

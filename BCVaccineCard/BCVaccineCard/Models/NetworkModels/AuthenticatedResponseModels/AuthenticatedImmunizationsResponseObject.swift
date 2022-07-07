@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Welcome
+// MARK: -
 struct AuthenticatedImmunizationsResponseObject: Codable {
     let resourcePayload: ResourcePayload?
     let totalResultCount, pageIndex, pageSize, resultStatus: Int?
