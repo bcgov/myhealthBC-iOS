@@ -903,6 +903,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let immz = immunizations.resourcePayload?.immunizations else { return }
         incrementLoadCounter()
 
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Immunization])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {

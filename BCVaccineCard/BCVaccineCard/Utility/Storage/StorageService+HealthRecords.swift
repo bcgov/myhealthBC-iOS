@@ -15,6 +15,7 @@ extension StorageService {
         case VaccineCard
         case Prescription
         case LaboratoryOrder
+        case Immunization
     }
     
     func getHeathRecords() -> [HealthRecord] {
@@ -69,6 +70,11 @@ extension StorageService {
             let orders = fetchLaboratoryOrders().filter({ $0.authenticated == true })
             toDelete.append(contentsOf: orders)
             notify(event: StorageEvent(event: .Delete, entity: .LaboratoryOrder, object: orders))
+        }
+        if typesTodelete.contains(.Immunization) {
+            let imms = fetchImmunization().filter({ $0.authenticated == true })
+            toDelete.append(contentsOf: imms)
+            notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: imms))
         }
         deleteAllRecords(in: toDelete)
     }

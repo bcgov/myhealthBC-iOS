@@ -158,7 +158,7 @@ struct HealthRecordsDetailDataSource {
             detailNavTitle = model.immunizationDetails?.name ?? ""
             name = model.immunizationDetails?.name ?? ""
             image = UIImage(named: "blue-bg-vaccine-record-icon")
-            deleteAlertTitle = "N/A" // Can't delete an authenticated lab result
+            deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
         }
     }
