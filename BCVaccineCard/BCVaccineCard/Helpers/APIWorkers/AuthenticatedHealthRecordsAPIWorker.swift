@@ -83,7 +83,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                     self.deinitializeStatusList()
                     return
                 }
-                StorageService.shared.removeCovidImmunizationDuplicates()
+//                StorageService.shared.removeCovidImmunizationDuplicates()
                 self.delegate?.showFetchCompletedBanner(recordsSuccessful: fetchStatusList.getSuccessfulCount, recordsAttempted: fetchStatusList.getAttemptedCount, errors: fetchStatusList.getErrors, showBanner: self.showBanner, resetHealthRecordsTab: !self.initialProtectedMedFetch, loginSourceVC: self.loginSourceVC, fetchStatusTypes: fetchStatusList.getFetchStatusTypes)
                 self.deinitializeStatusList()
             } else if fetchStatusList.canFetchComments {
