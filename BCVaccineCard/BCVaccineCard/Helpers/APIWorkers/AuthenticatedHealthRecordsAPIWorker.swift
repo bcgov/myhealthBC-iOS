@@ -935,8 +935,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let drugs = specialAuthDrugs.resourcePayload else { return }
         incrementLoadCounter()
         
-        // TODO: Fix this
-//        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.SpecialAuthorityDrugs])
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.SpecialAuthorityDrug])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {
@@ -1092,8 +1091,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         guard let healthVisitList = healthVisits.resourcePayload else { return }
         incrementLoadCounter()
         
-        // TODO: Fix this
-//        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.HealthVisits])
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.HealthVisit])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {
