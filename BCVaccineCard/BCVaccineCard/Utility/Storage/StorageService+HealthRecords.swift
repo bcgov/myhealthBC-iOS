@@ -24,8 +24,10 @@ extension StorageService {
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         let labOrders = fetchLaboratoryOrders().map({HealthRecord(type: .LaboratoryOrder($0))})
         let immunizations = fetchImmunization().map({HealthRecord(type: .Immunization($0))})
+        let healthVisits = fetchHealthVisits().map({HealthRecord(type: .HealthVisit($0))})
+        let specialAuthority = fetchSpecialAuthorityMedications().map({HealthRecord(type: .SpecialAuthorityDrug($0))})
         
-        return tests + vaccineCards + medications + labOrders + immunizations
+        return tests + vaccineCards + medications + labOrders + immunizations + healthVisits + specialAuthority
     }
     
     func delete(healthRecord: HealthRecord) {
@@ -45,6 +47,12 @@ extension StorageService {
         case .Immunization(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .Immunization, object: object))
+        case .HealthVisit(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .HealthVisit, object: object))
+        case .SpecialAuthorityDrug(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .SpecialAuthorityMedication, object: object))
         }
     }
     

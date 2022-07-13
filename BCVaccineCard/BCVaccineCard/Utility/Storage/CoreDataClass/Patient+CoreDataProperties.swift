@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-07-07.
+//  Created by Amir on 2022-07-12.
 //
 //
 
@@ -26,6 +26,8 @@ extension Patient {
     @NSManaged public var laboratoryOrders: NSSet?
     @NSManaged public var prescriptions: NSSet?
     @NSManaged public var vaccineCard: NSSet?
+    @NSManaged public var specialAuthorityDrugs: NSSet?
+    @NSManaged public var healthVisits: HealthVisit?
 
 }
 
@@ -111,5 +113,22 @@ extension Patient {
 
     @objc(removeVaccineCard:)
     @NSManaged public func removeFromVaccineCard(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for specialAuthorityDrugs
+extension Patient {
+
+    @objc(addSpecialAuthorityDrugsObject:)
+    @NSManaged public func addToSpecialAuthorityDrugs(_ value: SpecialAuthorityDrug)
+
+    @objc(removeSpecialAuthorityDrugsObject:)
+    @NSManaged public func removeFromSpecialAuthorityDrugs(_ value: SpecialAuthorityDrug)
+
+    @objc(addSpecialAuthorityDrugs:)
+    @NSManaged public func addToSpecialAuthorityDrugs(_ values: NSSet)
+
+    @objc(removeSpecialAuthorityDrugs:)
+    @NSManaged public func removeFromSpecialAuthorityDrugs(_ values: NSSet)
 
 }

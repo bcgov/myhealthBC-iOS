@@ -957,21 +957,21 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.fetchStatusList.fetchStatus[.SpecialAuthorityDrugs] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
-    private func handleSpecialAuthorityDrugsInCoreData(object: AuthenticatedSpecialAuthorityDrugsResponseModel.SpecialAuthorityDrug, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        // TODO: Handle core data logic here
-//        incrementLoadCounter()
-//
-//        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
-//            self.decrementLoadCounter()
-//            return nil
-//        }
-//        guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf) else {
-//            self.decrementLoadCounter()
-//            return nil
-//        }
-//        self.decrementLoadCounter()
-//        return object.id
-        return nil
+    private func handleSpecialAuthorityDrugsInCoreData(object: AuthenticatedSpecialAuthorityDrugsResponseModel.SpecialAuthorityDrug, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> SpecialAuthorityDrug? {
+        
+        incrementLoadCounter()
+
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+            self.decrementLoadCounter()
+            return nil
+        }
+        
+        guard let object = StorageService.shared.storeSpecialAuthorityMedication(patient: patient, object: object, authenticated: authenticated) else {
+            self.decrementLoadCounter()
+            return nil
+        }
+        self.decrementLoadCounter()
+        return object
     }
 }
 
@@ -1114,21 +1114,21 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.fetchStatusList.fetchStatus[.HealthVisits] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
     }
     
-    private func handleHealthVisitsInCoreData(object: AuthenticatedHealthVisitsResponseObject.HealthVisit, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
-        // TODO: Handle core data logic here
-//        incrementLoadCounter()
-//
-//        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
-//            self.decrementLoadCounter()
-//            return nil
-//        }
-//        guard let object = StorageService.shared.storeLaboratoryOrder(patient: patient, gateWayObject: object, pdf: pdf) else {
-//            self.decrementLoadCounter()
-//            return nil
-//        }
-//        self.decrementLoadCounter()
-//        return object.id
-        return nil
+    private func handleHealthVisitsInCoreData(object: AuthenticatedHealthVisitsResponseObject.HealthVisit, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> HealthVisit? {
+        
+        incrementLoadCounter()
+
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+            self.decrementLoadCounter()
+            return nil
+        }
+        
+        guard let object = StorageService.shared.storeHealthVisit(patient: patient, object: object, authenticated: authenticated) else {
+            self.decrementLoadCounter()
+            return nil
+        }
+        self.decrementLoadCounter()
+        return object
     }
 }
 

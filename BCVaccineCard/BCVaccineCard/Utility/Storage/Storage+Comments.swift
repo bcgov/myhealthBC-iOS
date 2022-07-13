@@ -60,6 +60,10 @@ extension StorageService: StorageCommentManager {
                 break
             case .Immunization(_):
                 return
+            case .HealthVisit(_):
+                break
+            case .SpecialAuthorityDrug(_):
+                break
             }
         }
         do {
