@@ -61,6 +61,9 @@ extension StorageService: StorageSpecialAuthorityMedicationManager {
         object.effectiveDate = effectiveDate
         object.expiryDate = expiryDate
         object.patient = patient
+        if expiryDate == nil {
+            print("HH")
+        }
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .SpecialAuthorityMedication, object: object))
