@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-07-12.
+//  Created by Amir on 2022-07-13.
 //
 //
 
@@ -22,12 +22,12 @@ extension Patient {
     @NSManaged public var name: String?
     @NSManaged public var phn: String?
     @NSManaged public var covidTestResults: NSSet?
+    @NSManaged public var healthVisits: NSSet?
     @NSManaged public var immunizations: NSSet?
     @NSManaged public var laboratoryOrders: NSSet?
     @NSManaged public var prescriptions: NSSet?
-    @NSManaged public var vaccineCard: NSSet?
     @NSManaged public var specialAuthorityDrugs: NSSet?
-    @NSManaged public var healthVisits: HealthVisit?
+    @NSManaged public var vaccineCard: NSSet?
 
 }
 
@@ -45,6 +45,23 @@ extension Patient {
 
     @objc(removeCovidTestResults:)
     @NSManaged public func removeFromCovidTestResults(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for healthVisits
+extension Patient {
+
+    @objc(addHealthVisitsObject:)
+    @NSManaged public func addToHealthVisits(_ value: HealthVisit)
+
+    @objc(removeHealthVisitsObject:)
+    @NSManaged public func removeFromHealthVisits(_ value: HealthVisit)
+
+    @objc(addHealthVisits:)
+    @NSManaged public func addToHealthVisits(_ values: NSSet)
+
+    @objc(removeHealthVisits:)
+    @NSManaged public func removeFromHealthVisits(_ values: NSSet)
 
 }
 
@@ -99,23 +116,6 @@ extension Patient {
 
 }
 
-// MARK: Generated accessors for vaccineCard
-extension Patient {
-
-    @objc(addVaccineCardObject:)
-    @NSManaged public func addToVaccineCard(_ value: VaccineCard)
-
-    @objc(removeVaccineCardObject:)
-    @NSManaged public func removeFromVaccineCard(_ value: VaccineCard)
-
-    @objc(addVaccineCard:)
-    @NSManaged public func addToVaccineCard(_ values: NSSet)
-
-    @objc(removeVaccineCard:)
-    @NSManaged public func removeFromVaccineCard(_ values: NSSet)
-
-}
-
 // MARK: Generated accessors for specialAuthorityDrugs
 extension Patient {
 
@@ -130,5 +130,22 @@ extension Patient {
 
     @objc(removeSpecialAuthorityDrugs:)
     @NSManaged public func removeFromSpecialAuthorityDrugs(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for vaccineCard
+extension Patient {
+
+    @objc(addVaccineCardObject:)
+    @NSManaged public func addToVaccineCard(_ value: VaccineCard)
+
+    @objc(removeVaccineCardObject:)
+    @NSManaged public func removeFromVaccineCard(_ value: VaccineCard)
+
+    @objc(addVaccineCard:)
+    @NSManaged public func addToVaccineCard(_ values: NSSet)
+
+    @objc(removeVaccineCard:)
+    @NSManaged public func removeFromVaccineCard(_ values: NSSet)
 
 }
