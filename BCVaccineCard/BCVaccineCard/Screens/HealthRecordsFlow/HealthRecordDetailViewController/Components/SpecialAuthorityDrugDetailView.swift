@@ -67,6 +67,8 @@ extension SpecialAuthorityDrugDetailView {
         if let date = object.expiryDate {
             expiryDate = date.issuedOnDate
         }
+        let prescriberFirstName = object.prescriberFirstName ?? ""
+        let prescriberLastName = object.prescriberLastName ?? ""
         let fields: [TextListModel] = [
             TextListModel(
                 header: TextProperties(
@@ -80,7 +82,7 @@ extension SpecialAuthorityDrugDetailView {
                     text: "Prescriber Name:",
                     bolded: true),
                 subtext: TextProperties(
-                    text: "\(object.prescriberFirstName) \(object.prescriberLastName)",
+                    text: "\(prescriberFirstName) \(prescriberLastName)",
                     bolded: false)),
             TextListModel(
                 header: TextProperties(

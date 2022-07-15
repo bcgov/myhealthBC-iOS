@@ -2,7 +2,7 @@
 //  HealthVisit+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-07-12.
+//  Created by Amir on 2022-07-13.
 //
 //
 
@@ -17,10 +17,10 @@ extension HealthVisit {
     }
 
     @NSManaged public var authenticated: Bool
-    @NSManaged public var id: String?
     @NSManaged public var encounterDate: Date?
-    @NSManaged public var specialtyDescription: String?
+    @NSManaged public var id: String?
     @NSManaged public var practitionerName: String?
+    @NSManaged public var specialtyDescription: String?
     @NSManaged public var clinic: HealthVisitClinic?
     @NSManaged public var patient: Patient?
 

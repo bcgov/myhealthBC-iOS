@@ -922,21 +922,11 @@ extension AuthenticatedHealthRecordsAPIWorker {
 // MARK: Handle Special Authority Drugs in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleSpecialAuthorityDrugsInCoreData(specialAuthDrugs: AuthenticatedSpecialAuthorityDrugsResponseModel) {
-        if let drugs = specialAuthDrugs.resourcePayload {
-            print("CONNOR: ", drugs)
-            self.fetchStatusList.fetchStatus[.SpecialAuthorityDrugs] = FetchStatus(requestCompleted: true, attemptedCount: drugs.count, successfullCount: drugs.count, error: nil)
-            return
-        } else {
-            print("CONNOR: Error fetching Special Authority Drugs")
-            self.fetchStatusList.fetchStatus[.SpecialAuthorityDrugs] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: "Error Fetching Special Authority Drugs")
-            return
-        }
         guard let patient = self.patientDetails else { return }
         guard let drugs = specialAuthDrugs.resourcePayload else { return }
         incrementLoadCounter()
         
-        // TODO: Fix this
-//        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.SpecialAuthorityDrugs])
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.SpecialAuthorityDrug])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {
@@ -1079,21 +1069,11 @@ extension AuthenticatedHealthRecordsAPIWorker {
 // MARK: Handle Health Visits in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleHealthVisitsInCoreData(healthVisits: AuthenticatedHealthVisitsResponseObject) {
-        if let hVisits = healthVisits.resourcePayload {
-            print("CONNOR: ", hVisits)
-            self.fetchStatusList.fetchStatus[.HealthVisits] = FetchStatus(requestCompleted: true, attemptedCount: hVisits.count, successfullCount: hVisits.count, error: nil)
-            return
-        } else {
-            print("CONNOR: Error fetching Health Visits")
-            self.fetchStatusList.fetchStatus[.HealthVisits] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: "Error Fetching Health Visits")
-            return
-        }
         guard let patient = self.patientDetails else { return }
         guard let healthVisitList = healthVisits.resourcePayload else { return }
         incrementLoadCounter()
         
-        // TODO: Fix this
-//        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.HealthVisits])
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.HealthVisit])
         var errorArrayCount: Int = 0
         var completedCount: Int = 0
         guard let authCreds = self.authCredentials else {

@@ -56,7 +56,7 @@
                     </constraints>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Udq-pr-wRI">
-                    <rect key="frame" x="16" y="69" width="544" height="136.5"/>
+                    <rect key="frame" x="16" y="69" width="544" height="166.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose record type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ttb-8W-5sH">
                             <rect key="frame" x="0.0" y="0.0" width="544" height="20.5"/>
@@ -65,10 +65,10 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xjG-wd-zFJ">
-                            <rect key="frame" x="0.0" y="36.5" width="544" height="100"/>
+                            <rect key="frame" x="0.0" y="36.5" width="544" height="130"/>
                             <color key="backgroundColor" systemColor="systemPinkColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" priority="750" constant="100" id="doB-vk-y4H"/>
+                                <constraint firstAttribute="height" priority="750" constant="130" id="doB-vk-y4H"/>
                             </constraints>
                         </view>
                     </subviews>
@@ -79,14 +79,14 @@
                     </constraints>
                 </stackView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VIv-AC-G8t">
-                    <rect key="frame" x="0.0" y="221.5" width="576" height="1"/>
+                    <rect key="frame" x="0.0" y="251.5" width="576" height="1"/>
                     <color key="backgroundColor" systemColor="systemBlueColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="Kdu-Yf-llF"/>
                     </constraints>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="eeM-Ba-vkV">
-                    <rect key="frame" x="16" y="238.5" width="544" height="515.5"/>
+                    <rect key="frame" x="16" y="268.5" width="544" height="485.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose date range" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uFb-7m-f3p">
                             <rect key="frame" x="0.0" y="0.0" width="544" height="20.5"/>
@@ -185,7 +185,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="n5R-DK-DqZ">
-                            <rect key="frame" x="0.0" y="361.5" width="544" height="154"/>
+                            <rect key="frame" x="0.0" y="361.5" width="544" height="124"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="b6E-W7-97F"/>
                                 <constraint firstAttribute="height" priority="750" constant="120" id="u7O-Eq-aoo"/>
