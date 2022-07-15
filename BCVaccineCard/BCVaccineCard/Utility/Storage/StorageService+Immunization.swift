@@ -18,6 +18,9 @@ protocol StorageImmunizationManager {
 
     // MARK: Fetch
     func fetchImmunization()-> [Immunization]
+    
+    // MARK: Remove Covid Records
+    func removeCovidImmunizationDuplicates()
 }
 extension StorageService: StorageImmunizationManager {
     func storeImmunization(patient: Patient, object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Immunization, authenticated: Bool) -> Immunization? {
@@ -118,6 +121,27 @@ extension StorageService: StorageImmunizationManager {
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
+        }
+    }
+    
+    func removeCovidImmunizationDuplicates() {
+        let immz = fetchImmunization()
+        let vaxCards = fetchVaccineCards()
+        let covidImmz = vaxCards.flatMap { $0.immunizations }
+        for covidIm in covidImmz {
+            let sameDateObjects = immz.filter { $0.dateOfImmunization == covidIm.date }
+            let sameLotNumberObjects = sameDateObjects.filter { immunization in
+                if let immunizationAgents = immunization.immunizationDetails?.immunizationAgents as? Set<ImmunizationAgent> {
+                    let lotNumbers = immunizationAgents.compactMap({ $0.lotNumber })
+                    guard let lotNumber = covidIm.lotNumber else { return false }
+                    return lotNumbers.contains(lotNumber)
+                }
+                return false
+            }
+            let objects = Set(sameLotNumberObjects)
+            for object in objects {
+                delete(object: object)
+            }
         }
     }
 }
