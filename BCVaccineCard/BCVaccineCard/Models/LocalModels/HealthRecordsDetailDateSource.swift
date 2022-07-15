@@ -184,7 +184,7 @@ struct HealthRecordsDetailDataSource {
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
         case .healthVisit(model: let model):
             id = model.id
-            title = model.clinic?.name ?? ""
+            title = model.specialtyDescription ?? ""
             detailNavTitle = model.clinic?.name ?? ""
             name = model.patient?.name ?? ""
             image = UIImage(named: "blue-bg-health-visit-icon")

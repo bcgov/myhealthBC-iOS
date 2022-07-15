@@ -25,7 +25,12 @@ class HealthVisitRecordDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
     override func setup() {
         tableView?.dataSource = self
         tableView?.delegate = self
+        tableView?.register(UINib.init(nibName: HealthVisitRecordDetailTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HealthVisitRecordDetailTableViewCell.getName)
         fields = createFields()
+    }
+    
+    private func getCell(indexPath: IndexPath, tableView: UITableView) -> HealthVisitRecordDetailTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: HealthVisitRecordDetailTableViewCell.getName, for: indexPath) as? HealthVisitRecordDetailTableViewCell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -37,8 +42,10 @@ class HealthVisitRecordDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-        cell.setup(with: fields[indexPath.row])
+        layoutIfNeeded()
+        guard let cell = getCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+        
+        cell.configure(practitioner: model?.healthVisit()?.practitionerName ?? "")
         return cell
     }
     
@@ -65,7 +72,7 @@ extension HealthVisitRecordDetailView {
                     text: "Clinic/Practitioner",
                     bolded: true),
                 subtext: TextProperties(
-                    text: object.practitionerName ?? "",
+                    text: object.clinic?.name ?? "",
                     bolded: false))
         ]
        
