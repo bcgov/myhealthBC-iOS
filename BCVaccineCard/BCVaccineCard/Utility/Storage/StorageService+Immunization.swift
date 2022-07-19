@@ -80,6 +80,7 @@ extension StorageService: StorageImmunizationManager {
         immunization.immunizationDetails = immunizationDetails
         immunization.authenticated = authenticated
         immunization.patient = patient
+        immunization.forecast = forecast
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .Immunization, object: immunization))

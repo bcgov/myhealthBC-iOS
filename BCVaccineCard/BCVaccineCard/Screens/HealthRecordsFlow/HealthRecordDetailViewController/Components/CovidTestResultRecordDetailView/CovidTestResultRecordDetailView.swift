@@ -43,9 +43,14 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
     }
     
     override func setup() {
+        tableView?.register(UINib.init(nibName: CovidTestResultBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CovidTestResultBannerTableViewCell.getName)
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
+    }
+    
+    public func covidTestHeaderCell(indexPath: IndexPath, tableView: UITableView) -> CovidTestResultBannerTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: CovidTestResultBannerTableViewCell.getName, for: indexPath) as? CovidTestResultBannerTableViewCell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

@@ -57,8 +57,7 @@ class UserRecordListView: UIView {
         recordTypeTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         recordTypeTitleLabel.textColor = AppColours.lightBlueText
         recordTypeSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 13)
-        // TODO: put in AppColours
-        recordTypeSubtitleLabel.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
+        recordTypeSubtitleLabel.textColor = AppColours.greyText
         self.layoutIfNeeded()
     }
     
