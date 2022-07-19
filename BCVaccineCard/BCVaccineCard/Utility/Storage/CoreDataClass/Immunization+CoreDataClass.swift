@@ -1,8 +1,8 @@
 //
 //  Immunization+CoreDataClass.swift
-//  BCVaccineCard
+//  
 //
-//  Created by Connor Ogilvie on 2022-07-05.
+//  Created by Amir on 2022-07-19.
 //
 //
 

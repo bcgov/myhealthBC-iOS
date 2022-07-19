@@ -174,6 +174,9 @@ struct HealthRecordsDetailDataSource {
             image = UIImage(named: "blue-bg-laboratory-record-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated lab result
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+            if title == "" {
+                print("--")
+            }
         case .immunization(model: let model):
             id = model.id
             title = model.immunizationDetails?.name ?? ""
@@ -182,6 +185,9 @@ struct HealthRecordsDetailDataSource {
             image = UIImage(named: "blue-bg-vaccine-record-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+            if title == "" {
+                print("--")
+            }
         case .healthVisit(model: let model):
             id = model.id
             title = model.specialtyDescription ?? ""
@@ -190,6 +196,9 @@ struct HealthRecordsDetailDataSource {
             image = UIImage(named: "blue-bg-health-visit-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+            if title == "" {
+                print("--")
+            }
         case .specialAuthorityDrug(model: let model):
             id = model.referenceNumber
             title = model.drugName ?? ""
@@ -198,6 +207,9 @@ struct HealthRecordsDetailDataSource {
             image = UIImage(named: "blue-bg-special-authority-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+            if title == "" {
+                print("--")
+            }
         }
     }
 }

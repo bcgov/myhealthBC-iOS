@@ -49,6 +49,7 @@
         <attribute name="status" optional="YES" attributeType="String"/>
         <attribute name="targetedDisease" optional="YES" attributeType="String"/>
         <attribute name="valid" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="forecast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ImmunizationForecast" inverseName="immunization" inverseEntity="ImmunizationForecast"/>
         <relationship name="immunizationDetails" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ImmunizationDetails" inverseName="immunization" inverseEntity="ImmunizationDetails"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="immunizations" inverseEntity="Patient"/>
     </entity>
@@ -63,6 +64,15 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="immunization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Immunization" inverseName="immunizationDetails" inverseEntity="Immunization"/>
         <relationship name="immunizationAgents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ImmunizationAgent" inverseName="immunizationDetails" inverseEntity="ImmunizationAgent"/>
+    </entity>
+    <entity name="ImmunizationForecast" representedClassName="ImmunizationForecast" syncable="YES">
+        <attribute name="createDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="displayName" optional="YES" attributeType="String"/>
+        <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="eligibleDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="recommendationID" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <relationship name="immunization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Immunization" inverseName="forecast" inverseEntity="Immunization"/>
     </entity>
     <entity name="LaboratoryOrder" representedClassName="LaboratoryOrder" syncable="YES">
         <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -190,7 +200,7 @@
         <element name="CovidLabTestResult" positionX="70.65234375" positionY="497.984375" width="128" height="119"/>
         <element name="HealthVisit" positionX="171" positionY="405" width="128" height="134"/>
         <element name="HealthVisitClinic" positionX="180" positionY="414" width="128" height="59"/>
-        <element name="Immunization" positionX="180" positionY="414" width="128" height="164"/>
+        <element name="Immunization" positionX="180" positionY="414" width="128" height="179"/>
         <element name="ImmunizationAgent" positionX="171" positionY="405" width="128" height="104"/>
         <element name="ImmunizationDetails" positionX="162" positionY="396" width="128" height="74"/>
         <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="254"/>
@@ -202,5 +212,6 @@
         <element name="SpecialAuthorityDrug" positionX="162" positionY="405" width="128" height="179"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
         <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="179"/>
+        <element name="ImmunizationForecast" positionX="162" positionY="396" width="128" height="134"/>
     </elements>
 </model>
