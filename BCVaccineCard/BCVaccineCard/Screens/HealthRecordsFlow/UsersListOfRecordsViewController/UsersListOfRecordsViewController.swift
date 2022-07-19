@@ -336,13 +336,15 @@ extension UsersListOfRecordsViewController {
                 if !filter.recordTypes.isEmpty {
                     switch item.type {
                     case .covidImmunizationRecord:
-                        showItem = filter.recordTypes.contains(.CovidImmunization)
+                        showItem = filter.recordTypes.contains(.Immunizations)
                     case .covidTestResultRecord:
                         showItem = filter.recordTypes.contains(.Covid)
                     case .medication:
                         showItem = filter.recordTypes.contains(.Medication)
                     case .laboratoryOrder:
                         showItem = filter.recordTypes.contains(.LabTests)
+                    case .immunization:
+                        showItem = filter.recordTypes.contains(.Immunizations)
                     }
                 }
                 // Filter by date
@@ -647,6 +649,8 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         case .medication:
             return
         case .laboratoryOrder:
+            return
+        case .immunization:
             return
         }
     }

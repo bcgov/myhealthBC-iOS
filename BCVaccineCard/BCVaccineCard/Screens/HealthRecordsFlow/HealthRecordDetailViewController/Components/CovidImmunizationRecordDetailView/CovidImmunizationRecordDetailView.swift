@@ -18,7 +18,7 @@ extension HealthRecordsDetailDataSource.Record {
         }
     }
     
-    fileprivate func covidImmunizations() -> [ImmunizationRecord]? {
+    fileprivate func covidImmunizations() -> [CovidImmunizationRecord]? {
         switch self.type {
         case .covidImmunizationRecord(model: _, immunizations: let imms):
             return imms
@@ -110,7 +110,7 @@ extension CovidImmunizationRecordDetailView {
                         bolded: false)),
                 TextListModel(
                     header: TextProperties(
-                        text: "Provide / Clinic:",
+                        text: "Provider / Clinic:",
                         bolded: true),
                     subtext: TextProperties(
                         text: imsModel.provider ?? "N/A",

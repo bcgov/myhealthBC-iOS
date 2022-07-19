@@ -71,6 +71,7 @@ class UserRecordListView: UIView {
         case .covidImmunizationRecord: statusToInclude = nil
         case .covidTestResultRecord: statusToInclude = record.mainRecord?.listStatus
         case .medication: statusToInclude = record.mainRecord?.listStatus
+        case .immunization: statusToInclude = record.mainRecord?.listStatus
         case .laboratoryOrder(let model):
             // I think we should use model.orderStatus?
             switch record.mainRecord?.status?.lowercased() {
