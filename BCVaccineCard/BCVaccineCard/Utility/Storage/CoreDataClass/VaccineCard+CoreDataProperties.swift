@@ -33,10 +33,10 @@ extension VaccineCard {
 extension VaccineCard {
 
     @objc(addImmunizationRecordObject:)
-    @NSManaged public func addToImmunizationRecord(_ value: ImmunizationRecord)
+    @NSManaged public func addToImmunizationRecord(_ value: CovidImmunizationRecord)
 
     @objc(removeImmunizationRecordObject:)
-    @NSManaged public func removeFromImmunizationRecord(_ value: ImmunizationRecord)
+    @NSManaged public func removeFromImmunizationRecord(_ value: CovidImmunizationRecord)
 
     @objc(addImmunizationRecord:)
     @NSManaged public func addToImmunizationRecord(_ values: NSSet)

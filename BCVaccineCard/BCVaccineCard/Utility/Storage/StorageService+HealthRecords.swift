@@ -15,15 +15,17 @@ extension StorageService {
         case VaccineCard
         case Prescription
         case LaboratoryOrder
+        case Immunization
     }
     
     func getHeathRecords() -> [HealthRecord] {
         let tests = fetchCovidTestResults().map({HealthRecord(type: .CovidTest($0))})
-        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))}).filter({$0.patient.authenticated})
+//        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))}).filter({$0.patient.authenticated})
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         let labOrders = fetchLaboratoryOrders().map({HealthRecord(type: .LaboratoryOrder($0))})
+        let immunizations = fetchImmunization().map({HealthRecord(type: .Immunization($0))})
         
-        return tests + vaccineCards + medications + labOrders
+        return tests + medications + labOrders + immunizations // Note: If we want the old UI for covid records, we add '+ vaccineCards' here
     }
     
     func delete(healthRecord: HealthRecord) {
@@ -40,6 +42,9 @@ extension StorageService {
         case .LaboratoryOrder(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .LaboratoryOrder, object: object))
+        case .Immunization(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .Immunization, object: object))
         }
     }
     
@@ -65,6 +70,11 @@ extension StorageService {
             let orders = fetchLaboratoryOrders().filter({ $0.authenticated == true })
             toDelete.append(contentsOf: orders)
             notify(event: StorageEvent(event: .Delete, entity: .LaboratoryOrder, object: orders))
+        }
+        if typesTodelete.contains(.Immunization) {
+            let imms = fetchImmunization().filter({ $0.authenticated == true })
+            toDelete.append(contentsOf: imms)
+            notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: imms))
         }
         deleteAllRecords(in: toDelete)
     }

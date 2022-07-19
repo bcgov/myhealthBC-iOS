@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2022-02-22.
+//  Created by Amir on 2022-07-07.
 //
 //
 
@@ -16,15 +16,16 @@ extension Patient {
         return NSFetchRequest<Patient>(entityName: "Patient")
     }
 
+    @NSManaged public var authenticated: Bool
+    @NSManaged public var authManagerDisplayName: String?
     @NSManaged public var birthday: Date?
     @NSManaged public var name: String?
     @NSManaged public var phn: String?
-    @NSManaged public var authenticated: Bool
-    @NSManaged public var authManagerDisplayName: String?
     @NSManaged public var covidTestResults: NSSet?
+    @NSManaged public var immunizations: NSSet?
+    @NSManaged public var laboratoryOrders: NSSet?
     @NSManaged public var prescriptions: NSSet?
     @NSManaged public var vaccineCard: NSSet?
-    @NSManaged public var laboratoryOrders: NSSet?
 
 }
 
@@ -42,6 +43,40 @@ extension Patient {
 
     @objc(removeCovidTestResults:)
     @NSManaged public func removeFromCovidTestResults(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for immunizations
+extension Patient {
+
+    @objc(addImmunizationsObject:)
+    @NSManaged public func addToImmunizations(_ value: Immunization)
+
+    @objc(removeImmunizationsObject:)
+    @NSManaged public func removeFromImmunizations(_ value: Immunization)
+
+    @objc(addImmunizations:)
+    @NSManaged public func addToImmunizations(_ values: NSSet)
+
+    @objc(removeImmunizations:)
+    @NSManaged public func removeFromImmunizations(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for laboratoryOrders
+extension Patient {
+
+    @objc(addLaboratoryOrdersObject:)
+    @NSManaged public func addToLaboratoryOrders(_ value: LaboratoryOrder)
+
+    @objc(removeLaboratoryOrdersObject:)
+    @NSManaged public func removeFromLaboratoryOrders(_ value: LaboratoryOrder)
+
+    @objc(addLaboratoryOrders:)
+    @NSManaged public func addToLaboratoryOrders(_ values: NSSet)
+
+    @objc(removeLaboratoryOrders:)
+    @NSManaged public func removeFromLaboratoryOrders(_ values: NSSet)
 
 }
 
@@ -76,22 +111,5 @@ extension Patient {
 
     @objc(removeVaccineCard:)
     @NSManaged public func removeFromVaccineCard(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for laboratoryOrders
-extension Patient {
-
-    @objc(addLaboratoryOrdersObject:)
-    @NSManaged public func addToLaboratoryOrders(_ value: LaboratoryOrder)
-
-    @objc(removeLaboratoryOrdersObject:)
-    @NSManaged public func removeFromLaboratoryOrders(_ value: LaboratoryOrder)
-
-    @objc(addLaboratoryOrders:)
-    @NSManaged public func addToLaboratoryOrders(_ values: NSSet)
-
-    @objc(removeLaboratoryOrders:)
-    @NSManaged public func removeFromLaboratoryOrders(_ values: NSSet)
 
 }

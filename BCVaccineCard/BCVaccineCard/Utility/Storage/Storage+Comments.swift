@@ -58,6 +58,8 @@ extension StorageService: StorageCommentManager {
             case .LaboratoryOrder(_):
                 // TODO: When supporting lab order comments
                 break
+            case .Immunization(_):
+                return
             }
         }
         do {
