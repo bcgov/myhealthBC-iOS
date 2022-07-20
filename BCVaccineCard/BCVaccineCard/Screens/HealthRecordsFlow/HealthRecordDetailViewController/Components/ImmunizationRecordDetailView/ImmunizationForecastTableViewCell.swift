@@ -24,7 +24,7 @@ class ImmunizationForecastTableViewCell: UITableViewCell {
     
     func setup(forecast: ImmunizationForecast?) {
         guard let forecast = forecast, let status = forecast.status?.forecastStatus() else {return}
-        setup(for: forecast, status: .status)
+        setup(for: forecast, status: status)
         style()
     }
     
