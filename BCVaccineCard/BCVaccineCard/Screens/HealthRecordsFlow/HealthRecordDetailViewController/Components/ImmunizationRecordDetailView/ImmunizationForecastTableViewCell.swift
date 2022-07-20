@@ -24,7 +24,7 @@ class ImmunizationForecastTableViewCell: UITableViewCell {
     
     func setup(forecast: ImmunizationForecast?) {
         guard let forecast = forecast, let status = forecast.status?.forecastStatus() else {return}
-        setup(for: forecast, status: status)
+        setup(for: forecast, status: .Eligible)
         style()
     }
     
@@ -35,7 +35,7 @@ class ImmunizationForecastTableViewCell: UITableViewCell {
             statusLabel.textColor = AppColours.green
         case .Overdue:
             imageView?.image = UIImage(named: "immunization-forecast-overdue")
-            statusLabel.textColor = AppColours.greyText
+            statusLabel.textColor = AppColours.appRed
         }
         dueDateLabel.text = forecast.dueDate?.forecastDueDate ?? "--"
         statusLabel.text = forecast.status ?? "--"
