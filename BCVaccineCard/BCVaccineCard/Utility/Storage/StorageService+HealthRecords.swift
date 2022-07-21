@@ -29,7 +29,7 @@ extension StorageService {
         let healthVisits = fetchHealthVisits().map({HealthRecord(type: .HealthVisit($0))})
         let specialAuthority = fetchSpecialAuthorityMedications().map({HealthRecord(type: .SpecialAuthorityDrug($0))})
         
-        return tests + vaccineCards + medications + labOrders + immunizations + healthVisits + specialAuthority
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority
     }
     
     func delete(healthRecord: HealthRecord) {
