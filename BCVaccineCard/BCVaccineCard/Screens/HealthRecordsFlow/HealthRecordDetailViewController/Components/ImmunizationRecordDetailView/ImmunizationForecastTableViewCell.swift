@@ -12,6 +12,7 @@ class ImmunizationForecastTableViewCell: UITableViewCell {
     enum Status {
         case Eligible
         case Overdue
+        case Unknown
     }
 
     @IBOutlet weak var container: UIView!
@@ -36,6 +37,9 @@ class ImmunizationForecastTableViewCell: UITableViewCell {
         case .Overdue:
             imageView?.image = UIImage(named: "immunization-forecast-overdue")
             statusLabel.textColor = AppColours.appRed
+        case .Unknown:
+            imageView?.image = UIImage(named: "immunization-forecast-overdue")
+            statusLabel.textColor = AppColours.textGray
         }
         dueDateLabel.text = forecast.dueDate?.forecastDueDate ?? "--"
         statusLabel.text = forecast.status ?? "--"
@@ -72,7 +76,7 @@ fileprivate extension String {
         case "overdue":
             return .Overdue
         default:
-            return .Overdue
+            return .Unknown
         }
     }
 }
