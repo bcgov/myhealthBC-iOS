@@ -72,6 +72,8 @@ class UserRecordListView: UIView {
         case .covidTestResultRecord: statusToInclude = record.mainRecord?.listStatus
         case .medication: statusToInclude = record.mainRecord?.listStatus
         case .immunization: statusToInclude = record.mainRecord?.listStatus
+        case .healthVisit: record.mainRecord?.listStatus
+        case .specialAuthorityDrug: record.mainRecord?.listStatus
         case .laboratoryOrder(let model):
             // I think we should use model.orderStatus?
             switch record.mainRecord?.status?.lowercased() {
@@ -84,6 +86,7 @@ class UserRecordListView: UIView {
             default:
                 statusToInclude = record.mainRecord?.status ?? ""
             }
+       
         }
         let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
         recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"

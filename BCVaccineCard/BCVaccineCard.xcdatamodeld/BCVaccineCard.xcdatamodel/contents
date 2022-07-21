@@ -28,6 +28,19 @@
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="covidTestResults" inverseEntity="Patient"/>
         <relationship name="results" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TestResult" inverseName="parentTest" inverseEntity="TestResult"/>
     </entity>
+    <entity name="HealthVisit" representedClassName="HealthVisit" syncable="YES">
+        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="encounterDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="practitionerName" optional="YES" attributeType="String"/>
+        <attribute name="specialtyDescription" optional="YES" attributeType="String"/>
+        <relationship name="clinic" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="HealthVisitClinic"/>
+        <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="healthVisits" inverseEntity="Patient"/>
+    </entity>
+    <entity name="HealthVisitClinic" representedClassName="HealthVisitClinic" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="healthVisit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HealthVisitClinic" inverseName="healthVisit" inverseEntity="HealthVisitClinic"/>
+    </entity>
     <entity name="Immunization" representedClassName="Immunization" syncable="YES">
         <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="dateOfImmunization" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -97,9 +110,11 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
+        <relationship name="healthVisits" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HealthVisit" inverseName="patient" inverseEntity="HealthVisit"/>
         <relationship name="immunizations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Immunization" inverseName="patient" inverseEntity="Immunization"/>
         <relationship name="laboratoryOrders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LaboratoryOrder" inverseName="patient" inverseEntity="LaboratoryOrder"/>
         <relationship name="prescriptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Perscription" inverseName="patient" inverseEntity="Perscription"/>
+        <relationship name="specialAuthorityDrugs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SpecialAuthorityDrug" inverseName="patient" inverseEntity="SpecialAuthorityDrug"/>
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="patient" inverseEntity="VaccineCard"/>
     </entity>
     <entity name="Perscription" representedClassName="Perscription" syncable="YES">
@@ -128,6 +143,18 @@
         <attribute name="postalCode" optional="YES" attributeType="String"/>
         <attribute name="province" optional="YES" attributeType="String"/>
         <relationship name="prescription" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Perscription" inverseName="pharmacy" inverseEntity="Perscription"/>
+    </entity>
+    <entity name="SpecialAuthorityDrug" representedClassName="SpecialAuthorityDrug" syncable="YES">
+        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="drugName" optional="YES" attributeType="String"/>
+        <attribute name="effectiveDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="expiryDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="prescriberFirstName" optional="YES" attributeType="String"/>
+        <attribute name="prescriberLastName" optional="YES" attributeType="String"/>
+        <attribute name="referenceNumber" optional="YES" attributeType="String"/>
+        <attribute name="requestedDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="requestStatus" optional="YES" attributeType="String"/>
+        <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="specialAuthorityDrugs" inverseEntity="Patient"/>
     </entity>
     <entity name="TestResult" representedClassName=".TestResult" syncable="YES">
         <attribute name="collectionDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -161,15 +188,18 @@
         <element name="Comment" positionX="162" positionY="396" width="128" height="194"/>
         <element name="CovidImmunizationRecord" positionX="280.58984375" positionY="979.82421875" width="128" height="104"/>
         <element name="CovidLabTestResult" positionX="70.65234375" positionY="497.984375" width="128" height="119"/>
+        <element name="HealthVisit" positionX="171" positionY="405" width="128" height="134"/>
+        <element name="HealthVisitClinic" positionX="180" positionY="414" width="128" height="59"/>
         <element name="Immunization" positionX="180" positionY="414" width="128" height="164"/>
         <element name="ImmunizationAgent" positionX="171" positionY="405" width="128" height="104"/>
         <element name="ImmunizationDetails" positionX="162" positionY="396" width="128" height="74"/>
         <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="254"/>
         <element name="LaboratoryTest" positionX="171" positionY="405" width="128" height="119"/>
         <element name="Medication" positionX="180" positionY="414" width="128" height="209"/>
-        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="179"/>
+        <element name="Patient" positionX="234.6484375" positionY="237.27734375" width="128" height="209"/>
         <element name="Perscription" positionX="162" positionY="396" width="128" height="209"/>
         <element name="Pharmacy" positionX="171" positionY="405" width="128" height="194"/>
+        <element name="SpecialAuthorityDrug" positionX="162" positionY="405" width="128" height="179"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
         <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="179"/>
     </elements>
