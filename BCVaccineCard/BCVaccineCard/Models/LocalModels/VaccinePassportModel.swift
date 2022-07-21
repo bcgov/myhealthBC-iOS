@@ -21,7 +21,7 @@ enum VaccineStatus: String, Codable {
     
     var getColor: UIColor {
         switch self {
-        case .fully: return AppColours.vaccinatedGreen
+        case .fully: return AppColours.green
         case .partially: return AppColours.partiallyVaxedBlue
         case .notVaxed: return .darkGray //Note: If this gets used, we will need to change the color to the actual grey
         }

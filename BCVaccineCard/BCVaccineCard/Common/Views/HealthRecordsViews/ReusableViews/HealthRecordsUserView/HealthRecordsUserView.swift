@@ -55,8 +55,7 @@ class HealthRecordsUserView: UIView {
         nameLabel.font = HealthRecordsUserView.nameFont
         nameLabel.textColor = AppColours.lightBlueText
         recordCountLabel.font = UIFont.bcSansRegularWithSize(size: 13)
-        // TODO: put in AppColours
-        recordCountLabel.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
+        recordCountLabel.textColor = AppColours.greyText
         recordIconImageView.image = UIImage(named: "vaccine-record-icon")
     }
     

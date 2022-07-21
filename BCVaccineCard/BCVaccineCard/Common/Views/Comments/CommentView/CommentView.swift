@@ -29,7 +29,7 @@ class CommentView: UIView {
         textView.sizeToFit()
         textView.isScrollEnabled = false
         self.backgroundColor = AppColours.commentBackground
-        dateTimeLabel.textColor = AppColours.commentDateTime
+        dateTimeLabel.textColor = AppColours.greyText
         textView.textColor = AppColours.textBlack
         
         textView.font = CommentView.textFont

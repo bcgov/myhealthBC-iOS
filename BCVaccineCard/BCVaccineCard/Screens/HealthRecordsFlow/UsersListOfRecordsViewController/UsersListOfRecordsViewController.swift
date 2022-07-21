@@ -345,6 +345,10 @@ extension UsersListOfRecordsViewController {
                         showItem = filter.recordTypes.contains(.LabTests)
                     case .immunization:
                         showItem = filter.recordTypes.contains(.Immunizations)
+                    case .healthVisit:
+                        showItem = filter.recordTypes.contains(.HeathVisits)
+                    case .specialAuthorityDrug:
+                        showItem = filter.recordTypes.contains(.SpecialAuthorityDrugs)
                     }
                 }
                 // Filter by date
@@ -651,6 +655,10 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         case .laboratoryOrder:
             return
         case .immunization:
+            return
+        case .healthVisit(model: let model):
+            return
+        case .specialAuthorityDrug(model: let model):
             return
         }
     }

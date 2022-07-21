@@ -34,8 +34,12 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
             recordView = MedicationRecordDetailView(frame: .zero)
         case .laboratoryOrder:
             recordView = LabOrderRecordDetailView(frame: .zero)
-        case .immunization(model: let model):
+        case .immunization:
             recordView = ImmunizationRecordDetailView(frame: .zero)
+        case .healthVisit:
+            recordView = HealthVisitRecordDetailView(frame: .zero)
+        case .specialAuthorityDrug:
+            recordView = SpecialAuthorityDrugDetailView(frame: .zero)
         }
         self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(recordView)

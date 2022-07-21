@@ -38,9 +38,12 @@ class LabOrderBsnnerTableViewCell: UITableViewCell, UITextViewDelegate {
             titleLabel.text = "Your test has been cancelled"
             body = NSMutableAttributedString(string: "Find resources to learn about your lab test and what the results mean", attributes: fontAttribute)
             _ = body.setAsLink(textToFind: "your lab test and what the results mean", linkURL: "https://www.healthgateway.gov.bc.ca/faq")
+            textView.isUserInteractionEnabled = true
+            textView.isSelectable = true
             
         }
         textView.attributedText = body
+        textView.delegate = self
         style()
         layoutIfNeeded()
         textView.sizeToFit()

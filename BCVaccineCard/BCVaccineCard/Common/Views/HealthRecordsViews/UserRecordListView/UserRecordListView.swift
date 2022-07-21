@@ -57,8 +57,7 @@ class UserRecordListView: UIView {
         recordTypeTitleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         recordTypeTitleLabel.textColor = AppColours.lightBlueText
         recordTypeSubtitleLabel.font = UIFont.bcSansRegularWithSize(size: 13)
-        // TODO: put in AppColours
-        recordTypeSubtitleLabel.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
+        recordTypeSubtitleLabel.textColor = AppColours.greyText
         self.layoutIfNeeded()
     }
     
@@ -68,11 +67,19 @@ class UserRecordListView: UIView {
         recordTypeTitleLabel.text = record.title
         var statusToInclude: String?
         switch record.type {
-        case .covidImmunizationRecord: statusToInclude = nil
-        case .covidTestResultRecord: statusToInclude = record.mainRecord?.listStatus
-        case .medication: statusToInclude = record.mainRecord?.listStatus
-        case .immunization: statusToInclude = record.mainRecord?.listStatus
-        case .laboratoryOrder(let model):
+        case .covidImmunizationRecord:
+            statusToInclude = nil
+        case .covidTestResultRecord:
+            statusToInclude = record.mainRecord?.listStatus
+        case .medication:
+            statusToInclude = record.mainRecord?.listStatus
+        case .immunization:
+            statusToInclude = record.mainRecord?.listStatus
+        case .healthVisit:
+            statusToInclude = record.mainRecord?.listStatus
+        case .specialAuthorityDrug:
+            statusToInclude = record.mainRecord?.listStatus
+        case .laboratoryOrder:
             // I think we should use model.orderStatus?
             switch record.mainRecord?.status?.lowercased() {
             case "held", "pending", "partial":
@@ -84,10 +91,12 @@ class UserRecordListView: UIView {
             default:
                 statusToInclude = record.mainRecord?.status ?? ""
             }
+       
         }
         let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
         recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"
         setupAccessibility()
+        layoutIfNeeded()
     }
     
     // TODO: Setup accessibility

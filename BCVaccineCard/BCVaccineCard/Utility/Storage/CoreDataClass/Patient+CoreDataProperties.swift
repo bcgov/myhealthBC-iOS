@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-07-07.
+//  Created by Amir on 2022-07-13.
 //
 //
 
@@ -22,9 +22,11 @@ extension Patient {
     @NSManaged public var name: String?
     @NSManaged public var phn: String?
     @NSManaged public var covidTestResults: NSSet?
+    @NSManaged public var healthVisits: NSSet?
     @NSManaged public var immunizations: NSSet?
     @NSManaged public var laboratoryOrders: NSSet?
     @NSManaged public var prescriptions: NSSet?
+    @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
 
 }
@@ -43,6 +45,23 @@ extension Patient {
 
     @objc(removeCovidTestResults:)
     @NSManaged public func removeFromCovidTestResults(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for healthVisits
+extension Patient {
+
+    @objc(addHealthVisitsObject:)
+    @NSManaged public func addToHealthVisits(_ value: HealthVisit)
+
+    @objc(removeHealthVisitsObject:)
+    @NSManaged public func removeFromHealthVisits(_ value: HealthVisit)
+
+    @objc(addHealthVisits:)
+    @NSManaged public func addToHealthVisits(_ values: NSSet)
+
+    @objc(removeHealthVisits:)
+    @NSManaged public func removeFromHealthVisits(_ values: NSSet)
 
 }
 
@@ -94,6 +113,23 @@ extension Patient {
 
     @objc(removePrescriptions:)
     @NSManaged public func removeFromPrescriptions(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for specialAuthorityDrugs
+extension Patient {
+
+    @objc(addSpecialAuthorityDrugsObject:)
+    @NSManaged public func addToSpecialAuthorityDrugs(_ value: SpecialAuthorityDrug)
+
+    @objc(removeSpecialAuthorityDrugsObject:)
+    @NSManaged public func removeFromSpecialAuthorityDrugs(_ value: SpecialAuthorityDrug)
+
+    @objc(addSpecialAuthorityDrugs:)
+    @NSManaged public func addToSpecialAuthorityDrugs(_ values: NSSet)
+
+    @objc(removeSpecialAuthorityDrugs:)
+    @NSManaged public func removeFromSpecialAuthorityDrugs(_ values: NSSet)
 
 }
 

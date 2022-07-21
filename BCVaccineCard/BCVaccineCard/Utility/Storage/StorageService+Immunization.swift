@@ -31,22 +31,26 @@ extension StorageService: StorageImmunizationManager {
             detailsObject = nil
         }
         
-        var dateOfImmunization: Date?
+        // TODO: UNCOMMENT TO ENABLE FORECAST
+//        let immForecast: ImmunizationForecast?
+//        if let remoteForecast = object.forecast, let forecast = storeImmunizationForecast(object: remoteForecast) {
+//            immForecast = forecast
+//        } else {
+//            immForecast = nil
+//        }
+        let immForecast: ImmunizationForecast? = nil
         
-        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dateOfImmunization ?? "") {
-            dateOfImmunization = timezoneDate
-        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dateOfImmunization ?? "") {
-            dateOfImmunization = nozoneDate
-        }
+        
         return storeImmunization(
             patient: patient,
             id: object.id,
-            dateOfImmunization: dateOfImmunization,
+            dateOfImmunization: getGatewayDate(from: object.dateOfImmunization),
             providerOrClinic: object.providerOrClinic,
             status: object.status,
             targetedDisease: object.targetedDisease,
             valid: object.valid,
             immunizationDetails: detailsObject,
+            forecast: immForecast,
             authenticated: authenticated
             )
                                                      
@@ -61,6 +65,7 @@ extension StorageService: StorageImmunizationManager {
         targetedDisease: String?,
         valid: Bool?,
         immunizationDetails: ImmunizationDetails?,
+        forecast: ImmunizationForecast?,
         authenticated: Bool
     ) -> Immunization? {
         guard let context = managedContext else {return nil}
@@ -74,6 +79,7 @@ extension StorageService: StorageImmunizationManager {
         immunization.immunizationDetails = immunizationDetails
         immunization.authenticated = authenticated
         immunization.patient = patient
+        immunization.forecast = forecast
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .Immunization, object: immunization))
@@ -86,6 +92,42 @@ extension StorageService: StorageImmunizationManager {
     
     private func storeImmunizationDetails(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.ImmunizationDetails) -> ImmunizationDetails? {
         return storeImmunizationDetails(name: object.name, immunizationAgents: object.immunizationAgents ?? [])
+    }
+    
+    private func storeImmunizationForecast(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Immunization.Forecast) -> ImmunizationForecast? {
+        return storeImmunizationForecast(
+            recommendationID: object.recommendationID,
+            createDate: getGatewayDate(from: object.createDate),
+            status: object.status,
+            displayName: object.displayName,
+            eligibleDate: getGatewayDate(from: object.eligibleDate),
+            dueDate: getGatewayDate(from: object.dueDate)
+        )
+    }
+    
+    private func storeImmunizationForecast(
+       recommendationID: String?,
+       createDate: Date?,
+       status: String?,
+       displayName: String?,
+       eligibleDate: Date?,
+       dueDate: Date?
+    ) -> ImmunizationForecast? {
+        guard let context = managedContext else {return nil}
+        let forecast = ImmunizationForecast(context: context)
+        forecast.recommendationID = recommendationID
+        forecast.createDate = createDate
+        forecast.status = status
+        forecast.displayName = displayName
+        forecast.eligibleDate = eligibleDate
+        forecast.dueDate = dueDate
+        do {
+            try context.save()
+            return forecast
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
     }
 
     private func storeImmunizationDetails(
