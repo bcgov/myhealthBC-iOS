@@ -28,24 +28,20 @@ extension StorageService: StorageImmunizationManager {
             detailsObject = nil
         }
         
-        var dateOfImmunization: Date?
+        // TODO: UNCOMMENT TO ENABLE FORECAST
+//        let immForecast: ImmunizationForecast?
+//        if let remoteForecast = object.forecast, let forecast = storeImmunizationForecast(object: remoteForecast) {
+//            immForecast = forecast
+//        } else {
+//            immForecast = nil
+//        }
+        let immForecast: ImmunizationForecast? = nil
         
-        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: object.dateOfImmunization ?? "") {
-            dateOfImmunization = timezoneDate
-        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: object.dateOfImmunization ?? "") {
-            dateOfImmunization = nozoneDate
-        }
         
-        let immForecast: ImmunizationForecast?
-        if let remoteForecast = object.forecast, let forecast = storeImmunizationForecast(object: remoteForecast) {
-            immForecast = forecast
-        } else {
-            immForecast = nil
-        }
         return storeImmunization(
             patient: patient,
             id: object.id,
-            dateOfImmunization: dateOfImmunization,
+            dateOfImmunization: getGatewayDate(from: object.dateOfImmunization),
             providerOrClinic: object.providerOrClinic,
             status: object.status,
             targetedDisease: object.targetedDisease,
