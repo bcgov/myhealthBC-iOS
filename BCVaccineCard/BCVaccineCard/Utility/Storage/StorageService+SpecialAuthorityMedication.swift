@@ -35,7 +35,18 @@ protocol StorageSpecialAuthorityMedicationManager {
 extension StorageService: StorageSpecialAuthorityMedicationManager {
     func storeSpecialAuthorityMedication(patient: Patient, object: AuthenticatedSpecialAuthorityDrugsResponseModel.SpecialAuthorityDrug, authenticated: Bool) -> SpecialAuthorityDrug? {
         
-        return storeSpecialAuthorityMedication(authenticated: authenticated, referenceNumber: object.requestedDate, drugName: object.drugName, requestStatus: object.requestStatus, prescriberFirstName: object.prescriberFirstName, prescriberLastName: object.prescriberLastName, requestedDate: getGatewayDate(from: object.requestedDate), effectiveDate: getGatewayDate(from: object.effectiveDate), expiryDate: getGatewayDate(from: object.expiryDate), patient: patient)
+        return storeSpecialAuthorityMedication(
+            authenticated: authenticated,
+            referenceNumber: object.referenceNumber,
+            drugName: object.drugName,
+            requestStatus: object.requestStatus,
+            prescriberFirstName: object.prescriberFirstName,
+            prescriberLastName: object.prescriberLastName,
+            requestedDate: getGatewayDate(from: object.requestedDate),
+            effectiveDate: getGatewayDate(from: object.effectiveDate),
+            expiryDate: getGatewayDate(from: object.expiryDate),
+            patient: patient
+        )
     }
     
     private func storeSpecialAuthorityMedication(
@@ -61,9 +72,6 @@ extension StorageService: StorageSpecialAuthorityMedicationManager {
         object.effectiveDate = effectiveDate
         object.expiryDate = expiryDate
         object.patient = patient
-        if expiryDate == nil {
-            print("HH")
-        }
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .SpecialAuthorityMedication, object: object))

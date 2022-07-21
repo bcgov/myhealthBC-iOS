@@ -96,6 +96,12 @@ extension Date {
             return formatter
         }()
         
+        static let forecastDueDate: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MMM-dd"
+            return formatter
+        }()
+        
         //MARK: - Date
         static let shortDate: DateFormatter = {
             let formatter = DateFormatter()
@@ -223,7 +229,7 @@ extension Date {
     var gatewayDateAndTimeWithMSAndTimeZone: String { return Formatter.gatewayDateAndTimeWithMSAndTimeZone.string(from: self) }
     var labOrderDateTime: String { return Formatter.labOrderDateTime.string(from: self) }
     var commentsDateTime: String { return Formatter.commentsDateTime.string(from: self) }
-    
+    var forecastDueDate: String { return Formatter.forecastDueDate.string(from: self) }
     //MARK: - Date Strings
     var shortDateString: String { return Formatter.shortDate.string(from: self) }
     var mediumDateString: String { return Formatter.mediumDate.string(from: self) }

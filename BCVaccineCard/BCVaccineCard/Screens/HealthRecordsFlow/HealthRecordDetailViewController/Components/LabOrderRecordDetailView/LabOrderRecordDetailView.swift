@@ -48,9 +48,14 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     }
     
     override func setup() {
+        tableView?.register(UINib.init(nibName: LabOrderBsnnerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: LabOrderBsnnerTableViewCell.getName)
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
+    }
+    
+    public func labOrderHeaderCell(indexPath: IndexPath, tableView: UITableView) -> LabOrderBsnnerTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: LabOrderBsnnerTableViewCell.getName, for: indexPath) as? LabOrderBsnnerTableViewCell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

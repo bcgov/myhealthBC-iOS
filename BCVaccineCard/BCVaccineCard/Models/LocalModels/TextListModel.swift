@@ -31,7 +31,7 @@ struct TextProperties: Codable {
             switch self {
             case .black: return AppColours.textBlack
             case .red: return AppColours.appRed
-            case .green: return AppColours.vaccinatedGreen
+            case .green: return AppColours.green
             }
         }
     }

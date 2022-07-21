@@ -28,7 +28,7 @@ class CommentViewTableViewCell: UITableViewCell {
         commentText.backgroundColor = .clear
         self.backgroundColor = .clear
         container.backgroundColor = AppColours.commentBackground
-        dateTimeLabel.textColor = AppColours.commentDateTime
+        dateTimeLabel.textColor = AppColours.greyText
         commentText.textColor = AppColours.textBlack
         
         commentText.font = CommentView.textFont

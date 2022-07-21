@@ -25,8 +25,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         // TODO: put in AppColours
         newsDetailsLabel.textColor =  UIColor(red: 0.192, green: 0.192, blue: 0.196, alpha: 1)
         newsDateLabel.font = UIFont.bcSansRegularWithSize(size: 15)
-        // TODO: put in AppColours
-        newsDateLabel.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
+        newsDateLabel.textColor = AppColours.greyText
     }
 
 //    func configure(item: NewsFeedData.Channel.Item) {
