@@ -126,7 +126,7 @@ extension ImmunizationRecordDetailView {
                             text: "Product:",
                             bolded: true),
                         subtext: TextProperties(
-                            text: agent.name ?? "--",
+                            text: agent.productName ?? "--",
                             bolded: false))
                 )
                 fields.append(
