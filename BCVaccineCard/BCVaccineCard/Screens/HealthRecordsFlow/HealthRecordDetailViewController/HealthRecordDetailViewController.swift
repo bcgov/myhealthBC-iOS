@@ -120,11 +120,13 @@ extension HealthRecordDetailViewController {
                 rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         default:
-            rightNavButton = self.authenticatedRecord ? nil :
-            NavButton(
-                title: .delete,
-                image: nil, action: #selector(self.deleteButton),
-                accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+            // NOTE: Enable Delete Record
+//            rightNavButton = self.authenticatedRecord ? nil :
+//            NavButton(
+//                title: .delete,
+//                image: nil, action: #selector(self.deleteButton),
+//                accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+            rightNavButton = nil
         }
         
         self.navDelegate?.setNavigationBarWith(title: dataSource.title,
