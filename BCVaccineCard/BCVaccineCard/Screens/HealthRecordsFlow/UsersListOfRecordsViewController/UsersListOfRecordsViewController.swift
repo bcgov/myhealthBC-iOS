@@ -587,9 +587,11 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     private func ableToDeleteRecord(at index: Int) -> Bool {
-        guard dataSource.indices.contains(index) else { return false }
-        let record = dataSource[index]
-        return !record.isAuthenticated
+        // NOTE: Enable Delete Record
+//        guard dataSource.indices.contains(index) else { return false }
+//        let record = dataSource[index]
+//        return !record.isAuthenticated
+        return false
     }
     
     private func deleteRecord(at index: Int, reInitEditMode: Bool, manuallyAdded: Bool) {
