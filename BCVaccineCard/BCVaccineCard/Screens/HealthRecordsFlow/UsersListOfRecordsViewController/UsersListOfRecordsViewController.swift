@@ -346,9 +346,11 @@ extension UsersListOfRecordsViewController {
                     case .immunization:
                         showItem = filter.recordTypes.contains(.Immunizations)
                     case .healthVisit:
-                        showItem = filter.recordTypes.contains(.HeathVisits)
+                        break
+//                        showItem = filter.recordTypes.contains(.HeathVisits)
                     case .specialAuthorityDrug:
-                        showItem = filter.recordTypes.contains(.SpecialAuthorityDrugs)
+                        break
+//                        showItem = filter.recordTypes.contains(.SpecialAuthorityDrugs)
                     }
                 }
                 // Filter by date
