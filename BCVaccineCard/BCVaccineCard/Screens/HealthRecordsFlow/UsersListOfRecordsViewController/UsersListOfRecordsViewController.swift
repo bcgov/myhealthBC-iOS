@@ -345,6 +345,10 @@ extension UsersListOfRecordsViewController {
                         showItem = filter.recordTypes.contains(.LabTests)
                     case .immunization:
                         showItem = filter.recordTypes.contains(.Immunizations)
+                    case .healthVisit:
+                        showItem = filter.recordTypes.contains(.HeathVisits)
+                    case .specialAuthorityDrug:
+                        showItem = filter.recordTypes.contains(.SpecialAuthorityDrugs)
                     }
                 }
                 // Filter by date
@@ -583,9 +587,11 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     private func ableToDeleteRecord(at index: Int) -> Bool {
-        guard dataSource.indices.contains(index) else { return false }
-        let record = dataSource[index]
-        return !record.isAuthenticated
+        // NOTE: Enable Delete Record
+//        guard dataSource.indices.contains(index) else { return false }
+//        let record = dataSource[index]
+//        return !record.isAuthenticated
+        return false
     }
     
     private func deleteRecord(at index: Int, reInitEditMode: Bool, manuallyAdded: Bool) {
@@ -651,6 +657,10 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         case .laboratoryOrder:
             return
         case .immunization:
+            return
+        case .healthVisit(model: let model):
+            return
+        case .specialAuthorityDrug(model: let model):
             return
         }
     }

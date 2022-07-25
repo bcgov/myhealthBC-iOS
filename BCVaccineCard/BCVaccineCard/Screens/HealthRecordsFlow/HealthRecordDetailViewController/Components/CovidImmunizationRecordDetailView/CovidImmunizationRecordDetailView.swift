@@ -33,10 +33,16 @@ class CovidImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableVie
     private var fields: [[TextListModel]] = [[]]
 
     override func setup() {
+        tableView?.register(UINib.init(nibName: CovidImmunizationBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CovidImmunizationBannerTableViewCell.getName)
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
     }
+    
+    public func CovidImmunizationBannerCell(indexPath: IndexPath, tableView: UITableView) -> CovidImmunizationBannerTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: CovidImmunizationBannerTableViewCell.getName, for: indexPath) as? CovidImmunizationBannerTableViewCell
+    }
+  
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return fields.count + 1 // Immunization dose sets + header

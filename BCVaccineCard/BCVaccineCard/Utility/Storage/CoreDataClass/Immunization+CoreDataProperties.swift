@@ -1,8 +1,8 @@
 //
 //  Immunization+CoreDataProperties.swift
-//  BCVaccineCard
+//  
 //
-//  Created by Connor Ogilvie on 2022-07-05.
+//  Created by Amir on 2022-07-19.
 //
 //
 
@@ -25,5 +25,6 @@ extension Immunization {
     @NSManaged public var valid: Bool
     @NSManaged public var immunizationDetails: ImmunizationDetails?
     @NSManaged public var patient: Patient?
+    @NSManaged public var forecast: ImmunizationForecast?
 
 }

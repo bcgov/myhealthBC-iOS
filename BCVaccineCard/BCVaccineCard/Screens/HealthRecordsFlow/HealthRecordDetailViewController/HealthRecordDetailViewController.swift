@@ -120,11 +120,13 @@ extension HealthRecordDetailViewController {
                 rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         default:
-            rightNavButton = self.authenticatedRecord ? nil :
-            NavButton(
-                title: .delete,
-                image: nil, action: #selector(self.deleteButton),
-                accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+            // NOTE: Enable Delete Record
+//            rightNavButton = self.authenticatedRecord ? nil :
+//            NavButton(
+//                title: .delete,
+//                image: nil, action: #selector(self.deleteButton),
+//                accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitle, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHint))
+            rightNavButton = nil
         }
         
         self.navDelegate?.setNavigationBarWith(title: dataSource.title,
@@ -156,6 +158,10 @@ extension HealthRecordDetailViewController {
             case .medication, .laboratoryOrder:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             case .immunization(model: let model):
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
+            case .healthVisit(model: let model):
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
+            case .specialAuthorityDrug(model: let model):
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
             if self.userNumberHealthRecords > 1 {
