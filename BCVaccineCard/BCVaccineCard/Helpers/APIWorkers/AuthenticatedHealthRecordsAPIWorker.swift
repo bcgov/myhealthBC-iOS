@@ -226,10 +226,10 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials, completion: {})
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
-            self.getAuthenticatedSpecialAuthorityDrugs(authCredentials: authCredentials)
+//            self.getAuthenticatedSpecialAuthorityDrugs(authCredentials: authCredentials)
             self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
-            self.getAuthenticatedImmunizations(authCredentials: authCredentials)
-            self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
+//            self.getAuthenticatedImmunizations(authCredentials: authCredentials)
+//            self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
             return
         }
@@ -1264,10 +1264,10 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 .VaccineCard : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
                 .TestResults : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
                 .MedicationStatement : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
-                .SpecialAuthorityDrugs: FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+//                .SpecialAuthorityDrugs: FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
                 .LaboratoryOrders : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
-                .Immunizations: FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
-                .HealthVisits: FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+//                .Immunizations: FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
+//                .HealthVisits: FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0),
                 .Comments : FetchStatus(requestCompleted: false, attemptedCount: 0, successfullCount: 0)
             ])
             return
