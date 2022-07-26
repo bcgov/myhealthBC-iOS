@@ -5,6 +5,8 @@
 //  Created by Amir on 2021-12-03.
 //
 
+// NOTE: For new Immz UI, we need to remove the createImmunizationRecords functionality
+
 import Foundation
 import BCVaccineValidator
 
@@ -36,7 +38,7 @@ protocol StorageVaccineCardManager {
         completion: @escaping(VaccineCard?)->Void
     )
     
-//    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([CovidImmunizationRecord])->Void)
+    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([CovidImmunizationRecord])->Void)
     
     // MARK: Update
     
@@ -93,27 +95,27 @@ extension StorageService: StorageVaccineCardManager {
         card.firHash = hash
         card.issueDate = issueDate
         if authenticated {
-//            createImmunizationRecords(for: card, manuallyAdded: manuallyAdded) { records in
-//                for record in records {
-//                    card.addToImmunizationRecord(record)
-//                }
-//                do {
-//                    try context.save()
-//                    self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
-//                    completion(card)
-//                } catch let error as NSError {
-//                    Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-//                    completion(nil)
-//                }
-//            }
-            do {
-                try context.save()
-                self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
-                completion(card)
-            } catch let error as NSError {
-                Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-                completion(nil)
+            createImmunizationRecords(for: card, manuallyAdded: manuallyAdded) { records in
+                for record in records {
+                    card.addToImmunizationRecord(record)
+                }
+                do {
+                    try context.save()
+                    self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
+                    completion(card)
+                } catch let error as NSError {
+                    Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+                    completion(nil)
+                }
             }
+//            do {
+//                try context.save()
+//                self.notify(event: StorageEvent(event: .Save, entity: .VaccineCard, object: card))
+//                completion(card)
+//            } catch let error as NSError {
+//                Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+//                completion(nil)
+//            }
         } else {
             do {
                 try context.save()
@@ -160,31 +162,31 @@ extension StorageService: StorageVaccineCardManager {
             card.removeFromImmunizationRecord(immunizations)
         }
         if authenticated {
-//            createImmunizationRecords(for: card, manuallyAdded: manuallyAdded) { records in
-//                for record in records {
-//                    card.addToImmunizationRecord(record)
-//                }
-//                do {
-//                    try context.save()
-//                    DispatchQueue.main.async {
-//                        self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
-//                        return completion(card)
-//                    }
-//                } catch let error as NSError {
-//                    Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-//                    completion(nil)
-//                }
-//            }
-            do {
-                try context.save()
-                DispatchQueue.main.async {
-                    self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
-                    return completion(card)
+            createImmunizationRecords(for: card, manuallyAdded: manuallyAdded) { records in
+                for record in records {
+                    card.addToImmunizationRecord(record)
                 }
-            } catch let error as NSError {
-                Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-                completion(nil)
+                do {
+                    try context.save()
+                    DispatchQueue.main.async {
+                        self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+                        return completion(card)
+                    }
+                } catch let error as NSError {
+                    Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+                    completion(nil)
+                }
             }
+//            do {
+//                try context.save()
+//                DispatchQueue.main.async {
+//                    self.notify(event: StorageEvent(event: .Update, entity: .VaccineCard, object: card))
+//                    return completion(card)
+//                }
+//            } catch let error as NSError {
+//                Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+//                completion(nil)
+//            }
         } else {
             do {
                 try context.save()
@@ -273,26 +275,26 @@ extension StorageService: StorageVaccineCardManager {
     }
     
     // MARK: Helpers
-//    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([CovidImmunizationRecord])->Void) {
-//        guard let qrCode = card.code, let context = managedContext else {return completion([])}
-//        BCVaccineValidator.shared.validate(code: qrCode) { result in
-//            guard let result = result.result else {return completion([])}
-//            var immunizations: [CovidImmunizationRecord] = []
-//            for record in result.immunizations {
-//                let model = CovidImmunizationRecord(context: context)
-//                model.snomed = record.snomed
-//                if let dateString = record.date, let date = Date.Formatter.yearMonthDay.date(from: dateString) {
-//                    model.date = date
-//                }
-//                model.provider = record.provider
-//                model.lotNumber = record.lotNumber
-//                model.date = record.date?.vaxDate()
-//                model.snomed = record.snomed
-//                immunizations.append(model)
-//            }
-//            return completion(immunizations)
-//        }
-//    }
+    func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([CovidImmunizationRecord])->Void) {
+        guard let qrCode = card.code, let context = managedContext else {return completion([])}
+        BCVaccineValidator.shared.validate(code: qrCode) { result in
+            guard let result = result.result else {return completion([])}
+            var immunizations: [CovidImmunizationRecord] = []
+            for record in result.immunizations {
+                let model = CovidImmunizationRecord(context: context)
+                model.snomed = record.snomed
+                if let dateString = record.date, let date = Date.Formatter.yearMonthDay.date(from: dateString) {
+                    model.date = date
+                }
+                model.provider = record.provider
+                model.lotNumber = record.lotNumber
+                model.date = record.date?.vaxDate()
+                model.snomed = record.snomed
+                immunizations.append(model)
+            }
+            return completion(immunizations)
+        }
+    }
     
     fileprivate func getState(of card: AppVaccinePassportModel, completion: @escaping(AppVaccinePassportModel.CardState) -> Void) {
         
