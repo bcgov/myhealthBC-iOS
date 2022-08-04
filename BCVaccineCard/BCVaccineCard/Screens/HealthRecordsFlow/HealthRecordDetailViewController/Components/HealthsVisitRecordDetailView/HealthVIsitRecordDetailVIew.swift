@@ -69,10 +69,17 @@ extension HealthVisitRecordDetailView {
         let fields: [TextListModel] = [
             TextListModel(
                 header: TextProperties(
-                    text: "Clinic/Practitioner",
+                    text: "Clinic Name:",
                     bolded: true),
                 subtext: TextProperties(
                     text: object.clinic?.name ?? "",
+                    bolded: false)),
+            TextListModel(
+                header: TextProperties(
+                    text: "Practiner Name:",
+                    bolded: true),
+                subtext: TextProperties(
+                    text: object.practitionerName ?? "",
                     bolded: false))
         ]
        
