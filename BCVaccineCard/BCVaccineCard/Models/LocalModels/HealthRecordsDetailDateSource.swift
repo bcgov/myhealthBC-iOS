@@ -154,7 +154,7 @@ struct HealthRecordsDetailDataSource {
             id = model.id
             title = .covid19TestResultTitle
             detailNavTitle = .covid19TestResultTitle
-            name = model.resultArray.first?.patientDisplayName ?? ""
+            name = model.resultArray.first?.patientDisplayName ?? "-"
             image = UIImage(named: "blue-bg-test-result-icon")
             deleteAlertTitle = .deleteTestResult
             deleteAlertMessage = .deleteTestResultMessage
@@ -162,54 +162,45 @@ struct HealthRecordsDetailDataSource {
             id = model.id
             title = model.medication?.brandName ?? "Statins"
             detailNavTitle = model.medication?.brandName ?? "Statins"
-            name = model.patient?.name ?? ""
+            name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-medication-record-icon")
             deleteAlertTitle = "N/A" // Note: We can't delete an auth medical record, so this won't be necessary
             deleteAlertMessage = "Shouldn't see this" // Showing these values for testing purposes
         case .laboratoryOrder(model: let model):
             id = model.id
-            title = model.commonName ?? ""
+            title = model.commonName ?? "-"
             detailNavTitle = "Lab test"
-            name = model.patient?.name ?? ""
+            name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-laboratory-record-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated lab result
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
-            if title == "" {
-                print("--")
-            }
+
         case .immunization(model: let model):
             id = model.id
-            title = model.immunizationDetails?.name ?? ""
-            detailNavTitle = model.immunizationDetails?.name ?? ""
-            name = model.patient?.name ?? ""
+            title = model.immunizationDetails?.name ?? "-"
+            detailNavTitle = model.immunizationDetails?.name ?? "-"
+            name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-vaccine-record-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
-            if title == "" {
-                print("--")
-            }
+
         case .healthVisit(model: let model):
             id = model.id
-            title = model.specialtyDescription ?? ""
-            detailNavTitle = model.clinic?.name ?? ""
-            name = model.patient?.name ?? ""
+            title = model.specialtyDescription ?? "-"
+            detailNavTitle = model.clinic?.name ?? "-"
+            name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-health-visit-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
-            if title == "" {
-                print("--")
-            }
+
         case .specialAuthorityDrug(model: let model):
             id = model.referenceNumber
-            title = model.drugName ?? ""
-            detailNavTitle = model.drugName ?? ""
-            name = model.patient?.name ?? ""
+            title = model.drugName ?? "-"
+            detailNavTitle = model.drugName ?? "-"
+            name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-special-authority-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
-            if title == "" {
-                print("--")
-            }
         }
     }
 }

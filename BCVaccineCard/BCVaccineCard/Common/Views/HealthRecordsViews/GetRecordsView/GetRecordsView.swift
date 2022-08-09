@@ -15,6 +15,8 @@ class GetRecordsView: UIView {
         case medication
         case laboratoryOrder
         case immunization
+        case healthVisit
+        case SpecialAuthority
         
         var getTitle: String {
             switch self {
@@ -23,6 +25,10 @@ class GetRecordsView: UIView {
             case .medication: return ""
             case .laboratoryOrder: return ""
             case .immunization: return ""
+            case .healthVisit:
+                return ""
+            case .SpecialAuthority:
+                return ""
             }
         }
         
@@ -33,6 +39,10 @@ class GetRecordsView: UIView {
             case .immunization: return ""
             case .medication: return ""
             case .laboratoryOrder: return ""
+            case .healthVisit:
+                return ""
+            case .SpecialAuthority:
+                return ""
             }
         }
         
@@ -43,6 +53,10 @@ class GetRecordsView: UIView {
             case .covidTestResult: return UIImage(named: "test-result-icon")
             case .medication: return nil
             case .laboratoryOrder: return nil
+            case .healthVisit:
+                return nil
+            case .SpecialAuthority:
+                return nil
             }
         }
     }

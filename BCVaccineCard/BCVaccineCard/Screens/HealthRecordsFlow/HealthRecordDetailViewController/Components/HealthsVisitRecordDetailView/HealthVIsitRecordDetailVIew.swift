@@ -38,15 +38,23 @@ class HealthVisitRecordDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fields.count
+        return fields.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         layoutIfNeeded()
-        guard let cell = getCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-        
-        cell.configure(practitioner: model?.healthVisit()?.practitionerName ?? "")
-        return cell
+        if indexPath.row == 0 {
+            guard let cell = getCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+            cell.configure()
+            return cell
+        }
+        if indexPath.row > 0 {
+            
+            guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+            cell.setup(with: fields[indexPath.row - 1])
+            return cell
+        }
+        return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
