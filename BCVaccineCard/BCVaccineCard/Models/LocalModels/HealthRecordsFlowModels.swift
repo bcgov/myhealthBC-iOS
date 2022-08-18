@@ -244,12 +244,12 @@ extension Array where Element == HealthRecord {
                 }
                 return false
             case .HealthVisit(let object):
-                if recordType == .immunization {
+                if recordType == .healthVisit {
                     return object.id == id
                 }
                 return false
             case .SpecialAuthorityDrug(let object):
-                if recordType == .immunization {
+                if recordType == .SpecialAuthority {
                     return object.referenceNumber == id
                 }
                 return false

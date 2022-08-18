@@ -175,7 +175,7 @@ class TabBarController: UITabBarController {
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
         self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
             if response == .Online {
-                self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, sourceVC: .BackgroundFetch)
+                self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, protectiveWord: AuthManager().protectiveWord,sourceVC: .BackgroundFetch)
             }
         })
     }
@@ -251,7 +251,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
             }
         }
         // TODO: Make this a little more reusable - hacky approach
-        if (fetchStatusTypes.contains(.LaboratoryOrders) && fetchStatusTypes.contains(.MedicationStatement) && /*fetchStatusTypes.contains(.SpecialAuthorityDrugs) &&*/ fetchStatusTypes.contains(.TestResults) && fetchStatusTypes.contains(.VaccineCard)) /*&& fetchStatusTypes.contains(.Immunizations) && fetchStatusTypes.contains(.HealthVisits)*/ || (fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.Comments)) {
+        if (fetchStatusTypes.contains(.LaboratoryOrders) && fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.SpecialAuthorityDrugs) && fetchStatusTypes.contains(.TestResults) && fetchStatusTypes.contains(.VaccineCard)) && fetchStatusTypes.contains(.Immunizations) && fetchStatusTypes.contains(.HealthVisits) || (fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.Comments)) {
             let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
             AppDelegate.sharedInstance?.showToast(message: message)
         }
