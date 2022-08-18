@@ -897,7 +897,6 @@ extension AuthenticatedHealthRecordsAPIWorker {
           if let protectiveWord = protectiveWord, completedCount > 0 {
               self.authManager.storeProtectiveWord(protectiveWord: protectiveWord)
               self.authManager.storeMedFetchRequired(bool: false)
-              AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
           }
             let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
             self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
