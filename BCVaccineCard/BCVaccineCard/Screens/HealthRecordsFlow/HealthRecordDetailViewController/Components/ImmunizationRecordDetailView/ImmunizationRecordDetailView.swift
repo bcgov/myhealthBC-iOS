@@ -123,6 +123,15 @@ extension ImmunizationRecordDetailView {
                 fields.append(
                     TextListModel(
                         header: TextProperties(
+                            text: "Immunizing agent:",
+                            bolded: true),
+                        subtext: TextProperties(
+                            text: agent.name ?? "--",
+                            bolded: false))
+                )
+                fields.append(
+                    TextListModel(
+                        header: TextProperties(
                             text: "Product:",
                             bolded: true),
                         subtext: TextProperties(

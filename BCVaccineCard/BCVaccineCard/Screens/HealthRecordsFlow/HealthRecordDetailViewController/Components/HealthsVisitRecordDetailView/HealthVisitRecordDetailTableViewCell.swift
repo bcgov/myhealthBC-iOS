@@ -14,10 +14,10 @@ class HealthVisitRecordDetailTableViewCell: UITableViewCell, UITextViewDelegate 
     @IBOutlet weak var nameLabel: UILabel!
     
     
-    func configure(practitioner: String) {
+    func configure() {
         layoutIfNeeded()
-        nameLabel.text = practitioner
-        titleLabel.text = "Clinic/Practitioner"
+        nameLabel.text = ""
+        titleLabel.text = ""
         disclaimer.delegate = self
         
         titleLabel.font =  UIFont.bcSansBoldWithSize(size: 17)

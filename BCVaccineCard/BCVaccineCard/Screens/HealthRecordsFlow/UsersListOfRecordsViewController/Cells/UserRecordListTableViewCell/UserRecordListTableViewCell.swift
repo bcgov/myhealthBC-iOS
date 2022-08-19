@@ -23,6 +23,11 @@ class UserRecordListTableViewCell: SwipeTableViewCell {
 
     func configure(record: HealthRecordsDetailDataSource) {
         userRecordListView.configure(record: record)
+        if record.title.removeWhiteSpaceFormatting.isEmpty {
+            print(record.type)
+            print(record.id)
+            print("Empty")
+        }
         self.layoutIfNeeded()
     }
     
