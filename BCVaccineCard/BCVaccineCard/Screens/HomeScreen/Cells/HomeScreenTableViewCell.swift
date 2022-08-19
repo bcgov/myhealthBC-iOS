@@ -31,7 +31,7 @@ enum HomeScreenCellType {
     
     var getDescriptionText: String {
         switch self {
-        case .Records: return "Access your lab results, medication history and vaccination records"
+        case .Records: return "Access your lab test results, medication history, immunization records, health visits and more"
         case .Proofs: return "Save proof of vaccination documents for you and your family"
         case .Resources: return "Find trusted health information and resources"
         }
