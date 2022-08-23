@@ -1283,14 +1283,18 @@ extension AuthenticatedHealthRecordsAPIWorker {
 
 extension AuthenticatedHealthRecordsAPIWorker {
     private func decrementLoadCounter() {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount -= 1
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.dataLoadCount -= 1
+            }
         }
     }
     
     private func incrementLoadCounter() {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.dataLoadCount += 1
+            }
         }
     }
 }
