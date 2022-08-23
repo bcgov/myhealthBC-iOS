@@ -678,6 +678,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             // Note: This is where we would have the retry logic, however this is currently not in the payload
             else {
                 self.handleImmunizationsInCoreData(immunizations: immunizations)
+                self.handleImmunizationsRecommendationsInCoreData(payload: immunizations)
             }
         case .failure(let error):
             //            showFetchFailed()
@@ -1061,11 +1062,48 @@ extension AuthenticatedHealthRecordsAPIWorker {
             self.decrementLoadCounter()
             return nil
         }
+       
         self.decrementLoadCounter()
         return object.id
     }
 }
 
+
+// MARK: Handle Immunization Recommendations in core data
+extension AuthenticatedHealthRecordsAPIWorker {
+    private func handleImmunizationsRecommendationsInCoreData(payload: AuthenticatedImmunizationsResponseObject) {
+        
+        guard let patient = self.patientDetails else { return }
+        guard let objects = payload.resourcePayload?.recommendations else { return }
+
+        
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Recommendation])
+        guard let authCreds = self.authCredentials else {
+            return
+        }
+        for object in objects {
+            _ = self.handleImmunizationsRecommendationsInCoreData(object: object, authenticated: true, patientObject: patient)
+            
+        }
+    }
+    
+    private func handleImmunizationsRecommendationsInCoreData(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Recommendation, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+        
+        incrementLoadCounter()
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+            self.decrementLoadCounter()
+            return nil
+        }
+        
+        guard let object = StorageService.shared.storeRecommendation(patient: patient, object: object, authenticated: authenticated) else {
+            self.decrementLoadCounter()
+            return nil
+        }
+       
+        self.decrementLoadCounter()
+        return object.recommendationSetID
+    }
+}
 // MARK: Handle Health Visits in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleHealthVisitsInCoreData(healthVisits: AuthenticatedHealthVisitsResponseObject) {
@@ -1283,14 +1321,19 @@ extension AuthenticatedHealthRecordsAPIWorker {
 
 extension AuthenticatedHealthRecordsAPIWorker {
     private func decrementLoadCounter() {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount -= 1
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.dataLoadCount -= 1
+            }
         }
+       
     }
     
     private func incrementLoadCounter() {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.dataLoadCount += 1
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.dataLoadCount += 1
+            }
         }
     }
 }

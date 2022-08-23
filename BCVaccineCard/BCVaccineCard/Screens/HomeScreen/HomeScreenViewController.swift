@@ -22,7 +22,7 @@ class HomeScreenViewController: BaseViewController {
     }
     
     @IBOutlet weak private var tableView: UITableView!
-    private var dataSource: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Proofs), .button(type: .Resources)]
+    private var dataSource: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Proofs), .button(type: .Resources), .button(type: .Recommendations)]
     private var authManager: AuthManager = AuthManager()
     
     override func viewDidLoad() {

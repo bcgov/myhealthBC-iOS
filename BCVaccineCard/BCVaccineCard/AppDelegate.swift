@@ -102,7 +102,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data stack
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "BCVaccineCard")
-        
+        /*add necessary support for migration*/
+        let description = NSPersistentStoreDescription()
+        description.shouldMigrateStoreAutomatically = true
+        description.shouldInferMappingModelAutomatically = true
+        container.persistentStoreDescriptions =  [description]
+        /*add necessary support for migration*/
         do {
             let options = [
                 EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key

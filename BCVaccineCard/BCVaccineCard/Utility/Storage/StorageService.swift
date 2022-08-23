@@ -29,6 +29,7 @@ extension StorageService {
         case LaboratoryOrder
         case Comments
         case Immunization
+        case Recommendation
         case HealthVisit
         case SpecialAuthorityMedication
     }

@@ -2,7 +2,7 @@
 //  ImmunizationDetails+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-07-07.
+//  Created by Amir Shayegh on 2022-08-23.
 //
 //
 
@@ -19,6 +19,7 @@ extension ImmunizationDetails {
     @NSManaged public var name: String?
     @NSManaged public var immunization: Immunization?
     @NSManaged public var immunizationAgents: NSSet?
+    @NSManaged public var recommendation: ImmunizationRecommendation?
 
 }
 
