@@ -32,9 +32,21 @@ class BaseURLWorker {
     
     func setBaseURL(completion: @escaping () -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+       
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.dataLoadCount += 1
+            }
+        }
+        
         self.apiClient.getBaseURLFromMobileConfig(token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: false) { baseURLString in
             if let baseURLString = baseURLString, let url = URL(string: baseURLString) {
                 self.baseURL = url
+            }
+            DispatchQueue.main.async {
+                if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                    appDelegate.dataLoadCount -= 1
+                }
             }
             completion()
         }
