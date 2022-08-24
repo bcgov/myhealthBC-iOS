@@ -148,11 +148,21 @@ extension HomeScreenViewController {
     private func goToTabForType(type: HomeScreenCellType) {
         guard let tabBarController = self.tabBarController as? TabBarController else { return }
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        guard type == .Records && !authManager.isAuthenticated else {
+        switch type {
+        case .Records:
+            if !authManager.isAuthenticated {
+                handleGetStartedScenario(tabBarController: tabBarController)
+            }
             tabBarController.selectedIndex = type.getTabIndex
-            return
+        case .Proofs:
+            tabBarController.selectedIndex = type.getTabIndex
+        case .Resources:
+            tabBarController.selectedIndex = type.getTabIndex
+        case .Recommendations:
+            let vc = RecommendationsViewController.constructRecommendationsViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+            vc.setup()
         }
-        handleGetStartedScenario(tabBarController: tabBarController)
     }
     
     private func handleGetStartedScenario(tabBarController: TabBarController) {

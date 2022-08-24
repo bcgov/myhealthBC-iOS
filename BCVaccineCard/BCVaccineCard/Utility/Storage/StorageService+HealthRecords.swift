@@ -98,6 +98,13 @@ extension StorageService {
             toDelete.append(contentsOf: objects)
             notify(event: StorageEvent(event: .Delete, entity: .SpecialAuthorityMedication, object: objects))
         }
+        
+        if typesTodelete.contains(.Recommendation) {
+            let objects = fetchRecommendations().filter({ $0.authenticated == true })
+            toDelete.append(contentsOf: objects)
+            notify(event: StorageEvent(event: .Delete, entity: .Recommendation, object: objects))
+        }
+        
         deleteAllRecords(in: toDelete)
     }
     
@@ -116,5 +123,7 @@ extension StorageService {
         deleteAllRecords(in: visits)
         let specialAuth = fetchSpecialAuthorityMedications()
         deleteAllRecords(in: specialAuth)
+        let recommendations = fetchRecommendations()
+        deleteAllRecords(in: recommendations)
     }
 }
