@@ -296,6 +296,18 @@
 		29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
 		29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
+		3E32322628B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
+		3E32322728B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
+		3E32322828B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
+		3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
+		3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
+		3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
+		3E7306E428B5EF32007FED05 /* ReccomandationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */; };
+		3E7306E528B5EF32007FED05 /* ReccomandationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */; };
+		3E7306E628B5F122007FED05 /* ReccomandationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */; };
+		3E7306E728B5F122007FED05 /* ReccomandationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */; };
+		3E7306E828B5F123007FED05 /* ReccomandationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */; };
+		3E7306E928B5F123007FED05 /* ReccomandationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */; };
 		3E91C7AE28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E91C7A628B51B0A005AA34F /* ImmunizationDetails+CoreDataClass.swift */; };
 		3E91C7AF28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E91C7A628B51B0A005AA34F /* ImmunizationDetails+CoreDataClass.swift */; };
 		3E91C7B028B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E91C7A628B51B0A005AA34F /* ImmunizationDetails+CoreDataClass.swift */; };
@@ -1154,6 +1166,10 @@
 		29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+EXT.swift"; sourceTree = "<group>"; };
 		29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedOnBoardingScreen.swift; sourceTree = "<group>"; };
 		322EBB5AF649DC5B3E4779FE /* Pods_Health_Gateway_Dev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Health_Gateway_Dev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E32322528B5FEB80067040C /* Recommendations.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
+		3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsViewController.swift; sourceTree = "<group>"; };
+		3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReccomandationTableViewCell.swift; sourceTree = "<group>"; };
+		3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReccomandationTableViewCell.xib; sourceTree = "<group>"; };
 		3E91C78D28B517C6005AA34F /* BCVaccineCard 1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.1.xcdatamodel"; sourceTree = "<group>"; };
 		3E91C7A628B51B0A005AA34F /* ImmunizationDetails+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationDetails+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E91C7A728B51B0A005AA34F /* Immunization+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Immunization+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -1884,6 +1900,24 @@
 			path = "Detail Field";
 			sourceTree = "<group>";
 		};
+		3E7306DC28B5EDD7007FED05 /* Recommendations */ = {
+			isa = PBXGroup;
+			children = (
+				3E7306E128B5EF1D007FED05 /* Cells */,
+				3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */,
+			);
+			path = Recommendations;
+			sourceTree = "<group>";
+		};
+		3E7306E128B5EF1D007FED05 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */,
+				3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		7918A8C427482CB500D19D1C /* ReusableViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -2223,6 +2257,7 @@
 				795AA76327155F6300E59FF1 /* NewsFeed.storyboard */,
 				298190C32773B4090062F55E /* Authentication.storyboard */,
 				799E0AFE27D13F43009C68FE /* Reusable.storyboard */,
+				3E32322528B5FEB80067040C /* Recommendations.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -2282,6 +2317,7 @@
 		7944F6B226F12AB3006B9444 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				3E7306DC28B5EDD7007FED05 /* Recommendations */,
 				79B9D00B27E2786800987D9F /* HomeScreen */,
 				298190C52773B4170062F55E /* Authentication */,
 				793504182761278E0098FEA7 /* ReusableViewControllers */,
@@ -3087,6 +3123,7 @@
 				791C27C12718315A001A6E12 /* AddCardsTableViewCell.xib in Resources */,
 				29719547288212F600CA824A /* HealthVisitRecordDetailTableViewCell.xib in Resources */,
 				79218A9E275141800063004E /* GetARecordTableViewCell.xib in Resources */,
+				3E32322728B5FEB80067040C /* Recommendations.storyboard in Resources */,
 				29547E5B27A2EC7700562958 /* LocalAuthView.xib in Resources */,
 				79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */,
 				7944F6D726F12C00006B9444 /* VaxQRZoomedInView.xib in Resources */,
@@ -3117,6 +3154,7 @@
 				293B32B927D2628A0064BAAA /* CommentsListView.xib in Resources */,
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
 				799E0AFF27D13F43009C68FE /* Reusable.storyboard in Resources */,
+				3E7306E928B5F123007FED05 /* ReccomandationTableViewCell.xib in Resources */,
 				29A4DF4727DA674100D5E901 /* FilterRecordsView.xib in Resources */,
 				79218AE027557F7D0063004E /* StaticPositiveTestTableViewCell.xib in Resources */,
 				7944F68026F12613006B9444 /* Main.storyboard in Resources */,
@@ -3152,6 +3190,7 @@
 				794BD65C2702EEC00084ADA8 /* AppStyleButton.xib in Resources */,
 				795AA76827155F7100E59FF1 /* Resource.storyboard in Resources */,
 				794BD65D2702EEC00084ADA8 /* BCSans-Regular.otf in Resources */,
+				3E32322828B5FEB80067040C /* Recommendations.storyboard in Resources */,
 				79590D9B2811EA25006EB59F /* CommentsTableViewCell.xib in Resources */,
 				297F6DB5280F16540023E89C /* AuthenticationView.xib in Resources */,
 				297F6DB6280F16A70023E89C /* AuthenticationInfoView.xib in Resources */,
@@ -3167,6 +3206,7 @@
 				2922C0AE286C73F9000FF4F7 /* HealthRecordDetailFieldTableViewCell.xib in Resources */,
 				794BD6602702EEC00084ADA8 /* BCSans-Italic.otf in Resources */,
 				794BD6612702EEC00084ADA8 /* VaccineCardTableViewCell.xib in Resources */,
+				3E7306E728B5F122007FED05 /* ReccomandationTableViewCell.xib in Resources */,
 				79218ADA27557ED50063004E /* TextListViewTableViewCell.xib in Resources */,
 				795AA7762715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
 				79590D992811E9F7006EB59F /* TableSectionHeader.xib in Resources */,
@@ -3278,6 +3318,7 @@
 				798006292852C66E006E390F /* AddCardsTableViewCell.xib in Resources */,
 				29719546288212F600CA824A /* HealthVisitRecordDetailTableViewCell.xib in Resources */,
 				7980062A2852C66E006E390F /* GetARecordTableViewCell.xib in Resources */,
+				3E32322628B5FEB80067040C /* Recommendations.storyboard in Resources */,
 				7980062B2852C66E006E390F /* LocalAuthView.xib in Resources */,
 				7980062C2852C66E006E390F /* HealthPass.storyboard in Resources */,
 				7980062D2852C66E006E390F /* VaxQRZoomedInView.xib in Resources */,
@@ -3308,6 +3349,7 @@
 				798006412852C66E006E390F /* CommentsListView.xib in Resources */,
 				798006422852C66E006E390F /* BCSans-BoldItalic.otf in Resources */,
 				798006432852C66E006E390F /* Reusable.storyboard in Resources */,
+				3E7306E528B5EF32007FED05 /* ReccomandationTableViewCell.xib in Resources */,
 				798006442852C66E006E390F /* FilterRecordsView.xib in Resources */,
 				798006452852C66E006E390F /* StaticPositiveTestTableViewCell.xib in Resources */,
 				798006462852C66E006E390F /* Main.storyboard in Resources */,
@@ -3607,6 +3649,7 @@
 				2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */,
 				297967A427C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */,
 				799050C4273C8558006CD726 /* UserRecordListView.swift in Sources */,
+				3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */,
 				79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				29719544288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
@@ -3635,6 +3678,7 @@
 				7944F70E26F3A0C1006B9444 /* QRRetrievalMethodViewController.swift in Sources */,
 				2961A999287F53C3007F3E03 /* HealthVisit+CoreDataProperties.swift in Sources */,
 				29A5B6D827B55B65006A9BA7 /* Pharmacy+CoreDataProperties.swift in Sources */,
+				3E7306E828B5F123007FED05 /* ReccomandationTableViewCell.swift in Sources */,
 				2979679F27C536E20019EE9B /* LaboratoryTest+CoreDataClass.swift in Sources */,
 				791C27CC2719DB3D001A6E12 /* QueueItCachedObject.swift in Sources */,
 				7967E74326F900E400EEF510 /* TabBarController.swift in Sources */,
@@ -3882,6 +3926,7 @@
 				798CA1CE27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */,
 				794FF0D227DAB08B00C98831 /* URL+EXT.swift in Sources */,
 				293B32A727D25A3A0064BAAA /* Comment+CoreDataClass.swift in Sources */,
+				3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */,
 				297967A527C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */,
 				79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				29719545288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
@@ -3910,6 +3955,7 @@
 				791C27CD2719DB3E001A6E12 /* QueueItCachedObject.swift in Sources */,
 				2961A99A287F53C3007F3E03 /* HealthVisit+CoreDataProperties.swift in Sources */,
 				7928345E2730E63A00EE2710 /* InteractiveLabelTableViewCell.swift in Sources */,
+				3E7306E628B5F122007FED05 /* ReccomandationTableViewCell.swift in Sources */,
 				79932CB02790FB4D007E8D92 /* AttributedString+EXT.swift in Sources */,
 				794BD6452702EEC00084ADA8 /* UIColor+EXT.swift in Sources */,
 				297967A027C536E20019EE9B /* LaboratoryTest+CoreDataClass.swift in Sources */,
@@ -4131,6 +4177,7 @@
 				798005842852C66E006E390F /* Comment+CoreDataClass.swift in Sources */,
 				798005852852C66E006E390F /* QRScannerView.swift in Sources */,
 				798005862852C66E006E390F /* StorageService+LabOrder.swift in Sources */,
+				3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */,
 				798005872852C66E006E390F /* UserRecordListView.swift in Sources */,
 				798005882852C66E006E390F /* LargerTouchAreaButton.swift in Sources */,
 				29719543288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
@@ -4159,6 +4206,7 @@
 				7980059A2852C66E006E390F /* InteractiveLabelTableViewCell.swift in Sources */,
 				2961A998287F53C3007F3E03 /* HealthVisit+CoreDataProperties.swift in Sources */,
 				7980059B2852C66E006E390F /* QRRetrievalMethodViewController.swift in Sources */,
+				3E7306E428B5EF32007FED05 /* ReccomandationTableViewCell.swift in Sources */,
 				7980059C2852C66E006E390F /* Pharmacy+CoreDataProperties.swift in Sources */,
 				7980059D2852C66E006E390F /* LaboratoryTest+CoreDataClass.swift in Sources */,
 				7980059E2852C66E006E390F /* QueueItCachedObject.swift in Sources */,

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Recommendations View Controller-->
+        <scene sceneID="roS-BA-oMf">
+            <objects>
+                <viewController storyboardIdentifier="RecommendationsViewController" id="WuS-X4-egA" customClass="RecommendationsViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5Mh-lC-1lb">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Yq9-x6-7dF">
+                                <rect key="frame" x="30" y="64" width="354" height="54"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="VR0-j5-YVc"/>
+                                </constraints>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="rRg-xk-LGo">
+                                <rect key="frame" x="25" y="138" width="364" height="704"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cs7-fj-L8U"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Yq9-x6-7dF" firstAttribute="centerX" secondItem="5Mh-lC-1lb" secondAttribute="centerX" id="8Os-mg-Z8U"/>
+                            <constraint firstItem="cs7-fj-L8U" firstAttribute="bottom" secondItem="rRg-xk-LGo" secondAttribute="bottom" constant="20" id="H7Q-69-pTF"/>
+                            <constraint firstItem="rRg-xk-LGo" firstAttribute="top" secondItem="Yq9-x6-7dF" secondAttribute="bottom" constant="20" id="Lud-Sn-odm"/>
+                            <constraint firstItem="Yq9-x6-7dF" firstAttribute="top" secondItem="cs7-fj-L8U" secondAttribute="top" constant="20" id="P7d-5u-k8f"/>
+                            <constraint firstItem="Yq9-x6-7dF" firstAttribute="leading" secondItem="cs7-fj-L8U" secondAttribute="leading" constant="30" id="Txp-cD-h4W"/>
+                            <constraint firstItem="rRg-xk-LGo" firstAttribute="centerX" secondItem="5Mh-lC-1lb" secondAttribute="centerX" id="hbn-bZ-ka2"/>
+                            <constraint firstItem="rRg-xk-LGo" firstAttribute="leading" secondItem="cs7-fj-L8U" secondAttribute="leading" constant="25" id="j6t-24-H9B"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="kgP-GZ-nV9"/>
+                    <connections>
+                        <outlet property="tableView" destination="rRg-xk-LGo" id="ygU-fD-L8B"/>
+                        <outlet property="textView" destination="Yq9-x6-7dF" id="cai-Ug-ZhD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Z1-qi-vbs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4335" y="-1708"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
