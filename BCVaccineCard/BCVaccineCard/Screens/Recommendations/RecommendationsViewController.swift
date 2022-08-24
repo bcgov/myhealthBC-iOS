@@ -27,26 +27,53 @@ class RecommendationsViewController: UIViewController {
         setup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        setupTextView()
         recommendations = StorageService.shared.fetchRecommendations()
         guard let tableView = tableView else {return}
         tableView.reloadData()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
     func setup() {
         title = "Recommended immunizations"
-        
         setupTableView()
+        setupTextView()
     }
     
     private func setupTextView() {
-        
+        guard let textView = self.textView else {return}
+        view.layoutIfNeeded()
+        textView.textColor = AppColours.textGray
+        let attributedText = NSMutableAttributedString(string: "For more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ")
+        _ = attributedText.setAsLink(textToFind: "immunizeBC", linkURL: "https://immunizebc.ca/")
+        textView.attributedText = attributedText
+        textView.isUserInteractionEnabled = true
+        textView.delegate = self
+        textView.font = UIFont.bcSansRegularWithSize(size: 13)
+        textView.translatesAutoresizingMaskIntoConstraints = true
+        textView.sizeToFit()
+        textView.isScrollEnabled = false
+        textView.isEditable = false
+        view.layoutIfNeeded()
     }
 
 }
 extension RecommendationsViewController: UITextViewDelegate {
-//ReccomandationTableViewCell
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        UIApplication.shared.open(URL)
+        return false
+    }
 }
 
 extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSource {
