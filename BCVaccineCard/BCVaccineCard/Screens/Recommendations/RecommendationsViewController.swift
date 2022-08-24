@@ -76,6 +76,7 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         if recommendations.indices.contains(indexPath.row) {
             cell.configure(object: recommendations[indexPath.row], expanded: expandedIndecies.contains(indexPath.row))
         }
+        cell.selectionStyle = .none
         return cell
     }
     
