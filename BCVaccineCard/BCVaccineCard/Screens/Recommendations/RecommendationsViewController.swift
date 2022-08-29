@@ -7,12 +7,14 @@
 
 import UIKit
 
-class RecommendationsViewController: UIViewController {
+class RecommendationsViewController: BaseViewController {
 
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var tableView: UITableView!
     
-    private var recommendations: [ImmunizationRecommendation] = []
+    private var recommendations: [ImmunizationRecommendation] {
+        return StorageService.shared.fetchRecommendations().sorted(by: {$0.diseaseEligibleDate ?? Date() > $1.diseaseEligibleDate ?? Date()})
+    }
     private var expandedIndecies: [Int] = []
     
     class func constructRecommendationsViewController() -> RecommendationsViewController {
@@ -25,6 +27,7 @@ class RecommendationsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        expandedIndecies = [0]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,7 +38,6 @@ class RecommendationsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         setupTextView()
-        recommendations = StorageService.shared.fetchRecommendations()
         guard let tableView = tableView else {return}
         tableView.reloadData()
     }
@@ -46,7 +48,7 @@ class RecommendationsViewController: UIViewController {
     }
     
     func setup() {
-        title = "Recommended immunizations"
+        navSetup()
         setupTableView()
         setupTextView()
     }
@@ -119,5 +121,17 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
             tableView.reloadRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
+    }
+}
+// MARK: Navigation setup
+extension RecommendationsViewController {
+    private func navSetup() {
+        self.navDelegate?.setNavigationBarWith(title: "Recommended immunizations",
+                                               leftNavButton: nil,
+                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
+                                               navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
+                                               targetVC: self,
+                                               backButtonHintString: nil)
     }
 }

@@ -2317,8 +2317,8 @@
 		7944F6B226F12AB3006B9444 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				3E7306DC28B5EDD7007FED05 /* Recommendations */,
 				79B9D00B27E2786800987D9F /* HomeScreen */,
+				3E7306DC28B5EDD7007FED05 /* Recommendations */,
 				298190C52773B4170062F55E /* Authentication */,
 				793504182761278E0098FEA7 /* ReusableViewControllers */,
 				791C27A52717472C001A6E12 /* OnboardingFlow */,

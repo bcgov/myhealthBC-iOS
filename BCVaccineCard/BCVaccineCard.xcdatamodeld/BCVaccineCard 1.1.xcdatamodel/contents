@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21G72" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21G83" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Comment" representedClassName="Comment" syncable="YES">
         <attribute name="createdBy" optional="YES" attributeType="String"/>
         <attribute name="createdDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -142,7 +142,7 @@
         <relationship name="immunizations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Immunization" inverseName="patient" inverseEntity="Immunization"/>
         <relationship name="laboratoryOrders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LaboratoryOrder" inverseName="patient" inverseEntity="LaboratoryOrder"/>
         <relationship name="prescriptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Perscription" inverseName="patient" inverseEntity="Perscription"/>
-        <relationship name="recommendations" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ImmunizationRecommendation" inverseName="patient" inverseEntity="ImmunizationRecommendation"/>
+        <relationship name="recommendations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ImmunizationRecommendation" inverseName="patient" inverseEntity="ImmunizationRecommendation"/>
         <relationship name="specialAuthorityDrugs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SpecialAuthorityDrug" inverseName="patient" inverseEntity="SpecialAuthorityDrug"/>
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="patient" inverseEntity="VaccineCard"/>
     </entity>
