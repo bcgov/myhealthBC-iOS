@@ -128,6 +128,7 @@
                 <outlet property="dueDateValueLabel" destination="aIO-iZ-9GW" id="aGq-oW-IjE"/>
                 <outlet property="expandIconImageView" destination="Khj-qJ-hey" id="sFB-Hk-P5W"/>
                 <outlet property="iconImageView" destination="LoE-Gs-VjV" id="g8L-3v-rmQ"/>
+                <outlet property="statusIcon" destination="08r-fM-Z0m" id="KWi-I8-o6A"/>
                 <outlet property="statusLabel" destination="QUD-pQ-UxE" id="DeX-kM-5QA"/>
                 <outlet property="statusValueLabel" destination="pZe-Sj-kd5" id="X8V-kt-RPg"/>
                 <outlet property="titleLabel" destination="EYv-Up-VdL" id="WZG-By-p6B"/>

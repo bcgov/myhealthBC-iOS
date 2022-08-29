@@ -11,6 +11,7 @@ class ReccomandationTableViewCell: UITableViewCell {
 
     @IBOutlet weak var cardContainer: UIView!
     
+    @IBOutlet weak var statusIcon: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var expandIconImageView: UIImageView!
     @IBOutlet weak var iconImageView: UIStackView!
@@ -56,10 +57,16 @@ class ReccomandationTableViewCell: UITableViewCell {
         switch text.lowercased() {
         case "eligible":
             statusValueLabel.textColor = AppColours.green
+            statusIcon.image = UIImage(named: "reccomandation-list-icon")
         case "overdue":
             statusValueLabel.textColor = AppColours.appRed
+            statusIcon.image = UIImage(named: "reccomandation-list-icon")
+        case "completed":
+            statusValueLabel.textColor = AppColours.greyText
+            statusIcon.image = UIImage(named: "reccomandation-list-icon")
         default:
             statusValueLabel.textColor = AppColours.greyText
+            statusIcon.image = UIImage(named: "reccomandation-list-icon")
         }
     }
     
