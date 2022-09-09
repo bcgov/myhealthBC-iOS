@@ -28,6 +28,9 @@ class HealthRecordDetailViewController: BaseViewController {
     private var userNumberHealthRecords: Int!
     private var patient: Patient?
     private var pdfData: String?
+    private var reportId: String?
+    private var type: LabTestType?
+    private var pdfAPIWorker: PDFAPIWorker?
     
     override var getRecordFlowType: RecordsFlowVCs? {
         return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource, userNumberHealthRecords: userNumberHealthRecords)
@@ -81,6 +84,11 @@ class HealthRecordDetailViewController: BaseViewController {
         super.viewDidAppear(animated)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.pdfAPIWorker = nil
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
@@ -110,13 +118,15 @@ extension HealthRecordDetailViewController {
         var rightNavButton: NavButton?
         switch dataSource.type {
         case .laboratoryOrder(model: let labOrder):
-            if let pdf = labOrder.pdf {
-                self.pdfData = pdf
+            if labOrder.reportAvailable == true {
+                self.reportId = labOrder.reportID
+                self.type = .normal
                 rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         case .covidTestResultRecord(model: let covidTestOrder):
-            if let pdf = covidTestOrder.pdf {
-                self.pdfData = pdf
+            if covidTestOrder.reportAvailable == true {
+                self.reportId = covidTestOrder.orderId
+                self.type = .covid
                 rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         default:
@@ -182,8 +192,25 @@ extension HealthRecordDetailViewController {
     }
     
     @objc private func showPDFView() {
-        guard let pdf = self.pdfData else { return }
-        self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+        if let pdf = self.pdfData {
+            self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+        } else {
+            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let reportId = self.reportId, let type = self.type else {
+                // TODO: Some sort of error handling here
+                return
+            }
+            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+            self.pdfAPIWorker = PDFAPIWorker(delegateOwner: self, authCredentials: authCreds)
+            self.view.startLoadingIndicator()
+            pdfAPIWorker?.getAuthenticatedLabPDF(authCredentials: authCreds, reportId: reportId, type: type, completion: { pdf in
+                self.pdfData = pdf
+                self.view.endLoadingIndicator()
+                if let pdf = pdf {
+                    self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                }
+            })
+        }
+        
     }
 }
 
