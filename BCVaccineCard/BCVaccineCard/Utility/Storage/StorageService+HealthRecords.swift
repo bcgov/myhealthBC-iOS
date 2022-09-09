@@ -16,6 +16,7 @@ extension StorageService {
         case Prescription
         case LaboratoryOrder
         case Immunization
+        case Recommendation
         case HealthVisit
         case SpecialAuthorityDrug
     }
@@ -23,15 +24,14 @@ extension StorageService {
     func getHeathRecords() -> [HealthRecord] {
         let tests = fetchCovidTestResults().map({HealthRecord(type: .CovidTest($0))})
         // NOTE: Remove vaccineCards if we want to use new immz UI
-        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))}).filter({$0.patient.authenticated})
+//        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))}).filter({$0.patient.authenticated})
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         let labOrders = fetchLaboratoryOrders().map({HealthRecord(type: .LaboratoryOrder($0))})
         let immunizations = fetchImmunization().map({HealthRecord(type: .Immunization($0))})
         let healthVisits = fetchHealthVisits().map({HealthRecord(type: .HealthVisit($0))})
         let specialAuthority = fetchSpecialAuthorityMedications().map({HealthRecord(type: .SpecialAuthorityDrug($0))})
         
-        // NOTE: Remove '+ vaccineCards" if we want to use new immz UI
-        return tests + vaccineCards + medications + labOrders + immunizations + healthVisits + specialAuthority
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority
     }
     
     func delete(healthRecord: HealthRecord) {
@@ -98,6 +98,13 @@ extension StorageService {
             toDelete.append(contentsOf: objects)
             notify(event: StorageEvent(event: .Delete, entity: .SpecialAuthorityMedication, object: objects))
         }
+        
+        if typesTodelete.contains(.Recommendation) {
+            let objects = fetchRecommendations().filter({ $0.authenticated == true })
+            toDelete.append(contentsOf: objects)
+            notify(event: StorageEvent(event: .Delete, entity: .Recommendation, object: objects))
+        }
+        
         deleteAllRecords(in: toDelete)
     }
     
@@ -116,5 +123,7 @@ extension StorageService {
         deleteAllRecords(in: visits)
         let specialAuth = fetchSpecialAuthorityMedications()
         deleteAllRecords(in: specialAuth)
+        let recommendations = fetchRecommendations()
+        deleteAllRecords(in: recommendations)
     }
 }

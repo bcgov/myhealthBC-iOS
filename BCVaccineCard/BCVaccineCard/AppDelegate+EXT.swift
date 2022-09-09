@@ -62,6 +62,7 @@ extension AppDelegate {
         indicator.tintColor = AppColours.appBlue
         indicator.color = AppColours.appBlue
         indicator.startAnimating()
+        window?.layoutIfNeeded()
     }
     
     // Triggered by dataLoadCount

@@ -12,12 +12,14 @@ enum HomeScreenCellType {
     case Records
     case Proofs
     case Resources
+    case Recommendations
     
     var getTitle: String {
         switch self {
         case .Records: return "Health records"
         case .Proofs: return "Proof of vaccination"
         case .Resources: return "Resources"
+        case .Recommendations: return "Recommended\nimmunizations"
         }
     }
     
@@ -26,14 +28,16 @@ enum HomeScreenCellType {
         case .Records: return UIImage(named: "records-home-icon")
         case .Proofs: return UIImage(named: "proofs-home-icon")
         case .Resources: return UIImage(named: "resources-home-icon")
+        case .Recommendations: return UIImage(named: "Immunization-recommendation-home")
         }
     }
     
     var getDescriptionText: String {
         switch self {
-        case .Records: return "Access your lab results, medication history and vaccination records"
+        case .Records: return "Access your lab test results, medication history, immunization records, health visits and more"
         case .Proofs: return "Save proof of vaccination documents for you and your family"
         case .Resources: return "Find trusted health information and resources"
+        case .Recommendations: return "Find out which vaccinations are recommended for you"
         }
     }
     
@@ -44,6 +48,7 @@ enum HomeScreenCellType {
             return image
         case .Proofs: return UIImage(named: "proofs-home-button")
         case .Resources: return UIImage(named: "resources-home-button")
+        case .Recommendations:  return UIImage(named: "resources-home-button")
         }
     }
     
@@ -52,6 +57,7 @@ enum HomeScreenCellType {
         case .Records: return TabBarVCs.records.rawValue
         case .Proofs: return TabBarVCs.healthPass.rawValue
         case .Resources: return TabBarVCs.resource.rawValue
+        case .Recommendations: return TabBarVCs.records.rawValue
         }
     }
 
@@ -65,7 +71,8 @@ class HomeScreenTableViewCell: UITableViewCell {
     @IBOutlet weak private var titleLabel: UILabel!
     @IBOutlet weak private var descriptionLabel: UILabel!
     @IBOutlet weak private var buttonImageView: UIImageView!
-
+    @IBOutlet weak private var titleHeight: NSLayoutConstraint!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         setup()
@@ -96,6 +103,7 @@ class HomeScreenTableViewCell: UITableViewCell {
         titleLabel.text = type.getTitle
         descriptionLabel.text = type.getDescriptionText
         buttonImageView.image = type.getButtonImage(auth: auth)
+        titleHeight.constant = type.getTitle.heightForView(font: UIFont.bcSansBoldWithSize(size: 17), width: titleLabel.bounds.width)
     }
     
 }

@@ -66,7 +66,7 @@
 "HealthResources" = "Health resources";
 "NewsFeed" = "News feed";
 "InitialOnboardingHealthPassesDescription" = "Save proof of vaccination documents for you and your family. Have them ready for travel or to access events and services that require it.";
-"InitialOnboardingHealthRecordsDescription" = "Access your lab results, medication history and vaccine records. Keep track of what's important to you and your health.";
+"InitialOnboardingHealthRecordsDescription" = "Access your lab test results, medication history, immunization records, health visits and more. Keep track of what's important to you and your health.";
 "InitialOnboardingHealthResourcesDescription" = "Connect with HealthLink BC for health advice and get the latest information about COVID-19.";
 "InitialOnboardingNewsFeedDescription" = "Get the latest BC government COVID-19 news";
 "NEW" = "NEW";

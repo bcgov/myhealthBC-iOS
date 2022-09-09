@@ -2,7 +2,7 @@
 //  ImmunizationDetails+CoreDataClass.swift
 //  
 //
-//  Created by Amir on 2022-07-07.
+//  Created by Amir Shayegh on 2022-08-23.
 //
 //
 

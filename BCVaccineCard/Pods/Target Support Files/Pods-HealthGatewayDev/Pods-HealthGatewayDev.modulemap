@@ -1,0 +1,6 @@
+framework module Pods_HealthGatewayDev {
+  umbrella header "Pods-HealthGatewayDev-umbrella.h"
+
+  export *
+  module * { export * }
+}

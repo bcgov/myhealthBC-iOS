@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Recommendations View Controller-->
+        <scene sceneID="roS-BA-oMf">
+            <objects>
+                <viewController storyboardIdentifier="RecommendationsViewController" id="WuS-X4-egA" customClass="RecommendationsViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5Mh-lC-1lb">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="zXg-to-tYY">
+                                <rect key="frame" x="16" y="64" width="382" height="782"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Yq9-x6-7dF">
+                                        <rect key="frame" x="0.0" y="0.0" width="382" height="54.5"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="rRg-xk-LGo">
+                                        <rect key="frame" x="0.0" y="74.5" width="382" height="707.5"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </tableView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Yq9-x6-7dF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zXg-to-tYY" secondAttribute="leading" id="3Ih-of-edw"/>
+                                    <constraint firstItem="Yq9-x6-7dF" firstAttribute="centerX" secondItem="zXg-to-tYY" secondAttribute="centerX" id="Z7X-g6-Wjw"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Yq9-x6-7dF" secondAttribute="trailing" id="pWP-cd-6jB"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cs7-fj-L8U"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="cs7-fj-L8U" firstAttribute="bottom" secondItem="zXg-to-tYY" secondAttribute="bottom" constant="16" id="8zV-mN-VKZ"/>
+                            <constraint firstItem="cs7-fj-L8U" firstAttribute="trailing" secondItem="zXg-to-tYY" secondAttribute="trailing" constant="16" id="FmJ-qv-wzO"/>
+                            <constraint firstItem="zXg-to-tYY" firstAttribute="leading" secondItem="cs7-fj-L8U" secondAttribute="leading" constant="16" id="VXr-rT-hSs"/>
+                            <constraint firstItem="zXg-to-tYY" firstAttribute="top" secondItem="cs7-fj-L8U" secondAttribute="top" constant="20" id="gD3-Kj-HNe"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="kgP-GZ-nV9"/>
+                    <connections>
+                        <outlet property="tableView" destination="rRg-xk-LGo" id="ygU-fD-L8B"/>
+                        <outlet property="textView" destination="Yq9-x6-7dF" id="cai-Ug-ZhD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Z1-qi-vbs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4335" y="-1708"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -250,3 +250,10 @@ extension ImmunizationDetails {
     }
 }
 
+// MARK: Recommendations
+extension ImmunizationRecommendation {
+    public var targetDiseasesArray: [ImmunizationTargetDisease] {
+        let set = targetDiseases as? Set<ImmunizationTargetDisease> ?? []
+        return Array(set)
+    }
+}

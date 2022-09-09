@@ -346,11 +346,9 @@ extension UsersListOfRecordsViewController {
                     case .immunization:
                         showItem = filter.recordTypes.contains(.Immunizations)
                     case .healthVisit:
-                        break
-//                        showItem = filter.recordTypes.contains(.HeathVisits)
+                        showItem = filter.recordTypes.contains(.HeathVisits)
                     case .specialAuthorityDrug:
-                        break
-//                        showItem = filter.recordTypes.contains(.SpecialAuthorityDrugs)
+                        showItem = filter.recordTypes.contains(.SpecialAuthorityDrugs)
                     }
                 }
                 // Filter by date
@@ -388,7 +386,7 @@ extension UsersListOfRecordsViewController {
         
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
-//        self.checkForTestResultsToUpdate(ds: self.dataSource)
+//        self.checkForTestResultsToUpdate(ds: self.dataSource) 
         
         if patientRecords.isEmpty {
             noRecordsFoundView.isHidden = false
