@@ -196,7 +196,7 @@ extension HealthRecordDetailViewController {
             self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let reportId = self.reportId, let type = self.type else {
-                // TODO: Some sort of error handling here
+                showPDFUnavailableAlert()
                 return
             }
             let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
@@ -207,10 +207,16 @@ extension HealthRecordDetailViewController {
                 self.view.endLoadingIndicator()
                 if let pdf = pdf {
                     self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                } else {
+                    self.showPDFUnavailableAlert()
                 }
             })
         }
         
+    }
+    
+    private func showPDFUnavailableAlert() {
+        self.alert(title: "Error", message: "There was an error fetching the PDF of this record")
     }
 }
 
