@@ -10,7 +10,7 @@ import Foundation
 
 extension CommunicationBanner {
     var shouldDisplay: Bool {
-        return !CommunicationSetvice(network: AFNetwork()).isDismissed(message: self)
+        guard !CommunicationSetvice(network: AFNetwork()).isDismissed(message: self) else {return false}
         guard let effectiveDateTime = effectiveDateTime.getGatewayDate(), let expiryDateTime = expiryDateTime.getGatewayDate() else {return false}
         return effectiveDateTime < Date() && expiryDateTime > Date()
     }
