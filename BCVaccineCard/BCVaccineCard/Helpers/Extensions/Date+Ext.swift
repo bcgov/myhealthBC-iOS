@@ -329,9 +329,13 @@ extension String {
             formatted = timezoneDate
         } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: self) {
             formatted = nozoneDate
+        } else if let withMillisenconds = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: self) {
+            formatted = withMillisenconds
         } else {
             formatted = nil
         }
         return formatted
     }
 }
+
+
