@@ -74,15 +74,22 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         self.delegate = delegate
         titleLabel.text = data.subject
         
-        let text = data.text.htmlToAttributedString
-        textView.attributedText = text
+        var textAttributed = data.text.htmlToAttributedString
+        
        
-        if text?.string.count ?? 0 > maxMessageChar {
+        if let text = textAttributed, text.string.count > maxMessageChar, let mutStr = text.mutableCopy() as? NSMutableAttributedString {
             learnMoreButton.isHidden = false
+            let textString = text.string
+            let length = textString.count
+            let reminder = length - maxMessageChar
+            let hiddenChars = String(textString.suffix(reminder))
+            let range = (mutStr.string as NSString).range(of: hiddenChars)
+            mutStr.deleteCharacters(in: range)
+            textAttributed = mutStr
         } else {
             learnMoreButton.isHidden = true
         }
-        
+        textView.attributedText = textAttributed
         style()
     }
     
