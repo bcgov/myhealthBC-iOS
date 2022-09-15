@@ -33,4 +33,6 @@ struct CommunicationResponseResourcePayload: Codable {
     }
 }
 
-typealias CommunicationMessage = CommunicationResponseResourcePayload
+typealias CommunicationBanner = CommunicationResponseResourcePayload
+
+

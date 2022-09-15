@@ -10,6 +10,7 @@ import UIKit
 class HomeScreenViewController: BaseViewController {
     
     enum DataSource {
+        case banner(data: CommunicationBanner)
         case text(text: String)
         case button(type: HomeScreenCellType)
     }
@@ -25,12 +26,11 @@ class HomeScreenViewController: BaseViewController {
     
     private var authManager: AuthManager = AuthManager()
     
+    private let communicationSetvice: CommunicationSetvice = CommunicationSetvice(network: AFNetwork())
+    private var communicationBanner: CommunicationBanner?
+    
     private var dataSource: [DataSource] {
-        if authManager.isAuthenticated {
-            return [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Proofs), .button(type: .Resources), .button(type: .Recommendations)]
-        }else {
-            return [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Proofs), .button(type: .Resources)]
-        }
+        genDataSource()
     }
     
     override func viewDidLoad() {
@@ -55,7 +55,20 @@ class HomeScreenViewController: BaseViewController {
         addObservablesForChangeInAuthenticationStatus()
         setupTableView()
         navSetup()
+        fetchCommunicationBanner()
     }
+    
+    private func genDataSource() -> [DataSource] {
+        var data: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Proofs), .button(type: .Resources)]
+        if authManager.isAuthenticated {
+            data.append(.button(type: .Recommendations))
+        }
+        if let banner = communicationBanner {
+            data.insert(.banner(data: banner), at: 0)
+        }
+        return data
+    }
+
     
 }
 
@@ -118,6 +131,7 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: HomeScreenTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HomeScreenTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CommunicationBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommunicationBannerTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
 //        tableView.estimatedRowHeight = 231
         tableView.delegate = self
@@ -138,6 +152,11 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeScreenTableViewCell.getName, for: indexPath) as? HomeScreenTableViewCell else { return UITableViewCell() }
             cell.configure(forType: type, auth: authManager.isAuthenticated)
             return cell
+        case .banner(data: let data):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CommunicationBannerTableViewCell.getName, for: indexPath) as? CommunicationBannerTableViewCell else { return UITableViewCell() }
+            cell.configure(data: communicationBanner, delegate: self)
+            cell.selectionStyle = .none
+            return cell
         }
     }
     
@@ -149,6 +168,53 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
         default: break
         }
     }
+}
+
+// MARK: Communications Banner
+extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
+    func fetchCommunicationBanner() {
+        communicationSetvice.fetchMessage {[weak self] result in
+            guard let `self` = self else {
+                return
+            }
+            
+            if let message = result, message.shouldDisplay {
+                self.communicationBanner = message
+            } else {
+                self.communicationBanner = nil
+            }
+           
+            self.tableView.reloadData()
+        }
+    }
+    
+    func onExpand(banner: CommunicationBanner?) {
+        tableView.reloadData()
+    }
+    
+    func onClose(banner: CommunicationBanner?) {
+        tableView.performBatchUpdates(nil)
+    }
+    
+    func onDismiss(banner: CommunicationBanner?) {
+        guard let banner = banner else {
+            return
+        }
+
+        communicationSetvice.dismiss(message: banner)
+        communicationBanner = nil
+        tableView.reloadData()
+        fetchCommunicationBanner()
+    }
+    
+    func onLearnMore(banner: CommunicationBanner?) {
+        print("Learn More")
+        guard let banner = banner else {
+            return
+        }
+    }
+    
+    
 }
 
 // MARK: Navigation logic for each type here

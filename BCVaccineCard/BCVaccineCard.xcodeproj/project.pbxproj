@@ -320,6 +320,12 @@
 		3E5E6EB228D2747800724EDD /* CommunicationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EB128D2747800724EDD /* CommunicationResponse.swift */; };
 		3E5E6EB328D2747800724EDD /* CommunicationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EB128D2747800724EDD /* CommunicationResponse.swift */; };
 		3E5E6EB428D2747800724EDD /* CommunicationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EB128D2747800724EDD /* CommunicationResponse.swift */; };
+		3E5E6EBB28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EB928D278BD00724EDD /* CommunicationBannerTableViewCell.swift */; };
+		3E5E6EBC28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EB928D278BD00724EDD /* CommunicationBannerTableViewCell.swift */; };
+		3E5E6EBD28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EB928D278BD00724EDD /* CommunicationBannerTableViewCell.swift */; };
+		3E5E6EBE28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */; };
+		3E5E6EBF28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */; };
+		3E5E6EC028D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */; };
 		3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
@@ -1196,6 +1202,8 @@
 		3E5E6EA828D2686F00724EDD /* NetworkProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkProtocol.swift; sourceTree = "<group>"; };
 		3E5E6EAC28D273F500724EDD /* MockNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetwork.swift; sourceTree = "<group>"; };
 		3E5E6EB128D2747800724EDD /* CommunicationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationResponse.swift; sourceTree = "<group>"; };
+		3E5E6EB928D278BD00724EDD /* CommunicationBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationBannerTableViewCell.swift; sourceTree = "<group>"; };
+		3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommunicationBannerTableViewCell.xib; sourceTree = "<group>"; };
 		3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsViewController.swift; sourceTree = "<group>"; };
 		3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReccomandationTableViewCell.swift; sourceTree = "<group>"; };
 		3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReccomandationTableViewCell.xib; sourceTree = "<group>"; };
@@ -2864,6 +2872,8 @@
 			children = (
 				79B9D01027E2869D00987D9F /* HomeScreenTableViewCell.swift */,
 				79B9D01127E2869D00987D9F /* HomeScreenTableViewCell.xib */,
+				3E5E6EB928D278BD00724EDD /* CommunicationBannerTableViewCell.swift */,
+				3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -3204,6 +3214,7 @@
 				297D3BB427D947A900B059CA /* TableSectionHeader.xib in Resources */,
 				29921C942773A5F8005025D2 /* AuthenticationInfoView.xib in Resources */,
 				29B07E0A2732109E007ABB46 /* exportOptions.plist in Resources */,
+				3E5E6EBF28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
 				79218ACF27556AA50063004E /* StatusBannerView.xib in Resources */,
 				799050C7273C8567006CD726 /* UserRecordListView.xib in Resources */,
@@ -3307,6 +3318,7 @@
 				2922C0E8286E33F8000FF4F7 /* MessageBannerTableViewCell.xib in Resources */,
 				29547E5C27A2EC7700562958 /* LocalAuthView.xib in Resources */,
 				79A15B0927FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */,
+				3E5E6EC028D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */,
 				795AA758271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
 				794BD6682702EEC00084ADA8 /* FormTableViewCell.xib in Resources */,
 				79218AD027556AA50063004E /* StatusBannerView.xib in Resources */,
@@ -3399,6 +3411,7 @@
 				798006392852C66E006E390F /* TableSectionHeader.xib in Resources */,
 				7980063A2852C66E006E390F /* AuthenticationInfoView.xib in Resources */,
 				7980063B2852C66E006E390F /* exportOptions.plist in Resources */,
+				3E5E6EBE28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */,
 				7980063C2852C66E006E390F /* FormTextFieldView.xib in Resources */,
 				7980063D2852C66E006E390F /* StatusBannerView.xib in Resources */,
 				7980063E2852C66E006E390F /* UserRecordListView.xib in Resources */,
@@ -3784,6 +3797,7 @@
 				79218AE42755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */,
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
 				795AA7542715189C00E59FF1 /* InitialOnboardingView.swift in Sources */,
+				3E5E6EBC28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
 				29736A252787A78A00CCB1D2 /* Logger.swift in Sources */,
 				791D092C27BF5EC000AD7C89 /* AuthenticatedLaboratoryOrdersResponseObject.swift in Sources */,
 				2922C0EC286E37B3000FF4F7 /* BaseHeaderTableViewCell.swift in Sources */,
@@ -4068,6 +4082,7 @@
 				794BD64D2702EEC00084ADA8 /* NoCardsTableViewCell.swift in Sources */,
 				79218AF0275672120063004E /* StorageService+HealthRecords.swift in Sources */,
 				79CF236F283D8DDF00510489 /* BaseURLWorker.swift in Sources */,
+				3E5E6EBD28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
 				29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */,
 				29A5B6DF27B55B6C006A9BA7 /* Medication+CoreDataClass.swift in Sources */,
 				79218AE52755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */,
@@ -4326,6 +4341,7 @@
 				29E19FE2286C044F00C235EF /* BaseHealthRecordDetailView.swift in Sources */,
 				798005BE2852C66E006E390F /* VisitedOnBoardingScreen.swift in Sources */,
 				798005BF2852C66E006E390F /* FetchHealthRecordsViewController.swift in Sources */,
+				3E5E6EBB28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
 				798005C02852C66E006E390F /* TextTableViewCell.swift in Sources */,
 				798005C12852C66E006E390F /* InitialOnboardingView.swift in Sources */,
 				2922C0EB286E37B3000FF4F7 /* BaseHeaderTableViewCell.swift in Sources */,
