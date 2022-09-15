@@ -32,6 +32,16 @@ class HealthRecordDetailViewController: BaseViewController {
     private var type: LabTestType?
     private var pdfAPIWorker: PDFAPIWorker?
     
+    let connectionListener = NetworkConnection()
+    
+    var navDownloadIcon: UIImage? {
+        if connectionListener.hasConnection {
+            return UIImage(named: "nav-download")
+        } else {
+            return UIImage(named: "nav-download-disabled")
+        }
+    }
+    
     override var getRecordFlowType: RecordsFlowVCs? {
         return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource, userNumberHealthRecords: userNumberHealthRecords)
     }
@@ -40,6 +50,10 @@ class HealthRecordDetailViewController: BaseViewController {
         super.viewDidLoad()
         navSetup()
         setupStorageListener()
+        connectionListener.initListener { [weak self] connected in
+            guard let `self` = self else {return}
+            self.navSetup()
+        }
     }
     
     // TODO: We should look into this - not sure we should pop to root VC from detail view on a storage change
@@ -121,13 +135,13 @@ extension HealthRecordDetailViewController {
             if labOrder.reportAvailable == true {
                 self.reportId = labOrder.reportID
                 self.type = .normal
-                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         case .covidTestResultRecord(model: let covidTestOrder):
             if covidTestOrder.reportAvailable == true {
                 self.reportId = covidTestOrder.orderId
                 self.type = .covid
-                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         default:
             // NOTE: Enable Delete Record
@@ -195,6 +209,10 @@ extension HealthRecordDetailViewController {
         if let pdf = self.pdfData {
             self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
+            if !NetworkConnection.shared.hasConnection {
+                AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+                return
+            }
             guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let reportId = self.reportId, let type = self.type else {
                 showPDFUnavailableAlert()
                 return
@@ -212,7 +230,6 @@ extension HealthRecordDetailViewController {
                 }
             })
         }
-        
     }
     
     private func showPDFUnavailableAlert() {

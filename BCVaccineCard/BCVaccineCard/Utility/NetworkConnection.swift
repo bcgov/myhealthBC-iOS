@@ -13,11 +13,13 @@ class NetworkConnection {
     
     private let reachability: Reachability?
     
+    private var onChange: ((_ connected: Bool)->Void)?
+    
     public var hasConnection: Bool {
         return reachability?.connection != nil
     }
     
-    private init() {
+    init() {
         do {
             reachability = try Reachability()
         } catch {
@@ -27,21 +29,27 @@ class NetworkConnection {
     }
     
     
-    public func initListener() {
+    public func initListener(onChange: @escaping(_ connected: Bool) -> Void) {
+        self.onChange = onChange
         guard let reachability = reachability else {
             return
         }
 
-        reachability.whenReachable = { reachability in
+        reachability.whenReachable = { [weak self] reachability in
             if reachability.connection == .wifi {
                 Logger.log(string: "Reachable via WiFi", type: .Network)
             } else {
                 Logger.log(string: "Reachable via Cellular", type: .Network)
             }
+            guard let `self` = self, let notifier = self.onChange else {return}
+            notifier(true)
         }
-        reachability.whenUnreachable = { _ in
+        reachability.whenUnreachable = { [weak self] _ in
+            
             Logger.log(string: "Not reachable", type: .Network)
             AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+            guard let `self` = self,let  notifier = self.onChange else {return}
+            notifier(false)
         }
 
         do {
