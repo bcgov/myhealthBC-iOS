@@ -76,7 +76,6 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         
         var textAttributed = data.text.htmlToAttributedString
         
-       
         if let text = textAttributed, text.string.count > maxMessageChar, let mutStr = text.mutableCopy() as? NSMutableAttributedString {
             learnMoreButton.isHidden = false
             let textString = text.string
@@ -85,6 +84,8 @@ class CommunicationBannerTableViewCell: UITableViewCell {
             let hiddenChars = String(textString.suffix(reminder))
             let range = (mutStr.string as NSString).range(of: hiddenChars)
             mutStr.deleteCharacters(in: range)
+            let dots = NSAttributedString(string: "...", attributes: nil)
+            mutStr.append(dots)
             textAttributed = mutStr
         } else {
             learnMoreButton.isHidden = true
@@ -100,8 +101,6 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         titleLabel.textColor = AppColours.blueLightText
         
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 15)
-//        expandButton.setTitleColor(AppColours.blueLightText, for: .normal)
-//        dismissButton.setTitleColor(AppColours.blueLightText, for: .normal)
         
         iconImageView.image = UIImage(named: "communication-icon")
         textView.font = UIFont.bcSansRegularWithSize(size: 13)
@@ -119,17 +118,6 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         dismissButton.setTitle("", for: .normal)
         learnMoreButton.setImage(UIImage(named: "learn-more"), for: .normal)
         dismissButton.setImage(UIImage(named: "dismiss-communication"), for: .normal)
-//        learnMoreButton.tintColor = AppColours.appBlue
-//        dismissButton.tintColor = AppColours.appBlue
-//
-//        if let titleLabel = learnMoreButton.titleLabel {
-//            titleLabel.font = UIFont.bcSansBoldWithSize(size: 12)
-////            titleLabel.textColor = AppColours.appBlue
-//        }
-//        if let titleLabel = dismissButton.titleLabel {
-//            titleLabel.font = UIFont.bcSansBoldWithSize(size: 12)
-////            titleLabel.textColor = AppColours.appBlue
-//        }
         layoutIfNeeded()
     }
 }

@@ -326,6 +326,9 @@
 		3E5E6EBE28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */; };
 		3E5E6EBF28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */; };
 		3E5E6EC028D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */; };
+		3E5E6EC328D3B79A00724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
+		3E5E6EC428D3B8C400724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
+		3E5E6EC528D3B8C500724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
 		3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
@@ -1204,6 +1207,7 @@
 		3E5E6EB128D2747800724EDD /* CommunicationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationResponse.swift; sourceTree = "<group>"; };
 		3E5E6EB928D278BD00724EDD /* CommunicationBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationBannerTableViewCell.swift; sourceTree = "<group>"; };
 		3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommunicationBannerTableViewCell.xib; sourceTree = "<group>"; };
+		3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationMessageUIViewController.swift; sourceTree = "<group>"; };
 		3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsViewController.swift; sourceTree = "<group>"; };
 		3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReccomandationTableViewCell.swift; sourceTree = "<group>"; };
 		3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReccomandationTableViewCell.xib; sourceTree = "<group>"; };
@@ -1966,6 +1970,14 @@
 			path = Communication;
 			sourceTree = "<group>";
 		};
+		3E5E6EC128D3B76100724EDD /* Communication message */ = {
+			isa = PBXGroup;
+			children = (
+				3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */,
+			);
+			path = "Communication message";
+			sourceTree = "<group>";
+		};
 		3E7306DC28B5EDD7007FED05 /* Recommendations */ = {
 			isa = PBXGroup;
 			children = (
@@ -2385,6 +2397,7 @@
 			isa = PBXGroup;
 			children = (
 				79B9D00B27E2786800987D9F /* HomeScreen */,
+				3E5E6EC128D3B76100724EDD /* Communication message */,
 				3E7306DC28B5EDD7007FED05 /* Recommendations */,
 				298190C52773B4170062F55E /* Authentication */,
 				793504182761278E0098FEA7 /* ReusableViewControllers */,
@@ -3647,6 +3660,7 @@
 				797BB9642767DCE100CD1645 /* HealthGatewayAPIWorker.swift in Sources */,
 				297885252795F38500FF912D /* SettingsAuthenticateTableViewCell.swift in Sources */,
 				29A4DF4C27DA678000D5E901 /* ChipsView.swift in Sources */,
+				3E5E6EC428D3B8C400724EDD /* CommunicationMessageUIViewController.swift in Sources */,
 				7944F6F826F302DF006B9444 /* BaseViewController.swift in Sources */,
 				79B1A10128774B12009B3EFB /* AuthenticatedSpecialAuthorityDrugsResponseModel.swift in Sources */,
 				79218AB827519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */,
@@ -3932,6 +3946,7 @@
 				79218AB927519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */,
 				79CF236128171D4300510489 /* ScreenStateManager.swift in Sources */,
 				79A15B0727FE9F5600F8330D /* DataSecurityTipsTableViewCell.swift in Sources */,
+				3E5E6EC528D3B8C500724EDD /* CommunicationMessageUIViewController.swift in Sources */,
 				79218AE92755E25C0063004E /* UsersListOfRecordsViewController.swift in Sources */,
 				79B1A10228774B12009B3EFB /* AuthenticatedSpecialAuthorityDrugsResponseModel.swift in Sources */,
 				794BD6342702EEC00084ADA8 /* AppDelegate.swift in Sources */,
@@ -4191,6 +4206,7 @@
 				798005442852C66E006E390F /* Constants.swift in Sources */,
 				798005452852C66E006E390F /* LoginThrottleAPIWorker.swift in Sources */,
 				798005462852C66E006E390F /* UserRecordListTableViewCell.swift in Sources */,
+				3E5E6EC328D3B79A00724EDD /* CommunicationMessageUIViewController.swift in Sources */,
 				798005472852C66E006E390F /* HealthGatewayAPIWorker.swift in Sources */,
 				798005482852C66E006E390F /* SettingsAuthenticateTableViewCell.swift in Sources */,
 				798005492852C66E006E390F /* ChipsView.swift in Sources */,

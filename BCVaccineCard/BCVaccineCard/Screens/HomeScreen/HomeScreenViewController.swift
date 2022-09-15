@@ -208,12 +208,14 @@ extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
     }
     
     func onLearnMore(banner: CommunicationBanner?) {
-        print("Learn More")
         guard let banner = banner else {
             return
         }
+        let learnMoreVC = CommunicationMessageUIViewController()
+        learnMoreVC.text = banner.text.htmlToAttributedString
+        learnMoreVC.titleString = banner.subject
+        navigationController?.pushViewController(learnMoreVC, animated: true)
     }
-    
     
 }
 
