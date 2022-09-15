@@ -34,25 +34,17 @@ class HealthRecordDetailViewController: BaseViewController {
     
     let connectionListener = NetworkConnection()
     
-    var navDownloadIcon: UIImage? {
-        if connectionListener.hasConnection {
-            return UIImage(named: "nav-download")
-        } else {
-            return UIImage(named: "nav-download-disabled")
-        }
-    }
-    
     override var getRecordFlowType: RecordsFlowVCs? {
         return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource, userNumberHealthRecords: userNumberHealthRecords)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navSetup()
+        navSetup(hasConnection: NetworkConnection.shared.hasConnection)
         setupStorageListener()
         connectionListener.initListener { [weak self] connected in
             guard let `self` = self else {return}
-            self.navSetup()
+            self.navSetup(hasConnection: connected)
         }
     }
     
@@ -128,7 +120,9 @@ class HealthRecordDetailViewController: BaseViewController {
 
 // MARK: Navigation setup
 extension HealthRecordDetailViewController {
-    private func navSetup() {
+    private func navSetup(hasConnection: Bool) {
+        let navDownloadIcon = hasConnection ? UIImage(named: "nav-download") : UIImage(named: "nav-download-disabled")?.withRenderingMode(.alwaysOriginal)
+
         var rightNavButton: NavButton?
         switch dataSource.type {
         case .laboratoryOrder(model: let labOrder):
@@ -220,15 +214,19 @@ extension HealthRecordDetailViewController {
             let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
             self.pdfAPIWorker = PDFAPIWorker(delegateOwner: self, authCredentials: authCreds)
             self.view.startLoadingIndicator()
-            pdfAPIWorker?.getAuthenticatedLabPDF(authCredentials: authCreds, reportId: reportId, type: type, completion: { pdf in
-                self.pdfData = pdf
-                self.view.endLoadingIndicator()
-                if let pdf = pdf {
-                    self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
-                } else {
-                    self.showPDFUnavailableAlert()
-                }
-            })
+            BaseURLWorker.shared.setBaseURL { [weak self] in
+                guard let `self` = self else {return}
+                self.pdfAPIWorker?.getAuthenticatedLabPDF(authCredentials: authCreds, reportId: reportId, type: type, completion: { [weak self]  pdf in
+                    guard let `self` = self else {return}
+                    self.pdfData = pdf
+                    self.view.endLoadingIndicator()
+                    if let pdf = pdf {
+                        self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                    } else {
+                        self.showPDFUnavailableAlert()
+                    }
+                })
+            }
         }
     }
     

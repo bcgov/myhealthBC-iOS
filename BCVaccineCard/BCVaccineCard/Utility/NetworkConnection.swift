@@ -16,7 +16,11 @@ class NetworkConnection {
     private var onChange: ((_ connected: Bool)->Void)?
     
     public var hasConnection: Bool {
-        return reachability?.connection != nil
+        if let connection = reachability?.connection {
+            return connection != .unavailable
+        } else {
+            return false
+        }
     }
     
     init() {

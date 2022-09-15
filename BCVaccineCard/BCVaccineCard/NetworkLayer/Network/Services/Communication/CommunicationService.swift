@@ -17,9 +17,9 @@ extension CommunicationBanner {
 }
 
 struct CommunicationSetvice {
-    let network: Network
-    
     fileprivate static var dismissed: [CommunicationBanner] = []
+    
+    let network: Network
     
     private var endpoints: UrlAccessor {
         return UrlAccessor()
