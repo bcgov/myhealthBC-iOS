@@ -263,6 +263,9 @@ extension APIClient {
     private func handleBaseURLResponse(result: Result<MobileConfigurationResponseObject, ResultError>, completion: @escaping(String?) -> Void) {
         switch result {
         case .success(let configResponse):
+            if !configResponse.online {
+                AppDelegate.sharedInstance?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+            }
             completion(configResponse.baseUrl)
         case .failure(let error):
             Logger.log(string: error.localizedDescription, type: .Network)

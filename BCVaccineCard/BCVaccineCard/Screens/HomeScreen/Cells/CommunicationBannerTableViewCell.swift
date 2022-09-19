@@ -99,11 +99,9 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         container.layer.cornerRadius = 10
         
         titleLabel.textColor = AppColours.blueLightText
-        
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 15)
         
         iconImageView.image = UIImage(named: "communication-icon")
-        //        textView.font = UIFont.bcSansRegularWithSize(size: 13)
         textView.backgroundColor = .clear
         
         textView.isScrollEnabled = false
@@ -134,6 +132,7 @@ extension CommunicationBannerTableViewCell: UITextViewDelegate {
 }
 
 extension String {
+    /// Creates attributed string from HTML string
     var htmlToAttributedString: NSAttributedString? {
         guard let data = data(using: .utf8) else { return nil }
         do {
@@ -148,7 +147,9 @@ extension String {
 }
 
 
+
 extension String {
+    /// Replaces HTML tags for styling with inline CSS and injects a Font through CSS with the given size
     func injectHTMLFont(size: Int) -> String {
         var edited = self
         // Italic text
@@ -171,6 +172,7 @@ extension String {
 
 
 extension NSAttributedString {
+    /// Cuts off text after given number of characters and adds ...
     func cutOff(at maxChar: Int) -> NSMutableAttributedString? {
         guard self.string.count > maxChar, let mutStr = self.mutableCopy() as? NSMutableAttributedString else {
             return nil
