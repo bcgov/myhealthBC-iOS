@@ -12,12 +12,14 @@ protocol CommunicationBannerTableViewCellDelegate {
     func onClose(banner: CommunicationBanner?)
     func onDismiss(banner: CommunicationBanner?)
     func onLearnMore(banner: CommunicationBanner?)
+    func shouldUpdateUI()
 }
 
 class CommunicationBannerTableViewCell: UITableViewCell {
     
     let maxMessageChar: Int = 120
-
+    
+    @IBOutlet weak var messageHeight: NSLayoutConstraint!
     @IBOutlet weak var iconImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var textView: UITextView!
@@ -34,7 +36,7 @@ class CommunicationBannerTableViewCell: UITableViewCell {
     var isExpanded: Bool {
         return !buttonsStack.isHidden && !messageStack.isHidden
     }
-
+    
     @IBAction func expandButtonTapped(_ sender: Any) {
         if isExpanded {
             close()
@@ -55,14 +57,14 @@ class CommunicationBannerTableViewCell: UITableViewCell {
     private func expand() {
         messageStack.isHidden = false
         buttonsStack.isHidden = false
-        expandButton.setImage(UIImage(named: "expand_arrow_down"), for: .normal)
+        expandButton.setImage(UIImage(named: "expand_arrow_up"), for: .normal)
         delegate?.onExpand(banner: data)
     }
     
     private func close() {
         messageStack.isHidden = true
         buttonsStack.isHidden = true
-        expandButton.setImage(UIImage(named: "expand_arrow_up"), for: .normal)
+        expandButton.setImage(UIImage(named: "expand_arrow_down"), for: .normal)
         delegate?.onClose(banner: data)
     }
     
@@ -70,31 +72,28 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         guard let data = data else {
             return
         }
+        expandButton.setImage(UIImage(named: "expand_arrow_down"), for: .normal)
         self.data = data
         self.delegate = delegate
         titleLabel.text = data.subject
         
-        var textAttributed = data.text.htmlToAttributedString
+        //        var textAttributed = data.text.injectHTMLFont(size: 13).htmlToAttributedString
+        var textAttributed = data.testText.injectHTMLFont(size: 14).htmlToAttributedString
         
-        if let text = textAttributed, text.string.count > maxMessageChar, let mutStr = text.mutableCopy() as? NSMutableAttributedString {
+        if let text = textAttributed, let shortText = text.cutOff(at: maxMessageChar) {
             learnMoreButton.isHidden = false
-            let textString = text.string
-            let length = textString.count
-            let reminder = length - maxMessageChar
-            let hiddenChars = String(textString.suffix(reminder))
-            let range = (mutStr.string as NSString).range(of: hiddenChars)
-            mutStr.deleteCharacters(in: range)
-            let dots = NSAttributedString(string: "...", attributes: nil)
-            mutStr.append(dots)
-            textAttributed = mutStr
+            textAttributed = shortText
         } else {
             learnMoreButton.isHidden = true
         }
+        
         textView.attributedText = textAttributed
+        textView.delegate = self
         style()
     }
     
     private func style() {
+        layoutIfNeeded()
         container.backgroundColor = UIColor(red: 0.851, green: 0.918, blue: 0.969, alpha: 1)
         container.layer.cornerRadius = 10
         
@@ -103,11 +102,12 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         titleLabel.font = UIFont.bcSansBoldWithSize(size: 15)
         
         iconImageView.image = UIImage(named: "communication-icon")
-        textView.font = UIFont.bcSansRegularWithSize(size: 13)
+        //        textView.font = UIFont.bcSansRegularWithSize(size: 13)
         textView.backgroundColor = .clear
         
         textView.isScrollEnabled = false
         textView.sizeToFit()
+        textView.isEditable = false
         
         container.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07).cgColor
         container.layer.shadowOpacity = 1
@@ -119,6 +119,16 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         learnMoreButton.setImage(UIImage(named: "learn-more"), for: .normal)
         dismissButton.setImage(UIImage(named: "dismiss-communication"), for: .normal)
         layoutIfNeeded()
+        delegate?.shouldUpdateUI()
+    }
+}
+
+extension CommunicationBannerTableViewCell: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        if UIApplication.shared.canOpenURL(URL) {
+            UIApplication.shared.open(URL)
+        }
+        return false
     }
 }
 
@@ -133,5 +143,45 @@ extension String {
     }
     var htmlToString: String {
         return htmlToAttributedString?.string ?? ""
+    }
+}
+
+
+extension String {
+    func injectHTMLFont(size: Int) -> String {
+        var edited = self
+        // Italic text
+        edited = edited.replacingOccurrences(of: "<em>", with: "<span style=\"font-style: italic;\">")
+        edited = edited.replacingOccurrences(of: "</em>", with: "</span>")
+        // Underlined text
+        edited = edited.replacingOccurrences(of: "<u>", with: "<span style=\"text-decoration: underline;\">")
+        edited = edited.replacingOccurrences(of: "</u>", with: "</span>")
+        // Bold Text
+        edited = edited.replacingOccurrences(of: "<b>", with: "<span style=\"font-weight: bold;\">")
+        edited = edited.replacingOccurrences(of: "</b>", with: "</span>")
+        // Strikethrough text
+        edited = edited.replacingOccurrences(of: "<del>", with: "<span style=\"text-decoration: line-through;\">")
+        edited = edited.replacingOccurrences(of: "</del>", with: "</span>")
+        edited = edited.replacingOccurrences(of: "<p>", with: "<p style=\" font-family: Arial, sans-serif; font-size: \(size)px;\">")
+        
+        return edited
+    }
+}
+
+
+extension NSAttributedString {
+    func cutOff(at maxChar: Int) -> NSMutableAttributedString? {
+        guard self.string.count > maxChar, let mutStr = self.mutableCopy() as? NSMutableAttributedString else {
+            return nil
+        }
+        let textString = self.string
+        let length = textString.count
+        let reminder = length - maxChar
+        let hiddenChars = String(textString.suffix(reminder))
+        let range = (mutStr.string as NSString).range(of: hiddenChars)
+        mutStr.deleteCharacters(in: range)
+        let dots = NSAttributedString(string: "...", attributes: nil)
+        mutStr.append(dots)
+        return mutStr
     }
 }

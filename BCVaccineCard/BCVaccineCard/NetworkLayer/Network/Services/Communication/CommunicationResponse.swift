@@ -36,3 +36,9 @@ struct CommunicationResponseResourcePayload: Codable {
 typealias CommunicationBanner = CommunicationResponseResourcePayload
 
 
+extension CommunicationBanner {
+    var testText: String {
+        return "<p><strong>Send</strong> <em>email to</em> <del>this</del> <u>email to weee</u>A Blue Heading Health Gateway provides secure and convenient access to your health records in <a href=\"https://dev.healthgateway.gov.bc.ca/\">British Columbia</a>. <strong>Send</strong> <em>email to</em> <a href=\"mailto:aravind@freshworks.io\">aravind@freshworks.io</a>&nbsp; <h1 style=\"color:blue;\">A Blue Heading</h1></p>"
+    }
+}
+

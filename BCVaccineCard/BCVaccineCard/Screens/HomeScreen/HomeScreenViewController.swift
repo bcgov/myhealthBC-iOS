@@ -28,6 +28,7 @@ class HomeScreenViewController: BaseViewController {
     
     private let communicationSetvice: CommunicationSetvice = CommunicationSetvice(network: AFNetwork())
     private var communicationBanner: CommunicationBanner?
+    private let connectionListener = NetworkConnection()
     
     private var dataSource: [DataSource] {
         genDataSource()
@@ -55,7 +56,13 @@ class HomeScreenViewController: BaseViewController {
         addObservablesForChangeInAuthenticationStatus()
         setupTableView()
         navSetup()
-        fetchCommunicationBanner()
+        
+        connectionListener.initListener { [weak self] connected in
+            guard let `self` = self else {return}
+            if connected {
+                self.fetchCommunicationBanner()
+            }
+        }
     }
     
     private func genDataSource() -> [DataSource] {
@@ -64,7 +71,7 @@ class HomeScreenViewController: BaseViewController {
             data.append(.button(type: .Recommendations))
         }
         if let banner = communicationBanner {
-            data.insert(.banner(data: banner), at: 0)
+            data.insert(.banner(data: banner), at: 1)
         }
         return data
     }
@@ -188,6 +195,10 @@ extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
         }
     }
     
+    func shouldUpdateUI() {
+        tableView.performBatchUpdates(nil)
+    }
+    
     func onExpand(banner: CommunicationBanner?) {
         tableView.reloadData()
     }
@@ -212,8 +223,7 @@ extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
             return
         }
         let learnMoreVC = CommunicationMessageUIViewController()
-        learnMoreVC.text = banner.text.htmlToAttributedString
-        learnMoreVC.titleString = banner.subject
+        learnMoreVC.banner = banner
         navigationController?.pushViewController(learnMoreVC, animated: true)
     }
     

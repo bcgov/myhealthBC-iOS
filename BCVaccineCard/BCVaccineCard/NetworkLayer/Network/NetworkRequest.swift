@@ -27,8 +27,6 @@ extension NetworkRequest {
         case Post
         case Put
     }
-    
-   
 }
 
 struct DefaultParams: Codable {
