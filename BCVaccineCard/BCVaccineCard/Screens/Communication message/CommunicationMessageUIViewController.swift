@@ -113,7 +113,7 @@ class CommunicationMessageUIViewController: UIViewController {
         guard let banner = banner, let textView = textView, let stackView = stackView else {
             return
         }
-        textView.attributedText = banner.testText.injectHTMLFont(size: 17).htmlToAttributedString
+        textView.attributedText = banner.text.injectHTMLFont(size: 17).htmlToAttributedString
         textView.backgroundColor = .clear
         textView.isEditable = false
         textView.delegate = self

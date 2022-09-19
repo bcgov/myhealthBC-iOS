@@ -59,6 +59,7 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         buttonsStack.isHidden = false
         expandButton.setImage(UIImage(named: "expand_arrow_up"), for: .normal)
         delegate?.onExpand(banner: data)
+        layoutIfNeeded()
     }
     
     private func close() {
@@ -66,19 +67,19 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         buttonsStack.isHidden = true
         expandButton.setImage(UIImage(named: "expand_arrow_down"), for: .normal)
         delegate?.onClose(banner: data)
+        layoutIfNeeded()
     }
     
     func configure(data: CommunicationBanner?, delegate: CommunicationBannerTableViewCellDelegate) {
         guard let data = data else {
             return
         }
-        expandButton.setImage(UIImage(named: "expand_arrow_down"), for: .normal)
+        expandButton.setImage(UIImage(named: "expand_arrow_up"), for: .normal)
         self.data = data
         self.delegate = delegate
         titleLabel.text = data.subject
         
-        //        var textAttributed = data.text.injectHTMLFont(size: 13).htmlToAttributedString
-        var textAttributed = data.testText.injectHTMLFont(size: 14).htmlToAttributedString
+        var textAttributed = data.text.injectHTMLFont(size: 14).htmlToAttributedString
         
         if let text = textAttributed, let shortText = text.cutOff(at: maxMessageChar) {
             learnMoreButton.isHidden = false
