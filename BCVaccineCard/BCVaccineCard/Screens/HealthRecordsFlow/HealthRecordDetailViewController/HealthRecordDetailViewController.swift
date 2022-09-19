@@ -215,7 +215,7 @@ extension HealthRecordDetailViewController {
             self.pdfAPIWorker = PDFAPIWorker(delegateOwner: self, authCredentials: authCreds)
             self.view.startLoadingIndicator()
             BaseURLWorker.shared.setBaseURL { [weak self] in
-                guard let `self` = self else {return}
+                guard let `self` = self, BaseURLWorker.shared.isOnline == true else {return}
                 self.pdfAPIWorker?.getAuthenticatedLabPDF(authCredentials: authCreds, reportId: reportId, type: type, completion: { [weak self]  pdf in
                     guard let `self` = self else {return}
                     self.pdfData = pdf

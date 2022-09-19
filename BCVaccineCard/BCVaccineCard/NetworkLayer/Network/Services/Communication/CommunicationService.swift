@@ -10,7 +10,6 @@ import Foundation
 
 extension CommunicationBanner {
     var shouldDisplay: Bool {
-        return true
         guard !CommunicationSetvice(network: AFNetwork()).isDismissed(message: self) else {return false}
         guard let effectiveDateTime = effectiveDateTime.getGatewayDate(), let expiryDateTime = expiryDateTime.getGatewayDate() else {return false}
         return effectiveDateTime < Date() && expiryDateTime > Date()
@@ -27,11 +26,15 @@ struct CommunicationSetvice {
     }
     
     func fetchMessage(completion: @escaping(_ message: CommunicationBanner?) -> Void) {
-        let requestModel = NetworkRequest<DefaultParams, CommunicationResponse>(url: endpoints.communicationsMobile, type: .Get, parameters: nil, headers: nil) { result in
-            completion(result?.resourcePayload)
+        BaseURLWorker.shared.setBaseURL {
+            guard BaseURLWorker.shared.isOnline == true else {return completion(nil)}
+            
+            let requestModel = NetworkRequest<DefaultParams, CommunicationResponse>(url: endpoints.communicationsMobile, type: .Get, parameters: nil, headers: nil) { result in
+                completion(result?.resourcePayload)
+            }
+            
+            network.request(with: requestModel)
         }
-        
-        network.request(with: requestModel)
     }
     
     func isDismissed(message: CommunicationBanner) -> Bool {
@@ -48,4 +51,3 @@ struct CommunicationSetvice {
         }
     }
 }
-
