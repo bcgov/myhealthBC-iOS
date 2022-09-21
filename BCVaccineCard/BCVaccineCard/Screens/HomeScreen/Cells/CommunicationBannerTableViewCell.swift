@@ -79,7 +79,7 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         self.delegate = delegate
         titleLabel.text = data.subject
         
-        var textAttributed = data.text.injectHTMLFont(size: 14).htmlToAttributedString
+        var textAttributed = data.text.injectHTMLFont(size: 14).htmlToAttributedString?.trimmedAttributedString()
         
         if let text = textAttributed, let shortText = text.cutOff(at: maxMessageChar) {
             learnMoreButton.isHidden = false
@@ -186,5 +186,18 @@ extension NSAttributedString {
         let dots = NSAttributedString(string: "...", attributes: nil)
         mutStr.append(dots)
         return mutStr
+    }
+    
+    func trimmedAttributedString() -> NSAttributedString {
+        let invertedSet = CharacterSet.whitespacesAndNewlines.inverted
+        let startRange = string.rangeOfCharacter(from: invertedSet)
+        let endRange = string.rangeOfCharacter(from: invertedSet, options: .backwards)
+        guard let startLocation = startRange?.upperBound, let endLocation = endRange?.lowerBound else {
+            return NSAttributedString(string: string)
+        }
+        let location = string.distance(from: string.startIndex, to: startLocation) - 1
+        let length = string.distance(from: startLocation, to: endLocation) + 2
+        let range = NSRange(location: location, length: length)
+        return attributedSubstring(from: range)
     }
 }
