@@ -13,7 +13,7 @@ class RecommendationsViewController: BaseViewController {
     @IBOutlet weak var tableView: UITableView!
     
     private var recommendations: [ImmunizationRecommendation] {
-        return StorageService.shared.fetchRecommendations().sorted(by: {$0.diseaseEligibleDate ?? Date() > $1.diseaseEligibleDate ?? Date()})
+        return StorageService.shared.fetchRecommendations().sorted(by: {$0.diseaseDueDate ?? Date() > $1.diseaseDueDate  ?? Date()})
     }
     private var expandedIndecies: [Int] = []
     

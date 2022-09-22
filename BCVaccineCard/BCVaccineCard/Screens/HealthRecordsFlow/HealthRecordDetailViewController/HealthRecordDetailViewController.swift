@@ -32,14 +32,20 @@ class HealthRecordDetailViewController: BaseViewController {
     private var type: LabTestType?
     private var pdfAPIWorker: PDFAPIWorker?
     
+    let connectionListener = NetworkConnection()
+    
     override var getRecordFlowType: RecordsFlowVCs? {
         return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource, userNumberHealthRecords: userNumberHealthRecords)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navSetup()
+        navSetup(hasConnection: NetworkConnection.shared.hasConnection)
         setupStorageListener()
+        connectionListener.initListener { [weak self] connected in
+            guard let `self` = self else {return}
+            self.navSetup(hasConnection: connected)
+        }
     }
     
     // TODO: We should look into this - not sure we should pop to root VC from detail view on a storage change
@@ -114,20 +120,22 @@ class HealthRecordDetailViewController: BaseViewController {
 
 // MARK: Navigation setup
 extension HealthRecordDetailViewController {
-    private func navSetup() {
+    private func navSetup(hasConnection: Bool) {
+        let navDownloadIcon = hasConnection ? UIImage(named: "nav-download") : UIImage(named: "nav-download-disabled")?.withRenderingMode(.alwaysOriginal)
+
         var rightNavButton: NavButton?
         switch dataSource.type {
         case .laboratoryOrder(model: let labOrder):
             if labOrder.reportAvailable == true {
                 self.reportId = labOrder.reportID
                 self.type = .normal
-                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         case .covidTestResultRecord(model: let covidTestOrder):
             if covidTestOrder.reportAvailable == true {
                 self.reportId = covidTestOrder.orderId
                 self.type = .covid
-                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         default:
             // NOTE: Enable Delete Record
@@ -195,6 +203,10 @@ extension HealthRecordDetailViewController {
         if let pdf = self.pdfData {
             self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
+            if !NetworkConnection.shared.hasConnection {
+                AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+                return
+            }
             guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let reportId = self.reportId, let type = self.type else {
                 showPDFUnavailableAlert()
                 return
@@ -202,17 +214,26 @@ extension HealthRecordDetailViewController {
             let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
             self.pdfAPIWorker = PDFAPIWorker(delegateOwner: self, authCredentials: authCreds)
             self.view.startLoadingIndicator()
-            pdfAPIWorker?.getAuthenticatedLabPDF(authCredentials: authCreds, reportId: reportId, type: type, completion: { pdf in
-                self.pdfData = pdf
-                self.view.endLoadingIndicator()
-                if let pdf = pdf {
-                    self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
-                } else {
-                    self.showPDFUnavailableAlert()
+            BaseURLWorker.shared.setBaseURL { [weak self] in
+                guard let `self` = self else {
+                    return
                 }
-            })
+                guard BaseURLWorker.shared.isOnline == true else {
+                    self.view.endLoadingIndicator()
+                    return
+                }
+                self.pdfAPIWorker?.getAuthenticatedLabPDF(authCredentials: authCreds, reportId: reportId, type: type, completion: { [weak self]  pdf in
+                    guard let `self` = self else {return}
+                    self.pdfData = pdf
+                    self.view.endLoadingIndicator()
+                    if let pdf = pdf {
+                        self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                    } else {
+                        self.showPDFUnavailableAlert()
+                    }
+                })
+            }
         }
-        
     }
     
     private func showPDFUnavailableAlert() {

@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         listenToAppState()
         localAuthManager = LocalAuthManager()
         localAuthManager?.listenToAppStates()
-        NetworkConnection.shared.initListener()
+        NetworkConnection.shared.initListener(onChange: {_ in})
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = false
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true

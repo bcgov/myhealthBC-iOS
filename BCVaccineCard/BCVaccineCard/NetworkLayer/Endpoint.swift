@@ -109,6 +109,11 @@ extension UrlAccessor: EndpointsAccessor {
         return self.mobileConfigURL
     }
     
+    var communicationsMobile: URL {
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/Communication/Mobile")
+//        return self.baseURL.appendingPathComponent("api/gatewayapiservice/Communication/Banner")
+    }
+    
     func getAuthenticatedPatientDetails(hdid: String) -> URL {
         return self.patientServiceBaseURL.appendingPathComponent("Patient").appendingPathComponent(hdid)
     }
