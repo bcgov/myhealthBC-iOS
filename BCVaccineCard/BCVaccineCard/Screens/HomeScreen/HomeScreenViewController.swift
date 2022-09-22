@@ -107,7 +107,18 @@ extension HomeScreenViewController {
     private func addObservablesForChangeInAuthenticationStatus() {
         NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+    }
+        
+    @objc private func storageChangeEvent(_ notification: Notification) {
+        guard let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+        switch event.entity {
+        case .Recommendation:
+            tableView.reloadData()
+        default:
+            break
+        }
     }
     
     @objc private func reloadFromForcedLogout(_ notification: Notification) {
