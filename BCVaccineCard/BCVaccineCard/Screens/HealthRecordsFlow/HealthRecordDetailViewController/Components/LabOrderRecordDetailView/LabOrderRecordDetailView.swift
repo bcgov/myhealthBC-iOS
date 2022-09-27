@@ -42,6 +42,7 @@ extension HealthRecordsDetailDataSource.Record {
 
 class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
     private var fields: [[TextListModel]] = [[]]
+    private var topSectionCount = 0
     
     var hasHeader: Bool {
         return model?.labOrderBannerType() != nil
@@ -59,15 +60,29 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return hasHeader ? fields.count + 1 : fields.count
+        var topBanner = false
+        if hasHeader {
+            topBanner = true
+        }
+        if model?.labOrder()?.reportAvailable == true {
+            topBanner = true
+        }
+        
+        return topBanner ? fields.count + 1 : fields.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if hasHeader, section == 0 {
-            return 1
+        if section == 0 {
+            if model?.labOrder()?.reportAvailable == true {
+                topSectionCount += 1
+            }
+            if hasHeader {
+                topSectionCount += 1
+            }
+            return topSectionCount
         }
         
-        if hasHeader {
+        if hasHeader || model?.labOrder()?.reportAvailable == true {
             return fields[section - 1].count
         } else {
             return fields[section].count
@@ -76,13 +91,20 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let model = self.model else {return UITableViewCell()}
-        if hasHeader, indexPath.section == 0, let bannerType = model.labOrderBannerType() {
-            guard let cell = labOrderHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.setup(type: bannerType)
-            return cell
+        if indexPath.section == 0 {
+            if hasHeader, let bannerType = model.labOrderBannerType(), indexPath.row == (topSectionCount - 1) {
+                guard let cell = labOrderHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+                cell.setup(type: bannerType)
+                return cell
+            }
+            if model.labOrder()?.reportAvailable == true, indexPath.row == (topSectionCount - 1) {
+                guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
+                cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance)
+                return cell
+            }
         }
-        
-        let fieldSection = hasHeader ? indexPath.section - 1 : indexPath.section
+        let topSectionAvailable = hasHeader || (model.labOrder()?.reportAvailable ?? false)
+        let fieldSection = topSectionAvailable ? indexPath.section - 1 : indexPath.section
         guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
         cell.setup(with: fields[fieldSection][indexPath.row])
         return cell

@@ -61,6 +61,9 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
         guard let section = Section(rawValue: section) else {return 0}
         switch section {
         case .Header:
+            if model?.testResult()?.parentTest?.reportAvailable == true {
+                return 2
+            }
             return 1
         case .Fields:
             return fields.count
@@ -71,16 +74,22 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
         guard let section = Section(rawValue: indexPath.section),  let testResult = model?.testResult() else {return UITableViewCell()}
         switch section {
         case .Header:
-            if let message = message {
-                guard let cell = messageHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-                cell.setup(text: message, bgColor: testResult.resultType.getColor, messageColor: testResult.resultType.getResultTextColor)
-                return cell
-            } else {
-                guard let cell = covidTestHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-                cell.setup(for: testResult, status: model?.status ?? "")
+            if indexPath.row == 0 {
+                if let message = message {
+                    guard let cell = messageHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+                    cell.setup(text: message, bgColor: testResult.resultType.getColor, messageColor: testResult.resultType.getResultTextColor)
+                    return cell
+                } else {
+                    guard let cell = covidTestHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+                    cell.setup(for: testResult, status: model?.status ?? "")
+                    return cell
+                }
+            } else if indexPath.row == 1 {
+                guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
+                cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance)
                 return cell
             }
-           
+           return UITableViewCell()
         case .Fields:
             guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
             cell.setup(with: fields[indexPath.row])

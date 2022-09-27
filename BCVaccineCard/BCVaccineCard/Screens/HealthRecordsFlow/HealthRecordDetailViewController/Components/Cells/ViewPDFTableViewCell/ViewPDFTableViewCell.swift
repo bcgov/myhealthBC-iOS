@@ -8,16 +8,15 @@
 import UIKit
 
 class ViewPDFTableViewCell: UITableViewCell {
+    
+    @IBOutlet private weak var viewPDFButton: AppStyleButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    public func configure(delegateOwner: UIViewController) {
+        viewPDFButton.configure(withStyle: .white, buttonType: .viewPDF, delegateOwner: delegateOwner, enabled: true)
     }
     
 }
