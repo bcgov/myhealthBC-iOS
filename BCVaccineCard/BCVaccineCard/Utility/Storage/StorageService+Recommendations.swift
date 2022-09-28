@@ -49,6 +49,7 @@ extension StorageService: StorageImmunizationRecommendationManager {
             diseaseDueDate: getGatewayDate(from: object.diseaseDueDate),
             diseaseEligibleDate: getGatewayDate(from: object.diseaseEligibleDate),
             recommendationSetID: object.recommendationSetID,
+            recommendedVaccinations: object.recommendedVaccinations,
             status: object.status,
             immunizationDetail: detailsObject,
             targetDiseases: targetDiseases,
@@ -63,6 +64,7 @@ extension StorageService: StorageImmunizationRecommendationManager {
     diseaseDueDate: Date?,
     diseaseEligibleDate: Date?,
     recommendationSetID: String?,
+    recommendedVaccinations: String?,
     status: String?,
     immunizationDetail: ImmunizationDetails?,
     targetDiseases: [ImmunizationTargetDisease],
@@ -76,6 +78,7 @@ extension StorageService: StorageImmunizationRecommendationManager {
         object.diseaseDueDate = diseaseDueDate
         object.diseaseEligibleDate = diseaseEligibleDate
         object.recommendationSetID = recommendationSetID
+        object.recommendationVaccinations = recommendedVaccinations
         object.status = status
         object.immunizationDetail = immunizationDetail
         object.patient = patient
