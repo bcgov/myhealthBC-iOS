@@ -11,22 +11,57 @@ class BaseHealthRecordsDetailView: UIView {
     
     public var tableView: UITableView?
     public var model: HealthRecordsDetailDataSource.Record?
+    private var commentsEnabled: Bool = false
+    private var stackViewBottomAnchor: NSLayoutConstraint? = nil
+    private var stackViewBottomKeyboardAnchor: NSLayoutConstraint? = nil
+    private weak var stackView: UIStackView? = nil
     
     let separatorHeight: CGFloat = 1
     let separatorBottomSpace: CGFloat = 12
+    let commentFieldHeight: CGFloat = 96
     
-    func setup(model: HealthRecordsDetailDataSource.Record) {
+    
+    func setup(model: HealthRecordsDetailDataSource.Record, enableComments: Bool) {
         self.model = model
-        createTableView()
+        self.commentsEnabled = enableComments
+        creatSubViews(enableComments: enableComments)
         setup()
+        setupKeyboardListener()
     }
     
     func setup() {}
     
-    public func createTableView() {
+    public func creatSubViews(enableComments: Bool) {
         let tableView = UITableView(frame: .zero)
         addSubview(tableView)
-        tableView.addEqualSizeContraints(to: self)
+        
+        let stackView = UIStackView(frame: .zero)
+        self.stackView = stackView
+        addSubview(stackView)
+        
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 0).isActive = true
+        stackView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
+        
+        let bottomAnchor = stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0)
+        stackViewBottomAnchor = bottomAnchor
+        bottomAnchor.isActive = true
+        
+        stackView.distribution = .fill
+        stackView.spacing = 0
+        stackView.alignment = .fill
+        stackView.axis = .vertical
+        stackView.addArrangedSubview(tableView)
+        
+        if enableComments {
+            let commentTextField: CommentTextFieldView = CommentTextFieldView.fromNib()
+            commentTextField.heightAnchor.constraint(equalToConstant: commentFieldHeight).isActive = true
+            stackView.addArrangedSubview(commentTextField)
+            commentTextField.setup()
+            commentTextField.delegate = self
+        }
+        
         self.tableView = tableView
         setupTableView()
     }
@@ -84,5 +119,100 @@ class BaseHealthRecordsDetailView: UIView {
     
     public func textCell(indexPath: IndexPath, tableView: UITableView) -> HealthRecordDetailFieldTableViewCell? {
         return tableView.dequeueReusableCell(withIdentifier: HealthRecordDetailFieldTableViewCell.getName, for: indexPath) as? HealthRecordDetailFieldTableViewCell
+    }
+    
+    // MARK: Keyboard Manager
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func setupKeyboardListener() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.keyboardNotification(notification:)),
+                                               name: UIResponder.keyboardWillChangeFrameNotification,
+                                               object: nil)
+    }
+    
+    @objc func keyboardNotification(notification: NSNotification) {
+        
+        guard let userInfo = notification.userInfo else { return }
+
+        let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        let endFrameY = endFrame?.origin.y ?? 0
+        let duration:TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+        let animationCurveRawNSN = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber
+        let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIView.AnimationOptions.curveEaseInOut.rawValue
+        let animationCurve:UIView.AnimationOptions = UIView.AnimationOptions(rawValue: animationCurveRaw)
+        
+        
+        var keyboardHeight: CGFloat = endFrame?.size.height ?? 0
+        
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                keyboardHeight = keyboardRectangle.height
+        }
+        
+
+        if endFrameY >= UIScreen.main.bounds.size.height {
+            if let keyboardConstraint = stackViewBottomKeyboardAnchor {
+                stackViewBottomKeyboardAnchor?.isActive = false
+                stackView?.removeConstraint(keyboardConstraint)
+            }
+            
+            
+            let bottomAnchor = stackView?.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0)
+            stackViewBottomAnchor = bottomAnchor
+            bottomAnchor?.isActive = true
+            self.layoutIfNeeded()
+
+        } else {
+            if let bottomConstraint = stackViewBottomAnchor {
+                stackViewBottomAnchor?.isActive = false
+                stackView?.removeConstraint(bottomConstraint)
+            }
+            
+            if let tabBarController = findTabBarParent() {
+                let tabHeight = tabBarController.tabBar.frame.height
+                keyboardHeight -= tabHeight
+            }
+            
+            let constraintConstant =  0 - (keyboardHeight)
+            let bottomAnchor = stackView?.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: constraintConstant)
+            bottomAnchor?.priority = UILayoutPriority.defaultLow
+            stackViewBottomKeyboardAnchor = bottomAnchor
+            bottomAnchor?.isActive = true
+            self.layoutIfNeeded()
+        }
+
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: animationCurve,
+            animations: { self.layoutIfNeeded() },
+            completion: nil)
+    }
+    
+    
+}
+
+// MARK: Comment Field delegate
+extension BaseHealthRecordsDetailView: CommentTextFieldViewDelegate {
+    func textChanged(text: String?) {
+        print(text)
+    }
+    
+    func submit(text: String) {
+        print("Submit")
+        print(text)
+        guard let record = model, let hdid = AuthManager().hdid else {return}
+        record.submitComment(text: text, hdid: hdid)
+    }
+}
+
+
+extension UIView {
+    func findTabBarParent() -> UITabBarController? {
+        let parentVc = self.parentContainerViewController()
+        return parentVc?.tabBarController
     }
 }

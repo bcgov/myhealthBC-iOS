@@ -299,6 +299,9 @@
 		2D465B0628CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
 		2D465B0728CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
+		3E0B540928E4AB5900DE80EB /* PostCommentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B540828E4AB5900DE80EB /* PostCommentResponse.swift */; };
+		3E0B540A28E4AB5900DE80EB /* PostCommentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B540828E4AB5900DE80EB /* PostCommentResponse.swift */; };
+		3E0B540B28E4AB5900DE80EB /* PostCommentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0B540828E4AB5900DE80EB /* PostCommentResponse.swift */; };
 		3E32322628B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
 		3E32322728B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
 		3E32322828B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
@@ -329,6 +332,18 @@
 		3E5E6EC328D3B79A00724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
 		3E5E6EC428D3B8C400724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
 		3E5E6EC528D3B8C500724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
+		3E61820A28E47C080084CFEE /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61820928E47C080084CFEE /* PostComment.swift */; };
+		3E61820C28E47C760084CFEE /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61820B28E47C760084CFEE /* CommentService.swift */; };
+		3E61821128E47F2C0084CFEE /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61820B28E47C760084CFEE /* CommentService.swift */; };
+		3E61821228E47F2D0084CFEE /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61820B28E47C760084CFEE /* CommentService.swift */; };
+		3E61821328E480E20084CFEE /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61820928E47C080084CFEE /* PostComment.swift */; };
+		3E61821428E480E30084CFEE /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61820928E47C080084CFEE /* PostComment.swift */; };
+		3E61821628E483CF0084CFEE /* CommentTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61821528E483CF0084CFEE /* CommentTextFieldView.swift */; };
+		3E61821728E483CF0084CFEE /* CommentTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61821528E483CF0084CFEE /* CommentTextFieldView.swift */; };
+		3E61821828E483CF0084CFEE /* CommentTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E61821528E483CF0084CFEE /* CommentTextFieldView.swift */; };
+		3E61821A28E483E70084CFEE /* CommentTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E61821928E483E70084CFEE /* CommentTextFieldView.xib */; };
+		3E61821B28E483E70084CFEE /* CommentTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E61821928E483E70084CFEE /* CommentTextFieldView.xib */; };
+		3E61821C28E483E70084CFEE /* CommentTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E61821928E483E70084CFEE /* CommentTextFieldView.xib */; };
 		3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
@@ -1198,6 +1213,7 @@
 		2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFAPIWorker.swift; sourceTree = "<group>"; };
 		2D60219828CBEB2D0096614F /* BCVaccineCard 1.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.2.xcdatamodel"; sourceTree = "<group>"; };
 		322EBB5AF649DC5B3E4779FE /* Pods_Health_Gateway_Dev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Health_Gateway_Dev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E0B540828E4AB5900DE80EB /* PostCommentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCommentResponse.swift; sourceTree = "<group>"; };
 		3E32322528B5FEB80067040C /* Recommendations.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
 		3E5E6E9A28D239BE00724EDD /* CommunicationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationService.swift; sourceTree = "<group>"; };
 		3E5E6E9F28D23B8B00724EDD /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
@@ -1208,6 +1224,10 @@
 		3E5E6EB928D278BD00724EDD /* CommunicationBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationBannerTableViewCell.swift; sourceTree = "<group>"; };
 		3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommunicationBannerTableViewCell.xib; sourceTree = "<group>"; };
 		3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationMessageUIViewController.swift; sourceTree = "<group>"; };
+		3E61820928E47C080084CFEE /* PostComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComment.swift; sourceTree = "<group>"; };
+		3E61820B28E47C760084CFEE /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
+		3E61821528E483CF0084CFEE /* CommentTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTextFieldView.swift; sourceTree = "<group>"; };
+		3E61821928E483E70084CFEE /* CommentTextFieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentTextFieldView.xib; sourceTree = "<group>"; };
 		3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsViewController.swift; sourceTree = "<group>"; };
 		3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReccomandationTableViewCell.swift; sourceTree = "<group>"; };
 		3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReccomandationTableViewCell.xib; sourceTree = "<group>"; };
@@ -1956,6 +1976,7 @@
 		3E5E6EA328D23B9200724EDD /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				3E61820828E47BEE0084CFEE /* Comments */,
 				3E5E6EB028D2746500724EDD /* Communication */,
 			);
 			path = Services;
@@ -1976,6 +1997,16 @@
 				3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */,
 			);
 			path = "Communication message";
+			sourceTree = "<group>";
+		};
+		3E61820828E47BEE0084CFEE /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				3E61820B28E47C760084CFEE /* CommentService.swift */,
+				3E61820928E47C080084CFEE /* PostComment.swift */,
+				3E0B540828E4AB5900DE80EB /* PostCommentResponse.swift */,
+			);
+			path = Comments;
 			sourceTree = "<group>";
 		};
 		3E7306DC28B5EDD7007FED05 /* Recommendations */ = {
@@ -2182,6 +2213,8 @@
 				29A7442B2762E304008A7DA2 /* HealthRecordDetailViewController.swift */,
 				291D43DE2762E1C5005F5B94 /* HealthRecordsView.swift */,
 				291D43DA2762E18B005F5B94 /* Components */,
+				3E61821528E483CF0084CFEE /* CommentTextFieldView.swift */,
+				3E61821928E483E70084CFEE /* CommentTextFieldView.xib */,
 			);
 			path = HealthRecordDetailViewController;
 			sourceTree = "<group>";
@@ -3183,6 +3216,7 @@
 				293B32C627D27A880064BAAA /* CommentsTableViewCell.xib in Resources */,
 				294BD3D327B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
 				297885262795F38500FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
+				3E61821B28E483E70084CFEE /* CommentTextFieldView.xib in Resources */,
 				791C27BB27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
 				7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */,
 				79218AAB2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */,
@@ -3275,6 +3309,7 @@
 				795AA76827155F7100E59FF1 /* Resource.storyboard in Resources */,
 				794BD65D2702EEC00084ADA8 /* BCSans-Regular.otf in Resources */,
 				3E32322828B5FEB80067040C /* Recommendations.storyboard in Resources */,
+				3E61821C28E483E70084CFEE /* CommentTextFieldView.xib in Resources */,
 				79590D9B2811EA25006EB59F /* CommentsTableViewCell.xib in Resources */,
 				297F6DB5280F16540023E89C /* AuthenticationView.xib in Resources */,
 				297F6DB6280F16A70023E89C /* AuthenticationInfoView.xib in Resources */,
@@ -3380,6 +3415,7 @@
 				798006122852C66E006E390F /* CommentsTableViewCell.xib in Resources */,
 				798006132852C66E006E390F /* HiddenRecordsTableViewCell.xib in Resources */,
 				798006142852C66E006E390F /* SettingsAuthenticateTableViewCell.xib in Resources */,
+				3E61821A28E483E70084CFEE /* CommentTextFieldView.xib in Resources */,
 				798006152852C66E006E390F /* ButtonTableViewCell.xib in Resources */,
 				798006162852C66E006E390F /* BCSans-Italic.otf in Resources */,
 				798006172852C66E006E390F /* UserRecordListTableViewCell.xib in Resources */,
@@ -3632,6 +3668,7 @@
 			files = (
 				799050BD273C8330006CD726 /* GetRecordsView.swift in Sources */,
 				7967E75A26F930E200EEF510 /* UIView+Ext.swift in Sources */,
+				3E61821328E480E20084CFEE /* PostComment.swift in Sources */,
 				795AA7792715652C00E59FF1 /* ResourceTableViewCell.swift in Sources */,
 				7944F6BE26F12BD5006B9444 /* VaccinePassportModel.swift in Sources */,
 				2979679927C536E20019EE9B /* LaboratoryTest+CoreDataProperties.swift in Sources */,
@@ -3737,6 +3774,7 @@
 				297967A427C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */,
 				799050C4273C8558006CD726 /* UserRecordListView.swift in Sources */,
 				3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */,
+				3E61821728E483CF0084CFEE /* CommentTextFieldView.swift in Sources */,
 				79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				29719544288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
@@ -3799,6 +3837,7 @@
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
 				3E5E6E9C28D239BE00724EDD /* CommunicationService.swift in Sources */,
 				29A5B6D427B55B65006A9BA7 /* Perscription+CoreDataProperties.swift in Sources */,
+				3E0B540A28E4AB5900DE80EB /* PostCommentResponse.swift in Sources */,
 				2971956828871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
 				297885192795F13D00FF912D /* SettingsProfileTableViewCell.swift in Sources */,
 				3E5E6EB328D2747800724EDD /* CommunicationResponse.swift in Sources */,
@@ -3875,6 +3914,7 @@
 				79B9D00D27E2788100987D9F /* HomeScreenViewController.swift in Sources */,
 				798CA1C427ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
 				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
+				3E61821128E47F2C0084CFEE /* CommentService.swift in Sources */,
 				29A5B6D627B55B65006A9BA7 /* Pharmacy+CoreDataClass.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				29719551288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
@@ -3918,6 +3958,7 @@
 			files = (
 				799050BE273C8330006CD726 /* GetRecordsView.swift in Sources */,
 				794BD62F2702EEC00084ADA8 /* UIView+Ext.swift in Sources */,
+				3E61821428E480E30084CFEE /* PostComment.swift in Sources */,
 				791C27BA27183149001A6E12 /* ButtonTableViewCell.swift in Sources */,
 				79932CAA2790F8DA007E8D92 /* QRMaker.swift in Sources */,
 				2979679A27C536E20019EE9B /* LaboratoryTest+CoreDataProperties.swift in Sources */,
@@ -4023,6 +4064,7 @@
 				794FF0D227DAB08B00C98831 /* URL+EXT.swift in Sources */,
 				293B32A727D25A3A0064BAAA /* Comment+CoreDataClass.swift in Sources */,
 				3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */,
+				3E61821828E483CF0084CFEE /* CommentTextFieldView.swift in Sources */,
 				297967A527C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */,
 				79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				29719545288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
@@ -4085,6 +4127,7 @@
 				79FDE424273335D000DAD988 /* FederalPassView.swift in Sources */,
 				3E5E6E9D28D239BE00724EDD /* CommunicationService.swift in Sources */,
 				795AA76B271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
+				3E0B540B28E4AB5900DE80EB /* PostCommentResponse.swift in Sources */,
 				2971956928871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
 				7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */,
 				3E5E6EB428D2747800724EDD /* CommunicationResponse.swift in Sources */,
@@ -4161,6 +4204,7 @@
 				794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */,
 				7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				798CA1C527ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
+				3E61821228E47F2D0084CFEE /* CommentService.swift in Sources */,
 				79932CAF2790FA94007E8D92 /* Theme.swift in Sources */,
 				796653EF27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29719552288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
@@ -4191,6 +4235,7 @@
 				798005392852C66E006E390F /* Storyboard.swift in Sources */,
 				7980053A2852C66E006E390F /* HealthRecordDetailViewController.swift in Sources */,
 				79B1A0F22874CEBE009B3EFB /* ImmunizationAgent+CoreDataProperties.swift in Sources */,
+				3E61820A28E47C080084CFEE /* PostComment.swift in Sources */,
 				7980053B2852C66E006E390F /* Keychain.swift in Sources */,
 				7980053C2852C66E006E390F /* Date+Ext.swift in Sources */,
 				7980053D2852C66E006E390F /* Theme.swift in Sources */,
@@ -4218,6 +4263,7 @@
 				7980054F2852C66E006E390F /* HealthRecordCollectionViewCell.swift in Sources */,
 				798005502852C66E006E390F /* UsersListOfRecordsViewController.swift in Sources */,
 				798005512852C66E006E390F /* HealthRecordsDetailDateSource.swift in Sources */,
+				3E61820C28E47C760084CFEE /* CommentService.swift in Sources */,
 				798005522852C66E006E390F /* ProfileAndSettingsViewController.swift in Sources */,
 				798005532852C66E006E390F /* VaccineCardView.swift in Sources */,
 				798005542852C66E006E390F /* CovidVaccineCardsViewController.swift in Sources */,
@@ -4282,6 +4328,7 @@
 				798005842852C66E006E390F /* Comment+CoreDataClass.swift in Sources */,
 				798005852852C66E006E390F /* QRScannerView.swift in Sources */,
 				798005862852C66E006E390F /* StorageService+LabOrder.swift in Sources */,
+				3E61821628E483CF0084CFEE /* CommentTextFieldView.swift in Sources */,
 				3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */,
 				798005872852C66E006E390F /* UserRecordListView.swift in Sources */,
 				798005882852C66E006E390F /* LargerTouchAreaButton.swift in Sources */,
@@ -4344,6 +4391,7 @@
 				798005B52852C66E006E390F /* NotificationName+Ext.swift in Sources */,
 				798005B62852C66E006E390F /* ZoomedInPopUpVC.swift in Sources */,
 				3E5E6E9B28D239BE00724EDD /* CommunicationService.swift in Sources */,
+				3E0B540928E4AB5900DE80EB /* PostCommentResponse.swift in Sources */,
 				798005B72852C66E006E390F /* Perscription+CoreDataProperties.swift in Sources */,
 				2971956728871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
 				798005B82852C66E006E390F /* SettingsProfileTableViewCell.swift in Sources */,

@@ -30,6 +30,6 @@ extension NetworkRequest {
 }
 
 struct DefaultParams: Codable {
-    
+    let hdid: String
 }
 

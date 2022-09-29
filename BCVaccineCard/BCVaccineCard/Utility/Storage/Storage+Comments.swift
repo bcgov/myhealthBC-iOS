@@ -11,12 +11,15 @@ import CoreData
 protocol StorageCommentManager {
     func storeComments(in: AuthenticatedCommentResponseObject)
     func storeComment(remoteObject: AuthenticatedCommentResponseObject.Comment)
+    
+    func fetchComments() -> [Comment]
+    func storeLocalComment(text: String, commentID: String)
 }
 
 extension StorageService: StorageCommentManager {
     func storeComments(in object: AuthenticatedCommentResponseObject) {
         
-        var comments: [AuthenticatedCommentResponseObject.Comment] = object.resourcePayload.flatMap({$0.value})
+        let comments: [AuthenticatedCommentResponseObject.Comment] = object.resourcePayload.flatMap({$0.value})
        
         guard !comments.isEmpty else {
             Logger.log(string: "No Comments", type: .storage)
@@ -47,14 +50,43 @@ extension StorageService: StorageCommentManager {
         
         let storageCommentObject = genCommentObject(in: object, context: context)
         
-        for record in applicableRecords {
+        store(comment: storageCommentObject, for: applicableRecords, context: context)
+    }
+    
+   
+    func storeLocalComment(text: String, commentID: String) {
+        let applicableRecords = findRecordsForComment(id: commentID)
+        guard let context = managedContext else {
+            return
+        }
+        let comment = Comment(context: context)
+        let now = Date()
+        comment.createdDateTime = now
+        comment.updatedDateTime = now
+        comment.text = text
+        
+        do {
+            try context.save()
+        } catch let error as NSError {
+            print(error)
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+        }
+        guard !applicableRecords.isEmpty else {
+            Logger.log(string: "Could not find record for comment with id \(String(describing: commentID))", type: .storage)
+            return
+        }
+        store(comment: comment, for: applicableRecords, context: context)
+    }
+    
+    fileprivate func store(comment: Comment, for records: [HealthRecord], context: NSManagedObjectContext) {
+        for record in records {
             switch record.type {
             case .CovidTest(_):
                 break
             case .CovidImmunization(_):
                 break
             case .Medication(let medication):
-                medication.addToComments(storageCommentObject)
+                medication.addToComments(comment)
             case .LaboratoryOrder(_):
                 // TODO: When supporting lab order comments
                 break
@@ -69,10 +101,12 @@ extension StorageService: StorageCommentManager {
         do {
             try context.save()
         } catch let error as NSError {
+            print(error)
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return
         }
     }
+    
     
     fileprivate func genCommentObject(in object: AuthenticatedCommentResponseObject.Comment, context: NSManagedObjectContext) -> Comment {
         let comment = Comment(context: context)
@@ -92,6 +126,7 @@ extension StorageService: StorageCommentManager {
         comment.parentEntryID = object.parentEntryID
         comment.createdBy = object.createdBy
         comment.updatedBy = object.updatedBy
+        
         return comment
     }
     
@@ -103,4 +138,16 @@ extension StorageService: StorageCommentManager {
         }
         return applicableRecords
     }
+    
+    func fetchComments() -> [Comment] {
+        guard let context = managedContext else {return []}
+        do {
+            let results = try context.fetch(Comment.fetchRequest())
+            return results
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return []
+        }
+    }
 }
+
