@@ -78,7 +78,7 @@ extension StorageService: StorageImmunizationRecommendationManager {
         object.diseaseDueDate = diseaseDueDate
         object.diseaseEligibleDate = diseaseEligibleDate
         object.recommendationSetID = recommendationSetID
-        object.recommendationVaccinations = recommendedVaccinations
+        object.recommendedVaccinations = recommendedVaccinations
         object.status = status
         object.immunizationDetail = immunizationDetail
         object.patient = patient

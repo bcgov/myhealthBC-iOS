@@ -2,7 +2,7 @@
 //  ImmunizationRecommendation+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2022-08-23.
+//  Created by Connor Ogilvie on 2022-09-29.
 //
 //
 
@@ -16,17 +16,17 @@ extension ImmunizationRecommendation {
         return NSFetchRequest<ImmunizationRecommendation>(entityName: "ImmunizationRecommendation")
     }
 
-    @NSManaged public var authenticated: Bool
     @NSManaged public var agentDueDate: Date?
     @NSManaged public var agentEligibleDate: Date?
+    @NSManaged public var authenticated: Bool
     @NSManaged public var diseaseDueDate: Date?
     @NSManaged public var diseaseEligibleDate: Date?
     @NSManaged public var recommendationSetID: String?
-    @NSManaged public var recommendationVaccinations: String?
     @NSManaged public var status: String?
+    @NSManaged public var recommendedVaccinations: String?
     @NSManaged public var immunizationDetail: ImmunizationDetails?
-    @NSManaged public var targetDiseases: NSSet?
     @NSManaged public var patient: Patient?
+    @NSManaged public var targetDiseases: NSSet?
 
 }
 
