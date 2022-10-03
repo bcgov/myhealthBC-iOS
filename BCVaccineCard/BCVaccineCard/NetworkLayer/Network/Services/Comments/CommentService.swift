@@ -19,25 +19,65 @@ struct CommentService {
         return UrlAccessor()
     }
     
-    public func newComment(message: String, commentID: String, hdid: String, type: CommentType, completion: @escaping ()->Void) {
+    public func newComment(message: String, commentID: String, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
         if NetworkConnection.shared.hasConnection {
             postComment(message: message, commentID: commentID, date: Date(), hdid: hdid, type: type) { result in
                 guard let result = result else {
-                    StorageService.shared.storeLocalComment(text: message, commentID: commentID)
-                    return completion()
+                    let comment = StorageService.shared.storeLocalComment(text: message, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
+                    return completion(comment)
                 }
-                print(result)
-                // TODO
-                return completion()
+                let comment = StorageService.shared.storeSubmittedComment(object: result)
+                return completion(comment)
             }
         } else {
-            StorageService.shared.storeLocalComment(text: message, commentID: commentID)
-            return completion()
+            let comment = StorageService.shared.storeLocalComment(text: message, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
+            return completion(comment)
         }
         
     }
     
-    func findCommentsToSync() -> [Comment] {
+    public func submitUnsyncedComments(completion: @escaping()->Void) {
+        let comments = findCommentsToSync()
+        // Must be online and authenticated
+        guard !comments.isEmpty, NetworkConnection.shared.hasConnection, authManager.isAuthenticated else {
+            return completion()
+        }
+        incrementLoadCounter()
+        let dispatchGroup = DispatchGroup()
+        for comment in comments {
+            dispatchGroup.enter()
+            post(comment: comment) { res in
+                if let result = res {
+                    StorageService.shared.delete(object: comment)
+                }
+                dispatchGroup.leave()
+            }
+        }
+        dispatchGroup.notify(queue: .main) {
+            decrementLoadCounter()
+            return completion()
+        }
+    }
+    
+    private func decrementLoadCounter() {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.dataLoadCount -= 1
+            }
+        }
+        
+    }
+    
+    private func incrementLoadCounter() {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.dataLoadCount += 1
+            }
+        }
+    }
+    
+    
+    private func findCommentsToSync() -> [Comment] {
         let comments = StorageService.shared.fetchComments()
         var unsynced = comments.filter({$0.id == nil})
         let synced = comments.filter({$0.id != nil})
@@ -51,7 +91,12 @@ struct CommentService {
         return unsynced
     }
     
-    func postComment(message: String, commentID: String, date: Date, hdid: String, type: CommentType,completion: @escaping (PostCommentResponseResult?)->Void) {
+    private func post(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
+        let type = CommentType.init(rawValue: comment.entryTypeCode ?? "") ?? .medication
+        postComment(message: comment.text ?? "", commentID: comment.parentEntryID ?? "", date: comment.createdDateTime ?? Date(), hdid: comment.userProfileID ?? "", type: type, completion: completion)
+    }
+    
+    private func postComment(message: String, commentID: String, date: Date, hdid: String, type: CommentType,completion: @escaping (PostCommentResponseResult?)->Void) {
         let model = postCommentObject(message: message, commentID: commentID, date: date, hdid: hdid, type: type)
         postComment(object: model, completion: completion)
     }
@@ -67,7 +112,6 @@ struct CommentService {
             ]
             
             let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.authenticatedComments(hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
-                    print(result)
                 completion(result?.resourcePayload)
             }
             
@@ -87,14 +131,20 @@ extension CommentService {
     }
     
     fileprivate func postCommentObject(message: String, commentID: String, date: Date, hdid: String, type: CommentType) -> PostComment {
-        return PostComment(text: message, parentEntryID: commentID, userProfileID: hdid, entryTypeCode:  type.rawValue, createdDateTime: date.gatewayDateAndTimeWithMSAndTimeZone)
+        return PostComment(
+            text: message,
+            parentEntryID: commentID,
+            userProfileID: hdid,
+            entryTypeCode:  type.rawValue,
+            createdDateTime: date.commentServerDateTime
+        )
     }
 }
 
 extension HealthRecord {
-    fileprivate func submitComment(text: String, hdid: String, completion: @escaping ()->Void) {
-        let service = CommentService(network: CustomNetwork(), authManager: AuthManager())
-        service.newComment(message: text,commentID: commentId, hdid: hdid, type: commentType, completion: completion)
+    fileprivate func submitComment(text: String, hdid: String, completion: @escaping (Comment?)->Void) {
+        let service = CommentService(network: AFNetwork(), authManager: AuthManager())
+        service.newComment(message: text, commentID: commentId, hdid: hdid, type: commentType, completion: completion)
     }
     
     fileprivate var commentType: CommentService.CommentType {
@@ -117,7 +167,7 @@ extension HealthRecord {
     }
 }
 extension HealthRecordsDetailDataSource.Record {
-    func submitComment(text: String, hdid: String, completion: @escaping ()->Void) {
+    func submitComment(text: String, hdid: String, completion: @escaping (Comment?)->Void) {
         toHealthRecord()?.submitComment(text: text, hdid: hdid, completion: completion)
     }
     

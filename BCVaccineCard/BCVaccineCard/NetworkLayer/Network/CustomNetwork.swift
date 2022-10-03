@@ -45,17 +45,14 @@ struct CustomNetwork: Network {
                 print(error)
             }
             if let data = data {
-                // TODO: Remove first do catch block
+                #if DEV
                 do {
-                    // TODO: Remove
                     let json = try JSONSerialization.jsonObject(with: data, options: [])
-                    
-                    print(request)
                     print(json)
                 } catch {
-                    // TODO: Remove
                     print(error)
                 }
+                #endif
                 do {
                     let decoder = JSONDecoder()
                     let obj = try decoder.decode(T.self, from: data)

@@ -12,7 +12,9 @@ protocol CommentTextFieldViewDelegate {
     func textChanged(text: String?)
     func submit(text: String)
 }
-class CommentTextFieldView: UIView {
+class CommentTextFieldView: UIView, UITextFieldDelegate {
+    
+    let MAXCHAR = 1000
     
     @IBOutlet weak var fieldContainer: UIView!
     @IBOutlet weak var leftImageView: UIImageView!
@@ -55,6 +57,7 @@ class CommentTextFieldView: UIView {
         submitButton.setTitle("", for: .normal)
         submitButton.setImage(UIImage(named: "submit-inactive"), for: .normal)
         leftImageView.image = UIImage(named: "https")
+        textField.delegate = self
         
         self.layer.cornerRadius = 4
         self.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07).cgColor
@@ -62,6 +65,16 @@ class CommentTextFieldView: UIView {
         self.layer.shadowOffset = CGSize(width: -1, height: 5)
         self.layer.shadowRadius = 5
         layoutSubviews()
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let textFieldText = textField.text,
+            let rangeOfTextToReplace = Range(range, in: textFieldText) else {
+                return false
+        }
+        let substringToReplace = textFieldText[rangeOfTextToReplace]
+        let count = textFieldText.count - substringToReplace.count + string.count
+        return count <= MAXCHAR
     }
     
 }

@@ -40,11 +40,6 @@ struct AFNetwork: Network {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
         let AFRequest = requestData.AFRequest()
-        // TODO: Remove response json
-        AFRequest.responseJSON { res in
-            print(res)
-            print("")
-        }
         AFRequest.responseDecodable(of: T.self, decoder: decoder, completionHandler: {response in
             if let res = response.value {
                 return requestData.completion(res)

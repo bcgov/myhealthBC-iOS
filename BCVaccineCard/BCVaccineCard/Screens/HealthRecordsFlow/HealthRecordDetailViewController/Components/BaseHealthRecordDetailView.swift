@@ -31,6 +31,8 @@ class BaseHealthRecordsDetailView: UIView {
     
     func setup() {}
     
+    func submittedComment(object: Comment){}
+    
     public func creatSubViews(enableComments: Bool) {
         let tableView = UITableView(frame: .zero)
         addSubview(tableView)
@@ -218,9 +220,12 @@ extension BaseHealthRecordsDetailView: CommentTextFieldViewDelegate {
         print("Submit")
         print(text)
         guard let record = model, let hdid = AuthManager().hdid else {return}
-        record.submitComment(text: text, hdid: hdid, completion: { [weak self] in
+        record.submitComment(text: text, hdid: hdid, completion: { [weak self] result in
             DispatchQueue.main.async { [weak self] in
-                self?.tableView?.reloadData()
+                guard let self = self, let commentObject = result else {
+                    return
+                }
+                self.submittedComment(object: commentObject)
             }
         })
     }

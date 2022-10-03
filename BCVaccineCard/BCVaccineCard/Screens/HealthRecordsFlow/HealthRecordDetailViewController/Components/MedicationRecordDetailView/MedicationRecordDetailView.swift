@@ -24,6 +24,17 @@ class MedicationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelega
         comments =  model?.comments ?? []
     }
     
+    override func submittedComment(object: Comment) {
+        comments.append(object)
+        tableView?.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { [weak self] in
+            let row = (self?.comments.count ?? 0) - 1
+            guard row >= 0 else { return }
+            let indexPath = IndexPath(row: row, section: Section.allCases.count - 1)
+            self?.tableView?.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        })
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return Section.allCases.count
     }
