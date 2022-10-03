@@ -49,13 +49,13 @@ struct AuthenticatedImmunizationsResponseObject: Codable {
         
         // MARK: - Recommendation
         struct Recommendation: Codable {
-            let recommendationSetID, status, diseaseEligibleDate, diseaseDueDate, agentEligibleDate, agentDueDate: String?
+            let recommendationSetID, status, diseaseEligibleDate, diseaseDueDate, agentEligibleDate, agentDueDate, recommendedVaccinations: String?
             let targetDiseases: [TargetDisease]?
             let immunization: ImmunizationDetails?
 
             enum CodingKeys: String, CodingKey {
                 case recommendationSetID = "recommendationSetId"
-                case diseaseEligibleDate, diseaseDueDate, agentEligibleDate, agentDueDate, status, targetDiseases, immunization
+                case diseaseEligibleDate, diseaseDueDate, agentEligibleDate, agentDueDate, status, targetDiseases, immunization, recommendedVaccinations
             }
             
             // MARK: - TargetDisease

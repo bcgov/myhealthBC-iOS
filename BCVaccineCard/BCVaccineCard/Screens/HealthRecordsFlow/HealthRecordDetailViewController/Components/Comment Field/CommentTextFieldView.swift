@@ -27,9 +27,10 @@ class CommentTextFieldView: UIView {
     }
     
     @IBAction func submitAction(_ sender: Any) {
-        print("tapped")
+        print("tapped send")
         guard let text = textField.text, text.count > 0 else {return}
         delegate?.submit(text: text)
+        textField.text = ""
     }
     
     func setup() {

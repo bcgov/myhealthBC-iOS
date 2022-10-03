@@ -43,7 +43,7 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
         }
         self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(recordView)
-        recordView.addEqualSizeContraints(to: self.contentView, paddingVertical: 0, paddingHorizontal: 20)
+        recordView.addEqualSizeContraints(to: self.contentView, paddingVertical: 0, paddingHorizontal: 0)
         recordView.setup(model: model, enableComments: model.commentsEnabled)
         self.recordView = recordView
     }

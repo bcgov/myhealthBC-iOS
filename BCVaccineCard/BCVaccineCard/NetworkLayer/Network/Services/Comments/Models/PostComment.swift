@@ -24,11 +24,14 @@ import Foundation
 
 
 struct PostComment: Codable {
-    let text, parentEntryID, createdDateTime: String
-    let userProfileID, entryTypeCode: String
+    let text, parentEntryID, userProfileID: String
+    let entryTypeCode: String
+    let createdDateTime: String
+
     enum CodingKeys: String, CodingKey {
-        case userProfileID = "userProfileId"
-        case text, entryTypeCode, createdDateTime
+        case text
         case parentEntryID = "parentEntryId"
+        case userProfileID = "userProfileId"
+        case entryTypeCode, createdDateTime
     }
 }

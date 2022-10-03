@@ -19,14 +19,20 @@ struct CommentService {
         return UrlAccessor()
     }
     
-    public func newComment(message: String, commentID: String, hdid: String, type: CommentType) {
+    public func newComment(message: String, commentID: String, hdid: String, type: CommentType, completion: @escaping ()->Void) {
         if NetworkConnection.shared.hasConnection {
             postComment(message: message, commentID: commentID, date: Date(), hdid: hdid, type: type) { result in
+                guard let result = result else {
+                    StorageService.shared.storeLocalComment(text: message, commentID: commentID)
+                    return completion()
+                }
                 print(result)
                 // TODO
+                return completion()
             }
         } else {
             StorageService.shared.storeLocalComment(text: message, commentID: commentID)
+            return completion()
         }
         
     }
@@ -55,46 +61,20 @@ struct CommentService {
         BaseURLWorker.shared.setBaseURL {
             guard BaseURLWorker.shared.isOnline == true else {return completion(nil)}
             
-            let headers = [Constants.AuthenticationHeaderKeys.authToken: token]
-//            let params = CommentParams(text:object.text, hdid: hdid)
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.hdid: hdid
+            ]
             
             let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.authenticatedComments(hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
                     print(result)
-//                completion(result?.resourcePayload)
+                completion(result?.resourcePayload)
             }
             
             network.request(with: requestModel)
         }
     }
-    
-    /*
-     fileprivate func postComment(object: PostComment, completion: @escaping(AuthenticatedCommentResponseObject?)->Void) {
-     guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
-     
-     
-     let headerParameters: Headers = [
-     Constants.AuthenticationHeaderKeys.authToken: token
-     ]
-     let params: Parameters = [
-     "hdid": hdid
-     ]
-     
-     let request = AF.request(endpoints.authenticatedComments(hdid: hdid), method: .post, parameters: params, encoding: JsonEncoding.default, headers: headerParameters)
-     request.responseJSON { res in
-     print(res)
-     }
-     request.responseDecodable(of: AuthenticatedCommentResponseObject.self) { response in
-     if let error = response.error {
-     Logger.log(string: error.localizedDescription, type: .Network)
-     }
-     if let result = response.value {
-     return completion(result)
-     }
-     }
-     }*/
 }
-
-
 
 extension CommentService {
     enum CommentType: String {
@@ -107,69 +87,14 @@ extension CommentService {
     }
     
     fileprivate func postCommentObject(message: String, commentID: String, date: Date, hdid: String, type: CommentType) -> PostComment {
-        return PostComment(text: message, parentEntryID: commentID, createdDateTime: date.gatewayDateAndTimeWithMSAndTimeZone, userProfileID: hdid, entryTypeCode: type.rawValue)
+        return PostComment(text: message, parentEntryID: commentID, userProfileID: hdid, entryTypeCode:  type.rawValue, createdDateTime: date.gatewayDateAndTimeWithMSAndTimeZone)
     }
 }
 
-//extension CommentService {
-//
-//    func postComment(message: String, commentID: String, date: Date, hdid: String, completion: @escaping (AuthenticatedCommentResponseObject?)->Void) {
-//        let model = postCommentObject(message: message, commentID: commentID, date: date, hdid: hdid)
-//        postComment(object: model, completion: completion)
-//    }
-//
-//
-//    fileprivate func postComment(object: PostComment, completion: @escaping(AuthenticatedCommentResponseObject?)->Void) {
-//        guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
-//        BaseURLWorker.shared.setBaseURL {
-//            guard BaseURLWorker.shared.isOnline == true else {return completion(nil)}
-//
-//            let headers = [Constants.AuthenticationHeaderKeys.authToken: token]
-//            let params = DefaultParams(hdid: hdid)
-//
-//
-//            let requestModel = NetworkRequest<DefaultParams, AuthenticatedCommentResponseObject>(url: endpoints.authenticatedComments(hdid: hdid), type: .post, parameters: params, headers: headers) { result in
-//                completion(result?.resourcePayload)
-//            }
-//
-//            network.request(with: requestModel)
-//        }
-
-//        guard let authToken = authManager.authToken, let hdid = authManager.hdid else {
-//            return completion(nil)
-//        }
-//        configureURL(token: nil, endpoint: self.endpoints.authenticatedComments(hdid: hdid), completion: { url in
-//            let headerParameters: Headers = [
-//                Constants.AuthenticationHeaderKeys.authToken: authToken
-//            ]
-//
-//            guard let unwrappedURL = url else { return }
-//
-//
-//
-//
-////            self.remote.request(withURL: unwrappedURL, method: .post, headers: headerParameters, interceptor: self.interceptor, checkQueueIt: false, executingVC: executingVC, includeQueueItUI: false, andCompletion: completion)
-//            let request = AF.request(unwrappedURL, method: .post, encoding: JsonEncoding.default, headers: headerParameters)
-//            request.responseJSON { res in
-//                print(res)
-//            }
-//            request.responseDecodable(of: AuthenticatedCommentResponseObject.self) { response in
-//                if let error = response.error {
-//                    Logger.log(string: error.localizedDescription, type: .Network)
-//                }
-//                if let result = response.value {
-//                    return completion(result)
-//                }
-//            }
-//        })
-//    }
-//}
-
-
 extension HealthRecord {
-    fileprivate func submitComment(text: String, hdid: String) {
-        let service = CommentService(network: AFNetwork(), authManager: AuthManager())
-        service.newComment(message: text,commentID: commentId, hdid: hdid, type: commentType)
+    fileprivate func submitComment(text: String, hdid: String, completion: @escaping ()->Void) {
+        let service = CommentService(network: CustomNetwork(), authManager: AuthManager())
+        service.newComment(message: text,commentID: commentId, hdid: hdid, type: commentType, completion: completion)
     }
     
     fileprivate var commentType: CommentService.CommentType {
@@ -192,8 +117,8 @@ extension HealthRecord {
     }
 }
 extension HealthRecordsDetailDataSource.Record {
-    func submitComment(text: String, hdid: String) {
-        toHealthRecord()?.submitComment(text: text, hdid: hdid)
+    func submitComment(text: String, hdid: String, completion: @escaping ()->Void) {
+        toHealthRecord()?.submitComment(text: text, hdid: hdid, completion: completion)
     }
     
     func toHealthRecord() -> HealthRecord? {

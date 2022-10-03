@@ -22,7 +22,7 @@ extension NetworkRequest.RequestType {
 }
 
 extension NetworkRequest {
-    var AFRequest:  DataRequest {
+    func AFRequest() ->  DataRequest {
         let afHeaders: HTTPHeaders?
         if let requestHeaders = headers {
             afHeaders = HTTPHeaders(requestHeaders)
@@ -39,7 +39,8 @@ struct AFNetwork: Network {
     func request<Parameters: Encodable, T: Decodable>(with requestData: NetworkRequest<Parameters, T>) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
-        let AFRequest = requestData.AFRequest
+        let AFRequest = requestData.AFRequest()
+        // TODO: Remove response json
         AFRequest.responseJSON { res in
             print(res)
             print("")

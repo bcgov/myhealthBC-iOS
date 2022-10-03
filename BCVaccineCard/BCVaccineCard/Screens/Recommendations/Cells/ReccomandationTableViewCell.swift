@@ -39,15 +39,16 @@ class ReccomandationTableViewCell: UITableViewCell {
             detailStack.isHidden = true
             expandIconImageView.image = UIImage(named: "expand_arrow_down")
         }
-        titleLabel.text = object.immunizationDetail?.name
-        if let immunizationName =  object.immunizationDetail?.name {
+        print(object.immunizationDetail?.recommendation?.recommendedVaccinations, object.immunizationDetail?.name, object.immunizationDetail?.agents.first?.name)
+        titleLabel.text = object.immunizationDetail?.recommendation?.recommendedVaccinations
+        if let immunizationName =  object.immunizationDetail?.recommendation?.recommendedVaccinations {
             titleLabel.text = immunizationName
         } else {
-            titleLabel.text = object.immunizationDetail?.agents.first?.name ?? "--"
+            titleLabel.text = object.immunizationDetail?.name ?? object.immunizationDetail?.agents.first?.name ?? "--"
         }
         
         statusValueLabel.text = object.status
-        dueDateValueLabel.text = object.diseaseDueDate?.forecastDueDate
+        dueDateValueLabel.text = object.agentDueDate?.forecastDueDate
         styleStatus(text: object.status ?? "")
         style()
         layoutIfNeeded()

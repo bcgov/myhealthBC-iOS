@@ -52,8 +52,15 @@ class BaseHealthRecordsDetailView: UIView {
         stackView.spacing = 0
         stackView.alignment = .fill
         stackView.axis = .vertical
-        stackView.addArrangedSubview(tableView)
         
+        // Tableview needs padding, so we have to add it in a subview
+        let tableContainer = UIView(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height))
+        stackView.addArrangedSubview(tableContainer)
+        
+        tableContainer.addSubview(tableView)
+        tableView.addEqualSizeContraints(to: tableContainer, paddingVertical: 0, paddingHorizontal: 20)
+        
+        // Add comment field if needed
         if enableComments {
             let commentTextField: CommentTextFieldView = CommentTextFieldView.fromNib()
             commentTextField.heightAnchor.constraint(equalToConstant: commentFieldHeight).isActive = true
@@ -89,6 +96,8 @@ class BaseHealthRecordsDetailView: UIView {
         
         tableView.register(UINib.init(nibName: SectionDescriptionTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SectionDescriptionTableViewCell.getName)
         
+        tableView.register(UINib.init(nibName: ViewPDFTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ViewPDFTableViewCell.getName)
+        
         
         tableView.rowHeight = UITableView.automaticDimension
         tableView.showsVerticalScrollIndicator = false
@@ -107,6 +116,10 @@ class BaseHealthRecordsDetailView: UIView {
     
     public func messageHeaderCell(indexPath: IndexPath, tableView: UITableView) -> MessageBannerTableViewCell? {
         return tableView.dequeueReusableCell(withIdentifier: MessageBannerTableViewCell.getName, for: indexPath) as? MessageBannerTableViewCell
+    }
+    
+    public func viewPDFButtonCell(indexPath: IndexPath, tableView: UITableView) -> ViewPDFTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: ViewPDFTableViewCell.getName, for: indexPath) as? ViewPDFTableViewCell
     }
     
     public func commentCell(indexPath: IndexPath, tableView: UITableView) -> CommentViewTableViewCell? {
@@ -205,7 +218,11 @@ extension BaseHealthRecordsDetailView: CommentTextFieldViewDelegate {
         print("Submit")
         print(text)
         guard let record = model, let hdid = AuthManager().hdid else {return}
-        record.submitComment(text: text, hdid: hdid)
+        record.submitComment(text: text, hdid: hdid, completion: { [weak self] in
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView?.reloadData()
+            }
+        })
     }
 }
 
