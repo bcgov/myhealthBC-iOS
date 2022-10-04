@@ -192,8 +192,6 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
         }
         guard section != 0 else {return nil}
         return separatorView()
-        
-       
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
