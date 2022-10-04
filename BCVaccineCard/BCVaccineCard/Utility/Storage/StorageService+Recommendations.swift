@@ -112,7 +112,8 @@ extension StorageService: StorageImmunizationRecommendationManager {
     func fetchRecommendations() -> [ImmunizationRecommendation] {
         guard let context = managedContext else {return []}
         do {
-            return try context.fetch(ImmunizationRecommendation.fetchRequest())
+            let all = try context.fetch(ImmunizationRecommendation.fetchRequest())
+            return all.filter({$0.recommendedVaccinations != "" && $0.recommendedVaccinations != nil})
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
