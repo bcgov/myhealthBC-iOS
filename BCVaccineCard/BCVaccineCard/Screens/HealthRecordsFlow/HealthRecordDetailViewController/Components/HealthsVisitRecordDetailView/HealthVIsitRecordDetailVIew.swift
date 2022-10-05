@@ -24,7 +24,6 @@ class HealthVisitRecordDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
         case Fields
         case Comments
     }
-    private var comments: [Comment] = []
     
     private var fields: [TextListModel] = []
 
@@ -107,7 +106,7 @@ class HealthVisitRecordDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
             return headerView
         }
         let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
-        headerView.configure(text: "\(model.comments.count) \(commentsString)")
+        headerView.configure(text: "\(model.comments.count) \(commentsString)",colour: AppColours.appBlue, delegate: self)
         headerView.backgroundColor = .white
         return headerView
     }
@@ -120,6 +119,7 @@ class HealthVisitRecordDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
         return "Comments".heightForView(font: TableSectionHeader.font, width: bounds.width) + 10
     }
 }
+
 
 extension HealthVisitRecordDetailView {
     

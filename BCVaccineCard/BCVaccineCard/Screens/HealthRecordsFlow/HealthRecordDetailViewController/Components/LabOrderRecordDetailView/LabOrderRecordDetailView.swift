@@ -47,7 +47,6 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
         case Comments
     }
     
-    private var comments: [Comment] = []
     private var fields: [[TextListModel]] = [[]]
     
     struct HeaderSection {
@@ -186,7 +185,7 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
                 return headerView
             }
             let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
-            headerView.configure(text: "\(model.comments.count) \(commentsString)")
+            headerView.configure(text: "\(model.comments.count) \(commentsString)",colour: AppColours.appBlue, delegate: self)
             headerView.backgroundColor = .white
             return headerView
         }

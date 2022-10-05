@@ -15,7 +15,6 @@ class MedicationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelega
     }
     
     private var fields: [TextListModel] = []
-    private var comments: [Comment] = []
     
     override func setup() {
         tableView?.dataSource = self
@@ -72,7 +71,7 @@ class MedicationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelega
             return headerView
         }
         let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
-        headerView.configure(text: "\(model.comments.count) \(commentsString)")
+        headerView.configure(text: "\(model.comments.count) \(commentsString)", colour: AppColours.appBlue, delegate: self)
         headerView.backgroundColor = .white
         return headerView
     }

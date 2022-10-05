@@ -11,6 +11,17 @@ class BaseHealthRecordsDetailView: UIView {
     
     public var tableView: UITableView?
     public var model: HealthRecordsDetailDataSource.Record?
+    
+    public var comments: [Comment] = [] {
+        didSet {
+            // Only show the last comment
+            if comments.count > 1, let last = comments.last {
+                comments = [last]
+            }
+        }
+    }
+    
+    private var delegate: HealthRecordDetailDelegate?
     private var commentsEnabled: Bool = false
     private var stackViewBottomAnchor: NSLayoutConstraint? = nil
     private var stackViewBottomKeyboardAnchor: NSLayoutConstraint? = nil
@@ -21,7 +32,8 @@ class BaseHealthRecordsDetailView: UIView {
     let commentFieldHeight: CGFloat = 96
     
     
-    func setup(model: HealthRecordsDetailDataSource.Record, enableComments: Bool) {
+    func setup(model: HealthRecordsDetailDataSource.Record, enableComments: Bool, delegate: HealthRecordDetailDelegate) {
+        self.delegate = delegate
         self.model = model
         self.commentsEnabled = enableComments
         creatSubViews(enableComments: enableComments)
@@ -211,7 +223,7 @@ class BaseHealthRecordsDetailView: UIView {
 }
 
 // MARK: Comment Field delegate
-extension BaseHealthRecordsDetailView: CommentTextFieldViewDelegate {
+extension BaseHealthRecordsDetailView: CommentTextFieldViewDelegate, TableSectionHeaderDelegate {
     func textChanged(text: String?) {
         print(text)
     }
@@ -229,8 +241,12 @@ extension BaseHealthRecordsDetailView: CommentTextFieldViewDelegate {
             }
         })
     }
+    
+    func tappedHeader(title: String) {
+        guard let model = self.model else {return}
+        delegate?.showComments(for: model)
+    }
 }
-
 
 extension UIView {
     func findTabBarParent() -> UITabBarController? {
