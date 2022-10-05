@@ -23,6 +23,8 @@ class HealthRecordDetailViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     
+    public static var currentInstance: HealthRecordDetailViewController!
+    
     private var dataSource: HealthRecordsDetailDataSource!
     private var authenticatedRecord: Bool!
     private var userNumberHealthRecords: Int!
@@ -40,6 +42,7 @@ class HealthRecordDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        HealthRecordDetailViewController.currentInstance = self
         navSetup(hasConnection: NetworkConnection.shared.hasConnection)
         setupStorageListener()
         connectionListener.initListener { [weak self] connected in
@@ -129,13 +132,13 @@ extension HealthRecordDetailViewController {
             if labOrder.reportAvailable == true {
                 self.reportId = labOrder.reportID
                 self.type = .normal
-                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+//                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         case .covidTestResultRecord(model: let covidTestOrder):
             if covidTestOrder.reportAvailable == true {
                 self.reportId = covidTestOrder.orderId
                 self.type = .covid
-                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+//                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         default:
             // NOTE: Enable Delete Record
@@ -198,7 +201,7 @@ extension HealthRecordDetailViewController {
         } onCancel: {
         }
     }
-    
+    // TODO: Call this in the new section
     @objc private func showPDFView() {
         if let pdf = self.pdfData {
             self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
@@ -239,6 +242,15 @@ extension HealthRecordDetailViewController {
     private func showPDFUnavailableAlert() {
         self.alert(title: "Error", message: "There was an error fetching the PDF of this record")
     }
+}
+
+extension HealthRecordDetailViewController: AppStyleButtonDelegate {
+    func buttonTapped(type: AppStyleButton.ButtonType) {
+        if type == .viewPDF {
+            showPDFView()
+        }
+    }
+
 }
 
 // MARK: This is for showing the PDF view using native behaviour

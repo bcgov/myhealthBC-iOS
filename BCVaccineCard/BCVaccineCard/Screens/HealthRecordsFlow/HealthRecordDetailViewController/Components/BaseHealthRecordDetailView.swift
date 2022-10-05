@@ -54,6 +54,8 @@ class BaseHealthRecordsDetailView: UIView {
         
         tableView.register(UINib.init(nibName: SectionDescriptionTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SectionDescriptionTableViewCell.getName)
         
+        tableView.register(UINib.init(nibName: ViewPDFTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ViewPDFTableViewCell.getName)
+        
         
         tableView.rowHeight = UITableView.automaticDimension
         tableView.showsVerticalScrollIndicator = false
@@ -72,6 +74,10 @@ class BaseHealthRecordsDetailView: UIView {
     
     public func messageHeaderCell(indexPath: IndexPath, tableView: UITableView) -> MessageBannerTableViewCell? {
         return tableView.dequeueReusableCell(withIdentifier: MessageBannerTableViewCell.getName, for: indexPath) as? MessageBannerTableViewCell
+    }
+    
+    public func viewPDFButtonCell(indexPath: IndexPath, tableView: UITableView) -> ViewPDFTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: ViewPDFTableViewCell.getName, for: indexPath) as? ViewPDFTableViewCell
     }
     
     public func commentCell(indexPath: IndexPath, tableView: UITableView) -> CommentViewTableViewCell? {

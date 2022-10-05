@@ -206,6 +206,7 @@ extension String {
     static var pendingTestRecordMessage: String { return "PendingTestRecordMessage".localized }
     static var instructions: String { return "Instructions".localized }
     static var instructionsMessage: String { return "InstructionsMessage".localized }
+    static var viewPDF: String { return "ViewPDF".localized }
     
     // MARK: Statuses
     static var cancelled: String { return "Cancelled".localized }

@@ -43,15 +43,57 @@ extension HealthRecordsDetailDataSource.Record {
 class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
     private var fields: [[TextListModel]] = [[]]
     
+    struct HeaderSection {
+        enum HeaderType {
+            case banner
+            case pdf
+        }
+        
+        var bannerPresent: Bool
+        var pdfPresent: Bool
+        
+        func indexOfType(type: HeaderType) -> Int {
+            switch type {
+            case .banner:
+                return 0
+            case .pdf:
+                return bannerPresent ? 1 : 0
+            }
+        }
+        
+        var headerCount: Int {
+            var count = 0
+            if bannerPresent {
+                count += 1
+            }
+            if pdfPresent {
+                count += 1
+            }
+            return count
+        }
+    }
+    
+    var headerSection = HeaderSection(bannerPresent: false, pdfPresent: false)
+    
     var hasHeader: Bool {
-        return model?.labOrderBannerType() != nil
+        return (model?.labOrderBannerType() != nil || model?.labOrder()?.reportAvailable == true)
     }
     
     override func setup() {
+        setupHeaderSection()
         tableView?.register(UINib.init(nibName: LabOrderBsnnerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: LabOrderBsnnerTableViewCell.getName)
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
+    }
+    
+    private func setupHeaderSection() {
+        if model?.labOrderBannerType() != nil {
+            headerSection.bannerPresent = true
+        }
+        if model?.labOrder()?.reportAvailable == true {
+            headerSection.pdfPresent = true
+        }
     }
     
     public func labOrderHeaderCell(indexPath: IndexPath, tableView: UITableView) -> LabOrderBsnnerTableViewCell? {
@@ -64,7 +106,7 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if hasHeader, section == 0 {
-            return 1
+            return headerSection.headerCount
         }
         
         if hasHeader {
@@ -73,15 +115,21 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
             return fields[section].count
         }
     }
-    
+    // TODO: Clean this part up
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let model = self.model else {return UITableViewCell()}
-        if hasHeader, indexPath.section == 0, let bannerType = model.labOrderBannerType() {
-            guard let cell = labOrderHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.setup(type: bannerType)
-            return cell
+        if hasHeader, indexPath.section == 0 {
+            if let bannerType = model.labOrderBannerType(), indexPath.row == headerSection.indexOfType(type: .banner) {
+                guard let cell = labOrderHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+                cell.setup(type: bannerType)
+                return cell
+            }
+            if model.labOrder()?.reportAvailable == true, indexPath.row == headerSection.indexOfType(type: .pdf) {
+                guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
+                cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance)
+                return cell
+            }
         }
-        
         let fieldSection = hasHeader ? indexPath.section - 1 : indexPath.section
         guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
         cell.setup(with: fields[fieldSection][indexPath.row])
