@@ -114,23 +114,26 @@ extension StorageService: StorageCommentManager {
     }
     
     fileprivate func store(comment: Comment, for records: [HealthRecord], context: NSManagedObjectContext) -> Comment? {
+        guard comment.parentEntryID != nil && comment.parentEntryID != "" else {
+            Logger.log(string: "Invalid comment", type: .storage)
+            return nil
+        }
         for record in records {
             switch record.type {
-            case .CovidTest(_):
-                break
+            case .CovidTest(let covidTest):
+                covidTest.addToComments(comment)
             case .CovidImmunization(_):
                 break
             case .Medication(let medication):
                 medication.addToComments(comment)
-            case .LaboratoryOrder(_):
-                // TODO: When supporting lab order comments
-                break
+            case .LaboratoryOrder(let labOrder):
+                labOrder.addToComments(comment)
             case .Immunization(_):
                 break
-            case .HealthVisit(_):
-                break
-            case .SpecialAuthorityDrug(_):
-                break
+            case .HealthVisit(let healthVisit):
+                healthVisit.addToComments(comment)
+            case .SpecialAuthorityDrug(let saDrug):
+                saDrug.addToComments(comment)
             }
         }
         do {

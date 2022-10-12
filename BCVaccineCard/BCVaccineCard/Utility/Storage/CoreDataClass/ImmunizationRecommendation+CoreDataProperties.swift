@@ -2,7 +2,7 @@
 //  ImmunizationRecommendation+CoreDataProperties.swift
 //  
 //
-//  Created by Connor Ogilvie on 2022-09-29.
+//  Created by Amir Shayegh on 2022-10-03.
 //
 //
 
@@ -22,8 +22,8 @@ extension ImmunizationRecommendation {
     @NSManaged public var diseaseDueDate: Date?
     @NSManaged public var diseaseEligibleDate: Date?
     @NSManaged public var recommendationSetID: String?
-    @NSManaged public var status: String?
     @NSManaged public var recommendedVaccinations: String?
+    @NSManaged public var status: String?
     @NSManaged public var immunizationDetail: ImmunizationDetails?
     @NSManaged public var patient: Patient?
     @NSManaged public var targetDiseases: NSSet?

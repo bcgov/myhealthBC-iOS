@@ -221,8 +221,43 @@ extension LaboratoryOrder {
             $0.batteryType ?? "" < $1.batteryType ?? ""
         }
     }
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
 }
 
+// MARK: Special Authority Drugs
+extension SpecialAuthorityDrug {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
+
+// MARK: Health Visit
+extension HealthVisit {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
+
+// MARK: Covid lab results
+extension CovidLabTestResult {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
 
 // MARK: Perscription
 extension Perscription {

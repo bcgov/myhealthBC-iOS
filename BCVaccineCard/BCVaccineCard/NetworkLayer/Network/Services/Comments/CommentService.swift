@@ -112,7 +112,7 @@ struct CommentService {
             ]
             
             let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.authenticatedComments(hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
-                completion(result?.resourcePayload)
+                return completion(result?.resourcePayload)
             }
             
             network.request(with: requestModel)
@@ -123,11 +123,11 @@ struct CommentService {
 extension CommentService {
     enum CommentType: String {
         case medication = "Med"
-        case laboratoryOrder = "la" // TODO
+        case laboratoryOrder = "ALO"
         case immunization = "im" // TODO
-        case healthVisit = "vis" // TODO
-        case specialAuthorityDrug = "sa" //TODO
-        case covid = "covid" //Todo
+        case healthVisit = "Enc"
+        case specialAuthorityDrug = "SAR"
+        case covid = "Lab"
     }
     
     fileprivate func postCommentObject(message: String, commentID: String, date: Date, hdid: String, type: CommentType) -> PostComment {
@@ -175,8 +175,9 @@ extension HealthRecordsDetailDataSource.Record {
         switch type {
         case .covidImmunizationRecord:
             return nil
-        case .covidTestResultRecord:
-            return nil
+        case .covidTestResultRecord(let model):
+            guard let parent = model.parentTest else {return nil}
+            return HealthRecord(type: .CovidTest(parent))
         case .medication(model: let model):
             return HealthRecord(type: .Medication(model))
         case .laboratoryOrder(model: let model, _):

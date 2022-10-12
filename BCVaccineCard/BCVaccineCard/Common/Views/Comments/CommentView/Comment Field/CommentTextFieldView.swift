@@ -20,6 +20,7 @@ class CommentTextFieldView: UIView, UITextFieldDelegate {
     @IBOutlet weak var leftImageView: UIImageView!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var submitButton: UIButton!
+    @IBOutlet weak var messageLabel: UILabel!
     
     var delegate: CommentTextFieldViewDelegate? = nil
     
@@ -33,6 +34,8 @@ class CommentTextFieldView: UIView, UITextFieldDelegate {
         guard let text = textField.text, text.count > 0 else {return}
         delegate?.submit(text: text)
         textField.text = ""
+        styleSubmit(enabled: false)
+        resignFirstResponder()
     }
     
     func setup() {
@@ -46,6 +49,8 @@ class CommentTextFieldView: UIView, UITextFieldDelegate {
     
     private func style() {
         guard fieldContainer != nil else { return }
+        messageLabel.alpha = 0
+        messageLabel.font = UIFont.bcSansRegularWithSize(size: 12)
         backgroundColor = .white
         fieldContainer.backgroundColor = AppColours.backgroundGray
         fieldContainer.layer.cornerRadius = 4
@@ -60,10 +65,10 @@ class CommentTextFieldView: UIView, UITextFieldDelegate {
         textField.delegate = self
         
         self.layer.cornerRadius = 4
-        self.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07).cgColor
-        self.layer.shadowOpacity = 1
-        self.layer.shadowOffset = CGSize(width: -1, height: 5)
-        self.layer.shadowRadius = 5
+//        self.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.07).cgColor
+//        self.layer.shadowOpacity = 1
+//        self.layer.shadowOffset = CGSize(width: -1, height: 5)
+//        self.layer.shadowRadius = 5
         layoutSubviews()
     }
     
@@ -74,7 +79,25 @@ class CommentTextFieldView: UIView, UITextFieldDelegate {
         }
         let substringToReplace = textFieldText[rangeOfTextToReplace]
         let count = textFieldText.count - substringToReplace.count + string.count
-        return count <= MAXCHAR
+        let isAllowed = count <= MAXCHAR
+        if !isAllowed {
+            showMaxCharCount()
+        } else {
+            removeMaxCharCount()
+        }
+        return isAllowed
+    }
+    
+    func showMaxCharCount() {
+        messageLabel.alpha = 1
+        messageLabel.text = "Maximum \(MAXCHAR) characters"
+        messageLabel.textColor = AppColours.appRed
+        fieldContainer.backgroundColor = AppColours.appRed.withAlphaComponent(0.1)
+    }
+    
+    func removeMaxCharCount() {
+        messageLabel.alpha = 0
+        fieldContainer.backgroundColor = AppColours.backgroundGray
     }
     
 }

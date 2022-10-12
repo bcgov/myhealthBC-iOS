@@ -29,19 +29,18 @@ struct HealthRecordsDetailDataSource {
             switch type {
             case .covidImmunizationRecord:
                 return []
-            case .covidTestResultRecord:
-                return []
+            case .covidTestResultRecord(let covidTestResultRecord):
+                return covidTestResultRecord.parentTest?.commentsArray ?? []
             case .medication(let medication):
                 return medication.commentsArray
-            case .laboratoryOrder:
-                // TODO: when supporting lab order comments
-                return []
+            case .laboratoryOrder(let laboratoryOrder, _):
+                return laboratoryOrder.commentsArray
             case .immunization:
                 return []
-            case .healthVisit:
-                return []
-            case .specialAuthorityDrug:
-                return []
+            case .healthVisit(let healthVisit):
+                return healthVisit.commentsArray
+            case .specialAuthorityDrug(let specialAuthorityDrug):
+                return specialAuthorityDrug.commentsArray
             }
         }
         
@@ -55,8 +54,8 @@ struct HealthRecordsDetailDataSource {
         // TODO: Enable Comments here
         var commentsEnabled: Bool {
             switch self.type {
-            case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder, .immunization, .specialAuthorityDrug, .healthVisit: return false
-            case .medication : return true
+            case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit : return true
+            default: return false
             }
         }
         

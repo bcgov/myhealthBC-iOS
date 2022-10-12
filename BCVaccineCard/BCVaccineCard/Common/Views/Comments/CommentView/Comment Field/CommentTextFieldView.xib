@@ -61,19 +61,28 @@
                         <constraint firstItem="GTp-yE-Kpi" firstAttribute="centerY" secondItem="juB-5o-9UQ" secondAttribute="centerY" id="yjH-hm-q4N"/>
                     </constraints>
                 </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rMS-f5-POe">
+                    <rect key="frame" x="8" y="104" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Axh-Dr-Rhs"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="juB-5o-9UQ" firstAttribute="leading" secondItem="Axh-Dr-Rhs" secondAttribute="leading" constant="8" id="2gW-j5-psz"/>
+                <constraint firstItem="rMS-f5-POe" firstAttribute="top" secondItem="juB-5o-9UQ" secondAttribute="bottom" constant="4" id="53G-xh-TH5"/>
                 <constraint firstItem="juB-5o-9UQ" firstAttribute="centerX" secondItem="yar-z7-gVt" secondAttribute="centerX" id="DYs-sX-a9t"/>
                 <constraint firstItem="juB-5o-9UQ" firstAttribute="centerY" secondItem="yar-z7-gVt" secondAttribute="centerY" id="OvE-y3-g9Y"/>
                 <constraint firstItem="juB-5o-9UQ" firstAttribute="top" relation="greaterThanOrEqual" secondItem="yar-z7-gVt" secondAttribute="top" constant="25" id="ehQ-Q2-8Kf"/>
+                <constraint firstItem="rMS-f5-POe" firstAttribute="leading" secondItem="juB-5o-9UQ" secondAttribute="leading" id="qtc-Ij-xeX"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="fieldContainer" destination="juB-5o-9UQ" id="kh4-n4-cVb"/>
                 <outlet property="leftImageView" destination="0dr-m8-rLO" id="Fxh-Pn-kzY"/>
+                <outlet property="messageLabel" destination="rMS-f5-POe" id="IcE-2x-osH"/>
                 <outlet property="submitButton" destination="GTp-yE-Kpi" id="eAP-OB-9xo"/>
                 <outlet property="textField" destination="AGz-XR-92p" id="jQv-Qw-wbx"/>
             </connections>
