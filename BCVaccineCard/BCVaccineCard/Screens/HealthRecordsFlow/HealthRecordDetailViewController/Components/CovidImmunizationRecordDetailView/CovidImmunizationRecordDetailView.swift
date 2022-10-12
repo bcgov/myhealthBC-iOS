@@ -40,7 +40,9 @@ class CovidImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableVie
     }
     
     public func CovidImmunizationBannerCell(indexPath: IndexPath, tableView: UITableView) -> CovidImmunizationBannerTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: CovidImmunizationBannerTableViewCell.getName, for: indexPath) as? CovidImmunizationBannerTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CovidImmunizationBannerTableViewCell.getName, for: indexPath) as? CovidImmunizationBannerTableViewCell
+        cell?.selectionStyle = .none
+        return cell
     }
   
     

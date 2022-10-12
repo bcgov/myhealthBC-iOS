@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LabOrderBsnnerTableViewCell: UITableViewCell, UITextViewDelegate {
+class LabOrderBannerTableViewCell: UITableViewCell, UITextViewDelegate {
     
     enum LabOrderBsnnerType {
         case Pending

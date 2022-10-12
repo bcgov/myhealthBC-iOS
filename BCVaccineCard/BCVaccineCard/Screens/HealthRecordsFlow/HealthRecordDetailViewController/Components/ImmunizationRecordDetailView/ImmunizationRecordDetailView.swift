@@ -31,8 +31,9 @@ class ImmunizationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDele
     }
     
     private func getImmunizationForecastCell(indexPath: IndexPath, tableView: UITableView) -> ImmunizationForecastTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: ImmunizationForecastTableViewCell.getName, for: indexPath) as? ImmunizationForecastTableViewCell
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: ImmunizationForecastTableViewCell.getName, for: indexPath) as? ImmunizationForecastTableViewCell
+        cell?.selectionStyle = .none
+        return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
