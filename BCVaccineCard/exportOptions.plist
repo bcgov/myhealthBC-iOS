@@ -5,7 +5,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>ca.bc.gov.myhealth</key>
-		<string>MyHealth BC</string>
+		<string>MyHealth BC - 2023</string>
 	</dict>
 	<key>method</key>
 	<string>app-store</string>
