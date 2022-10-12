@@ -20,4 +20,4 @@ security import ./.github/secrets/cert.p12 -k ~/Library/Keychains/health.keychai
 security list-keychains -s ~/Library/Keychains/health.keychain
 security set-key-partition-list -S apple-tool:,apple: -s -k "$IOS_KEYS" ~/Library/Keychains/health.keychain
 
-12-10-22-prd
+
