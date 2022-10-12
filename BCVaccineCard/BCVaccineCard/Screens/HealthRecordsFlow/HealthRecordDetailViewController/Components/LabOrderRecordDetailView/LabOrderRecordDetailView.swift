@@ -26,7 +26,7 @@ extension HealthRecordsDetailDataSource.Record {
         }
     }
     
-    fileprivate func labOrderBannerType() -> LabOrderBsnnerTableViewCell.LabOrderBsnnerType? {
+    fileprivate func labOrderBannerType() -> LabOrderBannerTableViewCell.LabOrderBsnnerType? {
         guard let labTests = LabTests()  else {return .NoTests}
         
         if labTests.isEmpty {
@@ -81,7 +81,7 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     
     override func setup() {
         setupHeaderSection()
-        tableView?.register(UINib.init(nibName: LabOrderBsnnerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: LabOrderBsnnerTableViewCell.getName)
+        tableView?.register(UINib.init(nibName: LabOrderBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: LabOrderBannerTableViewCell.getName)
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
@@ -96,8 +96,8 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
         }
     }
     
-    public func labOrderHeaderCell(indexPath: IndexPath, tableView: UITableView) -> LabOrderBsnnerTableViewCell? {
-        let cell = tableView.dequeueReusableCell(withIdentifier: LabOrderBsnnerTableViewCell.getName, for: indexPath) as? LabOrderBsnnerTableViewCell
+    public func labOrderHeaderCell(indexPath: IndexPath, tableView: UITableView) -> LabOrderBannerTableViewCell? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: LabOrderBannerTableViewCell.getName, for: indexPath) as? LabOrderBannerTableViewCell
         cell?.selectionStyle = .none
         return cell
     }
