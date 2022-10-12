@@ -50,7 +50,9 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
     }
     
     public func covidTestHeaderCell(indexPath: IndexPath, tableView: UITableView) -> CovidTestResultBannerTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: CovidTestResultBannerTableViewCell.getName, for: indexPath) as? CovidTestResultBannerTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CovidTestResultBannerTableViewCell.getName, for: indexPath) as? CovidTestResultBannerTableViewCell
+        cell?.selectionStyle = .none
+        return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

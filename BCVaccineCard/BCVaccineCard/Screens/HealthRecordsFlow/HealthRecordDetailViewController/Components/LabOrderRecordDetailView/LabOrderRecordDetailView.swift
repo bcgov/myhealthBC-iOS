@@ -97,7 +97,9 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     }
     
     public func labOrderHeaderCell(indexPath: IndexPath, tableView: UITableView) -> LabOrderBsnnerTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: LabOrderBsnnerTableViewCell.getName, for: indexPath) as? LabOrderBsnnerTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: LabOrderBsnnerTableViewCell.getName, for: indexPath) as? LabOrderBsnnerTableViewCell
+        cell?.selectionStyle = .none
+        return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
