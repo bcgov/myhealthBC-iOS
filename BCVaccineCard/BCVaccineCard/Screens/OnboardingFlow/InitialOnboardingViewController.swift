@@ -255,7 +255,6 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
             adjustUI()
         }
         if type == .getStarted || type == .ok {
-            // TODO: version
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
             
             showLocalAuth {[weak self] in
