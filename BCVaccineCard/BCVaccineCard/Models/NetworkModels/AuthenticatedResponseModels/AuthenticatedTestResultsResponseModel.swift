@@ -80,7 +80,7 @@ extension AuthenticatedTestResultsResponseModel {
             let record = GatewayTestResultResponseRecord(patientDisplayName: patient.getFullName, lab: model.reportingLab, reportId: labResult.id, collectionDateTime: labResult.collectedDateTime, resultDateTime: labResult.resultDateTime, testName: labResult.loincName, testType: labResult.testType, testStatus: labResult.testStatus, testOutcome: labResult.labResultOutcome, resultTitle: labResult.loincName, resultDescription: labResult.resultDescription, resultLink: labResult.resultLink)
             records.append(record)
         })
-        let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 0, records: records)
+        let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 0, records: records, reportAvailable: model.reportAvailable, id: model.id)
         let gatewayResponse = GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: nil, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
         return gatewayResponse
     }

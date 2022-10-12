@@ -2,7 +2,7 @@
 //  Immunization+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-07-19.
+//  Created by Amir Shayegh on 2022-08-23.
 //
 //
 
@@ -23,8 +23,8 @@ extension Immunization {
     @NSManaged public var status: String?
     @NSManaged public var targetedDisease: String?
     @NSManaged public var valid: Bool
+    @NSManaged public var forecast: ImmunizationForecast?
     @NSManaged public var immunizationDetails: ImmunizationDetails?
     @NSManaged public var patient: Patient?
-    @NSManaged public var forecast: ImmunizationForecast?
 
 }

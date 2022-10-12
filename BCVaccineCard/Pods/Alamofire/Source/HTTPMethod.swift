@@ -32,7 +32,7 @@ public struct HTTPMethod: RawRepresentable, Equatable, Hashable {
     /// `DELETE` method.
     public static let delete = HTTPMethod(rawValue: "DELETE")
     /// `GET` method.
-    public static let get = HTTPMethod(rawValue: "GET")
+     public static let get = HTTPMethod(rawValue: "GET")
     /// `HEAD` method.
     public static let head = HTTPMethod(rawValue: "HEAD")
     /// `OPTIONS` method.

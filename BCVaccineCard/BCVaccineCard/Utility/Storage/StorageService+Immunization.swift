@@ -32,13 +32,13 @@ extension StorageService: StorageImmunizationManager {
         }
         
         // TODO: UNCOMMENT TO ENABLE FORECAST
-//        let immForecast: ImmunizationForecast?
-//        if let remoteForecast = object.forecast, let forecast = storeImmunizationForecast(object: remoteForecast) {
-//            immForecast = forecast
-//        } else {
-//            immForecast = nil
-//        }
-        let immForecast: ImmunizationForecast? = nil
+        let immForecast: ImmunizationForecast?
+        if let remoteForecast = object.forecast, let forecast = storeImmunizationForecast(object: remoteForecast) {
+            immForecast = forecast
+        } else {
+            immForecast = nil
+        }
+//        let immForecast: ImmunizationForecast? = nil
         
         
         return storeImmunization(
@@ -90,7 +90,7 @@ extension StorageService: StorageImmunizationManager {
         }
     }
     
-    private func storeImmunizationDetails(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.ImmunizationDetails) -> ImmunizationDetails? {
+    func storeImmunizationDetails(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.ImmunizationDetails) -> ImmunizationDetails? {
         return storeImmunizationDetails(name: object.name, immunizationAgents: object.immunizationAgents ?? [])
     }
     

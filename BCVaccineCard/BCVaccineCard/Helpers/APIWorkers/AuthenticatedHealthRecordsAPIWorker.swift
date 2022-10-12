@@ -411,56 +411,57 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
-    private func getAuthenticatedLaboratoryOrderPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
-        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-        requestDetails.authenticatedLabOrderPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedLabOrderPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
-        apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .normal) { [weak self] result, queueItRetryStatus in
-            guard let `self` = self else {
-                completion(nil)
-                return
-            }
-            if let retry = queueItRetryStatus, retry.retry == true {
-                let queueItToken = retry.token
-                self.requestDetails.authenticatedLabOrderPDFDetails?.queueItToken = queueItToken
-                self.apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .normal) { [weak self] result, _ in
-                    guard let `self` = self else {
-                        completion(nil)
-                        return
-                    }
-                    return self.handlePDFResponse(result: result, completion: completion)
-                }
-            } else {
-                return self.handlePDFResponse(result: result, completion: completion)
-            }
-            
-        }
-    }
+    // TODO: Remove this from here
+//    private func getAuthenticatedLaboratoryOrderPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
+//        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+//        requestDetails.authenticatedLabOrderPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedLabOrderPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+//        apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .normal) { [weak self] result, queueItRetryStatus in
+//            guard let `self` = self else {
+//                completion(nil)
+//                return
+//            }
+//            if let retry = queueItRetryStatus, retry.retry == true {
+//                let queueItToken = retry.token
+//                self.requestDetails.authenticatedLabOrderPDFDetails?.queueItToken = queueItToken
+//                self.apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .normal) { [weak self] result, _ in
+//                    guard let `self` = self else {
+//                        completion(nil)
+//                        return
+//                    }
+//                    return self.handlePDFResponse(result: result, completion: completion)
+//                }
+//            } else {
+//                return self.handlePDFResponse(result: result, completion: completion)
+//            }
+//
+//        }
+//    }
     
-    private func getAuthenticatedCovidTestPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
-        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-        requestDetails.authenticatedCovidTestPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedCovidTestPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
-        apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .covid) { [weak self] result, queueItRetryStatus in
-            guard let `self` = self else {
-                completion(nil)
-                return
-            }
-            if let retry = queueItRetryStatus, retry.retry == true {
-                let queueItToken = retry.token
-                self.requestDetails.authenticatedCovidTestPDFDetails?.queueItToken = queueItToken
-                self.apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .covid) { [weak self] result, _ in
-                    guard let `self` = self else {
-                        completion(nil)
-                        return
-                    }
-                    return self.handlePDFResponse(result: result, completion: completion)
-                }
-            } else {
-                return self.handlePDFResponse(result: result, completion: completion)
-            }
-            
-        }
-    }
-    
+//    private func getAuthenticatedCovidTestPDF(authCredentials: AuthenticationRequestObject, reportId: String, completion: @escaping (String?) -> Void) {
+//        let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
+//        requestDetails.authenticatedCovidTestPDFDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedCovidTestPDFDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+//        apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItTokenCached, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .covid) { [weak self] result, queueItRetryStatus in
+//            guard let `self` = self else {
+//                completion(nil)
+//                return
+//            }
+//            if let retry = queueItRetryStatus, retry.retry == true {
+//                let queueItToken = retry.token
+//                self.requestDetails.authenticatedCovidTestPDFDetails?.queueItToken = queueItToken
+//                self.apiClient.getAuthenticatedLabTestPDF(authCredentials, token: queueItToken, reportId: reportId, executingVC: self.executingVC, includeQueueItUI: false, type: .covid) { [weak self] result, _ in
+//                    guard let `self` = self else {
+//                        completion(nil)
+//                        return
+//                    }
+//                    return self.handlePDFResponse(result: result, completion: completion)
+//                }
+//            } else {
+//                return self.handlePDFResponse(result: result, completion: completion)
+//            }
+//
+//        }
+//    }
+
 }
 
 // MARK: Retry functions
@@ -678,6 +679,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
             // Note: This is where we would have the retry logic, however this is currently not in the payload
             else {
                 self.handleImmunizationsInCoreData(immunizations: immunizations)
+                self.handleImmunizationsRecommendationsInCoreData(payload: immunizations)
             }
         case .failure(let error):
             //            showFetchFailed()
@@ -829,17 +831,17 @@ extension AuthenticatedHealthRecordsAPIWorker {
             return
         }
         for order in orders {
-            if order.reportAvailable == true {
-                self.getAuthenticatedCovidTestPDF(authCredentials: authCreds, reportId: order.id ?? "") { pdf in
-                    let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
-                    // TODO: Adjust core data to save covid test PDF - do the same as lab order
-                    if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, pdf: pdf, authenticated: true, patientObject: patient) {
-                        completedCount += 1
-                    } else {
-                        errorArrayCount += 1
-                    }
-                }
-            } else {
+//            if order.reportAvailable == true {
+//                self.getAuthenticatedCovidTestPDF(authCredentials: authCreds, reportId: order.id ?? "") { pdf in
+//                    let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
+//                    // TODO: Adjust core data to save covid test PDF - do the same as lab order
+//                    if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, pdf: pdf, authenticated: true, patientObject: patient) {
+//                        completedCount += 1
+//                    } else {
+//                        errorArrayCount += 1
+//                    }
+//                }
+//            } else {
                 let gatewayResponse = AuthenticatedTestResultsResponseModel.transformToGatewayTestResultResponse(model: order, patient: patient)
                 // TODO: Adjust core data to save covid test PDF - do the same as lab order
                 if let id = self.handleTestResultInCoreData(gatewayResponse: gatewayResponse, pdf: nil, authenticated: true, patientObject: patient) {
@@ -847,7 +849,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 } else {
                     errorArrayCount += 1
                 }
-            }
+//            }
         }
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
         self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: errorArrayCount + completedCount, successfullCount: completedCount, error: error)
@@ -980,22 +982,22 @@ extension AuthenticatedHealthRecordsAPIWorker {
             return
         }
         for order in orders {
-            if order.reportAvailable == true {
-                self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
-                    if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
-                        completedCount += 1
-                    } else {
-                        errorArrayCount += 1
-                    }
-                }
-                
-            } else {
+//            if order.reportAvailable == true {
+//                self.getAuthenticatedLaboratoryOrderPDF(authCredentials: authCreds, reportId: order.labPdfId ?? "") { pdf in
+//                    if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: pdf, authenticated: true, patientObject: patient) {
+//                        completedCount += 1
+//                    } else {
+//                        errorArrayCount += 1
+//                    }
+//                }
+//
+//            } else {
                 if let id = self.handleLaboratoryOrdersInCoreData(object: order, pdf: nil, authenticated: true, patientObject: patient) {
                     completedCount += 1
                 } else {
                     errorArrayCount += 1
                 }
-            }
+//            }
         }
         self.decrementLoadCounter()
         let error: String? = errorArrayCount > 0 ? .genericErrorMessage : nil
@@ -1061,11 +1063,48 @@ extension AuthenticatedHealthRecordsAPIWorker {
             self.decrementLoadCounter()
             return nil
         }
+       
         self.decrementLoadCounter()
         return object.id
     }
 }
 
+
+// MARK: Handle Immunization Recommendations in core data
+extension AuthenticatedHealthRecordsAPIWorker {
+    private func handleImmunizationsRecommendationsInCoreData(payload: AuthenticatedImmunizationsResponseObject) {
+        
+        guard let patient = self.patientDetails else { return }
+        guard let objects = payload.resourcePayload?.recommendations else { return }
+
+        
+        StorageService.shared.deleteHealthRecordsForAuthenticatedUser(types: [.Recommendation])
+        guard let authCreds = self.authCredentials else {
+            return
+        }
+        for object in objects {
+            _ = self.handleImmunizationsRecommendationsInCoreData(object: object, authenticated: true, patientObject: patient)
+            
+        }
+    }
+    
+    private func handleImmunizationsRecommendationsInCoreData(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Recommendation, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
+        
+        incrementLoadCounter()
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+            self.decrementLoadCounter()
+            return nil
+        }
+        
+        guard let object = StorageService.shared.storeRecommendation(patient: patient, object: object, authenticated: authenticated) else {
+            self.decrementLoadCounter()
+            return nil
+        }
+       
+        self.decrementLoadCounter()
+        return object.recommendationSetID
+    }
+}
 // MARK: Handle Health Visits in core data
 extension AuthenticatedHealthRecordsAPIWorker {
     private func handleHealthVisitsInCoreData(healthVisits: AuthenticatedHealthVisitsResponseObject) {
@@ -1288,6 +1327,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
                 appDelegate.dataLoadCount -= 1
             }
         }
+       
     }
     
     private func incrementLoadCounter() {

@@ -54,6 +54,8 @@ class BaseHealthRecordsDetailView: UIView {
         
         tableView.register(UINib.init(nibName: SectionDescriptionTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SectionDescriptionTableViewCell.getName)
         
+        tableView.register(UINib.init(nibName: ViewPDFTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ViewPDFTableViewCell.getName)
+        
         
         tableView.rowHeight = UITableView.automaticDimension
         tableView.showsVerticalScrollIndicator = false
@@ -71,18 +73,32 @@ class BaseHealthRecordsDetailView: UIView {
     
     
     public func messageHeaderCell(indexPath: IndexPath, tableView: UITableView) -> MessageBannerTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: MessageBannerTableViewCell.getName, for: indexPath) as? MessageBannerTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: MessageBannerTableViewCell.getName, for: indexPath) as? MessageBannerTableViewCell
+        cell?.selectionStyle = .none
+        return cell
+    }
+    
+    public func viewPDFButtonCell(indexPath: IndexPath, tableView: UITableView) -> ViewPDFTableViewCell? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ViewPDFTableViewCell.getName, for: indexPath) as? ViewPDFTableViewCell
+        cell?.selectionStyle = .none
+        return cell
     }
     
     public func commentCell(indexPath: IndexPath, tableView: UITableView) -> CommentViewTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: CommentViewTableViewCell.getName, for: indexPath) as? CommentViewTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: CommentViewTableViewCell.getName, for: indexPath) as? CommentViewTableViewCell
+        cell?.selectionStyle = .none
+        return cell
     }
     
     public func sectionDescriptionCell(indexPath: IndexPath, tableView: UITableView) -> SectionDescriptionTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: SectionDescriptionTableViewCell.getName, for: indexPath) as? SectionDescriptionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: SectionDescriptionTableViewCell.getName, for: indexPath) as? SectionDescriptionTableViewCell
+        cell?.selectionStyle = .none
+        return cell
     }
     
     public func textCell(indexPath: IndexPath, tableView: UITableView) -> HealthRecordDetailFieldTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: HealthRecordDetailFieldTableViewCell.getName, for: indexPath) as? HealthRecordDetailFieldTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: HealthRecordDetailFieldTableViewCell.getName, for: indexPath) as? HealthRecordDetailFieldTableViewCell
+        cell?.selectionStyle = .none
+        return cell
     }
 }

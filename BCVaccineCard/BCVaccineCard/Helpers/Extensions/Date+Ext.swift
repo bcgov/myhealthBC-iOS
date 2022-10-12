@@ -320,3 +320,22 @@ extension Date {
     }
     
 }
+
+
+extension String {
+    func getGatewayDate() -> Date? {
+        let formatted: Date?
+        if let timezoneDate = Date.Formatter.gatewayDateAndTimeWithTimeZone.date(from: self) {
+            formatted = timezoneDate
+        } else if let nozoneDate = Date.Formatter.gatewayDateAndTime.date(from: self) {
+            formatted = nozoneDate
+        } else if let withMillisenconds = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: self) {
+            formatted = withMillisenconds
+        } else {
+            formatted = nil
+        }
+        return formatted
+    }
+}
+
+
