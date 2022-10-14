@@ -8,7 +8,7 @@
 import UIKit
 
 enum TabBarVCs: Int {
-    case home = 0, records, healthPass, resource
+    case home = 0, records, healthPass, dependant ,resource
 //    case newsFeed
     
     var getIndexOfTab: Int {
@@ -30,6 +30,8 @@ enum TabBarVCs: Int {
             return Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: HealthRecordsViewController.constructHealthRecordsViewController())
         case .healthPass:
             return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil))
+        case .dependant:
+            return Properties(title: .dependent, selectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-unselected"), unselectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-selected"), baseViewController: DependentsHomeViewController.constructDependentsHomeViewController())
         case .resource:
             return Properties(title: .resources, selectedTabBarImage: #imageLiteral(resourceName: "resource-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "resource-tab-unselected"), baseViewController: ResourceViewController.constructResourceViewController())
 //        case .newsFeed:
@@ -91,7 +93,7 @@ class TabBarController: UITabBarController {
         self.tabBar.tintColor = AppColours.appBlue
         self.tabBar.barTintColor = .white
         self.delegate = self
-        self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource])
+        self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .dependant])
         self.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, onActualLaunchCheck: true)
         self.selectedIndex = selectedIndex
         setupObserver()
