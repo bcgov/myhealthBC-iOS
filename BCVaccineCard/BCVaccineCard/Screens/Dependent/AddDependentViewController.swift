@@ -20,7 +20,7 @@ struct AddDependentFormData {
     }
 }
 
-class AddDependentViewController: UIViewController, UITextFieldDelegate {
+class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
     class func constructAddDependentViewController() -> AddDependentViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: AddDependentViewController.self)) as? AddDependentViewController {
@@ -67,6 +67,7 @@ class AddDependentViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        style()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -116,25 +117,31 @@ class AddDependentViewController: UIViewController, UITextFieldDelegate {
     }
     
     func style() {
+        title = .dependentRegistration
         fields.forEach({style(field: $0)})
         headers.forEach({style(header: $0)})
         // Date of Birth
         dateOfBirthField.inputView = datePicker
         datePicker.addTarget(self, action: #selector(handleDatePicker(sender:)), for: .valueChanged)
         // Buttons
-        style(buton: cancelButton, filled: false)
-        style(buton: registerButton, filled: true)
-        registerButton.isEnabled = false
+        style(button: cancelButton, filled: false, title: "Cancel")
+        style(button: registerButton, filled: true, title: "Register")
+        updateregisterButtonStyle()
         
         // Agreement box
         agreementBox.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.tappedAgreementBox(_:)))
         agreementBox.addGestureRecognizer(tap)
         styleAgreementBox()
+        
+        phnHelpText.font = UIFont.bcSansRegularWithSize(size: 13)
+        phnHelpText.textColor = UIColor(red: 0.716, green: 0.716, blue: 0.716, alpha: 1)
+        navSetup()
     }
     
     func style(header label: UILabel) {
         label.font = UIFont.bcSansBoldWithSize(size: 17)
+        label.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
     }
     
     func style(field: UITextField) {
@@ -143,12 +150,25 @@ class AddDependentViewController: UIViewController, UITextFieldDelegate {
         field.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged)
     }
     
-    func style(buton: UIButton, filled: Bool) {
-        
+    func style(button: UIButton, filled: Bool, title: String) {
+        button.layer.cornerRadius = 4
+        if filled {
+            button.backgroundColor = AppColours.appBlue
+            button.setTitleColor(.white, for: .normal)
+            button.tintColor = .white
+        } else {
+            button.setTitleColor(AppColours.appBlue, for: .normal)
+            button.backgroundColor = .white
+            button.layer.borderWidth = 2
+            button.layer.borderColor = AppColours.appBlue.cgColor
+        }
+        button.setTitle(title, for: .normal)
+        button.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 18)
     }
     
     func updateregisterButtonStyle() {
         registerButton.isEnabled = formData.isValid
+        registerButton.backgroundColor = formData.isValid ? AppColours.appBlue : AppColours.lightGray
     }
     
     func styleAgreementBox() {
@@ -166,5 +186,17 @@ class AddDependentViewController: UIViewController, UITextFieldDelegate {
             return allowedCharacters.isSuperset(of: characterSet)
         }
         return true
+    }
+}
+
+extension AddDependentViewController {
+    private func navSetup() {
+        self.navDelegate?.setNavigationBarWith(title: .dependentRegistration,
+                                               leftNavButton: nil,
+                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
+                                               navStyle: .large,
+                                               navTitleSmallAlignment: .Center,
+                                               targetVC: self,
+                                               backButtonHintString: nil)
     }
 }

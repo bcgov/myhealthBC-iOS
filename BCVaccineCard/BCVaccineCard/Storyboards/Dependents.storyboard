@@ -18,33 +18,44 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hll-cX-j3a">
-                                <rect key="frame" x="31" y="104" width="352" height="101.5"/>
+                                <rect key="frame" x="16" y="104" width="382" height="81.5"/>
                                 <string key="text">You can add your dependents under the age of 12 to view their COVID-19 results. Please complete the form with your dependent’s information, exactly as it appears on their BC Services Card.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="H98-J5-p9U">
-                                <rect key="frame" x="31" y="738" width="352" height="116"/>
+                                <rect key="frame" x="31" y="676" width="352" height="178"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dAf-Jx-6kd">
                                         <rect key="frame" x="0.0" y="0.0" width="352" height="54"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="54" id="X4Q-ho-Nov"/>
                                         </constraints>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Add dependent"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Add dependent" image="add_person"/>
                                         <connections>
                                             <action selector="addDependent:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="b7K-4r-Mwl"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eaq-Gh-nwX">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PAG-rS-Ep8">
                                         <rect key="frame" x="0.0" y="62" width="352" height="54"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="54" id="5xf-hh-Gdb"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Log in with BC Services Card"/>
+                                        <connections>
+                                            <action selector="LoginWithBCSC:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="qua-Gz-NsC"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eaq-Gh-nwX">
+                                        <rect key="frame" x="0.0" y="124" width="352" height="54"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="54" id="geR-qe-xcf"/>
                                         </constraints>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Manage dependents"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Manage dependents" image="dependent-icon"/>
                                         <connections>
                                             <action selector="manageDependents:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="FCP-ZY-Pf4"/>
                                         </connections>
@@ -52,29 +63,30 @@
                                 </subviews>
                             </stackView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xbT-Bn-hiV">
-                                <rect key="frame" x="31" y="221.5" width="352" height="500.5"/>
+                                <rect key="frame" x="16" y="201.5" width="382" height="458.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Hll-cX-j3a" secondAttribute="trailing" constant="31" id="2Q0-2V-5IE"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="H98-J5-p9U" secondAttribute="trailing" constant="31" id="7C6-V1-iZ4"/>
-                            <constraint firstItem="xbT-Bn-hiV" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="31" id="Arv-LJ-914"/>
+                            <constraint firstItem="xbT-Bn-hiV" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="Arv-LJ-914"/>
                             <constraint firstItem="Hll-cX-j3a" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="16" id="CoE-bA-VwS"/>
                             <constraint firstItem="H98-J5-p9U" firstAttribute="top" secondItem="xbT-Bn-hiV" secondAttribute="bottom" constant="16" id="IlK-fa-6iZ"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="H98-J5-p9U" secondAttribute="bottom" constant="8" id="RIU-Cg-HSM"/>
                             <constraint firstItem="H98-J5-p9U" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="31" id="T7g-IN-cTd"/>
                             <constraint firstItem="xbT-Bn-hiV" firstAttribute="top" secondItem="Hll-cX-j3a" secondAttribute="bottom" constant="16" id="VFg-mb-l2j"/>
-                            <constraint firstItem="Hll-cX-j3a" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="31" id="bO1-4Z-W6s"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="xbT-Bn-hiV" secondAttribute="trailing" constant="31" id="hPW-ye-6Yv"/>
+                            <constraint firstItem="Hll-cX-j3a" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="bO1-4Z-W6s"/>
+                            <constraint firstItem="Hll-cX-j3a" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="oKO-sB-AWo"/>
+                            <constraint firstItem="xbT-Bn-hiV" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="qGE-p5-109"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="w3S-aB-Bg2"/>
                     <connections>
                         <outlet property="addDependentButton" destination="dAf-Jx-6kd" id="Lk2-UW-bg3"/>
                         <outlet property="desciptionLabel" destination="Hll-cX-j3a" id="w1o-VK-oiW"/>
+                        <outlet property="loginWIthBCSCButton" destination="PAG-rS-Ep8" id="ym7-JF-kqJ"/>
                         <outlet property="manageDependentsButton" destination="Eaq-Gh-nwX" id="rK7-EB-bTY"/>
                         <outlet property="tableView" destination="xbT-Bn-hiV" id="roj-yM-3Y8"/>
                     </connections>
@@ -127,7 +139,7 @@
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="w8h-Mt-8q8">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="John Alexander" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="w8h-Mt-8q8">
                                                                 <rect key="frame" x="0.0" y="29" width="352" height="42"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="42" id="qiG-39-Ae7"/>
@@ -146,7 +158,7 @@
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aZN-JQ-xm1">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Doe" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aZN-JQ-xm1">
                                                                 <rect key="frame" x="0.0" y="28.5" width="352" height="42"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="42" id="Dm3-vD-xI2"/>
@@ -159,13 +171,13 @@
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="5Gr-uB-EI3">
                                                         <rect key="frame" x="0.0" y="181.5" width="352" height="71"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date of Birth" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ic-7d-0FH">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date of Birth (DoB)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Ic-7d-0FH">
                                                                 <rect key="frame" x="0.0" y="0.0" width="352" height="25"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vzn-ki-XRL">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="yyyy-mm-dd" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vzn-ki-XRL">
                                                                 <rect key="frame" x="0.0" y="29" width="352" height="42"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="42" id="Lpr-LR-KaZ"/>
@@ -178,13 +190,13 @@
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="5n9-Ka-udZ">
                                                         <rect key="frame" x="0.0" y="272.5" width="352" height="102.5"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Personal Health Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xvr-bK-RXh">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Personal Health Number (PHN)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xvr-bK-RXh">
                                                                 <rect key="frame" x="0.0" y="0.0" width="352" height="25.5"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MGj-n4-s46">
+                                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="xxxx xxx xxx" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MGj-n4-s46">
                                                                 <rect key="frame" x="0.0" y="29.5" width="352" height="42"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="42" id="SJQ-Fa-9oU"/>
@@ -249,16 +261,16 @@ I understand that I will no longer be able to access my child’s health records
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eat-lJ-lbp">
                                         <rect key="frame" x="0.0" y="0.0" width="164" height="54"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Cancel"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Cancel"/>
                                         <connections>
                                             <action selector="onCancel:" destination="adm-uY-MpP" eventType="touchUpInside" id="2rr-hV-ouT"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Xr-wY-oZ4">
                                         <rect key="frame" x="188" y="0.0" width="164" height="54"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Register"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="Register"/>
                                         <connections>
                                             <action selector="onRegister:" destination="adm-uY-MpP" eventType="touchUpInside" id="Xz7-81-ldJ"/>
                                         </connections>
@@ -303,6 +315,8 @@ I understand that I will no longer be able to access my child’s health records
         </scene>
     </scenes>
     <resources>
+        <image name="add_person" width="24" height="24"/>
+        <image name="dependent-icon" width="32" height="32"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

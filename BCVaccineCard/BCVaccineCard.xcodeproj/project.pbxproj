@@ -314,6 +314,10 @@
 		3E32322628B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
 		3E32322728B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
 		3E32322828B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
+		3E3DA93F28FE8133009C500F /* DependentListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */; };
+		3E3DA94028FE8133009C500F /* DependentListItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */; };
+		3E3DA94128FE8135009C500F /* DependentListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */; };
+		3E3DA94228FE8136009C500F /* DependentListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */; };
 		3E5E6E9B28D239BE00724EDD /* CommunicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6E9A28D239BE00724EDD /* CommunicationService.swift */; };
 		3E5E6E9C28D239BE00724EDD /* CommunicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6E9A28D239BE00724EDD /* CommunicationService.swift */; };
 		3E5E6E9D28D239BE00724EDD /* CommunicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6E9A28D239BE00724EDD /* CommunicationService.swift */; };
@@ -1219,6 +1223,8 @@
 		2DF2102D28E5D47F00F5E01C /* ImmunizationRecommendation+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ImmunizationRecommendation+CoreDataClass.swift"; path = "../../../../../ImmunizationRecommendation+CoreDataClass.swift"; sourceTree = "<group>"; };
 		322EBB5AF649DC5B3E4779FE /* Pods_Health_Gateway_Dev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Health_Gateway_Dev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E32322528B5FEB80067040C /* Recommendations.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
+		3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentListItemTableViewCell.swift; sourceTree = "<group>"; };
+		3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DependentListItemTableViewCell.xib; sourceTree = "<group>"; };
 		3E5E6E9A28D239BE00724EDD /* CommunicationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationService.swift; sourceTree = "<group>"; };
 		3E5E6E9F28D23B8B00724EDD /* NetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRequest.swift; sourceTree = "<group>"; };
 		3E5E6EA428D23BB200724EDD /* AFNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AFNetwork.swift; sourceTree = "<group>"; };
@@ -1981,6 +1987,15 @@
 			path = ViewPDFTableViewCell;
 			sourceTree = "<group>";
 		};
+		3E3DA93C28FE811A009C500F /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */,
+				3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		3E5E6E9E28D23B5D00724EDD /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -2039,6 +2054,7 @@
 		3E78AEC728F8725300C66E28 /* Dependent */ = {
 			isa = PBXGroup;
 			children = (
+				3E3DA93C28FE811A009C500F /* Cells */,
 				3E78AEC828F8729900C66E28 /* DependentsHomeViewController.swift */,
 				3E78AECC28F9909500C66E28 /* AddDependentViewController.swift */,
 			);
@@ -3465,6 +3481,7 @@
 				7980062E2852C66E006E390F /* Records.storyboard in Resources */,
 				7980062F2852C66E006E390F /* NewsFeed.storyboard in Resources */,
 				798006302852C66E006E390F /* LocalAuthPrivacyView.xib in Resources */,
+				3E3DA94028FE8133009C500F /* DependentListItemTableViewCell.xib in Resources */,
 				798006312852C66E006E390F /* DataSecurityTipsTableViewCell.xib in Resources */,
 				798006322852C66E006E390F /* InteractiveLabelTableViewCell.xib in Resources */,
 				798006332852C66E006E390F /* GetRecordsView.xib in Resources */,
@@ -3922,6 +3939,7 @@
 				29A4DF4927DA675000D5E901 /* FilterRecordsView.swift in Sources */,
 				79CF23682825787900510489 /* HealthRecordsHomeView.swift in Sources */,
 				29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */,
+				3E3DA94128FE8135009C500F /* DependentListItemTableViewCell.swift in Sources */,
 				29B23B3F26FB88BB00A3AC79 /* CameraViewController.swift in Sources */,
 				2922C131287E10EB000FF4F7 /* StorageService+HealthVisits.swift in Sources */,
 				29E19FED286C11C900C235EF /* LabOrderRecordDetailView.swift in Sources */,
@@ -4211,6 +4229,7 @@
 				798CA1CB27EE4B0A0096188C /* LoginProcessStatus.swift in Sources */,
 				29788532279624EA00FF912D /* SettingsRowTableViewCell.swift in Sources */,
 				791C27C02718315A001A6E12 /* AddCardsTableViewCell.swift in Sources */,
+				3E3DA94228FE8136009C500F /* DependentListItemTableViewCell.swift in Sources */,
 				79D93B1E27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */,
 				2922C132287E10EC000FF4F7 /* StorageService+HealthVisits.swift in Sources */,
 				29E19FEF286C11CA00C235EF /* LabOrderRecordDetailView.swift in Sources */,
@@ -4474,6 +4493,7 @@
 				2922C0E3286E33F8000FF4F7 /* MessageBannerTableViewCell.swift in Sources */,
 				798005E52852C66E006E390F /* AuthenticatedCommentResponseObject.swift in Sources */,
 				798005E62852C66E006E390F /* String+EXT.swift in Sources */,
+				3E3DA93F28FE8133009C500F /* DependentListItemTableViewCell.swift in Sources */,
 				798005E72852C66E006E390F /* FilterRecordsView.swift in Sources */,
 				798005E82852C66E006E390F /* HealthRecordsHomeView.swift in Sources */,
 				798005E92852C66E006E390F /* UIImage+EXT.swift in Sources */,

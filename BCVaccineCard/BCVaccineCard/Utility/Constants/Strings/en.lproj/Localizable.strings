@@ -137,6 +137,7 @@
 "Resources" = "Resources";
 "Dependent" = "Dependent";
 "Dependents" = "Dependents";
+"DependentRegistration" = "Dependent Registration";
 "ResourceDescriptionText" = "Connect with HealthLink BC for health advice and get the latest information about COVID-19.";
 "GetVaccinatedResource" = "Get vaccinated";
 "GetTestedResource" = "Get a COVID-19 test";
