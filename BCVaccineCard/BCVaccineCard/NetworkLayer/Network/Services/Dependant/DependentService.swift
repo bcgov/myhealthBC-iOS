@@ -16,7 +16,16 @@ struct DependentService {
         return UrlAccessor()
     }
     
-    public func fetchDependents(completion: @escaping(_ dependentResponse: DependentResponse?) -> Void) {
+    public func fetchDependents(completion: @escaping(Bool) -> Void) {
+        fetchDependentNetworkRequest { dependentResponse in
+            print(dependentResponse)
+            // TODO: Store list of dependents response (converted to patients)
+            completion(true)
+            
+        }
+    }
+    
+    private func fetchDependentNetworkRequest(completion: @escaping(_ dependentResponse: DependentResponse?) -> Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else { return }
         if NetworkConnection.shared.hasConnection {
             BaseURLWorker.shared.setBaseURL {
@@ -34,9 +43,18 @@ struct DependentService {
                 network.request(with: requestModel)
             }
         }
+
     }
     
-    public func addDependent(object: PostDependent, completion: @escaping(_ dependentResponse: DependentResponse?) -> Void) {
+    public func addDependent(object: PostDependent, completion: @escaping(Bool) -> Void) {
+        addDependentNetworkRequest(object: object) { dependentResponse in
+            print(dependentResponse)
+            // TODO: Store dependent response (converted to patient object)
+            completion(true)
+        }
+    }
+    
+    private func addDependentNetworkRequest(object: PostDependent, completion: @escaping(_ dependentResponse: DependentResponse?) -> Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else { return }
         if NetworkConnection.shared.hasConnection {
             BaseURLWorker.shared.setBaseURL {
@@ -55,5 +73,6 @@ struct DependentService {
             }
         }
     }
+
     
 }
