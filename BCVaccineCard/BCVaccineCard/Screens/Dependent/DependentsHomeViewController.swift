@@ -61,7 +61,16 @@ class DependentsHomeViewController: BaseViewController {
     }
     
     @IBAction func LoginWithBCSC(_ sender: Any) {
-        
+        let vc = AuthenticationViewController.constructAuthenticationViewController(
+            createTabBarAndGoToHomeScreen: false,
+            isModal: true,
+            initialView: .Auth,
+            sourceVC: .Dependents,
+            presentingViewControllerReference: self
+        ) { [weak self] status in
+            self?.fetchData()
+        }
+        present(vc, animated: true)
     }
     
     func style() {
