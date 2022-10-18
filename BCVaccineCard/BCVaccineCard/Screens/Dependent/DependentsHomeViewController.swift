@@ -18,6 +18,7 @@ class DependentsHomeViewController: BaseViewController {
     }
 
     private let emptyLogoTag = 23412
+    private let service = DependentService(network: AFNetwork(), authManager: AuthManager())
     
     @IBOutlet weak var desciptionLabel: UILabel!
     @IBOutlet weak var loginWIthBCSCButton: UIButton!
@@ -39,27 +40,31 @@ class DependentsHomeViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = .dependents
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navSetup()
         style()
         setupTableView()
         fetchData()
         setState()
     }
     
-    func fetchData() {
+    private func fetchData() {
+        service.fetchDependents { completed in
+            // If completed, then reload data/update screen UI - if not completed, show an error
+        }
+        // TODO: Allocate this appropriately once storage has been updated
         dependents = []
         setState()
     }
 
     @IBAction func addDependent(_ sender: Any) {
         let addVC = AddDependentViewController.constructAddDependentViewController()
-        navigationController?.pushViewController(addVC, animated: true)
+        self.navigationController?.pushViewController(addVC, animated: true)
     }
     
     @IBAction func manageDependents(_ sender: Any) {
     }
     
+
     @IBAction func LoginWithBCSC(_ sender: Any) {
         let vc = AuthenticationViewController.constructAuthenticationViewController(
             createTabBarAndGoToHomeScreen: false,
@@ -108,7 +113,7 @@ class DependentsHomeViewController: BaseViewController {
         loginWIthBCSCButton.isHidden = false
     }
     
-    func styleWithDependents() {
+    private func styleWithDependents() {
         removeEmptyLogo()
         addDependentButton.isHidden = false
         manageDependentsButton.isHidden = false
@@ -131,7 +136,6 @@ class DependentsHomeViewController: BaseViewController {
         }
         imgView.removeFromSuperview()
     }
-    
     func style(button: UIButton, filled: Bool) {
         button.layer.cornerRadius = 4
         button.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 18)
@@ -146,6 +150,19 @@ class DependentsHomeViewController: BaseViewController {
             button.layer.borderWidth = 2
             button.layer.borderColor = AppColours.appBlue.cgColor
         }
+    }
+}
+
+// MARK: Navigation setup
+extension DependentsHomeViewController {
+    private func navSetup() {
+        self.navDelegate?.setNavigationBarWith(title: .dependents,
+                                               leftNavButton: nil,
+                                               rightNavButton: nil,
+                                               navStyle: .large,
+                                               navTitleSmallAlignment: .Center,
+                                               targetVC: self,
+                                               backButtonHintString: .dependents)
     }
 }
 

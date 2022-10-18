@@ -18,6 +18,20 @@ struct AddDependentFormData {
     var isValid: Bool {
         return givenName != nil &&  lastName != nil && dateOfBirth != nil && phn != nil && hasAgreed
     }
+    
+    func toPostDependent(data: Self) -> PostDependent? {
+        guard isValid else { return nil }
+        let dependent = PostDependent(firstName: data.givenName!, lastName: data.lastName!, dateOfBirth: convertDate(date: data.dateOfBirth!), phn: convertPHN(phn: data.phn!))
+        return dependent
+    }
+    
+    private func convertPHN(phn: Int) -> String {
+        return String(phn)
+    }
+    
+    private func convertDate(date: Date) -> String {
+        return date.gatewayDateAndTimeWithMSAndTimeZone
+    }
 }
 
 class AddDependentViewController: BaseViewController, UITextFieldDelegate {
@@ -30,6 +44,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     }
     
     private var formData = AddDependentFormData()
+    private let service = DependentService(network: AFNetwork(), authManager: AuthManager())
     
     @IBOutlet weak var givenNameHeader: UILabel!
     @IBOutlet weak var givenNameField: UITextField!
@@ -67,6 +82,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navSetup()
         style()
     }
     
@@ -76,12 +92,16 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     }
     
     @IBAction func onCancel(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func onRegister(_ sender: Any) {
         guard formData.isValid else {return}
         // TODO: Fetch dependent data using formData
+        guard let object = formData.toPostDependent(data: formData) else { return }
+        service.addDependent(object: object) { completed in
+            // If completed, then reload data/update screen UI/route to appropriate screen - if not completed, show an error
+        }
     }
     
     @objc func tappedAgreementBox(_ sender: UITapGestureRecognizer? = nil) {
@@ -188,6 +208,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
         return true
     }
 }
+
 
 extension AddDependentViewController {
     private func navSetup() {
