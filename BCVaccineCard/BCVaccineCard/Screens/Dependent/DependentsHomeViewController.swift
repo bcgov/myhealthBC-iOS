@@ -10,13 +10,15 @@ import UIKit
 
 class DependentsHomeViewController: BaseViewController {
     
-    class func constructDependentsHomeViewController() -> DependentsHomeViewController {
+    class func constructDependentsHomeViewController(patient: Patient?) -> DependentsHomeViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: DependentsHomeViewController.self)) as? DependentsHomeViewController {
+            vc.patient = patient
             return vc
         }
         return DependentsHomeViewController()
     }
 
+    private var patient: Patient? = nil
     private let emptyLogoTag = 23412
     private let service = DependentService(network: AFNetwork(), authManager: AuthManager())
     
@@ -48,12 +50,22 @@ class DependentsHomeViewController: BaseViewController {
     }
     
     private func fetchData() {
-        service.fetchDependents { completed in
+        setState()
+        guard let patient = patient else {
+            dependents = []
+            setState()
+            return
+        }
+
+        service.fetchDependents(for: patient) { [weak self] storedDependents in
             // If completed, then reload data/update screen UI - if not completed, show an error
+            self?.dependents = storedDependents
+            self?.setState()
         }
         // TODO: Allocate this appropriately once storage has been updated
-        dependents = []
-        setState()
+//        dependents = []
+//        setState()
+        
     }
 
     @IBAction func addDependent(_ sender: Any) {
@@ -79,6 +91,8 @@ class DependentsHomeViewController: BaseViewController {
     }
     
     func style() {
+        desciptionLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+        desciptionLabel.textColor = AppColours.greyText
         style(button: addDependentButton, filled: true)
         style(button: loginWIthBCSCButton, filled: true)
         style(button: manageDependentsButton, filled: false)
@@ -149,23 +163,12 @@ class DependentsHomeViewController: BaseViewController {
             button.backgroundColor = .white
             button.layer.borderWidth = 2
             button.layer.borderColor = AppColours.appBlue.cgColor
+            button.tintColor = AppColours.appBlue
         }
     }
 }
 
 // MARK: Navigation setup
-extension DependentsHomeViewController {
-    private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .dependents,
-                                               leftNavButton: nil,
-                                               rightNavButton: nil,
-                                               navStyle: .large,
-                                               navTitleSmallAlignment: .Center,
-                                               targetVC: self,
-                                               backButtonHintString: .dependents)
-    }
-}
-
 extension DependentsHomeViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: .dependents,
@@ -199,10 +202,9 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     private func dependentCell(indexPath: IndexPath) -> DependentListItemTableViewCell? {
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: DependentListItemTableViewCell.getName, for: indexPath) as? DependentListItemTableViewCell else {
-                return nil
-            }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: DependentListItemTableViewCell.getName, for: indexPath) as? DependentListItemTableViewCell else {
+            return DependentListItemTableViewCell()
+        }
         return cell
     }
     

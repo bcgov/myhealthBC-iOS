@@ -31,7 +31,7 @@ enum TabBarVCs: Int {
         case .healthPass:
             return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil))
         case .dependant:
-            return Properties(title: .dependent, selectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-unselected"), unselectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-selected"), baseViewController: DependentsHomeViewController.constructDependentsHomeViewController())
+            return Properties(title: .dependent, selectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-unselected"), unselectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-selected"), baseViewController: DependentsHomeViewController.constructDependentsHomeViewController(patient: StorageService.shared.fetchAuthenticatedPatient()))
         case .resource:
             return Properties(title: .resources, selectedTabBarImage: #imageLiteral(resourceName: "resource-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "resource-tab-unselected"), baseViewController: ResourceViewController.constructResourceViewController())
 //        case .newsFeed:

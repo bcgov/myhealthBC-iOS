@@ -38,6 +38,7 @@ struct DependentResponse: Codable {
     }
 }
 
+typealias RemoteDependents = DependentResponse.ResourcePayload
 
 
 

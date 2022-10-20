@@ -68,6 +68,7 @@ protocol StoragePatientManager {
     ///   - phn: phn
     ///   - name: name
     ///   - birthday: birthday
+    ///   - hdid: hdid
     /// - Returns: stored patient
     func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, hdid: String?, authenticated: Bool) -> Patient?
 }
@@ -249,7 +250,7 @@ extension StorageService: StoragePatientManager {
     ///   - name: name
     ///   - birthday: birthday
     /// - Returns: stored patient
-    public func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, hdid: String?, authenticated: Bool) -> Patient? {
+    public func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, hdid: String? = nil, authenticated: Bool) -> Patient? {
         var phnPatient: Patient?
         var dobPatient: Patient?
         

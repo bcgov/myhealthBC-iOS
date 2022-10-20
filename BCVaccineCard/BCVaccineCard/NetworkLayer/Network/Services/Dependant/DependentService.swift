@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JOSESwift
 
 struct DependentService {
     
@@ -16,11 +17,14 @@ struct DependentService {
         return UrlAccessor()
     }
     
-    public func fetchDependents(completion: @escaping(Bool) -> Void) {
+    public func fetchDependents(for patient: Patient, completion: @escaping([Patient]) -> Void) {
         fetchDependentNetworkRequest { dependentResponse in
             print(dependentResponse)
+            guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload else {
+                return completion([])
+            }
             // TODO: Store list of dependents response (converted to patients)
-            completion(true)
+            StorageService.shared.store(dependents: payload, for: patient, completion: completion)
             
         }
     }

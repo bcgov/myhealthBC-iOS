@@ -19,6 +19,8 @@ class DependentListItemTableViewCell: UITableViewCell {
         nameLabel.text = name
         nameLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         nameLabel.textColor = AppColours.appBlue
+        backgroundColor = AppColours.commentBackground
+        layer.cornerRadius = 4
     }
     
 }

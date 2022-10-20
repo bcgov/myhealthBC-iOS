@@ -161,7 +161,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
     func style(header label: UILabel) {
         label.font = UIFont.bcSansBoldWithSize(size: 17)
-        label.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
+        label.textColor = AppColours.greyText
     }
     
     func style(field: UITextField) {

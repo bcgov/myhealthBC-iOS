@@ -32,7 +32,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="54" id="X4Q-ho-Nov"/>
                                         </constraints>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="-16" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Add dependent" image="add_person"/>
                                         <connections>
                                             <action selector="addDependent:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="b7K-4r-Mwl"/>
@@ -54,7 +54,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="54" id="geR-qe-xcf"/>
                                         </constraints>
-                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="-16" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Manage dependents" image="dependent-icon"/>
                                         <connections>
                                             <action selector="manageDependents:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="FCP-ZY-Pf4"/>
