@@ -193,7 +193,7 @@ extension UIViewController {
         StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, patient: patientAPI, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
-                AppDelegate.sharedInstance?.showToast(message: .updatedCard)
+                self.showToast(message: .updatedCard)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
@@ -206,7 +206,7 @@ extension UIViewController {
         StorageService.shared.updateVaccineCard(card: card, federalPass: fedCode, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
-                AppDelegate.sharedInstance?.showToast(message: .updatedCard)
+                self.showToast(message: .updatedCard)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
