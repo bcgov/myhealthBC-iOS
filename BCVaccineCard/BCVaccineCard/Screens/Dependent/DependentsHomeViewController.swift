@@ -50,7 +50,6 @@ class DependentsHomeViewController: BaseViewController {
     }
     
     private func fetchData() {
-        setState()
         guard let patient = patient else {
             dependents = []
             setState()
@@ -62,10 +61,6 @@ class DependentsHomeViewController: BaseViewController {
             self?.dependents = storedDependents
             self?.setState()
         }
-        // TODO: Allocate this appropriately once storage has been updated
-//        dependents = []
-//        setState()
-        
     }
 
     @IBAction func addDependent(_ sender: Any) {
@@ -74,6 +69,7 @@ class DependentsHomeViewController: BaseViewController {
     }
     
     @IBAction func manageDependents(_ sender: Any) {
+        showToast(message: "Feature is not implemented")
     }
     
 
