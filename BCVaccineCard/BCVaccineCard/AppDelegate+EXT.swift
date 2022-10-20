@@ -131,3 +131,13 @@ extension AppDelegate {
         }
     }
 }
+
+extension UIViewController {
+    func showToast(message: String, style: AppDelegate.ToastStyle? = .Default) {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.showToast(message: message, style: style)
+            }
+        }
+    }
+}
