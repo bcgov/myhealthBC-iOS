@@ -8,6 +8,24 @@
 import Foundation
 import JOSESwift
 
+extension Network {
+    func addLoader() {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.incrementLoader(message: .SyncingRecords)
+            }
+        }
+    }
+    
+    func removeLoader() {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.decrementLoader()
+            }
+        }
+    }
+}
+
 struct DependentService {
     
     let network: Network
@@ -18,13 +36,18 @@ struct DependentService {
     }
     
     public func fetchDependents(for patient: Patient, completion: @escaping([Patient]) -> Void) {
+        network.addLoader()
         fetchDependentNetworkRequest { dependentResponse in
-            print(dependentResponse)
             guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload else {
+                network.removeLoader()
                 return completion([])
             }
             // TODO: Store list of dependents response (converted to patients)
-            StorageService.shared.store(dependents: payload, for: patient, completion: completion)
+            network.removeLoader()
+            StorageService.shared.store(dependents: payload, for: patient, completion: { result in
+                network.removeLoader()
+                completion(result)
+            })
             
         }
     }

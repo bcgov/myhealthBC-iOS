@@ -36,7 +36,7 @@ class BaseURLWorker {
         
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.dataLoadCount += 1
+                appDelegate.incrementLoader(message: .Preparing)
             }
         }
         
@@ -47,7 +47,7 @@ class BaseURLWorker {
             }
             DispatchQueue.main.async {
                 if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                    appDelegate.dataLoadCount -= 1
+                    appDelegate.decrementLoader()
                 }
             }
             completion()

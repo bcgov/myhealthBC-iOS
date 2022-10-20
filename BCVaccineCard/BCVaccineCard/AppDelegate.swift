@@ -22,16 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var protectiveWordEnteredThisSession = false
     
     var lastLocalAuth: Date? = nil
-    var dataLoadCount: Int = 0 {
-        didSet {
-            dataLoadHideTimer?.invalidate()
-            if dataLoadCount > 0 {
-                showLoader()
-            } else {
-                dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoaded), userInfo: nil, repeats: false)
-            }
-        }
-    }
+    fileprivate var dataLoadCount: Int = 0 
     internal var dataLoadHideTimer: Timer? = nil
     internal var dataLoadTag = 9912341
     
@@ -247,5 +238,86 @@ extension UIApplication {
         
         UIApplication.shared.open(settingsURL)
         return true
+    }
+}
+
+// MARK: Loading UI
+enum LoaderMessage: String {
+    case SyncingRecords = "Syncing Records"
+    case Preparing = "Preparing"
+}
+
+extension AppDelegate {
+    // Triggered by dataLoadCount
+
+    func incrementLoader(message: LoaderMessage) {
+        dataLoadCount += 1
+        dataLoadHideTimer?.invalidate()
+        showLoader(message: message)
+    }
+    
+    func decrementLoader() {
+        dataLoadCount -= 1
+        dataLoadHideTimer?.invalidate()
+        if dataLoadCount < 1 {
+            dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoaded), userInfo: nil, repeats: false)
+        }
+    }
+    
+    /// Do not call this function manually. use dataLoadCount
+    fileprivate func showLoader(message: LoaderMessage) {
+        // If already shown, dont do anything
+        if (self.window?.viewWithTag(dataLoadTag)) != nil {
+            return
+        }
+        
+        // if somehow you're here and its already shown... remove it
+        self.window?.viewWithTag(dataLoadTag)?.removeFromSuperview()
+        // create container and add it to the window
+        let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
+        // Add below toast if toast is shown
+        if let toast = self.window?.viewWithTag(Constants.UI.Toast.tag) {
+            window?.insertSubview(loaderView, belowSubview: toast)
+        } else {
+            window?.addSubview(loaderView)
+        }
+        
+        if window?.rootViewController?.presentedViewController is UIAlertController {
+            Logger.log(string: "An alert is being hidden", type: .general)
+            // Should handle this OR remove the alert saying data is being fetched afrer login
+//            if let alert = window?.rootViewController?.presentedViewController as? UIAlertController  {
+//                window?.insertSubview(loaderView, at: <#T##Int#>)
+//            }
+        }
+       
+        
+        loaderView.tag = dataLoadTag
+        
+        // Create subviews for indicator and label
+        let indicator = UIActivityIndicatorView(frame: .zero)
+        let label = UILabel(frame: .zero)
+        
+        loaderView.addSubview(indicator)
+        loaderView.addSubview(label)
+        indicator.center(in: loaderView, width: 30, height: 30)
+        label.center(in: loaderView, width: loaderView.bounds.width, height: 32, verticalOffset: 32, horizontalOffset: 0)
+        
+        // Style
+        loaderView.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        
+        label.textColor = AppColours.appBlue
+        label.text = message.rawValue
+        label.font = UIFont.bcSansBoldWithSize(size: 17)
+        label.textAlignment = .center
+        
+        indicator.tintColor = AppColours.appBlue
+        indicator.color = AppColours.appBlue
+        indicator.startAnimating()
+        window?.layoutIfNeeded()
+    }
+    
+    // Triggered by dataLoadCount
+    @objc fileprivate func hideLoaded() {
+        self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
     }
 }

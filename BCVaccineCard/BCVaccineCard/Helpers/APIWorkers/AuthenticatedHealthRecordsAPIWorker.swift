@@ -1324,7 +1324,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func decrementLoadCounter() {
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.dataLoadCount -= 1
+                appDelegate.decrementLoader()
             }
         }
        
@@ -1333,7 +1333,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func incrementLoadCounter() {
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.dataLoadCount += 1
+                appDelegate.incrementLoader(message: .SyncingRecords)
             }
         }
     }
