@@ -211,6 +211,6 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Show Dependent Details")
+        showToast(message: "Feature not implemented")
     }
 }
