@@ -13,6 +13,9 @@ class DependentsHomeViewController: BaseViewController {
     class func constructDependentsHomeViewController(patient: Patient?) -> DependentsHomeViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: DependentsHomeViewController.self)) as? DependentsHomeViewController {
             vc.patient = patient
+            if patient == nil {
+                vc.fetchDataWhenMainPatientIsStored()
+            }
             return vc
         }
         return DependentsHomeViewController()
@@ -20,14 +23,15 @@ class DependentsHomeViewController: BaseViewController {
 
     private var patient: Patient? = nil
     private let emptyLogoTag = 23412
-    private let service = DependentService(network: AFNetwork(), authManager: AuthManager())
+    private let authManager = AuthManager()
+    private let storageService = StorageService()
+    private let networkService = DependentService(network: AFNetwork(), authManager: AuthManager())
     
     @IBOutlet weak var desciptionLabel: UILabel!
     @IBOutlet weak var loginWIthBCSCButton: UIButton!
     @IBOutlet weak var addDependentButton: UIButton!
     @IBOutlet weak var manageDependentsButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
-   
     
     var dependents: [Patient] = [] {
         didSet {
@@ -45,26 +49,67 @@ class DependentsHomeViewController: BaseViewController {
         navSetup()
         style()
         setupTableView()
-        fetchData()
-        setState()
+        fetchData(fromRemote: true)
+        fetchDataWhenAuthenticated()
     }
     
-    private func fetchData() {
-        guard let patient = patient else {
+    private func fetchDataWhenAuthenticated() {
+        AppStates.shared.listenToAuth { [weak self] authenticated in
+            guard let `self` = self else {return}
+            if self.patient != nil {
+                self.fetchData(fromRemote: true)
+            } else {
+                // Patient hasnt been stored yet
+                self.fetchDataWhenMainPatientIsStored()
+            }
+        }
+    }
+    
+    private func fetchDataWhenMainPatientIsStored() {
+        AppStates.shared.listenToStorage { [weak self] event in
+            guard let `self` = self else {return}
+            
+            if  event.event == .Save,
+                event.entity == .Patient,
+                let storedPatient = event.object as? Patient,
+                storedPatient.authenticated {
+                
+                self.patient = storedPatient
+                self.fetchData(fromRemote: true)
+            }
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fetchData(fromRemote: false)
+    }
+    
+    private func fetchData(fromRemote: Bool) {
+        guard let patient = patient, authManager.isAuthenticated else {
             dependents = []
             setState()
+            tableView.reloadData()
             return
         }
-
-        service.fetchDependents(for: patient) { [weak self] storedDependents in
-            // If completed, then reload data/update screen UI - if not completed, show an error
+        
+        dependents = patient.dependentsArray
+        setState()
+        tableView.reloadData()
+        guard fromRemote else {return}
+        
+        networkService.fetchDependents(for: patient) { [weak self] storedDependents in
             self?.dependents = storedDependents
             self?.setState()
+            self?.tableView.reloadData()
         }
     }
 
     @IBAction func addDependent(_ sender: Any) {
-        let addVC = AddDependentViewController.constructAddDependentViewController()
+        guard let patient = patient else {
+            return
+        }
+        let addVC = AddDependentViewController.constructAddDependentViewController(patient: patient)
         self.navigationController?.pushViewController(addVC, animated: true)
     }
     
@@ -72,18 +117,21 @@ class DependentsHomeViewController: BaseViewController {
         showToast(message: "Feature is not implemented")
     }
     
-
     @IBAction func LoginWithBCSC(_ sender: Any) {
-        let vc = AuthenticationViewController.constructAuthenticationViewController(
-            createTabBarAndGoToHomeScreen: false,
-            isModal: true,
-            initialView: .Auth,
-            sourceVC: .Dependents,
-            presentingViewControllerReference: self
-        ) { [weak self] status in
-            self?.fetchData()
-        }
-        present(vc, animated: true)
+//        let vc = AuthenticationViewController.constructAuthenticationViewController(
+//            createTabBarAndGoToHomeScreen: false,
+//            isModal: true,
+//            initialView: .Auth,
+//            sourceVC: .Dependents,
+//            presentingViewControllerReference: self
+//        ) { [weak self] status in
+//            self?.fetchData(fromRemote: true)
+//        }
+//        present(vc, animated: true)
+        
+        guard let tabBarController = self.tabBarController as? TabBarController else { return }
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        handleGetStartedScenario(tabBarController: tabBarController)
     }
     
     func style() {
@@ -135,7 +183,8 @@ class DependentsHomeViewController: BaseViewController {
         let imgView = UIImageView(frame: tableView.bounds)
         imgView.tag = emptyLogoTag
         view.addSubview(imgView)
-        imgView.addEqualSizeContraints(to: tableView, paddingVertical: 32, paddingHorizontal: 32)
+        let padding = self.view.bounds.width / 10
+        imgView.addEqualSizeContraints(to: tableView, paddingVertical: padding, paddingHorizontal: padding)
         imgView.contentMode = .scaleAspectFit
         return imgView
     }
@@ -212,5 +261,18 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showToast(message: "Feature not implemented")
+    }
+}
+
+
+extension DependentsHomeViewController {
+    private func handleGetStartedScenario(tabBarController: TabBarController) {
+        self.showLogin(initialView: .Landing, sourceVC: .HomeScreen, presentingViewControllerReference: self) { authenticationStatus in
+            guard authenticationStatus != .Cancelled else { return }
+            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .dependant, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HomeScreen, authenticationStatus: authenticationStatus))
+            self.routerWorker?.routingAction(scenario: scenario, goToTab: .dependant, delayInSeconds: 0.5)
+        }
     }
 }

@@ -295,9 +295,9 @@
 		29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */; };
 		29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
 		29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */; };
-		2D120D3B28FF165D00EB8EBF /* DependentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3A28FF165D00EB8EBF /* DependentResponse.swift */; };
-		2D120D3C28FF165D00EB8EBF /* DependentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3A28FF165D00EB8EBF /* DependentResponse.swift */; };
-		2D120D3D28FF165D00EB8EBF /* DependentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3A28FF165D00EB8EBF /* DependentResponse.swift */; };
+		2D120D3B28FF165D00EB8EBF /* DependentsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */; };
+		2D120D3C28FF165D00EB8EBF /* DependentsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */; };
+		2D120D3D28FF165D00EB8EBF /* DependentsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */; };
 		2D120D3F28FF17FB00EB8EBF /* DependentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3E28FF17FB00EB8EBF /* DependentService.swift */; };
 		2D120D4028FF17FB00EB8EBF /* DependentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3E28FF17FB00EB8EBF /* DependentService.swift */; };
 		2D120D4128FF17FB00EB8EBF /* DependentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D3E28FF17FB00EB8EBF /* DependentService.swift */; };
@@ -383,6 +383,9 @@
 		3E78AECF28F9909500C66E28 /* AddDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AECC28F9909500C66E28 /* AddDependentViewController.swift */; };
 		3E87F4B12901B117002F0A0E /* DependentListItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */; };
 		3E87F4B22901B117002F0A0E /* DependentListItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */; };
+		3E87F4B429032092002F0A0E /* AppStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E87F4B329032092002F0A0E /* AppStates.swift */; };
+		3E87F4B529032092002F0A0E /* AppStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E87F4B329032092002F0A0E /* AppStates.swift */; };
+		3E87F4B629032092002F0A0E /* AppStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E87F4B329032092002F0A0E /* AppStates.swift */; };
 		3E91C7AE28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E91C7A628B51B0A005AA34F /* ImmunizationDetails+CoreDataClass.swift */; };
 		3E91C7AF28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E91C7A628B51B0A005AA34F /* ImmunizationDetails+CoreDataClass.swift */; };
 		3E91C7B028B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E91C7A628B51B0A005AA34F /* ImmunizationDetails+CoreDataClass.swift */; };
@@ -1228,7 +1231,7 @@
 		29E19FF7286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HealthRecordDetailFieldTableViewCell.xib; sourceTree = "<group>"; };
 		29E8953F26FA2D050000D7E1 /* UIImage+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+EXT.swift"; sourceTree = "<group>"; };
 		29F41296274CDEDA004927FF /* VisitedOnBoardingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitedOnBoardingScreen.swift; sourceTree = "<group>"; };
-		2D120D3A28FF165D00EB8EBF /* DependentResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentResponse.swift; sourceTree = "<group>"; };
+		2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentsResponse.swift; sourceTree = "<group>"; };
 		2D120D3E28FF17FB00EB8EBF /* DependentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentService.swift; sourceTree = "<group>"; };
 		2D120D4228FF25A600EB8EBF /* PostDependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDependent.swift; sourceTree = "<group>"; };
 		2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFAPIWorker.swift; sourceTree = "<group>"; };
@@ -1261,6 +1264,7 @@
 		3E78AEC328F8724900C66E28 /* Dependents.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dependents.storyboard; sourceTree = "<group>"; };
 		3E78AEC828F8729900C66E28 /* DependentsHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentsHomeViewController.swift; sourceTree = "<group>"; };
 		3E78AECC28F9909500C66E28 /* AddDependentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDependentViewController.swift; sourceTree = "<group>"; };
+		3E87F4B329032092002F0A0E /* AppStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStates.swift; sourceTree = "<group>"; };
 		3E91C78D28B517C6005AA34F /* BCVaccineCard 1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.1.xcdatamodel"; sourceTree = "<group>"; };
 		3E91C7A628B51B0A005AA34F /* ImmunizationDetails+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationDetails+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E91C7A728B51B0A005AA34F /* Immunization+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Immunization+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -1990,7 +1994,7 @@
 		2D120D3928FF15CA00EB8EBF /* Dependant */ = {
 			isa = PBXGroup;
 			children = (
-				2D120D3A28FF165D00EB8EBF /* DependentResponse.swift */,
+				2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */,
 				2D120D3E28FF17FB00EB8EBF /* DependentService.swift */,
 				2D120D4228FF25A600EB8EBF /* PostDependent.swift */,
 				3E3DA94329005AA2009C500F /* StorageService+Dependent.swift */,
@@ -2468,6 +2472,7 @@
 				79BDA079270CB87600FF30AB /* Constants */,
 				7944F6B326F12BA1006B9444 /* Storyboard.swift */,
 				296519A4272995680002B778 /* AuthManager.swift */,
+				3E87F4B329032092002F0A0E /* AppStates.swift */,
 				79B9D01927E31D7100987D9F /* NotificationManager.swift */,
 				29AC25322790320F001C22B4 /* QRMaker.swift */,
 				29547E5927A2EC5A00562958 /* LocalAuthentication */,
@@ -3802,7 +3807,7 @@
 				79CF23642825769B00510489 /* HealthRecordsViewController.swift in Sources */,
 				79B1A0F92874CEBE009B3EFB /* CovidImmunizationRecord+CoreDataProperties.swift in Sources */,
 				293B32C527D27A880064BAAA /* CommentsTableViewCell.swift in Sources */,
-				2D120D3C28FF165D00EB8EBF /* DependentResponse.swift in Sources */,
+				2D120D3C28FF165D00EB8EBF /* DependentsResponse.swift in Sources */,
 				2922C15A287E1482000FF4F7 /* SpecialAuthorityDrug+CoreDataClass.swift in Sources */,
 				794BD6272702E0E90084ADA8 /* CustomNavigationController.swift in Sources */,
 				7958DBA7286CFB2F00377F9B /* AuthenticatedImmunizationsResponseObject.swift in Sources */,
@@ -3981,6 +3986,7 @@
 				29E19FED286C11C900C235EF /* LabOrderRecordDetailView.swift in Sources */,
 				294BD3D227B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */,
 				79053CF92773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
+				3E87F4B529032092002F0A0E /* AppStates.swift in Sources */,
 				291A0CB9282AC33B00035B0F /* Device.swift in Sources */,
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				29736A482788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
@@ -4096,7 +4102,7 @@
 				792834592730E53200EE2710 /* InteractiveLinkLabel.swift in Sources */,
 				79B9D01327E2869D00987D9F /* HomeScreenTableViewCell.swift in Sources */,
 				79B1A0FA2874CEBE009B3EFB /* CovidImmunizationRecord+CoreDataProperties.swift in Sources */,
-				2D120D3D28FF165D00EB8EBF /* DependentResponse.swift in Sources */,
+				2D120D3D28FF165D00EB8EBF /* DependentsResponse.swift in Sources */,
 				2922C15B287E1482000FF4F7 /* SpecialAuthorityDrug+CoreDataClass.swift in Sources */,
 				794BD6392702EEC00084ADA8 /* CovidVaccineCardsViewController.swift in Sources */,
 				794BD63A2702EEC00084ADA8 /* UIConstants.swift in Sources */,
@@ -4275,6 +4281,7 @@
 				29E19FEF286C11CA00C235EF /* LabOrderRecordDetailView.swift in Sources */,
 				794BD6522702EEC00084ADA8 /* UIImage+EXT.swift in Sources */,
 				79A15AFF27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */,
+				3E87F4B629032092002F0A0E /* AppStates.swift in Sources */,
 				794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */,
 				794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */,
 				294BD3D427B1D60B00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */,
@@ -4364,7 +4371,7 @@
 				798005602852C66E006E390F /* HealthRecordsViewController.swift in Sources */,
 				79B1A0F82874CEBE009B3EFB /* CovidImmunizationRecord+CoreDataProperties.swift in Sources */,
 				798005622852C66E006E390F /* CommentsTableViewCell.swift in Sources */,
-				2D120D3B28FF165D00EB8EBF /* DependentResponse.swift in Sources */,
+				2D120D3B28FF165D00EB8EBF /* DependentsResponse.swift in Sources */,
 				2922C159287E1482000FF4F7 /* SpecialAuthorityDrug+CoreDataClass.swift in Sources */,
 				798005632852C66E006E390F /* CustomNavigationController.swift in Sources */,
 				7958DBA6286CFB2F00377F9B /* AuthenticatedImmunizationsResponseObject.swift in Sources */,
@@ -4543,6 +4550,7 @@
 				798005E92852C66E006E390F /* UIImage+EXT.swift in Sources */,
 				798005EA2852C66E006E390F /* CameraViewController.swift in Sources */,
 				798005EB2852C66E006E390F /* HiddenRecordsTableViewCell.swift in Sources */,
+				3E87F4B429032092002F0A0E /* AppStates.swift in Sources */,
 				798005EC2852C66E006E390F /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
 				798005ED2852C66E006E390F /* Device.swift in Sources */,
 				798005EE2852C66E006E390F /* AppColours.swift in Sources */,

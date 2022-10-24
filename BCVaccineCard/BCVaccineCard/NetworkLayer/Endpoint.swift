@@ -151,5 +151,9 @@ extension UrlAccessor: EndpointsAccessor {
     func listOfDependents(hdid: String) -> URL {
         return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Dependent")
     }
+    
+    func deleteDependent(hdid: String, dependentHdid: String) -> URL {
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Dependent").appendingPathComponent(dependentHdid)
+    }
 }
 

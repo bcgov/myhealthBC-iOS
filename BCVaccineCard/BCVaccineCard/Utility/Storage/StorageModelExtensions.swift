@@ -257,3 +257,12 @@ extension ImmunizationRecommendation {
         return Array(set)
     }
 }
+
+
+// MARK: Dependents
+extension Patient {
+    public var dependentsArray: [Patient] {
+        let set = dependents as? Set<Patient> ?? []
+        return Array(set)
+    }
+}

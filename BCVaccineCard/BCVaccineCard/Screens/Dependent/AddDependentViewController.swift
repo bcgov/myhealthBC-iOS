@@ -16,7 +16,7 @@ struct AddDependentFormData {
     var hasAgreed: Bool = false
     
     var isValid: Bool {
-        return givenName != nil &&  lastName != nil && dateOfBirth != nil && phn != nil && hasAgreed
+        return givenName != nil && lastName != nil && dateOfBirth != nil && phn != nil && hasAgreed
     }
     
     func toPostDependent(data: Self) -> PostDependent? {
@@ -30,19 +30,22 @@ struct AddDependentFormData {
     }
     
     private func convertDate(date: Date) -> String {
-        return date.gatewayDateAndTimeWithMSAndTimeZone
+//        return "2016-12-01T21:26:35.244Z"
+        return date.postServerDateTime
     }
 }
 
 class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
-    class func constructAddDependentViewController() -> AddDependentViewController {
+    class func constructAddDependentViewController(patient: Patient?) -> AddDependentViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: AddDependentViewController.self)) as? AddDependentViewController {
+            vc.patient = patient
             return vc
         }
         return AddDependentViewController()
     }
     
+    private var patient: Patient? = nil
     private var formData = AddDependentFormData()
     private let service = DependentService(network: AFNetwork(), authManager: AuthManager())
     
@@ -96,11 +99,20 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     }
     
     @IBAction func onRegister(_ sender: Any) {
-        guard formData.isValid else {return}
-        // TODO: Fetch dependent data using formData
+        guard formData.isValid, let patient = patient else {return}
         guard let object = formData.toPostDependent(data: formData) else { return }
-        service.addDependent(object: object) { completed in
-            // If completed, then reload data/update screen UI/route to appropriate screen - if not completed, show an error
+        service.addDependent(for: patient, object: object) { [weak self] result in
+            guard let patientResult = result else {
+                self?.alert(title: .error, message: .formError)
+                return
+            }
+            if let patientName = patientResult.name {
+                self?.showToast(message: "\(patientName) was added")
+            } else {
+                self?.showToast(message: "Dependent was added")
+            }
+            
+            self?.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -114,6 +126,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateOfBirthField.text = dateFormatter.string(from: sender.date)
         formData.dateOfBirth = sender.date
+        updateregisterButtonStyle()
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -188,7 +201,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
     func updateregisterButtonStyle() {
         registerButton.isEnabled = formData.isValid
-        registerButton.backgroundColor = formData.isValid ? AppColours.appBlue : AppColours.lightGray
+        registerButton.alpha = formData.isValid ? 1.0 : 0.3
     }
     
     func styleAgreementBox() {
@@ -197,6 +210,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
         } else {
             agreementBox.image = UIImage(named: "checkbox-empty")
         }
+        updateregisterButtonStyle()
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -215,7 +229,7 @@ extension AddDependentViewController {
         self.navDelegate?.setNavigationBarWith(title: .dependentRegistration,
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
-                                               navStyle: .large,
+                                               navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)

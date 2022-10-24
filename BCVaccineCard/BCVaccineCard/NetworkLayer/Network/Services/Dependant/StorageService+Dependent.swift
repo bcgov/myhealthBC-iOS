@@ -9,17 +9,17 @@ import Foundation
 
 extension StorageService {
     
-    func store(dependents: [RemoteDependents], for patient: Patient, completion: @escaping([Patient])->Void) {
+    func store(dependents: [DependentInformation], for patient: Patient, completion: @escaping([Patient])->Void) {
         var storedPatients: [Patient] = []
         for dependent in dependents {
-            let firstName = dependent.dependentInformation?.firstname ?? ""
-            let lastName = dependent.dependentInformation?.lastname ?? ""
+            let firstName = dependent.firstname ?? ""
+            let lastName = dependent.lastname ?? ""
             
             if let storedPatient = storePatient(
                 name: firstName + " " + lastName,
-                birthday: dependent.dependentInformation?.dateOfBirth?.getGatewayDate(),
-                phn: dependent.dependentInformation?.phn,
-                hdid: dependent.dependentInformation?.hdid,
+                birthday: dependent.dateOfBirth?.getGatewayDate(),
+                phn: dependent.phn,
+                hdid: dependent.hdid,
                 authenticated: false) {
                 storedPatients.append(storedPatient)
             }

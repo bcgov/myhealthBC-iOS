@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     fileprivate var dataLoadCount: Int = 0 
     internal var dataLoadHideTimer: Timer? = nil
     internal var dataLoadTag = 9912341
+    internal var dataLoadTextTag = 9912342
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -35,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func configure() {
+        AppStates.shared.listen()
         //use .Prod or .Test for different endpoints for keys
 #if PROD
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
@@ -244,7 +246,7 @@ extension UIApplication {
 // MARK: Loading UI
 enum LoaderMessage: String {
     case SyncingRecords = "Syncing Records"
-    case Preparing = "Preparing"
+    case empty = ""
 }
 
 extension AppDelegate {
@@ -267,7 +269,10 @@ extension AppDelegate {
     /// Do not call this function manually. use dataLoadCount
     fileprivate func showLoader(message: LoaderMessage) {
         // If already shown, dont do anything
-        if (self.window?.viewWithTag(dataLoadTag)) != nil {
+        if let existing = self.window?.viewWithTag(dataLoadTag),
+           let textLabel = existing.viewWithTag(dataLoadTextTag) as? UILabel,
+           textLabel.text == message.rawValue
+        {
             return
         }
         
@@ -309,6 +314,7 @@ extension AppDelegate {
         label.text = message.rawValue
         label.font = UIFont.bcSansBoldWithSize(size: 17)
         label.textAlignment = .center
+        label.tag = dataLoadTextTag
         
         indicator.tintColor = AppColours.appBlue
         indicator.color = AppColours.appBlue
