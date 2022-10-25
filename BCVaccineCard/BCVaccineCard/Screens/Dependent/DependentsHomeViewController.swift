@@ -54,6 +54,16 @@ class DependentsHomeViewController: BaseViewController {
         // TODO: Allocate this appropriately once storage has been updated
         dependents = []
         setState()
+        setHealthRecordServiceAndFetchDependentRecords()
+    }
+    
+    private func setHealthRecordServiceAndFetchDependentRecords() {
+        guard dependents.count > 0 else { return }
+        for dependent in dependents {
+            // If this is the way we decide to do it, then should do some thread handling here
+            let dependentsRecordService = HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), currentDependant: dependent)
+            dependentsRecordService.fetchHealthRecords()
+        }
     }
 
     @IBAction func addDependent(_ sender: Any) {

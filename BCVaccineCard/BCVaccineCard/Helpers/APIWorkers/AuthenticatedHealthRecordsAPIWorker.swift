@@ -860,7 +860,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         
         incrementLoadCounter()
         
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, hdid: AuthManager().hdid, authenticated: authenticated) else {
             self.decrementLoadCounter()
             return nil
         }
@@ -908,7 +908,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleMedicationStatementInCoreData(object: AuthenticatedMedicationStatementResponseObject.ResourcePayload, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject, initialProtectedMedFetch: Bool) -> String? {
         incrementLoadCounter()
         
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, hdid: AuthManager().hdid, authenticated: authenticated) else {
             self.decrementLoadCounter()
             return nil
         }
@@ -953,7 +953,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         
         incrementLoadCounter()
         
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, hdid: AuthManager().hdid, authenticated: authenticated) else {
             self.decrementLoadCounter()
             return nil
         }
@@ -1008,7 +1008,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleLaboratoryOrdersInCoreData(object: AuthenticatedLaboratoryOrdersResponseObject.ResourcePayload.Order, pdf: String?, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         incrementLoadCounter()
         
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, hdid: AuthManager().hdid, authenticated: authenticated) else {
             self.decrementLoadCounter()
             return nil
         }
@@ -1053,7 +1053,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleImmunizationsInCoreData(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Immunization, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         
         incrementLoadCounter()
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, hdid: AuthManager().hdid, authenticated: authenticated) else {
             self.decrementLoadCounter()
             return nil
         }
@@ -1091,7 +1091,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleImmunizationsRecommendationsInCoreData(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Recommendation, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         
         incrementLoadCounter()
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, hdid: AuthManager().hdid, authenticated: authenticated) else {
             self.decrementLoadCounter()
             return nil
         }
@@ -1137,7 +1137,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         
         incrementLoadCounter()
         
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, authenticated: authenticated) else {
+        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: patientObject.resourcePayload?.personalhealthnumber, name: patientObject.getFullName, birthday: patientObject.getBdayDate, hdid: AuthManager().hdid, authenticated: authenticated) else {
             self.decrementLoadCounter()
             return nil
         }
