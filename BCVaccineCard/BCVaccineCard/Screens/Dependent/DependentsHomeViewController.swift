@@ -22,11 +22,13 @@ class DependentsHomeViewController: BaseViewController {
     }
     
     private var patient: Patient? = nil
+    private let tableLeadingContraint: CGFloat = 16
     private let emptyLogoTag = 23412
     private let authManager = AuthManager()
     private let storageService = StorageService()
     private let networkService = DependentService(network: AFNetwork(), authManager: AuthManager())
     
+    @IBOutlet weak var tableStackLeadingContraint: NSLayoutConstraint!
     @IBOutlet weak var desciptionLabel: UILabel!
     @IBOutlet weak var loginWIthBCSCButton: UIButton!
     @IBOutlet weak var addDependentButton: UIButton!
@@ -53,6 +55,55 @@ class DependentsHomeViewController: BaseViewController {
         fetchDataWhenAuthenticated()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fetchData(fromRemote: false)
+    }
+    
+    // MARK: Actions
+    @IBAction func addDependent(_ sender: Any) {
+        guard let patient = patient else {
+            return
+        }
+        let addVC = AddDependentViewController.constructAddDependentViewController(patient: patient)
+        self.navigationController?.pushViewController(addVC, animated: true)
+    }
+    
+    @IBAction func manageDependents(_ sender: Any) {
+        showToast(message: "Feature is not implemented")
+    }
+    
+    @IBAction func LoginWithBCSC(_ sender: Any) {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        authenticate(initialView: .Landing, fromTab: .dependant)
+    }
+    
+    // MARK: Data
+    private func fetchData(fromRemote: Bool) {
+        guard let patient = patient, authManager.isAuthenticated else {
+            dependents = []
+            setState()
+            tableView.reloadData()
+            return
+        }
+        
+        dependents = patient.dependentsArray.sorted(by: {
+            $0.birthday ?? Date() > $1.birthday ?? Date()
+        })
+        setState()
+        tableView.reloadData()
+        guard fromRemote else {return}
+        
+        networkService.fetchDependents(for: patient) { [weak self] storedDependents in
+            self?.dependents = storedDependents.sorted(by: {
+                $0.birthday ?? Date() > $1.birthday ?? Date()
+            })
+            self?.setState()
+            self?.tableView.reloadData()
+        }
+    }
+    
+    // MARK: Listeners
     private func fetchDataWhenAuthenticated() {
         AppStates.shared.listenToAuth { [weak self] authenticated in
             guard let `self` = self else {return}
@@ -83,52 +134,7 @@ class DependentsHomeViewController: BaseViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        fetchData(fromRemote: false)
-    }
-    
-    private func fetchData(fromRemote: Bool) {
-        guard let patient = patient, authManager.isAuthenticated else {
-            dependents = []
-            setState()
-            tableView.reloadData()
-            return
-        }
-        
-        dependents = patient.dependentsArray.sorted(by: {
-            $0.birthday ?? Date() > $1.birthday ?? Date()
-        })
-        setState()
-        tableView.reloadData()
-        guard fromRemote else {return}
-        
-        networkService.fetchDependents(for: patient) { [weak self] storedDependents in
-            self?.dependents = storedDependents.sorted(by: {
-                $0.birthday ?? Date() > $1.birthday ?? Date()
-            })
-            self?.setState()
-            self?.tableView.reloadData()
-        }
-    }
-    
-    @IBAction func addDependent(_ sender: Any) {
-        guard let patient = patient else {
-            return
-        }
-        let addVC = AddDependentViewController.constructAddDependentViewController(patient: patient)
-        self.navigationController?.pushViewController(addVC, animated: true)
-    }
-    
-    @IBAction func manageDependents(_ sender: Any) {
-        showToast(message: "Feature is not implemented")
-    }
-    
-    @IBAction func LoginWithBCSC(_ sender: Any) {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        authenticate(initialView: .Landing, fromTab: .dependant)
-    }
-    
+    // MARK: Style
     func style() {
         desciptionLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         desciptionLabel.textColor = AppColours.greyText
@@ -136,51 +142,6 @@ class DependentsHomeViewController: BaseViewController {
         style(button: loginWIthBCSCButton, filled: true)
         style(button: manageDependentsButton, filled: false)
         navSetup()
-    }
-    
-    func setState() {
-        switch authManager.authStaus {
-        case .Authenticated:
-            if dependents.isEmpty {
-                styleWithoutDependents()
-            } else {
-                styleWithDependents()
-            }
-        case .AuthenticationExpired:
-            styleAuthenticationExpired()
-        case .UnAuthenticated:
-            styleUnauthenticated()
-        }
-    }
-    
-    func styleWithoutDependents() {
-        let imageView = createLogoImgView()
-        imageView.image = UIImage(named: "dependent-logo")
-        manageDependentsButton.isHidden = true
-        loginWIthBCSCButton.isHidden = true
-        addDependentButton.isHidden = false
-    }
-    
-    func styleAuthenticationExpired() {
-        removeEmptyLogo()
-        addDependentButton.isHidden = true
-        manageDependentsButton.isHidden = true
-        loginWIthBCSCButton.isHidden = true
-    }
-    
-    func styleUnauthenticated() {
-        let imageView = createLogoImgView()
-        imageView.image = UIImage(named: "dependent-logged-out")
-        addDependentButton.isHidden = true
-        manageDependentsButton.isHidden = true
-        loginWIthBCSCButton.isHidden = false
-    }
-    
-    private func styleWithDependents() {
-        removeEmptyLogo()
-        addDependentButton.isHidden = false
-        manageDependentsButton.isHidden = false
-        loginWIthBCSCButton.isHidden = true
     }
     
     private func createLogoImgView() -> UIImageView {
@@ -216,6 +177,60 @@ class DependentsHomeViewController: BaseViewController {
             button.tintColor = AppColours.appBlue
         }
     }
+    
+    // MARK: Screen States
+    func setState() {
+        switch authManager.authStaus {
+        case .Authenticated:
+            if dependents.isEmpty {
+                styleWithoutDependents()
+            } else {
+                styleWithDependents()
+            }
+        case .AuthenticationExpired:
+            styleAuthenticationExpired()
+        case .UnAuthenticated:
+            styleUnauthenticated()
+        }
+    }
+    
+    func styleWithoutDependents() {
+        let imageView = createLogoImgView()
+        imageView.image = UIImage(named: "dependent-logo")
+        manageDependentsButton.isHidden = true
+        loginWIthBCSCButton.isHidden = true
+        addDependentButton.isHidden = false
+        desciptionLabel.isHidden = false
+        tableStackLeadingContraint.constant = tableLeadingContraint
+    }
+    
+    func styleAuthenticationExpired() {
+        removeEmptyLogo()
+        addDependentButton.isHidden = true
+        manageDependentsButton.isHidden = true
+        loginWIthBCSCButton.isHidden = true
+        desciptionLabel.isHidden = true
+        tableStackLeadingContraint.constant = 0
+    }
+    
+    func styleUnauthenticated() {
+        let imageView = createLogoImgView()
+        imageView.image = UIImage(named: "dependent-logged-out")
+        addDependentButton.isHidden = true
+        manageDependentsButton.isHidden = true
+        loginWIthBCSCButton.isHidden = false
+        desciptionLabel.isHidden = false
+        tableStackLeadingContraint.constant = tableLeadingContraint
+    }
+    
+    private func styleWithDependents() {
+        removeEmptyLogo()
+        addDependentButton.isHidden = false
+        manageDependentsButton.isHidden = false
+        loginWIthBCSCButton.isHidden = true
+        desciptionLabel.isHidden = false
+        tableStackLeadingContraint.constant = tableLeadingContraint
+    }
 }
 
 // MARK: Navigation setup
@@ -232,6 +247,7 @@ extension DependentsHomeViewController {
 }
 
 
+// MARK: Tableview
 extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     private func setupTableView() {
@@ -295,7 +311,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
 }
 
-
+// MARK: Auth
 extension DependentsHomeViewController {
     private func authenticate(initialView: AuthenticationViewController.InitialView, fromTab: TabBarVCs) {
         self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { [weak self] authenticationStatus in
