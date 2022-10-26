@@ -44,4 +44,16 @@ extension StorageService {
             return
         }
     }
+    
+    func deleteDependents(for patient: Patient) {
+        guard let context = managedContext else {return}
+        guard let dependents = patient.dependents else {return}
+        patient.removeFromDependents(dependents)
+        do {
+            try context.save()
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return
+        }
+    }
 }

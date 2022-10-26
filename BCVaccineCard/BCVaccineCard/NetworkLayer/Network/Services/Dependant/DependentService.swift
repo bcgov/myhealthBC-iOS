@@ -45,6 +45,7 @@ struct DependentService {
             }
             network.removeLoader()
             let result = payload.compactMap({$0.dependentInformation})
+            StorageService.shared.deleteDependents(for: patient)
             StorageService.shared.store(dependents: result, for: patient, completion: { result in
                 network.removeLoader()
                 completion(result)
