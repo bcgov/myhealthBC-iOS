@@ -16,12 +16,18 @@ struct AddDependentFormData {
     var hasAgreed: Bool = false
     
     var isValid: Bool {
-        return givenName != nil && lastName != nil && dateOfBirth != nil && phn != nil && hasAgreed
+        return nameIsValid && dateOfBirth != nil && phn != nil && hasAgreed
     }
     
-    func toPostDependent(data: Self) -> PostDependent? {
+    private var nameIsValid: Bool {
+        guard let first = givenName, let last = lastName, !first.isEmpty && !last.isEmpty else {return false}
+        return !first.trimWhiteSpacesAndNewLines.isEmpty && !last.trimWhiteSpacesAndNewLines.isEmpty
+    }
+    
+    func toPostDependent() -> PostDependent? {
         guard isValid else { return nil }
-        let dependent = PostDependent(firstName: data.givenName!, lastName: data.lastName!, dateOfBirth: convertDate(date: data.dateOfBirth!), phn: convertPHN(phn: data.phn!))
+        guard let first = givenName, let last = lastName else {return nil}
+        let dependent = PostDependent(firstName: first.trimWhiteSpacesAndNewLines, lastName: last.trimWhiteSpacesAndNewLines, dateOfBirth: convertDate(date: dateOfBirth!), phn: convertPHN(phn: phn!))
         return dependent
     }
     
@@ -30,7 +36,6 @@ struct AddDependentFormData {
     }
     
     private func convertDate(date: Date) -> String {
-//        return "2016-12-01T21:26:35.244Z"
         return date.postServerDateTime
     }
 }
@@ -100,7 +105,13 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
     @IBAction func onRegister(_ sender: Any) {
         guard formData.isValid, let patient = patient else {return}
-        guard let object = formData.toPostDependent(data: formData) else { return }
+        guard let object = formData.toPostDependent() else { return }
+        
+        if patient.hasDepdendentWith(phn: object.phn) {
+            alert(title: .error, message: "This dependent is already added.")
+            return
+        }
+        
         service.addDependent(for: patient, object: object) { [weak self] result in
             guard let patientResult = result else {
                 self?.alert(title: .error, message: .formError)

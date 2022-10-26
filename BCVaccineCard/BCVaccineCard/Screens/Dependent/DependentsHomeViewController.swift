@@ -20,7 +20,7 @@ class DependentsHomeViewController: BaseViewController {
         }
         return DependentsHomeViewController()
     }
-
+    
     private var patient: Patient? = nil
     private let emptyLogoTag = 23412
     private let authManager = AuthManager()
@@ -58,10 +58,13 @@ class DependentsHomeViewController: BaseViewController {
             guard let `self` = self else {return}
             if self.patient != nil {
                 self.fetchData(fromRemote: true)
-            } else {
-                // Patient hasnt been stored yet
-                self.fetchDataWhenMainPatientIsStored()
             }
+            /*
+             Else, fetchDataWhenMainPatientIsStored
+             should have been initialized during initialization
+             of this viewcontroller
+             */
+            
         }
     }
     
@@ -93,18 +96,22 @@ class DependentsHomeViewController: BaseViewController {
             return
         }
         
-        dependents = patient.dependentsArray
+        dependents = patient.dependentsArray.sorted(by: {
+            $0.birthday ?? Date() > $1.birthday ?? Date()
+        })
         setState()
         tableView.reloadData()
         guard fromRemote else {return}
         
         networkService.fetchDependents(for: patient) { [weak self] storedDependents in
-            self?.dependents = storedDependents
+            self?.dependents = storedDependents.sorted(by: {
+                $0.birthday ?? Date() > $1.birthday ?? Date()
+            })
             self?.setState()
             self?.tableView.reloadData()
         }
     }
-
+    
     @IBAction func addDependent(_ sender: Any) {
         guard let patient = patient else {
             return
@@ -118,20 +125,8 @@ class DependentsHomeViewController: BaseViewController {
     }
     
     @IBAction func LoginWithBCSC(_ sender: Any) {
-//        let vc = AuthenticationViewController.constructAuthenticationViewController(
-//            createTabBarAndGoToHomeScreen: false,
-//            isModal: true,
-//            initialView: .Auth,
-//            sourceVC: .Dependents,
-//            presentingViewControllerReference: self
-//        ) { [weak self] status in
-//            self?.fetchData(fromRemote: true)
-//        }
-//        present(vc, animated: true)
-        
-        guard let tabBarController = self.tabBarController as? TabBarController else { return }
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        handleGetStartedScenario(tabBarController: tabBarController)
+        authenticate(initialView: .Landing, fromTab: .dependant)
     }
     
     func style() {
@@ -144,14 +139,17 @@ class DependentsHomeViewController: BaseViewController {
     }
     
     func setState() {
-        if !AuthManager().isAuthenticated {
-            styleUnauthenticated()
-        } else {
+        switch authManager.authStaus {
+        case .Authenticated:
             if dependents.isEmpty {
                 styleWithoutDependents()
             } else {
                 styleWithDependents()
             }
+        case .AuthenticationExpired:
+            styleAuthenticationExpired()
+        case .UnAuthenticated:
+            styleUnauthenticated()
         }
     }
     
@@ -161,6 +159,13 @@ class DependentsHomeViewController: BaseViewController {
         manageDependentsButton.isHidden = true
         loginWIthBCSCButton.isHidden = true
         addDependentButton.isHidden = false
+    }
+    
+    func styleAuthenticationExpired() {
+        removeEmptyLogo()
+        addDependentButton.isHidden = true
+        manageDependentsButton.isHidden = true
+        loginWIthBCSCButton.isHidden = true
     }
     
     func styleUnauthenticated() {
@@ -231,6 +236,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     
     private func setupTableView() {
         tableView.register(UINib.init(nibName: DependentListItemTableViewCell.getName, bundle: .main), forCellReuseIdentifier: DependentListItemTableViewCell.getName)
+        tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
         tableView.delegate = self
@@ -243,20 +249,45 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        dependents.count
+        switch authManager.authStaus {
+        case .Authenticated:
+            return dependents.count
+        case .AuthenticationExpired:
+            return 1
+        case .UnAuthenticated:
+            return 0
+        }
+        
     }
     
-    private func dependentCell(indexPath: IndexPath) -> DependentListItemTableViewCell? {
+    private func dependentCell(indexPath: IndexPath) -> DependentListItemTableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DependentListItemTableViewCell.getName, for: indexPath) as? DependentListItemTableViewCell else {
             return DependentListItemTableViewCell()
         }
+        cell.configure(name: dependents[indexPath.row].name ?? "")
+        return cell
+    }
+    
+    private func loginExpiredCell(indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HiddenRecordsTableViewCell.getName, for: indexPath) as? HiddenRecordsTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.configure(forRecordType: .loginToAccessDependents) { [weak self] _ in
+            self?.authenticate(initialView: .Auth, fromTab: .dependant)
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = dependentCell(indexPath: indexPath) else {return UITableViewCell()}
-        cell.configure(name: dependents[indexPath.row].name ?? "")
-        return cell
+        switch authManager.authStaus {
+        case .Authenticated:
+            return dependentCell(indexPath: indexPath)
+        case .AuthenticationExpired:
+            return loginExpiredCell(indexPath: indexPath)
+        case .UnAuthenticated:
+            return UITableViewCell()
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -266,13 +297,14 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
 
 
 extension DependentsHomeViewController {
-    private func handleGetStartedScenario(tabBarController: TabBarController) {
-        self.showLogin(initialView: .Landing, sourceVC: .HomeScreen, presentingViewControllerReference: self) { authenticationStatus in
-            guard authenticationStatus != .Cancelled else { return }
-            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .dependant, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HomeScreen, authenticationStatus: authenticationStatus))
-            self.routerWorker?.routingAction(scenario: scenario, goToTab: .dependant, delayInSeconds: 0.5)
+    private func authenticate(initialView: AuthenticationViewController.InitialView, fromTab: TabBarVCs) {
+        self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { [weak self] authenticationStatus in
+            
+//            guard authenticationStatus != .Cancelled, let `self` = self else { return }
+//            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+//            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+//            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: fromTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HomeScreen, authenticationStatus: authenticationStatus))
+//            self.routerWorker?.routingAction(scenario: scenario, goToTab: fromTab, delayInSeconds: 0.5)
         }
     }
 }
