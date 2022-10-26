@@ -207,7 +207,7 @@ extension HealthRecordDetailViewController {
             self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             if !NetworkConnection.shared.hasConnection {
-                AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+                showToast(message: "No internet connection", style: .Warn)
                 return
             }
             guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let reportId = self.pdfId, let type = self.type else {

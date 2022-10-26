@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2022-08-23.
+//  Created by Amir Shayegh on 2022-10-20.
 //
 //
 
@@ -19,6 +19,7 @@ extension Patient {
     @NSManaged public var authenticated: Bool
     @NSManaged public var authManagerDisplayName: String?
     @NSManaged public var birthday: Date?
+    @NSManaged public var hdid: String?
     @NSManaged public var name: String?
     @NSManaged public var phn: String?
     @NSManaged public var covidTestResults: NSSet?
@@ -26,9 +27,10 @@ extension Patient {
     @NSManaged public var immunizations: NSSet?
     @NSManaged public var laboratoryOrders: NSSet?
     @NSManaged public var prescriptions: NSSet?
+    @NSManaged public var recommendations: NSSet?
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
-    @NSManaged public var recommendations: NSSet?
+    @NSManaged public var dependents: NSSet?
 
 }
 
@@ -117,6 +119,23 @@ extension Patient {
 
 }
 
+// MARK: Generated accessors for recommendations
+extension Patient {
+
+    @objc(addRecommendationsObject:)
+    @NSManaged public func addToRecommendations(_ value: ImmunizationRecommendation)
+
+    @objc(removeRecommendationsObject:)
+    @NSManaged public func removeFromRecommendations(_ value: ImmunizationRecommendation)
+
+    @objc(addRecommendations:)
+    @NSManaged public func addToRecommendations(_ values: NSSet)
+
+    @objc(removeRecommendations:)
+    @NSManaged public func removeFromRecommendations(_ values: NSSet)
+
+}
+
 // MARK: Generated accessors for specialAuthorityDrugs
 extension Patient {
 
@@ -151,19 +170,19 @@ extension Patient {
 
 }
 
-// MARK: Generated accessors for recommendations
+// MARK: Generated accessors for dependents
 extension Patient {
 
-    @objc(addRecommendationsObject:)
-    @NSManaged public func addToRecommendations(_ value: ImmunizationRecommendation)
+    @objc(addDependentsObject:)
+    @NSManaged public func addToDependents(_ value: Patient)
 
-    @objc(removeRecommendationsObject:)
-    @NSManaged public func removeFromRecommendations(_ value: ImmunizationRecommendation)
+    @objc(removeDependentsObject:)
+    @NSManaged public func removeFromDependents(_ value: Patient)
 
-    @objc(addRecommendations:)
-    @NSManaged public func addToRecommendations(_ values: NSSet)
+    @objc(addDependents:)
+    @NSManaged public func addToDependents(_ values: NSSet)
 
-    @objc(removeRecommendations:)
-    @NSManaged public func removeFromRecommendations(_ values: NSSet)
+    @objc(removeDependents:)
+    @NSManaged public func removeFromDependents(_ values: NSSet)
 
 }

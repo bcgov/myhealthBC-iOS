@@ -61,7 +61,8 @@ extension String {
     static var queueItClosedTitle: String { return "QueueItClosedTitle".localized }
     static var queueItClosedMessage: String { return "QueueItClosedMessage".localized }
     static var errorParsingPHNFromHG: String { return "ErrorParsingPHNFromHG".localized }
-    static var errorParsingPHNMessage: String { return "ErrorParsingPHNMessage".localized }
+    static var errorParsingPHNMessage: String { return "FormError".localized }
+    static var formError: String { return "FormError".localized }
     static var duplicateTitle: String { return "DuplicateTitle".localized }
     static var duplicateMessage: String { return "DuplicateMessage".localized }
     static var duplicateTestMessage: String { return "DuplicateTestMessage".localized }
@@ -170,6 +171,9 @@ extension String {
     // Resource screen
     static var resource: String { return "Resource".localized }
     static var resources: String { return "Resources".localized }
+    static var dependent: String { return "Dependent".localized }
+    static var dependents: String { return "Dependents".localized }
+    static var dependentRegistration: String { return "DependentRegistration".localized }
     static var resourceDescriptionText: String { return "ResourceDescriptionText".localized }
     static var getVaccinatedResource: String { return "GetVaccinatedResource".localized }
     static var getTestedResource: String { return "GetTestedResource".localized }
