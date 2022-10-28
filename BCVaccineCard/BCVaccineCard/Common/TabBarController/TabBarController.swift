@@ -31,7 +31,7 @@ enum TabBarVCs: Int {
         case .healthPass:
             return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil))
         case .dependant:
-            return Properties(title: .dependent, selectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-unselected"), unselectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-selected"), baseViewController: DependentsHomeViewController.constructDependentsHomeViewController())
+            return Properties(title: .dependent, selectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-unselected"), baseViewController: DependentsHomeViewController.constructDependentsHomeViewController(patient: StorageService.shared.fetchAuthenticatedPatient()))
         case .resource:
             return Properties(title: .resources, selectedTabBarImage: #imageLiteral(resourceName: "resource-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "resource-tab-unselected"), baseViewController: ResourceViewController.constructResourceViewController())
 //        case .newsFeed:
@@ -231,12 +231,12 @@ extension TabBarController: UITabBarControllerDelegate {
 extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     func showPatientDetailsError(error: String, showBanner: Bool) {
         guard showBanner else { return }
-        AppDelegate.sharedInstance?.showToast(message: error, style: .Warn)
+        showToast(message: error, style: .Warn)
     }
     
     func showFetchStartedBanner(showBanner: Bool) {
         guard showBanner else { return }
-        AppDelegate.sharedInstance?.showToast(message: "Retrieving records", style: .Default)
+        showToast(message: "Retrieving records", style: .Default)
     }
     
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource, fetchStatusTypes: [AuthenticationFetchType]) {
@@ -255,7 +255,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         // TODO: Make this a little more reusable - hacky approach
         if (fetchStatusTypes.contains(.LaboratoryOrders) && fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.SpecialAuthorityDrugs) && fetchStatusTypes.contains(.TestResults) && fetchStatusTypes.contains(.VaccineCard)) && fetchStatusTypes.contains(.Immunizations) && fetchStatusTypes.contains(.HealthVisits) || (fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.Comments)) {
             let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
-            AppDelegate.sharedInstance?.showToast(message: message)
+            showToast(message: message)
         }
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
         var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)

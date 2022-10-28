@@ -16,12 +16,18 @@ struct AddDependentFormData {
     var hasAgreed: Bool = false
     
     var isValid: Bool {
-        return givenName != nil &&  lastName != nil && dateOfBirth != nil && phn != nil && hasAgreed
+        return nameIsValid && dateOfBirth != nil && phn != nil && hasAgreed
     }
     
-    func toPostDependent(data: Self) -> PostDependent? {
+    private var nameIsValid: Bool {
+        guard let first = givenName, let last = lastName, !first.isEmpty && !last.isEmpty else {return false}
+        return !first.trimWhiteSpacesAndNewLines.isEmpty && !last.trimWhiteSpacesAndNewLines.isEmpty
+    }
+    
+    func toPostDependent() -> PostDependent? {
         guard isValid else { return nil }
-        let dependent = PostDependent(firstName: data.givenName!, lastName: data.lastName!, dateOfBirth: convertDate(date: data.dateOfBirth!), phn: convertPHN(phn: data.phn!))
+        guard let first = givenName, let last = lastName else {return nil}
+        let dependent = PostDependent(firstName: first.trimWhiteSpacesAndNewLines, lastName: last.trimWhiteSpacesAndNewLines, dateOfBirth: convertDate(date: dateOfBirth!), phn: convertPHN(phn: phn!))
         return dependent
     }
     
@@ -30,19 +36,21 @@ struct AddDependentFormData {
     }
     
     private func convertDate(date: Date) -> String {
-        return date.gatewayDateAndTimeWithMSAndTimeZone
+        return date.postServerDateTime
     }
 }
 
 class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
-    class func constructAddDependentViewController() -> AddDependentViewController {
+    class func constructAddDependentViewController(patient: Patient?) -> AddDependentViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: AddDependentViewController.self)) as? AddDependentViewController {
+            vc.patient = patient
             return vc
         }
         return AddDependentViewController()
     }
     
+    private var patient: Patient? = nil
     private var formData = AddDependentFormData()
     private let service = DependentService(network: AFNetwork(), authManager: AuthManager())
     
@@ -96,11 +104,26 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     }
     
     @IBAction func onRegister(_ sender: Any) {
-        guard formData.isValid else {return}
-        // TODO: Fetch dependent data using formData
-        guard let object = formData.toPostDependent(data: formData) else { return }
-        service.addDependent(object: object) { completed in
-            // If completed, then reload data/update screen UI/route to appropriate screen - if not completed, show an error
+        guard formData.isValid, let patient = patient else {return}
+        guard let object = formData.toPostDependent() else { return }
+        
+        if patient.hasDepdendentWith(phn: object.phn) {
+            alert(title: .error, message: "This dependent is already added.")
+            return
+        }
+        
+        service.addDependent(for: patient, object: object) { [weak self] result in
+            guard let patientResult = result else {
+                self?.alert(title: .error, message: .formError)
+                return
+            }
+            if let patientName = patientResult.name {
+                self?.showToast(message: "\(patientName) was added")
+            } else {
+                self?.showToast(message: "Dependent was added")
+            }
+            
+            self?.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -114,6 +137,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateOfBirthField.text = dateFormatter.string(from: sender.date)
         formData.dateOfBirth = sender.date
+        updateregisterButtonStyle()
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -161,7 +185,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
     func style(header label: UILabel) {
         label.font = UIFont.bcSansBoldWithSize(size: 17)
-        label.textColor = UIColor(red: 0.376, green: 0.376, blue: 0.376, alpha: 1)
+        label.textColor = AppColours.greyText
     }
     
     func style(field: UITextField) {
@@ -188,7 +212,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
     func updateregisterButtonStyle() {
         registerButton.isEnabled = formData.isValid
-        registerButton.backgroundColor = formData.isValid ? AppColours.appBlue : AppColours.lightGray
+        registerButton.alpha = formData.isValid ? 1.0 : 0.3
     }
     
     func styleAgreementBox() {
@@ -197,6 +221,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
         } else {
             agreementBox.image = UIImage(named: "checkbox-empty")
         }
+        updateregisterButtonStyle()
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -215,7 +240,7 @@ extension AddDependentViewController {
         self.navDelegate?.setNavigationBarWith(title: .dependentRegistration,
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
-                                               navStyle: .large,
+                                               navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
