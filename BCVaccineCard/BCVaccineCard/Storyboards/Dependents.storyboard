@@ -316,6 +316,51 @@ I understand that I will no longer be able to access my child’s health records
             </objects>
             <point key="canvasLocation" x="1959.4202898550727" y="32.8125"/>
         </scene>
+        <!--Manage Dependents View Controller-->
+        <scene sceneID="ysi-za-5QD">
+            <objects>
+                <viewController storyboardIdentifier="ManageDependentsViewController" id="4br-iT-0r2" customClass="ManageDependentsViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vj1-Qd-avy">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8Gh-Yh-I0a">
+                                <rect key="frame" x="16" y="64" width="382" height="696"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCF-3V-rY6">
+                                <rect key="frame" x="32" y="776" width="350" height="54"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="NT2-Wo-IOp"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                <connections>
+                                    <action selector="saveChanges:" destination="4br-iT-0r2" eventType="touchUpInside" id="C1H-3k-lPo"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="D5s-PV-jyf"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="8Gh-Yh-I0a" firstAttribute="leading" secondItem="D5s-PV-jyf" secondAttribute="leading" constant="16" id="1Dr-cH-2RI"/>
+                            <constraint firstItem="D5s-PV-jyf" firstAttribute="bottom" secondItem="JCF-3V-rY6" secondAttribute="bottom" constant="32" id="G78-LR-tko"/>
+                            <constraint firstItem="JCF-3V-rY6" firstAttribute="leading" secondItem="D5s-PV-jyf" secondAttribute="leading" constant="32" id="GZQ-kf-Il6"/>
+                            <constraint firstItem="8Gh-Yh-I0a" firstAttribute="top" secondItem="D5s-PV-jyf" secondAttribute="top" constant="16" id="Inj-bT-2mr"/>
+                            <constraint firstItem="D5s-PV-jyf" firstAttribute="trailing" secondItem="JCF-3V-rY6" secondAttribute="trailing" constant="32" id="ahS-uV-bnn"/>
+                            <constraint firstItem="JCF-3V-rY6" firstAttribute="top" secondItem="8Gh-Yh-I0a" secondAttribute="bottom" constant="16" id="ewT-WY-O8x"/>
+                            <constraint firstItem="D5s-PV-jyf" firstAttribute="trailing" secondItem="8Gh-Yh-I0a" secondAttribute="trailing" constant="16" id="i6J-Ix-lja"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="saveChangesButton" destination="JCF-3V-rY6" id="WVo-cr-ode"/>
+                        <outlet property="tableView" destination="8Gh-Yh-I0a" id="KMD-wO-f59"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yY6-LU-sXu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1129" y="753"/>
+        </scene>
     </scenes>
     <resources>
         <image name="add_person" width="24" height="24"/>

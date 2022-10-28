@@ -36,7 +36,7 @@ struct DependentService {
         return UrlAccessor()
     }
     
-    public func fetchDependents(for patient: Patient, completion: @escaping([Patient]) -> Void) {
+    public func fetchDependents(for patient: Patient, completion: @escaping([Dependent]) -> Void) {
         network.addLoader()
         fetchDependentNetworkRequest { dependentResponse in
             guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload else {
@@ -44,9 +44,8 @@ struct DependentService {
                 return completion([])
             }
             network.removeLoader()
-            let result = payload.compactMap({$0.dependentInformation})
             StorageService.shared.deleteDependents(for: patient)
-            StorageService.shared.store(dependents: result, for: patient, completion: { result in
+            StorageService.shared.store(dependents: payload, for: patient, completion: { result in
                 network.removeLoader()
                 completion(result)
             })
@@ -74,43 +73,71 @@ struct DependentService {
 
     }
     
-    public func addDependent(for patient: Patient, object: PostDependent, completion: @escaping(Patient?) -> Void) {
+    public func addDependent(for patient: Patient, object: PostDependent, completion: @escaping(Dependent?) -> Void) {
         network.addLoader()
         addDependentNetworkRequest(object: object) { dependentResponse in
             network.removeLoader()
-            guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload, let info = payload.dependentInformation else {
+            guard let dependentResponse = dependentResponse,
+                  let payload = dependentResponse.resourcePayload
+            else {
                 network.removeLoader()
                 return completion(nil)
             }
             
-            StorageService.shared.store(dependents: [info], for: patient, completion: { result in
+            StorageService.shared.store(dependents: [payload], for: patient, completion: { result in
                 guard !result.isEmpty else {return completion(nil)}
                 completion(result.first)
             })
         }
     }
     
-//    public func deleteDependent(patient: Patient, completion: @escaping(Bool) -> Void) {
-//        guard let token = authManager.authToken, let hdid = authManager.hdid else {return completion(false)}
-//        guard NetworkConnection.shared.hasConnection else {return completion(false)}
-//        
-//        let object = PostDependent(firstName: <#T##String#>, lastName: <#T##String#>, dateOfBirth: <#T##String#>, phn: <#T##String#>)
-//        BaseURLWorker.shared.setBaseURL {
-//            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
-//            
-//            let headers = [
-//                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
-//                Constants.AuthenticationHeaderKeys.hdid: hdid
-//            ]
-//            
-//            let requestModel = NetworkRequest<PostDependent, AddDependentResponse>(url: endpoints.listOfDependents(hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
-//                completion(result)
-//            }
-//            
-//            network.request(with: requestModel)
-//        }
-//        
-//    }
+    public func delete(dependents: [Dependent], for guardian: Patient, completion: @escaping(Bool) -> Void) {
+        deleteRemote(dependents: dependents, for: guardian) { success in
+            guard success else {
+                return completion(success)
+            }
+            StorageService.shared.delete(dependents: dependents, for: guardian)
+            return completion(success)
+        }
+    }
+    
+    private func deleteRemote(dependents: [Dependent], for guardian: Patient, completion: @escaping(Bool) -> Void) {
+        guard !dependents.isEmpty, let guardianHdid = AuthManager().hdid else {
+            return completion(true)
+        }
+        var remaining = dependents
+        guard let currentDependent = remaining.popLast() else {
+            return completion(false)
+        }
+        
+        guard
+            let remoteObject = currentDependent.toRemote(),
+            let dependentInfo = currentDependent.info,
+            let dependentHdid = dependentInfo.hdid
+        else {
+            return deleteRemote(dependents: remaining, for: guardian, completion: completion)
+        }
+        guard let token = authManager.authToken else {return completion(false)}
+        guard NetworkConnection.shared.hasConnection else {return completion(false)}
+        
+        BaseURLWorker.shared.setBaseURL {
+            guard BaseURLWorker.shared.isOnline == true else { return completion(false) }
+
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.hdid: guardianHdid,
+                Constants.AuthenticationHeaderKeys.dependentHdid: dependentHdid
+            ]
+
+            let requestModel = NetworkRequest<RemoteDependent, AddDependentResponse>(url: endpoints.deleteDependent(dependentHdid: dependentHdid, guardian: guardianHdid), type: .Delete, parameters: remoteObject, headers: headers) { result in
+                guard result != nil else {return completion(false)}
+                return deleteRemote(dependents: remaining, for: guardian, completion: completion)
+            }
+
+            network.request(with: requestModel)
+        }
+
+    }
     
     private func addDependentNetworkRequest(object: PostDependent, completion: @escaping(_ dependentResponse: AddDependentResponse?) -> Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return completion(nil)}

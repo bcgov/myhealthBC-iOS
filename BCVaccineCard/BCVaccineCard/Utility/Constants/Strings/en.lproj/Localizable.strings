@@ -138,6 +138,10 @@
 "Dependent" = "Dependent";
 "Dependents" = "Dependents";
 "DependentRegistration" = "Dependent Registration";
+"ManageDependends" = "Manage Dependends";
+"SaveChanges" = "Save Changes";
+"DeleteDependentTitle" = "Remove Dependent";
+"DeleteDependentMessage" = "Are you sure you want to remove this dependent from your applicaiton";
 "ResourceDescriptionText" = "Connect with HealthLink BC for health advice and get the latest information about COVID-19.";
 "GetVaccinatedResource" = "Get vaccinated";
 "GetTestedResource" = "Get a COVID-19 test";

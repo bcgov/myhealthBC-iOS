@@ -17,6 +17,8 @@ extension NetworkRequest.RequestType {
             return .post
         case .Put:
             return .put
+        case .Delete:
+            return .delete
         }
     }
 }
