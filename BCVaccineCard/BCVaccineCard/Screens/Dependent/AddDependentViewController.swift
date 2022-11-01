@@ -40,7 +40,7 @@ struct AddDependentFormData {
     }
 }
 
-class AddDependentViewController: BaseViewController, UITextFieldDelegate {
+class AddDependentViewController: BaseDependentViewController, UITextFieldDelegate {
     
     class func constructAddDependentViewController(patient: Patient?) -> AddDependentViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: AddDependentViewController.self)) as? AddDependentViewController {
@@ -52,7 +52,6 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
     
     private var patient: Patient? = nil
     private var formData = AddDependentFormData()
-    private let service = DependentService(network: AFNetwork(), authManager: AuthManager())
     
     @IBOutlet weak var givenNameHeader: UILabel!
     @IBOutlet weak var givenNameField: UITextField!
@@ -112,7 +111,7 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
             return
         }
         
-        service.addDependent(for: patient, object: object) { [weak self] stored in
+        networkService.addDependent(for: patient, object: object) { [weak self] stored in
             guard let storedDependent = stored else {
                 self?.alert(title: .error, message: .formError)
                 return

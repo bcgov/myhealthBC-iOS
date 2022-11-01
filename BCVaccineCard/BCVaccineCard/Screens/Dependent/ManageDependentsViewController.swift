@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ManageDependentsViewController: BaseViewController {
+class ManageDependentsViewController: BaseDependentViewController {
     
     class func constructManageDependentsViewController(patient: Patient) -> ManageDependentsViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: ManageDependentsViewController.self)) as? ManageDependentsViewController {
@@ -19,10 +19,7 @@ class ManageDependentsViewController: BaseViewController {
     
     private var patient: Patient? = nil
     private var dependents: [Dependent] = []
-    private var dependentsToRemove: [Dependent] = []
-    private let networkService = DependentService(network: AFNetwork(), authManager: AuthManager())
     
-    @IBOutlet weak var saveChangesButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
 
     override func viewDidLoad() {
@@ -31,30 +28,6 @@ class ManageDependentsViewController: BaseViewController {
         setupTableView()
         navSetup()
         tableView.setEditing(true, animated: true)
-        style(button: saveChangesButton, style: .Fill, title: .saveChanges, image: nil)
-    }
-
-    @IBAction func saveChanges(_ sender: Any) {
-        
-        guard let patient = patient, !dependentsToRemove.isEmpty else {
-            navigationController?.popViewController(animated: true)
-            return
-        }
-        
-        guard NetworkConnection.shared.hasConnection else {
-            alert(title: "Defice is Offline", message: "Please connect to the internet to remove dependents")
-            return
-        }
-        
-        alertConfirmation(title: .deleteDependentTitle, message: .deleteDependentMessage, confirmTitle: .delete, confirmStyle: .destructive) { [weak self] in
-            guard let `self` = self else {return}
-            self.networkService.delete(dependents: self.dependentsToRemove, for: patient, completion: {[weak self] success in
-                self?.navigationController?.popViewController(animated: true)
-            })
-        } onCancel: { [weak self] in
-            self?.tableView.setEditing(false, animated: false)
-            self?.tableView.setEditing(true, animated: true)
-        }
     }
 }
 // MARK: Tableview
@@ -95,13 +68,22 @@ extension ManageDependentsViewController: UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard NetworkConnection.shared.hasConnection else {
-            alert(title: "Defice is Offline", message: "Please connect to the internet to remove dependents")
+            alert(title: "Device is Offline", message: "Please connect to the internet to remove dependents")
             return
         }
+        guard let patient = patient else {return}
         let dependent = dependents[indexPath.row]
-        dependentsToRemove.append(dependent)
-        dependents.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
+        
+        alertConfirmation(title: .deleteDependentTitle, message: .deleteDependentMessage, confirmTitle: .delete, confirmStyle: .destructive) { [weak self] in
+            guard let `self` = self else {return}
+            self.networkService.delete(dependents: [dependent], for: patient, completion: {[weak self] success in
+                self?.dependents.remove(at: indexPath.row)
+                self?.tableView.deleteRows(at: [indexPath], with: .automatic)
+            })
+        } onCancel: { [weak self] in
+            self?.tableView.setEditing(false, animated: false)
+            self?.tableView.setEditing(true, animated: true)
+        }
     }
 }
 
