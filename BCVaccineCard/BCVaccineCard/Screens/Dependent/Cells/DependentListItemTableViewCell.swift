@@ -22,7 +22,7 @@ class DependentListItemTableViewCell: UITableViewCell {
         nameLabel.textColor = AppColours.appBlue
         backgroundColor = .clear
         container.backgroundColor = AppColours.commentBackground
-        container.layer.cornerRadius = 4
+        container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
     }
     
 }

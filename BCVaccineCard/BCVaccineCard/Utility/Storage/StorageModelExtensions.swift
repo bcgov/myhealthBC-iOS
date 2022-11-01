@@ -42,6 +42,20 @@ extension Patient {
         }
     }
     
+    public var immunizationsArray: [Immunization] {
+        let set = immunizations as? Set<Immunization> ?? []
+        return Array(set)
+    }
+    
+    public var healthVisitsArray: [HealthVisit] {
+        let set = healthVisits as? Set<HealthVisit> ?? []
+        return Array(set)
+    }
+    public var specialAuthorityDrugsArray: [SpecialAuthorityDrug] {
+        let set = specialAuthorityDrugs as? Set<SpecialAuthorityDrug> ?? []
+        return Array(set)
+    }
+   
     public func getComparableName() -> String? {
         guard let name = self.name else {
             return nil
@@ -264,7 +278,7 @@ extension Patient {
     
     public var dependentsArray: [Dependent] {
         let set = dependents as? Set<Dependent> ?? []
-        return Array(set)
+        return Array(set).sorted
     }
     
     public var dependentsInfo: [Patient] {
@@ -273,5 +287,33 @@ extension Patient {
     
     func hasDepdendentWith(phn: String) -> Bool {
         return self.dependentsInfo.contains(where: { $0.phn != nil && $0.phn == phn})
+    }
+}
+
+extension Array where Element == Dependent {
+    var sorted: [Dependent] {
+        return self.sorted(by: {
+            $0.info?.birthday ?? Date() > $1.info?.birthday ?? Date()
+        })
+    }
+    
+    var under12: [Dependent] {
+        return self.filter { item in
+            if let info = item.info, let birthday = info.birthday, let age = birthday.ageInYears, age > 12 {
+                return false
+            } else {
+                return true
+            }
+        }.sorted
+    }
+    
+    var over12: [Dependent] {
+        return self.filter { item in
+            if let info = item.info, let birthday = info.birthday, let age = birthday.ageInYears, age > 12 {
+                return true
+            } else {
+                return false
+            }
+        }.sorted
     }
 }

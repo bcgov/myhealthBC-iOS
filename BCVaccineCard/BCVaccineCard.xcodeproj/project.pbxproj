@@ -314,6 +314,12 @@
 		2DF2102928DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF2102428DD2B2700F5E01C /* ViewPDFTableViewCell.xib */; };
 		2DF2102A28DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF2102428DD2B2700F5E01C /* ViewPDFTableViewCell.xib */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
+		3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
+		3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
+		3E048CC5291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
+		3E048CC6291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */; };
+		3E048CC7291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */; };
+		3E048CC8291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */; };
 		3E32322628B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
 		3E32322728B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
 		3E32322828B5FEB80067040C /* Recommendations.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E32322528B5FEB80067040C /* Recommendations.storyboard */; };
@@ -1255,6 +1261,8 @@
 		2DF2102428DD2B2700F5E01C /* ViewPDFTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewPDFTableViewCell.xib; sourceTree = "<group>"; };
 		2DF2102B28E4DEE900F5E01C /* BCVaccineCard 1.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.3.xcdatamodel"; sourceTree = "<group>"; };
 		322EBB5AF649DC5B3E4779FE /* Pods_Health_Gateway_Dev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Health_Gateway_Dev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccessibleDependentTableViewCell.swift; sourceTree = "<group>"; };
+		3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InaccessibleDependentTableViewCell.xib; sourceTree = "<group>"; };
 		3E32322528B5FEB80067040C /* Recommendations.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
 		3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentListItemTableViewCell.swift; sourceTree = "<group>"; };
 		3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DependentListItemTableViewCell.xib; sourceTree = "<group>"; };
@@ -2047,6 +2055,8 @@
 			children = (
 				3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */,
 				3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */,
+				3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */,
+				3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -3341,6 +3351,7 @@
 				795AA76427155F6300E59FF1 /* NewsFeed.storyboard in Resources */,
 				294BD3C927AACFB200BD8D46 /* LocalAuthPrivacyView.xib in Resources */,
 				3E87F4B22901B117002F0A0E /* DependentListItemTableViewCell.xib in Resources */,
+				3E048CC7291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				79A15B0827FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */,
 				7928345F2730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */,
 				799050C0273C8344006CD726 /* GetRecordsView.xib in Resources */,
@@ -3407,6 +3418,7 @@
 				3E32322828B5FEB80067040C /* Recommendations.storyboard in Resources */,
 				79590D9B2811EA25006EB59F /* CommentsTableViewCell.xib in Resources */,
 				297F6DB5280F16540023E89C /* AuthenticationView.xib in Resources */,
+				3E048CC8291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				297F6DB6280F16A70023E89C /* AuthenticationInfoView.xib in Resources */,
 				2DF2102A28DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
 				2922C0D6286E17DC000FF4F7 /* LabOrderBannerTableViewCell.xib in Resources */,
@@ -3544,6 +3556,7 @@
 				7980062F2852C66E006E390F /* NewsFeed.storyboard in Resources */,
 				798006302852C66E006E390F /* LocalAuthPrivacyView.xib in Resources */,
 				3E3DA94028FE8133009C500F /* DependentListItemTableViewCell.xib in Resources */,
+				3E048CC6291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				798006312852C66E006E390F /* DataSecurityTipsTableViewCell.xib in Resources */,
 				798006322852C66E006E390F /* InteractiveLabelTableViewCell.xib in Resources */,
 				798006332852C66E006E390F /* GetRecordsView.xib in Resources */,
@@ -3868,6 +3881,7 @@
 				794BD6762703A3DB0084ADA8 /* ImageTableViewCell.swift in Sources */,
 				7944F6BB26F12BC3006B9444 /* UIButton+EXT.swift in Sources */,
 				7967E73A26F517F600EEF510 /* FormDataSource.swift in Sources */,
+				3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */,
 				796653E427A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */,
 				2979679D27C536E20019EE9B /* LaboratoryOrder+CoreDataClass.swift in Sources */,
 				29A12AF7271F69D700A106B5 /* AnalyticsAction.swift in Sources */,
@@ -4168,6 +4182,7 @@
 				2922C10128774111000FF4F7 /* ImmunizationRecordDetailView.swift in Sources */,
 				29736A4A2788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
 				794BD6402702EEC00084ADA8 /* UIButton+EXT.swift in Sources */,
+				3E048CC5291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */,
 				29128F18272AF41F00358014 /* Array+EXT.swift in Sources */,
 				2979679E27C536E20019EE9B /* LaboratoryOrder+CoreDataClass.swift in Sources */,
 				2932DCE8275ECC8F00532BC4 /* CoreDataEncryptionKeyManager.swift in Sources */,
@@ -4442,6 +4457,7 @@
 				798005792852C66E006E390F /* UIViewController+EXT.swift in Sources */,
 				7980057A2852C66E006E390F /* ImageTableViewCell.swift in Sources */,
 				7980057B2852C66E006E390F /* UIButton+EXT.swift in Sources */,
+				3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */,
 				7980057C2852C66E006E390F /* FormDataSource.swift in Sources */,
 				7980057D2852C66E006E390F /* AuthenticatedPatientDetailsResponseObject.swift in Sources */,
 				7980057E2852C66E006E390F /* LaboratoryOrder+CoreDataClass.swift in Sources */,

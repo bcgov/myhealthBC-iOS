@@ -34,6 +34,7 @@
         <attribute name="delegateID" optional="YES" attributeType="String"/>
         <attribute name="ownerID" optional="YES" attributeType="String"/>
         <attribute name="reasonCode" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="version" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="guardian" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="dependents" inverseEntity="Patient"/>
         <relationship name="info" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Patient" inverseName="dependencyInfo" inverseEntity="Patient"/>
