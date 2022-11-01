@@ -205,8 +205,8 @@ extension UsersListOfRecordsViewController {
         } else {
             self.navigationItem.setHidesBackButton(false, animated: false)
             
-            let manageDependentsButton = NavButton(image: UIImage(named: "profile-icon"), action: #selector(self.showManageDependents), accessibility: Accessibility(traits: .button, label: "", hint: ""))
-            buttons.append(manageDependentsButton)
+            let dependentSettingButton = NavButton(image: UIImage(named: "profile-icon"), action: #selector(self.dependentSetting), accessibility: Accessibility(traits: .button, label: "", hint: ""))
+            buttons.append(dependentSettingButton)
         }
         
         
@@ -237,9 +237,11 @@ extension UsersListOfRecordsViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    @objc func showManageDependents() {
+    @objc func dependentSetting() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        // TODO: AMIR: Add in show manage dependents logic here
+        guard let patient = patient, let dependent = patient.dependencyInfo else {return}
+        let vc = DependentInfoViewController.construct(dependent: dependent)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func doneButton() {
