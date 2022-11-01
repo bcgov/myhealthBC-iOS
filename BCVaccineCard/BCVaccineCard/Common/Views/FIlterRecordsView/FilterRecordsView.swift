@@ -35,6 +35,7 @@ class UserFilters {
         let name: String
         var filter: RecordsFilter
     }
+    
     private static var filters: [UserFilter] = []
     
     static func filterFor(name: String) -> RecordsFilter? {
@@ -103,10 +104,11 @@ class FilterRecordsView: UIView, Theme {
     
     private var currentFilter: RecordsFilter = RecordsFilter()
     private var chipsView: ChipsView? = nil
-
+    private var availableFilters: [RecordsFilter.RecordType] = []
     
     // MARK: Display
-    func showModally(on view: UIView, filter: RecordsFilter?) {
+    func showModally(on view: UIView, availableFilters: [RecordsFilter.RecordType], filter: RecordsFilter?) {
+        self.availableFilters = availableFilters
         view.addSubview(self)
         positionView(on: view)
         showRecordTypes()
@@ -410,7 +412,7 @@ extension FilterRecordsView: ChipsViewDelegate {
         selectedFilters = currentFilter.recordTypes.map({$0.rawValue})
        
         chipsView.delegate = self
-        chipsView.setup(options: RecordsFilter.RecordType.allCases.map({$0.rawValue}), selected: selectedFilters, direction: .vertical)
+        chipsView.setup(options: availableFilters.map({$0.rawValue}), selected: selectedFilters, direction: .vertical)
     }
     
     func selected(value: String) {

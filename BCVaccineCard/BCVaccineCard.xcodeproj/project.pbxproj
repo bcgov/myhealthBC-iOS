@@ -327,6 +327,9 @@
 		3E3DA94429005AA2009C500F /* StorageService+Dependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3DA94329005AA2009C500F /* StorageService+Dependent.swift */; };
 		3E3DA94529005AA2009C500F /* StorageService+Dependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3DA94329005AA2009C500F /* StorageService+Dependent.swift */; };
 		3E3DA94629005AA2009C500F /* StorageService+Dependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3DA94329005AA2009C500F /* StorageService+Dependent.swift */; };
+		3E47378B2911053A00B5BBA0 /* DependentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47378A2911053A00B5BBA0 /* DependentInfoViewController.swift */; };
+		3E47378C2911053A00B5BBA0 /* DependentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47378A2911053A00B5BBA0 /* DependentInfoViewController.swift */; };
+		3E47378D2911053A00B5BBA0 /* DependentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47378A2911053A00B5BBA0 /* DependentInfoViewController.swift */; };
 		3E47377B2910902900B5BBA0 /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */; };
 		3E47377C2910902900B5BBA0 /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */; };
 		3E47377D2910902900B5BBA0 /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */; };
@@ -428,6 +431,9 @@
 		3E9D52662909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */; };
 		3E9D52672909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */; };
 		3E9D52682909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */; };
+		3EBC991829110ACE00D67A90 /* BaseDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */; };
+		3EBC991929110ACE00D67A90 /* BaseDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */; };
+		3EBC991A29110ACE00D67A90 /* BaseDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */; };
 		3ECD398928B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398A28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398B28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
@@ -1268,7 +1274,7 @@
 		3E32322528B5FEB80067040C /* Recommendations.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
 		3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentListItemTableViewCell.swift; sourceTree = "<group>"; };
 		3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DependentListItemTableViewCell.xib; sourceTree = "<group>"; };
-		3E3DA94329005AA2009C500F /* StorageService+Dependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Dependent.swift"; sourceTree = "<group>"; };
+		3E47378A2911053A00B5BBA0 /* DependentInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentInfoViewController.swift; sourceTree = "<group>"; };
 		3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImmunizationsService.swift; sourceTree = "<group>"; };
 		3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CovidTestsService.swift; sourceTree = "<group>"; };
 		3E473782291090DB00B5BBA0 /* LabOrderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabOrderService.swift; sourceTree = "<group>"; };
@@ -1304,6 +1310,7 @@
 		3E91C7AA28B51B0A005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationTargetDisease+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E91C7AD28B51B0B005AA34F /* Immunization+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Immunization+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageDependentsViewController.swift; sourceTree = "<group>"; };
+		3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDependentViewController.swift; sourceTree = "<group>"; };
 		3ECD398828B522970033B866 /* StorageService+Recommendations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Recommendations.swift"; sourceTree = "<group>"; };
 		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayerTests.swift; sourceTree = "<group>"; };
@@ -2139,6 +2146,8 @@
 				3E78AEC828F8729900C66E28 /* DependentsHomeViewController.swift */,
 				3E78AECC28F9909500C66E28 /* AddDependentViewController.swift */,
 				3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */,
+				3E47378A2911053A00B5BBA0 /* DependentInfoViewController.swift */,
+				3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */,
 			);
 			path = Dependent;
 			sourceTree = "<group>";
@@ -4013,6 +4022,7 @@
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				2932DCDF275A9D2C00532BC4 /* StorageService+VaccineCard.swift in Sources */,
 				79B9D01227E2869D00987D9F /* HomeScreenTableViewCell.swift in Sources */,
+				3E47378C2911053A00B5BBA0 /* DependentInfoViewController.swift in Sources */,
 				796653DA27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */,
 				29245D40275581C700F48642 /* StorageService+TestResults.swift in Sources */,
 				2932DCEA275ED82600532BC4 /* AnalyticsAppID.swift in Sources */,
@@ -4055,6 +4065,7 @@
 				297D3BB227D9479D00B059CA /* TableSectionHeader.swift in Sources */,
 				29E19FF2286C11CD00C235EF /* MedicationRecordDetailView.swift in Sources */,
 				79218ABE27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
+				3EBC991929110ACE00D67A90 /* BaseDependentViewController.swift in Sources */,
 				29719557288700F600CA824A /* ImmunizationForecast+CoreDataProperties.swift in Sources */,
 				2D120D4428FF25A600EB8EBF /* PostDependent.swift in Sources */,
 				792834542730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
@@ -4316,6 +4327,7 @@
 				291D43E32762E203005F5B94 /* HealthRecordCollectionViewCell.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
 				797BB95F276408B800CD1645 /* StorageService+VaccineCard.swift in Sources */,
+				3E47378D2911053A00B5BBA0 /* DependentInfoViewController.swift in Sources */,
 				79B9D01B27E31D7100987D9F /* NotificationManager.swift in Sources */,
 				29245D41275581C700F48642 /* StorageService+TestResults.swift in Sources */,
 				79A15B0B2808B28200F8330D /* TableSectionHeader.swift in Sources */,
@@ -4358,6 +4370,7 @@
 				79218ABF27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
 				29E19FF4286C11CD00C235EF /* MedicationRecordDetailView.swift in Sources */,
 				792834552730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
+				3EBC991A29110ACE00D67A90 /* BaseDependentViewController.swift in Sources */,
 				29719558288700F600CA824A /* ImmunizationForecast+CoreDataProperties.swift in Sources */,
 				2D120D4528FF25A600EB8EBF /* PostDependent.swift in Sources */,
 				797BB96B2767F17D00CD1645 /* PagingIndicatorView.swift in Sources */,
@@ -4593,6 +4606,7 @@
 				798005D52852C66E006E390F /* Medication+CoreDataProperties.swift in Sources */,
 				798005D62852C66E006E390F /* URL+EXT.swift in Sources */,
 				798005D72852C66E006E390F /* NewsFeedResponse.swift in Sources */,
+				3E47378B2911053A00B5BBA0 /* DependentInfoViewController.swift in Sources */,
 				798005D82852C66E006E390F /* VaccineCardTableViewCell.swift in Sources */,
 				798005D92852C66E006E390F /* StorageService+VaccineCard.swift in Sources */,
 				798005DA2852C66E006E390F /* HomeScreenTableViewCell.swift in Sources */,
@@ -4635,6 +4649,7 @@
 				798005F52852C66E006E390F /* DropDownView.swift in Sources */,
 				798005F62852C66E006E390F /* TableSectionHeader.swift in Sources */,
 				798005F72852C66E006E390F /* ReusableHeaderAddView.swift in Sources */,
+				3EBC991829110ACE00D67A90 /* BaseDependentViewController.swift in Sources */,
 				29719556288700F600CA824A /* ImmunizationForecast+CoreDataProperties.swift in Sources */,
 				2D120D4328FF25A600EB8EBF /* PostDependent.swift in Sources */,
 				798005F82852C66E006E390F /* RememberedGatewayDetails.swift in Sources */,
