@@ -72,7 +72,7 @@ class DependentInfoViewController: BaseDependentViewController {
         firstNameValueLabel.text = info.firstName
         lastNameValueLabel.text = info.lastName
         phnValueLabel.text = info.phn
-        dobValueLabel.text = info.birthday?.yearMonthDayString
+        dobValueLabel.text = info.birthday?.yearMonthStringDayString
     }
     
     func style() {

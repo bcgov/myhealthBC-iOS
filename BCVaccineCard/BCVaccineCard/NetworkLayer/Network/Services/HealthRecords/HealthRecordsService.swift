@@ -20,7 +20,11 @@ struct HealthRecordsService {
         
         let dispatchGroup = DispatchGroup()
         var records: [HealthRecord] = []
-        
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.incrementLoader(message: .FetchingRecords)
+            }
+        }
         dispatchGroup.enter()
         let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
         vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in
@@ -51,6 +55,9 @@ struct HealthRecordsService {
         
         dispatchGroup.notify(queue: .main) {
             // Return completion
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.decrementLoader()
+            }
             return completion(records)
         }
     }
