@@ -249,7 +249,8 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     
     @objc func showFilters() {
         let fv: FilterRecordsView = UIView.fromNib()
-        fv.showModally(on: view.findTopMostVC()?.view ?? view, filter: currentFilter)
+        let allFilters = RecordsFilter.RecordType.allCases
+        fv.showModally(on: view.findTopMostVC()?.view ?? view, availableFilters: allFilters, filter: currentFilter)
         fv.delegate = self
     }
     

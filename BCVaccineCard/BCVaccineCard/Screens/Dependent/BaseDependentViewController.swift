@@ -11,7 +11,6 @@ class BaseDependentViewController: BaseViewController {
 
     let networkService = DependentService(network: AFNetwork(), authManager: AuthManager())
     
-
     func delete(dependent: Dependent, completion: @escaping(_ confirmed: Bool) -> Void) {
         guard NetworkConnection.shared.hasConnection else {
             alert(title: "Device is Offline", message: "Please connect to the internet to remove dependents")
