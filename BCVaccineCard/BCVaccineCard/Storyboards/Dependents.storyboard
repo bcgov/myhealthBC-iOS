@@ -18,17 +18,36 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="fQx-x4-9Us">
-                                <rect key="frame" x="16" y="104" width="382" height="556"/>
+                                <rect key="frame" x="0.0" y="108" width="414" height="552"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hll-cX-j3a">
-                                        <rect key="frame" x="0.0" y="0.0" width="382" height="81.5"/>
-                                        <string key="text">You can add your dependents under the age of 12 to view their COVID-19 results. Please complete the form with your dependent’s information, exactly as it appears on their BC Services Card.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lIg-6Z-zXM">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lds-yY-jcI">
+                                                <rect key="frame" x="0.0" y="0.0" width="16" height="128"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="16" id="mws-4O-och"/>
+                                                </constraints>
+                                            </view>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hll-cX-j3a">
+                                                <rect key="frame" x="16" y="0.0" width="382" height="128"/>
+                                                <string key="text">You can add your dependents under the age of 12 to view their COVID-19 results. Please complete the form with your dependent’s information, exactly as it appears on their BC Services Card.</string>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FRv-5y-X1j">
+                                                <rect key="frame" x="398" y="0.0" width="16" height="128"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="16" id="ArZ-lj-fPT"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xbT-Bn-hiV">
-                                        <rect key="frame" x="0.0" y="97.5" width="382" height="458.5"/>
+                                        <rect key="frame" x="0.0" y="144" width="414" height="408"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </tableView>
                                 </subviews>
@@ -75,7 +94,7 @@
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="fQx-x4-9Us" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="6bP-01-aWG"/>
+                            <constraint firstItem="fQx-x4-9Us" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="6bP-01-aWG"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="H98-J5-p9U" secondAttribute="trailing" constant="31" id="7C6-V1-iZ4"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="H98-J5-p9U" secondAttribute="bottom" constant="8" id="RIU-Cg-HSM"/>
                             <constraint firstItem="H98-J5-p9U" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="31" id="T7g-IN-cTd"/>
@@ -325,17 +344,17 @@ I understand that I will no longer be able to access my child’s health records
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8Gh-Yh-I0a">
-                                <rect key="frame" x="16" y="64" width="382" height="782"/>
+                                <rect key="frame" x="0.0" y="64" width="414" height="782"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="D5s-PV-jyf"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="8Gh-Yh-I0a" firstAttribute="leading" secondItem="D5s-PV-jyf" secondAttribute="leading" constant="16" id="1Dr-cH-2RI"/>
+                            <constraint firstItem="8Gh-Yh-I0a" firstAttribute="leading" secondItem="D5s-PV-jyf" secondAttribute="leading" id="1Dr-cH-2RI"/>
                             <constraint firstItem="8Gh-Yh-I0a" firstAttribute="top" secondItem="D5s-PV-jyf" secondAttribute="top" constant="16" id="Inj-bT-2mr"/>
                             <constraint firstItem="D5s-PV-jyf" firstAttribute="bottom" secondItem="8Gh-Yh-I0a" secondAttribute="bottom" constant="16" id="XhF-ZG-qMk"/>
-                            <constraint firstItem="D5s-PV-jyf" firstAttribute="trailing" secondItem="8Gh-Yh-I0a" secondAttribute="trailing" constant="16" id="i6J-Ix-lja"/>
+                            <constraint firstItem="D5s-PV-jyf" firstAttribute="trailing" secondItem="8Gh-Yh-I0a" secondAttribute="trailing" id="i6J-Ix-lja"/>
                         </constraints>
                     </view>
                     <connections>

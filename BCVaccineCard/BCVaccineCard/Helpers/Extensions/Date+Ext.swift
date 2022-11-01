@@ -327,6 +327,14 @@ extension Date {
     
 }
 
+extension Date {
+    var ageInYears: Int? {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year], from: self, to: Date())
+        return components.year ?? nil
+    }
+}
+
 
 extension String {
     func getGatewayDate() -> Date? {

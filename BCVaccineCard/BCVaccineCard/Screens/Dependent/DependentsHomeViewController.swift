@@ -20,7 +20,6 @@ class DependentsHomeViewController: BaseDependentViewController {
     }
     
     private var patient: Patient? = nil
-    private let tableLeadingContraint: CGFloat = 16
     private let emptyLogoTag = 23412
     private let authManager = AuthManager()
     private let storageService = StorageService()
@@ -111,17 +110,13 @@ class DependentsHomeViewController: BaseDependentViewController {
             return
         }
         
-        dependents = patient.dependentsArray.sorted(by: {
-            $0.info?.birthday ?? Date() > $1.info?.birthday ?? Date()
-        })
+        dependents = patient.dependentsArray
         setState()
         tableView.reloadData()
         guard fromRemote else {return}
         
         networkService.fetchDependents(for: patient) { [weak self] storedDependents in
-            self?.dependents = storedDependents.sorted(by: {
-                $0.info?.birthday ?? Date() > $1.info?.birthday ?? Date()
-            })
+            self?.dependents = storedDependents
             self?.setState()
             self?.tableView.reloadData()
         }
@@ -229,7 +224,6 @@ class DependentsHomeViewController: BaseDependentViewController {
         loginWIthBCSCButton.isHidden = true
         addDependentButton.isHidden = false
         desciptionLabel.isHidden = false
-        tableStackLeadingContraint.constant = tableLeadingContraint
     }
     
     func styleAuthenticationExpired() {
@@ -248,7 +242,6 @@ class DependentsHomeViewController: BaseDependentViewController {
         manageDependentsButton.isHidden = true
         loginWIthBCSCButton.isHidden = false
         desciptionLabel.isHidden = false
-        tableStackLeadingContraint.constant = tableLeadingContraint
     }
     
     private func styleWithDependents() {
@@ -257,7 +250,6 @@ class DependentsHomeViewController: BaseDependentViewController {
         manageDependentsButton.isHidden = false
         loginWIthBCSCButton.isHidden = true
         desciptionLabel.isHidden = false
-        tableStackLeadingContraint.constant = tableLeadingContraint
     }
 }
 
@@ -281,6 +273,8 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     private func setupTableView() {
         tableView.register(UINib.init(nibName: DependentListItemTableViewCell.getName, bundle: .main), forCellReuseIdentifier: DependentListItemTableViewCell.getName)
         tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
+        tableView.register(UINib.init(nibName: InaccessibleDependentTableViewCell.getName, bundle: .main), forCellReuseIdentifier: InaccessibleDependentTableViewCell.getName)
+        
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
         tableView.delegate = self
@@ -289,13 +283,29 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        switch authManager.authStaus {
+        case .Authenticated:
+            return 2 // over 12 years of age and regular
+        case .AuthenticationExpired:
+            return 1
+        case .UnAuthenticated:
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch authManager.authStaus {
         case .Authenticated:
-            return dependents.count
+            
+            switch section {
+            case 0:
+                return dependents.over12.count
+            case 1:
+                return dependents.under12.count
+            default:
+                return 0
+            }
+            
         case .AuthenticationExpired:
             return 1
         case .UnAuthenticated:
@@ -307,7 +317,17 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DependentListItemTableViewCell.getName, for: indexPath) as? DependentListItemTableViewCell else {
             return DependentListItemTableViewCell()
         }
-        cell.configure(name: dependents[indexPath.row].info?.name ?? "")
+        cell.configure(name: dependents.under12[indexPath.row].info?.name ?? "")
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    private func inaccessibleDependentCell(indexPath: IndexPath) -> InaccessibleDependentTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: InaccessibleDependentTableViewCell.getName, for: indexPath) as? InaccessibleDependentTableViewCell else {
+            return InaccessibleDependentTableViewCell()
+        }
+        cell.configure(dependent: dependents.over12[indexPath.row], delegate: self)
+        cell.selectionStyle = .none
         return cell
     }
     
@@ -325,7 +345,15 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch authManager.authStaus {
         case .Authenticated:
-            return dependentCell(indexPath: indexPath)
+            switch indexPath.section {
+            case 0:
+                return inaccessibleDependentCell(indexPath: indexPath)
+            case 1:
+                return dependentCell(indexPath: indexPath)
+            default:
+                return UITableViewCell()
+            }
+            
         case .AuthenticationExpired:
             return loginExpiredCell(indexPath: indexPath)
         case .UnAuthenticated:
@@ -355,7 +383,15 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         }
-        
+    }
+}
+extension DependentsHomeViewController: InaccessibleDependentDelegate {
+    func delete(dependent: Dependent) {
+        delete(dependent: dependent) { [weak self] confirmed in
+            if confirmed {
+                self?.fetchData(fromRemote: false)
+            }
+        }
     }
 }
 

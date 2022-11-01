@@ -21,6 +21,16 @@ extension StorageService {
         case SpecialAuthorityDrug
     }
     
+    func getDependentRecords(for patient: Patient) -> [HealthRecord]{
+        let tests = patient.testResultArray.map({HealthRecord(type: .CovidTest($0))})
+        let medications = patient.prescriptionArray.map({HealthRecord(type: .Medication($0))})
+        let labOrders = patient.labOrdersArray.map({HealthRecord(type: .LaboratoryOrder($0))})
+        let immunizations = patient.immunizationsArray.map({HealthRecord(type: .Immunization($0))})
+        let healthVisits = patient.healthVisitsArray.map({HealthRecord(type: .HealthVisit($0))})
+        let specialAuthority = patient.specialAuthorityDrugsArray.map({HealthRecord(type: .SpecialAuthorityDrug($0))})
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority
+    }
+    
     func getHeathRecords() -> [HealthRecord] {
         let tests = fetchCovidTestResults().map({HealthRecord(type: .CovidTest($0))})
         // NOTE: Remove vaccineCards if we want to use new immz UI
