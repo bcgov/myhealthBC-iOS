@@ -26,6 +26,7 @@ extension NetworkRequest {
         case Get
         case Post
         case Put
+        case Delete
     }
 }
 
