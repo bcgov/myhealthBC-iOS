@@ -15,6 +15,7 @@ struct NetworkRequest<Parameters: Encodable, T: Decodable> {
     let type: RequestType
     
     let parameters: Parameters?
+    var encoder: EncoderType = .json
     let headers: [String: String]?
     let completion: Completion<T>
     
@@ -30,6 +31,17 @@ extension NetworkRequest {
     }
 }
 
+extension NetworkRequest {
+    enum EncoderType {
+        case json
+        case urlEncoder
+    }
+}
+
 struct DefaultParams: Codable {
     
+}
+
+struct HDIDParams: Codable {
+    let hdid: String
 }

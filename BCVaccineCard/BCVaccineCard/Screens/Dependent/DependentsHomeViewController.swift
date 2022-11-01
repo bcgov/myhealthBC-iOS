@@ -51,6 +51,24 @@ class DependentsHomeViewController: BaseDependentViewController {
         fetchDataWhenAuthenticated()
     }
     
+   // private func fetchData() {
+   ///     service.fetchDependents { completed in
+            // If completed, then reload data/update screen UI - if not completed, show an error
+     //   }
+        // TODO: Allocate this appropriately once storage has been updated
+      //  dependents = []
+       // setState()
+       // setHealthRecordServiceAndFetchDependentRecords()
+   // }
+    
+   // private func setHealthRecordServiceAndFetchDependentRecords() {
+    //    guard dependents.count > 0 else { return }
+     //   for dependent in dependents {
+            // If this is the way we decide to do it, then should do some thread handling here
+       //     let dependentsRecordService = HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), currentDependant: dependent)
+        //    dependentsRecordService.fetchHealthRecords()
+       // }
+       
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchData(fromRemote: false)
@@ -344,10 +362,28 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showToast(message: "Feature not implemented")
+        let dependent = dependents[indexPath.row]
+        // if not fetched this session, then call code below. else, fetch health records from storage
+        guard let dependentPatient = dependent.info else {
+            print("ERROR HERE")
+            // TODO: Handle error here
+            return
+        }
+        if AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.contains(dependentPatient) == true {
+            let records = StorageService.shared.getHealthRecords(forDependent: dependentPatient)
+            let dependantDS = records.detailDataSource(patient: dependentPatient)
+            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
+            self.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            StorageService.shared.deleteHealthRecordsForDependent(dependent: dependentPatient)
+            HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
+                let dependantDS = records.detailDataSource(patient: dependentPatient)
+                AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.append(dependentPatient)
+                let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
+                self?.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
         
-        let vc = DependentInfoViewController.construct(dependent: dependents[indexPath.row])
-        navigationController?.pushViewController(vc, animated: true)
     }
 }
 extension DependentsHomeViewController: InaccessibleDependentDelegate {

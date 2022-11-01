@@ -44,6 +44,26 @@ extension StorageService {
         return tests + medications + labOrders + immunizations + healthVisits + specialAuthority
     }
     
+    func getHealthRecords(forDependent dependent: Patient) -> [HealthRecord] {
+        let tests = dependent.testResultArray.map { HealthRecord(type: .CovidTest($0)) }
+        let medications = dependent.prescriptionArray.map { HealthRecord(type: .Medication($0)) }
+        let labOrders = dependent.labOrdersArray.map { HealthRecord(type: .LaboratoryOrder($0)) }
+        let immunizations = dependent.immunizationArray.map { HealthRecord(type: .Immunization($0)) }
+        
+        return tests + medications + labOrders + immunizations
+    }
+    
+    func deleteHealthRecordsForDependent(dependent: Patient) {
+        let tests = dependent.testResultArray
+        deleteAllRecords(in: tests)
+        let medications = dependent.prescriptionArray
+        deleteAllRecords(in: medications)
+        let labOrders = dependent.labOrdersArray
+        deleteAllRecords(in: labOrders)
+        let immunizations = dependent.immunizationArray
+        deleteAllRecords(in: immunizations)
+    }
+    
     func delete(healthRecord: HealthRecord) {
         switch healthRecord.type {
         case .CovidTest(let object):
