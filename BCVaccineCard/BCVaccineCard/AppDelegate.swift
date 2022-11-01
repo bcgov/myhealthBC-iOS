@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
     var protectiveWordEnteredThisSession = false
+    var recordsFetchedForDependentsThisSession: [Patient] = []
     
     var lastLocalAuth: Date? = nil
     fileprivate var dataLoadCount: Int = 0 

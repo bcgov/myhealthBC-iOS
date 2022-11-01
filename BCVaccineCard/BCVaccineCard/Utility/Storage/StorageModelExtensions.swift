@@ -35,10 +35,31 @@ extension Patient {
         }
     }
     
+    public var immunizationArray: [Immunization] {
+        let set = immunizations as? Set<Immunization> ?? []
+        return set.sorted {
+            $0.dateOfImmunization ?? Date() > $1.dateOfImmunization ?? Date()
+        }
+    }
+    
     public var labOrdersArray: [LaboratoryOrder] {
         let set = laboratoryOrders as? Set<LaboratoryOrder> ?? []
         return set.sorted {
             $0.timelineDateTime ?? Date() > $1.timelineDateTime ?? Date()
+        }
+    }
+    
+    public var healthVisitsArray: [HealthVisit] {
+        let set = healthVisits as? Set<HealthVisit> ?? []
+        return set.sorted {
+            $0.encounterDate ?? Date() > $1.encounterDate ?? Date()
+        }
+    }
+    
+    public var specialAuthorityDrugsArray: [SpecialAuthorityDrug] {
+        let set = specialAuthorityDrugs as? Set<SpecialAuthorityDrug> ?? []
+        return set.sorted {
+            $0.effectiveDate ?? Date() > $1.effectiveDate ?? Date()
         }
     }
     

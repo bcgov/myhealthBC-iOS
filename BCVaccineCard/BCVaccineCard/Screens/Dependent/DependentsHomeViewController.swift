@@ -336,11 +336,27 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dependent = dependents[indexPath.row]
-        HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
-                self?.showToast(message: "fetched \(records.count) records. show them")
-                print(records.count)
-                print(records)
+        // if not fetched this session, then call code below. else, fetch health records from storage
+        guard let dependentPatient = dependent.info else {
+            print("ERROR HERE")
+            // TODO: Handle error here
+            return
         }
+        if AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.contains(dependentPatient) == true {
+            let records = StorageService.shared.getHealthRecords(forDependent: dependentPatient)
+            let dependantDS = records.detailDataSource(patient: dependentPatient)
+            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
+            self.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            StorageService.shared.deleteHealthRecordsForDependent(dependent: dependentPatient)
+            HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
+                let dependantDS = records.detailDataSource(patient: dependentPatient)
+                AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.append(dependentPatient)
+                let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
+                self?.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+        
     }
 }
 
