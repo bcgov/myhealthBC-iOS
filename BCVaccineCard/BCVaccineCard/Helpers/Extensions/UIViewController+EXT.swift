@@ -180,7 +180,15 @@ extension UIViewController {
     ) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         let name = patientAPI?.getFullName ?? model.name
-        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: name, birthday: birthdate, hdid: nil, authenticated: authenticated) else {
+        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn,
+                                                                                name: name,
+                                                                                firstName: "",
+                                                                                lastName: "",
+                                                                                gender: "",
+                                                                                birthday: birthdate,
+                                                                                hdid: nil,
+                                                                                authenticated: authenticated)
+        else {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card", type: .storage)
             return completion(CoreDataReturnObject(id: model.id, patient: nil))
         }

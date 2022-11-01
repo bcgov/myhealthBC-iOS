@@ -112,17 +112,17 @@ class AddDependentViewController: BaseViewController, UITextFieldDelegate {
             return
         }
         
-        service.addDependent(for: patient, object: object) { [weak self] result in
-            guard let patientResult = result else {
+        service.addDependent(for: patient, object: object) { [weak self] stored in
+            guard let storedDependent = stored else {
                 self?.alert(title: .error, message: .formError)
                 return
             }
-            if let patientName = patientResult.name {
+            if let patientName = storedDependent.info?.name {
                 self?.showToast(message: "\(patientName) was added")
             } else {
                 self?.showToast(message: "Dependent was added")
             }
-            
+
             self?.navigationController?.popViewController(animated: true)
         }
     }

@@ -9,32 +9,72 @@ import Foundation
 
 extension StorageService {
     
-    func store(dependents: [DependentInformation], for patient: Patient, completion: @escaping([Patient])->Void) {
-        var storedPatients: [Patient] = []
+    func store(dependents: [RemoteDependent], for patient: Patient, completion: @escaping([Dependent])->Void) {
+        var storedDependends: [Dependent] = []
         for dependent in dependents {
-            let firstName = dependent.firstname ?? ""
-            let lastName = dependent.lastname ?? ""
             
-            if let storedPatient = storePatient(
-                name: firstName + " " + lastName,
-                birthday: dependent.dateOfBirth?.getGatewayDate(),
-                phn: dependent.phn,
-                hdid: dependent.hdid,
-                authenticated: false) {
-                storedPatients.append(storedPatient)
+            if let info = dependent.dependentInformation,
+               let versionInt = dependent.version,
+               let reasonCodeInt = dependent.reasonCode
+            {
+                let firstName = info.firstname ?? ""
+                let lastName = info.lastname ?? ""
+                
+                if let storedPatient = storePatient(
+                    name: firstName + " " + lastName,
+                    firstName: firstName,
+                    lastName: lastName,
+                    gender: info.gender,
+                    birthday: info.dateOfBirth?.getGatewayDate(),
+                    phn: info.phn,
+                    hdid: info.hdid,
+                    authenticated: false) {
+                    if let storedDependent = storeDependent(ownerID: dependent.ownerID,
+                                                            delegateID: dependent.delegateID,
+                                                            version: Int64(versionInt),
+                                                            reasonCode: Int64(reasonCodeInt),
+                                                            info: storedPatient)
+                    {
+                        storedDependends.append(storedDependent)
+                    }
+                }
             }
         }
-        add(dependents: storedPatients, to: patient)
-        return completion(storedPatients)
+        add(dependents: storedDependends, to: patient)
+        return completion(storedDependends)
     }
     
-    func add(dependents: [Patient], to patient: Patient) {
+    func storeDependent(
+        ownerID: String?,
+        delegateID: String?,
+        version: Int64,
+        reasonCode: Int64,
+        info: Patient
+    ) -> Dependent? {
+        guard let context = managedContext else {return nil}
+        let dependent = Dependent(context: context)
+        dependent.ownerID = ownerID
+        dependent.delegateID = delegateID
+        dependent.version = version
+        dependent.reasonCode = reasonCode
+        dependent.info = info
+        do {
+            try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .Dependent, object: dependent))
+            return dependent
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
+    
+    func add(dependents: [Dependent], to patient: Patient) {
         for dependent in dependents {
             addDependent(dependent: dependent, to: patient)
         }
     }
     
-    func addDependent(dependent: Patient, to patient: Patient) {
+    func addDependent(dependent: Dependent, to patient: Patient) {
         guard let context = managedContext else {return}
         patient.addToDependents(dependent)
         do {
@@ -49,6 +89,17 @@ extension StorageService {
         guard let context = managedContext else {return}
         guard let dependents = patient.dependents else {return}
         patient.removeFromDependents(dependents)
+        do {
+            try context.save()
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return
+        }
+    }
+    
+    func delete(dependents: [Dependent], for patient: Patient) {
+        guard let context = managedContext else {return}
+        dependents.forEach({patient.removeFromDependents($0)})
         do {
             try context.save()
         } catch let error as NSError {

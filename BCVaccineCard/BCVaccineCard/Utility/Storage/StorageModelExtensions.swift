@@ -261,12 +261,17 @@ extension ImmunizationRecommendation {
 
 // MARK: Dependents
 extension Patient {
-    public var dependentsArray: [Patient] {
-        let set = dependents as? Set<Patient> ?? []
+    
+    public var dependentsArray: [Dependent] {
+        let set = dependents as? Set<Dependent> ?? []
         return Array(set)
     }
     
+    public var dependentsInfo: [Patient] {
+        return dependentsArray.compactMap({$0.info})
+    }
+    
     func hasDepdendentWith(phn: String) -> Bool {
-        return self.dependentsArray.contains(where: { $0.phn != nil && $0.phn == phn})
+        return self.dependentsInfo.contains(where: { $0.phn != nil && $0.phn == phn})
     }
 }
