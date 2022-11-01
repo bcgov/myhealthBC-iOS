@@ -10,7 +10,7 @@ import UIKit
 struct RecordsFilter {
     enum RecordType: String, CaseIterable {
         case Medication = "Medications"
-        case Covid = "COVID-19"
+        case Covid = "COVID-19 Tests"
         case LabTests = "Lab Tests"
         case Immunizations = "Immunizations"
         case SpecialAuthorityDrugs = "Special Authority"

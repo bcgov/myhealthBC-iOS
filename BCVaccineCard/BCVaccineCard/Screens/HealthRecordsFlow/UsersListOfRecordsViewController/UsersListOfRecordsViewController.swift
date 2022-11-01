@@ -57,6 +57,10 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var protectiveWord: String?
     private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
     private var selectedCellIndexPath: IndexPath?
+    
+    private var isDependent: Bool {
+        return patient?.dependencyInfo != nil
+    }
         
     private var currentFilter: RecordsFilter? = nil {
         didSet {
@@ -260,7 +264,10 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     @objc func showFilters() {
         let fv: FilterRecordsView = UIView.fromNib()
         let allFilters = RecordsFilter.RecordType.allCases
-        fv.showModally(on: view.findTopMostVC()?.view ?? view, availableFilters: allFilters, filter: currentFilter)
+        let dependentFilters: [RecordsFilter.RecordType] = [.LabTests, .Covid, .Immunizations, .HeathVisits, .SpecialAuthorityDrugs]
+        fv.showModally(on: view.findTopMostVC()?.view ?? view,
+                       availableFilters: isDependent ? dependentFilters : allFilters,
+                       filter: currentFilter)
         fv.delegate = self
     }
     
