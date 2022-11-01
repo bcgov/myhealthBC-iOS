@@ -71,18 +71,20 @@ extension ManageDependentsViewController: UITableViewDelegate, UITableViewDataSo
             alert(title: "Device is Offline", message: "Please connect to the internet to remove dependents")
             return
         }
-        guard let patient = patient else {return}
-        let dependent = dependents[indexPath.row]
         
-        alertConfirmation(title: .deleteDependentTitle, message: .deleteDependentMessage, confirmTitle: .delete, confirmStyle: .destructive) { [weak self] in
+        let dependent = dependents[indexPath.row]
+        delete(dependent: dependent) {[weak self] confirmed in
             guard let `self` = self else {return}
-            self.networkService.delete(dependents: [dependent], for: patient, completion: {[weak self] success in
-                self?.dependents.remove(at: indexPath.row)
-                self?.tableView.deleteRows(at: [indexPath], with: .automatic)
-            })
-        } onCancel: { [weak self] in
-            self?.tableView.setEditing(false, animated: false)
-            self?.tableView.setEditing(true, animated: true)
+            if confirmed {
+                self.dependents.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                if self.dependents.isEmpty {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            } else {
+                self.tableView.setEditing(false, animated: false)
+                self.tableView.setEditing(true, animated: true)
+            }
         }
     }
 }
