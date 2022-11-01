@@ -8,7 +8,7 @@
 import UIKit
 
 
-class DependentsHomeViewController: BaseViewController {
+class DependentsHomeViewController: BaseDependentViewController {
     
     class func constructDependentsHomeViewController(patient: Patient?) -> DependentsHomeViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: DependentsHomeViewController.self)) as? DependentsHomeViewController {
@@ -24,7 +24,6 @@ class DependentsHomeViewController: BaseViewController {
     private let emptyLogoTag = 23412
     private let authManager = AuthManager()
     private let storageService = StorageService()
-    private let networkService = DependentService(network: AFNetwork(), authManager: AuthManager())
     
     @IBOutlet weak var tableStackLeadingContraint: NSLayoutConstraint!
     @IBOutlet weak var desciptionLabel: UILabel!
@@ -318,6 +317,9 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showToast(message: "Feature not implemented")
+        
+        let vc = DependentInfoViewController.construct(dependent: dependents[indexPath.row])
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
