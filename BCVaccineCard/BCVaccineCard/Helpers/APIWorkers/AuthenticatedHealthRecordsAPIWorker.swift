@@ -875,7 +875,6 @@ extension AuthenticatedHealthRecordsAPIWorker {
             birthday: patientObject.getBdayDate,
             hdid: nil,
             authenticated: authenticated) else {
-            
             self.decrementLoadCounter()
             return nil
         }
@@ -1139,7 +1138,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
     private func handleImmunizationsRecommendationsInCoreData(object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Recommendation, authenticated: Bool, patientObject: AuthenticatedPatientDetailsResponseObject) -> String? {
         
         incrementLoadCounter()
-        
+
         guard let patient = StorageService.shared.fetchOrCreatePatient(
             phn: patientObject.resourcePayload?.personalhealthnumber,
             name: patientObject.getFullName,
