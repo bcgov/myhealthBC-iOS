@@ -53,7 +53,7 @@ extension Patient {
         let set = immunizations as? Set<Immunization> ?? []
         return Array(set)
     }
-
+    
     public var healthVisitsArray: [HealthVisit] {
         let set = healthVisits as? Set<HealthVisit> ?? []
         return set.sorted {

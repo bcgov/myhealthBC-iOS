@@ -383,7 +383,6 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
                 self?.navigationController?.pushViewController(vc, animated: true)
             }
         }
-        
     }
 }
 extension DependentsHomeViewController: InaccessibleDependentDelegate {
