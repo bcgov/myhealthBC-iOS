@@ -247,6 +247,7 @@ extension UIApplication {
 // MARK: Loading UI
 enum LoaderMessage: String {
     case SyncingRecords = "Syncing Records"
+    case FetchingRecords = "Fetching Records"
     case empty = ""
 }
 
@@ -263,18 +264,20 @@ extension AppDelegate {
         dataLoadCount -= 1
         dataLoadHideTimer?.invalidate()
         if dataLoadCount < 1 {
-            dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoaded), userInfo: nil, repeats: false)
+            dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoader), userInfo: nil, repeats: false)
         }
     }
     
     /// Do not call this function manually. use dataLoadCount
     fileprivate func showLoader(message: LoaderMessage) {
         // If already shown, dont do anything
-        if let existing = self.window?.viewWithTag(dataLoadTag),
-           let textLabel = existing.viewWithTag(dataLoadTextTag) as? UILabel,
-           textLabel.text == message.rawValue
-        {
-            return
+        if let existing = self.window?.viewWithTag(dataLoadTag), let textLabel = existing.viewWithTag(dataLoadTextTag) as? UILabel {
+            if textLabel.text == message.rawValue {
+                return
+            } else {
+                textLabel.text = message.rawValue
+                return
+            }
         }
         
         // if somehow you're here and its already shown... remove it
@@ -324,7 +327,7 @@ extension AppDelegate {
     }
     
     // Triggered by dataLoadCount
-    @objc fileprivate func hideLoaded() {
+    @objc fileprivate func hideLoader() {
         self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
     }
 }

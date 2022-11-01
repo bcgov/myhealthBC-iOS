@@ -24,6 +24,8 @@ class DependentsHomeViewController: BaseDependentViewController {
     private let authManager = AuthManager()
     private let storageService = StorageService()
     
+    private var blockDependentSelection: Bool = false
+    
     @IBOutlet weak var tableStackLeadingContraint: NSLayoutConstraint!
     @IBOutlet weak var desciptionLabel: UILabel!
     @IBOutlet weak var loginWIthBCSCButton: UIButton!
@@ -232,6 +234,8 @@ class DependentsHomeViewController: BaseDependentViewController {
         manageDependentsButton.isHidden = true
         loginWIthBCSCButton.isHidden = true
         desciptionLabel.isHidden = true
+        desciptionLabel.isHidden = true
+        desciptionLabel.isHidden = true
         tableStackLeadingContraint.constant = 0
     }
     
@@ -364,16 +368,17 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let dependent = dependents[indexPath.row]
         // if not fetched this session, then call code below. else, fetch health records from storage
-        guard let dependentPatient = dependent.info else {
-            print("ERROR HERE")
-            // TODO: Handle error here
+        guard let dependentPatient = dependent.info, !blockDependentSelection else {
             return
         }
+        view.addLoader(message: .FetchingRecords)
         if AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.contains(dependentPatient) == true {
             let records = StorageService.shared.getHealthRecords(forDependent: dependentPatient)
             let dependantDS = records.detailDataSource(patient: dependentPatient)
             let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
             self.navigationController?.pushViewController(vc, animated: true)
+            view.removeLoader()
+            blockDependentSelection = false
         } else {
             StorageService.shared.deleteHealthRecordsForDependent(dependent: dependentPatient)
             HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
@@ -381,6 +386,8 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
                 AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.append(dependentPatient)
                 let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
                 self?.navigationController?.pushViewController(vc, animated: true)
+                self?.view.removeLoader()
+                self?.blockDependentSelection = false
             }
         }
     }
@@ -399,6 +406,25 @@ extension DependentsHomeViewController: InaccessibleDependentDelegate {
 extension DependentsHomeViewController {
     private func authenticate(initialView: AuthenticationViewController.InitialView, fromTab: TabBarVCs) {
         self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { _ in
+        }
+    }
+}
+
+
+extension UIView {
+    func addLoader(message: LoaderMessage) {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.incrementLoader(message: message)
+            }
+        }
+    }
+    
+    func removeLoader() {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.decrementLoader()
+            }
         }
     }
 }
