@@ -61,7 +61,7 @@ extension CovidTestsService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
 
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedTestResultsResponseModel>(url: endpoints.getAuthenticatedTestResults, type: .Get, parameters: parameters, headers: headers) { result in
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedTestResultsResponseModel>(url: endpoints.getAuthenticatedTestResults, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
                 
                 if result?.resourcePayload?.loaded == false, let retryInMS = result?.resourcePayload?.retryin {
                     DispatchQueue.main.asyncAfter(deadline: .now() + Double(retryInMS/1000)) {
@@ -72,7 +72,6 @@ extension CovidTestsService {
                     return completion(result)
                 } else {
                     // show error
-                    // TODO: CONNOR: getting this error
                     return completion(nil)
                 }
             }
