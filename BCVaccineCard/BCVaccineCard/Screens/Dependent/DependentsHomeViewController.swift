@@ -53,6 +53,24 @@ class DependentsHomeViewController: BaseViewController {
         fetchDataWhenAuthenticated()
     }
     
+   // private func fetchData() {
+   ///     service.fetchDependents { completed in
+            // If completed, then reload data/update screen UI - if not completed, show an error
+     //   }
+        // TODO: Allocate this appropriately once storage has been updated
+      //  dependents = []
+       // setState()
+       // setHealthRecordServiceAndFetchDependentRecords()
+   // }
+    
+   // private func setHealthRecordServiceAndFetchDependentRecords() {
+    //    guard dependents.count > 0 else { return }
+     //   for dependent in dependents {
+            // If this is the way we decide to do it, then should do some thread handling here
+       //     let dependentsRecordService = HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), currentDependant: dependent)
+        //    dependentsRecordService.fetchHealthRecords()
+       // }
+       
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchData(fromRemote: false)
@@ -317,7 +335,12 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showToast(message: "Feature not implemented")
+        let dependent = dependents[indexPath.row]
+        HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
+                self?.showToast(message: "fetched \(records.count) records. show them")
+                print(records.count)
+                print(records)
+        }
     }
 }
 
