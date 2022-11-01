@@ -59,7 +59,7 @@ extension VaccineCardService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, GatewayVaccineCardResponse>(url: endpoints.getAuthenticatedVaccineCard, type: .Get, parameters: parameters, headers: headers) { result in
+            let requestModel = NetworkRequest<HDIDParams, GatewayVaccineCardResponse>(url: endpoints.getAuthenticatedVaccineCard, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
                 
                 if result?.resourcePayload?.loaded == false,
                    let retryinMS = result?.resourcePayload?.retryin {
@@ -72,7 +72,6 @@ extension VaccineCardService {
                     // return result
                     return completion(result)
                 } else {
-                    // TODO: CONNOR: getting this error
                     // show error
                     return completion(nil)
                 }

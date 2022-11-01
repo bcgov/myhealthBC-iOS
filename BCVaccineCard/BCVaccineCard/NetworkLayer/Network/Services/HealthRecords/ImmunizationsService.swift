@@ -62,13 +62,12 @@ extension ImmnunizationsService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedImmunizationsResponseObject>(url: endpoints.getAuthenticatedImmunizations, type: .Get, parameters: parameters, headers: headers) { result in
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedImmunizationsResponseObject>(url: endpoints.getAuthenticatedImmunizations, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
                 
                 if let immunizations = result?.resourcePayload {
                     // return result
                     return completion(result)
                 } else {
-                    // TODO: CONNOR: getting this error
                     // show error
                     return completion(nil)
                 }
