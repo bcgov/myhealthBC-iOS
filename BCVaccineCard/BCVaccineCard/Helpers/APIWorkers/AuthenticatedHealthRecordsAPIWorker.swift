@@ -175,21 +175,21 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 self.requestDetails.authenticatedPatientDetails?.queueItToken = queueItToken
                 self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItToken, executingVC: self.executingVC, includeQueueItUI: false) { [weak self] result, _ in
                     guard let `self` = self else {return}
-                    self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
+                    self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch, sourceVC: sourceVC)
                     
                 }
             } else {
-                self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
+                self.initializePatientDetails(authCredentials: authCredentials, result: result, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch, sourceVC: sourceVC)
             }
         }
         
     }
     
-    private func initializePatientDetails(authCredentials: AuthenticationRequestObject, result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?, initialProtectedMedFetch: Bool) {
+    private func initializePatientDetails(authCredentials: AuthenticationRequestObject, result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?, initialProtectedMedFetch: Bool, sourceVC: LoginVCSource) {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
-            self.storePatient(patientDetails: patientDetails)
+            self.storePatient(patientDetails: patientDetails, sourceVC: sourceVC)
             let patientFirstName = patientDetails.resourcePayload?.firstname
             let patientFullName = patientDetails.getFullName
             let userInfo: [String: String?] = ["firstName": patientFirstName, "fullName": patientFullName]
@@ -201,14 +201,19 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
-    private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject) {
-        let _ = StorageService.shared.storePatient(name: patientDetails.getFullName,
+    private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject, sourceVC: LoginVCSource) {
+        let patient = StorageService.shared.storePatient(name: patientDetails.getFullName,
                                                    firstName: "",
                                                    lastName: "",
                                                    gender: "",
                                                    birthday: patientDetails.getBdayDate,
                                                    phn: patientDetails.resourcePayload?.personalhealthnumber,
+                                                   hdid: AuthManager().hdid,
                                                    authenticated: true)
+        
+        guard let patient = patient, sourceVC == .BackgroundFetch else { return }
+        let userInfo: [String: Patient] = ["patient": patient]
+        NotificationCenter.default.post(name: .patientStored, object: nil, userInfo: userInfo)
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?, initialProtectedMedFetch: Bool) {
