@@ -94,6 +94,7 @@ class FilterRecordsView: UIView, Theme {
     
     @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
+    @IBOutlet weak var filterChipsSectionHeight: NSLayoutConstraint!
     
     // MARK: Variables
     var delegate: FilterRecordsViewDelegate? = nil
@@ -195,6 +196,9 @@ class FilterRecordsView: UIView, Theme {
     // MARK: Style
     func style() {
         self.alpha = 0
+        if availableFilters.count == 2 {
+            filterChipsSectionHeight.constant = 54
+        }
         // TODO: Remove this check
 //        datePicker.maximumDate = Date()
         navContainer.backgroundColor = .clear
