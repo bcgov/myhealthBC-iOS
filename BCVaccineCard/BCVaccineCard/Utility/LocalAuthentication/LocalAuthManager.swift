@@ -112,7 +112,7 @@ class LocalAuthManager {
     }
     
     private var hasFaceId: Bool {
-        return biometricType == .faceID
+        return biometricType == .faceID && isBiometricAvailable
     }
     
     public var isEnabled: Bool {
