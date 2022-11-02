@@ -248,13 +248,23 @@ extension UIApplication {
 enum LoaderMessage: String {
     case SyncingRecords = "Syncing Records"
     case FetchingRecords = "Fetching Records"
+    case FetchingConfig = " "
     case empty = ""
+}
+
+extension LoaderMessage {
+    func isNetworkDependent() -> Bool {
+        return self == .FetchingRecords || self == .SyncingRecords || self == .FetchingConfig
+    }
 }
 
 extension AppDelegate {
     // Triggered by dataLoadCount
 
     func incrementLoader(message: LoaderMessage) {
+        if !NetworkConnection.shared.hasConnection && message.isNetworkDependent() {
+            return
+        }
         dataLoadCount += 1
         dataLoadHideTimer?.invalidate()
         showLoader(message: message)
@@ -265,6 +275,10 @@ extension AppDelegate {
         dataLoadHideTimer?.invalidate()
         if dataLoadCount < 1 {
             dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoader), userInfo: nil, repeats: false)
+        }
+        
+        if dataLoadCount < 0 {
+            dataLoadCount = 0
         }
     }
     

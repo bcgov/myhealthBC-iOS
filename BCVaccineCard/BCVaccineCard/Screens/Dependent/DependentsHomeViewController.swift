@@ -366,20 +366,21 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.section == 1 else {return}
         let dependent = dependents[indexPath.row]
         // if not fetched this session, then call code below. else, fetch health records from storage
         guard let dependentPatient = dependent.info, !blockDependentSelection else {
             return
         }
-        view.addLoader(message: .FetchingRecords)
+        
         if AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.contains(dependentPatient) == true {
             let records = StorageService.shared.getHealthRecords(forDependent: dependentPatient)
             let dependantDS = records.detailDataSource(patient: dependentPatient)
             let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
             self.navigationController?.pushViewController(vc, animated: true)
-            view.removeLoader()
             blockDependentSelection = false
         } else {
+            view.addLoader(message: .FetchingRecords)
             StorageService.shared.deleteHealthRecordsForDependent(dependent: dependentPatient)
             HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
                 let dependantDS = records.detailDataSource(patient: dependentPatient)
