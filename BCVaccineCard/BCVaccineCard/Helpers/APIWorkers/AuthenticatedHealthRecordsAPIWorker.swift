@@ -211,9 +211,16 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                                                    hdid: AuthManager().hdid,
                                                    authenticated: true)
         
-        guard let patient = patient, sourceVC == .BackgroundFetch else { return }
-        let userInfo: [String: Patient] = ["patient": patient]
-        NotificationCenter.default.post(name: .patientStored, object: nil, userInfo: userInfo)
+        guard let patient = patient else { return }
+//        let userInfo: [String: Patient] = ["patient": patient]
+//        NotificationCenter.default.post(name: .patientStored, object: nil, userInfo: userInfo)
+        // Note: We need to do this for both background fetch and for normal login fetch
+        let network = AFNetwork()
+        let authManager = AuthManager()
+        DependentService(network: network, authManager: authManager).fetchDependents(for: patient) { _ in
+            HealthRecordsService(network: network, authManager: authManager).fetchAndStoreVaccineCardForDependents(for: patient)
+        }
+        
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?, initialProtectedMedFetch: Bool) {
