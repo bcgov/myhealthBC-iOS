@@ -254,8 +254,7 @@ extension HomeScreenViewController {
         case .Proofs:
             tabBarController.selectedIndex = type.getTabIndex
         case .Resources:
-            let vc = ResourceViewController.constructResourceViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
+            tabBarController.selectedIndex = type.getTabIndex
         case .Recommendations:
             let vc = RecommendationsViewController.constructRecommendationsViewController()
             self.navigationController?.pushViewController(vc, animated: true)

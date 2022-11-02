@@ -76,8 +76,7 @@ extension HealthRecordsViewController: AppStyleButtonDelegate {
         }
     }
     
-    private func performBCSCLogin
-    () {
+    private func performBCSCLogin() {
         self.showLogin(initialView: .Landing, sourceVC: .HealthRecordsVC) { authenticationStatus in
             guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
             let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)

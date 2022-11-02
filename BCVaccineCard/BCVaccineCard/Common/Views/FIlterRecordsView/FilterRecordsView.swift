@@ -10,7 +10,7 @@ import UIKit
 struct RecordsFilter {
     enum RecordType: String, CaseIterable {
         case Medication = "Medications"
-        case Covid = "COVID-19 Tests"
+        case Covid = "COVID-19"
         case LabTests = "Lab Tests"
         case Immunizations = "Immunizations"
         case SpecialAuthorityDrugs = "Special Authority"
@@ -35,7 +35,6 @@ class UserFilters {
         let name: String
         var filter: RecordsFilter
     }
-    
     private static var filters: [UserFilter] = []
     
     static func filterFor(name: String) -> RecordsFilter? {
@@ -94,7 +93,6 @@ class FilterRecordsView: UIView, Theme {
     
     @IBOutlet weak var continueButton: UIButton!
     @IBOutlet weak var clearButton: UIButton!
-    @IBOutlet weak var filterChipsSectionHeight: NSLayoutConstraint!
     
     // MARK: Variables
     var delegate: FilterRecordsViewDelegate? = nil
@@ -105,11 +103,10 @@ class FilterRecordsView: UIView, Theme {
     
     private var currentFilter: RecordsFilter = RecordsFilter()
     private var chipsView: ChipsView? = nil
-    private var availableFilters: [RecordsFilter.RecordType] = []
+
     
     // MARK: Display
-    func showModally(on view: UIView, availableFilters: [RecordsFilter.RecordType], filter: RecordsFilter?) {
-        self.availableFilters = availableFilters
+    func showModally(on view: UIView, filter: RecordsFilter?) {
         view.addSubview(self)
         positionView(on: view)
         showRecordTypes()
@@ -196,9 +193,6 @@ class FilterRecordsView: UIView, Theme {
     // MARK: Style
     func style() {
         self.alpha = 0
-        if availableFilters.count == 2 {
-            filterChipsSectionHeight.constant = 54
-        }
         // TODO: Remove this check
 //        datePicker.maximumDate = Date()
         navContainer.backgroundColor = .clear
@@ -416,7 +410,7 @@ extension FilterRecordsView: ChipsViewDelegate {
         selectedFilters = currentFilter.recordTypes.map({$0.rawValue})
        
         chipsView.delegate = self
-        chipsView.setup(options: availableFilters.map({$0.rawValue}), selected: selectedFilters, direction: .vertical)
+        chipsView.setup(options: RecordsFilter.RecordType.allCases.map({$0.rawValue}), selected: selectedFilters, direction: .vertical)
     }
     
     func selected(value: String) {

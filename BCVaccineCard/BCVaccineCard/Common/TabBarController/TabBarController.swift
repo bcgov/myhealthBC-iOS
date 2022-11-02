@@ -8,7 +8,7 @@
 import UIKit
 
 enum TabBarVCs: Int {
-    case home = 0, records, healthPass, dependant ,resource
+    case home = 0, records, healthPass, resource
 //    case newsFeed
     
     var getIndexOfTab: Int {
@@ -30,8 +30,6 @@ enum TabBarVCs: Int {
             return Properties(title: .records, selectedTabBarImage: #imageLiteral(resourceName: "records-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "records-tab-unselected"), baseViewController: HealthRecordsViewController.constructHealthRecordsViewController())
         case .healthPass:
             return Properties(title: .passes, selectedTabBarImage: #imageLiteral(resourceName: "passes-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "passes-tab-unselected"), baseViewController: HealthPassViewController.constructHealthPassViewController(fedPassStringToOpen: nil))
-        case .dependant:
-            return Properties(title: .dependent, selectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "dependent-tab-unselected"), baseViewController: DependentsHomeViewController.constructDependentsHomeViewController(patient: StorageService.shared.fetchAuthenticatedPatient()))
         case .resource:
             return Properties(title: .resources, selectedTabBarImage: #imageLiteral(resourceName: "resource-tab-selected"), unselectedTabBarImage: #imageLiteral(resourceName: "resource-tab-unselected"), baseViewController: ResourceViewController.constructResourceViewController())
 //        case .newsFeed:
@@ -93,7 +91,7 @@ class TabBarController: UITabBarController {
         self.tabBar.tintColor = AppColours.appBlue
         self.tabBar.barTintColor = .white
         self.delegate = self
-        self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .dependant])
+        self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .resource])
         self.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, onActualLaunchCheck: true)
         self.selectedIndex = selectedIndex
         setupObserver()
@@ -143,7 +141,6 @@ class TabBarController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(fetchDependentsAndTheirVaccineCards), name: .patientStored, object: nil)
     }
     
     @objc private func showTermsOfService(_ notification: Notification) {
@@ -183,15 +180,6 @@ class TabBarController: UITabBarController {
             }
         })
     }
-    
-//    @objc private func fetchDependentsAndTheirVaccineCards(_ notification: Notification) {
-//        guard let patient = notification.userInfo?["patient"] as? Patient else { return }
-//        let network = AFNetwork()
-//        let authManager = AuthManager()
-//        DependentService(network: network, authManager: authManager).fetchDependents(for: patient) { _ in
-//            HealthRecordsService(network: network, authManager: authManager).fetchAndStoreVaccineCardForDependents(for: patient)
-//        }
-//    }
     
     private func showSuccessfulLoginAlert() {
         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
@@ -242,12 +230,12 @@ extension TabBarController: UITabBarControllerDelegate {
 extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
     func showPatientDetailsError(error: String, showBanner: Bool) {
         guard showBanner else { return }
-        showToast(message: error, style: .Warn)
+        AppDelegate.sharedInstance?.showToast(message: error, style: .Warn)
     }
     
     func showFetchStartedBanner(showBanner: Bool) {
         guard showBanner else { return }
-        showToast(message: "Retrieving records", style: .Default)
+        AppDelegate.sharedInstance?.showToast(message: "Retrieving records", style: .Default)
     }
     
     func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource, fetchStatusTypes: [AuthenticationFetchType]) {
@@ -266,7 +254,7 @@ extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
         // TODO: Make this a little more reusable - hacky approach
         if (fetchStatusTypes.contains(.LaboratoryOrders) && fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.SpecialAuthorityDrugs) && fetchStatusTypes.contains(.TestResults) && fetchStatusTypes.contains(.VaccineCard)) && fetchStatusTypes.contains(.Immunizations) && fetchStatusTypes.contains(.HealthVisits) || (fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.Comments)) {
             let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
-            showToast(message: message)
+            AppDelegate.sharedInstance?.showToast(message: message)
         }
         NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
         var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
