@@ -406,7 +406,12 @@ extension CovidVaccineCardsViewController {
 extension CovidVaccineCardsViewController {
     
     private func fetchFromStorage() {
-        let cards = StorageService.shared.fetchVaccineCards()
+        var cards: [VaccineCard] = []
+        if let patient = StorageService.shared.fetchAuthenticatedPatient() {
+            cards = StorageService.shared.fetchAllVaccineCards(forPatient: patient)
+        } else {
+            cards = StorageService.shared.fetchVaccineCards()
+        }
         self.dataSource = cards
         self.adjustNavBar()
         self.tableView.reloadData()

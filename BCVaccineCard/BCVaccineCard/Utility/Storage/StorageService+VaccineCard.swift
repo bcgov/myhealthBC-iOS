@@ -64,6 +64,7 @@ protocol StorageVaccineCardManager {
     // MARK: Fetch
     func fetchVaccineCards() -> [VaccineCard]
     func fetchVaccineCard(code: String) -> VaccineCard?
+    func fetchAllVaccineCards(forPatient patient: Patient) -> [VaccineCard]
 }
 
 extension StorageService: StorageVaccineCardManager {
@@ -313,6 +314,19 @@ extension StorageService: StorageVaccineCardManager {
     
     func fetchVaccineCard(code: String) -> VaccineCard? {
         fetchVaccineCards().filter({$0.code == code}).first
+    }
+    
+    func fetchAllVaccineCards(forPatient patient: Patient) -> [VaccineCard] {
+        var patientCards = patient.vaccineCardArray
+        var dependentCards: [[VaccineCard]] = []
+        patient.dependentsArray.forEach { dependent in
+            if let array = dependent.info?.vaccineCardArray {
+                dependentCards.append(array)
+            }
+        }
+        let flatDepCards = dependentCards.flatMap { $0 }
+        let cards = patientCards + flatDepCards
+        return cards.sorted(by: {$0.sortOrder < $1.sortOrder})
     }
     
     // MARK: Helpers
