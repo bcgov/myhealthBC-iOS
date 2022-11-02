@@ -371,15 +371,15 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
         guard let dependentPatient = dependent.info, !blockDependentSelection else {
             return
         }
-        view.addLoader(message: .FetchingRecords)
+        
         if AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.contains(dependentPatient) == true {
             let records = StorageService.shared.getHealthRecords(forDependent: dependentPatient)
             let dependantDS = records.detailDataSource(patient: dependentPatient)
             let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
             self.navigationController?.pushViewController(vc, animated: true)
-            view.removeLoader()
             blockDependentSelection = false
         } else {
+            view.addLoader(message: .FetchingRecords)
             StorageService.shared.deleteHealthRecordsForDependent(dependent: dependentPatient)
             HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
                 let dependantDS = records.detailDataSource(patient: dependentPatient)
