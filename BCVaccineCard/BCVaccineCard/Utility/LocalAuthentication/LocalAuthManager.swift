@@ -111,15 +111,6 @@ class LocalAuthManager {
         return result
     }
     
-    private var biometricsType: LABiometryType? {
-        let context = LAContext()
-        var error: NSError?
-        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
-            return nil
-        }
-        return context.biometryType
-    }
-    
     private var hasFaceId: Bool {
         return biometricType == .faceID
     }
