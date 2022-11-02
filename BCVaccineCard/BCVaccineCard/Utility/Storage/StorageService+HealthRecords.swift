@@ -64,6 +64,17 @@ extension StorageService {
         deleteAllRecords(in: immunizations)
     }
     
+    func deleteDependentVaccineCards(forPatient patient: Patient) {
+        var vaccineCardsArray: [[VaccineCard]] = []
+        patient.dependentsArray.forEach({ dependent in
+            if let array = dependent.info?.vaccineCardArray {
+                vaccineCardsArray.append(array)
+            }
+        })
+        let vaccineCards = vaccineCardsArray.flatMap { $0 }
+        deleteAllRecords(in: vaccineCards)
+    }
+    
     func delete(healthRecord: HealthRecord) {
         switch healthRecord.type {
         case .CovidTest(let object):
