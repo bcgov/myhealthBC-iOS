@@ -83,6 +83,11 @@ extension Date {
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
             return formatter
         }()
+        static let commentServerDateTime: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"
+            return formatter
+        }()
         static let gatewayDateAndTimeWithTimeZone: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -240,6 +245,7 @@ extension Date {
     var gatewayDateAndTimeWithMS: String { return Formatter.gatewayDateAndTimeWithMS.string(from: self) }
     var gatewayDateAndTimeWithMSAndTimeZone: String { return Formatter.gatewayDateAndTimeWithMSAndTimeZone.string(from: self) }
     var postServerDateTime: String { return Formatter.postServerDateTime.string(from: self) }
+    var commentServerDateTime: String { return Formatter.commentServerDateTime.string(from: self) }
     var labOrderDateTime: String { return Formatter.labOrderDateTime.string(from: self) }
     var commentsDateTime: String { return Formatter.commentsDateTime.string(from: self) }
     var forecastDueDate: String { return Formatter.forecastDueDate.string(from: self) }
@@ -352,6 +358,8 @@ extension String {
             formatted = nozoneDate
         } else if let withMillisenconds = Date.Formatter.gatewayDateAndTimeWithMSAndTimeZone.date(from: self) {
             formatted = withMillisenconds
+        } else if let commentDate = Date.Formatter.commentServerDateTime.date(from: self) {
+            formatted = commentDate
         } else {
             formatted = nil
         }

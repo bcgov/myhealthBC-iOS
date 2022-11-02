@@ -19,8 +19,10 @@ class CommentView: UIView {
     func configure(comment: Comment) {
         textView.text = comment.text
         
-        if let createdDate = comment.createdDateTime {
-            dateTimeLabel.text = Date.Formatter.issuedOnDateTime.string(from: createdDate)
+        if let createdDate = comment.createdDateTime, !comment.isPosting {
+            dateTimeLabel.text = Date.Formatter.commentsDateTime.string(from: createdDate)
+        } else if comment.isPosting {
+            dateTimeLabel.text = "Posting..."
         } else {
             dateTimeLabel.text = ""
         }

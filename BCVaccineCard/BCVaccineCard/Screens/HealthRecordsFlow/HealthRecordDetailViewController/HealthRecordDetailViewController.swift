@@ -7,9 +7,7 @@
 
 import UIKit
 
-
-class HealthRecordDetailViewController: BaseViewController {
-    
+class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDelegate {
     class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticatedRecord: Bool, userNumberHealthRecords: Int, patient: Patient?) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
             vc.dataSource = dataSource
@@ -115,10 +113,14 @@ class HealthRecordDetailViewController: BaseViewController {
         recordsView.addEqualSizeContraints(to: self.view, safe: true)
         // Note: keep this here so the child views in HealthRecordsView get sized properly
         view.layoutSubviews()
-        recordsView.configure(models: dataSource.records)
+        recordsView.configure(models: dataSource.records, delegate: self)
         view.layoutSubviews()
     }
     
+    func showComments(for record: HealthRecordsDetailDataSource.Record) {
+        let vc = CommentsViewController.constructCommentsViewController(model: record)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 // MARK: Navigation setup

@@ -177,7 +177,8 @@ class TabBarController: UITabBarController {
         guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
         let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
         self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-            if response == .Online {
+            guard response == .Online else {return}
+            CommentService(network: AFNetwork(), authManager: AuthManager()).submitUnsyncedComments {
                 self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, protectiveWord: AuthManager().protectiveWord,sourceVC: .BackgroundFetch)
             }
         })

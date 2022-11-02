@@ -75,21 +75,20 @@ struct HealthRecord {
 extension HealthRecord {
     var commentId: String {
         switch type {
-        case .CovidTest(_):
-            return ""
+        case .CovidTest(let object):
+            return object.id ?? ""
         case .CovidImmunization(_):
             return ""
         case .Medication(let medication):
             return medication.prescriptionIdentifier ?? ""
         case .LaboratoryOrder(let labTest):
-            // TODO: When supporting lab order comments
-            return labTest.reportID ?? ""
-        case .Immunization(_):
+            return labTest.labPdfId ?? ""
+        case .Immunization(let object):
             return ""
-        case .HealthVisit(_):
-            return ""
-        case .SpecialAuthorityDrug(_):
-            return ""
+        case .HealthVisit(let object):
+            return object.id ?? ""
+        case .SpecialAuthorityDrug(let object):
+            return object.referenceNumber ?? ""
         }
     }
     
