@@ -12,7 +12,7 @@
         <!--Initial Onboarding View Controller-->
         <scene sceneID="KQk-Hf-zta">
             <objects>
-                <viewController storyboardIdentifier="InitialOnboardingViewController" id="iBs-fi-Wty" customClass="InitialOnboardingViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="InitialOnboardingViewController" id="iBs-fi-Wty" customClass="InitialOnboardingViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TpP-ui-4I5">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -28,7 +28,7 @@
                                 </collectionViewFlowLayout>
                                 <cells/>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Zf-dC-FaH" customClass="AppStyleButton" customModule="HealthGateway" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Zf-dC-FaH" customClass="AppStyleButton" customModule="BCVaccineCard" customModuleProvider="target">
                                 <rect key="frame" x="154" y="716" width="106" height="54"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -83,7 +83,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="KpE-DL-QZC">
             <objects>
-                <tabBarController storyboardIdentifier="TabBarController" id="YHi-sk-2JH" customClass="TabBarController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" id="YHi-sk-2JH" customClass="TabBarController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="97X-fv-Hae">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -97,7 +97,7 @@
         <!--Profile And Settings View Controller-->
         <scene sceneID="XrK-f9-U7M">
             <objects>
-                <viewController storyboardIdentifier="ProfileAndSettingsViewController" id="BQI-xk-hkn" customClass="ProfileAndSettingsViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProfileAndSettingsViewController" id="BQI-xk-hkn" customClass="ProfileAndSettingsViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HMB-6o-V7A">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -128,7 +128,7 @@
         <!--Settings-->
         <scene sceneID="iCW-WW-7iV">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bp9-Lg-RvQ" customClass="CustomNavigationController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bp9-Lg-RvQ" customClass="CustomNavigationController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Settings" image="settings-tab" selectedImage="settings-tab" id="bqm-CU-u40"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Hjj-bN-0tM">
@@ -147,7 +147,7 @@
         <!--Security And Data View Controller-->
         <scene sceneID="CYY-0q-jsO">
             <objects>
-                <viewController storyboardIdentifier="SecurityAndDataViewController" id="afr-hV-yc0" customClass="SecurityAndDataViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SecurityAndDataViewController" id="afr-hV-yc0" customClass="SecurityAndDataViewController" customModule="BCVaccineCard" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="f20-yF-N2a">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

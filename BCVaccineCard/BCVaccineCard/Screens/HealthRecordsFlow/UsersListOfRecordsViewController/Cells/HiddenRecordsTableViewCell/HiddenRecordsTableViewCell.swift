@@ -8,29 +8,27 @@
 import UIKit
 
 enum HiddenRecordType: Equatable {
-    case loginToAccesshealthRecords(hiddenRecords: Int)
-    case loginToAccessDependents
+    case loginToAccess(hiddenRecords: Int)
     case medicalRecords
     case authenticate
     
     var getButtonImage: UIImage? {
         switch self {
-        case .loginToAccesshealthRecords, .loginToAccessDependents, .authenticate: return nil
+        case .loginToAccess, .authenticate: return nil
         case .medicalRecords: return UIImage(named: "lock-icon-new") // TODO: Check that this is working
         }
     }
     
     var getButtonTitle: String {
         switch self {
-        case .loginToAccesshealthRecords, .loginToAccessDependents, .authenticate: return .bcscLogin
+        case .loginToAccess, .authenticate: return .bcscLogin
         case .medicalRecords: return "Unlock records"
         }
     }
     
     var getTitleText: String {
         switch self {
-        case .loginToAccesshealthRecords(_): return "Your session has timed out"
-        case .loginToAccessDependents: return "Your session has timed out"
+        case .loginToAccess(_): return "Your session has timed out"
         case .medicalRecords: return "Medication history"
         case .authenticate: return "Manage your records"
         }
@@ -38,8 +36,7 @@ enum HiddenRecordType: Equatable {
     
     var getDescriptionText: String {
         switch self {
-        case .loginToAccesshealthRecords: return "Log in again to view your health records"
-        case .loginToAccessDependents: return "Log in again to access all dependents’ records."
+        case .loginToAccess: return "Log in again to view your health records"
         case .medicalRecords: return "Some of your health records are locked. You need to enter your protective word to unlock them."
         case .authenticate: return "Log in with your BC Services Card to view your health records"
         }

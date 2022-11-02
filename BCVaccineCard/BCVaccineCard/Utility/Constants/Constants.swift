@@ -63,7 +63,6 @@ struct Constants {
     struct AuthenticationHeaderKeys {
         static let authToken = "Authorization"
         static let hdid = "hdid"
-        static let dependentHdid = "dependentHdid"
     }
     
     struct AuthenticatedMedicationStatementParameters {
@@ -109,7 +108,6 @@ struct Constants {
         static let publicRetryMaxForTestResults = 3
         static let publicRetryMaxForMedicationStatement = 3
         static let publicRetryMaxForLaboratoryOrders = 3
-        static let publicRetryMaxGeneral = 3
     }
     
     static let vaccineTable: [VaccineTable] = [

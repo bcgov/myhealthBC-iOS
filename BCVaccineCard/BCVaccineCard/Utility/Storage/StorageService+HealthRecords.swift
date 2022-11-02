@@ -21,16 +21,6 @@ extension StorageService {
         case SpecialAuthorityDrug
     }
     
-    func getDependentRecords(for patient: Patient) -> [HealthRecord]{
-        let tests = patient.testResultArray.map({HealthRecord(type: .CovidTest($0))})
-        let medications = patient.prescriptionArray.map({HealthRecord(type: .Medication($0))})
-        let labOrders = patient.labOrdersArray.map({HealthRecord(type: .LaboratoryOrder($0))})
-        let immunizations = patient.immunizationsArray.map({HealthRecord(type: .Immunization($0))})
-        let healthVisits = patient.healthVisitsArray.map({HealthRecord(type: .HealthVisit($0))})
-        let specialAuthority = patient.specialAuthorityDrugsArray.map({HealthRecord(type: .SpecialAuthorityDrug($0))})
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority
-    }
-    
     func getHeathRecords() -> [HealthRecord] {
         let tests = fetchCovidTestResults().map({HealthRecord(type: .CovidTest($0))})
         // NOTE: Remove vaccineCards if we want to use new immz UI
@@ -42,37 +32,6 @@ extension StorageService {
         let specialAuthority = fetchSpecialAuthorityMedications().map({HealthRecord(type: .SpecialAuthorityDrug($0))})
         
         return tests + medications + labOrders + immunizations + healthVisits + specialAuthority
-    }
-    
-    func getHealthRecords(forDependent dependent: Patient) -> [HealthRecord] {
-        let tests = dependent.testResultArray.map { HealthRecord(type: .CovidTest($0)) }
-        let medications = dependent.prescriptionArray.map { HealthRecord(type: .Medication($0)) }
-        let labOrders = dependent.labOrdersArray.map { HealthRecord(type: .LaboratoryOrder($0)) }
-        let immunizations = dependent.immunizationArray.map { HealthRecord(type: .Immunization($0)) }
-        
-        return tests + medications + labOrders + immunizations
-    }
-    
-    func deleteHealthRecordsForDependent(dependent: Patient) {
-        let tests = dependent.testResultArray
-        deleteAllRecords(in: tests)
-        let medications = dependent.prescriptionArray
-        deleteAllRecords(in: medications)
-        let labOrders = dependent.labOrdersArray
-        deleteAllRecords(in: labOrders)
-        let immunizations = dependent.immunizationArray
-        deleteAllRecords(in: immunizations)
-    }
-    
-    func deleteDependentVaccineCards(forPatient patient: Patient) {
-        var vaccineCardsArray: [[VaccineCard]] = []
-        patient.dependentsArray.forEach({ dependent in
-            if let array = dependent.info?.vaccineCardArray {
-                vaccineCardsArray.append(array)
-            }
-        })
-        let vaccineCards = vaccineCardsArray.flatMap { $0 }
-        deleteAllRecords(in: vaccineCards)
     }
     
     func delete(healthRecord: HealthRecord) {

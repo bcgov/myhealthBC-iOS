@@ -40,12 +40,6 @@ extension AuthManager {
     }
 }
 
-enum AuthStatus {
-    case Authenticated
-    case AuthenticationExpired
-    case UnAuthenticated
-}
-
 class AuthManager {
     private enum Key: String {
         case authTokenExpiery
@@ -122,18 +116,6 @@ class AuthManager {
             return nil
         }
         return token.isEmpty ? nil : token
-    }
-    
-    var authStaus: AuthStatus {
-        guard authToken != nil else {
-            return .UnAuthenticated
-        }
-        guard let accessExpiry = authTokenExpiery else { return .UnAuthenticated }
-        if accessExpiry > Date() {
-            return .Authenticated
-        } else {
-            return .AuthenticationExpired
-        }
     }
     
     var authTokenExpiery: Date? {

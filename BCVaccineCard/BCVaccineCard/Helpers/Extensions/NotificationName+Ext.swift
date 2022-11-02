@@ -38,5 +38,4 @@ extension Notification.Name {
     static let respondToTermsOfService = Notification.Name("respondToTermsOfService")
     
     static let queueItUIManuallyClosed = Notification.Name("queueItUIManuallyClosed")
-    static let patientStored = Notification.Name("patientStored")
 }
