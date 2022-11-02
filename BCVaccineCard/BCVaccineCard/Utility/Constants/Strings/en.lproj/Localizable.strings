@@ -52,7 +52,7 @@
 "QueueItClosedTitle" = "QueueIt Waiting Room Closed";
 "QueueItClosedMessage" = "You have closed the QueueIt waiting room";
 "ErrorParsingPHNFromHG" = "Error parsing phn";
-"ErrorParsingPHNMessage" = "The information you entered does not match our records. Please try again.";
+"FormError" = "The information you entered does not match our records. Please try again.";
 "DuplicateTitle" = "Duplicate";
 "DuplicateMessage" = "This QR code is already saved in your list of cards.";
 "DuplicateTestMessage" = "This test is already saved in your list of records.";
@@ -135,6 +135,13 @@
 "Help" = "Help";
 "Resource" = "Resource";
 "Resources" = "Resources";
+"Dependent" = "Dependent";
+"Dependents" = "Dependents";
+"DependentRegistration" = "Dependent Registration";
+"ManageDependends" = "Manage Dependends";
+"SaveChanges" = "Save Changes";
+"DeleteDependentTitle" = "Remove Dependent";
+"DeleteDependentMessage" = "Are you sure you want to remove this dependent from your applicaiton";
 "ResourceDescriptionText" = "Connect with HealthLink BC for health advice and get the latest information about COVID-19.";
 "GetVaccinatedResource" = "Get vaccinated";
 "GetTestedResource" = "Get a COVID-19 test";

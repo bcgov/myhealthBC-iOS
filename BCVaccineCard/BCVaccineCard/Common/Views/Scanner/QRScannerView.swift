@@ -246,7 +246,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
             validate(code: stringValue)
         } else {
             // Show message
-            AppDelegate.sharedInstance?.showToast(message: .invalidQRCodeMessage, style: .Warn)
+            showToast(message: .invalidQRCodeMessage, style: .Warn)
             // Show code location
             showQRCodeLocation(for: metadataObject, isInValid: false, tag: Constants.UI.CameraView.QRCodeHighlighter.tag)
         }
@@ -267,7 +267,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
                     case .ValidCode:
                         break
                     case .InvalidCode, .ForgedCode, .MissingData:
-                        AppDelegate.sharedInstance?.showToast(message: .invalidQRCodeMessage, style: .Warn)
+                        self.showToast(message: .invalidQRCodeMessage, style: .Warn)
                     }
                     self.startCamera()
                     self.invalidScannedCodes.append(code)
@@ -292,7 +292,7 @@ extension QRScannerView: AVCaptureMetadataOutputObjectsDelegate {
         for (index, item) in metadataObjects.enumerated() {
             showQRCodeLocation(for: item, isInValid: true, tag: 1000 + index)
         }
-        AppDelegate.sharedInstance?.showToast(message: .multipleQRCodesMessage, style: .Warn)
+        showToast(message: .multipleQRCodesMessage, style: .Warn)
     }
     
     fileprivate func showQRCodeLocation(for object: AVMetadataObject, isInValid: Bool, tag: Int) {

@@ -22,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="427" height="139"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Clinic/Practitioner" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ogc-ks-4iL">
-                                <rect key="frame" x="0.0" y="0.0" width="427" height="25.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="427" height="24.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" priority="250" constant="22" id="ISt-ws-upN"/>
                                 </constraints>
@@ -31,18 +31,18 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="qKB-YL-XDd">
-                                <rect key="frame" x="0.0" y="33.5" width="427" height="60"/>
+                                <rect key="frame" x="0.0" y="32.5" width="427" height="60"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="kWU-Dp-92T"/>
                                 </constraints>
-                                <string key="text">Information is from the billing claim and may show a different practitioner or clinic from the one you visisted. For more information, visit the FAQ page.</string>
+                                <string key="text">Information is from the billing claim and may show a different practitioner or clinic from the one you visited. For more information, visit the FAQ page.</string>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Practitioner Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="tYG-PD-tYg">
-                                <rect key="frame" x="0.0" y="101.5" width="427" height="37.5"/>
+                                <rect key="frame" x="0.0" y="100.5" width="427" height="38.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" priority="250" constant="22" id="pLf-ka-7k0"/>
                                 </constraints>

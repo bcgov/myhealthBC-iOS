@@ -53,13 +53,13 @@ extension Date {
         }()
         static let issuedOnDateTime: DateFormatter = {
             let formatter = DateFormatter()
-//            September-09-2012, 14:27
+            //            September-09-2012, 14:27
             formatter.dateFormat = "MMMM-dd-yyyy, hh:mm z"
             return formatter
         }()
         static let issuedOnDate: DateFormatter = {
             let formatter = DateFormatter()
-//            September-09-2012
+            //            September-09-2012
             formatter.dateFormat = "MMMM-dd-yyyy"
             return formatter
         }()
@@ -78,13 +78,16 @@ extension Date {
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
             return formatter
         }()
-        
+        static let postServerDateTime: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+            return formatter
+        }()
         static let commentServerDateTime: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"
             return formatter
         }()
-        
         static let gatewayDateAndTimeWithTimeZone: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -92,13 +95,13 @@ extension Date {
         }()
         static let labOrderDateTime: DateFormatter = {
             let formatter = DateFormatter()
-//            2012-May-14, 4:35 PM
+            //            2012-May-14, 4:35 PM
             formatter.dateFormat = "yyyy-MMMM-dd, hh:mm a"
             return formatter
         }()
         static let commentsDateTime: DateFormatter = {
             let formatter = DateFormatter()
-//            2012-Apr-14, 4:35 PM
+            //            2012-Apr-14, 4:35 PM
             formatter.dateFormat = "yyyy-MMM-dd, hh:mm a"
             return formatter
         }()
@@ -184,6 +187,12 @@ extension Date {
             return formatter
         }()
         
+        static let yearMonthStringDay: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MMM-dd"
+            return formatter
+        }()
+        
         static let monthAndYear: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
@@ -223,6 +232,7 @@ extension Date {
     var longString: String { return Formatter.long.string(from: self) }
     var fullString: String { return Formatter.full.string(from: self) }
     var customDateTimeString: String { return Formatter.customDateTime.string(from: self) }
+    var yearMonthStringDayString: String { return Formatter.yearMonthStringDay.string(from: self) }
     var monthAndDayString: String { return Formatter.monthAndDay.string(from: self) }
     var monthAndYearString: String { return Formatter.monthAndYear.string(from: self) }
     var yearMonthDayString: String { return Formatter.yearMonthDay.string(from: self) }
@@ -234,6 +244,7 @@ extension Date {
     var gatewayDateAndTimeWithTimeZone: String { return Formatter.gatewayDateAndTimeWithTimeZone.string(from: self) }
     var gatewayDateAndTimeWithMS: String { return Formatter.gatewayDateAndTimeWithMS.string(from: self) }
     var gatewayDateAndTimeWithMSAndTimeZone: String { return Formatter.gatewayDateAndTimeWithMSAndTimeZone.string(from: self) }
+    var postServerDateTime: String { return Formatter.postServerDateTime.string(from: self) }
     var commentServerDateTime: String { return Formatter.commentServerDateTime.string(from: self) }
     var labOrderDateTime: String { return Formatter.labOrderDateTime.string(from: self) }
     var commentsDateTime: String { return Formatter.commentsDateTime.string(from: self) }
@@ -327,6 +338,14 @@ extension Date {
         return addingTimeInterval(targetOffset)
     }
     
+}
+
+extension Date {
+    var ageInYears: Int? {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year], from: self, to: Date())
+        return components.year ?? nil
+    }
 }
 
 

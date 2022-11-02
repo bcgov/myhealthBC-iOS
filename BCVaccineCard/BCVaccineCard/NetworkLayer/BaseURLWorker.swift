@@ -33,10 +33,22 @@ class BaseURLWorker {
     
     func setBaseURL(completion: @escaping () -> Void) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
-        self.apiClient.getBaseURLFromMobileConfig(token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: false) { baseURLString, isOnline  in
+        
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.incrementLoader(message: .FetchingConfig)
+            }
+        }
+        
+        self.apiClient.getBaseURLFromMobileConfig(token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: false) { baseURLString, online in
             if let baseURLString = baseURLString, let url = URL(string: baseURLString) {
                 self.baseURL = url
-                self.isOnline = isOnline
+                self.isOnline = online
+            }
+            DispatchQueue.main.async {
+                if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                    appDelegate.decrementLoader()
+                }
             }
             completion()
         }

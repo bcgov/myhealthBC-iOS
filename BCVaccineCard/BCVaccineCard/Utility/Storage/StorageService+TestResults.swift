@@ -10,6 +10,23 @@ import Foundation
 protocol StorageCovidTestResultManager {
     
     // MARK: Store
+    
+    func storeCovidTestResults(
+        patient: Patient,
+        in: AuthenticatedTestResultsResponseModel,
+        authenticated: Bool,
+        manuallyAdded: Bool,
+        pdf: String?
+    ) -> [CovidLabTestResult]
+    
+    func storeCovidTestResults(
+        patient: Patient,
+        in: AuthenticatedTestResultsResponseModel.ResourcePayload.Order,
+        authenticated: Bool,
+        manuallyAdded: Bool,
+        pdf: String?
+    ) -> CovidLabTestResult?
+    
     /// Store a Test results for given patient
     /// - Parameters:
     ///   - patient: owenr of the test result
@@ -63,7 +80,87 @@ protocol StorageCovidTestResultManager {
 
 
 extension StorageService: StorageCovidTestResultManager {
-    // MARK: Store
+    
+    func storeCovidTestResults(
+        patient: Patient,
+        in responseObeject: AuthenticatedTestResultsResponseModel,
+        authenticated: Bool,
+        manuallyAdded: Bool,
+        pdf: String?
+    ) -> [CovidLabTestResult] {
+        guard let orders = responseObeject.resourcePayload?.orders else {return []}
+        var storedObjects: [CovidLabTestResult] = []
+        for order in orders {
+            if let storedObject = storeCovidTestResults(patient: patient, in: order, authenticated: authenticated, manuallyAdded: manuallyAdded, pdf: pdf) {
+                storedObjects.append(storedObject)
+            }
+            
+        }
+        return storedObjects
+    }
+    
+    
+    func storeCovidTestResults(
+        patient: Patient,
+        in responseObeject: AuthenticatedTestResultsResponseModel.ResourcePayload.Order,
+        authenticated: Bool,
+        manuallyAdded: Bool,
+        pdf: String?
+    ) -> CovidLabTestResult? {
+        
+        let id = responseObeject.md5Hash() ?? UUID().uuidString
+        deleteCovidTestResult(id: id, sendDeleteEvent: false)
+        
+        guard let context = managedContext else {
+            return nil
+        }
+        let model = CovidLabTestResult(context: context)
+        model.patient = patient
+        model.id = id
+        model.createdAt = Date()
+        model.authenticated = authenticated
+        model.pdf = pdf
+        model.reportAvailable = responseObeject.reportAvailable ?? false
+        model.orderId = responseObeject.id
+        var testResults: [TestResult] = []
+        guard let records = responseObeject.labResults else {
+            return nil
+        }
+        
+        for record in records {
+            let collectionDateTime = record.collectedDateTime?.getGatewayDate()
+            let resultDateTime = record.resultDateTime?.getGatewayDate()
+            
+            if let resultModel = storeCovidTestResult(
+                resultId: id,
+                patientDisplayName: patient.name,
+                lab: responseObeject.reportingLab,
+                reportId: record.id,
+                collectionDateTime: collectionDateTime,
+                resultDateTime: resultDateTime,
+                testName: record.loincName,
+                testType: record.testType,
+                testStatus: record.testStatus,
+                testOutcome: record.labResultOutcome,
+                resultTitle: record.loincName,
+                resultDescription: record.resultDescription,
+                resultLink: record.resultLink) {
+                
+                testResults.append(resultModel)
+                model.addToResults(resultModel)
+            }
+            
+        }
+        do {
+            try context.save()
+            let _ = manuallyAdded == true ? self.notify(event: StorageEvent(event: .ManuallyAddedRecord, entity: .CovidLabTestResult, object: model)) : self.notify(event: StorageEvent(event: .Save, entity: .CovidLabTestResult, object: model))
+            return model
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
+    
     public func storeCovidTestResults(patient: Patient, gateWayResponse: GatewayTestResultResponse, authenticated: Bool, manuallyAdded: Bool, pdf: String?) -> CovidLabTestResult? {
         let id = gateWayResponse.md5Hash() ?? UUID().uuidString
         deleteCovidTestResult(id: id, sendDeleteEvent: false)

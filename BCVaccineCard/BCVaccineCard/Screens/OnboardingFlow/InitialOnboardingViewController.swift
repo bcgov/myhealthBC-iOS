@@ -255,7 +255,6 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
             adjustUI()
         }
         if type == .getStarted || type == .ok {
-            // TODO: version
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
             
             showLocalAuth {[weak self] in
@@ -267,7 +266,7 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
     
     private func goToAuthentication() {
         if AuthManager().isAuthenticated {
-            showHomeScreen(authStatus: .Completed)
+            showHomeScreen(authStatus: nil)
         } else {
             AuthenticationViewController.displayFullScreen(createTabBarAndGoToHomeScreen: true, initialView: .Landing, sourceVC: .AfterOnboarding)
             Defaults.hasSeenFirstLogin = true
@@ -276,10 +275,6 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
     }
     
     func showHomeScreen(authStatus: AuthenticationViewController.AuthenticationStatus?) {
-        let transition = CATransition()
-        transition.type = .fade
-        transition.duration = Constants.UI.Theme.animationDuration
-        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
         let vc = TabBarController.constructTabBarController(status: authStatus)
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }

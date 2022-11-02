@@ -2,7 +2,7 @@
 //  ImmunizationRecommendation+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2022-10-03.
+//  Created by Connor Ogilvie on 2022-09-29.
 //
 //
 
