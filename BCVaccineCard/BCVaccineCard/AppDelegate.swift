@@ -58,6 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enableAutoToolbar = false
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
+        ForceUpdateView.show()
     }
     
     private func clearKeychainIfNecessary(authManager: AuthManager?) {

@@ -28,8 +28,14 @@ enum LabelColour {
 extension Theme {
     
     // Buttons
-    public func style(button: UIButton, style: ButtonStyle, title: String, image: UIImage?, bold: Bool? = false) {
-        
+    public func style(button: UIButton,
+                      style: ButtonStyle,
+                      title: String,
+                      image: UIImage?,
+                      fillColour: UIColor? = AppColours.appBlue,
+                      fillTitleColour: UIColor? = .white,
+                      bold: Bool? = false)
+    {
         button.setTitle(title, for: .normal)
         button.setImage(image, for: .normal)
         button.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
@@ -38,7 +44,10 @@ extension Theme {
         switch style {
             
         case .Fill:
-            styleButtonfill(button: button, bold: bold)
+            styleButtonfill(button: button,
+                            fillColour: fillColour,
+                            fillTitleColour: fillColour,
+                            bold: bold)
         case .Hollow:
             styleButtonHollow(button: button, bold: bold)
         }
@@ -65,7 +74,7 @@ extension Theme {
         }
     }
     
-    fileprivate func styleButtonHollow(button: UIButton, bold: Bool? = false) {
+    fileprivate func styleButtonHollow(button: UIButton, bold: Bool? = false){
         button.backgroundColor = .white
         button.setTitleColor(AppColours.appBlue, for: .normal)
         button.borderColor = AppColours.appBlue
@@ -80,9 +89,13 @@ extension Theme {
         }
     }
     
-    fileprivate func styleButtonfill(button: UIButton, bold: Bool? = false) {
-        button.backgroundColor = AppColours.appBlue
-        button.setTitleColor(.white, for: .normal)
+    fileprivate func styleButtonfill(button: UIButton,
+                                     fillColour: UIColor? = AppColours.appBlue,
+                                     fillTitleColour: UIColor? = .white,
+                                     bold: Bool? = false)
+    {
+        button.backgroundColor = fillColour
+        button.setTitleColor(fillTitleColour, for: .normal)
         button.imageView?.tintColor = .white
         if let label = button.titleLabel {
             if let bolded = bold, bolded {
