@@ -29,7 +29,6 @@ class HomeScreenViewController: BaseViewController {
     private let communicationSetvice: CommunicationSetvice = CommunicationSetvice(network: AFNetwork())
     private var communicationBanner: CommunicationBanner?
     private let connectionListener = NetworkConnection()
-    private var numberOfTimesVisisted = 0
     
     private var dataSource: [DataSource] {
         genDataSource()
@@ -43,10 +42,6 @@ class HomeScreenViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-        numberOfTimesVisisted += 1
-        if numberOfTimesVisisted > 1 {
-            checkForAppStoreVersionUpdate()
-        }
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
