@@ -67,10 +67,9 @@ class TabBarController: UITabBarController {
             self.setup(selectedIndex: 0)
             self.showLoginPromptIfNecessary()
         }
-        
     }
     
-    private func showLoginPromptIfNecessary() {
+    public func showLoginPromptIfNecessary() {
         guard let authStatus = self.authenticationStatus else { return }
         if authStatus == .Completed {
             AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: self.authWorker, sourceVC: .AfterOnboarding) { allowed in
