@@ -19,6 +19,7 @@ protocol EndpointsAccessor {
     var getTermsOfService: URL { get }
     var communicationsMobile: URL { get }
     var throttleHG: URL { get }
+    var mobileConfiguration: URL { get }
     func getAuthenticatedPatientDetails(hdid: String) -> URL
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
     func getAuthenticatedMedicationRequest(hdid: String) -> URL
@@ -108,6 +109,10 @@ extension UrlAccessor: EndpointsAccessor {
     
     var throttleHG: URL {
 //        return self.baseURL.appendingPathComponent("api/gatewayapiservice/MobileConfiguration")
+        return self.mobileConfigURL
+    }
+    
+    var mobileConfiguration: URL {
         return self.mobileConfigURL
     }
     

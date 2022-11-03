@@ -12,8 +12,8 @@ extension TabBarController: SKStoreProductViewControllerDelegate{
     func showAppStoreUpdateDialogIfNeeded() {
         guard NetworkConnection().hasConnection else {return}
         UpdateManager(network: AFNetwork()).isUpdateAvailableInStore { [weak self] updateAvailable in
-            guard let `self` = self, !UpdateManager.updateDilogShownThisSession else {return}
-            UpdateManager.updateDilogShownThisSession = true
+            guard let `self` = self, updateAvailable, !UpdateManagerStorage.updateDilogShownThisSession else {return}
+            UpdateManagerStorage.updateDilogShownThisSession = true
             self.alert(title: "New update is available", message: "", buttonOneTitle: "Update Now", buttonOneCompletion: { [weak self] in
                 guard let `self` = self else {return}
                 self.openStoreAppStore()

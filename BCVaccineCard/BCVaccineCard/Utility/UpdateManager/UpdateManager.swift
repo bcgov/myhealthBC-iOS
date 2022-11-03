@@ -6,19 +6,20 @@
 //
 
 import Foundation
+import KeychainAccess
 
 struct UpdateManager {
     
     let network: Network
-    static var updateDilogShownThisSession = false
+    
+    private var endpoints: UrlAccessor {
+        return UrlAccessor()
+    }
     
     func isUpdateAvailableInStore(completion: @escaping (Bool)->Void) {
-        guard let bundleInfo = Bundle.main.infoDictionary else {
-            return completion(false)
-        }
-        
-        guard let bundleId = bundleInfo["CFBundleIdentifier"] as? String,
-              let currentVersion : String = bundleInfo["CFBundleShortVersionString"] as? String
+        guard let currentVersion = UpdateManagerStorage.currentAppVersion,
+              let bundleId = UpdateManagerStorage.bundleId,
+              NetworkConnection.shared.hasConnection
         else {
             return completion(false)
         }
@@ -40,6 +41,31 @@ struct UpdateManager {
                 }
                 
                 return completion(storeVersion > currentVersion)
+        })
+        network.request(with: request)
+    }
+    
+    func isBreakingConfigChangeAvailable(completion: @escaping (Bool)->Void) {
+        UpdateManagerStorage.setOrResetstoredAppVersion()
+        guard NetworkConnection.shared.hasConnection else {
+            return completion(false)
+        }
+        let request = NetworkRequest<DefaultParams, MobileConfigurationResponseObject>(
+            url: endpoints.mobileConfiguration,
+            type: .Get,
+            parameters: nil,
+            headers: nil,
+            completion: { responseData in
+                guard let response = responseData, let latest = response.version else {
+                    return completion(false)
+                }
+                
+                guard let current = UpdateManagerStorage.storedCofigVersion else {
+                    UpdateManagerStorage.storeConfig(version: latest)
+                    return completion(false)
+                }
+                
+                return completion(current < latest)
         })
         network.request(with: request)
     }
