@@ -8,7 +8,7 @@
 import Foundation
 import KeychainAccess
 
-struct UpdateManagerStorage {
+struct UpdateServiceStorage {
     
     private enum Key: String {
         case storedCofigVersion

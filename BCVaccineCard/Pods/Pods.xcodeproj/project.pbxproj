@@ -96,6 +96,7 @@
 		15D170D3887CE26AA8D3E3E7DE5CA170 /* QueueITWKViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 51F474518A0634D7F4A9F0CDF9A032A0 /* QueueITWKViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		161B289F1C83A7281E6842E33014033F /* OIDClientMetadataParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 3808665511A775EED63FEE1E754D1C22 /* OIDClientMetadataParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		163B255CEA957AC83305AF21F7F2D543 /* SPDefaultNetworkConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E64BDF5D7EF8D514066757569B31C48 /* SPDefaultNetworkConnection.m */; };
+		16BF1250FAA37C8E8093B1FF99CC418D /* smarthealthcard.phsa.ca~v1~trusted~.well-known~issuers.json in Resources */ = {isa = PBXBuildFile; fileRef = 58DC7BD6E448CE5B8821E4E0F846F919 /* smarthealthcard.phsa.ca~v1~trusted~.well-known~issuers.json */; };
 		17021FEE1335B4F63E84769C39C65778 /* KeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A428102872756B442363F2BDC39012A /* KeyManager.swift */; };
 		1740CBB33D469AEDD5D7291A9268FA97 /* IQToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ACC8FC03824B5FA02C470613BEA76E6 /* IQToolbar.swift */; };
 		1767010E7CBCF985912DBA2690AB5227 /* SPServiceProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FCE41271662EFF9E6B11BAEBC90C21E /* SPServiceProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -115,6 +116,7 @@
 		1B171AB5D0C700A9EDDBB043D66250A0 /* BCVaccineValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31B6018682C07FBD4C8EB06CCFF5AF7 /* BCVaccineValidator.swift */; };
 		1B57CDAE7E5B64EA4D448EDA9F957436 /* SPSubjectConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 43F7844FD1AEF895CA9BE5C4A0FFB302 /* SPSubjectConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1BE5248823CD218A4F11416EE33D7F36 /* FIRVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 38821CD0B472B41CE4A264B0164F5CF5 /* FIRVersion.m */; };
+		1C0B8D0DDF78BF1E20BAA266A71B1E0B /* issuers.json in Resources */ = {isa = PBXBuildFile; fileRef = 403DC742CEE6B364C8094F0E9FE76345 /* issuers.json */; };
 		1CA13D6FFED5C528920D2192BB60EB6E /* FIRLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = FCBB1BF86CB85E3D0D4DA3E3464F7CF0 /* FIRLogger.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		1CC9724DF00392FE183638961B054A26 /* PocketSVG.h in Headers */ = {isa = PBXBuildFile; fileRef = A90B735D78415D58A88ADF4836DF0B10 /* PocketSVG.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1D628C53D31EAEC96B4941362C068BF5 /* FIRAppDistribution.m in Sources */ = {isa = PBXBuildFile; fileRef = CA756651842F40A3AAAF79061665E083 /* FIRAppDistribution.m */; };
@@ -133,6 +135,7 @@
 		1FAA65A5DBDA921184346E518FF096F9 /* QueueConsts.h in Headers */ = {isa = PBXBuildFile; fileRef = D708CA4A8381D86D9994EB5C1C34E620 /* QueueConsts.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1FB11A0A377A1E48028F7013DA1C0750 /* HMACSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C368E01D74094709E36D5C1BED5CCE /* HMACSigner.swift */; };
 		1FC20FCE03CC49E1657FB1FC81EA5B74 /* QueueService.h in Headers */ = {isa = PBXBuildFile; fileRef = AE91FF0FF37EFF8F78D07090E2954EEB /* QueueService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		202A134FB70B6432F62091C4C4581256 /* rules-dev.json in Resources */ = {isa = PBXBuildFile; fileRef = E840ED91259347B3BB0A053A07E29C53 /* rules-dev.json */; };
 		20616A47873318F80BFFEABAC9730122 /* IQTitleBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFB580FE3A4013A1CB108790D8A87EEC /* IQTitleBarButtonItem.swift */; };
 		206F240944E9F5D7E0741FADB0F7B66F /* SwipeCollectionViewCell+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4A5150967CDC421BAE8007F8114A990 /* SwipeCollectionViewCell+Accessibility.swift */; };
 		20B80FE7955B5BEE6CAE9BC1C267EA95 /* SPTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F55937EF6AF0126EC804149E7348C95 /* SPTracker.m */; };
@@ -140,6 +143,7 @@
 		2129D1EE2060A110D9A497FE3C9A6418 /* ImmunizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120D8D367E753733F212C7888422D47E /* ImmunizationService.swift */; };
 		2156F1E12D1F62F8322CFE5C29277E6E /* OIDResponseTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B2D880F96840F188F6263874DAEC99E /* OIDResponseTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		216E9E105296295917752A1531B90FE8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC65653FEFE02F45A7359659E5DC1F42 /* SystemConfiguration.framework */; };
+		2210CFB8A2A4031625104D15B9B7D012 /* pvc.service.yukon.ca~issuer in Resources */ = {isa = PBXBuildFile; fileRef = 5753D1F6D9C5DD2CC9FEF89F5181A0FC /* pvc.service.yukon.ca~issuer */; };
 		223942D8C06549511BAA0EAF690DF2AD /* FIRCurrentDateProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = F8A571C11E119AB4BA923753CC9775AF /* FIRCurrentDateProvider.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		225A696F312058BE8E55074856D9F11B /* pb_common.h in Headers */ = {isa = PBXBuildFile; fileRef = BB92BE651A20FF63A0053D4709A1A7BE /* pb_common.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2340437E32FEBCE537F173A28579ACBB /* FBLPromise+Recover.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B215B67EA47075B9239C337815ABA24 /* FBLPromise+Recover.m */; };
@@ -296,6 +300,7 @@
 		4AB004E1E14D37CF5154283B746EE9A2 /* FirebaseCoreDiagnostics-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3711832BC3B464F70CA2DB7E953CFDB4 /* FirebaseCoreDiagnostics-dummy.m */; };
 		4B275CF4EF68CFEBD7FF5C5EBCAF64EE /* Swipeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684EB30BF02EEDD8B79544FD9142EE18 /* Swipeable.swift */; };
 		4B34D1AE1A6E91BCEC646C75372AF650 /* FBLPromise+Always.m in Sources */ = {isa = PBXBuildFile; fileRef = B40071B053E3FE6BCFACD47269457588 /* FBLPromise+Always.m */; };
+		4BB422317C3D5E70A63B6D1B2D9A381C /* smarthealthcard.phsa.ca~v1~issuer in Resources */ = {isa = PBXBuildFile; fileRef = 18E2A2EBF7BF853F51572EF6DC733CB8 /* smarthealthcard.phsa.ca~v1~issuer */; };
 		4BDB7E981F11DCE62B91294DDBE51E4F /* Pods-BCVaccineCardTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 046659B3ECF790F6029BDF9BB6AC7240 /* Pods-BCVaccineCardTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4BE5BAFAE33BE078851E95959CCF58D5 /* GDTCORStorageProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = C5E3F4D5B9C3E8343D3562D25D33B0FF /* GDTCORStorageProtocol.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		4BEA27A38ACE885D642FB2866EB849D9 /* GULNetworkURLSession.h in Headers */ = {isa = PBXBuildFile; fileRef = BB268EEB6AEF9B89B658E586C404D4C0 /* GULNetworkURLSession.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -450,6 +455,7 @@
 		7B068137A8925891446203B5D3D6A4ED /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF70A0295F5F6EF5FBC4046650C651B9 /* CFNetwork.framework */; };
 		7BCF206AEC862241CE5608B2A5953DDC /* FIRInstallationsStoredItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 6876EFC7E3C5BF2B0BE0C9C2EBA3ECA9 /* FIRInstallationsStoredItem.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		7C8748B4DD8098873D5B066F18DA2C77 /* Verifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FE7F376DE44E2D55077B183289DA0B /* Verifier.swift */; };
+		7CE7428E226225BBE4DA66E580C3D61B /* pvc.service.yukon.ca~test~issuer in Resources */ = {isa = PBXBuildFile; fileRef = 7C592E0340C47613A96C753AD61C004C /* pvc.service.yukon.ca~test~issuer */; };
 		7CECCAC1E397E281B3713603F0AB5616 /* FIRInstallations.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A31AE5CC1DC7B352E940EE3EA9FE19A /* FIRInstallations.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D17B0C9C11A23320AFDAE70AACD174F /* GDTCOREndpoints.h in Headers */ = {isa = PBXBuildFile; fileRef = B15FCE0E2DF24E0F3DAD4401C64DB3E7 /* GDTCOREndpoints.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D89DEA40BC25A9436C041B1DD78B5A5 /* DeflateWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8D2FAB13E5AF67B71FD5A21833B7D3 /* DeflateWrapper.swift */; };
@@ -492,6 +498,7 @@
 		85F5F4969BC9192695F5E704D30D65F0 /* Pods-Health Gateway-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 11C32D365A2979B146F82ADF3C47FCFC /* Pods-Health Gateway-dummy.m */; };
 		863AFC7EF6435C01F47B4F0E59E6F9E3 /* FirebaseCoreInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 66E6CB17BDE7146C217B27CDE2A5D559 /* FirebaseCoreInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		86A03DE9366D1BE94EB99AA387EACD1F /* IQKeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E3CC2A2F0CEB5FA90F53E5B438F36DA /* IQKeyboardManager.swift */; };
+		86EDD1EA3019AB6048DAF2E9AD8F9EA6 /* BCVaccineValidator.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator.bundle */; };
 		86F8ECE3DE23C7341B3062BAC8C0E6B8 /* FIRAppDistributionUIService.h in Headers */ = {isa = PBXBuildFile; fileRef = E2F4613401E8C20EA671AA2BE73E9509 /* FIRAppDistributionUIService.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		87610EB38179968BA404A597C6E13E0D /* GULUserDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0E45D7F6565BC480C1F6BDB186828 /* GULUserDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		877EE78E8E05ED249BA7B358C7157789 /* FIROptionsInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = A6199B87926EF68CD9920F11CAFE6AA1 /* FIROptionsInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -514,6 +521,7 @@
 		8DA822D5C649389EBC23C7DAE47B4B41 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6732B6B785E7AE36F07624463627A874 /* NetworkService.swift */; };
 		8E5CD14013D8CA3E7FBA68D9FB56D5E1 /* SPSelfDescribingJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F37EAC8D2D32B3F0492A21204CEDA73 /* SPSelfDescribingJson.m */; };
 		8EEF85F70D20B2BB020721C44C63F9D2 /* GDTCORClock.h in Headers */ = {isa = PBXBuildFile; fileRef = A30743B8A25AE4EDFD39373504D172EA /* GDTCORClock.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8EF010F768E06280321198E570039C14 /* bcvaxcardgen.freshworks.club in Resources */ = {isa = PBXBuildFile; fileRef = 58FE15B79C9E6D171C9863D3B7524372 /* bcvaxcardgen.freshworks.club */; };
 		8EF416875B0DB29E52BC8CF96C754F1A /* FIRDependency.h in Headers */ = {isa = PBXBuildFile; fileRef = F463BDA4CFB7C06F1008B576AE46717B /* FIRDependency.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		8EF9F3A0C2B5F1118F37CF7B1BC76C80 /* FIRHeartbeatInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = CDC5E068653703E8CE85C0381FCC6E99 /* FIRHeartbeatInfo.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		8FC5684C4684961A4B867842E66D7798 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 266697429E23A08F8CDDC62AD06A7F49 /* FMResultSet.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -647,6 +655,7 @@
 		B38C872AA32EABA4A6ABE17EAF32EF87 /* RSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A499165910BDEA058CD526028DC0A36 /* RSA.swift */; };
 		B40B071395954881429075EA56BF9512 /* OIDExternalUserAgentIOSCustomBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = EC92408227DF33791BB1CC98BB7815CC /* OIDExternalUserAgentIOSCustomBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B5A79FCC311A28AC6C16BF1CB06C40ED /* SPConfigurationProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = EA505AC43A290BB6F5E790D4A2DBF419 /* SPConfigurationProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5BF23F9CA3617FF063464A42F5A8257 /* issuers-test.json in Resources */ = {isa = PBXBuildFile; fileRef = A3FFAA3F80CC05F06AFEF24E7CACD3BC /* issuers-test.json */; };
 		B67F1D6DABD7F7380A5262A2309147F8 /* SPEventStore.h in Headers */ = {isa = PBXBuildFile; fileRef = 0ED253E800A1890442AAF9EF3A72E37F /* SPEventStore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6B43B1B78EC0E52CC08F82841A22A31 /* IQKeyboardManagerSwift-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EB5FD8C8BC026EBA33E6852D90186078 /* IQKeyboardManagerSwift-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6BFFD89E75614561BF08C0411DBDF30 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D155E789BBBC8BC5AEE7E44B3D5A716 /* Errors.swift */; };
@@ -683,6 +692,7 @@
 		C09272908163BEE58FD56BBE3A1B165A /* FIRCoreDiagnosticsInterop.h in Headers */ = {isa = PBXBuildFile; fileRef = 7BA89EB2EA01B9978B01D0F353692720 /* FIRCoreDiagnosticsInterop.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		C10DB300F9146CCD0BF643F3FADD7F82 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A104DD066365ACF37F7D53419EC14AA1 /* Security.framework */; };
 		C1264FE9324683BBAB218A99EF18C6F1 /* FIRInstallationsIIDTokenStore.h in Headers */ = {isa = PBXBuildFile; fileRef = FFC9E6ED56270D2C6938A60ED045947E /* FIRInstallationsIIDTokenStore.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		C216AAB29B02B2DF42B64BB67D1430C5 /* rules.json in Resources */ = {isa = PBXBuildFile; fileRef = 77D7086F0D7E99FA99377860A3DBDDEA /* rules.json */; };
 		C2252818655DEBAC5157622FDF32C8B4 /* SPNetworkControllerImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A577848E3FBB3BD2BF2E38A9B61FE37 /* SPNetworkControllerImpl.m */; };
 		C2613170B192863617D532082CED6A69 /* GDTCCTUploader.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E07F83A041355E574EC80CB6E38A17 /* GDTCCTUploader.m */; };
 		C2636D19CCE19A2042D35425D3CCC620 /* AppAuth-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B1B7F735D841DF90AD1D256CF34E538F /* AppAuth-dummy.m */; };
@@ -716,6 +726,7 @@
 		CE6FAF73C12C86ADA80075981BCCC7B7 /* FIRInstallationsLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 379DA8E17612449DEB74B4518AF7AB9C /* FIRInstallationsLogger.m */; };
 		CEBFFEED65D877702B2F36102528CF6D /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD887857B08C85143D1C88AE49C8FA0 /* EventMonitor.swift */; };
 		CEF27DC76DBCCA2FECE292D0B08C0487 /* SPEcommerceItem.h in Headers */ = {isa = PBXBuildFile; fileRef = E59C6C6EDA900FF576CA05BC9C1104FE /* SPEcommerceItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D042C59BCE71F8D6E5C85670099D2A83 /* phsasmarthealthcard-dev.azurewebsites.net~v1~issuer in Resources */ = {isa = PBXBuildFile; fileRef = 7E72B6A17E6257379773282F493B505C /* phsasmarthealthcard-dev.azurewebsites.net~v1~issuer */; };
 		D08E73CE77698A4EC2EFF175667F92A8 /* OIDEndSessionRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 0673BC5A4E5ED103EFEA7A48165C5C42 /* OIDEndSessionRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D0EA90FBF83350C49E6EF6C8A98D6F00 /* AFError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F0587A9DB20D644BADF90242BF9A26 /* AFError.swift */; };
 		D101DD74E5D4B601CE98F520A0F8B551 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B495F836F58B171D3ABCEE2FD8D1741 /* Foundation.framework */; };
@@ -745,6 +756,7 @@
 		D655D524692BF05CCE8A3BCB95C686EB /* SPConfigurationBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 66EF2D6264B4519E9BD024E0D4911999 /* SPConfigurationBundle.m */; };
 		D6B4751CED01D53E4A1B6A571AAA2F83 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE6E7D573BD73C6CFBD63BAB0ACEF4D8 /* HTTPMethod.swift */; };
 		D75A54DB6EFEDE8DA7977BF0681769F3 /* FBLPromise+Any.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = 1A9156A918D9416E05A5875B5329F1CB /* FBLPromise+Any.h */; };
+		D769F0001E211ED9000A68980D4E39CA /* rules-test.json in Resources */ = {isa = PBXBuildFile; fileRef = 4269D234FCF61501AE95102599C7714A /* rules-test.json */; };
 		D7BB0AB0C6BCC873EDDC2E8A1FE4C3CC /* JOSESwift-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 60B0229D444469C3EF5D46C448FF9C06 /* JOSESwift-dummy.m */; };
 		D7D49B9129898D8BED968B9407310B1E /* OIDAuthorizationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 64304428F9C9DB3D182E1FE319CAEF3F /* OIDAuthorizationResponse.m */; };
 		D8B67778334C5EF8D3843933DBD3A0CD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC65653FEFE02F45A7359659E5DC1F42 /* SystemConfiguration.framework */; };
@@ -877,6 +889,7 @@
 		F9A68048B4BD5B320E2E4F9721D6FDC5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B495F836F58B171D3ABCEE2FD8D1741 /* Foundation.framework */; };
 		FA53C864301C92DA2E5FE67A73B05C38 /* SPTrackerEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 276D316325622ACB8BC19D49B805CB15 /* SPTrackerEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB0B09DC3DE03C57B70331DC1DF7096A /* SPConsentGranted.m in Sources */ = {isa = PBXBuildFile; fileRef = A131B136BF22D892AC3E3704F1E9E2CA /* SPConsentGranted.m */; };
+		FB9136C68613D360CB8B18414C55D62D /* phsasmarthealthcard-dev.azurewebsites.net~v1~trusted~.well-known~issuers.json in Resources */ = {isa = PBXBuildFile; fileRef = 0938D4E6AB556C8D565ADBE669D2548D /* phsasmarthealthcard-dev.azurewebsites.net~v1~trusted~.well-known~issuers.json */; };
 		FC47C0BBF9807B64DF8E0BA97E5A6A8E /* FIRAppInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = ACD989A8DD38963B0031DE23F7836531 /* FIRAppInternal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		FC5276584FFA12B96D33F060CD710C52 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B495F836F58B171D3ABCEE2FD8D1741 /* Foundation.framework */; };
 		FC675852625B926A769F124991EADCAB /* GULLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = A35AF596E93A362AF58EE960314192E0 /* GULLogger.m */; };
@@ -1127,6 +1140,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 4402AFF83DBDC4DD07E198685FDC2DF2;
 			remoteInfo = FirebaseCore;
+		};
+		4A746B2BAD81471D1ED297D9485ABA9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FECF474E55BD03143F14F8FC2EC11BB;
+			remoteInfo = "BCVaccineValidator-BCVaccineValidator";
 		};
 		4D7B5FA8F51684DF4A42F027793A1B3B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2547,6 +2567,7 @@
 		E9B4A9A9CFA43ED8D4380984950E1746 /* RSSItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RSSItem.swift; path = Pod/Classes/RSSItem.swift; sourceTree = "<group>"; };
 		E9EB4BEFF3D484183017E9206A444978 /* NSURLSession+GULPromises.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSURLSession+GULPromises.h"; path = "GoogleUtilities/Environment/Public/GoogleUtilities/NSURLSession+GULPromises.h"; sourceTree = "<group>"; };
 		E9EECC86422DC18EDD2433D6AEE24802 /* IQNSArray+Sort.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "IQNSArray+Sort.swift"; path = "IQKeyboardManagerSwift/Categories/IQNSArray+Sort.swift"; sourceTree = "<group>"; };
+		EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BCVaccineValidator.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA505AC43A290BB6F5E790D4A2DBF419 /* SPConfigurationProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPConfigurationProvider.h; path = Snowplow/Internal/RemoteConfiguration/SPConfigurationProvider.h; sourceTree = "<group>"; };
 		EA5DA04734418A98A875482981408B2E /* GULNSData+zlib.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "GULNSData+zlib.h"; path = "GoogleUtilities/NSData+zlib/Public/GoogleUtilities/GULNSData+zlib.h"; sourceTree = "<group>"; };
 		EB5AA8E7B0EDF5173E58EE1CFD06B8B7 /* EncryptedCoreData-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "EncryptedCoreData-Info.plist"; sourceTree = "<group>"; };
@@ -2730,6 +2751,13 @@
 				2E5090F95BDDBDF2802A16ADCB770D6C /* CoreData.framework in Frameworks */,
 				F9A68048B4BD5B320E2E4F9721D6FDC5 /* Foundation.framework in Frameworks */,
 				F7DBB1B13E1DF5A356FF13506C6B2DC6 /* Security.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55684B16868DA44B18ED9CB586A48228 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3330,6 +3358,7 @@
 				97B9526BADB8C4C741DD53EA8F1150E5 /* AlamofireRSSParser */,
 				3FD1B4C1246D643E9476438C28048FA8 /* AppAuth */,
 				2B5894AEFF5152D2AD6A5DBF473B13C6 /* BCVaccineValidator */,
+				EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator.bundle */,
 				52844477CEE03CF70C82C12E881E0916 /* EncryptedCoreData */,
 				6DF1E44E6E7D05B4E0A2A774872F24F9 /* FirebaseAppDistribution */,
 				E2B63D462DB7F827C4B11FD51E4F8E2D /* FirebaseCore */,
@@ -5236,6 +5265,23 @@
 			productReference = 3347A1AB6546F0A3977529B8F199DC41 /* PromisesObjC */;
 			productType = "com.apple.product-type.framework";
 		};
+		3FECF474E55BD03143F14F8FC2EC11BB /* BCVaccineValidator-BCVaccineValidator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 47B852F038E7E46E2F7CB91D5BDD7D09 /* Build configuration list for PBXNativeTarget "BCVaccineValidator-BCVaccineValidator" */;
+			buildPhases = (
+				6D697A4A61DCB91ECE893DC766EEF36C /* Sources */,
+				55684B16868DA44B18ED9CB586A48228 /* Frameworks */,
+				A39ECF17A1F8F8776FED592834854E0E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "BCVaccineValidator-BCVaccineValidator";
+			productName = BCVaccineValidator;
+			productReference = EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		42F6EA4EBF9A61B5E1C05BE009E10B9B /* EncryptedCoreData */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B5D48A68503968DD08C8A87FD2E007B0 /* Build configuration list for PBXNativeTarget "EncryptedCoreData" */;
@@ -5443,6 +5489,7 @@
 			);
 			dependencies = (
 				C9B818367E364F076CD7B89D41AAA2C3 /* PBXTargetDependency */,
+				447B73D854791346DE419DEB85E86498 /* PBXTargetDependency */,
 				2FEFD7CB50B4F5F94462CA1F0C9A2857 /* PBXTargetDependency */,
 			);
 			name = BCVaccineValidator;
@@ -5805,6 +5852,7 @@
 				22A12C8E3AD112449186FEDB5FD823F0 /* AlamofireRSSParser */,
 				5C642AA10FB29936669CC269F42079C6 /* AppAuth */,
 				7D6BAEF60FA9AF969CF0D876E6A61EA5 /* BCVaccineValidator */,
+				3FECF474E55BD03143F14F8FC2EC11BB /* BCVaccineValidator-BCVaccineValidator */,
 				42F6EA4EBF9A61B5E1C05BE009E10B9B /* EncryptedCoreData */,
 				072CEA044D2EF26F03496D5996BBF59F /* Firebase */,
 				57B7E23CE80EC1AAA76AD2F821D233EC /* FirebaseAppDistribution */,
@@ -5918,6 +5966,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86EDD1EA3019AB6048DAF2E9AD8F9EA6 /* BCVaccineValidator.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5974,6 +6023,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A39ECF17A1F8F8776FED592834854E0E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8EF010F768E06280321198E570039C14 /* bcvaxcardgen.freshworks.club in Resources */,
+				1C0B8D0DDF78BF1E20BAA266A71B1E0B /* issuers.json in Resources */,
+				B5BF23F9CA3617FF063464A42F5A8257 /* issuers-test.json in Resources */,
+				D042C59BCE71F8D6E5C85670099D2A83 /* phsasmarthealthcard-dev.azurewebsites.net~v1~issuer in Resources */,
+				FB9136C68613D360CB8B18414C55D62D /* phsasmarthealthcard-dev.azurewebsites.net~v1~trusted~.well-known~issuers.json in Resources */,
+				2210CFB8A2A4031625104D15B9B7D012 /* pvc.service.yukon.ca~issuer in Resources */,
+				7CE7428E226225BBE4DA66E580C3D61B /* pvc.service.yukon.ca~test~issuer in Resources */,
+				C216AAB29B02B2DF42B64BB67D1430C5 /* rules.json in Resources */,
+				202A134FB70B6432F62091C4C4581256 /* rules-dev.json in Resources */,
+				D769F0001E211ED9000A68980D4E39CA /* rules-test.json in Resources */,
+				4BB422317C3D5E70A63B6D1B2D9A381C /* smarthealthcard.phsa.ca~v1~issuer in Resources */,
+				16BF1250FAA37C8E8093B1FF99CC418D /* smarthealthcard.phsa.ca~v1~trusted~.well-known~issuers.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6279,6 +6347,13 @@
 				0DE74F0B226EDC8C77D5CC00C0F15A6C /* OIDTokenUtilities.m in Sources */,
 				00B15FCCA7CC12C15A13010614F01854 /* OIDURLQueryComponent.m in Sources */,
 				A636502A305EA73DF8BE72146B23888D /* OIDURLSessionProvider.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D697A4A61DCB91ECE893DC766EEF36C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6913,6 +6988,12 @@
 			name = nanopb;
 			target = D2B5E7DCCBBFB32341D857D01211A1A3 /* nanopb */;
 			targetProxy = CA921C2B4DB9992B8726C7E7E7C7FBB5 /* PBXContainerItemProxy */;
+		};
+		447B73D854791346DE419DEB85E86498 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "BCVaccineValidator-BCVaccineValidator";
+			target = 3FECF474E55BD03143F14F8FC2EC11BB /* BCVaccineValidator-BCVaccineValidator */;
+			targetProxy = 4A746B2BAD81471D1ED297D9485ABA9C /* PBXContainerItemProxy */;
 		};
 		45EECE97B5272EBB67B7C4543C9F908C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -8069,6 +8150,23 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		54FEE974DFC339256521E8FDB603EAC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DB2DF5EF4CD36FA330334812C82F3F63 /* BCVaccineValidator.release.xcconfig */;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BCVaccineValidator";
+				DEVELOPMENT_TEAM = TCH45SXZ69;
+				IBSC_MODULE = BCVaccineValidator;
+				INFOPLIST_FILE = "Target Support Files/BCVaccineValidator/ResourceBundle-BCVaccineValidator-BCVaccineValidator-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = BCVaccineValidator;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -9380,6 +9478,23 @@
 			};
 			name = Debug;
 		};
+		E5ECF9009D2195A484E73FC585DF71DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 485094FE9A7BC2AEDDE201088C3212CA /* BCVaccineValidator.debug.xcconfig */;
+			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BCVaccineValidator";
+				DEVELOPMENT_TEAM = TCH45SXZ69;
+				IBSC_MODULE = BCVaccineValidator;
+				INFOPLIST_FILE = "Target Support Files/BCVaccineValidator/ResourceBundle-BCVaccineValidator-BCVaccineValidator-Info.plist";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = BCVaccineValidator;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
 		EAB8545504756377EEBB99BB6F038CFD /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B3C145518D1D9E83C82A7BDBF1595DD5 /* FirebaseInstallations.release.xcconfig */;
@@ -9620,6 +9735,15 @@
 			buildConfigurations = (
 				7FC4E2F77371528BA010DDDC46F0C7D4 /* Debug */,
 				097FCE19784279F44DBAEC516A352B10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		47B852F038E7E46E2F7CB91D5BDD7D09 /* Build configuration list for PBXNativeTarget "BCVaccineValidator-BCVaccineValidator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E5ECF9009D2195A484E73FC585DF71DD /* Debug */,
+				54FEE974DFC339256521E8FDB603EAC4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

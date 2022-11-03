@@ -57,8 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = false
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
-        IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
-        ForceUpdateView.show()
     }
     
     private func clearKeychainIfNecessary(authManager: AuthManager?) {
@@ -173,8 +171,6 @@ extension AppDelegate {
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
-        
-        
     }
 }
 

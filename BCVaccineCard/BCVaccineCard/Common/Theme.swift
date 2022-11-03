@@ -46,7 +46,7 @@ extension Theme {
         case .Fill:
             styleButtonfill(button: button,
                             fillColour: fillColour,
-                            fillTitleColour: fillColour,
+                            fillTitleColour: fillTitleColour,
                             bold: bold)
         case .Hollow:
             styleButtonHollow(button: button, bold: bold)

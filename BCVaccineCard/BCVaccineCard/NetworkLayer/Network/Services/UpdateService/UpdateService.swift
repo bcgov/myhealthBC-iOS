@@ -7,8 +7,9 @@
 
 import Foundation
 import KeychainAccess
+import StoreKit
 
-struct UpdateManager {
+struct UpdateService {
     
     let network: Network
     
@@ -17,8 +18,8 @@ struct UpdateManager {
     }
     
     func isUpdateAvailableInStore(completion: @escaping (Bool)->Void) {
-        guard let currentVersion = UpdateManagerStorage.currentAppVersion,
-              let bundleId = UpdateManagerStorage.bundleId,
+        guard let currentVersion = UpdateServiceStorage.currentAppVersion,
+              let bundleId = UpdateServiceStorage.bundleId,
               NetworkConnection.shared.hasConnection
         else {
             return completion(false)
@@ -46,27 +47,18 @@ struct UpdateManager {
     }
     
     func isBreakingConfigChangeAvailable(completion: @escaping (Bool)->Void) {
-        UpdateManagerStorage.setOrResetstoredAppVersion()
-        guard NetworkConnection.shared.hasConnection else {
-            return completion(false)
+        UpdateServiceStorage.setOrResetstoredAppVersion()
+        MobileConfigService(network: network).fetchConfig { responseData in
+            guard let response = responseData, let latest = response.version else {
+                return completion(false)
+            }
+            
+            guard let current = UpdateServiceStorage.storedCofigVersion else {
+                UpdateServiceStorage.storeConfig(version: latest)
+                return completion(false)
+            }
+            
+            return completion(current < latest)
         }
-        let request = NetworkRequest<DefaultParams, MobileConfigurationResponseObject>(
-            url: endpoints.mobileConfiguration,
-            type: .Get,
-            parameters: nil,
-            headers: nil,
-            completion: { responseData in
-                guard let response = responseData, let latest = response.version else {
-                    return completion(false)
-                }
-                
-                guard let current = UpdateManagerStorage.storedCofigVersion else {
-                    UpdateManagerStorage.storeConfig(version: latest)
-                    return completion(false)
-                }
-                
-                return completion(current < latest)
-        })
-        network.request(with: request)
     }
 }

@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol ForceUpdateViewDelegate {
+    func openStoreAppStore()
+}
+
 class ForceUpdateView: UIView, Theme {
     
     static let tag = 921412432
@@ -14,23 +18,25 @@ class ForceUpdateView: UIView, Theme {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var updateButton: UIButton!
     @IBOutlet weak var contactLabel: UILabel!
-    
     @IBOutlet weak var decLabel: UILabel!
+    
+    var delegate: ForceUpdateViewDelegate?
+    
     @IBAction func updateAction(_ sender: Any) {
+        delegate?.openStoreAppStore()
     }
     
-    static func show() {
+    static func show(delegate: ForceUpdateViewDelegate) {
         guard let window = AppDelegate.sharedInstance?.window else {
             return
         }
         if let existing = window.viewWithTag(tag) {
             existing.removeFromSuperview()
-            return
         }
         let view: ForceUpdateView = ForceUpdateView.fromNib()
         view.frame = window.bounds
         window.addSubview(view)
-        
+        view.delegate = delegate
         view.style()
     }
     
@@ -49,6 +55,6 @@ class ForceUpdateView: UIView, Theme {
               fillColour: .white,
               fillTitleColour: AppColours.appBlue,
               bold: true)
-        contactLabel.font = UIFont.bcSansRegularWithSize(size: 14)
+        contactLabel.font = UIFont.bcSansRegularWithSize(size: 13)
     }
 }

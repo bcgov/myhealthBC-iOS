@@ -326,12 +326,12 @@
 		3E31EA812913951D00E344E6 /* AppStoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7C2913951C00E344E6 /* AppStoreDataModel.swift */; };
 		3E31EA822913951D00E344E6 /* AppStoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7C2913951C00E344E6 /* AppStoreDataModel.swift */; };
 		3E31EA832913951D00E344E6 /* AppStoreDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7C2913951C00E344E6 /* AppStoreDataModel.swift */; };
-		3E31EA842913951D00E344E6 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7D2913951C00E344E6 /* UpdateManager.swift */; };
-		3E31EA852913951D00E344E6 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7D2913951C00E344E6 /* UpdateManager.swift */; };
-		3E31EA862913951D00E344E6 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7D2913951C00E344E6 /* UpdateManager.swift */; };
-		3E31EA882913A58F00E344E6 /* UpdateManagerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA872913A58F00E344E6 /* UpdateManagerStorage.swift */; };
-		3E31EA892913A58F00E344E6 /* UpdateManagerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA872913A58F00E344E6 /* UpdateManagerStorage.swift */; };
-		3E31EA8A2913A58F00E344E6 /* UpdateManagerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA872913A58F00E344E6 /* UpdateManagerStorage.swift */; };
+		3E31EA842913951D00E344E6 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7D2913951C00E344E6 /* UpdateService.swift */; };
+		3E31EA852913951D00E344E6 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7D2913951C00E344E6 /* UpdateService.swift */; };
+		3E31EA862913951D00E344E6 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7D2913951C00E344E6 /* UpdateService.swift */; };
+		3E31EA882913A58F00E344E6 /* UpdateServiceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA872913A58F00E344E6 /* UpdateServiceStorage.swift */; };
+		3E31EA892913A58F00E344E6 /* UpdateServiceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA872913A58F00E344E6 /* UpdateServiceStorage.swift */; };
+		3E31EA8A2913A58F00E344E6 /* UpdateServiceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA872913A58F00E344E6 /* UpdateServiceStorage.swift */; };
 		3E31EA8D29141F3500E344E6 /* ForceUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA8C29141F3500E344E6 /* ForceUpdateView.swift */; };
 		3E31EA8E29141F3500E344E6 /* ForceUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA8C29141F3500E344E6 /* ForceUpdateView.swift */; };
 		3E31EA8F29141F3500E344E6 /* ForceUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA8C29141F3500E344E6 /* ForceUpdateView.swift */; };
@@ -425,6 +425,9 @@
 		3ECD398928B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398A28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398B28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
+		3EEFB08E29142AC5009BF27D /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */; };
+		3EEFB08F29142B8F009BF27D /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */; };
+		3EEFB09029142B90009BF27D /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */; };
 		5B8BA6FE27BBB7D700250430 /* NetworkLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */; };
 		5BA177D027A1880600D61F2A /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177CF27A1880600D61F2A /* TestCoreDataStack.swift */; };
 		5BA177D227A18CDD00D61F2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */; };
@@ -1262,8 +1265,8 @@
 		322EBB5AF649DC5B3E4779FE /* Pods_Health_Gateway_Dev.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Health_Gateway_Dev.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TabBarController + UpdateManager.swift"; sourceTree = "<group>"; };
 		3E31EA7C2913951C00E344E6 /* AppStoreDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStoreDataModel.swift; sourceTree = "<group>"; };
-		3E31EA7D2913951C00E344E6 /* UpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
-		3E31EA872913A58F00E344E6 /* UpdateManagerStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManagerStorage.swift; sourceTree = "<group>"; };
+		3E31EA7D2913951C00E344E6 /* UpdateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
+		3E31EA872913A58F00E344E6 /* UpdateServiceStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateServiceStorage.swift; sourceTree = "<group>"; };
 		3E31EA8C29141F3500E344E6 /* ForceUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateView.swift; sourceTree = "<group>"; };
 		3E31EA9129141F5000E344E6 /* ForceUpdateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ForceUpdateView.xib; sourceTree = "<group>"; };
 		3E32322528B5FEB80067040C /* Recommendations.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
@@ -1297,6 +1300,7 @@
 		3E91C7AA28B51B0A005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationTargetDisease+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E91C7AD28B51B0B005AA34F /* Immunization+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Immunization+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3ECD398828B522970033B866 /* StorageService+Recommendations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Recommendations.swift"; sourceTree = "<group>"; };
+		3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
 		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayerTests.swift; sourceTree = "<group>"; };
 		5BA177CF27A1880600D61F2A /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
@@ -2044,15 +2048,15 @@
 			path = ViewPDFTableViewCell;
 			sourceTree = "<group>";
 		};
-		3E31EA7A291394E900E344E6 /* UpdateManager */ = {
+		3E31EA7A291394E900E344E6 /* UpdateService */ = {
 			isa = PBXGroup;
 			children = (
-				3E31EA7D2913951C00E344E6 /* UpdateManager.swift */,
-				3E31EA872913A58F00E344E6 /* UpdateManagerStorage.swift */,
+				3E31EA7D2913951C00E344E6 /* UpdateService.swift */,
+				3E31EA872913A58F00E344E6 /* UpdateServiceStorage.swift */,
 				3E31EA7C2913951C00E344E6 /* AppStoreDataModel.swift */,
 				3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */,
 			);
-			path = UpdateManager;
+			path = UpdateService;
 			sourceTree = "<group>";
 		};
 		3E31EA9029141F3A00E344E6 /* ForceUpdate */ = {
@@ -2088,6 +2092,8 @@
 		3E5E6EA328D23B9200724EDD /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */,
+				3E31EA7A291394E900E344E6 /* UpdateService */,
 				2D120D3928FF15CA00EB8EBF /* Dependant */,
 				3E5E6EB028D2746500724EDD /* Communication */,
 			);
@@ -2511,7 +2517,6 @@
 		7944F6B026F12A9D006B9444 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				3E31EA7A291394E900E344E6 /* UpdateManager */,
 				2940A34E2728393100132D7D /* Storage */,
 				29A12AF5271F69BF00A106B5 /* Analytics */,
 				79BDA079270CB87600FF30AB /* Constants */,
@@ -3817,6 +3822,7 @@
 				3E91C7B828B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
 				3E3DA94529005AA2009C500F /* StorageService+Dependent.swift in Sources */,
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
+				3EEFB08F29142B8F009BF27D /* MobileConfigService.swift in Sources */,
 				798CA1CD27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */,
 				3E31EA8E29141F3500E344E6 /* ForceUpdateView.swift in Sources */,
 				79218AA92751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
@@ -3929,7 +3935,7 @@
 				79218ACD27556AA50063004E /* StatusBannerView.swift in Sources */,
 				2912314526F9440600CF5F3B /* UIColor+EXT.swift in Sources */,
 				791C27BF2718315A001A6E12 /* AddCardsTableViewCell.swift in Sources */,
-				3E31EA852913951D00E344E6 /* UpdateManager.swift in Sources */,
+				3E31EA852913951D00E344E6 /* UpdateService.swift in Sources */,
 				7944F6D826F12C00006B9444 /* VaxQRZoomedInView.swift in Sources */,
 				7928345D2730E63A00EE2710 /* InteractiveLabelTableViewCell.swift in Sources */,
 				7944F70E26F3A0C1006B9444 /* QRRetrievalMethodViewController.swift in Sources */,
@@ -4003,7 +4009,7 @@
 				3E91C7AF28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */,
 				3E5E6EA628D23BB200724EDD /* AFNetwork.swift in Sources */,
 				79B1A0F62874CEBE009B3EFB /* CovidImmunizationRecord+CoreDataClass.swift in Sources */,
-				3E31EA892913A58F00E344E6 /* UpdateManagerStorage.swift in Sources */,
+				3E31EA892913A58F00E344E6 /* UpdateServiceStorage.swift in Sources */,
 				29AC25332790320F001C22B4 /* QRMaker.swift in Sources */,
 				294BD3D727B54AFE00BD8D46 /* StorageService+Medication.swift in Sources */,
 				291D43BB275FE0EC005F5B94 /* SettingsTextTableViewCell.swift in Sources */,
@@ -4117,6 +4123,7 @@
 				3E91C7B928B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
 				3E3DA94629005AA2009C500F /* StorageService+Dependent.swift in Sources */,
 				797BB9652767DCE100CD1645 /* HealthGatewayAPIWorker.swift in Sources */,
+				3EEFB09029142B90009BF27D /* MobileConfigService.swift in Sources */,
 				79BDA097270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				3E31EA8F29141F3500E344E6 /* ForceUpdateView.swift in Sources */,
 				29A7442D2762E304008A7DA2 /* HealthRecordDetailViewController.swift in Sources */,
@@ -4229,7 +4236,7 @@
 				79590D97280FFB83006EB59F /* RouterWorker.swift in Sources */,
 				79218ACE27556AA50063004E /* StatusBannerView.swift in Sources */,
 				794BD6442702EEC00084ADA8 /* Defaults.swift in Sources */,
-				3E31EA862913951D00E344E6 /* UpdateManager.swift in Sources */,
+				3E31EA862913951D00E344E6 /* UpdateService.swift in Sources */,
 				2941D70728482A1800EE98DE /* Device.swift in Sources */,
 				795AA76E271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
 				791C27CD2719DB3E001A6E12 /* QueueItCachedObject.swift in Sources */,
@@ -4303,7 +4310,7 @@
 				3E91C7B028B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */,
 				3E5E6EA728D23BB200724EDD /* AFNetwork.swift in Sources */,
 				293B32BF27D262F70064BAAA /* CommentsViewTableViewCell.swift in Sources */,
-				3E31EA8A2913A58F00E344E6 /* UpdateManagerStorage.swift in Sources */,
+				3E31EA8A2913A58F00E344E6 /* UpdateServiceStorage.swift in Sources */,
 				79B1A0F72874CEBE009B3EFB /* CovidImmunizationRecord+CoreDataClass.swift in Sources */,
 				795AA751271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				79218AA527518CC20063004E /* GatewayTestResultResponse.swift in Sources */,
@@ -4391,6 +4398,7 @@
 				3E91C7B728B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
 				3E3DA94429005AA2009C500F /* StorageService+Dependent.swift in Sources */,
 				29E19FD5286C024B00C235EF /* LabOrderRecordDetailView.swift in Sources */,
+				3EEFB08E29142AC5009BF27D /* MobileConfigService.swift in Sources */,
 				798005422852C66E006E390F /* CommentView.swift in Sources */,
 				3E31EA8D29141F3500E344E6 /* ForceUpdateView.swift in Sources */,
 				798005432852C66E006E390F /* BCVaccineCard.xcdatamodeld in Sources */,
@@ -4503,7 +4511,7 @@
 				798005952852C66E006E390F /* String+Localizable.swift in Sources */,
 				798005962852C66E006E390F /* StatusBannerView.swift in Sources */,
 				798005972852C66E006E390F /* UIColor+EXT.swift in Sources */,
-				3E31EA842913951D00E344E6 /* UpdateManager.swift in Sources */,
+				3E31EA842913951D00E344E6 /* UpdateService.swift in Sources */,
 				798005982852C66E006E390F /* AddCardsTableViewCell.swift in Sources */,
 				798005992852C66E006E390F /* VaxQRZoomedInView.swift in Sources */,
 				7980059A2852C66E006E390F /* InteractiveLabelTableViewCell.swift in Sources */,
@@ -4577,7 +4585,7 @@
 				3E91C7AE28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */,
 				3E5E6EA528D23BB200724EDD /* AFNetwork.swift in Sources */,
 				798005CF2852C66E006E390F /* AppPDFView.swift in Sources */,
-				3E31EA882913A58F00E344E6 /* UpdateManagerStorage.swift in Sources */,
+				3E31EA882913A58F00E344E6 /* UpdateServiceStorage.swift in Sources */,
 				798005D02852C66E006E390F /* LoginProcessStatus.swift in Sources */,
 				2922C12C287E0F8E000FF4F7 /* StorageService+HealthVisits.swift in Sources */,
 				79B1A0F52874CEBE009B3EFB /* CovidImmunizationRecord+CoreDataClass.swift in Sources */,

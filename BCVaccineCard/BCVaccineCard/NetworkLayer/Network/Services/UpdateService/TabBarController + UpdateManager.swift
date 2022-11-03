@@ -8,18 +8,27 @@
 import Foundation
 import StoreKit
 
-extension TabBarController: SKStoreProductViewControllerDelegate{
+extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateViewDelegate{
+    
     func showAppStoreUpdateDialogIfNeeded() {
         guard NetworkConnection().hasConnection else {return}
-        UpdateManager(network: AFNetwork()).isUpdateAvailableInStore { [weak self] updateAvailable in
-            guard let `self` = self, updateAvailable, !UpdateManagerStorage.updateDilogShownThisSession else {return}
-            UpdateManagerStorage.updateDilogShownThisSession = true
+        UpdateService(network: AFNetwork()).isUpdateAvailableInStore { [weak self] updateAvailable in
+            guard let `self` = self, updateAvailable, !UpdateServiceStorage.updateDilogShownThisSession else {return}
+            UpdateServiceStorage.updateDilogShownThisSession = true
             self.alert(title: "New update is available", message: "", buttonOneTitle: "Update Now", buttonOneCompletion: { [weak self] in
                 guard let `self` = self else {return}
                 self.openStoreAppStore()
             }, buttonTwoTitle: "Later") {
                 return
             }
+        }
+    }
+    
+    func showForceUpateIfNeeded(completion: @escaping (Bool)->Void) {
+        UpdateService(network: AFNetwork()).isBreakingConfigChangeAvailable { available in
+            guard available else {return completion(false)}
+            ForceUpdateView.show(delegate: self)
+            return completion(true)
         }
     }
     
