@@ -50,19 +50,36 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
     }
     
     func openStoreAppStore() {
+        let appId = "1590009068"
+        
+        openAppStoreWithStoreKit(appId: appId) { [weak self] success in
+            if success { return }
+            self?.openAppStoreWithDeeplink(appId: appId)
+        }
+    }
+    
+    private func openAppStoreWithStoreKit(appId: String , completion: @escaping(Bool)->Void) {
         let storeViewController = SKStoreProductViewController()
         storeViewController.delegate = self
-        
-        let parameters = [ SKStoreProductParameterITunesItemIdentifier : "1590009068"]
+        let parameters = [ SKStoreProductParameterITunesItemIdentifier : appId]
         storeViewController.loadProduct(withParameters: parameters) { [weak self] (loaded, error) -> Void in
             if loaded {
                 self?.present(storeViewController, animated: true, completion: nil)
+                return completion(true)
+            } else {
+                return completion(false)
             }
         }
     }
-    private func productViewControllerDidFinish(viewController: SKStoreProductViewController) {
-        viewController.dismiss(animated: true, completion: nil)
+    
+    private func openAppStoreWithDeeplink(appId: String) {
+        if let url  = URL(string: "itms-apps://itunes.apple.com/app/id\(appId)"), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
     }
+}
+private func productViewControllerDidFinish(viewController: SKStoreProductViewController) {
+    viewController.dismiss(animated: true, completion: nil)
 }
 
 extension UIViewController {
