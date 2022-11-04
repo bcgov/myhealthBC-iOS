@@ -15,7 +15,7 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
         UpdateService(network: AFNetwork()).isUpdateAvailableInStore { [weak self] updateAvailable in
             guard let `self` = self, updateAvailable, !UpdateServiceStorage.updateDilogShownThisSession else {return}
             UpdateServiceStorage.updateDilogShownThisSession = true
-            self.alert(title: "New update is available", message: "", buttonOneTitle: "Update Now", buttonOneCompletion: { [weak self] in
+            self.alert(title: "New update is available", message: "A new version of the Health Gateway mobile application is availble on the App Store.", buttonOneTitle: "Update Now", buttonOneCompletion: { [weak self] in
                 guard let `self` = self else {return}
                 self.openStoreAppStore()
             }, buttonTwoTitle: "Later") {
