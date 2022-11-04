@@ -22,20 +22,17 @@ class ForceUpdateView: UIView, Theme {
     
     var delegate: ForceUpdateViewDelegate?
     
-    @IBAction func updateAction(_ sender: Any) {
-        delegate?.openStoreAppStore()
-    }
-    
-    static func show(delegate: ForceUpdateViewDelegate) {
+    static func show(delegate: ForceUpdateViewDelegate, tabBarController: TabBarController) {
         guard let window = AppDelegate.sharedInstance?.window else {
             return
         }
-        if let existing = window.viewWithTag(tag) {
+        if let existing = tabBarController.view.viewWithTag(tag) {
             existing.removeFromSuperview()
         }
         let view: ForceUpdateView = ForceUpdateView.fromNib()
-        view.frame = window.bounds
-        window.addSubview(view)
+        view.frame = tabBarController.view.bounds
+        tabBarController.view.addSubview(view)
+        view.addEqualSizeContraints(to: tabBarController.view)
         view.delegate = delegate
         view.style()
     }
@@ -56,5 +53,11 @@ class ForceUpdateView: UIView, Theme {
               fillTitleColour: AppColours.appBlue,
               bold: true)
         contactLabel.font = UIFont.bcSansRegularWithSize(size: 13)
+        updateButton.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
     }
+    
+    @objc func buttonAction(sender: UIButton!) {
+        delegate?.openStoreAppStore()
+    }
+    
 }

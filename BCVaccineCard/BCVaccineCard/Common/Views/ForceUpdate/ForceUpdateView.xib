@@ -53,16 +53,13 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6NY-bg-zvZ">
-                    <rect key="frame" x="113" y="613" width="167" height="54"/>
+                    <rect key="frame" x="113" y="446" width="167" height="54"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="54" id="B9m-dS-F9q"/>
                         <constraint firstAttribute="width" constant="167" id="yXR-jW-VYg"/>
                     </constraints>
-                    <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="plain" title="Update Now"/>
-                    <connections>
-                        <action selector="updateAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="TOj-pl-KZP"/>
-                    </connections>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="Update Now"/>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
@@ -70,6 +67,7 @@
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="JkO-wu-zDH" secondAttribute="trailing" constant="31" id="65U-bA-FJj"/>
                 <constraint firstItem="JkO-wu-zDH" firstAttribute="top" secondItem="nMG-Ql-Q0f" secondAttribute="bottom" constant="20" id="9WQ-c5-tS7"/>
+                <constraint firstItem="6NY-bg-zvZ" firstAttribute="top" secondItem="JkO-wu-zDH" secondAttribute="bottom" constant="24" id="BNr-rf-bvb"/>
                 <constraint firstItem="QJd-LR-0hj" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="DwE-Of-Hs5"/>
                 <constraint firstItem="nMG-Ql-Q0f" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="GNH-je-g6X"/>
                 <constraint firstItem="nMG-Ql-Q0f" firstAttribute="top" secondItem="mdd-An-Gxf" secondAttribute="bottom" constant="20" id="Hxf-Kj-UcT"/>
@@ -83,7 +81,6 @@
                 <constraint firstAttribute="trailing" secondItem="HgL-j7-nil" secondAttribute="trailing" constant="42" id="flN-TC-0en"/>
                 <constraint firstItem="mdd-An-Gxf" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="nue-9B-0zA"/>
                 <constraint firstItem="JkO-wu-zDH" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="tVT-KV-cPY"/>
-                <constraint firstItem="HgL-j7-nil" firstAttribute="top" secondItem="6NY-bg-zvZ" secondAttribute="bottom" constant="20" id="zcE-0l-C2O"/>
             </constraints>
             <connections>
                 <outlet property="contactLabel" destination="HgL-j7-nil" id="2pi-Zh-XZy"/>
