@@ -18,7 +18,6 @@ struct MobileConfigService {
         guard NetworkConnection.shared.hasConnection else {
             return completion(MobileConfigStorage.cachedConfig)
         }
-        network.addLoader(message: .empty)
         let request = NetworkRequest<DefaultParams, MobileConfigurationResponseObject>(
             url: UrlAccessor.mobileConfigURL,
             type: .Get,
@@ -28,7 +27,6 @@ struct MobileConfigService {
                 if let response = responseData {
                     MobileConfigStorage.store(config: response)
                 }
-                self.network.removeLoader()
                 return completion(responseData)
         })
         network.request(with: request)
