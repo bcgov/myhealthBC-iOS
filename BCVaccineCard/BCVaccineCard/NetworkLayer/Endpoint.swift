@@ -33,16 +33,16 @@ protocol EndpointsAccessor {
 struct UrlAccessor {
     #if PROD
 //    let baseUrl = URL(string: "https://hg.api.gov.bc.ca/")!
-    let mobileConfigURL = URL(string: "https://healthgateway.gov.bc.ca/mobileconfiguration")!
+    static let mobileConfigURL = URL(string: "https://healthgateway.gov.bc.ca/mobileconfiguration")!
 //    let webClientURL = URL(string: "https://healthgateway.gov.bc.ca/")!
 //    let fallbackBaseUrl = URL(string: "https://healthgateway.gov.bc.ca/")!
     let baseURL = BaseURLWorker.shared.baseURL ?? URL(string: "https://healthgateway.gov.bc.ca/")!
     #elseif TEST
-    let mobileConfigURL = URL(string: "https://test.healthgateway.gov.bc.ca/mobileconfiguration")!
+    static let mobileConfigURL = URL(string: "https://test.healthgateway.gov.bc.ca/mobileconfiguration")!
     let baseURL = BaseURLWorker.shared.baseURL ?? URL(string: "https://test.healthgateway.gov.bc.ca/")!
     #elseif DEV
 //    let baseUrl = URL(string: "https://hg-dev.api.gov.bc.ca/")!
-    let mobileConfigURL = URL(string: "https://dev.healthgateway.gov.bc.ca/mobileconfiguration")!
+    static let mobileConfigURL = URL(string: "https://dev.healthgateway.gov.bc.ca/mobileconfiguration")!
 //    let webClientURL = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
 //    let fallbackBaseUrl = URL(string: "https://dev.healthgateway.gov.bc.ca/")!
     let baseURL = BaseURLWorker.shared.baseURL ?? URL(string: "https://dev.healthgateway.gov.bc.ca/")!
@@ -75,7 +75,7 @@ struct UrlAccessor {
 extension UrlAccessor: EndpointsAccessor {
     
     var getBaseURL: URL {
-        return mobileConfigURL
+        return UrlAccessor.mobileConfigURL
     }
     
     var getVaccineCard: URL {
@@ -108,7 +108,7 @@ extension UrlAccessor: EndpointsAccessor {
     
     var throttleHG: URL {
 //        return self.baseURL.appendingPathComponent("api/gatewayapiservice/MobileConfiguration")
-        return self.mobileConfigURL
+        return UrlAccessor.mobileConfigURL
     }
     
     var communicationsMobile: URL {

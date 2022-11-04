@@ -60,14 +60,16 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         BaseURLWorker.setup(BaseURLWorker.Config(delegateOwner: self))
-        BaseURLWorker.shared.setBaseURL {
-            self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
-            self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
-            self.routerWorker = RouterWorker(delegateOwner: self)
-            self.setup(selectedIndex: 0)
-            self.showLoginPromptIfNecessary()
-        }
-        
+        showForceUpateIfNeeded(completion: { updateNeeded in
+            guard !updateNeeded else {return}
+            BaseURLWorker.shared.setBaseURL {
+                self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
+                self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
+                self.routerWorker = RouterWorker(delegateOwner: self)
+                self.setup(selectedIndex: 0)
+                self.showLoginPromptIfNecessary()
+            }
+        })
     }
     
     private func showLoginPromptIfNecessary() {

@@ -9,5 +9,15 @@ import Foundation
 
 struct MobileConfigurationResponseObject: Codable {
     let online: Bool
-    let baseUrl: String
+    let baseURL, openIDURL: String?
+    let openIDClientID: String?
+    let version: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case online
+        case baseURL = "baseUrl"
+        case openIDURL = "openIdUrl"
+        case openIDClientID = "openIdClientId"
+        case version
+    }
 }
