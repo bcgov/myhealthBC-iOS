@@ -70,8 +70,6 @@ class TabBarController: UITabBarController {
                 self.showLoginPromptIfNecessary()
             }
         })
-        
-        
     }
     
     private func showLoginPromptIfNecessary() {

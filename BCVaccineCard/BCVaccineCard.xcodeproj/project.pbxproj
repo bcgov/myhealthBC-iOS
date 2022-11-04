@@ -2637,6 +2637,7 @@
 				7944F6C326F12C00006B9444 /* AppStyleButton */,
 				7944F6C826F12C00006B9444 /* VaxQRZoomedInView */,
 				799050B5273C6908006CD726 /* HealthRecordsViews */,
+				3EEFB0BE2915D78D009BF27D /* ForceUpdate */,
 				29498CA12767EA7300E36406 /* PagingIndicatorView.swift */,
 				3E31EA9029141F3A00E344E6 /* ForceUpdate */,
 			);
@@ -3402,6 +3403,7 @@
 				2971956B28871B1A00CA824A /* SectionDescriptionTableViewCell.xib in Resources */,
 				7918A8CA27482E1900D19D1C /* TextListView.xib in Resources */,
 				795AA76727155F7100E59FF1 /* Resource.storyboard in Resources */,
+				3EEFB0C22915D7BE009BF27D /* ForceUpdateView.xib in Resources */,
 				2922C0CC286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */,
 				293B32B927D2628A0064BAAA /* CommentsListView.xib in Resources */,
 				3E78AEC528F8724900C66E28 /* Dependents.storyboard in Resources */,
@@ -3521,6 +3523,7 @@
 				794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */,
 				79218AB3275196150063004E /* HealthRecordsUserView.xib in Resources */,
 				2922C0CD286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */,
+				3EEFB0C32915D7BE009BF27D /* ForceUpdateView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3607,6 +3610,7 @@
 				2971956A28871B1A00CA824A /* SectionDescriptionTableViewCell.xib in Resources */,
 				7980063F2852C66E006E390F /* TextListView.xib in Resources */,
 				798006402852C66E006E390F /* Resource.storyboard in Resources */,
+				3EEFB0C12915D7BE009BF27D /* ForceUpdateView.xib in Resources */,
 				2922C0CB286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */,
 				798006412852C66E006E390F /* CommentsListView.xib in Resources */,
 				3E78AEC428F8724900C66E28 /* Dependents.storyboard in Resources */,
@@ -3829,6 +3833,7 @@
 				7944F67926F12613006B9444 /* AppDelegate.swift in Sources */,
 				3ECD398A28B522970033B866 /* StorageService+Recommendations.swift in Sources */,
 				795AA73E271094B400E59FF1 /* Endpoint.swift in Sources */,
+				3EEFB0B62915D78A009BF27D /* TabBarController + UpdateManager.swift in Sources */,
 				797DE3C227D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */,
 				293B32AF27D25C4E0064BAAA /* CommentView.swift in Sources */,
 				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
@@ -3884,11 +3889,13 @@
 				5BA177D227A18CDD00D61F2A /* CoreDataStack.swift in Sources */,
 				2920AC1E278E3DA300F7CAE7 /* SecurityAndDataViewController.swift in Sources */,
 				792834582730E53200EE2710 /* InteractiveLinkLabel.swift in Sources */,
+				3EEFB0BC2915D78A009BF27D /* AppStoreDataModel.swift in Sources */,
 				795AA7482713FFF800E59FF1 /* QueueItEngine.swift in Sources */,
 				795AA72F27108C1C00E59FF1 /* GatewayRequestObjects.swift in Sources */,
 				7944F6D526F12C00006B9444 /* AppStyleButton.swift in Sources */,
 				3E91C7BB28B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift in Sources */,
 				79218A9C275141800063004E /* GetARecordTableViewCell.swift in Sources */,
+				3EEFB0B92915D78A009BF27D /* UpdateService.swift in Sources */,
 				29921C962773B049005025D2 /* AttributedString+EXT.swift in Sources */,
 				795AA73B271092D500E59FF1 /* MIMEType.swift in Sources */,
 				2922C0F328772573000FF4F7 /* StorageService+Immunization.swift in Sources */,
@@ -3924,6 +3931,7 @@
 				3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */,
 				2DF2102628DD2B2700F5E01C /* ViewPDFTableViewCell.swift in Sources */,
 				79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
+				3EEFB0C52915D7BE009BF27D /* ForceUpdateView.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				29719544288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
 				2971955F288719D400CA824A /* ImmunizationForecastTableViewCell.swift in Sources */,
@@ -4033,6 +4041,7 @@
 				795AA76A271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
 				7944F6FF26F3141A006B9444 /* VaccineCardTableViewCell.swift in Sources */,
 				2932DCDF275A9D2C00532BC4 /* StorageService+VaccineCard.swift in Sources */,
+				3EEFB0A92915D777009BF27D /* MobileConfigService.swift in Sources */,
 				79B9D01227E2869D00987D9F /* HomeScreenTableViewCell.swift in Sources */,
 				796653DA27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */,
 				29245D40275581C700F48642 /* StorageService+TestResults.swift in Sources */,
@@ -4068,6 +4077,7 @@
 				79B9D00D27E2788100987D9F /* HomeScreenViewController.swift in Sources */,
 				798CA1C427ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
 				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
+				3EEFB0AC2915D777009BF27D /* MobileConfigStorage.swift in Sources */,
 				29A5B6D627B55B65006A9BA7 /* Pharmacy+CoreDataClass.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				29719551288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
@@ -4131,6 +4141,7 @@
 				795AA73327108F5900E59FF1 /* NetworkAccessor.swift in Sources */,
 				3ECD398B28B522970033B866 /* StorageService+Recommendations.swift in Sources */,
 				794BD6332702EEC00084ADA8 /* Date+Ext.swift in Sources */,
+				3EEFB0B72915D78A009BF27D /* TabBarController + UpdateManager.swift in Sources */,
 				797DE3C327D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */,
 				293B32B027D25C4E0064BAAA /* CommentView.swift in Sources */,
 				79218AAA2751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
@@ -4186,11 +4197,13 @@
 				29A5B6D727B55B65006A9BA7 /* Pharmacy+CoreDataClass.swift in Sources */,
 				7958DBA8286CFB2F00377F9B /* AuthenticatedImmunizationsResponseObject.swift in Sources */,
 				79218A9D275141800063004E /* GetARecordTableViewCell.swift in Sources */,
+				3EEFB0BD2915D78A009BF27D /* AppStoreDataModel.swift in Sources */,
 				2978852E279624E100FF912D /* SettingsProfileTableViewCell.swift in Sources */,
 				5BA177D327A18CDD00D61F2A /* CoreDataStack.swift in Sources */,
 				794BD63B2702EEC00084ADA8 /* CustomNavigationController.swift in Sources */,
 				3E91C7BC28B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift in Sources */,
 				794BD63C2702EEC00084ADA8 /* AppStyleButton.swift in Sources */,
+				3EEFB0BA2915D78A009BF27D /* UpdateService.swift in Sources */,
 				795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				79218ADF27557F7D0063004E /* StaticPositiveTestTableViewCell.swift in Sources */,
 				799050B4273C4D3F006CD726 /* FolderRecordsViewController.swift in Sources */,
@@ -4226,6 +4239,7 @@
 				3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */,
 				2DF2102728DD2B2700F5E01C /* ViewPDFTableViewCell.swift in Sources */,
 				297967A527C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */,
+				3EEFB0C62915D7BE009BF27D /* ForceUpdateView.swift in Sources */,
 				79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				29719545288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
 				29719560288719D400CA824A /* ImmunizationForecastTableViewCell.swift in Sources */,
@@ -4335,6 +4349,7 @@
 				29B446AC2735766400E0F967 /* AppPDFView.swift in Sources */,
 				291D43E32762E203005F5B94 /* HealthRecordCollectionViewCell.swift in Sources */,
 				794BD6502702EEC00084ADA8 /* VaccineCardTableViewCell.swift in Sources */,
+				3EEFB0AA2915D777009BF27D /* MobileConfigService.swift in Sources */,
 				797BB95F276408B800CD1645 /* StorageService+VaccineCard.swift in Sources */,
 				79B9D01B27E31D7100987D9F /* NotificationManager.swift in Sources */,
 				29245D41275581C700F48642 /* StorageService+TestResults.swift in Sources */,
@@ -4370,6 +4385,7 @@
 				794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */,
 				7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				798CA1C527ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
+				3EEFB0AD2915D777009BF27D /* MobileConfigStorage.swift in Sources */,
 				79932CAF2790FA94007E8D92 /* Theme.swift in Sources */,
 				796653EF27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29719552288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
@@ -4407,6 +4423,7 @@
 				7980053D2852C66E006E390F /* Theme.swift in Sources */,
 				3ECD398928B522970033B866 /* StorageService+Recommendations.swift in Sources */,
 				7980053E2852C66E006E390F /* AnalyticsService.swift in Sources */,
+				3EEFB0B52915D78A009BF27D /* TabBarController + UpdateManager.swift in Sources */,
 				7980053F2852C66E006E390F /* AppDelegate.swift in Sources */,
 				798005402852C66E006E390F /* Endpoint.swift in Sources */,
 				798005412852C66E006E390F /* AuthenticatedPDFResponseObject.swift in Sources */,
@@ -4462,11 +4479,13 @@
 				798005662852C66E006E390F /* CoreDataStack.swift in Sources */,
 				798005672852C66E006E390F /* SecurityAndDataViewController.swift in Sources */,
 				798005682852C66E006E390F /* InteractiveLinkLabel.swift in Sources */,
+				3EEFB0BB2915D78A009BF27D /* AppStoreDataModel.swift in Sources */,
 				798005692852C66E006E390F /* QueueItEngine.swift in Sources */,
 				7980056A2852C66E006E390F /* GatewayRequestObjects.swift in Sources */,
 				7980056B2852C66E006E390F /* AppStyleButton.swift in Sources */,
 				3E91C7BA28B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift in Sources */,
 				7980056C2852C66E006E390F /* GetARecordTableViewCell.swift in Sources */,
+				3EEFB0B82915D78A009BF27D /* UpdateService.swift in Sources */,
 				7980056D2852C66E006E390F /* AttributedString+EXT.swift in Sources */,
 				7980056E2852C66E006E390F /* MIMEType.swift in Sources */,
 				2922C0F228772464000FF4F7 /* StorageService+Immunization.swift in Sources */,
@@ -4502,6 +4521,7 @@
 				3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */,
 				2DF2102528DD2B2700F5E01C /* ViewPDFTableViewCell.swift in Sources */,
 				798005872852C66E006E390F /* UserRecordListView.swift in Sources */,
+				3EEFB0C42915D7BE009BF27D /* ForceUpdateView.swift in Sources */,
 				798005882852C66E006E390F /* LargerTouchAreaButton.swift in Sources */,
 				29719543288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
 				2971955E288719D400CA824A /* ImmunizationForecastTableViewCell.swift in Sources */,
@@ -4611,6 +4631,7 @@
 				798005D42852C66E006E390F /* DummyCommentMaker.swift in Sources */,
 				798005D52852C66E006E390F /* Medication+CoreDataProperties.swift in Sources */,
 				798005D62852C66E006E390F /* URL+EXT.swift in Sources */,
+				3EEFB0A82915D777009BF27D /* MobileConfigService.swift in Sources */,
 				798005D72852C66E006E390F /* NewsFeedResponse.swift in Sources */,
 				798005D82852C66E006E390F /* VaccineCardTableViewCell.swift in Sources */,
 				798005D92852C66E006E390F /* StorageService+VaccineCard.swift in Sources */,
@@ -4646,6 +4667,7 @@
 				798005F02852C66E006E390F /* GatewayFormViewController.swift in Sources */,
 				798005F12852C66E006E390F /* HomeScreenViewController.swift in Sources */,
 				798005F22852C66E006E390F /* TermsOfServiceViewController.swift in Sources */,
+				3EEFB0AB2915D777009BF27D /* MobileConfigStorage.swift in Sources */,
 				798005F32852C66E006E390F /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				798005F42852C66E006E390F /* Pharmacy+CoreDataClass.swift in Sources */,
 				29719550288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
@@ -4973,7 +4995,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -4981,7 +5003,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.5;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bc.gov.myhealth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "MyHealth BC - 2023";
@@ -5001,7 +5023,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -5009,7 +5031,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.5;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bc.gov.myhealth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "MyHealth BC - 2023";

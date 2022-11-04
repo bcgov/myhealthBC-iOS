@@ -10,8 +10,8 @@ C --> D([execute Pod instsall])
 D --> E([open BCVaccineCard.xcworkspace])
 ```
 ## Prerequisites
-[Xcode](https://developer.apple.com/xcode/)
-[Cocoapods](https://cocoapods.org/)
+- [Xcode](https://developer.apple.com/xcode/)
+- [Cocoapods](https://cocoapods.org/)
 
 
 
