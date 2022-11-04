@@ -15,7 +15,7 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
         UpdateService(network: AFNetwork()).isUpdateAvailableInStore { [weak self] updateAvailable in
             guard let `self` = self, updateAvailable, !UpdateServiceStorage.updateDilogShownThisSession else {return}
             UpdateServiceStorage.updateDilogShownThisSession = true
-            self.alert(title: "New update is available", message: "A new version of the Health Gateway mobile application is availble on the App Store.", buttonOneTitle: "Update Now", buttonOneCompletion: { [weak self] in
+            self.alert(title: "New update is available", message: "A new version of the Health Gateway mobile application is available on the app store.", buttonOneTitle: "Update Now", buttonOneCompletion: { [weak self] in
                 guard let `self` = self else {return}
                 self.openStoreAppStore()
             }, buttonTwoTitle: "Later") {
@@ -25,6 +25,23 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
     }
     
     func showForceUpateIfNeeded(completion: @escaping (Bool)->Void) {
+        if NetworkConnection.shared.hasConnection {
+            checkForceUpdate(completion: completion)
+        } else {
+            checkForceUpdateWhenConnected()
+            return completion(false)
+        }
+    }
+    
+    fileprivate func checkForceUpdateWhenConnected() {
+        NetworkConnection().initListener { [weak self] connected in
+            if connected {
+                self?.checkForceUpdate(completion: {_ in })
+            }
+        }
+    }
+    
+    fileprivate func checkForceUpdate(completion: @escaping (Bool)->Void) {
         UpdateService(network: AFNetwork()).isBreakingConfigChangeAvailable { available in
             guard available else {return completion(false)}
             ForceUpdateView.show(delegate: self)
