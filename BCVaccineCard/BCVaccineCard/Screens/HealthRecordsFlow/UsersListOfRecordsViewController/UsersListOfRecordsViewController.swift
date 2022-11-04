@@ -377,7 +377,7 @@ extension UsersListOfRecordsViewController {
             let authenticatedRecords = patientRecords.filter({$0.isAuthenticated})
             self.dataSource = unauthenticatedRecords
             self.hiddenRecords = authenticatedRecords
-            self.hiddenCellType = .loginToAccess(hiddenRecords: hiddenRecords.count)
+            self.hiddenCellType = .loginToAccesshealthRecords(hiddenRecords: hiddenRecords.count)
         }
         self.setupTableView()
         self.navSetup(style: navStyle, authenticated: self.authenticated)
@@ -436,27 +436,26 @@ extension UsersListOfRecordsViewController {
     // NOTE: No special routing required here on login, as the user should remain on the same screen
     private func performBCSCLogin() {
         self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-            if response == .Online {
-                self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
-                    guard let `self` = self, authenticationStatus == .Completed else {return}
-                    if let authStatus = Defaults.loginProcessStatus,
-                       authStatus.hasCompletedLoginProcess == true,
-                       let storedName = authStatus.loggedInUserAuthManagerDisplayName,
-                       let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
-                       let currentName = currentAuthPatient.authManagerDisplayName,
-                       storedName != currentName {
-                        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-                        StorageService.shared.deleteAuthenticatedPatient(with: storedName)
-                        self.authManager.clearMedFetchProtectiveWordDetails()
-                        //                self.patient = nil
-                        if self.navStyle == .multiUser {
-                            //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
-                            //                    self.tableView.startLoadingIndicator()
-                            self.navigationController?.popViewController(animated: true)
-                        }
-                    } else {
-                        self.fetchDataSource()
+            guard response == .Online else {return}
+            self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
+                guard let `self` = self, authenticationStatus == .Completed else {return}
+                if let authStatus = Defaults.loginProcessStatus,
+                   authStatus.hasCompletedLoginProcess == true,
+                   let storedName = authStatus.loggedInUserAuthManagerDisplayName,
+                   let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
+                   let currentName = currentAuthPatient.authManagerDisplayName,
+                   storedName != currentName {
+                    StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                    StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+                    self.authManager.clearMedFetchProtectiveWordDetails()
+                    //                self.patient = nil
+                    if self.navStyle == .multiUser {
+                        //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
+                        //                    self.tableView.startLoadingIndicator()
+                        self.navigationController?.popViewController(animated: true)
                     }
+                } else {
+                    self.fetchDataSource()
                 }
             }
         })
@@ -518,7 +517,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             guard let `self` = self else { return }
             guard let type = hiddenType else { return }
             switch type {
-            case .loginToAccess:
+            case .loginToAccesshealthRecords:
                 self.performBCSCLogin()
             case .medicalRecords:
                 if self.authManager.medicalFetchRequired {
@@ -526,6 +525,8 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                 }
                 self.promptProtectiveVC(medFetchRequired: self.authManager.medicalFetchRequired)
             case .authenticate:
+                break
+            case .loginToAccessDependents:
                 break
             }
         }
