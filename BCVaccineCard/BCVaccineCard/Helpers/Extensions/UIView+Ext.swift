@@ -97,12 +97,17 @@ extension UIView {
         }
     }
     
-    public func addEqualSizeContraints(to toView: UIView, paddingVertical: CGFloat, paddingHorizontal: CGFloat) {
+    public func addEqualSizeContraints(to toView: UIView, paddingVertical: CGFloat, paddingHorizontal: CGFloat, safe: Bool? = false) {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.topAnchor.constraint(equalTo: toView.topAnchor, constant: paddingVertical).isActive = true
-        self.bottomAnchor.constraint(equalTo: toView.bottomAnchor, constant: 0 - paddingVertical).isActive = true
         self.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: paddingHorizontal).isActive = true
         self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0 - paddingHorizontal).isActive = true
+        if let safe = safe, safe {
+            self.bottomAnchor.constraint(equalTo: toView.safeBottomAnchor, constant: 0 - paddingVertical).isActive = true
+            self.topAnchor.constraint(equalTo: toView.safeTopAnchor, constant: paddingVertical).isActive = true
+        } else {
+            self.bottomAnchor.constraint(equalTo: toView.bottomAnchor, constant: 0 - paddingVertical).isActive = true
+            self.topAnchor.constraint(equalTo: toView.topAnchor, constant: paddingVertical).isActive = true
+        }
     }
     
     public func addEqualSizeContraints(to toView: UIView, paddingBottom: CGFloat) {
@@ -141,6 +146,14 @@ extension UIView {
         self.layer.cornerRadius = radius
         self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
     }
+    
+
+    
+    public func addHeight(constant height: CGFloat) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+    
     
     // Load a nib
     public class func fromNib<T: UIView>(bundle: Bundle? = Bundle.main) -> T {

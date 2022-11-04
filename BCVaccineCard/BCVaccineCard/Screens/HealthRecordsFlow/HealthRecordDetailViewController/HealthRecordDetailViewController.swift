@@ -23,11 +23,18 @@ class HealthRecordDetailViewController: BaseViewController {
     
     @IBOutlet weak private var tableView: UITableView!
     
+    public static var currentInstance: HealthRecordDetailViewController!
+    
     private var dataSource: HealthRecordsDetailDataSource!
     private var authenticatedRecord: Bool!
     private var userNumberHealthRecords: Int!
     private var patient: Patient?
     private var pdfData: String?
+    private var pdfId: String?
+    private var type: LabTestType?
+    private var pdfAPIWorker: PDFAPIWorker?
+    
+    let connectionListener = NetworkConnection()
     
     override var getRecordFlowType: RecordsFlowVCs? {
         return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource, userNumberHealthRecords: userNumberHealthRecords)
@@ -35,8 +42,13 @@ class HealthRecordDetailViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navSetup()
+        HealthRecordDetailViewController.currentInstance = self
+        navSetup(hasConnection: NetworkConnection.shared.hasConnection)
         setupStorageListener()
+        connectionListener.initListener { [weak self] connected in
+            guard let `self` = self else {return}
+            self.navSetup(hasConnection: connected)
+        }
     }
     
     // TODO: We should look into this - not sure we should pop to root VC from detail view on a storage change
@@ -81,6 +93,11 @@ class HealthRecordDetailViewController: BaseViewController {
         super.viewDidAppear(animated)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.pdfAPIWorker = nil
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
@@ -106,18 +123,22 @@ class HealthRecordDetailViewController: BaseViewController {
 
 // MARK: Navigation setup
 extension HealthRecordDetailViewController {
-    private func navSetup() {
+    private func navSetup(hasConnection: Bool) {
+        let navDownloadIcon = hasConnection ? UIImage(named: "nav-download") : UIImage(named: "nav-download-disabled")?.withRenderingMode(.alwaysOriginal)
+
         var rightNavButton: NavButton?
         switch dataSource.type {
         case .laboratoryOrder(model: let labOrder):
-            if let pdf = labOrder.pdf {
-                self.pdfData = pdf
-                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+            if labOrder.reportAvailable == true {
+                self.pdfId = labOrder.labPdfId
+                self.type = .normal
+//                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         case .covidTestResultRecord(model: let covidTestOrder):
-            if let pdf = covidTestOrder.pdf {
-                self.pdfData = pdf
-                rightNavButton = NavButton(image: UIImage(named: "nav-download"), action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
+            if covidTestOrder.reportAvailable == true {
+                self.pdfId = covidTestOrder.orderId
+                self.type = .covid
+//                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         default:
             // NOTE: Enable Delete Record
@@ -180,11 +201,56 @@ extension HealthRecordDetailViewController {
         } onCancel: {
         }
     }
-    
+    // TODO: Call this in the new section
     @objc private func showPDFView() {
-        guard let pdf = self.pdfData else { return }
-        self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+        if let pdf = self.pdfData {
+            self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+        } else {
+            if !NetworkConnection.shared.hasConnection {
+                AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+                return
+            }
+            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let reportId = self.pdfId, let type = self.type else {
+                showPDFUnavailableAlert()
+                return
+            }
+            let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+            self.pdfAPIWorker = PDFAPIWorker(delegateOwner: self, authCredentials: authCreds)
+            self.view.startLoadingIndicator()
+            BaseURLWorker.shared.setBaseURL { [weak self] in
+                guard let `self` = self else {
+                    return
+                }
+                guard BaseURLWorker.shared.isOnline == true else {
+                    self.view.endLoadingIndicator()
+                    return
+                }
+                self.pdfAPIWorker?.getAuthenticatedLabPDF(authCredentials: authCreds, reportId: reportId, type: type, completion: { [weak self]  pdf in
+                    guard let `self` = self else {return}
+                    self.pdfData = pdf
+                    self.view.endLoadingIndicator()
+                    if let pdf = pdf {
+                        self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                    } else {
+                        self.showPDFUnavailableAlert()
+                    }
+                })
+            }
+        }
     }
+    
+    private func showPDFUnavailableAlert() {
+        self.alert(title: "Error", message: "There was an error fetching the PDF of this record")
+    }
+}
+
+extension HealthRecordDetailViewController: AppStyleButtonDelegate {
+    func buttonTapped(type: AppStyleButton.ButtonType) {
+        if type == .viewPDF {
+            showPDFView()
+        }
+    }
+
 }
 
 // MARK: This is for showing the PDF view using native behaviour

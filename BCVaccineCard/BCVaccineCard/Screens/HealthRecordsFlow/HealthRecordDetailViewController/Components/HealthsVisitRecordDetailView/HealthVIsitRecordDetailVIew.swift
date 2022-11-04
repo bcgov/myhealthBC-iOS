@@ -30,7 +30,9 @@ class HealthVisitRecordDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
     }
     
     private func getCell(indexPath: IndexPath, tableView: UITableView) -> HealthVisitRecordDetailTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: HealthVisitRecordDetailTableViewCell.getName, for: indexPath) as? HealthVisitRecordDetailTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: HealthVisitRecordDetailTableViewCell.getName, for: indexPath) as? HealthVisitRecordDetailTableViewCell
+        cell?.selectionStyle = .none
+        return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

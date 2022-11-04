@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21G83" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Comment" representedClassName="Comment" syncable="YES">
         <attribute name="createdBy" optional="YES" attributeType="String"/>
         <attribute name="createdDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -203,6 +203,7 @@
         <element name="Immunization" positionX="180" positionY="414" width="128" height="179"/>
         <element name="ImmunizationAgent" positionX="171" positionY="405" width="128" height="104"/>
         <element name="ImmunizationDetails" positionX="162" positionY="396" width="128" height="74"/>
+        <element name="ImmunizationForecast" positionX="162" positionY="396" width="128" height="134"/>
         <element name="LaboratoryOrder" positionX="162" positionY="396" width="128" height="254"/>
         <element name="LaboratoryTest" positionX="171" positionY="405" width="128" height="119"/>
         <element name="Medication" positionX="180" positionY="414" width="128" height="209"/>
@@ -212,6 +213,5 @@
         <element name="SpecialAuthorityDrug" positionX="162" positionY="405" width="128" height="179"/>
         <element name="TestResult" positionX="5.28125" positionY="701.30078125" width="128" height="239"/>
         <element name="VaccineCard" positionX="311.04296875" positionY="685.625" width="128" height="179"/>
-        <element name="ImmunizationForecast" positionX="162" positionY="396" width="128" height="134"/>
     </elements>
 </model>

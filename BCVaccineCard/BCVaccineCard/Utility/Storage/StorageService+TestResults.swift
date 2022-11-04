@@ -74,6 +74,8 @@ extension StorageService: StorageCovidTestResultManager {
         model.createdAt = Date()
         model.authenticated = authenticated
         model.pdf = pdf
+        model.reportAvailable = gateWayResponse.resourcePayload?.reportAvailable ?? false
+        model.orderId = gateWayResponse.resourcePayload?.id
         var testResults: [TestResult] = []
         guard let records = gateWayResponse.resourcePayload?.records else { return nil }
         for record in records {

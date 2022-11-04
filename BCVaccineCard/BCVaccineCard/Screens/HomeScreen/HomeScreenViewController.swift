@@ -10,6 +10,7 @@ import UIKit
 class HomeScreenViewController: BaseViewController {
     
     enum DataSource {
+        case banner(data: CommunicationBanner)
         case text(text: String)
         case button(type: HomeScreenCellType)
     }
@@ -22,8 +23,16 @@ class HomeScreenViewController: BaseViewController {
     }
     
     @IBOutlet weak private var tableView: UITableView!
-    private var dataSource: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Proofs), .button(type: .Resources)]
+    
     private var authManager: AuthManager = AuthManager()
+    
+    private let communicationSetvice: CommunicationSetvice = CommunicationSetvice(network: AFNetwork())
+    private var communicationBanner: CommunicationBanner?
+    private let connectionListener = NetworkConnection()
+    
+    private var dataSource: [DataSource] {
+        genDataSource()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +56,26 @@ class HomeScreenViewController: BaseViewController {
         addObservablesForChangeInAuthenticationStatus()
         setupTableView()
         navSetup()
+        
+        connectionListener.initListener { [weak self] connected in
+            guard let `self` = self else {return}
+            if connected {
+                self.fetchCommunicationBanner()
+            }
+        }
     }
+    
+    private func genDataSource() -> [DataSource] {
+        var data: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Proofs), .button(type: .Resources)]
+        if authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty {
+            data.append(.button(type: .Recommendations))
+        }
+        if let banner = communicationBanner {
+            data.insert(.banner(data: banner), at: 1)
+        }
+        return data
+    }
+
     
 }
 
@@ -79,7 +107,18 @@ extension HomeScreenViewController {
     private func addObservablesForChangeInAuthenticationStatus() {
         NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+    }
+        
+    @objc private func storageChangeEvent(_ notification: Notification) {
+        guard let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+        switch event.entity {
+        case .Recommendation:
+            tableView.reloadData()
+        default:
+            break
+        }
     }
     
     @objc private func reloadFromForcedLogout(_ notification: Notification) {
@@ -110,6 +149,7 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.register(UINib.init(nibName: HomeScreenTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HomeScreenTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CommunicationBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommunicationBannerTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
 //        tableView.estimatedRowHeight = 231
         tableView.delegate = self
@@ -130,6 +170,11 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeScreenTableViewCell.getName, for: indexPath) as? HomeScreenTableViewCell else { return UITableViewCell() }
             cell.configure(forType: type, auth: authManager.isAuthenticated)
             return cell
+        case .banner(data: let data):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: CommunicationBannerTableViewCell.getName, for: indexPath) as? CommunicationBannerTableViewCell else { return UITableViewCell() }
+            cell.configure(data: communicationBanner, delegate: self)
+            cell.selectionStyle = .none
+            return cell
         }
     }
     
@@ -143,16 +188,78 @@ extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+// MARK: Communications Banner
+extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
+    func fetchCommunicationBanner() {
+        communicationSetvice.fetchMessage {[weak self] result in
+            guard let `self` = self else {
+                return
+            }
+            
+            if let message = result, message.shouldDisplay {
+                self.communicationBanner = message
+            } else {
+                self.communicationBanner = nil
+            }
+           
+            self.tableView.reloadData()
+        }
+    }
+    
+    func shouldUpdateUI() {
+        tableView.performBatchUpdates(nil)
+    }
+    
+    func onExpand(banner: CommunicationBanner?) {
+        tableView.reloadData()
+    }
+    
+    func onClose(banner: CommunicationBanner?) {
+        tableView.performBatchUpdates(nil)
+    }
+    
+    func onDismiss(banner: CommunicationBanner?) {
+        guard let banner = banner else {
+            return
+        }
+
+        communicationSetvice.dismiss(message: banner)
+        communicationBanner = nil
+        tableView.reloadData()
+        fetchCommunicationBanner()
+    }
+    
+    func onLearnMore(banner: CommunicationBanner?) {
+        guard let banner = banner else {
+            return
+        }
+        let learnMoreVC = CommunicationMessageUIViewController()
+        learnMoreVC.banner = banner
+        navigationController?.pushViewController(learnMoreVC, animated: true)
+    }
+    
+}
+
 // MARK: Navigation logic for each type here
 extension HomeScreenViewController {
     private func goToTabForType(type: HomeScreenCellType) {
         guard let tabBarController = self.tabBarController as? TabBarController else { return }
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        guard type == .Records && !authManager.isAuthenticated else {
+        switch type {
+        case .Records:
+            if !authManager.isAuthenticated {
+                handleGetStartedScenario(tabBarController: tabBarController)
+            }
             tabBarController.selectedIndex = type.getTabIndex
-            return
+        case .Proofs:
+            tabBarController.selectedIndex = type.getTabIndex
+        case .Resources:
+            tabBarController.selectedIndex = type.getTabIndex
+        case .Recommendations:
+            let vc = RecommendationsViewController.constructRecommendationsViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+            vc.setup()
         }
-        handleGetStartedScenario(tabBarController: tabBarController)
     }
     
     private func handleGetStartedScenario(tabBarController: TabBarController) {

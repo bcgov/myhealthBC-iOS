@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../ImmunizationRecommendation+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:../ImmunizationRecommendation+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:BCVaccineCard.xcodeproj">
    </FileRef>
    <FileRef

@@ -24,6 +24,8 @@ struct GatewayTestResultResponse: Codable, Equatable {
         let loaded: Bool
         let retryin: Int
         let records: [GatewayTestResultResponseRecord]
+        let reportAvailable: Bool?
+        let id: String?
     }
 }
 

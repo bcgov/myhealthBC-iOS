@@ -153,8 +153,9 @@ extension CovidLabTestResult {
         return resultArray.first
     }
     
+    // FIXME: Note: This doesn't appear to be used anywhere - should we delete?
     func toLocal() -> LocallyStoredCovidTestResultModel? {
-        let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 0, records: resultArray.compactMap({$0.toGatewayRecord()}))
+        let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 0, records: resultArray.compactMap({$0.toGatewayRecord()}), reportAvailable: false, id: nil)
         let response: GatewayTestResultResponse = GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: nil, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
 //        let response: GatewayTestResultResponse = GatewayTestResultResponse(records: resultArray.compactMap({$0.toGatewayRecord()}))
         return LocallyStoredCovidTestResultModel(response: response, resultType: resultType ?? .indeterminate)
@@ -249,3 +250,10 @@ extension ImmunizationDetails {
     }
 }
 
+// MARK: Recommendations
+extension ImmunizationRecommendation {
+    public var targetDiseasesArray: [ImmunizationTargetDisease] {
+        let set = targetDiseases as? Set<ImmunizationTargetDisease> ?? []
+        return Array(set)
+    }
+}

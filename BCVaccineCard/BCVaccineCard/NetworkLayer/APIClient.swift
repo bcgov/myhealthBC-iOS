@@ -238,7 +238,7 @@ extension APIClient {
 
 // MARK: For fetching the base URL
 extension APIClient {
-    func getBaseURLFromMobileConfig(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping(String?) -> Void) {
+    func getBaseURLFromMobileConfig(token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping(String?, Bool?) -> Void) {
         self.getBaseUrlAPILogic(token: token, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
             if let retry = queueItRetryStatus, retry.retry == true {
@@ -260,13 +260,16 @@ extension APIClient {
         })
     }
     
-    private func handleBaseURLResponse(result: Result<MobileConfigurationResponseObject, ResultError>, completion: @escaping(String?) -> Void) {
+    private func handleBaseURLResponse(result: Result<MobileConfigurationResponseObject, ResultError>, completion: @escaping(String?, Bool?) -> Void) {
         switch result {
         case .success(let configResponse):
-            completion(configResponse.baseUrl)
+            if !configResponse.online {
+                AppDelegate.sharedInstance?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+            }
+            completion(configResponse.baseURL, configResponse.online)
         case .failure(let error):
             Logger.log(string: error.localizedDescription, type: .Network)
-            completion(nil)
+            completion(nil, nil)
         }
     }
 }

@@ -8,11 +8,6 @@
 
 import UIKit
 
-// TODO: Delete
-//protocol OnboardSkipDelegate {
-//    func skip()
-//}
-
 class InitialOnboardingViewController: UIViewController {
     
     class func constructInitialOnboardingViewController(startScreenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType]) -> InitialOnboardingViewController {
@@ -24,7 +19,6 @@ class InitialOnboardingViewController: UIViewController {
         return InitialOnboardingViewController()
     }
     
-//    @IBOutlet weak private var DeleteThis: InitialOnboardingView! // TODO: Remove this
     @IBOutlet weak private var collectionView: UICollectionView!
     @IBOutlet weak private var progressStackView: UIStackView!
     @IBOutlet weak private var progressStackViewWidthConstraintToDelete: NSLayoutConstraint!
@@ -261,7 +255,6 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
             adjustUI()
         }
         if type == .getStarted || type == .ok {
-            // TODO: version
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
             
             showLocalAuth {[weak self] in
