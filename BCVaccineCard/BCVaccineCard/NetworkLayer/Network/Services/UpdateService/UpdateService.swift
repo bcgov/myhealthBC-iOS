@@ -48,12 +48,13 @@ struct UpdateService {
     
     func isBreakingConfigChangeAvailable(completion: @escaping (Bool)->Void) {
         UpdateServiceStorage.setOrResetstoredAppVersion()
+        
         MobileConfigService(network: network).fetchConfig { responseData in
             guard let response = responseData, let latest = response.version else {
                 return completion(false)
             }
             
-            guard let current = UpdateServiceStorage.storedCofigVersion else {
+            guard let current = UpdateServiceStorage.appCofigVersion else {
                 UpdateServiceStorage.storeConfig(version: latest)
                 return completion(false)
             }

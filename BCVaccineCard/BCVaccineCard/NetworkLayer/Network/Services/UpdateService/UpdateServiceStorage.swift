@@ -11,15 +11,15 @@ import KeychainAccess
 struct UpdateServiceStorage {
     
     private enum Key: String {
-        case storedCofigVersion
+        case appCofigVersion
         case storedAppVersion
     }
     
     private static let keychain = Keychain(service: "ca.bc.gov.myhealth")
     public static var updateDilogShownThisSession = false
     
-    public static var storedCofigVersion: Int? {
-        guard let versionString = keychain[Key.storedCofigVersion.rawValue],
+    public static var appCofigVersion: Int? {
+        guard let versionString = keychain[Key.appCofigVersion.rawValue],
               let versionInt = Int(versionString)
         else {
             return nil
@@ -66,14 +66,14 @@ struct UpdateServiceStorage {
     
     public static func storeConfig(version: Int) {
         do {
-            try keychain.set("\(version)", key: Key.storedCofigVersion.rawValue)
+            try keychain.set("\(version)", key: Key.appCofigVersion.rawValue)
             storeCurrentAppVersion()
         }
         catch let error {
             Logger.log(string: error.localizedDescription, type: .Auth)
         }
     }
-    
+
     public static func storeCurrentAppVersion() {
         guard let version = currentAppVersion else {return}
         do {

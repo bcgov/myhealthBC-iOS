@@ -10,10 +10,10 @@ import JOSESwift
 import BCVaccineValidator
 
 extension Network {
-    func addLoader() {
+    func addLoader(message: LoaderMessage) {
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.incrementLoader(message: .SyncingRecords)
+                appDelegate.incrementLoader(message: message)
             }
         }
     }
@@ -37,7 +37,7 @@ struct DependentService {
     }
     
     public func fetchDependents(for patient: Patient, completion: @escaping([Patient]) -> Void) {
-        network.addLoader()
+        network.addLoader(message: .SyncingRecords)
         fetchDependentNetworkRequest { dependentResponse in
             guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload else {
                 network.removeLoader()
@@ -75,7 +75,7 @@ struct DependentService {
     }
     
     public func addDependent(for patient: Patient, object: PostDependent, completion: @escaping(Patient?) -> Void) {
-        network.addLoader()
+        network.addLoader(message: .empty)
         addDependentNetworkRequest(object: object) { dependentResponse in
             network.removeLoader()
             guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload, let info = payload.dependentInformation else {

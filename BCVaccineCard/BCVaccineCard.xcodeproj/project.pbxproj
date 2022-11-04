@@ -428,6 +428,9 @@
 		3EEFB08E29142AC5009BF27D /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */; };
 		3EEFB08F29142B8F009BF27D /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */; };
 		3EEFB09029142B90009BF27D /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */; };
+		3EEFB0922915C79A009BF27D /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */; };
+		3EEFB0932915C79A009BF27D /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */; };
+		3EEFB0942915C79A009BF27D /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */; };
 		5B8BA6FE27BBB7D700250430 /* NetworkLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */; };
 		5BA177D027A1880600D61F2A /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177CF27A1880600D61F2A /* TestCoreDataStack.swift */; };
 		5BA177D227A18CDD00D61F2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */; };
@@ -1301,6 +1304,7 @@
 		3E91C7AD28B51B0B005AA34F /* Immunization+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Immunization+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3ECD398828B522970033B866 /* StorageService+Recommendations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Recommendations.swift"; sourceTree = "<group>"; };
 		3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
+		3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
 		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayerTests.swift; sourceTree = "<group>"; };
 		5BA177CF27A1880600D61F2A /* TestCoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCoreDataStack.swift; sourceTree = "<group>"; };
@@ -2092,7 +2096,7 @@
 		3E5E6EA328D23B9200724EDD /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */,
+				3EEFB0952915CC0D009BF27D /* MobileConfig */,
 				3E31EA7A291394E900E344E6 /* UpdateService */,
 				2D120D3928FF15CA00EB8EBF /* Dependant */,
 				3E5E6EB028D2746500724EDD /* Communication */,
@@ -2143,6 +2147,15 @@
 				3E78AECC28F9909500C66E28 /* AddDependentViewController.swift */,
 			);
 			path = Dependent;
+			sourceTree = "<group>";
+		};
+		3EEFB0952915CC0D009BF27D /* MobileConfig */ = {
+			isa = PBXGroup;
+			children = (
+				3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */,
+				3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */,
+			);
+			path = MobileConfig;
 			sourceTree = "<group>";
 		};
 		7918A8C427482CB500D19D1C /* ReusableViews */ = {
@@ -3965,6 +3978,7 @@
 				29820CE627594CF600B53468 /* StorageModelExtensions.swift in Sources */,
 				79FDE423273335D000DAD988 /* FederalPassView.swift in Sources */,
 				29E19FE5286C11BF00C235EF /* CovidImmunizationRecordDetailView.swift in Sources */,
+				3EEFB0932915C79A009BF27D /* MobileConfigStorage.swift in Sources */,
 				2965281728358F4800C411E1 /* AppDelegate+EXT.swift in Sources */,
 				2922C0D2286E17DC000FF4F7 /* LabOrderBannerTableViewCell.swift in Sources */,
 				3E5E6EAA28D2686F00724EDD /* NetworkProtocol.swift in Sources */,
@@ -4266,6 +4280,7 @@
 				29A5B6D927B55B65006A9BA7 /* Pharmacy+CoreDataProperties.swift in Sources */,
 				795AA7422713FB1400E59FF1 /* QueueItLocal.swift in Sources */,
 				795AA7802715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
+				3EEFB0942915C79A009BF27D /* MobileConfigStorage.swift in Sources */,
 				794BD6492702EEC00084ADA8 /* FormTableViewCell.swift in Sources */,
 				794BD64B2702EEC00084ADA8 /* AccessibilityLabels.swift in Sources */,
 				3E5E6EAB28D2686F00724EDD /* NetworkProtocol.swift in Sources */,
@@ -4541,6 +4556,7 @@
 				798005AC2852C66E006E390F /* AccessibilityLabels.swift in Sources */,
 				798005AD2852C66E006E390F /* StorageModelExtensions.swift in Sources */,
 				798005AF2852C66E006E390F /* FederalPassView.swift in Sources */,
+				3EEFB0922915C79A009BF27D /* MobileConfigStorage.swift in Sources */,
 				798005B02852C66E006E390F /* AppDelegate+EXT.swift in Sources */,
 				2922C0D1286E17DC000FF4F7 /* LabOrderBannerTableViewCell.swift in Sources */,
 				3E5E6EA928D2686F00724EDD /* NetworkProtocol.swift in Sources */,
