@@ -2071,6 +2071,7 @@
 		3EEFB0A52915D743009BF27D /* MobileConfig */ = {
 			isa = PBXGroup;
 			children = (
+				798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */,
 				3EEFB0A62915D777009BF27D /* MobileConfigService.swift */,
 				3EEFB0A72915D777009BF27D /* MobileConfigStorage.swift */,
 			);
@@ -2745,7 +2746,6 @@
 			children = (
 				796653DF27A148AD004D103E /* AuthenticatedResponseModels */,
 				795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */,
-				798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */,
 				795AA769271560F100E59FF1 /* NewsFeedResponse.swift */,
 				79218AA327518CC20063004E /* GatewayTestResultResponse.swift */,
 				798CA1C027ECDCFC0096188C /* TermsOfServiceResponse.swift */,
