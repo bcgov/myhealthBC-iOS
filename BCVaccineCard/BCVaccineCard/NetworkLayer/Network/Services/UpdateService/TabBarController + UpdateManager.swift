@@ -28,16 +28,7 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
         if NetworkConnection.shared.hasConnection {
             checkForceUpdate(completion: completion)
         } else {
-            checkForceUpdateWhenConnected()
             return completion(false)
-        }
-    }
-    
-    fileprivate func checkForceUpdateWhenConnected() {
-        NetworkConnection().initListener { [weak self] connected in
-            if connected {
-                self?.checkForceUpdate(completion: {_ in })
-            }
         }
     }
     

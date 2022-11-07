@@ -54,10 +54,18 @@ class TabBarController: UITabBarController {
     var authWorker: AuthenticatedHealthRecordsAPIWorker?
     private var throttleAPIWorker: LoginThrottleAPIWorker?
     var routerWorker: RouterWorker?
+    var network = NetworkConnection()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         BaseURLWorker.setup(BaseURLWorker.Config(delegateOwner: self))
+        network.initListener { connected in
+            if connected {
+                self.whenConnected()
+            } else {
+                self.whenDisconnected()
+            }
+        }
         showForceUpateIfNeeded(completion: { updateNeeded in
             guard !updateNeeded else {return}
             BaseURLWorker.shared.setBaseURL {
@@ -68,6 +76,14 @@ class TabBarController: UITabBarController {
                 self.showLoginPromptIfNecessary()
             }
         })
+    }
+    
+    func whenConnected() {
+        showForceUpateIfNeeded(completion: {_ in})
+    }
+    
+    func whenDisconnected() {
+        
     }
     
     private func showLoginPromptIfNecessary() {
