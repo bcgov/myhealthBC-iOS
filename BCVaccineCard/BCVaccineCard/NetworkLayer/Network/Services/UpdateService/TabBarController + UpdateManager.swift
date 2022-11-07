@@ -86,6 +86,8 @@ extension UIViewController {
     func checkForAppStoreVersionUpdate() {
         if let tabBar = tabBarController as? TabBarController {
             tabBar.showAppStoreUpdateDialogIfNeeded()
+        } else if let tabBar = self as? TabBarController {
+            tabBar.showAppStoreUpdateDialogIfNeeded()
         }
     }
 }
