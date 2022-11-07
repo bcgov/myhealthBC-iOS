@@ -11,21 +11,6 @@ import KeychainAccess
 import JWTDecode
 import BCVaccineValidator
 
-extension Constants {
-    struct Auth {
-        #if PROD
-//        static let redirectURI = "myhealthbc://*"
-        static let params = ["kc_idp_hint": "bcsc2"]
-        #elseif TEST
-//        static let redirectURI = "myhealthbc://*"
-        static let params = ["kc_idp_hint": "bcsc"]
-        #elseif DEV
-//        static let redirectURI = "myhealthbc://*"
-        static let params = ["kc_idp_hint": "bcsc"]
-        #endif
-    }
-}
-
 extension AuthManager {
     enum AuthenticationResult {
         case Unavailable

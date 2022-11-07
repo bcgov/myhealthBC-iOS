@@ -57,6 +57,8 @@ struct UpdateServiceStorage {
         if stored != currentAppVersion {
             do {
                 try keychain.remove(Key.storedAppVersion.rawValue)
+                // Clear auth data because auth provider may have changed
+                AuthManager().clearData()
             }
             catch let error {
                 Logger.log(string: error.localizedDescription, type: .Auth)
