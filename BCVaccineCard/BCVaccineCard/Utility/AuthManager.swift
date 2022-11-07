@@ -14,13 +14,13 @@ import BCVaccineValidator
 extension Constants {
     struct Auth {
         #if PROD
-        static let redirectURI = "myhealthbc://*"
+//        static let redirectURI = "myhealthbc://*"
         static let params = ["kc_idp_hint": "bcsc2"]
         #elseif TEST
-        static let redirectURI = "myhealthbc://*"
+//        static let redirectURI = "myhealthbc://*"
         static let params = ["kc_idp_hint": "bcsc"]
         #elseif DEV
-        static let redirectURI = "myhealthbc://*"
+//        static let redirectURI = "myhealthbc://*"
         static let params = ["kc_idp_hint": "bcsc"]
         #endif
     }
@@ -163,12 +163,15 @@ class AuthManager {
     
     // MARK: Network
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
-        guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
-            return completion(.Unavailable)
-        }
+        
         APIClientCache.reset()
         configService.fetchConfig(completion: { mobileConfig in
-            guard let issuer = mobileConfig?.openIDURL, let clientId = mobileConfig?.openIDClientID else {
+            guard let issuer = mobileConfig?.authentication?.endpoint,
+                  let clientId = mobileConfig?.authentication?.clientID,
+                  let redirectURIString = mobileConfig?.authentication?.redirectURI,
+                  let redirectURI = URL(string: redirectURIString),
+                let idphint = mobileConfig?.authentication?.identityProviderID
+            else {
                 return completion(.Unavailable)
             }
             self.discoverConfiguration(issuer: issuer) { result in
@@ -180,7 +183,7 @@ class AuthManager {
                                                       scopes: [OIDScopeOpenID, OIDScopeProfile],
                                                       redirectURL: redirectURI,
                                                       responseType: OIDResponseTypeCode,
-                                                      additionalParameters: Constants.Auth.params)
+                                                      additionalParameters: ["kc_idp_hint": idphint])
                 
                 LocalAuthManager.block = true
                 appDelegate.currentAuthorizationFlow =
@@ -220,43 +223,48 @@ class AuthManager {
     
     
     func signout(in viewController: UIViewController, completion: @escaping(Bool)->Void) {
-        guard let redirectURI = URL(string: Constants.Auth.redirectURI), let issuer = MobileConfigStorage.openIDURL else {
-            return
-        }
-        discoverConfiguration(issuer: issuer) { result in
-            guard let configuration = result,
-                  let token = self.idToken,
-                  let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        configService.fetchConfig(completion: { mobileConfig in
+            guard let issuer = mobileConfig?.authentication?.endpoint,
+                  let redirectURIString = mobileConfig?.authentication?.redirectURI,
+                  let redirectURI = URL(string: redirectURIString)
             else {
                 return completion(false)
             }
-            let request = OIDEndSessionRequest(configuration: configuration,
-                                               idTokenHint: token,
-                                               postLogoutRedirectURL: redirectURI,
-                                               additionalParameters: nil)
-            guard let agent = OIDExternalUserAgentIOS(presenting: viewController) else {
-                return completion(false)
-            }
-            
-            appDelegate.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent, callback: { (response, error) in
-                if response != nil {
-                    HTTPCookieStorage.shared.cookies?.forEach { cookie in
-                        HTTPCookieStorage.shared.deleteCookie(cookie)
-                    }
-                    self.removeAuthTokens()
-                    StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-                    StorageService.shared.deleteAuthenticatedPatient()
-                    self.removeAuthenticatedPatient()
-                    self.authStatusChanged(authenticated: false)
-                    self.clearData()
-                    Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: false, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: nil)
-                    return completion(true)
-                }
-                if error != nil {
+            self.discoverConfiguration(issuer: issuer) { result in
+                guard let configuration = result,
+                      let token = self.idToken,
+                      let appDelegate = UIApplication.shared.delegate as? AppDelegate
+                else {
                     return completion(false)
                 }
-            })
-        }
+                let request = OIDEndSessionRequest(configuration: configuration,
+                                                   idTokenHint: token,
+                                                   postLogoutRedirectURL: redirectURI,
+                                                   additionalParameters: nil)
+                guard let agent = OIDExternalUserAgentIOS(presenting: viewController) else {
+                    return completion(false)
+                }
+                
+                appDelegate.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent, callback: { (response, error) in
+                    if response != nil {
+                        HTTPCookieStorage.shared.cookies?.forEach { cookie in
+                            HTTPCookieStorage.shared.deleteCookie(cookie)
+                        }
+                        self.removeAuthTokens()
+                        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                        StorageService.shared.deleteAuthenticatedPatient()
+                        self.removeAuthenticatedPatient()
+                        self.authStatusChanged(authenticated: false)
+                        self.clearData()
+                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: false, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: nil)
+                        return completion(true)
+                    }
+                    if error != nil {
+                        return completion(false)
+                    }
+                })
+            }
+        })
     }
     
     func storeProtectiveWord(protectiveWord: String) {
@@ -283,8 +291,10 @@ class AuthManager {
     
     private func refetchAuthToken() {
         configService.fetchConfig(completion: { mobileConfig in
-            guard let issuer = mobileConfig?.openIDURL, let clientId = mobileConfig?.openIDClientID else {
-                return 
+            guard let issuer = mobileConfig?.authentication?.endpoint,
+                  let clientId = mobileConfig?.authentication?.clientID
+            else {
+                return
             }
             self.discoverConfiguration(issuer: issuer) { result in
                 guard let configuration = result, let refreshToken = self.refreshToken else { return }
