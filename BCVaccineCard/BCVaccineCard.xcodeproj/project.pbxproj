@@ -2238,9 +2238,9 @@
 		3EEFB0952915CC0D009BF27D /* MobileConfig */ = {
 			isa = PBXGroup;
 			children = (
+				798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */,
 				3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */,
 				3EE55BC8291AD29300DF13CC /* MobileConfigStorage.swift */,
-				798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */,
 			);
 			path = MobileConfig;
 			sourceTree = "<group>";
