@@ -433,7 +433,7 @@ extension UsersListOfRecordsViewController {
         self.protectiveWord = protectiveWord
         let visibleRecords = patientRecords.filter({!$0.containsProtectedWord})
         self.dataSource = visibleRecords
-        if !patient?.isDependent() {
+        if !(patient?.isDependent() ?? false) {
             let hiddenRecords = patientRecords.filter({$0.containsProtectedWord})
             self.hiddenRecords = hiddenRecords
             
