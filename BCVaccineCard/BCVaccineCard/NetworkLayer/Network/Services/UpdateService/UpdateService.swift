@@ -25,7 +25,8 @@ struct UpdateService {
             return completion(false)
         }
         
-        let url = URL(string: "https://itunes.apple.com/ca/lookup?bundleId=\(bundleId)")!
+        let storeURL = "https://itunes.apple.com/ca/lookup?bundleId=\(bundleId)"
+        let url = URL(string: storeURL)!
         let request = NetworkRequest<DefaultParams, AppStoreVersionData>(
             url: url,
             type: .Get,
@@ -40,7 +41,6 @@ struct UpdateService {
                 else {
                     return completion(false)
                 }
-                
                 return completion(storeVersion > currentVersion)
         })
         network.request(with: request)
@@ -58,7 +58,6 @@ struct UpdateService {
                 UpdateServiceStorage.storeConfig(version: latest)
                 return completion(false)
             }
-            
             return completion(current < latest)
         }
     }

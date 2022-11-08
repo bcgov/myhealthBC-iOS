@@ -2152,8 +2152,9 @@
 		3EEFB0952915CC0D009BF27D /* MobileConfig */ = {
 			isa = PBXGroup;
 			children = (
-				3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */,
-				3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */,
+				798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */,
+				3EEFB0A62915D777009BF27D /* MobileConfigService.swift */,
+				3EEFB0A72915D777009BF27D /* MobileConfigStorage.swift */,
 			);
 			path = MobileConfig;
 			sourceTree = "<group>";
@@ -2821,7 +2822,6 @@
 			children = (
 				796653DF27A148AD004D103E /* AuthenticatedResponseModels */,
 				795AA72B271089F100E59FF1 /* GatewayVaccineCardResponse.swift */,
-				798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */,
 				795AA769271560F100E59FF1 /* NewsFeedResponse.swift */,
 				79218AA327518CC20063004E /* GatewayTestResultResponse.swift */,
 				798CA1C027ECDCFC0096188C /* TermsOfServiceResponse.swift */,
@@ -4995,7 +4995,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -5023,7 +5023,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

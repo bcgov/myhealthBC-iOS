@@ -28,22 +28,15 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
         if NetworkConnection.shared.hasConnection {
             checkForceUpdate(completion: completion)
         } else {
-            checkForceUpdateWhenConnected()
             return completion(false)
-        }
-    }
-    
-    fileprivate func checkForceUpdateWhenConnected() {
-        NetworkConnection().initListener { [weak self] connected in
-            if connected {
-                self?.checkForceUpdate(completion: {_ in })
-            }
         }
     }
     
     fileprivate func checkForceUpdate(completion: @escaping (Bool)->Void) {
         UpdateService(network: AFNetwork()).isBreakingConfigChangeAvailable { available in
             guard available else {return completion(false)}
+            // Clear auth data because auth provider may have changed
+            AuthManager().clearData()
             ForceUpdateView.show(delegate: self, tabBarController: self)
             return completion(true)
         }
@@ -85,6 +78,8 @@ private func productViewControllerDidFinish(viewController: SKStoreProductViewCo
 extension UIViewController {
     func checkForAppStoreVersionUpdate() {
         if let tabBar = tabBarController as? TabBarController {
+            tabBar.showAppStoreUpdateDialogIfNeeded()
+        } else if let tabBar = self as? TabBarController {
             tabBar.showAppStoreUpdateDialogIfNeeded()
         }
     }
