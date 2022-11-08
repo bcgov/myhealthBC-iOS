@@ -367,7 +367,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 1 else {return}
-        let dependent = dependents[indexPath.row]
+        let dependent = dependents.under12[indexPath.row]
         // if not fetched this session, then call code below. else, fetch health records from storage
         guard let dependentPatient = dependent.info, !blockDependentSelection else {
             return
