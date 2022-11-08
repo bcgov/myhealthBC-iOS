@@ -28,6 +28,7 @@ protocol EndpointsAccessor {
     func validateProfile(hdid: String) -> URL
     func userProfile(hdid: String) -> URL
     func listOfDependents(hdid: String) -> URL
+    func deleteDependent(dependentHdid: String, guardian: String) -> URL
 }
 
 struct UrlAccessor {
@@ -152,8 +153,8 @@ extension UrlAccessor: EndpointsAccessor {
         return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Dependent")
     }
     
-    func deleteDependent(hdid: String, dependentHdid: String) -> URL {
-        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Dependent").appendingPathComponent(dependentHdid)
+    func deleteDependent(dependentHdid: String, guardian: String) -> URL {
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(guardian).appendingPathComponent("Dependent").appendingPathComponent(dependentHdid)
     }
 }
 

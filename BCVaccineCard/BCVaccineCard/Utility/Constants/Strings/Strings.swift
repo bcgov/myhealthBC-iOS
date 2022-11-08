@@ -174,6 +174,10 @@ extension String {
     static var dependent: String { return "Dependent".localized }
     static var dependents: String { return "Dependents".localized }
     static var dependentRegistration: String { return "DependentRegistration".localized }
+    static var manageDependends: String { return "ManageDependends".localized }
+    static var saveChanges: String { return "SaveChanges".localized }
+    static var deleteDependentTitle: String { return "DeleteDependentTitle".localized }
+    static var deleteDependentMessage: String { return "DeleteDependentMessage".localized }
     static var resourceDescriptionText: String { return "ResourceDescriptionText".localized }
     static var getVaccinatedResource: String { return "GetVaccinatedResource".localized }
     static var getTestedResource: String { return "GetTestedResource".localized }

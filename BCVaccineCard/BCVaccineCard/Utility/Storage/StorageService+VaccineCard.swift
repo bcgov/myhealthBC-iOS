@@ -38,6 +38,12 @@ protocol StorageVaccineCardManager {
         completion: @escaping(VaccineCard?)->Void
     )
     
+    func storeVaccineCard(from response: GatewayVaccineCardResponse,
+                          for patient: Patient,
+                          manuallyAdded: Bool,
+                          completion: @escaping(VaccineCard?)->Void
+    )
+    
     func createImmunizationRecords(for card: VaccineCard, manuallyAdded: Bool, completion: @escaping([CovidImmunizationRecord])->Void)
     
     // MARK: Update
@@ -58,10 +64,46 @@ protocol StorageVaccineCardManager {
     // MARK: Fetch
     func fetchVaccineCards() -> [VaccineCard]
     func fetchVaccineCard(code: String) -> VaccineCard?
+    func fetchAllVaccineCards(forPatient patient: Patient) -> [VaccineCard]
 }
 
 extension StorageService: StorageVaccineCardManager {
+   
     // MARK: Store
+    func storeVaccineCard(from response: GatewayVaccineCardResponse,
+                          for patient: Patient,
+                          manuallyAdded: Bool,
+                          completion: @escaping (VaccineCard?) -> Void
+    ) {
+        guard let qrString = response.transformResponseIntoQRCode().qrString else {return completion(nil)}
+        let existingCard = patient.vaccineCardArray.first
+        BCVaccineValidator.shared.validate(code: qrString) { result in
+            guard let data = result.result else {
+                return completion(nil)
+            }
+            DispatchQueue.main.async {
+                let issueDate = Date.init(timeIntervalSince1970: data.issueDate)
+                if let existing = existingCard,
+                   let existingIssue = existing.issueDate,
+                   issueDate > existingIssue
+                {
+                    StorageService.shared.delete(object: existing)
+                    StorageService.shared.storeVaccineCard(vaccineQR: data.code,
+                                                           name: data.name,
+                                                           issueDate: issueDate,
+                                                           hash: data.payload.fhirBundleHash() ?? data.code,
+                                                           patient: patient,
+                                                           authenticated: false,
+                                                           manuallyAdded: manuallyAdded,
+                                                           completion: completion)
+                } else {
+                    // the one already stored is newer
+                    return completion(nil)
+                }
+            }
+        }
+    }
+    
     func storeVaccineCard(vaccineQR: String,
                           name: String,
                           issueDate: Date,
@@ -272,6 +314,19 @@ extension StorageService: StorageVaccineCardManager {
     
     func fetchVaccineCard(code: String) -> VaccineCard? {
         fetchVaccineCards().filter({$0.code == code}).first
+    }
+    
+    func fetchAllVaccineCards(forPatient patient: Patient) -> [VaccineCard] {
+        var patientCards = patient.vaccineCardArray
+        var dependentCards: [[VaccineCard]] = []
+        patient.dependentsArray.forEach { dependent in
+            if let array = dependent.info?.vaccineCardArray {
+                dependentCards.append(array)
+            }
+        }
+        let flatDepCards = dependentCards.flatMap { $0 }
+        let cards = patientCards + flatDepCards
+        return cards.sorted(by: {$0.sortOrder < $1.sortOrder})
     }
     
     // MARK: Helpers

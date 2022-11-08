@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
     var protectiveWordEnteredThisSession = false
+    var recordsFetchedForDependentsThisSession: [Patient] = []
     
     var lastLocalAuth: Date? = nil
     fileprivate var dataLoadCount: Int = 0 
@@ -244,13 +245,24 @@ extension UIApplication {
 // MARK: Loading UI
 enum LoaderMessage: String {
     case SyncingRecords = "Syncing Records"
+    case FetchingRecords = "Fetching Records"
+    case FetchingConfig = " "
     case empty = ""
+}
+
+extension LoaderMessage {
+    func isNetworkDependent() -> Bool {
+        return self == .FetchingRecords || self == .SyncingRecords || self == .FetchingConfig
+    }
 }
 
 extension AppDelegate {
     // Triggered by dataLoadCount
 
     func incrementLoader(message: LoaderMessage) {
+        if !NetworkConnection.shared.hasConnection && message.isNetworkDependent() {
+            return
+        }
         dataLoadCount += 1
         dataLoadHideTimer?.invalidate()
         showLoader(message: message)
@@ -260,18 +272,24 @@ extension AppDelegate {
         dataLoadCount -= 1
         dataLoadHideTimer?.invalidate()
         if dataLoadCount < 1 {
-            dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoaded), userInfo: nil, repeats: false)
+            dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoader), userInfo: nil, repeats: false)
+        }
+        
+        if dataLoadCount < 0 {
+            dataLoadCount = 0
         }
     }
     
     /// Do not call this function manually. use dataLoadCount
     fileprivate func showLoader(message: LoaderMessage) {
         // If already shown, dont do anything
-        if let existing = self.window?.viewWithTag(dataLoadTag),
-           let textLabel = existing.viewWithTag(dataLoadTextTag) as? UILabel,
-           textLabel.text == message.rawValue
-        {
-            return
+        if let existing = self.window?.viewWithTag(dataLoadTag), let textLabel = existing.viewWithTag(dataLoadTextTag) as? UILabel {
+            if textLabel.text == message.rawValue {
+                return
+            } else {
+                textLabel.text = message.rawValue
+                return
+            }
         }
         
         // if somehow you're here and its already shown... remove it
@@ -321,7 +339,7 @@ extension AppDelegate {
     }
     
     // Triggered by dataLoadCount
-    @objc fileprivate func hideLoaded() {
+    @objc fileprivate func hideLoader() {
         self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
     }
 }

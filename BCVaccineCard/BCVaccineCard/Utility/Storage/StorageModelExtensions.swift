@@ -35,10 +35,36 @@ extension Patient {
         }
     }
     
+    public var immunizationArray: [Immunization] {
+        let set = immunizations as? Set<Immunization> ?? []
+        return set.sorted {
+            $0.dateOfImmunization ?? Date() > $1.dateOfImmunization ?? Date()
+        }
+    }
+    
     public var labOrdersArray: [LaboratoryOrder] {
         let set = laboratoryOrders as? Set<LaboratoryOrder> ?? []
         return set.sorted {
             $0.timelineDateTime ?? Date() > $1.timelineDateTime ?? Date()
+        }
+    }
+    
+    public var immunizationsArray: [Immunization] {
+        let set = immunizations as? Set<Immunization> ?? []
+        return Array(set)
+    }
+    
+    public var healthVisitsArray: [HealthVisit] {
+        let set = healthVisits as? Set<HealthVisit> ?? []
+        return set.sorted {
+            $0.encounterDate ?? Date() > $1.encounterDate ?? Date()
+        }
+    }
+    
+    public var specialAuthorityDrugsArray: [SpecialAuthorityDrug] {
+        let set = specialAuthorityDrugs as? Set<SpecialAuthorityDrug> ?? []
+        return set.sorted {
+            $0.effectiveDate ?? Date() > $1.effectiveDate ?? Date()
         }
     }
     
@@ -261,12 +287,45 @@ extension ImmunizationRecommendation {
 
 // MARK: Dependents
 extension Patient {
-    public var dependentsArray: [Patient] {
-        let set = dependents as? Set<Patient> ?? []
-        return Array(set)
+    
+    public var dependentsArray: [Dependent] {
+        let set = dependents as? Set<Dependent> ?? []
+        return Array(set).sorted
+    }
+    
+    public var dependentsInfo: [Patient] {
+        return dependentsArray.compactMap({$0.info})
     }
     
     func hasDepdendentWith(phn: String) -> Bool {
-        return self.dependentsArray.contains(where: { $0.phn != nil && $0.phn == phn})
+        return self.dependentsInfo.contains(where: { $0.phn != nil && $0.phn == phn})
+    }
+}
+
+extension Array where Element == Dependent {
+    var sorted: [Dependent] {
+        return self.sorted(by: {
+            $0.info?.birthday ?? Date() > $1.info?.birthday ?? Date()
+        })
+    }
+    
+    var under12: [Dependent] {
+        return self.filter { item in
+            if let info = item.info, let birthday = info.birthday, let age = birthday.ageInYears, age > 12 {
+                return false
+            } else {
+                return true
+            }
+        }.sorted
+    }
+    
+    var over12: [Dependent] {
+        return self.filter { item in
+            if let info = item.info, let birthday = info.birthday, let age = birthday.ageInYears, age > 12 {
+                return true
+            } else {
+                return false
+            }
+        }.sorted
     }
 }

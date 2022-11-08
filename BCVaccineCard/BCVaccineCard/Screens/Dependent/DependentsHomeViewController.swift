@@ -8,25 +8,23 @@
 import UIKit
 
 
-class DependentsHomeViewController: BaseViewController {
+class DependentsHomeViewController: BaseDependentViewController {
     
     class func constructDependentsHomeViewController(patient: Patient?) -> DependentsHomeViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: DependentsHomeViewController.self)) as? DependentsHomeViewController {
             vc.patient = patient
-            if patient == nil {
-                vc.fetchDataWhenMainPatientIsStored()
-            }
+            vc.fetchDataWhenMainPatientIsStored()
             return vc
         }
         return DependentsHomeViewController()
     }
     
     private var patient: Patient? = nil
-    private let tableLeadingContraint: CGFloat = 16
     private let emptyLogoTag = 23412
     private let authManager = AuthManager()
     private let storageService = StorageService()
-    private let networkService = DependentService(network: AFNetwork(), authManager: AuthManager())
+    
+    private var blockDependentSelection: Bool = false
     
     @IBOutlet weak var tableStackLeadingContraint: NSLayoutConstraint!
     @IBOutlet weak var desciptionLabel: UILabel!
@@ -35,7 +33,7 @@ class DependentsHomeViewController: BaseViewController {
     @IBOutlet weak var manageDependentsButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
-    var dependents: [Patient] = [] {
+    var dependents: [Dependent] = [] {
         didSet {
             if dependents.isEmpty {
                 styleWithoutDependents()
@@ -55,6 +53,24 @@ class DependentsHomeViewController: BaseViewController {
         fetchDataWhenAuthenticated()
     }
     
+   // private func fetchData() {
+   ///     service.fetchDependents { completed in
+            // If completed, then reload data/update screen UI - if not completed, show an error
+     //   }
+        // TODO: Allocate this appropriately once storage has been updated
+      //  dependents = []
+       // setState()
+       // setHealthRecordServiceAndFetchDependentRecords()
+   // }
+    
+   // private func setHealthRecordServiceAndFetchDependentRecords() {
+    //    guard dependents.count > 0 else { return }
+     //   for dependent in dependents {
+            // If this is the way we decide to do it, then should do some thread handling here
+       //     let dependentsRecordService = HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), currentDependant: dependent)
+        //    dependentsRecordService.fetchHealthRecords()
+       // }
+       
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchData(fromRemote: false)
@@ -70,7 +86,16 @@ class DependentsHomeViewController: BaseViewController {
     }
     
     @IBAction func manageDependents(_ sender: Any) {
-        showToast(message: "Feature is not implemented")
+        guard let patient = patient else {
+            showToast(message: "Please try re-launching this application")
+            return
+        }
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This feature requires an internet connection")
+            return
+        }
+        let vc = ManageDependentsViewController.constructManageDependentsViewController(patient: patient)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func LoginWithBCSC(_ sender: Any) {
@@ -87,17 +112,13 @@ class DependentsHomeViewController: BaseViewController {
             return
         }
         
-        dependents = patient.dependentsArray.sorted(by: {
-            $0.birthday ?? Date() > $1.birthday ?? Date()
-        })
+        dependents = patient.dependentsArray
         setState()
         tableView.reloadData()
         guard fromRemote else {return}
         
         networkService.fetchDependents(for: patient) { [weak self] storedDependents in
-            self?.dependents = storedDependents.sorted(by: {
-                $0.birthday ?? Date() > $1.birthday ?? Date()
-            })
+            self?.dependents = storedDependents
             self?.setState()
             self?.tableView.reloadData()
         }
@@ -125,12 +146,16 @@ class DependentsHomeViewController: BaseViewController {
             
             if  event.event == .Save,
                 event.entity == .Patient,
-                let storedPatient = event.object as? Patient,
-                storedPatient.authenticated {
+                let storedPatient = event.object as? Patient {
                 
-                self.patient = storedPatient
-                self.fetchData(fromRemote: true)
+                if storedPatient.authenticated {
+                    self.patient = storedPatient
+                    self.fetchData(fromRemote: true)
+                } else {
+                    self.fetchData(fromRemote: false)
+                }
             }
+            
         }
     }
     
@@ -201,7 +226,6 @@ class DependentsHomeViewController: BaseViewController {
         loginWIthBCSCButton.isHidden = true
         addDependentButton.isHidden = false
         desciptionLabel.isHidden = false
-        tableStackLeadingContraint.constant = tableLeadingContraint
     }
     
     func styleAuthenticationExpired() {
@@ -209,6 +233,8 @@ class DependentsHomeViewController: BaseViewController {
         addDependentButton.isHidden = true
         manageDependentsButton.isHidden = true
         loginWIthBCSCButton.isHidden = true
+        desciptionLabel.isHidden = true
+        desciptionLabel.isHidden = true
         desciptionLabel.isHidden = true
         tableStackLeadingContraint.constant = 0
     }
@@ -220,7 +246,6 @@ class DependentsHomeViewController: BaseViewController {
         manageDependentsButton.isHidden = true
         loginWIthBCSCButton.isHidden = false
         desciptionLabel.isHidden = false
-        tableStackLeadingContraint.constant = tableLeadingContraint
     }
     
     private func styleWithDependents() {
@@ -229,7 +254,6 @@ class DependentsHomeViewController: BaseViewController {
         manageDependentsButton.isHidden = false
         loginWIthBCSCButton.isHidden = true
         desciptionLabel.isHidden = false
-        tableStackLeadingContraint.constant = tableLeadingContraint
     }
 }
 
@@ -253,6 +277,8 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     private func setupTableView() {
         tableView.register(UINib.init(nibName: DependentListItemTableViewCell.getName, bundle: .main), forCellReuseIdentifier: DependentListItemTableViewCell.getName)
         tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
+        tableView.register(UINib.init(nibName: InaccessibleDependentTableViewCell.getName, bundle: .main), forCellReuseIdentifier: InaccessibleDependentTableViewCell.getName)
+        
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
         tableView.delegate = self
@@ -261,26 +287,51 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch authManager.authStaus {
         case .Authenticated:
-            return dependents.count
+            return 2 // over 12 years of age and regular
         case .AuthenticationExpired:
             return 1
         case .UnAuthenticated:
             return 0
         }
-        
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch authManager.authStaus {
+        case .Authenticated:
+            
+            switch section {
+            case 0:
+                return dependents.over12.count
+            case 1:
+                return dependents.under12.count
+            default:
+                return 0
+            }
+            
+        case .AuthenticationExpired:
+            return 1
+        case .UnAuthenticated:
+            return 0
+        }
     }
     
     private func dependentCell(indexPath: IndexPath) -> DependentListItemTableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DependentListItemTableViewCell.getName, for: indexPath) as? DependentListItemTableViewCell else {
             return DependentListItemTableViewCell()
         }
-        cell.configure(name: dependents[indexPath.row].name ?? "")
+        cell.configure(name: dependents.under12[indexPath.row].info?.name ?? "")
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    private func inaccessibleDependentCell(indexPath: IndexPath) -> InaccessibleDependentTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: InaccessibleDependentTableViewCell.getName, for: indexPath) as? InaccessibleDependentTableViewCell else {
+            return InaccessibleDependentTableViewCell()
+        }
+        cell.configure(dependent: dependents.over12[indexPath.row], delegate: self)
+        cell.selectionStyle = .none
         return cell
     }
     
@@ -298,7 +349,15 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch authManager.authStaus {
         case .Authenticated:
-            return dependentCell(indexPath: indexPath)
+            switch indexPath.section {
+            case 0:
+                return inaccessibleDependentCell(indexPath: indexPath)
+            case 1:
+                return dependentCell(indexPath: indexPath)
+            default:
+                return UITableViewCell()
+            }
+            
         case .AuthenticationExpired:
             return loginExpiredCell(indexPath: indexPath)
         case .UnAuthenticated:
@@ -307,20 +366,66 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showToast(message: "Feature not implemented")
+        guard indexPath.section == 1 else {return}
+        let dependent = dependents.under12[indexPath.row]
+        // if not fetched this session, then call code below. else, fetch health records from storage
+        guard let dependentPatient = dependent.info, !blockDependentSelection else {
+            return
+        }
+        
+        if AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.contains(dependentPatient) == true {
+            let records = StorageService.shared.getHealthRecords(forDependent: dependentPatient)
+            let dependantDS = records.detailDataSource(patient: dependentPatient)
+            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
+            self.navigationController?.pushViewController(vc, animated: true)
+            blockDependentSelection = false
+        } else {
+            view.addLoader(message: .FetchingRecords)
+            StorageService.shared.deleteHealthRecordsForDependent(dependent: dependentPatient)
+            HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
+                let dependantDS = records.detailDataSource(patient: dependentPatient)
+                AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.append(dependentPatient)
+                let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
+                self?.navigationController?.pushViewController(vc, animated: true)
+                self?.view.removeLoader()
+                self?.blockDependentSelection = false
+            }
+        }
+    }
+}
+extension DependentsHomeViewController: InaccessibleDependentDelegate {
+    func delete(dependent: Dependent) {
+        delete(dependent: dependent) { [weak self] confirmed in
+            if confirmed {
+                self?.fetchData(fromRemote: false)
+            }
+        }
     }
 }
 
 // MARK: Auth
 extension DependentsHomeViewController {
     private func authenticate(initialView: AuthenticationViewController.InitialView, fromTab: TabBarVCs) {
-        self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { [weak self] authenticationStatus in
-            
-//            guard authenticationStatus != .Cancelled, let `self` = self else { return }
-//            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: fromTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HomeScreen, authenticationStatus: authenticationStatus))
-//            self.routerWorker?.routingAction(scenario: scenario, goToTab: fromTab, delayInSeconds: 0.5)
+        self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { _ in
+        }
+    }
+}
+
+
+extension UIView {
+    func addLoader(message: LoaderMessage) {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.incrementLoader(message: message)
+            }
+        }
+    }
+    
+    func removeLoader() {
+        DispatchQueue.main.async {
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.decrementLoader()
+            }
         }
     }
 }

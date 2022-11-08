@@ -1,8 +1,8 @@
 //
-//  StorageService+Dependent.swift
+//  StorageService + Dependent.swift
 //  BCVaccineCard
 //
-//  Created by Amir Shayegh on 2022-10-19.
+//  Created by Amir Shayegh on 2022-11-01.
 //
 
 import Foundation

@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2022-10-20.
+//  Created by Amir Shayegh on 2022-10-27.
 //
 //
 
@@ -21,8 +21,12 @@ extension Patient {
     @NSManaged public var birthday: Date?
     @NSManaged public var hdid: String?
     @NSManaged public var name: String?
+    @NSManaged public var firstName: String?
+    @NSManaged public var lastName: String?
+    @NSManaged public var gender: String?
     @NSManaged public var phn: String?
     @NSManaged public var covidTestResults: NSSet?
+    @NSManaged public var dependents: NSSet?
     @NSManaged public var healthVisits: NSSet?
     @NSManaged public var immunizations: NSSet?
     @NSManaged public var laboratoryOrders: NSSet?
@@ -30,7 +34,7 @@ extension Patient {
     @NSManaged public var recommendations: NSSet?
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
-    @NSManaged public var dependents: NSSet?
+    @NSManaged public var dependencyInfo: Dependent?
 
 }
 
@@ -48,6 +52,23 @@ extension Patient {
 
     @objc(removeCovidTestResults:)
     @NSManaged public func removeFromCovidTestResults(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for dependents
+extension Patient {
+
+    @objc(addDependentsObject:)
+    @NSManaged public func addToDependents(_ value: Dependent)
+
+    @objc(removeDependentsObject:)
+    @NSManaged public func removeFromDependents(_ value: Dependent)
+
+    @objc(addDependents:)
+    @NSManaged public func addToDependents(_ values: NSSet)
+
+    @objc(removeDependents:)
+    @NSManaged public func removeFromDependents(_ values: NSSet)
 
 }
 
@@ -167,22 +188,5 @@ extension Patient {
 
     @objc(removeVaccineCard:)
     @NSManaged public func removeFromVaccineCard(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for dependents
-extension Patient {
-
-    @objc(addDependentsObject:)
-    @NSManaged public func addToDependents(_ value: Patient)
-
-    @objc(removeDependentsObject:)
-    @NSManaged public func removeFromDependents(_ value: Patient)
-
-    @objc(addDependents:)
-    @NSManaged public func addToDependents(_ values: NSSet)
-
-    @objc(removeDependents:)
-    @NSManaged public func removeFromDependents(_ values: NSSet)
 
 }

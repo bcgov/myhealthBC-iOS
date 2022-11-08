@@ -14,14 +14,17 @@ class UsersListOfRecordsViewController: BaseViewController {
         case singleUser
         case multiUser
     }
-    
+    // patient.dependencyInfo != nil == dependent
     // TODO: Replace params with Patient after storage refactor
-    class func constructUsersListOfRecordsViewController(patient: Patient?, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool) -> UsersListOfRecordsViewController {
+    class func constructUsersListOfRecordsViewController(patient: Patient?, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool, dependantDS: [HealthRecordsDetailDataSource]? = nil) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.patient = patient
             vc.authenticated = authenticated
             vc.navStyle = navStyle
             vc.hasUpdatedUnauthPendingTest = hasUpdatedUnauthPendingTest
+            if let dependantDS = dependantDS {
+                vc.dataSource = dependantDS
+            }
             return vc
         }
         return UsersListOfRecordsViewController()
@@ -54,6 +57,10 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var protectiveWord: String?
     private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
     private var selectedCellIndexPath: IndexPath?
+    
+    private var isDependent: Bool {
+        return patient?.dependencyInfo != nil
+    }
         
     private var currentFilter: RecordsFilter? = nil {
         didSet {
@@ -193,19 +200,19 @@ extension UsersListOfRecordsViewController {
             buttons.append(editModeNavButton)
         }
         
-        if style == .singleUser {
+        if style == .singleUser && patient?.dependencyInfo == nil {
             self.navigationItem.setHidesBackButton(true, animated: false)
-//            let addButton = NavButton(title: nil,
-//                      image: UIImage(named: "add-circle-btn"), action: #selector(self.showAddRecord),
-//                                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-//            buttons.append(addButton)
             let settingsButton = NavButton(title: nil,
                       image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
                                            accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
             buttons.append(settingsButton)
         } else {
             self.navigationItem.setHidesBackButton(false, animated: false)
+            
+            let dependentSettingButton = NavButton(image: UIImage(named: "profile-icon"), action: #selector(self.dependentSetting), accessibility: Accessibility(traits: .button, label: "", hint: ""))
+            buttons.append(dependentSettingButton)
         }
+        
         
         var name = self.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
         if name.count >= 20 {
@@ -219,7 +226,7 @@ extension UsersListOfRecordsViewController {
                                                leftNavButton: nil,
                                                rightNavButtons: buttons,
                                                navStyle: .small,
-                                               navTitleSmallAlignment: style == .singleUser ? .Left : .Center,
+                                               navTitleSmallAlignment: style == .singleUser && self.patient?.dependencyInfo == nil ? .Left : .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
@@ -231,6 +238,13 @@ extension UsersListOfRecordsViewController {
     
     private func goToSettingsScreen() {
         let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func dependentSetting() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        guard let patient = patient, let dependent = patient.dependencyInfo else {return}
+        let vc = DependentInfoViewController.construct(dependent: dependent)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -249,7 +263,11 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     
     @objc func showFilters() {
         let fv: FilterRecordsView = UIView.fromNib()
-        fv.showModally(on: view.findTopMostVC()?.view ?? view, filter: currentFilter)
+        let allFilters = RecordsFilter.RecordType.allCases
+        let dependentFilters: [RecordsFilter.RecordType] = [.Covid, .Immunizations]
+        fv.showModally(on: view.findTopMostVC()?.view ?? view,
+                       availableFilters: isDependent ? dependentFilters : allFilters,
+                       filter: currentFilter)
         fv.delegate = self
     }
     
@@ -316,6 +334,10 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
 extension UsersListOfRecordsViewController {
     
     private func fetchDataSource(initialProtectedMedFetch: Bool = false) {
+        guard self.dataSource.count == 0 else {
+            show(records: self.dataSource, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
+            return
+        }
         let patientRecords = fetchPatientRecords()
         show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
     }

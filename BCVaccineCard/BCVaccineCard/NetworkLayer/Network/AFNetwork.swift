@@ -17,6 +17,8 @@ extension NetworkRequest.RequestType {
             return .post
         case .Put:
             return .put
+        case .Delete:
+            return .delete
         }
     }
 }
@@ -29,7 +31,8 @@ extension NetworkRequest {
         } else {
             afHeaders = nil
         }
-        return AF.request(url, method: type.AFMethod, parameters: parameters, encoder: .json, headers: afHeaders)
+        let alamoEncoder: ParameterEncoder = encoder == .json ? .json : .urlEncodedForm
+        return AF.request(url, method: type.AFMethod, parameters: parameters, encoder: alamoEncoder, headers: afHeaders)
     }
 }
 

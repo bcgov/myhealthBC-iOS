@@ -161,6 +161,7 @@ class TabBarController: UITabBarController {
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(fetchDependentsAndTheirVaccineCards), name: .patientStored, object: nil)
     }
     
     @objc private func showTermsOfService(_ notification: Notification) {
@@ -199,6 +200,15 @@ class TabBarController: UITabBarController {
             }
         })
     }
+    
+//    @objc private func fetchDependentsAndTheirVaccineCards(_ notification: Notification) {
+//        guard let patient = notification.userInfo?["patient"] as? Patient else { return }
+//        let network = AFNetwork()
+//        let authManager = AuthManager()
+//        DependentService(network: network, authManager: authManager).fetchDependents(for: patient) { _ in
+//            HealthRecordsService(network: network, authManager: authManager).fetchAndStoreVaccineCardForDependents(for: patient)
+//        }
+//    }
     
     private func showSuccessfulLoginAlert() {
         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)

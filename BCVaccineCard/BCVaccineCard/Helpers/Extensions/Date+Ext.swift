@@ -182,6 +182,12 @@ extension Date {
             return formatter
         }()
         
+        static let yearMonthStringDay: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MMM-dd"
+            return formatter
+        }()
+        
         static let monthAndYear: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
@@ -221,6 +227,7 @@ extension Date {
     var longString: String { return Formatter.long.string(from: self) }
     var fullString: String { return Formatter.full.string(from: self) }
     var customDateTimeString: String { return Formatter.customDateTime.string(from: self) }
+    var yearMonthStringDayString: String { return Formatter.yearMonthStringDay.string(from: self) }
     var monthAndDayString: String { return Formatter.monthAndDay.string(from: self) }
     var monthAndYearString: String { return Formatter.monthAndYear.string(from: self) }
     var yearMonthDayString: String { return Formatter.yearMonthDay.string(from: self) }
@@ -325,6 +332,14 @@ extension Date {
         return addingTimeInterval(targetOffset)
     }
     
+}
+
+extension Date {
+    var ageInYears: Int? {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year], from: self, to: Date())
+        return components.year ?? nil
+    }
 }
 
 
