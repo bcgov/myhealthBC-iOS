@@ -51,7 +51,11 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     private var hiddenRecords: [HealthRecordsDetailDataSource] = []
-    private var hiddenCellType: HiddenRecordType?
+    private var hiddenCellType: HiddenRecordType? {
+        didSet {
+            print(hiddenCellType)
+        }
+    }
     
     fileprivate let authManager = AuthManager()
     private var protectiveWord: String?
@@ -59,7 +63,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var selectedCellIndexPath: IndexPath?
     
     private var isDependent: Bool {
-        return patient?.dependencyInfo != nil
+        return patient?.isDependent() ?? false
     }
         
     private var currentFilter: RecordsFilter? = nil {
@@ -427,13 +431,13 @@ extension UsersListOfRecordsViewController {
             return
         }
         guard let protectiveWord = authManager.protectiveWord, AppDelegate.sharedInstance?.protectiveWordEnteredThisSession == false else {
-            showAllRecords(patientRecords: patientRecords, medFetchRequired: authManager.medicalFetchRequired)
+            showAllRecords(patientRecords: patientRecords, medFetchRequired: authManager.medicalFetchRequired && isDependent)
             return
         }
         self.protectiveWord = protectiveWord
         let visibleRecords = patientRecords.filter({!$0.containsProtectedWord})
         self.dataSource = visibleRecords
-        if !(patient?.isDependent() ?? false) {
+        if !isDependent {
             let hiddenRecords = patientRecords.filter({$0.containsProtectedWord})
             self.hiddenRecords = hiddenRecords
             
