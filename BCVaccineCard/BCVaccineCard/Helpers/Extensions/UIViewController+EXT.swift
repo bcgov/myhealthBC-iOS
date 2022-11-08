@@ -100,6 +100,7 @@ extension UIViewController {
                 case .Authorized:
                     onSuccess()
                     self?.localAuthSucceded()
+                    self?.checkForAppStoreVersionUpdate()
                 case .Unauthorized, .Unavailable:
                     self?.localAuthFailed()
                 }
