@@ -432,12 +432,16 @@ extension UsersListOfRecordsViewController {
         }
         self.protectiveWord = protectiveWord
         let visibleRecords = patientRecords.filter({!$0.containsProtectedWord})
-        let hiddenRecords = patientRecords.filter({$0.containsProtectedWord})
         self.dataSource = visibleRecords
-        self.hiddenRecords = hiddenRecords
-        if hiddenRecords.count > 0 {
-            self.hiddenCellType = .medicalRecords
+        if !patient?.isDependent() {
+            let hiddenRecords = patientRecords.filter({$0.containsProtectedWord})
+            self.hiddenRecords = hiddenRecords
+            
+            if hiddenRecords.count > 0 {
+                self.hiddenCellType = .medicalRecords
+            }
         }
+        
     }
     
     private func showAllRecords(patientRecords: [HealthRecordsDetailDataSource], medFetchRequired: Bool) {

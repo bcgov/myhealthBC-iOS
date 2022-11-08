@@ -464,16 +464,12 @@
 		3ECD398928B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398A28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398B28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
-		3EE55BCA291AD29300DF13CC /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE55BC8291AD29300DF13CC /* MobileConfigStorage.swift */; };
-		3EE55BCB291AD29300DF13CC /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE55BC8291AD29300DF13CC /* MobileConfigStorage.swift */; };
-		3EE55BCC291AD29300DF13CC /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE55BC8291AD29300DF13CC /* MobileConfigStorage.swift */; };
-		3EE55BCD291AD29300DF13CC /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */; };
-		3EE55BCE291AD29300DF13CC /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */; };
-		3EE55BCF291AD29300DF13CC /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */; };
-		3EEFB08E29142AC5009BF27D /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */; };
-		3EEFB08F29142B8F009BF27D /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */; };
-		3EEFB0922915C79A009BF27D /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */; };
-		3EEFB0932915C79A009BF27D /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */; };
+		3EDEE956291AD89900273F5E /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */; };
+		3EDEE957291AD89900273F5E /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */; };
+		3EDEE958291AD89900273F5E /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */; };
+		3EDEE959291AD89900273F5E /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE955291AD89900273F5E /* MobileConfigService.swift */; };
+		3EDEE95A291AD89900273F5E /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE955291AD89900273F5E /* MobileConfigService.swift */; };
+		3EDEE95B291AD89900273F5E /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE955291AD89900273F5E /* MobileConfigService.swift */; };
 		5B8BA6FE27BBB7D700250430 /* NetworkLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */; };
 		5BA177D027A1880600D61F2A /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177CF27A1880600D61F2A /* TestCoreDataStack.swift */; };
 		5BA177D227A18CDD00D61F2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */; };
@@ -1358,8 +1354,8 @@
 		3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageDependentsViewController.swift; sourceTree = "<group>"; };
 		3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDependentViewController.swift; sourceTree = "<group>"; };
 		3ECD398828B522970033B866 /* StorageService+Recommendations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Recommendations.swift"; sourceTree = "<group>"; };
-		3EE55BC8291AD29300DF13CC /* MobileConfigStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
-		3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
+		3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
+		3EDEE955291AD89900273F5E /* MobileConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
 		3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
 		3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
 		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2238,9 +2234,9 @@
 		3EEFB0952915CC0D009BF27D /* MobileConfig */ = {
 			isa = PBXGroup;
 			children = (
+				3EDEE955291AD89900273F5E /* MobileConfigService.swift */,
+				3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */,
 				798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */,
-				3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */,
-				3EE55BC8291AD29300DF13CC /* MobileConfigStorage.swift */,
 			);
 			path = MobileConfig;
 			sourceTree = "<group>";
@@ -3931,7 +3927,6 @@
 				3E91C7B828B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
 				3E3DA94529005AA2009C500F /* (null) in Sources */,
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
-				3EEFB08F29142B8F009BF27D /* MobileConfigService.swift in Sources */,
 				798CA1CD27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */,
 				3E31EA8E29141F3500E344E6 /* ForceUpdateView.swift in Sources */,
 				79218AA92751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
@@ -4050,6 +4045,7 @@
 				7928345D2730E63A00EE2710 /* InteractiveLabelTableViewCell.swift in Sources */,
 				7944F70E26F3A0C1006B9444 /* QRRetrievalMethodViewController.swift in Sources */,
 				3E473788291090EB00B5BBA0 /* VaccineCardService.swift in Sources */,
+				3EDEE957291AD89900273F5E /* MobileConfigStorage.swift in Sources */,
 				2961A999287F53C3007F3E03 /* HealthVisit+CoreDataProperties.swift in Sources */,
 				3E31EA7F2913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */,
 				29A5B6D827B55B65006A9BA7 /* Pharmacy+CoreDataProperties.swift in Sources */,
@@ -4075,7 +4071,6 @@
 				29820CE627594CF600B53468 /* StorageModelExtensions.swift in Sources */,
 				79FDE423273335D000DAD988 /* FederalPassView.swift in Sources */,
 				29E19FE5286C11BF00C235EF /* CovidImmunizationRecordDetailView.swift in Sources */,
-				3EEFB0932915C79A009BF27D /* MobileConfigStorage.swift in Sources */,
 				2965281728358F4800C411E1 /* AppDelegate+EXT.swift in Sources */,
 				2922C0D2286E17DC000FF4F7 /* LabOrderBannerTableViewCell.swift in Sources */,
 				3E5E6EAA28D2686F00724EDD /* NetworkProtocol.swift in Sources */,
@@ -4103,7 +4098,6 @@
 				3E5E6EBC28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
 				29736A252787A78A00CCB1D2 /* Logger.swift in Sources */,
 				791D092C27BF5EC000AD7C89 /* AuthenticatedLaboratoryOrdersResponseObject.swift in Sources */,
-				3EE55BCB291AD29300DF13CC /* MobileConfigStorage.swift in Sources */,
 				2922C0EC286E37B3000FF4F7 /* BaseHeaderTableViewCell.swift in Sources */,
 				7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
 				29245D432755877A00F48642 /* Encodable+EXT.swift in Sources */,
@@ -4159,6 +4153,7 @@
 				2922C131287E10EB000FF4F7 /* StorageService+HealthVisits.swift in Sources */,
 				29E19FED286C11C900C235EF /* LabOrderRecordDetailView.swift in Sources */,
 				294BD3D227B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */,
+				3EDEE95A291AD89900273F5E /* MobileConfigService.swift in Sources */,
 				79053CF92773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
 				3E87F4B529032092002F0A0E /* AppStates.swift in Sources */,
 				291A0CB9282AC33B00035B0F /* Device.swift in Sources */,
@@ -4178,7 +4173,6 @@
 				3EBC991929110ACE00D67A90 /* BaseDependentViewController.swift in Sources */,
 				29719557288700F600CA824A /* ImmunizationForecast+CoreDataProperties.swift in Sources */,
 				2D120D4428FF25A600EB8EBF /* PostDependent.swift in Sources */,
-				3EE55BCE291AD29300DF13CC /* MobileConfigService.swift in Sources */,
 				792834542730A52900EE2710 /* RememberedGatewayDetails.swift in Sources */,
 				3E66F05D290B437500D90EF6 /* Dependent+CoreDataProperties.swift in Sources */,
 			);
@@ -4365,7 +4359,7 @@
 				795AA76E271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
 				791C27CD2719DB3E001A6E12 /* QueueItCachedObject.swift in Sources */,
 				3E473789291090EB00B5BBA0 /* VaccineCardService.swift in Sources */,
-				3EE55BCC291AD29300DF13CC /* MobileConfigStorage.swift in Sources */,
+				3EDEE958291AD89900273F5E /* MobileConfigStorage.swift in Sources */,
 				2961A99A287F53C3007F3E03 /* HealthVisit+CoreDataProperties.swift in Sources */,
 				3E31EA802913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */,
 				7928345E2730E63A00EE2710 /* InteractiveLabelTableViewCell.swift in Sources */,
@@ -4473,7 +4467,7 @@
 				2922C132287E10EC000FF4F7 /* StorageService+HealthVisits.swift in Sources */,
 				29E19FEF286C11CA00C235EF /* LabOrderRecordDetailView.swift in Sources */,
 				794BD6522702EEC00084ADA8 /* UIImage+EXT.swift in Sources */,
-				3EE55BCF291AD29300DF13CC /* MobileConfigService.swift in Sources */,
+				3EDEE95B291AD89900273F5E /* MobileConfigService.swift in Sources */,
 				79A15AFF27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */,
 				3E87F4B629032092002F0A0E /* AppStates.swift in Sources */,
 				794BD6532702EEC00084ADA8 /* CameraViewController.swift in Sources */,
@@ -4535,7 +4529,6 @@
 				3E91C7B728B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
 				3E3DA94429005AA2009C500F /* (null) in Sources */,
 				29E19FD5286C024B00C235EF /* LabOrderRecordDetailView.swift in Sources */,
-				3EEFB08E29142AC5009BF27D /* MobileConfigService.swift in Sources */,
 				798005422852C66E006E390F /* CommentView.swift in Sources */,
 				3E31EA8D29141F3500E344E6 /* ForceUpdateView.swift in Sources */,
 				798005432852C66E006E390F /* BCVaccineCard.xcdatamodeld in Sources */,
@@ -4654,6 +4647,7 @@
 				798005992852C66E006E390F /* VaxQRZoomedInView.swift in Sources */,
 				7980059A2852C66E006E390F /* InteractiveLabelTableViewCell.swift in Sources */,
 				3E473787291090EB00B5BBA0 /* VaccineCardService.swift in Sources */,
+				3EDEE956291AD89900273F5E /* MobileConfigStorage.swift in Sources */,
 				2961A998287F53C3007F3E03 /* HealthVisit+CoreDataProperties.swift in Sources */,
 				3E31EA7E2913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */,
 				7980059B2852C66E006E390F /* QRRetrievalMethodViewController.swift in Sources */,
@@ -4679,7 +4673,6 @@
 				798005AC2852C66E006E390F /* AccessibilityLabels.swift in Sources */,
 				798005AD2852C66E006E390F /* StorageModelExtensions.swift in Sources */,
 				798005AF2852C66E006E390F /* FederalPassView.swift in Sources */,
-				3EEFB0922915C79A009BF27D /* MobileConfigStorage.swift in Sources */,
 				798005B02852C66E006E390F /* AppDelegate+EXT.swift in Sources */,
 				2922C0D1286E17DC000FF4F7 /* LabOrderBannerTableViewCell.swift in Sources */,
 				3E5E6EA928D2686F00724EDD /* NetworkProtocol.swift in Sources */,
@@ -4707,7 +4700,6 @@
 				3E5E6EBB28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
 				798005C02852C66E006E390F /* TextTableViewCell.swift in Sources */,
 				798005C12852C66E006E390F /* InitialOnboardingView.swift in Sources */,
-				3EE55BCA291AD29300DF13CC /* MobileConfigStorage.swift in Sources */,
 				2922C0EB286E37B3000FF4F7 /* BaseHeaderTableViewCell.swift in Sources */,
 				798005C22852C66E006E390F /* Logger.swift in Sources */,
 				798005C32852C66E006E390F /* AuthenticatedLaboratoryOrdersResponseObject.swift in Sources */,
@@ -4763,6 +4755,7 @@
 				798005E82852C66E006E390F /* HealthRecordsHomeView.swift in Sources */,
 				798005E92852C66E006E390F /* UIImage+EXT.swift in Sources */,
 				798005EA2852C66E006E390F /* CameraViewController.swift in Sources */,
+				3EDEE959291AD89900273F5E /* MobileConfigService.swift in Sources */,
 				798005EB2852C66E006E390F /* HiddenRecordsTableViewCell.swift in Sources */,
 				3E87F4B429032092002F0A0E /* AppStates.swift in Sources */,
 				798005EC2852C66E006E390F /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
@@ -4782,7 +4775,6 @@
 				3EBC991829110ACE00D67A90 /* BaseDependentViewController.swift in Sources */,
 				29719556288700F600CA824A /* ImmunizationForecast+CoreDataProperties.swift in Sources */,
 				2D120D4328FF25A600EB8EBF /* PostDependent.swift in Sources */,
-				3EE55BCD291AD29300DF13CC /* MobileConfigService.swift in Sources */,
 				798005F82852C66E006E390F /* RememberedGatewayDetails.swift in Sources */,
 				3E66F05C290B437500D90EF6 /* Dependent+CoreDataProperties.swift in Sources */,
 			);
