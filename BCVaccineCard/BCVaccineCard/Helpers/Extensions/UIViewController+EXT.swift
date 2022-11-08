@@ -181,7 +181,7 @@ extension UIViewController {
     ) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         let name = patientAPI?.getFullName ?? model.name
-        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: name, birthday: birthdate, authenticated: authenticated) else {
+        guard let patient: Patient = StorageService.shared.fetchOrCreatePatient(phn: model.phn, name: name, birthday: birthdate, hdid: nil, authenticated: authenticated) else {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card", type: .storage)
             return completion(CoreDataReturnObject(id: model.id, patient: nil))
         }
@@ -194,7 +194,7 @@ extension UIViewController {
         StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, patient: patientAPI, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
-                AppDelegate.sharedInstance?.showToast(message: .updatedCard)
+                self.showToast(message: .updatedCard)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
@@ -207,7 +207,7 @@ extension UIViewController {
         StorageService.shared.updateVaccineCard(card: card, federalPass: fedCode, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
-                AppDelegate.sharedInstance?.showToast(message: .updatedCard)
+                self.showToast(message: .updatedCard)
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }

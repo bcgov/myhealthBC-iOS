@@ -32,4 +32,3 @@ extension NetworkRequest {
 struct DefaultParams: Codable {
     
 }
-

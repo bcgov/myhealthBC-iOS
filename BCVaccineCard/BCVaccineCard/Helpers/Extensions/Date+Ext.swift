@@ -53,13 +53,13 @@ extension Date {
         }()
         static let issuedOnDateTime: DateFormatter = {
             let formatter = DateFormatter()
-//            September-09-2012, 14:27
+            //            September-09-2012, 14:27
             formatter.dateFormat = "MMMM-dd-yyyy, hh:mm z"
             return formatter
         }()
         static let issuedOnDate: DateFormatter = {
             let formatter = DateFormatter()
-//            September-09-2012
+            //            September-09-2012
             formatter.dateFormat = "MMMM-dd-yyyy"
             return formatter
         }()
@@ -78,6 +78,11 @@ extension Date {
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
             return formatter
         }()
+        static let postServerDateTime: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+            return formatter
+        }()
         static let gatewayDateAndTimeWithTimeZone: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -85,13 +90,13 @@ extension Date {
         }()
         static let labOrderDateTime: DateFormatter = {
             let formatter = DateFormatter()
-//            2012-May-14, 4:35 PM
+            //            2012-May-14, 4:35 PM
             formatter.dateFormat = "yyyy-MMMM-dd, hh:mm a"
             return formatter
         }()
         static let commentsDateTime: DateFormatter = {
             let formatter = DateFormatter()
-//            2012-Apr-14, 4:35 PM
+            //            2012-Apr-14, 4:35 PM
             formatter.dateFormat = "yyyy-MMM-dd, hh:mm a"
             return formatter
         }()
@@ -227,6 +232,7 @@ extension Date {
     var gatewayDateAndTimeWithTimeZone: String { return Formatter.gatewayDateAndTimeWithTimeZone.string(from: self) }
     var gatewayDateAndTimeWithMS: String { return Formatter.gatewayDateAndTimeWithMS.string(from: self) }
     var gatewayDateAndTimeWithMSAndTimeZone: String { return Formatter.gatewayDateAndTimeWithMSAndTimeZone.string(from: self) }
+    var postServerDateTime: String { return Formatter.postServerDateTime.string(from: self) }
     var labOrderDateTime: String { return Formatter.labOrderDateTime.string(from: self) }
     var commentsDateTime: String { return Formatter.commentsDateTime.string(from: self) }
     var forecastDueDate: String { return Formatter.forecastDueDate.string(from: self) }
