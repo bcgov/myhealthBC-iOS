@@ -35,6 +35,8 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
     fileprivate func checkForceUpdate(completion: @escaping (Bool)->Void) {
         UpdateService(network: AFNetwork()).isBreakingConfigChangeAvailable { available in
             guard available else {return completion(false)}
+            // Clear auth data because auth provider may have changed
+            AuthManager().clearData()
             ForceUpdateView.show(delegate: self, tabBarController: self)
             return completion(true)
         }
