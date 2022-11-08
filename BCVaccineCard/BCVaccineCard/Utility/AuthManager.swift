@@ -168,7 +168,7 @@ class AuthManager {
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
         
         APIClientCache.reset()
-        configService.fetchConfig(completion: { mobileConfig in
+        configService.fetchDefaultAuthConfig(completion: { mobileConfig in
             guard let issuer = mobileConfig?.authentication?.endpoint,
                   let clientId = mobileConfig?.authentication?.clientID,
                   let redirectURIString = mobileConfig?.authentication?.redirectURI,
@@ -226,7 +226,7 @@ class AuthManager {
     
     
     func signout(in viewController: UIViewController, completion: @escaping(Bool)->Void) {
-        configService.fetchConfig(completion: { mobileConfig in
+        configService.fetchDefaultAuthConfig(completion: { mobileConfig in
             guard let issuer = mobileConfig?.authentication?.endpoint,
                   let redirectURIString = mobileConfig?.authentication?.redirectURI,
                   let redirectURI = URL(string: redirectURIString)
@@ -293,7 +293,7 @@ class AuthManager {
     }
     
     private func refetchAuthToken() {
-        configService.fetchConfig(completion: { mobileConfig in
+        configService.fetchDefaultAuthConfig(completion: { mobileConfig in
             guard let issuer = mobileConfig?.authentication?.endpoint,
                   let clientId = mobileConfig?.authentication?.clientID
             else {
