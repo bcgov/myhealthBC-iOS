@@ -11,27 +11,6 @@ import KeychainAccess
 import JWTDecode
 import BCVaccineValidator
 
-extension Constants {
-    struct Auth {
-        #if PROD
-        static let issuer = Constants.authIssuer
-        static let clientID = "hgmobileapp"
-        static let redirectURI = "myhealthbc://*"
-        static let params = ["kc_idp_hint": "bcsc2"]
-        #elseif TEST
-        static let issuer = Constants.authIssuer
-        static let clientID = "myhealthapp"
-        static let redirectURI = "myhealthbc://*"
-        static let params = ["kc_idp_hint": "bcsc"]
-        #elseif DEV
-        static let issuer = Constants.authIssuer
-        static let clientID = "myhealthapp"
-        static let redirectURI = "myhealthbc://*"
-        static let params = ["kc_idp_hint": "bcsc"]
-        #endif
-    }
-}
-
 extension AuthManager {
     enum AuthenticationResult {
         case Unavailable
@@ -57,6 +36,7 @@ class AuthManager {
     }
     let defaultUserID = "default"
     private let keychain = Keychain(service: "ca.bc.gov.myhealth")
+    private let configService = MobileConfigService(network: AFNetwork())
     
     // MARK: Computed
     var authToken: String? {
@@ -186,34 +166,43 @@ class AuthManager {
     
     // MARK: Network
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
-        guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
-            return
-        }
+        
         APIClientCache.reset()
-        discoverConfiguration { result in
-            guard let configuration = result, let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+        configService.fetchConfig(completion: { mobileConfig in
+            guard let issuer = mobileConfig?.authentication?.endpoint,
+                  let clientId = mobileConfig?.authentication?.clientID,
+                  let redirectURIString = mobileConfig?.authentication?.redirectURI,
+                  let redirectURI = URL(string: redirectURIString),
+                let idphint = mobileConfig?.authentication?.identityProviderID
+            else {
                 return completion(.Unavailable)
             }
-            let request = OIDAuthorizationRequest(configuration: configuration,
-                                                  clientId: Constants.Auth.clientID,
-                                                  scopes: [OIDScopeOpenID, OIDScopeProfile],
-                                                  redirectURL: redirectURI,
-                                                  responseType: OIDResponseTypeCode,
-                                                  additionalParameters: Constants.Auth.params)
-            
-            LocalAuthManager.block = true
-            appDelegate.currentAuthorizationFlow =
-            OIDAuthState.authState(byPresenting: request, presenting: viewController) { authState, error in
-                if let authState = authState {
-                    self.store(state: authState)
-                    self.authStatusChanged(authenticated: authState.isAuthorized)
-                    return completion(.Success)
-                } else {
-                    Logger.log(string: "Authorization error: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
-                    return completion(.Fail)
+            self.discoverConfiguration(issuer: issuer) { result in
+                guard let configuration = result, let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                    return completion(.Unavailable)
+                }
+                let request = OIDAuthorizationRequest(configuration: configuration,
+                                                      clientId: clientId,
+                                                      scopes: [OIDScopeOpenID, OIDScopeProfile],
+                                                      redirectURL: redirectURI,
+                                                      responseType: OIDResponseTypeCode,
+                                                      additionalParameters: ["kc_idp_hint": idphint])
+                
+                LocalAuthManager.block = true
+                appDelegate.currentAuthorizationFlow =
+                OIDAuthState.authState(byPresenting: request, presenting: viewController) { authState, error in
+                    if let authState = authState {
+                        self.store(state: authState)
+                        self.authStatusChanged(authenticated: authState.isAuthorized)
+                        return completion(.Success)
+                    } else {
+                        Logger.log(string: "Authorization error: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
+                        return completion(.Fail)
+                    }
                 }
             }
-        }
+        })
+       
     }
     
     func topMostController() -> UIViewController? {
@@ -237,43 +226,48 @@ class AuthManager {
     
     
     func signout(in viewController: UIViewController, completion: @escaping(Bool)->Void) {
-        guard let redirectURI = URL(string: Constants.Auth.redirectURI) else {
-            return
-        }
-        discoverConfiguration { result in
-            guard let configuration = result,
-                  let token = self.idToken,
-                  let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        configService.fetchConfig(completion: { mobileConfig in
+            guard let issuer = mobileConfig?.authentication?.endpoint,
+                  let redirectURIString = mobileConfig?.authentication?.redirectURI,
+                  let redirectURI = URL(string: redirectURIString)
             else {
                 return completion(false)
             }
-            let request = OIDEndSessionRequest(configuration: configuration,
-                                               idTokenHint: token,
-                                               postLogoutRedirectURL: redirectURI,
-                                               additionalParameters: nil)
-            guard let agent = OIDExternalUserAgentIOS(presenting: viewController) else {
-                return completion(false)
-            }
-            
-            appDelegate.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent, callback: { (response, error) in
-                if response != nil {
-                    HTTPCookieStorage.shared.cookies?.forEach { cookie in
-                        HTTPCookieStorage.shared.deleteCookie(cookie)
-                    }
-                    self.removeAuthTokens()
-                    StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-                    StorageService.shared.deleteAuthenticatedPatient()
-                    self.removeAuthenticatedPatient()
-                    self.authStatusChanged(authenticated: false)
-                    self.clearData()
-                    Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: false, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: nil)
-                    return completion(true)
-                }
-                if error != nil {
+            self.discoverConfiguration(issuer: issuer) { result in
+                guard let configuration = result,
+                      let token = self.idToken,
+                      let appDelegate = UIApplication.shared.delegate as? AppDelegate
+                else {
                     return completion(false)
                 }
-            })
-        }
+                let request = OIDEndSessionRequest(configuration: configuration,
+                                                   idTokenHint: token,
+                                                   postLogoutRedirectURL: redirectURI,
+                                                   additionalParameters: nil)
+                guard let agent = OIDExternalUserAgentIOS(presenting: viewController) else {
+                    return completion(false)
+                }
+                
+                appDelegate.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent, callback: { (response, error) in
+                    if response != nil {
+                        HTTPCookieStorage.shared.cookies?.forEach { cookie in
+                            HTTPCookieStorage.shared.deleteCookie(cookie)
+                        }
+                        self.removeAuthTokens()
+                        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                        StorageService.shared.deleteAuthenticatedPatient()
+                        self.removeAuthenticatedPatient()
+                        self.authStatusChanged(authenticated: false)
+                        self.clearData()
+                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: false, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: nil)
+                        return completion(true)
+                    }
+                    if error != nil {
+                        return completion(false)
+                    }
+                })
+            }
+        })
     }
     
     func storeProtectiveWord(protectiveWord: String) {
@@ -299,33 +293,40 @@ class AuthManager {
     }
     
     private func refetchAuthToken() {
-        discoverConfiguration { result in
-            guard let configuration = result, let refreshToken = self.refreshToken else { return }
-
-            let request = OIDTokenRequest(configuration: configuration,
-                                          grantType: OIDGrantTypeRefreshToken,
-                                          authorizationCode: nil,
-                                          redirectURL: nil,
-                                          clientID: Constants.Auth.clientID,
-                                          clientSecret: nil,
-                                          scope: nil,
-                                          refreshToken: refreshToken,
-                                          codeVerifier: nil,
-                                          additionalParameters: nil)
-
-            LocalAuthManager.block = true
-            OIDAuthorizationService.perform(request) { tokenResponse, error in
-                if let tokenResponse = tokenResponse {
-                    self.store(tokenResponse: tokenResponse)
-                } else {
-                    Logger.log(string: "Refetch error: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
+        configService.fetchConfig(completion: { mobileConfig in
+            guard let issuer = mobileConfig?.authentication?.endpoint,
+                  let clientId = mobileConfig?.authentication?.clientID
+            else {
+                return
+            }
+            self.discoverConfiguration(issuer: issuer) { result in
+                guard let configuration = result, let refreshToken = self.refreshToken else { return }
+                
+                let request = OIDTokenRequest(configuration: configuration,
+                                              grantType: OIDGrantTypeRefreshToken,
+                                              authorizationCode: nil,
+                                              redirectURL: nil,
+                                              clientID: clientId,
+                                              clientSecret: nil,
+                                              scope: nil,
+                                              refreshToken: refreshToken,
+                                              codeVerifier: nil,
+                                              additionalParameters: nil)
+                
+                LocalAuthManager.block = true
+                OIDAuthorizationService.perform(request) { tokenResponse, error in
+                    if let tokenResponse = tokenResponse {
+                        self.store(tokenResponse: tokenResponse)
+                    } else {
+                        Logger.log(string: "Refetch error: \(error?.localizedDescription ?? "Unknown error")", type: .Auth)
+                    }
                 }
             }
-        }
+        })
     }
     
-    private func discoverConfiguration(completion: @escaping(OIDServiceConfiguration?)->Void) {
-        guard let issuer = URL(string: Constants.Auth.issuer) else {
+    private func discoverConfiguration(issuer: String, completion: @escaping(OIDServiceConfiguration?)->Void) {
+        guard let issuer = URL(string: issuer) else {
             return completion(nil)
         }
         OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { result, error in

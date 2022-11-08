@@ -173,8 +173,6 @@ extension AppDelegate {
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
-        
-        
     }
 }
 

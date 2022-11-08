@@ -266,7 +266,7 @@ extension APIClient {
             if !configResponse.online {
                 AppDelegate.sharedInstance?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
             }
-            completion(configResponse.baseUrl, configResponse.online)
+            completion(configResponse.baseURL, configResponse.online)
         case .failure(let error):
             Logger.log(string: error.localizedDescription, type: .Network)
             completion(nil, nil)

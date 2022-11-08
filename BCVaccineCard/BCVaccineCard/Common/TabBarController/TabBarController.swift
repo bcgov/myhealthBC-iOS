@@ -56,17 +56,35 @@ class TabBarController: UITabBarController {
     var authWorker: AuthenticatedHealthRecordsAPIWorker?
     private var throttleAPIWorker: LoginThrottleAPIWorker?
     var routerWorker: RouterWorker?
+    var network = NetworkConnection()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         BaseURLWorker.setup(BaseURLWorker.Config(delegateOwner: self))
-        BaseURLWorker.shared.setBaseURL {
-            self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
-            self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
-            self.routerWorker = RouterWorker(delegateOwner: self)
-            self.setup(selectedIndex: 0)
-            self.showLoginPromptIfNecessary()
+        network.initListener { connected in
+            if connected {
+                self.whenConnected()
+            } else {
+                self.whenDisconnected()
+            }
         }
+        showForceUpateIfNeeded(completion: { updateNeeded in
+            guard !updateNeeded else {return}
+            BaseURLWorker.shared.setBaseURL {
+                self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
+                self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
+                self.routerWorker = RouterWorker(delegateOwner: self)
+                self.setup(selectedIndex: 0)
+                self.showLoginPromptIfNecessary()
+            }
+        })
+    }
+    
+    func whenConnected() {
+        showForceUpateIfNeeded(completion: {_ in})
+    }
+    
+    func whenDisconnected() {
         
     }
     
