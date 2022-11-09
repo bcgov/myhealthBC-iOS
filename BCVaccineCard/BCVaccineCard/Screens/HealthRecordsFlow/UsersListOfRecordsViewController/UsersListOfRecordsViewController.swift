@@ -431,7 +431,7 @@ extension UsersListOfRecordsViewController {
             return
         }
         guard let protectiveWord = authManager.protectiveWord, AppDelegate.sharedInstance?.protectiveWordEnteredThisSession == false else {
-            showAllRecords(patientRecords: patientRecords, medFetchRequired: authManager.medicalFetchRequired && isDependent)
+            showAllRecords(patientRecords: patientRecords, medFetchRequired: authManager.medicalFetchRequired && !isDependent)
             return
         }
         self.protectiveWord = protectiveWord
