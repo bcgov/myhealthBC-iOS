@@ -23,15 +23,7 @@ class HealthPassViewController: BaseViewController {
     
     private var dataSource: VaccineCard?
     private var savedCardsCount: Int {
-        // Should probably do this differently and update the fetchVaccineCards function itself
-        var dependentsProofCount = 0
-        if let patient = StorageService.shared.fetchAuthenticatedPatient() {
-            let dependents = patient.dependentsArray
-            for dependent in dependents {
-                dependentsProofCount += (dependent.info?.vaccineCardArray.count ?? 0)
-            }
-        }
-        return StorageService.shared.fetchVaccineCards().count + dependentsProofCount
+        return StorageService.shared.fetchVaccineCards().count
     }
     private var fedPassStringToOpen: String?
     
