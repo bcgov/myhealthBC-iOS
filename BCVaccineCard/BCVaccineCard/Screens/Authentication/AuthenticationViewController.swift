@@ -26,13 +26,18 @@ extension BaseViewController {
             case .Completed:
                 let tabVC = self.tabBarController as? TabBarController
                 let authWorker = tabVC?.authWorker
+                self.view.startLoadingIndicator()
                 AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: authWorker, sourceVC: sourceVC) { allowed in
                     if allowed {
                         self.performAuthenticatedRecordsFetch(isManualFetch: true, sourceVC: sourceVC)
                         self.postAuthChangedSettingsReloadRequired()
                         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
+                        self.view.endLoadingIndicator()
+                        completion(.Completed)
+                    } else {
+                        self.view.endLoadingIndicator()
+                        completion(.Failed)
                     }
-                    completion(.Completed)
                 }
                 
             case .Cancelled, .Failed:
