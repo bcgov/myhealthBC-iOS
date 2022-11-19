@@ -90,6 +90,7 @@ extension StorageService: StorageVaccineCardManager {
                                                            hash: data.payload.fhirBundleHash() ?? data.code,
                                                            patient: patient,
                                                            authenticated: false,
+                                                           federalPass: response.resourcePayload?.federalVaccineProof?.data,
                                                            manuallyAdded: manuallyAdded,
                                                            completion: completion)
                     return
@@ -104,6 +105,7 @@ extension StorageService: StorageVaccineCardManager {
                                                            hash: data.payload.fhirBundleHash() ?? data.code,
                                                            patient: patient,
                                                            authenticated: false,
+                                                           federalPass: response.resourcePayload?.federalVaccineProof?.data,
                                                            manuallyAdded: manuallyAdded,
                                                            completion: completion)
                 } else {
