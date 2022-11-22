@@ -47,7 +47,14 @@ struct UpdateServiceStorage {
         }
         return bundleInfo["CFBundleIdentifier"] as? String
     }
-       
+    
+    // check if app has been updated since last launch
+    public static var appWasUpdated: Bool {
+        guard let stored = storedAppVersion else {
+            return true
+        }
+        return stored != currentAppVersion
+    }
     
     public static func setOrResetstoredAppVersion() {
         guard let stored = storedAppVersion else {
