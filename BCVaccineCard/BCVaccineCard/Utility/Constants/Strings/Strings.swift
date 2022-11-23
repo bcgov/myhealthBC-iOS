@@ -83,6 +83,7 @@ extension String {
     static var initialOnboardingHealthPassesDescription: String { return "InitialOnboardingHealthPassesDescription".localized }
     static var initialOnboardingHealthRecordsDescription: String { return "InitialOnboardingHealthRecordsDescription".localized }
     static var initialOnboardingHealthResourcesDescription: String { return "InitialOnboardingHealthResourcesDescription".localized }
+    static var initialOnboardingDependentRecordDescription: String { return "InitialOnboardingDependentRecordDescription".localized }
     static var initialOnboardingNewsFeedDescription: String { return "InitialOnboardingNewsFeedDescription".localized }
     static var new: String { return "NEW".localized }
     
@@ -173,6 +174,7 @@ extension String {
     static var resources: String { return "Resources".localized }
     static var dependent: String { return "Dependent".localized }
     static var dependents: String { return "Dependents".localized }
+    static var dependentRecord: String { return "DependentRecord".localized }
     static var dependentRegistration: String { return "DependentRegistration".localized }
     static var manageDependends: String { return "ManageDependends".localized }
     static var saveChanges: String { return "SaveChanges".localized }
