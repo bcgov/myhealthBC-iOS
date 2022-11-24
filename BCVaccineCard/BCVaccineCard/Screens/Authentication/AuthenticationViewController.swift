@@ -62,6 +62,7 @@ enum LoginVCSource: String {
     case UserListOfRecordsVC = "UserListOfRecordsVC"
     case TabBar = "TabBar"
     case HomeScreen = "HomeScreenVC"
+    case Dependents = "Dependents"
     
     var getVCType: UIViewController.Type {
         switch self {
@@ -76,6 +77,7 @@ enum LoginVCSource: String {
         case .UserListOfRecordsVC: return UsersListOfRecordsViewController.self
         case .TabBar: return TabBarController.self
         case .HomeScreen: return HomeScreenViewController.self
+        case .Dependents: return DependentsHomeViewController.self
         }
     }
 }
@@ -183,13 +185,13 @@ class AuthenticationViewController: UIViewController {
                     self.view.endLoadingIndicator()
                     switch result {
                     case .Unavailable:
-                        AppDelegate.sharedInstance?.showToast(message: "Authentication server is unavailable", style: .Warn)
+                        self.showToast(message: "Authentication server is unavailable", style: .Warn)
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     case .Success:
                         Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
                         self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
                     case .Fail:
-                        AppDelegate.sharedInstance?.showToast(message: "Authentication Failed", style: .Warn)
+                        self.showToast(message: "Authentication Failed", style: .Warn)
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     }
                 })

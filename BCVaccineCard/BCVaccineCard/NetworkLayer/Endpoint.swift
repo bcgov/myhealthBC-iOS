@@ -17,6 +17,7 @@ protocol EndpointsAccessor {
     var getAuthenticatedLaboratoryOrders: URL { get }
     var getAuthenticatedImmunizations: URL { get }
     var getTermsOfService: URL { get }
+    var communicationsMobile: URL { get }
     var throttleHG: URL { get }
     func getAuthenticatedPatientDetails(hdid: String) -> URL
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
@@ -26,6 +27,8 @@ protocol EndpointsAccessor {
     func getAuthenticatedLabTestPDF(repordId: String) -> URL
     func validateProfile(hdid: String) -> URL
     func userProfile(hdid: String) -> URL
+    func listOfDependents(hdid: String) -> URL
+    func deleteDependent(dependentHdid: String, guardian: String) -> URL
 }
 
 struct UrlAccessor {
@@ -144,6 +147,14 @@ extension UrlAccessor: EndpointsAccessor {
     
     func userProfile(hdid: String) -> URL {
         return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid)
+    }
+    
+    func listOfDependents(hdid: String) -> URL {
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Dependent")
+    }
+    
+    func deleteDependent(dependentHdid: String, guardian: String) -> URL {
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(guardian).appendingPathComponent("Dependent").appendingPathComponent(dependentHdid)
     }
 }
 
