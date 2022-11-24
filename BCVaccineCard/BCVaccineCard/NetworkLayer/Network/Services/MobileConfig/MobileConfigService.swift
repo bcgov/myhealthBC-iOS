@@ -40,18 +40,18 @@ struct MobileConfigService {
             guard let response = remoteResponse else {
                 return completion(nil)
             }
-            let modified = MobileConfigurationResponseObject(online: response.online, baseURL: response.baseURL, authentication: defaultAuth(), version: response.version)
-            return completion(modified)
+//            let modified = MobileConfigurationResponseObject(online: response.online, baseURL: response.baseURL, authentication: defaultAuth(), version: response.version)
+            return completion(response)
         }
     }
     
-    fileprivate func defaultAuth() -> AuthenticationConfig {
-#if PROD
-        return AuthenticationConfig(endpoint: "https://oidc.gov.bc.ca/auth/realms/ff09qn3f", identityProviderID: "bcsc2", clientID: "myhealthapp", redirectURI: "myhealthbc://*")
-#elseif TEST
-        return AuthenticationConfig(endpoint: "https://test.oidc.gov.bc.ca/auth/realms/ff09qn3f", identityProviderID: "bcsc", clientID: "myhealthapp", redirectURI: "myhealthbc://*")
-#else
-        return AuthenticationConfig(endpoint: "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f", identityProviderID: "bcsc", clientID: "myhealthapp", redirectURI: "myhealthbc://*")
-#endif
-    }
+//    fileprivate func defaultAuth() -> AuthenticationConfig {
+//#if PROD
+//        return AuthenticationConfig(endpoint: "https://oidc.gov.bc.ca/auth/realms/ff09qn3f", identityProviderID: "bcsc2", clientID: "myhealthapp", redirectURI: "myhealthbc://*")
+//#elseif TEST
+//        return AuthenticationConfig(endpoint: "https://test.oidc.gov.bc.ca/auth/realms/ff09qn3f", identityProviderID: "bcsc", clientID: "myhealthapp", redirectURI: "myhealthbc://*")
+//#else
+//        return AuthenticationConfig(endpoint: "https://dev.oidc.gov.bc.ca/auth/realms/ff09qn3f", identityProviderID: "bcsc", clientID: "myhealthapp", redirectURI: "myhealthbc://*")
+//#endif
+//    }
 }
