@@ -167,4 +167,28 @@ extension StorageService {
         let recommendations = fetchRecommendations()
         deleteAllRecords(in: recommendations)
     }
+    
+    func deleteHealthRecordsForDependent(dependent: Dependent) {
+        if let vaccineCards = dependent.info?.vaccineCardArray {
+            deleteAllRecords(in: vaccineCards)
+        }
+        if let tests = dependent.info?.testResultArray {
+            deleteAllRecords(in: tests)
+        }
+        if let medications = dependent.info?.prescriptionArray {
+            deleteAllRecords(in: medications)
+        }
+        if let labOrders = dependent.info?.labOrdersArray {
+            deleteAllRecords(in: labOrders)
+        }
+        if let imms = dependent.info?.immunizationsArray {
+            deleteAllRecords(in: imms)
+        }
+        if let visits = dependent.info?.healthVisitsArray {
+            deleteAllRecords(in: visits)
+        }
+        if let specialAuth = dependent.info?.specialAuthorityDrugsArray {
+            deleteAllRecords(in: specialAuth)
+        }        
+    }
 }

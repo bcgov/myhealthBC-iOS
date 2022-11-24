@@ -71,13 +71,21 @@ class ProfileAndSettingsViewController: BaseViewController {
     }
     
     func showLogin() {
+        // Note: This nav bar hack is to prevent the user from navigating back to the root vc, which was causing issues as the routing functionality wasn't working in time, so the records weren't showing
+        self.navigationController?.navigationBar.isUserInteractionEnabled = false
         showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: { authenticationStatus in
-            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
+            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else {
+                self.navigationController?.navigationBar.isUserInteractionEnabled = false
+                return
+            }
             let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
             let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
             let currentTab = self.getCurrentTab
             let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .ProfileAndSettingsVC, authenticationStatus: authenticationStatus))
             self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.navigationController?.navigationBar.isUserInteractionEnabled = true
+            }
         })
     }
     

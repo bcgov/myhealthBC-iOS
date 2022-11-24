@@ -83,8 +83,19 @@ extension StorageService: StorageVaccineCardManager {
             }
             DispatchQueue.main.async {
                 let issueDate = Date.init(timeIntervalSince1970: data.issueDate)
-                if let existing = existingCard,
-                   let existingIssue = existing.issueDate,
+                guard let existing = existingCard else {
+                    StorageService.shared.storeVaccineCard(vaccineQR: data.code,
+                                                           name: data.name,
+                                                           issueDate: issueDate,
+                                                           hash: data.payload.fhirBundleHash() ?? data.code,
+                                                           patient: patient,
+                                                           authenticated: false,
+                                                           federalPass: response.resourcePayload?.federalVaccineProof?.data,
+                                                           manuallyAdded: manuallyAdded,
+                                                           completion: completion)
+                    return
+                }
+                if let existingIssue = existing.issueDate,
                    issueDate > existingIssue
                 {
                     StorageService.shared.delete(object: existing)
@@ -94,6 +105,7 @@ extension StorageService: StorageVaccineCardManager {
                                                            hash: data.payload.fhirBundleHash() ?? data.code,
                                                            patient: patient,
                                                            authenticated: false,
+                                                           federalPass: response.resourcePayload?.federalVaccineProof?.data,
                                                            manuallyAdded: manuallyAdded,
                                                            completion: completion)
                 } else {
