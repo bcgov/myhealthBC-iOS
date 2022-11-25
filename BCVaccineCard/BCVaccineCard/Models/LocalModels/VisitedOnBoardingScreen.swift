@@ -27,9 +27,9 @@ struct VisitedOnboardingScreen: Encodable, Decodable {
  */
 enum OnboardingScreenType: Int, CaseIterable {
     case healthRecords = 0
+    case dependents
     case healthPasses
     case healthResources
-    case dependents
 }
 
 enum OnboardingScreenTypeID: String {
