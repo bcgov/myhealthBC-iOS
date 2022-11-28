@@ -464,15 +464,17 @@
 		3ECD398928B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398A28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398B28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
-		3EDEE956291AD89900273F5E /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */; };
-		3EDEE957291AD89900273F5E /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */; };
-		3EDEE958291AD89900273F5E /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */; };
-		3EDEE959291AD89900273F5E /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE955291AD89900273F5E /* MobileConfigService.swift */; };
-		3EDEE95A291AD89900273F5E /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE955291AD89900273F5E /* MobileConfigService.swift */; };
-		3EDEE95B291AD89900273F5E /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEE955291AD89900273F5E /* MobileConfigService.swift */; };
 		3EFFE8A3292D3A7C00CEABF2 /* MigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE8A2292D3A7C00CEABF2 /* MigrationService.swift */; };
 		3EFFE8A4292D3A7C00CEABF2 /* MigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE8A2292D3A7C00CEABF2 /* MigrationService.swift */; };
 		3EFFE8A5292D3A7C00CEABF2 /* MigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE8A2292D3A7C00CEABF2 /* MigrationService.swift */; };
+		3EDEBB582935691A00C8386C /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEBB572935691A00C8386C /* MobileConfigStorage.swift */; };
+		3EDEBB592935691A00C8386C /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEBB572935691A00C8386C /* MobileConfigStorage.swift */; };
+		3EDEBB5A2935691A00C8386C /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEBB572935691A00C8386C /* MobileConfigStorage.swift */; };
+		3EE55BCD291AD29300DF13CC /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */; };
+		3EE55BCE291AD29300DF13CC /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */; };
+		3EE55BCF291AD29300DF13CC /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */; };
+		3EEFB08E29142AC5009BF27D /* MobileConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */; };
+		3EEFB0922915C79A009BF27D /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */; };
 		5B8BA6FE27BBB7D700250430 /* NetworkLayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */; };
 		5BA177D027A1880600D61F2A /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177CF27A1880600D61F2A /* TestCoreDataStack.swift */; };
 		5BA177D227A18CDD00D61F2A /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */; };
@@ -1357,8 +1359,8 @@
 		3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageDependentsViewController.swift; sourceTree = "<group>"; };
 		3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDependentViewController.swift; sourceTree = "<group>"; };
 		3ECD398828B522970033B866 /* StorageService+Recommendations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Recommendations.swift"; sourceTree = "<group>"; };
-		3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
-		3EDEE955291AD89900273F5E /* MobileConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
+		3EDEBB572935691A00C8386C /* MobileConfigStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
+		3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
 		3EEFB08D29142AC5009BF27D /* MobileConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
 		3EEFB0912915C79A009BF27D /* MobileConfigStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
 		3EFFE8A2292D3A7C00CEABF2 /* MigrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationService.swift; sourceTree = "<group>"; };
@@ -2239,8 +2241,8 @@
 		3EEFB0952915CC0D009BF27D /* MobileConfig */ = {
 			isa = PBXGroup;
 			children = (
-				3EDEE955291AD89900273F5E /* MobileConfigService.swift */,
-				3EDEE954291AD89900273F5E /* MobileConfigStorage.swift */,
+				3EDEBB572935691A00C8386C /* MobileConfigStorage.swift */,
+				3EE55BC9291AD29300DF13CC /* MobileConfigService.swift */,
 				798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */,
 			);
 			path = MobileConfig;
@@ -3910,6 +3912,7 @@
 				3E473784291090DB00B5BBA0 /* LabOrderService.swift in Sources */,
 				3E66F052290B436500D90EF6 /* Patient+CoreDataClass.swift in Sources */,
 				294BD3C727AACFA800BD8D46 /* LocalAuthPrivacyView.swift in Sources */,
+				3EDEBB592935691A00C8386C /* MobileConfigStorage.swift in Sources */,
 				2940A3502728399B00132D7D /* StorageService.swift in Sources */,
 				7967E73D26F536AF00EEF510 /* FormTextFieldView.swift in Sources */,
 				3E66F062290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */,
@@ -4225,6 +4228,7 @@
 				3E473785291090DB00B5BBA0 /* LabOrderService.swift in Sources */,
 				3E66F053290B436500D90EF6 /* Patient+CoreDataClass.swift in Sources */,
 				294BD3CA27AACFB600BD8D46 /* LocalAuthPrivacyView.swift in Sources */,
+				3EDEBB5A2935691A00C8386C /* MobileConfigStorage.swift in Sources */,
 				794BD6302702EEC00084ADA8 /* VaccinePassportModel.swift in Sources */,
 				29A5B6DB27B55B65006A9BA7 /* Perscription+CoreDataClass.swift in Sources */,
 				3E66F063290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */,
@@ -4365,7 +4369,6 @@
 				795AA76E271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
 				791C27CD2719DB3E001A6E12 /* QueueItCachedObject.swift in Sources */,
 				3E473789291090EB00B5BBA0 /* VaccineCardService.swift in Sources */,
-				3EDEE958291AD89900273F5E /* MobileConfigStorage.swift in Sources */,
 				2961A99A287F53C3007F3E03 /* HealthVisit+CoreDataProperties.swift in Sources */,
 				3E31EA802913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */,
 				7928345E2730E63A00EE2710 /* InteractiveLabelTableViewCell.swift in Sources */,
@@ -4591,6 +4594,7 @@
 				7980056C2852C66E006E390F /* GetARecordTableViewCell.swift in Sources */,
 				7980056D2852C66E006E390F /* AttributedString+EXT.swift in Sources */,
 				7980056E2852C66E006E390F /* MIMEType.swift in Sources */,
+				3EDEBB582935691A00C8386C /* MobileConfigStorage.swift in Sources */,
 				2922C0F228772464000FF4F7 /* StorageService+Immunization.swift in Sources */,
 				7980056F2852C66E006E390F /* AuthenticatedUserProfileResponseObject.swift in Sources */,
 				798005702852C66E006E390F /* UINavigationItem+Ext.swift in Sources */,
