@@ -35,11 +35,13 @@ class DependentsHomeViewController: BaseDependentViewController {
     
     var dependents: [Dependent] = [] {
         didSet {
-            if dependents.isEmpty {
-                styleWithoutDependents()
-            } else {
-                styleWithDependents()
-                tableView.reloadData()
+            DispatchQueue.main.async {
+                if self.dependents.isEmpty {
+                    self.styleWithoutDependents()
+                } else {
+                    self.styleWithDependents()
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -181,10 +183,12 @@ class DependentsHomeViewController: BaseDependentViewController {
     }
     
     private func removeEmptyLogo() {
-        guard let imgView = view.viewWithTag(emptyLogoTag) else {
-            return
+        DispatchQueue.main.async {
+            guard let imgView = self.view.viewWithTag(self.emptyLogoTag) else {
+                return
+            }
+            imgView.removeFromSuperview()
         }
-        imgView.removeFromSuperview()
     }
     func style(button: UIButton, filled: Bool) {
         button.layer.cornerRadius = 4
