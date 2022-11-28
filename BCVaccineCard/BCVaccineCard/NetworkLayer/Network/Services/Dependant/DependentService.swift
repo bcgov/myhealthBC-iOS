@@ -73,7 +73,7 @@ struct DependentService {
 
     }
     
-    public func addDependent(for patient: Patient, object: PostDependent, completion: @escaping(Patient?) -> Void) {
+    public func addDependent(for patient: Patient, object: PostDependent, completion: @escaping(Dependent?) -> Void) {
         network.addLoader(message: .empty)
         addDependentNetworkRequest(object: object) { dependentResponse in
             network.removeLoader()
