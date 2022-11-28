@@ -28,6 +28,8 @@ struct Constants {
             return 1
 //        case .newsFeed:
 //            return 1
+        case .dependents:
+            return 1
         }
     }
     

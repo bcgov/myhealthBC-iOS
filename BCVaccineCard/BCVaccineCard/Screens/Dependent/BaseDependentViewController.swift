@@ -21,6 +21,7 @@ class BaseDependentViewController: BaseViewController {
         
         alertConfirmation(title: .deleteDependentTitle, message: .deleteDependentMessage, confirmTitle: .delete, confirmStyle: .destructive) { [weak self] in
             guard let `self` = self else {return}
+            StorageService.shared.deleteHealthRecordsForDependent(dependent: dependent)
             self.networkService.delete(dependents: [dependent], for: patient, completion: {success in
                 return completion(true)
             })

@@ -27,16 +27,16 @@ struct VisitedOnboardingScreen: Encodable, Decodable {
  */
 enum OnboardingScreenType: Int, CaseIterable {
     case healthRecords = 0
+    case dependents
     case healthPasses
     case healthResources
-//    case newsFeed
 }
 
 enum OnboardingScreenTypeID: String {
     case healthPasses = "healthPasses"
     case healthRecords = "healthRecords"
     case healthResources = "healthResources"
-//    case newsFeed = "newsFeed"
+    case dependents = "dependents"
 }
 
 extension OnboardingScreenType {
@@ -48,8 +48,8 @@ extension OnboardingScreenType {
             return .healthRecords
         case .healthResources:
             return .healthResources
-//        case .newsFeed:
-//            return .newsFeed
+        case .dependents:
+            return .dependents
         }
     }
 }
@@ -63,8 +63,8 @@ extension OnboardingScreenTypeID {
             return .healthRecords
         case .healthResources:
             return .healthResources
-//        case .newsFeed:
-//            return .newsFeed
+        case .dependents:
+            return .dependents
         }
     }
 }
@@ -78,8 +78,8 @@ extension OnboardingScreenType {
             return UIImage(named: "bubble-records")
         case .healthResources:
             return UIImage(named: "bubble-resources")
-//        case .newsFeed:
-//            return UIImage(named: "bubble-news")
+        case .dependents:
+            return UIImage(named: "bubble-dependents")
         }
     }
     // Note: Offset is:
@@ -92,8 +92,8 @@ extension OnboardingScreenType {
             return (width: 133, height: 99, xOffset: 64, yOffset: 48)
         case .healthResources:
             return (width: 132, height: 99, xOffset: -60, yOffset: 48)
-//        case .newsFeed:
-//            return (width: 0, height: 0, xOffset: 0, yOffset: 0)
+        case .dependents:
+            return (width: 132, height: 99, xOffset: 64, yOffset: -10)
         }
     }
     
@@ -105,8 +105,8 @@ extension OnboardingScreenType {
             return .healthRecords.sentenceCase()
         case .healthResources:
             return .healthResources.sentenceCase()
-//        case .newsFeed:
-//            return .newsFeed.sentenceCase()
+        case .dependents:
+            return .dependentRecord.sentenceCase()
         }
     }
     
@@ -118,8 +118,8 @@ extension OnboardingScreenType {
             return .initialOnboardingHealthRecordsDescription
         case .healthResources:
             return .initialOnboardingHealthResourcesDescription
-//        case .newsFeed:
-//            return .initialOnboardingNewsFeedDescription
+        case .dependents:
+            return .initialOnboardingDependentRecordDescription
         }
     }
 }

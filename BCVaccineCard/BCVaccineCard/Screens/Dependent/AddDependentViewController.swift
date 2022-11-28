@@ -116,6 +116,10 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
                 self?.alert(title: .error, message: .formError)
                 return
             }
+            let network = AFNetwork()
+            let authManager = AuthManager()
+            HealthRecordsService(network: network, authManager: authManager).fetchAndStoreVaccineCardForDependent(for: storedDependent)
+            
             if let patientName = storedDependent.info?.name {
                 self?.showToast(message: "\(patientName) was added")
             } else {

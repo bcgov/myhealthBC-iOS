@@ -28,6 +28,13 @@ struct HealthRecordsService {
         }
     }
     
+    public func fetchAndStoreVaccineCardForDependent(for dependent: Dependent) {
+        let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
+        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in
+            print(vaccineCard)
+        }
+    }
+    
     public func fetchAndStoreHealthRecords(for dependent: Dependent, completion: @escaping ([HealthRecord])->Void) {
         
         let dispatchGroup = DispatchGroup()

@@ -300,6 +300,10 @@ extension Patient {
     func hasDepdendentWith(phn: String) -> Bool {
         return self.dependentsInfo.contains(where: { $0.phn != nil && $0.phn == phn})
     }
+    
+    func isDependent() -> Bool {
+        return dependencyInfo != nil
+    }
 }
 
 extension Array where Element == Dependent {

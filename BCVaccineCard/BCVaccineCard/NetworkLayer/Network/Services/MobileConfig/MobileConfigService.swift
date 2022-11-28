@@ -30,7 +30,7 @@ struct MobileConfigService {
                 }
                 self.network.removeLoader()
                 return completion(responseData)
-        })
+            })
         network.request(with: request)
     }
 }
