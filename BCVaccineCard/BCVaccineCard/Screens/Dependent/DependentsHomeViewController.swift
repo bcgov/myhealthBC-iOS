@@ -107,6 +107,7 @@ class DependentsHomeViewController: BaseDependentViewController {
     
     // MARK: Data
     private func fetchData(fromRemote: Bool) {
+        guard tableView != nil else {return}
         guard let patient = patient, authManager.isAuthenticated else {
             dependents = []
             setState()
@@ -173,11 +174,12 @@ class DependentsHomeViewController: BaseDependentViewController {
     
     private func createLogoImgView() -> UIImageView {
         removeEmptyLogo()
-        let imgView = UIImageView(frame: tableView.bounds)
+        let bounds = tableView != nil ? tableView.bounds : view.bounds
+        let imgView = UIImageView(frame: bounds)
         imgView.tag = emptyLogoTag
         view.addSubview(imgView)
         let padding = self.view.bounds.width / 10
-        imgView.addEqualSizeContraints(to: tableView, paddingVertical: padding, paddingHorizontal: padding)
+        imgView.addEqualSizeContraints(to: tableView != nil ? tableView : view, paddingVertical: padding, paddingHorizontal: padding)
         imgView.contentMode = .scaleAspectFit
         return imgView
     }
@@ -209,17 +211,19 @@ class DependentsHomeViewController: BaseDependentViewController {
     
     // MARK: Screen States
     func setState() {
-        switch authManager.authStaus {
-        case .Authenticated:
-            if dependents.isEmpty {
-                styleWithoutDependents()
-            } else {
-                styleWithDependents()
+        DispatchQueue.main.async {
+            switch self.authManager.authStaus {
+            case .Authenticated:
+                if self.dependents.isEmpty {
+                    self.styleWithoutDependents()
+                } else {
+                    self.styleWithDependents()
+                }
+            case .AuthenticationExpired:
+                self.styleAuthenticationExpired()
+            case .UnAuthenticated:
+                self.styleUnauthenticated()
             }
-        case .AuthenticationExpired:
-            styleAuthenticationExpired()
-        case .UnAuthenticated:
-            styleUnauthenticated()
         }
     }
     
