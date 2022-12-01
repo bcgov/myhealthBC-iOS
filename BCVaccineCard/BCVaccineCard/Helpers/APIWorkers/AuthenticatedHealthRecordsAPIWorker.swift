@@ -168,8 +168,10 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         self.delegate?.showFetchStartedBanner(showBanner: showBanner)
         self.initialProtectedMedFetch = initialProtectedMedFetch
         self.requestDetails.authenticatedPatientDetails = AuthenticatedAPIWorkerRetryDetails.AuthenticatedPatientDetails(authCredentials: authCredentials, queueItToken: queueItTokenCached)
+        self.incrementLoadCounter()
         self.apiClient.getAuthenticatedPatientDetails(authCredentials, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI) { [weak self] result, queueItRetryStatus in
             guard let `self` = self else {return}
+            self.decrementLoadCounter()
             if let retry = queueItRetryStatus, retry.retry == true {
                 let queueItToken = retry.token
                 self.requestDetails.authenticatedPatientDetails?.queueItToken = queueItToken
