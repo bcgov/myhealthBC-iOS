@@ -54,7 +54,7 @@ extension ManageDependentsViewController: UITableViewDelegate, UITableViewDataSo
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DependentListItemTableViewCell.getName, for: indexPath) as? DependentListItemTableViewCell else {
             return DependentListItemTableViewCell()
         }
-        cell.configure(name: dependents[indexPath.row].info?.name ?? "")
+        cell.configure(name: dependents[indexPath.row].info?.name ?? "", hideArrow: true)
         return cell
     }
     
