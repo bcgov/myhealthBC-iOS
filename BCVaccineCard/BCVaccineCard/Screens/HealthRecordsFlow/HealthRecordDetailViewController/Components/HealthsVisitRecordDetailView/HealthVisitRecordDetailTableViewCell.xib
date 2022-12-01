@@ -36,7 +36,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="kWU-Dp-92T"/>
                                 </constraints>
-                                <string key="text">Information is from the billing claim and may show a different practitioner or clinic from the one you visisted. For more information, visit the FAQ page.</string>
+                                <string key="text">Information is from the billing claim and may show a different practitioner or clinic from the one you visited. For more information, visit the FAQ page.</string>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
