@@ -43,7 +43,9 @@ class BaseHealthRecordsDetailView: UIView {
     
     func setup() {}
     
-    func submittedComment(object: Comment){}
+    func submittedComment(object: Comment){
+        print("submitted")
+    }
     
     public func creatSubViews(enableComments: Bool) {
         let tableView = UITableView(frame: .zero)
@@ -235,12 +237,9 @@ class BaseHealthRecordsDetailView: UIView {
 // MARK: Comment Field delegate
 extension BaseHealthRecordsDetailView: CommentTextFieldViewDelegate, TableSectionHeaderDelegate {
     func textChanged(text: String?) {
-        print(text)
     }
     
     func submit(text: String) {
-        print("Submit")
-        print(text)
         guard let record = model, let hdid = AuthManager().hdid else {return}
         record.submitComment(text: text, hdid: hdid, completion: { [weak self] result in
             DispatchQueue.main.async { [weak self] in

@@ -12,6 +12,7 @@ protocol CommentTextFieldViewDelegate {
     func textChanged(text: String?)
     func submit(text: String)
 }
+
 class CommentTextFieldView: UIView, UITextFieldDelegate {
     
     let MAXCHAR = 1000

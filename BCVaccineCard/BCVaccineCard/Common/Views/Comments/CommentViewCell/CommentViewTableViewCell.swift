@@ -18,28 +18,27 @@ class CommentViewTableViewCell: UITableViewCell {
     }
     
     func configure(comment: Comment) {
-        func configure(comment: Comment) {
-            commentText.text = comment.text
-            
-            if let createdDate = comment.createdDateTime, !comment.isPosting {
-                dateTimeLabel.text = Date.Formatter.commentsDateTime.string(from: createdDate)
-            } else if comment.isPosting {
-                dateTimeLabel.text = "Posting..."
-            } else {
-                dateTimeLabel.text = ""
-            }
-            commentText.backgroundColor = .clear
-            self.backgroundColor = .clear
-            container.backgroundColor = AppColours.commentBackground
-            dateTimeLabel.textColor = AppColours.greyText
-            commentText.textColor = AppColours.textBlack
-            
-            commentText.font = CommentView.textFont
-            dateTimeLabel.font = UIFont.bcSansRegularWithSize(size: 13)
-            
-            self.layoutIfNeeded()
+        commentText.text = comment.text
+        
+        if let createdDate = comment.createdDateTime, !comment.isPosting {
+            dateTimeLabel.text = Date.Formatter.commentsDateTime.string(from: createdDate)
+        } else if comment.isPosting {
+            dateTimeLabel.text = "Posting..."
+        } else {
+            dateTimeLabel.text = ""
         }
+        commentText.backgroundColor = .clear
+        self.backgroundColor = .clear
+        container.backgroundColor = AppColours.commentBackground
+        dateTimeLabel.textColor = AppColours.greyText
+        commentText.textColor = AppColours.textBlack
+        
+        commentText.font = CommentView.textFont
+        dateTimeLabel.font = UIFont.bcSansRegularWithSize(size: 13)
+        
+        self.layoutIfNeeded()
     }
+    
 }
 
 extension Comment {

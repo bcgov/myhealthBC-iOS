@@ -25,7 +25,7 @@ class HealthVisitRecordDetailTableViewCell: UITableViewCell, UITextViewDelegate 
         let padding = disclaimer.textContainer.lineFragmentPadding
         disclaimer.textContainerInset =  UIEdgeInsets(top: 0, left: -padding, bottom: 0, right: -padding)
         layoutIfNeeded()
-        let disclaimerText = "Information is from the billing claim and may show a different practitioner or clinic from the one you visited. For more information, visit the FAQ page."
+        let disclaimerText = "Information is from the billing claim and may show a different practitioner or clinic from the one you visisted. For more information, visit the FAQ page."
         let attributedText = NSMutableAttributedString(string: disclaimerText)
         _ = attributedText.setAsLink(textToFind: "FAQ", linkURL: "https://www.healthgateway.gov.bc.ca/faq")
     
