@@ -429,6 +429,18 @@
 		3E6831352940D41200100402 /* CovidLabTestResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831132940D41200100402 /* CovidLabTestResult+CoreDataClass.swift */; };
 		3E6831362940D41200100402 /* CovidLabTestResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831132940D41200100402 /* CovidLabTestResult+CoreDataClass.swift */; };
 		3E6831372940D41200100402 /* CovidLabTestResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831132940D41200100402 /* CovidLabTestResult+CoreDataClass.swift */; };
+		3E68313A2940D77600100402 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831392940D77500100402 /* CommentsViewController.swift */; };
+		3E68313B2940D77600100402 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831392940D77500100402 /* CommentsViewController.swift */; };
+		3E68313C2940D77600100402 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831392940D77500100402 /* CommentsViewController.swift */; };
+		3E6831462940D92600100402 /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831452940D92600100402 /* Comments.storyboard */; };
+		3E6831472940D92600100402 /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831452940D92600100402 /* Comments.storyboard */; };
+		3E6831482940D92600100402 /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831452940D92600100402 /* Comments.storyboard */; };
+		3E68314A2940DA4300100402 /* CommentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831492940DA4300100402 /* CommentView.xib */; };
+		3E68314B2940DA4300100402 /* CommentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831492940DA4300100402 /* CommentView.xib */; };
+		3E68314C2940DA4300100402 /* CommentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831492940DA4300100402 /* CommentView.xib */; };
+		3E68314E2940DB1600100402 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68314D2940DB1600100402 /* CommentView.swift */; };
+		3E68314F2940DB1600100402 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68314D2940DB1600100402 /* CommentView.swift */; };
+		3E6831502940DB1600100402 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68314D2940DB1600100402 /* CommentView.swift */; };
 		3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
@@ -1349,6 +1361,10 @@
 		3E6831112940D41200100402 /* HealthVisit+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HealthVisit+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E6831122940D41200100402 /* Perscription+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Perscription+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E6831132940D41200100402 /* CovidLabTestResult+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CovidLabTestResult+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E6831392940D77500100402 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
+		3E6831452940D92600100402 /* Comments.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Comments.storyboard; sourceTree = "<group>"; };
+		3E6831492940DA4300100402 /* CommentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentView.xib; sourceTree = "<group>"; };
+		3E68314D2940DB1600100402 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsViewController.swift; sourceTree = "<group>"; };
 		3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReccomandationTableViewCell.swift; sourceTree = "<group>"; };
 		3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReccomandationTableViewCell.xib; sourceTree = "<group>"; };
@@ -1717,6 +1733,8 @@
 				293B32B427D262540064BAAA /* CommentsList */,
 				293B32CA27D814EB0064BAAA /* CommentViewTableViewCell.swift */,
 				293B32CB27D814EB0064BAAA /* CommentViewTableViewCell.xib */,
+				3E6831492940DA4300100402 /* CommentView.xib */,
+				3E68314D2940DB1600100402 /* CommentView.swift */,
 			);
 			path = Comments;
 			sourceTree = "<group>";
@@ -2225,6 +2243,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		3E6831382940D74D00100402 /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				3E6831392940D77500100402 /* CommentsViewController.swift */,
+			);
+			path = Comments;
+			sourceTree = "<group>";
+		};
 		3E7306DC28B5EDD7007FED05 /* Recommendations */ = {
 			isa = PBXGroup;
 			children = (
@@ -2618,6 +2644,7 @@
 				799E0AFE27D13F43009C68FE /* Reusable.storyboard */,
 				3E32322528B5FEB80067040C /* Recommendations.storyboard */,
 				3E78AEC328F8724900C66E28 /* Dependents.storyboard */,
+				3E6831452940D92600100402 /* Comments.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -2678,6 +2705,7 @@
 		7944F6B226F12AB3006B9444 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				3E6831382940D74D00100402 /* Comments */,
 				79B9D00B27E2786800987D9F /* HomeScreen */,
 				3E5E6EC128D3B76100724EDD /* Communication message */,
 				3E7306DC28B5EDD7007FED05 /* Recommendations */,
@@ -3465,6 +3493,7 @@
 				79FDE426273335DC00DAD988 /* FederalPassView.xib in Resources */,
 				293B32C627D27A880064BAAA /* CommentsTableViewCell.xib in Resources */,
 				294BD3D327B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
+				3E6831472940D92600100402 /* Comments.storyboard in Resources */,
 				297885262795F38500FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				791C27BB27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
 				7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */,
@@ -3485,6 +3514,7 @@
 				297885202795F16E00FF912D /* SettingsRowTableViewCell.xib in Resources */,
 				293B32CD27D814EB0064BAAA /* CommentViewTableViewCell.xib in Resources */,
 				7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */,
+				3E68314B2940DA4300100402 /* CommentView.xib in Resources */,
 				7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */,
 				791C27C12718315A001A6E12 /* AddCardsTableViewCell.xib in Resources */,
 				29719547288212F600CA824A /* HealthVisitRecordDetailTableViewCell.xib in Resources */,
@@ -3587,6 +3617,7 @@
 				79590D992811E9F7006EB59F /* TableSectionHeader.xib in Resources */,
 				79218AC227555B350063004E /* ReusableHeaderAddView.xib in Resources */,
 				7918A8CB27482E1900D19D1C /* TextListView.xib in Resources */,
+				3E6831482940D92600100402 /* Comments.storyboard in Resources */,
 				794BD6622702EEC00084ADA8 /* NoCardsTableViewCell.xib in Resources */,
 				29A4DF5E27DEFCCC00D5E901 /* FilterRecordsView.xib in Resources */,
 				79BDA093270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
@@ -3609,6 +3640,7 @@
 				293B32B327D25C5B0064BAAA /* CommentView.xib in Resources */,
 				297F6DB4280F16180023E89C /* Authentication.storyboard in Resources */,
 				79BDA084270CEE5A00FF30AB /* HealthPass.storyboard in Resources */,
+				3E68314C2940DA4300100402 /* CommentView.xib in Resources */,
 				79B9D01827E2950000987D9F /* Home.storyboard in Resources */,
 				79FDE427273335DC00DAD988 /* FederalPassView.xib in Resources */,
 				799050C8273C8567006CD726 /* UserRecordListView.xib in Resources */,
@@ -3672,6 +3704,7 @@
 				798006112852C66E006E390F /* FederalPassView.xib in Resources */,
 				798006122852C66E006E390F /* CommentsTableViewCell.xib in Resources */,
 				798006132852C66E006E390F /* HiddenRecordsTableViewCell.xib in Resources */,
+				3E6831462940D92600100402 /* Comments.storyboard in Resources */,
 				798006142852C66E006E390F /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				798006152852C66E006E390F /* ButtonTableViewCell.xib in Resources */,
 				798006162852C66E006E390F /* BCSans-Italic.otf in Resources */,
@@ -3692,6 +3725,7 @@
 				798006252852C66E006E390F /* SettingsRowTableViewCell.xib in Resources */,
 				798006262852C66E006E390F /* CommentViewTableViewCell.xib in Resources */,
 				798006272852C66E006E390F /* QRSelectionTableViewCell.xib in Resources */,
+				3E68314A2940DA4300100402 /* CommentView.xib in Resources */,
 				798006282852C66E006E390F /* GoogleService-Info.plist in Resources */,
 				798006292852C66E006E390F /* AddCardsTableViewCell.xib in Resources */,
 				29719546288212F600CA824A /* HealthVisitRecordDetailTableViewCell.xib in Resources */,
@@ -4150,6 +4184,7 @@
 				29B446AB273575AA00E0F967 /* AppPDFView.swift in Sources */,
 				798CA1CA27EE4B0A0096188C /* LoginProcessStatus.swift in Sources */,
 				3E91C7AF28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */,
+				3E68313B2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA628D23BB200724EDD /* AFNetwork.swift in Sources */,
 				79B1A0F62874CEBE009B3EFB /* CovidImmunizationRecord+CoreDataClass.swift in Sources */,
 				3E31EA892913A58F00E344E6 /* UpdateServiceStorage.swift in Sources */,
@@ -4198,6 +4233,7 @@
 				7944F6BA26F12BC3006B9444 /* AppColours.swift in Sources */,
 				29736A482788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
 				7944F6E726F12C4E006B9444 /* GatewayFormViewController.swift in Sources */,
+				3E68314F2940DB1600100402 /* CommentView.swift in Sources */,
 				79B9D00D27E2788100987D9F /* HomeScreenViewController.swift in Sources */,
 				798CA1C427ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
 				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
@@ -4465,6 +4501,7 @@
 				79218AA227518A5E0063004E /* CovidTestResultModel.swift in Sources */,
 				29A4DF5F27DEFCCC00D5E901 /* ChipCollectionViewCell.swift in Sources */,
 				3E91C7B028B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */,
+				3E68313C2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA728D23BB200724EDD /* AFNetwork.swift in Sources */,
 				293B32BF27D262F70064BAAA /* CommentsViewTableViewCell.swift in Sources */,
 				3E31EA8A2913A58F00E344E6 /* UpdateServiceStorage.swift in Sources */,
@@ -4513,6 +4550,7 @@
 				794BD6542702EEC00084ADA8 /* AppColours.swift in Sources */,
 				294BD3D427B1D60B00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */,
 				79053CFA2773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
+				3E6831502940DB1600100402 /* CommentView.swift in Sources */,
 				794BD6552702EEC00084ADA8 /* GatewayFormViewController.swift in Sources */,
 				7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				798CA1C527ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
@@ -4757,6 +4795,7 @@
 				798005CD2852C66E006E390F /* GatewayTestResultResponse.swift in Sources */,
 				798005CE2852C66E006E390F /* ResourceViewController.swift in Sources */,
 				3E91C7AE28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */,
+				3E68313A2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA528D23BB200724EDD /* AFNetwork.swift in Sources */,
 				798005CF2852C66E006E390F /* AppPDFView.swift in Sources */,
 				3E31EA882913A58F00E344E6 /* UpdateServiceStorage.swift in Sources */,
@@ -4805,6 +4844,7 @@
 				798005ED2852C66E006E390F /* Device.swift in Sources */,
 				798005EE2852C66E006E390F /* AppColours.swift in Sources */,
 				798005EF2852C66E006E390F /* TestResult+CoreDataProperties.swift in Sources */,
+				3E68314E2940DB1600100402 /* CommentView.swift in Sources */,
 				798005F02852C66E006E390F /* GatewayFormViewController.swift in Sources */,
 				798005F12852C66E006E390F /* HomeScreenViewController.swift in Sources */,
 				798005F22852C66E006E390F /* TermsOfServiceViewController.swift in Sources */,
