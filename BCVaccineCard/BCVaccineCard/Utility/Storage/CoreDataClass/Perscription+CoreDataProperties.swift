@@ -2,7 +2,7 @@
 //  Perscription+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-03-04.
+//  Created by Amir Shayegh on 2022-12-07.
 //
 //
 
@@ -24,10 +24,10 @@ extension Perscription {
     @NSManaged public var practitionerSurname: String?
     @NSManaged public var prescriptionIdentifier: String?
     @NSManaged public var status: String?
+    @NSManaged public var comments: NSSet?
     @NSManaged public var medication: Medication?
     @NSManaged public var patient: Patient?
     @NSManaged public var pharmacy: Pharmacy?
-    @NSManaged public var comments: NSSet?
 
 }
 
