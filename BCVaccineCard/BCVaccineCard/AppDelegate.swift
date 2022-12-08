@@ -55,11 +55,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         listenToAppState()
         localAuthManager = LocalAuthManager()
         localAuthManager?.listenToAppStates()
-        NetworkConnection.shared.initListener(onChange: {_ in})
+        initNetworkListener()
+        initKeyboardManager()
+    }
+    
+    private func initKeyboardManager() {
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = false
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
+        IQKeyboardManager.shared.disabledDistanceHandlingClasses = [HealthRecordDetailViewController.self]
+    }
+    
+    private func initNetworkListener() {
+        NetworkConnection.shared.initListener(onChange: {isOnline in
+            if isOnline {
+                self.whenAppisOnline()
+            }
+        })
+    }
+    
+    // Perform whatever app needs to do when it comes onlines
+    private func whenAppisOnline() {
+        guard NetworkConnection.shared.hasConnection else {return}
+        self.syncCommentsIfNeeded()
+    }
+    
+    private func syncCommentsIfNeeded() {
+        CommentService(network: AFNetwork(), authManager: AuthManager()).submitUnsyncedComments{}
     }
     
     private func clearKeychainIfNecessary(authManager: AuthManager?) {
