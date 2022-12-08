@@ -182,7 +182,9 @@ extension String {
     static var manageDependends: String { return "ManageDependends".localized }
     static var saveChanges: String { return "SaveChanges".localized }
     static var deleteDependentTitle: String { return "DeleteDependentTitle".localized }
-    static var deleteDependentMessage: String { return "DeleteDependentMessage".localized }
+    static func deleteDependentMessage(name: String) -> String {
+        return String(format: "DeleteDependentMessage".localized, name)
+    }
     static var resourceDescriptionText: String { return "ResourceDescriptionText".localized }
     static var getVaccinatedResource: String { return "GetVaccinatedResource".localized }
     static var getTestedResource: String { return "GetTestedResource".localized }
