@@ -17,6 +17,7 @@
 "Passes" = "Proofs";
 "Records" = "Records";
 "Cancel" = "Cancel";
+"SendEmail" = "Send Email";
 "Continue" = "Continue";
 "Agree" = "Agree";
 //"Enter" = "Enter";
@@ -53,6 +54,7 @@
 "QueueItClosedMessage" = "You have closed the QueueIt waiting room";
 "ErrorParsingPHNFromHG" = "Error parsing phn";
 "FormError" = "The information you entered does not match our records. Please try again.";
+"FormErrorDependent" = "The information you entered does not match our records. Please try again.\n\nIf you continue to have issues, please contact HealthGateway@gov.bc.ca";
 "DuplicateTitle" = "Duplicate";
 "DuplicateMessage" = "This QR code is already saved in your list of cards.";
 "DuplicateTestMessage" = "This test is already saved in your list of records.";
