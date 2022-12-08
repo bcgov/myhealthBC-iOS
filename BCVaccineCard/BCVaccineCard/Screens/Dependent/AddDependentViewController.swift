@@ -113,7 +113,7 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
         
         networkService.addDependent(for: patient, object: object) { [weak self] stored in
             guard let storedDependent = stored else {
-                self?.alert(title: .error, message: .formError)
+                self?.showInvalidInfoAlert()
                 return
             }
             let network = AFNetwork()
@@ -161,6 +161,23 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
             break
         }
         updateregisterButtonStyle()
+    }
+    
+    func showInvalidInfoAlert() {
+        alert(title: .error,
+              message: .formErrorDependent,
+              buttonOneTitle: .cancel,
+              buttonOneCompletion: {},
+              buttonTwoTitle: .sendEmail,
+              buttonTwoCompletion: {self.sendEmail()}
+        )
+    }
+    
+    func sendEmail() {
+        let email = "HealthGateway@gov.bc.ca"
+        if let url = URL(string: "mailto:\(email)"), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
     }
     
     func style() {
