@@ -36,6 +36,7 @@ class CommentTextFieldView: UIView, UITextFieldDelegate {
         delegate?.submit(text: text)
         textField.text = ""
         styleSubmit(enabled: false)
+        textField.endEditing(true)
         resignFirstResponder()
     }
     

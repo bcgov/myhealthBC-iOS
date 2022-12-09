@@ -20,7 +20,11 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     
     public var model: HealthRecordsDetailDataSource.Record? = nil
     private var comments: [Comment] = []
+    fileprivate var lastKnowContentOfsset: CGFloat = 0.0
+    fileprivate var hideTitleAfterScroll: Bool = false
+    fileprivate let titleText = "Only you can see comments added to your medical records."
     
+    @IBOutlet weak var titleTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var fieldContainer: UIView!
     @IBOutlet weak var tableView: UITableView!
@@ -31,7 +35,8 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     }
     
     func setup() {
-        titleLabel.text = "Only you can see comments added to your medical records."
+        guard titleLabel != nil else {return}
+        titleLabel.text = titleText
         
         let commentTextField: CommentTextFieldView = CommentTextFieldView.fromNib()
         fieldContainer.addSubview(commentTextField)
@@ -41,12 +46,16 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
         commentTextField.delegate = self
         
         comments = model?.comments ?? []
+        comments = comments.sorted(by: {$0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()})
         setupTableView()
         style()
+        scrollToBottom()
     }
     
     func style() {
+        guard titleLabel != nil else {return}
         titleLabel.font = UIFont.bcSansRegularWithSize(size: 17)
+//        showTitle()
     }
     
     func textChanged(text: String?) {}
@@ -59,12 +68,17 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
             }
             self.comments.append(commentObject)
             self.tableView.reloadData()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { [weak self] in
-                let row = (self?.comments.count ?? 0) - 1
-                guard row >= 0 else { return }
-                let indexPath = IndexPath(row: row, section: 0)
-                self?.tableView?.scrollToRow(at: indexPath, at: .bottom, animated: true)
-            })
+            self.scrollToBottom()
+            self.resignFirstResponder()
+        })
+    }
+    
+    func scrollToBottom() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { [weak self] in
+            let row = (self?.comments.count ?? 0) - 1
+            guard row >= 0 else { return }
+            let indexPath = IndexPath(row: row, section: 0)
+            self?.tableView?.scrollToRow(at: indexPath, at: .bottom, animated: true)
         })
     }
 }
@@ -107,4 +121,73 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
         return comments.count
     }
     
+}
+
+extension CommentsViewController: UIScrollViewDelegate {
+    
+    func showTitle() {
+        
+        UIView.animate(withDuration: 0.3) {
+            self.titleTopConstraint.constant = 25
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func hideTitle() {
+        UIView.animate(withDuration: 0.3) {
+            self.titleTopConstraint.constant = 0 - (self.titleLabel.bounds.height + 25)
+            self.view.layoutIfNeeded()
+        }
+        
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == tableView {
+            let contentOffset = scrollView.contentOffset.y
+            
+            let change = lastKnowContentOfsset - contentOffset
+            print(change)
+            if contentOffset == 0 {
+//                showTitle()
+                hideTitleAfterScroll = false
+            } else if change > 0.0 {
+//                showTitle()
+                hideTitleAfterScroll = false
+            } else if change < 0.0 {
+//                hideTitle()
+                hideTitleAfterScroll = true
+            }
+            lastKnowContentOfsset = contentOffset
+//            print("contentOffset: ", contentOffset)
+//            if (contentOffset > self.lastKnowContentOfsset) {
+//                showTitle()
+//            } else {
+//                hideTitle()
+//            }
+        }
+    }
+    
+//    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+//        if scrollView == tableView {
+//            let contentOffset = scrollView.contentOffset.y
+//            print("contentOffset: ", contentOffset)
+//            if (contentOffset > self.lastKnowContentOfsset) {
+//                showTitle()
+//            } else {
+//                hideTitle()
+//            }
+//        }
+//    }
+    
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        showTitle()
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if hideTitleAfterScroll {
+            hideTitle()
+        } else {
+            showTitle()
+        }
+    }
 }

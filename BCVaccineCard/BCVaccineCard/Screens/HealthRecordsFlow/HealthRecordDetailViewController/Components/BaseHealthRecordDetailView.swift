@@ -27,6 +27,8 @@ class BaseHealthRecordsDetailView: UIView {
     private var stackViewBottomKeyboardAnchor: NSLayoutConstraint? = nil
     private weak var stackView: UIStackView? = nil
     
+    var commentField: CommentTextFieldView? = nil
+    
     let separatorHeight: CGFloat = 1
     let separatorBottomSpace: CGFloat = 12
     let commentFieldHeight: CGFloat = 96
@@ -83,6 +85,7 @@ class BaseHealthRecordsDetailView: UIView {
             stackView.addArrangedSubview(commentTextField)
             commentTextField.setup()
             commentTextField.delegate = self
+            commentField = commentTextField
         }
         
         self.tableView = tableView
@@ -253,6 +256,10 @@ extension BaseHealthRecordsDetailView: CommentTextFieldViewDelegate, TableSectio
     
     func tappedHeader(title: String) {
         guard let model = self.model else {return}
+        if let commentTextField = commentField, let field = commentTextField.textField {
+            field.endEditing(true)
+            commentTextField.resignFirstResponder()
+        }
         delegate?.showComments(for: model)
     }
 }
