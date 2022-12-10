@@ -148,36 +148,15 @@ extension CommentsViewController: UIScrollViewDelegate {
             let change = lastKnowContentOfsset - contentOffset
             print(change)
             if contentOffset == 0 {
-//                showTitle()
                 hideTitleAfterScroll = false
             } else if change > 0.0 {
-//                showTitle()
                 hideTitleAfterScroll = false
             } else if change < 0.0 {
-//                hideTitle()
                 hideTitleAfterScroll = true
             }
             lastKnowContentOfsset = contentOffset
-//            print("contentOffset: ", contentOffset)
-//            if (contentOffset > self.lastKnowContentOfsset) {
-//                showTitle()
-//            } else {
-//                hideTitle()
-//            }
         }
     }
-    
-//    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-//        if scrollView == tableView {
-//            let contentOffset = scrollView.contentOffset.y
-//            print("contentOffset: ", contentOffset)
-//            if (contentOffset > self.lastKnowContentOfsset) {
-//                showTitle()
-//            } else {
-//                hideTitle()
-//            }
-//        }
-//    }
     
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         showTitle()
