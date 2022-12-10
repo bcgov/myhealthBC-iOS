@@ -26,6 +26,7 @@ class DependentsHomeViewController: BaseDependentViewController {
     
     private var blockDependentSelection: Bool = false
     
+    @IBOutlet weak var descStack: UIStackView!
     @IBOutlet weak var tableStackLeadingContraint: NSLayoutConstraint!
     @IBOutlet weak var desciptionLabel: UILabel!
     @IBOutlet weak var loginWIthBCSCButton: UIButton!
