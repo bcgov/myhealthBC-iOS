@@ -76,7 +76,7 @@ extension HealthRecord {
     var commentId: String {
         switch type {
         case .CovidTest(let object):
-            return object.id ?? ""
+            return object.orderId ?? ""
         case .CovidImmunization(_):
             return ""
         case .Medication(let medication):
