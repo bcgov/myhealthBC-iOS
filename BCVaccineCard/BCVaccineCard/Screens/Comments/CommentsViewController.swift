@@ -20,6 +20,14 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     
     public var model: HealthRecordsDetailDataSource.Record? = nil
     private var comments: [Comment] = []
+    fileprivate var debounceTitleStrollUpBlock = false
+    fileprivate var debounceTitleStrollDownBlock = false
+    fileprivate var debounceTitleStrollUpBlockTimer: Timer? = nil
+    fileprivate var debounceTitleStrollDownBlockTimer: Timer? = nil
+    fileprivate var titleVisibleContraint: CGFloat = 25
+    fileprivate var titleHiddenContraint: CGFloat {
+        return 0 - (titleLabel.bounds.height + titleVisibleContraint)
+    }
     fileprivate var lastKnowContentOfsset: CGFloat = 0.0
     fileprivate var hideTitleAfterScroll: Bool = false
     fileprivate let titleText = "Only you can see comments added to your medical records."
@@ -50,6 +58,21 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
         setupTableView()
         style()
         scrollToBottom()
+        
+    }
+    
+    func listenToSync() {
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
+    }
+        
+    @objc private func storageChangeEvent(_ notification: Notification) {
+        guard let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+        guard event.event == .Synced,
+              event.entity == .Comments else {return}
+        comments = model?.comments ?? []
+        comments = comments.sorted(by: {$0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()})
+        tableView.reloadData()
     }
     
     func style() {
@@ -126,19 +149,60 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
 extension CommentsViewController: UIScrollViewDelegate {
     
     func showTitle() {
-        
-        UIView.animate(withDuration: 0.3) {
-            self.titleTopConstraint.constant = 25
+        resetUpDebounceTimer()
+        resetDownDebounceTimer()
+        UIView.animate(withDuration: 0.3, delay: 0.0) {
+            self.titleTopConstraint.constant = self.titleVisibleContraint
             self.view.layoutIfNeeded()
         }
     }
     
     func hideTitle() {
-        UIView.animate(withDuration: 0.3) {
-            self.titleTopConstraint.constant = 0 - (self.titleLabel.bounds.height + 25)
+        resetUpDebounceTimer()
+        resetDownDebounceTimer()
+        UIView.animate(withDuration: 0.3, delay: 0.0) {
+            self.titleTopConstraint.constant = self.titleHiddenContraint
             self.view.layoutIfNeeded()
         }
-        
+    }
+    
+    func scrollTitle(by amount: CGFloat) {
+        if amount > 0 {
+            if debounceTitleStrollDownBlock {return}
+            guard titleTopConstraint.constant + amount <= self.titleVisibleContraint / 2
+            else {return}
+            guard titleTopConstraint.constant != titleVisibleContraint
+            else {return}
+            resetUpDebounceTimer()
+            titleTopConstraint.constant += amount
+        } else {
+            if debounceTitleStrollUpBlock {return}
+            guard titleTopConstraint.constant + amount >= self.titleHiddenContraint / 2
+            else {return}
+            guard titleTopConstraint.constant != titleHiddenContraint
+            else {return}
+            resetDownDebounceTimer()
+            titleTopConstraint.constant += amount
+        }
+    }
+    
+    private func resetDownDebounceTimer() {
+        debounceTitleStrollDownBlock = true
+        debounceTitleStrollDownBlockTimer?.invalidate()
+        debounceTitleStrollDownBlockTimer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(resetDownDebounce), userInfo: nil, repeats: false)
+    }
+    private func resetUpDebounceTimer() {
+        debounceTitleStrollUpBlock = true
+        debounceTitleStrollUpBlockTimer?.invalidate()
+        debounceTitleStrollUpBlockTimer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(resetUpDebounce), userInfo: nil, repeats: false)
+       
+    }
+    
+    @objc private func resetUpDebounce() {
+        debounceTitleStrollUpBlock = false
+    }
+    @objc private func resetDownDebounce() {
+        debounceTitleStrollDownBlock = false
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -146,12 +210,13 @@ extension CommentsViewController: UIScrollViewDelegate {
             let contentOffset = scrollView.contentOffset.y
             
             let change = lastKnowContentOfsset - contentOffset
-            print(change)
             if contentOffset == 0 {
                 hideTitleAfterScroll = false
             } else if change > 0.0 {
+                scrollTitle(by: change)
                 hideTitleAfterScroll = false
             } else if change < 0.0 {
+                scrollTitle(by: change)
                 hideTitleAfterScroll = true
             }
             lastKnowContentOfsset = contentOffset
@@ -159,7 +224,7 @@ extension CommentsViewController: UIScrollViewDelegate {
     }
     
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        showTitle()
+        hideTitleAfterScroll = false
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {

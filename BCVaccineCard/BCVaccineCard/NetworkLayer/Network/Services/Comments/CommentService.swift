@@ -49,6 +49,9 @@ struct CommentService {
             post(comment: comment) { res in
                 if let result = res {
                     StorageService.shared.delete(object: comment)
+                    if let storedComment = StorageService.shared.storeSubmittedComment(object: result) {
+                        self.notify(event: StorageService.StorageEvent(event: .Synced, entity: .Comments, object: storedComment))
+                    }
                 }
                 dispatchGroup.leave()
             }
@@ -117,6 +120,11 @@ struct CommentService {
             
             network.request(with: requestModel)
         }
+    }
+    
+    func notify(event: StorageService.StorageEvent<Any>) {
+        Logger.log(string: "StorageEvent \(event.entity) - \(event.event)", type: .storage)
+        NotificationCenter.default.post(name: .storageChangeEvent, object: event)
     }
 }
 

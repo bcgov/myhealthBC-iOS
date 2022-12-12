@@ -41,6 +41,23 @@ class BaseHealthRecordsDetailView: UIView {
         creatSubViews(enableComments: enableComments)
         setup()
         setupKeyboardListener()
+        listenToSync()
+    }
+    
+    func listenToSync() {
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
+    }
+        
+    @objc private func storageChangeEvent(_ notification: Notification) {
+        guard let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+        guard event.event == .Synced,
+              event.entity == .Comments else {return}
+        guard let object = event.object as? Comment,
+              let model = self.model else {return}
+        if model.toHealthRecord()?.commentId == object.parentEntryID {
+            submittedComment(object: object)
+        }
     }
     
     func setup() {}
