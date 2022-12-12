@@ -40,12 +40,12 @@ class BaseHealthRecordsDetailView: UIView {
         self.commentsEnabled = enableComments
         creatSubViews(enableComments: enableComments)
         setup()
+        NotificationCenter.default.removeObserver(self)
         setupKeyboardListener()
         listenToSync()
     }
     
     func listenToSync() {
-        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
     }
         
