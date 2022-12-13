@@ -25,7 +25,10 @@ class DependentsHomeViewController: BaseDependentViewController {
     private let storageService = StorageService()
     
     private var blockDependentSelection: Bool = false
+    fileprivate var lastKnowContentOfsset: CGFloat = 0
+    fileprivate var hideTitleAfterScroll: Bool = false
     
+    @IBOutlet weak var descStack: UIStackView!
     @IBOutlet weak var tableStackLeadingContraint: NSLayoutConstraint!
     @IBOutlet weak var desciptionLabel: UILabel!
     @IBOutlet weak var loginWIthBCSCButton: UIButton!
@@ -398,6 +401,52 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
                 self?.view.removeLoader()
                 self?.blockDependentSelection = false
             }
+        }
+    }
+}
+
+extension DependentsHomeViewController: UIScrollViewDelegate {
+    func showTitle() {
+        
+        UIView.animate(withDuration: 0.3) {
+            self.descStack.isHidden = false
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func hideTitle() {
+        UIView.animate(withDuration: 0.3) {
+            self.descStack.isHidden = true
+            self.view.layoutIfNeeded()
+        }
+        
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == tableView {
+            let contentOffset = scrollView.contentOffset.y
+            
+            let change = lastKnowContentOfsset - contentOffset
+            if contentOffset == 0 {
+                hideTitleAfterScroll = false
+            } else if change > 0.0 {
+                hideTitleAfterScroll = false
+            } else if change < 0.0 {
+                hideTitleAfterScroll = true
+            }
+            lastKnowContentOfsset = contentOffset
+        }
+    }
+    
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        showTitle()
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if hideTitleAfterScroll {
+            hideTitle()
+        } else {
+            showTitle()
         }
     }
 }
