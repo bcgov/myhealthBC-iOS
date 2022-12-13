@@ -8,15 +8,22 @@
 import Foundation
 import UIKit
 
+protocol HealthRecordDetailDelegate {
+    func showComments(for record: HealthRecordsDetailDataSource.Record)
+}
+
 class HealthRecordsView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     private var collectionView: UICollectionView?
+    
+    private var delegate: HealthRecordDetailDelegate? = nil
     
     private var models: [HealthRecordsDetailDataSource.Record] = []
     
     private var pagingIndicatorContainer: UIView?
     private var pagingIndicator: PagingIndicatorView?
     
-    func configure(models: [HealthRecordsDetailDataSource.Record]) {
+    func configure(models: [HealthRecordsDetailDataSource.Record], delegate: HealthRecordDetailDelegate) {
+        self.delegate = delegate
         self.models = models
         if models.count > 1 {
             setupPagingIndicator(count: models.count - 1)
@@ -76,11 +83,12 @@ class HealthRecordsView: UIView, UICollectionViewDataSource, UICollectionViewDel
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HealthRecordCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HealthRecordCollectionViewCell,
+            let delegate = delegate
         else {
             return UICollectionViewCell()
         }
-        cell.configure(model: models[indexPath.row])
+        cell.configure(model: models[indexPath.row], delegate: delegate)
         return cell
     }
     

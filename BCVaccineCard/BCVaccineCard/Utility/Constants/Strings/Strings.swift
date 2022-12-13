@@ -26,6 +26,7 @@ extension String {
     static var cancel: String { return "Cancel".localized }
     static var continueText: String { return "Continue".localized }
     static var agree: String { return "Agree".localized }
+    static var sendEmail: String { return "SendEmail".localized }
 //    static var enter: String { return "Enter".localized }
     static var submit: String { return "Submit".localized }
     static var done: String { return "Done".localized }
@@ -62,6 +63,8 @@ extension String {
     static var queueItClosedMessage: String { return "QueueItClosedMessage".localized }
     static var errorParsingPHNFromHG: String { return "ErrorParsingPHNFromHG".localized }
     static var errorParsingPHNMessage: String { return "FormError".localized }
+    
+    static var formErrorDependent: String { return "FormErrorDependent".localized }
     static var formError: String { return "FormError".localized }
     static var duplicateTitle: String { return "DuplicateTitle".localized }
     static var duplicateMessage: String { return "DuplicateMessage".localized }
@@ -179,7 +182,9 @@ extension String {
     static var manageDependends: String { return "ManageDependends".localized }
     static var saveChanges: String { return "SaveChanges".localized }
     static var deleteDependentTitle: String { return "DeleteDependentTitle".localized }
-    static var deleteDependentMessage: String { return "DeleteDependentMessage".localized }
+    static func deleteDependentMessage(name: String) -> String {
+        return String(format: "DeleteDependentMessage".localized, name)
+    }
     static var resourceDescriptionText: String { return "ResourceDescriptionText".localized }
     static var getVaccinatedResource: String { return "GetVaccinatedResource".localized }
     static var getTestedResource: String { return "GetTestedResource".localized }

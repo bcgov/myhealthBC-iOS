@@ -15,13 +15,23 @@ class MedicationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelega
     }
     
     private var fields: [TextListModel] = []
-    private var comments: [Comment] = []
     
     override func setup() {
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
-        comments =  model?.comments ?? []
+        comments = model?.comments ?? []
+    }
+    
+    override func submittedComment(object: Comment) {
+        comments.append(object)
+        tableView?.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { [weak self] in
+            let row = (self?.comments.count ?? 0) - 1
+            guard row >= 0 else { return }
+            let indexPath = IndexPath(row: row, section: Section.allCases.count - 1)
+            self?.tableView?.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        })
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -61,7 +71,7 @@ class MedicationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelega
             return headerView
         }
         let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
-        headerView.configure(text: "\(model.comments.count) \(commentsString)")
+        headerView.configure(text: "\(model.comments.count) \(commentsString)", colour: AppColours.appBlue, delegate: self)
         headerView.backgroundColor = .white
         return headerView
     }
