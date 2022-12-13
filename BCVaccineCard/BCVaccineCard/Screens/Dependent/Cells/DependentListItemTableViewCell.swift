@@ -9,6 +9,7 @@ import UIKit
 
 class DependentListItemTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var arrowImageView: UIImageView!
     @IBOutlet weak var container: UIView!
     @IBOutlet weak var nameLabel: UILabel!
     
@@ -16,13 +17,18 @@ class DependentListItemTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    func configure(name: String) {
+    func configure(name: String, hideArrow: Bool? = false) {
         nameLabel.text = name
         nameLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         nameLabel.textColor = AppColours.appBlue
         backgroundColor = .clear
         container.backgroundColor = AppColours.commentBackground
         container.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
+        if hideArrow == true {
+            arrowImageView.alpha = 0
+        } else {
+            arrowImageView.alpha = 1
+        }
     }
     
 }

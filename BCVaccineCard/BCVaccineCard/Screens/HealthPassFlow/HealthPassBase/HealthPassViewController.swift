@@ -250,6 +250,9 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right, savedCardsCount == 1, self.dataSource?.authenticated == false else {return nil}
+        if let patient = self.dataSource?.patient, patient.isDependent() {
+            return nil
+        }
         let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
             guard let `self` = self else {return}
             self.deleteCard(manuallyAdded: true)
