@@ -53,10 +53,11 @@ struct HealthRecordsDetailDataSource {
         
         // TODO: Enable Comments here
         var commentsEnabled: Bool {
-            switch self.type {
-            case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit : return true
-            default: return false
-            }
+            return false
+//            switch self.type {
+//            case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit : return true
+//            default: return false
+//            }
         }
         
     }
