@@ -19,7 +19,7 @@ class BaseDependentViewController: BaseViewController {
         
         guard let patient = dependent.guardian else {return completion(false)}
         
-        alert(title: .deleteDependentTitle, message: .deleteDependentMessage(name: dependent.info?.name ?? ""), buttonOneTitle: .no, buttonOneCompletion: {
+        alert(title: .deleteDependentTitle, message: .deleteDependentMessage(name: dependent.info?.firstName ?? ""), buttonOneTitle: .no, buttonOneCompletion: {
             return completion(false)
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
