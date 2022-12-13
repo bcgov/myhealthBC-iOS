@@ -16,12 +16,14 @@ class CommentViewTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     func configure(comment: Comment) {
         commentText.text = comment.text
         
-        if let createdDate = comment.createdDateTime {
+        if let createdDate = comment.createdDateTime, !comment.isPosting {
             dateTimeLabel.text = Date.Formatter.commentsDateTime.string(from: createdDate)
+        } else if comment.isPosting {
+            dateTimeLabel.text = "Posting..."
         } else {
             dateTimeLabel.text = ""
         }
@@ -37,4 +39,10 @@ class CommentViewTableViewCell: UITableViewCell {
         self.layoutIfNeeded()
     }
     
+}
+
+extension Comment {
+    var isPosting: Bool {
+        return self.id == nil || self.id == ""
+    }
 }

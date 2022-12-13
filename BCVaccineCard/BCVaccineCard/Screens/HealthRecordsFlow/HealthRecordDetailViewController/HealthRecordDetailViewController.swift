@@ -7,9 +7,7 @@
 
 import UIKit
 
-
-class HealthRecordDetailViewController: BaseViewController {
-    
+class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDelegate {
     class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticatedRecord: Bool, userNumberHealthRecords: Int, patient: Patient?) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
             vc.dataSource = dataSource
@@ -30,7 +28,7 @@ class HealthRecordDetailViewController: BaseViewController {
     private var userNumberHealthRecords: Int!
     private var patient: Patient?
     private var pdfData: String?
-    private var pdfId: String?
+    private var reportId: String?
     private var type: LabTestType?
     private var pdfAPIWorker: PDFAPIWorker?
     
@@ -115,10 +113,14 @@ class HealthRecordDetailViewController: BaseViewController {
         recordsView.addEqualSizeContraints(to: self.view, safe: true)
         // Note: keep this here so the child views in HealthRecordsView get sized properly
         view.layoutSubviews()
-        recordsView.configure(models: dataSource.records)
+        recordsView.configure(models: dataSource.records, delegate: self)
         view.layoutSubviews()
     }
     
+    func showComments(for record: HealthRecordsDetailDataSource.Record) {
+        let vc = CommentsViewController.constructCommentsViewController(model: record)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 // MARK: Navigation setup
@@ -130,13 +132,13 @@ extension HealthRecordDetailViewController {
         switch dataSource.type {
         case .laboratoryOrder(model: let labOrder):
             if labOrder.reportAvailable == true {
-                self.pdfId = labOrder.labPdfId
+                self.reportId = labOrder.reportID
                 self.type = .normal
 //                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
         case .covidTestResultRecord(model: let covidTestOrder):
             if covidTestOrder.reportAvailable == true {
-                self.pdfId = covidTestOrder.orderId
+                self.reportId = covidTestOrder.orderId
                 self.type = .covid
 //                rightNavButton = NavButton(image: navDownloadIcon, action: #selector(self.showPDFView), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconTitlePDF, hint: AccessibilityLabels.HealthRecordsDetailScreen.navRightIconHintPDF))
             }
@@ -207,10 +209,10 @@ extension HealthRecordDetailViewController {
             self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             if !NetworkConnection.shared.hasConnection {
-                showToast(message: "No internet connection", style: .Warn)
+                AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
                 return
             }
-            guard let authToken = AuthManager().authToken, let hdid = (self.patient?.hdid ?? AuthManager().hdid), let reportId = self.pdfId, let type = self.type else {
+            guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let reportId = self.reportId, let type = self.type else {
                 showPDFUnavailableAlert()
                 return
             }
