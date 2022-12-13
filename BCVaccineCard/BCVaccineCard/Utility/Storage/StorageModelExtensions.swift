@@ -308,7 +308,8 @@ extension Patient {
 
 extension Array where Element == Dependent {
     var sorted: [Dependent] {
-        return self.sorted(by: {
+        let alphabetized = self.sorted { $0.info?.name ?? "" < $1.info?.name ?? "" }
+        return alphabetized.sorted(by: {
             $0.info?.birthday ?? Date() > $1.info?.birthday ?? Date()
         })
     }

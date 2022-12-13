@@ -19,14 +19,14 @@ class BaseDependentViewController: BaseViewController {
         
         guard let patient = dependent.guardian else {return completion(false)}
         
-        alertConfirmation(title: .deleteDependentTitle, message: .deleteDependentMessage, confirmTitle: .delete, confirmStyle: .destructive) { [weak self] in
+        alert(title: .deleteDependentTitle, message: .deleteDependentMessage(name: dependent.info?.firstName ?? ""), buttonOneTitle: .no, buttonOneCompletion: {
+            return completion(false)
+        }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
             StorageService.shared.deleteHealthRecordsForDependent(dependent: dependent)
             self.networkService.delete(dependents: [dependent], for: patient, completion: {success in
                 return completion(true)
             })
-        } onCancel: {
-            return completion(false)
         }
     }
  
