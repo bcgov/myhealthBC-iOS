@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -24,8 +24,8 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dependent-icon" translatesAutoresizingMaskIntoConstraints="NO" id="jFM-7Q-F7c">
                                 <rect key="frame" x="16" y="16" width="32" height="215"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X9A-dk-vdw">
-                                <rect key="frame" x="64" y="113.5" width="42" height="20.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X9A-dk-vdw">
+                                <rect key="frame" x="64" y="113.5" width="41.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -40,10 +40,13 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="X9A-dk-vdw" secondAttribute="bottom" constant="8" id="8Cq-HW-jeZ"/>
                             <constraint firstAttribute="trailing" secondItem="3ZG-V2-x2x" secondAttribute="trailing" constant="8" id="8yX-k0-0th"/>
                             <constraint firstItem="jFM-7Q-F7c" firstAttribute="leading" secondItem="Nre-HG-yrA" secondAttribute="leading" constant="16" id="9S1-KL-sZP"/>
                             <constraint firstItem="jFM-7Q-F7c" firstAttribute="top" secondItem="Nre-HG-yrA" secondAttribute="top" constant="16" id="Yd6-z2-WHU"/>
+                            <constraint firstAttribute="bottom" secondItem="jFM-7Q-F7c" secondAttribute="bottom" constant="16" id="adP-rN-QJl"/>
                             <constraint firstItem="jFM-7Q-F7c" firstAttribute="centerY" secondItem="Nre-HG-yrA" secondAttribute="centerY" id="cRN-GU-Zza"/>
+                            <constraint firstItem="X9A-dk-vdw" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Nre-HG-yrA" secondAttribute="top" constant="8" id="fEN-jR-ksL"/>
                             <constraint firstItem="3ZG-V2-x2x" firstAttribute="centerY" secondItem="Nre-HG-yrA" secondAttribute="centerY" id="m1G-cw-255"/>
                             <constraint firstItem="3ZG-V2-x2x" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="X9A-dk-vdw" secondAttribute="trailing" constant="8" id="saD-M2-69d"/>
                             <constraint firstItem="X9A-dk-vdw" firstAttribute="leading" secondItem="jFM-7Q-F7c" secondAttribute="trailing" constant="16" id="wpR-Pu-FXy"/>
@@ -55,6 +58,7 @@
                     <constraint firstItem="Nre-HG-yrA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="G8B-mM-Sxh"/>
                     <constraint firstItem="Nre-HG-yrA" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="IG8-WC-2y8"/>
                     <constraint firstAttribute="trailing" secondItem="Nre-HG-yrA" secondAttribute="trailing" constant="16" id="Zoa-HA-1AQ"/>
+                    <constraint firstAttribute="bottom" secondItem="Nre-HG-yrA" secondAttribute="bottom" constant="8" id="cOh-gr-6iG"/>
                     <constraint firstItem="Nre-HG-yrA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="iME-P4-mQd"/>
                 </constraints>
             </tableViewCellContentView>
