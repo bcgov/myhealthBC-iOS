@@ -317,7 +317,14 @@ extension StorageService: StorageVaccineCardManager {
         guard let context = managedContext else {return []}
         do {
             let cards = try context.fetch(VaccineCard.fetchRequest())
-            return cards.sorted(by: {$0.sortOrder < $1.sortOrder})
+            let removeAgedOut = cards.filter { card in
+                if let patient = card.patient, patient.isDependent(),
+                   let birthday = patient.birthday, let age = birthday.ageInYears, age > 12 {
+                    return false
+                }
+                return true
+            }
+            return removeAgedOut.sorted(by: {$0.sortOrder < $1.sortOrder})
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []

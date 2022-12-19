@@ -19,7 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow? 
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
-    var protectiveWordEnteredThisSession = false
+    var protectiveWordEnteredThisSession = false {
+        didSet {
+            print(protectiveWordEnteredThisSession)
+        }
+    }
     var recordsFetchedForDependentsThisSession: [Patient] = []
     
     var lastLocalAuth: Date? = nil
