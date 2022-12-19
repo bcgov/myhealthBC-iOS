@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="fQx-x4-9Us">
-                                <rect key="frame" x="0.0" y="108" width="414" height="552"/>
+                                <rect key="frame" x="0.0" y="104" width="414" height="556"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lIg-6Z-zXM">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
@@ -47,7 +47,7 @@
                                         </subviews>
                                     </stackView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xbT-Bn-hiV">
-                                        <rect key="frame" x="0.0" y="144" width="414" height="408"/>
+                                        <rect key="frame" x="0.0" y="144" width="414" height="412"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </tableView>
                                 </subviews>
@@ -61,7 +61,7 @@
                                             <constraint firstAttribute="height" constant="54" id="X4Q-ho-Nov"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="-16" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Add dependent" image="add_person"/>
+                                        <state key="normal" title="Add Dependent" image="add_person"/>
                                         <connections>
                                             <action selector="addDependent:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="b7K-4r-Mwl"/>
                                         </connections>
@@ -124,7 +124,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="I5g-a0-WmZ" customClass="CustomNavigationController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="VRI-sR-moV">
-                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -145,13 +145,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tZP-ww-Hrc">
-                                <rect key="frame" x="0.0" y="48" width="414" height="728"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="732"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ie2-eU-VPP">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="787"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="796"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="T6E-BD-Cpm">
-                                                <rect key="frame" x="31" y="31" width="352" height="740"/>
+                                                <rect key="frame" x="31" y="31" width="352" height="749"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Heb-8K-ywd">
                                                         <rect key="frame" x="0.0" y="0.0" width="352" height="71"/>
@@ -210,25 +210,25 @@
                                                             </textField>
                                                         </subviews>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="5n9-Ka-udZ">
-                                                        <rect key="frame" x="0.0" y="272.5" width="352" height="102.5"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="5n9-Ka-udZ">
+                                                        <rect key="frame" x="0.0" y="272.5" width="352" height="111.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Personal Health Number (PHN)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xvr-bK-RXh">
-                                                                <rect key="frame" x="0.0" y="0.0" width="352" height="25.5"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="352" height="20.5"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="xxxx xxx xxx" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MGj-n4-s46">
-                                                                <rect key="frame" x="0.0" y="29.5" width="352" height="42"/>
+                                                                <rect key="frame" x="0.0" y="24.5" width="352" height="42"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="42" id="SJQ-Fa-9oU"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="numberPad"/>
                                                             </textField>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Find PHN on care card or the back of driver’s license." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kqq-FH-c7X">
-                                                                <rect key="frame" x="0.0" y="75.5" width="352" height="27"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Find PHN on care card or the back of driver’s license." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kqq-FH-c7X">
+                                                                <rect key="frame" x="0.0" y="70.5" width="352" height="41"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -236,7 +236,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="WqX-R3-l0A">
-                                                        <rect key="frame" x="0.0" y="395" width="352" height="345"/>
+                                                        <rect key="frame" x="0.0" y="404" width="352" height="345"/>
                                                         <subviews>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4Mu-6E-Ajt">
                                                                 <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
@@ -345,7 +345,7 @@ I understand that I will no longer be able to access my child’s health records
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8Gh-Yh-I0a">
-                                <rect key="frame" x="0.0" y="64" width="414" height="782"/>
+                                <rect key="frame" x="0.0" y="60" width="414" height="786"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -375,20 +375,20 @@ I understand that I will no longer be able to access my child’s health records
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="76g-Ky-w99">
-                                <rect key="frame" x="191" y="64" width="32" height="32"/>
+                                <rect key="frame" x="191" y="60" width="32" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="32" id="ByE-bI-D7h"/>
                                     <constraint firstAttribute="height" constant="32" id="vzA-i1-lO9"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8mc-el-ZQZ">
-                                <rect key="frame" x="184.5" y="120" width="45" height="20.5"/>
+                                <rect key="frame" x="184.5" y="116" width="45" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6a7-cg-NLI">
-                                <rect key="frame" x="0.0" y="172.5" width="414" height="571.5"/>
+                                <rect key="frame" x="0.0" y="168.5" width="414" height="575.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="uLh-qg-89H">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="426.5"/>

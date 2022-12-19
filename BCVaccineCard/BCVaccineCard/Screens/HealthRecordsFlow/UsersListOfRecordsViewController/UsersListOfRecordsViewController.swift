@@ -221,6 +221,9 @@ extension UsersListOfRecordsViewController {
         var name = self.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
         if name.count >= 20 {
             name = self.patient?.name?.firstName?.nameCase() ?? defaultFirstNameIfFailure?.nameCase() ?? ""
+            if name.count >= 20 {
+                name = String(name.prefix(20))
+            }
         }
         let showLoadingTitle = (self.patient == nil && self.authenticated == true)
         if showLoadingTitle {
