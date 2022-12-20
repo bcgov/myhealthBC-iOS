@@ -93,7 +93,7 @@ class DependentInfoViewController: BaseDependentViewController {
         dividers.forEach { divider in
             divider.backgroundColor = AppColours.divider
         }
-        style(button: removeButton, style: .Fill, title: "Remove Dependent", image: nil)
+        style(button: removeButton, style: .Fill, title: "Remove dependent", image: nil)
     }
 
 }

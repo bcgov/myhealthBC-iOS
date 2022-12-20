@@ -61,7 +61,7 @@
                                             <constraint firstAttribute="height" constant="54" id="X4Q-ho-Nov"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="-16" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" title="Add Dependent" image="add_person"/>
+                                        <state key="normal" title="Add dependent" image="add_person"/>
                                         <connections>
                                             <action selector="addDependent:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="b7K-4r-Mwl"/>
                                         </connections>
@@ -381,8 +381,8 @@ I understand that I will no longer be able to access my child’s health records
                                     <constraint firstAttribute="height" constant="32" id="vzA-i1-lO9"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8mc-el-ZQZ">
-                                <rect key="frame" x="184.5" y="116" width="45" height="20.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8mc-el-ZQZ">
+                                <rect key="frame" x="32" y="116" width="350" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -556,7 +556,7 @@ I understand that I will no longer be able to access my child’s health records
                                     <constraint firstAttribute="height" constant="54" id="q4Z-Vd-tsP"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Remove Dependent"/>
+                                <state key="normal" title="Remove dependent"/>
                                 <connections>
                                     <action selector="removeDependent:" destination="9Ws-kl-4cq" eventType="touchUpInside" id="P9U-J3-xJx"/>
                                 </connections>
@@ -574,6 +574,8 @@ I understand that I will no longer be able to access my child’s health records
                             <constraint firstItem="6a7-cg-NLI" firstAttribute="trailing" secondItem="Znj-ln-6w3" secondAttribute="trailing" id="S2z-NP-4oN"/>
                             <constraint firstItem="tqf-a3-BLN" firstAttribute="top" secondItem="6a7-cg-NLI" secondAttribute="bottom" constant="32" id="Txw-zo-lhA"/>
                             <constraint firstItem="6a7-cg-NLI" firstAttribute="top" secondItem="8mc-el-ZQZ" secondAttribute="bottom" constant="32" id="YNB-3t-yIN"/>
+                            <constraint firstItem="Znj-ln-6w3" firstAttribute="trailing" secondItem="8mc-el-ZQZ" secondAttribute="trailing" constant="32" id="jZy-rd-Jlg"/>
+                            <constraint firstItem="8mc-el-ZQZ" firstAttribute="leading" secondItem="Znj-ln-6w3" secondAttribute="leading" constant="32" id="on9-TA-bPi"/>
                             <constraint firstItem="Znj-ln-6w3" firstAttribute="trailing" secondItem="tqf-a3-BLN" secondAttribute="trailing" constant="32" id="q6B-lN-wET"/>
                             <constraint firstItem="Znj-ln-6w3" firstAttribute="bottom" secondItem="tqf-a3-BLN" secondAttribute="bottom" constant="32" id="run-iS-Jcn"/>
                         </constraints>
