@@ -319,7 +319,9 @@ extension StorageService: StorageVaccineCardManager {
             let cards = try context.fetch(VaccineCard.fetchRequest())
             let removeAgedOut = cards.filter { card in
                 if let patient = card.patient, patient.isDependent(),
-                   let birthday = patient.birthday, let age = birthday.ageInYears, age < 12 {
+                   let birthday = patient.birthday,
+                   let age = birthday.ageInYears, age > 12
+                {
                     return false
                 }
                 return true
