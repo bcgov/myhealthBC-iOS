@@ -91,7 +91,7 @@ extension ManageDependentsViewController: UITableViewDelegate, UITableViewDataSo
 
 extension ManageDependentsViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: .manageDependends,
+        self.navDelegate?.setNavigationBarWith(title: .manageDependents,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,

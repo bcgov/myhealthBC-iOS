@@ -179,7 +179,7 @@ extension String {
     static var dependents: String { return "Dependents".localized }
     static var dependentRecord: String { return "DependentRecord".localized }
     static var dependentRegistration: String { return "DependentRegistration".localized }
-    static var manageDependends: String { return "ManageDependends".localized }
+    static var manageDependents: String { return "ManageDependents".localized }
     static var saveChanges: String { return "SaveChanges".localized }
     static var deleteDependentTitle: String { return "DeleteDependentTitle".localized }
     static func deleteDependentMessage(name: String) -> String {

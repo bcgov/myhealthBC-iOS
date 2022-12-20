@@ -53,7 +53,7 @@ class InaccessibleDependentTableViewCell: UITableViewCell, Theme {
         warningLabel.text = "You no longer have access to this dependent as they have turned 12"
         dependentNameLabel.font = UIFont.bcSansBoldWithSize(size: 17)
         cellContainer.backgroundColor = AppColours.commentBackground
-        style(button: removeButton, style: .Hollow, title: "Remove Dependent", image: nil)
+        style(button: removeButton, style: .Hollow, title: .deleteDependentTitle, image: nil)
         cellContainer.layer.cornerRadius = Constants.UI.Theme.cornerRadiusRegular
         
     }
