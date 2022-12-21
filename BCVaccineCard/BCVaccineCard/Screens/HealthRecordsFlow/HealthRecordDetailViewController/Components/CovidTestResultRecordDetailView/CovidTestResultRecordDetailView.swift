@@ -23,6 +23,7 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
     enum Section: Int, CaseIterable {
         case Header
         case Fields
+        case Comments
     }
     
     private var fields: [TextListModel] = []
@@ -47,6 +48,18 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
+        comments = model?.comments ?? []
+    }
+    
+    override func submittedComment(object: Comment) {
+        comments.append(object)
+        tableView?.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { [weak self] in
+            let row = (self?.comments.count ?? 0) - 1
+            guard row >= 0 else { return }
+            let indexPath = IndexPath(row: row, section: Section.allCases.count - 1)
+            self?.tableView?.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        })
     }
     
     public func covidTestHeaderCell(indexPath: IndexPath, tableView: UITableView) -> CovidTestResultBannerTableViewCell? {
@@ -69,6 +82,8 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
             return 1
         case .Fields:
             return fields.count
+        case .Comments:
+            return comments.count
         }
     }
     
@@ -96,15 +111,38 @@ class CovidTestResultRecordDetailView: BaseHealthRecordsDetailView, UITableViewD
             guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
             cell.setup(with: fields[indexPath.row])
             return cell
+        case .Comments:
+            guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+            cell.configure(comment: comments[indexPath.row])
+            return cell
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if let section = Section(rawValue: section), section == .Comments ,let model = self.model {
+            let headerView: TableSectionHeader = TableSectionHeader.fromNib()
+            guard !model.comments.isEmpty else {
+                headerView.configure(text: "")
+                return headerView
+            }
+            let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
+            headerView.configure(text: "\(model.comments.count) \(commentsString)",colour: AppColours.appBlue, delegate: self)
+            headerView.backgroundColor = .white
+            return headerView
+        }
         guard section != 0 else {return nil}
         return separatorView()
+        
+       
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if let section = Section(rawValue: section), section == .Comments, let model = self.model {
+            guard !model.comments.isEmpty else {
+                return 0
+            }
+            return "Comments".heightForView(font: TableSectionHeader.font, width: bounds.width) + 10
+        }
         guard section != 0 else {return 0}
         return separatorHeight + separatorBottomSpace
     }

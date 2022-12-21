@@ -32,6 +32,7 @@ extension StorageService {
         case Recommendation
         case HealthVisit
         case SpecialAuthorityMedication
+        case Dependent
     }
     
     struct StorageEvent<T> {
@@ -42,6 +43,7 @@ extension StorageService {
             case ManuallyAddedRecord
             case ProtectedMedicalRecordsInitialFetch
             case ManuallyAddedPendingTestBackgroundRefetch
+            case Synced
         }
         
         let event: Event

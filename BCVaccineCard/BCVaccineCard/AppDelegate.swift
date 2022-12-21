@@ -19,32 +19,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow? 
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
-    var protectiveWordEnteredThisSession = false
-    
-    var lastLocalAuth: Date? = nil
-    var dataLoadCount: Int = 0 {
+    var protectiveWordEnteredThisSession = false {
         didSet {
-            dataLoadHideTimer?.invalidate()
-            if dataLoadCount > 0 {
-                showLoader()
-            } else {
-                dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoaded), userInfo: nil, repeats: false)
-            }
+            print(protectiveWordEnteredThisSession)
         }
     }
+    var recordsFetchedForDependentsThisSession: [Patient] = []
+    
+    var lastLocalAuth: Date? = nil
+    fileprivate var dataLoadCount: Int = 0 
     internal var dataLoadHideTimer: Timer? = nil
     internal var dataLoadTag = 9912341
+    internal var dataLoadTextTag = 9912342
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UpdateServiceStorage.setOrResetstoredAppVersion()
+        MigrationService().removeExistingDBIfNeeded()
         configure()
         return true
     }
     
     private func configure() {
+        AppStates.shared.listen()
         //use .Prod or .Test for different endpoints for keys
 #if PROD
         BCVaccineValidator.shared.setup(mode: .Prod, remoteRules: false)
@@ -61,11 +60,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         listenToAppState()
         localAuthManager = LocalAuthManager()
         localAuthManager?.listenToAppStates()
-        NetworkConnection.shared.initListener(onChange: {_ in})
+        initNetworkListener()
+        initKeyboardManager()
+    }
+    
+    private func initKeyboardManager() {
         IQKeyboardManager.shared.enable = true
         IQKeyboardManager.shared.enableAutoToolbar = false
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
+        IQKeyboardManager.shared.disabledDistanceHandlingClasses = [HealthRecordDetailViewController.self]
+    }
+    
+    private func initNetworkListener() {
+        NetworkConnection.shared.initListener(onChange: {isOnline in
+            if isOnline {
+                self.whenAppisOnline()
+            }
+        })
+    }
+    
+    // Perform whatever app needs to do when it comes onlines
+    private func whenAppisOnline() {
+        guard NetworkConnection.shared.hasConnection else {return}
+        self.syncCommentsIfNeeded()
+    }
+    
+    private func syncCommentsIfNeeded() {
+        CommentService(network: AFNetwork(), authManager: AuthManager()).submitUnsyncedComments{}
     }
     
     private func clearKeychainIfNecessary(authManager: AuthManager?) {
@@ -132,21 +154,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     
     
-    // MARK: - Core Data Saving support
-    
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
+//    // MARK: - Core Data Saving support
+//
+//    func saveContext () {
+//        let context = persistentContainer.viewContext
+//        if context.hasChanges {
+//            do {
+//                try context.save()
+//            } catch {
+//                // Replace this implementation with code to handle the error appropriately.
+//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//                let nserror = error as NSError
+//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+//            }
+//        }
+//    }
 }
 
 // MARK: Auth {
@@ -180,8 +202,6 @@ extension AppDelegate {
         
         let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
         self.window?.rootViewController = vc
-        
-        
     }
 }
 
@@ -248,5 +268,107 @@ extension UIApplication {
         
         UIApplication.shared.open(settingsURL)
         return true
+    }
+}
+
+// MARK: Loading UI
+enum LoaderMessage: String {
+    case SyncingRecords = "Syncing Records"
+    case FetchingRecords = "Fetching Records"
+    case FetchingConfig = " "
+    case empty = ""
+}
+
+extension LoaderMessage {
+    func isNetworkDependent() -> Bool {
+        return self == .FetchingRecords || self == .SyncingRecords || self == .FetchingConfig
+    }
+}
+
+extension AppDelegate {
+    // Triggered by dataLoadCount
+
+    func incrementLoader(message: LoaderMessage) {
+        if !NetworkConnection.shared.hasConnection && message.isNetworkDependent() {
+            return
+        }
+        dataLoadCount += 1
+        dataLoadHideTimer?.invalidate()
+        showLoader(message: message)
+    }
+    
+    func decrementLoader() {
+        dataLoadCount -= 1
+        dataLoadHideTimer?.invalidate()
+        if dataLoadCount < 1 {
+            dataLoadHideTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideLoader), userInfo: nil, repeats: false)
+        }
+        
+        if dataLoadCount < 0 {
+            dataLoadCount = 0
+        }
+    }
+    
+    /// Do not call this function manually. use dataLoadCount
+    fileprivate func showLoader(message: LoaderMessage) {
+        // If already shown, dont do anything
+        if let existing = self.window?.viewWithTag(dataLoadTag), let textLabel = existing.viewWithTag(dataLoadTextTag) as? UILabel {
+            if textLabel.text == message.rawValue {
+                return
+            } else {
+                textLabel.text = message.rawValue
+                return
+            }
+        }
+        
+        // if somehow you're here and its already shown... remove it
+        self.window?.viewWithTag(dataLoadTag)?.removeFromSuperview()
+        // create container and add it to the window
+        let loaderView: UIView = UIView(frame: self.window?.bounds ?? .zero)
+        // Add below toast if toast is shown
+        if let toast = self.window?.viewWithTag(Constants.UI.Toast.tag) {
+            window?.insertSubview(loaderView, belowSubview: toast)
+        } else {
+            window?.addSubview(loaderView)
+        }
+        
+        if window?.rootViewController?.presentedViewController is UIAlertController {
+            Logger.log(string: "An alert is being hidden", type: .general)
+            // Should handle this OR remove the alert saying data is being fetched afrer login
+//            if let alert = window?.rootViewController?.presentedViewController as? UIAlertController  {
+//                window?.insertSubview(loaderView, at: <#T##Int#>)
+//            }
+        }
+       
+        
+        loaderView.tag = dataLoadTag
+        
+        // Create subviews for indicator and label
+        let indicator = UIActivityIndicatorView(frame: .zero)
+        let label = UILabel(frame: .zero)
+        
+        loaderView.addSubview(indicator)
+        loaderView.addSubview(label)
+        indicator.center(in: loaderView, width: 30, height: 30)
+        label.center(in: loaderView, width: loaderView.bounds.width, height: 32, verticalOffset: 32, horizontalOffset: 0)
+        
+        // Style
+        loaderView.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+        
+        label.textColor = AppColours.appBlue
+        label.text = message.rawValue
+        label.font = UIFont.bcSansBoldWithSize(size: 17)
+        label.textAlignment = .center
+        label.tag = dataLoadTextTag
+        
+        indicator.tintColor = AppColours.appBlue
+        indicator.color = AppColours.appBlue
+        indicator.startAnimating()
+        window?.layoutIfNeeded()
+    }
+    
+    // Triggered by dataLoadCount
+    @objc fileprivate func hideLoader() {
+        self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
     }
 }

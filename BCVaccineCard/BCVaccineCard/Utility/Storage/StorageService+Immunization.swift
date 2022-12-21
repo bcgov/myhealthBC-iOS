@@ -9,6 +9,12 @@ import Foundation
 protocol StorageImmunizationManager {
     
     // MARK: Store
+    func storeImmunizations(
+        patient: Patient,
+        in: AuthenticatedImmunizationsResponseObject.ResourcePayload,
+        authenticated: Bool
+    ) -> [Immunization]
+    
     func storeImmunization(
         patient: Patient,
         object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Immunization,
@@ -23,6 +29,18 @@ protocol StorageImmunizationManager {
     func removeCovidImmunizationDuplicates()
 }
 extension StorageService: StorageImmunizationManager {
+    
+    func storeImmunizations(patient: Patient, in object: AuthenticatedImmunizationsResponseObject.ResourcePayload, authenticated: Bool) -> [Immunization] {
+        guard let imms = object.immunizations else {return []}
+        var stored: [Immunization] = []
+        for immObject in imms {
+            if let storedObject = storeImmunization (patient: patient, object: immObject, authenticated: authenticated) {
+                stored.append(storedObject)
+            }
+        }
+        return stored
+    }
+    
     func storeImmunization(patient: Patient, object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Immunization, authenticated: Bool) -> Immunization? {
         let detailsObject: ImmunizationDetails?
         if let details = object.immunizationDetails {

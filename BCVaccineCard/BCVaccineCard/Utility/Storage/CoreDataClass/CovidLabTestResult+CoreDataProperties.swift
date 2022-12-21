@@ -2,7 +2,7 @@
 //  CovidLabTestResult+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-01-17.
+//  Created by Amir Shayegh on 2022-12-07.
 //
 //
 
@@ -16,14 +16,15 @@ extension CovidLabTestResult {
         return NSFetchRequest<CovidLabTestResult>(entityName: "CovidLabTestResult")
     }
 
+    @NSManaged public var authenticated: Bool
     @NSManaged public var createdAt: Date?
     @NSManaged public var id: String?
-    @NSManaged public var authenticated: Bool
-    @NSManaged public var patient: Patient?
-    @NSManaged public var results: NSSet?
+    @NSManaged public var orderId: String?
     @NSManaged public var pdf: String?
     @NSManaged public var reportAvailable: Bool
-    @NSManaged public var orderId: String?
+    @NSManaged public var patient: Patient?
+    @NSManaged public var results: NSSet?
+    @NSManaged public var comments: NSSet?
 
 }
 
@@ -41,5 +42,22 @@ extension CovidLabTestResult {
 
     @objc(removeResults:)
     @NSManaged public func removeFromResults(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for comments
+extension CovidLabTestResult {
+
+    @objc(addCommentsObject:)
+    @NSManaged public func addToComments(_ value: Comment)
+
+    @objc(removeCommentsObject:)
+    @NSManaged public func removeFromComments(_ value: Comment)
+
+    @objc(addComments:)
+    @NSManaged public func addToComments(_ values: NSSet)
+
+    @objc(removeComments:)
+    @NSManaged public func removeFromComments(_ values: NSSet)
 
 }

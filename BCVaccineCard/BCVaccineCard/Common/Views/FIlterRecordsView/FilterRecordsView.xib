@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -269,6 +269,7 @@
                 <outlet property="errorLabelFrom" destination="qrZ-3B-iYX" id="GtM-8d-R7T"/>
                 <outlet property="errorLabelTo" destination="nNg-nv-51e" id="HlV-en-pr0"/>
                 <outlet property="filterChipsContainer" destination="xjG-wd-zFJ" id="QFI-3J-AOo"/>
+                <outlet property="filterChipsSectionHeight" destination="doB-vk-y4H" id="4TN-bY-SHf"/>
                 <outlet property="filterTypeDivider" destination="VIv-AC-G8t" id="qCC-w2-hQL"/>
                 <outlet property="fromDateContainer" destination="adg-vc-zQ8" id="egu-jN-4ik"/>
                 <outlet property="fromDateIcon" destination="ffE-fF-GjG" id="q7O-49-1zx"/>

@@ -35,10 +35,36 @@ extension Patient {
         }
     }
     
+    public var immunizationArray: [Immunization] {
+        let set = immunizations as? Set<Immunization> ?? []
+        return set.sorted {
+            $0.dateOfImmunization ?? Date() > $1.dateOfImmunization ?? Date()
+        }
+    }
+    
     public var labOrdersArray: [LaboratoryOrder] {
         let set = laboratoryOrders as? Set<LaboratoryOrder> ?? []
         return set.sorted {
             $0.timelineDateTime ?? Date() > $1.timelineDateTime ?? Date()
+        }
+    }
+    
+    public var immunizationsArray: [Immunization] {
+        let set = immunizations as? Set<Immunization> ?? []
+        return Array(set)
+    }
+    
+    public var healthVisitsArray: [HealthVisit] {
+        let set = healthVisits as? Set<HealthVisit> ?? []
+        return set.sorted {
+            $0.encounterDate ?? Date() > $1.encounterDate ?? Date()
+        }
+    }
+    
+    public var specialAuthorityDrugsArray: [SpecialAuthorityDrug] {
+        let set = specialAuthorityDrugs as? Set<SpecialAuthorityDrug> ?? []
+        return set.sorted {
+            $0.effectiveDate ?? Date() > $1.effectiveDate ?? Date()
         }
     }
     
@@ -221,8 +247,44 @@ extension LaboratoryOrder {
             $0.batteryType ?? "" < $1.batteryType ?? ""
         }
     }
+    
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
 }
 
+// MARK: Special Authority Drugs
+extension SpecialAuthorityDrug {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
+
+// MARK: Health Visit
+extension HealthVisit {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
+
+// MARK: Covid lab results
+extension CovidLabTestResult {
+    public var commentsArray: [Comment] {
+        let set = comments as? Set<Comment> ?? []
+        return set.sorted {
+            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+        }
+    }
+}
 
 // MARK: Perscription
 extension Perscription {
@@ -255,5 +317,56 @@ extension ImmunizationRecommendation {
     public var targetDiseasesArray: [ImmunizationTargetDisease] {
         let set = targetDiseases as? Set<ImmunizationTargetDisease> ?? []
         return Array(set)
+    }
+}
+
+
+// MARK: Dependents
+extension Patient {
+    
+    public var dependentsArray: [Dependent] {
+        let set = dependents as? Set<Dependent> ?? []
+        return Array(set).sorted
+    }
+    
+    public var dependentsInfo: [Patient] {
+        return dependentsArray.compactMap({$0.info})
+    }
+    
+    func hasDepdendentWith(phn: String) -> Bool {
+        return self.dependentsInfo.contains(where: { $0.phn != nil && $0.phn == phn})
+    }
+    
+    func isDependent() -> Bool {
+        return dependencyInfo != nil
+    }
+}
+
+extension Array where Element == Dependent {
+    var sorted: [Dependent] {
+        let alphabetized = self.sorted { $0.info?.name ?? "" < $1.info?.name ?? "" }
+        return alphabetized.sorted(by: {
+            $0.info?.birthday ?? Date() > $1.info?.birthday ?? Date()
+        })
+    }
+    
+    var under12: [Dependent] {
+        return self.filter { item in
+            if let info = item.info, let birthday = info.birthday, let age = birthday.ageInYears, age > 12 {
+                return false
+            } else {
+                return true
+            }
+        }.sorted
+    }
+    
+    var over12: [Dependent] {
+        return self.filter { item in
+            if let info = item.info, let birthday = info.birthday, let age = birthday.ageInYears, age > 12 {
+                return true
+            } else {
+                return false
+            }
+        }.sorted
     }
 }
