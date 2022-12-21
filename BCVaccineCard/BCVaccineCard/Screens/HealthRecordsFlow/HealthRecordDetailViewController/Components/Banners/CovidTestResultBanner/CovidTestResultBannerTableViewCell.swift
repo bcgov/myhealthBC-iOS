@@ -19,7 +19,7 @@ class CovidTestResultBannerTableViewCell: BaseHeaderTableViewCell {
         statusLabel.text = status
         nameLabel.text = model.patientDisplayName
         if let date = model.collectionDateTime {
-            testDateLabel.text = "Tested on: \(date.issuedOnDateTime)"
+            testDateLabel.text = "Tested on: \(date.issuedOnDateTimeWithAmPm)"
         } else {
             testDateLabel.text = ""
         }

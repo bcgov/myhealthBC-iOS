@@ -147,7 +147,7 @@
 "DeleteDependentTitle" = "Remove dependent";
 "DeleteDependentMessage" = "Are you sure you want to remove this dependent (%@) from your applicaiton";
 "ResourceDescriptionText" = "Connect with HealthLink BC for health advice and get the latest information about COVID-19.";
-"GetVaccinatedResource" = "Get vaccinated";
+"GetVaccinatedResource" = "Get vaccinated for COVID-19";
 "GetTestedResource" = "Get a COVID-19 test";
 "GetTestkitResource" = "Get a COVID-19 Rapid Test Kit";
 "Covid19SymptomCheckerResource" = "COVID-19 self-assessment";

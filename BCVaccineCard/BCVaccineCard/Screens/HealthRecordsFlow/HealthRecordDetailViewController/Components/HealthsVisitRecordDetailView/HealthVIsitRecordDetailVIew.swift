@@ -138,7 +138,7 @@ extension HealthVisitRecordDetailView {
                     bolded: false)),
             TextListModel(
                 header: TextProperties(
-                    text: "Practiner Name:",
+                    text: "Practitioner Name:",
                     bolded: true),
                 subtext: TextProperties(
                     text: object.practitionerName ?? "",
