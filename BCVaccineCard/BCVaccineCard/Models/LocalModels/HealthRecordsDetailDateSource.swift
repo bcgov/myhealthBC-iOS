@@ -50,16 +50,6 @@ struct HealthRecordsDetailDataSource {
             case .medication, .specialAuthorityDrug, .healthVisit: return false
             }
         }
-        
-        // TODO: Enable Comments here
-        var commentsEnabled: Bool {
-            return false
-//            switch self.type {
-//            case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit : return true
-//            default: return false
-//            }
-        }
-        
     }
     
     enum RecordType {
