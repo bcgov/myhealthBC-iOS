@@ -500,6 +500,9 @@
 		3EF0DF2B2953D16E00408A1E /* MobileConfigurationResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF0DF2A2953D16E00408A1E /* MobileConfigurationResponseObject.swift */; };
 		3EF0DF2C2953D16E00408A1E /* MobileConfigurationResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF0DF2A2953D16E00408A1E /* MobileConfigurationResponseObject.swift */; };
 		3EF0DF2D2953D16E00408A1E /* MobileConfigurationResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF0DF2A2953D16E00408A1E /* MobileConfigurationResponseObject.swift */; };
+		3EF0DF342954AFB200408A1E /* SessionServiceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF0DF332954AFB200408A1E /* SessionServiceStorage.swift */; };
+		3EF0DF352954AFB200408A1E /* SessionServiceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF0DF332954AFB200408A1E /* SessionServiceStorage.swift */; };
+		3EF0DF362954AFB200408A1E /* SessionServiceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF0DF332954AFB200408A1E /* SessionServiceStorage.swift */; };
 		3EFFE8A3292D3A7C00CEABF2 /* MigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE8A2292D3A7C00CEABF2 /* MigrationService.swift */; };
 		3EFFE8A4292D3A7C00CEABF2 /* MigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE8A2292D3A7C00CEABF2 /* MigrationService.swift */; };
 		3EFFE8A5292D3A7C00CEABF2 /* MigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE8A2292D3A7C00CEABF2 /* MigrationService.swift */; };
@@ -1386,6 +1389,7 @@
 		3EDEBB5B29356A6700C8386C /* MobileConfigStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
 		3EDEBB5C29356A6700C8386C /* MobileConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
 		3EF0DF2A2953D16E00408A1E /* MobileConfigurationResponseObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigurationResponseObject.swift; sourceTree = "<group>"; };
+		3EF0DF332954AFB200408A1E /* SessionServiceStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionServiceStorage.swift; sourceTree = "<group>"; };
 		3EFFE8A2292D3A7C00CEABF2 /* MigrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationService.swift; sourceTree = "<group>"; };
 		4B0116F1C82424046C14A0F8 /* Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; path = "Target Support Files/Pods-BCVaccineCard-BCVaccineCardUITests/Pods-BCVaccineCard-BCVaccineCardUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		5B8BA6FD27BBB7D700250430 /* NetworkLayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkLayerTests.swift; sourceTree = "<group>"; };
@@ -2307,6 +2311,14 @@
 			path = MobileConfig;
 			sourceTree = "<group>";
 		};
+		3EF0DF2E2954AF7F00408A1E /* Session */ = {
+			isa = PBXGroup;
+			children = (
+				3EF0DF332954AFB200408A1E /* SessionServiceStorage.swift */,
+			);
+			path = Session;
+			sourceTree = "<group>";
+		};
 		7918A8C427482CB500D19D1C /* ReusableViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -2681,6 +2693,7 @@
 		7944F6B026F12A9D006B9444 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				3EF0DF2E2954AF7F00408A1E /* Session */,
 				2940A34E2728393100132D7D /* Storage */,
 				29A12AF5271F69BF00A106B5 /* Analytics */,
 				79BDA079270CB87600FF30AB /* Constants */,
@@ -4056,6 +4069,7 @@
 				795AA7482713FFF800E59FF1 /* QueueItEngine.swift in Sources */,
 				795AA72F27108C1C00E59FF1 /* GatewayRequestObjects.swift in Sources */,
 				7944F6D526F12C00006B9444 /* AppStyleButton.swift in Sources */,
+				3EF0DF352954AFB200408A1E /* SessionServiceStorage.swift in Sources */,
 				3E91C7BB28B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift in Sources */,
 				79218A9C275141800063004E /* GetARecordTableViewCell.swift in Sources */,
 				3E6831182940D41200100402 /* Comment+CoreDataClass.swift in Sources */,
@@ -4373,6 +4387,7 @@
 				5BA177D327A18CDD00D61F2A /* CoreDataStack.swift in Sources */,
 				794BD63B2702EEC00084ADA8 /* CustomNavigationController.swift in Sources */,
 				3E91C7BC28B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift in Sources */,
+				3EF0DF362954AFB200408A1E /* SessionServiceStorage.swift in Sources */,
 				794BD63C2702EEC00084ADA8 /* AppStyleButton.swift in Sources */,
 				795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				3E6831192940D41200100402 /* Comment+CoreDataClass.swift in Sources */,
@@ -4667,6 +4682,7 @@
 				798005692852C66E006E390F /* QueueItEngine.swift in Sources */,
 				7980056A2852C66E006E390F /* GatewayRequestObjects.swift in Sources */,
 				7980056B2852C66E006E390F /* AppStyleButton.swift in Sources */,
+				3EF0DF342954AFB200408A1E /* SessionServiceStorage.swift in Sources */,
 				3E91C7BA28B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift in Sources */,
 				7980056C2852C66E006E390F /* GetARecordTableViewCell.swift in Sources */,
 				3E6831172940D41200100402 /* Comment+CoreDataClass.swift in Sources */,
@@ -5038,7 +5054,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -5068,7 +5084,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

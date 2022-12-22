@@ -40,6 +40,7 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     override func viewDidLoad() {
         self.title = "Comments"
         setup()
+        listenToSync()
     }
     
     func setup() {
@@ -62,7 +63,6 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     }
     
     func listenToSync() {
-        NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
     }
         
