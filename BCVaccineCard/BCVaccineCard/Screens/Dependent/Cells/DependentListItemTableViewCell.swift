@@ -29,6 +29,7 @@ class DependentListItemTableViewCell: UITableViewCell {
         } else {
             arrowImageView.alpha = 1
         }
+        self.layoutIfNeeded()
     }
     
 }
