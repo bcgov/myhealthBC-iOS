@@ -432,7 +432,9 @@ extension UsersListOfRecordsViewController {
             showAllRecords(patientRecords: patientRecords, medFetchRequired: false)
             return
         }
-        guard let protectiveWord = AuthManager().protectiveWord, !SessionStorage.protectiveWordEnteredThisSession else {
+        guard let protectiveWord = AuthManager().protectiveWord,
+              !SessionStorage.protectiveWordEnteredThisSession
+        else {
             showAllRecords(patientRecords: patientRecords, medFetchRequired: AuthManager().medicalFetchRequired && !isDependent)
             return
         }
@@ -703,6 +705,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
 // MARK: Protected word retry
 extension UsersListOfRecordsViewController {
     @objc private func protectedWordFailedPromptAgain(_ notification: Notification) {
+        SessionStorage.attemptingProtectiveWord = false
         alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
             self.promptProtectiveVC(medFetchRequired: AuthManager().medicalFetchRequired)
             self.adjustLoadingIndicator(show: false, tryingAgain: true)
@@ -716,28 +719,36 @@ extension UsersListOfRecordsViewController {
         guard let protectiveWordEntered = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String else { return }
         guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw) else { return }
         if purpose == .viewingRecords {
-            if let proWord = self.protectiveWord, protectiveWordEntered == proWord {
-                let records = self.patientRecordsTemp ?? []
-                SessionStorage.protectiveWordEnteredThisSession = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.showAllRecords(patientRecords: records, medFetchRequired: false)
-                    self.tableView.reloadData()
-                }
-            } else {
-                alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
-                    self.promptProtectiveVC(medFetchRequired: false)
-                }, buttonTwoTitle: .no) {
-                    // Do nothing
-                }
-            }
+            viewProtectedRecords(protectiveWord: protectiveWordEntered)
         } else if purpose == .initialFetch {
-            self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-                if response == .Online {
-                    self.adjustLoadingIndicator(show: true)
-                    self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
-                }
-            })
+            fetchProtectedRecords(protectiveWord: protectiveWordEntered)
         }
+    }
+    
+    private func viewProtectedRecords(protectiveWord: String) {
+        if let proWord = self.protectiveWord,
+           protectiveWord == proWord
+        {
+            let records = self.patientRecordsTemp ?? []
+            SessionStorage.protectiveWordEnteredThisSession = true
+            self.showAllRecords(patientRecords: records, medFetchRequired: false)
+            self.tableView.reloadData()
+        } else {
+            alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
+                self.promptProtectiveVC(medFetchRequired: false)
+            }, buttonTwoTitle: .no) {
+                // Do nothing
+            }
+        }
+    }
+    
+    private func fetchProtectedRecords(protectiveWord: String) {
+        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+            guard response == .Online else {return}
+            self.adjustLoadingIndicator(show: true)
+            SessionStorage.attemptingProtectiveWord = true
+            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWord, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+        })
     }
 }
 

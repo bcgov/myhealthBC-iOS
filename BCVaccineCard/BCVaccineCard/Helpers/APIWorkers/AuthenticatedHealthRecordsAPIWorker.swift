@@ -157,7 +157,14 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         apiClient.respondToTermsOfService(authCredentials, accepted: accepted, termsOfServiceId: termsOfServiceId, token: queueItTokenCached, executingVC: self.executingVC, includeQueueItUI: self.includeQueueItUI, completion: completion)
     }
     
-    public func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject, showBanner: Bool, isManualFetch: Bool, specificFetchTypes: [AuthenticationFetchType]? = nil, protectiveWord: String? = nil, sourceVC: LoginVCSource, initialProtectedMedFetch: Bool = false) {
+    public func getAuthenticatedPatientDetails(authCredentials: AuthenticationRequestObject,
+                                               showBanner: Bool,
+                                               isManualFetch: Bool,
+                                               specificFetchTypes: [AuthenticationFetchType]? = nil,
+                                               protectiveWord: String? = nil,
+                                               sourceVC: LoginVCSource,
+                                               initialProtectedMedFetch: Bool = false
+    ) {
         let queueItTokenCached = Defaults.cachedQueueItObject?.queueitToken
         // User is valid, so we can proceed here
         self.showBanner = showBanner
@@ -187,7 +194,13 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         
     }
     
-    private func initializePatientDetails(authCredentials: AuthenticationRequestObject, result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?, initialProtectedMedFetch: Bool, sourceVC: LoginVCSource) {
+    private func initializePatientDetails(authCredentials: AuthenticationRequestObject,
+                                          result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>,
+                                          specificFetchTypes: [AuthenticationFetchType]?,
+                                          protectiveWord: String?,
+                                          initialProtectedMedFetch: Bool,
+                                          sourceVC: LoginVCSource
+    ) {
         switch result {
         case .success(let patientDetails):
             self.patientDetails = patientDetails
@@ -225,7 +238,11 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         
     }
     
-    private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?, initialProtectedMedFetch: Bool) {
+    private func initializeRequests(authCredentials: AuthenticationRequestObject,
+                                    specificFetchTypes: [AuthenticationFetchType]?,
+                                    protectiveWord: String?,
+                                    initialProtectedMedFetch: Bool
+    ) {
         // Note: Check if patient is same as currently stored patient or not - if isManualFetch, is currently stored exists, is authenticated, and patient details shows they are different, then delete current patient and all associated records
         if isManualAuthFetch,
            let currentlyStoredPatient = StorageService.shared.fetchAuthenticatedPatient(),
@@ -643,6 +660,10 @@ extension AuthenticatedHealthRecordsAPIWorker {
             //                self.perform(#selector(self.retryGetMedicationStatementRequest), with: nil, afterDelay: retryInSeconds)
             //            }
             else {
+                // TODO:// --
+                if protectiveWord != nil, SessionStorage.attemptingProtectiveWord {
+                    SessionStorage.protectiveWordEnteredThisSession = true
+                }
                 self.handleMedicationStatementInCoreData(medicationStatement: medicationStatement, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             }
         case .failure(let error):

@@ -8,6 +8,16 @@
 import Foundation
 
 class SessionStorage {
+    // If protective word was entered and validated in this session
     static var protectiveWordEnteredThisSession = false
+    // Last time Local Authentication was shown to user
     static var lastLocalAuth: Date? = nil
+    
+    /* This flag lets AuthenticatedHealthRecordsAPIWorker
+     know if protectiveWordEnteredThisSession
+     should be set to true after succesfull fetch
+     using stored protective word
+     */
+    static var attemptingProtectiveWord = false
+    
 }
