@@ -57,6 +57,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     fileprivate let authManager = AuthManager()
     
     private var retryCount = 0
+    private var immzRetryCount = 0
     private var requestDetails = AuthenticatedAPIWorkerRetryDetails()
     private var includeQueueItUI = false
     private var executingVC: UIViewController
@@ -536,6 +537,14 @@ extension AuthenticatedHealthRecordsAPIWorker {
         self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
     }
     
+    @objc private func retryGetImmunizationsRequest() {
+        guard let authCredentials = self.requestDetails.authenticatedImmunizationsDetails?.authCredentials else {
+            self.fetchStatusList.fetchStatus[.Immunizations] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: .genericErrorMessage)
+            return
+        }
+        self.getAuthenticatedImmunizations(authCredentials: authCredentials)
+    }
+    
 }
 
 // MARK: Handling responses
@@ -695,9 +704,12 @@ extension AuthenticatedHealthRecordsAPIWorker {
             // Note: Have to check for error here because error is being sent back on a 200 response
             if let resultMessage = immunizations.resultError?.resultMessage, immunizations.resourcePayload?.immunizations?.count == 0 {
                 self.fetchStatusList.fetchStatus[.Immunizations] = FetchStatus(requestCompleted: true, attemptedCount: immunizations.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
-            }
-            // Note: This is where we would have the retry logic, however this is currently not in the payload
-            else {
+            } else if immunizations.resourcePayload?.loadState?.refreshInProgress == true && self.immzRetryCount < Constants.NetworkRetryAttempts.publicRetryMaxForLaboratoryOrders {
+                self.immzRetryCount += 1
+                let retryInSeconds = 5.0
+                self.perform(#selector(self.retryGetImmunizationsRequest), with: nil, afterDelay: retryInSeconds)
+            } else {
+                // Note: This is where we would have the retry logic, however this is currently not in the payload
                 self.handleImmunizationsInCoreData(immunizations: immunizations)
                 self.handleImmunizationsRecommendationsInCoreData(payload: immunizations)
             }
