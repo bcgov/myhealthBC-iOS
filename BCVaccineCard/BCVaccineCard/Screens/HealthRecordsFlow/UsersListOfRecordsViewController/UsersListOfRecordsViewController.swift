@@ -57,7 +57,6 @@ class UsersListOfRecordsViewController: BaseViewController {
         }
     }
     
-    fileprivate let authManager = AuthManager()
     private var protectiveWord: String?
     private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
     private var selectedCellIndexPath: IndexPath?
@@ -65,7 +64,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var isDependent: Bool {
         return patient?.isDependent() ?? false
     }
-        
+    
     private var currentFilter: RecordsFilter? = nil {
         didSet {
             if let current = currentFilter, current.exists {
@@ -142,7 +141,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
-        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: self.authManager, currentTab: .records)
+        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
         self.parentContainerStackView.endLoadingIndicator()
         let showLoadingTitle = (self.patient == nil && self.authenticated == true)
         updatePatientIfNecessary()
@@ -187,19 +186,19 @@ extension UsersListOfRecordsViewController {
         var buttons: [NavButton] = []
         if authenticated {
             let filterButton = NavButton(title: nil,
-                      image: UIImage(named: "filter"), action: #selector(self.showFilters),
-                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+                                         image: UIImage(named: "filter"), action: #selector(self.showFilters),
+                                         accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
             buttons.append(filterButton)
         } else {
             var editModeNavButton: NavButton
             if inEditMode {
                 editModeNavButton = NavButton(title: .done,
-                          image: nil, action: #selector(self.doneButton),
-                          accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconHint))
+                                              image: nil, action: #selector(self.doneButton),
+                                              accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconHint))
             } else {
                 editModeNavButton = NavButton(title: nil,
-                          image: UIImage(named: "edit-icon"), action: #selector(self.editButton),
-                          accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
+                                              image: UIImage(named: "edit-icon"), action: #selector(self.editButton),
+                                              accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
             }
             buttons.append(editModeNavButton)
         }
@@ -207,7 +206,7 @@ extension UsersListOfRecordsViewController {
         if style == .singleUser && patient?.dependencyInfo == nil {
             self.navigationItem.setHidesBackButton(true, animated: false)
             let settingsButton = NavButton(title: nil,
-                      image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
+                                           image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
                                            accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
             buttons.append(settingsButton)
         } else {
@@ -320,10 +319,10 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
             } else if current.fromDate != nil && current.toDate == nil {
                 dateFilter = "\(fromDateText) and after"
             }
-           
+            
             selectedFilters.append(dateFilter)
         }
-
+        
         selectedFilters += current.recordTypes.map({$0.rawValue})
         
         chipsView.setup(options: selectedFilters, selected: [], direction: .horizontal, selectable: false)
@@ -415,7 +414,7 @@ extension UsersListOfRecordsViewController {
         
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
-//        self.checkForTestResultsToUpdate(ds: self.dataSource) 
+        //        self.checkForTestResultsToUpdate(ds: self.dataSource)
         
         if patientRecords.isEmpty {
             noRecordsFoundView.isHidden = false
@@ -433,8 +432,10 @@ extension UsersListOfRecordsViewController {
             showAllRecords(patientRecords: patientRecords, medFetchRequired: false)
             return
         }
-        guard let protectiveWord = authManager.protectiveWord, AppDelegate.sharedInstance?.protectiveWordEnteredThisSession == false else {
-            showAllRecords(patientRecords: patientRecords, medFetchRequired: authManager.medicalFetchRequired && !isDependent)
+        guard let protectiveWord = AuthManager().protectiveWord,
+              !SessionStorage.protectiveWordEnteredThisSession
+        else {
+            showAllRecords(patientRecords: patientRecords, medFetchRequired: AuthManager().medicalFetchRequired && !isDependent)
             return
         }
         self.protectiveWord = protectiveWord
@@ -480,7 +481,7 @@ extension UsersListOfRecordsViewController {
                    storedName != currentName {
                     StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
                     StorageService.shared.deleteAuthenticatedPatient(with: storedName)
-                    self.authManager.clearMedFetchProtectiveWordDetails()
+                    AuthManager().clearMedFetchProtectiveWordDetails()
                     //                self.patient = nil
                     if self.navStyle == .multiUser {
                         //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
@@ -532,8 +533,8 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     private func recordCell(indexPath: IndexPath) -> UITableViewCell {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: UserRecordListTableViewCell.getName, for: indexPath) as? UserRecordListTableViewCell else {
-                return UITableViewCell()
-            }
+            return UITableViewCell()
+        }
         cell.configure(record: dataSource[indexPath.row])
         cell.delegate = self
         return cell
@@ -542,8 +543,8 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     private func hiddenRecordsCell(indexPath: IndexPath) -> UITableViewCell {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: HiddenRecordsTableViewCell.getName, for: indexPath) as? HiddenRecordsTableViewCell else {
-                return UITableViewCell()
-            }
+            return UITableViewCell()
+        }
         // TODO: Configure fetch type elsewhere (when data source is being sorted) and pass in here
         guard let hiddenType = self.hiddenCellType else { return cell }
         cell.configure(forRecordType: hiddenType) { [weak self] hiddenType in
@@ -553,10 +554,10 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             case .loginToAccesshealthRecords:
                 self.performBCSCLogin()
             case .medicalRecords:
-                if self.authManager.medicalFetchRequired {
+                if AuthManager().medicalFetchRequired {
                     self.selectedCellIndexPath = indexPath
                 }
-                self.promptProtectiveVC(medFetchRequired: self.authManager.medicalFetchRequired)
+                self.promptProtectiveVC(medFetchRequired: AuthManager().medicalFetchRequired)
             case .authenticate:
                 break
             case .loginToAccessDependents:
@@ -622,9 +623,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     
     private func ableToDeleteRecord(at index: Int) -> Bool {
         // NOTE: Enable Delete Record
-//        guard dataSource.indices.contains(index) else { return false }
-//        let record = dataSource[index]
-//        return !record.isAuthenticated
+        //        guard dataSource.indices.contains(index) else { return false }
+        //        let record = dataSource[index]
+        //        return !record.isAuthenticated
         return false
     }
     
@@ -704,8 +705,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
 // MARK: Protected word retry
 extension UsersListOfRecordsViewController {
     @objc private func protectedWordFailedPromptAgain(_ notification: Notification) {
+        SessionStorage.attemptingProtectiveWord = false
         alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
-            self.promptProtectiveVC(medFetchRequired: self.authManager.medicalFetchRequired)
+            self.promptProtectiveVC(medFetchRequired: AuthManager().medicalFetchRequired)
             self.adjustLoadingIndicator(show: false, tryingAgain: true)
         }, buttonTwoTitle: .no) {
             // Do nothing
@@ -717,26 +719,36 @@ extension UsersListOfRecordsViewController {
         guard let protectiveWordEntered = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String else { return }
         guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw) else { return }
         if purpose == .viewingRecords {
-            if let proWord = self.protectiveWord, protectiveWordEntered == proWord {
-                let records = self.patientRecordsTemp ?? []
-                AppDelegate.sharedInstance?.protectiveWordEnteredThisSession = true
-                showAllRecords(patientRecords: records, medFetchRequired: false)
-                self.tableView.reloadData()
-            } else {
-                alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
-                    self.promptProtectiveVC(medFetchRequired: false)
-                }, buttonTwoTitle: .no) {
-                    // Do nothing
-                }
-            }
+            viewProtectedRecords(protectiveWord: protectiveWordEntered)
         } else if purpose == .initialFetch {
-            self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-                if response == .Online {
-                    self.adjustLoadingIndicator(show: true)
-                    self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWordEntered, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
-                }
-            })
+            fetchProtectedRecords(protectiveWord: protectiveWordEntered)
         }
+    }
+    
+    private func viewProtectedRecords(protectiveWord: String) {
+        if let proWord = self.protectiveWord,
+           protectiveWord == proWord
+        {
+            let records = self.patientRecordsTemp ?? []
+            SessionStorage.protectiveWordEnteredThisSession = true
+            self.showAllRecords(patientRecords: records, medFetchRequired: false)
+            self.tableView.reloadData()
+        } else {
+            alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
+                self.promptProtectiveVC(medFetchRequired: false)
+            }, buttonTwoTitle: .no) {
+                // Do nothing
+            }
+        }
+    }
+    
+    private func fetchProtectedRecords(protectiveWord: String) {
+        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+            guard response == .Online else {return}
+            self.adjustLoadingIndicator(show: true)
+            SessionStorage.attemptingProtectiveWord = true
+            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWord, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+        })
     }
 }
 
@@ -762,7 +774,7 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController {
     @objc private func authFetchComplete(_ notification: Notification) {
         adjustLoadingIndicator(show: false)
-//        self.tableView.endLoadingIndicator()
+        //        self.tableView.endLoadingIndicator()
         self.fetchDataSource(initialProtectedMedFetch: true)
     }
 }

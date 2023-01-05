@@ -19,14 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow? 
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
-    var protectiveWordEnteredThisSession = false {
-        didSet {
-            print(protectiveWordEnteredThisSession)
-        }
-    }
     var recordsFetchedForDependentsThisSession: [Patient] = []
     
-    var lastLocalAuth: Date? = nil
     fileprivate var dataLoadCount: Int = 0 
     internal var dataLoadHideTimer: Timer? = nil
     internal var dataLoadTag = 9912341
