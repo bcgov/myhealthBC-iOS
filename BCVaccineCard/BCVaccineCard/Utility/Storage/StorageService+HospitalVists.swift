@@ -53,6 +53,7 @@ extension StorageService: StorageHospitalVisitsManager {
         let visit = HospitalVisit(context: context)
         let clinic = HospitalVisitClinic(context: context)
         clinic.name = clinicName
+        visit.clinic = clinic
         visit.id = id
         visit.encounterDate = encounterDate
         visit.specialtyDescription = specialtyDescription
