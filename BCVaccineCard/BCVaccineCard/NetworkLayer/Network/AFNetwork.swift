@@ -65,7 +65,7 @@ class AFNetwork: Network {
               payload is BaseRetryableGatewayResponse,
               let payLoadStruct = payload as? BaseRetryableGatewayResponse else
         {
-            // is a BaseRetryableGatewayResponse but retry not needed - return response
+            // is a BaseRetryableGatewayResponse but is not retry-able - return response
             return requestData.completion(value)
         }
         
