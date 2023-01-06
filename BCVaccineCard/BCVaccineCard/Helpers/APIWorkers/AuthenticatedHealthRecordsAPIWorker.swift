@@ -28,6 +28,7 @@ enum AuthenticationFetchType {
     case Immunizations
     case HealthVisits
     case HospitalVisits
+    case ClinicalDocuments
     case Comments
     
     // NOTE: The reason this is not in localized file yet is because we don't know what loader will look like, so text will likely change
@@ -43,6 +44,7 @@ enum AuthenticationFetchType {
         case .HealthVisits: return "Health Visits"
         case .Comments: return "Comments"
         case .HospitalVisits: return "Hospital Visits"
+        case .ClinicalDocuments: return "Clinical Documents"
         }
     }
 }
@@ -270,6 +272,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
             self.getAuthenticatedHospitalVisits(authCredentials: authCredentials)
+            self.getAuthenticatedClinicalDocuments(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
             return
         }
@@ -284,7 +287,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             case .Immunizations: self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             case .HealthVisits: self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
             case .HospitalVisits: getAuthenticatedHospitalVisits(authCredentials: authCredentials)
-            default: break
+            case .ClinicalDocuments: self.getAuthenticatedClinicalDocuments(authCredentials: authCredentials)
+            case .Comments, .PatientDetails: break
             }
         }
     }
@@ -431,7 +435,26 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             return
         }
         
-        HospitalVisitsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHospitalVisits(for: patient, completion: {_ in})
+        HospitalVisitsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, completion: {_ in})
+    }
+    
+    private func getAuthenticatedClinicalDocuments(authCredentials: AuthenticationRequestObject) {
+        guard let patientObject = self.patientDetails else { return }
+        incrementLoadCounter()
+        guard let patient = StorageService.shared.fetchOrCreatePatient(
+            phn: patientObject.resourcePayload?.personalhealthnumber,
+            name: patientObject.getFullName,
+            firstName: "",
+            lastName: "",
+            gender: "",
+            birthday: patientObject.getBdayDate,
+            authenticated: true
+        ) else {
+            self.decrementLoadCounter()
+            return
+        }
+        
+        ClinicalDocumentService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, completion: {_ in})
     }
     
     private func getAuthenticatedHealthVisits(authCredentials: AuthenticationRequestObject) {

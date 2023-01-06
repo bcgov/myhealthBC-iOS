@@ -9,19 +9,25 @@ import Foundation
 
 // MARK: - MobileConfigurationResponseObject
 struct AuthenticatedHospitalVisitsResponseObject: BaseGatewayResponse, Codable {
-    let resourcePayload: [HospitalVisits]?
+    let resourcePayload: ResourcePayload?
     var totalResultCount, pageIndex, pageSize, resultStatus: Int?
     var resultError: ResultError?
     
-    // MARK: - ResourcePayload
-    struct HospitalVisits: Codable {
-        let id, encounterDate, specialtyDescription, practitionerName: String
-        let clinic: Clinic
+    // MARK: - HospitalVisits
+    struct ResourcePayload: BaseRetryableGatewayResponse, Codable {
+        var loaded, queued: Bool?
+        var retryin: Int?
+        let hospitalVisits: [HospitalVisit]?
     }
 
-    // MARK: - Clinic
-    struct Clinic: Codable {
-        let name: String
+    // MARK: - HospitalVisit
+    struct HospitalVisit: Codable {
+        let encounterID, facility, healthService, visitType: String?
+        let healthAuthority, admitDateTime, endDateTime, provider: String?
+
+        enum CodingKeys: String, CodingKey {
+            case encounterID = "encounterId"
+            case facility, healthService, visitType, healthAuthority, admitDateTime, endDateTime, provider
+        }
     }
-    
 }

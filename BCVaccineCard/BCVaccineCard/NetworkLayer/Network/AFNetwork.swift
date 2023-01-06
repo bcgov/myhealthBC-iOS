@@ -52,16 +52,30 @@ struct AFNetwork: Network {
         guard let value = response.value else {
             return requestData.completion(nil)
         }
-        if value is BaseGatewayResponse, let gateWayResponse = value as? BaseGatewayResponse {
-            if gateWayResponse.resultError != nil { // TODO: Retry criteria...
-                // Retry needed - retry
+        
+        guard value is BaseGatewayResponse, var gateWayResponse = value as? BaseGatewayResponse else {
+            // Not a BaseGatewayResponse - return response
+            return requestData.completion(value)
+        }
+        
+        // BaseGatewayResponse - check if retry is needed
+        if let payload = swift_value(of: &gateWayResponse, key: "resourcePayload"),
+           payload is BaseRetryableGatewayResponse,
+           let payLoadStruct = payload as? BaseRetryableGatewayResponse,
+           payLoadStruct.loaded == false // if not loaded
+        {
+            // Retry needed - retry
+            print("RETRYABLE!!!")
+            /*
+             TODO: Connor please check this retry criteria.
+             Do we need if payLoadStruct.queued ??
+             Whats the default retry time?
+             */
+            DispatchQueue.main.asyncAfter(deadline: .now() + (Double(payLoadStruct.retryin ?? 3000))) {
                 return request(with: requestData)
-            } else {
-                // Retry not needed - return (if no network error)
-                return requestData.completion(value)
             }
         } else {
-            // Not a BaseGatewayResponse - return response
+            // Retry not needed - return (if no network error)
             return requestData.completion(value)
         }
     }

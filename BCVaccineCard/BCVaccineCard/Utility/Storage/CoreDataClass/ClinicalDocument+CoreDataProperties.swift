@@ -1,5 +1,5 @@
 //
-//  HospitalVisit+CoreDataProperties.swift
+//  ClinicalDocument+CoreDataProperties.swift
 //  
 //
 //  Created by Amir Shayegh on 2023-01-05.
@@ -10,28 +10,27 @@ import Foundation
 import CoreData
 
 
-extension HospitalVisit {
+extension ClinicalDocument {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<HospitalVisit> {
-        return NSFetchRequest<HospitalVisit>(entityName: "HospitalVisit")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<ClinicalDocument> {
+        return NSFetchRequest<ClinicalDocument>(entityName: "ClinicalDocument")
     }
 
-    @NSManaged public var facility: String?
-    @NSManaged public var encounterID: String?
-    @NSManaged public var visitType: String?
-    @NSManaged public var healthService: String?
+    @NSManaged public var id: String?
+    @NSManaged public var fileID: String?
+    @NSManaged public var name: String?
+    @NSManaged public var type: String?
+    @NSManaged public var facilityName: String?
+    @NSManaged public var discipline: String?
+    @NSManaged public var serviceDate: Date?
     @NSManaged public var authenticated: Bool
-    @NSManaged public var healthAuthority: String?
-    @NSManaged public var admitDateTime: Date?
-    @NSManaged public var endDateTime: Date?
-    @NSManaged public var provider: String?
     @NSManaged public var patient: Patient?
     @NSManaged public var comments: NSSet?
 
 }
 
 // MARK: Generated accessors for comments
-extension HospitalVisit {
+extension ClinicalDocument {
 
     @objc(addCommentsObject:)
     @NSManaged public func addToComments(_ value: Comment)

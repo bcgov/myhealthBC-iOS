@@ -32,6 +32,7 @@ extension Comment {
     @NSManaged public var prescription: NSSet?
     @NSManaged public var specialAuthorityDrug: SpecialAuthorityDrug?
     @NSManaged public var hospitalVisit: HospitalVisit?
+    @NSManaged public var clinicalDocument: ClinicalDocument?
 
 }
 

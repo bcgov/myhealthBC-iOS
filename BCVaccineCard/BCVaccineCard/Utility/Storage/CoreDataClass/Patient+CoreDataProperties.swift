@@ -36,6 +36,7 @@ extension Patient {
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
     @NSManaged public var hospitalVisits: NSSet?
+    @NSManaged public var clinicalDocuments: NSSet?
 
 }
 
@@ -192,19 +193,36 @@ extension Patient {
 
 }
 
-// MARK: Generated accessors for hospitalVisit
+// MARK: Generated accessors for hospitalVisits
 extension Patient {
 
-    @objc(addHospitalVisitObject:)
-    @NSManaged public func addToHospitalVisit(_ value: HospitalVisit)
+    @objc(addHospitalVisitsObject:)
+    @NSManaged public func addToHospitalVisits(_ value: HospitalVisit)
 
-    @objc(removeHospitalVisitObject:)
-    @NSManaged public func removeFromHospitalVisit(_ value: HospitalVisit)
+    @objc(removeHospitalVisitsObject:)
+    @NSManaged public func removeFromHospitalVisits(_ value: HospitalVisit)
 
-    @objc(addHospitalVisit:)
-    @NSManaged public func addToHospitalVisit(_ values: NSSet)
+    @objc(addHospitalVisits:)
+    @NSManaged public func addToHospitalVisits(_ values: NSSet)
 
-    @objc(removeHospitalVisit:)
-    @NSManaged public func removeFromHospitalVisit(_ values: NSSet)
+    @objc(removeHospitalVisits:)
+    @NSManaged public func removeFromHospitalVisits(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for clinicalDocuments
+extension Patient {
+
+    @objc(addClinicalDocumentsObject:)
+    @NSManaged public func addToClinicalDocuments(_ value: ClinicalDocument)
+
+    @objc(removeClinicalDocumentsObject:)
+    @NSManaged public func removeFromClinicalDocuments(_ value: ClinicalDocument)
+
+    @objc(addClinicalDocuments:)
+    @NSManaged public func addToClinicalDocuments(_ values: NSSet)
+
+    @objc(removeClinicalDocuments:)
+    @NSManaged public func removeFromClinicalDocuments(_ values: NSSet)
 
 }

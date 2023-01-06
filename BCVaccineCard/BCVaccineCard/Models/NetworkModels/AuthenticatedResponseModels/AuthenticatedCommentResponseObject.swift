@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - AuthenticatedCommentResponseObject
 struct AuthenticatedCommentResponseObject: BaseGatewayResponse, Codable {
-    let resourcePayload: [String: [Comment]]
+    var resourcePayload: [String: [Comment]]
     var totalResultCount, pageIndex, pageSize, resultStatus: Int?
     var resultError: ResultError?
     

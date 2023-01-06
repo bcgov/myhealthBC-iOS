@@ -22,16 +22,22 @@ protocol StorageHospitalVisitsManager {
 }
 
 extension StorageService: StorageHospitalVisitsManager {
-    func storeHospitalVisits(patient: Patient, objects: [HospitalVisitsResponse], authenticated: Bool) -> [HospitalVisit] {
+    func storeHospitalVisits(patient: Patient,
+                             objects: [HospitalVisitsResponse],
+                             authenticated: Bool
+    ) -> [HospitalVisit] {
         var storedObjects: [HospitalVisit] = []
         for visit in objects {
-            if let stored = storeHospitalVisit(id: visit.id,
-                                               encounterDate: visit.encounterDate.getGatewayDate(),
-                                               specialtyDescription: visit.specialtyDescription,
-                                               practitionerName: visit.practitionerName,
-                                               clinicName: visit.clinic.name,
-                                               authenticated: authenticated,
-                                               patient: patient)
+            if let stored = storeHospitalVisit(encounterID: visit.encounterID,
+                                               facility: visit.facility,
+                                               healthService: visit.healthService,
+                                               visitType: visit.visitType,
+                                               healthAuthority: visit.healthAuthority,
+                                               admitDateTime: visit.admitDateTime?.getGatewayDate(),
+                                               endDateTime: visit.endDateTime?.getGatewayDate(),
+                                               provider: visit.provider,
+                                               patient: patient,
+                                               authenticated: authenticated)
             {
                 storedObjects.append(stored)
             }
@@ -41,23 +47,26 @@ extension StorageService: StorageHospitalVisitsManager {
     }
     
     private func storeHospitalVisit(
-        id: String?,
-        encounterDate: Date?,
-        specialtyDescription: String?,
-        practitionerName: String?,
-        clinicName: String?,
-        authenticated: Bool,
-        patient: Patient?
+        encounterID: String?,
+        facility: String?,
+        healthService: String?,
+        visitType: String?,
+        healthAuthority: String?,
+        admitDateTime: Date?,
+        endDateTime: Date?,
+        provider: String?,
+        patient: Patient?,
+        authenticated: Bool
     ) -> HospitalVisit? {
         guard let context = managedContext else {return nil}
         let visit = HospitalVisit(context: context)
-        let clinic = HospitalVisitClinic(context: context)
-        clinic.name = clinicName
-        visit.clinic = clinic
-        visit.id = id
-        visit.encounterDate = encounterDate
-        visit.specialtyDescription = specialtyDescription
-        visit.practitionerName = practitionerName
+        visit.encounterID = encounterID
+        visit.facility = facility
+        visit.healthService = healthService
+        visit.visitType = visitType
+        visit.admitDateTime = admitDateTime
+        visit.endDateTime = endDateTime
+        visit.provider = provider
         visit.patient = patient
         visit.authenticated = authenticated
         do {

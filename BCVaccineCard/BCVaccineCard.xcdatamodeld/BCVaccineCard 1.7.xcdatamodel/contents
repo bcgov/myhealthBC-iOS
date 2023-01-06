@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="21G217" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="ClinicalDocument" representedClassName="ClinicalDocument" syncable="YES">
+        <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="discipline" optional="YES" attributeType="String"/>
+        <attribute name="facilityName" optional="YES" attributeType="String"/>
+        <attribute name="fileID" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="serviceDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="clinicalDocument" inverseEntity="Comment"/>
+        <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="clinicalDocuments" inverseEntity="Patient"/>
+    </entity>
     <entity name="Comment" representedClassName="Comment" syncable="YES">
         <attribute name="createdBy" optional="YES" attributeType="String"/>
         <attribute name="createdDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -11,6 +23,7 @@
         <attribute name="updatedDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="userProfileID" optional="YES" attributeType="String"/>
         <attribute name="version" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="clinicalDocument" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ClinicalDocument" inverseName="comments" inverseEntity="ClinicalDocument"/>
         <relationship name="covidLabTestResult" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CovidLabTestResult" inverseName="comments" inverseEntity="CovidLabTestResult"/>
         <relationship name="healthVIsit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HealthVisit" inverseName="comments" inverseEntity="HealthVisit"/>
         <relationship name="hospitalVisit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HospitalVisit" inverseName="comments" inverseEntity="HospitalVisit"/>
@@ -51,7 +64,7 @@
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="practitionerName" optional="YES" attributeType="String"/>
         <attribute name="specialtyDescription" optional="YES" attributeType="String"/>
-        <relationship name="clinic" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HealthVisitClinic" inverseName="healthVisit" inverseEntity="HealthVisitClinic"/>
+        <relationship name="clinic" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="HealthVisitClinic" inverseName="healthVisit" inverseEntity="HealthVisitClinic"/>
         <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="healthVIsit" inverseEntity="Comment"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="healthVisits" inverseEntity="Patient"/>
     </entity>
@@ -60,18 +73,17 @@
         <relationship name="healthVisit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HealthVisit" inverseName="clinic" inverseEntity="HealthVisit"/>
     </entity>
     <entity name="HospitalVisit" representedClassName="HospitalVisit" syncable="YES">
+        <attribute name="admitDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="encounterDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id" optional="YES" attributeType="String"/>
-        <attribute name="practitionerName" optional="YES" attributeType="String"/>
-        <attribute name="specialtyDescription" optional="YES" attributeType="String"/>
-        <relationship name="clinic" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="HospitalVisitClinic" inverseName="hospitalVisit" inverseEntity="HospitalVisitClinic"/>
-        <relationship name="comments" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Comment" inverseName="hospitalVisit" inverseEntity="Comment"/>
+        <attribute name="encounterID" optional="YES" attributeType="String"/>
+        <attribute name="endDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="facility" optional="YES" attributeType="String"/>
+        <attribute name="healthAuthority" optional="YES" attributeType="String"/>
+        <attribute name="healthService" optional="YES" attributeType="String"/>
+        <attribute name="provider" optional="YES" attributeType="String"/>
+        <attribute name="visitType" optional="YES" attributeType="String"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="hospitalVisit" inverseEntity="Comment"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="hospitalVisits" inverseEntity="Patient"/>
-    </entity>
-    <entity name="HospitalVisitClinic" representedClassName="HospitalVisitClinic" syncable="YES">
-        <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="hospitalVisit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HospitalVisit" inverseName="clinic" inverseEntity="HospitalVisit"/>
     </entity>
     <entity name="Immunization" representedClassName="Immunization" syncable="YES">
         <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -175,6 +187,7 @@
         <attribute name="lastName" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
+        <relationship name="clinicalDocuments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ClinicalDocument" inverseName="patient" inverseEntity="ClinicalDocument"/>
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
         <relationship name="dependencyInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Dependent" inverseName="info" inverseEntity="Dependent"/>
         <relationship name="dependents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Dependent" inverseName="guardian" inverseEntity="Dependent"/>

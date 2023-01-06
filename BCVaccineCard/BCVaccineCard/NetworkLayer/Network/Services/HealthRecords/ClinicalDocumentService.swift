@@ -1,5 +1,5 @@
 //
-//  HealthVisitsService.swift
+//  ClinicalDocumentService.swift
 //  BCVaccineCard
 //
 //  Created by Amir Shayegh on 2023-01-05.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-typealias HospitalVisitsResponse = AuthenticatedHospitalVisitsResponseObject.HospitalVisit
+typealias ClinicalDocumentResponse = AuthenticatedClinicalDocumentResponseObject.ClinicalDocument
 
-struct HospitalVisitsService {
+struct ClinicalDocumentService {
     
     let network: Network
     let authManager: AuthManager
@@ -18,9 +18,9 @@ struct HospitalVisitsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, completion: @escaping ([HospitalVisit])->Void) {
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([ClinicalDocument])->Void) {
         network.addLoader(message: .SyncingRecords)
-        fetch(for: patient, currentAttempt: 0) { result in
+        fetch(for: patient) { result in
             guard let response = result else {
                 return completion([])
             }
@@ -30,20 +30,20 @@ struct HospitalVisitsService {
     }
     
     // MARK: Store
-    private func store(HopotalVisits response: [HospitalVisitsResponse],
+    private func store(HopotalVisits response: [ClinicalDocumentResponse],
                        for patient: Patient,
-                       completion: @escaping ([HospitalVisit])->Void
+                       completion: @escaping ([ClinicalDocument])->Void
     ) {
-        StorageService.shared.deleteAllRecords(in: patient.hospitalVisitsArray)
-        let stored = StorageService.shared.storeHospitalVisits(patient: patient, objects: response, authenticated: true)
+        StorageService.shared.deleteAllRecords(in: patient.clinicalDocumentsArray)
+        let stored = StorageService.shared.storeClinicalDocuments(patient: patient, objects: response, authenticated: true)
         return completion(stored)
     }
     
 }
 
 // MARK: Network requests
-extension HospitalVisitsService {
-    private func fetch(for patient: Patient, currentAttempt: Int, completion: @escaping(_ response: [HospitalVisitsResponse]?) -> Void) {
+extension ClinicalDocumentService {
+    private func fetch(for patient: Patient, completion: @escaping(_ response: [ClinicalDocumentResponse]?) -> Void) {
         
         guard let token = authManager.authToken,
               let hdid = patient .hdid,
@@ -59,10 +59,10 @@ extension HospitalVisitsService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedHospitalVisitsResponseObject>(url: endpoints.getAuthenticatedHospitalVisits(hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
-                if let visits = result?.resourcePayload?.hospitalVisits {
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedClinicalDocumentResponseObject>(url: endpoints.authenticatedClinicalDocuments(hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
+                if let docs = result?.resourcePayload {
                     // return result
-                    return completion(visits)
+                    return completion(docs)
                 } else {
                     // show error
                     return completion(nil)
