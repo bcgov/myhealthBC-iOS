@@ -61,6 +61,13 @@ extension Patient {
         }
     }
     
+    public var hospitalVisitsArray: [HospitalVisit] {
+        let set = healthVisits as? Set<HospitalVisit> ?? []
+        return set.sorted {
+            $0.encounterDate ?? Date() > $1.encounterDate ?? Date()
+        }
+    }
+    
     public var specialAuthorityDrugsArray: [SpecialAuthorityDrug] {
         let set = specialAuthorityDrugs as? Set<SpecialAuthorityDrug> ?? []
         return set.sorted {

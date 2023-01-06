@@ -31,6 +31,7 @@ extension StorageService {
         case Immunization
         case Recommendation
         case HealthVisit
+        case HospitalVisit
         case SpecialAuthorityMedication
         case Dependent
     }

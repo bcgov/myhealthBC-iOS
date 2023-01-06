@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias HospitalVisitsResponse = AuthenticatedHospitalVisitsResponseObject.HospitalVisits
+
 struct HospitalVisitsService {
     
     let network: Network
@@ -16,7 +18,7 @@ struct HospitalVisitsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStoreHospitalVisits(for patient: Patient, completion: @escaping ([Immunization])->Void) {
+    public func fetchAndStoreHospitalVisits(for patient: Patient, completion: @escaping ([HospitalVisit])->Void) {
         network.addLoader(message: .SyncingRecords)
         fetchHospitalVisits(for: patient, currentAttempt: 0) { result in
             guard let response = result else {
@@ -28,24 +30,20 @@ struct HospitalVisitsService {
     }
     
     // MARK: Store
-    private func store(HopotalVisits response: AuthenticatedHospitalVisitsResponseObject,
+    private func store(HopotalVisits response: [HospitalVisitsResponse],
                        for patient: Patient,
-                       completion: @escaping ([Immunization])->Void
+                       completion: @escaping ([HospitalVisit])->Void
     ) {
-//        guard let payload = response.resourcePayload
-//        else { return completion([]) }
-//        let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
-//        // TODO: Connor Test stored
-//        return completion(stored)
-        
-        return completion([])
+        StorageService.shared.deleteAllRecords(in: patient.hospitalVisitsArray)
+        let stored = StorageService.shared.storeHospitalVisits(patient: patient, objects: response, authenticated: true)
+        return completion(stored)
     }
     
 }
 
 // MARK: Network requests
 extension HospitalVisitsService {
-    private func fetchHospitalVisits(for patient: Patient, currentAttempt: Int, completion: @escaping(_ response: AuthenticatedHospitalVisitsResponseObject?) -> Void) {
+    private func fetchHospitalVisits(for patient: Patient, currentAttempt: Int, completion: @escaping(_ response: [HospitalVisitsResponse]?) -> Void) {
         
         guard let token = authManager.authToken,
               let hdid = patient .hdid,
@@ -64,7 +62,7 @@ extension HospitalVisitsService {
             let requestModel = NetworkRequest<HDIDParams, AuthenticatedHospitalVisitsResponseObject>(url: endpoints.getAuthenticatedHospitalVisits(hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
                 if let visits = result?.resourcePayload {
                     // return result
-                    return completion(result)
+                    return completion(visits)
                 } else {
                     // show error
                     return completion(nil)
