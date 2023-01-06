@@ -37,21 +37,77 @@ extension NetworkRequest {
 }
 
 
-struct AFNetwork: Network {
+class AFNetwork: Network {
+    
+    private var requestAttempts: [URL: Int] = [URL: Int]()
     
     func request<Parameters: Encodable, T: Decodable>(with requestData: NetworkRequest<Parameters, T>) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
         let AFRequest = requestData.AFRequest
         AFRequest.responseDecodable(of: T.self, decoder: decoder, completionHandler: {response in
-            if let res = response.value {
-                return requestData.completion(res)
-            } else {
-                Logger.log(string: response.error.debugDescription, type: .Network)
-                return requestData.completion(nil)
-            }
-            
+            return self.returnOrRetryIfneeded(with: requestData, response: response)
         })
+    }
+    
+    private func returnOrRetryIfneeded<Parameters: Encodable, T: Decodable>(with requestData: NetworkRequest<Parameters, T>, response: DataResponse<T, AFError>)  {
+        guard let value = response.value else {
+            // Didnt get a response.. return nil
+            return requestData.completion(nil)
+        }
         
+        guard value is BaseGatewayResponse, var gateWayResponse = value as? BaseGatewayResponse else {
+            // Not a BaseGatewayResponse - return response
+            return requestData.completion(value)
+        }
+        
+        guard let payload = swift_value(of: &gateWayResponse, key: "resourcePayload"),
+              payload is BaseRetryableGatewayResponse,
+              let payLoadStruct = payload as? BaseRetryableGatewayResponse else
+        {
+            // is a BaseRetryableGatewayResponse but is not retry-able - return response
+            return requestData.completion(value)
+        }
+        
+        // Request is retry-able:
+        
+        if shouldRetry(request: requestData, responsePayload: payLoadStruct) {
+            // retry needed - increment attempt and request again
+            if let attempts = requestAttempts[requestData.url] {
+                requestAttempts[requestData.url] = attempts + 1
+            } else {
+                requestAttempts[requestData.url] = 1
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + (Double(payLoadStruct.retryin ?? requestData.retryIn))) {
+                return self.request(with: requestData)
+            }
+        } else {
+            // retry not needed - return response
+            requestAttempts[requestData.url] = 0
+            return requestData.completion(value)
+        }
+    }
+    
+    
+    // Retry criteria Logic
+    private func shouldRetry<Parameters: Encodable, T: Decodable>(request requestData: NetworkRequest<Parameters, T>,
+                                                                  responsePayload: BaseRetryableGatewayResponse) -> Bool {
+        if responsePayload.loaded == false {
+            if let attempts = requestAttempts[requestData.url] {
+                if attempts < requestData.maxAttempts {
+                    // havent reached max retry yet
+                    return true
+                } else {
+                    // reached max retry attempts
+                    return false
+                }
+            } else {
+                // Not retried yet
+                return true
+            }
+        } else {
+            // loaded is true
+            return false
+        }
     }
 }

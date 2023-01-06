@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2022-10-27.
+//  Created by Amir Shayegh on 2023-01-05.
 //
 //
 
@@ -19,13 +19,14 @@ extension Patient {
     @NSManaged public var authenticated: Bool
     @NSManaged public var authManagerDisplayName: String?
     @NSManaged public var birthday: Date?
-    @NSManaged public var hdid: String?
-    @NSManaged public var name: String?
     @NSManaged public var firstName: String?
-    @NSManaged public var lastName: String?
     @NSManaged public var gender: String?
+    @NSManaged public var hdid: String?
+    @NSManaged public var lastName: String?
+    @NSManaged public var name: String?
     @NSManaged public var phn: String?
     @NSManaged public var covidTestResults: NSSet?
+    @NSManaged public var dependencyInfo: Dependent?
     @NSManaged public var dependents: NSSet?
     @NSManaged public var healthVisits: NSSet?
     @NSManaged public var immunizations: NSSet?
@@ -34,7 +35,8 @@ extension Patient {
     @NSManaged public var recommendations: NSSet?
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
-    @NSManaged public var dependencyInfo: Dependent?
+    @NSManaged public var hospitalVisits: NSSet?
+    @NSManaged public var clinicalDocuments: NSSet?
 
 }
 
@@ -188,5 +190,39 @@ extension Patient {
 
     @objc(removeVaccineCard:)
     @NSManaged public func removeFromVaccineCard(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for hospitalVisits
+extension Patient {
+
+    @objc(addHospitalVisitsObject:)
+    @NSManaged public func addToHospitalVisits(_ value: HospitalVisit)
+
+    @objc(removeHospitalVisitsObject:)
+    @NSManaged public func removeFromHospitalVisits(_ value: HospitalVisit)
+
+    @objc(addHospitalVisits:)
+    @NSManaged public func addToHospitalVisits(_ values: NSSet)
+
+    @objc(removeHospitalVisits:)
+    @NSManaged public func removeFromHospitalVisits(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for clinicalDocuments
+extension Patient {
+
+    @objc(addClinicalDocumentsObject:)
+    @NSManaged public func addToClinicalDocuments(_ value: ClinicalDocument)
+
+    @objc(removeClinicalDocumentsObject:)
+    @NSManaged public func removeFromClinicalDocuments(_ value: ClinicalDocument)
+
+    @objc(addClinicalDocuments:)
+    @NSManaged public func addToClinicalDocuments(_ values: NSSet)
+
+    @objc(removeClinicalDocuments:)
+    @NSManaged public func removeFromClinicalDocuments(_ values: NSSet)
 
 }

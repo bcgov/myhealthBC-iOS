@@ -27,6 +27,8 @@ enum AuthenticationFetchType {
     case LaboratoryOrders
     case Immunizations
     case HealthVisits
+    case HospitalVisits
+    case ClinicalDocuments
     case Comments
     
     // NOTE: The reason this is not in localized file yet is because we don't know what loader will look like, so text will likely change
@@ -39,8 +41,10 @@ enum AuthenticationFetchType {
         case .SpecialAuthorityDrugs: return "Special Authority Drugs"
         case .LaboratoryOrders: return "Laboratory Orders"
         case .Immunizations: return "Immunizations"
-        case .HealthVisits: return "HealthVisits"
+        case .HealthVisits: return "Health Visits"
         case .Comments: return "Comments"
+        case .HospitalVisits: return "Hospital Visits"
+        case .ClinicalDocuments: return "Clinical Documents"
         }
     }
 }
@@ -268,6 +272,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
+            self.getAuthenticatedHospitalVisits(authCredentials: authCredentials)
+            self.getAuthenticatedClinicalDocuments(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
             return
         }
@@ -281,7 +287,9 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             case .LaboratoryOrders: self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             case .Immunizations: self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             case .HealthVisits: self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
-            default: break
+            case .HospitalVisits: getAuthenticatedHospitalVisits(authCredentials: authCredentials)
+            case .ClinicalDocuments: self.getAuthenticatedClinicalDocuments(authCredentials: authCredentials)
+            case .Comments, .PatientDetails: break
             }
         }
     }
@@ -410,6 +418,44 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 self.handleImmunizationsResponse(result: result)
             }
         }
+    }
+    
+    private func getAuthenticatedHospitalVisits(authCredentials: AuthenticationRequestObject) {
+        guard let patientObject = self.patientDetails else { return }
+        incrementLoadCounter()
+        guard let patient = StorageService.shared.fetchOrCreatePatient(
+            phn: patientObject.resourcePayload?.personalhealthnumber,
+            name: patientObject.getFullName,
+            firstName: "",
+            lastName: "",
+            gender: "",
+            birthday: patientObject.getBdayDate,
+            authenticated: true
+        ) else {
+            self.decrementLoadCounter()
+            return
+        }
+        
+        HospitalVisitsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, completion: {_ in})
+    }
+    
+    private func getAuthenticatedClinicalDocuments(authCredentials: AuthenticationRequestObject) {
+        guard let patientObject = self.patientDetails else { return }
+        incrementLoadCounter()
+        guard let patient = StorageService.shared.fetchOrCreatePatient(
+            phn: patientObject.resourcePayload?.personalhealthnumber,
+            name: patientObject.getFullName,
+            firstName: "",
+            lastName: "",
+            gender: "",
+            birthday: patientObject.getBdayDate,
+            authenticated: true
+        ) else {
+            self.decrementLoadCounter()
+            return
+        }
+        
+        ClinicalDocumentService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, completion: {_ in})
     }
     
     private func getAuthenticatedHealthVisits(authCredentials: AuthenticationRequestObject) {
@@ -575,7 +621,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders.count == 0 {
+            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders?.count == 0 {
                 Logger.log(string: resultMessage, type: .Network)
                 completion()
             } else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
@@ -598,7 +644,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders.count == 0 {
+            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders?.count == 0 {
                 self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: testResult.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
             }
             else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
@@ -701,7 +747,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let labOrders):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = labOrders.resultError?.resultMessage, labOrders.resourcePayload?.orders.count == 0 {
+            if let resultMessage = labOrders.resultError?.resultMessage, labOrders.resourcePayload?.orders?.count == 0 {
                 self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: labOrders.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
             }
             else if labOrders.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForLaboratoryOrders, let retryinMS = labOrders.resourcePayload?.retryin {

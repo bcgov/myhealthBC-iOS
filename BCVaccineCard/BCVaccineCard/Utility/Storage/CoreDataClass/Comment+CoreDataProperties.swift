@@ -2,7 +2,7 @@
 //  Comment+CoreDataProperties.swift
 //  
 //
-//  Created by Amir Shayegh on 2022-12-07.
+//  Created by Amir Shayegh on 2023-01-05.
 //
 //
 
@@ -26,11 +26,13 @@ extension Comment {
     @NSManaged public var updatedDateTime: Date?
     @NSManaged public var userProfileID: String?
     @NSManaged public var version: Int64
-    @NSManaged public var prescription: NSSet?
     @NSManaged public var covidLabTestResult: CovidLabTestResult?
     @NSManaged public var healthVIsit: HealthVisit?
     @NSManaged public var laboratoryOrder: LaboratoryOrder?
+    @NSManaged public var prescription: NSSet?
     @NSManaged public var specialAuthorityDrug: SpecialAuthorityDrug?
+    @NSManaged public var hospitalVisit: HospitalVisit?
+    @NSManaged public var clinicalDocument: ClinicalDocument?
 
 }
 

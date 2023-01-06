@@ -1,0 +1,75 @@
+//
+//  ClinicalDocumentService.swift
+//  BCVaccineCard
+//
+//  Created by Amir Shayegh on 2023-01-05.
+//
+
+import Foundation
+
+typealias ClinicalDocumentResponse = AuthenticatedClinicalDocumentResponseObject.ClinicalDocument
+
+struct ClinicalDocumentService {
+    
+    let network: Network
+    let authManager: AuthManager
+    
+    private var endpoints: UrlAccessor {
+        return UrlAccessor()
+    }
+    
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([ClinicalDocument])->Void) {
+        network.addLoader(message: .SyncingRecords)
+        fetch(for: patient) { result in
+            guard let response = result else {
+                return completion([])
+            }
+            store(HopotalVisits: response, for: patient, completion: completion)
+            network.removeLoader()
+        }
+    }
+    
+    // MARK: Store
+    private func store(HopotalVisits response: [ClinicalDocumentResponse],
+                       for patient: Patient,
+                       completion: @escaping ([ClinicalDocument])->Void
+    ) {
+        StorageService.shared.deleteAllRecords(in: patient.clinicalDocumentsArray)
+        let stored = StorageService.shared.storeClinicalDocuments(patient: patient, objects: response, authenticated: true)
+        return completion(stored)
+    }
+    
+}
+
+// MARK: Network requests
+extension ClinicalDocumentService {
+    private func fetch(for patient: Patient, completion: @escaping(_ response: [ClinicalDocumentResponse]?) -> Void) {
+        
+        guard let token = authManager.authToken,
+              let hdid = patient .hdid,
+              NetworkConnection.shared.hasConnection
+        else { return completion(nil)}
+        
+        BaseURLWorker.shared.setBaseURL {
+            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
+            
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+            ]
+            
+            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedClinicalDocumentResponseObject>(url: endpoints.authenticatedClinicalDocuments(hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
+                if let docs = result?.resourcePayload {
+                    // return result
+                    return completion(docs)
+                } else {
+                    // show error
+                    return completion(nil)
+                }
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
+}

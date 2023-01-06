@@ -19,6 +19,7 @@ extension StorageService {
         case Recommendation
         case HealthVisit
         case SpecialAuthorityDrug
+        case HospitalVisit
     }
     
     func getDependentRecords(for patient: Patient) -> [HealthRecord]{

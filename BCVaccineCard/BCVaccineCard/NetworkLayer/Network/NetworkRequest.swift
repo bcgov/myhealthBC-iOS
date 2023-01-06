@@ -11,6 +11,9 @@ struct NetworkRequest<Parameters: Encodable, T: Decodable> {
     
     typealias Completion<T: Decodable> = ((_ Result: T?) -> Void)
     
+    var maxAttempts: Int = 3 // if can be re-tried, max number of attempts allowed
+    var retryIn: Int = 1000 // if can be re-tried, time to wait until next try
+    
     let url: URL
     let type: RequestType
     
@@ -18,9 +21,7 @@ struct NetworkRequest<Parameters: Encodable, T: Decodable> {
     var encoder: EncoderType = .json
     let headers: [String: String]?
     let completion: Completion<T>
-    
 }
-
 
 extension NetworkRequest {
     enum RequestType {
