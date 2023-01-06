@@ -15,7 +15,7 @@ struct AuthenticatedHospitalVisitsResponseObject: BaseGatewayResponse, Codable {
     
     // MARK: - HospitalVisits
     struct ResourcePayload: BaseRetryableGatewayResponse, Codable {
-        var loaded, queued: Bool?
+        var loaded: Bool?
         var retryin: Int?
         let hospitalVisits: [HospitalVisit]?
     }

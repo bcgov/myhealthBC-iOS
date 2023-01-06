@@ -13,10 +13,10 @@ struct AuthenticatedTestResultsResponseModel: BaseGatewayResponse, Codable {
     var resultError: ResultError?
     
     // MARK: ResourcePayload
-    struct ResourcePayload: Codable {
-        let loaded: Bool
-        let retryin: Int
-        let orders: [Order]
+    struct ResourcePayload: BaseRetryableGatewayResponse, Codable {
+        var loaded: Bool?
+        var retryin: Int?
+        let orders: [Order]?
         
         // MARK: - Order
         struct Order: Codable {

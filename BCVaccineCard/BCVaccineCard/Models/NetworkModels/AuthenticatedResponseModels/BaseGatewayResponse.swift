@@ -17,6 +17,5 @@ protocol BaseGatewayResponse: KeyValueCoding {
 
 protocol BaseRetryableGatewayResponse {
     var loaded: Bool? { get set }
-    var queued: Bool? { get set }
     var retryin: Int? { get set }
 }

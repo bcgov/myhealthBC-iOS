@@ -612,7 +612,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders.count == 0 {
+            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders?.count == 0 {
                 Logger.log(string: resultMessage, type: .Network)
                 completion()
             } else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
@@ -635,7 +635,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let testResult):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders.count == 0 {
+            if let resultMessage = testResult.resultError?.resultMessage, testResult.resourcePayload?.orders?.count == 0 {
                 self.fetchStatusList.fetchStatus[.TestResults] = FetchStatus(requestCompleted: true, attemptedCount: testResult.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
             }
             else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
@@ -738,7 +738,7 @@ extension AuthenticatedHealthRecordsAPIWorker {
         switch result {
         case .success(let labOrders):
             // Note: Have to check for error here because error is being sent back on a 200 response
-            if let resultMessage = labOrders.resultError?.resultMessage, labOrders.resourcePayload?.orders.count == 0 {
+            if let resultMessage = labOrders.resultError?.resultMessage, labOrders.resourcePayload?.orders?.count == 0 {
                 self.fetchStatusList.fetchStatus[.LaboratoryOrders] = FetchStatus(requestCompleted: true, attemptedCount: labOrders.totalResultCount ?? 0, successfullCount: 0, error: resultMessage)
             }
             else if labOrders.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForLaboratoryOrders, let retryinMS = labOrders.resourcePayload?.retryin {
