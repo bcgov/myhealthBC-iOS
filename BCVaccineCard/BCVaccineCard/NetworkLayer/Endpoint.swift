@@ -23,6 +23,7 @@ protocol EndpointsAccessor {
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
     func getAuthenticatedMedicationRequest(hdid: String) -> URL
     func getAuthenticatedHealthVisits(hdid: String) -> URL
+    func getAuthenticatedHospitalVisits(hdid: String) -> URL
     func authenticatedComments(hdid: String) -> URL
     func getAuthenticatedLabTestPDF(repordId: String) -> URL
     func validateProfile(hdid: String) -> URL
@@ -130,6 +131,10 @@ extension UrlAccessor: EndpointsAccessor {
     }
     
     func getAuthenticatedHealthVisits(hdid: String) -> URL {
+        return self.encounterServiceBaseURL.appendingPathComponent("Encounter").appendingPathComponent(hdid)
+    }
+    
+    func getAuthenticatedHospitalVisits(hdid: String) -> URL {
         return self.encounterServiceBaseURL.appendingPathComponent("Encounter").appendingPathComponent(hdid)
     }
     

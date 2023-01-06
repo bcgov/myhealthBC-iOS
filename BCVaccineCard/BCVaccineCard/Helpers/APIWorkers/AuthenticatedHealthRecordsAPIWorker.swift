@@ -27,6 +27,7 @@ enum AuthenticationFetchType {
     case LaboratoryOrders
     case Immunizations
     case HealthVisits
+    case HospitalVisits
     case Comments
     
     // NOTE: The reason this is not in localized file yet is because we don't know what loader will look like, so text will likely change
@@ -39,8 +40,9 @@ enum AuthenticationFetchType {
         case .SpecialAuthorityDrugs: return "Special Authority Drugs"
         case .LaboratoryOrders: return "Laboratory Orders"
         case .Immunizations: return "Immunizations"
-        case .HealthVisits: return "HealthVisits"
+        case .HealthVisits: return "Health Visits"
         case .Comments: return "Comments"
+        case .HospitalVisits: return "Hospital Visits"
         }
     }
 }
@@ -267,6 +269,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
+            self.getAuthenticatedHospitalVisits(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
             return
         }
@@ -280,6 +283,7 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             case .LaboratoryOrders: self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             case .Immunizations: self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             case .HealthVisits: self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
+            case .HospitalVisits: getAuthenticatedHospitalVisits(authCredentials: authCredentials)
             default: break
             }
         }
@@ -409,6 +413,25 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 self.handleImmunizationsResponse(result: result)
             }
         }
+    }
+    
+    private func getAuthenticatedHospitalVisits(authCredentials: AuthenticationRequestObject) {
+        guard let patientObject = self.patientDetails else { return }
+        incrementLoadCounter()
+        guard let patient = StorageService.shared.fetchOrCreatePatient(
+            phn: patientObject.resourcePayload?.personalhealthnumber,
+            name: patientObject.getFullName,
+            firstName: "",
+            lastName: "",
+            gender: "",
+            birthday: patientObject.getBdayDate,
+            authenticated: true
+        ) else {
+            self.decrementLoadCounter()
+            return
+        }
+        
+        HospitalVisitsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHospitalVisits(for: patient, completion: {_ in})
     }
     
     private func getAuthenticatedHealthVisits(authCredentials: AuthenticationRequestObject) {

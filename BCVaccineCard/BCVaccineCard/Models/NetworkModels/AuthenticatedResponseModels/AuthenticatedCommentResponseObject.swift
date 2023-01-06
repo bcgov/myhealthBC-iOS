@@ -8,10 +8,10 @@
 import Foundation
 
 // MARK: - AuthenticatedCommentResponseObject
-struct AuthenticatedCommentResponseObject: Codable {
+struct AuthenticatedCommentResponseObject: BaseGatewayResponse, Codable {
     let resourcePayload: [String: [Comment]]
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
-    let resultError: ResultError?
+    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var resultError: ResultError?
     
     // MARK: - ResourcePayload
     // TODO: Once we have comments available, check what the name of the keys will be, and what each one means

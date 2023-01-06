@@ -22,17 +22,13 @@ struct HealthRecordsService {
         StorageService.shared.deleteDependentVaccineCards(forPatient: patient)
         dependents.forEach { dependent in
             let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
-            vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in
-                print(vaccineCard)
-            }
+            vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in }
         }
     }
     
     public func fetchAndStoreVaccineCardForDependent(for dependent: Dependent) {
         let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
-        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in
-            print(vaccineCard)
-        }
+        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in }
     }
     
     public func fetchAndStoreHealthRecords(for dependent: Dependent, completion: @escaping ([HealthRecord])->Void) {

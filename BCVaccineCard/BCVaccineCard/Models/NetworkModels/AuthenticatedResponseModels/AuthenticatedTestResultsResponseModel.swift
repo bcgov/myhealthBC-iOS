@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct AuthenticatedTestResultsResponseModel: Codable {
+struct AuthenticatedTestResultsResponseModel: BaseGatewayResponse, Codable {
     let resourcePayload: ResourcePayload?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
-    let resultError: ResultError?
+    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var resultError: ResultError?
     
     // MARK: ResourcePayload
     struct ResourcePayload: Codable {

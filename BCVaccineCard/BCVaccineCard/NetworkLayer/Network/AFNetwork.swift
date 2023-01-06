@@ -44,14 +44,25 @@ struct AFNetwork: Network {
         decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
         let AFRequest = requestData.AFRequest
         AFRequest.responseDecodable(of: T.self, decoder: decoder, completionHandler: {response in
-            if let res = response.value {
-                return requestData.completion(res)
-            } else {
-                Logger.log(string: response.error.debugDescription, type: .Network)
-                return requestData.completion(nil)
-            }
-            
+            return returnOrRetryIfneeded(with: requestData, response: response)
         })
-        
+    }
+    
+    func returnOrRetryIfneeded<Parameters: Encodable, T: Decodable>(with requestData: NetworkRequest<Parameters, T>, response: DataResponse<T, AFError>)  {
+        guard let value = response.value else {
+            return requestData.completion(nil)
+        }
+        if value is BaseGatewayResponse, let gateWayResponse = value as? BaseGatewayResponse {
+            if gateWayResponse.resultError != nil { // TODO: Retry criteria...
+                // Retry needed - retry
+                return request(with: requestData)
+            } else {
+                // Retry not needed - return (if no network error)
+                return requestData.completion(value)
+            }
+        } else {
+            // Not a BaseGatewayResponse - return response
+            return requestData.completion(value)
+        }
     }
 }

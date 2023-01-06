@@ -8,10 +8,10 @@
 import Foundation
 
 // MARK: -
-struct AuthenticatedImmunizationsResponseObject: Codable {
+struct AuthenticatedImmunizationsResponseObject: BaseGatewayResponse, Codable {
     let resourcePayload: ResourcePayload?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
-    let resultError: ResultError?
+    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var resultError: ResultError?
     
     // MARK: - ResourcePayload
     struct ResourcePayload: Codable {
