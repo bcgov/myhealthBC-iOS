@@ -13,7 +13,6 @@ struct NetworkRequest<Parameters: Encodable, T: Decodable> {
     
     var maxAttempts: Int = 3 // if can be re-tried, max number of attempts allowed
     var retryIn: Int = 1000 // if can be re-tried, time to wait until next try
-    var attempts: Int = 0
     
     let url: URL
     let type: RequestType
@@ -22,15 +21,6 @@ struct NetworkRequest<Parameters: Encodable, T: Decodable> {
     var encoder: EncoderType = .json
     let headers: [String: String]?
     let completion: Completion<T>
-    
-    
-    mutating func incremenetAttempts() {
-        attempts = attempts + 1
-    }
-    
-    var shouldRetry: Bool {
-        return attempts < maxAttempts
-    }
 }
 
 extension NetworkRequest {
