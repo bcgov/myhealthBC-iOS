@@ -52,6 +52,7 @@ class AFNetwork: Network {
     
     private func returnOrRetryIfneeded<Parameters: Encodable, T: Decodable>(with requestData: NetworkRequest<Parameters, T>, response: DataResponse<T, AFError>)  {
         guard let value = response.value else {
+            // Didnt get a response.. return nil
             return requestData.completion(nil)
         }
         
@@ -61,17 +62,17 @@ class AFNetwork: Network {
         }
         
         guard let payload = swift_value(of: &gateWayResponse, key: "resourcePayload"),
-           payload is BaseRetryableGatewayResponse,
-           let payLoadStruct = payload as? BaseRetryableGatewayResponse else
+              payload is BaseRetryableGatewayResponse,
+              let payLoadStruct = payload as? BaseRetryableGatewayResponse else
         {
-            // Retry not needed - return
+            // is a BaseRetryableGatewayResponse but retry not needed - return response
             return requestData.completion(value)
         }
         
-        // Request is retry-able
+        // Request is retry-able:
         
         if shouldRetry(request: requestData, responsePayload: payLoadStruct) {
-            // retry needed
+            // retry needed - increment attempt and request again
             if let attempts = requestAttempts[requestData.url] {
                 requestAttempts[requestData.url] = attempts + 1
             } else {
@@ -81,7 +82,8 @@ class AFNetwork: Network {
                 return self.request(with: requestData)
             }
         } else {
-            // retry not needed
+            // retry not needed - return response
+            requestAttempts[requestData.url] = 0
             return requestData.completion(value)
         }
     }
