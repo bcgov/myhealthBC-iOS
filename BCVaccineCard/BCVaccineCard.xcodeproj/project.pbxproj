@@ -542,6 +542,9 @@
 		3EDC0D1E296C93D200603FED /* HospitalVisitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */; };
 		3EDC0D1F296C93D200603FED /* HospitalVisitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */; };
 		3EDC0D20296C93D200603FED /* HospitalVisitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */; };
+		3EDC0D23296CBEB700603FED /* ClinicalDocumentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D22296CBEB700603FED /* ClinicalDocumentDetailView.swift */; };
+		3EDC0D24296CBEB700603FED /* ClinicalDocumentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D22296CBEB700603FED /* ClinicalDocumentDetailView.swift */; };
+		3EDC0D25296CBEB700603FED /* ClinicalDocumentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D22296CBEB700603FED /* ClinicalDocumentDetailView.swift */; };
 		3EDEBB5D29356A6700C8386C /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEBB5B29356A6700C8386C /* MobileConfigStorage.swift */; };
 		3EDEBB5E29356A6700C8386C /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEBB5B29356A6700C8386C /* MobileConfigStorage.swift */; };
 		3EDEBB5F29356A6700C8386C /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEBB5B29356A6700C8386C /* MobileConfigStorage.swift */; };
@@ -1455,6 +1458,7 @@
 		3EDC0D142968930200603FED /* KVCMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVCMetadata.swift; sourceTree = "<group>"; };
 		3EDC0D182968932100603FED /* KVCReflectionMirror.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVCReflectionMirror.swift; sourceTree = "<group>"; };
 		3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalVisitDetailView.swift; sourceTree = "<group>"; };
+		3EDC0D22296CBEB700603FED /* ClinicalDocumentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClinicalDocumentDetailView.swift; sourceTree = "<group>"; };
 		3EDEBB5B29356A6700C8386C /* MobileConfigStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
 		3EDEBB5C29356A6700C8386C /* MobileConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
 		3EF0DF2A2953D16E00408A1E /* MobileConfigurationResponseObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigurationResponseObject.swift; sourceTree = "<group>"; };
@@ -1734,6 +1738,7 @@
 				29E19FCE286C01E900C235EF /* CovidTestResultRecordDetailView */,
 				29E19FCD286C01D500C235EF /* LabOrderRecordDetailView */,
 				29E19FCC286C01C500C235EF /* MedicationRecordDetailView */,
+				3EDC0D21296CBE9900603FED /* Clinical Document */,
 				3EDC0D1C296C93B500603FED /* Hospital Visit */,
 				291D43E12762E203005F5B94 /* HealthRecordCollectionViewCell.swift */,
 				29E19FE1286C044F00C235EF /* BaseHealthRecordDetailView.swift */,
@@ -2174,6 +2179,7 @@
 		29E19FF5286C713800C235EF /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				3EDC0D26296CBF2300603FED /* New Group */,
 				29E19FFA286C716700C235EF /* Detail Field */,
 			);
 			path = Common;
@@ -2389,6 +2395,21 @@
 				3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */,
 			);
 			path = "Hospital Visit";
+			sourceTree = "<group>";
+		};
+		3EDC0D21296CBE9900603FED /* Clinical Document */ = {
+			isa = PBXGroup;
+			children = (
+				3EDC0D22296CBEB700603FED /* ClinicalDocumentDetailView.swift */,
+			);
+			path = "Clinical Document";
+			sourceTree = "<group>";
+		};
+		3EDC0D26296CBF2300603FED /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		3EE55BC7291AD21700DF13CC /* Recovered References */ = {
@@ -4145,6 +4166,7 @@
 				3EDC0CEC2967DCA000603FED /* Comment+CoreDataClass.swift in Sources */,
 				3E6830FE2940D14100100402 /* PostComment.swift in Sources */,
 				2922C12F287E1018000FF4F7 /* StorageService+SpecialAuthorityMedication.swift in Sources */,
+				3EDC0D24296CBEB700603FED /* ClinicalDocumentDetailView.swift in Sources */,
 				3E91C7B228B51B0B005AA34F /* Immunization+CoreDataProperties.swift in Sources */,
 				2941D7042847D76000EE98DE /* NetworkConnection.swift in Sources */,
 				79218AD2275576640063004E /* TextListModel.swift in Sources */,
@@ -4480,6 +4502,7 @@
 				3EDC0CED2967DCA100603FED /* Comment+CoreDataClass.swift in Sources */,
 				3E6830FF2940D14100100402 /* PostComment.swift in Sources */,
 				2922C130287E1018000FF4F7 /* StorageService+SpecialAuthorityMedication.swift in Sources */,
+				3EDC0D25296CBEB700603FED /* ClinicalDocumentDetailView.swift in Sources */,
 				3E91C7B328B51B0B005AA34F /* Immunization+CoreDataProperties.swift in Sources */,
 				29788531279624E600FF912D /* SettingsAuthenticateTableViewCell.swift in Sources */,
 				79218AB0275196040063004E /* HealthRecordsUserView.swift in Sources */,
@@ -4792,6 +4815,7 @@
 				3EDC0CEB2967DCA000603FED /* Comment+CoreDataClass.swift in Sources */,
 				798005552852C66E006E390F /* OnboardingCollectionViewCell.swift in Sources */,
 				3E6830FD2940D14100100402 /* PostComment.swift in Sources */,
+				3EDC0D23296CBEB700603FED /* ClinicalDocumentDetailView.swift in Sources */,
 				3E91C7B128B51B0B005AA34F /* Immunization+CoreDataProperties.swift in Sources */,
 				798005572852C66E006E390F /* NetworkConnection.swift in Sources */,
 				798005592852C66E006E390F /* TextListModel.swift in Sources */,

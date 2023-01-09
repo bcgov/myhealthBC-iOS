@@ -72,9 +72,14 @@ extension VaccineCardService {
                     // return result
                     return completion(result)
                 } else {
-                    // show error
                     return completion(nil)
                 }
+            } onError: { error in
+                switch error {
+                case .FailedAfterRetry:
+                    network.showToast(message: .fetchRecordError, style: .Warn)
+                }
+                
             }
             
             network.request(with: requestModel)

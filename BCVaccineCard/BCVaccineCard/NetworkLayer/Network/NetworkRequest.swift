@@ -10,8 +10,9 @@ import Foundation
 struct NetworkRequest<Parameters: Encodable, T: Decodable> {
     
     typealias Completion<T: Decodable> = ((_ Result: T?) -> Void)
+    typealias Error = ((_ type: ErrorType) -> Void)
     
-    var maxAttempts: Int = 3 // if can be re-tried, max number of attempts allowed
+    var maxAttempts: Int = 5 // if can be re-tried, max number of attempts allowed
     var retryIn: Int = 1000 // if can be re-tried, time to wait until next try
     
     let url: URL
@@ -21,6 +22,8 @@ struct NetworkRequest<Parameters: Encodable, T: Decodable> {
     var encoder: EncoderType = .json
     let headers: [String: String]?
     let completion: Completion<T>
+    
+    var onError: Error? = nil // Optional completion handler for returning errors
 }
 
 extension NetworkRequest {
@@ -29,6 +32,12 @@ extension NetworkRequest {
         case Post
         case Put
         case Delete
+    }
+}
+
+extension NetworkRequest {
+    enum ErrorType {
+        case FailedAfterRetry
     }
 }
 

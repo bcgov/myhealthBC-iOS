@@ -289,7 +289,7 @@ extension AppDelegate {
         dataLoadCount += 1
         dataLoadHideTimer?.invalidate()
         showLoader(message: message)
-        Logger.log(string: "\n\n\n\n Loader + + + + + + + \(dataLoadCount)", type: .general)
+        Logger.log(string: "\n\n\n\n Loader + + + + + + + \n\(dataLoadCount)", type: .general)
     }
     
     func decrementLoader() {
@@ -302,7 +302,7 @@ extension AppDelegate {
         if dataLoadCount < 0 {
             dataLoadCount = 0
         }
-        Logger.log(string: "\n\n\n\n Loader - - - - - - - \n \(dataLoadCount)", type: .general)
+        Logger.log(string: "\n\n\n\n Loader - - - - - - - \n\(dataLoadCount)", type: .general)
     }
     
     /// Do not call this function manually. use dataLoadCount

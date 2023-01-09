@@ -72,9 +72,15 @@ extension ImmnunizationsService {
                     // return result
                     return completion(result)
                 } else {
-                    // show error
                     return completion(nil)
                 }
+            } onError: { error in
+                switch error {
+                case .FailedAfterRetry:
+                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    break
+                }
+                
             }
             
             network.request(with: requestModel)

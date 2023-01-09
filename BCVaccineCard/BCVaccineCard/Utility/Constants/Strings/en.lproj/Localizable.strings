@@ -289,3 +289,4 @@
 "Unselected" = "Unselected";
 "SelectTo" = "Select To";
 "ActionAvailable" = "Action Available: ";
+"FetchRecordError" = "Not all records were fetched successfully";
