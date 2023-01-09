@@ -422,7 +422,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
     private func getAuthenticatedHospitalVisits(authCredentials: AuthenticationRequestObject) {
         guard let patientObject = self.patientDetails else { return }
-        incrementLoadCounter()
         guard let patient = StorageService.shared.fetchOrCreatePatient(
             phn: patientObject.resourcePayload?.personalhealthnumber,
             name: patientObject.getFullName,
@@ -432,7 +431,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             birthday: patientObject.getBdayDate,
             authenticated: true
         ) else {
-            self.decrementLoadCounter()
             return
         }
         
@@ -441,7 +439,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
     private func getAuthenticatedClinicalDocuments(authCredentials: AuthenticationRequestObject) {
         guard let patientObject = self.patientDetails else { return }
-        incrementLoadCounter()
         guard let patient = StorageService.shared.fetchOrCreatePatient(
             phn: patientObject.resourcePayload?.personalhealthnumber,
             name: patientObject.getFullName,
@@ -451,7 +448,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             birthday: patientObject.getBdayDate,
             authenticated: true
         ) else {
-            self.decrementLoadCounter()
             return
         }
         

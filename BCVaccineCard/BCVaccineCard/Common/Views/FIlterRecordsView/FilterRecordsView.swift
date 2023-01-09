@@ -15,6 +15,8 @@ struct RecordsFilter {
         case Immunizations = "Immunizations"
         case SpecialAuthorityDrugs = "Special Authority"
         case HeathVisits = "Health Visits"
+        case HospitalVisits = "Hospital Visits"
+        case ClinicalDocuments = "Clinical Docs"
     }
     
     var fromDate: Date?

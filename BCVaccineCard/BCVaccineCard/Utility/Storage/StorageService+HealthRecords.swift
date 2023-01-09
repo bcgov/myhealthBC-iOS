@@ -22,14 +22,17 @@ extension StorageService {
         case HospitalVisit
     }
     
-    func getDependentRecords(for patient: Patient) -> [HealthRecord]{
+    func getRecords(for patient: Patient) -> [HealthRecord]{
         let tests = patient.testResultArray.map({HealthRecord(type: .CovidTest($0))})
         let medications = patient.prescriptionArray.map({HealthRecord(type: .Medication($0))})
         let labOrders = patient.labOrdersArray.map({HealthRecord(type: .LaboratoryOrder($0))})
         let immunizations = patient.immunizationsArray.map({HealthRecord(type: .Immunization($0))})
         let healthVisits = patient.healthVisitsArray.map({HealthRecord(type: .HealthVisit($0))})
         let specialAuthority = patient.specialAuthorityDrugsArray.map({HealthRecord(type: .SpecialAuthorityDrug($0))})
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority
+        let hospitalVisits = patient.hospitalVisitsArray.map({HealthRecord(type: .HospitalVisit($0))})
+        let clinicalDocs = patient.clinicalDocumentsArray.map({HealthRecord(type: .ClinicalDocument($0))})
+        
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs
     }
     
     func getHeathRecords() -> [HealthRecord] {
@@ -41,8 +44,10 @@ extension StorageService {
         let immunizations = fetchImmunization().map({HealthRecord(type: .Immunization($0))})
         let healthVisits = fetchHealthVisits().map({HealthRecord(type: .HealthVisit($0))})
         let specialAuthority = fetchSpecialAuthorityMedications().map({HealthRecord(type: .SpecialAuthorityDrug($0))})
+        let hospitalVisits = fetchHospitalVisits().map({HealthRecord(type: .HospitalVisit($0))})
+        let clinicalDocs = fetchClinicalDocuments().map({HealthRecord(type: .ClinicalDocument($0))})
         
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs
     }
     
     func getHealthRecords(forDependent dependent: Patient) -> [HealthRecord] {
@@ -99,6 +104,12 @@ extension StorageService {
         case .SpecialAuthorityDrug(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .SpecialAuthorityMedication, object: object))
+        case .HospitalVisit(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .HealthVisit, object: object))
+        case .ClinicalDocument(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .ClinicalDocument, object: object))
         }
     }
     

@@ -91,10 +91,21 @@ class UserRecordListView: UIView {
             default:
                 statusToInclude = record.mainRecord?.status ?? ""
             }
-       
+        case .hospitalVisit:
+            statusToInclude = record.mainRecord?.listStatus
+        case .clinicalDocument:
+            statusToInclude = record.mainRecord?.listStatus
         }
-        let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
-        recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"
+        
+        switch record.type {
+        case .hospitalVisit, .clinicalDocument:
+            // records that dont show date
+            recordTypeSubtitleLabel.text = statusToInclude
+        case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization:
+            // records that show date
+            let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
+            recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"
+        }
         setupAccessibility()
         layoutIfNeeded()
     }

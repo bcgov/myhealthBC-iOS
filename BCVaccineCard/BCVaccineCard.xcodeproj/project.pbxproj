@@ -539,6 +539,9 @@
 		3EDC0D192968932100603FED /* KVCReflectionMirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D182968932100603FED /* KVCReflectionMirror.swift */; };
 		3EDC0D1A2968932100603FED /* KVCReflectionMirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D182968932100603FED /* KVCReflectionMirror.swift */; };
 		3EDC0D1B2968932100603FED /* KVCReflectionMirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D182968932100603FED /* KVCReflectionMirror.swift */; };
+		3EDC0D1E296C93D200603FED /* HospitalVisitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */; };
+		3EDC0D1F296C93D200603FED /* HospitalVisitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */; };
+		3EDC0D20296C93D200603FED /* HospitalVisitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */; };
 		3EDEBB5D29356A6700C8386C /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEBB5B29356A6700C8386C /* MobileConfigStorage.swift */; };
 		3EDEBB5E29356A6700C8386C /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEBB5B29356A6700C8386C /* MobileConfigStorage.swift */; };
 		3EDEBB5F29356A6700C8386C /* MobileConfigStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDEBB5B29356A6700C8386C /* MobileConfigStorage.swift */; };
@@ -1451,6 +1454,7 @@
 		3EDC0D10296892EA00603FED /* KVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVC.swift; sourceTree = "<group>"; };
 		3EDC0D142968930200603FED /* KVCMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVCMetadata.swift; sourceTree = "<group>"; };
 		3EDC0D182968932100603FED /* KVCReflectionMirror.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KVCReflectionMirror.swift; sourceTree = "<group>"; };
+		3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalVisitDetailView.swift; sourceTree = "<group>"; };
 		3EDEBB5B29356A6700C8386C /* MobileConfigStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigStorage.swift; sourceTree = "<group>"; };
 		3EDEBB5C29356A6700C8386C /* MobileConfigService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigService.swift; sourceTree = "<group>"; };
 		3EF0DF2A2953D16E00408A1E /* MobileConfigurationResponseObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileConfigurationResponseObject.swift; sourceTree = "<group>"; };
@@ -1730,6 +1734,7 @@
 				29E19FCE286C01E900C235EF /* CovidTestResultRecordDetailView */,
 				29E19FCD286C01D500C235EF /* LabOrderRecordDetailView */,
 				29E19FCC286C01C500C235EF /* MedicationRecordDetailView */,
+				3EDC0D1C296C93B500603FED /* Hospital Visit */,
 				291D43E12762E203005F5B94 /* HealthRecordCollectionViewCell.swift */,
 				29E19FE1286C044F00C235EF /* BaseHealthRecordDetailView.swift */,
 			);
@@ -2376,6 +2381,14 @@
 				3EDC0D182968932100603FED /* KVCReflectionMirror.swift */,
 			);
 			path = KVC;
+			sourceTree = "<group>";
+		};
+		3EDC0D1C296C93B500603FED /* Hospital Visit */ = {
+			isa = PBXGroup;
+			children = (
+				3EDC0D1D296C93D200603FED /* HospitalVisitDetailView.swift */,
+			);
+			path = "Hospital Visit";
 			sourceTree = "<group>";
 		};
 		3EE55BC7291AD21700DF13CC /* Recovered References */ = {
@@ -4138,6 +4151,7 @@
 				2912314326F9433600CF5F3B /* UIConstants.swift in Sources */,
 				79218AAF275196040063004E /* HealthRecordsUserView.swift in Sources */,
 				795AA7732715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
+				3EDC0D1F296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
 				79B1A0FD28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				3E6831242940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift in Sources */,
@@ -4472,6 +4486,7 @@
 				795AA74D2714018600E59FF1 /* APIClient.swift in Sources */,
 				2941D7052847D76000EE98DE /* NetworkConnection.swift in Sources */,
 				79A15B0A2808B27600F8330D /* CommentViewTableViewCell.swift in Sources */,
+				3EDC0D20296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
 				79B1A0FE28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				795AA7492713FFF800E59FF1 /* QueueItEngine.swift in Sources */,
 				3E6831252940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift in Sources */,
@@ -4783,6 +4798,7 @@
 				7980055A2852C66E006E390F /* UIConstants.swift in Sources */,
 				7980055B2852C66E006E390F /* HealthRecordsUserView.swift in Sources */,
 				7980055C2852C66E006E390F /* NewsFeedTableViewCell.swift in Sources */,
+				3EDC0D1E296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
 				79B1A0FC28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				7980055D2852C66E006E390F /* HealthPassViewController.swift in Sources */,
 				3E6831232940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift in Sources */,

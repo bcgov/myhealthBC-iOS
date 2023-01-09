@@ -17,6 +17,8 @@ struct HealthRecordsDetailDataSource {
             case immunization(model: Immunization)
             case healthVisit(model: HealthVisit)
             case specialAuthorityDrug(model: SpecialAuthorityDrug)
+            case hospitalVisit(model: HospitalVisit)
+            case clinicalDocument(model: ClinicalDocument)
         }
         let id: String
         let name: String
@@ -41,13 +43,17 @@ struct HealthRecordsDetailDataSource {
                 return healthVisit.commentsArray
             case .specialAuthorityDrug(let specialAuthorityDrug):
                 return specialAuthorityDrug.commentsArray
+            case .hospitalVisit(model: let model):
+                return model.commentsArray
+            case .clinicalDocument(model: let model):
+                return model.commentsArray
             }
         }
         
         var includesSeparatorUI: Bool {
             switch self.type {
             case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder, .immunization: return true
-            case .medication, .specialAuthorityDrug, .healthVisit: return false
+            case .medication, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument: return false
             }
         }
     }
@@ -60,6 +66,8 @@ struct HealthRecordsDetailDataSource {
         case immunization(model: Immunization)
         case healthVisit(model: HealthVisit)
         case specialAuthorityDrug(model: SpecialAuthorityDrug)
+        case hospitalVisit(model: HospitalVisit)
+        case clinicalDocument(model:ClinicalDocument)
     }
     
     let id: String?
@@ -95,6 +103,10 @@ struct HealthRecordsDetailDataSource {
             return records.first
         case .specialAuthorityDrug:
             return records.first
+        case .hospitalVisit(model: let model):
+            return records.first
+        case .clinicalDocument(model: let model):
+            return records.first
         }
     }
     
@@ -114,6 +126,10 @@ struct HealthRecordsDetailDataSource {
             return model.authenticated
         case .specialAuthorityDrug(model: let model):
             return model.authenticated
+        case .hospitalVisit(model: let model):
+            return model.authenticated
+        case .clinicalDocument(model: let model):
+            return model.authenticated
         }
     }
     
@@ -125,7 +141,9 @@ struct HealthRecordsDetailDataSource {
                 .laboratoryOrder,
                 .healthVisit,
                 .specialAuthorityDrug,
-                .immunization:
+                .immunization,
+                .hospitalVisit,
+                .clinicalDocument:
             return false
         case .medication:
             return true
@@ -199,6 +217,26 @@ struct HealthRecordsDetailDataSource {
             image = UIImage(named: "blue-bg-special-authority-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+        case .hospitalVisit(model: let model):
+            // TODO: Confirm data
+            id = model.encounterID
+            title = model.visitType ?? "-"
+            detailNavTitle = model.facility ?? "-"
+            name = model.patient?.name ?? "-"
+            image = UIImage(named: "blue-bg-hospital-visits-icon")
+            
+            deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
+            deleteAlertMessage = "Should not see this" // Showing for testing purposes
+        case .clinicalDocument(model: let model):
+            // TODO: Confirm data
+            id = model.id
+            title = model.type ?? "-"
+            detailNavTitle = model.facilityName ?? "-"
+            name = model.patient?.name ?? "-"
+            image = UIImage(named: "blue-bg-clinical-documents-icon")
+            
+            deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
+            deleteAlertMessage = "Should not see this" // Showing for testing purposes
         }
     }
 }
@@ -231,6 +269,12 @@ extension HealthRecordsDetailDataSource {
             return result
         case .specialAuthorityDrug(model: let model):
             result.append(genRecord(specialAuthorityDrug: model))
+            return result
+        case .hospitalVisit(model: let model):
+            result.append(genRecord(hospitalVisit: model))
+            return result
+        case .clinicalDocument(model: let model):
+            result.append(genRecord(clinicalDocument: model))
             return result
         }
     }
@@ -307,6 +351,22 @@ extension HealthRecordsDetailDataSource {
         let dateString = specialAuthorityDrug.requestedDate?.monthDayYearString
         
         return Record(id: specialAuthorityDrug.referenceNumber ?? UUID().uuidString, name: specialAuthorityDrug.patient?.name ?? "" , type: .specialAuthorityDrug(model: specialAuthorityDrug), status: specialAuthorityDrug.requestStatus, date: dateString, listStatus: specialAuthorityDrug.requestStatus ?? "")
+        
+    }
+    
+    // MARK: Hospital Visit
+    private static func genRecord(hospitalVisit: HospitalVisit) -> Record {
+        let dateString = hospitalVisit.admitDateTime?.monthDayYearString
+        // TODO: confirm data
+        return Record(id: hospitalVisit.encounterID ?? UUID().uuidString, name: hospitalVisit.visitType ?? "", type: .hospitalVisit(model: hospitalVisit), status: hospitalVisit.facility, date: dateString, listStatus: hospitalVisit.facility ?? "")
+        
+    }
+    
+    // MARK: Clinical Documment
+    private static func genRecord(clinicalDocument: ClinicalDocument) -> Record {
+        let dateString = clinicalDocument.serviceDate?.monthAndDayString
+        // TODO: confirm data
+        return Record(id: clinicalDocument.id ?? UUID().uuidString, name: clinicalDocument.type ?? "", type: .clinicalDocument(model: clinicalDocument), status: clinicalDocument.facilityName, date: dateString, listStatus: clinicalDocument.facilityName ?? "")
         
     }
 }

@@ -42,6 +42,11 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
             recordView = HealthVisitRecordDetailView(frame: .zero)
         case .specialAuthorityDrug:
             recordView = SpecialAuthorityDrugDetailView(frame: .zero)
+        case .hospitalVisit:
+            recordView = HospitalVisitRecordDetailView(frame: .zero)
+        case .clinicalDocument:
+            // TODO
+            recordView = HospitalVisitRecordDetailView(frame: .zero)
         }
         self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(recordView)

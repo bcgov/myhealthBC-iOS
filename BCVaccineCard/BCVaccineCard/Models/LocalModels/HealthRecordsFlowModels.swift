@@ -24,6 +24,8 @@ struct HealthRecord {
         case Immunization(Immunization)
         case HealthVisit(HealthVisit)
         case SpecialAuthorityDrug(SpecialAuthorityDrug)
+        case HospitalVisit(HospitalVisit)
+        case ClinicalDocument(ClinicalDocument)
     }
     
     public let type: Record
@@ -68,6 +70,14 @@ struct HealthRecord {
             patient = object.patient!
             patientName = patient.name ?? ""
             birthDate = patient.birthday
+        case .HospitalVisit(let object):
+            patient = object.patient!
+            patientName = patient.name ?? ""
+            birthDate = patient.birthday
+        case .ClinicalDocument(let object):
+            patient = object.patient!
+            patientName = patient.name ?? ""
+            birthDate = patient.birthday
         }
     }
 }
@@ -89,6 +99,10 @@ extension HealthRecord {
             return object.id ?? ""
         case .SpecialAuthorityDrug(let object):
             return object.referenceNumber ?? ""
+        case .HospitalVisit(let object):
+            return object.encounterID ?? ""
+        case .ClinicalDocument(let object):
+            return object.id ?? ""
         }
     }
     
@@ -127,6 +141,10 @@ extension HealthRecord {
             return HealthRecordsDetailDataSource(type: .healthVisit(model: object))
         case .SpecialAuthorityDrug(let object):
             return HealthRecordsDetailDataSource(type: .specialAuthorityDrug(model: object))
+        case .HospitalVisit(let object):
+            return HealthRecordsDetailDataSource(type: .hospitalVisit(model: object))
+        case .ClinicalDocument(let object):
+            return HealthRecordsDetailDataSource(type: .clinicalDocument(model: object))
         }
     }
     
@@ -145,6 +163,10 @@ extension HealthRecord {
         case .HealthVisit(let object):
             return object.authenticated
         case .SpecialAuthorityDrug(let object):
+            return object.authenticated
+        case .HospitalVisit(let object):
+            return object.authenticated
+        case .ClinicalDocument(let object):
             return object.authenticated
         }
     }
@@ -193,6 +215,10 @@ extension Array where Element == HealthRecord {
                 firstDate = model.encounterDate
             case .specialAuthorityDrug(model: let model):
                 firstDate = model.requestedDate
+            case .hospitalVisit(model: let model):
+                firstDate = model.admitDateTime
+            case .clinicalDocument(model: let model):
+                firstDate = model.serviceDate
             }
             switch second.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
@@ -209,6 +235,10 @@ extension Array where Element == HealthRecord {
                 secondDate = model.encounterDate
             case .specialAuthorityDrug(model: let model):
                 secondDate = model.requestedDate
+            case .hospitalVisit(model: let model):
+                secondDate = model.admitDateTime
+            case .clinicalDocument(model: let model):
+                secondDate = model.serviceDate
             }
             return firstDate ?? Date() > secondDate ?? Date()
         })
@@ -250,6 +280,16 @@ extension Array where Element == HealthRecord {
             case .SpecialAuthorityDrug(let object):
                 if recordType == .SpecialAuthority {
                     return object.referenceNumber == id
+                }
+                return false
+            case .HospitalVisit(let object):
+                if recordType == .hospitalVisit {
+                    return object.encounterID == id
+                }
+                return false
+            case .ClinicalDocument(let object):
+                if recordType == .clinicalDocument {
+                    return object.id == id
                 }
                 return false
             }

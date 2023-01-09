@@ -134,6 +134,10 @@ extension StorageService: StorageCommentManager {
                 healthVisit.addToComments(comment)
             case .SpecialAuthorityDrug(let saDrug):
                 saDrug.addToComments(comment)
+            case .HospitalVisit(let hospitalVisit):
+                hospitalVisit.addToComments(comment)
+            case .ClinicalDocument(let clinicalDoc):
+                clinicalDoc.addToComments(comment)
             }
         }
         do {
