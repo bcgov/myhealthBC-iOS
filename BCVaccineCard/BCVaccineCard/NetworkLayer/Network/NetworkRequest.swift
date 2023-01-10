@@ -38,6 +38,8 @@ extension NetworkRequest {
 extension NetworkRequest {
     enum ErrorType {
         case FailedAfterRetry
+//        case NoData
+//        case UnexpectedResponse
     }
 }
 

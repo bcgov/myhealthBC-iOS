@@ -13,6 +13,7 @@ protocol ChipsViewDelegate {
 }
 
 class ChipsView: UIView {
+    static let spacing: CGFloat = 5
     var delegate: ChipsViewDelegate? = nil
     private var dataSource: [String] = []
     private var selectedItems: [String] = []
@@ -68,13 +69,13 @@ extension ChipsView: UICollectionViewDelegate, UICollectionViewDataSource, UICol
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 9
+        return ChipsView.spacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout
                         collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 9
+        return ChipsView.spacing
     }
     
     
