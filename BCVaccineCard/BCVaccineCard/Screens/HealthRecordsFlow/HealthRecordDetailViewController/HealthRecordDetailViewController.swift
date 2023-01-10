@@ -256,9 +256,37 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
             showPDFView()
         }
         if type == .downloadFullReport {
-            // TODO: Clinical Records Show full report / download full report
-            print("TODO: Clinical Records Show full report / download full report")
+            showClinicalDocumentPDF()
         }
+    }
+    
+    func showClinicalDocumentPDF() {
+        // Cached
+        if let pdf = self.pdfData {
+            self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+            return
+        }
+        // No internet
+        if !NetworkConnection.shared.hasConnection {
+            AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+            return
+        }
+        // Fetch
+        guard let patient = self.patient else {return}
+        switch dataSource.type {
+            case.clinicalDocument(let clinicalDoc):
+            ClinicalDocumentService(network: AFNetwork(), authManager: AuthManager()).fetchPDF(for: clinicalDoc, patient: patient) {[weak self] result in
+                guard let `self` = self else {return}
+                if let pdf = result {
+                    self.pdfData = pdf
+                    self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                } else {
+                    self.showPDFUnavailableAlert()
+                }
+            }
+            default: break
+        }
+        
     }
 
 }

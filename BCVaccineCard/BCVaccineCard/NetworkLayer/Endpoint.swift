@@ -26,6 +26,7 @@ protocol EndpointsAccessor {
     func getAuthenticatedHospitalVisits(hdid: String) -> URL
     func authenticatedComments(hdid: String) -> URL
     func authenticatedClinicalDocuments(hdid: String) -> URL
+    func authenticatedClinicalDocumentPDF(hdid: String, fileID: String) -> URL
     func getAuthenticatedLabTestPDF(repordId: String) -> URL
     func validateProfile(hdid: String) -> URL
     func userProfile(hdid: String) -> URL
@@ -149,6 +150,10 @@ extension UrlAccessor: EndpointsAccessor {
     
     func authenticatedClinicalDocuments(hdid: String) -> URL {
         return self.clinicaldocumentserviceBaseURL.appendingPathComponent("ClinicalDocument").appendingPathComponent(hdid)
+    }
+    
+    func authenticatedClinicalDocumentPDF(hdid: String, fileID: String) -> URL {
+        return self.authenticatedClinicalDocuments(hdid: hdid).appendingPathComponent("file").appendingPathComponent(fileID)
     }
     
     func getAuthenticatedLabTestPDF(repordId: String) -> URL {
