@@ -473,9 +473,9 @@
 		3E9D52662909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */; };
 		3E9D52672909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */; };
 		3E9D52682909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */; };
-		3EAF8185296DF0CE00738553 /* HealthRecordUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAF8184296DF0CE00738553 /* HealthRecordUtils.swift */; };
-		3EAF8186296DF0CE00738553 /* HealthRecordUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAF8184296DF0CE00738553 /* HealthRecordUtils.swift */; };
-		3EAF8187296DF0CE00738553 /* HealthRecordUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAF8184296DF0CE00738553 /* HealthRecordUtils.swift */; };
+		3EAF8185296DF0CE00738553 /* ConstantsAndTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */; };
+		3EAF8186296DF0CE00738553 /* ConstantsAndTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */; };
+		3EAF8187296DF0CE00738553 /* ConstantsAndTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */; };
 		3EBC991829110ACE00D67A90 /* BaseDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */; };
 		3EBC991929110ACE00D67A90 /* BaseDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */; };
 		3EBC991A29110ACE00D67A90 /* BaseDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */; };
@@ -1437,7 +1437,7 @@
 		3E91C7AA28B51B0A005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationTargetDisease+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E91C7AD28B51B0B005AA34F /* Immunization+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Immunization+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageDependentsViewController.swift; sourceTree = "<group>"; };
-		3EAF8184296DF0CE00738553 /* HealthRecordUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordUtils.swift; sourceTree = "<group>"; };
+		3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsAndTypes.swift; sourceTree = "<group>"; };
 		3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDependentViewController.swift; sourceTree = "<group>"; };
 		3ECD398828B522970033B866 /* StorageService+Recommendations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Recommendations.swift"; sourceTree = "<group>"; };
 		3EDC0C7A29673E2F00603FED /* HospitalVisitsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalVisitsService.swift; sourceTree = "<group>"; };
@@ -2212,7 +2212,8 @@
 		2D9B399D2907170300AE9FA1 /* HealthRecords */ = {
 			isa = PBXGroup;
 			children = (
-				3EAF8188296DF0D400738553 /* Main */,
+				3EAF8188296DF0D400738553 /* utils */,
+				2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */,
 				3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */,
 				3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */,
 				3E473782291090DB00B5BBA0 /* LabOrderService.swift */,
@@ -2381,13 +2382,12 @@
 			path = Dependent;
 			sourceTree = "<group>";
 		};
-		3EAF8188296DF0D400738553 /* Main */ = {
+		3EAF8188296DF0D400738553 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				3EAF8184296DF0CE00738553 /* HealthRecordUtils.swift */,
-				2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */,
+				3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */,
 			);
-			path = Main;
+			path = utils;
 			sourceTree = "<group>";
 		};
 		3EDC0D072968926000603FED /* KVC */ = {
@@ -4127,7 +4127,7 @@
 				294BD3C727AACFA800BD8D46 /* LocalAuthPrivacyView.swift in Sources */,
 				3EDEBB5E29356A6700C8386C /* MobileConfigStorage.swift in Sources */,
 				2940A3502728399B00132D7D /* StorageService.swift in Sources */,
-				3EAF8186296DF0CE00738553 /* HealthRecordUtils.swift in Sources */,
+				3EAF8186296DF0CE00738553 /* ConstantsAndTypes.swift in Sources */,
 				7967E73D26F536AF00EEF510 /* FormTextFieldView.swift in Sources */,
 				3E66F062290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */,
 				3E048CCB2911ADF100774278 /* StorageService + Dependent.swift in Sources */,
@@ -4464,7 +4464,7 @@
 				3E473785291090DB00B5BBA0 /* LabOrderService.swift in Sources */,
 				294BD3CA27AACFB600BD8D46 /* LocalAuthPrivacyView.swift in Sources */,
 				3EDEBB5F29356A6700C8386C /* MobileConfigStorage.swift in Sources */,
-				3EAF8187296DF0CE00738553 /* HealthRecordUtils.swift in Sources */,
+				3EAF8187296DF0CE00738553 /* ConstantsAndTypes.swift in Sources */,
 				794BD6302702EEC00084ADA8 /* VaccinePassportModel.swift in Sources */,
 				3E66F063290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */,
 				3E048CCC2911ADF100774278 /* StorageService + Dependent.swift in Sources */,
@@ -4778,7 +4778,7 @@
 				3E473783291090DB00B5BBA0 /* LabOrderService.swift in Sources */,
 				798005332852C66E006E390F /* LaboratoryTest+CoreDataProperties.swift in Sources */,
 				3EDEBB5D29356A6700C8386C /* MobileConfigStorage.swift in Sources */,
-				3EAF8185296DF0CE00738553 /* HealthRecordUtils.swift in Sources */,
+				3EAF8185296DF0CE00738553 /* ConstantsAndTypes.swift in Sources */,
 				798005352852C66E006E390F /* LocalAuthPrivacyView.swift in Sources */,
 				3E66F061290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */,
 				3E048CCA2911ADF100774278 /* StorageService + Dependent.swift in Sources */,
