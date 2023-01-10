@@ -70,7 +70,7 @@ extension ImmnunizationsService {
             let requestModel = NetworkRequest<HDIDParams, AuthenticatedImmunizationsResponseObject>(url: endpoints.getAuthenticatedImmunizations, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
                 
                 if result?.resourcePayload?.loadState?.refreshInProgress == true {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + retryIn) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(retryIn)) {
                         fetchImmunizations(for: dependent, currentAttempt: currentAttempt + 1, completion: completion)
                     }
                 } else if let immunizations = result?.resourcePayload {

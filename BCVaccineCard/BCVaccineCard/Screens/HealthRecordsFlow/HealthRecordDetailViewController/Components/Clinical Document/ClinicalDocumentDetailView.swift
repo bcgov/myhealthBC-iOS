@@ -96,10 +96,12 @@ extension ClinicalDocumentRecordDetailView {
             let fields: [TextListModel] = [
                 TextListModel(
                     header: TextProperties(text: "Location", bolded: true),
-                    subtext: TextProperties(text: model.facility ?? "", bolded: false)),
+                    subtext: TextProperties(text: model.facility ?? "", bolded: false)
+                ),
                 TextListModel(
                     header: TextProperties(text: "Provider:", bolded: true),
-                    subtext: TextProperties(text: model.provider ?? "", bolded: false)),
+                    subtext: TextProperties(text: model.provider ?? "", bolded: false)
+                ),
                 TextListModel(
                     header: TextProperties(text: "Visit type:", bolded: true),
                     subtext: TextProperties(text: model.visitType ?? "", bolded: false)),

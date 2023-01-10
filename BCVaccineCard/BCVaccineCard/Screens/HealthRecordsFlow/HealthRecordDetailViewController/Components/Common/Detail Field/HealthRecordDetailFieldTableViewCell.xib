@@ -21,13 +21,19 @@
                         <rect key="frame" x="0.0" y="8" width="564" height="231"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hba-dj-oel" customClass="InteractiveLinkLabel" customModule="HealthGateway" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="41.5" height="105"/>
+                                <rect key="frame" x="0.0" y="0.0" width="41.5" height="68"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pz8-Kf-bkw" customClass="InteractiveLinkLabel" customModule="HealthGateway" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="109" width="41.5" height="122"/>
+                                <rect key="frame" x="0.0" y="72" width="41.5" height="68.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xnb-qi-5Zg" customClass="InteractiveLinkLabel" customModule="HealthGateway" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="144.5" width="41.5" height="86.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -45,6 +51,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="headerLabel" destination="hba-dj-oel" id="7xg-ac-39c"/>
+                <outlet property="thirdLine" destination="xnb-qi-5Zg" id="YRk-eN-7Xa"/>
                 <outlet property="valueLabel" destination="pz8-Kf-bkw" id="pkd-Ni-3LL"/>
             </connections>
             <point key="canvasLocation" x="75.362318840579718" y="97.433035714285708"/>
