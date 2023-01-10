@@ -255,6 +255,10 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
         if type == .viewPDF {
             showPDFView()
         }
+        if type == .downloadFullReport {
+            // TODO: Clinical Records Show full report / download full report
+            print("TODO: Clinical Records Show full report / download full report")
+        }
     }
 
 }

@@ -95,7 +95,7 @@ extension HospitalVisitRecordDetailView {
             
             let fields: [TextListModel] = [
                 TextListModel(
-                    header: TextProperties(text: "Location", bolded: true),
+                    header: TextProperties(text: "Location:", bolded: true),
                     subtext: TextProperties(text: model.facility ?? "", bolded: false),
                     thirdLine: TextProperties(text: "Virtual visits show your provider's location", bolded: false, italic: true, fontSize: 17, textColor: .grey)
                 ),

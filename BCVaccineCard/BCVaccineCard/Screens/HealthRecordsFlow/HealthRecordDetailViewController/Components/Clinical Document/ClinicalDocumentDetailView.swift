@@ -10,6 +10,7 @@ import UIKit
 class ClinicalDocumentRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
     
     enum Section: Int, CaseIterable {
+        case DownloadButton
         case Fields
         case Comments
     }
@@ -41,10 +42,13 @@ class ClinicalDocumentRecordDetailView: BaseHealthRecordsDetailView, UITableView
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let section = Section(rawValue: section) else {return 0}
         switch section {
+        case .DownloadButton:
+            return 1
         case .Fields:
             return fields.count
         case .Comments:
             return comments.count
+        
         }
     }
     
@@ -58,6 +62,10 @@ class ClinicalDocumentRecordDetailView: BaseHealthRecordsDetailView, UITableView
         case .Comments:
             guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
             cell.configure(comment: comments[indexPath.row])
+            return cell
+        case .DownloadButton:
+            guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
+            cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: .downloadFullReport)
             return cell
         }
     }
@@ -90,27 +98,18 @@ extension ClinicalDocumentRecordDetailView {
     private func createFields() -> [TextListModel] {
         guard let model = model else {return []}
         switch model.type {
-        case .hospitalVisit(model: let model):
+        case .clinicalDocument(model: let model):
            
             
             let fields: [TextListModel] = [
                 TextListModel(
-                    header: TextProperties(text: "Location", bolded: true),
-                    subtext: TextProperties(text: model.facility ?? "", bolded: false)
+                    header: TextProperties(text: "Discipline:", bolded: true),
+                    subtext: TextProperties(text: model.discipline ?? "", bolded: false)
                 ),
                 TextListModel(
-                    header: TextProperties(text: "Provider:", bolded: true),
-                    subtext: TextProperties(text: model.provider ?? "", bolded: false)
-                ),
-                TextListModel(
-                    header: TextProperties(text: "Visit type:", bolded: true),
-                    subtext: TextProperties(text: model.visitType ?? "", bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Visit Date:", bolded: true),
-                    subtext: TextProperties(text: model.admitDateTime?.labOrderDateTime ?? "", bolded: false)),
-                TextListModel(
-                    header: TextProperties(text: "Discharge Date:", bolded: true),
-                    subtext: TextProperties(text: model.endDateTime?.labOrderDateTime ?? "", bolded: false)),
+                    header: TextProperties(text: "Facility:", bolded: true),
+                    subtext: TextProperties(text: model.facilityName ?? "", bolded: false)
+                )
             ]
             return fields
         default:

@@ -7,28 +7,6 @@
 
 import UIKit
 
-struct RecordsFilter {
-    enum RecordType: String, CaseIterable {
-        case HeathVisits = "Health Visits"
-        case LabTests = "Lab Tests"
-        case Medication = "Medications"
-        case ClinicalDocuments = "Clinical Docs"
-        case Covid = "COVID-19 Tests"
-        case Immunizations = "Immunizations"
-        case SpecialAuthorityDrugs = "Special Authority"
-        case HospitalVisits = "Hospital Visits"
-        
-    }
-    
-    var fromDate: Date?
-    var toDate: Date?
-    var recordTypes: [RecordType] = []
-    
-    var exists: Bool {
-        return fromDate != nil || toDate != nil || !recordTypes.isEmpty
-    }
-}
-
 protocol FilterRecordsViewDelegate {
     func selected(filter: RecordsFilter)
 }
