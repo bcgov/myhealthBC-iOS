@@ -14,16 +14,28 @@ class HealthRecordDetailFieldTableViewCell: UITableViewCell {
     
     @IBOutlet weak var headerLabel: InteractiveLinkLabel!
     @IBOutlet weak var valueLabel: InteractiveLinkLabel!
+    @IBOutlet weak var thirdLine: InteractiveLinkLabel!
     
     func setup(with model: TextListModel) {
         self.layoutIfNeeded()
+        setHeader(with: model)
+        setValue(with: model)
+        setThirdLine(with: model)
+        self.layoutIfNeeded()
+    }
+    
+    func setHeader(with model: TextListModel) {
         headerLabel.attributedText =
         headerLabel.attributedText(
             withString: model.header.text,
             linkedStrings: model.header.links ?? [],
             textColor: model.header.textColor.getUIColor,
-            font: model.header.bolded ? UIFont.bcSansBoldWithSize(size: model.header.fontSize) : UIFont.bcSansRegularWithSize(size: model.header.fontSize)
+            font: model.header.font
         )
+        self.layoutIfNeeded()
+    }
+    
+    func setValue(with model: TextListModel) {
         guard let subtext = model.subtext else {
             valueLabel.isHidden = true
             return
@@ -34,9 +46,23 @@ class HealthRecordDetailFieldTableViewCell: UITableViewCell {
             withString: subtext.text,
             linkedStrings: subtext.links ?? [],
             textColor: subtext.textColor.getUIColor,
-            font: subtext.bolded ? UIFont.bcSansBoldWithSize(size: subtext.fontSize) : UIFont.bcSansRegularWithSize(size: subtext.fontSize)
+            font: subtext.font
         )
         self.layoutIfNeeded()
+    }
+    
+    func setThirdLine(with model: TextListModel) {
+        guard let subtext = model.thirdLine else {
+            thirdLine.isHidden = true
+            return
+        }
+        thirdLine.attributedText =
+        thirdLine.attributedText(
+            withString: subtext.text,
+            linkedStrings: subtext.links ?? [],
+            textColor: subtext.textColor.getUIColor,
+            font: subtext.font
+        )
     }
     
 }

@@ -40,6 +40,8 @@ extension String {
     static var getStarted: String { return "GetStarted".localized }
     
     // Errors
+    
+    static var fetchRecordError: String { return "FetchRecordError".localized }
     static var noCameraAccessTitle: String { return "NoCameraAccessTitle".localized }
     static var noCameraAccessMessage: String { return "NoCameraAccessMessage".localized }
     static var multipleQRCodesMessage: String { return "MultipleQRCodesMessage".localized }

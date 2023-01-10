@@ -39,6 +39,7 @@ class AppStyleButton: UIView {
         case agree
         case login
         case viewPDF
+        case downloadFullReport
         
         var getTitle: String {
             switch self {
@@ -57,6 +58,7 @@ class AppStyleButton: UIView {
             case .agree: return .agree
             case .login: return .bcscLogin
             case .viewPDF: return .viewPDF
+            case .downloadFullReport: return "Download Full Report"
             }
         }
     }

@@ -8,18 +8,18 @@
 import Foundation
 
 struct PostCommentResponse: Codable {
-    let resourcePayload: PostCommentResponsePayload
+    let resourcePayload: PostCommentResponsePayload?
     let totalResultCount, pageIndex, pageSize: JSONNull?
-    let resultStatus: Int
-    let resultError: ResultError
+    let resultStatus: Int?
+    let resultError: ResultError?
 }
 
 // MARK: - ResourcePayload
 struct PostCommentResponsePayload: Codable {
-    let id, userProfileID, text, entryTypeCode: String
-    let parentEntryID: String
-    let version: Int
-    let createdDateTime, createdBy, updatedDateTime, updatedBy: String
+    let id, userProfileID, text, entryTypeCode: String?
+    let parentEntryID: String?
+    let version: Int?
+    let createdDateTime, createdBy, updatedDateTime, updatedBy: String?
 
     enum CodingKeys: String, CodingKey {
         case id

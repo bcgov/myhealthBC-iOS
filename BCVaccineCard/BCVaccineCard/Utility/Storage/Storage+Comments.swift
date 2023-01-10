@@ -82,21 +82,21 @@ extension StorageService: StorageCommentManager {
     }
     
     func storeSubmittedComment(object: PostCommentResponseResult) -> Comment? {
-        let applicableRecords = findRecordsForComment(id: object.parentEntryID)
+        guard let parentEntryId = object.parentEntryID else {return nil}
+        let applicableRecords = findRecordsForComment(id: parentEntryId)
         guard let context = managedContext else {
             return nil
         }
         let comment = Comment(context: context)
-        let now = Date()
         comment.id = object.id
         comment.text = object.text
         comment.userProfileID = object.userProfileID
         comment.entryTypeCode = object.entryTypeCode
         comment.parentEntryID = object.parentEntryID
-        comment.version = Int64(object.version)
-        comment.createdDateTime = object.createdDateTime.getGatewayDate()
+        comment.version = Int64(object.version ?? 0)
+        comment.createdDateTime = object.createdDateTime?.getGatewayDate()
         comment.createdBy = object.createdBy
-        comment.updatedDateTime = object.updatedDateTime.getGatewayDate()
+        comment.updatedDateTime = object.updatedDateTime?.getGatewayDate()
         comment.updatedBy = object.updatedBy
         
         
@@ -134,6 +134,10 @@ extension StorageService: StorageCommentManager {
                 healthVisit.addToComments(comment)
             case .SpecialAuthorityDrug(let saDrug):
                 saDrug.addToComments(comment)
+            case .HospitalVisit(let hospitalVisit):
+                hospitalVisit.addToComments(comment)
+            case .ClinicalDocument(let clinicalDoc):
+                clinicalDoc.addToComments(comment)
             }
         }
         do {

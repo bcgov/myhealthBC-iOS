@@ -7,25 +7,6 @@
 
 import UIKit
 
-struct RecordsFilter {
-    enum RecordType: String, CaseIterable {
-        case Medication = "Medications"
-        case Covid = "COVID-19 Tests"
-        case LabTests = "Lab Tests"
-        case Immunizations = "Immunizations"
-        case SpecialAuthorityDrugs = "Special Authority"
-        case HeathVisits = "Health Visits"
-    }
-    
-    var fromDate: Date?
-    var toDate: Date?
-    var recordTypes: [RecordType] = []
-    
-    var exists: Bool {
-        return fromDate != nil || toDate != nil || !recordTypes.isEmpty
-    }
-}
-
 protocol FilterRecordsViewDelegate {
     func selected(filter: RecordsFilter)
 }
@@ -112,12 +93,18 @@ class FilterRecordsView: UIView, Theme {
         self.availableFilters = availableFilters
         view.addSubview(self)
         positionView(on: view)
+        self.availableFilters = adjustFilterTextOrder(filters: availableFilters, selected: currentFilter.recordTypes)
         showRecordTypes()
         style()
         if let existingFilter = filter {
             currentFilter = existingFilter
             populateCurrentFilter()
         }
+    }
+                         
+    fileprivate struct ProposedChips {
+        let chips: [RecordsFilter.RecordType]
+        let width: CGFloat
     }
     
     private func positionView(on view: UIView) {
@@ -433,4 +420,78 @@ extension FilterRecordsView: ChipsViewDelegate {
         }
     }
     
+}
+
+
+extension FilterRecordsView {
+    private func sizeFor(filter: RecordsFilter.RecordType, selected: [RecordsFilter.RecordType]) -> CGFloat {
+        let isSelected =  selected.contains(where: {$0 == filter})
+        let textFont = isSelected ? ChipCollectionViewCell.selectedFont : ChipCollectionViewCell.unselectedFont
+//            let height = ChipCollectionViewCell.textHeight + (ChipCollectionViewCell.paddingVertical * 2)
+        let textWidth = filter.rawValue.widthForView(font: textFont, height: ChipCollectionViewCell.textHeight)
+        let width = textWidth + (ChipCollectionViewCell.paddingHorizontal * 2)
+        return width
+    }
+    private func adjustFilterTextOrder(filters: [RecordsFilter.RecordType], selected: [RecordsFilter.RecordType]) -> [RecordsFilter.RecordType] {
+        // width available
+        let availableWidth = bounds.width - 32 // padding
+        var sizes: [RecordsFilter.RecordType: CGFloat] = [RecordsFilter.RecordType: CGFloat]()
+        // calculate width needed for each box
+        for availableFilter in filters {
+            let width = sizeFor(filter: availableFilter, selected: selected)
+            sizes[availableFilter] = width
+        }
+        
+        var chips = filters
+   
+        var rows: [ProposedChips] = []
+        while(!chips.isEmpty) {
+            let current = chips.popLast()!
+            let currentWidth = sizes[current] ?? 0
+            let remainingWidth = availableWidth - currentWidth
+            
+            var widths: [ProposedChips] = []
+            for chip1 in chips {
+                let chip1Size: CGFloat = sizes[chip1] ?? 0
+                let proposedWidth1 = currentWidth + chip1Size + ChipsView.spacing
+                print("\(current) + \(chip1) = \(proposedWidth1)")
+                if proposedWidth1 < availableWidth {
+                    widths.append(ProposedChips(chips: [chip1], width: proposedWidth1))
+                    
+                    for chip2 in chips where chip2 != chip1 {
+                        let chip2Size: CGFloat = sizes[chip2] ?? 0
+                        let proposedWidth2 = proposedWidth1 + chip2Size + ChipsView.spacing
+                        print("\(current) + \(chip1) + \(chip2) = \(proposedWidth1)")
+                        if proposedWidth2 < availableWidth {
+                            widths.append(ProposedChips(chips: [chip1, chip2], width: proposedWidth2))
+                        }
+                    }
+                }
+            }
+            
+            widths = widths.sorted(by: {$0.width > $1.width})
+            if let first = widths.first {
+                var chipsInRow = [current]
+                chipsInRow.append(contentsOf: first.chips)
+                rows.append(ProposedChips(chips: chipsInRow, width: first.width))
+                for each in first.chips {
+                    if let i = chips.firstIndex(of: each) {
+                        chips.remove(at: i)
+                    }
+                }
+            } else {
+                rows.append(ProposedChips(chips: [current], width: currentWidth))
+            }
+        }
+        rows = rows.sorted(by: {$0.width > $1.width})
+        
+        print(rows)
+        var sortedTypes: [RecordsFilter.RecordType] = []
+        for row in rows {
+            sortedTypes.append(contentsOf: row.chips)
+        }
+        
+        return sortedTypes
+    }
+      
 }

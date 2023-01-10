@@ -186,6 +186,10 @@ extension HealthRecordDetailViewController {
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             case .specialAuthorityDrug(model: let model):
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
+            case .hospitalVisit(model: let model):
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
+            case .clinicalDocument(model: let model):
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)
@@ -251,6 +255,38 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
         if type == .viewPDF {
             showPDFView()
         }
+        if type == .downloadFullReport {
+            showClinicalDocumentPDF()
+        }
+    }
+    
+    func showClinicalDocumentPDF() {
+        // Cached
+        if let pdf = self.pdfData {
+            self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+            return
+        }
+        // No internet
+        if !NetworkConnection.shared.hasConnection {
+            AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+            return
+        }
+        // Fetch
+        guard let patient = self.patient else {return}
+        switch dataSource.type {
+            case.clinicalDocument(let clinicalDoc):
+            ClinicalDocumentService(network: AFNetwork(), authManager: AuthManager()).fetchPDF(for: clinicalDoc, patient: patient) {[weak self] result in
+                guard let `self` = self else {return}
+                if let pdf = result {
+                    self.pdfData = pdf
+                    self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                } else {
+                    self.showPDFUnavailableAlert()
+                }
+            }
+            default: break
+        }
+        
     }
 
 }

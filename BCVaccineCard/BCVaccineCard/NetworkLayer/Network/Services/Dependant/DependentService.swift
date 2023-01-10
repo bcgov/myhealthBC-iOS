@@ -9,24 +9,6 @@ import Foundation
 import JOSESwift
 import BCVaccineValidator
 
-extension Network {
-    func addLoader(message: LoaderMessage) {
-        DispatchQueue.main.async {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.incrementLoader(message: message)
-            }
-        }
-    }
-    
-    func removeLoader() {
-        DispatchQueue.main.async {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.decrementLoader()
-            }
-        }
-    }
-}
-
 struct DependentService {
     
     let network: Network
@@ -66,6 +48,12 @@ struct DependentService {
             
             let requestModel = NetworkRequest<DefaultParams, DependentsResponse>(url: endpoints.listOfDependents(hdid: hdid), type: .Get, parameters: nil, headers: headers) { result in
                 completion(result)
+            } onError: { error in
+                switch error {
+                case .FailedAfterRetry:
+                    network.showToast(message: .fetchRecordError, style: .Warn)
+                }
+                
             }
             
             network.request(with: requestModel)
@@ -132,6 +120,12 @@ struct DependentService {
             let requestModel = NetworkRequest<RemoteDependent, AddDependentResponse>(url: endpoints.deleteDependent(dependentHdid: dependentHdid, guardian: guardianHdid), type: .Delete, parameters: remoteObject, headers: headers) { result in
                 guard result != nil else {return completion(false)}
                 return deleteRemote(dependents: remaining, for: guardian, completion: completion)
+            } onError: { error in
+                switch error {
+                case .FailedAfterRetry:
+                    network.showToast(message: "Could not delete dependent, please try again later", style: .Warn)
+                }
+                
             }
 
             network.request(with: requestModel)
@@ -152,6 +146,12 @@ struct DependentService {
             
             let requestModel = NetworkRequest<PostDependent, AddDependentResponse>(url: endpoints.listOfDependents(hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
                 completion(result)
+            } onError: { error in
+                switch error {
+                case .FailedAfterRetry:
+                    network.showToast(message: "Could not add depndent, please try again later", style: .Warn)
+                }
+                
             }
             
             network.request(with: requestModel)

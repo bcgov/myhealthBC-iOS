@@ -160,7 +160,7 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
             }
             if model.labOrder()?.reportAvailable == true, indexPath.row == headerSection.indexOfType(type: .pdf) {
                 guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
-                cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance)
+                cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: .viewPDF)
                 return cell
             }
         }

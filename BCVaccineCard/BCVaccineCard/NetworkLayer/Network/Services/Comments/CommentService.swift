@@ -136,6 +136,8 @@ extension CommentService {
         case healthVisit = "Enc"
         case specialAuthorityDrug = "SAR"
         case covid = "Lab"
+        case hospitalVisit = "Hos"
+        case clinicalDocument = "CDO"
     }
     
     fileprivate func postCommentObject(message: String, commentID: String, date: Date, hdid: String, type: CommentType) -> PostComment {
@@ -171,6 +173,10 @@ extension HealthRecord {
             return .healthVisit
         case .SpecialAuthorityDrug(_):
             return .specialAuthorityDrug
+        case .HospitalVisit(_):
+            return .hospitalVisit
+        case .ClinicalDocument(_):
+            return .clinicalDocument
         }
     }
 }
@@ -196,6 +202,10 @@ extension HealthRecordsDetailDataSource.Record {
             return HealthRecord(type: .HealthVisit(model))
         case .specialAuthorityDrug(model: let model):
             return HealthRecord(type: .SpecialAuthorityDrug(model))
+        case .hospitalVisit(model: let model):
+            return HealthRecord(type: .HospitalVisit(model))
+        case .clinicalDocument(model: let model):
+            return HealthRecord(type: .ClinicalDocument(model))
         }
         
     }
@@ -204,7 +214,7 @@ extension HealthRecordsDetailDataSource.Record {
     var commentsEnabled: Bool {
         //        return false
         switch self.type {
-        case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit : return true
+        case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument : return true
         default: return false
         }
     }

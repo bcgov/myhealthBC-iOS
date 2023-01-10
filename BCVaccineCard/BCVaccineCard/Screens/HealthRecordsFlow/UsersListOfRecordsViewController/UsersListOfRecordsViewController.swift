@@ -269,7 +269,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     
     @objc func showFilters() {
         let fv: FilterRecordsView = UIView.fromNib()
-        let allFilters = RecordsFilter.RecordType.allCases
+        let allFilters = RecordsFilter.RecordType.avaiableFilters
         let dependentFilters: [RecordsFilter.RecordType] = [.Covid, .Immunizations]
         fv.showModally(on: view.findTopMostVC()?.view ?? view,
                        availableFilters: isDependent ? dependentFilters : allFilters,
@@ -377,6 +377,10 @@ extension UsersListOfRecordsViewController {
                         showItem = filter.recordTypes.contains(.HeathVisits)
                     case .specialAuthorityDrug:
                         showItem = filter.recordTypes.contains(.SpecialAuthorityDrugs)
+                    case .hospitalVisit:
+                        showItem = filter.recordTypes.contains(.HospitalVisits)
+                    case .clinicalDocument:
+                        showItem = filter.recordTypes.contains(.ClinicalDocuments)
                     }
                 }
                 // Filter by date
@@ -693,9 +697,13 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             return
         case .immunization:
             return
-        case .healthVisit(model: let model):
+        case .healthVisit:
             return
-        case .specialAuthorityDrug(model: let model):
+        case .specialAuthorityDrug:
+            return
+        case .hospitalVisit:
+            return
+        case .clinicalDocument:
             return
         }
     }

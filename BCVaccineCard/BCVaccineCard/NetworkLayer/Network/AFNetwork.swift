@@ -49,7 +49,11 @@ class AFNetwork: Network {
             return self.returnOrRetryIfneeded(with: requestData, response: response)
         })
     }
-    
+}
+
+
+// MARK: Retry Logic
+extension AFNetwork {
     private func returnOrRetryIfneeded<Parameters: Encodable, T: Decodable>(with requestData: NetworkRequest<Parameters, T>, response: DataResponse<T, AFError>)  {
         guard let value = response.value else {
             // Didnt get a response.. return nil
@@ -71,7 +75,14 @@ class AFNetwork: Network {
         
         // Request is retry-able:
         
-        if shouldRetry(request: requestData, responsePayload: payLoadStruct) {
+        let shouldRetry = shouldRetry(request: requestData, responsePayload: payLoadStruct)
+        switch shouldRetry {
+            
+        case .NotNeeded:
+            // retry not needed - return response
+            requestAttempts[requestData.url] = 0
+            return requestData.completion(value)
+        case .ShouldRetry:
             // retry needed - increment attempt and request again
             if let attempts = requestAttempts[requestData.url] {
                 requestAttempts[requestData.url] = attempts + 1
@@ -81,9 +92,11 @@ class AFNetwork: Network {
             DispatchQueue.main.asyncAfter(deadline: .now() + (Double(payLoadStruct.retryin ?? requestData.retryIn))) {
                 return self.request(with: requestData)
             }
-        } else {
-            // retry not needed - return response
-            requestAttempts[requestData.url] = 0
+        case .MaxRetryReached:
+            // Max retry reached - return reponse and error
+            if let error = requestData.onError {
+                error(.FailedAfterRetry)
+            }
             return requestData.completion(value)
         }
     }
@@ -91,23 +104,29 @@ class AFNetwork: Network {
     
     // Retry criteria Logic
     private func shouldRetry<Parameters: Encodable, T: Decodable>(request requestData: NetworkRequest<Parameters, T>,
-                                                                  responsePayload: BaseRetryableGatewayResponse) -> Bool {
+                                                                  responsePayload: BaseRetryableGatewayResponse) -> RetryRestult {
         if responsePayload.loaded == false {
             if let attempts = requestAttempts[requestData.url] {
                 if attempts < requestData.maxAttempts {
                     // havent reached max retry yet
-                    return true
+                    return .ShouldRetry
                 } else {
                     // reached max retry attempts
-                    return false
+                    return .MaxRetryReached
                 }
             } else {
                 // Not retried yet
-                return true
+                return .ShouldRetry
             }
         } else {
             // loaded is true
-            return false
+            return .NotNeeded
         }
+    }
+    
+    enum RetryRestult {
+        case NotNeeded
+        case ShouldRetry
+        case MaxRetryReached
     }
 }
