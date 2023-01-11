@@ -231,7 +231,7 @@ struct HealthRecordsDetailDataSource {
             // TODO: Confirm data
             id = model.id
             title = model.name ?? "-"
-            detailNavTitle = model.facilityName ?? "-"
+            detailNavTitle = model.type ?? "-"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-clinical-documents-icon")
             
