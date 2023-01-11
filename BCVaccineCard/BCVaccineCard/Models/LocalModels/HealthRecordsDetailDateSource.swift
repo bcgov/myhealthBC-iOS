@@ -230,7 +230,7 @@ struct HealthRecordsDetailDataSource {
         case .clinicalDocument(model: let model):
             // TODO: Confirm data
             id = model.id
-            title = model.type ?? "-"
+            title = model.name ?? "-"
             detailNavTitle = model.facilityName ?? "-"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-clinical-documents-icon")
