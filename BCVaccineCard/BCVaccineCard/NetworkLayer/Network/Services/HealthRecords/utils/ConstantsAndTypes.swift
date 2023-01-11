@@ -50,7 +50,7 @@ extension HealthRecordConstants.RecordType {
         case .medication:
             return .Medication
         case .laboratoryOrder:
-            return .LabTests
+            return nil
         case .immunization:
             return .Immunizations
         case .healthVisit:
