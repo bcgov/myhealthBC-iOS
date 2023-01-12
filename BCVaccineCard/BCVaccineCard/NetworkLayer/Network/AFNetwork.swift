@@ -89,7 +89,16 @@ extension AFNetwork {
             } else {
                 requestAttempts[requestData.url] = 1
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + (Double(payLoadStruct.retryin ?? requestData.retryIn))) {
+            
+            var retryIn: Double = Double(requestData.retryIn)
+            if let payloadRetry = payLoadStruct.retryin {
+                retryIn = Double(payloadRetry) / 1000
+                if retryIn < 1 {
+                    retryIn = Double(requestData.retryIn)
+                }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + retryIn) {
                 return self.request(with: requestData)
             }
         case .MaxRetryReached:
