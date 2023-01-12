@@ -112,7 +112,7 @@ struct Constants {
         static let publicRetryMaxForMedicationStatement = 3
         static let publicRetryMaxForLaboratoryOrders = 3
         static let maxRetry = 5
-        static let retryIn: Int = 1000
+        static let retryIn: Int = 5
     }
     
     static let vaccineTable: [VaccineTable] = [

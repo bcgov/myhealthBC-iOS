@@ -19,7 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow? 
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
-    var recordsFetchedForDependentsThisSession: [Patient] = []
     
     fileprivate var dataLoadCount: Int = 0 
     internal var dataLoadHideTimer: Timer? = nil

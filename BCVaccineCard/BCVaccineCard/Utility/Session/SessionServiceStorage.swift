@@ -20,4 +20,6 @@ class SessionStorage {
      */
     static var attemptingProtectiveWord = false
     
+    // Dependent records fetched in this session
+    static var dependentRecordsFetched: [Patient] = []
 }

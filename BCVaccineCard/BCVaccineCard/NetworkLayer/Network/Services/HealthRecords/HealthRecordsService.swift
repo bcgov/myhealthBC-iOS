@@ -37,7 +37,7 @@ struct HealthRecordsService {
         var records: [HealthRecord] = []
         
         network.addLoader(message: .FetchingRecords)
-
+        StorageService.shared.deleteHealthRecordsForDependent(dependent: dependent)
 //        dispatchGroup.enter()
 //        let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
 //        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in

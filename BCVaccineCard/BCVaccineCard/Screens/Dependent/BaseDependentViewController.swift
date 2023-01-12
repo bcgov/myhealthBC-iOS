@@ -23,8 +23,12 @@ class BaseDependentViewController: BaseViewController {
             return completion(false)
         }, buttonTwoTitle: .yes) { [weak self] in
             guard let `self` = self else {return}
-            StorageService.shared.deleteHealthRecordsForDependent(dependent: dependent)
             self.networkService.delete(dependents: [dependent], for: patient, completion: {success in
+                if let cachedIndex =
+                    SessionStorage.dependentRecordsFetched.firstIndex(where: {$0.dependencyInfo?.info?.hdid == dependent.info?.hdid}) {
+                    SessionStorage.dependentRecordsFetched.remove(at: cachedIndex)
+                }
+                StorageService.shared.deleteHealthRecordsForDependent(dependent: dependent)
                 return completion(true)
             })
         }

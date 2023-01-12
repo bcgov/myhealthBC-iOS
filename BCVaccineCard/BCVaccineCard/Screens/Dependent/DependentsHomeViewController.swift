@@ -289,6 +289,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
         tableView.register(UINib.init(nibName: DependentListItemTableViewCell.getName, bundle: .main), forCellReuseIdentifier: DependentListItemTableViewCell.getName)
         tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
         tableView.register(UINib.init(nibName: InaccessibleDependentTableViewCell.getName, bundle: .main), forCellReuseIdentifier: InaccessibleDependentTableViewCell.getName)
+        tableView.registerEmptyCell()
         
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
@@ -328,7 +329,10 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
         }
     }
     
-    private func dependentCell(indexPath: IndexPath) -> DependentListItemTableViewCell {
+    private func dependentCell(indexPath: IndexPath) -> UITableViewCell {
+        guard dependents.under12.indices.contains(indexPath.row) else {
+            return tableView.getEmptyCell(indexPath: indexPath)
+        }
         guard let cell = tableView.dequeueReusableCell(withIdentifier: DependentListItemTableViewCell.getName, for: indexPath) as? DependentListItemTableViewCell else {
             return DependentListItemTableViewCell()
         }
@@ -337,7 +341,10 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
         return cell
     }
     
-    private func inaccessibleDependentCell(indexPath: IndexPath) -> InaccessibleDependentTableViewCell {
+    private func inaccessibleDependentCell(indexPath: IndexPath) -> UITableViewCell {
+        guard dependents.over12.indices.contains(indexPath.row) else {
+            return tableView.getEmptyCell(indexPath: indexPath)
+        }
         guard let cell = tableView.dequeueReusableCell(withIdentifier: InaccessibleDependentTableViewCell.getName, for: indexPath) as? InaccessibleDependentTableViewCell else {
             return InaccessibleDependentTableViewCell()
         }
@@ -378,30 +385,31 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.section == 1 else {return}
+        guard dependents.under12.indices.contains(indexPath.row) else {
+            return
+        }
         let dependent = dependents.under12[indexPath.row]
-        // if not fetched this session, then call code below. else, fetch health records from storage
         guard let dependentPatient = dependent.info, !blockDependentSelection else {
             return
         }
         
-        if AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.contains(dependentPatient) == true {
-            let records = StorageService.shared.getHealthRecords(forDependent: dependentPatient)
-            let dependantDS = records.detailDataSource(patient: dependentPatient)
-            let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
-            self.navigationController?.pushViewController(vc, animated: true)
+        if SessionStorage.dependentRecordsFetched.contains(dependentPatient) {
+            showDetails(for: dependentPatient)
             blockDependentSelection = false
         } else {
-            view.addLoader(message: .FetchingRecords)
-            StorageService.shared.deleteHealthRecordsForDependent(dependent: dependentPatient)
             HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
-                let dependantDS = records.detailDataSource(patient: dependentPatient)
-                AppDelegate.sharedInstance?.recordsFetchedForDependentsThisSession.append(dependentPatient)
-                let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependentPatient, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
-                self?.navigationController?.pushViewController(vc, animated: true)
-                self?.view.removeLoader()
+                SessionStorage.dependentRecordsFetched.append(dependentPatient)
+                self?.showDetails(for: dependentPatient)
                 self?.blockDependentSelection = false
             }
         }
+    }
+    
+    private func showDetails(for dependent: Patient) {
+        let records = StorageService.shared.getHealthRecords(forDependent: dependent)
+        let dependantDS = records.detailDataSource(patient: dependent)
+        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependent, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -464,25 +472,6 @@ extension DependentsHomeViewController: InaccessibleDependentDelegate {
 extension DependentsHomeViewController {
     private func authenticate(initialView: AuthenticationViewController.InitialView, fromTab: TabBarVCs) {
         self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { _ in
-        }
-    }
-}
-
-
-extension UIView {
-    func addLoader(message: LoaderMessage) {
-        DispatchQueue.main.async {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.incrementLoader(message: message)
-            }
-        }
-    }
-    
-    func removeLoader() {
-        DispatchQueue.main.async {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.decrementLoader()
-            }
         }
     }
 }
