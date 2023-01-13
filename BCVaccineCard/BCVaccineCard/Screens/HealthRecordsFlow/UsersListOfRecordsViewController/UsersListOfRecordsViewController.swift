@@ -385,12 +385,13 @@ extension UsersListOfRecordsViewController {
                 }
                 // Filter by date
                 if let dateString = item.mainRecord?.date,
-                   let recordDate = Date.Formatter.monthDayYearDate.date(from: dateString)
+                   let recordDate = Date.Formatter.monthDayYearDate.date(from: dateString),
+                   let timeNeutralDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: recordDate)
                 {
-                    if let fromDate = filter.fromDate, recordDate <= fromDate {
+                    if let fromDate = filter.fromDate, timeNeutralDate < fromDate {
                         showItem = false
                     }
-                    if let toDate = filter.toDate, recordDate >= toDate {
+                    if let toDate = filter.toDate, timeNeutralDate > toDate {
                         showItem = false
                     }
                     
