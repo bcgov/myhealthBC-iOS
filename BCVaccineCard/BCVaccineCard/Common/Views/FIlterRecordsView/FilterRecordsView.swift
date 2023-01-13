@@ -342,13 +342,13 @@ class FilterRecordsView: UIView, Theme {
         resetDatePickerHideTimer()
         let selectedDate = sender.date
         let dateString = Date.Formatter.yearMonthDay.string(from: selectedDate)
-        
+        let timeNeutralDate = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: selectedDate)
         if datepickerType == .toDate {
-            currentFilter.toDate = selectedDate
+            currentFilter.toDate = timeNeutralDate
             toDateLabel.text = dateString
             toDateIcon.image = UIImage(named: "close-icon")
         } else {
-            currentFilter.fromDate = selectedDate
+            currentFilter.fromDate = timeNeutralDate
             fromDateLabel.text = dateString
             fromDateIcon.image = UIImage(named: "close-icon")
         }

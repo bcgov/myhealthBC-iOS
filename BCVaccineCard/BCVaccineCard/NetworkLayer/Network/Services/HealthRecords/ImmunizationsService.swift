@@ -53,7 +53,7 @@ extension ImmnunizationsService {
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
         
-        guard currentAttempt <= maxRetry else {
+        guard currentAttempt < maxRetry else {
             network.showToast(message: .fetchRecordError, style: .Warn)
             return completion(nil)
         }
