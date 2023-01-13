@@ -17,8 +17,8 @@ struct HealthRecordConstants {
             .immunization,
             .healthVisit,
             .specialAuthorityDrug,
-//            .hospitalVisit,
-//            .clinicalDocument
+            .hospitalVisit,
+            .clinicalDocument
         ]
     }
     // TODO:
