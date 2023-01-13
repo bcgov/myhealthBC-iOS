@@ -28,7 +28,10 @@ struct HealthRecordsService {
     
     public func fetchAndStoreVaccineCardForDependent(for dependent: Dependent) {
         let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
-        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in }
+        network.addLoader(message: .empty)
+        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in
+            network.removeLoader()
+        }
     }
     
     public func fetchAndStoreHealthRecords(for dependent: Dependent, completion: @escaping ([HealthRecord])->Void) {
@@ -38,15 +41,16 @@ struct HealthRecordsService {
         
         network.addLoader(message: .FetchingRecords)
         StorageService.shared.deleteHealthRecordsForDependent(dependent: dependent)
-//        dispatchGroup.enter()
-//        let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
-//        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in
-//            if let covidCard = vaccineCard {
-//                let covidRec = HealthRecord(type: .CovidImmunization(covidCard))
-//                records.append(covidRec)
-//            }
-//            dispatchGroup.leave()
-//        }
+        
+        dispatchGroup.enter()
+        let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
+        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in
+            if let covidCard = vaccineCard {
+                let covidRec = HealthRecord(type: .CovidImmunization(covidCard))
+                records.append(covidRec)
+            }
+            dispatchGroup.leave()
+        }
         
         dispatchGroup.enter()
         let covidTestsService = CovidTestsService(network: network, authManager: authManager)

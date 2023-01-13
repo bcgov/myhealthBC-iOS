@@ -162,7 +162,7 @@ extension HealthPassViewController {
 extension HealthPassViewController {
     
     private func fetchFromStorage() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.main.async {
             let cards: [VaccineCard] = StorageService.shared.fetchVaccineCards()
             guard cards.count > 0 else {
                 self.dataSource = nil
