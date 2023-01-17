@@ -231,7 +231,7 @@ struct HealthRecordsDetailDataSource {
             // TODO: Confirm data
             id = model.id
             title = model.name ?? "-"
-            detailNavTitle = model.type ?? "-"
+            detailNavTitle = model.name ?? "-"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-clinical-documents-icon")
             
@@ -366,7 +366,7 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(clinicalDocument: ClinicalDocument) -> Record {
         let dateString = clinicalDocument.serviceDate?.monthDayYearString
         // TODO: confirm data
-        return Record(id: clinicalDocument.id ?? UUID().uuidString, name: clinicalDocument.name ?? "", type: .clinicalDocument(model: clinicalDocument), status: clinicalDocument.type, date: dateString, listStatus: clinicalDocument.facilityName ?? "")
+        return Record(id: clinicalDocument.id ?? UUID().uuidString, name: clinicalDocument.name ?? "", type: .clinicalDocument(model: clinicalDocument), status: clinicalDocument.type, date: dateString, listStatus: clinicalDocument.type ?? "")
         
     }
 }
