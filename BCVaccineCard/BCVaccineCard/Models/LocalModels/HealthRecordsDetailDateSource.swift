@@ -220,8 +220,8 @@ struct HealthRecordsDetailDataSource {
         case .hospitalVisit(model: let model):
             // TODO: Confirm data
             id = model.encounterID
-            title = model.visitType ?? "-"
-            detailNavTitle = model.facility ?? "-"
+            title = model.healthService ?? "-"
+            detailNavTitle = model.healthService ?? "-"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-hospital-visits-icon")
             
