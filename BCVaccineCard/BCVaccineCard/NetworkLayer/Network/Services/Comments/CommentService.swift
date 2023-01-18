@@ -15,6 +15,8 @@ struct CommentService {
     let network: Network
     let authManager: AuthManager
     
+    fileprivate static var blockSync: Bool = false
+    
     private var endpoints: UrlAccessor {
         return UrlAccessor()
     }
@@ -37,9 +39,12 @@ struct CommentService {
     }
     
     public func submitUnsyncedComments(completion: @escaping()->Void) {
+        if CommentService.blockSync {return completion()}
+        CommentService.blockSync = true
         let comments = findCommentsToSync()
         // Must be online and authenticated
         guard !comments.isEmpty, NetworkConnection.shared.hasConnection, authManager.isAuthenticated else {
+            CommentService.blockSync = false
             return completion()
         }
         incrementLoadCounter()
@@ -58,6 +63,7 @@ struct CommentService {
         }
         dispatchGroup.notify(queue: .main) {
             decrementLoadCounter()
+            CommentService.blockSync = false
             return completion()
         }
     }
