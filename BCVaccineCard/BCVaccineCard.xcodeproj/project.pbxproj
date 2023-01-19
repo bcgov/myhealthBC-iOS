@@ -341,6 +341,75 @@
 		3E5E6EC328D3B79A00724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
 		3E5E6EC428D3B8C400724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
 		3E5E6EC528D3B8C500724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
+<<<<<<< Updated upstream
+=======
+		3E60A3FC2978BFA800BB20BE /* MedicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A3FB2978BFA800BB20BE /* MedicationService.swift */; };
+		3E60A3FD2978BFA800BB20BE /* MedicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A3FB2978BFA800BB20BE /* MedicationService.swift */; };
+		3E60A3FE2978BFA800BB20BE /* MedicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A3FB2978BFA800BB20BE /* MedicationService.swift */; };
+		3E66F059290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */; };
+		3E66F05A290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */; };
+		3E66F05B290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */; };
+		3E66F05C290B437500D90EF6 /* Dependent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F058290B437500D90EF6 /* Dependent+CoreDataProperties.swift */; };
+		3E66F05D290B437500D90EF6 /* Dependent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F058290B437500D90EF6 /* Dependent+CoreDataProperties.swift */; };
+		3E66F05E290B437500D90EF6 /* Dependent+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F058290B437500D90EF6 /* Dependent+CoreDataProperties.swift */; };
+		3E66F061290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F05F290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift */; };
+		3E66F062290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F05F290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift */; };
+		3E66F063290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F05F290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift */; };
+		3E66F064290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F060290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift */; };
+		3E66F065290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F060290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift */; };
+		3E66F066290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F060290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift */; };
+		3E6830FD2940D14100100402 /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6830FB2940D14000100402 /* PostComment.swift */; };
+		3E6830FE2940D14100100402 /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6830FB2940D14000100402 /* PostComment.swift */; };
+		3E6830FF2940D14100100402 /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6830FB2940D14000100402 /* PostComment.swift */; };
+		3E6831002940D14100100402 /* PostCommentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6830FC2940D14000100402 /* PostCommentResponse.swift */; };
+		3E6831012940D14100100402 /* PostCommentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6830FC2940D14000100402 /* PostCommentResponse.swift */; };
+		3E6831022940D14100100402 /* PostCommentResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6830FC2940D14000100402 /* PostCommentResponse.swift */; };
+		3E6831042940D14600100402 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831032940D14600100402 /* CommentService.swift */; };
+		3E6831052940D14600100402 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831032940D14600100402 /* CommentService.swift */; };
+		3E6831062940D14600100402 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831032940D14600100402 /* CommentService.swift */; };
+		3E6831142940D41200100402 /* SpecialAuthorityDrug+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831082940D41100100402 /* SpecialAuthorityDrug+CoreDataProperties.swift */; };
+		3E6831152940D41200100402 /* SpecialAuthorityDrug+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831082940D41100100402 /* SpecialAuthorityDrug+CoreDataProperties.swift */; };
+		3E6831162940D41200100402 /* SpecialAuthorityDrug+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831082940D41100100402 /* SpecialAuthorityDrug+CoreDataProperties.swift */; };
+		3E68311D2940D41200100402 /* Perscription+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310B2940D41100100402 /* Perscription+CoreDataClass.swift */; };
+		3E68311E2940D41200100402 /* Perscription+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310B2940D41100100402 /* Perscription+CoreDataClass.swift */; };
+		3E68311F2940D41200100402 /* Perscription+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310B2940D41100100402 /* Perscription+CoreDataClass.swift */; };
+		3E6831202940D41200100402 /* CovidLabTestResult+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310C2940D41100100402 /* CovidLabTestResult+CoreDataProperties.swift */; };
+		3E6831212940D41200100402 /* CovidLabTestResult+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310C2940D41100100402 /* CovidLabTestResult+CoreDataProperties.swift */; };
+		3E6831222940D41200100402 /* CovidLabTestResult+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310C2940D41100100402 /* CovidLabTestResult+CoreDataProperties.swift */; };
+		3E6831232940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310D2940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift */; };
+		3E6831242940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310D2940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift */; };
+		3E6831252940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310D2940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift */; };
+		3E6831262940D41200100402 /* LaboratoryOrder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310E2940D41200100402 /* LaboratoryOrder+CoreDataClass.swift */; };
+		3E6831272940D41200100402 /* LaboratoryOrder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310E2940D41200100402 /* LaboratoryOrder+CoreDataClass.swift */; };
+		3E6831282940D41200100402 /* LaboratoryOrder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310E2940D41200100402 /* LaboratoryOrder+CoreDataClass.swift */; };
+		3E6831292940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310F2940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift */; };
+		3E68312A2940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310F2940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift */; };
+		3E68312B2940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E68310F2940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift */; };
+		3E68312C2940D41200100402 /* HealthVisit+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831102940D41200100402 /* HealthVisit+CoreDataClass.swift */; };
+		3E68312D2940D41200100402 /* HealthVisit+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831102940D41200100402 /* HealthVisit+CoreDataClass.swift */; };
+		3E68312E2940D41200100402 /* HealthVisit+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831102940D41200100402 /* HealthVisit+CoreDataClass.swift */; };
+		3E68312F2940D41200100402 /* HealthVisit+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831112940D41200100402 /* HealthVisit+CoreDataProperties.swift */; };
+		3E6831302940D41200100402 /* HealthVisit+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831112940D41200100402 /* HealthVisit+CoreDataProperties.swift */; };
+		3E6831312940D41200100402 /* HealthVisit+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831112940D41200100402 /* HealthVisit+CoreDataProperties.swift */; };
+		3E6831322940D41200100402 /* Perscription+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831122940D41200100402 /* Perscription+CoreDataProperties.swift */; };
+		3E6831332940D41200100402 /* Perscription+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831122940D41200100402 /* Perscription+CoreDataProperties.swift */; };
+		3E6831342940D41200100402 /* Perscription+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831122940D41200100402 /* Perscription+CoreDataProperties.swift */; };
+		3E6831352940D41200100402 /* CovidLabTestResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831132940D41200100402 /* CovidLabTestResult+CoreDataClass.swift */; };
+		3E6831362940D41200100402 /* CovidLabTestResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831132940D41200100402 /* CovidLabTestResult+CoreDataClass.swift */; };
+		3E6831372940D41200100402 /* CovidLabTestResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831132940D41200100402 /* CovidLabTestResult+CoreDataClass.swift */; };
+		3E68313A2940D77600100402 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831392940D77500100402 /* CommentsViewController.swift */; };
+		3E68313B2940D77600100402 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831392940D77500100402 /* CommentsViewController.swift */; };
+		3E68313C2940D77600100402 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831392940D77500100402 /* CommentsViewController.swift */; };
+		3E6831462940D92600100402 /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831452940D92600100402 /* Comments.storyboard */; };
+		3E6831472940D92600100402 /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831452940D92600100402 /* Comments.storyboard */; };
+		3E6831482940D92600100402 /* Comments.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831452940D92600100402 /* Comments.storyboard */; };
+		3E6831532940DC1600100402 /* CommentTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831522940DC1600100402 /* CommentTextFieldView.swift */; };
+		3E6831542940DC1600100402 /* CommentTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831522940DC1600100402 /* CommentTextFieldView.swift */; };
+		3E6831552940DC1600100402 /* CommentTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6831522940DC1600100402 /* CommentTextFieldView.swift */; };
+		3E6831572940DC3C00100402 /* CommentTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831562940DC3C00100402 /* CommentTextFieldView.xib */; };
+		3E6831582940DC3C00100402 /* CommentTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831562940DC3C00100402 /* CommentTextFieldView.xib */; };
+		3E6831592940DC3C00100402 /* CommentTextFieldView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E6831562940DC3C00100402 /* CommentTextFieldView.xib */; };
+>>>>>>> Stashed changes
 		3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
@@ -1243,6 +1312,32 @@
 		3E5E6EB928D278BD00724EDD /* CommunicationBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationBannerTableViewCell.swift; sourceTree = "<group>"; };
 		3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommunicationBannerTableViewCell.xib; sourceTree = "<group>"; };
 		3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationMessageUIViewController.swift; sourceTree = "<group>"; };
+<<<<<<< Updated upstream
+=======
+		3E60A3FB2978BFA800BB20BE /* MedicationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicationService.swift; sourceTree = "<group>"; };
+		3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dependent+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E66F058290B437500D90EF6 /* Dependent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dependent+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E66F05F290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationRecommendation+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E66F060290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationRecommendation+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E6830FB2940D14000100402 /* PostComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostComment.swift; sourceTree = "<group>"; };
+		3E6830FC2940D14000100402 /* PostCommentResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCommentResponse.swift; sourceTree = "<group>"; };
+		3E6831032940D14600100402 /* CommentService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
+		3E6831072940D1B400100402 /* BCVaccineCard 1.6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.6.xcdatamodel"; sourceTree = "<group>"; };
+		3E6831082940D41100100402 /* SpecialAuthorityDrug+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpecialAuthorityDrug+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E68310B2940D41100100402 /* Perscription+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Perscription+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E68310C2940D41100100402 /* CovidLabTestResult+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CovidLabTestResult+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E68310D2940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LaboratoryOrder+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E68310E2940D41200100402 /* LaboratoryOrder+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LaboratoryOrder+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E68310F2940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpecialAuthorityDrug+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E6831102940D41200100402 /* HealthVisit+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HealthVisit+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E6831112940D41200100402 /* HealthVisit+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HealthVisit+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E6831122940D41200100402 /* Perscription+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Perscription+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		3E6831132940D41200100402 /* CovidLabTestResult+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CovidLabTestResult+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E6831392940D77500100402 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
+		3E6831452940D92600100402 /* Comments.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Comments.storyboard; sourceTree = "<group>"; };
+		3E6831522940DC1600100402 /* CommentTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTextFieldView.swift; sourceTree = "<group>"; };
+		3E6831562940DC3C00100402 /* CommentTextFieldView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentTextFieldView.xib; sourceTree = "<group>"; };
+>>>>>>> Stashed changes
 		3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsViewController.swift; sourceTree = "<group>"; };
 		3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReccomandationTableViewCell.swift; sourceTree = "<group>"; };
 		3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReccomandationTableViewCell.xib; sourceTree = "<group>"; };
@@ -1982,6 +2077,36 @@
 			path = "Detail Field";
 			sourceTree = "<group>";
 		};
+<<<<<<< Updated upstream
+=======
+		2D120D3928FF15CA00EB8EBF /* Dependant */ = {
+			isa = PBXGroup;
+			children = (
+				2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */,
+				2D120D3E28FF17FB00EB8EBF /* DependentService.swift */,
+				2D120D4228FF25A600EB8EBF /* PostDependent.swift */,
+				3E048CC92911ADF100774278 /* StorageService + Dependent.swift */,
+			);
+			path = Dependant;
+			sourceTree = "<group>";
+		};
+		2D9B399D2907170300AE9FA1 /* HealthRecords */ = {
+			isa = PBXGroup;
+			children = (
+				3EAF8188296DF0D400738553 /* utils */,
+				2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */,
+				3E60A3FB2978BFA800BB20BE /* MedicationService.swift */,
+				3E473782291090DB00B5BBA0 /* LabOrderService.swift */,
+				3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */,
+				3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */,
+				3E473786291090EB00B5BBA0 /* VaccineCardService.swift */,
+				3EDC0C7A29673E2F00603FED /* HospitalVisitsService.swift */,
+				3EDC0CAB2967D11B00603FED /* ClinicalDocumentService.swift */,
+			);
+			path = HealthRecords;
+			sourceTree = "<group>";
+		};
+>>>>>>> Stashed changes
 		2DF2102128DD2AF500F5E01C /* SectionDescriptionTableViewCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -3756,6 +3881,7 @@
 				798CA1CD27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */,
 				79218AA92751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				797BB9642767DCE100CD1645 /* HealthGatewayAPIWorker.swift in Sources */,
+				3E60A3FD2978BFA800BB20BE /* MedicationService.swift in Sources */,
 				297885252795F38500FF912D /* SettingsAuthenticateTableViewCell.swift in Sources */,
 				29A4DF4C27DA678000D5E901 /* ChipsView.swift in Sources */,
 				3E5E6EC428D3B8C400724EDD /* CommunicationMessageUIViewController.swift in Sources */,
@@ -4050,6 +4176,7 @@
 				79BDA097270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				29A7442D2762E304008A7DA2 /* HealthRecordDetailViewController.swift in Sources */,
 				79218AB927519E790063004E /* HealthRecordsUserCollectionViewCell.swift in Sources */,
+				3E60A3FE2978BFA800BB20BE /* MedicationService.swift in Sources */,
 				79CF236128171D4300510489 /* ScreenStateManager.swift in Sources */,
 				79A15B0727FE9F5600F8330D /* DataSecurityTipsTableViewCell.swift in Sources */,
 				3E5E6EC528D3B8C500724EDD /* CommunicationMessageUIViewController.swift in Sources */,
@@ -4318,6 +4445,7 @@
 				798005422852C66E006E390F /* CommentView.swift in Sources */,
 				798005432852C66E006E390F /* BCVaccineCard.xcdatamodeld in Sources */,
 				798005442852C66E006E390F /* Constants.swift in Sources */,
+				3E60A3FC2978BFA800BB20BE /* MedicationService.swift in Sources */,
 				798005452852C66E006E390F /* LoginThrottleAPIWorker.swift in Sources */,
 				798005462852C66E006E390F /* UserRecordListTableViewCell.swift in Sources */,
 				3E5E6EC328D3B79A00724EDD /* CommunicationMessageUIViewController.swift in Sources */,

@@ -203,8 +203,33 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         }
     }
     
+<<<<<<< Updated upstream
     private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject) {
         let _ = StorageService.shared.storePatient(name: patientDetails.getFullName, birthday: patientDetails.getBdayDate, phn: patientDetails.resourcePayload?.personalhealthnumber, authenticated: true)
+=======
+    private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject, sourceVC: LoginVCSource) {
+        let patient = StorageService.shared.storePatient(name: patientDetails.getFullName,
+                                                   firstName: "",
+                                                   lastName: "",
+                                                   gender: "",
+                                                   birthday: patientDetails.getBdayDate,
+                                                   phn: patientDetails.resourcePayload?.personalhealthnumber,
+                                                   hdid: AuthManager().hdid,
+                                                   authenticated: true)
+        
+        guard let patient = patient else { return }
+//        let userInfo: [String: Patient] = ["patient": patient]
+//        NotificationCenter.default.post(name: .patientStored, object: nil, userInfo: userInfo)
+        // Note: We need to do this for both background fetch and for normal login fetch
+        let network = AFNetwork()
+        let authManager = AuthManager()
+        DependentService(network: network, authManager: authManager).fetchDependents(for: patient) { _ in
+            VaccineCardService(network: network, authManager: authManager).fetchAndStoreForDependents(of: patient, completion: { _ in
+                
+            })
+        }
+        
+>>>>>>> Stashed changes
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject, specificFetchTypes: [AuthenticationFetchType]?, protectiveWord: String?, initialProtectedMedFetch: Bool) {

@@ -119,7 +119,6 @@ class AuthManager {
     var authTokenExpiery: Date? {
         if let timeIntervalString = keychain[Key.authTokenExpiery.rawValue],
            let  timeInterval = Double(timeIntervalString) {
-            Logger.log(string: "Auth Token Expires in:  \(Date(timeIntervalSince1970: timeInterval))", type: .Auth)
             return Date(timeIntervalSince1970: timeInterval)
         }
         return nil
