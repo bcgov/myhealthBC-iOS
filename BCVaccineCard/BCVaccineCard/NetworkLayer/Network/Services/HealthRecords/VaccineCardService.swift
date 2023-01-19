@@ -7,7 +7,9 @@
 
 import Foundation
 
+
 typealias VaccineCardsResponse = GatewayVaccineCardResponse
+
 
 struct VaccineCardService {
     
@@ -18,6 +20,7 @@ struct VaccineCardService {
         return UrlAccessor()
     }
     
+
     public func fetchAndStore(for patient: Patient, completion: @escaping (VaccineCard?)->Void) {
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
@@ -79,7 +82,7 @@ struct VaccineCardService {
 
 // MARK: Network requests
 extension VaccineCardService {
-    
+
     private func fetch(for patient: Patient, completion: @escaping(_ response: VaccineCardsResponse?) -> Void) {
         
         guard let token = authManager.authToken,

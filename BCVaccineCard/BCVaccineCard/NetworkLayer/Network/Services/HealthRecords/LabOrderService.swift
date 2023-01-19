@@ -46,6 +46,7 @@ struct LabOrderService {
 
 // MARK: Network requests
 extension LabOrderService {
+
     private func fetch(for patient: Patient, completion: @escaping(_ response: labOrdersResponse?) -> Void) {
         
         guard let token = authManager.authToken,

@@ -9,6 +9,7 @@ import Foundation
 
 typealias CovidTestsResponse = AuthenticatedTestResultsResponseModel
 
+
 struct CovidTestsService {
     
     let network: Network
@@ -56,7 +57,7 @@ extension CovidTestsService {
         
         BaseURLWorker.shared.setBaseURL {
             guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
-            
+
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]

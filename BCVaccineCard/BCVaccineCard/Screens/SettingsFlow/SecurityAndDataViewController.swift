@@ -117,7 +117,7 @@ class SecurityAndDataViewController: BaseViewController {
                 guard let `self` = self else {return}
                 Defaults.rememberGatewayDetails = nil
                 StorageService.shared.deleteAllStoredData()
-                AppDelegate.sharedInstance?.showToast(message: .deletedAllRecordsAndSavedData)
+                self.showToast(message: .deletedAllRecordsAndSavedData)
 //                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
                 DispatchQueue.main.async {
                     let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)

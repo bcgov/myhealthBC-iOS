@@ -41,6 +41,12 @@ extension HealthRecordsDetailDataSource.Record {
 }
 
 class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {
+    
+    enum Section: Int, CaseIterable {
+        case Fields
+        case Comments
+    }
+    
     private var fields: [[TextListModel]] = [[]]
     
     struct HeaderSection {
@@ -79,12 +85,29 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
         return (model?.labOrderBannerType() != nil || model?.labOrder()?.reportAvailable == true)
     }
     
+    var numberOrSections: Int {
+        // 2 to account for header & comments or just comments
+        hasHeader ? fields.count + 2 : fields.count + 1
+    }
+    
     override func setup() {
         setupHeaderSection()
         tableView?.register(UINib.init(nibName: LabOrderBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: LabOrderBannerTableViewCell.getName)
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
+        comments = model?.comments ?? []
+    }
+    
+    override func submittedComment(object: Comment) {
+        comments.append(object)
+        tableView?.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { [weak self] in
+            let row = (self?.comments.count ?? 0) - 1
+            guard row >= 0, let numberOfSections = self?.numberOrSections else { return }
+            let indexPath = IndexPath(row: row, section: numberOfSections - 1)
+            self?.tableView?.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        })
     }
     
     private func setupHeaderSection() {
@@ -103,14 +126,21 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return hasHeader ? fields.count + 1 : fields.count
+        return numberOrSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Header section
         if hasHeader, section == 0 {
             return headerSection.headerCount
         }
         
+        // Comment section
+        if section == numberOrSections - 1 {
+            return comments.count
+        }
+        
+        // Fields
         if hasHeader {
             return fields[section - 1].count
         } else {
@@ -120,6 +150,8 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     // TODO: Clean this part up
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let model = self.model else {return UITableViewCell()}
+        
+        // Header cell
         if hasHeader, indexPath.section == 0 {
             if let bannerType = model.labOrderBannerType(), indexPath.row == headerSection.indexOfType(type: .banner) {
                 guard let cell = labOrderHeaderCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
@@ -128,10 +160,19 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
             }
             if model.labOrder()?.reportAvailable == true, indexPath.row == headerSection.indexOfType(type: .pdf) {
                 guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
-                cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance)
+                cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: .viewPDF)
                 return cell
             }
         }
+        
+        // Last section is comments
+        if indexPath.section == numberOrSections - 1 {
+            guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+            cell.configure(comment: comments[indexPath.row])
+            return cell
+        }
+        
+        // Fields
         let fieldSection = hasHeader ? indexPath.section - 1 : indexPath.section
         guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
         cell.setup(with: fields[fieldSection][indexPath.row])
@@ -139,11 +180,28 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == numberOrSections - 1, let model = self.model {
+            let headerView: TableSectionHeader = TableSectionHeader.fromNib()
+            guard !model.comments.isEmpty else {
+                headerView.configure(text: "")
+                return headerView
+            }
+            let commentsString = model.comments.count == 1 ? "Comment" : "Comments"
+            headerView.configure(text: "\(model.comments.count) \(commentsString)",colour: AppColours.appBlue, delegate: self)
+            headerView.backgroundColor = .white
+            return headerView
+        }
         guard section != 0 else {return nil}
         return separatorView()
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == numberOrSections - 1, let model = self.model {
+            guard !model.comments.isEmpty else {
+                return 0
+            }
+            return "Comments".heightForView(font: TableSectionHeader.font, width: bounds.width) + 10
+        }
         guard section != 0 else {return 0}
         return separatorHeight + separatorBottomSpace
     }

@@ -45,7 +45,8 @@ class LoginThrottleAPIWorker: NSObject {
         switch result {
         case .success(let mobileConfig):
             // Note: This is a quickfix for now - should rework so that either we only do this here instead of in tabBar controller
-            if let urlString = mobileConfig.baseURL, let url = URL(string: urlString) {
+            if let urlString = mobileConfig.baseURL,
+               let url = URL(string: urlString) {
                 BaseURLWorker.shared.baseURL = url
             }
             if mobileConfig.online == false {

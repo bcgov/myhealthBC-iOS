@@ -292,12 +292,14 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         guard !dataSource.isEmpty || !inEditMode else { return .none }
-        if !dataSource.isEmpty && dataSource[indexPath.row].authenticated {
+        if dataSource[indexPath.row].authenticated ||
+            dataSource[indexPath.row].patient?.isDependent() == true
+        {
             return .none
         }
         return .delete
     }
-
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             self.deleteCardAt(indexPath: indexPath, reInitEditMode: true, manuallyAdded: true)
@@ -322,8 +324,15 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        if !dataSource.isEmpty && dataSource[indexPath.row].authenticated {
-            return nil
+        if !dataSource.isEmpty {
+            if dataSource[indexPath.row].authenticated {
+                return nil
+            }
+            
+            if let patient = dataSource[indexPath.row].patient, patient.isDependent() {
+                return nil
+            }
+            
         }
         guard orientation == .right else {return nil}
         let deleteAction = SwipeAction(style: .destructive, title: "Unlink") { [weak self] action, indexPath in
@@ -406,7 +415,7 @@ extension CovidVaccineCardsViewController {
 extension CovidVaccineCardsViewController {
     
     private func fetchFromStorage() {
-        let cards = StorageService.shared.fetchVaccineCards()
+        var cards: [VaccineCard] = StorageService.shared.fetchVaccineCards()
         self.dataSource = cards
         self.adjustNavBar()
         self.tableView.reloadData()

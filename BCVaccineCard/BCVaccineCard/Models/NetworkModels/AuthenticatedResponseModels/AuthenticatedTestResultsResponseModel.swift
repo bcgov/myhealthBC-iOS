@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct AuthenticatedTestResultsResponseModel: Codable {
+struct AuthenticatedTestResultsResponseModel: BaseGatewayResponse, Codable {
     let resourcePayload: ResourcePayload?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
-    let resultError: ResultError?
+    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var resultError: ResultError?
     
     // MARK: ResourcePayload
-    struct ResourcePayload: Codable {
-        let loaded: Bool
-        let retryin: Int
-        let orders: [Order]
+    struct ResourcePayload: BaseRetryableGatewayResponse, Codable {
+        var loaded: Bool?
+        var retryin: Int?
+        let orders: [Order]?
         
         // MARK: - Order
         struct Order: Codable {

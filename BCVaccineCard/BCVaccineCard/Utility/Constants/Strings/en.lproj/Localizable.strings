@@ -17,6 +17,7 @@
 "Passes" = "Proofs";
 "Records" = "Records";
 "Cancel" = "Cancel";
+"SendEmail" = "Send Email";
 "Continue" = "Continue";
 "Agree" = "Agree";
 //"Enter" = "Enter";
@@ -52,7 +53,8 @@
 "QueueItClosedTitle" = "QueueIt Waiting Room Closed";
 "QueueItClosedMessage" = "You have closed the QueueIt waiting room";
 "ErrorParsingPHNFromHG" = "Error parsing phn";
-"ErrorParsingPHNMessage" = "The information you entered does not match our records. Please try again.";
+"FormError" = "The information you entered does not match our records. Please try again.";
+"FormErrorDependent" = "The information you entered does not match our records. Please try again.\n\nIf you continue to have issues, please contact HealthGateway@gov.bc.ca";
 "DuplicateTitle" = "Duplicate";
 "DuplicateMessage" = "This QR code is already saved in your list of cards.";
 "DuplicateTestMessage" = "This test is already saved in your list of records.";
@@ -68,6 +70,7 @@
 "InitialOnboardingHealthPassesDescription" = "Save proof of vaccination documents for you and your family. Have them ready for travel or to access events and services that require it.";
 "InitialOnboardingHealthRecordsDescription" = "Access your lab test results, medication history, immunization records, health visits and more. Keep track of what's important to you and your health.";
 "InitialOnboardingHealthResourcesDescription" = "Connect with HealthLink BC for health advice and get the latest information about COVID-19.";
+"InitialOnboardingDependentRecordDescription" = "Access to your children's (11 years old and younger) immunization and COVID-19 test records.";
 "InitialOnboardingNewsFeedDescription" = "Get the latest BC government COVID-19 news";
 "NEW" = "NEW";
 "PHNRequired" = "Personal Health Number is required";
@@ -135,6 +138,14 @@
 "Help" = "Help";
 "Resource" = "Resource";
 "Resources" = "Resources";
+"Dependent" = "Dependent";
+"Dependents" = "Dependents";
+"DependentRecord" = "Dependent record";
+"DependentRegistration" = "Dependent Registration";
+"ManageDependents" = "Manage Dependents";
+"SaveChanges" = "Save Changes";
+"DeleteDependentTitle" = "Remove dependent";
+"DeleteDependentMessage" = "Are you sure you want to remove this dependent (%@) from your applicaiton";
 "ResourceDescriptionText" = "Connect with HealthLink BC for health advice and get the latest information about COVID-19.";
 "GetVaccinatedResource" = "Get vaccinated for COVID-19";
 "GetTestedResource" = "Get a COVID-19 test";
@@ -278,3 +289,4 @@
 "Unselected" = "Unselected";
 "SelectTo" = "Select To";
 "ActionAvailable" = "Action Available: ";
+"FetchRecordError" = "Not all records were fetched successfully";

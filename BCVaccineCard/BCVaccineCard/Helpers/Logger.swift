@@ -19,7 +19,7 @@ class Logger {
     }
     
     /// Add LogType to array to hide logs of that type
-    private static let hiddenLogTypes: [LogType] = [.localAuth, .general]
+    private static let hiddenLogTypes: [LogType] = [.localAuth, .storage]
     
     public static func log(string: String, type: LogType) {
         #if DEV

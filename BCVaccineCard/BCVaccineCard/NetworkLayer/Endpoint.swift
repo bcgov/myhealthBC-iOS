@@ -17,15 +17,21 @@ protocol EndpointsAccessor {
     var getAuthenticatedLaboratoryOrders: URL { get }
     var getAuthenticatedImmunizations: URL { get }
     var getTermsOfService: URL { get }
+    var communicationsMobile: URL { get }
     var throttleHG: URL { get }
     func getAuthenticatedPatientDetails(hdid: String) -> URL
     func getAuthenticatedMedicationStatement(hdid: String) -> URL
     func getAuthenticatedMedicationRequest(hdid: String) -> URL
     func getAuthenticatedHealthVisits(hdid: String) -> URL
+    func getAuthenticatedHospitalVisits(hdid: String) -> URL
     func authenticatedComments(hdid: String) -> URL
+    func authenticatedClinicalDocuments(hdid: String) -> URL
+    func authenticatedClinicalDocumentPDF(hdid: String, fileID: String) -> URL
     func getAuthenticatedLabTestPDF(repordId: String) -> URL
     func validateProfile(hdid: String) -> URL
     func userProfile(hdid: String) -> URL
+    func listOfDependents(hdid: String) -> URL
+    func deleteDependent(dependentHdid: String, guardian: String) -> URL
 }
 
 struct UrlAccessor {
@@ -66,6 +72,10 @@ struct UrlAccessor {
     
     private var encounterServiceBaseURL: URL {
         return baseURL.appendingPathComponent("api/encounterservice")
+    }
+    
+    private var clinicaldocumentserviceBaseURL: URL {
+        return baseURL.appendingPathComponent("api/clinicaldocumentservice")
     }
 
 }
@@ -130,8 +140,20 @@ extension UrlAccessor: EndpointsAccessor {
         return self.encounterServiceBaseURL.appendingPathComponent("Encounter").appendingPathComponent(hdid)
     }
     
+    func getAuthenticatedHospitalVisits(hdid: String) -> URL {
+        return self.encounterServiceBaseURL.appendingPathComponent("Encounter").appendingPathComponent("HospitalVisit").appendingPathComponent(hdid)
+    }
+    
     func authenticatedComments(hdid: String) -> URL {
         return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Comment")
+    }
+    
+    func authenticatedClinicalDocuments(hdid: String) -> URL {
+        return self.clinicaldocumentserviceBaseURL.appendingPathComponent("ClinicalDocument").appendingPathComponent(hdid)
+    }
+    
+    func authenticatedClinicalDocumentPDF(hdid: String, fileID: String) -> URL {
+        return self.authenticatedClinicalDocuments(hdid: hdid).appendingPathComponent("file").appendingPathComponent(fileID)
     }
     
     func getAuthenticatedLabTestPDF(repordId: String) -> URL {
@@ -144,6 +166,14 @@ extension UrlAccessor: EndpointsAccessor {
     
     func userProfile(hdid: String) -> URL {
         return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid)
+    }
+    
+    func listOfDependents(hdid: String) -> URL {
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(hdid).appendingPathComponent("Dependent")
+    }
+    
+    func deleteDependent(dependentHdid: String, guardian: String) -> URL {
+        return self.baseURL.appendingPathComponent("api/gatewayapiservice/UserProfile").appendingPathComponent(guardian).appendingPathComponent("Dependent").appendingPathComponent(dependentHdid)
     }
 }
 

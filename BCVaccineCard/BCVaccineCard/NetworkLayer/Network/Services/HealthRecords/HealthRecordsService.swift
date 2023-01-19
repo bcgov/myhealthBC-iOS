@@ -18,6 +18,7 @@ struct HealthRecordsService {
     
     public func fetchAndStoreHealthRecords(for dependent: Dependent, completion: @escaping ([HealthRecord])->Void) {
         guard let patient = dependent.info else {return completion([])}
+
         let dispatchGroup = DispatchGroup()
         var records: [HealthRecord] = []
         
@@ -26,6 +27,7 @@ struct HealthRecordsService {
         
         dispatchGroup.enter()
         let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
+
         vaccineCardService.fetchAndStore(for: patient) { result in
             if let covidCard = result {
                 let covidRec = HealthRecord(type: .CovidImmunization(covidCard))
@@ -36,6 +38,7 @@ struct HealthRecordsService {
         
         dispatchGroup.enter()
         let covidTestsService = CovidTestsService(network: network, authManager: authManager)
+
         covidTestsService.fetchAndStore(for: patient) { result in
             let uwreapped = result.map({HealthRecord(type: .CovidTest($0))})
             records.append(contentsOf: uwreapped)
@@ -44,6 +47,7 @@ struct HealthRecordsService {
         
         dispatchGroup.enter()
         let immunizationsService = ImmnunizationsService(network: network, authManager: authManager)
+
         immunizationsService.fetchAndStore(for: patient) { result in
             let uwreapped = result.map({HealthRecord(type: .Immunization($0))})
             records.append(contentsOf: uwreapped)

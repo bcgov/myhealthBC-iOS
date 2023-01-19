@@ -33,8 +33,7 @@ class LocalAuthManager {
             Logger.log(string: "Local Auth is blocked, not showing challenge", type: .localAuth)
             return
         }
-        if let delegate = UIApplication.shared.delegate as? AppDelegate,
-           let lastAuth = delegate.lastLocalAuth {
+        if let lastAuth = SessionStorage.lastLocalAuth {
             let timeElapsedInMinutes = (Int(Int(Date().timeIntervalSince(lastAuth))) / 60 ) % 60
             
             if timeElapsedInMinutes <= (LocalAuthManager.timout) {
@@ -63,9 +62,7 @@ class LocalAuthManager {
     
     private func listenToAppGoingToBackground() {
         Notification.Name.didEnterBackground.onPost(object: nil, queue: .main) { _ in
-            if let delegate = UIApplication.shared.delegate as? AppDelegate {
-                delegate.lastLocalAuth = Date()
-            }
+            SessionStorage.lastLocalAuth = Date()
             Logger.log(string: "App going to background", type: .localAuth)
         }
     }
@@ -111,6 +108,10 @@ class LocalAuthManager {
         return result
     }
     
+    private var hasFaceId: Bool {
+        return biometricType == .faceID && isBiometricAvailable
+    }
+    
     public var isEnabled: Bool {
         // TODO
         return true
@@ -138,10 +139,10 @@ class LocalAuthManager {
             self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            if viewType == .Authenticate {
-                // NOTE: For Amir: Commenting this out, as it will automatically authenticate user, and they won't be able to access the details of the local auth screen (Ticket HAPP-637)
-//                self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
+        if hasFaceId && viewType == .Authenticate {
+            //(Ticket HAPP-637)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.useAuth(policy: .deviceOwnerAuthentication, completion: completion)
             }
         }
     }
@@ -200,9 +201,7 @@ class LocalAuthManager {
                 success, authenticationError in
                 DispatchQueue.main.async {
                     if success {
-                        if let delegate = UIApplication.shared.delegate as? AppDelegate {
-                            delegate.lastLocalAuth = Date()
-                        }
+                        SessionStorage.lastLocalAuth = Date()
                         return completion(.Authorized)
                     } else {
                         return completion(.Unauthorized)

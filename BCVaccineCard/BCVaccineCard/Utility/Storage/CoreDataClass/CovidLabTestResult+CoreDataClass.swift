@@ -2,7 +2,7 @@
 //  CovidLabTestResult+CoreDataClass.swift
 //  
 //
-//  Created by Amir on 2021-12-09.
+//  Created by Amir Shayegh on 2022-12-07.
 //
 //
 

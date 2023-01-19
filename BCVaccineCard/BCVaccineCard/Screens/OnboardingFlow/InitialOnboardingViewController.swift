@@ -52,6 +52,8 @@ class InitialOnboardingViewController: UIViewController {
         skipButton.setTitle("Skip intro", for: .normal)
         skipButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 17)
         adjustBottomButton(screenNumber: screenNumber, screensToShow: screensToShow)
+        skipButton.isHidden = screensToShow.count == 1
+        
     }
     
     @IBAction private func skipButtonTapped(_ sender: UIButton) {
