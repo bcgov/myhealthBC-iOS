@@ -49,7 +49,7 @@ struct ImmnunizationsService {
 
 // MARK: Network requests
 extension ImmnunizationsService {
-
+    
     private func fetch(for patient: Patient, currentAttempt: Int, completion: @escaping(_ response: immunizationsResponse?) -> Void) {
         
         guard let token = authManager.authToken,

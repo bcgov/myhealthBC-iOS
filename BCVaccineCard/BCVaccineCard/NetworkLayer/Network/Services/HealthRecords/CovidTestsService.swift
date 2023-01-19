@@ -57,7 +57,7 @@ extension CovidTestsService {
         
         BaseURLWorker.shared.setBaseURL {
             guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
-
+            
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
