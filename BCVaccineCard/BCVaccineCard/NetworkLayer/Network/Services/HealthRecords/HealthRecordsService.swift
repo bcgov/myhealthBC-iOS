@@ -62,13 +62,13 @@ struct HealthRecordsService {
             dispatchGroup.leave()
         }
         
-        dispatchGroup.enter()
-        let medicationService = MedicationService(network: network, authManager: authManager)
-        medicationService.fetchAndStore(for: patient, protected: false) { result in
-            let uwreapped = result.map({HealthRecord(type: .Medication($0))})
-            records.append(contentsOf: uwreapped)
-            dispatchGroup.leave()
-        }
+//        dispatchGroup.enter()
+//        let medicationService = MedicationService(network: network, authManager: authManager)
+//        medicationService.fetchAndStore(for: patient, protected: false) { result in
+//            let uwreapped = result.map({HealthRecord(type: .Medication($0))})
+//            records.append(contentsOf: uwreapped)
+//            dispatchGroup.leave()
+//        }
         
         dispatchGroup.enter()
         let labOrderService = LabOrderService(network: network, authManager: authManager)
