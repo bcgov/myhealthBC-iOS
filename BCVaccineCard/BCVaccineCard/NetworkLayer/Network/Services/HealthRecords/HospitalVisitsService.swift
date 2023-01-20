@@ -20,7 +20,8 @@ struct HospitalVisitsService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([HospitalVisit])->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.hospitalVisit) {return completion([])}
-        network.addLoader(message: .SyncingRecords)
+        
+        network.addLoader(message: .FetchingRecords)
         fetch(for: patient, currentAttempt: 0) { result in
             guard let response = result else {
                 return completion([])
@@ -60,7 +61,12 @@ extension HospitalVisitsService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedHospitalVisitsResponseObject>(url: endpoints.getAuthenticatedHospitalVisits(hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedHospitalVisitsResponseObject>(url: endpoints.getAuthenticatedHospitalVisits(hdid: hdid),
+                                                                                                     type: .Get,
+                                                                                                     parameters: parameters,
+                                                                                                     encoder: .urlEncoder,
+                                                                                                     headers: headers)
+            { result in
                 if let visits = result?.resourcePayload?.hospitalVisits {
                     // return result
                     return completion(visits)

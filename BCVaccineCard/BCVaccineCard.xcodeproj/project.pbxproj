@@ -324,9 +324,6 @@
 		3E3DA94429005AA2009C500F /* (null) in Sources */ = {isa = PBXBuildFile; };
 		3E3DA94529005AA2009C500F /* (null) in Sources */ = {isa = PBXBuildFile; };
 		3E3DA94629005AA2009C500F /* (null) in Sources */ = {isa = PBXBuildFile; };
-		3E47377B2910902900B5BBA0 /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */; };
-		3E47377C2910902900B5BBA0 /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */; };
-		3E47377D2910902900B5BBA0 /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */; };
 		3E47377F291090BC00B5BBA0 /* CovidTestsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */; };
 		3E473780291090BC00B5BBA0 /* CovidTestsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */; };
 		3E473781291090BC00B5BBA0 /* CovidTestsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */; };
@@ -372,6 +369,12 @@
 		3E5E6EC328D3B79A00724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
 		3E5E6EC428D3B8C400724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
 		3E5E6EC528D3B8C500724EDD /* CommunicationMessageUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */; };
+		3E60A4002979B70E00BB20BE /* MedicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A3FF2979B70D00BB20BE /* MedicationService.swift */; };
+		3E60A4012979B70E00BB20BE /* MedicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A3FF2979B70D00BB20BE /* MedicationService.swift */; };
+		3E60A4022979B70E00BB20BE /* MedicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A3FF2979B70D00BB20BE /* MedicationService.swift */; };
+		3E60A4042979B80100BB20BE /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A4032979B80100BB20BE /* ImmunizationsService.swift */; };
+		3E60A4052979B80100BB20BE /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A4032979B80100BB20BE /* ImmunizationsService.swift */; };
+		3E60A4062979B80100BB20BE /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A4032979B80100BB20BE /* ImmunizationsService.swift */; };
 		3E66F059290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */; };
 		3E66F05A290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */; };
 		3E66F05B290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */; };
@@ -1391,7 +1394,6 @@
 		3E32322528B5FEB80067040C /* Recommendations.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Recommendations.storyboard; sourceTree = "<group>"; };
 		3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentListItemTableViewCell.swift; sourceTree = "<group>"; };
 		3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DependentListItemTableViewCell.xib; sourceTree = "<group>"; };
-		3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImmunizationsService.swift; sourceTree = "<group>"; };
 		3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CovidTestsService.swift; sourceTree = "<group>"; };
 		3E473782291090DB00B5BBA0 /* LabOrderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabOrderService.swift; sourceTree = "<group>"; };
 		3E473786291090EB00B5BBA0 /* VaccineCardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineCardService.swift; sourceTree = "<group>"; };
@@ -1407,6 +1409,8 @@
 		3E5E6EB928D278BD00724EDD /* CommunicationBannerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationBannerTableViewCell.swift; sourceTree = "<group>"; };
 		3E5E6EBA28D278BD00724EDD /* CommunicationBannerTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommunicationBannerTableViewCell.xib; sourceTree = "<group>"; };
 		3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationMessageUIViewController.swift; sourceTree = "<group>"; };
+		3E60A3FF2979B70D00BB20BE /* MedicationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedicationService.swift; sourceTree = "<group>"; };
+		3E60A4032979B80100BB20BE /* ImmunizationsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImmunizationsService.swift; sourceTree = "<group>"; };
 		3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dependent+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E66F058290B437500D90EF6 /* Dependent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dependent+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E66F05F290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationRecommendation+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -2222,9 +2226,10 @@
 			children = (
 				3EAF8188296DF0D400738553 /* utils */,
 				2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */,
-				3E47377A2910902900B5BBA0 /* ImmunizationsService.swift */,
-				3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */,
+				3E60A4032979B80100BB20BE /* ImmunizationsService.swift */,
+				3E60A3FF2979B70D00BB20BE /* MedicationService.swift */,
 				3E473782291090DB00B5BBA0 /* LabOrderService.swift */,
+				3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */,
 				3E473786291090EB00B5BBA0 /* VaccineCardService.swift */,
 				3EDC0C7A29673E2F00603FED /* HospitalVisitsService.swift */,
 				3EDC0CAB2967D11B00603FED /* ClinicalDocumentService.swift */,
@@ -4266,7 +4271,6 @@
 				79B9D01A27E31D7100987D9F /* NotificationManager.swift in Sources */,
 				3E5E6EAE28D273F500724EDD /* MockNetwork.swift in Sources */,
 				3E91C7C428B51B0B005AA34F /* Immunization+CoreDataClass.swift in Sources */,
-				3E47377C2910902900B5BBA0 /* ImmunizationsService.swift in Sources */,
 				29921C8B27739609005025D2 /* AuthenticationView.swift in Sources */,
 				2D120D4028FF17FB00EB8EBF /* DependentService.swift in Sources */,
 				792834642731016600EE2710 /* CheckboxTableViewCell.swift in Sources */,
@@ -4347,6 +4351,7 @@
 				3E5E6EBC28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
 				29736A252787A78A00CCB1D2 /* Logger.swift in Sources */,
 				3E68312A2940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift in Sources */,
+				3E60A4052979B80100BB20BE /* ImmunizationsService.swift in Sources */,
 				791D092C27BF5EC000AD7C89 /* AuthenticatedLaboratoryOrdersResponseObject.swift in Sources */,
 				3EDC0CF52967DCA100603FED /* HospitalVisit+CoreDataClass.swift in Sources */,
 				3EDC0CB12967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
@@ -4391,6 +4396,7 @@
 				79B1A0F02874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
 				296519A5272995680002B778 /* AuthManager.swift in Sources */,
 				2978851F2795F16E00FF912D /* SettingsRowTableViewCell.swift in Sources */,
+				3E60A4012979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79218AD727557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
 				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				79D93B1D27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */,
@@ -4602,7 +4608,6 @@
 				79932CAD2790F9FE007E8D92 /* AuthenticationView.swift in Sources */,
 				3E5E6EAF28D273F500724EDD /* MockNetwork.swift in Sources */,
 				3E91C7C528B51B0B005AA34F /* Immunization+CoreDataClass.swift in Sources */,
-				3E47377D2910902900B5BBA0 /* ImmunizationsService.swift in Sources */,
 				29788534279624F000FF912D /* SecurityAndDataViewController.swift in Sources */,
 				2942AC58273AC4CA00A4A466 /* ToggleSettingsTableViewCell.swift in Sources */,
 				2D120D4128FF17FB00EB8EBF /* DependentService.swift in Sources */,
@@ -4685,6 +4690,7 @@
 				29A5B6DF27B55B6C006A9BA7 /* Medication+CoreDataClass.swift in Sources */,
 				3E68312B2940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift in Sources */,
 				79218AE52755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */,
+				3E60A4062979B80100BB20BE /* ImmunizationsService.swift in Sources */,
 				2922C0ED286E37B3000FF4F7 /* BaseHeaderTableViewCell.swift in Sources */,
 				3EDC0CF62967DCA100603FED /* HospitalVisit+CoreDataClass.swift in Sources */,
 				3EDC0CB22967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
@@ -4729,6 +4735,7 @@
 				795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				79B1A0F12874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
 				296519A6272995680002B778 /* AuthManager.swift in Sources */,
+				3E60A4022979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79218AD827557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
 				799E0AFD27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */,
 				796653E227A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift in Sources */,
@@ -4919,7 +4926,6 @@
 				7980058A2852C66E006E390F /* ToggleSettingsTableViewCell.swift in Sources */,
 				3E5E6EAD28D273F500724EDD /* MockNetwork.swift in Sources */,
 				3E91C7C328B51B0B005AA34F /* Immunization+CoreDataClass.swift in Sources */,
-				3E47377B2910902900B5BBA0 /* ImmunizationsService.swift in Sources */,
 				7980058B2852C66E006E390F /* NotificationManager.swift in Sources */,
 				2D120D3F28FF17FB00EB8EBF /* DependentService.swift in Sources */,
 				7980058D2852C66E006E390F /* AuthenticationView.swift in Sources */,
@@ -5000,6 +5006,7 @@
 				3E5E6EBB28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
 				798005C02852C66E006E390F /* TextTableViewCell.swift in Sources */,
 				3E6831292940D41200100402 /* SpecialAuthorityDrug+CoreDataClass.swift in Sources */,
+				3E60A4042979B80100BB20BE /* ImmunizationsService.swift in Sources */,
 				798005C12852C66E006E390F /* InitialOnboardingView.swift in Sources */,
 				3EDC0CF42967DCA100603FED /* HospitalVisit+CoreDataClass.swift in Sources */,
 				3EDC0CB02967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
@@ -5044,6 +5051,7 @@
 				798005DE2852C66E006E390F /* UIAccessibility+EXT.swift in Sources */,
 				798005DF2852C66E006E390F /* AuthenticatedTestResultsResponseModel.swift in Sources */,
 				798005E02852C66E006E390F /* ProtectiveWordPromptViewController.swift in Sources */,
+				3E60A4002979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79B1A0EF2874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
 				798005E12852C66E006E390F /* AuthManager.swift in Sources */,
 				798005E22852C66E006E390F /* SettingsRowTableViewCell.swift in Sources */,

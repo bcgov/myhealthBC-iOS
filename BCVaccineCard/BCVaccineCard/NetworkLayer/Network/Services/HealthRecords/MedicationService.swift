@@ -1,16 +1,15 @@
 //
-//  CovidTestsService.swift
+//  MedicationService.swift
 //  BCVaccineCard
 //
-//  Created by Amir Shayegh on 2022-10-31.
+//  Created by Amir Shayegh on 2023-01-18.
 //
 
 import Foundation
 
-typealias CovidTestsResponse = AuthenticatedTestResultsResponseModel
+typealias MedicationResponse = AuthenticatedMedicationStatementResponseObject
 
-
-struct CovidTestsService {
+struct MedicationService {
     
     let network: Network
     let authManager: AuthManager
@@ -19,37 +18,38 @@ struct CovidTestsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, completion: @escaping ([CovidLabTestResult])->Void) {
+    public func fetchAndStore(for patient: Patient, protected: Bool, completion: @escaping ([Perscription])->Void) {
         network.addLoader(message: .FetchingRecords)
-        fetch(for: patient) { result in
+        // TODO: Handle Protected Fetch
+        fetch(for: patient, protected: protected) { result in
             guard let response = result else {
                 network.removeLoader()
                 return completion([])
             }
-            store(covidtests: response, for: patient, completion: { result in
+            store(medication: response, for: patient, protected: protected, completion: { result in
                 network.removeLoader()
                 return completion(result)
             })
         }
     }
     
-    
     // MARK: Store
-    private func store(covidtests respose: CovidTestsResponse,
+    private func store(medication response: MedicationResponse,
                        for patient: Patient,
-                       completion: @escaping ([CovidLabTestResult])->Void
+                       protected: Bool,
+                       completion: @escaping ([Perscription])->Void
     ) {
-        
-        StorageService.shared.deleteAllRecords(in: patient.testResultArray)
-        let stored = StorageService.shared.storeCovidTestResults(patient: patient, in: respose, authenticated: false, manuallyAdded: false, pdf: nil)
-        return completion(stored)
+        StorageService.shared.deleteAllRecords(in: patient.prescriptionArray)
+        StorageService.shared.storePrescriptions(in: response, patient: patient, initialProtectedMedFetch: protected, completion: completion)
     }
+    
 }
 
 // MARK: Network requests
-extension CovidTestsService {
-    private func fetch(for patient: Patient, completion: @escaping(_ response: CovidTestsResponse?) -> Void) {
-        
+extension MedicationService {
+    
+    private func fetch(for patient: Patient, protected: Bool, completion: @escaping(_ response: MedicationResponse?) -> Void) {
+        // TODO: Handle Protected Fetch
         guard let token = authManager.authToken,
               let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
@@ -64,7 +64,8 @@ extension CovidTestsService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, CovidTestsResponse>(url: endpoints.getAuthenticatedTestResults,
+            // TODO: CONNOR: getAuthenticatedMedicationRequest or getAuthenticatedMedicationStatement?
+            let requestModel = NetworkRequest<HDIDParams, MedicationResponse>(url: endpoints.getAuthenticatedMedicationStatement(hdid: hdid),
                                                                               type: .Get,
                                                                               parameters: parameters,
                                                                               encoder: .urlEncoder,

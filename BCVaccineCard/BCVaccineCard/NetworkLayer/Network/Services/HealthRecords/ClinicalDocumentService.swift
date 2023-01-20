@@ -22,20 +22,26 @@ struct ClinicalDocumentService {
         guard let fileId = document.fileID else {
             return completion(nil)
         }
+        network.addLoader(message: .FetchingRecords)
         fetchPDF(fileID: fileId, patient: patient, completion: {response in
+            network.removeLoader()
             return completion(response?.data)
         })
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([ClinicalDocument])->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.clinicalDocument) {return completion([])}
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
+                network.removeLoader()
                 return completion([])
             }
-            store(HopotalVisits: response, for: patient, completion: completion)
-            network.removeLoader()
+            
+            store(HopotalVisits: response, for: patient, completion: { result in
+                network.removeLoader()
+                return completion(result)
+            })
         }
     }
     
@@ -68,7 +74,12 @@ extension ClinicalDocumentService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedPDFResponseObject>(url: endpoints.authenticatedClinicalDocumentPDF(hdid: hdid, fileID: fileID), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedPDFResponseObject>(url: endpoints.authenticatedClinicalDocumentPDF(hdid: hdid, fileID: fileID),
+                                                                                          type: .Get,
+                                                                                          parameters: parameters,
+                                                                                          encoder: .urlEncoder,
+                                                                                          headers: headers)
+            { result in
                 if let docs = result?.resourcePayload {
                     // return result
                     return completion(docs)
@@ -103,7 +114,12 @@ extension ClinicalDocumentService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedClinicalDocumentResponseObject>(url: endpoints.authenticatedClinicalDocuments(hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedClinicalDocumentResponseObject>(url: endpoints.authenticatedClinicalDocuments(hdid: hdid),
+                                                                                                       type: .Get,
+                                                                                                       parameters: parameters,
+                                                                                                       encoder: .urlEncoder,
+                                                                                                       headers: headers)
+            { result in
                 if let docs = result?.resourcePayload {
                     // return result
                     return completion(docs)

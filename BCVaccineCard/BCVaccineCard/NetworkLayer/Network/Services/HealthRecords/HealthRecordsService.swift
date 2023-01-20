@@ -16,25 +16,8 @@ struct HealthRecordsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStoreVaccineCardForDependents(for patient: Patient) {
-        let dependents = patient.dependentsArray
-        guard dependents.count > 0 else { return }
-        StorageService.shared.deleteDependentVaccineCards(forPatient: patient)
-        dependents.forEach { dependent in
-            let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
-            vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in }
-        }
-    }
-    
-    public func fetchAndStoreVaccineCardForDependent(for dependent: Dependent) {
-        let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
-        network.addLoader(message: .empty)
-        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in
-            network.removeLoader()
-        }
-    }
-    
     public func fetchAndStoreHealthRecords(for dependent: Dependent, completion: @escaping ([HealthRecord])->Void) {
+        guard let patient = dependent.info else {return completion([])}
         
         let dispatchGroup = DispatchGroup()
         var records: [HealthRecord] = []
@@ -44,8 +27,9 @@ struct HealthRecordsService {
         
         dispatchGroup.enter()
         let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
-        vaccineCardService.fetchAndStoreCovidProof(for: dependent) { vaccineCard in
-            if let covidCard = vaccineCard {
+        
+        vaccineCardService.fetchAndStore(for: patient) { result in
+            if let covidCard = result {
                 let covidRec = HealthRecord(type: .CovidImmunization(covidCard))
                 records.append(covidRec)
             }
@@ -54,17 +38,43 @@ struct HealthRecordsService {
         
         dispatchGroup.enter()
         let covidTestsService = CovidTestsService(network: network, authManager: authManager)
-        covidTestsService.fetchAndStoreCovidTests(for: dependent) { covidTests in
-            let covidTestsRec = covidTests.map({HealthRecord(type: .CovidTest($0))})
-            records.append(contentsOf: covidTestsRec)
+        
+        covidTestsService.fetchAndStore(for: patient) { result in
+            let uwreapped = result.map({HealthRecord(type: .CovidTest($0))})
+            records.append(contentsOf: uwreapped)
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
         let immunizationsService = ImmnunizationsService(network: network, authManager: authManager)
-        immunizationsService.fetchAndStoreImmunizations(for: dependent) { immunizations in
-            let immunizationsRec = immunizations.map({HealthRecord(type: .Immunization($0))})
-            records.append(contentsOf: immunizationsRec)
+        
+        immunizationsService.fetchAndStore(for: patient) { result in
+            let uwreapped = result.map({HealthRecord(type: .Immunization($0))})
+            records.append(contentsOf: uwreapped)
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        let clinicalDocsService = ClinicalDocumentService(network: network, authManager: authManager)
+        clinicalDocsService.fetchAndStore(for: patient) { result in
+            let uwreapped = result.map({HealthRecord(type: .ClinicalDocument($0))})
+            records.append(contentsOf: uwreapped)
+            dispatchGroup.leave()
+        }
+        
+//        dispatchGroup.enter()
+//        let medicationService = MedicationService(network: network, authManager: authManager)
+//        medicationService.fetchAndStore(for: patient, protected: false) { result in
+//            let uwreapped = result.map({HealthRecord(type: .Medication($0))})
+//            records.append(contentsOf: uwreapped)
+//            dispatchGroup.leave()
+//        }
+        
+        dispatchGroup.enter()
+        let labOrderService = LabOrderService(network: network, authManager: authManager)
+        labOrderService.fetchAndStore(for: patient) { result in
+            let uwreapped = result.map({HealthRecord(type: .LaboratoryOrder($0))})
+            records.append(contentsOf: uwreapped)
             dispatchGroup.leave()
         }
         

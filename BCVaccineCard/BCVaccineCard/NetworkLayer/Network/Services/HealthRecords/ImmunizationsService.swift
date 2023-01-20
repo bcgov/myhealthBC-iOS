@@ -20,25 +20,28 @@ struct ImmnunizationsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStoreImmunizations(for dependent: Dependent, completion: @escaping ([Immunization])->Void) {
-        fetchImmunizations(for: dependent, currentAttempt: 0) { result in
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([Immunization])->Void) {
+        network.addLoader(message: .FetchingRecords)
+        fetch(for: patient, currentAttempt: 0) { result in
             guard let response = result else {
+                network.removeLoader()
                 return completion([])
             }
-            store(immunizations: response, for: dependent, completion: completion)
+            store(immunizations: response, for: patient, completion: { result in
+                network.removeLoader()
+                return completion(result)
+            })
         }
     }
     
     // MARK: Store
     private func store(immunizations response: immunizationsResponse,
-                       for dependent: Dependent,
+                       for patient: Patient,
                        completion: @escaping ([Immunization])->Void
     ) {
-        guard let patient = dependent.info,
-              let payload = response.resourcePayload
-        else { return completion([]) }
+        guard let payload = response.resourcePayload else { return completion([]) }
+        StorageService.shared.deleteAllRecords(in: patient.immunizationArray)
         let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
-        // TODO: Connor Test stored
         return completion(stored)
     }
     
@@ -46,12 +49,15 @@ struct ImmnunizationsService {
 
 // MARK: Network requests
 extension ImmnunizationsService {
-    private func fetchImmunizations(for dependent: Dependent, currentAttempt: Int, completion: @escaping(_ response: AuthenticatedImmunizationsResponseObject?) -> Void) {
+    
+    private func fetch(for patient: Patient, currentAttempt: Int, completion: @escaping(_ response: immunizationsResponse?) -> Void) {
         
         guard let token = authManager.authToken,
-              let hdid = dependent.info?.hdid,
+              let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
-        else { return completion(nil)}
+        else {
+            return completion(nil)
+        }
         
         guard currentAttempt < maxRetry else {
             network.showToast(message: .fetchRecordError, style: .Warn)
@@ -67,12 +73,17 @@ extension ImmnunizationsService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedImmunizationsResponseObject>(url: endpoints.getAuthenticatedImmunizations, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
+            let requestModel = NetworkRequest<HDIDParams, immunizationsResponse>(url: endpoints.getAuthenticatedImmunizations,
+                                                                                 type: .Get,
+                                                                                 parameters: parameters,
+                                                                                 encoder: .urlEncoder,
+                                                                                 headers: headers)
+            { result in
                 
                 let shouldRetry = result?.resourcePayload?.loadState?.refreshInProgress
                 if  shouldRetry == true {
                     DispatchQueue.main.asyncAfter(deadline: .now() + Double(retryIn)) {
-                        return fetchImmunizations(for: dependent, currentAttempt: currentAttempt + 1, completion: completion)
+                        return fetch(for: patient, currentAttempt: currentAttempt + 1, completion: completion)
                     }
                 } else if (result?.resourcePayload) != nil {
                     // return result

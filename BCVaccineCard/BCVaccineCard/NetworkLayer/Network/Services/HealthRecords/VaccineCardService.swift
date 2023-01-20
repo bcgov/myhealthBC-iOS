@@ -7,33 +7,74 @@
 
 import Foundation
 
-typealias vaccineCardsResponse = GatewayVaccineCardResponse
+
+typealias VaccineCardsResponse = GatewayVaccineCardResponse
+
 
 struct VaccineCardService {
     
     let network: Network
     let authManager: AuthManager
-    private let maxRetry = Constants.NetworkRetryAttempts.publicRetryMaxForTestResults
     
     private var endpoints: UrlAccessor {
         return UrlAccessor()
     }
     
-    public func fetchAndStoreCovidProof(for dependent: Dependent, completion: @escaping (VaccineCard?)->Void) {
-        fetchVaccineProofs(for: dependent, currentAttempt: 0) { result in
+    
+    public func fetchAndStore(for patient: Patient, completion: @escaping (VaccineCard?)->Void) {
+        network.addLoader(message: .FetchingRecords)
+        fetch(for: patient) { result in
             guard let response = result else {
+                network.removeLoader()
                 return completion(nil)
             }
-            store(VaccineCards: response, for: dependent, completion: completion)
+            store(VaccineCards: response, for: patient, completion: { result in
+                network.removeLoader()
+                return completion(result)
+            })
         }
     }
     
-                                                          
-    private func store(VaccineCards: vaccineCardsResponse,
-                       for dependent: Dependent,
+    public func fetchAndStore(for dependent: Dependent, completion: @escaping (VaccineCard?)->Void) {
+        guard let patient = dependent.info else {return}
+        network.addLoader(message: .FetchingRecords)
+        fetchAndStore(for: patient) { vaccineCard in
+            network.removeLoader()
+            return completion(vaccineCard)
+        }
+    }
+    
+    public func fetchAndStoreForDependents(of patient: Patient, completion: @escaping ([VaccineCard])->Void) {
+        let dependents = patient.dependentsArray
+        guard dependents.count > 0 else { return }
+        
+        let dispatchGroup = DispatchGroup()
+        var records: [VaccineCard] = []
+        network.addLoader(message: .FetchingRecords)
+        StorageService.shared.deleteDependentVaccineCards(forPatient: patient)
+        
+        dependents.forEach { dependent in
+            dispatchGroup.enter()
+            fetchAndStore(for: patient) { vaccineCard in
+                if let record = vaccineCard {
+                    records.append(record)
+                }
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            // Return completion
+            network.removeLoader()
+            return completion(records)
+        }
+    }
+    
+    private func store(VaccineCards: VaccineCardsResponse,
+                       for patient: Patient,
                        completion: @escaping (VaccineCard?)->Void
     ) {
-        guard let patient = dependent.info else { return completion(nil) }
+        StorageService.shared.deleteAllRecords(in: patient.vaccineCardArray)
         StorageService.shared.storeVaccineCard(from: VaccineCards, for: patient, manuallyAdded: false, completion: completion)
     }
     
@@ -41,12 +82,11 @@ struct VaccineCardService {
 
 // MARK: Network requests
 extension VaccineCardService {
-   
-    private func fetchVaccineProofs(for dependent: Dependent, currentAttempt: Int, completion: @escaping(_ response: GatewayVaccineCardResponse?) -> Void) {
+    
+    private func fetch(for patient: Patient, completion: @escaping(_ response: VaccineCardsResponse?) -> Void) {
         
-        guard currentAttempt < maxRetry,
-              let token = authManager.authToken,
-              let hdid = dependent.info?.hdid,
+        guard let token = authManager.authToken,
+              let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
         
@@ -59,16 +99,14 @@ extension VaccineCardService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, GatewayVaccineCardResponse>(url: endpoints.getAuthenticatedVaccineCard, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers) { result in
+            let requestModel = NetworkRequest<HDIDParams, VaccineCardsResponse>(url: endpoints.getAuthenticatedVaccineCard,
+                                                                                type: .Get,
+                                                                                parameters: parameters,
+                                                                                encoder: .urlEncoder,
+                                                                                headers: headers)
+            { result in
                 
-                if result?.resourcePayload?.loaded == false,
-                   let retryinMS = result?.resourcePayload?.retryin {
-                    // retry if needed
-                    DispatchQueue.main.asyncAfter(deadline: .now() + Double(retryinMS/1000)) {
-                        fetchVaccineProofs(for: dependent, currentAttempt: currentAttempt + 1, completion: completion)
-                    }
-                    
-                } else if let proofs = result?.resourcePayload {
+                if (result?.resourcePayload) != nil {
                     // return result
                     return completion(result)
                 } else {

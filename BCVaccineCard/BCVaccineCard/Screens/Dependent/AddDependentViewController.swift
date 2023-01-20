@@ -116,15 +116,15 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
                 self?.showInvalidInfoAlert()
                 return
             }
-            
-            HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreVaccineCardForDependent(for: storedDependent)
-            if let patientName = storedDependent.info?.name {
-                self?.showToast(message: "\(patientName) was added")
-            } else {
-                self?.showToast(message: "Dependent was added")
-            }
+            VaccineCardService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: storedDependent, completion: {_ in
+                if let patientName = storedDependent.info?.name {
+                    self?.showToast(message: "\(patientName) was added")
+                } else {
+                    self?.showToast(message: "Dependent was added")
+                }
 
-            self?.navigationController?.popViewController(animated: true)
+                self?.navigationController?.popViewController(animated: true)
+            })
         }
     }
     

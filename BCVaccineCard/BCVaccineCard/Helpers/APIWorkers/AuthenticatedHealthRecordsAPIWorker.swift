@@ -238,9 +238,10 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
         let network = AFNetwork()
         let authManager = AuthManager()
         DependentService(network: network, authManager: authManager).fetchDependents(for: patient) { _ in
-            HealthRecordsService(network: network, authManager: authManager).fetchAndStoreVaccineCardForDependents(for: patient)
+            VaccineCardService(network: network, authManager: authManager).fetchAndStoreForDependents(of: patient, completion: { _ in
+                
+            })
         }
-        
     }
     
     private func initializeRequests(authCredentials: AuthenticationRequestObject,
