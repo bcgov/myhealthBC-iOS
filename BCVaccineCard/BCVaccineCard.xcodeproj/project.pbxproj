@@ -375,6 +375,9 @@
 		3E60A4042979B80100BB20BE /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A4032979B80100BB20BE /* ImmunizationsService.swift */; };
 		3E60A4052979B80100BB20BE /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A4032979B80100BB20BE /* ImmunizationsService.swift */; };
 		3E60A4062979B80100BB20BE /* ImmunizationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A4032979B80100BB20BE /* ImmunizationsService.swift */; };
+		3E60A409297F012600BB20BE /* PDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A408297F012600BB20BE /* PDFService.swift */; };
+		3E60A40A297F012600BB20BE /* PDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A408297F012600BB20BE /* PDFService.swift */; };
+		3E60A40B297F012600BB20BE /* PDFService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E60A408297F012600BB20BE /* PDFService.swift */; };
 		3E66F059290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */; };
 		3E66F05A290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */; };
 		3E66F05B290B437500D90EF6 /* Dependent+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */; };
@@ -1411,6 +1414,7 @@
 		3E5E6EC228D3B79A00724EDD /* CommunicationMessageUIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationMessageUIViewController.swift; sourceTree = "<group>"; };
 		3E60A3FF2979B70D00BB20BE /* MedicationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MedicationService.swift; sourceTree = "<group>"; };
 		3E60A4032979B80100BB20BE /* ImmunizationsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImmunizationsService.swift; sourceTree = "<group>"; };
+		3E60A408297F012600BB20BE /* PDFService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFService.swift; sourceTree = "<group>"; };
 		3E66F057290B437500D90EF6 /* Dependent+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dependent+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E66F058290B437500D90EF6 /* Dependent+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dependent+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E66F05F290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationRecommendation+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -2233,6 +2237,7 @@
 				3E473786291090EB00B5BBA0 /* VaccineCardService.swift */,
 				3EDC0C7A29673E2F00603FED /* HospitalVisitsService.swift */,
 				3EDC0CAB2967D11B00603FED /* ClinicalDocumentService.swift */,
+				3E60A408297F012600BB20BE /* PDFService.swift */,
 			);
 			path = HealthRecords;
 			sourceTree = "<group>";
@@ -4401,6 +4406,7 @@
 				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				79D93B1D27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */,
 				3E66F065290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift in Sources */,
+				3E60A40A297F012600BB20BE /* PDFService.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
 				2922C0E4286E33F8000FF4F7 /* MessageBannerTableViewCell.swift in Sources */,
 				3EDC0CF82967DCA100603FED /* Comment+CoreDataProperties.swift in Sources */,
@@ -4740,6 +4746,7 @@
 				799E0AFD27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */,
 				796653E227A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift in Sources */,
 				3E66F066290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift in Sources */,
+				3E60A40B297F012600BB20BE /* PDFService.swift in Sources */,
 				794BD6512702EEC00084ADA8 /* String+EXT.swift in Sources */,
 				2922C0E5286E33F8000FF4F7 /* MessageBannerTableViewCell.swift in Sources */,
 				3EDC0CF92967DCA100603FED /* Comment+CoreDataProperties.swift in Sources */,
@@ -5056,6 +5063,7 @@
 				798005E12852C66E006E390F /* AuthManager.swift in Sources */,
 				798005E22852C66E006E390F /* SettingsRowTableViewCell.swift in Sources */,
 				3E66F064290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift in Sources */,
+				3E60A409297F012600BB20BE /* PDFService.swift in Sources */,
 				798005E32852C66E006E390F /* TextListViewTableViewCell.swift in Sources */,
 				798005E42852C66E006E390F /* InitialOnboardingViewController.swift in Sources */,
 				3EDC0CF72967DCA100603FED /* Comment+CoreDataProperties.swift in Sources */,
@@ -5272,7 +5280,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
@@ -5305,7 +5313,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
@@ -5423,7 +5431,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -5431,7 +5439,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bc.gov.myhealth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "MyHealth BC - 2023";
@@ -5451,7 +5459,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -5459,7 +5467,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bc.gov.myhealth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "MyHealth BC - 2023";

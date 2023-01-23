@@ -270,7 +270,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     @objc func showFilters() {
         let fv: FilterRecordsView = UIView.fromNib()
         let allFilters = RecordsFilter.RecordType.avaiableFilters
-        let dependentFilters: [RecordsFilter.RecordType] = [.Covid, .Immunizations, .LabTests, .ClinicalDocuments]
+        let dependentFilters: [RecordsFilter.RecordType] = RecordsFilter.RecordType.dependentFilters
         fv.showModally(on: view.findTopMostVC()?.view ?? view,
                        availableFilters: isDependent ? dependentFilters : allFilters,
                        filter: currentFilter)

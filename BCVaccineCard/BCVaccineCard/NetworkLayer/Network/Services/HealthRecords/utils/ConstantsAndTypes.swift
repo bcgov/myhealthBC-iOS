@@ -17,13 +17,10 @@ struct HealthRecordConstants {
             .immunization,
             .healthVisit,
             .specialAuthorityDrug,
-            .hospitalVisit,
-            .clinicalDocument
+//            .hospitalVisit,
+//            .clinicalDocument
         ]
     }
-    // TODO:
-//    static var enabledDependentTypes: [RecordType] {
-//    }
 }
 
 extension HealthRecordConstants {
@@ -90,5 +87,9 @@ extension RecordsFilter.RecordType {
     static var avaiableFilters: [RecordsFilter.RecordType] {
         let availableTypes = HealthRecordConstants.enabledTypes
         return availableTypes.compactMap({$0.toRecordsFilterType()})
+    }
+    
+    static var dependentFilters: [RecordsFilter.RecordType] {
+        return [.Covid, .Immunizations]
     }
 }
