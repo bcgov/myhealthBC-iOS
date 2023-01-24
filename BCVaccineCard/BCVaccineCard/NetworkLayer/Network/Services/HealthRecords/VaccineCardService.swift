@@ -55,7 +55,7 @@ struct VaccineCardService {
         
         dependents.forEach { dependent in
             dispatchGroup.enter()
-            fetchAndStore(for: patient) { vaccineCard in
+            fetchAndStore(for: dependent) { vaccineCard in
                 if let record = vaccineCard {
                     records.append(record)
                 }

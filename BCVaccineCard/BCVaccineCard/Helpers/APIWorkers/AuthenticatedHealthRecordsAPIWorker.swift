@@ -30,6 +30,7 @@ enum AuthenticationFetchType {
     case HospitalVisits
     case ClinicalDocuments
     case Comments
+//    case Dependents
     
     // NOTE: The reason this is not in localized file yet is because we don't know what loader will look like, so text will likely change
     var getName: String {
@@ -45,6 +46,7 @@ enum AuthenticationFetchType {
         case .Comments: return "Comments"
         case .HospitalVisits: return "Hospital Visits"
         case .ClinicalDocuments: return "Clinical Documents"
+//        case .Dependents: return "Dependents"
         }
     }
 }
@@ -270,12 +272,13 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             self.getAuthenticatedVaccineCard(authCredentials: authCredentials)
             self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             self.getAuthenticatedSpecialAuthorityDrugs(authCredentials: authCredentials)
-            self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
             self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
+            self.getAuthenticatedLabOrders(authCredentials: authCredentials)
             self.getAuthenticatedHospitalVisits(authCredentials: authCredentials)
             self.getAuthenticatedClinicalDocuments(authCredentials: authCredentials)
             self.getAuthenticatedTestResults(authCredentials: authCredentials)
+//            self.getDependents(authCredentials: authCredentials)
             return
         }
         self.getQueueItWorkingByHittingTestResultsEndpoint(authCredentials: authCredentials, completion: {})
@@ -285,12 +288,13 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             case .TestResults: self.getAuthenticatedTestResults(authCredentials: authCredentials)
             case .MedicationStatement: self.getAuthenticatedMedicationStatement(authCredentials: authCredentials, protectiveWord: protectiveWord ?? authManager.protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
             case .SpecialAuthorityDrugs: self.getAuthenticatedSpecialAuthorityDrugs(authCredentials: authCredentials)
-            case .LaboratoryOrders: self.getAuthenticatedLaboratoryOrders(authCredentials: authCredentials)
+            case .LaboratoryOrders: self.getAuthenticatedLabOrders(authCredentials: authCredentials)
             case .Immunizations: self.getAuthenticatedImmunizations(authCredentials: authCredentials)
             case .HealthVisits: self.getAuthenticatedHealthVisits(authCredentials: authCredentials)
             case .HospitalVisits: getAuthenticatedHospitalVisits(authCredentials: authCredentials)
             case .ClinicalDocuments: self.getAuthenticatedClinicalDocuments(authCredentials: authCredentials)
             case .Comments, .PatientDetails: break
+//            case .Dependents: self.getDependents(authCredentials: authCredentials)
             }
         }
     }
@@ -419,6 +423,44 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
                 self.handleImmunizationsResponse(result: result)
             }
         }
+    }
+    
+//    private func getDependents(authCredentials: AuthenticationRequestObject) {
+//        guard let patientObject = self.patientDetails else { return }
+//        guard let patient = StorageService.shared.fetchOrCreatePatient(
+//            phn: patientObject.resourcePayload?.personalhealthnumber,
+//            name: patientObject.getFullName,
+//            firstName: "",
+//            lastName: "",
+//            gender: "",
+//            birthday: patientObject.getBdayDate,
+//            authenticated: true
+//        ) else {
+//            return
+//        }
+//
+//        DependentService(network: AFNetwork(), authManager: AuthManager()).fetchDependents(for: patient) { _ in
+//            VaccineCardService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreForDependents(of: patient, completion: { _ in
+//
+//            })
+//        }
+//    }
+    
+    private func getAuthenticatedLabOrders(authCredentials: AuthenticationRequestObject) {
+        guard let patientObject = self.patientDetails else { return }
+        guard let patient = StorageService.shared.fetchOrCreatePatient(
+            phn: patientObject.resourcePayload?.personalhealthnumber,
+            name: patientObject.getFullName,
+            firstName: "",
+            lastName: "",
+            gender: "",
+            birthday: patientObject.getBdayDate,
+            authenticated: true
+        ) else {
+            return
+        }
+        LabOrderService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, completion: {_ in})
+        
     }
     
     private func getAuthenticatedHospitalVisits(authCredentials: AuthenticationRequestObject) {
