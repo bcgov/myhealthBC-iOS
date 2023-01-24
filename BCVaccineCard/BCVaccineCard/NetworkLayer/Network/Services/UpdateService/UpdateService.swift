@@ -31,8 +31,8 @@ struct UpdateService {
             url: url,
             type: .Get,
             parameters: nil,
-            headers: nil,
-            completion: { responseData in
+            headers: nil)
+        { responseData in
                 guard let response = responseData,
                       let results = response.results,
                       !results.isEmpty,
@@ -42,7 +42,7 @@ struct UpdateService {
                     return completion(false)
                 }
                 return completion(storeVersion > currentVersion)
-        })
+        }
         network.request(with: request)
     }
     

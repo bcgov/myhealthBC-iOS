@@ -20,9 +20,9 @@ struct GatewayTestResultResponse: Codable, Equatable {
     let resultError: ResultError?
     
     // MARK: - ResourcePayload
-    struct ResourcePayload: Codable {
-        let loaded: Bool
-        let retryin: Int
+    struct ResourcePayload: BaseRetryableGatewayResponse, Codable {
+        var loaded: Bool?
+        var retryin: Int?
         let records: [GatewayTestResultResponseRecord]
         let reportAvailable: Bool?
         let id: String?

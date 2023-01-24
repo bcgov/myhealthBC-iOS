@@ -15,6 +15,9 @@ class NetworkConnection {
     
     private var onChange: ((_ connected: Bool)->Void)?
     
+    private var debounceOnline = false
+    private var debounceTimer: Timer? = nil
+    
     public var hasConnection: Bool {
         if let connection = reachability?.connection {
             return connection != .unavailable
@@ -40,19 +43,22 @@ class NetworkConnection {
         }
 
         reachability.whenReachable = { [weak self] reachability in
+            guard let `self` = self, let notifier = self.onChange else {return}
+            if self.debounceOnline {return}
+            self.debounceOnline = true
+            self.debounceTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.resetDebounce), userInfo: nil, repeats: false)
+            
             if reachability.connection == .wifi {
                 Logger.log(string: "Reachable via WiFi", type: .Network)
             } else {
                 Logger.log(string: "Reachable via Cellular", type: .Network)
             }
-            guard let `self` = self, let notifier = self.onChange else {return}
             notifier(true)
         }
         reachability.whenUnreachable = { [weak self] _ in
-            
+            guard let `self` = self,let  notifier = self.onChange else {return}
             Logger.log(string: "Not reachable", type: .Network)
             AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
-            guard let `self` = self,let  notifier = self.onChange else {return}
             notifier(false)
         }
 
@@ -62,5 +68,9 @@ class NetworkConnection {
             Logger.log(string: "Unable to start Reachability notifier", type: .Network)
         }
 
+    }
+    
+    @objc fileprivate func resetDebounce() {
+        self.debounceOnline = false
     }
 }

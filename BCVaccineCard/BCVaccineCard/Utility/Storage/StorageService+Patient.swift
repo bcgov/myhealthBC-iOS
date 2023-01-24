@@ -17,9 +17,15 @@ protocol StoragePatientManager {
     ///   - phn: Optional phn
     /// - Returns: Patient object
     func storePatient(name: String?,
+                      firstName: String?,
+                      lastName: String?,
+                      gender: String?,
                       birthday: Date?,
                       phn: String?,
-                      authenticated: Bool) -> Patient?
+                      hdid: String?,
+                      authenticated: Bool
+    ) -> Patient?
+    
     // MARK: Update
     /// Update a patient entity to add phn or add name and birthday.
     /// This function will find the patient based on the data given and update it. if not found, returns nil
@@ -28,7 +34,15 @@ protocol StoragePatientManager {
     ///   - name: name to update or search with
     ///   - birthday: birthday to update or search with
     /// - Returns: Updated patient if found and updated successfully.
-    func updatePatient(phn: String, name: String, birthday: Date, authenticated: Bool) -> Patient?
+    func updatePatient(phn: String,
+                       name: String,
+                       firstName: String?,
+                       lastName: String?,
+                       gender: String?,
+                       birthday: Date,
+                       hdid: String?,
+                       authenticated: Bool
+    ) -> Patient?
     
     // MARK: Delete
     func deletePatient(phn: String)
@@ -67,11 +81,21 @@ protocol StoragePatientManager {
     ///   - phn: phn
     ///   - name: name
     ///   - birthday: birthday
+    ///   - hdid: hdid
     /// - Returns: stored patient
-    func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool) -> Patient?
+    func fetchOrCreatePatient(phn: String?,
+                              name: String?,
+                              firstName: String?,
+                              lastName: String?,
+                              gender: String?,
+                              birthday: Date?,
+                              hdid: String?,
+                              authenticated: Bool
+    ) -> Patient?
 }
 
 extension StorageService: StoragePatientManager {
+    
     
     // MARK: Store
     /// returns existing patient
@@ -80,26 +104,46 @@ extension StorageService: StoragePatientManager {
     /// - Does the same thing as fetchOrCreatePatient()
     public func storePatient(
         name: String? = nil,
+        firstName: String?,
+        lastName: String?,
+        gender: String?,
         birthday: Date? = nil,
         phn: String? = nil,
+        hdid: String? = nil,
         authenticated: Bool
     ) -> Patient? {
-        return fetchOrCreatePatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated)
+        return fetchOrCreatePatient(
+            phn: phn,
+            name: name,
+            firstName: firstName,
+            lastName: lastName,
+            gender: gender,
+            birthday: birthday,
+            hdid: hdid,
+            authenticated: authenticated)
     }
     
     /// Create a new patient entry in storage.
     fileprivate func savePatient(
         name: String? = nil,
+        firstName: String?,
+        lastName: String?,
+        gender: String?,
         birthday: Date? = nil,
         phn: String? = nil,
+        hdid: String? = nil,
         authenticated: Bool
     ) -> Patient? {
         guard let context = managedContext else {return nil}
         let patient = Patient(context: context)
         patient.birthday = birthday
         patient.name = name
+        patient.firstName = firstName
+        patient.lastName = lastName
+        patient.gender = gender
         patient.phn = phn
         patient.authenticated = authenticated
+        patient.hdid = hdid
         patient.authManagerDisplayName = AuthManager().displayName
         do {
             try context.save()
@@ -115,20 +159,29 @@ extension StorageService: StoragePatientManager {
     
     /// Update a patient entity to add phn or add name and birthday.
     /// This function will find the patient based on the data given and update it. if not found, returns nil
-    func updatePatient(phn: String, name: String, birthday: Date, authenticated: Bool) -> Patient? {
+    func updatePatient(
+        phn: String,
+        name: String,
+        firstName: String?,
+        lastName: String?,
+        gender: String?,
+        birthday: Date,
+        hdid: String?,
+        authenticated: Bool
+    ) -> Patient? {
         if let patient = fetchPatient(phn: phn) {
-            return update(phn: phn, name: name, birthday: birthday, authenticated: authenticated, for: patient)
+            return update(phn: phn, name: name, birthday: birthday, hdid: hdid, authenticated: authenticated, for: patient)
             
         } else if let patient = fetchPatient(name: name, birthday: birthday) {
-            return update(phn: phn, name: name, birthday: birthday, authenticated: authenticated, for: patient)
+            return update(phn: phn, name: name, birthday: birthday, hdid: hdid, authenticated: authenticated, for: patient)
         }
         return nil
     }
     
     /// Updates values that are not nil
-    fileprivate func update(phn: String?, name: String?, birthday: Date?, authenticated: Bool, for patient: Patient) -> Patient? {
+    fileprivate func update(phn: String?, name: String?, birthday: Date?, hdid: String?, authenticated: Bool, for patient: Patient) -> Patient? {
         guard let context = managedContext else {return nil}
-        if patient.name == name && patient.phn == phn && patient.birthday == birthday && patient.authenticated == authenticated {return patient}
+        if patient.name == name && patient.phn == phn && patient.birthday == birthday && patient.hdid == hdid && patient.authenticated == authenticated {return patient}
         do {
             if let patientName = name {
                 patient.name = patientName
@@ -138,6 +191,9 @@ extension StorageService: StoragePatientManager {
             }
             if let healthNumber = phn {
                 patient.phn = healthNumber
+            }
+            if let hdid = hdid {
+                patient.hdid = hdid
             }
             if authenticated != patient.authenticated {
                 patient.authenticated = authenticated
@@ -242,7 +298,16 @@ extension StorageService: StoragePatientManager {
     ///   - name: name
     ///   - birthday: birthday
     /// - Returns: stored patient
-    public func fetchOrCreatePatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool) -> Patient? {
+    public func fetchOrCreatePatient(
+        phn: String?,
+        name: String?,
+        firstName: String?,
+        lastName: String?,
+        gender: String?,
+        birthday: Date?,
+        hdid: String? = nil,
+        authenticated: Bool
+    ) -> Patient? {
         var phnPatient: Patient?
         var dobPatient: Patient?
         
@@ -257,20 +322,43 @@ extension StorageService: StoragePatientManager {
         // If patient doesnt exist, create it
         let foundPatient = phnPatient ?? dobPatient
         guard let patient = foundPatient else {
-            return createPatient(phn: phn, name: name, birthday: birthday, authenticated: authenticated)
+            return createPatient(
+                phn: phn,
+                name: name,
+                firstName: firstName,
+                lastName: lastName,
+                gender: gender,
+                birthday: birthday,
+                hdid: hdid,
+                authenticated: authenticated)
         }
         
         // otherwise update user data if needed and return
-        _ = update(phn: phn, name: name, birthday: birthday, authenticated: authenticated, for: patient)
+        _ = update(phn: phn, name: name, birthday: birthday, hdid: hdid, authenticated: authenticated, for: patient)
         
         return patient
     }
     
     /// This function is meant to be used by fetchOrCreatePatient
     /// All is does is verify
-    fileprivate func createPatient(phn: String?, name: String?, birthday: Date?, authenticated: Bool) -> Patient? {
+    fileprivate func createPatient(phn: String?,
+                                   name: String?,
+                                   firstName: String?,
+                                   lastName: String?,
+                                   gender: String?,
+                                   birthday: Date?,
+                                   hdid: String?,
+                                   authenticated: Bool) -> Patient? {
         if (phn != nil) || (birthday != nil && name != nil) {
-            return savePatient(name: name, birthday: birthday, phn: phn, authenticated: authenticated)
+            return savePatient(
+                name: name,
+                firstName: firstName,
+                lastName: lastName,
+                gender: gender,
+                birthday: birthday,
+                phn: phn,
+                hdid: hdid,
+                authenticated: authenticated)
         }
         
         return nil

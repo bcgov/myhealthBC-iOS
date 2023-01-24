@@ -2,7 +2,7 @@
 //  Comment+CoreDataProperties.swift
 //  
 //
-//  Created by Amir on 2022-03-04.
+//  Created by Amir Shayegh on 2023-01-05.
 //
 //
 
@@ -16,6 +16,7 @@ extension Comment {
         return NSFetchRequest<Comment>(entityName: "Comment")
     }
 
+    @NSManaged public var createdBy: String?
     @NSManaged public var createdDateTime: Date?
     @NSManaged public var entryTypeCode: String?
     @NSManaged public var id: String?
@@ -25,8 +26,13 @@ extension Comment {
     @NSManaged public var updatedDateTime: Date?
     @NSManaged public var userProfileID: String?
     @NSManaged public var version: Int64
-    @NSManaged public var createdBy: String?
+    @NSManaged public var covidLabTestResult: CovidLabTestResult?
+    @NSManaged public var healthVIsit: HealthVisit?
+    @NSManaged public var laboratoryOrder: LaboratoryOrder?
     @NSManaged public var prescription: NSSet?
+    @NSManaged public var specialAuthorityDrug: SpecialAuthorityDrug?
+    @NSManaged public var hospitalVisit: HospitalVisit?
+    @NSManaged public var clinicalDocument: ClinicalDocument?
 
 }
 

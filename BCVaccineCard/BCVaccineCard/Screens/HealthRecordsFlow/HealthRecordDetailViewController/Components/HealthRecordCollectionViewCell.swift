@@ -11,6 +11,7 @@ import UIKit
 class HealthRecordCollectionViewCell: UICollectionViewCell {
     
     private var model: HealthRecordsDetailDataSource.Record?
+    private var delegate: HealthRecordDetailDelegate?
     private weak var recordView: BaseHealthRecordsDetailView?
     
     override init(frame: CGRect) {
@@ -21,7 +22,8 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(model: HealthRecordsDetailDataSource.Record) {
+    func configure(model: HealthRecordsDetailDataSource.Record, delegate: HealthRecordDetailDelegate) {
+        self.delegate = delegate
         self.model = model
         self.recordView?.removeFromSuperview()
         let recordView: BaseHealthRecordsDetailView
@@ -40,11 +42,15 @@ class HealthRecordCollectionViewCell: UICollectionViewCell {
             recordView = HealthVisitRecordDetailView(frame: .zero)
         case .specialAuthorityDrug:
             recordView = SpecialAuthorityDrugDetailView(frame: .zero)
+        case .hospitalVisit:
+            recordView = HospitalVisitRecordDetailView(frame: .zero)
+        case .clinicalDocument:
+            recordView = ClinicalDocumentRecordDetailView(frame: .zero)
         }
         self.contentView.subviews.forEach({$0.removeFromSuperview()})
         self.contentView.addSubview(recordView)
-        recordView.addEqualSizeContraints(to: self.contentView, paddingVertical: 0, paddingHorizontal: 20)
-        recordView.setup(model: model)
+        recordView.addEqualSizeContraints(to: self.contentView, paddingVertical: 0, paddingHorizontal: 0)
+        recordView.setup(model: model, enableComments: model.commentsEnabled, delegate: delegate)
         self.recordView = recordView
     }
 }

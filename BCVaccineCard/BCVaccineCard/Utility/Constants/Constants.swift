@@ -28,6 +28,8 @@ struct Constants {
             return 1
 //        case .newsFeed:
 //            return 1
+        case .dependents:
+            return 1
         }
     }
     
@@ -63,6 +65,7 @@ struct Constants {
     struct AuthenticationHeaderKeys {
         static let authToken = "Authorization"
         static let hdid = "hdid"
+        static let dependentHdid = "dependentHdid"
     }
     
     struct AuthenticatedMedicationStatementParameters {
@@ -108,6 +111,8 @@ struct Constants {
         static let publicRetryMaxForTestResults = 3
         static let publicRetryMaxForMedicationStatement = 3
         static let publicRetryMaxForLaboratoryOrders = 3
+        static let maxRetry = 5
+        static let retryIn: Int = 5
     }
     
     static let vaccineTable: [VaccineTable] = [

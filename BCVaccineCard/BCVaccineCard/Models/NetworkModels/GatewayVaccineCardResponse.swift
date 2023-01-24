@@ -15,10 +15,10 @@ struct GatewayVaccineCardResponse: Codable {
     let resultError: ResultError?
     
     // MARK: - ResourcePayload
-    struct ResourcePayload: Codable {
+    struct ResourcePayload: BaseRetryableGatewayResponse, Codable {
         let id: String?
-        let loaded: Bool? // This is for fed pass fetch, will be true or false. Max retry fetches set to 3
-        let retryin: Int? // this is for fed pass fetch, in milliseconds
+        var loaded: Bool? // This is for fed pass fetch, will be true or false. Max retry fetches set to 3
+        var retryin: Int? // this is for fed pass fetch, in milliseconds
         let personalhealthnumber, firstname, lastname, birthdate: String?
         let vaccinedate: String?
         let doses, state: Int?

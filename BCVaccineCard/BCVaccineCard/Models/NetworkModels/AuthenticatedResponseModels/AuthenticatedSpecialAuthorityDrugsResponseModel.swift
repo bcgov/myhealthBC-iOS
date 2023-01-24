@@ -8,10 +8,10 @@
 import Foundation
 
 // MARK: - Welcome
-struct AuthenticatedSpecialAuthorityDrugsResponseModel: Codable {
+struct AuthenticatedSpecialAuthorityDrugsResponseModel: BaseGatewayResponse, Codable {
     let resourcePayload: [SpecialAuthorityDrug]?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
-    let resultError: ResultError?
+    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var resultError: ResultError?
     
     // MARK: - ResourcePayload
     struct SpecialAuthorityDrug: Codable {

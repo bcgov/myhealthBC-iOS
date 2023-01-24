@@ -17,17 +17,26 @@ class GetRecordsView: UIView {
         case immunization
         case healthVisit
         case SpecialAuthority
+        case hospitalVisit
+        case clinicalDocument
         
         var getTitle: String {
             switch self {
             case .covidImmunizationRecord: return .getVaccinationRecordsTitle
             case .covidTestResult: return .getCovidTestResultsTitle
-            case .medication: return ""
-            case .laboratoryOrder: return ""
-            case .immunization: return ""
+            case .medication:
+                return ""
+            case .laboratoryOrder:
+                return ""
+            case .immunization:
+                return ""
             case .healthVisit:
                 return ""
             case .SpecialAuthority:
+                return ""
+            case .hospitalVisit:
+                return ""
+            case .clinicalDocument:
                 return ""
             }
         }
@@ -36,12 +45,19 @@ class GetRecordsView: UIView {
             switch self {
             case .covidImmunizationRecord: return .getVaccinationRecordsDescription
             case .covidTestResult: return .getCovidTestResultsDescription
-            case .immunization: return ""
-            case .medication: return ""
-            case .laboratoryOrder: return ""
+            case .immunization:
+                return ""
+            case .medication:
+                return ""
+            case .laboratoryOrder:
+                return ""
             case .healthVisit:
                 return ""
             case .SpecialAuthority:
+                return ""
+            case .hospitalVisit:
+                return ""
+            case .clinicalDocument:
                 return ""
             }
         }
@@ -51,11 +67,17 @@ class GetRecordsView: UIView {
             case .immunization: return UIImage(named: "vaccine-record-icon")
             case .covidImmunizationRecord: return UIImage(named: "vaccine-record-icon")
             case .covidTestResult: return UIImage(named: "test-result-icon")
-            case .medication: return nil
-            case .laboratoryOrder: return nil
+            case .medication:
+                return nil
+            case .laboratoryOrder:
+                return nil
             case .healthVisit:
                 return nil
             case .SpecialAuthority:
+                return nil
+            case .hospitalVisit:
+                return nil
+            case .clinicalDocument:
                 return nil
             }
         }
