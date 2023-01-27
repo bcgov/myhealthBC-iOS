@@ -460,7 +460,6 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             return
         }
         LabOrderService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, completion: {_ in})
-        
     }
     
     private func getAuthenticatedHospitalVisits(authCredentials: AuthenticationRequestObject) {
