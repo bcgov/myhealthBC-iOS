@@ -9,7 +9,7 @@ import UIKit
 
 class ProfileDetailsViewController: BaseViewController {
     
-    enum TableRow: Int, CaseIterable {
+    enum TableRow {
         case headerView
         case firstName
         case lastName
@@ -62,6 +62,11 @@ class ProfileDetailsViewController: BaseViewController {
         return ProfileDetailsViewController()
     }
     
+    struct DataSource {
+        let type: TableRow
+        let text: String?
+    }
+    
     // MARK: Variables
     private var firstName: String?
     private var lastName: String?
@@ -69,7 +74,7 @@ class ProfileDetailsViewController: BaseViewController {
     private var physicalAddress: String?
     private var mailingAddress: String?
     
-    private var dataSource: [String?] = []
+    private var dataSource: [DataSource] = []
     
     // MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -86,18 +91,49 @@ class ProfileDetailsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initializeDataSource()
-        
-        setupTableView()
         navSetup()
-        setupListener()
-        self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
+        setupTableView()
     }
     
     private func initializeDataSource() {
-        dataSource.append(firstName)
-        dataSource.append(lastName)
-        dataSource.append(phn)
-        dataSource.append(physicalAddress)
-        dataSource.append(mailingAddress)
+        let headerName = (firstName ?? "FirstName") + " " + (lastName ?? "LastName") //Note: Not formatting as per designs yet - consistency question
+        dataSource.append(DataSource(type: .headerView, text: headerName))
+        dataSource.append(DataSource(type: .firstName, text: firstName))
+        dataSource.append(DataSource(type: .lastName, text: lastName))
+        dataSource.append(DataSource(type: .phn, text: phn))
+        dataSource.append(DataSource(type: .physicalAddress, text: physicalAddress))
+        dataSource.append(DataSource(type: .mailingAddress, text: mailingAddress))
+    }
+}
+
+// MARK: Nav setup
+extension ProfileDetailsViewController {
+    private func navSetup() {
+        // TODO: See Profile and Settings View Controller
+    }
+}
+
+// MARK: Table View Setup
+extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSource {
+    private func setupTableView() {
+        // TODO: Boilerplate setup here
+    }
+    
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let data = dataSource[indexPath.row]
+        return data.type.getTableViewCell(data: data.text, tableView: tableView, indexPath: indexPath, delegateOwner: self)
+    }
+}
+
+
+// MARK: Address help button delegate
+extension ProfileDetailsViewController: ProfileDetailsTableViewCellDelegate {
+    func addressHelpButtonTapped() {
+        // TODO: Go to website here (using in app web browser)
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ProfileDetailsTableViewCellDelegate: AnyObject {
-    func addressHelpButtonTapped(viewType: ProfileDetailsTableViewCell.ViewType)
+    func addressHelpButtonTapped
 }
 
 class ProfileDetailsTableViewCell: UITableViewCell {
@@ -103,7 +103,7 @@ class ProfileDetailsTableViewCell: UITableViewCell {
     }
     
     @IBAction private func addressHelpButtonTapped(_ sender: Any) {
-        // TODO:
+        self.delegate?.addressHelpButtonTapped()
     }
     
 }

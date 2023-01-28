@@ -125,6 +125,36 @@
             </objects>
             <point key="canvasLocation" x="3584" y="-729"/>
         </scene>
+        <!--Profile Details View Controller-->
+        <scene sceneID="SyJ-y8-DHk">
+            <objects>
+                <viewController storyboardIdentifier="ProfileDetailsViewController" id="JJh-CO-a0c" customClass="ProfileDetailsViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="VD1-Av-Wee">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Yzc-sR-nsF">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="07Y-jW-r6m"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="07Y-jW-r6m" firstAttribute="trailing" secondItem="Yzc-sR-nsF" secondAttribute="trailing" id="JCL-r8-Ty0"/>
+                            <constraint firstItem="Yzc-sR-nsF" firstAttribute="top" secondItem="07Y-jW-r6m" secondAttribute="top" id="NVv-EE-Cvi"/>
+                            <constraint firstItem="Yzc-sR-nsF" firstAttribute="leading" secondItem="07Y-jW-r6m" secondAttribute="leading" id="ngz-b9-jgO"/>
+                            <constraint firstItem="07Y-jW-r6m" firstAttribute="bottom" secondItem="Yzc-sR-nsF" secondAttribute="bottom" id="rJ6-1K-gyy"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="Yzc-sR-nsF" id="Uvw-Vb-OHq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IDJ-hf-Z68" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3555" y="-68"/>
+        </scene>
         <!--Settings-->
         <scene sceneID="iCW-WW-7iV">
             <objects>
