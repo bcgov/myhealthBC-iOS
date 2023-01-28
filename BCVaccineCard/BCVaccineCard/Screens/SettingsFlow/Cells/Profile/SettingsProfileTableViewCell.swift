@@ -54,4 +54,8 @@ class SettingsProfileTableViewCell: UITableViewCell, Theme {
         style(label: nameLabel, style: .Bold, size: 17, colour: .Blue)
     }
     
+    func configureForProfileDetailsScreen(name: String) {
+        // TODO: 
+    }
+    
 }

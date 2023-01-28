@@ -277,6 +277,15 @@
 		2D465B0528CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
 		2D465B0628CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
 		2D465B0728CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
+		2D5218BB29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */; };
+		2D5218BC29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */; };
+		2D5218BD29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */; };
+		2D5218C12984A38000E07382 /* ProfileDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BF2984A38000E07382 /* ProfileDetailsTableViewCell.swift */; };
+		2D5218C22984A38000E07382 /* ProfileDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BF2984A38000E07382 /* ProfileDetailsTableViewCell.swift */; };
+		2D5218C32984A38000E07382 /* ProfileDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BF2984A38000E07382 /* ProfileDetailsTableViewCell.swift */; };
+		2D5218C42984A38000E07382 /* ProfileDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D5218C02984A38000E07382 /* ProfileDetailsTableViewCell.xib */; };
+		2D5218C52984A38000E07382 /* ProfileDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D5218C02984A38000E07382 /* ProfileDetailsTableViewCell.xib */; };
+		2D5218C62984A38000E07382 /* ProfileDetailsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D5218C02984A38000E07382 /* ProfileDetailsTableViewCell.xib */; };
 		2D9B399F2907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A02907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A12907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
@@ -1379,6 +1388,9 @@
 		2D120D3E28FF17FB00EB8EBF /* DependentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentService.swift; sourceTree = "<group>"; };
 		2D120D4228FF25A600EB8EBF /* PostDependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDependent.swift; sourceTree = "<group>"; };
 		2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFAPIWorker.swift; sourceTree = "<group>"; };
+		2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsViewController.swift; sourceTree = "<group>"; };
+		2D5218BF2984A38000E07382 /* ProfileDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsTableViewCell.swift; sourceTree = "<group>"; };
+		2D5218C02984A38000E07382 /* ProfileDetailsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileDetailsTableViewCell.xib; sourceTree = "<group>"; };
 		2D60219828CBEB2D0096614F /* BCVaccineCard 1.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.2.xcdatamodel"; sourceTree = "<group>"; };
 		2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsService.swift; sourceTree = "<group>"; };
 		2DF2102328DD2B2700F5E01C /* ViewPDFTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPDFTableViewCell.swift; sourceTree = "<group>"; };
@@ -2033,6 +2045,7 @@
 				2978851C2795F14800FF912D /* Profile */,
 				297885222795F37000FF912D /* login */,
 				297885212795F17200FF912D /* Row */,
+				2D5218BE2984A36600E07382 /* ProfileDetails */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2223,6 +2236,15 @@
 				3E048CC92911ADF100774278 /* StorageService + Dependent.swift */,
 			);
 			path = Dependant;
+			sourceTree = "<group>";
+		};
+		2D5218BE2984A36600E07382 /* ProfileDetails */ = {
+			isa = PBXGroup;
+			children = (
+				2D5218BF2984A38000E07382 /* ProfileDetailsTableViewCell.swift */,
+				2D5218C02984A38000E07382 /* ProfileDetailsTableViewCell.xib */,
+			);
+			path = ProfileDetails;
 			sourceTree = "<group>";
 		};
 		2D9B399D2907170300AE9FA1 /* HealthRecords */ = {
@@ -3062,6 +3084,7 @@
 				2978851B2795F14100FF912D /* Cells */,
 				2920AC1D278E3DA300F7CAE7 /* SecurityAndDataViewController.swift */,
 				2920AC1F278E626500F7CAE7 /* ProfileAndSettingsViewController.swift */,
+				2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */,
 			);
 			path = SettingsFlow;
 			sourceTree = "<group>";
@@ -3689,6 +3712,7 @@
 				297885202795F16E00FF912D /* SettingsRowTableViewCell.xib in Resources */,
 				293B32CD27D814EB0064BAAA /* CommentViewTableViewCell.xib in Resources */,
 				3E5924C4297086C900936CF1 /* EmptyTableViewCell.xib in Resources */,
+				2D5218C52984A38000E07382 /* ProfileDetailsTableViewCell.xib in Resources */,
 				7944F71526F3A26D006B9444 /* QRSelectionTableViewCell.xib in Resources */,
 				7967E75E26FBDD3900EEF510 /* GoogleService-Info.plist in Resources */,
 				791C27C12718315A001A6E12 /* AddCardsTableViewCell.xib in Resources */,
@@ -3840,6 +3864,7 @@
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
 				79218A9F275141800063004E /* GetARecordTableViewCell.xib in Resources */,
 				79B9D01527E2869D00987D9F /* HomeScreenTableViewCell.xib in Resources */,
+				2D5218C62984A38000E07382 /* ProfileDetailsTableViewCell.xib in Resources */,
 				2978852F279624E100FF912D /* SettingsProfileTableViewCell.xib in Resources */,
 				795AA76527155F6300E59FF1 /* NewsFeed.storyboard in Resources */,
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
@@ -3902,6 +3927,7 @@
 				798006252852C66E006E390F /* SettingsRowTableViewCell.xib in Resources */,
 				798006262852C66E006E390F /* CommentViewTableViewCell.xib in Resources */,
 				3E5924C3297086C900936CF1 /* EmptyTableViewCell.xib in Resources */,
+				2D5218C42984A38000E07382 /* ProfileDetailsTableViewCell.xib in Resources */,
 				798006272852C66E006E390F /* QRSelectionTableViewCell.xib in Resources */,
 				798006282852C66E006E390F /* GoogleService-Info.plist in Resources */,
 				798006292852C66E006E390F /* AddCardsTableViewCell.xib in Resources */,
@@ -4257,6 +4283,7 @@
 				3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */,
 				796653E427A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */,
 				29A12AF7271F69D700A106B5 /* AnalyticsAction.swift in Sources */,
+				2D5218BC29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */,
 				29128F17272AF41F00358014 /* Array+EXT.swift in Sources */,
 				291D43DF2762E1C5005F5B94 /* HealthRecordsView.swift in Sources */,
 				2932DCE7275ECC7C00532BC4 /* CoreDataEncryptionKeyManager.swift in Sources */,
@@ -4405,6 +4432,7 @@
 				79218AD727557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
 				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
 				79D93B1D27D048540083B603 /* AuthenticatedCommentResponseObject.swift in Sources */,
+				2D5218C22984A38000E07382 /* ProfileDetailsTableViewCell.swift in Sources */,
 				3E66F065290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift in Sources */,
 				3E60A40A297F012600BB20BE /* PDFService.swift in Sources */,
 				7944F6BC26F12BC3006B9444 /* String+EXT.swift in Sources */,
@@ -4597,6 +4625,7 @@
 				29128F18272AF41F00358014 /* Array+EXT.swift in Sources */,
 				2932DCE8275ECC8F00532BC4 /* CoreDataEncryptionKeyManager.swift in Sources */,
 				794BD6412702EEC00084ADA8 /* FormDataSource.swift in Sources */,
+				2D5218BD29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */,
 				799050C5273C8558006CD726 /* UserRecordListView.swift in Sources */,
 				796653E527A16915004D103E /* AuthenticatedPatientDetailsResponseObject.swift in Sources */,
 				293B32AC27D25AEF0064BAAA /* Storage+Comments.swift in Sources */,
@@ -4745,6 +4774,7 @@
 				79218AD827557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
 				799E0AFD27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */,
 				796653E227A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift in Sources */,
+				2D5218C32984A38000E07382 /* ProfileDetailsTableViewCell.swift in Sources */,
 				3E66F066290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift in Sources */,
 				3E60A40B297F012600BB20BE /* PDFService.swift in Sources */,
 				794BD6512702EEC00084ADA8 /* String+EXT.swift in Sources */,
@@ -4914,6 +4944,7 @@
 				3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */,
 				7980057C2852C66E006E390F /* FormDataSource.swift in Sources */,
 				7980057D2852C66E006E390F /* AuthenticatedPatientDetailsResponseObject.swift in Sources */,
+				2D5218BB29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */,
 				7980057F2852C66E006E390F /* AnalyticsAction.swift in Sources */,
 				798005802852C66E006E390F /* Array+EXT.swift in Sources */,
 				798005812852C66E006E390F /* HealthRecordsView.swift in Sources */,
@@ -5062,6 +5093,7 @@
 				79B1A0EF2874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
 				798005E12852C66E006E390F /* AuthManager.swift in Sources */,
 				798005E22852C66E006E390F /* SettingsRowTableViewCell.swift in Sources */,
+				2D5218C12984A38000E07382 /* ProfileDetailsTableViewCell.swift in Sources */,
 				3E66F064290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataProperties.swift in Sources */,
 				3E60A409297F012600BB20BE /* PDFService.swift in Sources */,
 				798005E32852C66E006E390F /* TextListViewTableViewCell.swift in Sources */,
