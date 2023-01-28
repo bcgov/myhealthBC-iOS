@@ -170,7 +170,7 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
                 return profileCell(for: indexPath) {[weak self] in
                     guard let `self` = self else {return}
                     // Not using this right now
-//                    self.showProfile()
+                    self.showProfile()
                 }
             } else {
                 return loginCell(for: indexPath) {[weak self] in
