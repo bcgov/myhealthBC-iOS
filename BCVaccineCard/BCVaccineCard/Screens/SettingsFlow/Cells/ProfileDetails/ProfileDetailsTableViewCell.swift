@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ProfileDetailsTableViewCellDelegate: AnyObject {
-    func addressHelpButtonTapped
+    func addressHelpButtonTapped()
 }
 
 class ProfileDetailsTableViewCell: UITableViewCell {
@@ -58,7 +58,8 @@ class ProfileDetailsTableViewCell: UITableViewCell {
     }
     
     private func applyCellHeaderTextFormatting() {
-        // TODO:
+        headerLabel.font = UIFont.bcSansRegularWithSize(size: 14)
+        headerLabel.textColor = AppColours.textBlack
     }
     
     func configure(data: String?, type: ViewType, delegateOwner: UIViewController) {
@@ -71,35 +72,49 @@ class ProfileDetailsTableViewCell: UITableViewCell {
             self.delegate = delegateOwner as? ProfileDetailsTableViewCellDelegate
             detailLabel.text = data == nil ? "No address on record" : data
             addressHelpTextLabel.text = data == nil ? "To add an address, visit" : "If this address is incorrect, please update it"
-            let buttonTitle = data == nil ? "this page" : "here"
-            addressHelpButton.setTitle(buttonTitle, for: .normal)
+            let buttonTitle: NSAttributedString = data == nil ? applyLightButtonFormatting(text: "this page") : applyDarkButtonFormatting(text: "here")
+            addressHelpButton.setAttributedTitle(buttonTitle, for: .normal)
             
             if data == nil {
-                applyLightGreyFormatting(label: detailLabel)
-                applyNormalFormatting(label: addressHelpTextLabel)
-                applyLightButtonFormatting(button: addressHelpButton)
+                applyLightGreyFormatting(label: detailLabel, fontSize: 13)
+                applyNormalFormatting(label: addressHelpTextLabel, fontSize: 13)
             } else {
-                applyNormalFormatting(label: detailLabel)
-                applyLightGreyFormatting(label: addressHelpTextLabel)
-                applyDarkButtonFormatting(button: addressHelpButton)
+                applyNormalFormatting(label: detailLabel, fontSize: 17)
+                applyLightGreyFormatting(label: addressHelpTextLabel, fontSize: 13)
             }
+        } else {
+            applyNormalFormatting(label: detailLabel, fontSize: 17)
         }
     }
     
-    private func applyNormalFormatting(label: UILabel) {
-        // TODO:
+    private func applyNormalFormatting(label: UILabel, fontSize: CGFloat) {
+        label.font = UIFont.bcSansRegularWithSize(size: fontSize)
+        label.textColor = AppColours.textBlack
     }
     
-    private func applyLightGreyFormatting(label: UILabel) {
-        // TODO:
+    private func applyLightGreyFormatting(label: UILabel, fontSize: CGFloat) {
+        label.font = UIFont.bcSansRegularWithSize(size: 13)
+        label.textColor = AppColours.textGray
     }
     
-    private func applyLightButtonFormatting(button: UIButton) {
-        // TODO:
+    private func applyLightButtonFormatting(text: String) -> NSAttributedString {
+        let attributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: UIFont.bcSansRegularWithSize(size: 13),
+            NSAttributedString.Key.foregroundColor: AppColours.appBlue,
+            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        return attributedString
     }
     
-    private func applyDarkButtonFormatting(button: UIButton) {
-        // TODO:
+    private func applyDarkButtonFormatting(text: String) -> NSAttributedString {
+        let attributes: [NSAttributedString.Key: Any] = [
+            NSAttributedString.Key.font: UIFont.bcSansBoldWithSize(size: 13),
+            NSAttributedString.Key.foregroundColor: AppColours.appBlue,
+            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        let attributedString = NSAttributedString(string: text, attributes: attributes)
+        return attributedString
     }
     
     @IBAction private func addressHelpButtonTapped(_ sender: Any) {

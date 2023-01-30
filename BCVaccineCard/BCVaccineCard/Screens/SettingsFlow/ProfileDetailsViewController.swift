@@ -34,12 +34,18 @@ class ProfileDetailsViewController: BaseViewController {
                 guard let name = data, let cell = tableView.dequeueReusableCell(withIdentifier: SettingsProfileTableViewCell.getName, for: indexPath) as? SettingsProfileTableViewCell else {
                     return SettingsProfileTableViewCell()
                 }
+                cell.preservesSuperviewLayoutMargins = false
+                cell.separatorInset = UIEdgeInsets.zero
+                cell.layoutMargins = UIEdgeInsets.zero
                 cell.configureForProfileDetailsScreen(name: name)
                 return cell
             case .firstName, .lastName, .phn, .physicalAddress, .mailingAddress:
                 guard let type = self.getProfileDetailsScreenType, let cell = tableView.dequeueReusableCell(withIdentifier: ProfileDetailsTableViewCell.getName, for: indexPath) as? ProfileDetailsTableViewCell else {
                     return ProfileDetailsTableViewCell()
                 }
+                cell.preservesSuperviewLayoutMargins = false
+                cell.separatorInset = UIEdgeInsets.zero
+                cell.layoutMargins = UIEdgeInsets.zero
                 cell.configure(data: data, type: type, delegateOwner: delegateOwner)
                 return cell
             }
