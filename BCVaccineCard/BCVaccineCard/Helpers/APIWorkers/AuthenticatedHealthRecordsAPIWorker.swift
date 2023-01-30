@@ -225,13 +225,13 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     
     private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject, sourceVC: LoginVCSource) {
         let patient = StorageService.shared.storePatient(name: patientDetails.getFullName,
-                                                   firstName: "",
-                                                   lastName: "",
-                                                   gender: "",
-                                                   birthday: patientDetails.getBdayDate,
-                                                   phn: patientDetails.resourcePayload?.personalhealthnumber,
-                                                   hdid: AuthManager().hdid,
-                                                   authenticated: true)
+                                                         firstName: patientDetails.resourcePayload?.firstname,
+                                                         lastName: patientDetails.resourcePayload?.lastname,
+                                                         gender: patientDetails.resourcePayload?.gender,
+                                                         birthday: patientDetails.getBdayDate,
+                                                         phn: patientDetails.resourcePayload?.personalhealthnumber,
+                                                         hdid: AuthManager().hdid,
+                                                         authenticated: true)
         
         guard let patient = patient else { return }
 //        let userInfo: [String: Patient] = ["patient": patient]

@@ -67,7 +67,14 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     // MARK: Routing
     func showProfile() {
-        alert(title: "Not implemented", message: "Can't view profile yet")
+        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+        // TODO: Get Core Data working for patient with new address objects
+        let addy1Details = AuthenticatedPatientDetailsResponseObject.Address(streetLines: nil, city: "Victoria", state: "BC", postalCode: "V3V 1X5", country: "Canada")
+        let addy2Details = AuthenticatedPatientDetailsResponseObject.Address(streetLines: nil, city: "Vancouver", state: "BC", postalCode: "V6W 2J9", country: "Canada")
+        let physicalAddy = addy1Details.getAddressString
+        let mailingAddy = addy2Details.getAddressString
+        let vc = ProfileDetailsViewController.constructProfileDetailsViewController(firstName: patient.firstName, lastName: patient.lastName, phn: patient.phn, physicalAddress: physicalAddy, mailingAddress: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func showLogin() {

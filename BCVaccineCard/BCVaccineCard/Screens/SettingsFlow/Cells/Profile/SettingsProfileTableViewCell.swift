@@ -55,7 +55,8 @@ class SettingsProfileTableViewCell: UITableViewCell, Theme {
     }
     
     func configureForProfileDetailsScreen(name: String) {
-        // TODO: 
+        nameLabel.text = name
+        viewProfileLabel.isHidden = true
     }
     
 }

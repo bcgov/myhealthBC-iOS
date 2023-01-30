@@ -115,14 +115,25 @@ class ProfileDetailsViewController: BaseViewController {
 // MARK: Nav setup
 extension ProfileDetailsViewController {
     private func navSetup() {
-        // TODO: See Profile and Settings View Controller
+        self.navDelegate?.setNavigationBarWith(title: .profile,
+                                               leftNavButton: nil,
+                                               rightNavButton: nil,
+                                               navStyle: .small,
+                                               navTitleSmallAlignment: .Center,
+                                               targetVC: self,
+                                               backButtonHintString: nil)
     }
 }
 
 // MARK: Table View Setup
 extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
-        // TODO: Boilerplate setup here
+        tableView.register(UINib.init(nibName: SettingsProfileTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsProfileTableViewCell.getName)
+        tableView.register(UINib.init(nibName: ProfileDetailsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ProfileDetailsTableViewCell.getName)
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
     }
     
     
@@ -141,5 +152,7 @@ extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSour
 extension ProfileDetailsViewController: ProfileDetailsTableViewCellDelegate {
     func addressHelpButtonTapped() {
         // TODO: Go to website here (using in app web browser)
+        self.alert(title: "Not Done Yet", message: "In Progress")
+        // Note: May have to refetch patient details when returning to this screen
     }
 }
