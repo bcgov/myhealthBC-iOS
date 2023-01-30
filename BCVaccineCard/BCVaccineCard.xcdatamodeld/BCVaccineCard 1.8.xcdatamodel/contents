@@ -5,7 +5,7 @@
         <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="postalCode" optional="YES" attributeType="String"/>
         <attribute name="state" optional="YES" attributeType="String"/>
-        <attribute name="streetLines" optional="YES" attributeType="Transformable"/>
+        <attribute name="streetLines" optional="YES" attributeType="Transformable" customClassName="[String]"/>
     </entity>
     <entity name="ClinicalDocument" representedClassName="ClinicalDocument" syncable="YES">
         <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>

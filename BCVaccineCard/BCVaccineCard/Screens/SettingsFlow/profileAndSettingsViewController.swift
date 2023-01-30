@@ -68,12 +68,11 @@ class ProfileAndSettingsViewController: BaseViewController {
     // MARK: Routing
     func showProfile() {
         guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-        // TODO: Get Core Data working for patient with new address objects
-        let addy1Details = AuthenticatedPatientDetailsResponseObject.Address(streetLines: nil, city: "Victoria", state: "BC", postalCode: "V3V 1X5", country: "Canada")
-        let addy2Details = AuthenticatedPatientDetailsResponseObject.Address(streetLines: nil, city: "Vancouver", state: "BC", postalCode: "V6W 2J9", country: "Canada")
-        let physicalAddy = addy1Details.getAddressString
-        let mailingAddy = addy2Details.getAddressString
-        let vc = ProfileDetailsViewController.constructProfileDetailsViewController(firstName: patient.firstName, lastName: patient.lastName, phn: patient.phn, physicalAddress: physicalAddy, mailingAddress: nil)
+        let physAddy = patient.physicalAddress
+        let physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: physAddy?.streetLines, city: physAddy?.city, state: physAddy?.state, postalCode: physAddy?.postalCode, country: physAddy?.country).getAddressString
+        let mailAddy = patient.physicalAddress
+        let mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: mailAddy?.streetLines, city: mailAddy?.city, state: mailAddy?.state, postalCode: mailAddy?.postalCode, country: mailAddy?.country).getAddressString
+        let vc = ProfileDetailsViewController.constructProfileDetailsViewController(firstName: patient.firstName, lastName: patient.lastName, phn: patient.phn, physicalAddress: physicalAddress, mailingAddress: mailingAddress)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     

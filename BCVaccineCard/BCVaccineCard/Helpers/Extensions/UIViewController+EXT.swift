@@ -187,6 +187,8 @@ extension UIViewController {
                                                                                 lastName: "",
                                                                                 gender: "",
                                                                                 birthday: birthdate,
+                                                                                physicalAddress: nil,
+                                                                                mailingAddress: nil,
                                                                                 hdid: nil,
                                                                                 authenticated: authenticated)
         else {

@@ -25,17 +25,30 @@ struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
     
     struct Address: Codable {
         let streetLines: [String]?
-        let city: String
-        let state: String
-        let postalCode: String
-        let country: String
+        let city: String?
+        let state: String?
+        let postalCode: String?
+        let country: String?
         
-        var getAddressString: String {
+        var getAddressString: String? {
             var street = ""
             if let streetLines = streetLines, let first = streetLines.first, first.count > 0 {
                 street = first + " ,"
             }
-            return street + city.capitalized + ", " + state.uppercased() + " " + postalCode.uppercased()
+            var cit = ""
+            if let city = city, city.count > 0 {
+                cit = city + ", "
+            }
+            var stat = ""
+            if let state = state, state.count > 0 {
+                stat = state + " "
+            }
+            var postal = ""
+            if let postalCode = postalCode {
+                postal = postalCode
+            }
+            let addyString = street + cit.capitalized + stat.uppercased() + postal.uppercased()
+            return addyString.count > 0 ? addyString : nil
         }
     }
     
