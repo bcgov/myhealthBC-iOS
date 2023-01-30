@@ -82,6 +82,8 @@ class ProfileDetailsViewController: BaseViewController {
     
     private var dataSource: [DataSource] = []
     
+    private var apiClient: APIClient?
+    
     // MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
     
@@ -99,6 +101,12 @@ class ProfileDetailsViewController: BaseViewController {
         initializeDataSource()
         navSetup()
         setupTableView()
+        self.apiClient = APIClient(delegateOwner: self)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+//        self.apiClient = nil
     }
     
     private func initializeDataSource() {
@@ -151,8 +159,61 @@ extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSour
 // MARK: Address help button delegate
 extension ProfileDetailsViewController: ProfileDetailsTableViewCellDelegate {
     func addressHelpButtonTapped() {
-        // TODO: Go to website here (using in app web browser)
-        self.alert(title: "Not Done Yet", message: "In Progress")
-        // Note: May have to refetch patient details when returning to this screen
+        let urlString = "https://www.addresschange.gov.bc.ca/"
+        let vc = UpdateAddressViewController.constructUpdateAddressViewController(delegateOwner: self, urlString: urlString)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: For address change callback
+extension ProfileDetailsViewController: UpdateAddressViewControllerDelegate {
+    func webViewClosed() {
+        self.fetchPatientDetails()
+    }
+}
+
+// MARK: Fetch Patient Details after address has been updated
+extension ProfileDetailsViewController {
+    private func fetchPatientDetails() {
+        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
+        let creds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+        self.tableView.startLoadingIndicator()
+        self.apiClient?.getAuthenticatedPatientDetails(creds, token: nil, executingVC: self, includeQueueItUI: false) { [weak self] result, _ in
+            guard let `self` = self else {return}
+            self.initializePatientDetails(authCredentials: creds, result: result)
+        }
+    }
+    
+    
+    private func initializePatientDetails(authCredentials: AuthenticationRequestObject,
+                                          result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>) {
+        switch result {
+        case .success(let patientDetails):
+            self.storePatient(patientDetails: patientDetails)
+        case .failure(let error):
+            Logger.log(string: error.localizedDescription, type: .Network)
+            self.tableView.endLoadingIndicator()
+        }
+    }
+    
+    private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject) {
+        let phyiscalAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.physicalAddress)
+        let mailingAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.postalAddress)
+        let patient = StorageService.shared.storePatient(name: patientDetails.getFullName,
+                                                         firstName: patientDetails.resourcePayload?.firstname,
+                                                         lastName: patientDetails.resourcePayload?.lastname,
+                                                         gender: patientDetails.resourcePayload?.gender,
+                                                         birthday: patientDetails.getBdayDate,
+                                                         phn: patientDetails.resourcePayload?.personalhealthnumber,
+                                                         physicalAddress: phyiscalAddress,
+                                                         mailingAddress: mailingAddress,
+                                                         hdid: AuthManager().hdid,
+                                                         authenticated: true)
+        self.physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.physicalAddress?.streetLines, city: patient?.physicalAddress?.city, state: patient?.physicalAddress?.state, postalCode: patient?.physicalAddress?.postalCode, country: patient?.physicalAddress?.country).getAddressString
+        self.mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.postalAddress?.streetLines, city: patient?.postalAddress?.city, state: patient?.postalAddress?.state, postalCode: patient?.postalAddress?.postalCode, country: patient?.postalAddress?.country).getAddressString
+        self.dataSource = []
+        initializeDataSource()
+        self.tableView.reloadData()
+        self.tableView.endLoadingIndicator()
     }
 }

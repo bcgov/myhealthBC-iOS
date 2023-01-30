@@ -155,6 +155,40 @@
             </objects>
             <point key="canvasLocation" x="3555" y="-68"/>
         </scene>
+        <!--Update Address View Controller-->
+        <scene sceneID="c95-rV-lqC">
+            <objects>
+                <viewController storyboardIdentifier="UpdateAddressViewController" id="rXN-2q-myV" customClass="UpdateAddressViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="egg-Ic-0Q9">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wYM-EI-qMu">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="UoT-aq-AFL"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="wYM-EI-qMu" firstAttribute="leading" secondItem="UoT-aq-AFL" secondAttribute="leading" id="7xr-xb-ME5"/>
+                            <constraint firstItem="wYM-EI-qMu" firstAttribute="top" secondItem="UoT-aq-AFL" secondAttribute="top" id="BnQ-2z-mVe"/>
+                            <constraint firstItem="UoT-aq-AFL" firstAttribute="trailing" secondItem="wYM-EI-qMu" secondAttribute="trailing" id="O6G-MG-KsW"/>
+                            <constraint firstItem="UoT-aq-AFL" firstAttribute="bottom" secondItem="wYM-EI-qMu" secondAttribute="bottom" id="qkk-P1-b42"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="wYM-EI-qMu" id="TRg-YR-TS8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ikR-NE-Tov" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4463" y="-64"/>
+        </scene>
         <!--Settings-->
         <scene sceneID="iCW-WW-7iV">
             <objects>

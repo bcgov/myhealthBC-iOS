@@ -298,6 +298,9 @@
 		2D5218D52988556100E07382 /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218CB2988556100E07382 /* Patient+CoreDataProperties.swift */; };
 		2D5218D62988556100E07382 /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218CB2988556100E07382 /* Patient+CoreDataProperties.swift */; };
 		2D5218D72988556100E07382 /* Patient+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218CB2988556100E07382 /* Patient+CoreDataProperties.swift */; };
+		2D5218D92988881B00E07382 /* UpdateAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */; };
+		2D5218DA2988881B00E07382 /* UpdateAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */; };
+		2D5218DB2988881B00E07382 /* UpdateAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */; };
 		2D9B399F2907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A02907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A12907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
@@ -1402,6 +1405,7 @@
 		2D5218C92988556100E07382 /* Address+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Address+CoreDataProperties.swift"; path = "../../../../Address+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2D5218CA2988556100E07382 /* Patient+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Patient+CoreDataClass.swift"; path = "../../../../Patient+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2D5218CB2988556100E07382 /* Patient+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Patient+CoreDataProperties.swift"; path = "../../../../Patient+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAddressViewController.swift; sourceTree = "<group>"; };
 		2D60219828CBEB2D0096614F /* BCVaccineCard 1.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.2.xcdatamodel"; sourceTree = "<group>"; };
 		2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsService.swift; sourceTree = "<group>"; };
 		2DF2102328DD2B2700F5E01C /* ViewPDFTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPDFTableViewCell.swift; sourceTree = "<group>"; };
@@ -3096,6 +3100,7 @@
 				2920AC1D278E3DA300F7CAE7 /* SecurityAndDataViewController.swift */,
 				2920AC1F278E626500F7CAE7 /* ProfileAndSettingsViewController.swift */,
 				2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */,
+				2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */,
 			);
 			path = SettingsFlow;
 			sourceTree = "<group>";
@@ -4465,6 +4470,7 @@
 				2922C131287E10EB000FF4F7 /* StorageService+HealthVisits.swift in Sources */,
 				29E19FED286C11C900C235EF /* LabOrderRecordDetailView.swift in Sources */,
 				294BD3D227B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.swift in Sources */,
+				2D5218DA2988881B00E07382 /* UpdateAddressViewController.swift in Sources */,
 				79053CF92773B8AF00D01A29 /* BackgroundTestResultUpdateAPIWorker.swift in Sources */,
 				3E87F4B529032092002F0A0E /* AppStates.swift in Sources */,
 				3EDC0CAD2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
@@ -4809,6 +4815,7 @@
 				2922C132287E10EC000FF4F7 /* StorageService+HealthVisits.swift in Sources */,
 				29E19FEF286C11CA00C235EF /* LabOrderRecordDetailView.swift in Sources */,
 				794BD6522702EEC00084ADA8 /* UIImage+EXT.swift in Sources */,
+				2D5218DB2988881B00E07382 /* UpdateAddressViewController.swift in Sources */,
 				79A15AFF27FC07D500F8330D /* OnboardingCollectionViewCell.swift in Sources */,
 				3E87F4B629032092002F0A0E /* AppStates.swift in Sources */,
 				3EDC0CAE2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,
@@ -5130,6 +5137,7 @@
 				798005E82852C66E006E390F /* HealthRecordsHomeView.swift in Sources */,
 				798005E92852C66E006E390F /* UIImage+EXT.swift in Sources */,
 				798005EA2852C66E006E390F /* CameraViewController.swift in Sources */,
+				2D5218D92988881B00E07382 /* UpdateAddressViewController.swift in Sources */,
 				798005EB2852C66E006E390F /* HiddenRecordsTableViewCell.swift in Sources */,
 				3E87F4B429032092002F0A0E /* AppStates.swift in Sources */,
 				3EDC0CAC2967D11B00603FED /* ClinicalDocumentService.swift in Sources */,

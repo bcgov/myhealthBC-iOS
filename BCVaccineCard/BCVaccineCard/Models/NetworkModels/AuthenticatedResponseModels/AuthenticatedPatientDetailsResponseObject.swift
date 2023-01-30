@@ -33,7 +33,7 @@ struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
         var getAddressString: String? {
             var street = ""
             if let streetLines = streetLines, let first = streetLines.first, first.count > 0 {
-                street = first + " ,"
+                street = first + ", "
             }
             var cit = ""
             if let city = city, city.count > 0 {
