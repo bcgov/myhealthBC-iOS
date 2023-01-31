@@ -17,7 +17,39 @@ struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
     struct ResourcePayload: Codable {
         let hdid, personalhealthnumber, firstname, lastname: String?
         let birthdate, gender: String?
+        let physicalAddress: Address?
+        let postalAddress: Address?
+        let responseCode: String? // Not adding this to core data yet
         // Birthday format: "1967-06-02T00:00:00"
+    }
+    
+    struct Address: Codable {
+        let streetLines: [String]?
+        let city: String?
+        let state: String?
+        let postalCode: String?
+        let country: String?
+        
+        var getAddressString: String? {
+            var street = ""
+            if let streetLines = streetLines, let first = streetLines.first, first.count > 0 {
+                street = first + ", "
+            }
+            var cit = ""
+            if let city = city, city.count > 0 {
+                cit = city + ", "
+            }
+            var stat = ""
+            if let state = state, state.count > 0 {
+                stat = state + " "
+            }
+            var postal = ""
+            if let postalCode = postalCode {
+                postal = postalCode
+            }
+            let addyString = street + cit.capitalized + stat.uppercased() + postal.uppercased()
+            return addyString.count > 0 ? addyString : nil
+        }
     }
     
     var getFullName: String {

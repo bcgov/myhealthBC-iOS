@@ -224,14 +224,18 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
     }
     
     private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject, sourceVC: LoginVCSource) {
+        let phyiscalAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.physicalAddress)
+        let mailingAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.postalAddress)
         let patient = StorageService.shared.storePatient(name: patientDetails.getFullName,
-                                                   firstName: "",
-                                                   lastName: "",
-                                                   gender: "",
-                                                   birthday: patientDetails.getBdayDate,
-                                                   phn: patientDetails.resourcePayload?.personalhealthnumber,
-                                                   hdid: AuthManager().hdid,
-                                                   authenticated: true)
+                                                         firstName: patientDetails.resourcePayload?.firstname,
+                                                         lastName: patientDetails.resourcePayload?.lastname,
+                                                         gender: patientDetails.resourcePayload?.gender,
+                                                         birthday: patientDetails.getBdayDate,
+                                                         phn: patientDetails.resourcePayload?.personalhealthnumber,
+                                                         physicalAddress: phyiscalAddress,
+                                                         mailingAddress: mailingAddress,
+                                                         hdid: AuthManager().hdid,
+                                                         authenticated: true)
         
         guard let patient = patient else { return }
 //        let userInfo: [String: Patient] = ["patient": patient]
@@ -455,6 +459,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             authenticated: true
         ) else {
             return
@@ -471,6 +477,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             authenticated: true
         ) else {
             return
@@ -488,6 +496,8 @@ class AuthenticatedHealthRecordsAPIWorker: NSObject {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             authenticated: true
         ) else {
             return
@@ -1004,6 +1014,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             hdid: nil,
             authenticated: authenticated) else {
             self.decrementLoadCounter()
@@ -1060,6 +1072,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             hdid: nil,
             authenticated: authenticated) else {
             self.decrementLoadCounter()
@@ -1113,6 +1127,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             authenticated: authenticated
         ) else {
             self.decrementLoadCounter()
@@ -1176,6 +1192,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             authenticated: authenticated
         ) else {
             self.decrementLoadCounter()
@@ -1230,6 +1248,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             authenticated: authenticated
         ) else {
             self.decrementLoadCounter()
@@ -1277,6 +1297,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             authenticated: authenticated
         ) else {
             self.decrementLoadCounter()
@@ -1331,6 +1353,8 @@ extension AuthenticatedHealthRecordsAPIWorker {
             lastName: "",
             gender: "",
             birthday: patientObject.getBdayDate,
+            physicalAddress: nil,
+            mailingAddress: nil,
             hdid: nil,
             authenticated: authenticated
         ) else {

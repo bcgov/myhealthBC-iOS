@@ -67,7 +67,13 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     // MARK: Routing
     func showProfile() {
-        alert(title: "Not implemented", message: "Can't view profile yet")
+        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+        let physAddy = patient.physicalAddress
+        let physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: physAddy?.streetLines, city: physAddy?.city, state: physAddy?.state, postalCode: physAddy?.postalCode, country: physAddy?.country).getAddressString
+        let mailAddy = patient.physicalAddress
+        let mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: mailAddy?.streetLines, city: mailAddy?.city, state: mailAddy?.state, postalCode: mailAddy?.postalCode, country: mailAddy?.country).getAddressString
+        let vc = ProfileDetailsViewController.constructProfileDetailsViewController(firstName: patient.firstName, lastName: patient.lastName, phn: patient.phn, physicalAddress: physicalAddress, mailingAddress: mailingAddress)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func showLogin() {
@@ -170,7 +176,7 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
                 return profileCell(for: indexPath) {[weak self] in
                     guard let `self` = self else {return}
                     // Not using this right now
-//                    self.showProfile()
+                    self.showProfile()
                 }
             } else {
                 return loginCell(for: indexPath) {[weak self] in

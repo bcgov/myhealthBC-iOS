@@ -1,8 +1,8 @@
 //
 //  Patient+CoreDataProperties.swift
-//  
+//  BCVaccineCard
 //
-//  Created by Amir Shayegh on 2023-01-05.
+//  Created by Connor Ogilvie on 2023-01-30.
 //
 //
 
@@ -25,18 +25,37 @@ extension Patient {
     @NSManaged public var lastName: String?
     @NSManaged public var name: String?
     @NSManaged public var phn: String?
+    @NSManaged public var clinicalDocuments: NSSet?
     @NSManaged public var covidTestResults: NSSet?
     @NSManaged public var dependencyInfo: Dependent?
     @NSManaged public var dependents: NSSet?
     @NSManaged public var healthVisits: NSSet?
+    @NSManaged public var hospitalVisits: NSSet?
     @NSManaged public var immunizations: NSSet?
     @NSManaged public var laboratoryOrders: NSSet?
     @NSManaged public var prescriptions: NSSet?
     @NSManaged public var recommendations: NSSet?
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
-    @NSManaged public var hospitalVisits: NSSet?
-    @NSManaged public var clinicalDocuments: NSSet?
+    @NSManaged public var physicalAddress: Address?
+    @NSManaged public var postalAddress: Address?
+
+}
+
+// MARK: Generated accessors for clinicalDocuments
+extension Patient {
+
+    @objc(addClinicalDocumentsObject:)
+    @NSManaged public func addToClinicalDocuments(_ value: ClinicalDocument)
+
+    @objc(removeClinicalDocumentsObject:)
+    @NSManaged public func removeFromClinicalDocuments(_ value: ClinicalDocument)
+
+    @objc(addClinicalDocuments:)
+    @NSManaged public func addToClinicalDocuments(_ values: NSSet)
+
+    @objc(removeClinicalDocuments:)
+    @NSManaged public func removeFromClinicalDocuments(_ values: NSSet)
 
 }
 
@@ -88,6 +107,23 @@ extension Patient {
 
     @objc(removeHealthVisits:)
     @NSManaged public func removeFromHealthVisits(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for hospitalVisits
+extension Patient {
+
+    @objc(addHospitalVisitsObject:)
+    @NSManaged public func addToHospitalVisits(_ value: HospitalVisit)
+
+    @objc(removeHospitalVisitsObject:)
+    @NSManaged public func removeFromHospitalVisits(_ value: HospitalVisit)
+
+    @objc(addHospitalVisits:)
+    @NSManaged public func addToHospitalVisits(_ values: NSSet)
+
+    @objc(removeHospitalVisits:)
+    @NSManaged public func removeFromHospitalVisits(_ values: NSSet)
 
 }
 
@@ -190,39 +226,5 @@ extension Patient {
 
     @objc(removeVaccineCard:)
     @NSManaged public func removeFromVaccineCard(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for hospitalVisits
-extension Patient {
-
-    @objc(addHospitalVisitsObject:)
-    @NSManaged public func addToHospitalVisits(_ value: HospitalVisit)
-
-    @objc(removeHospitalVisitsObject:)
-    @NSManaged public func removeFromHospitalVisits(_ value: HospitalVisit)
-
-    @objc(addHospitalVisits:)
-    @NSManaged public func addToHospitalVisits(_ values: NSSet)
-
-    @objc(removeHospitalVisits:)
-    @NSManaged public func removeFromHospitalVisits(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for clinicalDocuments
-extension Patient {
-
-    @objc(addClinicalDocumentsObject:)
-    @NSManaged public func addToClinicalDocuments(_ value: ClinicalDocument)
-
-    @objc(removeClinicalDocumentsObject:)
-    @NSManaged public func removeFromClinicalDocuments(_ value: ClinicalDocument)
-
-    @objc(addClinicalDocuments:)
-    @NSManaged public func addToClinicalDocuments(_ values: NSSet)
-
-    @objc(removeClinicalDocuments:)
-    @NSManaged public func removeFromClinicalDocuments(_ values: NSSet)
 
 }
