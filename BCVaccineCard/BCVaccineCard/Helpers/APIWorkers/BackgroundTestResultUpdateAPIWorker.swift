@@ -58,7 +58,7 @@ extension BackgroundTestResultUpdateAPIWorker {
             if let resultMessage = testResult.resultError?.resultMessage, (testResult.resourcePayload?.records == nil || testResult.resourcePayload?.records.count == 0) {
                 // TODO: Error mapping here
                 self.delegate?.handleError(title: .error, error: ResultError(resultMessage: resultMessage), row: row)
-            } else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.publicRetryMaxForTestResults, let retryinMS = testResult.resourcePayload?.retryin {
+            } else if testResult.resourcePayload?.loaded == false && self.retryCount < Constants.NetworkRetryAttempts.maxRetry - 1, let retryinMS = testResult.resourcePayload?.retryin {
                 // Note: If we don't get QR data back when retrying (for BC Vaccine Card purposes), we
                 self.retryCount += 1
                 let retryInSeconds = Double(retryinMS/1000)
