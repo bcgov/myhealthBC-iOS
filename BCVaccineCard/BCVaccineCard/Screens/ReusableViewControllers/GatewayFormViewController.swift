@@ -796,6 +796,8 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
                                                                        lastName: "",
                                                                        gender: "",
                                                                        birthday: bday,
+                                                                       physicalAddress: nil,
+                                                                       mailingAddress: nil,
                                                                        hdid: nil,
                                                                        authenticated: authenticated
         ) else {return nil}

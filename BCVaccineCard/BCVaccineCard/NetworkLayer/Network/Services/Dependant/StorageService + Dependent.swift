@@ -88,7 +88,9 @@ extension StorageService {
     func deleteDependents(for patient: Patient) {
         guard let context = managedContext else {return}
         guard let dependents = patient.dependents else {return}
+        let dependentsArray = patient.dependentsArray
         patient.removeFromDependents(dependents)
+        dependentsArray.forEach({delete(object: $0)})
         do {
             try context.save()
         } catch let error as NSError {
@@ -100,6 +102,7 @@ extension StorageService {
     func delete(dependents: [Dependent], for patient: Patient) {
         guard let context = managedContext else {return}
         dependents.forEach({patient.removeFromDependents($0)})
+        dependents.forEach({delete(object: $0)})
         do {
             try context.save()
         } catch let error as NSError {
