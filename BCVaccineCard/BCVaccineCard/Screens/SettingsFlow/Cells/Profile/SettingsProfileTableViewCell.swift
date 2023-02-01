@@ -50,7 +50,7 @@ class SettingsProfileTableViewCell: UITableViewCell, Theme {
     // MARK: Style
     fileprivate func style() {
         viewProfileLabel.text = .viewProfile
-        style(label: viewProfileLabel, style: .Regular, size: 13, colour: .Grey)
+        style(label: viewProfileLabel, style: .Regular, size: 13, colour: .Blue)
         style(label: nameLabel, style: .Bold, size: 17, colour: .Blue)
     }
     
