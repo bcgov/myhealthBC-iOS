@@ -18,7 +18,7 @@ struct HealthRecordConstants {
             .healthVisit,
             .specialAuthorityDrug,
             .hospitalVisit,
-            .clinicalDocument
+//            .clinicalDocument
         ]
     }
 }
@@ -90,6 +90,6 @@ extension RecordsFilter.RecordType {
     }
     
     static var dependentFilters: [RecordsFilter.RecordType] {
-        return [.Covid, .Immunizations, .ClinicalDocuments, .LabTests]
+        return [.Covid, .Immunizations, .LabTests]
     }
 }
