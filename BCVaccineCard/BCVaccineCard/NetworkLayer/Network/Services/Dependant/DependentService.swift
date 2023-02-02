@@ -28,8 +28,11 @@ struct DependentService {
             network.removeLoader()
             StorageService.shared.deleteDependents(for: patient)
             StorageService.shared.store(dependents: payload, for: patient, completion: { result in
-                network.removeLoader()
-                completion(result)
+                // Fetch vaccine cards for dependents - Always needed after fetching patients
+                VaccineCardService(network: network, authManager: authManager).fetchAndStoreForDependents(of: patient, completion: { _ in
+                    network.removeLoader()
+                    completion(result)
+                })
             })
             
         }
