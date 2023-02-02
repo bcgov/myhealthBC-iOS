@@ -60,9 +60,9 @@ class StorageService: StorageManagerProtocol {
     
     var managedContext: NSManagedObjectContext?
     
-    init(managedContext: NSManagedObjectContext = CoreDataStack.shared.managedContext,
+    init(context: NSManagedObjectContext? = AppDelegate.sharedInstance?.coreDataContext,
          mergePolicy: Any = NSMergeByPropertyObjectTrumpMergePolicy) {
-        self.managedContext = managedContext
+        self.managedContext = context
         self.managedContext?.mergePolicy = mergePolicy
     }
     

@@ -20,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
     
+    var coreDataContext: NSManagedObjectContext?
+    
     fileprivate var dataLoadCount: Int = 0 
     internal var dataLoadHideTimer: Timer? = nil
     internal var dataLoadTag = 9912341
@@ -31,7 +33,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UpdateServiceStorage.setOrResetstoredAppVersion()
         MigrationService().removeExistingDBIfNeeded()
-        configure()
+        CoreDataProvider.shared.loadManagedContext { context in
+            if context == nil {
+                // Could not load storage
+                self.showDBLoadError()
+            } else {
+                self.coreDataContext = context
+                self.configure()
+            }
+        }
+        
         return true
     }
     

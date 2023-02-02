@@ -58,8 +58,19 @@ class TabBarController: UITabBarController {
     var routerWorker: RouterWorker?
     var network = NetworkConnection()
 
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if AppDelegate.sharedInstance?.coreDataContext == nil {
+            AppDelegate.sharedInstance?.showDBLoadError()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        if AppDelegate.sharedInstance?.coreDataContext == nil {
+            return
+        }
         BaseURLWorker.setup(BaseURLWorker.Config(delegateOwner: self))
         network.initListener { connected in
             if connected {

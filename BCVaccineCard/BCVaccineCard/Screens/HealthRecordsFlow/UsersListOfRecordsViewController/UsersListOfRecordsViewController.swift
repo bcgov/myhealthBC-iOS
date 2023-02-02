@@ -41,6 +41,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     @IBOutlet weak private var parentContainerStackView: UIStackView!
     
+    private var refreshDebounceTimer: Timer? = nil
     private var patient: Patient?
     private var authenticated: Bool = true
     private var navStyle: NavStyle = .singleUser
@@ -137,6 +138,8 @@ class UsersListOfRecordsViewController: BaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
+        
         NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
     }
     
@@ -154,9 +157,6 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
         fetchDataSource()
-        if showLoadingTitle {
-            self.parentContainerStackView.startLoadingIndicator(backgroundColor: .white)
-        }
     }
     
     private func updatePatientIfNecessary() {
@@ -399,9 +399,8 @@ extension UsersListOfRecordsViewController {
                 
                 return showItem
             })
+            tableView.reloadData()
         }
-        
-        self.view.startLoadingIndicator(backgroundColor: .clear)
         
         if AuthManager().isAuthenticated {
             handleAuthenticatedMedicalRecords(patientRecords: patientRecords, initialProtectedMedFetch: initialProtectedMedFetch)
@@ -414,8 +413,6 @@ extension UsersListOfRecordsViewController {
         }
         self.setupTableView()
         self.navSetup(style: navStyle, authenticated: self.authenticated)
-        
-        self.view.endLoadingIndicator()
         
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
@@ -462,6 +459,7 @@ extension UsersListOfRecordsViewController {
         self.hiddenRecords.removeAll()
         self.hiddenCellType = medFetchRequired ? .medicalRecords : nil
         self.patientRecordsTemp = nil
+        tableView.reloadData()
     }
     
     private func promptProtectiveVC(medFetchRequired: Bool) {
@@ -785,5 +783,18 @@ extension UsersListOfRecordsViewController {
         adjustLoadingIndicator(show: false)
         //        self.tableView.endLoadingIndicator()
         self.fetchDataSource(initialProtectedMedFetch: true)
+        self.fetchDataSource(initialProtectedMedFetch: true)
+    }
+    
+    @objc private func storageChangeEvent(_ notification: Notification) {
+        guard let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+        guard event.event == .Save else {return}
+        refreshDebounceTimer?.invalidate()
+        refreshDebounceTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(refreshOnStorageUpdate), userInfo: nil, repeats: false)
+    }
+    
+    @objc private func refreshOnStorageUpdate() {
+        let patientRecords = fetchPatientRecords()
+        show(records: patientRecords, filter: currentFilter)
     }
 }
