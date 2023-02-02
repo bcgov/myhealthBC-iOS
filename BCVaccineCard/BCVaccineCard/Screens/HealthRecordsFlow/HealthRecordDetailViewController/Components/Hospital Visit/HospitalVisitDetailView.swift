@@ -105,6 +105,10 @@ extension HospitalVisitRecordDetailView {
                     thirdLine: TextProperties(text: "Inpatient visits only show the first attending physician.", bolded: false, italic: true, fontSize: 17, textColor: .grey)
                 ),
                 TextListModel(
+                    header: TextProperties(text: "Service description:", bolded: true),
+                    subtext: TextProperties(text: model.healthService ?? "", bolded: false)
+                ),
+                TextListModel(
                     header: TextProperties(text: "Visit type:", bolded: true),
                     subtext: TextProperties(text: model.visitType ?? "", bolded: false)),
                 TextListModel(

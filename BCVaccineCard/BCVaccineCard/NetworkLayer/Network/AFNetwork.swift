@@ -116,7 +116,7 @@ extension AFNetwork {
                                                                   responsePayload: BaseRetryableGatewayResponse) -> RetryRestult {
         if responsePayload.loaded == false {
             if let attempts = requestAttempts[requestData.url] {
-                if attempts < requestData.maxAttempts - 1 {
+                if attempts < requestData.maxAttempts {
                     // havent reached max retry yet
                     return .ShouldRetry
                 } else {
