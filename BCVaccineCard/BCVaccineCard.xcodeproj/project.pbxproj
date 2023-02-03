@@ -360,12 +360,18 @@
 		3E47378B2911053A00B5BBA0 /* DependentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47378A2911053A00B5BBA0 /* DependentInfoViewController.swift */; };
 		3E47378C2911053A00B5BBA0 /* DependentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47378A2911053A00B5BBA0 /* DependentInfoViewController.swift */; };
 		3E47378D2911053A00B5BBA0 /* DependentInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47378A2911053A00B5BBA0 /* DependentInfoViewController.swift */; };
+		3E585503298C56DD006778AD /* DBLoadFatalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E585502298C56DD006778AD /* DBLoadFatalError.swift */; };
+		3E585505298C56E5006778AD /* DBLoadFatalError.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E585504298C56E5006778AD /* DBLoadFatalError.xib */; };
 		3E5924C0297086C900936CF1 /* EmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5924BE297086C900936CF1 /* EmptyTableViewCell.swift */; };
 		3E5924C1297086C900936CF1 /* EmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5924BE297086C900936CF1 /* EmptyTableViewCell.swift */; };
 		3E5924C2297086C900936CF1 /* EmptyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5924BE297086C900936CF1 /* EmptyTableViewCell.swift */; };
 		3E5924C3297086C900936CF1 /* EmptyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5924BF297086C900936CF1 /* EmptyTableViewCell.xib */; };
 		3E5924C4297086C900936CF1 /* EmptyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5924BF297086C900936CF1 /* EmptyTableViewCell.xib */; };
 		3E5924C5297086C900936CF1 /* EmptyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E5924BF297086C900936CF1 /* EmptyTableViewCell.xib */; };
+		3E5A68DE298C57BD00E94A01 /* DBLoadFatalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E585502298C56DD006778AD /* DBLoadFatalError.swift */; };
+		3E5A68DF298C57BE00E94A01 /* DBLoadFatalError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E585502298C56DD006778AD /* DBLoadFatalError.swift */; };
+		3E5A68E0298C57C400E94A01 /* DBLoadFatalError.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E585504298C56E5006778AD /* DBLoadFatalError.xib */; };
+		3E5A68E1298C57C500E94A01 /* DBLoadFatalError.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E585504298C56E5006778AD /* DBLoadFatalError.xib */; };
 		3E5E6E9B28D239BE00724EDD /* CommunicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6E9A28D239BE00724EDD /* CommunicationService.swift */; };
 		3E5E6E9C28D239BE00724EDD /* CommunicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6E9A28D239BE00724EDD /* CommunicationService.swift */; };
 		3E5E6E9D28D239BE00724EDD /* CommunicationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E6E9A28D239BE00724EDD /* CommunicationService.swift */; };
@@ -1428,6 +1434,8 @@
 		3E473782291090DB00B5BBA0 /* LabOrderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabOrderService.swift; sourceTree = "<group>"; };
 		3E473786291090EB00B5BBA0 /* VaccineCardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaccineCardService.swift; sourceTree = "<group>"; };
 		3E47378A2911053A00B5BBA0 /* DependentInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentInfoViewController.swift; sourceTree = "<group>"; };
+		3E585502298C56DD006778AD /* DBLoadFatalError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBLoadFatalError.swift; sourceTree = "<group>"; };
+		3E585504298C56E5006778AD /* DBLoadFatalError.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DBLoadFatalError.xib; sourceTree = "<group>"; };
 		3E5924BE297086C900936CF1 /* EmptyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyTableViewCell.swift; sourceTree = "<group>"; };
 		3E5924BF297086C900936CF1 /* EmptyTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EmptyTableViewCell.xib; sourceTree = "<group>"; };
 		3E5E6E9A28D239BE00724EDD /* CommunicationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationService.swift; sourceTree = "<group>"; };
@@ -2328,6 +2336,15 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		3E585501298C56C5006778AD /* BDLoadFatalError */ = {
+			isa = PBXGroup;
+			children = (
+				3E585502298C56DD006778AD /* DBLoadFatalError.swift */,
+				3E585504298C56E5006778AD /* DBLoadFatalError.xib */,
+			);
+			path = BDLoadFatalError;
+			sourceTree = "<group>";
+		};
 		3E5E6E9E28D23B5D00724EDD /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -2880,6 +2897,7 @@
 		7944F6B026F12A9D006B9444 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				3E585501298C56C5006778AD /* BDLoadFatalError */,
 				3EDC0D072968926000603FED /* KVC */,
 				3EF0DF2E2954AF7F00408A1E /* Session */,
 				2940A34E2728393100132D7D /* Storage */,
@@ -3707,6 +3725,7 @@
 				79FDE426273335DC00DAD988 /* FederalPassView.xib in Resources */,
 				293B32C627D27A880064BAAA /* CommentsTableViewCell.xib in Resources */,
 				294BD3D327B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
+				3E5A68E0298C57C400E94A01 /* DBLoadFatalError.xib in Resources */,
 				3E6831472940D92600100402 /* Comments.storyboard in Resources */,
 				297885262795F38500FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				791C27BB27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
@@ -3812,6 +3831,7 @@
 				79590D9B2811EA25006EB59F /* CommentsTableViewCell.xib in Resources */,
 				297F6DB5280F16540023E89C /* AuthenticationView.xib in Resources */,
 				3E048CC8291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
+				3E5A68E1298C57C500E94A01 /* DBLoadFatalError.xib in Resources */,
 				297F6DB6280F16A70023E89C /* AuthenticationInfoView.xib in Resources */,
 				2DF2102A28DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
 				2922C0D6286E17DC000FF4F7 /* LabOrderBannerTableViewCell.xib in Resources */,
@@ -3922,6 +3942,7 @@
 				798006112852C66E006E390F /* FederalPassView.xib in Resources */,
 				798006122852C66E006E390F /* CommentsTableViewCell.xib in Resources */,
 				798006132852C66E006E390F /* HiddenRecordsTableViewCell.xib in Resources */,
+				3E585505298C56E5006778AD /* DBLoadFatalError.xib in Resources */,
 				3E6831462940D92600100402 /* Comments.storyboard in Resources */,
 				798006142852C66E006E390F /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				798006152852C66E006E390F /* ButtonTableViewCell.xib in Resources */,
@@ -4315,6 +4336,7 @@
 				79A2582E2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
 				7967E74726F9071A00EEF510 /* SettingsTableViewCell.swift in Sources */,
 				3EDC0CFB2967DCA100603FED /* ClinicalDocument+CoreDataClass.swift in Sources */,
+				3E5A68DE298C57BD00E94A01 /* DBLoadFatalError.swift in Sources */,
 				29719544288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
 				2971955F288719D400CA824A /* ImmunizationForecastTableViewCell.swift in Sources */,
 				2942AC56273AC30900A4A466 /* ToggleSettingsTableViewCell.swift in Sources */,
@@ -4660,6 +4682,7 @@
 				29719545288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
 				29719560288719D400CA824A /* ImmunizationForecastTableViewCell.swift in Sources */,
 				3EDC0CFC2967DCA100603FED /* ClinicalDocument+CoreDataClass.swift in Sources */,
+				3E5A68DF298C57BE00E94A01 /* DBLoadFatalError.swift in Sources */,
 				795AA7392710920600E59FF1 /* ResultError.swift in Sources */,
 				79932CAD2790F9FE007E8D92 /* AuthenticationView.swift in Sources */,
 				3E5E6EAF28D273F500724EDD /* MockNetwork.swift in Sources */,
@@ -4982,6 +5005,7 @@
 				798005872852C66E006E390F /* UserRecordListView.swift in Sources */,
 				798005882852C66E006E390F /* LargerTouchAreaButton.swift in Sources */,
 				3EDC0CFA2967DCA100603FED /* ClinicalDocument+CoreDataClass.swift in Sources */,
+				3E585503298C56DD006778AD /* DBLoadFatalError.swift in Sources */,
 				29719543288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
 				2971955E288719D400CA824A /* ImmunizationForecastTableViewCell.swift in Sources */,
 				798005892852C66E006E390F /* SettingsTableViewCell.swift in Sources */,
@@ -5337,7 +5361,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
@@ -5370,7 +5394,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
@@ -5488,7 +5512,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -5516,7 +5540,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = L796QSLV3E;
 				INFOPLIST_FILE = "BCVaccineCard/PROD Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;

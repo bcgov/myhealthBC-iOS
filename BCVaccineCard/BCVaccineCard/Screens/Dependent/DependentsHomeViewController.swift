@@ -22,7 +22,7 @@ class DependentsHomeViewController: BaseDependentViewController {
     private var patient: Patient? = nil
     private let emptyLogoTag = 23412
     private let authManager = AuthManager()
-    private let storageService = StorageService()
+    private let storageService = StorageService.shared
     
     private var blockDependentSelection: Bool = false
     fileprivate var lastKnowContentOfsset: CGFloat = 0

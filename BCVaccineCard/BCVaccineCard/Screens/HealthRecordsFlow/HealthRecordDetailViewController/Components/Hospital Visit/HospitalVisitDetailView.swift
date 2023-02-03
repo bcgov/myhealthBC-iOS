@@ -106,7 +106,7 @@ extension HospitalVisitRecordDetailView {
                 ),
                 TextListModel(
                     header: TextProperties(text: "Service description:", bolded: true),
-                    subtext: TextProperties(text: model.healthService ?? "", bolded: false)
+                    subtext: TextProperties(text: model.healthService ?? "NOT AVAILABLE", bolded: false)
                 ),
                 TextListModel(
                     header: TextProperties(text: "Visit type:", bolded: true),
@@ -116,7 +116,7 @@ extension HospitalVisitRecordDetailView {
                     subtext: TextProperties(text: model.admitDateTime?.labOrderDateTime ?? "", bolded: false)),
                 TextListModel(
                     header: TextProperties(text: "Discharge Date:", bolded: true),
-                    subtext: TextProperties(text: model.endDateTime?.labOrderDateTime ?? "", bolded: false)),
+                    subtext: TextProperties(text: model.endDateTime?.labOrderDateTime ?? "NOT AVAILABLE", bolded: false)),
             ]
             return fields
         default:
