@@ -65,7 +65,7 @@ extension HealthRecordConstants.RecordType {
 struct RecordsFilter {
     enum RecordType: String, CaseIterable {
         case HeathVisits = "Health Visits"
-        case LabTests = "Lab Tests"
+        case LabTests = "Lab Results"
         case Medication = "Medications"
         case ClinicalDocuments = "Clinical Docs"
         case Covid = "COVID-19 Tests"
