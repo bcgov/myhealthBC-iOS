@@ -12,18 +12,18 @@ import Foundation
 struct CommunicationResponse: Codable {
     let resourcePayload: CommunicationResponseResourcePayload?
     let totalResultCount: Int
-    let pageIndex, pageSize: JSONNull?
+    let pageIndex, pageSize: Int?
     let resultStatus: Int
-    let resultError: JSONNull?
+    let resultError: ResultError?
 }
 
 // MARK: - ResourcePayload
 struct CommunicationResponseResourcePayload: Codable {
     let communicationID, text, subject, effectiveDateTime: String
     let expiryDateTime: String
-    let scheduledDateTime: JSONNull?
-    let communicationTypeCode: String
-    let communicationStatusCode, priority: Int
+    let scheduledDateTime: String?
+    let communicationTypeCode, communicationStatusCode: String
+    let priority: Int
     let createdBy, createdDateTime, updatedBy, updatedDateTime: String
     let version: Int
 
