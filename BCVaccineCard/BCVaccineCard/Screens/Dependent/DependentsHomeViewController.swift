@@ -477,7 +477,7 @@ extension DependentsHomeViewController {
             let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
             let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .dependant, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .DependentsScreen, authenticationStatus: authenticationStatus))
             self.routerWorker?.routingAction(scenario: scenario, goToTab: nil, delayInSeconds: 0.5)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 self.view.layoutIfNeeded()
             }
         }
