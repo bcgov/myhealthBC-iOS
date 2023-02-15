@@ -23,9 +23,16 @@ struct CommentService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([Comment])->Void) {
         // TODO delete existing?
+        network.addLoader(message: .SyncingRecords)
         fetch(for: patient) { response in
-            guard let response = response else {return completion([])}
-            StorageService.shared.storeComments(in: response, completion: completion)
+            guard let response = response else {
+                network.removeLoader()
+                return completion([])
+            }
+            StorageService.shared.storeComments(in: response, completion: { comments in
+                network.removeLoader()
+                completion(comments)
+            })
         }
     }
     

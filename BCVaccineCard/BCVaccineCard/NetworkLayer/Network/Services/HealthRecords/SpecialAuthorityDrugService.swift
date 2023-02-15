@@ -24,6 +24,7 @@ struct SpecialAuthorityDrugService {
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
+                network.removeLoader()
                 return completion([])
             }
             store(medications: response, for: patient, completion: completion)

@@ -24,6 +24,7 @@ struct HealthVisitsService {
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
+                network.removeLoader()
                 return completion([])
             }
             store(healthVisits: response, for: patient, completion: completion)

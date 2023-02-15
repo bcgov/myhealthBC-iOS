@@ -22,8 +22,9 @@ struct HospitalVisitsService {
         if !HealthRecordConstants.enabledTypes.contains(.hospitalVisit) {return completion([])}
         
         network.addLoader(message: .FetchingRecords)
-        fetch(for: patient, currentAttempt: 0) { result in
+        fetch(for: patient) { result in
             guard let response = result else {
+                network.removeLoader()
                 return completion([])
             }
             store(HopotalVisits: response, for: patient, completion: completion)
@@ -45,7 +46,7 @@ struct HospitalVisitsService {
 
 // MARK: Network requests
 extension HospitalVisitsService {
-    private func fetch(for patient: Patient, currentAttempt: Int, completion: @escaping(_ response: [HospitalVisitsResponse]?) -> Void) {
+    private func fetch(for patient: Patient, completion: @escaping(_ response: [HospitalVisitsResponse]?) -> Void) {
         
         guard let token = authManager.authToken,
               let hdid = patient .hdid,
