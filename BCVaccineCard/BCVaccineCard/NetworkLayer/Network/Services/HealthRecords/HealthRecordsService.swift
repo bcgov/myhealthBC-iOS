@@ -25,6 +25,7 @@ struct HealthRecordsService {
         
         let typesToFetch = types ?? StorageService.healthRecordType.allCases
         for recordType in typesToFetch {
+            dispatchGroup.enter()
             switch recordType {
             case .CovidTest:
                 let covidTestsService = CovidTestsService(network: network, authManager: authManager)
@@ -95,6 +96,9 @@ struct HealthRecordsService {
                     dispatchGroup.leave()
                 }
             }
+        }
+        dispatchGroup.notify(queue: .main) {
+            return completion(records)
         }
     }
     
