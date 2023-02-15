@@ -144,7 +144,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setup() {
-        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
+//        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
         self.parentContainerStackView.endLoadingIndicator()
         let showLoadingTitle = (self.patient == nil && self.authenticated == true)
         updatePatientIfNecessary()
@@ -476,24 +476,26 @@ extension UsersListOfRecordsViewController {
             guard response == .Online else {return}
             self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
                 guard let `self` = self, authenticationStatus == .Completed else {return}
-                if let authStatus = Defaults.loginProcessStatus,
-                   authStatus.hasCompletedLoginProcess == true,
-                   let storedName = authStatus.loggedInUserAuthManagerDisplayName,
-                   let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
-                   let currentName = currentAuthPatient.authManagerDisplayName,
-                   storedName != currentName {
-                    StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-                    StorageService.shared.deleteAuthenticatedPatient(with: storedName)
-                    AuthManager().clearMedFetchProtectiveWordDetails()
-                    //                self.patient = nil
-                    if self.navStyle == .multiUser {
-                        //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
-                        //                    self.tableView.startLoadingIndicator()
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                } else {
-                    self.fetchDataSource()
-                }
+                print("sync?")
+                // TODO: Check this
+//                if let authStatus = Defaults.loginProcessStatus,
+//                   authStatus.hasCompletedLoginProcess == true,
+//                   let storedName = authStatus.loggedInUserAuthManagerDisplayName,
+//                   let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
+//                   let currentName = currentAuthPatient.authManagerDisplayName,
+//                   storedName != currentName {
+//                    StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+//                    StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+//                    AuthManager().clearMedFetchProtectiveWordDetails()
+//                    //                self.patient = nil
+//                    if self.navStyle == .multiUser {
+//                        //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
+//                        //                    self.tableView.startLoadingIndicator()
+//                        self.navigationController?.popViewController(animated: true)
+//                    }
+//                } else {
+//                    self.fetchDataSource()
+//                }
             }
         })
     }
@@ -750,11 +752,14 @@ extension UsersListOfRecordsViewController {
     }
     
     private func fetchProtectedRecords(protectiveWord: String) {
-        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-            guard response == .Online else {return}
-            self.adjustLoadingIndicator(show: true)
-            SessionStorage.attemptingProtectiveWord = true
-            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWord, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { [weak self] response in
+            guard response == .Online, let patient = self?.patient else {return}
+//            self.adjustLoadingIndicator(show: true)
+//            SessionStorage.attemptingProtectiveWord = true
+//            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWord, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
+            MedicationService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records in
+                print(records.count)
+            }
         })
     }
 }

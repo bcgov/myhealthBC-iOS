@@ -252,12 +252,11 @@ class AuthManager {
                         HTTPCookieStorage.shared.cookies?.forEach { cookie in
                             HTTPCookieStorage.shared.deleteCookie(cookie)
                         }
-                        self.removeAuthTokens()
-                        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                        AuthManager().clearMedFetchProtectiveWordDetails()
                         StorageService.shared.deleteAuthenticatedPatient()
-                        self.removeAuthenticatedPatient()
-                        self.authStatusChanged(authenticated: false)
                         self.clearData()
+                        self.authStatusChanged(authenticated: false)
+                        
                         Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: false, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: nil)
                         return completion(true)
                     }
@@ -392,16 +391,16 @@ class AuthManager {
         self.removeMedFetchRequired()
     }
     
-    private func removeAuthenticatedPatient() {
-        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-        if let phn = patient.phn {
-            StorageService.shared.deletePatient(phn: phn)
-        } else if let dob = patient.birthday, let name = patient.name {
-            StorageService.shared.deletePatient(name: name, birthday: dob)
-        } else {
-            StorageService.shared.deleteAuthenticatedPatient()
-        }
-    }
+//    private func removeAuthenticatedPatient() {
+//        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+//        if let phn = patient.phn {
+//            StorageService.shared.deletePatient(phn: phn)
+//        } else if let dob = patient.birthday, let name = patient.name {
+//            StorageService.shared.deletePatient(name: name, birthday: dob)
+//        } else {
+//            StorageService.shared.deleteAuthenticatedPatient()
+//        }
+//    }
     
     private func store(string: String, for key: Key) {
         do {

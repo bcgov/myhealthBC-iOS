@@ -10,10 +10,8 @@ import WebKit
 
 class TermsOfServiceViewController: BaseViewController {
     
-    class func constructTermsOfServiceViewController(authWorker: AuthenticatedHealthRecordsAPIWorker?, authCredentials: AuthenticationRequestObject) -> TermsOfServiceViewController {
+    class func constructTermsOfServiceViewController() -> TermsOfServiceViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: TermsOfServiceViewController.self)) as? TermsOfServiceViewController {
-            vc.authWorker = authWorker
-            vc.authCredentials = authCredentials
             vc.modalPresentationStyle = .overFullScreen
             return vc
         }
@@ -27,9 +25,6 @@ class TermsOfServiceViewController: BaseViewController {
     @IBOutlet weak private var buttonContainerView: UIView!
     @IBOutlet weak private var cancelButton: AppStyleButton!
     @IBOutlet weak private var agreeButton: AppStyleButton!
-    
-    private var authWorker: AuthenticatedHealthRecordsAPIWorker?
-    private var authCredentials: AuthenticationRequestObject?
     
     private var tosPayload: TermsOfServiceResponse.ResourcePayload?
 
@@ -88,20 +83,22 @@ extension TermsOfServiceViewController {
 extension TermsOfServiceViewController {
     private func fetchTermsOfService() {
         termsWebView.navigationDelegate = self
-        self.view.startLoadingIndicator()
-        authWorker?.fetchTermsOfService(completion: { tos, error in
+        TOSService(network: AFNetwork(), authManager: AuthManager()).fetchTOS { tos in
             var displayString: String
-            self.tosPayload = tos
-            if let terms = tos, let termsString = terms.content, terms.id != nil {
-                displayString = termsString
-            } else if let error = error?.resultMessage {
-                displayString = error
-            } else {
-                displayString = "Unknown error"
+            self.tosPayload = tos?.resourcePayload
+            guard let terms = tos?.resourcePayload, let termsString = terms.content, terms.id != nil else {
+                displayString = "We're sorry, there was an issue fetching terms of service."
+                return
             }
-            self.termsWebView.loadHTMLString(displayString, baseURL: nil)
-            self.view.endLoadingIndicator()
-        })
+            displayString = termsString
+//            if let terms = tos, let termsString = terms.content, terms.id != nil {
+//                displayString = termsString
+//            } else {
+//                displayString = "We're sorry, there was an issue fetching terms of service."
+//            }
+//            self.termsWebView.loadHTMLString(displayString, baseURL: nil)
+//            self.view.endLoadingIndicator()
+        }
     }
 }
 
@@ -132,23 +129,31 @@ extension TermsOfServiceViewController {
         case DidntAgree
     }
     private func respondToTermsOfService(accepted: Bool) {
-        guard let authCredentials = self.authCredentials, let termsOfServiceId = tosPayload?.id else { return }
+        
+        guard let termsOfServiceId = tosPayload?.id else { return }
         guard accepted == true else {
             signout(error: nil, reason: .DidntAgree)
             return
         }
-        self.view.startLoadingIndicator()
-        self.authWorker?.respondToTermsOfService(authCredentials, accepted: accepted, termsOfServiceId: termsOfServiceId, completion: { accepted, error in
-            guard let accepted = accepted else {
-                self.signout(error: error, reason: .Error)
+        TOSService(network: AFNetwork(), authManager: AuthManager()).accept(termsOfServiceId: termsOfServiceId) { result in
+            guard let result = result else {
                 return
             }
-
-            NotificationManager.respondToTermsOfService(accepted: accepted, error: nil, errorTitle: nil)
-            self.view.endLoadingIndicator()
             self.dismiss(animated: true)
-            
-        })
+        }
+        
+//        self.view.startLoadingIndicator()
+//        self.authWorker?.respondToTermsOfService(authCredentials, accepted: accepted, termsOfServiceId: termsOfServiceId, completion: { accepted, error in
+//            guard let accepted = accepted else {
+//                self.signout(error: error, reason: .Error)
+//                return
+//            }
+//
+//            NotificationManager.respondToTermsOfService(accepted: accepted, error: nil, errorTitle: nil)
+//            self.view.endLoadingIndicator()
+//            self.dismiss(animated: true)
+//
+//        })
     }
     
 //    private func resetRecordsTab() {

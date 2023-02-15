@@ -42,6 +42,13 @@ extension Patient {
         }
     }
     
+    public var recommandationsArray: [ImmunizationRecommendation] {
+        let set = recommendations as? Set<ImmunizationRecommendation> ?? []
+        return set.sorted {
+            $0.agentEligibleDate ?? Date() > $1.agentEligibleDate ?? Date()
+        }
+    }
+    
     public var labOrdersArray: [LaboratoryOrder] {
         let set = laboratoryOrders as? Set<LaboratoryOrder> ?? []
         return set.sorted {

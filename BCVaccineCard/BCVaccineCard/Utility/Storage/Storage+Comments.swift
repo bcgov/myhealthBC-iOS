@@ -9,15 +9,15 @@ import Foundation
 import CoreData
 
 protocol StorageCommentManager {
-    func storeComments(in: AuthenticatedCommentResponseObject)
-    func storeComment(remoteObject: AuthenticatedCommentResponseObject.Comment)
+    func storeComments(in: AuthenticatedCommentResponseObject, completion: @escaping([Comment])->Void)
+    func storeComment(remoteObject: AuthenticatedCommentResponseObject.Comment, completion: @escaping(Comment?)->Void)
     
     func fetchComments() -> [Comment]
     func storeLocalComment(text: String, commentID: String, hdid: String, typeCode: String) -> Comment?
 }
 
 extension StorageService: StorageCommentManager {
-    func storeComments(in object: AuthenticatedCommentResponseObject) {
+    func storeComments(in object: AuthenticatedCommentResponseObject, completion: @escaping([Comment])->Void) {
         
         let comments: [AuthenticatedCommentResponseObject.Comment] = object.resourcePayload.flatMap({$0.value})
        
@@ -25,14 +25,26 @@ extension StorageService: StorageCommentManager {
             Logger.log(string: "No Comments", type: .storage)
             return
         }
+        var storedComments: [Comment] = []
+        let group = DispatchGroup()
         for comment in comments {
-            storeComment(remoteObject: comment)
+            group.enter()
+            storeComment(remoteObject: comment, completion: { result in
+                if let stored = result {
+                    storedComments.append(stored)
+                }
+                group.leave()
+            })
+        }
+        group.notify(queue: .main) {
+            self.notify(event: StorageEvent(event: .Save, entity: .Comments, object: storedComments))
+            return completion(storedComments)
         }
         
-        self.notify(event: StorageEvent(event: .Save, entity: .Comments, object: []))
+        
     }
     
-    func storeComment(remoteObject object: AuthenticatedCommentResponseObject.Comment) {
+    func storeComment(remoteObject object: AuthenticatedCommentResponseObject.Comment, completion: @escaping(Comment?)->Void) {
         guard let id = object.parentEntryID else {
             Logger.log(string: "Can't store comment: No id", type: .storage)
             return
@@ -50,7 +62,8 @@ extension StorageService: StorageCommentManager {
         
         let storageCommentObject = genCommentObject(in: object, context: context)
         
-        store(comment: storageCommentObject, for: applicableRecords, context: context)
+        let result = store(comment: storageCommentObject, for: applicableRecords, context: context)
+        return completion(result)
     }
     
    

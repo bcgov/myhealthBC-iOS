@@ -37,6 +37,21 @@ extension HealthRecordConstants {
     }
 }
 
+extension StorageService {
+    enum healthRecordType: CaseIterable {
+        case CovidTest
+        case VaccineCard
+        case Prescription
+        case LaboratoryOrder
+        case Immunization
+        case Recommendation
+        case HealthVisit
+        case SpecialAuthorityDrug
+        case HospitalVisit
+        case ClinicalDocument
+    }
+}
+
 extension HealthRecordConstants.RecordType {
     func toRecordsFilterType() -> RecordsFilter.RecordType? {
         switch self {

@@ -246,7 +246,10 @@ extension StorageService: StoragePatientManager {
     }
     
     func deleteAuthenticatedPatient() {
-        guard let patient = fetchAuthenticatedPatient() else { return }
+        guard let patient = fetchAuthenticatedPatient() else {
+            return
+        }
+        deleteHealthRecords(for: patient)
         delete(object: patient)
         notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
     }

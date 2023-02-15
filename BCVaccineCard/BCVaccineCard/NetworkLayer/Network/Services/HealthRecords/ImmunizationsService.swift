@@ -41,8 +41,17 @@ struct ImmnunizationsService {
     ) {
         guard let payload = response.resourcePayload else { return completion([]) }
         StorageService.shared.deleteAllRecords(in: patient.immunizationArray)
-        let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
-        return completion(stored)
+        StorageService.shared.deleteAllRecords(in: patient.recommandationsArray)
+        
+        if let recomandations = payload.recommendations {
+            StorageService.shared.storeRecommendations(patient: patient, objects: recomandations, authenticated: patient.authenticated, completion: { results in
+                let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
+                return completion(stored)
+            })
+        } else {
+            let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
+            return completion(stored)
+        }
     }
     
 }

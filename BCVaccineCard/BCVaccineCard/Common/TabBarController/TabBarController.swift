@@ -53,7 +53,7 @@ class TabBarController: UITabBarController {
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
     private var authenticationStatus: AuthenticationViewController.AuthenticationStatus?
-    var authWorker: AuthenticatedHealthRecordsAPIWorker?
+    var syncService: SyncService = SyncService(network: AFNetwork(), authManager: AuthManager())
     private var throttleAPIWorker: LoginThrottleAPIWorker?
     var routerWorker: RouterWorker?
     var network = NetworkConnection()
@@ -82,7 +82,6 @@ class TabBarController: UITabBarController {
         showForceUpateIfNeeded(completion: { updateNeeded in
             guard !updateNeeded else {return}
             BaseURLWorker.shared.setBaseURL {
-                self.authWorker = AuthenticatedHealthRecordsAPIWorker(delegateOwner: self)
                 self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
                 self.routerWorker = RouterWorker(delegateOwner: self)
                 self.setup(selectedIndex: 0)
@@ -102,7 +101,7 @@ class TabBarController: UITabBarController {
     private func showLoginPromptIfNecessary() {
         guard let authStatus = self.authenticationStatus else { return }
         if authStatus == .Completed {
-            AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: self.authWorker, sourceVC: .AfterOnboarding) { allowed in
+            AuthenticationViewController.checkIfUserCanLoginAndFetchRecords() { allowed in
                 if allowed {
                     self.showSuccessfulLoginAlert()
                     self.customRoutingForRecordsTab(authStatus: authStatus)
@@ -123,7 +122,7 @@ class TabBarController: UITabBarController {
         self.tabBar.barTintColor = .white
         self.delegate = self
         self.viewControllers = setViewControllers(withVCs: [.home, .records, .healthPass, .dependant])
-        self.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, onActualLaunchCheck: true)
+//        self.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, onActualLaunchCheck: true)
         self.selectedIndex = selectedIndex
         setupObserver()
         postBackgroundAuthFetch()
@@ -133,23 +132,23 @@ class TabBarController: UITabBarController {
     private func postBackgroundAuthFetch() {
         guard let token = AuthManager().authToken else { return }
         guard let hdid = AuthManager().hdid else { return }
-        checkForExpiredUser()
+//        checkForExpiredUser()
         NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
     }
     
     // Note: This will handle the edge case where we have an authenticated user who's token expired, then user logged in with different credentials, and then killed the app before the check for this edge case could be executed in the AuthenticatedHealthRecordsAPIWorker
-    private func checkForExpiredUser() {
-        if let authStatus = Defaults.loginProcessStatus,
-           authStatus.hasCompletedLoginProcess == true,
-           authStatus.hasFinishedFetchingRecords == false,
-           let storedName = authStatus.loggedInUserAuthManagerDisplayName,
-           let currentName = AuthManager().displayName,
-           storedName != currentName {
-            StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-            StorageService.shared.deleteAuthenticatedPatient(with: storedName)
-            AuthManager().clearMedFetchProtectiveWordDetails()
-        }
-    }
+//    private func checkForExpiredUser() {
+//        if let authStatus = Defaults.loginProcessStatus,
+//           authStatus.hasCompletedLoginProcess == true,
+//           authStatus.hasFinishedFetchingRecords == false,
+//           let storedName = authStatus.loggedInUserAuthManagerDisplayName,
+//           let currentName = AuthManager().displayName,
+//           storedName != currentName {
+//            StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+//            StorageService.shared.deleteAuthenticatedPatient(with: storedName)
+//            AuthManager().clearMedFetchProtectiveWordDetails()
+//        }
+//    }
     
     private func setViewControllers(withVCs vcs: [TabBarVCs]) -> [UIViewController] {
         var viewControllers: [UIViewController] = []
@@ -178,7 +177,7 @@ class TabBarController: UITabBarController {
     @objc private func showTermsOfService(_ notification: Notification) {
         guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
         let creds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        let vc = TermsOfServiceViewController.constructTermsOfServiceViewController(authWorker: self.authWorker, authCredentials: creds)
+        let vc = TermsOfServiceViewController.constructTermsOfServiceViewController()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
             self.present(vc, animated: true)
@@ -204,14 +203,17 @@ class TabBarController: UITabBarController {
     
     @objc private func backgroundAuthFetch(_ notification: Notification) {
         guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
-        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-            if response == .Online {
-                CommentService(network: AFNetwork(), authManager: AuthManager()).submitUnsyncedComments {
-                    self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, protectiveWord: AuthManager().protectiveWord,sourceVC: .BackgroundFetch)
-                }
-            }
-        })
+        syncService.performSync(hdid: hdid) { patient in
+            print(patient)
+        }
+//        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+//        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+//            if response == .Online {
+//                CommentService(network: AFNetwork(), authManager: AuthManager()).submitUnsyncedComments {
+//                    self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: false, isManualFetch: false, protectiveWord: AuthManager().protectiveWord,sourceVC: .BackgroundFetch)
+//                }
+//            }
+//        })
     }
     
 //    @objc private func fetchDependentsAndTheirVaccineCards(_ notification: Notification) {
@@ -225,10 +227,13 @@ class TabBarController: UITabBarController {
     
     private func showSuccessfulLoginAlert() {
         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
-        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
-        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        let protectiveWord = AuthManager().protectiveWord
-        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, protectiveWord: protectiveWord, sourceVC: .AfterOnboarding)
+        guard let hdid = AuthManager().hdid else { return }
+        syncService.performSync(hdid: hdid) { patient in
+            print(patient)
+        }
+//        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+//        let protectiveWord = AuthManager().protectiveWord
+//        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, protectiveWord: protectiveWord, sourceVC: .AfterOnboarding)
         
     }
     
@@ -269,40 +274,40 @@ extension TabBarController: UITabBarControllerDelegate {
 }
 
 // MARK: Auth Fetch delegates
-extension TabBarController: AuthenticatedHealthRecordsAPIWorkerDelegate {
-    func showPatientDetailsError(error: String, showBanner: Bool) {
-        guard showBanner else { return }
-        showToast(message: error, style: .Warn)
-    }
-    
-    func showFetchStartedBanner(showBanner: Bool) {
-        guard showBanner else { return }
-        showToast(message: "Retrieving records", style: .Default)
-    }
-    
-    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource, fetchStatusTypes: [AuthenticationFetchType]) {
-        guard showBanner else { return }
-        // TODO: Connor - handle error case
-        if resetHealthRecordsTab {
-            guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-            DispatchQueue.main.async {
-                let currentTab = TabBarVCs.init(rawValue: self.selectedIndex) ?? .home
-                let flowStack = self.getCurrentRecordsAndPassesFlows()
-                let recordFlowDetails = RecordsFlowDetails(currentStack: flowStack.recordsStack, actioningPatient: patient, addedRecord: nil)
-                let passesFlowDetails = PassesFlowDetails(currentStack: flowStack.passesStack)
-                self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: loginSourceVC)))
-            }
-        }
-        // TODO: Make this a little more reusable - hacky approach
-        if (fetchStatusTypes.contains(.LaboratoryOrders) && fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.SpecialAuthorityDrugs) && fetchStatusTypes.contains(.TestResults) && fetchStatusTypes.contains(.VaccineCard)) && fetchStatusTypes.contains(.Immunizations) && fetchStatusTypes.contains(.HealthVisits) || (fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.Comments)) {
-            let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
-            showToast(message: message)
-        }
-        NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
-        var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
-        loginProcessStatus.hasFinishedFetchingRecords = true
-        Defaults.loginProcessStatus = loginProcessStatus
-    }
+extension TabBarController {
+//    func showPatientDetailsError(error: String, showBanner: Bool) {
+//        guard showBanner else { return }
+//        showToast(message: error, style: .Warn)
+//    }
+//
+//    func showFetchStartedBanner(showBanner: Bool) {
+//        guard showBanner else { return }
+//        showToast(message: "Retrieving records", style: .Default)
+//    }
+//
+//    func showFetchCompletedBanner(recordsSuccessful: Int, recordsAttempted: Int, errors: [AuthenticationFetchType : String]?, showBanner: Bool, resetHealthRecordsTab: Bool, loginSourceVC: LoginVCSource, fetchStatusTypes: [AuthenticationFetchType]) {
+//        guard showBanner else { return }
+//        // TODO: Connor - handle error case
+//        if resetHealthRecordsTab {
+//            guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+//            DispatchQueue.main.async {
+//                let currentTab = TabBarVCs.init(rawValue: self.selectedIndex) ?? .home
+//                let flowStack = self.getCurrentRecordsAndPassesFlows()
+//                let recordFlowDetails = RecordsFlowDetails(currentStack: flowStack.recordsStack, actioningPatient: patient, addedRecord: nil)
+//                let passesFlowDetails = PassesFlowDetails(currentStack: flowStack.passesStack)
+//                self.routerWorker?.routingAction(scenario: .AuthenticatedFetch(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: loginSourceVC)))
+//            }
+//        }
+//        // TODO: Make this a little more reusable - hacky approach
+//        if (fetchStatusTypes.contains(.LaboratoryOrders) && fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.SpecialAuthorityDrugs) && fetchStatusTypes.contains(.TestResults) && fetchStatusTypes.contains(.VaccineCard)) && fetchStatusTypes.contains(.Immunizations) && fetchStatusTypes.contains(.HealthVisits) || (fetchStatusTypes.contains(.MedicationStatement) && fetchStatusTypes.contains(.Comments)) {
+//            let message = (recordsSuccessful >= recordsAttempted || errors?.count == 0) ? "Records retrieved" : "Not all records were fetched successfully"
+//            showToast(message: message)
+//        }
+//        NotificationCenter.default.post(name: .authFetchComplete, object: nil, userInfo: nil)
+//        var loginProcessStatus = Defaults.loginProcessStatus ?? LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
+//        loginProcessStatus.hasFinishedFetchingRecords = true
+//        Defaults.loginProcessStatus = loginProcessStatus
+//    }
     func showAlertForLoginAttemptDueToValidation(error: ResultError?) {
         Logger.log(string: error?.localizedDescription ?? "", type: .Network)
         self.alert(title: "Login Error", message: "We're sorry, there was an error logging in. Please try again later.")
@@ -328,22 +333,22 @@ extension TabBarController {
 }
 
 // MARK: This is an edge case function that we will use in both HealthRecordsVC and UserListOfRecords VC
-extension TabBarController {
-    // NOTE: This is a hacky check to see if there are patient records that are stored that shouldn't be stored (This occurs if a user logs out while they are fetching records in the background - new records will continue to be stored after the user logs out)
-    func scrapeDBForEdgeCaseRecords(authManager: AuthManager, currentTab: TabBarVCs, onActualLaunchCheck: Bool? = nil) {
-        if authManager.authToken == nil, let _ = StorageService.shared.fetchAuthenticatedPatient() {
-            // This means the user has manually logged out, but there are still remainning records - Scrub records
-            StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-            StorageService.shared.deleteAuthenticatedPatient()
-            let values = ActionScenarioValues(currentTab: currentTab, affectedTabs: [.records])
-            self.routerWorker?.routingAction(scenario: AppUserActionScenarios.InitialAppLaunch(values: values))
-        } else if onActualLaunchCheck == true {
-            // In the event that there is an auth token, then user us logged in and we have to reset stack accordingly
-            self.routerWorker?.routingAction(scenario: .InitialAppLaunch(values: ActionScenarioValues(currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, affectedTabs: [.records], recordFlowDetails: nil, passesFlowDetails: nil)))
-        }
-    }
-
-}
+//extension TabBarController {
+//    // NOTE: This is a hacky check to see if there are patient records that are stored that shouldn't be stored (This occurs if a user logs out while they are fetching records in the background - new records will continue to be stored after the user logs out)
+//    func scrapeDBForEdgeCaseRecords(authManager: AuthManager, currentTab: TabBarVCs, onActualLaunchCheck: Bool? = nil) {
+//        if authManager.authToken == nil, let _ = StorageService.shared.fetchAuthenticatedPatient() {
+//            // This means the user has manually logged out, but there are still remainning records - Scrub records
+//            StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+//            StorageService.shared.deleteAuthenticatedPatient()
+//            let values = ActionScenarioValues(currentTab: currentTab, affectedTabs: [.records])
+//            self.routerWorker?.routingAction(scenario: AppUserActionScenarios.InitialAppLaunch(values: values))
+//        } else if onActualLaunchCheck == true {
+//            // In the event that there is an auth token, then user us logged in and we have to reset stack accordingly
+//            self.routerWorker?.routingAction(scenario: .InitialAppLaunch(values: ActionScenarioValues(currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, affectedTabs: [.records], recordFlowDetails: nil, passesFlowDetails: nil)))
+//        }
+//    }
+//
+//}
 
 // MARK: Router worker
 extension TabBarController: RouterWorkerDelegate {    

@@ -152,20 +152,27 @@ extension BaseViewController {
 
 // MARK: For Authenticated Fetch
 extension BaseViewController {
-    func performAuthenticatedRecordsFetch(isManualFetch: Bool,
-                                          showBanner: Bool = true,
-                                          specificFetchTypes: [AuthenticationFetchType]? = nil,
-                                          protectiveWord: String? = nil,
-                                          sourceVC: LoginVCSource,
-                                          initialProtectedMedFetch: Bool = false
-    ) {
-        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
-            // TODO: Error handling here
-            return
+    func syncAuthenticatedPatient() {
+        guard let hdid = AuthManager().hdid else {return}
+        let service = SyncService(network: AFNetwork(), authManager: AuthManager())
+        service.performSync(hdid: hdid) { patient in
+            print(patient)
         }
-        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: showBanner, isManualFetch: isManualFetch, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, sourceVC: sourceVC, initialProtectedMedFetch: initialProtectedMedFetch)
     }
+//    func performAuthenticatedRecordsFetch(isManualFetch: Bool,
+//                                          showBanner: Bool = true,
+//                                          specificFetchTypes: [AuthenticationFetchType]? = nil,
+//                                          protectiveWord: String? = nil,
+//                                          sourceVC: LoginVCSource,
+//                                          initialProtectedMedFetch: Bool = false
+//    ) {
+//        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
+//            // TODO: Error handling here
+//            return
+//        }
+//        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
+//        tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: showBanner, isManualFetch: isManualFetch, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, sourceVC: sourceVC, initialProtectedMedFetch: initialProtectedMedFetch)
+//    }
 }
 
 // MARK: This is used to let the settings screen know that it should reload table view (viewDidAppear not called when auth is complete from settings screen)

@@ -44,7 +44,7 @@ class HealthRecordsViewController: BaseViewController {
     private func setup() {
         navSetup()
         setupView()
-        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
+//        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
     }
 
 }

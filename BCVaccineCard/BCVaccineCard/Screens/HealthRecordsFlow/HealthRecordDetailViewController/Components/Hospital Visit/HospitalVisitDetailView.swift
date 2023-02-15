@@ -117,7 +117,7 @@ extension HospitalVisitRecordDetailView {
                 TextListModel(
                     header: TextProperties(text: "Discharge Date:", bolded: true),
                     subtext: TextProperties(text: model.endDateTime?.labOrderDateTime ?? "NOT AVAILABLE", bolded: false)),
-            ]
+            ] 
             return fields
         default:
             return []

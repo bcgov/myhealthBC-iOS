@@ -15,12 +15,35 @@ protocol StorageHealthVisitsManager {
         authenticated: Bool
     ) -> HealthVisit?
     
+    func storeHealthVisits(
+        patient: Patient,
+        objects: [AuthenticatedHealthVisitsResponseObject.HealthVisit],
+        authenticated: Bool,
+        completion: @escaping ([HealthVisit])-> Void
+    )
+    
 
     // MARK: Fetch
     func fetchHealthVisits()-> [HealthVisit]
 }
 
 extension StorageService: StorageHealthVisitsManager {
+    func storeHealthVisits(
+        patient: Patient,
+        objects: [AuthenticatedHealthVisitsResponseObject.HealthVisit],
+        authenticated: Bool,
+        completion: @escaping ([HealthVisit])-> Void
+    ) {
+        var storedObjects: [HealthVisit] = []
+        for object in objects {
+            if let storedObject = storeHealthVisit(patient: patient, object: object, authenticated: authenticated) {
+                storedObjects.append(storedObject)
+            }
+        }
+        
+        return completion(storedObjects)
+    }
+    
     func storeHealthVisit(patient: Patient, object: AuthenticatedHealthVisitsResponseObject.HealthVisit, authenticated: Bool) -> HealthVisit? {
         return storeHealthVisit(authenticated: authenticated, id: object.id, encounterDate:  getGatewayDate(from: object.encounterDate), specialtyDescription: object.specialtyDescription, practitionerName: object.practitionerName, clinicName: object.clinic?.name, patient: patient)
     }

@@ -10,18 +10,6 @@ import BCVaccineValidator
 import CoreData
 
 extension StorageService {
-    enum healthRecordType {
-        case CovidTest
-        case VaccineCard
-        case Prescription
-        case LaboratoryOrder
-        case Immunization
-        case Recommendation
-        case HealthVisit
-        case SpecialAuthorityDrug
-        case HospitalVisit
-    }
-    
     func getRecords(for patient: Patient) -> [HealthRecord]{
         let tests = patient.testResultArray.map({HealthRecord(type: .CovidTest($0))})
         let medications = patient.prescriptionArray.map({HealthRecord(type: .Medication($0))})
@@ -113,49 +101,52 @@ extension StorageService {
         }
     }
     
-    func deleteHealthRecordsForAuthenticatedUser(types: [healthRecordType]? = nil) {
+    func deleteHealthRecords(for patient: Patient, types: [healthRecordType]? = nil) {
         var toDelete: [NSManagedObject] = []
-        let typesTodelete: [healthRecordType] = types ?? [.Prescription, .CovidTest, .VaccineCard, .LaboratoryOrder]
-        if typesTodelete.contains(.VaccineCard) {
-            let vaccineCards = fetchVaccineCards().filter({$0.authenticated == true})
-            toDelete.append(contentsOf: vaccineCards)
-            notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: vaccineCards))
-        }
-        if typesTodelete.contains(.CovidTest) {
-            let tests = fetchCovidTestResults().filter({$0.authenticated == true})
-            toDelete.append(contentsOf: tests)
-            notify(event: StorageEvent(event: .Delete, entity: .TestResult, object: tests))
-        }
-        if typesTodelete.contains(.Prescription) {
-            let medications = fetchPrescriptions().filter({ $0.authenticated == true })
-            toDelete.append(contentsOf: medications)
-            notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: medications))
-        }
-        if typesTodelete.contains(.LaboratoryOrder) {
-            let orders = fetchLaboratoryOrders().filter({ $0.authenticated == true })
-            toDelete.append(contentsOf: orders)
-            notify(event: StorageEvent(event: .Delete, entity: .LaboratoryOrder, object: orders))
-        }
-        if typesTodelete.contains(.Immunization) {
-            let imms = fetchImmunization().filter({ $0.authenticated == true })
-            toDelete.append(contentsOf: imms)
-            notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: imms))
-        }
-        if typesTodelete.contains(.HealthVisit) {
-            let visits = fetchHealthVisits().filter({ $0.authenticated == true })
-            toDelete.append(contentsOf: visits)
-            notify(event: StorageEvent(event: .Delete, entity: .HealthVisit, object: visits))
-        }
-        if typesTodelete.contains(.SpecialAuthorityDrug) {
-            let objects = fetchSpecialAuthorityMedications().filter({ $0.authenticated == true })
-            toDelete.append(contentsOf: objects)
-            notify(event: StorageEvent(event: .Delete, entity: .SpecialAuthorityMedication, object: objects))
-        }
-        
-        if typesTodelete.contains(.Recommendation) {
-            let objects = fetchRecommendations().filter({ $0.authenticated == true })
-            toDelete.append(contentsOf: objects)
-            notify(event: StorageEvent(event: .Delete, entity: .Recommendation, object: objects))
+        let typesTodelete: [healthRecordType] = types ?? healthRecordType.allCases
+        for type in typesTodelete {
+            switch type {
+            case .CovidTest:
+                let tests = fetchCovidTestResults().filter({$0.authenticated == true})
+                toDelete.append(contentsOf: tests)
+                notify(event: StorageEvent(event: .Delete, entity: .TestResult, object: tests))
+            case .VaccineCard:
+                let vaccineCards = fetchVaccineCards().filter({$0.authenticated == true})
+                toDelete.append(contentsOf: vaccineCards)
+                notify(event: StorageEvent(event: .Delete, entity: .VaccineCard, object: vaccineCards))
+            case .Prescription:
+                let medications = fetchPrescriptions().filter({ $0.authenticated == true })
+                toDelete.append(contentsOf: medications)
+                notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: medications))
+            case .LaboratoryOrder:
+                let orders = fetchLaboratoryOrders().filter({ $0.authenticated == true })
+                toDelete.append(contentsOf: orders)
+                notify(event: StorageEvent(event: .Delete, entity: .LaboratoryOrder, object: orders))
+            case .Immunization:
+                let imms = fetchImmunization().filter({ $0.authenticated == true })
+                toDelete.append(contentsOf: imms)
+                notify(event: StorageEvent(event: .Delete, entity: .Perscription, object: imms))
+            case .Recommendation:
+                let objects = fetchRecommendations().filter({ $0.authenticated == true })
+                toDelete.append(contentsOf: objects)
+                notify(event: StorageEvent(event: .Delete, entity: .Recommendation, object: objects))
+            case .HealthVisit:
+                let visits = fetchHealthVisits().filter({ $0.authenticated == true })
+                toDelete.append(contentsOf: visits)
+                notify(event: StorageEvent(event: .Delete, entity: .HealthVisit, object: visits))
+            case .SpecialAuthorityDrug:
+                let objects = fetchSpecialAuthorityMedications().filter({ $0.authenticated == true })
+                toDelete.append(contentsOf: objects)
+                notify(event: StorageEvent(event: .Delete, entity: .SpecialAuthorityMedication, object: objects))
+            case .HospitalVisit:
+                let objects = patient.hospitalVisitsArray
+                toDelete.append(contentsOf: objects)
+                notify(event: StorageEvent(event: .Delete, entity: .HospitalVisit, object: objects))
+            case .ClinicalDocument:
+                let objects = patient.clinicalDocumentsArray
+                toDelete.append(contentsOf: objects)
+                notify(event: StorageEvent(event: .Delete, entity: .ClinicalDocument, object: objects))
+            }
         }
         
         deleteAllRecords(in: toDelete)

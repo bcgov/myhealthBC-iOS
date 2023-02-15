@@ -18,15 +18,15 @@ struct MedicationService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, protected: Bool, completion: @escaping ([Perscription])->Void) {
+    public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([Perscription])->Void) {
         network.addLoader(message: .FetchingRecords)
         // TODO: Handle Protected Fetch
-        fetch(for: patient, protected: protected) { result in
+        fetch(for: patient, protectiveWord: protectiveWord) { result in
             guard let response = result else {
                 network.removeLoader()
                 return completion([])
             }
-            store(medication: response, for: patient, protected: protected, completion: { result in
+            store(medication: response, for: patient, protected: protectiveWord != nil, completion: { result in
                 network.removeLoader()
                 return completion(result)
             })
@@ -48,7 +48,7 @@ struct MedicationService {
 // MARK: Network requests
 extension MedicationService {
     
-    private func fetch(for patient: Patient, protected: Bool, completion: @escaping(_ response: MedicationResponse?) -> Void) {
+    private func fetch(for patient: Patient, protectiveWord: String?, completion: @escaping(_ response: MedicationResponse?) -> Void) {
         // TODO: Handle Protected Fetch
         guard let token = authManager.authToken,
               let hdid = patient.hdid,
@@ -59,7 +59,8 @@ extension MedicationService {
             guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
             
             let headers = [
-                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticatedMedicationStatementParameters.protectiveWord: (protectiveWord ?? "")
             ]
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)

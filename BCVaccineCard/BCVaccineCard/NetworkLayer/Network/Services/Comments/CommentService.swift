@@ -17,8 +17,16 @@ struct CommentService {
     
     fileprivate static var blockSync: Bool = false
     
-    private var endpoints: UrlAccessor {
+    var endpoints: UrlAccessor {
         return UrlAccessor()
+    }
+    
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([Comment])->Void) {
+        // TODO delete existing?
+        fetch(for: patient) { response in
+            guard let response = response else {return completion([])}
+            StorageService.shared.storeComments(in: response, completion: completion)
+        }
     }
     
     public func newComment(message: String, commentID: String, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
@@ -85,7 +93,6 @@ struct CommentService {
         }
     }
     
-    
     private func findCommentsToSync() -> [Comment] {
         let comments = StorageService.shared.fetchComments()
         var unsynced = comments.filter({$0.id == nil})
@@ -99,6 +106,8 @@ struct CommentService {
         // Now unsynced contains comments that need to be uploaded
         return unsynced
     }
+    
+    // MARK: POST
     
     private func post(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
         let type = CommentType.init(rawValue: comment.entryTypeCode ?? "") ?? .medication
@@ -132,6 +141,7 @@ struct CommentService {
         Logger.log(string: "StorageEvent \(event.entity) - \(event.event)", type: .storage)
         NotificationCenter.default.post(name: .storageChangeEvent, object: event)
     }
+
 }
 
 extension CommentService {

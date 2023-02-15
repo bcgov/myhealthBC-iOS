@@ -25,13 +25,12 @@ extension BaseViewController {
             switch result {
             case .Completed:
                 let tabVC = self.tabBarController as? TabBarController
-                let authWorker = tabVC?.authWorker
                 self.view.startLoadingIndicator()
-                AuthenticationViewController.checkIfUserCanLoginAndFetchRecords(authWorker: authWorker, sourceVC: sourceVC) { allowed in
+                AuthenticationViewController.checkIfUserCanLoginAndFetchRecords() { allowed in
                     if allowed {
-                        self.performAuthenticatedRecordsFetch(isManualFetch: true, sourceVC: sourceVC)
                         self.postAuthChangedSettingsReloadRequired()
                         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
+                        self.syncAuthenticatedPatient()
                         self.view.endLoadingIndicator()
                         completion(.Completed)
                     } else {
@@ -270,10 +269,8 @@ class AuthenticationViewController: UIViewController {
 
 // MARK: Checks if user is 12 and over AND has accepted terms and conditions
 extension AuthenticationViewController {
-    public static func checkIfUserCanLoginAndFetchRecords(authWorker: AuthenticatedHealthRecordsAPIWorker?, sourceVC: LoginVCSource, completion: @escaping (Bool) -> Void) {
-        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
-        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        authWorker?.checkIfUserCanLoginAndFetchRecords(authCredentials: authCreds, sourceVC: sourceVC, completion: completion)
+    public static func checkIfUserCanLoginAndFetchRecords(completion: @escaping (Bool) -> Void) {
+        PatientService(network: AFNetwork(), authManager: AuthManager()).validateProfile(completion: completion)
     }
 }
 
