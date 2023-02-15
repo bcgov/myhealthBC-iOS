@@ -25,7 +25,6 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     // MARK: Variables
     let authManager: AuthManager = AuthManager()
-    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     // MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -46,7 +45,6 @@ class ProfileAndSettingsViewController: BaseViewController {
         setupTableView()
         navSetup()
         setupListener()
-        self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +60,6 @@ class ProfileAndSettingsViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
-        self.throttleAPIWorker = nil
     }
     
     // MARK: Routing
@@ -261,16 +258,15 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
     }
     
     private func performLogout(completion: @escaping(_ success: Bool)-> Void) {
-        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-            if response != .NoInternet {
-                self.authManager.signout(in: self, completion: { [weak self] success in
-                    guard let `self` = self else {return}
-                    // Regardless of the result of the async logout, clear tokens.
-                    // because user may be offline
-                    self.tableView.reloadData()
-                    completion(success)
-                })
-            }
-        })
+        MobileConfigService(network: AFNetwork()).fetchConfig { response in
+            guard let config = response, config.online else {return}
+            self.authManager.signout(in: self, completion: { [weak self] success in
+                guard let `self` = self else {return}
+                // Regardless of the result of the async logout, clear tokens.
+                // because user may be offline
+                self.tableView.reloadData()
+                completion(success)
+            })
+        }
     }
 }

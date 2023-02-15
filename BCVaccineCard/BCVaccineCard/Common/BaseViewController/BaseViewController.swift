@@ -155,7 +155,7 @@ extension BaseViewController {
     func syncAuthenticatedPatient() {
         guard let hdid = AuthManager().hdid else {return}
         let service = SyncService(network: AFNetwork(), authManager: AuthManager())
-        service.performSync(hdid: hdid) { patient in
+        service.performSync() { patient in
             print(patient)
         }
     }

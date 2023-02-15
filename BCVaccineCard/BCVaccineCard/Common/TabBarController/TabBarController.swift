@@ -54,7 +54,6 @@ class TabBarController: UITabBarController {
     private var updateRecordsScreenState = false
     private var authenticationStatus: AuthenticationViewController.AuthenticationStatus?
     var syncService: SyncService = SyncService(network: AFNetwork(), authManager: AuthManager())
-    private var throttleAPIWorker: LoginThrottleAPIWorker?
     var routerWorker: RouterWorker?
     var network = NetworkConnection()
 
@@ -82,7 +81,6 @@ class TabBarController: UITabBarController {
         showForceUpateIfNeeded(completion: { updateNeeded in
             guard !updateNeeded else {return}
             BaseURLWorker.shared.setBaseURL {
-                self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
                 self.routerWorker = RouterWorker(delegateOwner: self)
                 self.setup(selectedIndex: 0)
                 self.showLoginPromptIfNecessary()
@@ -101,7 +99,7 @@ class TabBarController: UITabBarController {
     private func showLoginPromptIfNecessary() {
         guard let authStatus = self.authenticationStatus else { return }
         if authStatus == .Completed {
-            AuthenticationViewController.checkIfUserCanLoginAndFetchRecords() { allowed in
+            PatientService(network: AFNetwork(), authManager: AuthManager()).validateProfile { allowed in
                 if allowed {
                     self.showSuccessfulLoginAlert()
                     self.customRoutingForRecordsTab(authStatus: authStatus)
@@ -125,16 +123,27 @@ class TabBarController: UITabBarController {
 //        self.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: TabBarVCs.init(rawValue: self.selectedIndex) ?? .home, onActualLaunchCheck: true)
         self.selectedIndex = selectedIndex
         setupObserver()
-        postBackgroundAuthFetch()
+//        postBackgroundAuthFetch()
+        performSync()
+        
+    }
+    
+    func performSync() {
+        syncService.performSync() {[weak self] patient in
+            print(patient)
+            // TODO: CONNOR HELP!
+            // how do we set record's tab's state?
+            self?.setRecordsTabStateAfterAuthSync()
+        }
     }
     
     // Note: Leaving this in the notification pattern for now, as perhaps we will call it in a different location (if there are any issues calling it here, that is)
-    private func postBackgroundAuthFetch() {
-        guard let token = AuthManager().authToken else { return }
-        guard let hdid = AuthManager().hdid else { return }
-//        checkForExpiredUser()
-        NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
-    }
+//    private func postBackgroundAuthFetch() {
+//        guard let token = AuthManager().authToken else { return }
+//        guard let hdid = AuthManager().hdid else { return }
+////        checkForExpiredUser()
+//        NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
+//    }
     
     // Note: This will handle the edge case where we have an authenticated user who's token expired, then user logged in with different credentials, and then killed the app before the check for this edge case could be executed in the AuthenticatedHealthRecordsAPIWorker
 //    private func checkForExpiredUser() {
@@ -169,14 +178,11 @@ class TabBarController: UITabBarController {
         NotificationManager.listenToShowTermsOfService(observer: self, selector: #selector(showTermsOfService))
         NotificationManager.listenToTermsOfServiceResponse(observer: self, selector: #selector(termsOfServiceResponse))
         NotificationCenter.default.addObserver(self, selector: #selector(tabChanged), name: .tabChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(backgroundAuthFetch), name: .backgroundAuthFetch, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(protectedWordRequired), name: .protectedWordRequired, object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(fetchDependentsAndTheirVaccineCards), name: .patientStored, object: nil)
     }
     
     @objc private func showTermsOfService(_ notification: Notification) {
-        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
-        let creds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
         let vc = TermsOfServiceViewController.constructTermsOfServiceViewController()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -201,11 +207,11 @@ class TabBarController: UITabBarController {
         }
     }
     
-    @objc private func backgroundAuthFetch(_ notification: Notification) {
-        guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
-        syncService.performSync(hdid: hdid) { patient in
-            print(patient)
-        }
+//    @objc private func backgroundAuthFetch(_ notification: Notification) {
+//        guard let authToken = notification.userInfo?["authToken"] as? String, let hdid = notification.userInfo?["hdid"] as? String else { return }
+//        syncService.performSync(hdid: hdid) { patient in
+//            print(patient)
+//        }
 //        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
 //        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
 //            if response == .Online {
@@ -214,7 +220,7 @@ class TabBarController: UITabBarController {
 //                }
 //            }
 //        })
-    }
+//    }
     
 //    @objc private func fetchDependentsAndTheirVaccineCards(_ notification: Notification) {
 //        guard let patient = notification.userInfo?["patient"] as? Patient else { return }
@@ -227,10 +233,7 @@ class TabBarController: UITabBarController {
     
     private func showSuccessfulLoginAlert() {
         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
-        guard let hdid = AuthManager().hdid else { return }
-        syncService.performSync(hdid: hdid) { patient in
-            print(patient)
-        }
+        performSync()
 //        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
 //        let protectiveWord = AuthManager().protectiveWord
 //        self.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: true, isManualFetch: true, protectiveWord: protectiveWord, sourceVC: .AfterOnboarding)
@@ -257,6 +260,10 @@ extension TabBarController {
         let currentTab = TabBarVCs.init(rawValue: self.selectedIndex) ?? .home
         let scenario = AppUserActionScenarios.TermsOfServiceRejected(values: ActionScenarioValues(currentTab: currentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: nil, authenticationStatus: nil))
         self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.0)
+    }
+    
+    private func setRecordsTabStateAfterAuthSync() {
+        // TODO: CONNOR HELP!
     }
 }
 

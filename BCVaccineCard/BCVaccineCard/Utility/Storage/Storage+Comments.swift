@@ -23,7 +23,7 @@ extension StorageService: StorageCommentManager {
        
         guard !comments.isEmpty else {
             Logger.log(string: "No Comments", type: .storage)
-            return
+            return completion([])
         }
         var storedComments: [Comment] = []
         let group = DispatchGroup()

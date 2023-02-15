@@ -16,17 +16,17 @@ struct SyncService {
         return UrlAccessor()
     }
     
-    func performSync(hdid: String, completion: @escaping(Patient?) -> Void) {
+    func performSync(completion: @escaping(Patient?) -> Void) {
         // Network status
         guard NetworkConnection.shared.hasConnection else { return completion(nil) }
         
-        let commentsService = CommentService(network: network, authManager: authManager)
+        // auth
+        guard authManager.isAuthenticated else {return completion(nil)}
         
         // check if user has changed - clear protective word
-        let authManager = AuthManager()
         if let authenticatedPatient = StorageService.shared.fetchAuthenticatedPatient(),
            let storedHDID = authenticatedPatient.hdid,
-           storedHDID != hdid
+           storedHDID != authManager.hdid
         {
             authManager.clearMedFetchProtectiveWordDetails()
         }
@@ -38,18 +38,19 @@ struct SyncService {
             }
             
             // Submit comments before removing all records
+            let commentsService = CommentService(network: network, authManager: authManager)
             commentsService.submitUnsyncedComments {
                 // Remove authenticated patient records
                 StorageService.shared.deleteAuthenticatedPatient()
                 // Fetch
-                fetchData(hdid: hdid, protectiveWord: authManager.protectiveWord, completion: completion)
+                fetchData(protectiveWord: authManager.protectiveWord, completion: completion)
             }
         }
         
         
     }
     
-    private func fetchData(hdid: String, protectiveWord: String?, completion: @escaping(Patient?) -> Void) {
+    private func fetchData(protectiveWord: String?, completion: @escaping(Patient?) -> Void) {
         let patientService = PatientService(network: network, authManager: authManager)
         let dependentService = DependentService(network: network, authManager: authManager)
         let recordsService = HealthRecordsService(network: network, authManager: authManager)

@@ -65,16 +65,17 @@ extension AFNetwork {
             return requestData.completion(value)
         }
         
-        guard let payload = swift_value(of: &gateWayResponse, key: "resourcePayload"),
-              payload is BaseRetryableGatewayResponse,
-              let payLoadStruct = payload as? BaseRetryableGatewayResponse else
-        {
+        // TODO: Use swiftJSON
+//        guard let payload = swift_value(of: &gateWayResponse, key: "resourcePayload"),
+//              payload is BaseRetryableGatewayResponse,
+//              let payLoadStruct = payload as? BaseRetryableGatewayResponse else
+//        {
             // is a BaseRetryableGatewayResponse but is not retry-able - return response
             return requestData.completion(value)
-        }
+//        }
         
         // Request is retry-able:
-        
+        /*
         let shouldRetry = shouldRetry(request: requestData, responsePayload: payLoadStruct)
         switch shouldRetry {
             
@@ -108,6 +109,7 @@ extension AFNetwork {
             }
             return requestData.completion(value)
         }
+         */
     }
     
     

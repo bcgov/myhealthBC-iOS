@@ -48,7 +48,6 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var hasUpdatedUnauthPendingTest = true
     
     private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
-    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     private var hiddenRecords: [HealthRecordsDetailDataSource] = []
@@ -98,7 +97,6 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()
-        self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
         if let patient = patient, let patientName = patient.name, let existingFilter = UserFilters.filterFor(name: patientName) {
             currentFilter = existingFilter
         }
@@ -472,11 +470,20 @@ extension UsersListOfRecordsViewController {
     
     // NOTE: No special routing required here on login, as the user should remain on the same screen
     private func performBCSCLogin() {
-        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-            guard response == .Online else {return}
+        MobileConfigService(network: AFNetwork()).fetchConfig { config in
+            guard let config = config, config.online else {
+                return
+            }
             self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
                 guard let `self` = self, authenticationStatus == .Completed else {return}
                 print("sync?")
+            }
+        }
+//        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
+//            guard response == .Online else {return}
+//            self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
+//                guard let `self` = self, authenticationStatus == .Completed else {return}
+//                print("sync?")
                 // TODO: Check this
 //                if let authStatus = Defaults.loginProcessStatus,
 //                   authStatus.hasCompletedLoginProcess == true,
@@ -496,8 +503,8 @@ extension UsersListOfRecordsViewController {
 //                } else {
 //                    self.fetchDataSource()
 //                }
-            }
-        })
+//            }
+//        })
     }
     
     @objc private func patientAPIFetched(_ notification: Notification) {
@@ -752,15 +759,17 @@ extension UsersListOfRecordsViewController {
     }
     
     private func fetchProtectedRecords(protectiveWord: String) {
-        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { [weak self] response in
-            guard response == .Online, let patient = self?.patient else {return}
+        guard let patient = self.patient else {return}
+        MedicationService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records in
+            print(records.count)
+        }
+//        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { [weak self] response in
+//            guard response == .Online, let patient = self?.patient else {return}
 //            self.adjustLoadingIndicator(show: true)
 //            SessionStorage.attemptingProtectiveWord = true
 //            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWord, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
-            MedicationService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records in
-                print(records.count)
-            }
-        })
+           
+//        })
     }
 }
 

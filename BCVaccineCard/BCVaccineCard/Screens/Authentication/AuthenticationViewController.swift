@@ -26,7 +26,7 @@ extension BaseViewController {
             case .Completed:
                 let tabVC = self.tabBarController as? TabBarController
                 self.view.startLoadingIndicator()
-                AuthenticationViewController.checkIfUserCanLoginAndFetchRecords() { allowed in
+                PatientService(network: AFNetwork(), authManager: AuthManager()).validateProfile { allowed in
                     if allowed {
                         self.postAuthChangedSettingsReloadRequired()
                         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
@@ -118,26 +118,26 @@ class AuthenticationViewController: UIViewController {
     private var initialView: InitialView = .Landing
     private var sourceVC: LoginVCSource = .AfterOnboarding
     private var presentingVCReference: UIViewController?
-    private var throttleAPIWorker: LoginThrottleAPIWorker?
+//    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initializeNecessaryProperties()
+//        initializeNecessaryProperties()
         switch self.initialView {
         case .Landing:
             self.showLanding(sourceVC: self.sourceVC)
         case .AuthInfo:
             self.showInfo(sourceVC: self.sourceVC)
         case .Auth:
-            self.performAuthentication(sourceVC: self.sourceVC, completion: nil)
+            self.performAuthentication(sourceVC: self.sourceVC)
         }
     }
     
-    private func initializeNecessaryProperties() {
-        NotificationCenter.default.addObserver(self, selector: #selector(queueItUIManuallyClosed), name: .queueItUIManuallyClosed, object: nil)
-        throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
-    }
+//    private func initializeNecessaryProperties() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(queueItUIManuallyClosed), name: .queueItUIManuallyClosed, object: nil)
+//        throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
+//    }
     
     private func showLanding(sourceVC: LoginVCSource) {
         removeChild()
@@ -162,11 +162,7 @@ class AuthenticationViewController: UIViewController {
             guard let self = self else {return}
             switch result {
             case .Continue:
-                self.performAuthentication(sourceVC: sourceVC) { online in
-                    if !online {
-                        authInfoView.continueButton.isUserInteractionEnabled = true
-                    }
-                }
+                self.performAuthentication(sourceVC: sourceVC)
             case .Cancel:
                 self.dismissView(withDelay: false, status: .Cancelled, sourceVC: sourceVC)
             case .Back:
@@ -175,30 +171,26 @@ class AuthenticationViewController: UIViewController {
         }
     }
     
-    private func performAuthentication(sourceVC: LoginVCSource, completion: ((Bool) -> Void)?) {
-        throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-            if response == .Online {
-                self.view.startLoadingIndicator()
-                AuthManager().authenticate(in: self, completion: { [weak self] result in
-                    guard let self = self else {return}
-                    self.view.endLoadingIndicator()
-                    switch result {
-                    case .Unavailable:
-                        self.showToast(message: "Authentication server is unavailable", style: .Warn)
-                        self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
-                    case .Success:
-                        Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
-                        self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
-                    case .Fail:
-                        self.showToast(message: "Authentication Failed", style: .Warn)
-                        self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
-                    }
-                })
-            } else {
-                completion?(false)
+    private func performAuthentication(sourceVC: LoginVCSource) {
+        MobileConfigService(network: AFNetwork()).fetchConfig { config in
+            guard let config = config, config.online else {
+                return
             }
-            // Note: Toast will be shown if response is not "Online", so we don't need an else statement here, as we won't be showing a pop-up and won't be dismissing the screen
-        })
+            AuthManager().authenticate(in: self, completion: { [weak self] result in
+                guard let self = self else {return}
+                switch result {
+                case .Unavailable:
+                    self.showToast(message: "Authentication server is unavailable", style: .Warn)
+                    self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                case .Success:
+                    Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
+                    self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
+                case .Fail:
+                    self.showToast(message: "Authentication Failed", style: .Warn)
+                    self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                }
+            })
+        }
     }
     
     fileprivate func removeChild() {
@@ -268,15 +260,15 @@ class AuthenticationViewController: UIViewController {
 }
 
 // MARK: Checks if user is 12 and over AND has accepted terms and conditions
-extension AuthenticationViewController {
-    public static func checkIfUserCanLoginAndFetchRecords(completion: @escaping (Bool) -> Void) {
-        PatientService(network: AFNetwork(), authManager: AuthManager()).validateProfile(completion: completion)
-    }
-}
+//extension AuthenticationViewController {
+//    public static func checkIfUserCanLoginAndFetchRecords(completion: @escaping (Bool) -> Void) {
+//        PatientService(network: AFNetwork(), authManager: AuthManager()).validateProfile(completion: completion)
+//    }
+//}
 
 // MARK: QueueIt UI Hack
-extension AuthenticationViewController {
-    @objc private func queueItUIManuallyClosed(_ notification: Notification) {
-        self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
-    }
-}
+//extension AuthenticationViewController {
+//    @objc private func queueItUIManuallyClosed(_ notification: Notification) {
+//        self.dismissView(withDelay: false, status: .Cancelled, sourceVC: self.sourceVC)
+//    }
+//}

@@ -66,7 +66,7 @@ struct HealthRecordsService {
                     dispatchGroup.leave()
                 }
             case .Recommendation:
-                break
+                dispatchGroup.leave()
             case .HealthVisit:
                 let service = HealthVisitsService(network: network, authManager: authManager)
                 service.fetchAndStore(for: patient) { result in

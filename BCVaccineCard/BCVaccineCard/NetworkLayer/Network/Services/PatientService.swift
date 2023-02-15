@@ -28,10 +28,11 @@ struct PatientService {
             }
             let patientFirstName = response.resourcePayload?.firstname
             let patientFullName = response.getFullName
-            let userInfo: [String: String?] = ["firstName": patientFirstName, "fullName": patientFullName]
-            NotificationCenter.default.post(name: .patientAPIFetched, object: nil, userInfo: userInfo as [AnyHashable : Any])
+            
             store(patientDetails: response, completion: { result in
                 network.removeLoader()
+                let userInfo: [String: String?] = ["firstName": patientFirstName, "fullName": patientFullName]
+                NotificationCenter.default.post(name: .patientAPIFetched, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 return completion(result)
             })
         }
