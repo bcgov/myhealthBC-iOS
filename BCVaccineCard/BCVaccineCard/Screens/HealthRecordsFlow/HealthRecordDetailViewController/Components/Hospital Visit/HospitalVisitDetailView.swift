@@ -92,7 +92,18 @@ extension HospitalVisitRecordDetailView {
         switch model.type {
         case .hospitalVisit(model: let model):
            
-            
+            var providerText = model.provider ?? "NOT AVAILABLE"
+            if providerText.trimWhiteSpacesAndNewLines.count == 0 {
+                providerText = "NOT AVAILABLE"
+            }
+            var healthServiceText = model.healthService ?? "NOT AVAILABLE"
+            if healthServiceText.trimWhiteSpacesAndNewLines.count == 0 {
+                healthServiceText = "NOT AVAILABLE"
+            }
+            var dischargeDateText = model.endDateTime?.labOrderDateTime ?? "NOT AVAILABLE"
+            if dischargeDateText.trimWhiteSpacesAndNewLines.count == 0 {
+                dischargeDateText = "NOT AVAILABLE"
+            }
             let fields: [TextListModel] = [
                 TextListModel(
                     header: TextProperties(text: "Location:", bolded: true),
@@ -101,12 +112,12 @@ extension HospitalVisitRecordDetailView {
                 ),
                 TextListModel(
                     header: TextProperties(text: "Provider:", bolded: true),
-                    subtext: TextProperties(text: model.provider ?? "", bolded: false),
+                    subtext: TextProperties(text: providerText, bolded: false),
                     thirdLine: TextProperties(text: "Inpatient visits only show the first attending physician.", bolded: false, italic: true, fontSize: 17, textColor: .grey)
                 ),
                 TextListModel(
                     header: TextProperties(text: "Service description:", bolded: true),
-                    subtext: TextProperties(text: model.healthService ?? "NOT AVAILABLE", bolded: false)
+                    subtext: TextProperties(text: healthServiceText, bolded: false)
                 ),
                 TextListModel(
                     header: TextProperties(text: "Visit type:", bolded: true),
@@ -116,8 +127,8 @@ extension HospitalVisitRecordDetailView {
                     subtext: TextProperties(text: model.admitDateTime?.labOrderDateTime ?? "", bolded: false)),
                 TextListModel(
                     header: TextProperties(text: "Discharge Date:", bolded: true),
-                    subtext: TextProperties(text: model.endDateTime?.labOrderDateTime ?? "NOT AVAILABLE", bolded: false)),
-            ] 
+                    subtext: TextProperties(text: dischargeDateText, bolded: false)),
+                ]
             return fields
         default:
             return []
