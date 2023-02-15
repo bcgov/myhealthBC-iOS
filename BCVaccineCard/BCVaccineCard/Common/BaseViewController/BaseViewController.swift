@@ -156,6 +156,8 @@ extension BaseViewController {
         guard let hdid = AuthManager().hdid else {return}
         let service = SyncService(network: AFNetwork(), authManager: AuthManager())
         service.performSync() { patient in
+            // TODO: CONNOR HELP!
+            // how do we set record's tab's state?
             print(patient)
         }
     }
