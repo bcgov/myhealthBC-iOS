@@ -397,7 +397,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
             showDetails(for: dependentPatient)
             blockDependentSelection = false
         } else {
-            HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
+            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
                 SessionStorage.dependentRecordsFetched.append(dependentPatient)
                 self?.showDetails(for: dependentPatient)
                 self?.blockDependentSelection = false

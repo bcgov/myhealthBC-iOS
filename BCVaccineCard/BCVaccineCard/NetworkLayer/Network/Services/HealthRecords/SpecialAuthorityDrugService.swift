@@ -13,6 +13,7 @@ struct SpecialAuthorityDrugService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     
     private var endpoints: UrlAccessor {
         return UrlAccessor()
@@ -54,8 +55,14 @@ extension SpecialAuthorityDrugService {
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
         
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
@@ -63,11 +70,8 @@ extension SpecialAuthorityDrugService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedSpecialAuthorityDrugsResponseModel>(url: endpoints.getAuthenticatedMedicationRequest(hdid: hdid),
-                                                                                                     type: .Get,
-                                                                                                     parameters: parameters,
-                                                                                                     encoder: .urlEncoder,
-                                                                                                     headers: headers)
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedSpecialAuthorityDrugsResponseModel>(url: endpoints.medicationStatement(base: baseURL, hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            
             { result in
                 if let meds = result?.resourcePayload {
                     // return result

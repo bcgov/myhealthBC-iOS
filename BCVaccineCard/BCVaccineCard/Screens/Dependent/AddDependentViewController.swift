@@ -116,7 +116,7 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
                 self?.showInvalidInfoAlert()
                 return
             }
-            VaccineCardService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: storedDependent, completion: {_ in
+            VaccineCardService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: storedDependent, completion: {_ in
                 if let patientName = storedDependent.info?.name {
                     self?.showToast(message: "\(patientName) was added")
                 } else {

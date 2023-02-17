@@ -11,6 +11,7 @@ struct SyncService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     
     private var endpoints: UrlAccessor {
         return UrlAccessor()
@@ -38,7 +39,7 @@ struct SyncService {
             }
             
             // Submit comments before removing all records
-            let commentsService = CommentService(network: network, authManager: authManager)
+            let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
             commentsService.submitUnsyncedComments {
                 // Remove authenticated patient records
                 StorageService.shared.deleteAuthenticatedPatient()
@@ -51,10 +52,10 @@ struct SyncService {
     }
     
     private func fetchData(protectiveWord: String?, completion: @escaping(Patient?) -> Void) {
-        let patientService = PatientService(network: network, authManager: authManager)
-        let dependentService = DependentService(network: network, authManager: authManager)
-        let recordsService = HealthRecordsService(network: network, authManager: authManager)
-        let commentsService = CommentService(network: network, authManager: authManager)
+        let patientService = PatientService(network: network, authManager: authManager, configService: configService)
+        let dependentService = DependentService(network: network, authManager: authManager, configService: configService)
+        let recordsService = HealthRecordsService(network: network, authManager: authManager, configService: configService)
+        let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
         
         patientService.fetchAndStoreDetails { patient in
             guard let patient = patient else {

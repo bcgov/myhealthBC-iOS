@@ -166,7 +166,6 @@ class AuthManager {
     // MARK: Network
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
         
-        APIClientCache.reset()
         configService.fetchConfig(completion: { mobileConfig in
             guard let issuer = mobileConfig?.authentication?.endpoint,
                   let clientId = mobileConfig?.authentication?.clientID,
@@ -339,7 +338,6 @@ class AuthManager {
     // MARK: STORAGE
     public func clearData() {
         removeAuthTokens()
-        APIClientCache.reset()
     }
     private func store(state: OIDAuthState) {
         guard state.isAuthorized else { return }

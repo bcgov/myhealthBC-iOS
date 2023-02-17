@@ -13,6 +13,7 @@ struct ImmnunizationsService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     private let maxRetry = Constants.NetworkRetryAttempts.maxRetry
     private let retryIn = Constants.NetworkRetryAttempts.retryIn
     
@@ -73,8 +74,14 @@ extension ImmnunizationsService {
             return completion(nil)
         }
         
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
@@ -82,7 +89,7 @@ extension ImmnunizationsService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, immunizationsResponse>(url: endpoints.getAuthenticatedImmunizations,
+            let requestModel = NetworkRequest<HDIDParams, immunizationsResponse>(url: endpoints.immunizations(base: baseURL),
                                                                                  type: .Get,
                                                                                  parameters: parameters,
                                                                                  encoder: .urlEncoder,

@@ -91,7 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func syncCommentsIfNeeded() {
-        CommentService(network: AFNetwork(), authManager: AuthManager()).submitUnsyncedComments{}
+        CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).submitUnsyncedComments{}
     }
     
     private func clearKeychainIfNecessary(authManager: AuthManager?) {

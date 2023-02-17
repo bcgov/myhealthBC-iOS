@@ -13,6 +13,7 @@ struct DependentService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     
     private var endpoints: UrlAccessor {
         return UrlAccessor()
@@ -29,7 +30,7 @@ struct DependentService {
             StorageService.shared.deleteDependents(for: patient)
             StorageService.shared.store(dependents: payload, for: patient, completion: { result in
                 // Fetch vaccine cards for dependents - Always needed after fetching patients
-                VaccineCardService(network: network, authManager: authManager).fetchAndStoreForDependents(of: patient, completion: { _ in
+                VaccineCardService(network: network, authManager: authManager, configService: configService).fetchAndStoreForDependents(of: patient, completion: { _ in
                     network.removeLoader()
                     completion(result)
                 })
@@ -41,15 +42,20 @@ struct DependentService {
     private func fetchDependentNetworkRequest(completion: @escaping(_ dependentResponse: DependentsResponse?) -> Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return completion(nil)}
         guard NetworkConnection.shared.hasConnection else {return completion(nil)}
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
-            
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
                 Constants.AuthenticationHeaderKeys.hdid: hdid
             ]
             
-            let requestModel = NetworkRequest<DefaultParams, DependentsResponse>(url: endpoints.listOfDependents(hdid: hdid), type: .Get, parameters: nil, headers: headers) { result in
+            let requestModel = NetworkRequest<DefaultParams, DependentsResponse>(url: endpoints.listOfDependents(base: baseURL, hdid: hdid), type: .Get, parameters: nil, headers: headers) { result in
                 completion(result)
             } onError: { error in
                 switch error {
@@ -111,16 +117,21 @@ struct DependentService {
         guard let token = authManager.authToken else {return completion(false)}
         guard NetworkConnection.shared.hasConnection else {return completion(false)}
         
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(false) }
-
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(false)
+            }
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
                 Constants.AuthenticationHeaderKeys.hdid: guardianHdid,
                 Constants.AuthenticationHeaderKeys.dependentHdid: dependentHdid
             ]
 
-            let requestModel = NetworkRequest<RemoteDependent, AddDependentResponse>(url: endpoints.deleteDependent(dependentHdid: dependentHdid, guardian: guardianHdid), type: .Delete, parameters: remoteObject, headers: headers) { result in
+            let requestModel = NetworkRequest<RemoteDependent, AddDependentResponse>(url: endpoints.deleteDependent(base: baseURL, dependentHdid: dependentHdid, guardian: guardianHdid), type: .Delete, parameters: remoteObject, headers: headers) { result in
                 guard result != nil else {return completion(false)}
                 return deleteRemote(dependents: remaining, for: guardian, completion: completion)
             } onError: { error in
@@ -139,15 +150,21 @@ struct DependentService {
     private func addDependentNetworkRequest(object: PostDependent, completion: @escaping(_ dependentResponse: AddDependentResponse?) -> Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return completion(nil)}
         guard NetworkConnection.shared.hasConnection else {return completion(nil)}
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
                 Constants.AuthenticationHeaderKeys.hdid: hdid
             ]
             
-            let requestModel = NetworkRequest<PostDependent, AddDependentResponse>(url: endpoints.listOfDependents(hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
+            let requestModel = NetworkRequest<PostDependent, AddDependentResponse>(url: endpoints.listOfDependents(base: baseURL, hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
                 completion(result)
             } onError: { error in
                 switch error {

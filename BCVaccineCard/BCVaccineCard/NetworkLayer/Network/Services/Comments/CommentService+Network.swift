@@ -17,16 +17,21 @@ extension CommentService {
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
         
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
-            
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, CommentsResponse>(url: endpoints.authenticatedComments(hdid: hdid),
+            let requestModel = NetworkRequest<HDIDParams, CommentsResponse>(url: endpoints.comments(base: baseURL, hdid: hdid),
                                                                             type: .Get,
                                                                             parameters: parameters,
                                                                             encoder: .urlEncoder,

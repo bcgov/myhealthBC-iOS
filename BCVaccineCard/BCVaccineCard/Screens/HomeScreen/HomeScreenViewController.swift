@@ -26,7 +26,7 @@ class HomeScreenViewController: BaseViewController {
     
     private var authManager: AuthManager = AuthManager()
     
-    private let communicationSetvice: CommunicationSetvice = CommunicationSetvice(network: AFNetwork())
+    private let communicationSetvice: CommunicationSetvice = CommunicationSetvice(network: AFNetwork(), configService: MobileConfigService(network: AFNetwork()))
     private var communicationBanner: CommunicationBanner?
     private let connectionListener = NetworkConnection()
     

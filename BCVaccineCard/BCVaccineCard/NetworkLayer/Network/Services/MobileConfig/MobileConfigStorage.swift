@@ -6,10 +6,14 @@
 //
 
 import Foundation
-
 import KeychainAccess
 
 struct MobileConfigStorage {
+    
+    struct CachedConfig {
+        let datetime: Date
+        let config: MobileConfigurationResponseObject
+    }
     
     private enum Key: String {
         case baseURL
@@ -19,6 +23,8 @@ struct MobileConfigStorage {
         case authRedirectURI
         case authIdentityProviderID
     }
+    
+    public static var cachedConfig: CachedConfig? = nil
     
     private static let keychain = Keychain(service: "ca.bc.gov.myhealth")
     
@@ -71,7 +77,7 @@ struct MobileConfigStorage {
         return idString
     }
     
-    public static var cachedConfig: MobileConfigurationResponseObject {
+    public static var offlineConfig: MobileConfigurationResponseObject {
         let authConfig = AuthenticationConfig(endpoint: authEndpoint,
                                               identityProviderID: authIdentityProviderID,
                                               clientID: authClientID,
@@ -83,6 +89,7 @@ struct MobileConfigStorage {
     }
     
     public static func store(config: MobileConfigurationResponseObject) {
+        cachedConfig = CachedConfig(datetime: Date(), config: config)
         if let baseUrl = config.baseURL {
             store(baseURL: baseUrl)
         }

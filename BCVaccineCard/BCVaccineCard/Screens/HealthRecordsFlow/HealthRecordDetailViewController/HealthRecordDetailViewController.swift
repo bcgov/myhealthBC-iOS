@@ -234,7 +234,7 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
         }
         // Fetch
         guard let patient = self.patient else {return}
-        PDFService(network: AFNetwork(), authManager: AuthManager()).fetchPDF(record: dataSource, patient: patient, completion: { [weak self] result in
+        PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDF(record: dataSource, patient: patient, completion: { [weak self] result in
             guard let `self` = self else {return}
             if let pdf = result {
                 self.pdfData = pdf

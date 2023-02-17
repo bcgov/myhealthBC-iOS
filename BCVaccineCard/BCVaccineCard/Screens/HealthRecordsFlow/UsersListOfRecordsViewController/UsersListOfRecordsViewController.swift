@@ -47,8 +47,6 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var navStyle: NavStyle = .singleUser
     private var hasUpdatedUnauthPendingTest = true
     
-    private var backgroundWorker: BackgroundTestResultUpdateAPIWorker?
-    
     private var dataSource: [HealthRecordsDetailDataSource] = []
     private var hiddenRecords: [HealthRecordsDetailDataSource] = []
     private var hiddenCellType: HiddenRecordType? {
@@ -147,7 +145,6 @@ class UsersListOfRecordsViewController: BaseViewController {
         let showLoadingTitle = (self.patient == nil && self.authenticated == true)
         updatePatientIfNecessary()
         navSetup(style: navStyle, authenticated: self.authenticated)
-        self.backgroundWorker = BackgroundTestResultUpdateAPIWorker(delegateOwner: self)
         showSelectedFilters()
         noRecordsFoundSubTitle.font = UIFont.bcSansRegularWithSize(size: 13)
         noRecordsFoundTitle.font = UIFont.bcSansBoldWithSize(size: 20)
@@ -760,7 +757,7 @@ extension UsersListOfRecordsViewController {
     
     private func fetchProtectedRecords(protectiveWord: String) {
         guard let patient = self.patient else {return}
-        MedicationService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records in
+        MedicationService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records in
             print(records.count)
         }
 //        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { [weak self] response in

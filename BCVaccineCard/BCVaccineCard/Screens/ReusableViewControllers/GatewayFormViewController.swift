@@ -189,7 +189,6 @@ class GatewayFormViewController: BaseViewController {
     // For Request
     // TODO: Will need to refactor this a bit when we get the endpoint for test results
     private var storageModel: HGStorageModel?
-    private var worker: HealthGatewayAPIWorker?
     
     // Note: This is for
     private var currentProgress: GatewayInProgressDetails?
@@ -235,16 +234,11 @@ class GatewayFormViewController: BaseViewController {
     private func setup() {
         setupButtons()
         setupTableView()
-        setupAPIWorker()
     }
     
     private func setupButtons() {
         cancelButton.configure(withStyle: .white, buttonType: .cancel, delegateOwner: self, enabled: true)
         submitButton.configure(withStyle: .blue, buttonType: .submit, delegateOwner: self, enabled: false)
-    }
-    
-    private func setupAPIWorker() {
-        self.worker = HealthGatewayAPIWorker(delegateOwner: self)
     }
     
     private func updateCurrentProgress(type: FormTextFieldType, text: String?) {
@@ -446,12 +440,12 @@ extension GatewayFormViewController {
         guard let model = formatGatewayDataForVaccineRequest(phn: phn, birthday: birthday, vax: vaxDate) else { return }
         self.whiteSpaceFormattedPHN = phn
         self.storageModel = HGStorageModel(phn: model.phn, dob: model.dateOfBirth)
-        BaseURLWorker.shared.setBaseURL {
-            if BaseURLWorker.shared.isOnline == true {
-//                self.showLoader()
-                self.worker?.getVaccineCard(model: model, executingVC: self)
-            }
+        
+        let service = VaccineCardService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+        service.fetch(phn: phn, dateOfBirth: birthday, dateOfVaccine: vaxDate) { result in
+            
         }
+        
     }
     
     private func formatGatewayDataForVaccineRequest(phn: String, birthday: String, vax: String) -> GatewayVaccineCardRequest? {
@@ -469,8 +463,18 @@ extension GatewayFormViewController {
         guard let model = formatGatewayDataForTestResultRequest(phn: phn, birthday: birthday, test: testDate) else { return }
         self.whiteSpaceFormattedPHN = phn
         self.storageModel = HGStorageModel(phn: model.phn, dob: model.dateOfBirth)
-        showLoader()
-        worker?.getTestResult(model: model, executingVC: self)
+//        BCVaccineValidator.shared.validate(code: code) { [weak self] result in
+            //                    guard let `self` = self else { return }
+            //                    guard let data = result.result else {
+            //                        self.delegate?.handleError(title: .error, error: ResultError(resultMessage: .invalidQRCodeMessage))
+            //                        return
+            //                    }
+            //                    DispatchQueue.main.async { [weak self] in
+            //                        guard let `self` = self else {return}
+            //                        self.delegate?.handleVaccineCard(scanResult: data, fedCode: vaccineCard.resourcePayload?.federalVaccineProof?.data)
+            //                    }
+            //
+            //                }
     }
     
     private func formatGatewayDataForTestResultRequest(phn: String, birthday: String, test: String) -> GatewayTestResultRequest? {
@@ -640,6 +644,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
 
 }
 
+/*
 // MARK: Health Gateway worker
 extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?) {
@@ -802,6 +807,7 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     
     
 }
+*/
 
 struct CoreDataReturnObject {
     let id: String?

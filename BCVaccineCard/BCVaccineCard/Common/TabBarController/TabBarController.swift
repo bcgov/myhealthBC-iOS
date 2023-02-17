@@ -53,7 +53,7 @@ class TabBarController: UITabBarController {
     private var previousSelectedIndex: Int?
     private var updateRecordsScreenState = false
     private var authenticationStatus: AuthenticationViewController.AuthenticationStatus?
-    var syncService: SyncService = SyncService(network: AFNetwork(), authManager: AuthManager())
+    var syncService: SyncService = SyncService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
     var routerWorker: RouterWorker?
     var network = NetworkConnection()
 
@@ -70,7 +70,7 @@ class TabBarController: UITabBarController {
         if AppDelegate.sharedInstance?.coreDataContext == nil {
             return
         }
-        BaseURLWorker.setup(BaseURLWorker.Config(delegateOwner: self))
+        
         network.initListener { connected in
             if connected {
                 self.whenConnected()
@@ -80,11 +80,9 @@ class TabBarController: UITabBarController {
         }
         showForceUpateIfNeeded(completion: { updateNeeded in
             guard !updateNeeded else {return}
-            BaseURLWorker.shared.setBaseURL {
-                self.routerWorker = RouterWorker(delegateOwner: self)
-                self.setup(selectedIndex: 0)
-                self.showLoginPromptIfNecessary()
-            }
+            self.routerWorker = RouterWorker(delegateOwner: self)
+            self.setup(selectedIndex: 0)
+            self.showLoginPromptIfNecessary()
         })
     }
     
@@ -99,7 +97,7 @@ class TabBarController: UITabBarController {
     private func showLoginPromptIfNecessary() {
         guard let authStatus = self.authenticationStatus else { return }
         if authStatus == .Completed {
-            PatientService(network: AFNetwork(), authManager: AuthManager()).validateProfile { allowed in
+            PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).validateProfile { allowed in
                 if allowed {
                     self.showSuccessfulLoginAlert()
                     self.customRoutingForRecordsTab(authStatus: authStatus)

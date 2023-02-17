@@ -7,20 +7,34 @@
 
 import Foundation
 
-struct MobileConfigService {
+class MobileConfigService {
     let network: Network
+
+    private var callers: [((MobileConfigurationResponseObject?)->Void)] = []
     
-    private var endpoints: UrlAccessor {
-        return UrlAccessor()
+    init(network: Network) {
+        self.network = network
     }
     
     func fetchConfig(completion: @escaping (MobileConfigurationResponseObject?)->Void) {
-        guard NetworkConnection.shared.hasConnection else {
-            return completion(MobileConfigStorage.cachedConfig)
+        if !callers.isEmpty {
+            callers.append(completion)
+            return
         }
-        network.addLoader(message: .empty)
+        callers.append(completion)
+        if let cache = MobileConfigStorage.cachedConfig {
+            let timeDiff = Date().timeIntervalSince(cache.datetime)
+            if timeDiff <= 5 {
+                return completion(cache.config)
+            }
+            print(timeDiff)
+        }
+        
+        guard NetworkConnection.shared.hasConnection else {
+            return completion(MobileConfigStorage.offlineConfig)
+        }
         let request = NetworkRequest<DefaultParams, MobileConfigurationResponseObject>(
-            url: UrlAccessor.mobileConfigURL,
+            url: Constants.Network.MobileConfig,
             type: .Get,
             parameters: nil,
             headers: nil,
@@ -28,9 +42,13 @@ struct MobileConfigService {
                 if let response = responseData {
                     MobileConfigStorage.store(config: response)
                 }
-                self.network.removeLoader()
-                return completion(responseData)
-            }, onError: nil)
+                while !self.callers.isEmpty {
+                    if let callback = self.callers.popLast() {
+                        callback(responseData)
+                    }
+                }
+                return
+            })
         network.request(with: request)
     }
 }

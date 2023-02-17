@@ -11,21 +11,20 @@ struct PDFService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     
     private var endpoints: UrlAccessor {
         return UrlAccessor()
     }
     
     public func fetchPDF(record: HealthRecordsDetailDataSource, patient: Patient, completion: @escaping (String?)->Void) {
-        guard let hdid = patient .hdid,
-              let id = getID(record: record),
+        guard let id = getID(record: record),
               let type = record.getPDFType()
         else {
             return completion(nil)
         }
-        let url = getURL(type: type, hdid: hdid, fileID: id)
         network.addLoader(message: .FetchingRecords)
-        fetchPDF(url: url, isCovid: type == .Covid19, patient: patient, completion: {response in
+        fetchPDF(fileID: id, type: type, isCovid: type == .Covid19, patient: patient, completion: {response in
             network.removeLoader()
             return completion(response?.data)
         })
@@ -44,14 +43,14 @@ struct PDFService {
         }
     }
     
-    private func getURL(type: FetchType, hdid: String, fileID: String) -> URL {
+    private func getURL(type: FetchType, baseURL: URL, hdid: String, fileID: String) -> URL {
         switch type {
         case .ClinialDocument:
-            return endpoints.authenticatedClinicalDocumentPDF(hdid: hdid, fileID: fileID)
+            return endpoints.clinicalDocumentPDF(fileID: fileID, base: baseURL, hdid: hdid)
         case .LabOrder:
-            return endpoints.getAuthenticatedLabTestPDF(repordId: fileID)
+            return endpoints.labTestPDF(base: baseURL, reportID: fileID)
         case .Covid19:
-            return endpoints.getAuthenticatedLabTestPDF(repordId: fileID)
+            return endpoints.labTestPDF(base: baseURL, reportID: fileID)
         }
     }
     
@@ -59,26 +58,29 @@ struct PDFService {
 
 // MARK: Network requests
 extension PDFService {
-    private func fetchPDF(url: URL, isCovid: Bool, patient: Patient, completion: @escaping(_ response: AuthenticatedPDFResponseObject.ResourcePayload?) -> Void) {
+    private func fetchPDF(fileID: String, type: FetchType, isCovid: Bool, patient: Patient, completion: @escaping(_ response: AuthenticatedPDFResponseObject.ResourcePayload?) -> Void) {
         guard let token = authManager.authToken,
-              let hdid = patient .hdid,
+              let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
         
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             
+            let url = getURL(type: type, baseURL: baseURL, hdid: hdid, fileID: fileID)
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
             let parameters: AuthenticatedPDFRequestObject = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: isCovid ? "true" : "false")
             
-            let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, AuthenticatedPDFResponseObject>(url: url,
-                                                                                                             type: .Get,
-                                                                                                             parameters: parameters,
-                                                                                                             encoder: .urlEncoder,
-                                                                                                             headers: headers)
+            let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, AuthenticatedPDFResponseObject>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
                 if let docs = result?.resourcePayload {
                     // return result

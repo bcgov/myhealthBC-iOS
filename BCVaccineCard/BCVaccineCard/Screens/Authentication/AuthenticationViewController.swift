@@ -26,7 +26,7 @@ extension BaseViewController {
             case .Completed:
                 let tabVC = self.tabBarController as? TabBarController
                 self.view.startLoadingIndicator()
-                PatientService(network: AFNetwork(), authManager: AuthManager()).validateProfile { allowed in
+                PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).validateProfile { allowed in
                     if allowed {
                         self.postAuthChangedSettingsReloadRequired()
                         self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
@@ -252,9 +252,6 @@ class AuthenticationViewController: UIViewController {
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
         let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: createTabBarAndGoToHomeScreen, isModal: false, initialView: initialView, sourceVC: sourceVC) {_ in}
         AppDelegate.sharedInstance?.window?.rootViewController = vc
-        // Note: This is required for the edge case where a user logs in from onboarding flow
-        BaseURLWorker.setup(BaseURLWorker.Config(delegateOwner: vc))
-        BaseURLWorker.shared.setBaseURL {}
     }
     
 }

@@ -82,7 +82,7 @@ extension HealthRecordsViewController: AppStyleButtonDelegate {
             guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
             let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
             let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthRecordsVC, authenticationStatus: authenticationStatus))
+            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthRecordsVC, authenticationStatus: authenticationStatus)) 
             self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
         }
     }

@@ -11,6 +11,7 @@ struct HealthRecordsService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     
     private var endpoints: UrlAccessor {
         return UrlAccessor()
@@ -28,7 +29,7 @@ struct HealthRecordsService {
             dispatchGroup.enter()
             switch recordType {
             case .CovidTest:
-                let covidTestsService = CovidTestsService(network: network, authManager: authManager)
+                let covidTestsService = CovidTestsService(network: network, authManager: authManager, configService: configService)
                 
                 covidTestsService.fetchAndStore(for: patient) { result in
                     let uwreapped = result.map({HealthRecord(type: .CovidTest($0))})
@@ -36,7 +37,7 @@ struct HealthRecordsService {
                     dispatchGroup.leave()
                 }
             case .VaccineCard:
-                let vaccineCardService = VaccineCardService(network: network, authManager: authManager)
+                let vaccineCardService = VaccineCardService(network: network, authManager: authManager, configService: configService)
                 vaccineCardService.fetchAndStore(for: patient) { result in
                     if let covidCard = result {
                         let covidRec = HealthRecord(type: .CovidImmunization(covidCard))
@@ -45,21 +46,21 @@ struct HealthRecordsService {
                     dispatchGroup.leave()
                 }
             case .Prescription:
-                let medicationService = MedicationService(network: network, authManager: authManager)
+                let medicationService = MedicationService(network: network, authManager: authManager, configService: configService)
                 medicationService.fetchAndStore(for: patient, protectiveWord: protectiveWord) { result in
                     let uwreapped = result.map({HealthRecord(type: .Medication($0))})
                     records.append(contentsOf: uwreapped)
                     dispatchGroup.leave()
                 }
             case .LaboratoryOrder:
-                let labOrderService = LabOrderService(network: network, authManager: authManager)
+                let labOrderService = LabOrderService(network: network, authManager: authManager, configService: configService)
                 labOrderService.fetchAndStore(for: patient) { result in
                     let uwreapped = result.map({HealthRecord(type: .LaboratoryOrder($0))})
                     records.append(contentsOf: uwreapped)
                     dispatchGroup.leave()
                 }
             case .Immunization:
-                let immunizationsService = ImmnunizationsService(network: network, authManager: authManager)
+                let immunizationsService = ImmnunizationsService(network: network, authManager: authManager, configService: configService)
                 immunizationsService.fetchAndStore(for: patient) { result in
                     let uwreapped = result.map({HealthRecord(type: .Immunization($0))})
                     records.append(contentsOf: uwreapped)
@@ -68,28 +69,28 @@ struct HealthRecordsService {
             case .Recommendation:
                 dispatchGroup.leave()
             case .HealthVisit:
-                let service = HealthVisitsService(network: network, authManager: authManager)
+                let service = HealthVisitsService(network: network, authManager: authManager, configService: configService)
                 service.fetchAndStore(for: patient) { result in
                     let unwrapped = result.map({HealthRecord(type: .HealthVisit($0))})
                     records.append(contentsOf: unwrapped)
                     dispatchGroup.leave()
                 }
             case .SpecialAuthorityDrug:
-                let service = SpecialAuthorityDrugService(network: network, authManager: authManager)
+                let service = SpecialAuthorityDrugService(network: network, authManager: authManager, configService: configService)
                 service.fetchAndStore(for: patient) { result in
                     let unwrapped = result.map({HealthRecord(type: .SpecialAuthorityDrug($0))})
                     records.append(contentsOf: unwrapped)
                     dispatchGroup.leave()
                 }
             case .HospitalVisit:
-                let hospitalVisitService = HospitalVisitsService(network: network, authManager: authManager)
+                let hospitalVisitService = HospitalVisitsService(network: network, authManager: authManager, configService: configService)
                 hospitalVisitService.fetchAndStore(for: patient) { result in
                     let uwreapped = result.map({HealthRecord(type: .HospitalVisit($0))})
                     records.append(contentsOf: uwreapped)
                     dispatchGroup.leave()
                 }
             case .ClinicalDocument:
-                let clinicalDocumentsService = ClinicalDocumentService(network: network, authManager: authManager)
+                let clinicalDocumentsService = ClinicalDocumentService(network: network, authManager: authManager, configService: configService)
                 clinicalDocumentsService.fetchAndStore(for: patient) { result in
                     let uwreapped = result.map({HealthRecord(type: .ClinicalDocument($0))})
                     records.append(contentsOf: uwreapped)

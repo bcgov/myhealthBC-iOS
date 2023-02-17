@@ -13,6 +13,7 @@ struct HealthVisitsService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     
     private var endpoints: UrlAccessor {
         return UrlAccessor()
@@ -54,16 +55,21 @@ extension HealthVisitsService {
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
         
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
-            
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedHealthVisitsResponseObject>(url: endpoints.getAuthenticatedHealthVisits(hdid: hdid),
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedHealthVisitsResponseObject>(url: endpoints.healthVisits(base: baseURL, hdid: hdid),
                                                                                                      type: .Get,
                                                                                                      parameters: parameters,
                                                                                                      encoder: .urlEncoder,

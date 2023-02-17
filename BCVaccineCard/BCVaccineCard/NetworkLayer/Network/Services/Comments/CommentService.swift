@@ -14,6 +14,7 @@ struct CommentService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     
     fileprivate static var blockSync: Bool = false
     
@@ -128,15 +129,20 @@ struct CommentService {
     
     private func postComment(object: PostComment, completion: @escaping(PostCommentResponseResult?)->Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else {return completion(nil)}
-            
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
                 Constants.AuthenticationHeaderKeys.hdid: hdid
             ]
             
-            let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.authenticatedComments(hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
+            let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.comments(base: baseURL, hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
                 return completion(result?.resourcePayload)
             }
             
@@ -176,7 +182,7 @@ extension CommentService {
 
 extension HealthRecord {
     fileprivate func submitComment(text: String, hdid: String, completion: @escaping (Comment?)->Void) {
-        let service = CommentService(network: AFNetwork(), authManager: AuthManager())
+        let service = CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         service.newComment(message: text, commentID: commentId, hdid: hdid, type: commentType, completion: completion)
     }
     

@@ -154,7 +154,7 @@ extension BaseViewController {
 extension BaseViewController {
     func syncAuthenticatedPatient() {
         guard let hdid = AuthManager().hdid else {return}
-        let service = SyncService(network: AFNetwork(), authManager: AuthManager())
+        let service = SyncService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         service.performSync() { patient in
             // TODO: CONNOR HELP!
             // how do we set record's tab's state?
