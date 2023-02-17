@@ -54,13 +54,13 @@ struct HealthRecordsService {
             dispatchGroup.leave()
         }
         
-        dispatchGroup.enter()
-        let clinicalDocsService = ClinicalDocumentService(network: network, authManager: authManager)
-        clinicalDocsService.fetchAndStore(for: patient) { result in
-            let uwreapped = result.map({HealthRecord(type: .ClinicalDocument($0))})
-            records.append(contentsOf: uwreapped)
-            dispatchGroup.leave()
-        }
+//        dispatchGroup.enter()
+//        let clinicalDocsService = ClinicalDocumentService(network: network, authManager: authManager)
+//        clinicalDocsService.fetchAndStore(for: patient) { result in
+//            let uwreapped = result.map({HealthRecord(type: .ClinicalDocument($0))})
+//            records.append(contentsOf: uwreapped)
+//            dispatchGroup.leave()
+//        }
         
 //        dispatchGroup.enter()
 //        let medicationService = MedicationService(network: network, authManager: authManager)
@@ -70,13 +70,13 @@ struct HealthRecordsService {
 //            dispatchGroup.leave()
 //        }
         
-        dispatchGroup.enter()
-        let labOrderService = LabOrderService(network: network, authManager: authManager)
-        labOrderService.fetchAndStore(for: patient) { result in
-            let uwreapped = result.map({HealthRecord(type: .LaboratoryOrder($0))})
-            records.append(contentsOf: uwreapped)
-            dispatchGroup.leave()
-        }
+//        dispatchGroup.enter()
+//        let labOrderService = LabOrderService(network: network, authManager: authManager)
+//        labOrderService.fetchAndStore(for: patient) { result in
+//            let uwreapped = result.map({HealthRecord(type: .LaboratoryOrder($0))})
+//            records.append(contentsOf: uwreapped)
+//            dispatchGroup.leave()
+//        }
         
         // TODO: other records here
         

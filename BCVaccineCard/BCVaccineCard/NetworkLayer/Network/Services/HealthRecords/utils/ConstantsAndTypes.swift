@@ -90,6 +90,6 @@ extension RecordsFilter.RecordType {
     }
     
     static var dependentFilters: [RecordsFilter.RecordType] {
-        return [.Covid, .Immunizations, .LabTests]
+        return [.Covid, .Immunizations]
     }
 }
