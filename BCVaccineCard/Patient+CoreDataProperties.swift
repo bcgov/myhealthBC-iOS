@@ -2,7 +2,7 @@
 //  Patient+CoreDataProperties.swift
 //  BCVaccineCard
 //
-//  Created by Connor Ogilvie on 2023-01-30.
+//  Created by Connor Ogilvie on 2023-02-24.
 //
 //
 
@@ -25,6 +25,9 @@ extension Patient {
     @NSManaged public var lastName: String?
     @NSManaged public var name: String?
     @NSManaged public var phn: String?
+    @NSManaged public var email: String?
+    @NSManaged public var phone: String?
+    @NSManaged public var emailVerified: Bool
     @NSManaged public var clinicalDocuments: NSSet?
     @NSManaged public var covidTestResults: NSSet?
     @NSManaged public var dependencyInfo: Dependent?
@@ -33,12 +36,12 @@ extension Patient {
     @NSManaged public var hospitalVisits: NSSet?
     @NSManaged public var immunizations: NSSet?
     @NSManaged public var laboratoryOrders: NSSet?
+    @NSManaged public var physicalAddress: Address?
+    @NSManaged public var postalAddress: Address?
     @NSManaged public var prescriptions: NSSet?
     @NSManaged public var recommendations: NSSet?
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
-    @NSManaged public var physicalAddress: Address?
-    @NSManaged public var postalAddress: Address?
 
 }
 

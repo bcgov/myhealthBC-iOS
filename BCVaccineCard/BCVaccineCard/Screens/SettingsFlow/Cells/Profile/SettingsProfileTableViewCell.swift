@@ -35,10 +35,10 @@ class SettingsProfileTableViewCell: UITableViewCell, Theme {
             imageView.image = icon
         }
         nameLabel.text = displayName ?? StorageService.shared.fetchAuthenticatedPatient()?.name?.nameCase() ?? AuthManager().displayName?.nameCase()
-        viewProfileLabel.isHidden = true
-        //let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+//        viewProfileLabel.isHidden = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.contentView.gestureRecognizers?.removeAll()
-        //self.contentView.addGestureRecognizer(tap)
+        self.contentView.addGestureRecognizer(tap)
     }
     
     @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
