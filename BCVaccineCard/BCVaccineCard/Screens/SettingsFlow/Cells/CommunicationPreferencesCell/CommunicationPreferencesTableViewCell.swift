@@ -26,9 +26,9 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
     private func setup() {
         staticLabelSetup()
         textViewSetup()
-        styleLabel(label: emailAddressTitleLabel, data: nil, emptyDataText: "No email address provided")
+        styleLabel(label: emailAddressDetailsLabel, data: nil, emptyDataText: "No email address provided")
         displayVerifiedImage(emailAddress: nil, verified: false)
-        styleLabel(label: phoneNumberTitleLabel, data: nil, emptyDataText: "No phone number provided")
+        styleLabel(label: phoneNumberDetailsLabel, data: nil, emptyDataText: "No phone number provided")
     }
     
     private func staticLabelSetup() {
@@ -46,25 +46,29 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
     private func textViewSetup() {
         let attrString = NSMutableAttributedString(string: "Keep you updated on health record updates (vaccine availability, lab results and more).\n\nTo make changes to email address and phone number, please go to www.healthgateway.gov.bc.ca")
         let urlString = "www.healthgateway.gov.bc.ca"
+        attrString.addAttribute(.font, value: UIFont.bcSansRegularWithSize(size: 13), range: NSMakeRange(0, attrString.length))
+        attrString.addAttribute(.foregroundColor, value: AppColours.textGray, range: NSMakeRange(0, attrString.length))
         if let url = URL(string: urlString) {
             attrString.setAttributes([.link: url], range: NSMakeRange(attrString.length - urlString.count, urlString.count))
             descriptionTextView.attributedText = attrString
             descriptionTextView.isUserInteractionEnabled = true
             descriptionTextView.isEditable = false
             descriptionTextView.linkTextAttributes = [
-                .foregroundColor: AppColours.appBlue,
+                .foregroundColor: UIColor(hexString: "#1A5A96"),
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
         } else {
             descriptionTextView.attributedText = attrString
         }
+        descriptionTextView.textContainerInset = .zero
+        descriptionTextView.textContainer.lineFragmentPadding = 0.0
         
     }
     // NOTE: Remember to cache these values for this session, and to check cache for values before hitting endpoint
     func configure(patient: Patient) {
-        styleLabel(label: emailAddressTitleLabel, data: patient.email, emptyDataText: "No email address provided")
+        styleLabel(label: emailAddressDetailsLabel, data: patient.email, emptyDataText: "No email address provided")
         displayVerifiedImage(emailAddress: patient.email, verified: patient.emailVerified)
-        styleLabel(label: phoneNumberTitleLabel, data: patient.phone, emptyDataText: "No phone number provided")
+        styleLabel(label: phoneNumberDetailsLabel, data: patient.phone, emptyDataText: "No phone number provided")
     }
     
     private func styleLabel(label: UILabel, data: String?, emptyDataText: String) {

@@ -206,7 +206,7 @@ extension StorageService: StoragePatientManager {
     fileprivate func update(phn: String?, name: String?, birthday: Date?, physicalAddress: Address?, mailingAddress: Address?, email: String?,
                             phone: String?, emailVerified: Bool, hdid: String?, authenticated: Bool, for patient: Patient) -> Patient? {
         guard let context = managedContext else {return nil}
-        if patient.name == name && patient.phn == phn && patient.birthday == birthday && patient.hdid == hdid && patient.authenticated == authenticated {return patient}
+        if patient.name == name && patient.phn == phn && patient.birthday == birthday && patient.email == email && patient.phone == phone && patient.emailVerified == emailVerified && patient.hdid == hdid && patient.authenticated == authenticated {return patient}
         do {
             if let patientName = name {
                 patient.name = patientName
