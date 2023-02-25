@@ -24,13 +24,11 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
     }
 
     private func setup() {
-        // TODO: Font sizing here, etc
         staticLabelSetup()
         textViewSetup()
-        self.startLoadingIndicator()
-        styleLabel(label: emailAddressTitleLabel, data: nil)
+        styleLabel(label: emailAddressTitleLabel, data: nil, emptyDataText: "No email address provided")
         displayVerifiedImage(emailAddress: nil, verified: false)
-        styleLabel(label: phoneNumberTitleLabel, data: nil)
+        styleLabel(label: phoneNumberTitleLabel, data: nil, emptyDataText: "No phone number provided")
     }
     
     private func staticLabelSetup() {
@@ -64,13 +62,12 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
     }
     // NOTE: Remember to cache these values for this session, and to check cache for values before hitting endpoint
     func configure(patient: Patient) {
-        self.endLoadingIndicator()
-        styleLabel(label: emailAddressTitleLabel, data: patient.email)
+        styleLabel(label: emailAddressTitleLabel, data: patient.email, emptyDataText: "No email address provided")
         displayVerifiedImage(emailAddress: patient.email, verified: patient.emailVerified)
-        styleLabel(label: phoneNumberTitleLabel, data: patient.phone)
+        styleLabel(label: phoneNumberTitleLabel, data: patient.phone, emptyDataText: "No phone number provided")
     }
     
-    private func styleLabel(label: UILabel, data: String?, emptyDataText: String? = nil) {
+    private func styleLabel(label: UILabel, data: String?, emptyDataText: String) {
         label.text = data != nil ? data : emptyDataText
         label.font = data != nil ? UIFont.bcSansRegularWithSize(size: 17) : UIFont.bcSansRegularWithSize(size: 13)
         label.textColor = data != nil ? AppColours.textBlack : AppColours.textGray

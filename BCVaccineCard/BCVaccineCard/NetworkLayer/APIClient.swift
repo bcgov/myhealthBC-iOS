@@ -325,6 +325,18 @@ extension APIClient {
 // MARK: For handling user profile, used for terms of service check
 extension APIClient {
     
+    func getCommunicationPreferenceDetails(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, completion: @escaping (AuthenticatedUserProfileResponseObject?, ResultError?) -> Void) {
+        self.getUserProfile(authCredentials, token: nil, executingVC: executingVC, includeQueueItUI: false) { [weak self] result, _ in
+            switch result {
+            case .success(let profile):
+                completion(profile, nil)
+            case .failure(let error):
+                Logger.log(string: error.localizedDescription, type: .Network)
+                completion(nil, error)
+            }
+        }
+    }
+    
     // This function is used to check if user has accepted terms of service or not
     func hasUserAcceptedTermsOfService(_ authCredentials: AuthenticationRequestObject, token: String?, executingVC: UIViewController, includeQueueItUI: Bool, completion: @escaping (Bool?, ResultError?) -> Void) {
         self.getUserProfile(authCredentials, token: nil, executingVC: executingVC, includeQueueItUI: includeQueueItUI) { [weak self] result, queueItRetryStatus in

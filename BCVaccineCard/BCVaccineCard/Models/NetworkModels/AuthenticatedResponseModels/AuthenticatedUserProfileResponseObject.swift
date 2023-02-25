@@ -35,6 +35,7 @@ struct ResourcePayload: Codable {
         let email, smsNumber, closedDateTime, identityManagementID: String?
         let lastLoginDateTime, encryptionKey: String?
         let verifications: [Verification]?
+        let isEmailVerified, isSMSNumberVerified: Bool
 
         enum CodingKeys: String, CodingKey {
             case createdBy, createdDateTime, updatedBy, updatedDateTime, version
@@ -43,6 +44,7 @@ struct ResourcePayload: Codable {
             case termsOfService, email, smsNumber, closedDateTime
             case identityManagementID = "identityManagementId"
             case lastLoginDateTime, encryptionKey, verifications
+            case isEmailVerified, isSMSNumberVerified
         }
     }
 
