@@ -46,9 +46,10 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
     private func textViewSetup() {
         let attrString = NSMutableAttributedString(string: "Keep you updated on health record updates (vaccine availability, lab results and more).\n\nTo make changes to email address and phone number, please go to www.healthgateway.gov.bc.ca")
         let urlString = "www.healthgateway.gov.bc.ca"
+        let httpsUrlString = "https:www.healthgateway.gov.bc.ca"
         attrString.addAttribute(.font, value: UIFont.bcSansRegularWithSize(size: 13), range: NSMakeRange(0, attrString.length))
         attrString.addAttribute(.foregroundColor, value: AppColours.textGray, range: NSMakeRange(0, attrString.length))
-        if let url = URL(string: urlString) {
+        if let url = URL(string: httpsUrlString) {
             attrString.setAttributes([.link: url], range: NSMakeRange(attrString.length - urlString.count, urlString.count))
             descriptionTextView.attributedText = attrString
             descriptionTextView.isUserInteractionEnabled = true
