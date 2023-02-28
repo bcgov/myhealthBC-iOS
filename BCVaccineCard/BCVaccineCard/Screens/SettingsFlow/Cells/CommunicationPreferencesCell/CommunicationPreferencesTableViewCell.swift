@@ -13,10 +13,12 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var emailAddressTitleLabel: UILabel!
     @IBOutlet private weak var emailAddressDetailsLabel: UILabel!
-    @IBOutlet private weak var verifiedStatusImageView: UIImageView!
-    @IBOutlet private weak var imageViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var emailVerifiedStatusImageView: UIImageView!
+    @IBOutlet private weak var emailImageViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet private weak var phoneNumberTitleLabel: UILabel!
     @IBOutlet private weak var phoneNumberDetailsLabel: UILabel!
+    @IBOutlet private weak var phoneVerifiedStatusImageView: UIImageView!
+    @IBOutlet private weak var phoneImageViewWidthConstraint: NSLayoutConstraint!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,7 +29,8 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
         staticLabelSetup()
         textViewSetup()
         styleLabel(label: emailAddressDetailsLabel, data: nil, emptyDataText: "No email address provided")
-        displayVerifiedImage(emailAddress: nil, verified: false)
+        displayVerifiedImage(data: nil, verified: false, imageView: emailVerifiedStatusImageView, constraint: emailImageViewWidthConstraint)
+        displayVerifiedImage(data: nil, verified: false, imageView: phoneVerifiedStatusImageView, constraint: phoneImageViewWidthConstraint)
         styleLabel(label: phoneNumberDetailsLabel, data: nil, emptyDataText: "No phone number provided")
     }
     
@@ -68,8 +71,9 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
     // NOTE: Remember to cache these values for this session, and to check cache for values before hitting endpoint
     func configure(patient: Patient) {
         styleLabel(label: emailAddressDetailsLabel, data: patient.email, emptyDataText: "No email address provided")
-        displayVerifiedImage(emailAddress: patient.email, verified: patient.emailVerified)
+        displayVerifiedImage(data: patient.email, verified: patient.emailVerified, imageView: emailVerifiedStatusImageView, constraint: emailImageViewWidthConstraint)
         styleLabel(label: phoneNumberDetailsLabel, data: patient.phone, emptyDataText: "No phone number provided")
+        displayVerifiedImage(data: patient.phone, verified: patient.phoneVerified, imageView: phoneVerifiedStatusImageView, constraint: phoneImageViewWidthConstraint)
     }
     
     private func styleLabel(label: UILabel, data: String?, emptyDataText: String) {
@@ -78,14 +82,14 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
         label.textColor = data != nil ? AppColours.textBlack : AppColours.textGray
     }
     
-    private func displayVerifiedImage(emailAddress: String?, verified: Bool) {
-        guard let _ = emailAddress else {
-            verifiedStatusImageView.isHidden = true
+    private func displayVerifiedImage(data: String?, verified: Bool, imageView: UIImageView, constraint: NSLayoutConstraint) {
+        guard let _ = data else {
+            imageView.isHidden = true
             return
         }
-        verifiedStatusImageView.isHidden = false
-        verifiedStatusImageView.image = verified ? UIImage(named: "verified") : UIImage(named: "unverified")
-        imageViewWidthConstraint.constant = verified ? 58 : 78
+        imageView.isHidden = false
+        imageView.image = verified ? UIImage(named: "verified") : UIImage(named: "unverified")
+        constraint.constant = verified ? 58 : 78
         self.layoutIfNeeded()
     }
     

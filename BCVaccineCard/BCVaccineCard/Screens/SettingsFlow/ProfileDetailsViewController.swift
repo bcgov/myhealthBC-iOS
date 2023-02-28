@@ -260,6 +260,7 @@ extension ProfileDetailsViewController {
         let email = result.resourcePayload?.email
         let emailVerified = result.resourcePayload?.isEmailVerified ?? false
         let phone = result.resourcePayload?.smsNumber
+        let phoneVerified = result.resourcePayload?.isSMSNumberVerified ?? false
         let patient = StorageService.shared.updatePatient(phn: phn,
                                                           name: name,
                                                           firstName: existingPatient.firstName,
@@ -271,9 +272,10 @@ extension ProfileDetailsViewController {
                                                           email: email,
                                                           phone: phone,
                                                           emailVerified: emailVerified,
+                                                          phoneVerified: phoneVerified,
                                                           hdid: AuthManager().hdid,
                                                           authenticated: true)
-        AppDelegate.sharedInstance?.cachedCommunicationPreferences = CommunicationPreferences(email: email, emailVerified: emailVerified, phone: phone)
+        AppDelegate.sharedInstance?.cachedCommunicationPreferences = CommunicationPreferences(email: email, emailVerified: emailVerified, phone: phone, phoneVerified: phoneVerified)
         
         self.dataSource = []
         initializeDataSource()
@@ -286,4 +288,5 @@ struct CommunicationPreferences {
     let email: String?
     let emailVerified: Bool
     let phone: String?
+    let phoneVerified: Bool
 }

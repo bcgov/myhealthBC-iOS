@@ -1413,6 +1413,7 @@
 		2D5218C82988556100E07382 /* Address+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Address+CoreDataClass.swift"; path = "../../../../Address+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2D5218C92988556100E07382 /* Address+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Address+CoreDataProperties.swift"; path = "../../../../Address+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2D60219828CBEB2D0096614F /* BCVaccineCard 1.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.2.xcdatamodel"; sourceTree = "<group>"; };
+		2D7FD13229AE922500A4838A /* BCVaccineCard 1.10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.10.xcdatamodel"; sourceTree = "<group>"; };
 		2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsService.swift; sourceTree = "<group>"; };
 		2DF2102328DD2B2700F5E01C /* ViewPDFTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPDFTableViewCell.swift; sourceTree = "<group>"; };
 		2DF2102428DD2B2700F5E01C /* ViewPDFTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewPDFTableViewCell.xib; sourceTree = "<group>"; };
@@ -5376,7 +5377,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
@@ -5391,7 +5392,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-ADHOC";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-Dev";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEV;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -5409,7 +5410,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
@@ -5424,7 +5425,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-ADHOC";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-Dev";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEV;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -5697,6 +5698,7 @@
 		7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2D7FD13229AE922500A4838A /* BCVaccineCard 1.10.xcdatamodel */,
 				2DF25A1D29A97FCA0081DB5B /* BCVaccineCard 1.9.xcdatamodel */,
 				2D5218C72988519E00E07382 /* BCVaccineCard 1.8.xcdatamodel */,
 				3EDC0C8A2967A18000603FED /* BCVaccineCard 1.7.xcdatamodel */,
@@ -5707,7 +5709,7 @@
 				3E91C78D28B517C6005AA34F /* BCVaccineCard 1.1.xcdatamodel */,
 				7944F68226F12614006B9444 /* BCVaccineCard.xcdatamodel */,
 			);
-			currentVersion = 2DF25A1D29A97FCA0081DB5B /* BCVaccineCard 1.9.xcdatamodel */;
+			currentVersion = 2D7FD13229AE922500A4838A /* BCVaccineCard 1.10.xcdatamodel */;
 			name = BCVaccineCard.xcdatamodeld;
 			path = ../BCVaccineCard.xcdatamodeld;
 			sourceTree = "<group>";

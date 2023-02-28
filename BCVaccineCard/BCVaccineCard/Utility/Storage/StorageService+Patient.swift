@@ -47,6 +47,7 @@ protocol StoragePatientManager {
                        email: String?,
                        phone: String?,
                        emailVerified: Bool,
+                       phoneVerified: Bool,
                        hdid: String?,
                        authenticated: Bool
     ) -> Patient?
@@ -190,23 +191,24 @@ extension StorageService: StoragePatientManager {
         email: String?,
         phone: String?,
         emailVerified: Bool,
+        phoneVerified: Bool,
         hdid: String?,
         authenticated: Bool
     ) -> Patient? {
         if let patient = fetchPatient(phn: phn) {
-            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, email: email, phone: phone, emailVerified: emailVerified, hdid: hdid, authenticated: authenticated, for: patient)
+            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, email: email, phone: phone, emailVerified: emailVerified, phoneVerified: phoneVerified, hdid: hdid, authenticated: authenticated, for: patient)
             
         } else if let patient = fetchPatient(name: name, birthday: birthday) {
-            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, email: email, phone: phone, emailVerified: emailVerified, hdid: hdid, authenticated: authenticated, for: patient)
+            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, email: email, phone: phone, emailVerified: emailVerified, phoneVerified: phoneVerified, hdid: hdid, authenticated: authenticated, for: patient)
         }
         return nil
     }
     
     /// Updates values that are not nil
     fileprivate func update(phn: String?, name: String?, birthday: Date?, physicalAddress: Address?, mailingAddress: Address?, email: String?,
-                            phone: String?, emailVerified: Bool, hdid: String?, authenticated: Bool, for patient: Patient) -> Patient? {
+                            phone: String?, emailVerified: Bool, phoneVerified: Bool, hdid: String?, authenticated: Bool, for patient: Patient) -> Patient? {
         guard let context = managedContext else {return nil}
-        if patient.name == name && patient.phn == phn && patient.birthday == birthday && patient.email == email && patient.phone == phone && patient.emailVerified == emailVerified && patient.hdid == hdid && patient.authenticated == authenticated {return patient}
+        if patient.name == name && patient.phn == phn && patient.birthday == birthday && patient.email == email && patient.phone == phone && patient.emailVerified == emailVerified && patient.phoneVerified == phoneVerified && patient.hdid == hdid && patient.authenticated == authenticated {return patient}
         do {
             if let patientName = name {
                 patient.name = patientName
@@ -223,15 +225,18 @@ extension StorageService: StoragePatientManager {
             if let mailingAddress = mailingAddress {
                 patient.postalAddress = mailingAddress
             }
-            if let email = email {
+//            if let email = email {
                 patient.email = email
-            }
+//            }
             if emailVerified != patient.emailVerified {
                 patient.emailVerified = emailVerified
             }
-            if let phone = phone {
-                patient.phone = phone
+            if phoneVerified != patient.phoneVerified {
+                patient.phoneVerified = phoneVerified
             }
+//            if let phone = phone {
+                patient.phone = phone
+//            }
             if let hdid = hdid {
                 patient.hdid = hdid
             }
@@ -378,7 +383,7 @@ extension StorageService: StoragePatientManager {
         }
         
         // otherwise update user data if needed and return
-        _ = update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, email: patient.email, phone: patient.phone, emailVerified: patient.emailVerified, hdid: hdid, authenticated: authenticated, for: patient)
+        _ = update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, email: patient.email, phone: patient.phone, emailVerified: patient.emailVerified, phoneVerified: patient.phoneVerified, hdid: hdid, authenticated: authenticated, for: patient)
         
         return patient
     }
