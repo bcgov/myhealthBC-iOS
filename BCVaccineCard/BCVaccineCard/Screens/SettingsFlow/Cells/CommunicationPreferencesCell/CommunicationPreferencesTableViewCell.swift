@@ -89,7 +89,7 @@ class CommunicationPreferencesTableViewCell: UITableViewCell {
         }
         imageView.isHidden = false
         imageView.image = verified ? UIImage(named: "verified") : UIImage(named: "unverified")
-        constraint.constant = verified ? 58 : 78
+        constraint.constant = verified ? 58 : 81
         self.layoutIfNeeded()
     }
     
