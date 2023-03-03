@@ -274,6 +274,12 @@
 		2D120D4328FF25A600EB8EBF /* PostDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D4228FF25A600EB8EBF /* PostDependent.swift */; };
 		2D120D4428FF25A600EB8EBF /* PostDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D4228FF25A600EB8EBF /* PostDependent.swift */; };
 		2D120D4528FF25A600EB8EBF /* PostDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D4228FF25A600EB8EBF /* PostDependent.swift */; };
+		2D3F16A629B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3F16A429B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift */; };
+		2D3F16A729B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3F16A429B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift */; };
+		2D3F16A829B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3F16A429B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift */; };
+		2D3F16A929B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F16A529B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib */; };
+		2D3F16AA29B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F16A529B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib */; };
+		2D3F16AB29B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F16A529B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib */; };
 		2D465B0528CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
 		2D465B0628CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
 		2D465B0728CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
@@ -1405,6 +1411,8 @@
 		2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentsResponse.swift; sourceTree = "<group>"; };
 		2D120D3E28FF17FB00EB8EBF /* DependentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentService.swift; sourceTree = "<group>"; };
 		2D120D4228FF25A600EB8EBF /* PostDependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDependent.swift; sourceTree = "<group>"; };
+		2D3F16A429B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitizenSubmissionTableViewCell.swift; sourceTree = "<group>"; };
+		2D3F16A529B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CitizenSubmissionTableViewCell.xib; sourceTree = "<group>"; };
 		2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFAPIWorker.swift; sourceTree = "<group>"; };
 		2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsViewController.swift; sourceTree = "<group>"; };
 		2D5218BF2984A38000E07382 /* ProfileDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsTableViewCell.swift; sourceTree = "<group>"; };
@@ -2023,6 +2031,7 @@
 		294BD3CE27B1C47000BD8D46 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				2D3F16A329B19D030029C8EA /* CitizenSubmissionTableViewCell */,
 				294BD3CF27B1C4B900BD8D46 /* HiddenRecordsTableViewCell */,
 				79218AA6275194410063004E /* UserRecordListTableViewCell */,
 			);
@@ -2266,6 +2275,15 @@
 				3E048CC92911ADF100774278 /* StorageService + Dependent.swift */,
 			);
 			path = Dependant;
+			sourceTree = "<group>";
+		};
+		2D3F16A329B19D030029C8EA /* CitizenSubmissionTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				2D3F16A429B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift */,
+				2D3F16A529B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib */,
+			);
+			path = CitizenSubmissionTableViewCell;
 			sourceTree = "<group>";
 		};
 		2D5218BE2984A36600E07382 /* ProfileDetails */ = {
@@ -3797,6 +3815,7 @@
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
 				79218ACF27556AA50063004E /* StatusBannerView.xib in Resources */,
 				2DF2102928DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
+				2D3F16AA29B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib in Resources */,
 				799050C7273C8567006CD726 /* UserRecordListView.xib in Resources */,
 				2971956B28871B1A00CA824A /* SectionDescriptionTableViewCell.xib in Resources */,
 				7918A8CA27482E1900D19D1C /* TextListView.xib in Resources */,
@@ -3856,6 +3875,7 @@
 				79590D982811E68A006EB59F /* CommentViewTableViewCell.xib in Resources */,
 				294BD3CB27AACFB600BD8D46 /* LocalAuthPrivacyView.xib in Resources */,
 				2922C0DF286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.xib in Resources */,
+				2D3F16AB29B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib in Resources */,
 				294BD3D527B1D60B00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
 				79CF236C2825789600510489 /* HealthRecordsHomeView.xib in Resources */,
 				794BD65F2702EEC00084ADA8 /* SettingsTableViewCell.xib in Resources */,
@@ -4016,6 +4036,7 @@
 				7980063C2852C66E006E390F /* FormTextFieldView.xib in Resources */,
 				7980063D2852C66E006E390F /* StatusBannerView.xib in Resources */,
 				2DF2102828DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
+				2D3F16A929B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib in Resources */,
 				7980063E2852C66E006E390F /* UserRecordListView.xib in Resources */,
 				2971956A28871B1A00CA824A /* SectionDescriptionTableViewCell.xib in Resources */,
 				7980063F2852C66E006E390F /* TextListView.xib in Resources */,
@@ -4425,6 +4446,7 @@
 				3E5E6E9C28D239BE00724EDD /* CommunicationService.swift in Sources */,
 				2971956828871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
 				3EDC0CE12967D63E00603FED /* StorageService+ClinicalDocuments.swift in Sources */,
+				2D3F16A729B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift in Sources */,
 				297885192795F13D00FF912D /* SettingsProfileTableViewCell.swift in Sources */,
 				3E5E6EB328D2747800724EDD /* CommunicationResponse.swift in Sources */,
 				7944F70426F31451006B9444 /* NoCardsTableViewCell.swift in Sources */,
@@ -4771,6 +4793,7 @@
 				7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */,
 				3E5E6EB428D2747800724EDD /* CommunicationResponse.swift in Sources */,
 				3EDC0CE22967D63E00603FED /* StorageService+ClinicalDocuments.swift in Sources */,
+				2D3F16A829B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift in Sources */,
 				795AA75D27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
 				29A12AF9271F6B2100A106B5 /* AnalyticsService.swift in Sources */,
 				794BD64C2702EEC00084ADA8 /* ZoomedInPopUpVC.swift in Sources */,
@@ -5094,6 +5117,7 @@
 				3E5E6E9B28D239BE00724EDD /* CommunicationService.swift in Sources */,
 				2971956728871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
 				3EDC0CE02967D63E00603FED /* StorageService+ClinicalDocuments.swift in Sources */,
+				2D3F16A629B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift in Sources */,
 				798005B82852C66E006E390F /* SettingsProfileTableViewCell.swift in Sources */,
 				3E5E6EB228D2747800724EDD /* CommunicationResponse.swift in Sources */,
 				798005B92852C66E006E390F /* NoCardsTableViewCell.swift in Sources */,
