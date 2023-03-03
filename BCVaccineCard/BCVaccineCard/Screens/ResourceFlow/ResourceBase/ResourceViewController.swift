@@ -9,7 +9,7 @@ import UIKit
 
 class ResourceViewController: BaseViewController {
     
-    class func constructResourceViewController() -> ResourceViewController {
+    class func construct() -> ResourceViewController {
         if let vc = Storyboard.resource.instantiateViewController(withIdentifier: String(describing: ResourceViewController.self)) as? ResourceViewController {
             return vc
         }

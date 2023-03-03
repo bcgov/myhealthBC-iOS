@@ -9,9 +9,14 @@ import UIKit
 
 class ManageDependentsViewController: BaseDependentViewController {
     
-    class func constructManageDependentsViewController(patient: Patient) -> ManageDependentsViewController {
+    // TODO: Move to new file
+    struct ViewModel {
+        let patient: Patient?
+    }
+    
+    class func construct(viewModel: ViewModel) -> ManageDependentsViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: ManageDependentsViewController.self)) as? ManageDependentsViewController {
-            vc.patient = patient
+            vc.patient = viewModel.patient
             return vc
         }
         return ManageDependentsViewController()

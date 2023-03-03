@@ -18,10 +18,7 @@ class HealthRecordsViewController: BaseViewController {
     
     @IBOutlet weak private var homeRecordsView: HealthRecordsHomeView!
     
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .HealthRecordsViewController
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -76,14 +73,19 @@ extension HealthRecordsViewController: AppStyleButtonDelegate {
         }
     }
     
-    private func performBCSCLogin
-    () {
-        self.showLogin(initialView: .Landing, sourceVC: .HealthRecordsVC) { authenticationStatus in
+    private func performBCSCLogin() {
+        let authVM = AuthenticationViewController.ViewModel(initialView: .Landing) {[weak self] authenticationStatus in
+            guard let `self` = self else {return}
             guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
-            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthRecordsVC, authenticationStatus: authenticationStatus)) 
-            self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
+            self.adjustTabsAfterAuth(authenticated: authenticationStatus == .Completed)
         }
+        showLogin(viewModel: authVM)
+//        self.showLogin(initialView: .Landing, sourceVC: .HealthRecordsVC) { authenticationStatus in
+//            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
+//            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+//            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+//            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthRecordsVC, authenticationStatus: authenticationStatus))
+//            self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
+//        }
     }
 }

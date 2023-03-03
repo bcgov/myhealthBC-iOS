@@ -10,19 +10,15 @@ import SwipeCellKit
 
 class UsersListOfRecordsViewController: BaseViewController {
     
-    enum NavStyle {
-        case singleUser
-        case multiUser
-    }
     // patient.dependencyInfo != nil == dependent
     // TODO: Replace params with Patient after storage refactor
-    class func constructUsersListOfRecordsViewController(patient: Patient?, authenticated: Bool, navStyle: NavStyle, hasUpdatedUnauthPendingTest: Bool, dependantDS: [HealthRecordsDetailDataSource]? = nil) -> UsersListOfRecordsViewController {
+    class func construct(viewModel: ViewModel) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
-            vc.patient = patient
-            vc.authenticated = authenticated
-            vc.navStyle = navStyle
-            vc.hasUpdatedUnauthPendingTest = hasUpdatedUnauthPendingTest
-            if let dependantDS = dependantDS {
+            vc.patient = viewModel.patient
+            vc.authenticated = viewModel.authenticated
+            vc.navStyle = viewModel.navStyle
+            vc.hasUpdatedUnauthPendingTest = viewModel.hasUpdatedUnauthPendingTest
+            if let dependantDS = viewModel.dataSource {
                 vc.dataSource = dependantDS
             }
             return vc

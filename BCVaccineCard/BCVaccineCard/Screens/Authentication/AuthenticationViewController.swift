@@ -16,37 +16,37 @@ We can call the BCSC auth in 2 ways:
     - Shows AuthenticationViewController as a modal on the current view controller
  */
 
-extension BaseViewController {
-    func showLogin(initialView: AuthenticationViewController.InitialView, sourceVC: LoginVCSource, presentingViewControllerReference viewController: UIViewController? = nil, completion: @escaping(_ authenticationStatus: AuthenticationViewController.AuthenticationStatus)->Void) {
-        self.view.startLoadingIndicator()
-        let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: false, isModal: true, initialView: initialView, sourceVC: sourceVC, completion: { [weak self] result in
-            guard let `self` = self else {return}
-            self.view.endLoadingIndicator()
-            switch result {
-            case .Completed:
-                let tabVC = self.tabBarController as? TabBarController
-                self.view.startLoadingIndicator()
-                PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).validateProfile { allowed in
-                    if allowed {
-                        self.postAuthChangedSettingsReloadRequired()
-                        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
-                        self.syncAuthenticatedPatient()
-                        self.view.endLoadingIndicator()
-                        completion(.Completed)
-                    } else {
-                        self.view.endLoadingIndicator()
-                        completion(.Failed)
-                    }
-                }
-                
-            case .Cancelled, .Failed:
-                completion(result)
-                break
-            }
-        })
-        self.present(vc, animated: true, completion: nil)
-    }
-}
+//extension BaseViewController {
+//    func showLogin(initialView: AuthenticationViewController.InitialView, sourceVC: LoginVCSource, presentingViewControllerReference viewController: UIViewController? = nil, completion: @escaping(_ authenticationStatus: AuthenticationViewController.AuthenticationStatus)->Void) {
+//        self.view.startLoadingIndicator()
+//        let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: false, isModal: true, initialView: initialView, sourceVC: sourceVC, completion: { [weak self] result in
+//            guard let `self` = self else {return}
+//            self.view.endLoadingIndicator()
+//            switch result {
+//            case .Completed:
+//                let tabVC = self.tabBarController as? TabBarController
+//                self.view.startLoadingIndicator()
+//                PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).validateProfile { allowed in
+//                    if allowed {
+//                        self.postAuthChangedSettingsReloadRequired()
+//                        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
+//                        self.syncAuthenticatedPatient()
+//                        self.view.endLoadingIndicator()
+//                        completion(.Completed)
+//                    } else {
+//                        self.view.endLoadingIndicator()
+//                        completion(.Failed)
+//                    }
+//                }
+//                
+//            case .Cancelled, .Failed:
+//                completion(result)
+//                break
+//            }
+//        })
+//        self.present(vc, animated: true, completion: nil)
+//    }
+//}
 
 // MARK: This is for resetting the appropriate view controller
 enum LoginVCSource: String {
@@ -82,26 +82,11 @@ enum LoginVCSource: String {
 }
 
 class AuthenticationViewController: UIViewController {
-    
-    enum InitialView {
-        case Landing
-        case AuthInfo
-        case Auth
-    }
-    
-    enum AuthenticationStatus {
-        case Completed
-        case Cancelled
-        case Failed
-    }
    
-    class func constructAuthenticationViewController(createTabBarAndGoToHomeScreen: Bool, isModal: Bool, initialView: InitialView, sourceVC: LoginVCSource, presentingViewControllerReference viewController: UIViewController? = nil, completion: @escaping(AuthenticationStatus)->Void) -> AuthenticationViewController {
+    class func construct(viewModel: ViewModel) -> AuthenticationViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
-            vc.completion = completion
-            vc.createTabBarAndGoToHomeScreen = createTabBarAndGoToHomeScreen
-            vc.initialView = initialView
-            vc.sourceVC = sourceVC
-            vc.presentingVCReference = viewController
+            vc.completion = viewModel.completion
+            vc.initialView = viewModel.initialView
             if #available(iOS 13.0, *) {
                 vc.isModalInPresentation = isModal
             }

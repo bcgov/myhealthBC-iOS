@@ -52,17 +52,14 @@ class ProfileDetailsViewController: BaseViewController {
         }
     }
     
-    class func constructProfileDetailsViewController(firstName: String?,
-                                                     lastName: String?,
-                                                     phn: String?,
-                                                     physicalAddress: String?,
-                                                     mailingAddress: String?) -> ProfileDetailsViewController {
+    class func construct(viewModel: ViewModel) -> ProfileDetailsViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: ProfileDetailsViewController.self)) as? ProfileDetailsViewController {
-            vc.firstName = firstName
-            vc.lastName = lastName
-            vc.phn = phn
-            vc.physicalAddress = physicalAddress
-            vc.mailingAddress = mailingAddress
+            vc.firstName = viewModel.firstName
+            vc.lastName = viewModel.lastName
+            vc.phn = viewModel.phn
+            vc.physicalAddress = viewModel.physicalAddress
+            vc.mailingAddress = viewModel.mailingAddress
+            vc.patient = viewModel.patient
             return vc
         }
         return ProfileDetailsViewController()
@@ -74,6 +71,7 @@ class ProfileDetailsViewController: BaseViewController {
     }
     
     // MARK: Variables
+    private var patient: Patient?
     private var firstName: String?
     private var lastName: String?
     private var phn: String?
@@ -82,18 +80,9 @@ class ProfileDetailsViewController: BaseViewController {
     
     private var dataSource: [DataSource] = []
     
-    private var apiClient: APIClient?
-    
     // MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
-    
-    override var getPassesFlowType: PassesFlowVCs? {
-        return .ProfileAndSettingsViewController
-    }
-    
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .ProfileAndSettingsViewController
-    }
+
     
     // MARK: Class funcs
     override func viewDidLoad() {
@@ -101,7 +90,6 @@ class ProfileDetailsViewController: BaseViewController {
         initializeDataSource()
         navSetup()
         setupTableView()
-        self.apiClient = APIClient(delegateOwner: self)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -175,45 +163,49 @@ extension ProfileDetailsViewController: UpdateAddressViewControllerDelegate {
 // MARK: Fetch Patient Details after address has been updated
 extension ProfileDetailsViewController {
     private func fetchPatientDetails() {
-        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid else { return }
-        let creds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-        self.tableView.startLoadingIndicator()
-        self.apiClient?.getAuthenticatedPatientDetails(creds, token: nil, executingVC: self, includeQueueItUI: false) { [weak self] result, _ in
-            guard let `self` = self else {return}
-            self.initializePatientDetails(authCredentials: creds, result: result)
-        }
-    }
-    
-    
-    private func initializePatientDetails(authCredentials: AuthenticationRequestObject,
-                                          result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>) {
-        switch result {
-        case .success(let patientDetails):
-            self.storePatient(patientDetails: patientDetails)
-        case .failure(let error):
-            Logger.log(string: error.localizedDescription, type: .Network)
+        let profileService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+        profileService.fetchAndStoreDetails { patient in
+            // TODO:
+            //            self.physicalAddress =
+            //            self.mailingAddress =
+            self.dataSource = []
+            self.initializeDataSource()
+            self.tableView.reloadData()
             self.tableView.endLoadingIndicator()
         }
     }
-    
-    private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject) {
-        let phyiscalAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.physicalAddress)
-        let mailingAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.postalAddress)
-        let patient = StorageService.shared.storePatient(name: patientDetails.getFullName,
-                                                         firstName: patientDetails.resourcePayload?.firstname,
-                                                         lastName: patientDetails.resourcePayload?.lastname,
-                                                         gender: patientDetails.resourcePayload?.gender,
-                                                         birthday: patientDetails.getBdayDate,
-                                                         phn: patientDetails.resourcePayload?.personalhealthnumber,
-                                                         physicalAddress: phyiscalAddress,
-                                                         mailingAddress: mailingAddress,
-                                                         hdid: AuthManager().hdid,
-                                                         authenticated: true)
-        self.physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.physicalAddress?.streetLines, city: patient?.physicalAddress?.city, state: patient?.physicalAddress?.state, postalCode: patient?.physicalAddress?.postalCode, country: patient?.physicalAddress?.country).getAddressString
-        self.mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.postalAddress?.streetLines, city: patient?.postalAddress?.city, state: patient?.postalAddress?.state, postalCode: patient?.postalAddress?.postalCode, country: patient?.postalAddress?.country).getAddressString
-        self.dataSource = []
-        initializeDataSource()
-        self.tableView.reloadData()
-        self.tableView.endLoadingIndicator()
-    }
 }
+    
+    
+//    private func initializePatientDetails(authCredentials: AuthenticationRequestObject,
+//                                          result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>) {
+//        switch result {
+//        case .success(let patientDetails):
+//            self.storePatient(patientDetails: patientDetails)
+//        case .failure(let error):
+//            Logger.log(string: error.localizedDescription, type: .Network)
+//            self.tableView.endLoadingIndicator()
+//        }
+//    }
+//
+//    private func storePatient(patientDetails: AuthenticatedPatientDetailsResponseObject) {
+//        let phyiscalAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.physicalAddress)
+//        let mailingAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.postalAddress)
+//        let patient = StorageService.shared.storePatient(name: patientDetails.getFullName,
+//                                                         firstName: patientDetails.resourcePayload?.firstname,
+//                                                         lastName: patientDetails.resourcePayload?.lastname,
+//                                                         gender: patientDetails.resourcePayload?.gender,
+//                                                         birthday: patientDetails.getBdayDate,
+//                                                         phn: patientDetails.resourcePayload?.personalhealthnumber,
+//                                                         physicalAddress: phyiscalAddress,
+//                                                         mailingAddress: mailingAddress,
+//                                                         hdid: AuthManager().hdid,
+//                                                         authenticated: true)
+//        self.physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.physicalAddress?.streetLines, city: patient?.physicalAddress?.city, state: patient?.physicalAddress?.state, postalCode: patient?.physicalAddress?.postalCode, country: patient?.physicalAddress?.country).getAddressString
+//        self.mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.postalAddress?.streetLines, city: patient?.postalAddress?.city, state: patient?.postalAddress?.state, postalCode: patient?.postalAddress?.postalCode, country: patient?.postalAddress?.country).getAddressString
+//        self.dataSource = []
+//        initializeDataSource()
+//        self.tableView.reloadData()
+//        self.tableView.endLoadingIndicator()
+//    }
+

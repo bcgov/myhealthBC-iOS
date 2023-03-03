@@ -15,7 +15,7 @@ class HomeScreenViewController: BaseViewController {
         case button(type: HomeScreenCellType)
     }
     
-    class func constructHomeScreenViewController() -> HomeScreenViewController {
+    class func construct() -> HomeScreenViewController {
         if let vc = Storyboard.home.instantiateViewController(withIdentifier: String(describing: HomeScreenViewController.self)) as? HomeScreenViewController {
             return vc
         }
@@ -254,6 +254,7 @@ extension HomeScreenViewController {
         case .Proofs:
             tabBarController.selectedIndex = type.getTabIndex
         case .Resources:
+            
             let vc = ResourceViewController.constructResourceViewController()
             self.navigationController?.pushViewController(vc, animated: true)
         case .Recommendations:

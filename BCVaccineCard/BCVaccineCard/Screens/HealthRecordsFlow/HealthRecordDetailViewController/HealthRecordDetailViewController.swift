@@ -8,12 +8,12 @@
 import UIKit
 
 class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDelegate {
-    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticatedRecord: Bool, userNumberHealthRecords: Int, patient: Patient?) -> HealthRecordDetailViewController {
+    class func construct(viewModel: ViewModel) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
-            vc.dataSource = dataSource
-            vc.authenticatedRecord = authenticatedRecord
-            vc.userNumberHealthRecords = userNumberHealthRecords
-            vc.patient = patient
+            vc.dataSource = viewModel.dataSource
+            vc.authenticatedRecord = viewModel.authenticatedRecord
+            vc.userNumberHealthRecords = viewModel.userNumberHealthRecords
+            vc.patient = viewModel.patient
             return vc
         }
         return HealthRecordDetailViewController()

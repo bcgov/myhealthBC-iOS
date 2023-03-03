@@ -10,9 +10,14 @@ import UIKit
 
 class DependentsHomeViewController: BaseDependentViewController {
     
-    class func constructDependentsHomeViewController(patient: Patient?) -> DependentsHomeViewController {
+    // TODO: Move to new file
+    struct ViewModel {
+        let patient: Patient?
+    }
+    
+    class func construct(viewModel: ViewModel) -> DependentsHomeViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: DependentsHomeViewController.self)) as? DependentsHomeViewController {
-            vc.patient = patient
+            vc.patient = viewModel.patient
             vc.fetchDataWhenMainPatientIsStored()
             return vc
         }

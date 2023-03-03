@@ -12,10 +12,10 @@ import SwipeCellKit
 
 class CovidVaccineCardsViewController: BaseViewController {
     
-    class func constructCovidVaccineCardsViewController(recentlyAddedCardId: String?, fedPassStringToOpen: String?) -> CovidVaccineCardsViewController {
+    class func construct(viewModel: ViewModel) -> CovidVaccineCardsViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: CovidVaccineCardsViewController.self)) as? CovidVaccineCardsViewController {
-            vc.recentlyAddedCardId = recentlyAddedCardId
-            vc.fedPassStringToOpen = fedPassStringToOpen
+            vc.recentlyAddedCardId = viewModel.recentlyAddedCardId
+            vc.fedPassStringToOpen = viewModel.fedPassStringToOpen
             return vc
         }
         return CovidVaccineCardsViewController()

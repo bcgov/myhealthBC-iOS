@@ -26,7 +26,7 @@ extension StorageService {
     func getHeathRecords() -> [HealthRecord] {
         let tests = fetchCovidTestResults().map({HealthRecord(type: .CovidTest($0))})
         // NOTE: Remove vaccineCards if we want to use new immz UI
-//        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))}).filter({$0.patient.authenticated})
+        //        let vaccineCards = fetchVaccineCards().map({HealthRecord(type: .CovidImmunization($0))}).filter({$0.patient.authenticated})
         let medications = fetchPrescriptions().map({HealthRecord(type: .Medication($0))})
         let labOrders = fetchLaboratoryOrders().map({HealthRecord(type: .LaboratoryOrder($0))})
         let immunizations = fetchImmunization().map({HealthRecord(type: .Immunization($0))})
@@ -153,45 +153,88 @@ extension StorageService {
     }
     
     func deleteAllHealthRecords() {
-        let vaccineCards = fetchVaccineCards()
-        deleteAllRecords(in: vaccineCards)
-        let tests = fetchCovidTestResults()
-        deleteAllRecords(in: tests)
-        let medications = fetchPrescriptions()
-        deleteAllRecords(in: medications)
-        let labOrders = fetchLaboratoryOrders()
-        deleteAllRecords(in: labOrders)
-        let imms = fetchImmunization()
-        deleteAllRecords(in: imms)
-        let visits = fetchHealthVisits()
-        deleteAllRecords(in: visits)
-        let specialAuth = fetchSpecialAuthorityMedications()
-        deleteAllRecords(in: specialAuth)
-        let recommendations = fetchRecommendations()
-        deleteAllRecords(in: recommendations)
+        let typesTodelete = healthRecordType.allCases
+        for type in typesTodelete {
+            switch type {
+            case .CovidTest:
+                let tests = fetchCovidTestResults()
+                deleteAllRecords(in: tests)
+            case .VaccineCard:
+                let vaccineCards = fetchVaccineCards()
+                deleteAllRecords(in: vaccineCards)
+            case .Prescription:
+                let medications = fetchPrescriptions()
+                deleteAllRecords(in: medications)
+            case .LaboratoryOrder:
+                let labOrders = fetchLaboratoryOrders()
+                deleteAllRecords(in: labOrders)
+            case .Immunization:
+                let imms = fetchImmunization()
+                deleteAllRecords(in: imms)
+            case .Recommendation:
+                let recommendations = fetchRecommendations()
+                deleteAllRecords(in: recommendations)
+            case .HealthVisit:
+                let visits = fetchHealthVisits()
+                deleteAllRecords(in: visits)
+            case .SpecialAuthorityDrug:
+                let specialAuth = fetchSpecialAuthorityMedications()
+                deleteAllRecords(in: specialAuth)
+            case .HospitalVisit:
+                let hospitalVisits = fetchHospitalVisits()
+                deleteAllRecords(in: hospitalVisits)
+            case .ClinicalDocument:
+                let clinicalDocuments = fetchClinicalDocuments()
+                deleteAllRecords(in: clinicalDocuments)
+            }
+        }
     }
     
     func deleteHealthRecordsForDependent(dependent: Dependent) {
-        if let vaccineCards = dependent.info?.vaccineCardArray {
-            deleteAllRecords(in: vaccineCards)
+        let typesTodelete = healthRecordType.allCases
+        for type in typesTodelete {
+            switch type {
+            case .CovidTest:
+                if let tests = dependent.info?.testResultArray {
+                    deleteAllRecords(in: tests)
+                }
+            case .VaccineCard:
+                if let vaccineCards = dependent.info?.vaccineCardArray {
+                    deleteAllRecords(in: vaccineCards)
+                }
+            case .Prescription:
+                if let medications = dependent.info?.prescriptionArray {
+                    deleteAllRecords(in: medications)
+                }
+            case .LaboratoryOrder:
+                if let labOrders = dependent.info?.labOrdersArray {
+                    deleteAllRecords(in: labOrders)
+                }
+            case .Immunization:
+                if let imms = dependent.info?.immunizationsArray {
+                    deleteAllRecords(in: imms)
+                }
+            case .Recommendation:
+                if let recommandations = dependent.info?.recommandationsArray {
+                    deleteAllRecords(in: recommandations)
+                }
+            case .HealthVisit:
+                if let visits = dependent.info?.healthVisitsArray {
+                    deleteAllRecords(in: visits)
+                }
+            case .SpecialAuthorityDrug:
+                if let specialAuth = dependent.info?.specialAuthorityDrugsArray {
+                    deleteAllRecords(in: specialAuth)
+                }
+            case .HospitalVisit:
+                if let hospitalVisits = dependent.info?.hospitalVisitsArray {
+                    deleteAllRecords(in: hospitalVisits)
+                }
+            case .ClinicalDocument:
+                if let clinicalDocuments = dependent.info?.clinicalDocumentsArray {
+                    deleteAllRecords(in: clinicalDocuments)
+                }
+            }
         }
-        if let tests = dependent.info?.testResultArray {
-            deleteAllRecords(in: tests)
-        }
-        if let medications = dependent.info?.prescriptionArray {
-            deleteAllRecords(in: medications)
-        }
-        if let labOrders = dependent.info?.labOrdersArray {
-            deleteAllRecords(in: labOrders)
-        }
-        if let imms = dependent.info?.immunizationsArray {
-            deleteAllRecords(in: imms)
-        }
-        if let visits = dependent.info?.healthVisitsArray {
-            deleteAllRecords(in: visits)
-        }
-        if let specialAuth = dependent.info?.specialAuthorityDrugsArray {
-            deleteAllRecords(in: specialAuth)
-        }        
     }
 }

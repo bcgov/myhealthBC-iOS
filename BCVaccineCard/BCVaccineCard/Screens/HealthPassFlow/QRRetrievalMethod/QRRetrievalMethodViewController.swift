@@ -13,7 +13,7 @@ import SwiftUI
 
 class QRRetrievalMethodViewController: BaseViewController {
     
-    class func constructQRRetrievalMethodViewController() -> QRRetrievalMethodViewController {
+    class func construct() -> QRRetrievalMethodViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: QRRetrievalMethodViewController.self)) as? QRRetrievalMethodViewController {
 //            vc.backScreenString = backScreenString
             return vc

@@ -42,9 +42,14 @@ struct AddDependentFormData {
 
 class AddDependentViewController: BaseDependentViewController, UITextFieldDelegate {
     
-    class func constructAddDependentViewController(patient: Patient?) -> AddDependentViewController {
+    // TODO: Move to new file
+    struct ViewModel {
+        let patient: Patient?
+    }
+    
+    class func construct(viewModel: ViewModel) -> AddDependentViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: AddDependentViewController.self)) as? AddDependentViewController {
-            vc.patient = patient
+            vc.patient = viewModel.patient
             return vc
         }
         return AddDependentViewController()

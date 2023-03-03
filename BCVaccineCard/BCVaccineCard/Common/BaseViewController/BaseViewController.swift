@@ -24,13 +24,13 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
    
     weak var navDelegate: NavigationSetupProtocol?
     
-    var routerWorker: RouterWorker? {
-        return (self.tabBarController as? TabBarController)?.routerWorker
-    }
-    
-    var getCurrentStacks: CurrentRecordsAndPassesStacks {
-        return (self.tabBarController as? TabBarController)?.getCurrentRecordsAndPassesFlows() ?? CurrentRecordsAndPassesStacks(recordsStack: [], passesStack: [])
-    }
+//    var routerWorker: RouterWorker? {
+//        return (self.tabBarController as? TabBarController)?.routerWorker
+//    }
+//
+//    var getCurrentStacks: CurrentRecordsAndPassesStacks {
+//        return (self.tabBarController as? TabBarController)?.getCurrentRecordsAndPassesFlows() ?? CurrentRecordsAndPassesStacks(recordsStack: [], passesStack: [])
+//    }
     
     var getCurrentTab: TabBarVCs {
         return TabBarVCs.init(rawValue: (self.tabBarController as? TabBarController)?.selectedIndex ?? 0) ?? .home
@@ -40,12 +40,12 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
         return self.tabBarController as? TabBarController
     }
     
-    var getRecordFlowType: RecordsFlowVCs? {
-        return nil
-    }
-    var getPassesFlowType: PassesFlowVCs? {
-        return nil
-    }
+//    var getRecordFlowType: RecordsFlowVCs? {
+//        return nil
+//    }
+//    var getPassesFlowType: PassesFlowVCs? {
+//        return nil
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

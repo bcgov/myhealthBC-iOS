@@ -17,7 +17,7 @@ class RecommendationsViewController: BaseViewController {
     }
     private var expandedIndecies: [Int] = []
     
-    class func constructRecommendationsViewController() -> RecommendationsViewController {
+    class func construct() -> RecommendationsViewController {
         if let vc = Storyboard.recommendations.instantiateViewController(withIdentifier: String(describing: RecommendationsViewController.self)) as? RecommendationsViewController {
             return vc
         }

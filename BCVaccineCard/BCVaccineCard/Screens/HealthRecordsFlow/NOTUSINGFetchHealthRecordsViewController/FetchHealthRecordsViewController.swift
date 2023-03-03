@@ -195,35 +195,37 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
     }
     //FIXME: CONNOR: Adjust routing here to use router worker
     private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {
+        // TODO: Add to ROUTER
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
         vc.completionHandler = { [weak self] details in
             guard let `self` = self else { return }
 //            self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidImmunizationRecord)
-            DispatchQueue.main.async {
-                
-                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
-                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
-            }
+//            DispatchQueue.main.async {
+//                
+//                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
+//                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+//                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+//            }
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     //FIXME: CONNOR: Adjust routing here to use router worker
     private func showTestForm(rememberDetails: RememberedGatewayDetails) {
+        // TODO: Add to ROUTER
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
         vc.completionHandler = { [weak self] details in
             guard let `self` = self else { return }
 //            self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidTestResult)
-            DispatchQueue.main.async {
-                
-                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
-                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
-            }
+//            DispatchQueue.main.async {
+//
+//                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
+//                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+//                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+//            }
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -232,10 +234,11 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 // MARK: BCSC Login
 extension FetchHealthRecordsViewController {
     func performBCSCLogin() {
-        self.showLogin(initialView: .Landing, sourceVC: .FetchHealthRecordsVC) { [weak self] authenticationStatus in
-            guard let `self` = self, authenticationStatus == .Completed else {return}
-            // TODO: Adjust nav stack here if necessary
-            self.adjustDataSource()
-        }
+        // TODO: Add to ROUTER
+//        self.showLogin(initialView: .Landing, sourceVC: .FetchHealthRecordsVC) { [weak self] authenticationStatus in
+//            guard let `self` = self, authenticationStatus == .Completed else {return}
+//            // TODO: Adjust nav stack here if necessary
+//            self.adjustDataSource()
+//        }
     }
 }

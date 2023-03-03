@@ -10,9 +10,9 @@ import SwipeCellKit
 
 class HealthPassViewController: BaseViewController {
     
-    class func constructHealthPassViewController(fedPassStringToOpen: String?) -> HealthPassViewController {
+    class func construct(viewModel: ViewModel) -> HealthPassViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: HealthPassViewController.self)) as? HealthPassViewController {
-            vc.fedPassStringToOpen = fedPassStringToOpen
+            vc.fedPassStringToOpen = viewModel.fedPassStringToOpen
             return vc
         }
         return HealthPassViewController()

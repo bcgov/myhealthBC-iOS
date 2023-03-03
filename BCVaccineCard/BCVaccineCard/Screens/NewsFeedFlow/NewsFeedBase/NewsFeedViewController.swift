@@ -14,7 +14,7 @@ import Alamofire
 
 class NewsFeedViewController: BaseViewController {
 
-    class func constructNewsFeedViewController() -> NewsFeedViewController {
+    class func construct() -> NewsFeedViewController {
         if let vc = Storyboard.newsFeed.instantiateViewController(withIdentifier: String(describing: NewsFeedViewController.self)) as? NewsFeedViewController {
             return vc
         }

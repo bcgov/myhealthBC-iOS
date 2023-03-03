@@ -16,7 +16,7 @@ class ProfileAndSettingsViewController: BaseViewController {
         case logout
     }
     
-    class func constructProfileAndSettingsViewController() -> ProfileAndSettingsViewController {
+    class func construct() -> ProfileAndSettingsViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: ProfileAndSettingsViewController.self)) as? ProfileAndSettingsViewController {
             return vc
         }

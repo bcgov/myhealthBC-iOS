@@ -30,7 +30,7 @@ class SecurityAndDataViewController: BaseViewController {
         }
     }
     
-    class func constructSecurityAndDataViewController() -> SecurityAndDataViewController {
+    class func construct() -> SecurityAndDataViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: SecurityAndDataViewController.self)) as? SecurityAndDataViewController {
             return vc
         }
@@ -41,14 +41,6 @@ class SecurityAndDataViewController: BaseViewController {
     @IBOutlet weak var tableView: UITableView!
     
     fileprivate let authManager = AuthManager()
-    
-    override var getPassesFlowType: PassesFlowVCs? {
-        return .SecurityAndDataViewController
-    }
-    
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .SecurityAndDataViewController
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,12 +111,9 @@ class SecurityAndDataViewController: BaseViewController {
                 StorageService.shared.deleteAllStoredData()
                 self.showToast(message: .deletedAllRecordsAndSavedData)
 //                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
+                
                 DispatchQueue.main.async {
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-
-                    self.routerWorker?.routingAction(scenario: .ClearAllData(values: values))
+                    self.adjustTabsAfterAuth(authenticated: false)
                 }
             })
             
