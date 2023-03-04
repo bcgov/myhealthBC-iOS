@@ -11,15 +11,15 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CitizenSubmissionTableViewCell" id="KGk-i7-Jjw" customClass="CitizenSubmissionTableViewCell" customModule="HealthGateway" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="328" height="120"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CitizenSubmissionTableViewCell" id="KGk-i7-Jjw" customClass="CitizenSubmissionTableViewCell" customModule="HealthGateway" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="388" height="120"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="328" height="120"/>
+                <rect key="frame" x="0.0" y="0.0" width="388" height="120"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DyQ-Mn-XqI">
-                        <rect key="frame" x="0.0" y="0.0" width="328" height="120"/>
+                        <rect key="frame" x="22" y="0.0" width="344" height="108"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AXf-fX-UbS">
                                 <rect key="frame" x="16" y="10" width="20" height="20"/>
@@ -31,7 +31,7 @@
                                 <state key="normal" image="info-icon-fill"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p5t-jI-ug5">
-                                <rect key="frame" x="288" y="8" width="24" height="24"/>
+                                <rect key="frame" x="304" y="8" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="p5t-jI-ug5" secondAttribute="height" multiplier="1:1" id="4yr-Kc-ltC"/>
                                     <constraint firstAttribute="width" constant="24" id="cx4-Le-jW5"/>
@@ -43,7 +43,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bgY-LP-gcO">
-                                <rect key="frame" x="48" y="10" width="230" height="95"/>
+                                <rect key="frame" x="48" y="10" width="246" height="83"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis </string>
                                 <color key="textColor" systemColor="labelColor"/>
@@ -66,9 +66,9 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="DyQ-Mn-XqI" secondAttribute="bottom" id="9Iy-46-tsy"/>
-                    <constraint firstAttribute="trailing" secondItem="DyQ-Mn-XqI" secondAttribute="trailing" id="Opt-8d-tVG"/>
-                    <constraint firstItem="DyQ-Mn-XqI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="XmO-TH-9lD"/>
+                    <constraint firstAttribute="bottom" secondItem="DyQ-Mn-XqI" secondAttribute="bottom" constant="12" id="9Iy-46-tsy"/>
+                    <constraint firstAttribute="trailing" secondItem="DyQ-Mn-XqI" secondAttribute="trailing" constant="22" id="Opt-8d-tVG"/>
+                    <constraint firstItem="DyQ-Mn-XqI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="22" id="XmO-TH-9lD"/>
                     <constraint firstItem="DyQ-Mn-XqI" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="e9m-RU-TuQ"/>
                 </constraints>
             </tableViewCellContentView>

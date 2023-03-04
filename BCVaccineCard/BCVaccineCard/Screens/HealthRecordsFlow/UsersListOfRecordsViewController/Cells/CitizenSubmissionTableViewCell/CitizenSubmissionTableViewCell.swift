@@ -40,6 +40,7 @@ class CitizenSubmissionTableViewCell: UITableViewCell {
     private func setupTextView() {
         contentTextView.isUserInteractionEnabled = true
         contentTextView.isEditable = false
+        contentTextView.backgroundColor = .clear
         let attributedText = NSMutableAttributedString(string: "")
         // All text size 13
         
@@ -49,7 +50,7 @@ class CitizenSubmissionTableViewCell: UITableViewCell {
             .font: UIFont.bcSansRegularWithSize(size: 13),
             .foregroundColor: AppColours.textBlack
         ]
-        let normal = NSAttributedString(string: "You can add or update immunizations by visiting", attributes: normalAttributes)
+        let normal = NSAttributedString(string: "You can add or update immunizations by visiting\n", attributes: normalAttributes)
         attributedText.append(normal)
         // link text - bold
         // immunizationrecord.gov.bc.ca.
@@ -59,6 +60,7 @@ class CitizenSubmissionTableViewCell: UITableViewCell {
         let linkAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.bcSansBoldWithSize(size: 13),
             .foregroundColor: AppColours.appBlue,
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
             .link: url
         ]
         let link = NSAttributedString(string: stringUrl, attributes: linkAttributes)
@@ -69,7 +71,7 @@ class CitizenSubmissionTableViewCell: UITableViewCell {
             .font: UIFont.bcSansItalicWithSize(size: 13),
             .foregroundColor: AppColours.textBlack
         ]
-        let italic = NSAttributedString(string: "You can always access this information by going to the Resources page.", attributes: italicAttributes)
+        let italic = NSAttributedString(string: "\nYou can always access this information by going to the Resources page.", attributes: italicAttributes)
         attributedText.append(italic)
         
         contentTextView.attributedText = attributedText

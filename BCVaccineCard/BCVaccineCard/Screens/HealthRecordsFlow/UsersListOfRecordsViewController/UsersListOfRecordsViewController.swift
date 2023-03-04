@@ -81,7 +81,7 @@ class UsersListOfRecordsViewController: BaseViewController {
             }
         }
     }
-    
+    // TODO: Once network refactor is completed, I will adjust how this is done - didn't put the work in as I believe the plan is to completely refactor this screen
     private var showBannerRowCount: Int {
         var show = false
         if self.currentFilter == nil && AuthManager().isAuthenticated && !(AppDelegate.sharedInstance?.hasCitizenSubmissionBannerBeenDismissedThisSession ?? false) {
@@ -523,7 +523,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     private func setupTableView() {
         tableView.register(UINib.init(nibName: UserRecordListTableViewCell.getName, bundle: .main), forCellReuseIdentifier: UserRecordListTableViewCell.getName)
         tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
-        tableView.register(UINib.init(nibName: CommunicationPreferencesTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommunicationPreferencesTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CitizenSubmissionTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CitizenSubmissionTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
         tableView.delegate = self
@@ -588,7 +588,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if showBannerRowCount == 1 {
+        if showBannerRowCount == 1 && indexPath.row == 0 {
             return bannerCell(indexPath: indexPath)
         } else if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && indexPath.section == 0 {
             return hiddenRecordsCell(indexPath: indexPath)
@@ -601,8 +601,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
         if self.hiddenCellType == .medicalRecords && indexPath.section == 0 { return }
-        guard dataSource.count > indexPath.row else {return}
-        let ds = dataSource[indexPath.row]
+        guard !(showBannerRowCount == 1 && indexPath.row == 0) else { return }
+        guard dataSource.count + showBannerRowCount > indexPath.row else {return}
+        let ds = dataSource[indexPath.row - showBannerRowCount]
         let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: dataSource.count, patient: self.patient)
         self.navigationController?.pushViewController(vc, animated: true)
     }
