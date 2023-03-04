@@ -31,30 +31,51 @@ class CitizenSubmissionTableViewCell: UITableViewCell {
         self.contentView.backgroundColor = .clear
         roundedView.layer.cornerRadius = 10
         roundedView.backgroundColor = AppColours.appBlueLight
-        // TODO: Import image, then set here
-//        dismissButton.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControl.State#>)
-        
-        
+        informationIconButton.setImage(UIImage(named: "info-icon-fill"), for: .normal)
+        informationIconButton.isUserInteractionEnabled = false
+        dismissButton.setImage(UIImage(named: "close-icon"), for: .normal)
+        setupTextView()
     }
     
     private func setupTextView() {
-        // TODO: See what I did for the text view in HG 2.0
-        // TODO: Apply proper formatting here
+        contentTextView.isUserInteractionEnabled = true
+        contentTextView.isEditable = false
         let attributedText = NSMutableAttributedString(string: "")
         // All text size 13
         
         // Normal text
         // You can add or update immunizations by visiting
-        let normal = NSAttributedString(string: "You can add or update immunizations by visiting")
+        let normalAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.bcSansRegularWithSize(size: 13),
+            .foregroundColor: AppColours.textBlack
+        ]
+        let normal = NSAttributedString(string: "You can add or update immunizations by visiting", attributes: normalAttributes)
         attributedText.append(normal)
         // link text - bold
         // immunizationrecord.gov.bc.ca.
-        let link = NSAttributedString(string: "immunizationrecord.gov.bc.ca.")
+        let stringUrl = "immunizationrecord.gov.bc.ca."
+        let linkUrl = "https://www.immunizationrecord.gov.bc.ca."
+        guard let url = URL(string: linkUrl) else { return }
+        let linkAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.bcSansBoldWithSize(size: 13),
+            .foregroundColor: AppColours.appBlue,
+            .link: url
+        ]
+        let link = NSAttributedString(string: stringUrl, attributes: linkAttributes)
         attributedText.append(link)
         // italic text
         // You can always access this information by going to the Resources page.
-        let italic = NSAttributedString(string: "You can always access this information by going to the Resources page.")
+        let italicAttributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont.bcSansItalicWithSize(size: 13),
+            .foregroundColor: AppColours.textBlack
+        ]
+        let italic = NSAttributedString(string: "You can always access this information by going to the Resources page.", attributes: italicAttributes)
         attributedText.append(italic)
+        
+        contentTextView.attributedText = attributedText
+        
+        contentTextView.textContainerInset = .zero
+        contentTextView.textContainer.lineFragmentPadding = 0.0
     }
     
     func configure(delegateOwner: UIViewController) {

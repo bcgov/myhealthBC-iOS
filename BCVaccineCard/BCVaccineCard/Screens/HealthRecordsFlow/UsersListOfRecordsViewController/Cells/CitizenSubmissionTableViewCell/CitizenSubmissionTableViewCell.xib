@@ -20,7 +20,49 @@
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DyQ-Mn-XqI">
                         <rect key="frame" x="0.0" y="0.0" width="328" height="120"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AXf-fX-UbS">
+                                <rect key="frame" x="16" y="10" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="2ZX-la-fbn"/>
+                                    <constraint firstAttribute="width" secondItem="AXf-fX-UbS" secondAttribute="height" multiplier="1:1" id="NjH-lk-DWY"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="info-icon-fill"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p5t-jI-ug5">
+                                <rect key="frame" x="288" y="8" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="p5t-jI-ug5" secondAttribute="height" multiplier="1:1" id="4yr-Kc-ltC"/>
+                                    <constraint firstAttribute="width" constant="24" id="cx4-Le-jW5"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="close-icon"/>
+                                <connections>
+                                    <action selector="dismissAction:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Ljz-rc-RZB"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bgY-LP-gcO">
+                                <rect key="frame" x="48" y="10" width="230" height="95"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis </string>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="p5t-jI-ug5" secondAttribute="trailing" constant="16" id="PTW-lo-p6C"/>
+                            <constraint firstItem="AXf-fX-UbS" firstAttribute="top" secondItem="DyQ-Mn-XqI" secondAttribute="top" constant="10" id="Pbc-I8-STI"/>
+                            <constraint firstAttribute="bottom" secondItem="bgY-LP-gcO" secondAttribute="bottom" constant="15" id="SDI-BW-cTi"/>
+                            <constraint firstItem="p5t-jI-ug5" firstAttribute="centerY" secondItem="AXf-fX-UbS" secondAttribute="centerY" id="WYo-dt-N53"/>
+                            <constraint firstItem="bgY-LP-gcO" firstAttribute="top" secondItem="AXf-fX-UbS" secondAttribute="top" id="WfG-Lt-xNf"/>
+                            <constraint firstItem="p5t-jI-ug5" firstAttribute="leading" secondItem="bgY-LP-gcO" secondAttribute="trailing" constant="10" id="XiA-dI-6WW"/>
+                            <constraint firstItem="bgY-LP-gcO" firstAttribute="leading" secondItem="AXf-fX-UbS" secondAttribute="trailing" constant="12" id="ZfT-4R-6iV"/>
+                            <constraint firstItem="AXf-fX-UbS" firstAttribute="leading" secondItem="DyQ-Mn-XqI" secondAttribute="leading" constant="16" id="eYd-UT-0qm"/>
+                            <constraint firstItem="bgY-LP-gcO" firstAttribute="leading" secondItem="AXf-fX-UbS" secondAttribute="trailing" constant="12" id="qbd-qA-eOs"/>
+                        </constraints>
                     </view>
                 </subviews>
                 <constraints>
@@ -31,10 +73,21 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="contentTextView" destination="bgY-LP-gcO" id="eR7-c1-EWO"/>
+                <outlet property="dismissButton" destination="p5t-jI-ug5" id="qkN-us-3jr"/>
+                <outlet property="informationIconButton" destination="AXf-fX-UbS" id="8A9-eu-bRq"/>
+                <outlet property="roundedView" destination="DyQ-Mn-XqI" id="6Wj-Lo-Gze"/>
+            </connections>
             <point key="canvasLocation" x="134" y="21"/>
         </tableViewCell>
     </objects>
     <resources>
+        <image name="close-icon" width="28.666666030883789" height="28.666666030883789"/>
+        <image name="info-icon-fill" width="24" height="24"/>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

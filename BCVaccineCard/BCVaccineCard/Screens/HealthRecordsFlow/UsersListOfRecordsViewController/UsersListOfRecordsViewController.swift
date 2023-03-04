@@ -82,6 +82,14 @@ class UsersListOfRecordsViewController: BaseViewController {
         }
     }
     
+    private var showBannerRowCount: Int {
+        var show = false
+        if self.currentFilter == nil && AuthManager().isAuthenticated && !(AppDelegate.sharedInstance?.hasCitizenSubmissionBannerBeenDismissedThisSession ?? false) {
+            show = true
+        }
+        return show == true ? 1 : 0
+    }
+    
     private var inEditMode = false {
         didSet {
             self.tableView.setEditing(inEditMode, animated: false)
@@ -515,6 +523,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     private func setupTableView() {
         tableView.register(UINib.init(nibName: UserRecordListTableViewCell.getName, bundle: .main), forCellReuseIdentifier: UserRecordListTableViewCell.getName)
         tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CommunicationPreferencesTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommunicationPreferencesTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
         tableView.delegate = self
@@ -530,7 +539,15 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && section == 0 {
             return 1
         }
-        return dataSource.count
+        return dataSource.count + showBannerRowCount
+    }
+    
+    private func bannerCell(indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CitizenSubmissionTableViewCell.getName, for: indexPath) as? CitizenSubmissionTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.configure(delegateOwner: self)
+        return cell
     }
     
     private func recordCell(indexPath: IndexPath) -> UITableViewCell {
@@ -538,7 +555,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             let cell = tableView.dequeueReusableCell(withIdentifier: UserRecordListTableViewCell.getName, for: indexPath) as? UserRecordListTableViewCell else {
             return UITableViewCell()
         }
-        cell.configure(record: dataSource[indexPath.row])
+        cell.configure(record: dataSource[indexPath.row - showBannerRowCount])
         cell.delegate = self
         return cell
     }
@@ -571,7 +588,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && indexPath.section == 0 {
+        if showBannerRowCount == 1 {
+            return bannerCell(indexPath: indexPath)
+        } else if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && indexPath.section == 0 {
             return hiddenRecordsCell(indexPath: indexPath)
         } else {
             return recordCell(indexPath: indexPath)
@@ -707,6 +726,20 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         }
     }
     
+}
+
+// MARK: Citizen banner delegate
+extension UsersListOfRecordsViewController: CitizenSubmissionTableViewCellDelegate {
+    func dismissButtonTapped() {
+        AppDelegate.sharedInstance?.hasCitizenSubmissionBannerBeenDismissedThisSession = true
+        alert(title: "Accessing Resources", message: "Add or update your immunization records by visiting the Resources page") {
+            self.tableView.reloadData()
+        }
+    }
+    
+    func websiteTapped(urlString: String) {
+        // Do nothing
+    }
 }
 
 // MARK: Protected word retry
