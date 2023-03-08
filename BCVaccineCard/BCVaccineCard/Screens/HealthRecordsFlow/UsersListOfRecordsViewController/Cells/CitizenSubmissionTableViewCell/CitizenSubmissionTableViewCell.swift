@@ -55,7 +55,7 @@ class CitizenSubmissionTableViewCell: UITableViewCell {
         // link text - bold
         // immunizationrecord.gov.bc.ca.
         let stringUrl = "immunizationrecord.gov.bc.ca."
-        let linkUrl = "https://www.immunizationrecord.gov.bc.ca."
+        let linkUrl = "https://www.immunizationrecord.gov.bc.ca"
         guard let url = URL(string: linkUrl) else { return }
         let linkAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.bcSansBoldWithSize(size: 13),

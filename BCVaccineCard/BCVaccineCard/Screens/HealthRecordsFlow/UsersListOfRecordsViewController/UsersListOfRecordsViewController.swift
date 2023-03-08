@@ -532,14 +532,16 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return (self.hiddenCellType == .medicalRecords || !hiddenRecords.isEmpty) ? 2 : 1
+        return (self.hiddenCellType == .medicalRecords || !hiddenRecords.isEmpty) ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && section == 0 {
+        if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && section == 1 {
             return 1
+        } else if section == 0 {
+            return showBannerRowCount
         }
-        return dataSource.count + showBannerRowCount
+        return dataSource.count
     }
     
     private func bannerCell(indexPath: IndexPath) -> UITableViewCell {
@@ -555,7 +557,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             let cell = tableView.dequeueReusableCell(withIdentifier: UserRecordListTableViewCell.getName, for: indexPath) as? UserRecordListTableViewCell else {
             return UITableViewCell()
         }
-        cell.configure(record: dataSource[indexPath.row - showBannerRowCount])
+        cell.configure(record: dataSource[indexPath.row])
         cell.delegate = self
         return cell
     }
@@ -588,9 +590,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if showBannerRowCount == 1 && indexPath.row == 0 {
+        if showBannerRowCount == 1 && indexPath.section == 0 {
             return bannerCell(indexPath: indexPath)
-        } else if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && indexPath.section == 0 {
+        } else if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && indexPath.section == 1 {
             return hiddenRecordsCell(indexPath: indexPath)
         } else {
             return recordCell(indexPath: indexPath)
@@ -599,11 +601,11 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
-        if self.hiddenCellType == .medicalRecords && indexPath.section == 0 { return }
-        guard !(showBannerRowCount == 1 && indexPath.row == 0) else { return }
-        guard dataSource.count + showBannerRowCount > indexPath.row else {return}
-        let ds = dataSource[indexPath.row - showBannerRowCount]
+        if !hiddenRecords.isEmpty && indexPath.section == 1 { return }
+        if self.hiddenCellType == .medicalRecords && indexPath.section == 1 { return }
+        guard !(showBannerRowCount == 1 && indexPath.section == 0) else { return }
+        guard dataSource.count > indexPath.row else {return}
+        let ds = dataSource[indexPath.row]
         let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: dataSource.count, patient: self.patient)
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -733,9 +735,9 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
 extension UsersListOfRecordsViewController: CitizenSubmissionTableViewCellDelegate {
     func dismissButtonTapped() {
         AppDelegate.sharedInstance?.hasCitizenSubmissionBannerBeenDismissedThisSession = true
-        alert(title: "Accessing Resources", message: "Add or update your immunization records by visiting the Resources page") {
+        alert(title: "", message: "Add or update your immunization records by visiting the Resources page", buttonOneTitle: .done, buttonOneCompletion: {
             self.tableView.reloadData()
-        }
+        }, buttonTwoTitle: nil) {}
     }
     
     func websiteTapped(urlString: String) {

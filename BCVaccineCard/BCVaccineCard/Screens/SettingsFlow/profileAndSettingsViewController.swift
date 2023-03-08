@@ -250,6 +250,7 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
         performLogout(completion: {success in
             guard success else { return }
 //            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
+            AppDelegate.sharedInstance?.hasCitizenSubmissionBannerBeenDismissedThisSession = false
             DispatchQueue.main.async {
                 let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
                 let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
