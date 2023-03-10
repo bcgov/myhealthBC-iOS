@@ -270,15 +270,14 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         if AuthManager().isAuthenticated {
             showHomeScreen(authStatus: nil)
         } else {
-            AuthenticationViewController.displayFullScreen(createTabBarAndGoToHomeScreen: true, initialView: .Landing, sourceVC: .AfterOnboarding)
+            AuthenticationViewController.displayFullScreen()
             Defaults.hasSeenFirstLogin = true
         }
         
     }
     
     func showHomeScreen(authStatus: AuthenticationViewController.AuthenticationStatus?) {
-        let vc = TabBarController.constructTabBarController(status: authStatus)
-        AppDelegate.sharedInstance?.window?.rootViewController = vc
+        AppDelegate.sharedInstance?.setupRootViewController()
     }
 }
 

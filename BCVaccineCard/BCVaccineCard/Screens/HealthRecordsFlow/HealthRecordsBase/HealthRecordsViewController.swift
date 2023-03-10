@@ -9,7 +9,7 @@ import UIKit
 
 class HealthRecordsViewController: BaseViewController {
     
-    class func constructHealthRecordsViewController() -> HealthRecordsViewController {
+    class func construct() -> HealthRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordsViewController.self)) as? HealthRecordsViewController {
             return vc
         }
@@ -74,7 +74,12 @@ extension HealthRecordsViewController: AppStyleButtonDelegate {
     }
     
     private func performBCSCLogin() {
-        let authVM = AuthenticationViewController.ViewModel(initialView: .Landing) {[weak self] authenticationStatus in
+        // TODO: ROUTE REFACTOR -
+        let authVM = AuthenticationViewController.ViewModel(
+            initialView: .Landing,
+            configService: MobileConfigService(network: AFNetwork()),
+            authManager: AuthManager()
+        ) {[weak self] authenticationStatus in
             guard let `self` = self else {return}
             guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
             self.adjustTabsAfterAuth(authenticated: authenticationStatus == .Completed)

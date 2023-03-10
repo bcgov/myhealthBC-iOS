@@ -70,16 +70,18 @@ class FetchHealthRecordsViewController: BaseViewController {
     }
     
     private func setup() {
-        checkIfIsRootVCInStack()
+//        checkIfIsRootVCInStack()
         navSetup()
 //        setupLabel()
         setupTableView()
         setupListeners()
     }
+    
+    // TODO: ROUTE REFACTOR - needed?
     // TODO: Make this safer?
-    private func checkIfIsRootVCInStack() {
-        self.showSettingsIcon = (((self.tabBarController as? TabBarController)?.viewControllers?[TabBarVCs.records.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController])?.first is FetchHealthRecordsViewController ? true : false
-    }
+//    private func checkIfIsRootVCInStack() {
+//        self.showSettingsIcon = (((self.tabBarController as? TabBarController)?.viewControllers?[TabBarVCs.records.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController])?.first is FetchHealthRecordsViewController ? true : false
+//    }
     
     private func adjustDataSource() {
         self.dataSource = [
@@ -193,6 +195,12 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         
         showForm()
     }
+    
+    
+    // TODO: ROUTE REFACTOR -
+    private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {}
+    private func showTestForm(rememberDetails: RememberedGatewayDetails) {}
+    /*
     //FIXME: CONNOR: Adjust routing here to use router worker
     private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {
         // TODO: Add to ROUTER
@@ -229,6 +237,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    */
 }
 
 // MARK: BCSC Login

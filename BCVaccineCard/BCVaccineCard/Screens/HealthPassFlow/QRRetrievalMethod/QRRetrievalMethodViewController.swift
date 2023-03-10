@@ -11,6 +11,7 @@ import UIKit
 import BCVaccineValidator
 import SwiftUI
 
+// TODO: ROUTE REFACTOR -
 class QRRetrievalMethodViewController: BaseViewController {
     
     class func construct() -> QRRetrievalMethodViewController {
@@ -21,66 +22,66 @@ class QRRetrievalMethodViewController: BaseViewController {
         return QRRetrievalMethodViewController()
     }
     
-    enum CellType {
-        case text(text: String), image(image: UIImage), method(type: TableViewButtonView.ButtonType, style: TableViewButtonView.ButtonStyle)
-    }
-    
-    @IBOutlet weak private var tableView: UITableView!
-    private var dataSource: [CellType] = []
-//    private var backScreenString: String!
-    
-    private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
-    private weak var imagePicker: UIImagePickerController? = nil
-    
-    override var getPassesFlowType: PassesFlowVCs? {
-        return .QRRetrievalMethodViewController
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setup()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setNeedsStatusBarAppearanceUpdate()
-        // Calling this again, just in case - don't want any users to be stuck in a weird state where the tab bar isn't shown
-        self.tabBarController?.tabBar.isHidden = false
-        navSetup()
-        self.tableView.contentInsetAdjustmentBehavior = .never
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        if #available(iOS 13.0, *) {
-            return UIStatusBarStyle.darkContent
-        } else {
-            return UIStatusBarStyle.default
-        }
-    }
-    
-    private func setup() {
-        setupDataSource()
-        setupTableView()
-    }
-    
-    // MARK: - Navigation
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Going to camera
-        if let destination = segue.destination as? CameraViewController {
-            destination.setup { [weak self] result in
-                guard let `self` = self, let data = result else {return}
-                self.storeValidatedQRCode(data: data, source: .scanner)
-            }
-        }
-    }
+//    enum CellType {
+//        case text(text: String), image(image: UIImage), method(type: TableViewButtonView.ButtonType, style: TableViewButtonView.ButtonStyle)
+//    }
+//
+//    @IBOutlet weak private var tableView: UITableView!
+//    private var dataSource: [CellType] = []
+////    private var backScreenString: String!
+//
+//    private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
+//    private weak var imagePicker: UIImagePickerController? = nil
+//
+//    override var getPassesFlowType: PassesFlowVCs? {
+//        return .QRRetrievalMethodViewController
+//    }
+//
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        setup()
+//    }
+//
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        setNeedsStatusBarAppearanceUpdate()
+//        // Calling this again, just in case - don't want any users to be stuck in a weird state where the tab bar isn't shown
+//        self.tabBarController?.tabBar.isHidden = false
+//        navSetup()
+//        self.tableView.contentInsetAdjustmentBehavior = .never
+//    }
+//
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//
+//    }
+//
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        if #available(iOS 13.0, *) {
+//            return UIStatusBarStyle.darkContent
+//        } else {
+//            return UIStatusBarStyle.default
+//        }
+//    }
+//
+//    private func setup() {
+//        setupDataSource()
+//        setupTableView()
+//    }
+//
+//    // MARK: - Navigation
+//    // In a storyboard-based application, you will often want to do a little preparation before navigation
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        // Going to camera
+//        if let destination = segue.destination as? CameraViewController {
+//            destination.setup { [weak self] result in
+//                guard let `self` = self, let data = result else {return}
+//                self.storeValidatedQRCode(data: data, source: .scanner)
+//            }
+//        }
+//    }
 }
-
+/*
 // MARK: Navigation setup
 extension QRRetrievalMethodViewController {
     private func navSetup() {
@@ -373,3 +374,4 @@ extension QRRetrievalMethodViewController: UIImagePickerControllerDelegate, UINa
     }
 }
 
+*/

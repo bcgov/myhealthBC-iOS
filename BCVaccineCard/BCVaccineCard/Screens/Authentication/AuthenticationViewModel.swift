@@ -7,10 +7,11 @@
 
 import Foundation
 
-
 extension AuthenticationViewController {
     struct ViewModel {
         let initialView: InitialView
+        let configService: MobileConfigService
+        let authManager: AuthManager
         let completion: ((AuthenticationStatus)->Void)?
     }
     

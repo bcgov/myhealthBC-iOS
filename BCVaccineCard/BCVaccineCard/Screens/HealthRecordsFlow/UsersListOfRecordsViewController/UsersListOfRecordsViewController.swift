@@ -18,9 +18,8 @@ class UsersListOfRecordsViewController: BaseViewController {
             vc.authenticated = viewModel.authenticated
             vc.navStyle = viewModel.navStyle
             vc.hasUpdatedUnauthPendingTest = viewModel.hasUpdatedUnauthPendingTest
-            if let dependantDS = viewModel.dataSource {
-                vc.dataSource = dependantDS
-            }
+            vc.dataSource = viewModel.dataSource
+           
             return vc
         }
         return UsersListOfRecordsViewController()
@@ -83,11 +82,7 @@ class UsersListOfRecordsViewController: BaseViewController {
             self.tableView.layoutSubviews()
         }
     }
-    
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .UsersListOfRecordsViewController(patient: self.patient)
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()
@@ -234,15 +229,17 @@ extension UsersListOfRecordsViewController {
     }
     
     private func goToSettingsScreen() {
-        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        // TODO: ROUTE REFACTOR -
+//        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func dependentSetting() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        guard let patient = patient, let dependent = patient.dependencyInfo else {return}
-        let vc = DependentInfoViewController.construct(dependent: dependent)
-        self.navigationController?.pushViewController(vc, animated: true)
+        // TODO: ROUTE REFACTOR -
+//        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+//        guard let patient = patient, let dependent = patient.dependencyInfo else {return}
+//        let vc = DependentInfoViewController.construct(dependent: dependent)
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func doneButton() {
@@ -463,15 +460,13 @@ extension UsersListOfRecordsViewController {
     
     // NOTE: No special routing required here on login, as the user should remain on the same screen
     private func performBCSCLogin() {
-        MobileConfigService(network: AFNetwork()).fetchConfig { config in
-            guard let config = config, config.online else {
-                return
-            }
-            self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
-                guard let `self` = self, authenticationStatus == .Completed else {return}
-                print("sync?")
-            }
-        }
+        // TODO: ROUTE REFACTOR -
+//        let vm = AuthenticationViewController.ViewModel(initialView: .Auth)
+//        self.showLogin(viewModel: vm) { [weak self] authenticationStatus in
+//            guard let `self` = self, authenticationStatus == .Completed else {return}
+//            print("sync?")
+//        }
+        
 //        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
 //            guard response == .Online else {return}
 //            self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
@@ -586,8 +581,12 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         if self.hiddenCellType == .medicalRecords && indexPath.section == 0 { return }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
-        let vc = HealthRecordDetailViewController.constructHealthRecordDetailViewController(dataSource: ds, authenticatedRecord: ds.isAuthenticated, userNumberHealthRecords: dataSource.count, patient: self.patient)
-        self.navigationController?.pushViewController(vc, animated: true)
+        // TODO: ROUTE REFACTOR -
+        let vm = HealthRecordDetailViewController.ViewModel(dataSource: ds,
+                                                            authenticatedRecord: ds.isAuthenticated,
+                                                            userNumberHealthRecords: dataSource.count,
+                                                            patient: patient)
+        show(route: .UsersListOfRecords, withNavigation: true, viewModel: vm)
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -644,11 +643,12 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                 if self.dataSource.isEmpty {
                     self.inEditMode = false
                     DispatchQueue.main.async {
-                        
-                        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                        let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                        self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                        // TODO: ROUTE REFACTOR -
+//
+//                        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+//                        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+//                        let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                        self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
                     }
                 } else {
                     self.tableView.reloadData()
@@ -671,11 +671,11 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                     StorageService.shared.deletePatient(name: name, birthday: birthday)
                 }
                 DispatchQueue.main.async {
-                    
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.healthPass], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                    // TODO: ROUTE REFACTOR -
+//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.healthPass], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
                 }
                 completion(true)
             } onCancel: {

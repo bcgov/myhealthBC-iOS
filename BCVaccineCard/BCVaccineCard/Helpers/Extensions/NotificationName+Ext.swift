@@ -20,6 +20,7 @@ extension Notification.Name {
     static let launchedFromBackground = Notification.Name("launchedFromBackground")
     static let didEnterBackground = Notification.Name("didEnterBackground")
     static let shouldPerformLocalAuth = Notification.Name("shouldPerformLocalAuth")
+    static let performedAuth = Notification.Name("performedAuth")
     
     static let authFetchComplete = Notification.Name("AuthFetchComplete") // <-
     

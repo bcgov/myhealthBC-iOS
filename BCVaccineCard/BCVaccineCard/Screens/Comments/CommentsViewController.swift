@@ -17,7 +17,7 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     
     class func construct(viewModel: ViewModel) -> CommentsViewController {
         if let vc = Storyboard.comments.instantiateViewController(withIdentifier: String(describing: CommentsViewController.self)) as? CommentsViewController {
-            vc.model = viewModel.model
+            vc.model = viewModel.record
             return vc
         }
         return CommentsViewController()

@@ -19,11 +19,13 @@ class DependentsHomeViewController: BaseDependentViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: DependentsHomeViewController.self)) as? DependentsHomeViewController {
             vc.patient = viewModel.patient
             vc.fetchDataWhenMainPatientIsStored()
+            vc.viewModel = viewModel
             return vc
         }
         return DependentsHomeViewController()
     }
     
+    private var viewModel: ViewModel? = nil
     private var patient: Patient? = nil
     private let emptyLogoTag = 23412
     private let authManager = AuthManager()
@@ -88,15 +90,17 @@ class DependentsHomeViewController: BaseDependentViewController {
     
     // MARK: Actions
     @IBAction func addDependent(_ sender: Any) {
-        guard let patient = patient else {
+        // TODO: ROUTE REFACTOR -
+        guard let patient = viewModel?.patient else {
             return
         }
-        let addVC = AddDependentViewController.constructAddDependentViewController(patient: patient)
-        self.navigationController?.pushViewController(addVC, animated: true)
+        let vm = AddDependentViewController.ViewModel(patient: patient)
+        show(route: .AddDependent, withNavigation: true, viewModel: vm)
     }
     
     @IBAction func manageDependents(_ sender: Any) {
-        guard let patient = patient else {
+        // TODO: ROUTE REFACTOR -
+        guard let patient = viewModel?.patient else {
             showToast(message: "Please try re-launching this application")
             return
         }
@@ -104,13 +108,15 @@ class DependentsHomeViewController: BaseDependentViewController {
             showToast(message: "This feature requires an internet connection")
             return
         }
-        let vc = ManageDependentsViewController.constructManageDependentsViewController(patient: patient)
-        self.navigationController?.pushViewController(vc, animated: true)
+        let vm = ManageDependentsViewController.ViewModel(patient: patient)
+        show(route: .ManageDependents, withNavigation: true, viewModel: vm)
+//        let vc = ManageDependentsViewController.constructManageDependentsViewController(patient: patient)
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func LoginWithBCSC(_ sender: Any) {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        authenticate(initialView: .Landing, fromTab: .dependant)
+        authenticate(initialView: .Landing)
     }
     
     // MARK: Data
@@ -363,7 +369,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
             return UITableViewCell()
         }
         cell.configure(forRecordType: .loginToAccessDependents) { [weak self] _ in
-            self?.authenticate(initialView: .Auth, fromTab: .dependant)
+            self?.authenticate(initialView: .Auth)
         }
         
         return cell
@@ -413,8 +419,11 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     private func showDetails(for dependent: Patient) {
         let records = StorageService.shared.getHealthRecords(forDependent: dependent)
         let dependantDS = records.detailDataSource(patient: dependent)
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependent, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
-        navigationController?.pushViewController(vc, animated: true)
+        // TODO: ROUTE REFACTOR -
+//        let vm = UsersListOfRecordsViewController.ViewModel(patient: <#Patient?#>)
+        
+//        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependent, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
+//        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -475,8 +484,9 @@ extension DependentsHomeViewController: InaccessibleDependentDelegate {
 
 // MARK: Auth
 extension DependentsHomeViewController {
-    private func authenticate(initialView: AuthenticationViewController.InitialView, fromTab: TabBarVCs) {
-        self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { _ in
-        }
+    private func authenticate(initialView: AuthenticationViewController.InitialView) {
+        // TODO: ROUTE REFACTOR -
+//        self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { _ in
+//        }
     }
 }

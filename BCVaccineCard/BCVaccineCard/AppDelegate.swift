@@ -16,9 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let sharedInstance = UIApplication.shared.delegate as? AppDelegate
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
-    var window: UIWindow? 
+    var window: UIWindow?
+    
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
+    var networkService: Network?
+    var syncService: SyncService?
+    var configService: MobileConfigService?
+    
     
     var coreDataContext: NSManagedObjectContext?
     
@@ -57,10 +62,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
 #endif
         AnalyticsService.shared.setup()
-        authManager = AuthManager()
+        
+        let networkService = AFNetwork()
+        let authManager = AuthManager()
+        let configService = MobileConfigService(network: networkService)
+        let syncService = SyncService(network: networkService, authManager: authManager, configService: configService)
+        self.networkService = networkService
+        self.authManager = authManager
+        self.configService = configService
+        self.syncService = syncService
+        
         clearKeychainIfNecessary(authManager: authManager)
         setupRootViewController()
-        authManager?.initTokenExpieryTimer()
+        authManager.initTokenExpieryTimer()
         listenToAppState()
         localAuthManager = LocalAuthManager()
         localAuthManager?.listenToAppStates()
@@ -123,8 +137,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     @objc func didEnterBackground(_ notification: Notification) {
         NotificationCenter.default.post(name: .didEnterBackground, object: nil)
     }
-    
-    
     
     // MARK: - Core Data stack
     lazy var persistentContainer: NSPersistentContainer = {
@@ -196,10 +208,22 @@ extension AppDelegate {
 
 // MARK: Root setup
 extension AppDelegate {
-    private func setupRootViewController() {
+    func setupRootViewController() {
+        guard let authManager = authManager,
+              let syncService = syncService,
+              let networkService = networkService,
+              let configService = configService
+            else {
+            showToast(message: "Fatal Error")
+            return
+        }
+        
         let unseen = Defaults.unseenOnBoardingScreens()
         guard let first = unseen.first else {
-            let vc = TabBarController.constructTabBarController()
+            let vc = AppTabBarController.construct(authManager: authManager,
+                                                   syncService: syncService,
+                                                   networkService: networkService,
+                                                   configService: configService)
             self.window?.rootViewController = vc
             return
         }

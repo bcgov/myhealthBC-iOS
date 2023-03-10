@@ -13,27 +13,22 @@ class HealthPassViewController: BaseViewController {
     class func construct(viewModel: ViewModel) -> HealthPassViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: HealthPassViewController.self)) as? HealthPassViewController {
             vc.fedPassStringToOpen = viewModel.fedPassStringToOpen
+            vc.viewModel = viewModel
             return vc
         }
         return HealthPassViewController()
     }
     
     @IBOutlet weak private var tableView: UITableView!
-    lazy var authManager: AuthManager = AuthManager()
-    
+    private var viewModel: ViewModel?
     private var dataSource: VaccineCard?
     private var savedCardsCount: Int {
         return StorageService.shared.fetchVaccineCards().count
     }
     private var fedPassStringToOpen: String?
     
-    override var getPassesFlowType: PassesFlowVCs? {
-        return .HealthPassViewController(fedPassToOpen: self.fedPassStringToOpen)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        authManager = AuthManager()
         refreshOnStorageChange()
         setFedPassObservable()
         setupListeners()
@@ -98,26 +93,27 @@ extension HealthPassViewController {
         
     }
     
+    // TODO: ROUTE REFACTOR -
     private func goToAddCardOptionScreen(showAuth: Bool) {
-        func showScreen() {
-            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-        
-        if showAuth && !authManager.isAuthenticated {
-            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticationStatus in
-                if authenticationStatus != .Completed {
-                    showScreen()
-                } else {
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthPassVC, authenticationStatus: authenticationStatus))
-                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
-                }
-            }
-        } else {
-            showScreen()
-        }
+//        func showScreen() {
+//            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        }
+//
+//        if showAuth && !authManager.isAuthenticated {
+//            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticationStatus in
+//                if authenticationStatus != .Completed {
+//                    showScreen()
+//                } else {
+//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+//                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthPassVC, authenticationStatus: authenticationStatus))
+//                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
+//                }
+//            }
+//        } else {
+//            showScreen()
+//        }
     }
 }
 
@@ -284,11 +280,11 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
                     }
                 }
                 DispatchQueue.main.async {
-                    
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                    // TODO: ROUTE REFACTOR -
+//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
                 }
             }
             self.dataSource = nil
@@ -333,8 +329,10 @@ extension HealthPassViewController: AddCardsTableViewCellDelegate {
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .viewAll {
-            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
-            self.navigationController?.pushViewController(vc, animated: true)
+            
+            // TODO: ROUTE REFACTOR -
+//            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
+//            self.navigationController?.pushViewController(vc, animated: true)
         }
         if type == .addAHealthPass {
             goToAddCardOptionScreen(showAuth: true)

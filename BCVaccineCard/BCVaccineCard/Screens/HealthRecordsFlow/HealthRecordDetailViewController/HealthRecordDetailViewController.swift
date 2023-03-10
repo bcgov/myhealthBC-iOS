@@ -30,13 +30,8 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     private var pdfData: String?
     private var reportId: String?
     private var type: LabTestType?
-    private var pdfAPIWorker: PDFAPIWorker?
     
     let connectionListener = NetworkConnection()
-    
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource, userNumberHealthRecords: userNumberHealthRecords)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +88,6 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.pdfAPIWorker = nil
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -118,8 +112,9 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     }
     
     func showComments(for record: HealthRecordsDetailDataSource.Record) {
-        let vc = CommentsViewController.constructCommentsViewController(model: record)
-        self.navigationController?.pushViewController(vc, animated: true)
+        // TODO: ROUTE REFACTOR -
+//        let vc = CommentsViewController.constructCommentsViewController(model: record)
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -167,11 +162,11 @@ extension HealthRecordDetailViewController {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
                 DispatchQueue.main.async {
-
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.healthPass], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                    // TODO: ROUTE REFACTOR -
+//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.healthPass], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
                 }
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
@@ -196,10 +191,11 @@ extension HealthRecordDetailViewController {
                     StorageService.shared.deletePatient(name: name, birthday: birthday)
                 }
                 DispatchQueue.main.async {
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
+                    // TODO: ROUTE REFACTOR -
+//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
+//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
+//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
                 }
             }
         } onCancel: {

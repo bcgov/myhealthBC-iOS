@@ -320,6 +320,15 @@
 		3E048CCA2911ADF100774278 /* StorageService + Dependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC92911ADF100774278 /* StorageService + Dependent.swift */; };
 		3E048CCB2911ADF100774278 /* StorageService + Dependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC92911ADF100774278 /* StorageService + Dependent.swift */; };
 		3E048CCC2911ADF100774278 /* StorageService + Dependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC92911ADF100774278 /* StorageService + Dependent.swift */; };
+		3E10300429BA7721001E85EC /* AppTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10300329BA7721001E85EC /* AppTabBarController.swift */; };
+		3E10300529BA7721001E85EC /* AppTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10300329BA7721001E85EC /* AppTabBarController.swift */; };
+		3E10300629BA7721001E85EC /* AppTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10300329BA7721001E85EC /* AppTabBarController.swift */; };
+		3E10300829BA77C6001E85EC /* AppTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10300729BA77C6001E85EC /* AppTabs.swift */; };
+		3E10300929BA77C6001E85EC /* AppTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10300729BA77C6001E85EC /* AppTabs.swift */; };
+		3E10300A29BA77C6001E85EC /* AppTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E10300729BA77C6001E85EC /* AppTabs.swift */; };
+		3E10300C29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E10300B29BA7AFB001E85EC /* AppTabBar.storyboard */; };
+		3E10300D29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E10300B29BA7AFB001E85EC /* AppTabBar.storyboard */; };
+		3E10300E29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E10300B29BA7AFB001E85EC /* AppTabBar.storyboard */; };
 		3E31EA7E2913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */; };
 		3E31EA7F2913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */; };
 		3E31EA802913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */; };
@@ -988,7 +997,6 @@
 		798005722852C66E006E390F /* ResultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795AA7372710920600E59FF1 /* ResultError.swift */; };
 		798005732852C66E006E390F /* AuthenticationRequestObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796653DC279876C9004D103E /* AuthenticationRequestObjects.swift */; };
 		798005742852C66E006E390F /* StaticPositiveTestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79218ADC27557F7D0063004E /* StaticPositiveTestTableViewCell.swift */; };
-		798005752852C66E006E390F /* FolderRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* FolderRecordsViewController.swift */; };
 		798005762852C66E006E390F /* CommentsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293B32B527D2627B0064BAAA /* CommentsListView.swift */; };
 		798005772852C66E006E390F /* UIFont+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967E75526F9155700EEF510 /* UIFont+Ext.swift */; };
 		798005782852C66E006E390F /* ScreenStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79CF235F28171D4300510489 /* ScreenStateManager.swift */; };
@@ -1197,8 +1205,6 @@
 		798CA1CD27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1CC27EED9ED0096188C /* LoginThrottleAPIWorker.swift */; };
 		798CA1CE27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798CA1CC27EED9ED0096188C /* LoginThrottleAPIWorker.swift */; };
 		799050AF27365111006CD726 /* AppPDFView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 29B446AD27357F1700E0F967 /* AppPDFView.xib */; };
-		799050B3273C4D3F006CD726 /* FolderRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* FolderRecordsViewController.swift */; };
-		799050B4273C4D3F006CD726 /* FolderRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050B2273C4D3F006CD726 /* FolderRecordsViewController.swift */; };
 		799050BD273C8330006CD726 /* GetRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050BC273C832F006CD726 /* GetRecordsView.swift */; };
 		799050BE273C8330006CD726 /* GetRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799050BC273C832F006CD726 /* GetRecordsView.swift */; };
 		799050C0273C8344006CD726 /* GetRecordsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799050BF273C8344006CD726 /* GetRecordsView.xib */; };
@@ -1460,6 +1466,9 @@
 		3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccessibleDependentTableViewCell.swift; sourceTree = "<group>"; };
 		3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InaccessibleDependentTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC92911ADF100774278 /* StorageService + Dependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService + Dependent.swift"; sourceTree = "<group>"; };
+		3E10300329BA7721001E85EC /* AppTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabBarController.swift; sourceTree = "<group>"; };
+		3E10300729BA77C6001E85EC /* AppTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabs.swift; sourceTree = "<group>"; };
+		3E10300B29BA7AFB001E85EC /* AppTabBar.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AppTabBar.storyboard; sourceTree = "<group>"; };
 		3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TabBarController + UpdateManager.swift"; sourceTree = "<group>"; };
 		3E31EA7C2913951C00E344E6 /* AppStoreDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStoreDataModel.swift; sourceTree = "<group>"; };
 		3E31EA7D2913951C00E344E6 /* UpdateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
@@ -1722,7 +1731,6 @@
 		798CA1C927EE4B0A0096188C /* LoginProcessStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProcessStatus.swift; sourceTree = "<group>"; };
 		798CA1CC27EED9ED0096188C /* LoginThrottleAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginThrottleAPIWorker.swift; sourceTree = "<group>"; };
 		798CA1CF27F2810C0096188C /* MobileConfigurationResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileConfigurationResponseObject.swift; sourceTree = "<group>"; };
-		799050B2273C4D3F006CD726 /* FolderRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderRecordsViewController.swift; sourceTree = "<group>"; };
 		799050BC273C832F006CD726 /* GetRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRecordsView.swift; sourceTree = "<group>"; };
 		799050BF273C8344006CD726 /* GetRecordsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GetRecordsView.xib; sourceTree = "<group>"; };
 		799050C3273C8558006CD726 /* UserRecordListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecordListView.swift; sourceTree = "<group>"; };
@@ -3377,6 +3385,9 @@
 			isa = PBXGroup;
 			children = (
 				7967E74226F900E400EEF510 /* TabBarController.swift */,
+				3E10300329BA7721001E85EC /* AppTabBarController.swift */,
+				3E10300729BA77C6001E85EC /* AppTabs.swift */,
+				3E10300B29BA7AFB001E85EC /* AppTabBar.storyboard */,
 			);
 			path = TabBarController;
 			sourceTree = "<group>";
@@ -3425,7 +3436,6 @@
 			children = (
 				79CF23632825769B00510489 /* HealthRecordsViewController.swift */,
 				79CF23662825785D00510489 /* HealthRecordsHomeView */,
-				79CF2362282575BE00510489 /* FolderViewControllerForLater */,
 			);
 			path = HealthRecordsBase;
 			sourceTree = "<group>";
@@ -3561,14 +3571,6 @@
 				79CF235F28171D4300510489 /* ScreenStateManager.swift */,
 			);
 			path = ScreenStateManager;
-			sourceTree = "<group>";
-		};
-		79CF2362282575BE00510489 /* FolderViewControllerForLater */ = {
-			isa = PBXGroup;
-			children = (
-				799050B2273C4D3F006CD726 /* FolderRecordsViewController.swift */,
-			);
-			path = FolderViewControllerForLater;
 			sourceTree = "<group>";
 		};
 		79CF23662825785D00510489 /* HealthRecordsHomeView */ = {
@@ -3861,6 +3863,7 @@
 				2922C0CC286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */,
 				293B32B927D2628A0064BAAA /* CommentsListView.xib in Resources */,
 				3E78AEC528F8724900C66E28 /* Dependents.storyboard in Resources */,
+				3E10300D29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */,
 				7967E75226F9145700EEF510 /* BCSans-BoldItalic.otf in Resources */,
 				799E0AFF27D13F43009C68FE /* Reusable.storyboard in Resources */,
 				3E7306E928B5F123007FED05 /* ReccomandationTableViewCell.xib in Resources */,
@@ -3916,6 +3919,7 @@
 				294BD3D527B1D60B00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
 				79CF236C2825789600510489 /* HealthRecordsHomeView.xib in Resources */,
 				794BD65F2702EEC00084ADA8 /* SettingsTableViewCell.xib in Resources */,
+				3E10300E29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */,
 				79218ABB27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */,
 				2922C0AE286C73F9000FF4F7 /* HealthRecordDetailFieldTableViewCell.xib in Resources */,
 				794BD6602702EEC00084ADA8 /* BCSans-Italic.otf in Resources */,
@@ -4078,6 +4082,7 @@
 				2922C0CB286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */,
 				798006412852C66E006E390F /* CommentsListView.xib in Resources */,
 				3E78AEC428F8724900C66E28 /* Dependents.storyboard in Resources */,
+				3E10300C29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */,
 				798006422852C66E006E390F /* BCSans-BoldItalic.otf in Resources */,
 				798006432852C66E006E390F /* Reusable.storyboard in Resources */,
 				3E7306E528B5EF32007FED05 /* ReccomandationTableViewCell.xib in Resources */,
@@ -4334,6 +4339,7 @@
 				3E68311E2940D41200100402 /* Perscription+CoreDataClass.swift in Sources */,
 				79218AF82756A0B30063004E /* HealthRecordsDetailDateSource.swift in Sources */,
 				2920AC20278E626500F7CAE7 /* ProfileAndSettingsViewController.swift in Sources */,
+				3E10300929BA77C6001E85EC /* AppTabs.swift in Sources */,
 				79BDA08F270E9E0A00FF30AB /* VaccineCardView.swift in Sources */,
 				7944F6F526F30293006B9444 /* CovidVaccineCardsViewController.swift in Sources */,
 				29E19FE3286C11BB00C235EF /* BaseHealthRecordDetailView.swift in Sources */,
@@ -4386,7 +4392,6 @@
 				3E6831152940D41200100402 /* SpecialAuthorityDrug+CoreDataProperties.swift in Sources */,
 				2D5218D32988556100E07382 /* Patient+CoreDataClass.swift in Sources */,
 				2922C0C9286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.swift in Sources */,
-				799050B3273C4D3F006CD726 /* FolderRecordsViewController.swift in Sources */,
 				293B32B627D2627B0064BAAA /* CommentsListView.swift in Sources */,
 				7967E75626F9155700EEF510 /* UIFont+Ext.swift in Sources */,
 				79CF236028171D4300510489 /* ScreenStateManager.swift in Sources */,
@@ -4519,6 +4524,7 @@
 				795AA75C27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
 				297885292796213800FF912D /* SettingsSectionHeaderView.swift in Sources */,
 				79218AA127518A5E0063004E /* CovidTestResultModel.swift in Sources */,
+				3E10300529BA7721001E85EC /* AppTabBarController.swift in Sources */,
 				79BDA07B270CB89900FF30AB /* Strings.swift in Sources */,
 				293B32BE27D262F70064BAAA /* CommentsViewTableViewCell.swift in Sources */,
 				79218AA427518CC20063004E /* GatewayTestResultResponse.swift in Sources */,
@@ -4693,6 +4699,7 @@
 				3E68311F2940D41200100402 /* Perscription+CoreDataClass.swift in Sources */,
 				2908647B27A1B08E0003F9E3 /* LocalAuthManager.swift in Sources */,
 				794BD6362702EEC00084ADA8 /* Constants.swift in Sources */,
+				3E10300A29BA77C6001E85EC /* AppTabs.swift in Sources */,
 				79218AD3275576640063004E /* TextListModel.swift in Sources */,
 				79CF23692825787900510489 /* HealthRecordsHomeView.swift in Sources */,
 				29E19FE4286C11BC00C235EF /* BaseHealthRecordDetailView.swift in Sources */,
@@ -4734,7 +4741,6 @@
 				794BD63C2702EEC00084ADA8 /* AppStyleButton.swift in Sources */,
 				795E68272703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				79218ADF27557F7D0063004E /* StaticPositiveTestTableViewCell.swift in Sources */,
-				799050B4273C4D3F006CD726 /* FolderRecordsViewController.swift in Sources */,
 				2922C0F428772574000FF4F7 /* StorageService+Immunization.swift in Sources */,
 				794BD63D2702EEC00084ADA8 /* UINavigationItem+Ext.swift in Sources */,
 				29806693275970C8006FF3ED /* StorageModelExtensions.swift in Sources */,
@@ -4878,6 +4884,7 @@
 				791D092D27BF5EC000AD7C89 /* AuthenticatedLaboratoryOrdersResponseObject.swift in Sources */,
 				7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
 				29245D442755877A00F48642 /* Encodable+EXT.swift in Sources */,
+				3E10300629BA7721001E85EC /* AppTabBarController.swift in Sources */,
 				794BD64F2702EEC00084ADA8 /* TextTableViewCell.swift in Sources */,
 				79932CAC2790F8F0007E8D92 /* AuthenticationViewController.swift in Sources */,
 				3EF0DF2D2953D16E00408A1E /* MobileConfigurationResponseObject.swift in Sources */,
@@ -5029,6 +5036,7 @@
 				3E68311D2940D41200100402 /* Perscription+CoreDataClass.swift in Sources */,
 				7980054F2852C66E006E390F /* HealthRecordCollectionViewCell.swift in Sources */,
 				798005502852C66E006E390F /* UsersListOfRecordsViewController.swift in Sources */,
+				3E10300829BA77C6001E85EC /* AppTabs.swift in Sources */,
 				798005512852C66E006E390F /* HealthRecordsDetailDateSource.swift in Sources */,
 				798005522852C66E006E390F /* ProfileAndSettingsViewController.swift in Sources */,
 				3E81C4C729B2A60500C8F5C4 /* AuthenticationViewModel.swift in Sources */,
@@ -5082,7 +5090,6 @@
 				3E6831142940D41200100402 /* SpecialAuthorityDrug+CoreDataProperties.swift in Sources */,
 				2D5218D22988556100E07382 /* Patient+CoreDataClass.swift in Sources */,
 				2922C0C8286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.swift in Sources */,
-				798005752852C66E006E390F /* FolderRecordsViewController.swift in Sources */,
 				798005762852C66E006E390F /* CommentsListView.swift in Sources */,
 				798005772852C66E006E390F /* UIFont+Ext.swift in Sources */,
 				29E19FD1286C023700C235EF /* CovidImmunizationRecordDetailView.swift in Sources */,
@@ -5214,6 +5221,7 @@
 				798005C42852C66E006E390F /* TableViewButtonView.swift in Sources */,
 				798005C52852C66E006E390F /* Encodable+EXT.swift in Sources */,
 				798005C62852C66E006E390F /* BaseURLWorker.swift in Sources */,
+				3E10300429BA7721001E85EC /* AppTabBarController.swift in Sources */,
 				798005C72852C66E006E390F /* NewsFeedViewController.swift in Sources */,
 				798005C82852C66E006E390F /* SettingsSectionHeaderView.swift in Sources */,
 				798005C92852C66E006E390F /* CovidTestResultModel.swift in Sources */,
@@ -5470,12 +5478,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -5485,8 +5491,7 @@
 				MARKETING_VERSION = 1.7.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-DEV-AppStore";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEV;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -5503,12 +5508,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -5518,8 +5521,7 @@
 				MARKETING_VERSION = 1.7.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "ClientVaccineCard-DEV-AppStore";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "ClientVaccineCard-DEV-AppStore";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEV;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

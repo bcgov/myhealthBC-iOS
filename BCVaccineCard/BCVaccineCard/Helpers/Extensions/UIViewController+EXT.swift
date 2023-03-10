@@ -89,7 +89,7 @@ extension UIViewController {
                 parent.showLocalAuth(onSuccess: onSuccess)
                 return
             }
-            if let parent = self.parent as? TabBarController {
+            if let parent = self.parent as? AppTabBarController {
                 parent.showLocalAuth(onSuccess: onSuccess)
                 return
             }
@@ -129,7 +129,7 @@ extension UIViewController {
             return parent.findTabBarController()
             
         }
-        if let parent = self.parent as? TabBarController {
+        if let parent = self.parent as? AppTabBarController {
             return parent.findTabBarController()
             
         }

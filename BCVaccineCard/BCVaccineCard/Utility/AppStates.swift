@@ -13,11 +13,17 @@ class AppStates {
     private var onAuthChange: [((_ authenticated: Bool)->Void)] = []
     private var onStorageChage: [((_ event: StorageService.StorageEvent<Any>)->Void)] = []
     private var onPatientFetch: [(()->Void)] = []
+    private var onLocalAuth: [(()->Void)] = []
     
     func listen() {
         NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(performedAuth), name: .performedAuth, object: nil)
+    }
+    
+    @objc private func performedAuth(_ notification: Notification) {
+        onLocalAuth.forEach({$0()})
     }
     
     @objc private func authStatusChanged(_ notification: Notification) {
@@ -45,5 +51,9 @@ class AppStates {
     
     func listenToPatient(fetch: @escaping()->Void) {
         onPatientFetch.append(fetch)
+    }
+    
+    func listenLocalAuth(success: @escaping()->Void) {
+        onLocalAuth.append(success)
     }
 }

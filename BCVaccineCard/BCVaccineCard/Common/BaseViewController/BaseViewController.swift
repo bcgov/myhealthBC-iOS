@@ -23,6 +23,7 @@ protocol NavigationSetupProtocol: AnyObject {
 class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
    
     weak var navDelegate: NavigationSetupProtocol?
+    var tabDelegate: TabDelegate?
     
 //    var routerWorker: RouterWorker? {
 //        return (self.tabBarController as? TabBarController)?.routerWorker
@@ -32,12 +33,12 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
 //        return (self.tabBarController as? TabBarController)?.getCurrentRecordsAndPassesFlows() ?? CurrentRecordsAndPassesStacks(recordsStack: [], passesStack: [])
 //    }
     
-    var getCurrentTab: TabBarVCs {
-        return TabBarVCs.init(rawValue: (self.tabBarController as? TabBarController)?.selectedIndex ?? 0) ?? .home
-    }
+//    var getCurrentTab: AppTabs {
+//        return TabBarVCs.init(rawValue: (self.tabBarController as? AppTabBarController)?.selectedIndex ?? 0) ?? .home
+//    }
     
-    var getTabBarController: TabBarController? {
-        return self.tabBarController as? TabBarController
+    var getTabBarController: AppTabBarController? {
+        return self.tabBarController as? AppTabBarController
     }
     
 //    var getRecordFlowType: RecordsFlowVCs? {
@@ -69,9 +70,15 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     if !Defaults.hasSeenFirstLogin {
                         Defaults.hasSeenFirstLogin = true
-                        self.showLogin(initialView: .Landing, sourceVC: .AfterOnboarding) { authenticated in
-                            
-                        }
+                        // TODO: ROUTE REFACTOR -
+                        let loginVM = AuthenticationViewController.ViewModel(
+                            initialView: .Landing,
+                            configService: MobileConfigService(network: AFNetwork()),
+                            authManager: AuthManager(),
+                            completion: {_ in 
+                                
+                            })
+                        self.showLogin(viewModel: loginVM)
                     }
                 }
             })
@@ -145,21 +152,23 @@ extension BaseViewController {
     }
     
     private func goToSettingsScreen() {
-        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        // TODO: ROUTE REFACTOR -
+//        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
 // MARK: For Authenticated Fetch
 extension BaseViewController {
     func syncAuthenticatedPatient() {
-        guard let hdid = AuthManager().hdid else {return}
-        let service = SyncService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
-        service.performSync() { patient in
-            // TODO: CONNOR HELP!
-            // how do we set record's tab's state?
-            print(patient)
-        }
+        // TODO: ROUTE REFACTOR -
+//        guard let hdid = AuthManager().hdid else {return}
+//        let service = SyncService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+//        service.performSync() { patient in
+//            // TODO: CONNOR HELP!
+//            // how do we set record's tab's state?
+//            print(patient)
+//        }
     }
 //    func performAuthenticatedRecordsFetch(isManualFetch: Bool,
 //                                          showBanner: Bool = true,
@@ -187,34 +196,35 @@ extension BaseViewController {
 // MARK: GoTo Health Gateway Logic from passes flow
 extension BaseViewController {
     //FIXME: CONNOR: - Ready To Test: Move this function to base view controller and then user router worker within this function
+       // TODO: ROUTE REFACTOR -
         func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, navDelegate: NavigationSetupProtocol?) {
-            var rememberDetails = RememberedGatewayDetails(storageArray: nil)
-            if let details = Defaults.rememberGatewayDetails {
-                rememberDetails = details
-            }
-            
-            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
-            if fetchType.isFedPassOnly {
-                vc.completionHandler = { [weak self] details in
-                    guard let `self` = self else { return }
-                    DispatchQueue.main.async {
-                        if let fedPass = details.fedPassId {
-                            // Added record set to nil means that the records tab will either show UserRecordsVC or HealthRecordsVC, depending on number of users - if we want to display the detail screen, then we need to provide the addedRecord - this function is only being called from HealthPassVC and CovidVaccineCardsVC as of now though
-                            let fedPassAddedFromHealthPassVC = source == .healthPassHomeScreen ? true : false
-                            DispatchQueue.main.async {
-
-                                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: nil)
-                                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC)
-                                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
-                            }
-                        } else {
-                            self.navigationController?.popViewController(animated: true)
-                        }
-                    }
-                }
-            }
-            self.tabBarController?.tabBar.isHidden = true
-            self.navigationController?.pushViewController(vc, animated: true)
+//            var rememberDetails = RememberedGatewayDetails(storageArray: nil)
+//            if let details = Defaults.rememberGatewayDetails {
+//                rememberDetails = details
+//            }
+//
+//            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
+//            if fetchType.isFedPassOnly {
+//                vc.completionHandler = { [weak self] details in
+//                    guard let `self` = self else { return }
+//                    DispatchQueue.main.async {
+//                        if let fedPass = details.fedPassId {
+//                            // Added record set to nil means that the records tab will either show UserRecordsVC or HealthRecordsVC, depending on number of users - if we want to display the detail screen, then we need to provide the addedRecord - this function is only being called from HealthPassVC and CovidVaccineCardsVC as of now though
+//                            let fedPassAddedFromHealthPassVC = source == .healthPassHomeScreen ? true : false
+//                            DispatchQueue.main.async {
+//
+//                                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: nil)
+//                                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC)
+//                                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+//                            }
+//                        } else {
+//                            self.navigationController?.popViewController(animated: true)
+//                        }
+//                    }
+//                }
+//            }
+//            self.tabBarController?.tabBar.isHidden = true
+//            self.navigationController?.pushViewController(vc, animated: true)
         }
 }

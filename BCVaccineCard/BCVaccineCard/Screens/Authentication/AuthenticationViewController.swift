@@ -49,37 +49,37 @@ We can call the BCSC auth in 2 ways:
 //}
 
 // MARK: This is for resetting the appropriate view controller
-enum LoginVCSource: String {
-    case BackgroundFetch = "BackgroundFetch"
-    case AfterOnboarding = "AfterOnboarding"
-    case SecurityAndDataVC = "SecurityAndDataVC"
-    case ProfileAndSettingsVC = "ProfileAndSettingsVC"
-    case HealthPassVC = "HealthPassVC"
-    case HealthRecordsVC = "HealthRecordsVC"
-    case QRRetrievalVC = "QRRetrievalVC"
-    case FetchHealthRecordsVC = "FetchHealthRecordsVC"
-    case UserListOfRecordsVC = "UserListOfRecordsVC"
-    case TabBar = "TabBar"
-    case HomeScreen = "HomeScreenVC"
-    case Dependents = "Dependents"
-    
-    var getVCType: UIViewController.Type {
-        switch self {
-        case .BackgroundFetch: return TabBarController.self
-        case .AfterOnboarding: return InitialOnboardingViewController.self
-        case .SecurityAndDataVC: return SecurityAndDataViewController.self
-        case .ProfileAndSettingsVC: return ProfileAndSettingsViewController.self
-        case .HealthPassVC: return HealthPassViewController.self
-        case .HealthRecordsVC: return HealthRecordsViewController.self
-        case .QRRetrievalVC: return QRRetrievalMethodViewController.self
-        case .FetchHealthRecordsVC: return FetchHealthRecordsViewController.self
-        case .UserListOfRecordsVC: return UsersListOfRecordsViewController.self
-        case .TabBar: return TabBarController.self
-        case .HomeScreen: return HomeScreenViewController.self
-        case .Dependents: return DependentsHomeViewController.self
-        }
-    }
-}
+//enum LoginVCSource: String {
+//    case BackgroundFetch = "BackgroundFetch"
+//    case AfterOnboarding = "AfterOnboarding"
+//    case SecurityAndDataVC = "SecurityAndDataVC"
+//    case ProfileAndSettingsVC = "ProfileAndSettingsVC"
+//    case HealthPassVC = "HealthPassVC"
+//    case HealthRecordsVC = "HealthRecordsVC"
+//    case QRRetrievalVC = "QRRetrievalVC"
+//    case FetchHealthRecordsVC = "FetchHealthRecordsVC"
+//    case UserListOfRecordsVC = "UserListOfRecordsVC"
+//    case TabBar = "TabBar"
+//    case HomeScreen = "HomeScreenVC"
+//    case Dependents = "Dependents"
+//    
+//    var getVCType: UIViewController.Type {
+//        switch self {
+//        case .BackgroundFetch: return TabBarController.self
+//        case .AfterOnboarding: return InitialOnboardingViewController.self
+//        case .SecurityAndDataVC: return SecurityAndDataViewController.self
+//        case .ProfileAndSettingsVC: return ProfileAndSettingsViewController.self
+//        case .HealthPassVC: return HealthPassViewController.self
+//        case .HealthRecordsVC: return HealthRecordsViewController.self
+//        case .QRRetrievalVC: return QRRetrievalMethodViewController.self
+//        case .FetchHealthRecordsVC: return FetchHealthRecordsViewController.self
+//        case .UserListOfRecordsVC: return UsersListOfRecordsViewController.self
+//        case .TabBar: return TabBarController.self
+//        case .HomeScreen: return HomeScreenViewController.self
+//        case .Dependents: return DependentsHomeViewController.self
+//        }
+//    }
+//}
 
 class AuthenticationViewController: UIViewController {
    
@@ -87,8 +87,9 @@ class AuthenticationViewController: UIViewController {
         if let vc = Storyboard.authentication.instantiateViewController(withIdentifier: String(describing: AuthenticationViewController.self)) as? AuthenticationViewController {
             vc.completion = viewModel.completion
             vc.initialView = viewModel.initialView
+            vc.viewModel = viewModel
             if #available(iOS 13.0, *) {
-                vc.isModalInPresentation = isModal
+                vc.isModalInPresentation = true
             }
             return vc
         }
@@ -98,11 +99,9 @@ class AuthenticationViewController: UIViewController {
     fileprivate let childTag = 19141244
     fileprivate let dismissDelay: TimeInterval = 1
     
+    private var viewModel: ViewModel?
     private var completion: ((AuthenticationStatus)->Void)?
-    private var createTabBarAndGoToHomeScreen: Bool = true
     private var initialView: InitialView = .Landing
-    private var sourceVC: LoginVCSource = .AfterOnboarding
-    private var presentingVCReference: UIViewController?
 //    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     
@@ -111,11 +110,11 @@ class AuthenticationViewController: UIViewController {
 //        initializeNecessaryProperties()
         switch self.initialView {
         case .Landing:
-            self.showLanding(sourceVC: self.sourceVC)
+            self.showLanding()
         case .AuthInfo:
-            self.showInfo(sourceVC: self.sourceVC)
+            self.showInfo()
         case .Auth:
-            self.performAuthentication(sourceVC: self.sourceVC)
+            self.performAuthentication()
         }
     }
     
@@ -124,7 +123,7 @@ class AuthenticationViewController: UIViewController {
 //        throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
 //    }
     
-    private func showLanding(sourceVC: LoginVCSource) {
+    private func showLanding() {
         removeChild()
         let authView: AuthenticationView = AuthenticationView.fromNib()
         authView.tag = childTag
@@ -132,14 +131,14 @@ class AuthenticationViewController: UIViewController {
             guard let self = self else {return}
             switch result {
             case .Login:
-                self.showInfo(sourceVC: sourceVC)
+                self.showInfo()
             case .Cancel:
-                self.dismissView(withDelay: false, status: .Cancelled, sourceVC: sourceVC)
+                self.dismissView(withDelay: false, status: .Cancelled)
             }
         }
     }
     
-    private func showInfo(sourceVC: LoginVCSource) {
+    private func showInfo() {
         removeChild()
         let authInfoView: AuthenticationInfoView = AuthenticationInfoView.fromNib()
         authInfoView.tag = childTag
@@ -147,32 +146,36 @@ class AuthenticationViewController: UIViewController {
             guard let self = self else {return}
             switch result {
             case .Continue:
-                self.performAuthentication(sourceVC: sourceVC)
+                self.performAuthentication()
             case .Cancel:
-                self.dismissView(withDelay: false, status: .Cancelled, sourceVC: sourceVC)
+                self.dismissView(withDelay: false, status: .Cancelled)
             case .Back:
-                self.showLanding(sourceVC: sourceVC)
+                self.showLanding()
             }
         }
     }
     
-    private func performAuthentication(sourceVC: LoginVCSource) {
-        MobileConfigService(network: AFNetwork()).fetchConfig { config in
+    private func performAuthentication() {
+        guard let configService = viewModel?.configService,
+              let authManager = viewModel?.authManager else {
+            return
+        }
+        configService.fetchConfig { config in
             guard let config = config, config.online else {
                 return
             }
-            AuthManager().authenticate(in: self, completion: { [weak self] result in
+            authManager.authenticate(in: self, completion: { [weak self] result in
                 guard let self = self else {return}
                 switch result {
                 case .Unavailable:
                     self.showToast(message: "Authentication server is unavailable", style: .Warn)
-                    self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                    self.dismissView(withDelay: false, status: .Failed)
                 case .Success:
                     Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
-                    self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
+                    self.dismissView(withDelay: true, status: .Completed)
                 case .Fail:
                     self.showToast(message: "Authentication Failed", style: .Warn)
-                    self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
+                    self.dismissView(withDelay: false, status: .Failed)
                 }
             })
         }
@@ -184,31 +187,28 @@ class AuthenticationViewController: UIViewController {
         }
     }
     
-    private func dismissView(withDelay: Bool, status: AuthenticationStatus, sourceVC: LoginVCSource) {
+    private func dismissView(withDelay: Bool, status: AuthenticationStatus) {
         
         if withDelay {
             self.view.startLoadingIndicator()
             DispatchQueue.main.asyncAfter(deadline: .now() + dismissDelay) { [weak self] in
                 guard let self = self else {return}
-                self.dismissView(withDelay: false, status: status, sourceVC: sourceVC)
+                self.dismissView(withDelay: false, status: status)
             }
         } else {
             self.removeChild()
             
             dismissAndReturnCompletion(status: status)
-            if self.createTabBarAndGoToHomeScreen {
-                let authStatus: AuthenticationStatus? = status == .Completed ? .Completed : nil
-                dismissFullScreen(sourceVC: sourceVC, authStatus: authStatus)
-            }
         }
     }
     
     private func dismissAndReturnCompletion(status: AuthenticationStatus) {
-        if sourceVC == .HomeScreen && status == .Completed {
-            // Note: This is so that the user doesn't see the home screen after a successfull login
-            let view = self.presentingVCReference?.view
-            AppDelegate.sharedInstance?.addLoadingViewHack(addToView: view)
-        }
+        // TODO: ROUTE REFACTOR -
+//        if sourceVC == .HomeScreen && status == .Completed {
+//            // Note: This is so that the user doesn't see the home screen after a successfull login
+//            let view = self.presentingVCReference?.view
+//            AppDelegate.sharedInstance?.addLoadingViewHack(addToView: view)
+//        }
         self.dismiss(animated: true, completion: {
             self.returnCompletion(status: status)
         })
@@ -221,21 +221,27 @@ class AuthenticationViewController: UIViewController {
     }
     
     // Note: This authStatus is to determine whether tab bar needs to prompt a login success message or not
-    func dismissFullScreen(sourceVC: LoginVCSource, authStatus: AuthenticationStatus?) {
-        let transition = CATransition()
-        transition.type = .fade
-        transition.duration = Constants.UI.Theme.animationDuration
-        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = TabBarController.constructTabBarController(status: authStatus)
-        AppDelegate.sharedInstance?.window?.rootViewController = vc
+    func dismissFullScreen(authStatus: AuthenticationStatus?) {
+        AppDelegate.sharedInstance?.setupRootViewController()
     }
     
-    public static func displayFullScreen(createTabBarAndGoToHomeScreen: Bool, initialView: InitialView, sourceVC: LoginVCSource) {
+    /// Used only for initial authentication.
+    /// sets auth view as the app's root view controller and after gets app to reset its root view controller
+    public static func displayFullScreen() {
+        let networkService = AFNetwork()
+        let authManager = AuthManager()
+        let configService = MobileConfigService(network: networkService)
         let transition = CATransition()
         transition.type = .fade
         transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: createTabBarAndGoToHomeScreen, isModal: false, initialView: initialView, sourceVC: sourceVC) {_ in}
+        let vm = AuthenticationViewController.ViewModel(initialView: .Landing,
+                                                        configService: configService,
+                                                        authManager: authManager,
+                                                        completion: { _ in
+            AppDelegate.sharedInstance?.setupRootViewController()
+        })
+        let vc = AuthenticationViewController.construct(viewModel: vm)
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
     

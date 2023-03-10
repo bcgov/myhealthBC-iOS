@@ -8,8 +8,11 @@
 import Foundation
 import StoreKit
 
-extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateViewDelegate{
-    
+
+ // TODO: ROUTE REFACTOR -
+
+extension AppTabBarController: SKStoreProductViewControllerDelegate, ForceUpdateViewDelegate{
+
     func showAppStoreUpdateDialogIfNeeded() {
         guard NetworkConnection().hasConnection else {return}
         UpdateService(network: AFNetwork()).isUpdateAvailableInStore { [weak self] updateAvailable in
@@ -23,7 +26,7 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
             }
         }
     }
-    
+
     func showForceUpateIfNeeded(completion: @escaping (Bool)->Void) {
         if NetworkConnection.shared.hasConnection {
             checkForceUpdate(completion: completion)
@@ -31,7 +34,7 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
             return completion(false)
         }
     }
-    
+
     fileprivate func checkForceUpdate(completion: @escaping (Bool)->Void) {
         UpdateService(network: AFNetwork()).isBreakingConfigChangeAvailable { available in
             guard available else {return completion(false)}
@@ -41,16 +44,16 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
             return completion(true)
         }
     }
-    
+
     func openStoreAppStore() {
         let appId = "1590009068"
-        
+
         openAppStoreWithStoreKit(appId: appId) { [weak self] success in
             if success { return }
             self?.openAppStoreWithDeeplink(appId: appId)
         }
     }
-    
+
     private func openAppStoreWithStoreKit(appId: String , completion: @escaping(Bool)->Void) {
         let storeViewController = SKStoreProductViewController()
         storeViewController.delegate = self
@@ -64,7 +67,7 @@ extension TabBarController: SKStoreProductViewControllerDelegate, ForceUpdateVie
             }
         }
     }
-    
+
     private func openAppStoreWithDeeplink(appId: String) {
         if let url  = URL(string: "itms-apps://itunes.apple.com/app/id\(appId)"), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url)
@@ -77,9 +80,9 @@ private func productViewControllerDidFinish(viewController: SKStoreProductViewCo
 
 extension UIViewController {
     func checkForAppStoreVersionUpdate() {
-        if let tabBar = tabBarController as? TabBarController {
+        if let tabBar = tabBarController as? AppTabBarController {
             tabBar.showAppStoreUpdateDialogIfNeeded()
-        } else if let tabBar = self as? TabBarController {
+        } else if let tabBar = self as? AppTabBarController {
             tabBar.showAppStoreUpdateDialogIfNeeded()
         }
     }
