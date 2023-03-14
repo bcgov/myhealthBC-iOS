@@ -280,6 +280,9 @@
 		2D3F16A929B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F16A529B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib */; };
 		2D3F16AA29B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F16A529B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib */; };
 		2D3F16AB29B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D3F16A529B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib */; };
+		2D41BD6B29BFE1110069E831 /* LoginErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D41BD6A29BFE1110069E831 /* LoginErrorViewController.swift */; };
+		2D41BD6C29BFE1110069E831 /* LoginErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D41BD6A29BFE1110069E831 /* LoginErrorViewController.swift */; };
+		2D41BD6D29BFE1110069E831 /* LoginErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D41BD6A29BFE1110069E831 /* LoginErrorViewController.swift */; };
 		2D465B0528CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
 		2D465B0628CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
 		2D465B0728CB0438008B66D8 /* PDFAPIWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */; };
@@ -1413,6 +1416,7 @@
 		2D120D4228FF25A600EB8EBF /* PostDependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDependent.swift; sourceTree = "<group>"; };
 		2D3F16A429B19D3F0029C8EA /* CitizenSubmissionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitizenSubmissionTableViewCell.swift; sourceTree = "<group>"; };
 		2D3F16A529B19D3F0029C8EA /* CitizenSubmissionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CitizenSubmissionTableViewCell.xib; sourceTree = "<group>"; };
+		2D41BD6A29BFE1110069E831 /* LoginErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginErrorViewController.swift; sourceTree = "<group>"; };
 		2D465B0428CB0438008B66D8 /* PDFAPIWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFAPIWorker.swift; sourceTree = "<group>"; };
 		2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsViewController.swift; sourceTree = "<group>"; };
 		2D5218BF2984A38000E07382 /* ProfileDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsTableViewCell.swift; sourceTree = "<group>"; };
@@ -2138,6 +2142,7 @@
 			isa = PBXGroup;
 			children = (
 				298190C62773B4350062F55E /* AuthenticationViewController.swift */,
+				2D41BD6A29BFE1110069E831 /* LoginErrorViewController.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -4457,6 +4462,7 @@
 				3E78AECE28F9909500C66E28 /* AddDependentViewController.swift in Sources */,
 				3EDC0D0A2968928000603FED /* KVCAccessor.swift in Sources */,
 				3EDC0D1A2968932100603FED /* KVCReflectionMirror.swift in Sources */,
+				2D41BD6C29BFE1110069E831 /* LoginErrorViewController.swift in Sources */,
 				29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */,
 				79218AE42755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */,
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
@@ -4804,6 +4810,7 @@
 				794BD64D2702EEC00084ADA8 /* NoCardsTableViewCell.swift in Sources */,
 				3EDC0D0B2968928000603FED /* KVCAccessor.swift in Sources */,
 				3EDC0D1B2968932100603FED /* KVCReflectionMirror.swift in Sources */,
+				2D41BD6D29BFE1110069E831 /* LoginErrorViewController.swift in Sources */,
 				79218AF0275672120063004E /* StorageService+HealthRecords.swift in Sources */,
 				79CF236F283D8DDF00510489 /* BaseURLWorker.swift in Sources */,
 				3E5E6EBD28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
@@ -5128,6 +5135,7 @@
 				3E78AECD28F9909500C66E28 /* AddDependentViewController.swift in Sources */,
 				3EDC0D092968928000603FED /* KVCAccessor.swift in Sources */,
 				3EDC0D192968932100603FED /* KVCReflectionMirror.swift in Sources */,
+				2D41BD6B29BFE1110069E831 /* LoginErrorViewController.swift in Sources */,
 				798005BD2852C66E006E390F /* StorageService+HealthRecords.swift in Sources */,
 				29E19FE2286C044F00C235EF /* BaseHealthRecordDetailView.swift in Sources */,
 				798005BE2852C66E006E390F /* VisitedOnBoardingScreen.swift in Sources */,

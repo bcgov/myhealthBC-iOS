@@ -80,7 +80,7 @@ class ProfileAndSettingsViewController: BaseViewController {
         // Note: This nav bar hack is to prevent the user from navigating back to the root vc, which was causing issues as the routing functionality wasn't working in time, so the records weren't showing
         self.navigationController?.navigationBar.isUserInteractionEnabled = false
         showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: { authenticationStatus in
-            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else {
+            guard authenticationStatus == .Completed else {
                 self.navigationController?.navigationBar.isUserInteractionEnabled = false
                 return
             }
