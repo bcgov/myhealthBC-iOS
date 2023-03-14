@@ -21,6 +21,7 @@ struct PatientService {
     
     // MARK: Profile
     public func fetchAndStoreDetails(completion: @escaping (Patient?)->Void) {
+        Logger.log(string: "Fetching PatientDetails", type: .Network)
         network.addLoader(message: .FetchingRecords)
         fetch() { result in
             guard let response = result else {
@@ -32,6 +33,7 @@ struct PatientService {
             
             store(patientDetails: response, completion: { result in
                 network.removeLoader()
+                Logger.log(string: "Stored Patient Details", type: .Network)
                 let userInfo: [String: String?] = ["firstName": patientFirstName, "fullName": patientFullName]
                 NotificationCenter.default.post(name: .patientAPIFetched, object: nil, userInfo: userInfo as [AnyHashable : Any])
                 return completion(result)
@@ -42,19 +44,19 @@ struct PatientService {
     private func store(patientDetails: PatientDetailResponse,
                        completion: @escaping (Patient?)->Void
     ) {
+        Logger.log(string: "Storing Patient Details", type: .Network)
         let phyiscalAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.physicalAddress)
         let mailingAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.postalAddress)
-        let patient = StorageService.shared.storePatient(name: patientDetails.getFullName,
-                                                         firstName: patientDetails.resourcePayload?.firstname,
-                                                         lastName: patientDetails.resourcePayload?.lastname,
-                                                         gender: patientDetails.resourcePayload?.gender,
-                                                         birthday: patientDetails.getBdayDate,
-                                                         phn: patientDetails.resourcePayload?.personalhealthnumber,
-                                                         physicalAddress: phyiscalAddress,
-                                                         mailingAddress: mailingAddress,
-                                                         hdid: AuthManager().hdid,
-                                                         authenticated: true)
-        
+        let patient = StorageService.shared.fetchOrCreatePatient(phn: patientDetails.resourcePayload?.personalhealthnumber,
+                                                   name: patientDetails.getFullName,
+                                                   firstName: patientDetails.resourcePayload?.firstname,
+                                                   lastName: patientDetails.resourcePayload?.lastname,
+                                                   gender: patientDetails.resourcePayload?.gender,
+                                                   birthday: patientDetails.getBdayDate,
+                                                   physicalAddress: phyiscalAddress,
+                                                   mailingAddress: mailingAddress,
+                                                   hdid: AuthManager().hdid,
+                                                   authenticated: true)
         return completion(patient)
         
     }

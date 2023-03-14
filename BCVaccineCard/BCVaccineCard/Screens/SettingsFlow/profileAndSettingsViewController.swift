@@ -88,6 +88,7 @@ class ProfileAndSettingsViewController: BaseViewController {
     }
     
     func showSecurityAndData() {
+        show(route: .SecurityAndData, withNavigation: true)
         // TODO: ROUTE REFACTOR -
 //        let vc = SecurityAndDataViewController.constructSecurityAndDataViewController()
 //        self.navigationController?.pushViewController(vc, animated: true)

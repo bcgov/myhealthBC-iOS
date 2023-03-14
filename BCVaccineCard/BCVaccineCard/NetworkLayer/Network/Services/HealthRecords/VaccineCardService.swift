@@ -23,6 +23,7 @@ struct VaccineCardService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping (VaccineCard?)->Void) {
         network.addLoader(message: .FetchingRecords)
+        Logger.log(string: "Fetching VaccineCard records for \(patient.name)", type: .Network)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()
@@ -103,6 +104,7 @@ struct VaccineCardService {
                        for patient: Patient,
                        completion: @escaping (VaccineCard?)->Void
     ) {
+        Logger.log(string: "Storing VaccineCard records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.vaccineCardArray)
         StorageService.shared.storeVaccineCard(from: vaccineCard, for: patient, manuallyAdded: true, completion: completion)
     }
@@ -111,6 +113,7 @@ struct VaccineCardService {
                        for patient: Patient,
                        completion: @escaping (VaccineCard?)->Void
     ) {
+        Logger.log(string: "Storing VaccineCard records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.vaccineCardArray)
         StorageService.shared.storeVaccineCard(from: VaccineCards, for: patient, manuallyAdded: false, completion: completion)
     }
@@ -139,6 +142,7 @@ extension VaccineCardService {
             
             let requestModel = NetworkRequest<DefaultParams, VaccineCardsResponse>(url: endpoints.vaccineCard(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
+                Logger.log(string: "Network VaccineCard Result received", type: .Network)
                 if (result?.resourcePayload) != nil {
                     // return result
                     return completion(result)
@@ -181,6 +185,7 @@ extension VaccineCardService {
             let requestModel = NetworkRequest<HDIDParams, VaccineCardsResponse>(url: endpoints.vaccineCard(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             
             { result in
+                Logger.log(string: "Network VaccineCard Result received", type: .Network)
                 if (result?.resourcePayload) != nil {
                     // return result
                     return completion(result)
@@ -194,7 +199,7 @@ extension VaccineCardService {
                 }
                 
             }
-            
+            Logger.log(string: "Network VaccineCard initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

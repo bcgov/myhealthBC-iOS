@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Welcome
 struct AuthenticatedHealthVisitsResponseObject: BaseGatewayResponse, Codable {
     let resourcePayload: [HealthVisit]?
-    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var totalResultCount, pageIndex, pageSize: Int?
     var resultError: ResultError?
     
     // MARK: - ResourcePayload

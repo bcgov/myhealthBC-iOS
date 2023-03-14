@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var loadingViewHack: UIView?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
         UpdateServiceStorage.setOrResetstoredAppVersion()
         MigrationService().removeExistingDBIfNeeded()
         CoreDataProvider.shared.loadManagedContext { context in

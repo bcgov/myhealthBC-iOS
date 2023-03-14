@@ -21,15 +21,18 @@ struct HealthVisitsService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([HealthVisit])->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.healthVisit) {return completion([])}
-        
+        Logger.log(string: "Fetching HealthVisit records for \(patient.name)", type: .Network)
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()
                 return completion([])
             }
-            store(healthVisits: response, for: patient, completion: completion)
-            network.removeLoader()
+            store(healthVisits: response, for: patient) { stored in
+                network.removeLoader()
+                return completion(stored)
+            }
+            
         }
     }
     
@@ -38,6 +41,7 @@ struct HealthVisitsService {
                        for patient: Patient,
                        completion: @escaping ([HealthVisit])->Void
     ) {
+        Logger.log(string: "Storing HealthVisit records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.healthVisitsArray)
         StorageService.shared.storeHealthVisits(patient: patient, objects: response, authenticated: patient.authenticated, completion: {result in
             return completion(result)
@@ -75,6 +79,7 @@ extension HealthVisitsService {
                                                                                                      encoder: .urlEncoder,
                                                                                                      headers: headers)
             { result in
+                Logger.log(string: "Network HealthVisits Result received", type: .Network)
                 if let visits = result?.resourcePayload {
                     // return result
                     return completion(visits)
@@ -88,7 +93,7 @@ extension HealthVisitsService {
                 }
                 
             }
-            
+            Logger.log(string: "Network HealthVisits initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

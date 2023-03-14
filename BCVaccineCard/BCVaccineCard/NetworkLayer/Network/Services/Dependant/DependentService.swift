@@ -21,6 +21,7 @@ struct DependentService {
   
     public func fetchDependents(for patient: Patient, completion: @escaping([Dependent]) -> Void) {
         network.addLoader(message: .FetchingRecords)
+        Logger.log(string: "fetching dependents", type: .Network)
         fetchDependentNetworkRequest { dependentResponse in
             guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload else {
                 network.removeLoader()
@@ -28,8 +29,10 @@ struct DependentService {
             }
             network.removeLoader()
             StorageService.shared.deleteDependents(for: patient)
+            Logger.log(string: "Storing dependents", type: .Network)
             StorageService.shared.store(dependents: payload, for: patient, completion: { result in
                 // Fetch vaccine cards for dependents - Always needed after fetching patients
+                Logger.log(string: "fetching dependents vaccine cards", type: .Network)
                 VaccineCardService(network: network, authManager: authManager, configService: configService).fetchAndStoreForDependents(of: patient, completion: { _ in
                     network.removeLoader()
                     completion(result)
@@ -77,7 +80,6 @@ struct DependentService {
             guard let dependentResponse = dependentResponse,
                   let payload = dependentResponse.resourcePayload
             else {
-                network.removeLoader()
                 return completion(nil)
             }
             

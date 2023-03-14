@@ -12,7 +12,6 @@ struct AuthenticatedClinicalDocumentResponseObject: BaseGatewayResponse, Codable
     var totalResultCount: Int?
     var pageIndex: Int?
     var pageSize: Int?
-    var resultStatus: Int?
     var resultError: ResultError?
     
     struct ClinicalDocument: Codable {

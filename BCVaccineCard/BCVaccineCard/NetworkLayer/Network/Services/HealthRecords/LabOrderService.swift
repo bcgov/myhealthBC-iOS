@@ -20,6 +20,7 @@ struct LabOrderService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([LaboratoryOrder])->Void) {
+        Logger.log(string: "Fetching LabOrder records for \(patient.name)", type: .Network)
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
@@ -38,6 +39,7 @@ struct LabOrderService {
                        for patient: Patient,
                        completion: @escaping ([LaboratoryOrder])->Void
     ) {
+        Logger.log(string: "Storing LabOrder records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.labOrdersArray)
         let stored = StorageService.shared.storeLaboratoryOrders(patient: patient, gateWayResponse: response)
         return completion(stored)
@@ -77,6 +79,7 @@ extension LabOrderService {
                                                                              encoder: .urlEncoder,
                                                                              headers: headers)
             { result in
+                Logger.log(string: "Network LabOrder Result received", type: .Network)
                 if (result?.resourcePayload) != nil {
                     // return result
                     return completion(result)
@@ -90,6 +93,7 @@ extension LabOrderService {
                 }
                 
             }
+            Logger.log(string: "Network LabOrder initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

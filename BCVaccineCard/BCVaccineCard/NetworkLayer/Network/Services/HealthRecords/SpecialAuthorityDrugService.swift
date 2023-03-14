@@ -21,15 +21,17 @@ struct SpecialAuthorityDrugService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([SpecialAuthorityDrug])->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.specialAuthorityDrug) {return completion([])}
-        
+        Logger.log(string: "Fetching SpecialAuthorityDrug records for \(patient.name)", type: .Network)
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()
                 return completion([])
             }
-            store(medications: response, for: patient, completion: completion)
-            network.removeLoader()
+            store(medications: response, for: patient){ stored in
+                network.removeLoader()
+                return completion(stored)
+            }
         }
     }
     
@@ -38,6 +40,7 @@ struct SpecialAuthorityDrugService {
                        for patient: Patient,
                        completion: @escaping ([SpecialAuthorityDrug])->Void
     ) {
+        Logger.log(string: "Storing SpecialAuthorityDrug records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.specialAuthorityDrugsArray)
         StorageService.shared.storeSpecialAuthorityMedications(patient: patient, objects: response, authenticated: patient.authenticated, completion: { result in
             return completion(result)
@@ -73,6 +76,7 @@ extension SpecialAuthorityDrugService {
             let requestModel = NetworkRequest<HDIDParams, AuthenticatedSpecialAuthorityDrugsResponseModel>(url: endpoints.medicationStatement(base: baseURL, hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             
             { result in
+                Logger.log(string: "Network SpecialAuthorityDrug Result received", type: .Network)
                 if let meds = result?.resourcePayload {
                     // return result
                     return completion(meds)
@@ -86,7 +90,7 @@ extension SpecialAuthorityDrugService {
                 }
                 
             }
-            
+            Logger.log(string: "Network SpecialAuthorityDrug initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

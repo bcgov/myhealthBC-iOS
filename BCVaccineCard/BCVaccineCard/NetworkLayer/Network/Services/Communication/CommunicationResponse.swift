@@ -13,7 +13,6 @@ struct CommunicationResponse: Codable {
     let resourcePayload: CommunicationResponseResourcePayload?
     let totalResultCount: Int
     let pageIndex, pageSize: JSONNull?
-    let resultStatus: Int
     let resultError: JSONNull?
 }
 

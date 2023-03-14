@@ -18,12 +18,14 @@ struct HealthRecordsService {
     }
     
     public func fetchAndStore(for patient: Patient, protectiveWord: String?, types: [StorageService.healthRecordType]? = StorageService.healthRecordType.allCases, completion: @escaping ([HealthRecord])->Void) {
+        
         let dispatchGroup = DispatchGroup()
         var records: [HealthRecord] = []
         
         network.addLoader(message: .FetchingRecords)
-        StorageService.shared.deleteHealthRecords(for: patient, types: nil)
-        
+        // TODO: Verify each service deletes its record type before storing so this is not needd
+//        StorageService.shared.deleteHealthRecords(for: patient, types: nil)
+        Logger.log(string: "fetching patient records for \(patient.name)", type: .Network)
         let typesToFetch = types ?? StorageService.healthRecordType.allCases
         for recordType in typesToFetch {
             dispatchGroup.enter()
@@ -99,6 +101,7 @@ struct HealthRecordsService {
             }
         }
         dispatchGroup.notify(queue: .main) {
+            Logger.log(string: "Fetched patient records for \(patient.name)", type: .Network)
             network.removeLoader()
             return completion(records)
         }

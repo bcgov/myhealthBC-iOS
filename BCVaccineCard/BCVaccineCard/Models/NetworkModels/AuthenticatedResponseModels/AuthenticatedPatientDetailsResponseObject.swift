@@ -10,26 +10,20 @@ import Foundation
 // MARK: - AuthenticatedPatientDetailsResponseObject
 struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
     let resourcePayload: ResourcePayload?
-    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var totalResultCount, pageIndex, pageSize: Int?
     var resultError: ResultError?
     
     // MARK: - ResourcePayload
     struct ResourcePayload: Codable {
         let hdid, personalhealthnumber, firstname, lastname: String?
         let birthdate, gender: String?
-        let physicalAddress: Address?
-        let postalAddress: Address?
-        let responseCode: String? // Not adding this to core data yet
-        // Birthday format: "1967-06-02T00:00:00"
+        let physicalAddress, postalAddress: Address?
+        let responseCode: String?
     }
     
     struct Address: Codable {
         let streetLines: [String]?
-        let city: String?
-        let state: String?
-        let postalCode: String?
-        let country: String?
-        
+        let city, state, postalCode, country: String?
         var getAddressString: String? {
             var street = ""
             if let streetLines = streetLines, let first = streetLines.first, first.count > 0 {
@@ -84,7 +78,7 @@ struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
 
 struct AuthenticatedValidAgeCheck: Codable {
     let resourcePayload: Bool?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    let totalResultCount, pageIndex, pageSize: Int?
     let resultError: ResultError?
 }
 

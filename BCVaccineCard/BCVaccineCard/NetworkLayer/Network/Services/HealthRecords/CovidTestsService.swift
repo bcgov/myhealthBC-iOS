@@ -22,6 +22,7 @@ struct CovidTestsService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([CovidLabTestResult])->Void) {
         network.addLoader(message: .FetchingRecords)
+        Logger.log(string: "Fetching CovidTests records for \(patient.name)", type: .Network)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()
@@ -40,7 +41,7 @@ struct CovidTestsService {
                        for patient: Patient,
                        completion: @escaping ([CovidLabTestResult])->Void
     ) {
-        
+        Logger.log(string: "Storing CovidTests records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.testResultArray)
         let stored = StorageService.shared.storeCovidTestResults(patient: patient, in: respose, authenticated: false, manuallyAdded: false, pdf: nil)
         return completion(stored)
@@ -76,6 +77,7 @@ extension CovidTestsService {
                                                                               encoder: .urlEncoder,
                                                                               headers: headers)
             { result in
+                Logger.log(string: "Network CovidTests Result received", type: .Network)
                 if (result?.resourcePayload) != nil {
                     // return result
                     return completion(result)
@@ -89,6 +91,7 @@ extension CovidTestsService {
                 }
                 
             }
+            Logger.log(string: "Network CovidTests initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

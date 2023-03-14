@@ -243,6 +243,26 @@ extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
 // MARK: Navigation logic for each type here
 extension HomeScreenViewController {
     private func goToTabForType(type: HomeScreenCellType) {
+        
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        switch type {
+        case .Records:
+            if authManager.isAuthenticated {
+                show(tab: .AuthenticatedRecords)
+            } else {
+                showLogin(initialView: .AuthInfo) {[weak self] status in
+                    guard status == .Completed else {return}
+                    self?.show(tab: .AuthenticatedRecords)
+                }
+            }
+        case .Proofs:
+            show(tab: .Proofs)
+        case .Resources:
+            show(route: .Resource, withNavigation: true)
+        case .Recommendations:
+            show(route: .Recommendations, withNavigation: true)
+        }
+        
         // TODO: ROUTE REFACTOR -
 //        guard let tabBarController = self.tabBarController as? TabBarController else { return }
 //        UIImpactFeedbackGenerator(style: .light).impactOccurred()

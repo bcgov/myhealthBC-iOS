@@ -10,7 +10,7 @@ import Foundation
 // MARK: - DependentsResponse
 struct DependentsResponse: Codable {
     let resourcePayload: [RemoteDependent]?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    let totalResultCount, pageIndex, pageSize: Int?
     let resultError: ResultError?
 }
 
@@ -28,7 +28,7 @@ struct DependentInformation: Codable {
 // MARK: - AddDependentResponse
 struct AddDependentResponse: Codable {
     let resourcePayload: RemoteDependent?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    let totalResultCount, pageIndex, pageSize: Int?
     let resultError: ResultError?
 }
 

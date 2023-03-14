@@ -37,10 +37,6 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
 //        return TabBarVCs.init(rawValue: (self.tabBarController as? AppTabBarController)?.selectedIndex ?? 0) ?? .home
 //    }
     
-    var getTabBarController: AppTabBarController? {
-        return self.tabBarController as? AppTabBarController
-    }
-    
 //    var getRecordFlowType: RecordsFlowVCs? {
 //        return nil
 //    }
@@ -70,15 +66,7 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     if !Defaults.hasSeenFirstLogin {
                         Defaults.hasSeenFirstLogin = true
-                        // TODO: ROUTE REFACTOR -
-                        let loginVM = AuthenticationViewController.ViewModel(
-                            initialView: .Landing,
-                            configService: MobileConfigService(network: AFNetwork()),
-                            authManager: AuthManager(),
-                            completion: {_ in 
-                                
-                            })
-                        self.showLogin(viewModel: loginVM)
+                        self.showLogin(initialView: .Landing, completion: {_ in})
                     }
                 }
             })
@@ -152,6 +140,7 @@ extension BaseViewController {
     }
     
     private func goToSettingsScreen() {
+        show(route: .Settings, withNavigation: true)
         // TODO: ROUTE REFACTOR -
 //        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
 //        self.navigationController?.pushViewController(vc, animated: true)

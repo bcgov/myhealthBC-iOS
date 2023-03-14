@@ -17,20 +17,24 @@ class MobileConfigService {
     }
     
     func fetchConfig(completion: @escaping (MobileConfigurationResponseObject?)->Void) {
+        if let cache = MobileConfigStorage.cachedConfig {
+            let timeDiff = Date().timeIntervalSince(cache.datetime)
+            if timeDiff <= 5 {
+                Logger.log(string: "MobileConfigService returning cached", type: .Network)
+                return completion(cache.config)
+            }
+            Logger.log(string: "MobileConfigService timediff = \(timeDiff)", type: .Network)
+        }
+        
         if !callers.isEmpty {
+            Logger.log(string: "MobileConfigService queuing", type: .Network)
             callers.append(completion)
             return
         }
         callers.append(completion)
-        if let cache = MobileConfigStorage.cachedConfig {
-            let timeDiff = Date().timeIntervalSince(cache.datetime)
-            if timeDiff <= 5 {
-                return completion(cache.config)
-            }
-            print(timeDiff)
-        }
         
         guard NetworkConnection.shared.hasConnection else {
+            Logger.log(string: "MobileConfigService Offline", type: .Network)
             return completion(MobileConfigStorage.offlineConfig)
         }
         let request = NetworkRequest<DefaultParams, MobileConfigurationResponseObject>(
@@ -39,6 +43,7 @@ class MobileConfigService {
             parameters: nil,
             headers: nil,
             completion: { responseData in
+                Logger.log(string: "MobileConfigService response received", type: .Network)
                 if let response = responseData {
                     MobileConfigStorage.store(config: response)
                 }
@@ -47,8 +52,10 @@ class MobileConfigService {
                         callback(responseData)
                     }
                 }
+                Logger.log(string: "MobileConfigService responded to callers", type: .Network)
                 return
             })
+        Logger.log(string: "MobileConfigService Calling", type: .Network)
         network.request(with: request)
     }
 }

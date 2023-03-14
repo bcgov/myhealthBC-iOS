@@ -21,6 +21,7 @@ struct MedicationService {
     
     public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([Perscription])->Void) {
         network.addLoader(message: .FetchingRecords)
+        Logger.log(string: "Fetching Medication records for \(patient.name)", type: .Network)
         // TODO: Handle Protected Fetch
         fetch(for: patient, protectiveWord: protectiveWord) { result in
             guard let response = result else {
@@ -40,6 +41,7 @@ struct MedicationService {
                        protected: Bool,
                        completion: @escaping ([Perscription])->Void
     ) {
+        Logger.log(string: "Storing Medication records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.prescriptionArray)
         StorageService.shared.storePrescriptions(in: response, patient: patient, initialProtectedMedFetch: protected, completion: completion)
     }
@@ -78,6 +80,7 @@ extension MedicationService {
                                                                               encoder: .urlEncoder,
                                                                               headers: headers)
             { result in
+                Logger.log(string: "Network Medication Result received", type: .Network)
                 if (result?.resourcePayload) != nil {
                     // return result
                     return completion(result)
@@ -91,6 +94,7 @@ extension MedicationService {
                 }
                 
             }
+            Logger.log(string: "Network Medication initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

@@ -74,17 +74,12 @@ extension HealthRecordsViewController: AppStyleButtonDelegate {
     }
     
     private func performBCSCLogin() {
-        // TODO: ROUTE REFACTOR -
-        let authVM = AuthenticationViewController.ViewModel(
-            initialView: .Landing,
-            configService: MobileConfigService(network: AFNetwork()),
-            authManager: AuthManager()
-        ) {[weak self] authenticationStatus in
+        showLogin(initialView: .Landing, completion: {[weak self] authenticationStatus in
             guard let `self` = self else {return}
             guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
             self.adjustTabsAfterAuth(authenticated: authenticationStatus == .Completed)
-        }
-        showLogin(viewModel: authVM)
+        })
+        // TODO: ROUTE REFACTOR -
 //        self.showLogin(initialView: .Landing, sourceVC: .HealthRecordsVC) { authenticationStatus in
 //            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
 //            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)

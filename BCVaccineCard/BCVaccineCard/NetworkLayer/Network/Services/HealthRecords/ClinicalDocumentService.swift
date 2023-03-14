@@ -21,6 +21,7 @@ struct ClinicalDocumentService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([ClinicalDocument])->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.clinicalDocument) {return completion([])}
+        Logger.log(string: "Fetching ClinicalDocument records for \(patient.name)", type: .Network)
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
@@ -40,6 +41,7 @@ struct ClinicalDocumentService {
                        for patient: Patient,
                        completion: @escaping ([ClinicalDocument])->Void
     ) {
+        Logger.log(string: "Storing ClinicalDocument records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.clinicalDocumentsArray)
         let stored = StorageService.shared.storeClinicalDocuments(patient: patient, objects: response, authenticated: true)
         return completion(stored)
@@ -78,6 +80,7 @@ extension ClinicalDocumentService {
                                                                                                        encoder: .urlEncoder,
                                                                                                        headers: headers)
             { result in
+                Logger.log(string: "Network ClinicalDocument Result received", type: .Network)
                 if let docs = result?.resourcePayload {
                     // return result
                     return completion(docs)
@@ -91,7 +94,7 @@ extension ClinicalDocumentService {
                 }
                 
             }
-            
+            Logger.log(string: "Network ClinicalDocument initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

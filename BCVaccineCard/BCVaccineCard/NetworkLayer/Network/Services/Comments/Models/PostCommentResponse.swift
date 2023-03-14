@@ -10,7 +10,6 @@ import Foundation
 struct PostCommentResponse: Codable {
     let resourcePayload: PostCommentResponsePayload?
     let totalResultCount, pageIndex, pageSize: JSONNull?
-    let resultStatus: Int?
     let resultError: ResultError?
 }
 

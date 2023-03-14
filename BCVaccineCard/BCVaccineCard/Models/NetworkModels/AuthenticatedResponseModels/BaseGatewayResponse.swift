@@ -11,7 +11,7 @@ protocol BaseGatewayResponse: KeyValueCoding {
     var totalResultCount: Int? { get set }
     var pageIndex: Int? { get set }
     var pageSize: Int? { get set }
-    var resultStatus: Int? { get set }
+//    var resultStatus: Int? { get set }
     var resultError: ResultError? { get set }
 }
 

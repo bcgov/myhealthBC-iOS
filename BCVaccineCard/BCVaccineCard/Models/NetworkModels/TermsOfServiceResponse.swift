@@ -10,7 +10,7 @@ import Foundation
 // MARK: - GatewayVaccineCardResponse
 struct TermsOfServiceResponse: Codable {
     let resourcePayload: ResourcePayload?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    let totalResultCount, pageIndex, pageSize: Int?
     let resultError: ResultError?
     
     // MARK: - ResourcePayload

@@ -22,6 +22,7 @@ struct ImmnunizationsService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([Immunization])->Void) {
+        Logger.log(string: "Fetching Immnunization records for \(patient.name)", type: .Network)
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient, currentAttempt: 0) { result in
             guard let response = result else {
@@ -41,15 +42,18 @@ struct ImmnunizationsService {
                        completion: @escaping ([Immunization])->Void
     ) {
         guard let payload = response.resourcePayload else { return completion([]) }
+        Logger.log(string: "Storing Immnunization records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.immunizationArray)
         StorageService.shared.deleteAllRecords(in: patient.recommandationsArray)
         
         if let recomandations = payload.recommendations {
             StorageService.shared.storeRecommendations(patient: patient, objects: recomandations, authenticated: patient.authenticated, completion: { results in
+                Logger.log(string: "Stored Immnunization Reccomandation records for \(patient.name)", type: .Network)
                 let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
                 return completion(stored)
             })
         } else {
+            Logger.log(string: "Stored Immnunization records for \(patient.name)", type: .Network)
             let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
             return completion(stored)
         }
@@ -96,6 +100,7 @@ extension ImmnunizationsService {
                                                                                  headers: headers)
             { result in
                 
+                Logger.log(string: "Network Immnunization Result received", type: .Network)
                 let shouldRetry = result?.resourcePayload?.loadState?.refreshInProgress
                 if  shouldRetry == true {
                     DispatchQueue.main.asyncAfter(deadline: .now() + Double(retryIn)) {
@@ -116,6 +121,7 @@ extension ImmnunizationsService {
                 
             }
             
+            Logger.log(string: "Network Immnunization initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

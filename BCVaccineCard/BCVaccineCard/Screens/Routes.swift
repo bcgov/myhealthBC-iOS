@@ -10,7 +10,15 @@ import UIKit
 // MARK: Special Routing
 extension UIViewController {
     
-    func showLogin(viewModel: AuthenticationViewController.ViewModel) {
+    func showLogin(initialView: AuthenticationViewController.InitialView,
+                   completion: @escaping (AuthenticationViewController.AuthenticationStatus)->Void
+    ) {
+        let authSetvice = AppDelegate.sharedInstance?.authManager ?? AuthManager()
+        let ConfigService = AppDelegate.sharedInstance?.configService ?? MobileConfigService(network: AFNetwork())
+        let viewModel: AuthenticationViewController.ViewModel = AuthenticationViewController.ViewModel(initialView: initialView,
+                                                                                                       configService: ConfigService,
+                                                                                                       authManager: authSetvice,
+                                                                                                       completion: completion)
         guard let controller = createController(route: .Authentication, viewModel: viewModel) else {
             return
         }
@@ -144,6 +152,15 @@ extension UIViewController {
 
 // MARK: General Routing
 extension UIViewController {
+    
+    func show(tab: AppTabs) {
+        // TODO: Adjust if tabs need to be switched from VC whose parent is nav controller
+        guard let tabBar = self.tabBarController as? AppTabBarController else {
+            return
+        }
+        
+        tabBar.switchTo(tab: tab)
+    }
     
     func show(route: Route, withNavigation: Bool, viewModel: Any? = nil) {
         guard let controller = createController(route: route, viewModel: viewModel) else {

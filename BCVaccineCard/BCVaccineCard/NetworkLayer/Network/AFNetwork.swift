@@ -37,17 +37,18 @@ extension NetworkRequest {
 }
 
 
-class AFNetwork: Network {
-    
+struct AFNetwork: Network {
     private var requestAttempts: [URL: Int] = [URL: Int]()
     
     func request<Parameters: Encodable, T: Decodable>(with requestData: NetworkRequest<Parameters, T>) {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
-        let AFRequest = requestData.AFRequest
-        AFRequest.responseDecodable(of: T.self, decoder: decoder, completionHandler: {response in
-            return self.returnOrRetryIfneeded(with: requestData, response: response)
-        })
+        DispatchQueue.global(qos: .userInitiated).async {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
+            let AFRequest = requestData.AFRequest
+            AFRequest.responseDecodable(of: T.self, decoder: decoder, completionHandler: {response in
+                return self.returnOrRetryIfneeded(with: requestData, response: response)
+            })
+        }
     }
 }
 
@@ -65,7 +66,7 @@ extension AFNetwork {
             return requestData.completion(value)
         }
         
-        // TODO: Use swiftJSON
+        // TODO: ROUTE REFACTOR: Use swiftJSON
 //        guard let payload = swift_value(of: &gateWayResponse, key: "resourcePayload"),
 //              payload is BaseRetryableGatewayResponse,
 //              let payLoadStruct = payload as? BaseRetryableGatewayResponse else

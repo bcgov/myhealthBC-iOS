@@ -31,6 +31,16 @@ class AppTabBarController: UITabBarController {
     private var configService: MobileConfigService?
     private var patient: Patient?
     
+    private var authenticatedTabs: [AppTabs] {
+        return [.Home, .AuthenticatedRecords, .Proofs, .Dependents]
+    }
+    
+    private var unAuthenticatedTabs: [AppTabs] {
+        return [.Home, .UnAuthenticatedRecords, .Proofs, .Dependents]
+    } 
+    
+    /// Currently available tabs
+    var currentTabs: [AppTabs] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,18 +90,12 @@ class AppTabBarController: UITabBarController {
     // MARK: Set and create tabs
     private func setTabs() {
         if AuthManager().isAuthenticated {
-            self.viewControllers = setViewControllers(tabs: authenticatedTabs())
+            self.currentTabs = authenticatedTabs
+            self.viewControllers = setViewControllers(tabs: authenticatedTabs)
         } else {
-            self.viewControllers = setViewControllers(tabs: unAuthenticatedTabs())
+            self.currentTabs = unAuthenticatedTabs
+            self.viewControllers = setViewControllers(tabs: unAuthenticatedTabs)
         }
-    }
-    
-    func authenticatedTabs() -> [AppTabs] {
-        return [.Home, .AuthenticatedRecords, .Proofs, .Dependents]
-    }
-    
-    func unAuthenticatedTabs() -> [AppTabs] {
-        return [.Home, .UnAuthenticatedRecords, .Proofs, .Dependents]
     }
     
     private func setViewControllers(tabs: [AppTabs]) -> [UIViewController] {
@@ -134,9 +138,9 @@ extension AppTabBarController: TabDelegate {
     func switchTo(tab: AppTabs) {
         let availableTabs: [AppTabs]
         if AuthManager().isAuthenticated {
-            availableTabs = authenticatedTabs()
+            availableTabs = authenticatedTabs
         } else {
-            availableTabs = unAuthenticatedTabs()
+            availableTabs = unAuthenticatedTabs
         }
         self.selectedIndex = availableTabs.firstIndex(where: {$0 == tab}) ?? 0
     }
