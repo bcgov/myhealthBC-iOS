@@ -11,7 +11,8 @@ import UIKit
 import BCVaccineValidator
 import SwiftUI
 
-// TODO: ROUTE REFACTOR -
+// TODO: ROUTE REFACTOR - QR Retreival methos
+
 class QRRetrievalMethodViewController: BaseViewController {
     
     class func construct() -> QRRetrievalMethodViewController {
@@ -26,7 +27,7 @@ class QRRetrievalMethodViewController: BaseViewController {
 //        case text(text: String), image(image: UIImage), method(type: TableViewButtonView.ButtonType, style: TableViewButtonView.ButtonStyle)
 //    }
 //
-//    @IBOutlet weak private var tableView: UITableView!
+    @IBOutlet weak private var tableView: UITableView!
 //    private var dataSource: [CellType] = []
 ////    private var backScreenString: String!
 //

@@ -107,9 +107,8 @@ struct HealthRecordsService {
         }
     }
     
-    public func fetchAndStoreHealthRecords(for dependent: Dependent, completion: @escaping ([HealthRecord])->Void) {
+    public func fetchAndStore(for dependent: Dependent, completion: @escaping ([HealthRecord])->Void) {
         guard let patient = dependent.info else {return completion([])}
-        
         fetchAndStore(for: patient, protectiveWord: nil, types: [.VaccineCard, .CovidTest, .Immunization, .ClinicalDocument, .LaboratoryOrder], completion: completion)
     }
 }

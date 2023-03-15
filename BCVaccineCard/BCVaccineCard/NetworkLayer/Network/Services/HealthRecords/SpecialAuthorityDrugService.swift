@@ -54,7 +54,7 @@ extension SpecialAuthorityDrugService {
     private func fetch(for patient: Patient, completion: @escaping(_ response: [SpecialAuthorityDrugResponse]?) -> Void) {
         
         guard let token = authManager.authToken,
-              let hdid = patient .hdid,
+              let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
         
@@ -73,7 +73,7 @@ extension SpecialAuthorityDrugService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, AuthenticatedSpecialAuthorityDrugsResponseModel>(url: endpoints.medicationStatement(base: baseURL, hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedSpecialAuthorityDrugsResponseModel>(url: endpoints.medicationRequest(base: baseURL, hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             
             { result in
                 Logger.log(string: "Network SpecialAuthorityDrug Result received", type: .Network)
@@ -95,4 +95,3 @@ extension SpecialAuthorityDrugService {
         }
     }
 }
-

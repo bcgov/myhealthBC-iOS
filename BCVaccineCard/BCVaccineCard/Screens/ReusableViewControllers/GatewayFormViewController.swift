@@ -8,7 +8,7 @@ import UIKit
 import BCVaccineValidator
 
 
-// TODO: ROUTE REFACTOR -
+// TODO: ROUTE REFACTOR - FORMS
 
 enum GatewayFormSource: Equatable {
     case healthPassHomeScreen
@@ -154,7 +154,7 @@ class GatewayFormViewController: BaseViewController {
     
     class func constructGatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType, currentProgress: GatewayInProgressDetails? = nil) -> GatewayFormViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
-            // TODO: ROUTE REFACTOR -
+            // TODO: ROUTE REFACTOR - FORMS
 //            vc.rememberDetails = rememberDetails
 //            vc.fetchType = fetchType
 //            vc.navTitle = fetchType.getNavTitle
@@ -169,7 +169,7 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
 }
-// TODO: ROUTE REFACTOR -
+// TODO: ROUTE REFACTOR - FORMS
 //    // Form setup
 //    private var dataSource: [FormData] = []
 //    private var fetchType: GatewayFormViewControllerFetchType!

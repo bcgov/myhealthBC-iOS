@@ -61,7 +61,7 @@ enum AppTabs: Int, CaseIterable {
                               baseViewController: HealthRecordsViewController.construct())
             
         case .AuthenticatedRecords:
-            let vm = UsersListOfRecordsViewController.ViewModel(patient: patient)
+            let vm = UsersListOfRecordsViewController.ViewModel(patient: patient, authenticated: patient?.authenticated ?? false)
             return Properties(title: "Records",
                               selectedTabBarImage: UIImage(named: "records-tab-selected")!,
                               unselectedTabBarImage: UIImage(named: "records-tab-unselected")!,

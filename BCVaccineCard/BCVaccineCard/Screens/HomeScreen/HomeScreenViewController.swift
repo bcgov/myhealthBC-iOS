@@ -262,38 +262,6 @@ extension HomeScreenViewController {
         case .Recommendations:
             show(route: .Recommendations, withNavigation: true)
         }
-        
-        // TODO: ROUTE REFACTOR -
-//        guard let tabBarController = self.tabBarController as? TabBarController else { return }
-//        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-//        switch type {
-//        case .Records:
-//            if !authManager.isAuthenticated {
-//                handleGetStartedScenario(tabBarController: tabBarController)
-//            }
-//            tabBarController.selectedIndex = type.getTabIndex
-//        case .Proofs:
-//            tabBarController.selectedIndex = type.getTabIndex
-//        case .Resources:
-//
-//            let vc = ResourceViewController.constructResourceViewController()
-//            self.navigationController?.pushViewController(vc, animated: true)
-//        case .Recommendations:
-//            let vc = RecommendationsViewController.constructRecommendationsViewController()
-//            self.navigationController?.pushViewController(vc, animated: true)
-//            vc.setup()
-//        }
     }
-    
-    // TODO: ROUTE REFACTOR -
-//    private func handleGetStartedScenario(tabBarController: TabBarController) {
-//        self.showLogin(initialView: .Landing, sourceVC: .HomeScreen, presentingViewControllerReference: self) { authenticationStatus in
-//            guard authenticationStatus != .Cancelled else { return }
-//            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HomeScreen, authenticationStatus: authenticationStatus))
-//            self.routerWorker?.routingAction(scenario: scenario, goToTab: .records, delayInSeconds: 0.5)
-//        }
-//    }
 }
 

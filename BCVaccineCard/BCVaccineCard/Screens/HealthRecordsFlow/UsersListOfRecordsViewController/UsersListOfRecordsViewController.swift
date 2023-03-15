@@ -14,12 +14,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     // TODO: Replace params with Patient after storage refactor
     class func construct(viewModel: ViewModel) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
-            vc.patient = viewModel.patient
-            vc.authenticated = viewModel.authenticated
-            vc.navStyle = viewModel.navStyle
-            vc.hasUpdatedUnauthPendingTest = viewModel.hasUpdatedUnauthPendingTest
-            vc.dataSource = viewModel.dataSource
-           
+            vc.viewModel = viewModel
             return vc
         }
         return UsersListOfRecordsViewController()
@@ -37,10 +32,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var parentContainerStackView: UIStackView!
     
     private var refreshDebounceTimer: Timer? = nil
-    private var patient: Patient?
-    private var authenticated: Bool = true
-    private var navStyle: NavStyle = .singleUser
-    private var hasUpdatedUnauthPendingTest = true
+    
+    private var viewModel: ViewModel?
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     private var hiddenRecords: [HealthRecordsDetailDataSource] = []
@@ -55,19 +48,19 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var selectedCellIndexPath: IndexPath?
     
     private var isDependent: Bool {
-        return patient?.isDependent() ?? false
+        return viewModel?.patient?.isDependent() ?? false
     }
     
     private var currentFilter: RecordsFilter? = nil {
         didSet {
             if let current = currentFilter, current.exists {
                 showSelectedFilters()
-                if let patient = patient, let patientName = patient.name {
+                if let patient = viewModel?.patient, let patientName = patient.name {
                     UserFilters.save(filter: current, for: patientName)
                 }
             } else {
                 hideSelectedFilters()
-                if let patient = patient, let patientName = patient.name {
+                if let patient = viewModel?.patient, let patientName = patient.name {
                     UserFilters.removeFilterFor(name: patientName)
                 }
             }
@@ -78,7 +71,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         didSet {
             self.tableView.setEditing(inEditMode, animated: false)
             self.tableView.reloadData()
-            navSetup(style: navStyle, authenticated: self.authenticated)
+            navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
             self.tableView.layoutSubviews()
         }
     }
@@ -86,7 +79,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()
-        if let patient = patient, let patientName = patient.name, let existingFilter = UserFilters.filterFor(name: patientName) {
+        if let patient = viewModel?.patient, let patientName = patient.name, let existingFilter = UserFilters.filterFor(name: patientName) {
             currentFilter = existingFilter
         }
         // When authentication is expired, reset filters
@@ -133,9 +126,9 @@ class UsersListOfRecordsViewController: BaseViewController {
     private func setup() {
 //        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
         self.parentContainerStackView.endLoadingIndicator()
-        let showLoadingTitle = (self.patient == nil && self.authenticated == true)
+        let showLoadingTitle = (viewModel?.patient == nil && viewModel?.authenticated == true)
         updatePatientIfNecessary()
-        navSetup(style: navStyle, authenticated: self.authenticated)
+        navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
         showSelectedFilters()
         noRecordsFoundSubTitle.font = UIFont.bcSansRegularWithSize(size: 13)
         noRecordsFoundTitle.font = UIFont.bcSansBoldWithSize(size: 20)
@@ -146,8 +139,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func updatePatientIfNecessary() {
-        if self.patient == nil {
-            self.patient = StorageService.shared.fetchAuthenticatedPatient()
+        if viewModel?.patient == nil {
+            viewModel?.patient = StorageService.shared.fetchAuthenticatedPatient()
         }
     }
     
@@ -189,7 +182,7 @@ extension UsersListOfRecordsViewController {
             buttons.append(editModeNavButton)
         }
         
-        if style == .singleUser && patient?.dependencyInfo == nil {
+        if style == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             self.navigationItem.setHidesBackButton(true, animated: false)
             let settingsButton = NavButton(title: nil,
                                            image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
@@ -203,14 +196,14 @@ extension UsersListOfRecordsViewController {
         }
         
         
-        var name = self.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
+        var name = viewModel?.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
         if name.count >= 20 {
-            name = self.patient?.name?.firstName?.nameCase() ?? defaultFirstNameIfFailure?.nameCase() ?? ""
+            name = viewModel?.patient?.name?.firstName?.nameCase() ?? defaultFirstNameIfFailure?.nameCase() ?? ""
             if name.count >= 20 {
                 name = String(name.prefix(20))
             }
         }
-        let showLoadingTitle = (self.patient == nil && self.authenticated == true)
+        let showLoadingTitle = (viewModel?.patient == nil && viewModel?.authenticated == true)
         if showLoadingTitle {
             name = "Fetching User"
         }
@@ -218,7 +211,7 @@ extension UsersListOfRecordsViewController {
                                                leftNavButton: nil,
                                                rightNavButtons: buttons,
                                                navStyle: .small,
-                                               navTitleSmallAlignment: style == .singleUser && self.patient?.dependencyInfo == nil ? .Left : .Center,
+                                               navTitleSmallAlignment: style == .singleUser && viewModel?.patient?.dependencyInfo == nil ? .Left : .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
@@ -229,17 +222,15 @@ extension UsersListOfRecordsViewController {
     }
     
     private func goToSettingsScreen() {
-        // TODO: ROUTE REFACTOR -
-//        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-//        self.navigationController?.pushViewController(vc, animated: true)
+        show(route: .Settings, withNavigation: true)
     }
     
     @objc func dependentSetting() {
-        // TODO: ROUTE REFACTOR -
-//        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-//        guard let patient = patient, let dependent = patient.dependencyInfo else {return}
-//        let vc = DependentInfoViewController.construct(dependent: dependent)
-//        self.navigationController?.pushViewController(vc, animated: true)
+        guard let dependent = viewModel?.patient?.dependencyInfo else {
+            return
+        }
+        let vm = DependentInfoViewController.ViewModel(dependent: dependent)
+        show(route: .DependentInfo, withNavigation: true, viewModel: vm)
     }
     
     @objc private func doneButton() {
@@ -337,8 +328,8 @@ extension UsersListOfRecordsViewController {
     }
     
     private func fetchPatientRecords() -> [HealthRecordsDetailDataSource] {
-        guard let patient = self.patient else {return []}
-        let records = StorageService.shared.getHeathRecords()
+        guard let patient = viewModel?.patient else {return []}
+        let records = StorageService.shared.getRecords(for: patient)
         let patientRecords = records.detailDataSource(patient: patient)
         return patientRecords
     }
@@ -400,7 +391,7 @@ extension UsersListOfRecordsViewController {
             self.hiddenCellType = .loginToAccesshealthRecords(hiddenRecords: hiddenRecords.count)
         }
         self.setupTableView()
-        self.navSetup(style: navStyle, authenticated: self.authenticated)
+        self.navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
         
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
         self.tableView.reloadData()
@@ -460,7 +451,9 @@ extension UsersListOfRecordsViewController {
     
     // NOTE: No special routing required here on login, as the user should remain on the same screen
     private func performBCSCLogin() {
-        // TODO: ROUTE REFACTOR -
+        // TODO: ROUTE REFACTOR - CHECK
+        showLogin(initialView: .Auth) { _ in }
+        
 //        let vm = AuthenticationViewController.ViewModel(initialView: .Auth)
 //        self.showLogin(viewModel: vm) { [weak self] authenticationStatus in
 //            guard let `self` = self, authenticationStatus == .Completed else {return}
@@ -499,16 +492,16 @@ extension UsersListOfRecordsViewController {
         let userInfo = notification.userInfo as? [String: String]
         let firstName = userInfo?["firstName"]
         let fullName = userInfo?["fullName"]
-        guard self.patient == nil else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.patient = StorageService.shared.fetchAuthenticatedPatient()
-            self.navSetup(style: self.navStyle, authenticated: self.authenticated, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
+        guard viewModel?.patient == nil else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            self?.viewModel?.patient = StorageService.shared.fetchAuthenticatedPatient()
+            self?.navSetup(style: self?.viewModel?.navStyle ?? .singleUser, authenticated: self?.viewModel?.authenticated ??  false, defaultFirstNameIfFailure: firstName, defaultFullNameIfFailure: fullName)
         }
     }
 }
 
 // MARK: TableView setup
-extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
+extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
         tableView.register(UINib.init(nibName: UserRecordListTableViewCell.getName, bundle: .main), forCellReuseIdentifier: UserRecordListTableViewCell.getName)
         tableView.register(UINib.init(nibName: HiddenRecordsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HiddenRecordsTableViewCell.getName)
@@ -536,7 +529,6 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             return UITableViewCell()
         }
         cell.configure(record: dataSource[indexPath.row])
-        cell.delegate = self
         return cell
     }
     
@@ -581,132 +573,11 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         if self.hiddenCellType == .medicalRecords && indexPath.section == 0 { return }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
-        // TODO: ROUTE REFACTOR -
         let vm = HealthRecordDetailViewController.ViewModel(dataSource: ds,
                                                             authenticatedRecord: ds.isAuthenticated,
                                                             userNumberHealthRecords: dataSource.count,
-                                                            patient: patient)
-        show(route: .UsersListOfRecords, withNavigation: true, viewModel: vm)
-    }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        guard !dataSource.isEmpty || !inEditMode else { return .none }
-        if ableToDeleteRecord(at: indexPath.row) {
-            return .delete
-        } else {
-            return .none
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            self.deleteRecord(at: indexPath.row, reInitEditMode: true, manuallyAdded: true)
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return .delete
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        
-        guard orientation == .right, ableToDeleteRecord(at: indexPath.row) else {return nil}
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { [weak self] action, indexPath in
-            guard let `self` = self else {return}
-            self.deleteRecord(at: indexPath.row, reInitEditMode: false, manuallyAdded: true)
-        }
-        deleteAction.hidesWhenSelected = true
-        deleteAction.image = UIImage(named: "unlink")
-        deleteAction.backgroundColor = .white
-        deleteAction.textColor = Constants.UI.Theme.primaryColor
-        deleteAction.isAccessibilityElement = true
-        deleteAction.accessibilityLabel = AccessibilityLabels.UnlinkFunctionality.unlinkCard
-        deleteAction.accessibilityTraits = .button
-        return [deleteAction]
-    }
-    
-    private func ableToDeleteRecord(at index: Int) -> Bool {
-        // NOTE: Enable Delete Record
-        //        guard dataSource.indices.contains(index) else { return false }
-        //        let record = dataSource[index]
-        //        return !record.isAuthenticated
-        return false
-    }
-    
-    private func deleteRecord(at index: Int, reInitEditMode: Bool, manuallyAdded: Bool) {
-        guard dataSource.indices.contains(index) else {return}
-        let record = dataSource[index]
-        self.delete(record: record, manuallyAdded: manuallyAdded, completion: { [weak self] deleted in
-            guard let `self` = self else {return}
-            if deleted {
-                self.dataSource.remove(at: index)
-                if self.dataSource.isEmpty {
-                    self.inEditMode = false
-                    DispatchQueue.main.async {
-                        // TODO: ROUTE REFACTOR -
-//
-//                        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//                        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//                        let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-//                        self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                    }
-                } else {
-                    self.tableView.reloadData()
-                }
-            } else {
-                if reInitEditMode {
-                    self.tableView.setEditing(false, animated: true)
-                    self.tableView.setEditing(true, animated: true)
-                }
-            }
-        })
-    }
-    
-    private func delete(record: HealthRecordsDetailDataSource, manuallyAdded: Bool, completion: @escaping(_ deleted: Bool)-> Void) {
-        switch record.type {
-        case .covidImmunizationRecord(model: let model, immunizations: _):
-            alertConfirmation(title: .deleteRecord, message: .deleteCovidHealthRecord, confirmTitle: .delete, confirmStyle: .destructive) {
-                StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
-                if self.dataSource.count == 1, let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
-                    StorageService.shared.deletePatient(name: name, birthday: birthday)
-                }
-                DispatchQueue.main.async {
-                    // TODO: ROUTE REFACTOR -
-//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.healthPass], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                }
-                completion(true)
-            } onCancel: {
-                completion(false)
-            }
-        case .covidTestResultRecord:
-            guard let recordId = record.id else {return}
-            alertConfirmation(title: .deleteTestResult, message: .deleteTestResultMessage, confirmTitle: .delete, confirmStyle: .destructive) {
-                StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
-                if self.dataSource.count == 1, let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
-                    StorageService.shared.deletePatient(name: name, birthday: birthday)
-                }
-                completion(true)
-            } onCancel: {
-                completion(false)
-            }
-        case .medication:
-            return
-        case .laboratoryOrder:
-            return
-        case .immunization:
-            return
-        case .healthVisit:
-            return
-        case .specialAuthorityDrug:
-            return
-        case .hospitalVisit:
-            return
-        case .clinicalDocument:
-            return
-        }
+                                                            patient: viewModel?.patient)
+        show(route: .HealthRecordDetail, withNavigation: true, viewModel: vm)
     }
     
 }
@@ -752,7 +623,7 @@ extension UsersListOfRecordsViewController {
     }
     
     private func fetchProtectedRecords(protectiveWord: String) {
-        guard let patient = self.patient else {return}
+        guard let patient = viewModel?.patient else {return}
         MedicationService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records in
             print(records.count)
         }
@@ -784,11 +655,10 @@ extension UsersListOfRecordsViewController {
     }
 }
 
-// MARK: Auth fetch completed, reload data
+// MARK: Sync completed, reload data
 extension UsersListOfRecordsViewController {
     @objc private func authFetchComplete(_ notification: Notification) {
         adjustLoadingIndicator(show: false)
-        //        self.tableView.endLoadingIndicator()
         self.fetchDataSource(initialProtectedMedFetch: true)
         self.fetchDataSource(initialProtectedMedFetch: true)
     }

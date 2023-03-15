@@ -55,7 +55,7 @@ extension ClinicalDocumentService {
     private func fetch(for patient: Patient, completion: @escaping(_ response: [ClinicalDocumentResponse]?) -> Void) {
         
         guard let token = authManager.authToken,
-              let hdid = patient .hdid,
+              let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
         

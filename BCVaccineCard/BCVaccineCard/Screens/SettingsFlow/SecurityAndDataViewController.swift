@@ -110,11 +110,6 @@ class SecurityAndDataViewController: BaseViewController {
                 Defaults.rememberGatewayDetails = nil
                 StorageService.shared.deleteAllStoredData()
                 self.showToast(message: .deletedAllRecordsAndSavedData)
-//                NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
-                
-                DispatchQueue.main.async {
-                    self.adjustTabsAfterAuth(authenticated: false)
-                }
             })
             
         } onCancel: {}

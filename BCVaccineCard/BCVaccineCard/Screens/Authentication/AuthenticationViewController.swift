@@ -203,12 +203,6 @@ class AuthenticationViewController: UIViewController {
     }
     
     private func dismissAndReturnCompletion(status: AuthenticationStatus) {
-        // TODO: ROUTE REFACTOR -
-//        if sourceVC == .HomeScreen && status == .Completed {
-//            // Note: This is so that the user doesn't see the home screen after a successfull login
-//            let view = self.presentingVCReference?.view
-//            AppDelegate.sharedInstance?.addLoadingViewHack(addToView: view)
-//        }
         self.dismiss(animated: true, completion: {
             self.returnCompletion(status: status)
         })

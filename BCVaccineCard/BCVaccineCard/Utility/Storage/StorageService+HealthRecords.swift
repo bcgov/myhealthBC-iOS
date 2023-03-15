@@ -10,7 +10,7 @@ import BCVaccineValidator
 import CoreData
 
 extension StorageService {
-    func getRecords(for patient: Patient) -> [HealthRecord]{
+    func getRecords(for patient: Patient) -> [HealthRecord] {
         let tests = patient.testResultArray.map({HealthRecord(type: .CovidTest($0))})
         let medications = patient.prescriptionArray.map({HealthRecord(type: .Medication($0))})
         let labOrders = patient.labOrdersArray.map({HealthRecord(type: .LaboratoryOrder($0))})
@@ -38,7 +38,7 @@ extension StorageService {
         return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs
     }
     
-    func getHealthRecords(forDependent dependent: Patient) -> [HealthRecord] {
+    func getRecords(forDependent dependent: Patient) -> [HealthRecord] {
         let tests = dependent.testResultArray.map { HealthRecord(type: .CovidTest($0)) }
         let medications = dependent.prescriptionArray.map { HealthRecord(type: .Medication($0)) }
         let labOrders = dependent.labOrdersArray.map { HealthRecord(type: .LaboratoryOrder($0)) }

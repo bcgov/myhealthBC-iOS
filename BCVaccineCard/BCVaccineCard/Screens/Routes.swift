@@ -24,22 +24,6 @@ extension UIViewController {
         }
         present(controller, animated: true)
     }
-    
-    func adjustTabsAfterAuth(authenticated: Bool) {
-        if authenticated {
-            adjustTabsAuthenticated()
-        } else {
-            adjustTabsUnauthenticated()
-        }
-    }
-    
-    private func adjustTabsUnauthenticated() {
-        // TODO: Reset tabs
-    }
-    
-    private func adjustTabsAuthenticated() {
-        // TODO: Reset tabs
-    }
 }
 
 // MARK: Routes

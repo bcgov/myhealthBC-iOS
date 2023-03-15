@@ -96,6 +96,8 @@ class AppTabBarController: UITabBarController {
             self.currentTabs = unAuthenticatedTabs
             self.viewControllers = setViewControllers(tabs: unAuthenticatedTabs)
         }
+        self.view.layoutIfNeeded()
+        self.tabBar.layoutIfNeeded()
     }
     
     private func setViewControllers(tabs: [AppTabs]) -> [UIViewController] {

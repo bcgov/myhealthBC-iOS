@@ -66,6 +66,10 @@ extension AFNetwork {
             return requestData.completion(value)
         }
         
+        if let JSONObject = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: Any]],
+            let username = (JSONObject[0]["user"] as? [String: Any])?["name"] as? String {
+                // There's our username
+        }
         // TODO: ROUTE REFACTOR: Use swiftJSON
 //        guard let payload = swift_value(of: &gateWayResponse, key: "resourcePayload"),
 //              payload is BaseRetryableGatewayResponse,

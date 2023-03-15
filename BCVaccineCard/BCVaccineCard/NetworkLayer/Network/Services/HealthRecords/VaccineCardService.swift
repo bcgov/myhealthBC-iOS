@@ -104,7 +104,7 @@ struct VaccineCardService {
                        for patient: Patient,
                        completion: @escaping (VaccineCard?)->Void
     ) {
-        Logger.log(string: "Storing VaccineCard records for \(patient.name)", type: .Network)
+        Logger.log(string: "Storing VaccineCard records from gateway for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.vaccineCardArray)
         StorageService.shared.storeVaccineCard(from: vaccineCard, for: patient, manuallyAdded: true, completion: completion)
     }
@@ -140,7 +140,7 @@ extension VaccineCardService {
             
             let parameters: DefaultParams = DefaultParams()
             
-            let requestModel = NetworkRequest<DefaultParams, VaccineCardsResponse>(url: endpoints.vaccineCard(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            let requestModel = NetworkRequest<DefaultParams, VaccineCardsResponse>(url: endpoints.vaccineCardPublic(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
                 Logger.log(string: "Network VaccineCard Result received", type: .Network)
                 if (result?.resourcePayload) != nil {
@@ -182,7 +182,7 @@ extension VaccineCardService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, VaccineCardsResponse>(url: endpoints.vaccineCard(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            let requestModel = NetworkRequest<HDIDParams, VaccineCardsResponse>(url: endpoints.vaccineCardAuthenticated(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             
             { result in
                 Logger.log(string: "Network VaccineCard Result received", type: .Network)

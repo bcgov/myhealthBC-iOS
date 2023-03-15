@@ -141,38 +141,7 @@ extension BaseViewController {
     
     private func goToSettingsScreen() {
         show(route: .Settings, withNavigation: true)
-        // TODO: ROUTE REFACTOR -
-//        let vc = ProfileAndSettingsViewController.constructProfileAndSettingsViewController()
-//        self.navigationController?.pushViewController(vc, animated: true)
     }
-}
-
-// MARK: For Authenticated Fetch
-extension BaseViewController {
-    func syncAuthenticatedPatient() {
-        // TODO: ROUTE REFACTOR -
-//        guard let hdid = AuthManager().hdid else {return}
-//        let service = SyncService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
-//        service.performSync() { patient in
-//            // TODO: CONNOR HELP!
-//            // how do we set record's tab's state?
-//            print(patient)
-//        }
-    }
-//    func performAuthenticatedRecordsFetch(isManualFetch: Bool,
-//                                          showBanner: Bool = true,
-//                                          specificFetchTypes: [AuthenticationFetchType]? = nil,
-//                                          protectiveWord: String? = nil,
-//                                          sourceVC: LoginVCSource,
-//                                          initialProtectedMedFetch: Bool = false
-//    ) {
-//        guard let authToken = AuthManager().authToken, let hdid = AuthManager().hdid, let tabVC = self.tabBarController as? TabBarController else {
-//            // TODO: Error handling here
-//            return
-//        }
-//        let authCreds = AuthenticationRequestObject(authToken: authToken, hdid: hdid)
-//        tabVC.authWorker?.getAuthenticatedPatientDetails(authCredentials: authCreds, showBanner: showBanner, isManualFetch: isManualFetch, specificFetchTypes: specificFetchTypes, protectiveWord: protectiveWord, sourceVC: sourceVC, initialProtectedMedFetch: initialProtectedMedFetch)
-//    }
 }
 
 // MARK: This is used to let the settings screen know that it should reload table view (viewDidAppear not called when auth is complete from settings screen)
@@ -185,7 +154,7 @@ extension BaseViewController {
 // MARK: GoTo Health Gateway Logic from passes flow
 extension BaseViewController {
     //FIXME: CONNOR: - Ready To Test: Move this function to base view controller and then user router worker within this function
-       // TODO: ROUTE REFACTOR -
+       // TODO: ROUTE REFACTOR - FORMS
         func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, navDelegate: NavigationSetupProtocol?) {
 //            var rememberDetails = RememberedGatewayDetails(storageArray: nil)
 //            if let details = Defaults.rememberGatewayDetails {

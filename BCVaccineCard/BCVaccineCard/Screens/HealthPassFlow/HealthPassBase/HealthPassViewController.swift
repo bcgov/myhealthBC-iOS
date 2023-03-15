@@ -39,6 +39,7 @@ class HealthPassViewController: BaseViewController {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
         navSetup()
+        fetchFromStorage()
         setupTableView()
         // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
@@ -93,27 +94,19 @@ extension HealthPassViewController {
         
     }
     
-    // TODO: ROUTE REFACTOR -
     private func goToAddCardOptionScreen(showAuth: Bool) {
-//        func showScreen() {
-//            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
-//            self.navigationController?.pushViewController(vc, animated: true)
-//        }
-//
-//        if showAuth && !authManager.isAuthenticated {
-//            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticationStatus in
-//                if authenticationStatus != .Completed {
-//                    showScreen()
-//                } else {
-//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthPassVC, authenticationStatus: authenticationStatus))
-//                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
-//                }
-//            }
-//        } else {
-//            showScreen()
-//        }
+        
+        if showAuth && !AuthManager().isAuthenticated {
+            showLogin(initialView: .Landing) {[weak self] authenticationStatus in
+                if authenticationStatus != .Completed {
+                    self?.show(route: .QRRetrievalMethod, withNavigation: true)
+                } else {
+                    self?.retrieveDataSource()
+                }
+            }
+        } else {
+            show(route: .QRRetrievalMethod, withNavigation: true)
+        }
     }
 }
 
@@ -280,7 +273,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
                     }
                 }
                 DispatchQueue.main.async {
-                    // TODO: ROUTE REFACTOR -
+                    // TODO: ROUTE REFACTOR - QR Retreival methos
 //                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
 //                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
 //                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
@@ -329,10 +322,8 @@ extension HealthPassViewController: AddCardsTableViewCellDelegate {
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .viewAll {
-            
-            // TODO: ROUTE REFACTOR -
-//            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
-//            self.navigationController?.pushViewController(vc, animated: true)
+            let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
+            show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
         }
         if type == .addAHealthPass {
             goToAddCardOptionScreen(showAuth: true)

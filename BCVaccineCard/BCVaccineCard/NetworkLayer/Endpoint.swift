@@ -17,9 +17,8 @@ protocol EndpointsAccessor {
     func medicationStatement(base url: URL, hdid: String) -> URL
     func healthVisits(base url: URL, hdid: String) -> URL
     func communication(base url: URL) -> URL
-    ////
-    func vaccineCard(base url: URL) -> URL
-//    var getAuthenticatedVaccineCard: URL { get }
+    func vaccineCardPublic(base url: URL) -> URL
+    func vaccineCardAuthenticated(base url: URL) -> URL
     func termsOfService(base url: URL) -> URL
     func patientDetails(base url: URL, hdid: String) -> URL
     func comments(base url: URL, hdid: String) -> URL
@@ -245,6 +244,10 @@ struct UrlAccessor: EndpointsAccessor {
         medicationServiceBaseURL(base: url).appendingPathComponent("MedicationStatement").appendingPathComponent(hdid)
     }
     
+    func medicationRequest(base url: URL, hdid: String) -> URL {
+        medicationServiceBaseURL(base: url).appendingPathComponent("MedicationRequest").appendingPathComponent(hdid)
+    }
+    
     func laboratoryOrders(base url: URL) -> URL {
         laboratoryService(base: url).appendingPathComponent("Laboratory/LaboratoryOrders")
     }
@@ -261,8 +264,12 @@ struct UrlAccessor: EndpointsAccessor {
         gatewayAPIService(base: url).appendingPathComponent("Communication/Mobile")
     }
     
-    func vaccineCard(base url: URL) -> URL {
+    func vaccineCardPublic(base url: URL) -> URL {
         immunizationBaseUrl(base: url).appendingPathComponent("PublicVaccineStatus")
+    }
+    
+    func vaccineCardAuthenticated(base url: URL) -> URL {
+        immunizationBaseUrl(base: url).appendingPathComponent("AuthenticatedVaccineStatus")
     }
     
     // MARK: PDF

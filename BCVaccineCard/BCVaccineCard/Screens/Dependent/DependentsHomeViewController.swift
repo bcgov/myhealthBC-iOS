@@ -90,7 +90,6 @@ class DependentsHomeViewController: BaseDependentViewController {
     
     // MARK: Actions
     @IBAction func addDependent(_ sender: Any) {
-        // TODO: ROUTE REFACTOR -
         guard let patient = viewModel?.patient else {
             return
         }
@@ -99,7 +98,6 @@ class DependentsHomeViewController: BaseDependentViewController {
     }
     
     @IBAction func manageDependents(_ sender: Any) {
-        // TODO: ROUTE REFACTOR -
         guard let patient = viewModel?.patient else {
             showToast(message: "Please try re-launching this application")
             return
@@ -110,8 +108,6 @@ class DependentsHomeViewController: BaseDependentViewController {
         }
         let vm = ManageDependentsViewController.ViewModel(patient: patient)
         show(route: .ManageDependents, withNavigation: true, viewModel: vm)
-//        let vc = ManageDependentsViewController.constructManageDependentsViewController(patient: patient)
-//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func LoginWithBCSC(_ sender: Any) {
@@ -408,7 +404,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
             showDetails(for: dependentPatient)
             blockDependentSelection = false
         } else {
-            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
+            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records in
                 SessionStorage.dependentRecordsFetched.append(dependentPatient)
                 self?.showDetails(for: dependentPatient)
                 self?.blockDependentSelection = false
@@ -417,13 +413,8 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     private func showDetails(for dependent: Patient) {
-        let records = StorageService.shared.getHealthRecords(forDependent: dependent)
-        let dependantDS = records.detailDataSource(patient: dependent)
-        // TODO: ROUTE REFACTOR -
-//        let vm = UsersListOfRecordsViewController.ViewModel(patient: <#Patient?#>)
-        
-//        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependent, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
-//        navigationController?.pushViewController(vc, animated: true)
+        let vm = UsersListOfRecordsViewController.ViewModel(patient: dependent, authenticated: dependent.authenticated)
+        show(route: .UsersListOfRecords, withNavigation: true, viewModel: vm)
     }
 }
 
@@ -485,8 +476,8 @@ extension DependentsHomeViewController: InaccessibleDependentDelegate {
 // MARK: Auth
 extension DependentsHomeViewController {
     private func authenticate(initialView: AuthenticationViewController.InitialView) {
-        // TODO: ROUTE REFACTOR -
-//        self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { _ in
-//        }
+        showLogin(initialView: initialView) { [weak self] status in
+            self?.setState()
+        }
     }
 }

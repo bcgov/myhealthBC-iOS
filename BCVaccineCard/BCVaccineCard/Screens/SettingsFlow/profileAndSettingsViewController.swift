@@ -56,42 +56,17 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     // MARK: Routing
     func showProfile() {
-        // TODO: ROUTE REFACTOR -
-//        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-//        let physAddy = patient.physicalAddress
-//        let physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: physAddy?.streetLines, city: physAddy?.city, state: physAddy?.state, postalCode: physAddy?.postalCode, country: physAddy?.country).getAddressString
-//        let mailAddy = patient.physicalAddress
-//        let mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: mailAddy?.streetLines, city: mailAddy?.city, state: mailAddy?.state, postalCode: mailAddy?.postalCode, country: mailAddy?.country).getAddressString
-//        let vc = ProfileDetailsViewController.constructProfileDetailsViewController(firstName: patient.firstName, lastName: patient.lastName, phn: patient.phn, physicalAddress: physicalAddress, mailingAddress: mailingAddress)
-//        self.navigationController?.pushViewController(vc, animated: true)
+        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+        let vm = ProfileDetailsViewController.ViewModel(patient: patient)
+        show(route: .Profile, withNavigation: true, viewModel: vm)
     }
     
     func showLogin() {
-        // TODO: ROUTE REFACTOR -
-        // Note: This nav bar hack is to prevent the user from navigating back to the root vc, which was causing issues as the routing functionality wasn't working in time, so the records weren't showing
-        
-//        self.navigationController?.navigationBar.isUserInteractionEnabled = false
-//        showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: { authenticationStatus in
-//            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else {
-//                self.navigationController?.navigationBar.isUserInteractionEnabled = false
-//                return
-//            }
-//            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//            let currentTab = self.getCurrentTab
-//            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .ProfileAndSettingsVC, authenticationStatus: authenticationStatus))
-//            self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                self.navigationController?.navigationBar.isUserInteractionEnabled = true
-//            }
-//        })
+        showLogin(initialView: .Landing) { _ in }
     }
     
     func showSecurityAndData() {
         show(route: .SecurityAndData, withNavigation: true)
-        // TODO: ROUTE REFACTOR -
-//        let vc = SecurityAndDataViewController.constructSecurityAndDataViewController()
-//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func showPrivacyStatement() {
@@ -241,18 +216,7 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
     // MARK: Helpers
     private func deleteRecordsForAuthenticatedUserAndLogout() {
         LocalAuthManager.block = true
-        performLogout(completion: {success in
-            guard success else { return }
-//            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
-            DispatchQueue.main.async {
-                // TODO: ROUTE REFACTOR -
-//                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-//                self.routerWorker?.routingAction(scenario: .Logout(values: values))
-                
-            }
-        })
+        performLogout(completion: {_ in })
     }
     
     private func performLogout(completion: @escaping(_ success: Bool)-> Void) {

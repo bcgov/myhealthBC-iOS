@@ -11,8 +11,8 @@ import Foundation
 extension UsersListOfRecordsViewController {
     
     struct ViewModel {
-        let patient: Patient?
-        let authenticated: Bool = true
+        var patient: Patient?
+        let authenticated: Bool
         let navStyle: NavStyle = .singleUser
         let hasUpdatedUnauthPendingTest = true
         let dataSource: [HealthRecordsDetailDataSource] = []

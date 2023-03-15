@@ -112,9 +112,8 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     }
     
     func showComments(for record: HealthRecordsDetailDataSource.Record) {
-        // TODO: ROUTE REFACTOR -
-//        let vc = CommentsViewController.constructCommentsViewController(model: record)
-//        self.navigationController?.pushViewController(vc, animated: true)
+        let vm = CommentsViewController.ViewModel(record: record)
+        show(route: .Comments, withNavigation: true, viewModel: vm)
     }
 }
 
@@ -161,27 +160,20 @@ extension HealthRecordDetailViewController {
             switch self.dataSource.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
-                DispatchQueue.main.async {
-                    // TODO: ROUTE REFACTOR -
-//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.healthPass], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                }
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
             case .medication, .laboratoryOrder:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .immunization(model: let model):
+            case .immunization:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .healthVisit(model: let model):
+            case .healthVisit:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .specialAuthorityDrug(model: let model):
+            case .specialAuthorityDrug:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .hospitalVisit(model: let model):
+            case .hospitalVisit:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .clinicalDocument(model: let model):
+            case .clinicalDocument:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
             if self.userNumberHealthRecords > 1 {
@@ -190,15 +182,9 @@ extension HealthRecordDetailViewController {
                 if let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
                     StorageService.shared.deletePatient(name: name, birthday: birthday)
                 }
-                DispatchQueue.main.async {
-                    // TODO: ROUTE REFACTOR -
-//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                }
             }
         } onCancel: {
+            
         }
     }
     
