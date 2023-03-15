@@ -353,9 +353,9 @@
 		3E3DA94028FE8133009C500F /* DependentListItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E3DA93E28FE8133009C500F /* DependentListItemTableViewCell.xib */; };
 		3E3DA94128FE8135009C500F /* DependentListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */; };
 		3E3DA94228FE8136009C500F /* DependentListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E3DA93D28FE8133009C500F /* DependentListItemTableViewCell.swift */; };
-		3E3DA94429005AA2009C500F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		3E3DA94529005AA2009C500F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
-		3E3DA94629005AA2009C500F /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		3E3DA94429005AA2009C500F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		3E3DA94529005AA2009C500F /* (null) in Sources */ = {isa = PBXBuildFile; };
+		3E3DA94629005AA2009C500F /* (null) in Sources */ = {isa = PBXBuildFile; };
 		3E47377F291090BC00B5BBA0 /* CovidTestsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */; };
 		3E473780291090BC00B5BBA0 /* CovidTestsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */; };
 		3E473781291090BC00B5BBA0 /* CovidTestsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E47377E291090BC00B5BBA0 /* CovidTestsService.swift */; };
@@ -4283,7 +4283,7 @@
 				293B32AF27D25C4E0064BAAA /* CommentView.swift in Sources */,
 				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
 				3E91C7B828B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
-				3E3DA94529005AA2009C500F /* BuildFile in Sources */,
+				3E3DA94529005AA2009C500F /* (null) in Sources */,
 				7967E73626F40DB100EEF510 /* Constants.swift in Sources */,
 				798CA1CD27EED9ED0096188C /* LoginThrottleAPIWorker.swift in Sources */,
 				3E31EA8E29141F3500E344E6 /* ForceUpdateView.swift in Sources */,
@@ -4643,7 +4643,7 @@
 				293B32B027D25C4E0064BAAA /* CommentView.swift in Sources */,
 				79218AAA2751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				3E91C7B928B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
-				3E3DA94629005AA2009C500F /* BuildFile in Sources */,
+				3E3DA94629005AA2009C500F /* (null) in Sources */,
 				797BB9652767DCE100CD1645 /* HealthGatewayAPIWorker.swift in Sources */,
 				79BDA097270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				3E31EA8F29141F3500E344E6 /* ForceUpdateView.swift in Sources */,
@@ -4979,7 +4979,7 @@
 				798005402852C66E006E390F /* Endpoint.swift in Sources */,
 				798005412852C66E006E390F /* AuthenticatedPDFResponseObject.swift in Sources */,
 				3E91C7B728B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
-				3E3DA94429005AA2009C500F /* BuildFile in Sources */,
+				3E3DA94429005AA2009C500F /* (null) in Sources */,
 				29E19FD5286C024B00C235EF /* LabOrderRecordDetailView.swift in Sources */,
 				798005422852C66E006E390F /* CommentView.swift in Sources */,
 				3E31EA8D29141F3500E344E6 /* ForceUpdateView.swift in Sources */,
@@ -5445,7 +5445,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -5453,7 +5453,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.7.5;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -5475,7 +5475,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -5483,7 +5483,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.3;
+				MARKETING_VERSION = 1.7.5;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

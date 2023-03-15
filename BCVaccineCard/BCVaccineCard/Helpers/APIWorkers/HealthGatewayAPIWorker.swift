@@ -8,11 +8,10 @@
 import UIKit
 import BCVaccineValidator
 //
-//protocol HealthGatewayAPIWorkerDelegate: AnyObject {
-//    func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?)
-//    func handleTestResult(result: GatewayTestResultResponse)
-//    func handleError(title: String, error: ResultError)
-//}
+protocol HealthGatewayAPIWorkerDelegate: AnyObject {
+    func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?)
+    func handleError(title: String, error: ResultError)
+}
 //
 //class HealthGatewayAPIWorker: NSObject {
 //    

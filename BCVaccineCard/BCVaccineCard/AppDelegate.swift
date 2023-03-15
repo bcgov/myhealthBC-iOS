@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var loadingViewHack: UIView?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+        AuthManager().isAuthenticated
         UpdateServiceStorage.setOrResetstoredAppVersion()
         MigrationService().removeExistingDBIfNeeded()
         CoreDataProvider.shared.loadManagedContext { context in
@@ -153,6 +153,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key
             ]
             
+            // TODO: fix for 'NSKeyedUnarchiveFromData' should not be used
+            //https://github.com/project-imas/encrypted-core-data/compare/master...fitmecare:encrypted-core-data:master
             let description = try EncryptedStore.makeDescription(options: options, configuration: nil)
             container.persistentStoreDescriptions = [ description ]
         }

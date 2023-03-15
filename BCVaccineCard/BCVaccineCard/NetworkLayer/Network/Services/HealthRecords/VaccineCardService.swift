@@ -143,12 +143,7 @@ extension VaccineCardService {
             let requestModel = NetworkRequest<DefaultParams, VaccineCardsResponse>(url: endpoints.vaccineCardPublic(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
                 Logger.log(string: "Network VaccineCard Result received", type: .Network)
-                if (result?.resourcePayload) != nil {
-                    // return result
-                    return completion(result)
-                } else {
-                    return completion(nil)
-                }
+                return completion(result)
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:

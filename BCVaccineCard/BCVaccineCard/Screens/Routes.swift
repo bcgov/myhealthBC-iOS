@@ -44,6 +44,7 @@ extension UIViewController {
         case HealthPass
         case CovidVaccineCards
         case QRRetrievalMethod
+        case GatewayForm
         case UsersListOfRecords
         case HealthRecordDetail
         case Resource
@@ -128,6 +129,11 @@ extension UIViewController {
             return CommentsViewController.construct(viewModel: vm)
         case .SecurityAndData:
             return SecurityAndDataViewController.construct()
+        case .GatewayForm:
+            guard let vm = viewModel as? GatewayFormViewController.ViewModel else {
+                return nil
+            }
+            return GatewayFormViewController.construct(viewModel: vm)
         }
         return controller
     }

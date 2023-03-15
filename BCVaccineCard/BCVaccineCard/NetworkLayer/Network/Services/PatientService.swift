@@ -136,7 +136,8 @@ extension PatientService {
                 return completion(nil)
             }
             let headers = [
-                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.apiVersion: "2"
             ]
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)

@@ -42,14 +42,14 @@ enum AppTabs: Int, CaseIterable {
             
         case .Proofs:
             let vm = HealthPassViewController.ViewModel(fedPassStringToOpen: nil)
-            return Properties(title: "Service Finder",
+            return Properties(title: "Proofs",
                               selectedTabBarImage: UIImage(named: "passes-tab-selected")!,
                               unselectedTabBarImage: UIImage(named: "passes-tab-unselected")!,
                               baseViewController: HealthPassViewController.construct(viewModel: vm))
             
         case .Dependents:
             let vm = DependentsHomeViewController.ViewModel(patient: patient)
-            return Properties(title: "Service Finder",
+            return Properties(title: "Dependents",
                               selectedTabBarImage: UIImage(named: "dependent-tab-selected")!,
                               unselectedTabBarImage: UIImage(named: "dependent-tab-unselected")!,
                               baseViewController: DependentsHomeViewController.construct(viewModel: vm))

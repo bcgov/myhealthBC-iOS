@@ -88,6 +88,7 @@ struct Constants {
         static let authToken = "Authorization"
         static let hdid = "hdid"
         static let dependentHdid = "dependentHdid"
+        static let apiVersion = "api-version"
     }
     
     struct AuthenticatedMedicationStatementParameters {
