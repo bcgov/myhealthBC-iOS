@@ -40,7 +40,12 @@ extension BaseViewController {
                     }
                 }
                 
-            case .Cancelled, .Failed:
+            case .Cancelled:
+                completion(result)
+                break
+            case .Failed:
+                let vc = LoginErrorViewController.constructLoginErrorViewController()
+                self.navigationController?.pushViewController(vc, animated: false)
                 completion(result)
                 break
             }
@@ -185,13 +190,13 @@ class AuthenticationViewController: UIViewController {
                     self.view.endLoadingIndicator()
                     switch result {
                     case .Unavailable:
-                        self.showToast(message: "Authentication server is unavailable", style: .Warn)
+//                        self.showToast(message: "Authentication server is unavailable", style: .Warn)
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     case .Success:
                         Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
                         self.dismissView(withDelay: true, status: .Completed, sourceVC: sourceVC)
                     case .Fail:
-                        self.showToast(message: "Authentication Failed", style: .Warn)
+//                        self.showToast(message: "Authentication Failed", style: .Warn)
                         self.dismissView(withDelay: false, status: .Failed, sourceVC: sourceVC)
                     }
                 })
@@ -221,8 +226,7 @@ class AuthenticationViewController: UIViewController {
             
             dismissAndReturnCompletion(status: status)
             if self.createTabBarAndGoToHomeScreen {
-                let authStatus: AuthenticationStatus? = status == .Completed ? .Completed : nil
-                dismissFullScreen(sourceVC: sourceVC, authStatus: authStatus)
+                dismissFullScreen(sourceVC: sourceVC, authStatus: status)
             }
         }
     }
@@ -250,6 +254,7 @@ class AuthenticationViewController: UIViewController {
         transition.type = .fade
         transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
+//        let status: AuthenticationStatus? = authStatus == .Completed ? .Completed : nil
         let vc = TabBarController.constructTabBarController(status: authStatus)
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }
