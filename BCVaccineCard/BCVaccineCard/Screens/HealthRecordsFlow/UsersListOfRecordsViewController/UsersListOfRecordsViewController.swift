@@ -6,7 +6,6 @@
 // TODO: This will be a table view controller with editable cells (for deleting) - nav bar will have same edit/done functionality that covid 19 view controller has
 
 import UIKit
-import SwipeCellKit
 
 class UsersListOfRecordsViewController: BaseViewController {
     

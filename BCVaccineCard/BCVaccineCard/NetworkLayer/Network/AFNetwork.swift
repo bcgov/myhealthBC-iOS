@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import SwiftyJSON
 
 extension NetworkRequest.RequestType {
     var AFMethod: HTTPMethod {
@@ -37,7 +38,7 @@ extension NetworkRequest {
 }
 
 
-struct AFNetwork: Network {
+class AFNetwork: Network {
     private var requestAttempts: [URL: Int] = [URL: Int]()
     
     func request<Parameters: Encodable, T: Decodable>(with requestData: NetworkRequest<Parameters, T>) {
@@ -61,26 +62,18 @@ extension AFNetwork {
             return requestData.completion(nil)
         }
         
-        guard value is BaseGatewayResponse, var gateWayResponse = value as? BaseGatewayResponse else {
+        guard value is BaseGatewayResponse,
+              let gateWayResponse = value as? BaseGatewayResponse,
+              let dict = gateWayResponse.toDictionary(),
+              let resourcePayloadDict = JSON(dict)["resourcePayload"].dictionary,
+              let retryIn = resourcePayloadDict["retryin"]?.int,
+              let loaded = resourcePayloadDict["loaded"]?.bool
+        else {
             // Not a BaseGatewayResponse - return response
             return requestData.completion(value)
         }
-        
-        if let JSONObject = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: Any]],
-            let username = (JSONObject[0]["user"] as? [String: Any])?["name"] as? String {
-                // There's our username
-        }
-        // TODO: ROUTE REFACTOR: Use swiftJSON
-//        guard let payload = swift_value(of: &gateWayResponse, key: "resourcePayload"),
-//              payload is BaseRetryableGatewayResponse,
-//              let payLoadStruct = payload as? BaseRetryableGatewayResponse else
-//        {
-            // is a BaseRetryableGatewayResponse but is not retry-able - return response
-            return requestData.completion(value)
-//        }
-        
-        // Request is retry-able:
-        /*
+        let payLoadStruct = RetryableGatewayResponse(loaded: loaded, retryin: retryIn)
+
         let shouldRetry = shouldRetry(request: requestData, responsePayload: payLoadStruct)
         switch shouldRetry {
             
@@ -114,7 +107,6 @@ extension AFNetwork {
             }
             return requestData.completion(value)
         }
-         */
     }
     
     
@@ -144,5 +136,23 @@ extension AFNetwork {
         case NotNeeded
         case ShouldRetry
         case MaxRetryReached
+    }
+}
+
+
+extension Encodable {
+
+    func toDictionary(_ encoder: JSONEncoder = JSONEncoder()) -> [String: Any]? {
+        do {
+            let data = try encoder.encode(self)
+            let object = try JSONSerialization.jsonObject(with: data)
+            guard let json = object as? [String: Any] else {
+                return nil
+            }
+            return json
+        } catch {
+            return nil
+        }
+        
     }
 }
