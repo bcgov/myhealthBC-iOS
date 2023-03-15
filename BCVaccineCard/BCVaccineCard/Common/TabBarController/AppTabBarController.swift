@@ -29,6 +29,7 @@ class AppTabBarController: UITabBarController {
     private var syncService: SyncService?
     private var networkService: Network?
     private var configService: MobileConfigService?
+    private var networkListener: NetworkConnection?
     private var patient: Patient?
     
     private var authenticatedTabs: [AppTabs] {
@@ -37,7 +38,7 @@ class AppTabBarController: UITabBarController {
     
     private var unAuthenticatedTabs: [AppTabs] {
         return [.Home, .UnAuthenticatedRecords, .Proofs, .Dependents]
-    } 
+    }
     
     /// Currently available tabs
     var currentTabs: [AppTabs] = []
@@ -45,27 +46,38 @@ class AppTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.setup(selectedIndex: 0)
-        
-        // When authentication status changes, we can set the records tab to the appropriate VC
-        // and fetch records
-        AppStates.shared.listenToAuth { authenticated in
-            self.setTabs()
-            self.performSync()
+        networkListener?.initListener { connected in
+            if connected {
+                self.whenConnected()
+            } else {
+                self.whenDisconnected()
+            }
         }
         
-        // Local auth happens on records tab only.
-        // When its done, we should fetch records if user is authenticated.
-        AppStates.shared.listenLocalAuth {
-            self.performSync()
-        }
-        
-        // When patient profile is stored, reload tabs
-        AppStates.shared.listenToPatient {
-            let storedPatient = StorageService.shared.fetchAuthenticatedPatient()
-            self.patient = storedPatient
-            self.setTabs()
-        }
+        showForceUpateIfNeeded(completion: { updateNeeded in
+            guard !updateNeeded else {return}
+            self.setup(selectedIndex: 0)
+            
+            // When authentication status changes, we can set the records tab to the appropriate VC
+            // and fetch records
+            AppStates.shared.listenToAuth { authenticated in
+                self.setTabs()
+                self.performSync()
+            }
+            
+            // Local auth happens on records tab only.
+            // When its done, we should fetch records if user is authenticated.
+            AppStates.shared.listenLocalAuth {
+                self.performSync()
+            }
+            
+            // When patient profile is stored, reload tabs
+            AppStates.shared.listenToPatient {
+                let storedPatient = StorageService.shared.fetchAuthenticatedPatient()
+                self.patient = storedPatient
+                self.setTabs()
+            }
+        })
     }
     
     // MARK: Setup
@@ -132,6 +144,14 @@ class AppTabBarController: UITabBarController {
         viewController.title = properties.title
         let navController = CustomNavigationController.init(rootViewController: viewController)
         return navController
+    }
+    
+    func whenConnected() {
+        showForceUpateIfNeeded(completion: {_ in})
+    }
+    
+    func whenDisconnected() {
+        
     }
 }
 
