@@ -226,8 +226,7 @@ class AuthenticationViewController: UIViewController {
             
             dismissAndReturnCompletion(status: status)
             if self.createTabBarAndGoToHomeScreen {
-                let authStatus: AuthenticationStatus? = status == .Completed ? .Completed : nil
-                dismissFullScreen(sourceVC: sourceVC, authStatus: authStatus)
+                dismissFullScreen(sourceVC: sourceVC, authStatus: status)
             }
         }
     }
@@ -255,6 +254,7 @@ class AuthenticationViewController: UIViewController {
         transition.type = .fade
         transition.duration = Constants.UI.Theme.animationDuration
         AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
+//        let status: AuthenticationStatus? = authStatus == .Completed ? .Completed : nil
         let vc = TabBarController.constructTabBarController(status: authStatus)
         AppDelegate.sharedInstance?.window?.rootViewController = vc
     }

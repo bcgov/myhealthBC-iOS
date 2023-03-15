@@ -106,8 +106,10 @@ extension HealthPassViewController {
         
         if showAuth && !authManager.isAuthenticated {
             showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticationStatus in
-                if authenticationStatus != .Completed {
+                if authenticationStatus == .Cancelled {
                     showScreen()
+                } else if authenticationStatus == .Failed {
+                    // Do Nothing, handled
                 } else {
                     let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
                     let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)

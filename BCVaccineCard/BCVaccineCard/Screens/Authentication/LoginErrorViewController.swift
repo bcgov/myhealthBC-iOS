@@ -64,11 +64,12 @@ class LoginErrorViewController: BaseViewController {
         let normal = NSAttributedString(string: "We are unable to retrive your health record at this moment because of problem with BC Service Card log in, please contact Health Gateway team: ", attributes: normalAttributes)
         attributedText.append(normal)
         // underlined text
-        
+        let url = URL(string: "mailto:healthgateway@gov.bc.ca")
         let underlineAttributes: [NSAttributedString.Key: Any] = [
             .font: UIFont.bcSansRegularWithSize(size: 17),
             .foregroundColor: AppColours.appBlue,
-            .underlineStyle: NSUnderlineStyle.single.rawValue
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
+            .link: url
         ]
         let email = NSAttributedString(string: "healthgateway@gov.bc.ca", attributes: underlineAttributes)
         attributedText.append(email)
@@ -83,6 +84,7 @@ class LoginErrorViewController: BaseViewController {
         
         descriptionTextView.attributedText = attributedText
         descriptionTextView.textAlignment = .center
+        descriptionTextView.delegate = self
     }
     
     private func styleButton() {
@@ -99,6 +101,15 @@ class LoginErrorViewController: BaseViewController {
         composeEmail()
     }
 
+}
+
+extension LoginErrorViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        if ((URL.scheme?.contains("mailto")) != nil) {
+            composeEmail()
+        }
+        return false
+    }
 }
 
 extension LoginErrorViewController: MFMailComposeViewControllerDelegate {

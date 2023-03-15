@@ -81,7 +81,7 @@ class ProfileAndSettingsViewController: BaseViewController {
         self.navigationController?.navigationBar.isUserInteractionEnabled = false
         showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: { authenticationStatus in
             guard authenticationStatus == .Completed else {
-                self.navigationController?.navigationBar.isUserInteractionEnabled = false
+                self.navigationController?.navigationBar.isUserInteractionEnabled = true
                 return
             }
             let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)

@@ -108,6 +108,10 @@ class TabBarController: UITabBarController {
                     self.customRoutingForRecordsTab(authStatus: authStatus)
                 }
             }
+        } else if authStatus == .Failed {
+            let vc = LoginErrorViewController.constructLoginErrorViewController()
+            let customNav = (self.viewControllers?[0] as? CustomNavigationController)
+            customNav?.pushViewController(vc, animated: false)
         }
     }
     
