@@ -99,7 +99,6 @@ class AppTabBarController: UITabBarController {
             return
         }
         syncService?.performSync() {[weak self] patient in
-            print(patient)
             self?.setTabs()
         }
     }
