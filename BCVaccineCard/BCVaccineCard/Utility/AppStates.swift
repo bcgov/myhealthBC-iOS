@@ -14,8 +14,10 @@ class AppStates {
     private var onStorageChage: [((_ event: StorageService.StorageEvent<Any>)->Void)] = []
     private var onPatientFetch: [(()->Void)] = []
     private var onLocalAuth: [(()->Void)] = []
+    private var onShouldSync: [(()->Void)] = []
     
     func listen() {
+        NotificationCenter.default.addObserver(self, selector: #selector(shouldSync), name: .shouldSync, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(authStatusChanged), name: .authStatusChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
@@ -24,6 +26,15 @@ class AppStates {
     
     @objc private func performedAuth(_ notification: Notification) {
         onLocalAuth.forEach({$0()})
+    }
+    
+    /// Request data sync manually.
+    public func requestSync() {
+        NotificationCenter.default.post(name: .shouldSync, object: nil, userInfo: nil)
+    }
+    
+    @objc private func shouldSync(_ notification: Notification) {
+        onShouldSync.forEach({$0()})
     }
     
     @objc private func authStatusChanged(_ notification: Notification) {
@@ -39,6 +50,10 @@ class AppStates {
     
     @objc private func patientAPIFetched(_ notification: Notification) {
         onPatientFetch.forEach({$0()})
+    }
+    
+    func listenToSyncRequest(onRequest: @escaping()->Void) {
+        onShouldSync.append(onRequest)
     }
     
     func listenToStorage(change: @escaping(_ event: StorageService.StorageEvent<Any>)->Void) {

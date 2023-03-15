@@ -77,6 +77,11 @@ class AppTabBarController: UITabBarController {
                 self.patient = storedPatient
                 self.setTabs()
             }
+            
+            // Sync when requested manually
+            AppStates.shared.listenToSyncRequest {
+                self.performSync()
+            }
         })
     }
     
