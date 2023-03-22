@@ -37,6 +37,7 @@ class AuthManager {
     let defaultUserID = "default"
     private let keychain = Keychain(service: "ca.bc.gov.myhealth")
     private let configService = MobileConfigService(network: AFNetwork())
+    private var timer: Timer? = nil
     
     // MARK: Computed
     var authToken: String? {
@@ -356,15 +357,13 @@ class AuthManager {
         if let idToken = state.lastTokenResponse?.idToken {
             store(string: idToken, for: .idToken)
         }
+        
     }
     
     private func store(tokenResponse: OIDTokenResponse) {
         if let authToken = tokenResponse.accessToken {
             let previousToken = self.authToken
             store(string: authToken, for: .authToken)
-            if previousToken != nil {
-                postRefetchNotification()
-            }
         }
         
         if let refreshToken = tokenResponse.refreshToken {
@@ -441,26 +440,18 @@ class AuthManager {
 
 
 extension AuthManager {
-    // NOTE: This is a hacky solution where we are relying on the access token expiry and not using the refresh token. This is due to a keycloak issue that the HG team can't work around - so we just have a longer lasting access token. Once expired, user is considered logged out
     func initTokenExpieryTimer() {
-//        if let refreshTokenExpiery = refreshTokenExpiery {
-//            let timer = Timer(fireAt: refreshTokenExpiery, interval: 0, target: self, selector: #selector(refreshTokenExpired), userInfo: nil, repeats: false)
-//            RunLoop.main.add(timer, forMode: .common)
-//        }
-        
         if let authTokenExpiery = authTokenExpiery {
             let timer = Timer(fireAt: authTokenExpiery, interval: 0, target: self, selector: #selector(authTokenExpired), userInfo: nil, repeats: false)
+            self.timer?.invalidate()
+            self.timer = timer
             RunLoop.main.add(timer, forMode: .common)
         }
     }
     
-//    @objc func refreshTokenExpired() {
-//        NotificationCenter.default.post(name: .refreshTokenExpired, object: nil)
-//    }
     @objc func authTokenExpired() {
-//        NotificationCenter.default.post(name: .authTokenExpired, object: nil)
-//        fetchAccessTokenWithRefeshToken()
-        NotificationCenter.default.post(name: .refreshTokenExpired, object: nil)
+        NotificationCenter.default.post(name: .authTokenExpired, object: nil)
+        NotificationCenter.default.post(name: .authStatusChanged, object: nil)
     }
     
     // Note - due to hack, we won't be using this function, currently
@@ -468,13 +459,4 @@ extension AuthManager {
         refetchAuthToken()
     }
     
-}
-
-// MARK: For refetch of authenticated data
-extension AuthManager {
-    private func postRefetchNotification() {
-//        guard let token = self.authToken else { return }
-//        guard let hdid = self.hdid else { return }
-//        NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
-    }
 }

@@ -61,7 +61,7 @@ class DependentsHomeViewController: BaseDependentViewController {
         navSetup()
         style()
         setupTableView()
-        fetchData(fromRemote: true)
+        fetchData(fromRemote: false)
         fetchDataWhenAuthenticated()
     }
     
@@ -476,7 +476,7 @@ extension DependentsHomeViewController: InaccessibleDependentDelegate {
 // MARK: Auth
 extension DependentsHomeViewController {
     private func authenticate(initialView: AuthenticationViewController.InitialView) {
-        showLogin(initialView: initialView) { [weak self] status in
+        showLogin(initialView: initialView, showTabOnSuccess: .Dependents) { [weak self] status in
             self?.setState()
         }
     }

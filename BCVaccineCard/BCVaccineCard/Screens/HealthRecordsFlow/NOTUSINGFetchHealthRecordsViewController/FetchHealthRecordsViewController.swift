@@ -243,6 +243,7 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
 // MARK: BCSC Login
 extension FetchHealthRecordsViewController {
     func performBCSCLogin() {
+        showLogin(initialView: .Landing)
         // TODO: Add to ROUTER
 //        self.showLogin(initialView: .Landing, sourceVC: .FetchHealthRecordsVC) { [weak self] authenticationStatus in
 //            guard let `self` = self, authenticationStatus == .Completed else {return}

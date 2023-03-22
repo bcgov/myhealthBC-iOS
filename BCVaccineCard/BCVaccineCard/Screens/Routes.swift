@@ -11,18 +11,33 @@ import UIKit
 extension UIViewController {
     
     func showLogin(initialView: AuthenticationViewController.InitialView,
-                   completion: @escaping (AuthenticationViewController.AuthenticationStatus)->Void
+                   presentationStyle: UIModalPresentationStyle? = nil,
+                   showTabOnSuccess: AppTabs? = nil,
+                   completion: ((AuthenticationViewController.AuthenticationStatus)->Void)? = nil
     ) {
+        guard let tabBar = self.tabBarController as? AppTabBarController else {
+            return
+        }
+        let currentTab = tabBar.selectedIndex
         let authSetvice = AppDelegate.sharedInstance?.authManager ?? AuthManager()
         let ConfigService = AppDelegate.sharedInstance?.configService ?? MobileConfigService(network: AFNetwork())
-        let viewModel: AuthenticationViewController.ViewModel = AuthenticationViewController.ViewModel(initialView: initialView,
-                                                                                                       configService: ConfigService,
-                                                                                                       authManager: authSetvice,
-                                                                                                       completion: completion)
+        let viewModel: AuthenticationViewController.ViewModel = AuthenticationViewController.ViewModel(
+            initialView: initialView,
+            configService: ConfigService,
+            authManager: authSetvice,
+            completion: { result in
+//                completion(result)
+                if result == .Completed, let showTab = showTabOnSuccess {
+                    tabBar.switchTo(tab: showTab)
+                }
+            })
         guard let controller = createController(route: .Authentication, viewModel: viewModel) else {
             return
         }
-        present(controller, animated: true)
+        if #available(iOS 13.0, *) {
+            controller.modalPresentationStyle = presentationStyle ?? .automatic
+        }
+        tabBar.present(controller, animated: true)
     }
 }
 

@@ -79,7 +79,7 @@ class CommunicationBannerTableViewCell: UITableViewCell {
         self.delegate = delegate
         titleLabel.text = data.subject
         
-        var textAttributed = data.text.injectHTMLFont(size: 14).htmlToAttributedString?.trimmedAttributedString()
+        var textAttributed = data.text?.injectHTMLFont(size: 14).htmlToAttributedString?.trimmedAttributedString()
         
         if let text = textAttributed, let shortText = text.cutOff(at: maxMessageChar) {
             learnMoreButton.isHidden = false

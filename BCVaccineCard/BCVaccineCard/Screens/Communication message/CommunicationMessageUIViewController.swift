@@ -102,7 +102,7 @@ class CommunicationMessageUIViewController: UIViewController {
         guard let banner = banner, let label = label else {
             return
         }
-        let timestamp = banner.effectiveDateTime.getGatewayDate()?.shortString ?? ""
+        let timestamp = banner.effectiveDateTime?.getGatewayDate()?.shortString
         label.text = timestamp
         label.textColor = AppColours.textGray
         let font = UIFont.bcSansRegularWithSize(size: 13)
@@ -113,7 +113,7 @@ class CommunicationMessageUIViewController: UIViewController {
         guard let banner = banner, let textView = textView, let stackView = stackView else {
             return
         }
-        textView.attributedText = banner.text.injectHTMLFont(size: 17).htmlToAttributedString
+        textView.attributedText = banner.text?.injectHTMLFont(size: 17).htmlToAttributedString
         textView.backgroundColor = .clear
         textView.isEditable = false
         textView.delegate = self

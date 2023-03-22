@@ -74,6 +74,6 @@ extension HealthRecordsViewController: AppStyleButtonDelegate {
     }
     
     private func performBCSCLogin() {
-        showLogin(initialView: .Landing, completion: {[weak self] _ in })
+        showLogin(initialView: .Landing, showTabOnSuccess: .AuthenticatedRecords)
     }
 }

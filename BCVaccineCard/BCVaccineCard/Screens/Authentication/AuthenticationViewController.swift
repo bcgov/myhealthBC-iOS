@@ -215,29 +215,27 @@ class AuthenticationViewController: UIViewController {
     }
     
     // Note: This authStatus is to determine whether tab bar needs to prompt a login success message or not
-    func dismissFullScreen(authStatus: AuthenticationStatus?) {
-        AppDelegate.sharedInstance?.setupRootViewController()
-    }
+//    func dismissFullScreen(authStatus: AuthenticationStatus?) {
+//        AppDelegate.sharedInstance?.setupRootViewController()
+//    }
     
     /// Used only for initial authentication.
     /// sets auth view as the app's root view controller and after gets app to reset its root view controller
-    public static func displayFullScreen() {
-        let networkService = AFNetwork()
-        let authManager = AuthManager()
-        let configService = MobileConfigService(network: networkService)
-        let transition = CATransition()
-        transition.type = .fade
-        transition.duration = Constants.UI.Theme.animationDuration
-        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
-        let vm = AuthenticationViewController.ViewModel(initialView: .Landing,
-                                                        configService: configService,
-                                                        authManager: authManager,
-                                                        completion: { _ in
-            AppDelegate.sharedInstance?.setupRootViewController()
-        })
-        let vc = AuthenticationViewController.construct(viewModel: vm)
-        AppDelegate.sharedInstance?.window?.rootViewController = vc
-    }
+//    public static func displayFullScreen(completion: @escaping (AuthenticationStatus?)->Void) {
+//        let networkService = AFNetwork()
+//        let authManager = AuthManager()
+//        let configService = MobileConfigService(network: networkService)
+//        let transition = CATransition()
+//        transition.type = .fade
+//        transition.duration = Constants.UI.Theme.animationDuration
+//        AppDelegate.sharedInstance?.window?.layer.add(transition, forKey: "transition")
+//        let vm = AuthenticationViewController.ViewModel(initialView: .Landing,
+//                                                        configService: configService,
+//                                                        authManager: authManager,
+//                                                        completion: completion)
+//        let vc = AuthenticationViewController.construct(viewModel: vm)
+//        AppDelegate.sharedInstance?.window?.rootViewController = vc
+//    }
     
 }
 

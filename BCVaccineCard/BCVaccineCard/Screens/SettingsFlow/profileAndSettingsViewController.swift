@@ -62,7 +62,7 @@ class ProfileAndSettingsViewController: BaseViewController {
     }
     
     func showLogin() {
-        showLogin(initialView: .Landing) { _ in }
+        showLogin(initialView: .Landing)
     }
     
     func showSecurityAndData() {

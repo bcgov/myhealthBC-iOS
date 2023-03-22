@@ -60,13 +60,17 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
     
     func performLocalAuthIfNeeded() {
         if LocalAuthManager.shouldAuthenticate {
+            // Dont show local auth if onboading should be shown
+            let unseen = Defaults.unseenOnBoardingScreens()
+            guard unseen.isEmpty else {return}
+            
             showLocalAuth(onSuccess: { [weak self] in
                 guard let `self` = self else {return}
                 self.localAuthPerformed()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     if !Defaults.hasSeenFirstLogin {
                         Defaults.hasSeenFirstLogin = true
-                        self.showLogin(initialView: .Landing, completion: {_ in})
+                        self.showLogin(initialView: .Landing, showTabOnSuccess: .Home)
                     }
                 }
             })

@@ -250,10 +250,7 @@ extension HomeScreenViewController {
             if authManager.isAuthenticated {
                 show(tab: .AuthenticatedRecords)
             } else {
-                showLogin(initialView: .AuthInfo) {[weak self] status in
-                    guard status == .Completed else {return}
-                    self?.show(tab: .AuthenticatedRecords)
-                }
+                showLogin(initialView: .AuthInfo, showTabOnSuccess: .AuthenticatedRecords)
             }
         case .Proofs:
             show(tab: .Proofs)

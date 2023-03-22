@@ -81,6 +81,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         localAuthManager?.listenToAppStates()
         initNetworkListener()
         initKeyboardManager()
+        
+        AppStates.shared.listenToAuth { authenticated in
+            authManager.initTokenExpieryTimer()
+        }
     }
     
     private func initKeyboardManager() {
@@ -220,19 +224,23 @@ extension AppDelegate {
             showToast(message: "Fatal Error")
             return
         }
-        
-        let unseen = Defaults.unseenOnBoardingScreens()
-        guard let first = unseen.first else {
-            let vc = AppTabBarController.construct(authManager: authManager,
-                                                   syncService: syncService,
-                                                   networkService: networkService,
-                                                   configService: configService)
-            self.window?.rootViewController = vc
-            return
-        }
-        
-        let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
+        let vc = AppTabBarController.construct(authManager: authManager,
+                                               syncService: syncService,
+                                               networkService: networkService,
+                                               configService: configService)
         self.window?.rootViewController = vc
+//        let unseen = Defaults.unseenOnBoardingScreens()
+//        guard let first = unseen.first else {
+//            let vc = AppTabBarController.construct(authManager: authManager,
+//                                                   syncService: syncService,
+//                                                   networkService: networkService,
+//                                                   configService: configService)
+//            self.window?.rootViewController = vc
+//            return
+//        }
+//
+//        let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
+//        self.window?.rootViewController = vc
     }
 }
 

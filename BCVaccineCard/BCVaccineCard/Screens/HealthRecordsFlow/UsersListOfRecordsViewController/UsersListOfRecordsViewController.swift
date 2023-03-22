@@ -448,43 +448,8 @@ extension UsersListOfRecordsViewController {
         NotificationCenter.default.post(name: .protectedWordRequired, object: nil, userInfo: userInfo)
     }
     
-    // NOTE: No special routing required here on login, as the user should remain on the same screen
     private func performBCSCLogin() {
-        // TODO: ROUTE REFACTOR - CHECK
-        showLogin(initialView: .Auth) { _ in }
-        
-//        let vm = AuthenticationViewController.ViewModel(initialView: .Auth)
-//        self.showLogin(viewModel: vm) { [weak self] authenticationStatus in
-//            guard let `self` = self, authenticationStatus == .Completed else {return}
-//            print("sync?")
-//        }
-        
-//        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-//            guard response == .Online else {return}
-//            self.showLogin(initialView: .Auth, sourceVC: .UserListOfRecordsVC) { [weak self] authenticationStatus in
-//                guard let `self` = self, authenticationStatus == .Completed else {return}
-//                print("sync?")
-                // TODO: Check this
-//                if let authStatus = Defaults.loginProcessStatus,
-//                   authStatus.hasCompletedLoginProcess == true,
-//                   let storedName = authStatus.loggedInUserAuthManagerDisplayName,
-//                   let currentAuthPatient = StorageService.shared.fetchAuthenticatedPatient(),
-//                   let currentName = currentAuthPatient.authManagerDisplayName,
-//                   storedName != currentName {
-//                    StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
-//                    StorageService.shared.deleteAuthenticatedPatient(with: storedName)
-//                    AuthManager().clearMedFetchProtectiveWordDetails()
-//                    //                self.patient = nil
-//                    if self.navStyle == .multiUser {
-//                        //                    self.navSetup(style: self.navStyle, authenticated: self.authenticated, showLoadingTitle: true)
-//                        //                    self.tableView.startLoadingIndicator()
-//                        self.navigationController?.popViewController(animated: true)
-//                    }
-//                } else {
-//                    self.fetchDataSource()
-//                }
-//            }
-//        })
+        showLogin(initialView: .Auth)
     }
     
     @objc private func patientAPIFetched(_ notification: Notification) {

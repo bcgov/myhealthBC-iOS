@@ -45,7 +45,6 @@ class AppTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         networkListener?.initListener { connected in
             if connected {
                 self.whenConnected()
@@ -54,41 +53,70 @@ class AppTabBarController: UITabBarController {
             }
         }
         
-        showForceUpateIfNeeded(completion: { updateNeeded in
+        showForceUpateIfNeeded() { updateNeeded in
             guard !updateNeeded else {return}
             self.setup(selectedIndex: 0)
-            
-            // When authentication status changes, we can set the records tab to the appropriate VC
-            // and fetch records
-            AppStates.shared.listenToAuth { authenticated in
-                self.setTabs()
-                self.performSync()
+            self.showOnBoardingIfNeeded() {authenticatedDuringOnBoarding in
+                self.setup(selectedIndex: 0)
+                self.setupListeners()
+                if authenticatedDuringOnBoarding {
+                    self.showSuccessfulLoginAlert()
+                    self.performSync()
+                }
             }
-            
-            // Local auth happens on records tab only.
-            // When its done, we should fetch records if user is authenticated.
-            AppStates.shared.listenLocalAuth {
-                self.performSync()
+        }
+    }
+    
+    private func setupListeners() {
+        // When authentication status changes, we can set the records tab to the appropriate VC
+        // and fetch records
+        AppStates.shared.listenToAuth { authenticated in
+            if authenticated {
+                self.showSuccessfulLoginAlert()
             }
-            
-            // When patient profile is stored, reload tabs
-            AppStates.shared.listenToPatient {
-                let storedPatient = StorageService.shared.fetchAuthenticatedPatient()
-                self.patient = storedPatient
-                self.setTabs()
-            }
-            
-            // Sync when requested manually
-            AppStates.shared.listenToSyncRequest {
-                self.performSync()
-            }
-        })
+            self.setTabs()
+            self.performSync()
+        }
+        
+        // Local auth happens on records tab only.
+        // When its done, we should fetch records if user is authenticated.
+        AppStates.shared.listenLocalAuth {
+            self.performSync()
+        }
+        
+        // When patient profile is stored, reload tabs
+        AppStates.shared.listenToPatient {
+            let storedPatient = StorageService.shared.fetchAuthenticatedPatient()
+            self.patient = storedPatient
+            self.setTabs()
+        }
+        
+        // Sync when requested manually
+        AppStates.shared.listenToSyncRequest {
+            self.performSync()
+        }
+    }
+    
+    private func showOnBoardingIfNeeded(completion: @escaping(_ authenticated: Bool)->Void) {
+        let unseen = Defaults.unseenOnBoardingScreens()
+        guard let first = unseen.first else {
+            return completion(false)
+        }
+        let vm = InitialOnboardingViewController.ViewModel(startScreenNumber: first, screensToShow: unseen, completion: completion)
+        let vc = InitialOnboardingViewController.construct(viewModel: vm)
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: false)
+    }
+    
+    private func showSuccessfulLoginAlert() {
+        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
     }
     
     // MARK: Setup
     private func setup(selectedIndex: Int) {
-        self.tabBar.tintColor = AppColours.appBlue
-        self.tabBar.barTintColor = .white
+        tabBar.tintColor = AppColours.appBlue
+        tabBar.barTintColor = .white
+        tabBar.isHidden = false
         setTabs()
     }
     
@@ -106,14 +134,15 @@ class AppTabBarController: UITabBarController {
     // MARK: Set and create tabs
     private func setTabs() {
         if AuthManager().isAuthenticated {
-            self.currentTabs = authenticatedTabs
-            self.viewControllers = setViewControllers(tabs: authenticatedTabs)
+            currentTabs = authenticatedTabs
+            viewControllers = setViewControllers(tabs: authenticatedTabs)
         } else {
-            self.currentTabs = unAuthenticatedTabs
-            self.viewControllers = setViewControllers(tabs: unAuthenticatedTabs)
+            currentTabs = unAuthenticatedTabs
+            viewControllers = setViewControllers(tabs: unAuthenticatedTabs)
         }
-        self.view.layoutIfNeeded()
-        self.tabBar.layoutIfNeeded()
+        tabBar.isHidden = false
+        view.layoutIfNeeded()
+        tabBar.layoutIfNeeded()
     }
     
     private func setViewControllers(tabs: [AppTabs]) -> [UIViewController] {

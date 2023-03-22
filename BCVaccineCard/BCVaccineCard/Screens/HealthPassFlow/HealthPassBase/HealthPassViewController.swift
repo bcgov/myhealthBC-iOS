@@ -97,7 +97,7 @@ extension HealthPassViewController {
     private func goToAddCardOptionScreen(showAuth: Bool) {
         
         if showAuth && !AuthManager().isAuthenticated {
-            showLogin(initialView: .Landing) {[weak self] authenticationStatus in
+            showLogin(initialView: .Landing, showTabOnSuccess: .Proofs) {[weak self] authenticationStatus in
                 if authenticationStatus != .Completed {
                     self?.show(route: .QRRetrievalMethod, withNavigation: true)
                 } else {
