@@ -48,6 +48,9 @@ class MobileConfigService {
                 Logger.log(string: "MobileConfigService response received", type: .Network)
                 if let response = responseData {
                     MobileConfigStorage.store(config: response)
+                    if response.online == false {
+                        AppDelegate.sharedInstance?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                    }
                 }
                 while !self.callers.isEmpty {
                     if let callback = self.callers.popLast() {

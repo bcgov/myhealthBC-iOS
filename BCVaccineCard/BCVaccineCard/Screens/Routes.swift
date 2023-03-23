@@ -15,10 +15,11 @@ extension UIViewController {
                    showTabOnSuccess: AppTabs? = nil,
                    completion: ((AuthenticationViewController.AuthenticationStatus)->Void)? = nil
     ) {
-        guard let tabBar = self.tabBarController as? AppTabBarController else {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: .noInternetConnection, style: .Warn)
             return
         }
-        let currentTab = tabBar.selectedIndex
+  
         let authSetvice = AppDelegate.sharedInstance?.authManager ?? AuthManager()
         let ConfigService = AppDelegate.sharedInstance?.configService ?? MobileConfigService(network: AFNetwork())
         let viewModel: AuthenticationViewController.ViewModel = AuthenticationViewController.ViewModel(
@@ -26,8 +27,14 @@ extension UIViewController {
             configService: ConfigService,
             authManager: authSetvice,
             completion: { result in
-//                completion(result)
-                if result == .Completed, let showTab = showTabOnSuccess {
+                if let completion = completion {
+                    completion(result)
+                }
+                
+                if let tabBar = self.tabBarController as? AppTabBarController,
+                   result == .Completed,
+                   let showTab = showTabOnSuccess
+                {
                     tabBar.switchTo(tab: showTab)
                 }
             })
@@ -37,7 +44,13 @@ extension UIViewController {
         if #available(iOS 13.0, *) {
             controller.modalPresentationStyle = presentationStyle ?? .automatic
         }
-        tabBar.present(controller, animated: true)
+        
+        if let tabBar = self.tabBarController as? AppTabBarController {
+            tabBar.present(controller, animated: true)
+        } else {
+            present(controller, animated: true)
+        }
+        
     }
 }
 

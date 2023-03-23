@@ -139,9 +139,10 @@ extension StorageService: StorageVaccineCardManager {
         }
         
         var patientOwner = patient
-        if let phn = patient.phn, let refetchPatientInContext = fetchPatient(phn: phn) {
+        if let phn = patient.phn, let refetchPatientInContext = fetchPatient(phn: phn, context: context) {
             patientOwner = refetchPatientInContext
         }
+        if patientOwner.managedObjectContext ==  nil { return completion(nil)}
         
         let card = VaccineCard(context: context)
         card.authenticated = authenticated

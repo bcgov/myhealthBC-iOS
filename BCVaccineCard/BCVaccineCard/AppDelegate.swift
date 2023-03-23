@@ -75,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         clearKeychainIfNecessary(authManager: authManager)
         setupRootViewController()
-        authManager.initTokenExpieryTimer()
+        authManager.initAuthExpieryTimer()
         listenToAppState()
         localAuthManager = LocalAuthManager()
         localAuthManager?.listenToAppStates()
@@ -83,7 +83,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         initKeyboardManager()
         
         AppStates.shared.listenToAuth { authenticated in
-            authManager.initTokenExpieryTimer()
+            if authenticated {
+                authManager.initAuthExpieryTimer()
+            }
         }
     }
     

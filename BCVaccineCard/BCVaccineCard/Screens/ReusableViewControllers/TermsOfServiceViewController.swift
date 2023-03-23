@@ -116,7 +116,12 @@ extension TermsOfServiceViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         switch type {
         case .cancel: respondToTermsOfService(accepted: false)
-        case .agree: respondToTermsOfService(accepted: true)
+        case .agree:
+            guard NetworkConnection.shared.hasConnection else {
+                NetworkConnection.shared.showUnreachableToast()
+                return
+            }
+            respondToTermsOfService(accepted: true)
         default: break
         }
     }
@@ -129,8 +134,8 @@ extension TermsOfServiceViewController {
         case Error
         case DidntAgree
     }
+    
     private func respondToTermsOfService(accepted: Bool) {
-        
         guard let termsOfServiceId = tosPayload?.id else { return }
         guard accepted == true else {
             signout(error: nil, reason: .DidntAgree)

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 protocol StoragePatientManager {
     
@@ -57,7 +58,7 @@ protocol StoragePatientManager {
     // MARK: Fetch
     /// Returns all stored patients
     /// - Returns: all stored patients
-    func fetchPatients() -> [Patient]
+    func fetchPatients(context: NSManagedObjectContext?) -> [Patient]
     
     /// Returns the patient with authenticated results
     /// - Returns: patient
@@ -73,7 +74,7 @@ protocol StoragePatientManager {
     
     /// Returns the patient with matching phn
     /// - Returns: patient
-    func fetchPatient(phn: String) -> Patient?
+    func fetchPatient(phn: String, context: NSManagedObjectContext?) -> Patient?
     
     /// Returns the patient with matching name and bitthday
     /// - Returns: patient
@@ -264,10 +265,19 @@ extension StorageService: StoragePatientManager {
     
     /// returns all stored patients
     /// - Returns: all stored patients
-    public func fetchPatients() -> [Patient] {
-        guard let context = managedContext else {return []}
+    public func fetchPatients(context: NSManagedObjectContext? = nil) -> [Patient] {
+        let contextToUse: NSManagedObjectContext?
+        if let givenContext = context {
+            contextToUse = givenContext
+        } else if let currentContext = managedContext {
+            contextToUse = currentContext
+        } else {
+            contextToUse = nil
+            return []
+        }
+        guard let contextToUse = contextToUse else {return []}
         do {
-            return try context.fetch(Patient.fetchRequest())
+            return try contextToUse.fetch(Patient.fetchRequest())
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
@@ -302,8 +312,8 @@ extension StorageService: StoragePatientManager {
     /// fetch patient by phn
     /// - Parameter phn: patient phn
     /// - Returns: patient
-    public func fetchPatient(phn: String) -> Patient? {
-        let patients = fetchPatients()
+    public func fetchPatient(phn: String, context: NSManagedObjectContext? = nil) -> Patient? {
+        let patients = fetchPatients(context: context)
         return patients.filter({$0.phn == phn}).first
     }
     

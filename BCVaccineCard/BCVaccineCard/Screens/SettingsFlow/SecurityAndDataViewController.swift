@@ -132,11 +132,12 @@ class SecurityAndDataViewController: BaseViewController {
 //    }
 //
     private func performLogout(completion: @escaping(_ success: Bool)-> Void) {
+        guard NetworkConnection.shared.hasConnection else {
+            NetworkConnection.shared.showUnreachableToast()
+            return
+        }
         authManager.signout(in: self, completion: { [weak self] success in
             guard let `self` = self else {return}
-            // Regardless of the result of the async logout, clear tokens.
-            // because user may be offline
-            // TODO: Note - sometimes prompt isn't shown after hitting logout, so the screen state (for records) remains. We should look at resetting tab bar and then switch index to current index after reset
             self.authManager.clearData()
             self.tableView.reloadData()
             completion(success)

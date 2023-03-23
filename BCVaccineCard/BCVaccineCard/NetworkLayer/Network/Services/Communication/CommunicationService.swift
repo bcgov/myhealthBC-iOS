@@ -16,6 +16,10 @@ extension CommunicationBanner {
     }
 }
 
+class CommunicationSetviceCache {
+    static var banner: CommunicationBanner? = nil
+}
+
 struct CommunicationSetvice {
     fileprivate static var dismissed: [CommunicationBanner] = []
     
@@ -27,6 +31,9 @@ struct CommunicationSetvice {
     }
     
     func fetchMessage(completion: @escaping(_ message: CommunicationBanner?) -> Void) {
+        if let cached = CommunicationSetviceCache.banner {
+            return completion(cached)
+        }
         configService.fetchConfig { response in
             guard let config = response,
                   config.online,
@@ -36,6 +43,7 @@ struct CommunicationSetvice {
                 return completion(nil)
             }
             let requestModel = NetworkRequest<DefaultParams, CommunicationResponse>(url: endpoints.communication(base: baseURL), type: .Get, parameters: nil, headers: nil) { result in
+                CommunicationSetviceCache.banner = result?.resourcePayload
                 completion(result?.resourcePayload)
             }
             

@@ -6,6 +6,7 @@
   
 */
 
+"NoInternetConnection" = "You are not connected to the internet";
 "OK" = "OK";
 "Yes" = "Yes";
 "No" = "No";

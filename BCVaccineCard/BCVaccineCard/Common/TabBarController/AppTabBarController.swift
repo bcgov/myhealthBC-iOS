@@ -56,7 +56,7 @@ class AppTabBarController: UITabBarController {
         showForceUpateIfNeeded() { updateNeeded in
             guard !updateNeeded else {return}
             self.setup(selectedIndex: 0)
-            self.showOnBoardingIfNeeded() {authenticatedDuringOnBoarding in
+            self.showOnBoardingIfNeeded() { authenticatedDuringOnBoarding in
                 self.setup(selectedIndex: 0)
                 self.setupListeners()
                 if authenticatedDuringOnBoarding {
@@ -102,9 +102,9 @@ class AppTabBarController: UITabBarController {
         guard let first = unseen.first else {
             return completion(false)
         }
-        let vm = InitialOnboardingViewController.ViewModel(startScreenNumber: first, screensToShow: unseen, completion: completion)
+        let vm = InitialOnboardingViewController.ViewModel(delegate: self, startScreenNumber: first, screensToShow: unseen, completion: completion)
         let vc = InitialOnboardingViewController.construct(viewModel: vm)
-        vc.modalPresentationStyle = .fullScreen
+        vc.modalPresentationStyle = .overFullScreen
         present(vc, animated: false)
     }
     
@@ -133,7 +133,7 @@ class AppTabBarController: UITabBarController {
     
     // MARK: Set and create tabs
     private func setTabs() {
-        if AuthManager().isAuthenticated {
+        if AuthManager().authToken != nil {
             currentTabs = authenticatedTabs
             viewControllers = setViewControllers(tabs: authenticatedTabs)
         } else {

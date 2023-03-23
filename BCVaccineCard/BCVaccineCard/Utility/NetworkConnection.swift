@@ -35,6 +35,9 @@ class NetworkConnection {
         }
     }
     
+    func showUnreachableToast() {
+        AppDelegate.sharedInstance?.showToast(message: .noInternetConnection, style: .Warn)
+    }
     
     public func initListener(onChange: @escaping(_ connected: Bool) -> Void) {
         self.onChange = onChange
@@ -58,7 +61,7 @@ class NetworkConnection {
         reachability.whenUnreachable = { [weak self] _ in
             guard let `self` = self,let  notifier = self.onChange else {return}
             Logger.log(string: "Not reachable", type: .Network)
-            AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+            AppDelegate.sharedInstance?.showToast(message: .noInternetConnection, style: .Warn)
             notifier(false)
         }
 

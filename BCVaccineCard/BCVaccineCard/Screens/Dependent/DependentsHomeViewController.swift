@@ -404,11 +404,20 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
             showDetails(for: dependentPatient)
             blockDependentSelection = false
         } else {
-            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records in
-                SessionStorage.dependentRecordsFetched.append(dependentPatient)
-                self?.showDetails(for: dependentPatient)
-                self?.blockDependentSelection = false
-            }
+            selected(dependent: dependent, dependentPatient: dependentPatient)
+        }
+    }
+    
+    private func selected(dependent: Dependent, dependentPatient: Patient) {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: .noInternetConnection, style: .Warn)
+            return
+        }
+        
+        HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records in
+            SessionStorage.dependentRecordsFetched.append(dependentPatient)
+            self?.showDetails(for: dependentPatient)
+            self?.blockDependentSelection = false
         }
     }
     

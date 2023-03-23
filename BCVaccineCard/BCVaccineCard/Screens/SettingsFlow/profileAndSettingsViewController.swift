@@ -220,6 +220,10 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
     }
     
     private func performLogout(completion: @escaping(_ success: Bool)-> Void) {
+        guard NetworkConnection.shared.hasConnection else {
+            NetworkConnection.shared.showUnreachableToast()
+            return
+        }
         MobileConfigService(network: AFNetwork()).fetchConfig { response in
             guard let config = response, config.online else {return}
             self.authManager.signout(in: self, completion: { [weak self] success in

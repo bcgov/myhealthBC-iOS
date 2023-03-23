@@ -134,16 +134,12 @@ class AuthManager {
             return nil
         }
     }
-    // Note: Below is a hacky solution where we have to use access token expiry
+    
     var isAuthenticated: Bool {
         guard authToken != nil else {
             return false
         }
-//        guard let refreshExpiery = refreshTokenExpiery else {
-//            return false
-//        }
         guard let accessExpiry = authTokenExpiery else { return false }
-//        return refreshExpiery > Date()
         return accessExpiry > Date()
     }
     
@@ -440,18 +436,22 @@ class AuthManager {
 
 
 extension AuthManager {
-    func initTokenExpieryTimer() {
-        if let authTokenExpiery = authTokenExpiery {
-            let timer = Timer(fireAt: authTokenExpiery, interval: 0, target: self, selector: #selector(authTokenExpired), userInfo: nil, repeats: false)
+    func initAuthExpieryTimer() {
+        if let authTokenExpiery = authTokenExpiery, isAuthenticated {
+            let timer = Timer(fireAt: authTokenExpiery, interval: 0, target: self, selector: #selector(authExpired), userInfo: nil, repeats: false)
             self.timer?.invalidate()
             self.timer = timer
             RunLoop.main.add(timer, forMode: .common)
         }
     }
     
-    @objc func authTokenExpired() {
+    @objc func authExpired() {
+        guard !isAuthenticated else {return}
+        timer?.invalidate()
+        let info: [String: Bool] = [Constants.AuthStatusKey.key: false]
         NotificationCenter.default.post(name: .authTokenExpired, object: nil)
-        NotificationCenter.default.post(name: .authStatusChanged, object: nil)
+        NotificationCenter.default.post(name: .authStatusChanged, object: nil, userInfo: info)
+       
     }
     
     // Note - due to hack, we won't be using this function, currently

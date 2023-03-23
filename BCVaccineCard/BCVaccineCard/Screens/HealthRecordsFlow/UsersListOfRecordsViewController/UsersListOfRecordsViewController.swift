@@ -162,24 +162,10 @@ extension UsersListOfRecordsViewController {
 extension UsersListOfRecordsViewController {
     private func navSetup(style: NavStyle, authenticated: Bool, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
-        if authenticated {
-            let filterButton = NavButton(title: nil,
-                                         image: UIImage(named: "filter"), action: #selector(self.showFilters),
-                                         accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-            buttons.append(filterButton)
-        } else {
-            var editModeNavButton: NavButton
-            if inEditMode {
-                editModeNavButton = NavButton(title: .done,
-                                              image: nil, action: #selector(self.doneButton),
-                                              accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightDoneIconHint))
-            } else {
-                editModeNavButton = NavButton(title: nil,
-                                              image: UIImage(named: "edit-icon"), action: #selector(self.editButton),
-                                              accessibility: Accessibility(traits: .button, label: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconTitle, hint: AccessibilityLabels.ListOfHealthRecordsScreen.navRightEditIconHint))
-            }
-            buttons.append(editModeNavButton)
-        }
+        let filterButton = NavButton(title: nil,
+                                     image: UIImage(named: "filter"), action: #selector(self.showFilters),
+                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+        buttons.append(filterButton)
         
         if style == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             self.navigationItem.setHidesBackButton(true, animated: false)

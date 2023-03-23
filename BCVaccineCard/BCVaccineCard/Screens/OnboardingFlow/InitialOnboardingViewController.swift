@@ -11,6 +11,7 @@ import UIKit
 class InitialOnboardingViewController: UIViewController {
     
     struct ViewModel {
+        let delegate: TabDelegate
         let startScreenNumber: OnboardingScreenType
         let screensToShow: [OnboardingScreenType]
         let completion: (_ authenticated: Bool)->Void
@@ -276,7 +277,10 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         if AuthManager().isAuthenticated {
             showHomeScreen(authStatus: nil)
         } else {
-            showLogin(initialView: .Landing, presentationStyle: .fullScreen, showTabOnSuccess: .Home)
+            showLogin(initialView: .Landing, presentationStyle: .fullScreen, showTabOnSuccess: .Home) {[weak self] _ in
+                self?.viewModel?.delegate.switchTo(tab: .Home)
+                self?.dismiss(animated: true)
+            }
             Defaults.hasSeenFirstLogin = true
         }
         
