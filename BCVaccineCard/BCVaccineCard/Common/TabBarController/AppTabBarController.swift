@@ -56,9 +56,9 @@ class AppTabBarController: UITabBarController {
         showForceUpateIfNeeded() { updateNeeded in
             guard !updateNeeded else {return}
             self.setup(selectedIndex: 0)
+            self.setupListeners()
             self.showOnBoardingIfNeeded() { authenticatedDuringOnBoarding in
                 self.setup(selectedIndex: 0)
-                self.setupListeners()
                 if authenticatedDuringOnBoarding {
                     self.showSuccessfulLoginAlert()
                     self.performSync()

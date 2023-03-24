@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="fQx-x4-9Us">
-                                <rect key="frame" x="0.0" y="108" width="414" height="552"/>
+                                <rect key="frame" x="0.0" y="108" width="414" height="530"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lIg-6Z-zXM">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
@@ -47,16 +47,16 @@
                                         </subviews>
                                     </stackView>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xbT-Bn-hiV">
-                                        <rect key="frame" x="0.0" y="144" width="414" height="408"/>
+                                        <rect key="frame" x="0.0" y="144" width="414" height="386"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </tableView>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="H98-J5-p9U">
-                                <rect key="frame" x="31" y="676" width="352" height="178"/>
+                                <rect key="frame" x="24" y="654" width="366" height="178"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dAf-Jx-6kd">
-                                        <rect key="frame" x="0.0" y="0.0" width="352" height="54"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="366" height="54"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="54" id="X4Q-ho-Nov"/>
                                         </constraints>
@@ -67,7 +67,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PAG-rS-Ep8">
-                                        <rect key="frame" x="0.0" y="62" width="352" height="54"/>
+                                        <rect key="frame" x="0.0" y="62" width="366" height="54"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="54" id="5xf-hh-Gdb"/>
                                         </constraints>
@@ -78,7 +78,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eaq-Gh-nwX">
-                                        <rect key="frame" x="0.0" y="124" width="352" height="54"/>
+                                        <rect key="frame" x="0.0" y="124" width="366" height="54"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="54" id="geR-qe-xcf"/>
                                         </constraints>
@@ -95,9 +95,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="fQx-x4-9Us" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="6bP-01-aWG"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="H98-J5-p9U" secondAttribute="trailing" constant="31" id="7C6-V1-iZ4"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="H98-J5-p9U" secondAttribute="bottom" constant="8" id="RIU-Cg-HSM"/>
-                            <constraint firstItem="H98-J5-p9U" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="31" id="T7g-IN-cTd"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="H98-J5-p9U" secondAttribute="trailing" constant="24" id="7C6-V1-iZ4"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="H98-J5-p9U" secondAttribute="bottom" constant="30" id="RIU-Cg-HSM"/>
+                            <constraint firstItem="H98-J5-p9U" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="24" id="T7g-IN-cTd"/>
                             <constraint firstItem="fQx-x4-9Us" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="bbM-3e-sAS"/>
                             <constraint firstItem="fQx-x4-9Us" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="16" id="dl2-Bc-ckb"/>
                             <constraint firstItem="H98-J5-p9U" firstAttribute="top" secondItem="fQx-x4-9Us" secondAttribute="bottom" constant="16" id="lM6-ku-0wt"/>

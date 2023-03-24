@@ -29,21 +29,18 @@ class HealthPassViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshOnStorageChange()
         setFedPassObservable()
         setupListeners()
         showFedPassIfNeccessary()
+        setup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        tabBarController?.tabBar.isHidden = false
         navSetup()
-        fetchFromStorage()
-        setupTableView()
-        // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
-        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -59,7 +56,8 @@ class HealthPassViewController: BaseViewController {
     }
     
     private func setup() {
-        retrieveDataSource()
+        setupTableView()
+        fetchFromStorage()
     }
     
     private func showFedPassIfNeccessary() {
@@ -72,7 +70,16 @@ class HealthPassViewController: BaseViewController {
 // MARK: Listeners
 extension HealthPassViewController {
     private func setupListeners() {
-        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+        AppStates.shared.listenToStorage { [weak self] event in
+            guard let `self` = self else {return}
+            guard event.entity == .VaccineCard else {return}
+            self.setup()
+        }
+        
+        AppStates.shared.listenToAuth { [weak self] authenticated in
+            guard let `self` = self else {return}
+            self.setup()
+        }
     }
     
     @objc private func reloadFromForcedLogout(_ notification: Notification) {
@@ -101,7 +108,7 @@ extension HealthPassViewController {
                 if authenticationStatus != .Completed {
                     self?.show(route: .QRRetrievalMethod, withNavigation: true)
                 } else {
-                    self?.retrieveDataSource()
+                    self?.fetchFromStorage()
                 }
             }
         } else {
@@ -113,22 +120,19 @@ extension HealthPassViewController {
 
 // MARK: DataSource Management
 extension HealthPassViewController {
-    private func retrieveDataSource() {
-        fetchFromStorage()
-    }
     
-    private func refreshOnStorageChange() {
-        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
-            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
-            switch event.entity {
-            case .VaccineCard, .Patient:
-                self.fetchFromStorage()
-            default:
-                break
-            }
-           
-        }
-    }
+//    private func refreshOnStorageChange() {
+//        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+//            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+//            switch event.entity {
+//            case .VaccineCard, .Patient:
+//                self.fetchFromStorage()
+//            default:
+//                break
+//            }
+//           
+//        }
+//    }
 }
 
 // MARK: For fed pass observable
