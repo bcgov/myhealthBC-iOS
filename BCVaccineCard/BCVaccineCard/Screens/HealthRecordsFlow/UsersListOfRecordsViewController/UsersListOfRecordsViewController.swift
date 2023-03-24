@@ -78,7 +78,10 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setObservables()
-        if let patient = viewModel?.patient, let patientName = patient.name, let existingFilter = UserFilters.filterFor(name: patientName) {
+        if let patient = viewModel?.patient,
+           let patientName = patient.name,
+           let existingFilter = UserFilters.filterFor(name: patientName)
+        {
             currentFilter = existingFilter
         }
         // When authentication is expired, reset filters
@@ -113,19 +116,28 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setObservables() {
-        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(storageChangeEvent), name: .storageChangeEvent, object: nil)
+        AppStates.shared.listenToAuth { [weak self] authenticated in
+            guard let `self` = self else {return}
+            self.setup()
+        }
         
-        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+        AppStates.shared.listenToStorage { [weak self] event in
+            guard let `self` = self else {return}
+            guard event.event == .Save else {return}
+            self.refreshDebounceTimer?.invalidate()
+            self.refreshDebounceTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.refreshOnStorageUpdate), userInfo: nil, repeats: false)
+        }
+//        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
+        
     }
     
     private func setup() {
-//        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
-        self.parentContainerStackView.endLoadingIndicator()
-        let showLoadingTitle = (viewModel?.patient == nil && viewModel?.authenticated == true)
+//        self.parentContainerStackView.endLoadingIndicator()
+//        let showLoadingTitle = (viewModel?.patient == nil && viewModel?.authenticated == true)
+        setupTableView()
         updatePatientIfNecessary()
         navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
         showSelectedFilters()
@@ -148,13 +160,6 @@ class UsersListOfRecordsViewController: BaseViewController {
         hideSelectedFilters()
         let patientRecords = fetchPatientRecords()
         show(records: patientRecords)
-    }
-}
-
-// MARK: For reloading data on logout hack
-extension UsersListOfRecordsViewController {
-    @objc private func reloadFromForcedLogout(_ notification: Notification) {
-        setup()
     }
 }
 
@@ -304,12 +309,20 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
 extension UsersListOfRecordsViewController {
     
     private func fetchDataSource(initialProtectedMedFetch: Bool = false) {
-        guard self.dataSource.count == 0 else {
-            show(records: self.dataSource, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
+        guard let vm = self.viewModel else {
             return
         }
-        let patientRecords = fetchPatientRecords()
-        show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
+        switch vm.state {
+        case .AuthExpired:
+            showAuthExpired()
+        case .authenticated:
+            guard self.dataSource.count == 0 else {
+                show(records: self.dataSource, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
+                return
+            }
+            let patientRecords = fetchPatientRecords()
+            show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
+        }
     }
     
     private func fetchPatientRecords() -> [HealthRecordsDetailDataSource] {
@@ -317,6 +330,11 @@ extension UsersListOfRecordsViewController {
         let records = StorageService.shared.getRecords(for: patient)
         let patientRecords = records.detailDataSource(patient: patient)
         return patientRecords
+    }
+    
+    func showAuthExpired() {
+        self.hiddenCellType = .loginToAccesshealthRecords(hiddenRecords: 0)
+        tableView.reloadData()
     }
     
     private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil, initialProtectedMedFetch: Bool = false) {
@@ -366,16 +384,16 @@ extension UsersListOfRecordsViewController {
             tableView.reloadData()
         }
         
-        if AuthManager().isAuthenticated {
-            handleAuthenticatedMedicalRecords(patientRecords: patientRecords, initialProtectedMedFetch: initialProtectedMedFetch)
-        } else {
-            let unauthenticatedRecords = patientRecords.filter({!$0.isAuthenticated})
-            let authenticatedRecords = patientRecords.filter({$0.isAuthenticated})
-            self.dataSource = unauthenticatedRecords
-            self.hiddenRecords = authenticatedRecords
-            self.hiddenCellType = .loginToAccesshealthRecords(hiddenRecords: hiddenRecords.count)
-        }
-        self.setupTableView()
+        handleAuthenticatedMedicalRecords(patientRecords: patientRecords, initialProtectedMedFetch: initialProtectedMedFetch)
+//        if AuthManager().isAuthenticated {
+//            handleAuthenticatedMedicalRecords(patientRecords: patientRecords, initialProtectedMedFetch: initialProtectedMedFetch)
+//        } else {
+//            let unauthenticatedRecords = patientRecords.filter({!$0.isAuthenticated})
+//            let authenticatedRecords = patientRecords.filter({$0.isAuthenticated})
+//            self.dataSource = unauthenticatedRecords
+//            self.hiddenRecords = authenticatedRecords
+//            self.hiddenCellType = .loginToAccesshealthRecords(hiddenRecords: hiddenRecords.count)
+//        }
         self.navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
         
         // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
@@ -463,13 +481,25 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        // Auth expired dialog
+        if viewModel?.state == .AuthExpired {
+            return 1
+        }
+        // Hidden records?
         return (self.hiddenCellType == .medicalRecords || !hiddenRecords.isEmpty) ? 2 : 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Auth expired dialog
+        if viewModel?.state == .AuthExpired {
+            return 1
+        }
+        
+        // Hidden records
         if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && section == 0 {
             return 1
         }
+        // Records
         return dataSource.count
     }
     
@@ -482,36 +512,37 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         return cell
     }
     
-    private func hiddenRecordsCell(indexPath: IndexPath) -> UITableViewCell {
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: HiddenRecordsTableViewCell.getName, for: indexPath) as? HiddenRecordsTableViewCell else {
+    private func getProtectiveWordCell(indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HiddenRecordsTableViewCell.getName, for: indexPath) as? HiddenRecordsTableViewCell else {
             return UITableViewCell()
         }
-        // TODO: Configure fetch type elsewhere (when data source is being sorted) and pass in here
-        guard let hiddenType = self.hiddenCellType else { return cell }
-        cell.configure(forRecordType: hiddenType) { [weak self] hiddenType in
+        cell.configure(forRecordType: .medicalRecords) { [weak self] _ in
             guard let `self` = self else { return }
-            guard let type = hiddenType else { return }
-            switch type {
-            case .loginToAccesshealthRecords:
-                self.performBCSCLogin()
-            case .medicalRecords:
-                if AuthManager().medicalFetchRequired {
-                    self.selectedCellIndexPath = indexPath
-                }
-                self.promptProtectiveVC(medFetchRequired: AuthManager().medicalFetchRequired)
-            case .authenticate:
-                break
-            case .loginToAccessDependents:
-                break
+            if AuthManager().medicalFetchRequired {
+                self.selectedCellIndexPath = indexPath
             }
+            self.promptProtectiveVC(medFetchRequired: AuthManager().medicalFetchRequired)
+        }
+        return cell
+    }
+    
+    private func getLoginCell(indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HiddenRecordsTableViewCell.getName, for: indexPath) as? HiddenRecordsTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.configure(forRecordType: .loginToAccesshealthRecords(hiddenRecords: 0)) { [weak self] _ in
+            guard let `self` = self else { return }
+            self.performBCSCLogin()
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if viewModel?.state == .AuthExpired {
+            return getLoginCell(indexPath: indexPath)
+        }
         if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && indexPath.section == 0 {
-            return hiddenRecordsCell(indexPath: indexPath)
+            return getProtectiveWordCell(indexPath: indexPath)
         } else {
             return recordCell(indexPath: indexPath)
         }
@@ -577,13 +608,6 @@ extension UsersListOfRecordsViewController {
         MedicationService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records in
             print(records.count)
         }
-//        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { [weak self] response in
-//            guard response == .Online, let patient = self?.patient else {return}
-//            self.adjustLoadingIndicator(show: true)
-//            SessionStorage.attemptingProtectiveWord = true
-//            self.performAuthenticatedRecordsFetch(isManualFetch: false, showBanner: true, specificFetchTypes: [.MedicationStatement, .Comments], protectiveWord: protectiveWord, sourceVC: .UserListOfRecordsVC, initialProtectedMedFetch: true)
-           
-//        })
     }
 }
 
@@ -610,14 +634,6 @@ extension UsersListOfRecordsViewController {
     @objc private func authFetchComplete(_ notification: Notification) {
         adjustLoadingIndicator(show: false)
         self.fetchDataSource(initialProtectedMedFetch: true)
-        self.fetchDataSource(initialProtectedMedFetch: true)
-    }
-    
-    @objc private func storageChangeEvent(_ notification: Notification) {
-        guard let event = notification.object as? StorageService.StorageEvent<Any> else {return}
-        guard event.event == .Save else {return}
-        refreshDebounceTimer?.invalidate()
-        refreshDebounceTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(refreshOnStorageUpdate), userInfo: nil, repeats: false)
     }
     
     @objc private func refreshOnStorageUpdate() {

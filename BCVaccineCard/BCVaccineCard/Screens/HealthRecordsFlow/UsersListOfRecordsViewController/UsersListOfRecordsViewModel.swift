@@ -16,9 +16,25 @@ extension UsersListOfRecordsViewController {
         let navStyle: NavStyle = .singleUser
         let hasUpdatedUnauthPendingTest = true
         let dataSource: [HealthRecordsDetailDataSource] = []
+        
+        var state: State {
+            if AuthManager().isAuthenticated {
+                return .authenticated
+            }
+            if AuthManager().authToken != nil {
+                return .AuthExpired
+            }
+            return .AuthExpired
+        }
     }
+    
     enum NavStyle {
         case singleUser
         case multiUser
+    }
+    
+    enum State {
+        case AuthExpired
+        case authenticated
     }
 }
