@@ -122,7 +122,17 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     @objc private func refresh(_ sender: AnyObject) {
-        AppStates.shared.requestSync()
+        // TODO: Test out the dependent refresh logic here
+        if isDependent {
+            guard let patient = viewModel?.patient else { return }
+            guard let dependent = patient.dependencyInfo else { return }
+            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records in
+                SessionStorage.dependentRecordsFetched.append(patient)
+                self?.refreshControl.endRefreshing()
+            }
+        } else {
+            AppStates.shared.requestSync()
+        }
     }
     
     private func setObservables() {

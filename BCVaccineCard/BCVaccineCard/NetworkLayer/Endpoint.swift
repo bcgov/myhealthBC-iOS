@@ -28,6 +28,7 @@ protocol EndpointsAccessor {
     func userProfile(base url: URL, hdid: String) -> URL
     func listOfDependents(base url: URL, hdid: String) -> URL
     func deleteDependent(base url: URL, dependentHdid: String, guardian: String) -> URL
+    func feedback(base url: URL, hdid: String) -> URL
 }
 
 struct UrlAccessor: EndpointsAccessor {
@@ -134,6 +135,12 @@ struct UrlAccessor: EndpointsAccessor {
             .appendingPathComponent(guardian)
             .appendingPathComponent("Dependent")
             .appendingPathComponent(dependentHdid)
+    }
+    
+    // MARK: Feedback
+    
+    func feedback(base url: URL, hdid: String) -> URL {
+        return gatewayAPIService(base: url).appendingPathComponent("UserFeedback").appendingPathComponent(hdid)
     }
     
     // MARK: User

@@ -31,6 +31,8 @@ class FeedbackViewController: BaseViewController {
     
     private let characterLimit = 500
     private let placeholderText = "Describe your suggestion or idea..."
+    
+    private var feedbackService: FeedbackService?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +44,8 @@ class FeedbackViewController: BaseViewController {
         labelSetup()
         setupTextView()
         setupButton()
+        // TODO: Clean this up so that we don't keep reinstantiating a new network every time
+        feedbackService = FeedbackService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
     }
 
 }
@@ -92,6 +96,50 @@ extension FeedbackViewController: UITextViewDelegate {
         feedbackTextView.layer.borderWidth = 1.0
         feedbackTextView.textColor = AppColours.textGray
         feedbackTextView.font = UIFont.bcSansRegularWithSize(size: 17)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        addDoneButtonOnKeyboard()
+        feedbackTextView.contentInset = UIEdgeInsets(top: 10, left: 8, bottom: 50, right: 8)
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    private func addDoneButtonOnKeyboard(){
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
+        doneToolbar.barStyle = .default
+
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneButtonAction))
+
+        let items = [flexSpace, done]
+        doneToolbar.items = items
+        doneToolbar.sizeToFit()
+
+        feedbackTextView.inputAccessoryView = doneToolbar
+    }
+
+    @objc func doneButtonAction(){
+        feedbackTextView.resignFirstResponder()
+    }
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        placeholderLabel.isHidden = true
+        formatUI(underLimit: textView.text.count <= characterLimit, characterCount: textView.text.count)
+        return true
+    }
+    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        if textView.text.trimWhiteSpacesAndNewLines.count == 0 {
+            placeholderLabel.isHidden = false
+        }
+        formatUI(underLimit: textView.text.count <= characterLimit, characterCount: textView.text.count)
+        return true
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        formatUI(underLimit: textView.text.count <= characterLimit, characterCount: textView.text.count)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -114,7 +162,7 @@ extension FeedbackViewController: UITextViewDelegate {
     private func formatUI(underLimit: Bool, characterCount: Int) {
         formatTextView(underLimit: underLimit)
         formatLabel(underLimit: underLimit, characterCount: characterCount)
-        updateButtonStatus(underLimit: underLimit, characterCount: characterCount)
+        updateButtonStatus(characterCount: characterCount)
     }
     
     private func formatTextView(underLimit: Bool) {
@@ -125,11 +173,10 @@ extension FeedbackViewController: UITextViewDelegate {
         characterWarningMessageLabel.isHidden = underLimit
         characterCountLabel.text = "\(characterCount)/\(characterLimit)"
         characterCountLabel.textColor = underLimit ? AppColours.textGray : AppColours.appRed
-        placeholderLabel.isHidden = characterCount > 0
     }
     
-    private func updateButtonStatus(underLimit: Bool, characterCount: Int) {
-        sendMessageButton.enabled = underLimit && characterCount > 0
+    private func updateButtonStatus(characterCount: Int) {
+        sendMessageButton.enabled = characterCount > 0
     }
     
 }
@@ -139,10 +186,19 @@ extension FeedbackViewController: AppStyleButtonDelegate {
 
     private func setupButton() {
         sendMessageButton.configure(withStyle: .blue, buttonType: .sendMessage, delegateOwner: self, enabled: false)
+        sendMessageButton.isHidden = !AuthManager().isAuthenticated
     }
     
     func buttonTapped(type: AppStyleButton.ButtonType) {
         guard type == .sendMessage else { return }
-        // TODO: Functionality done here for making the network request
+        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+        let feedback = PostFeedback(comment: feedbackTextView.text)
+        feedbackService?.postFeedback(for: patient, object: feedback, completion: { success in
+            if success {
+                self.alert(title: "Success", message: "Your message has been sent successfully!") {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        })
     }
 }
