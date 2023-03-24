@@ -309,6 +309,9 @@
 		2DF2102828DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF2102428DD2B2700F5E01C /* ViewPDFTableViewCell.xib */; };
 		2DF2102928DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF2102428DD2B2700F5E01C /* ViewPDFTableViewCell.xib */; };
 		2DF2102A28DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF2102428DD2B2700F5E01C /* ViewPDFTableViewCell.xib */; };
+		2DF317EF29CD6F9D0077EA87 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317EE29CD6F9D0077EA87 /* FeedbackViewController.swift */; };
+		2DF317F029CD6F9D0077EA87 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317EE29CD6F9D0077EA87 /* FeedbackViewController.swift */; };
+		2DF317F129CD6F9D0077EA87 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317EE29CD6F9D0077EA87 /* FeedbackViewController.swift */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
 		3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
 		3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
@@ -1441,6 +1444,7 @@
 		2DF2102328DD2B2700F5E01C /* ViewPDFTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPDFTableViewCell.swift; sourceTree = "<group>"; };
 		2DF2102428DD2B2700F5E01C /* ViewPDFTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewPDFTableViewCell.xib; sourceTree = "<group>"; };
 		2DF2102B28E4DEE900F5E01C /* BCVaccineCard 1.3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.3.xcdatamodel"; sourceTree = "<group>"; };
+		2DF317EE29CD6F9D0077EA87 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccessibleDependentTableViewCell.swift; sourceTree = "<group>"; };
 		3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InaccessibleDependentTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC92911ADF100774278 /* StorageService + Dependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService + Dependent.swift"; sourceTree = "<group>"; };
@@ -3173,6 +3177,7 @@
 				2920AC1F278E626500F7CAE7 /* ProfileAndSettingsViewController.swift */,
 				3E81C4D029B2A8B500C8F5C4 /* ProfileDetail */,
 				2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */,
+				2DF317EE29CD6F9D0077EA87 /* FeedbackViewController.swift */,
 			);
 			path = SettingsFlow;
 			sourceTree = "<group>";
@@ -4326,6 +4331,7 @@
 				79CF236028171D4300510489 /* ScreenStateManager.swift in Sources */,
 				2912314126F942CC00CF5F3B /* UIViewController+EXT.swift in Sources */,
 				2922C10028774111000FF4F7 /* ImmunizationRecordDetailView.swift in Sources */,
+				2DF317F029CD6F9D0077EA87 /* FeedbackViewController.swift in Sources */,
 				794BD6762703A3DB0084ADA8 /* ImageTableViewCell.swift in Sources */,
 				7944F6BB26F12BC3006B9444 /* UIButton+EXT.swift in Sources */,
 				7967E73A26F517F600EEF510 /* FormDataSource.swift in Sources */,
@@ -4679,6 +4685,7 @@
 				29736A4A2788EBD700CCB1D2 /* TestResult+CoreDataProperties.swift in Sources */,
 				794BD6402702EEC00084ADA8 /* UIButton+EXT.swift in Sources */,
 				3E048CC5291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */,
+				2DF317F129CD6F9D0077EA87 /* FeedbackViewController.swift in Sources */,
 				29128F18272AF41F00358014 /* Array+EXT.swift in Sources */,
 				2932DCE8275ECC8F00532BC4 /* CoreDataEncryptionKeyManager.swift in Sources */,
 				794BD6412702EEC00084ADA8 /* FormDataSource.swift in Sources */,
@@ -5009,6 +5016,7 @@
 				798005772852C66E006E390F /* UIFont+Ext.swift in Sources */,
 				29E19FD1286C023700C235EF /* CovidImmunizationRecordDetailView.swift in Sources */,
 				798005782852C66E006E390F /* ScreenStateManager.swift in Sources */,
+				2DF317EF29CD6F9D0077EA87 /* FeedbackViewController.swift in Sources */,
 				2922C0FF28774111000FF4F7 /* ImmunizationRecordDetailView.swift in Sources */,
 				798005792852C66E006E390F /* UIViewController+EXT.swift in Sources */,
 				7980057A2852C66E006E390F /* ImageTableViewCell.swift in Sources */,

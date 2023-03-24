@@ -40,6 +40,7 @@ class AppStyleButton: UIView {
         case login
         case viewPDF
         case downloadFullReport
+        case sendMessage
         
         var getTitle: String {
             switch self {
@@ -59,6 +60,7 @@ class AppStyleButton: UIView {
             case .login: return .bcscLogin
             case .viewPDF: return .viewPDF
             case .downloadFullReport: return "Download Full Report"
+            case .sendMessage: return "Send Message"
             }
         }
     }
