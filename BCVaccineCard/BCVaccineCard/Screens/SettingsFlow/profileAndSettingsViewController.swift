@@ -13,6 +13,7 @@ class ProfileAndSettingsViewController: BaseViewController {
         case profile
         case securityAndData
         case privacyStatement
+        case feedback
         case logout
     }
     
@@ -71,6 +72,11 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     func showPrivacyStatement() {
         openPrivacyPolicy()
+    }
+    
+    func showFeedback() {
+        let vc = FeedbackViewController.construct()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -166,6 +172,13 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
             return rowCell(for: indexPath, title: title, icon: icon) {[weak self] in
                 guard let `self` = self else {return}
                 self.showPrivacyStatement()
+            }
+        case .feedback:
+            let title: String = "Feedback"
+            let icon = UIImage(named: "feedback")
+            return rowCell(for: indexPath, title: title, icon: icon) {[weak self] in
+                guard let `self` = self else {return}
+                self.showFeedback()
             }
         case .logout:
             let title: String = .logOut

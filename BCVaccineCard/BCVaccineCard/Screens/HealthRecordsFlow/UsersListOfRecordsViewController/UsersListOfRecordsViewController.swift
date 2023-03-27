@@ -34,6 +34,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private var viewModel: ViewModel?
     
+    private let refreshControl = UIRefreshControl()
+    
     private var dataSource: [HealthRecordsDetailDataSource] = []
     private var hiddenRecords: [HealthRecordsDetailDataSource] = []
     private var hiddenCellType: HiddenRecordType? {
@@ -77,6 +79,7 @@ class UsersListOfRecordsViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupRefreshControl()
         setObservables()
         if let patient = viewModel?.patient,
            let patientName = patient.name,
@@ -112,6 +115,26 @@ class UsersListOfRecordsViewController: BaseViewController {
             return UIStatusBarStyle.darkContent
         } else {
             return UIStatusBarStyle.default
+        }
+    }
+    
+    private func setupRefreshControl() {
+//        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        tableView.addSubview(refreshControl)
+    }
+    
+    @objc private func refresh(_ sender: AnyObject) {
+        // TODO: Test out the dependent refresh logic here
+        if isDependent {
+            guard let patient = viewModel?.patient else { return }
+            guard let dependent = patient.dependencyInfo else { return }
+            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records in
+                SessionStorage.dependentRecordsFetched.append(patient)
+                self?.refreshControl.endRefreshing()
+            }
+        } else {
+            AppStates.shared.requestSync()
         }
     }
     
@@ -167,6 +190,7 @@ class UsersListOfRecordsViewController: BaseViewController {
 extension UsersListOfRecordsViewController {
     private func navSetup(style: NavStyle, authenticated: Bool, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
+        
         let filterButton = NavButton(title: nil,
                                      image: UIImage(named: "filter"), action: #selector(self.showFilters),
                                      accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
@@ -185,6 +209,10 @@ extension UsersListOfRecordsViewController {
             buttons.append(dependentSettingButton)
         }
         
+        let refreshButton = NavButton(title: nil,
+                                      image: UIImage(named: "refresh"), action: #selector(self.refresh(_:)),
+                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+        buttons.append(refreshButton)
         
         var name = viewModel?.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
         if name.count >= 20 {

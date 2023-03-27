@@ -171,7 +171,7 @@ struct DependentService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: "Could not add depndent, please try again later", style: .Warn)
+                    network.showToast(message: "Could not add dependent, please try again later", style: .Warn)
                 }
                 
             }
