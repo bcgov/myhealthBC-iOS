@@ -27,7 +27,7 @@ class HealthVisitRecordDetailTableViewCell: UITableViewCell, UITextViewDelegate 
         layoutIfNeeded()
         let disclaimerText = "Information is from the billing claim and may show a different practitioner or clinic from the one you visited. For more information, visit the FAQ page."
         let attributedText = NSMutableAttributedString(string: disclaimerText)
-        _ = attributedText.setAsLink(textToFind: "FAQ", linkURL: "https://www.healthgateway.gov.bc.ca/faq")
+        _ = attributedText.setAsLink(textToFind: "FAQ", linkURL: "https://www2.gov.bc.ca/gov/content?id=FE8BA7F9F1F0416CB2D24CF71C4BAF80")
     
         disclaimer.attributedText = attributedText
         disclaimer.isUserInteractionEnabled = true

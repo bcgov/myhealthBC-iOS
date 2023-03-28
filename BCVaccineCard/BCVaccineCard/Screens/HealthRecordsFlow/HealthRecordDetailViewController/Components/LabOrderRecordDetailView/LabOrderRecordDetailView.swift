@@ -242,7 +242,7 @@ extension LabOrderRecordDetailView {
                         subtext: TextProperties(text: statusTuple.text ,bolded: statusTuple.bolded))
                 ]
                 if index == 0 {
-                    let links = [LinkedStrings(text: "Learn more", link: "https://www.healthgateway.gov.bc.ca/faq")]
+                    let links = [LinkedStrings(text: "Learn more", link: "https://www2.gov.bc.ca/gov/content?id=FE8BA7F9F1F0416CB2D24CF71C4BAF80")]
                     section.insert(TextListModel(header: TextProperties(text: "Test summary", bolded: true), subtext: TextProperties(text: "Find resources to learn about your lab test and what the results mean. Learn more", bolded: false, links: links)), at: 0)
                 }
                 fields.append(section)
