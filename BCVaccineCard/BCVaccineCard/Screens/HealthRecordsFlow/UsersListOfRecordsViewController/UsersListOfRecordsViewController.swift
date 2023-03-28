@@ -116,6 +116,10 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     @objc private func refresh(_ sender: AnyObject) {
         // TODO: Test out the dependent refresh logic here
+        guard NetworkConnection.shared.hasConnection else {
+            AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+            return
+        }
         if isDependent {
             guard let patient = viewModel?.patient else { return }
             guard let dependent = patient.dependencyInfo else { return }
