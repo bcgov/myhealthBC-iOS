@@ -37,16 +37,6 @@ class UsersListOfRecordsViewController: BaseViewController {
     private let refreshControl = UIRefreshControl()
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
-    private var hiddenRecords: [HealthRecordsDetailDataSource] = []
-    private var hiddenCellType: HiddenRecordType? {
-        didSet {
-            print(hiddenCellType)
-        }
-    }
-    
-    private var protectiveWord: String?
-    private var patientRecordsTemp: [HealthRecordsDetailDataSource]? // Note: This is used to temporarily store patient records when authenticating with local protective word
-    private var selectedCellIndexPath: IndexPath?
     
     private var isDependent: Bool {
         return viewModel?.patient?.isDependent() ?? false
@@ -150,16 +140,14 @@ class UsersListOfRecordsViewController: BaseViewController {
             self.refreshDebounceTimer?.invalidate()
             self.refreshDebounceTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.refreshOnStorageUpdate), userInfo: nil, repeats: false)
         }
-//        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordProvided), name: .protectedWordProvided, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(patientAPIFetched), name: .patientAPIFetched, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(authFetchComplete), name: .authFetchComplete, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(protectedWordFailedPromptAgain), name: .protectedWordFailedPromptAgain, object: nil)
         
+        AppStates.shared.listenToSyncCompletion { [weak self] in
+            guard let `self` = self else {return}
+            self.setup()
+        }
     }
     
     private func setup() {
-//        self.parentContainerStackView.endLoadingIndicator()
-//        let showLoadingTitle = (viewModel?.patient == nil && viewModel?.authenticated == true)
         setupTableView()
         updatePatientIfNecessary()
         navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
@@ -345,11 +333,11 @@ extension UsersListOfRecordsViewController {
             showAuthExpired()
         case .authenticated:
             guard self.dataSource.count == 0 else {
-                show(records: self.dataSource, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
+                show(records: self.dataSource, filter: currentFilter)
                 return
             }
             let patientRecords = fetchPatientRecords()
-            show(records: patientRecords, filter: currentFilter, initialProtectedMedFetch: initialProtectedMedFetch)
+            show(records: patientRecords, filter: currentFilter)
         }
     }
     
@@ -361,11 +349,10 @@ extension UsersListOfRecordsViewController {
     }
     
     func showAuthExpired() {
-        self.hiddenCellType = .loginToAccesshealthRecords(hiddenRecords: 0)
         tableView.reloadData()
     }
     
-    private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil, initialProtectedMedFetch: Bool = false) {
+    private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil) {
         var patientRecords: [HealthRecordsDetailDataSource] = records
         if let filter = filter {
             patientRecords = patientRecords.filter({ item in
@@ -412,22 +399,15 @@ extension UsersListOfRecordsViewController {
             tableView.reloadData()
         }
         
-        handleAuthenticatedMedicalRecords(patientRecords: patientRecords, initialProtectedMedFetch: initialProtectedMedFetch)
-//        if AuthManager().isAuthenticated {
-//            handleAuthenticatedMedicalRecords(patientRecords: patientRecords, initialProtectedMedFetch: initialProtectedMedFetch)
-//        } else {
-//            let unauthenticatedRecords = patientRecords.filter({!$0.isAuthenticated})
-//            let authenticatedRecords = patientRecords.filter({$0.isAuthenticated})
-//            self.dataSource = unauthenticatedRecords
-//            self.hiddenRecords = authenticatedRecords
-//            self.hiddenCellType = .loginToAccesshealthRecords(hiddenRecords: hiddenRecords.count)
-//        }
-        self.navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
+        if SessionStorage.protectiveWordRequired {
+            dataSource = patientRecords.filter({!$0.containsProtectedWord})
+        } else {
+            dataSource = patientRecords
+        }
         
-        // Note: Reloading data here as the table view doesn't seem to reload properly after deleting a record from the detail screen
-        self.tableView.reloadData()
-        //        self.checkForTestResultsToUpdate(ds: self.dataSource)
+        navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
         
+        tableView.reloadData()
         if patientRecords.isEmpty {
             noRecordsFoundView.isHidden = false
             tableView.isHidden = true
@@ -435,49 +415,6 @@ extension UsersListOfRecordsViewController {
             noRecordsFoundView.isHidden = true
             tableView.isHidden = false
         }
-    }
-    
-    private func handleAuthenticatedMedicalRecords(patientRecords: [HealthRecordsDetailDataSource], initialProtectedMedFetch: Bool) {
-        // Note: Assumption is, if protective word is not stored in keychain at this point, then user does not have protective word enabled
-        self.patientRecordsTemp = patientRecords
-        guard !initialProtectedMedFetch else {
-            showAllRecords(patientRecords: patientRecords, medFetchRequired: false)
-            return
-        }
-        guard let protectiveWord = AuthManager().protectiveWord,
-              !SessionStorage.protectiveWordEnteredThisSession
-        else {
-            showAllRecords(patientRecords: patientRecords, medFetchRequired: AuthManager().medicalFetchRequired && !isDependent)
-            return
-        }
-        self.protectiveWord = protectiveWord
-        let visibleRecords = patientRecords.filter({!$0.containsProtectedWord})
-        self.dataSource = visibleRecords
-        if !isDependent {
-            let hiddenRecords = patientRecords.filter({$0.containsProtectedWord})
-            self.hiddenRecords = hiddenRecords
-            
-            if hiddenRecords.count > 0 {
-                self.hiddenCellType = .medicalRecords
-            }
-        }
-        
-    }
-    
-    private func showAllRecords(patientRecords: [HealthRecordsDetailDataSource], medFetchRequired: Bool) {
-        self.dataSource = patientRecords
-        self.hiddenRecords.removeAll()
-        self.hiddenCellType = medFetchRequired ? .medicalRecords : nil
-        self.patientRecordsTemp = nil
-        tableView.reloadData()
-    }
-    
-    private func promptProtectiveVC(medFetchRequired: Bool) {
-        let value = medFetchRequired ? ProtectiveWordPurpose.initialFetch.rawValue : ProtectiveWordPurpose.viewingRecords.rawValue
-        let userInfo: [String: String] = [
-            ProtectiveWordPurpose.purposeKey: value,
-        ]
-        NotificationCenter.default.post(name: .protectedWordRequired, object: nil, userInfo: userInfo)
     }
     
     private func performBCSCLogin() {
@@ -513,8 +450,13 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         if viewModel?.state == .AuthExpired {
             return 1
         }
-        // Hidden records?
-        return (self.hiddenCellType == .medicalRecords || !hiddenRecords.isEmpty) ? 2 : 1
+        
+        // Protective word not entered
+        if viewModel?.showProtectiveWordPrompt == true {
+            return 2
+        }
+        
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -523,10 +465,12 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
             return 1
         }
         
-        // Hidden records
-        if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && section == 0 {
-            return 1
+        if viewModel?.state == .authenticated,
+           viewModel?.showProtectiveWordPrompt == true,
+           section == 0 {
+           return 1
         }
+        
         // Records
         return dataSource.count
     }
@@ -546,10 +490,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         }
         cell.configure(forRecordType: .medicalRecords) { [weak self] _ in
             guard let `self` = self else { return }
-            if AuthManager().medicalFetchRequired {
-                self.selectedCellIndexPath = indexPath
-            }
-            self.promptProtectiveVC(medFetchRequired: AuthManager().medicalFetchRequired)
+            self.promoptProtectedWord()
         }
         return cell
     }
@@ -569,17 +510,18 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         if viewModel?.state == .AuthExpired {
             return getLoginCell(indexPath: indexPath)
         }
-        if (!hiddenRecords.isEmpty || self.hiddenCellType == .medicalRecords) && indexPath.section == 0 {
+        if viewModel?.showProtectiveWordPrompt == true, indexPath.section == 0 {
             return getProtectiveWordCell(indexPath: indexPath)
-        } else {
-            return recordCell(indexPath: indexPath)
         }
+        
+        return recordCell(indexPath: indexPath)
         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !hiddenRecords.isEmpty && indexPath.section == 0 { return }
-        if self.hiddenCellType == .medicalRecords && indexPath.section == 0 { return }
+        if viewModel?.showProtectiveWordPrompt == true, indexPath.section == 0 {
+            return
+        }
         guard dataSource.count > indexPath.row else {return}
         let ds = dataSource[indexPath.row]
         let vm = HealthRecordDetailViewController.ViewModel(dataSource: ds,
@@ -591,40 +533,37 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
     
 }
 
-// MARK: Protected word retry
-extension UsersListOfRecordsViewController {
-    @objc private func protectedWordFailedPromptAgain(_ notification: Notification) {
-        SessionStorage.attemptingProtectiveWord = false
-        alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
-            self.promptProtectiveVC(medFetchRequired: AuthManager().medicalFetchRequired)
-            self.adjustLoadingIndicator(show: false, tryingAgain: true)
-        }, buttonTwoTitle: .no) {
-            // Do nothing
-            self.adjustLoadingIndicator(show: false, tryingAgain: false)
+// MARK: Protected word
+extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
+    
+    private func promoptProtectedWord() {
+        let firstFetch = AuthManager().protectiveWord == nil
+        self.showProtectedWordDialog(delegate: self, purpose: firstFetch ? .initialFetch : .viewingRecords)
+    }
+    
+    func protectiveWordProvided(string: String) {
+        let firstFetch = AuthManager().protectiveWord == nil
+        SessionStorage.protectiveWordEnteredThisSession = string
+        if !firstFetch {
+            viewProtectedRecords(protectiveWord: string)
+        } else {
+            fetchProtectedRecords(protectiveWord: string)
         }
     }
     
-    @objc private func protectedWordProvided(_ notification: Notification) {
-        guard let protectiveWordEntered = notification.userInfo?[Constants.AuthenticatedMedicationStatementParameters.protectiveWord] as? String else { return }
-        guard let purposeRaw = notification.userInfo?[ProtectiveWordPurpose.purposeKey] as? String, let purpose = ProtectiveWordPurpose(rawValue: purposeRaw) else { return }
-        if purpose == .viewingRecords {
-            viewProtectedRecords(protectiveWord: protectiveWordEntered)
-        } else if purpose == .initialFetch {
-            fetchProtectedRecords(protectiveWord: protectiveWordEntered)
-        }
+    private func protectedWordFailedPromptAgain() {
+        alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
+            self.promoptProtectedWord()
+        }, buttonTwoTitle: .no) {}
     }
     
     private func viewProtectedRecords(protectiveWord: String) {
-        if let proWord = self.protectiveWord,
-           protectiveWord == proWord
-        {
-            let records = self.patientRecordsTemp ?? []
-            SessionStorage.protectiveWordEnteredThisSession = true
-            self.showAllRecords(patientRecords: records, medFetchRequired: false)
-            self.tableView.reloadData()
+        if protectiveWord.lowercased() == AuthManager().protectiveWord?.lowercased() {
+            SessionStorage.protectiveWordEnteredThisSession = protectiveWord
+            show(records: fetchPatientRecords(), filter: currentFilter)
         } else {
             alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
-                self.promptProtectiveVC(medFetchRequired: false)
+                self.promoptProtectedWord()
             }, buttonTwoTitle: .no) {
                 // Do nothing
             }
@@ -633,25 +572,11 @@ extension UsersListOfRecordsViewController {
     
     private func fetchProtectedRecords(protectiveWord: String) {
         guard let patient = viewModel?.patient else {return}
-        MedicationService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records in
-            print(records.count)
-        }
-    }
-}
-
-// MARK: Handling hidden records loading indicator
-extension UsersListOfRecordsViewController {
-    private func adjustLoadingIndicator(show: Bool, tryingAgain: Bool? = nil) {
-        if let indexPath = self.selectedCellIndexPath, let cell = self.tableView.cellForRow(at: indexPath) as? HiddenRecordsTableViewCell {
-            if show {
-                cell.startLoadingIndicator(backgroundColor: .clear)
-            } else {
-                cell.endLoadingIndicator()
-                if let tryingAgain = tryingAgain, tryingAgain == true {
-                    // Don't remove selectedCellIndexPath here
-                } else {
-                    self.selectedCellIndexPath = nil
-                }
+        MedicationService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records, protectiveWordRequird  in
+            if protectiveWordRequird {
+                self.protectedWordFailedPromptAgain()
+            } else if !records.isEmpty {
+                AuthManager().storeProtectiveWord(protectiveWord: protectiveWord)
             }
         }
     }
@@ -659,11 +584,6 @@ extension UsersListOfRecordsViewController {
 
 // MARK: Sync completed, reload data
 extension UsersListOfRecordsViewController {
-    @objc private func authFetchComplete(_ notification: Notification) {
-        adjustLoadingIndicator(show: false)
-        self.fetchDataSource(initialProtectedMedFetch: true)
-    }
-    
     @objc private func refreshOnStorageUpdate() {
         let patientRecords = fetchPatientRecords()
         show(records: patientRecords, filter: currentFilter)

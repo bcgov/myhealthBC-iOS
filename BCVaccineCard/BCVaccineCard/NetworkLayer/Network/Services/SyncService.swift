@@ -29,8 +29,10 @@ struct SyncService {
            let storedHDID = authenticatedPatient.hdid,
            storedHDID != authManager.hdid
         {
-            authManager.clearMedFetchProtectiveWordDetails()
+            authManager.removeProtectiveWord()
         }
+        
+        SessionStorage.syncPerformedThisSession = true
         
         // API status
         MobileConfigService(network: network).fetchConfig { config in
@@ -44,11 +46,12 @@ struct SyncService {
                 // Remove authenticated patient records
                 StorageService.shared.deleteAuthenticatedPatient()
                 // Fetch
-                fetchData(protectiveWord: authManager.protectiveWord, completion: completion)
+                fetchData(protectiveWord: authManager.protectiveWord, completion: { result in
+                    NotificationCenter.default.post(name: .syncPerformed, object: nil, userInfo: nil)
+                    return completion(result)
+                })
             }
         }
-        
-        
     }
     
     private func fetchData(protectiveWord: String?, completion: @escaping(Patient?) -> Void) {

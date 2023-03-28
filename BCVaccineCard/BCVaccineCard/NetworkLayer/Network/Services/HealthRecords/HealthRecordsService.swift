@@ -49,7 +49,7 @@ struct HealthRecordsService {
                 }
             case .Prescription:
                 let medicationService = MedicationService(network: network, authManager: authManager, configService: configService)
-                medicationService.fetchAndStore(for: patient, protectiveWord: protectiveWord) { result in
+                medicationService.fetchAndStore(for: patient, protectiveWord: protectiveWord) { result, error in
                     let uwreapped = result.map({HealthRecord(type: .Medication($0))})
                     records.append(contentsOf: uwreapped)
                     dispatchGroup.leave()

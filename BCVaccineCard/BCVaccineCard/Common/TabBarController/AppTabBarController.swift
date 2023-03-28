@@ -71,8 +71,9 @@ class AppTabBarController: UITabBarController {
         // When authentication status changes, we can set the records tab to the appropriate VC
         // and fetch records
         AppStates.shared.listenToAuth { authenticated in
+            
             if authenticated {
-                self.showSuccessfulLoginAlert()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: self.showSuccessfulLoginAlert)
             }
             self.setTabs()
             self.performSync()
@@ -181,6 +182,9 @@ class AppTabBarController: UITabBarController {
     
     func whenConnected() {
         showForceUpateIfNeeded(completion: {_ in})
+        if !SessionStorage.syncPerformedThisSession {
+            performSync()
+        }
     }
     
     func whenDisconnected() {

@@ -36,7 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var loadingViewHack: UIView?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        AuthManager().isAuthenticated
         UpdateServiceStorage.setOrResetstoredAppVersion()
         MigrationService().removeExistingDBIfNeeded()
         CoreDataProvider.shared.loadManagedContext { context in
@@ -68,6 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let authManager = AuthManager()
         let configService = MobileConfigService(network: networkService)
         let syncService = SyncService(network: networkService, authManager: authManager, configService: configService)
+        SessionStorage.protectiveWordEnabled = authManager.protectiveWord != nil
         self.networkService = networkService
         self.authManager = authManager
         self.configService = configService

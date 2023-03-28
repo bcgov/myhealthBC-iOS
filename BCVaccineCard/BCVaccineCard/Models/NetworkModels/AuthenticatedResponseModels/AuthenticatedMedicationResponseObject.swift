@@ -60,3 +60,14 @@ struct AuthenticatedMedicationStatementResponseObject: BaseGatewayResponse, Coda
         }
     }
 }
+
+extension AuthenticatedMedicationStatementResponseObject {
+    var protectiveWordRequired: Bool {
+        if let error = resultError,
+           let actionCode = error.actionCode,
+           actionCode.lowercased() == "PROTECTED".lowercased() {
+            return true
+        }
+        return false
+    }
+}

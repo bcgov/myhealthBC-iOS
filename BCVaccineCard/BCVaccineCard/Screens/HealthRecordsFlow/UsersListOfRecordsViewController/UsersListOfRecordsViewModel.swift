@@ -26,6 +26,10 @@ extension UsersListOfRecordsViewController {
             }
             return .AuthExpired
         }
+        
+        var showProtectiveWordPrompt: Bool {
+            return SessionStorage.protectiveWordRequired
+        }
     }
     
     enum NavStyle {

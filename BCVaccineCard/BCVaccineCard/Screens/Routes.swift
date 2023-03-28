@@ -52,6 +52,16 @@ extension UIViewController {
         }
         
     }
+    
+    func showProtectedWordDialog(delegate: ProtectiveWordPromptDelegate, purpose: ProtectiveWordPurpose) {
+        let vm = ProtectiveWordPromptViewController.ViewModel(delegate: delegate, purpose: purpose)
+        let controller = ProtectiveWordPromptViewController.construct(viewModel: vm)
+        if let tabBar = self.tabBarController as? AppTabBarController {
+            tabBar.present(controller, animated: true)
+        } else {
+            present(controller, animated: true)
+        }
+    }
 }
 
 // MARK: Routes

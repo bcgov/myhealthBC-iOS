@@ -31,6 +31,7 @@ extension Notification.Name {
     static let protectedWordFailedPromptAgain = Notification.Name("protectedWordFailedPromptAgain")
     static let authStatusChanged = Notification.Name("authStatusChanged")
     static let shouldSync = Notification.Name("shouldSync")
+    static let syncPerformed = Notification.Name("syncPerformed")
     static let patientAPIFetched = Notification.Name("patientAPIFetched")
     static let reloadVCDueToUnderage = Notification.Name("reloadVCDueToUnderage")
     static let resetHealthRecordsScreenOnLogout = Notification.Name("resetHealthRecordsScreenOnLogout")

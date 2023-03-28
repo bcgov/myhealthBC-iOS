@@ -150,16 +150,6 @@ class AuthManager {
         return proWord.isEmpty ? nil : proWord
     }
     
-    var medicalFetchRequired: Bool {
-        guard let medFetch = keychain[Key.medicalFetchRequired.rawValue] else {
-            return false
-        }
-        if medFetch == "true" {
-            return true
-        }
-        return false
-    }
-    
     // MARK: Network
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
         
@@ -248,7 +238,8 @@ class AuthManager {
                         HTTPCookieStorage.shared.cookies?.forEach { cookie in
                             HTTPCookieStorage.shared.deleteCookie(cookie)
                         }
-                        AuthManager().clearMedFetchProtectiveWordDetails()
+                        self.removeProtectiveWord()
+                        SessionStorage.onSignOut()
                         StorageService.shared.deleteAuthenticatedPatient()
                         self.clearData()
                         self.authStatusChanged(authenticated: false)
@@ -268,22 +259,8 @@ class AuthManager {
         self.store(string: protectiveWord, for: .protectiveWord)
     }
     
-    private func removeProtectiveWord() {
+    func removeProtectiveWord() {
         self.delete(key: .protectiveWord)
-    }
-    
-    func storeMedFetchRequired(bool: Bool) {
-        self.store(string: String(bool), for: .medicalFetchRequired)
-    }
-    
-    private func removeMedFetchRequired() {
-        self.delete(key: .medicalFetchRequired)
-    }
-    
-    // Note: This is called when user session expired and user logs in with new credentials
-    func clearMedFetchProtectiveWordDetails() {
-        removeProtectiveWord()
-        removeMedFetchRequired()
     }
     
     private func refetchAuthToken() {
@@ -381,7 +358,6 @@ class AuthManager {
         delete(key: .authTokenExpiery)
         delete(key: .idToken)
         self.removeProtectiveWord()
-        self.removeMedFetchRequired()
     }
     
 //    private func removeAuthenticatedPatient() {

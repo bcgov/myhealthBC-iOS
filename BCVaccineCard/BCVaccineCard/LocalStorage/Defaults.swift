@@ -10,21 +10,12 @@ import Foundation
 struct Defaults {
     enum Key: String {
         case initialOnboardingScreensSeen
-        case cachedQueueItObject
         case rememberGatewayDetails
         case hasAppLaunchedBefore
         case loginProcessStatus
         case hasSeenFirstLogin
     }
     
-    static var cachedQueueItObject: QueueItCachedObject? {
-        get {
-            guard let data = UserDefaults.standard.value(forKey: self.Key.cachedQueueItObject.rawValue) as? Data else { return nil }
-            let cached = try? PropertyListDecoder().decode(QueueItCachedObject.self, from: data)
-            return cached
-        }
-        set { UserDefaults.standard.set(try? PropertyListEncoder().encode(newValue), forKey: self.Key.cachedQueueItObject.rawValue) }
-    }
     // Temporary measure until I can get keychain working properly
     static var rememberGatewayDetails: RememberedGatewayDetails? {
         get {

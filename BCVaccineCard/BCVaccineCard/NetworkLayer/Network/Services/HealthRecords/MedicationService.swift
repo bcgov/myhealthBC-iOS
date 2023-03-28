@@ -19,18 +19,22 @@ struct MedicationService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([Perscription])->Void) {
+    public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([Perscription], _ protectiveWordRequired: Bool)->Void) {
         network.addLoader(message: .FetchingRecords)
         Logger.log(string: "Fetching Medication records for \(patient.name)", type: .Network)
         // TODO: Handle Protected Fetch
         fetch(for: patient, protectiveWord: protectiveWord) { result in
+            if result?.protectiveWordRequired == true {
+                SessionStorage.protectiveWordEnabled = true
+            }
+            
             guard let response = result else {
                 network.removeLoader()
-                return completion([])
+                return completion([], result?.protectiveWordRequired == true)
             }
             store(medication: response, for: patient, protected: protectiveWord != nil, completion: { result in
                 network.removeLoader()
-                return completion(result)
+                return completion(result, response.protectiveWordRequired)
             })
         }
     }
@@ -52,7 +56,6 @@ struct MedicationService {
 extension MedicationService {
     
     private func fetch(for patient: Patient, protectiveWord: String?, completion: @escaping(_ response: MedicationResponse?) -> Void) {
-        // TODO: Handle Protected Fetch
         guard let token = authManager.authToken,
               let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
@@ -81,12 +84,7 @@ extension MedicationService {
                                                                               headers: headers)
             { result in
                 Logger.log(string: "Network Medication Result received", type: .Network)
-                if (result?.resourcePayload) != nil {
-                    // return result
-                    return completion(result)
-                } else {
-                    return completion(nil)
-                }
+                return completion(result)
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
@@ -98,4 +96,19 @@ extension MedicationService {
             network.request(with: requestModel)
         }
     }
+    /*
+     if isManualAuthFetch {
+    //                        self.authManager.storeMedFetchRequired(bool: true)
+    //                        self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: nil)
+    //                    } else if self.protectedWordAlreadyAttempted == false {
+    //                        guard let authCreds = self.authCredentials else { return }
+    //                        self.protectedWordAlreadyAttempted = true
+    //                        self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
+    //                    } else if self.protectedWordAlreadyAttempted == true {
+    //                        // In this case, there is an error with the protective word, so we must show an alert
+    //                        self.protectedWordAlreadyAttempted = false
+    //                        NotificationCenter.default.post(name: .protectedWordFailedPromptAgain, object: nil, userInfo: nil)
+    //                        self.deinitializeStatusList()
+    //                    }
+    */
 }

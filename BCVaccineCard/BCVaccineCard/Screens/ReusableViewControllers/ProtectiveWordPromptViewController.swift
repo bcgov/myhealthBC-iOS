@@ -17,10 +17,14 @@ enum ProtectiveWordPurpose: String {
 }
 
 class ProtectiveWordPromptViewController: BaseViewController {
+    struct ViewModel {
+        var delegate: ProtectiveWordPromptDelegate
+        var purpose: ProtectiveWordPurpose
+    }
     
-    class func constructProtectiveWordPromptViewController(purpose: ProtectiveWordPurpose) -> ProtectiveWordPromptViewController {
+    class func construct(viewModel: ViewModel) -> ProtectiveWordPromptViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: ProtectiveWordPromptViewController.self)) as? ProtectiveWordPromptViewController {
-            vc.purpose = purpose
+            vc.viewModel = viewModel
             vc.modalPresentationStyle = .overFullScreen
             return vc
         }
@@ -42,7 +46,7 @@ class ProtectiveWordPromptViewController: BaseViewController {
         }
     }
     
-    private var purpose: ProtectiveWordPurpose?
+    private var viewModel: ViewModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -121,18 +125,21 @@ extension ProtectiveWordPromptViewController: AppStyleButtonDelegate {
             self.dismiss(animated: true, completion: nil)
         } else if type == .continueType {
             guard let proWord = protectiveWordTextField.text else { return }
-            guard let purpose = self.purpose else { return }
-            let userInfo: [String: String] = [
-                Constants.AuthenticatedMedicationStatementParameters.protectiveWord : proWord,
-                ProtectiveWordPurpose.purposeKey: purpose.rawValue]
-            NotificationCenter.default.post(name: .protectedWordProvided, object: nil, userInfo: userInfo)
-            self.dismiss(animated: true, completion: nil)
+            guard let purpose = viewModel?.purpose else { return }
+            guard let delegate = viewModel?.delegate else {return}
+            dismiss(animated: true, completion: {
+                delegate.protectiveWordProvided(string: proWord)
+            })
+            
         }
     }
     
     func shouldButtonBeEnabled(text: String?) -> Bool {
         return text?.trimWhiteSpacesAndNewLines.count ?? 0 > 0
     }
+}
 
+protocol ProtectiveWordPromptDelegate {
+    func protectiveWordProvided(string: String)
 }
 
