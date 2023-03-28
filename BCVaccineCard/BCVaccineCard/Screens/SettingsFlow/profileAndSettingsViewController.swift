@@ -176,7 +176,8 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
         case .feedback:
             let title: String = "Feedback"
             let icon = UIImage(named: "feedback")
-            return rowCell(for: indexPath, title: title, icon: icon) {[weak self] in
+            let isHidden = !authManager.isAuthenticated
+            return rowCell(for: indexPath, title: title, icon: icon, isHidden: isHidden) {[weak self] in
                 guard let `self` = self else {return}
                 self.showFeedback()
             }
@@ -207,11 +208,12 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
         return cell
     }
     
-    func rowCell(for indexPath: IndexPath, title: String, icon: UIImage?, labelColor: LabelColour = .Black, onTap: @escaping() -> Void) -> SettingsRowTableViewCell {
+    func rowCell(for indexPath: IndexPath, title: String, icon: UIImage?, labelColor: LabelColour = .Black, isHidden: Bool = false, onTap: @escaping() -> Void) -> SettingsRowTableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsRowTableViewCell.getName, for: indexPath) as? SettingsRowTableViewCell else {
             return SettingsRowTableViewCell()
         }
         cell.setup(title: title, icon: icon, labelColor: labelColor, onTap: onTap)
+        cell.isHidden = isHidden
         return cell
     }
     
