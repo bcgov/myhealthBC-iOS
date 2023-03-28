@@ -114,13 +114,14 @@ extension MedicationRecordDetailView {
             }
             
             let dinText = (prescription.medication?.isPin ?? false) ? "PIN:" : "DIN:"
+            let quantity: Int = Int(prescription.medication?.quantity ?? 0)
             let fields: [TextListModel] = [
                 TextListModel(
                     header: TextProperties(text: "Practitioner:", bolded: true),
                     subtext: TextProperties(text: prescription.practitionerSurname ?? "", bolded: false)),
                 TextListModel(
                     header: TextProperties(text: "Quantity:", bolded: true),
-                    subtext: TextProperties(text: String(prescription.medication?.quantity ?? 0), bolded: false)),
+                    subtext: TextProperties(text: String(quantity), bolded: false)),
                 TextListModel(
                     header: TextProperties(text: "Strength:", bolded: true),
                     subtext: TextProperties(text: (prescription.medication?.strength ?? "") + " " + (prescription.medication?.strengthUnit ?? ""), bolded: false)),

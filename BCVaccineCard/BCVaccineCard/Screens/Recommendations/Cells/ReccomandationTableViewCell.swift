@@ -64,7 +64,7 @@ class ReccomandationTableViewCell: UITableViewCell {
             statusIcon.image = UIImage(named: "reccomandation-list-icon")
         case "completed":
             statusValueLabel.textColor = AppColours.greyText
-            statusIcon.image = UIImage(named: "reccomandation-list-icon")
+            statusIcon.image = UIImage(named: "reccomandation-list-icon-completed")
         default:
             statusValueLabel.textColor = AppColours.greyText
             statusIcon.image = UIImage(named: "reccomandation-list-icon")
