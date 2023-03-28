@@ -118,6 +118,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         // TODO: Test out the dependent refresh logic here
         guard NetworkConnection.shared.hasConnection else {
             AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+            refreshControl.endRefreshing()
             return
         }
         if isDependent {
