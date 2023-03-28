@@ -47,6 +47,11 @@ class FeedbackViewController: BaseViewController {
         // TODO: Clean this up so that we don't keep reinstantiating a new network every time
         feedbackService = FeedbackService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
 
 }
 
@@ -153,16 +158,17 @@ extension FeedbackViewController: UITextViewDelegate {
         let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
         
         // Format other UI
-        formatUI(underLimit: updatedText.count < characterLimit, characterCount: currentText.count)
+        formatUI(underLimit: updatedText.count <= characterLimit, characterCount: currentText.count)
 
-        // make sure the result is under 500 characters
-        return updatedText.count <= characterLimit
+//        // make sure the result is under 500 characters
+//        return updatedText.count <= characterLimit
+        return true
     }
     
     private func formatUI(underLimit: Bool, characterCount: Int) {
         formatTextView(underLimit: underLimit)
         formatLabel(underLimit: underLimit, characterCount: characterCount)
-        updateButtonStatus(characterCount: characterCount)
+        updateButtonStatus(underLimit: underLimit, characterCount: characterCount)
     }
     
     private func formatTextView(underLimit: Bool) {
@@ -175,8 +181,8 @@ extension FeedbackViewController: UITextViewDelegate {
         characterCountLabel.textColor = underLimit ? AppColours.textGray : AppColours.appRed
     }
     
-    private func updateButtonStatus(characterCount: Int) {
-        sendMessageButton.enabled = characterCount > 0
+    private func updateButtonStatus(underLimit: Bool, characterCount: Int) {
+        sendMessageButton.enabled = underLimit && characterCount > 0
     }
     
 }
@@ -194,9 +200,14 @@ extension FeedbackViewController: AppStyleButtonDelegate {
         guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
         let feedback = PostFeedback(comment: feedbackTextView.text)
         feedbackService?.postFeedback(for: patient, object: feedback, completion: { success in
+            guard let success = success else { return }
             if success {
                 self.alert(title: "Success", message: "Your message has been sent successfully!") {
                     self.navigationController?.popViewController(animated: true)
+                }
+            } else {
+                self.alert(title: "Error", message: "Unable to post feedback, please try again later") {
+                    
                 }
             }
         })
