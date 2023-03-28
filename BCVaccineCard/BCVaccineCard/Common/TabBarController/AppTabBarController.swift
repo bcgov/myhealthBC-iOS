@@ -56,6 +56,10 @@ class AppTabBarController: UITabBarController {
         
         showForceUpateIfNeeded() { updateNeeded in
             guard !updateNeeded else {return}
+            if self.authManager?.isAuthenticated == true {
+                let storedPatient = StorageService.shared.fetchAuthenticatedPatient()
+                self.patient = storedPatient
+            }
             self.setup(selectedIndex: 0)
             self.setupListeners()
             self.showOnBoardingIfNeeded() { authenticatedDuringOnBoarding in
