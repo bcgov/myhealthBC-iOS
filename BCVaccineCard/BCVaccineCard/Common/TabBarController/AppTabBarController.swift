@@ -185,7 +185,7 @@ class AppTabBarController: UITabBarController {
     // MARK: Sync
     func performSync(showDialog: Bool) {
         setTabs()
-        guard authManager?.isAuthenticated == true, networkListener?.hasConnection == true else {
+        guard authManager?.isAuthenticated == true, NetworkConnection.shared.hasConnection == true else {
             return
         }
         self.validateAuthenticatedUser() { valid in
