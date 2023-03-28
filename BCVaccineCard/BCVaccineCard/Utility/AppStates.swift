@@ -12,6 +12,7 @@ class AppStates {
     private init() {}
     private var onAuthChange: [((_ authenticated: Bool)->Void)] = []
     private var onStorageChage: [((_ event: StorageService.StorageEvent<Any>)->Void)] = []
+    private var onTermsOfServiceAgreementChange: [((_ accepted: Bool)->Void)] = []
     private var onPatientFetch: [(()->Void)] = []
     private var onLocalAuth: [(()->Void)] = []
     private var onShouldSync: [(()->Void)] = []
@@ -33,6 +34,10 @@ class AppStates {
     /// Request data sync manually.
     public func requestSync() {
         NotificationCenter.default.post(name: .shouldSync, object: nil, userInfo: nil)
+    }
+    
+    public func updatedTermsOfService(accepted: Bool) {
+        onTermsOfServiceAgreementChange.forEach({$0(accepted)})
     }
     
     @objc private func shouldSync(_ notification: Notification) {
@@ -80,5 +85,9 @@ class AppStates {
     
     func listenLocalAuth(success: @escaping()->Void) {
         onLocalAuth.append(success)
+    }
+    
+    func listenToTermsOfServiceAgreement(change: @escaping(_ accepted: Bool)->Void) {
+        onTermsOfServiceAgreementChange.append(change)
     }
 }

@@ -45,6 +45,7 @@ class AppTabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        networkListener = NetworkConnection()
         networkListener?.initListener { connected in
             if connected {
                 self.whenConnected()
@@ -60,28 +61,33 @@ class AppTabBarController: UITabBarController {
             self.showOnBoardingIfNeeded() { authenticatedDuringOnBoarding in
                 self.setup(selectedIndex: 0)
                 if authenticatedDuringOnBoarding {
-                    self.showSuccessfulLoginAlert()
-                    self.performSync()
+                    self.performSync(showDialog: true)
                 }
             }
         }
     }
     
+    // MARK: Events
     private func setupListeners() {
         // When authentication status changes, we can set the records tab to the appropriate VC
-        // and fetch records
+        // and fetch records - after validation
         AppStates.shared.listenToAuth { authenticated in
-            if authenticated {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: self.showSuccessfulLoginAlert)
+            self.performSync(showDialog: true)
+        }
+        
+        // Listen to Terms of service acceptance
+        AppStates.shared.listenToTermsOfServiceAgreement { accepted in
+            if !accepted {
+                self.logout(reason: .TOSRejected, completion: {})
+            } else {
+                self.performSync(showDialog: true)
             }
-            self.setTabs()
-            self.performSync()
         }
         
         // Local auth happens on records tab only.
         // When its done, we should fetch records if user is authenticated.
         AppStates.shared.listenLocalAuth {
-            self.performSync()
+            self.performSync(showDialog: false)
         }
         
         // When patient profile is stored, reload tabs
@@ -93,10 +99,70 @@ class AppTabBarController: UITabBarController {
         
         // Sync when requested manually
         AppStates.shared.listenToSyncRequest {
-            self.performSync()
+            self.performSync(showDialog: true)
         }
     }
     
+    // MARK: Auth and validation
+    private func validateAuthenticatedUser(completion: @escaping(Bool) -> Void) {
+        guard let networkService = networkService, let authManager = authManager, let configService = configService else {
+            return completion(false)
+        }
+        let patientService = PatientService(network: networkService, authManager: authManager, configService: configService)
+        
+        patientService.validateProfile {[weak self] validationResult in
+            guard let `self` = self else {return}
+            switch validationResult {
+            case .UnderAge:
+                self.logout(reason: .Underage, completion: {
+                    return completion(false)
+                })
+            case .TOSNotAccepted:
+                self.show(route: .TermsOfService, withNavigation: false)
+                return completion(false)
+            case .CouldNotValidate:
+                self.logout(reason: .FailedToValidate, completion: {
+                    return completion(false)
+                })
+            case .Valid:
+                return completion(true)
+            }
+        }
+    }
+                
+    func logout(reason: AuthManager.AutoLogoutReason, completion: @escaping()->Void) {
+        authManager?.signout(in: self, completion: {[weak self] success in
+            guard let `self` = self else {return}
+            self.authManager?.clearData()
+            switch reason {
+            case .Underage:
+                self.showAlertForUserUnder(ageInYears: Constants.AgeLimit.ageLimitForRecords)
+                return completion()
+            case .FailedToValidate:
+                self.showAlertForUserProfile()
+                return completion()
+            case .TOSRejected:
+                // TODO: Show a dialog?
+                return completion()
+            }
+        })
+    }
+    
+    func showAlertForUserUnder(ageInYears age: Int) {
+        self.alert(title: "Age Restriction", message: "You must be \(age) year's of age or older to use Health Gateway.")
+    }
+    
+    func showAlertForUserProfile() {
+        self.alert(title: "Login Error", message: "We're sorry, there was an error logging in. Please try again later.")
+    }
+    
+    private func showSuccessfulLoginAlert() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
+        }
+    }
+    
+    // MARK: OnBoard
     private func showOnBoardingIfNeeded(completion: @escaping(_ authenticated: Bool)->Void) {
         let unseen = Defaults.unseenOnBoardingScreens()
         guard let first = unseen.first else {
@@ -108,10 +174,6 @@ class AppTabBarController: UITabBarController {
         present(vc, animated: false)
     }
     
-    private func showSuccessfulLoginAlert() {
-        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
-    }
-    
     // MARK: Setup
     private func setup(selectedIndex: Int) {
         tabBar.tintColor = AppColours.appBlue
@@ -121,13 +183,22 @@ class AppTabBarController: UITabBarController {
     }
     
     // MARK: Sync
-    func performSync() {
+    func performSync(showDialog: Bool) {
+        setTabs()
         guard authManager?.isAuthenticated == true else {
-            setTabs()
             return
         }
-        syncService?.performSync() {[weak self] patient in
-            self?.setTabs()
+        self.validateAuthenticatedUser() { valid in
+            guard valid else {
+                self.setTabs()
+                return
+            }
+            if showDialog {
+                self.showSuccessfulLoginAlert()
+            }
+            self.syncService?.performSync() {[weak self] patient in
+                self?.setTabs()
+            }
         }
     }
     
@@ -181,8 +252,8 @@ class AppTabBarController: UITabBarController {
     
     func whenConnected() {
         showForceUpateIfNeeded(completion: {_ in})
-        if !SessionStorage.syncPerformedThisSession {
-            performSync()
+        if !SessionStorage.syncPerformedThisSession, SessionStorage.lastLocalAuth != nil {
+            performSync(showDialog: false)
         }
     }
     

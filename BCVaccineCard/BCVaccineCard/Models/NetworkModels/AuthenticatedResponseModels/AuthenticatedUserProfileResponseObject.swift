@@ -14,38 +14,39 @@ struct AuthenticatedUserProfileResponseObject: Codable {
     let resultError: ResultError?
     
     // MARK: ResourcePayload
-//    struct ResourcePayload: Codable {
-//        let hdid: String?
-//        let acceptedTermsOfService: Bool
-//        
-//        enum CodingKeys: String, CodingKey {
-//            case hdid = "hdId"
-//            case acceptedTermsOfService
-//        }
-//    }
+    //    struct ResourcePayload: Codable {
+    //        let hdid: String?
+    //        let acceptedTermsOfService: Bool
+    //
+    //        enum CodingKeys: String, CodingKey {
+    //            case hdid = "hdId"
+    //            case acceptedTermsOfService
+    //        }
+    //    }
 }
 
 extension AuthenticatedUserProfileResponseObject {
-// MARK: - Profile
-struct ResourcePayload: Codable {
+    // MARK: - Profile
+    struct ResourcePayload: Codable {
         let createdBy, createdDateTime, updatedBy, updatedDateTime: String?
         let version: Int?
+        let acceptedTermsOfService: Bool?
         let hdID, termsOfServiceID: String?
-        let termsOfService: TermsOfService?
         let email, smsNumber, closedDateTime, identityManagementID: String?
         let lastLoginDateTime, encryptionKey: String?
         let verifications: [Verification]?
-
+        
         enum CodingKeys: String, CodingKey {
             case createdBy, createdDateTime, updatedBy, updatedDateTime, version
             case hdID = "hdId"
+            case acceptedTermsOfService
             case termsOfServiceID = "termsOfServiceId"
-            case termsOfService, email, smsNumber, closedDateTime
+            case email, smsNumber, closedDateTime
             case identityManagementID = "identityManagementId"
             case lastLoginDateTime, encryptionKey, verifications
         }
     }
-
+    
     // MARK: - TermsOfService
     struct TermsOfService: Codable {
         let createdBy, createdDateTime, updatedBy, updatedDateTime: String
@@ -54,7 +55,7 @@ struct ResourcePayload: Codable {
         let legalAgreementCode: Int
         let legalText, effectiveDate: String
     }
-
+    
     // MARK: - Verification
     struct Verification: Codable {
         let createdBy, createdDateTime, updatedBy, updatedDateTime: String
@@ -67,7 +68,7 @@ struct ResourcePayload: Codable {
         let expireDate: String
         let verificationAttempts: Int
         let deleted: Bool
-
+        
         enum CodingKeys: String, CodingKey {
             case createdBy, createdDateTime, updatedBy, updatedDateTime, version, id
             case userProfileID = "userProfileId"
@@ -76,7 +77,7 @@ struct ResourcePayload: Codable {
             case email, inviteKey, verificationType, smsNumber, smsValidationCode, expireDate, verificationAttempts, deleted
         }
     }
-
+    
     // MARK: - Email
     struct Email: Codable {
         let createdBy, createdDateTime, updatedBy, updatedDateTime: String
@@ -101,12 +102,5 @@ struct AuthenticatedUserProfileRequestObject: Codable {
             case hdid = "hdId"
             case termsOfServiceId
         }
-    }
-}
-
-
-extension AuthenticatedUserProfileResponseObject.ResourcePayload {
-    var acceptedTermsOfService : Bool {
-        return termsOfServiceID != nil
     }
 }

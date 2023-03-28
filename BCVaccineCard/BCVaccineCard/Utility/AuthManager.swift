@@ -19,6 +19,14 @@ extension AuthManager {
     }
 }
 
+extension AuthManager {
+    enum AutoLogoutReason {
+        case Underage
+        case FailedToValidate
+        case TOSRejected
+    }
+}
+
 enum AuthStatus {
     case Authenticated
     case AuthenticationExpired

@@ -23,7 +23,7 @@ struct PatientService {
     public func fetchAndStoreDetails(completion: @escaping (Patient?)->Void) {
         Logger.log(string: "Fetching PatientDetails", type: .Network)
         network.addLoader(message: .FetchingRecords)
-        fetch() { result in
+        fetchDetail() { result in
             guard let response = result else {
                 network.removeLoader()
                 return completion(nil)
@@ -60,14 +60,37 @@ struct PatientService {
         return completion(patient)
         
     }
-    // MARK: Validate
     
-    func validateProfile(completion: @escaping (Bool)->Void) {
+    // MARK: Validate
+    func validateProfile(completion: @escaping (ProfileValidationResult)->Void) {
         validate { response in
-            if let response = response, let payload = response.resourcePayload {
-                return completion(payload)
+            guard let response = response else {
+                return completion(.CouldNotValidate)
+            }
+            guard
+                let payload = response.resourcePayload,
+                payload == true
+            else {
+                return completion(.UnderAge)
+            }
+            fetchProfile { profile in
+                guard let profile = profile else {
+                    return completion(.CouldNotValidate)
+                }
+                if profile.resourcePayload?.acceptedTermsOfService == true {
+                    return completion(.Valid)
+                } else {
+                    return completion(.TOSNotAccepted)
+                }
             }
         }
+    }
+    
+    enum ProfileValidationResult {
+        case UnderAge
+        case TOSNotAccepted
+        case CouldNotValidate
+        case Valid
     }
 }
 
@@ -120,7 +143,7 @@ extension PatientService {
         }
     }
     
-    private func fetch(completion: @escaping(_ response: PatientDetailResponse?) -> Void) {
+    private func fetchDetail(completion: @escaping(_ response: PatientDetailResponse?) -> Void) {
         
         guard let token = authManager.authToken,
               let hdid = authManager.hdid,
@@ -135,9 +158,9 @@ extension PatientService {
             else {
                 return completion(nil)
             }
+            
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
-                Constants.AuthenticationHeaderKeys.apiVersion: "2"
             ]
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
@@ -164,6 +187,37 @@ extension PatientService {
             }
             
             network.request(with: requestModel)
+        }
+    }
+    
+    func fetchProfile(completion: @escaping (AuthenticatedUserProfileResponseObject?)-> Void) {
+        guard let token = authManager.authToken,
+              let hdid = authManager.hdid,
+              NetworkConnection.shared.hasConnection
+        else { return completion(nil)}
+        
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+            ]
+            
+            let request = NetworkRequest<DefaultParams, AuthenticatedUserProfileResponseObject>(
+                url: endpoints.userProfile(base: baseURL, hdid: hdid),
+                type: .Get,
+                parameters: nil,
+                headers: headers,
+                completion: { responseData in
+                    return completion(responseData)
+                }, onError: nil)
+            network.request(with: request)
         }
     }
 }

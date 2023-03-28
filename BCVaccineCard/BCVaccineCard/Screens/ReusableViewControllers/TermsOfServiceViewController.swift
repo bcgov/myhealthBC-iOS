@@ -10,7 +10,7 @@ import WebKit
 
 class TermsOfServiceViewController: BaseViewController {
     
-    class func constructTermsOfServiceViewController() -> TermsOfServiceViewController {
+    class func construct() -> TermsOfServiceViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: TermsOfServiceViewController.self)) as? TermsOfServiceViewController {
             vc.modalPresentationStyle = .overFullScreen
             return vc

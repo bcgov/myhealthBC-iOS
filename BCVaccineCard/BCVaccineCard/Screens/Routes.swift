@@ -50,7 +50,6 @@ extension UIViewController {
         } else {
             present(controller, animated: true)
         }
-        
     }
     
     func showProtectedWordDialog(delegate: ProtectiveWordPromptDelegate, purpose: ProtectiveWordPurpose) {
@@ -93,10 +92,10 @@ extension UIViewController {
         case DependentInfo
         case Comments
         case SecurityAndData
+        case TermsOfService
     }
     
     fileprivate func createController(route: Route, viewModel: Any? = nil) -> UIViewController? {
-        let controller: UIViewController?
         switch route {
         case .Home:
             return HomeScreenViewController.construct()
@@ -172,8 +171,9 @@ extension UIViewController {
                 return nil
             }
             return GatewayFormViewController.construct(viewModel: vm)
+        case .TermsOfService:
+            return TermsOfServiceViewController.construct()
         }
-        return controller
     }
 }
 
