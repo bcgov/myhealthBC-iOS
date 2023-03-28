@@ -99,6 +99,9 @@ class AppTabBarController: UITabBarController {
         
         // Sync when requested manually
         AppStates.shared.listenToSyncRequest {
+            if !NetworkConnection.shared.hasConnection {
+                AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+            }
             self.performSync(showDialog: false)
         }
     }
