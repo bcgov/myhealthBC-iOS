@@ -88,7 +88,7 @@ extension ManageDependentsViewController: UITableViewDelegate, UITableViewDataSo
                 }
             } else {
                 self.tableView.setEditing(false, animated: false)
-                self.tableView.setEditing(true, animated: true)
+                self.tableView.setEditing(true, animated: false)
             }
         }
     }

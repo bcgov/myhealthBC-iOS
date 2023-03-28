@@ -71,7 +71,6 @@ class AppTabBarController: UITabBarController {
         // When authentication status changes, we can set the records tab to the appropriate VC
         // and fetch records
         AppStates.shared.listenToAuth { authenticated in
-            
             if authenticated {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: self.showSuccessfulLoginAlert)
             }

@@ -18,7 +18,6 @@ class DependentsHomeViewController: BaseDependentViewController {
     class func construct(viewModel: ViewModel) -> DependentsHomeViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: DependentsHomeViewController.self)) as? DependentsHomeViewController {
             vc.patient = viewModel.patient
-            vc.fetchDataWhenMainPatientIsStored()
             vc.viewModel = viewModel
             return vc
         }
@@ -63,6 +62,7 @@ class DependentsHomeViewController: BaseDependentViewController {
         setupTableView()
         fetchData(fromRemote: false)
         fetchDataWhenAuthenticated()
+        fetchDataWhenMainPatientIsStored()
     }
     
    // private func fetchData() {
@@ -142,7 +142,7 @@ class DependentsHomeViewController: BaseDependentViewController {
         AppStates.shared.listenToAuth { [weak self] authenticated in
             guard let `self` = self else {return}
             if self.patient != nil {
-                self.fetchData(fromRemote: true)
+                self.fetchData(fromRemote: false)
             }
             /*
              Else, fetchDataWhenMainPatientIsStored
@@ -156,19 +156,16 @@ class DependentsHomeViewController: BaseDependentViewController {
     private func fetchDataWhenMainPatientIsStored() {
         AppStates.shared.listenToStorage { [weak self] event in
             guard let `self` = self else {return}
-            
-            if  event.event == .Save,
-                event.entity == .Patient,
-                let storedPatient = event.object as? Patient {
-                
-                if storedPatient.authenticated {
+            if event.event == .Save {
+                if event.entity == .Dependent {
+                    self.fetchData(fromRemote: false)
+                } else if event.entity == .Patient,
+                          let storedPatient = event.object as? Patient,
+                          storedPatient.authenticated {
                     self.patient = storedPatient
-                    self.fetchData(fromRemote: true)
-                } else {
                     self.fetchData(fromRemote: false)
                 }
             }
-            
         }
     }
     
