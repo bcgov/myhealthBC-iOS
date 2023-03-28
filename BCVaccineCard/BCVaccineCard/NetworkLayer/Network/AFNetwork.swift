@@ -59,7 +59,13 @@ extension AFNetwork {
     private func returnOrRetryIfneeded<Parameters: Encodable, T: Decodable>(with requestData: NetworkRequest<Parameters, T>, response: DataResponse<T, AFError>)  {
         guard let value = response.value else {
             // Didnt get a response.. return nil
-            return requestData.completion(nil)
+            // Note - this is for empty responses with 200 status codes
+            guard let statusCode = response.response?.statusCode else { return requestData.completion(nil) }
+            if (200...299).contains(statusCode) {
+                return requestData.completion(statusCode as? T)
+            } else {
+                return requestData.completion(nil)
+            }
         }
         
         guard value is BaseGatewayResponse,

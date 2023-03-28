@@ -17,20 +17,20 @@ struct FeedbackService {
         return UrlAccessor()
     }
     
-    public func postFeedback(for patient: Patient, object: PostFeedback, completion: @escaping(Bool) -> Void) {
+    public func postFeedback(for patient: Patient, object: PostFeedback, completion: @escaping(Bool?) -> Void) {
         network.addLoader(message: .empty)
         postFeedbackNetworkRequest(object: object) { passed in
             network.removeLoader()
-            guard passed else {
-                return completion(false)
-            }
-            completion(true)
+            completion(passed)
         }
     }
 
-    private func postFeedbackNetworkRequest(object: PostFeedback, completion: @escaping(Bool) -> Void) {
+    private func postFeedbackNetworkRequest(object: PostFeedback, completion: @escaping(Bool?) -> Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return completion(false)}
-        guard NetworkConnection.shared.hasConnection else {return completion(false)}
+        guard NetworkConnection.shared.hasConnection else {
+            network.showToast(message: .noInternetConnection, style: .Warn)
+            return completion(nil)
+        }
         configService.fetchConfig { response in
             guard let config = response,
                   config.online,
@@ -46,14 +46,14 @@ struct FeedbackService {
             ]
             // TODO: Figure out a way to get some sort of response to test here for status code
             let requestModel = NetworkRequest<PostFeedback, Int>(url: endpoints.feedback(base: baseURL, hdid: hdid), type: .Post, parameters: object, headers: headers) { statusCode in
-                print(statusCode)
-                completion(true)
+                guard let statusCode = statusCode else { return completion(false) }
+                let success = (200...299).contains(statusCode) ? true : false
+                completion(success)
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: "Could not post feedback, please try again later", style: .Warn)
+                    completion(false)
                 }
-                
             }
             
             network.request(with: requestModel)
