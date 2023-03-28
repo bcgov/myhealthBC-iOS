@@ -99,7 +99,7 @@ class AppTabBarController: UITabBarController {
         
         // Sync when requested manually
         AppStates.shared.listenToSyncRequest {
-            self.performSync(showDialog: true)
+            self.performSync(showDialog: false)
         }
     }
     

@@ -145,6 +145,7 @@ extension TermsOfServiceViewController {
             guard let result = result else {
                 return
             }
+            AppStates.shared.updatedTermsOfService(accepted: result.resourcePayload?.acceptedTermsOfService == true)
             self.dismiss(animated: true)
         }
         
