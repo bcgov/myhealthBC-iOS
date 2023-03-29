@@ -122,7 +122,13 @@ class AppTabBarController: UITabBarController {
                     return completion(false)
                 })
             case .TOSNotAccepted:
-                self.show(route: .TermsOfService, withNavigation: false)
+                if let presented = self.presentedViewController {
+                    self.presentedViewController?.dismiss(animated: true) {
+                        self.show(route: .TermsOfService, withNavigation: false)
+                    }
+                } else {
+                    self.show(route: .TermsOfService, withNavigation: false)
+                }
                 return completion(false)
             case .CouldNotValidate:
                 self.logout(reason: .FailedToValidate, completion: {
@@ -133,7 +139,7 @@ class AppTabBarController: UITabBarController {
             }
         }
     }
-                
+    
     func logout(reason: AuthManager.AutoLogoutReason, completion: @escaping()->Void) {
         authManager?.signout(in: self, completion: {[weak self] success in
             guard let `self` = self else {return}
