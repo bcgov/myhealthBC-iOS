@@ -19,14 +19,14 @@ struct ClinicalDocumentService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, completion: @escaping ([ClinicalDocument])->Void) {
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([ClinicalDocument]?)->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.clinicalDocument) {return completion([])}
         Logger.log(string: "Fetching ClinicalDocument records for \(patient.name)", type: .Network)
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()
-                return completion([])
+                return completion(nil)
             }
             
             store(HopotalVisits: response, for: patient, completion: { result in

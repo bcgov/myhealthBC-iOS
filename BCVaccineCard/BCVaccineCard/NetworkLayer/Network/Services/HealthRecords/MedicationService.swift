@@ -19,13 +19,18 @@ struct MedicationService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([Perscription], _ protectiveWordRequired: Bool)->Void) {
+    public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([Perscription]?, _ protectiveWordRequired: Bool)->Void) {
         network.addLoader(message: .FetchingRecords)
         Logger.log(string: "Fetching Medication records for \(patient.name)", type: .Network)
         // TODO: Handle Protected Fetch
         fetch(for: patient, protectiveWord: protectiveWord) { result in
+            
             if result?.protectiveWordRequired == true {
                 SessionStorage.protectiveWordEnabled = true
+            }
+            
+            if result == nil {
+                return completion(nil, false)
             }
             
             guard let response = result else {

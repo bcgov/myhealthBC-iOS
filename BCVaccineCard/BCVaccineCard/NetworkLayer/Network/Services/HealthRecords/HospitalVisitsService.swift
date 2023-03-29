@@ -19,14 +19,14 @@ struct HospitalVisitsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, completion: @escaping ([HospitalVisit])->Void) {
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([HospitalVisit]?)->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.hospitalVisit) {return completion([])}
         Logger.log(string: "Fetching HospitalVisit records for \(patient.name)", type: .Network)
         network.addLoader(message: .FetchingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()
-                return completion([])
+                return completion(nil)
             }
             store(HopotalVisits: response, for: patient) { stored in
                 network.removeLoader()

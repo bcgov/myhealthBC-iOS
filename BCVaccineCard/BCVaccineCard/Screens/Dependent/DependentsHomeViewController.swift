@@ -131,6 +131,11 @@ class DependentsHomeViewController: BaseDependentViewController {
         guard fromRemote else {return}
         
         networkService.fetchDependents(for: patient) { [weak self] storedDependents in
+            guard let storedDependents = storedDependents else {
+                self?.setState()
+                self?.tableView.reloadData()
+                return
+            }
             self?.dependents = storedDependents
             self?.setState()
             self?.tableView.reloadData()
@@ -411,7 +416,9 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
             return
         }
         
-        HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records in
+        HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records, hadFails in
+            let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
+            self?.showToast(message: message)
             SessionStorage.dependentRecordsFetched.append(dependentPatient)
             self?.showDetails(for: dependentPatient)
             self?.blockDependentSelection = false

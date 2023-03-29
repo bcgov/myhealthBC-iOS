@@ -19,13 +19,13 @@ struct DependentService {
         return UrlAccessor()
     }
   
-    public func fetchDependents(for patient: Patient, completion: @escaping([Dependent]) -> Void) {
+    public func fetchDependents(for patient: Patient, completion: @escaping([Dependent]?) -> Void) {
         network.addLoader(message: .FetchingRecords)
         Logger.log(string: "fetching dependents", type: .Network)
         fetchDependentNetworkRequest { dependentResponse in
             guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload else {
                 network.removeLoader()
-                return completion([])
+                return completion(nil)
             }
             network.removeLoader()
             StorageService.shared.deleteDependents(for: patient)

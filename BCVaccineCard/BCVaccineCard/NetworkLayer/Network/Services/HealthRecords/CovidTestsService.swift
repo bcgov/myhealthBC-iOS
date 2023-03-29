@@ -20,13 +20,13 @@ struct CovidTestsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, completion: @escaping ([CovidLabTestResult])->Void) {
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([CovidLabTestResult]?)->Void) {
         network.addLoader(message: .FetchingRecords)
         Logger.log(string: "Fetching CovidTests records for \(patient.name)", type: .Network)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()
-                return completion([])
+                return completion(nil)
             }
             store(covidtests: response, for: patient, completion: { result in
                 network.removeLoader()

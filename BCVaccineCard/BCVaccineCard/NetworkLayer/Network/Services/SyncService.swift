@@ -17,7 +17,7 @@ struct SyncService {
         return UrlAccessor()
     }
     
-    func performSync(completion: @escaping(Patient?) -> Void) {
+    func performSync(showToast: Bool, completion: @escaping(Patient?) -> Void) {
         // Network status
         guard NetworkConnection.shared.hasConnection else { return completion(nil) }
         
@@ -46,7 +46,7 @@ struct SyncService {
                 // Remove authenticated patient records
                 StorageService.shared.deleteAuthenticatedPatient()
                 // Fetch
-                fetchData(protectiveWord: authManager.protectiveWord, completion: { result in
+                fetchData(protectiveWord: authManager.protectiveWord, showToast: showToast, completion: { result in
                     NotificationCenter.default.post(name: .syncPerformed, object: nil, userInfo: nil)
                     return completion(result)
                 })
@@ -54,28 +54,37 @@ struct SyncService {
         }
     }
     
-    private func fetchData(protectiveWord: String?, completion: @escaping(Patient?) -> Void) {
+    private func fetchData(protectiveWord: String?, showToast: Bool, completion: @escaping(Patient?) -> Void) {
         let patientService = PatientService(network: network, authManager: authManager, configService: configService)
         let dependentService = DependentService(network: network, authManager: authManager, configService: configService)
         let recordsService = HealthRecordsService(network: network, authManager: authManager, configService: configService)
         let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
-        
+        if showToast {
+            network.showToast(message: "Retrieving records")
+        }
         patientService.fetchAndStoreDetails { patient in
             guard let patient = patient else {
                 // Could not fetch patient details
                 Logger.log(string: "Could not fetch patient details", type: .Network)
                 return completion(nil)
             }
+            var hadFailures = false
             let group = DispatchGroup()
             
             group.enter()
             dependentService.fetchDependents(for: patient) { dependents in
-                Logger.log(string: "fetched \(dependents.count) dependents", type: .Network)
+                if dependents == nil {
+                    hadFailures = true
+                }
+                Logger.log(string: "fetched \(dependents?.count ?? 0) dependents", type: .Network)
                 group.leave()
             }
             
             group.enter()
-            recordsService.fetchAndStore(for: patient, protectiveWord: protectiveWord) { records in
+            recordsService.fetchAndStore(for: patient, protectiveWord: protectiveWord) { records, hadFails in
+                if hadFails {
+                    hadFailures = true
+                }
                 Logger.log(string: "fetched \(records.count) records", type: .Network)
                 group.leave()
             }
@@ -87,6 +96,14 @@ struct SyncService {
             }
             
             group.notify(queue: .main) {
+                let message: String = !hadFailures ? "Records retrieved" : "Not all records were fetched successfully"
+                
+                if showToast {
+                    network.showToast(message: message)
+                } else if hadFailures {
+                    network.showToast(message: message)
+                }
+                
                 return completion(patient)
             }
         }

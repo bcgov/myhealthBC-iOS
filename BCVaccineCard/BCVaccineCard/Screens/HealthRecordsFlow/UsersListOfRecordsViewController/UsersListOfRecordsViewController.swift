@@ -124,7 +124,9 @@ class UsersListOfRecordsViewController: BaseViewController {
         if isDependent {
             guard let patient = viewModel?.patient else { return }
             guard let dependent = patient.dependencyInfo else { return }
-            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records in
+            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records, hadFails in
+                let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
+                self?.showToast(message: message)
                 SessionStorage.dependentRecordsFetched.append(patient)
                 self?.refreshControl.endRefreshing()
             }
@@ -578,6 +580,9 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
     private func fetchProtectedRecords(protectiveWord: String) {
         guard let patient = viewModel?.patient else {return}
         MedicationService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: patient, protectiveWord: protectiveWord) { records, protectiveWordRequird  in
+            guard let records = records else {
+                return
+            }
             if protectiveWordRequird {
                 self.protectedWordFailedPromptAgain()
             } else if !records.isEmpty {

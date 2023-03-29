@@ -91,7 +91,7 @@ class AppTabBarController: UITabBarController {
         // Local auth happens on records tab only.
         // When its done, we should fetch records if user is authenticated.
         AppStates.shared.listenLocalAuth {
-            self.performSync(showDialog: false)
+            self.performSync(showDialog: false, showToast: false)
         }
         
         // When patient profile is stored, reload tabs
@@ -187,7 +187,7 @@ class AppTabBarController: UITabBarController {
     }
     
     // MARK: Sync
-    func performSync(showDialog: Bool) {
+    func performSync(showDialog: Bool, showToast: Bool = true) {
         setTabs()
         guard authManager?.isAuthenticated == true, NetworkConnection.shared.hasConnection == true else {
             return
@@ -200,7 +200,7 @@ class AppTabBarController: UITabBarController {
             if showDialog {
                 self.showSuccessfulLoginAlert()
             }
-            self.syncService?.performSync() {[weak self] patient in
+            self.syncService?.performSync(showToast: showToast) {[weak self] patient in
                 self?.setTabs()
             }
         }
