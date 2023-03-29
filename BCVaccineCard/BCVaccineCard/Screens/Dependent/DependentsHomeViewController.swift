@@ -93,6 +93,10 @@ class DependentsHomeViewController: BaseDependentViewController {
         guard let patient = viewModel?.patient else {
             return
         }
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This feature requires an internet connection")
+            return
+        }
         let vm = AddDependentViewController.ViewModel(patient: patient)
         show(route: .AddDependent, withNavigation: true, viewModel: vm)
     }
