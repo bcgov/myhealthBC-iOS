@@ -155,38 +155,3 @@ extension BaseViewController {
     }
 }
 
-// MARK: GoTo Health Gateway Logic from passes flow
-extension BaseViewController {
-    //FIXME: CONNOR: - Ready To Test: Move this function to base view controller and then user router worker within this function
-       // TODO: ROUTE REFACTOR - FORMS
-        func goToHealthGateway(fetchType: GatewayFormViewControllerFetchType, source: GatewayFormSource, owner: UIViewController, navDelegate: NavigationSetupProtocol?) {
-//            var rememberDetails = RememberedGatewayDetails(storageArray: nil)
-//            if let details = Defaults.rememberGatewayDetails {
-//                rememberDetails = details
-//            }
-//
-//            let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: fetchType)
-//            if fetchType.isFedPassOnly {
-//                vc.completionHandler = { [weak self] details in
-//                    guard let `self` = self else { return }
-//                    DispatchQueue.main.async {
-//                        if let fedPass = details.fedPassId {
-//                            // Added record set to nil means that the records tab will either show UserRecordsVC or HealthRecordsVC, depending on number of users - if we want to display the detail screen, then we need to provide the addedRecord - this function is only being called from HealthPassVC and CovidVaccineCardsVC as of now though
-//                            let fedPassAddedFromHealthPassVC = source == .healthPassHomeScreen ? true : false
-//                            DispatchQueue.main.async {
-//
-//                                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: nil)
-//                                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: fedPass, fedPassAddedFromHealthPassVC: fedPassAddedFromHealthPassVC)
-//                                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-//                                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
-//                            }
-//                        } else {
-//                            self.navigationController?.popViewController(animated: true)
-//                        }
-//                    }
-//                }
-//            }
-//            self.tabBarController?.tabBar.isHidden = true
-//            self.navigationController?.pushViewController(vc, animated: true)
-        }
-}

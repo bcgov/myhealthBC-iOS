@@ -331,8 +331,22 @@ extension HealthPassViewController: FederalPassViewDelegate {
             self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .healthPassHomeScreen, owner: self, navDelegate: self.navDelegate)
+            addFederalPass(model: model)
         }
+    }
+    
+    func addFederalPass(model: AppVaccinePassportModel) {
+        let fetchType = GatewayFormViewControllerFetchType.federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code)
+        let vm = GatewayFormViewController.ViewModel(rememberDetails: RememberedGatewayDetails(), fetchType: fetchType) { [weak self] vaccineCard in
+            guard let `self` = self else {return}
+            self.onAdd(vaccineCard: vaccineCard)
+            
+        } onAddFederalPass: { [weak self] vaccineCard in
+            guard let `self` = self else {return}
+            self.onAdd(federal: vaccineCard)
+        }
+        
+        show(route: .GatewayForm, withNavigation: true, viewModel: vm)
     }
     
 }

@@ -190,35 +190,7 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 
 // MARK: Table View Button Methods
 extension QRRetrievalMethodViewController {
-    // TODO: ROUTE REFACTOR- DELETE?
-//    func authenticateBeforeDisplayingGatewayForm() {
-//        if !AuthManager().isAuthenticated {
-//            showLogin(initialView: .Landing) {[weak self] authenticationStatus in
-//                guard let `self` = self else {return}
-//                if authenticationStatus != .Completed {
-//                    self.goToEnterGateway()
-//                } else {
-//                }
-//            }
-//            showLogin(initialView: .Landing, sourceVC: .QRRetrievalVC, completion: {[weak self] authenticationStatus in
-//                guard let `self` = self else {return}
-//                if authenticationStatus != .Completed {
-//                    self.goToEnterGateway()
-//                } else {
-//                    // TODO: ROUTE REFACTOR
-////                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-////                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-////                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .QRRetrievalVC, authenticationStatus: authenticationStatus))
-////                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
-//                }
-//            })
-//        } else {
-//            goToEnterGateway()
-//        }
-//    }
-    //FIXME: CONNOR: - Ready To Test: Adjust this function - stack will be set from router worker
     func goToEnterGateway() {
-        // TODO: Should look at refactoring this a bit
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
         if let details = Defaults.rememberGatewayDetails {
             rememberDetails = details
@@ -233,22 +205,6 @@ extension QRRetrievalMethodViewController {
                                                      onAddFederalPass: { vaccineCard in
             self.viewModel?.onAddFederalPass(vaccineCard)
         })
-//        let vm = GatewayFormViewController.ViewModel(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass) { [weak self] details in
-//            guard let `self` = self else { return }
-//            DispatchQueue.main.async {  [weak self] in
-//                guard let `self` = self else { return }
-//                AnalyticsService.shared.track(action: .AddQR, text: .Get)
-//
-//                DispatchQueue.main.async {
-//                      // TODO: ROUTE REFACTOR - where to go?
-////                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: nil)
-////                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-////                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-////                    self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
-//                }
-//                
-//            }
-//        }
         show(route: .GatewayForm, withNavigation: true, viewModel: vm)
     }
     
