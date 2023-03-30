@@ -294,7 +294,8 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         guard !dataSource.isEmpty || !inEditMode else { return .none }
         if dataSource[indexPath.row].authenticated ||
-            dataSource[indexPath.row].patient?.isDependent() == true
+            dataSource[indexPath.row].patient?.isDependent() == true ||
+            dataSource[indexPath.row].patient?.authenticated == true
         {
             return .none
         }
@@ -326,7 +327,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         if !dataSource.isEmpty {
-            if dataSource[indexPath.row].authenticated {
+            if dataSource[indexPath.row].authenticated || dataSource[indexPath.row].patient?.authenticated == true {
                 return nil
             }
             
