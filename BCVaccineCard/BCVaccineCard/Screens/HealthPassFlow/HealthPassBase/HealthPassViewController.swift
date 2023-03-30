@@ -20,12 +20,14 @@ class HealthPassViewController: BaseViewController {
     }
     
     @IBOutlet weak private var tableView: UITableView!
+    
     private var viewModel: ViewModel?
     private var dataSource: VaccineCard?
+    private var fedPassStringToOpen: String?
+    
     private var savedCardsCount: Int {
         return StorageService.shared.fetchVaccineCards().count
     }
-    private var fedPassStringToOpen: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,33 +109,50 @@ extension HealthPassViewController {
         
         if showAuth && !AuthManager().isAuthenticated {
             showLogin(initialView: .Landing, showTabOnSuccess: .Proofs) {[weak self] authenticationStatus in
-                if authenticationStatus != .Completed {
-                    self?.show(route: .QRRetrievalMethod, withNavigation: true)
-                } else {
+                if authenticationStatus == .Completed {
                     self?.fetchFromStorage()
+                } else {
+                    let vm = QRRetrievalMethodViewController.ViewModel { [weak self] vaccineCard in
+                        guard let `self` = self else {return}
+                        self.onAdd(vaccineCard: vaccineCard)
+                    } onAddFederalPass: { [weak self] vaccineCard in
+                        guard let `self` = self else {return}
+                        self.onAdd(federal: vaccineCard)
+                    }
+
+                    self?.show(route: .QRRetrievalMethod, withNavigation: true, viewModel: vm)
                 }
             }
         } else {
             let vm = QRRetrievalMethodViewController.ViewModel(onAddCard: {[weak self] vaccineCard in
                 guard let self = self, let vaccineCard = vaccineCard else {return}
-                // TODO: ROUTE REFACTOR - where to go?
-                let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: nil)
-                self.navigationController?.popToRootViewController(animated: true)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    if StorageService.shared.fetchVaccineCards().count > 1 {
-                        self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
-                    }
-                }
+                self.onAdd(vaccineCard: vaccineCard)
+               
             }, onAddFederalPass: { [weak self] vaccineCard in
                 guard let self = self, let vaccineCard = vaccineCard else {return}
-                // TODO: ROUTE REFACTOR - where to go?
-                let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: vaccineCard.federalPass)
-                self.navigationController?.popToRootViewController(animated: true)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
-                }
+                self.onAdd(federal: vaccineCard)
             })
             show(route: .QRRetrievalMethod, withNavigation: true, viewModel: vm)
+        }
+    }
+    
+    func onAdd(vaccineCard: VaccineCard?) {
+        guard let vaccineCard = vaccineCard else {return}
+        let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: nil)
+        self.navigationController?.popToRootViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if StorageService.shared.fetchVaccineCards().count > 1 {
+                self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
+            }
+        }
+    }
+    
+    func onAdd(federal vaccineCard: VaccineCard?) {
+        guard let vaccineCard = vaccineCard else {return}
+        let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: vaccineCard.federalPass)
+        self.navigationController?.popToRootViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
         }
     }
 }
