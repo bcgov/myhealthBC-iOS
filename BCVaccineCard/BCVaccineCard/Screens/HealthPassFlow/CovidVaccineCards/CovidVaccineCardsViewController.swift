@@ -59,6 +59,11 @@ class CovidVaccineCardsViewController: BaseViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.scrollToRecentlyAddedCardAndExpand()
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
 //        return .lightContent
         if #available(iOS 13.0, *) {
@@ -73,9 +78,9 @@ class CovidVaccineCardsViewController: BaseViewController {
         cardChangedObservableSetup()
         retrieveDataSource()
         setupTableView()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-            self.scrollToRecentlyAddedCardAndExpand()
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+//            self.scrollToRecentlyAddedCardAndExpand()
+//        }
         
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
@@ -390,8 +395,9 @@ extension CovidVaccineCardsViewController {
                 }
             }
             DispatchQueue.main.async {
-                // TODO: ROUTE REFACTOR - CHECK
-                self.dismiss()
+                if self.dataSource.count < 2 {
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
             }
             
         }

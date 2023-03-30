@@ -56,8 +56,10 @@ class HealthPassViewController: BaseViewController {
     }
     
     private func setup() {
-        setupTableView()
-        fetchFromStorage()
+        DispatchQueue.main.async {
+            self.setupTableView()
+            self.fetchFromStorage()
+        }
     }
     
     private func showFedPassIfNeccessary() {
@@ -112,7 +114,26 @@ extension HealthPassViewController {
                 }
             }
         } else {
-            show(route: .QRRetrievalMethod, withNavigation: true)
+            let vm = QRRetrievalMethodViewController.ViewModel(onAddCard: {[weak self] vaccineCard in
+                guard let self = self, let vaccineCard = vaccineCard else {return}
+                // TODO: ROUTE REFACTOR - where to go?
+                let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: nil)
+                self.navigationController?.popToRootViewController(animated: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if StorageService.shared.fetchVaccineCards().count > 1 {
+                        self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
+                    }
+                }
+            }, onAddFederalPass: { [weak self] vaccineCard in
+                guard let self = self, let vaccineCard = vaccineCard else {return}
+                // TODO: ROUTE REFACTOR - where to go?
+                let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: vaccineCard.federalPass)
+                self.navigationController?.popToRootViewController(animated: true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
+                }
+            })
+            show(route: .QRRetrievalMethod, withNavigation: true, viewModel: vm)
         }
     }
 }
@@ -276,13 +297,6 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
                         StorageService.shared.deletePatient(name: name, birthday: birthday)
                     }
                 }
-                DispatchQueue.main.async {
-                    // TODO: ROUTE REFACTOR - QR Retreival methos
-//                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-//                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                }
             }
             self.dataSource = nil
             AnalyticsService.shared.track(action: .RemoveCard)
@@ -295,10 +309,6 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
 extension HealthPassViewController: FederalPassViewDelegate {
     func federalPassButtonTapped(model: AppVaccinePassportModel?) {
         if let pass = model?.codableModel.fedCode {
-//            self.openPDFView(pdfString: pass, vc: self, id: nil, type: .fedPass, completion: { [weak self] _ in
-//                guard let `self` = self else { return }
-//                self.tabBarController?.tabBar.isHidden = false
-//            })
             self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }

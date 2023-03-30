@@ -124,7 +124,10 @@ extension UIViewController {
             }
             return CovidVaccineCardsViewController.construct(viewModel: vm)
         case .QRRetrievalMethod:
-            return QRRetrievalMethodViewController.construct()
+            guard let vm = viewModel as? QRRetrievalMethodViewController.ViewModel else {
+                return nil
+            }
+            return QRRetrievalMethodViewController.construct(viewModel: vm)
         case .UsersListOfRecords:
             guard let vm = viewModel as? UsersListOfRecordsViewController.ViewModel else {
                 return nil
@@ -218,12 +221,15 @@ extension UIViewController {
         }
     }
     
-    func dismiss() {
+    func dismiss(then: @escaping()->Void) {
         if self.parent is UINavigationController, let navController = navigationController {
-            navController.dismiss(animated: true)
-            return
+            navController.dismiss(animated: true) {
+                return then()
+            }
         } else {
-            self.dismiss(animated: true)
+            self.dismiss(animated: true) {
+                return then()
+            }
         }
     }
 }
