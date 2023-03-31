@@ -63,17 +63,23 @@ struct PatientService {
     
     // MARK: Validate
     func validateProfile(completion: @escaping (ProfileValidationResult)->Void) {
+        network.addLoader(message: .SyncingRecords)
         validate { response in
+            network.removeLoader()
             guard let response = response else {
+                
                 return completion(.CouldNotValidate)
             }
             guard
                 let payload = response.resourcePayload,
                 payload == true
             else {
+                network.removeLoader()
                 return completion(.UnderAge)
             }
+            network.addLoader(message: .SyncingRecords)
             fetchProfile { profile in
+                network.removeLoader()
                 guard let profile = profile else {
                     return completion(.CouldNotValidate)
                 }
