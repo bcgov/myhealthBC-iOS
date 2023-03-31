@@ -77,7 +77,9 @@ struct PatientService {
                 guard let profile = profile else {
                     return completion(.CouldNotValidate)
                 }
-                if profile.resourcePayload?.acceptedTermsOfService == true {
+                if profile.resourcePayload?.acceptedTermsOfService == true
+                    // TODO: CHECK TERMS UPDATED
+                {
                     return completion(.Valid)
                 } else {
                     return completion(.TOSNotAccepted)

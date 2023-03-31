@@ -11,8 +11,6 @@ import UIKit
 import BCVaccineValidator
 import SwiftUI
 
-// TODO: ROUTE REFACTOR - QR Retreival methos
-
 class QRRetrievalMethodViewController: BaseViewController {
     
     struct ViewModel {
@@ -22,7 +20,6 @@ class QRRetrievalMethodViewController: BaseViewController {
     
     class func construct(viewModel: ViewModel) -> QRRetrievalMethodViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: QRRetrievalMethodViewController.self)) as? QRRetrievalMethodViewController {
-//            vc.backScreenString = backScreenString
             vc.viewModel = viewModel
             return vc
         }

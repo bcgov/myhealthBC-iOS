@@ -580,6 +580,9 @@
 		3ECD398928B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398A28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
 		3ECD398B28B522970033B866 /* StorageService+Recommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECD398828B522970033B866 /* StorageService+Recommendations.swift */; };
+		3ED302B229D749D900E38A79 /* AuthenticationFailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED302B129D749D900E38A79 /* AuthenticationFailedViewController.swift */; };
+		3ED302B329D749D900E38A79 /* AuthenticationFailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED302B129D749D900E38A79 /* AuthenticationFailedViewController.swift */; };
+		3ED302B429D749D900E38A79 /* AuthenticationFailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ED302B129D749D900E38A79 /* AuthenticationFailedViewController.swift */; };
 		3EDC0C7B29673E2F00603FED /* HospitalVisitsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0C7A29673E2F00603FED /* HospitalVisitsService.swift */; };
 		3EDC0C7C29673E2F00603FED /* HospitalVisitsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0C7A29673E2F00603FED /* HospitalVisitsService.swift */; };
 		3EDC0C7D29673E2F00603FED /* HospitalVisitsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EDC0C7A29673E2F00603FED /* HospitalVisitsService.swift */; };
@@ -1542,6 +1545,7 @@
 		3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsAndTypes.swift; sourceTree = "<group>"; };
 		3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDependentViewController.swift; sourceTree = "<group>"; };
 		3ECD398828B522970033B866 /* StorageService+Recommendations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Recommendations.swift"; sourceTree = "<group>"; };
+		3ED302B129D749D900E38A79 /* AuthenticationFailedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationFailedViewController.swift; sourceTree = "<group>"; };
 		3EDC0C7A29673E2F00603FED /* HospitalVisitsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalVisitsService.swift; sourceTree = "<group>"; };
 		3EDC0C7E2967406000603FED /* AuthenticatedHospitalVisitsResponseObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedHospitalVisitsResponseObject.swift; sourceTree = "<group>"; };
 		3EDC0C82296785DB00603FED /* BaseGatewayResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseGatewayResponse.swift; sourceTree = "<group>"; };
@@ -2169,6 +2173,7 @@
 			children = (
 				298190C62773B4350062F55E /* AuthenticationViewController.swift */,
 				3E81C4C629B2A60500C8F5C4 /* AuthenticationViewModel.swift */,
+				3ED302B129D749D900E38A79 /* AuthenticationFailedViewController.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -4504,6 +4509,7 @@
 				2932DCEA275ED82600532BC4 /* AnalyticsAppID.swift in Sources */,
 				795E68262703DBA100948502 /* UIAccessibility+EXT.swift in Sources */,
 				796653E127A14E54004D103E /* AuthenticatedTestResultsResponseModel.swift in Sources */,
+				3ED302B329D749D900E38A79 /* AuthenticationFailedViewController.swift in Sources */,
 				799E0AFC27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */,
 				79B1A0F02874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
 				296519A5272995680002B778 /* AuthManager.swift in Sources */,
@@ -4860,6 +4866,7 @@
 				79A15B0B2808B28200F8330D /* TableSectionHeader.swift in Sources */,
 				2932DCEB275ED8C800532BC4 /* AnalyticsAppID.swift in Sources */,
 				79CF23652825769B00510489 /* HealthRecordsViewController.swift in Sources */,
+				3ED302B429D749D900E38A79 /* AuthenticationFailedViewController.swift in Sources */,
 				796653DB27981336004D103E /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */,
 				795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				79B1A0F12874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
@@ -5193,6 +5200,7 @@
 				3E6831322940D41200100402 /* Perscription+CoreDataProperties.swift in Sources */,
 				798005DA2852C66E006E390F /* HomeScreenTableViewCell.swift in Sources */,
 				798005DB2852C66E006E390F /* AuthenticatedHealthRecordsAPIWorker.swift in Sources */,
+				3ED302B229D749D900E38A79 /* AuthenticationFailedViewController.swift in Sources */,
 				798005DC2852C66E006E390F /* StorageService+TestResults.swift in Sources */,
 				798005DD2852C66E006E390F /* AnalyticsAppID.swift in Sources */,
 				798005DE2852C66E006E390F /* UIAccessibility+EXT.swift in Sources */,

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,10 +23,110 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139" y="136"/>
+            <point key="canvasLocation" x="180" y="-127"/>
+        </scene>
+        <!--Authentication Failed View Controller-->
+        <scene sceneID="0OX-Cz-qIm">
+            <objects>
+                <viewController storyboardIdentifier="AuthenticationFailedViewController" id="eme-Ac-AIc" customClass="AuthenticationFailedViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="a3H-Gc-d7E">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zjd-ES-0sE">
+                                <rect key="frame" x="24" y="776" width="366" height="54"/>
+                                <color key="backgroundColor" name="AccentColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="54" id="PIO-sS-kKS"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Email us" image="mail"/>
+                                <connections>
+                                    <action selector="sendMailAction:" destination="eme-Ac-AIc" eventType="touchUpInside" id="11T-8D-n5H"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="32" translatesAutoresizingMaskIntoConstraints="NO" id="wUK-fm-lgH">
+                                <rect key="frame" x="25" y="233.5" width="364" height="321.5"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="client-registry" translatesAutoresizingMaskIntoConstraints="NO" id="e1p-Gh-fTw">
+                                        <rect key="frame" x="114" y="0.0" width="136" height="109"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Problem with log in" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k1o-uJ-AXF">
+                                        <rect key="frame" x="109.5" y="141" width="145" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ZVj-St-xnC">
+                                        <rect key="frame" x="62" y="193.5" width="240" height="128"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="128" id="Tzn-SR-abA"/>
+                                        </constraints>
+                                        <string key="text">We are unable to retrive your health record at this moment because of problem with BC Service Card log in, please contact Health Gateway team: healthgateway@gov.bc.ca for more information</string>
+                                        <color key="textColor" systemColor="labelColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OkM-8S-y3Z">
+                                <rect key="frame" x="186.5" y="75" width="41.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IgR-ID-N2V">
+                                <rect key="frame" x="16" y="64" width="42" height="42"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="55j-Ze-5xp"/>
+                                    <constraint firstAttribute="width" constant="42" id="Csl-fi-0MT"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="app-back-arrow"/>
+                                <connections>
+                                    <action selector="backButton:" destination="eme-Ac-AIc" eventType="touchUpInside" id="ePL-zp-vga"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="FOH-cc-F3e"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="zjd-ES-0sE" firstAttribute="leading" secondItem="FOH-cc-F3e" secondAttribute="leading" constant="24" id="7fQ-k9-yQk"/>
+                            <constraint firstItem="IgR-ID-N2V" firstAttribute="top" secondItem="FOH-cc-F3e" secondAttribute="top" constant="16" id="Eaz-n0-1zZ"/>
+                            <constraint firstItem="OkM-8S-y3Z" firstAttribute="centerX" secondItem="a3H-Gc-d7E" secondAttribute="centerX" id="LCm-BL-iRK"/>
+                            <constraint firstAttribute="trailing" secondItem="wUK-fm-lgH" secondAttribute="trailing" constant="25" id="PU0-Ig-h2e"/>
+                            <constraint firstItem="FOH-cc-F3e" firstAttribute="trailing" secondItem="zjd-ES-0sE" secondAttribute="trailing" constant="24" id="Y01-ZT-ft4"/>
+                            <constraint firstItem="IgR-ID-N2V" firstAttribute="leading" secondItem="FOH-cc-F3e" secondAttribute="leading" constant="16" id="f57-DI-NMB"/>
+                            <constraint firstItem="FOH-cc-F3e" firstAttribute="bottom" secondItem="zjd-ES-0sE" secondAttribute="bottom" constant="32" id="lJ5-9f-zL3"/>
+                            <constraint firstItem="wUK-fm-lgH" firstAttribute="centerX" secondItem="a3H-Gc-d7E" secondAttribute="centerX" id="qiZ-T7-z8u"/>
+                            <constraint firstItem="wUK-fm-lgH" firstAttribute="centerY" secondItem="a3H-Gc-d7E" secondAttribute="centerY" constant="-54" id="sB3-7i-Pkd"/>
+                            <constraint firstItem="OkM-8S-y3Z" firstAttribute="centerY" secondItem="IgR-ID-N2V" secondAttribute="centerY" id="zVN-wf-eck"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="button" destination="zjd-ES-0sE" id="pm1-so-vKt"/>
+                        <outlet property="descriptionTextView" destination="ZVj-St-xnC" id="wlU-6e-kgw"/>
+                        <outlet property="logo" destination="e1p-Gh-fTw" id="RDo-TM-eFl"/>
+                        <outlet property="navTitleLabel" destination="OkM-8S-y3Z" id="vhB-ji-GJ4"/>
+                        <outlet property="titleLabel" destination="k1o-uJ-AXF" id="rQi-fb-yoA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ca5-iA-SLt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1069.5652173913045" y="-107.14285714285714"/>
         </scene>
     </scenes>
     <resources>
+        <image name="app-back-arrow" width="24" height="24"/>
+        <image name="client-registry" width="136" height="109"/>
+        <image name="mail" width="27" height="24"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

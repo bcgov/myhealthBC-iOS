@@ -7,9 +7,6 @@
 import UIKit
 import BCVaccineValidator
 
-
-// TODO: ROUTE REFACTOR - FORMS
-
 enum GatewayFormSource: Equatable {
     case healthPassHomeScreen
     case vaccineCardsScreen
@@ -593,13 +590,8 @@ extension GatewayFormViewController {
     private func showAlertToRedirectAuthenticatedUserToRecordsView(patient: Patient) {
         alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
             guard let `self` = self else {return}
-            // TODO: ROUTE REFACTOR - Where to go?
             DispatchQueue.main.async {
-//                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: patient, addedRecord: nil)
-//                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: nil, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-//                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-//
-//                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+                self.navigationController?.popToRootViewController(animated: true)
             }
         }, buttonTwoTitle: "Retry") {}
     }

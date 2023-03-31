@@ -93,7 +93,7 @@ extension MedicationService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    break
                 }
                 
             }
@@ -101,19 +101,4 @@ extension MedicationService {
             network.request(with: requestModel)
         }
     }
-    /*
-     if isManualAuthFetch {
-    //                        self.authManager.storeMedFetchRequired(bool: true)
-    //                        self.fetchStatusList.fetchStatus[.MedicationStatement] = FetchStatus(requestCompleted: true, attemptedCount: 0, successfullCount: 0, error: nil)
-    //                    } else if self.protectedWordAlreadyAttempted == false {
-    //                        guard let authCreds = self.authCredentials else { return }
-    //                        self.protectedWordAlreadyAttempted = true
-    //                        self.getAuthenticatedMedicationStatement(authCredentials: authCreds, protectiveWord: protectiveWord, initialProtectedMedFetch: initialProtectedMedFetch)
-    //                    } else if self.protectedWordAlreadyAttempted == true {
-    //                        // In this case, there is an error with the protective word, so we must show an alert
-    //                        self.protectedWordAlreadyAttempted = false
-    //                        NotificationCenter.default.post(name: .protectedWordFailedPromptAgain, object: nil, userInfo: nil)
-    //                        self.deinitializeStatusList()
-    //                    }
-    */
 }

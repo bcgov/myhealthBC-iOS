@@ -73,14 +73,14 @@ struct VaccineCardService {
     
     func fetchAndStore(phn: String, dateOfBirth: String, dateOfVaccine: String, completion: @escaping (VaccineCard?)->Void) {
         network.addLoader(message: .empty)
-        fetch(phn: phn, dateOfBirth: dateOfBirth, dateOfVaccine: dateOfVaccine) { response in
+        fetch(phn: phn.removeWhiteSpaceFormatting, dateOfBirth: dateOfBirth, dateOfVaccine: dateOfVaccine) { response in
             guard let response = response, let payload = response.resourcePayload else {
                 return completion(nil)
             }
             
             
             let fullName = (payload.firstname ?? "") + " " + (payload.lastname ?? "")
-            guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn,
+            guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn.removeWhiteSpaceFormatting,
                                                                      name: fullName,
                                                                      firstName: payload.firstname,
                                                                      lastName: payload.lastname,
@@ -133,7 +133,7 @@ extension VaccineCardService {
             }
             
             let headers = [
-                Constants.GatewayVaccineCardRequestParameters.phn: phn,
+                Constants.GatewayVaccineCardRequestParameters.phn: phn.removeWhiteSpaceFormatting,
                 Constants.GatewayVaccineCardRequestParameters.dateOfBirth: dateOfBirth,
                 Constants.GatewayVaccineCardRequestParameters.dateOfVaccine: dateOfVaccine
             ]

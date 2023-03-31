@@ -7,80 +7,6 @@
 
 import UIKit
 
-/*
-We can call the BCSC auth in 2 ways:
-1) AuthenticationViewController.displayFullScreen()
-    - Replaces the VC in window with AuthenticationViewController
-    - then sets the VC in window to be Tab Bar
-2) BaseViewController.showLogin()
-    - Shows AuthenticationViewController as a modal on the current view controller
- */
-
-//extension BaseViewController {
-//    func showLogin(initialView: AuthenticationViewController.InitialView, sourceVC: LoginVCSource, presentingViewControllerReference viewController: UIViewController? = nil, completion: @escaping(_ authenticationStatus: AuthenticationViewController.AuthenticationStatus)->Void) {
-//        self.view.startLoadingIndicator()
-//        let vc = AuthenticationViewController.constructAuthenticationViewController(createTabBarAndGoToHomeScreen: false, isModal: true, initialView: initialView, sourceVC: sourceVC, completion: { [weak self] result in
-//            guard let `self` = self else {return}
-//            self.view.endLoadingIndicator()
-//            switch result {
-//            case .Completed:
-//                let tabVC = self.tabBarController as? TabBarController
-//                self.view.startLoadingIndicator()
-//                PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).validateProfile { allowed in
-//                    if allowed {
-//                        self.postAuthChangedSettingsReloadRequired()
-//                        self.alert(title: .loginSuccess, message: .recordsWillBeAutomaticallyAdded)
-//                        self.syncAuthenticatedPatient()
-//                        self.view.endLoadingIndicator()
-//                        completion(.Completed)
-//                    } else {
-//                        self.view.endLoadingIndicator()
-//                        completion(.Failed)
-//                    }
-//                }
-//                
-//            case .Cancelled, .Failed:
-//                completion(result)
-//                break
-//            }
-//        })
-//        self.present(vc, animated: true, completion: nil)
-//    }
-//}
-
-// MARK: This is for resetting the appropriate view controller
-//enum LoginVCSource: String {
-//    case BackgroundFetch = "BackgroundFetch"
-//    case AfterOnboarding = "AfterOnboarding"
-//    case SecurityAndDataVC = "SecurityAndDataVC"
-//    case ProfileAndSettingsVC = "ProfileAndSettingsVC"
-//    case HealthPassVC = "HealthPassVC"
-//    case HealthRecordsVC = "HealthRecordsVC"
-//    case QRRetrievalVC = "QRRetrievalVC"
-//    case FetchHealthRecordsVC = "FetchHealthRecordsVC"
-//    case UserListOfRecordsVC = "UserListOfRecordsVC"
-//    case TabBar = "TabBar"
-//    case HomeScreen = "HomeScreenVC"
-//    case Dependents = "Dependents"
-//    
-//    var getVCType: UIViewController.Type {
-//        switch self {
-//        case .BackgroundFetch: return TabBarController.self
-//        case .AfterOnboarding: return InitialOnboardingViewController.self
-//        case .SecurityAndDataVC: return SecurityAndDataViewController.self
-//        case .ProfileAndSettingsVC: return ProfileAndSettingsViewController.self
-//        case .HealthPassVC: return HealthPassViewController.self
-//        case .HealthRecordsVC: return HealthRecordsViewController.self
-//        case .QRRetrievalVC: return QRRetrievalMethodViewController.self
-//        case .FetchHealthRecordsVC: return FetchHealthRecordsViewController.self
-//        case .UserListOfRecordsVC: return UsersListOfRecordsViewController.self
-//        case .TabBar: return TabBarController.self
-//        case .HomeScreen: return HomeScreenViewController.self
-//        case .Dependents: return DependentsHomeViewController.self
-//        }
-//    }
-//}
-
 class AuthenticationViewController: UIViewController {
    
     class func construct(viewModel: ViewModel) -> AuthenticationViewController {
@@ -174,7 +100,6 @@ class AuthenticationViewController: UIViewController {
                     Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: true, hasCompletedLoginProcess: true, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: AuthManager().displayName)
                     self.dismissView(withDelay: true, status: .Completed)
                 case .Fail:
-                    self.showToast(message: "Authentication Failed", style: .Warn)
                     self.dismissView(withDelay: false, status: .Failed)
                 }
             })

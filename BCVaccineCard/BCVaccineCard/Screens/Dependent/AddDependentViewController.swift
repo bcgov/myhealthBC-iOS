@@ -176,13 +176,6 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
         )
     }
     
-    func sendEmail() {
-        let email = "HealthGateway@gov.bc.ca"
-        if let url = URL(string: "mailto:\(email)"), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
-        }
-    }
-    
     func style() {
         title = .dependentRegistration
         fields.forEach({style(field: $0)})

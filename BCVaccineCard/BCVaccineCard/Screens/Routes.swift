@@ -15,6 +15,31 @@ extension UIViewController {
                    showTabOnSuccess: AppTabs? = nil,
                    completion: ((AuthenticationViewController.AuthenticationStatus)->Void)? = nil
     ) {
+        if self is AppTabBarController, let current = self as? AppTabBarController {
+            self.showLogin(initialView: initialView,
+                             presentationStyle: presentationStyle,
+                             showTabOnSuccess: showTabOnSuccess,
+                             tabBarController: current,
+                             completion: completion)
+        } else if let tabBar = self.tabBarController as? AppTabBarController {
+            tabBar.showLogin(initialView: initialView,
+                             presentationStyle: presentationStyle,
+                             showTabOnSuccess: showTabOnSuccess,
+                             completion: completion)
+        } else if let navigationController = self.navigationController {
+            navigationController.showLogin(initialView: initialView,
+                                            presentationStyle: presentationStyle,
+                                            showTabOnSuccess: showTabOnSuccess,
+                                            completion: completion)
+        }
+    }
+    
+    private func showLogin(initialView: AuthenticationViewController.InitialView,
+                   presentationStyle: UIModalPresentationStyle? = nil,
+                   showTabOnSuccess: AppTabs? = nil,
+                   tabBarController: AppTabBarController,
+                   completion: ((AuthenticationViewController.AuthenticationStatus)->Void)? = nil
+    ) {
         guard NetworkConnection.shared.hasConnection else {
             showToast(message: .noInternetConnection, style: .Warn)
             return
@@ -31,11 +56,14 @@ extension UIViewController {
                     completion(result)
                 }
                 
-                if let tabBar = self.tabBarController as? AppTabBarController,
-                   result == .Completed,
+                if result == .Completed,
                    let showTab = showTabOnSuccess
                 {
-                    tabBar.switchTo(tab: showTab)
+                    tabBarController.switchTo(tab: showTab)
+                    return
+                }
+                if result != .Completed {
+                    self.showAuthFailed()
                 }
             })
         guard let controller = createController(route: .Authentication, viewModel: viewModel) else {
@@ -52,6 +80,11 @@ extension UIViewController {
         }
     }
     
+    private func showAuthFailed() {
+        let vc = AuthenticationFailedViewController.construct()
+        present(vc, animated: true)
+    }
+    
     func showProtectedWordDialog(delegate: ProtectiveWordPromptDelegate, purpose: ProtectiveWordPurpose) {
         let vm = ProtectiveWordPromptViewController.ViewModel(delegate: delegate, purpose: purpose)
         let controller = ProtectiveWordPromptViewController.construct(viewModel: vm)
@@ -59,6 +92,13 @@ extension UIViewController {
             tabBar.present(controller, animated: true)
         } else {
             present(controller, animated: true)
+        }
+    }
+    
+    func sendEmail() {
+        let email = "HealthGateway@gov.bc.ca"
+        if let url = URL(string: "mailto:\(email)"), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
         }
     }
 }

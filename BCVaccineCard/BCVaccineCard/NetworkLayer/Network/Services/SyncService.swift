@@ -96,12 +96,12 @@ struct SyncService {
             }
             
             group.notify(queue: .main) {
-                let message: String = !hadFailures ? "Records retrieved" : "Not all records were fetched successfully"
+                let message: String = !hadFailures ? "Records retrieved" : .fetchRecordError
                 
                 if showToast {
                     network.showToast(message: message)
                 } else if hadFailures {
-                    network.showToast(message: message)
+                    network.showToast(message: message, style: .Warn)
                 }
                 
                 return completion(patient)

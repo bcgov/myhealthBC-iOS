@@ -8,9 +8,6 @@
 import Foundation
 import StoreKit
 
-
-// TODO: ROUTE REFACTOR - Update
-
 extension AppTabBarController: SKStoreProductViewControllerDelegate, ForceUpdateViewDelegate{
 
     func showAppStoreUpdateDialogIfNeeded() {

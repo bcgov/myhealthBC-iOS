@@ -115,7 +115,6 @@ extension ImmnunizationsService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
                     break
                 }
                 
