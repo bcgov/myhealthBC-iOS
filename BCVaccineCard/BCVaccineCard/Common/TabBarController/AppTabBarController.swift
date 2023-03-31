@@ -283,4 +283,8 @@ extension AppTabBarController: TabDelegate {
         }
         self.selectedIndex = availableTabs.firstIndex(where: {$0 == tab}) ?? 0
     }
+    
+    func showLogin() {
+        showLogin(initialView: .Landing, presentationStyle: .fullScreen, showTabOnSuccess: .Home)
+    }
 }

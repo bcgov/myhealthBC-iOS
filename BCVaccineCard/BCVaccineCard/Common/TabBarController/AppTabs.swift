@@ -9,6 +9,7 @@ import UIKit
 
 protocol TabDelegate {
     func switchTo(tab: AppTabs)
+    func showLogin()
     
 }
 

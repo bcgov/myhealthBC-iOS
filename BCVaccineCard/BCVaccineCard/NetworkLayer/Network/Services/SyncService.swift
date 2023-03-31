@@ -89,11 +89,11 @@ struct SyncService {
                 group.leave()
             }
             
-            group.enter()
-            commentsService.fetchAndStore(for: patient) { comments in
-                Logger.log(string: "fetched \(comments.count) comments", type: .Network)
-                group.leave()
-            }
+//            group.enter()
+//            commentsService.fetchAndStore(for: patient) { comments in
+//                Logger.log(string: "fetched \(comments.count) comments", type: .Network)
+//                group.leave()
+//            }
             
             group.notify(queue: .main) {
                 let message: String = !hadFailures ? "Records retrieved" : .fetchRecordError

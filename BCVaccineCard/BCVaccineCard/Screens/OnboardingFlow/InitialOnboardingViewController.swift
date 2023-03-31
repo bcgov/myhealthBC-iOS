@@ -277,13 +277,12 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         if AuthManager().isAuthenticated {
             showHomeScreen(authStatus: nil)
         } else {
-            showLogin(initialView: .Landing, presentationStyle: .fullScreen, showTabOnSuccess: .Home) {[weak self] _ in
-                self?.viewModel?.delegate.switchTo(tab: .Home)
-                self?.dismiss(animated: true)
-            }
+            let delegate = self.viewModel?.delegate
             Defaults.hasSeenFirstLogin = true
+            dismiss(animated: true) {
+                delegate?.showLogin()
+            }
         }
-        
     }
     
     func showHomeScreen(authStatus: AuthenticationViewController.AuthenticationStatus?) {
