@@ -31,13 +31,19 @@ extension UIViewController {
                                             presentationStyle: presentationStyle,
                                             showTabOnSuccess: showTabOnSuccess,
                                             completion: completion)
+        } else {
+            self.showLogin(initialView: initialView,
+                           presentationStyle: presentationStyle,
+                           showTabOnSuccess: showTabOnSuccess,
+                           tabBarController: nil,
+                           completion: completion)
         }
     }
     
     private func showLogin(initialView: AuthenticationViewController.InitialView,
                    presentationStyle: UIModalPresentationStyle? = nil,
                    showTabOnSuccess: AppTabs? = nil,
-                   tabBarController: AppTabBarController,
+                   tabBarController: AppTabBarController?,
                    completion: ((AuthenticationViewController.AuthenticationStatus)->Void)? = nil
     ) {
         guard NetworkConnection.shared.hasConnection else {
@@ -59,7 +65,7 @@ extension UIViewController {
                 if result == .Completed,
                    let showTab = showTabOnSuccess
                 {
-                    tabBarController.switchTo(tab: showTab)
+                    tabBarController?.switchTo(tab: showTab)
                     return
                 }
                 if result == .Failed {
