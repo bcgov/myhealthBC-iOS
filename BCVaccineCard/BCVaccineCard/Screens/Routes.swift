@@ -62,7 +62,7 @@ extension UIViewController {
                     tabBarController.switchTo(tab: showTab)
                     return
                 }
-                if result != .Completed {
+                if result == .Failed {
                     self.showAuthFailed()
                 }
             })
