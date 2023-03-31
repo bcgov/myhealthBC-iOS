@@ -22,7 +22,7 @@ struct ClinicalDocumentService {
     public func fetchAndStore(for patient: Patient, completion: @escaping ([ClinicalDocument]?)->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.clinicalDocument) {return completion([])}
         Logger.log(string: "Fetching ClinicalDocument records for \(patient.name)", type: .Network)
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()

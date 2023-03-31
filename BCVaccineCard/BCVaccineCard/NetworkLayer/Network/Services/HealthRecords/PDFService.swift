@@ -23,7 +23,7 @@ struct PDFService {
         else {
             return completion(nil)
         }
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         fetchPDF(fileID: id, type: type, isCovid: type == .Covid19, patient: patient, completion: {response in
             network.removeLoader()
             return completion(response?.data)

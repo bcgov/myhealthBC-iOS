@@ -22,7 +22,7 @@ struct PatientService {
     // MARK: Profile
     public func fetchAndStoreDetails(completion: @escaping (Patient?)->Void) {
         Logger.log(string: "Fetching PatientDetails", type: .Network)
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         fetchDetail() { result in
             guard let response = result else {
                 network.removeLoader()

@@ -21,7 +21,7 @@ struct CovidTestsService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([CovidLabTestResult]?)->Void) {
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         Logger.log(string: "Fetching CovidTests records for \(patient.name)", type: .Network)
         fetch(for: patient) { result in
             guard let response = result else {

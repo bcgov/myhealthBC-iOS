@@ -22,7 +22,7 @@ struct HealthRecordsService {
         let dispatchGroup = DispatchGroup()
         var records: [HealthRecord] = []
         
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         // TODO: Verify each service deletes its record type before storing so this is not needd
 //        StorageService.shared.deleteHealthRecords(for: patient, types: nil)
         Logger.log(string: "fetching patient records for \(patient.name)", type: .Network)

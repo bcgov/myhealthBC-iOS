@@ -22,7 +22,7 @@ struct SpecialAuthorityDrugService {
     public func fetchAndStore(for patient: Patient, completion: @escaping ([SpecialAuthorityDrug]?)->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.specialAuthorityDrug) {return completion([])}
         Logger.log(string: "Fetching SpecialAuthorityDrug records for \(patient.name)", type: .Network)
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()

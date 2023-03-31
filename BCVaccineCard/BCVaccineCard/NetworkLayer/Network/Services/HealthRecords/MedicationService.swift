@@ -20,7 +20,7 @@ struct MedicationService {
     }
     
     public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([Perscription]?, _ protectiveWordRequired: Bool)->Void) {
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         Logger.log(string: "Fetching Medication records for \(patient.name)", type: .Network)
         // TODO: Handle Protected Fetch
         fetch(for: patient, protectiveWord: protectiveWord) { result in

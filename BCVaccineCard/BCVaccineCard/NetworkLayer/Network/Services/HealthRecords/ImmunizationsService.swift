@@ -23,7 +23,7 @@ struct ImmnunizationsService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([Immunization]?)->Void) {
         Logger.log(string: "Fetching Immnunization records for \(patient.name)", type: .Network)
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         fetch(for: patient, currentAttempt: 0) { result in
             guard let response = result else {
                 network.removeLoader()

@@ -315,14 +315,13 @@ extension UIApplication {
 // MARK: Loading UI
 enum LoaderMessage: String {
     case SyncingRecords = "Syncing Records"
-    case FetchingRecords = "Fetching Records"
     case FetchingConfig = " "
     case empty = ""
 }
 
 extension LoaderMessage {
     func isNetworkDependent() -> Bool {
-        return self == .FetchingRecords || self == .SyncingRecords || self == .FetchingConfig
+        return self == .SyncingRecords || self == .FetchingConfig
     }
 }
 
@@ -354,14 +353,16 @@ extension AppDelegate {
     
     /// Do not call this function manually. use dataLoadCount
     fileprivate func showLoader(message: LoaderMessage) {
-        // If already shown, dont do anything
+        // If already shown, dont do anything - just update message
         if let existing = self.window?.viewWithTag(dataLoadTag), let textLabel = existing.viewWithTag(dataLoadTextTag) as? UILabel {
             if textLabel.text == message.rawValue {
                 return
-            } else {
+            } else if message.rawValue.count > textLabel.text?.count ?? 0 {
                 textLabel.text = message.rawValue
                 return
             }
+            
+            return
         }
         
         // if somehow you're here and its already shown... remove it

@@ -22,7 +22,7 @@ struct HospitalVisitsService {
     public func fetchAndStore(for patient: Patient, completion: @escaping ([HospitalVisit]?)->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.hospitalVisit) {return completion([])}
         Logger.log(string: "Fetching HospitalVisit records for \(patient.name)", type: .Network)
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()

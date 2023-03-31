@@ -20,7 +20,7 @@ struct DependentService {
     }
   
     public func fetchDependents(for patient: Patient, completion: @escaping([Dependent]?) -> Void) {
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         Logger.log(string: "fetching dependents", type: .Network)
         fetchDependentNetworkRequest { dependentResponse in
             guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload else {

@@ -22,7 +22,7 @@ struct VaccineCardService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping (VaccineCard?)->Void) {
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         Logger.log(string: "Fetching VaccineCard records for \(patient.name)", type: .Network)
         fetch(for: patient) { result in
             guard let response = result else {
@@ -38,7 +38,7 @@ struct VaccineCardService {
     
     public func fetchAndStore(for dependent: Dependent, completion: @escaping (VaccineCard?)->Void) {
         guard let patient = dependent.info else {return}
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         fetchAndStore(for: patient) { vaccineCard in
             network.removeLoader()
             return completion(vaccineCard)
@@ -51,7 +51,7 @@ struct VaccineCardService {
         
         let dispatchGroup = DispatchGroup()
         var records: [VaccineCard] = []
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         StorageService.shared.deleteDependentVaccineCards(forPatient: patient)
         
         dependents.forEach { dependent in

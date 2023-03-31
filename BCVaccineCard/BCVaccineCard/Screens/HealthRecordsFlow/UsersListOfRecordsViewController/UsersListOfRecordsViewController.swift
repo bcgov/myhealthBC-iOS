@@ -69,7 +69,7 @@ class UsersListOfRecordsViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupRefreshControl()
+//        setupRefreshControl()
         setObservables()
         if let patient = viewModel?.patient,
            let patientName = patient.name,
@@ -109,7 +109,6 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setupRefreshControl() {
-//        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl)
     }
@@ -204,10 +203,10 @@ extension UsersListOfRecordsViewController {
             buttons.append(dependentSettingButton)
         }
         
-        let refreshButton = NavButton(title: nil,
-                                      image: UIImage(named: "refresh"), action: #selector(self.refresh(_:)),
-                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-        buttons.append(refreshButton)
+//        let refreshButton = NavButton(title: nil,
+//                                      image: UIImage(named: "refresh"), action: #selector(self.refresh(_:)),
+//                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+//        buttons.append(refreshButton)
         
         var name = viewModel?.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
         if name.count >= 20 {

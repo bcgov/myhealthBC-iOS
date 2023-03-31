@@ -21,7 +21,7 @@ struct LabOrderService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([LaboratoryOrder]?)->Void) {
         Logger.log(string: "Fetching LabOrder records for \(patient.name)", type: .Network)
-        network.addLoader(message: .FetchingRecords)
+        network.addLoader(message: .SyncingRecords)
         fetch(for: patient) { result in
             guard let response = result else {
                 network.removeLoader()
