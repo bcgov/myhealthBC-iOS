@@ -632,7 +632,7 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
 }
 
 // MARK: Health Gateway worker
-extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
+extension GatewayFormViewController {
     func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?) {
         guard let viewModel = self.viewModel else {
             return
@@ -738,41 +738,6 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             }
         }
     }
-    
-//    func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool) -> CoreDataReturnObject? {
-//        guard let viewModel = self.viewModel else {
-//            return nil
-//        }
-//        // Note, this first guard statement is to handle the case when health gateway is wonky - throws success with no error but has key nil values, so in this case we don't want to store a dummy patient value, as that's what was happening
-//        guard let collectionDate = gatewayResponse.resourcePayload?.records.first?.collectionDateTime,
-//              !collectionDate.trimWhiteSpacesAndNewLines.isEmpty, let reportID = gatewayResponse.resourcePayload?.records.first?.reportId,
-//              !reportID.trimWhiteSpacesAndNewLines.isEmpty else { return nil }
-//        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: viewModel.dataSource, usingOnlyShownCells: false) else { return nil }
-//        guard let phn = viewModel.dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
-//        let bday: Date?
-//        if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: viewModel.dataSource, usingOnlyShownCells: false),
-//           let dob = viewModel.dataSource[dobIndexPath.row].configuration.text,
-//           let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) {
-//            bday = dateOfBirth
-//        } else {
-//            bday = nil
-//        }
-//        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn,
-//                                                                       name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName,
-//                                                                       firstName: "",
-//                                                                       lastName: "",
-//                                                                       gender: "",
-//                                                                       birthday: bday,
-//                                                                       physicalAddress: nil,
-//                                                                       mailingAddress: nil,
-//                                                                       hdid: nil,
-//                                                                       authenticated: authenticated
-//        ) else {return nil}
-//        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: true, pdf: nil) else { return nil }
-//        return CoreDataReturnObject(id: object.id, patient: patient)
-//    }
-//
-//
 }
 
 

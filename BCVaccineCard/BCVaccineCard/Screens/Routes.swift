@@ -15,6 +15,8 @@ extension UIViewController {
                    showTabOnSuccess: AppTabs? = nil,
                    completion: ((AuthenticationViewController.AuthenticationStatus)->Void)? = nil
     ) {
+    
+        // Find and display login from the tab bar controller.
         if self is AppTabBarController, let current = self as? AppTabBarController {
             self.showLogin(initialView: initialView,
                              presentationStyle: presentationStyle,

@@ -8,6 +8,7 @@
 import Foundation
 
 struct HealthRecordConstants {
+    // ENABLE AND DISABLE PRIMARY PATIENT RECORD TYPES
     static var enabledTypes: [RecordType] {
         return [
             .covidImmunizationRecord,
@@ -20,6 +21,16 @@ struct HealthRecordConstants {
             .hospitalVisit,
             .clinicalDocument
         ]
+    }
+    
+    // ENABLE AND DISABLE DEPENDENT RECORD TYPES
+    static var enabledDepententRecordTypes: [RecordType] {
+        return [.covidImmunizationRecord, .immunization]
+    }
+    
+    // ENABLE AND DISABLE COMMENTS
+    static var CommentsEnabled: Bool {
+        return false
     }
 }
 
@@ -75,6 +86,29 @@ extension HealthRecordConstants.RecordType {
             return .ClinicalDocuments
         }
     }
+    
+    func toStorageType() -> StorageService.healthRecordType? {
+        switch self {
+        case .covidImmunizationRecord:
+            return .Immunization
+        case .covidTestResultRecord:
+            return .CovidTest
+        case .medication:
+            return .Prescription
+        case .laboratoryOrder:
+            return .LaboratoryOrder
+        case .immunization:
+            return .Immunization
+        case .healthVisit:
+            return .HealthVisit
+        case .specialAuthorityDrug:
+            return .SpecialAuthorityDrug
+        case .hospitalVisit:
+            return .HospitalVisit
+        case .clinicalDocument:
+            return .ClinicalDocument
+        }
+    }
 }
 
 struct RecordsFilter {
@@ -99,12 +133,15 @@ struct RecordsFilter {
 }
 
 extension RecordsFilter.RecordType {
+    // Patient filters - set based on HealthRecordConstants.enabledTypes
     static var avaiableFilters: [RecordsFilter.RecordType] {
         let availableTypes = HealthRecordConstants.enabledTypes
         return availableTypes.compactMap({$0.toRecordsFilterType()})
     }
     
+    // Dependent filters - set based on HealthRecordConstants.enabledDepententRecordTypes
     static var dependentFilters: [RecordsFilter.RecordType] {
-        return [.Covid, .Immunizations, .LabTests]
+        let availableTypes = HealthRecordConstants.enabledDepententRecordTypes
+        return availableTypes.compactMap({$0.toRecordsFilterType()})
     }
 }

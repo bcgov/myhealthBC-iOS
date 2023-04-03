@@ -23,8 +23,6 @@ struct HealthRecordsService {
         var records: [HealthRecord] = []
         
         network.addLoader(message: .SyncingRecords)
-        // TODO: Verify each service deletes its record type before storing so this is not needd
-//        StorageService.shared.deleteHealthRecords(for: patient, types: nil)
         Logger.log(string: "fetching patient records for \(patient.name)", type: .Network)
         let typesToFetch = types ?? StorageService.healthRecordType.allCases
         var hadFailures = false
@@ -155,6 +153,9 @@ struct HealthRecordsService {
     
     public func fetchAndStore(for dependent: Dependent, completion: @escaping ([HealthRecord], _ hadfailures: Bool)->Void) {
         guard let patient = dependent.info else {return completion([], false)}
-        fetchAndStore(for: patient, protectiveWord: nil, types: [.VaccineCard, .CovidTest, .Immunization, .ClinicalDocument, .LaboratoryOrder], completion: completion)
+        fetchAndStore(for: patient,
+                      protectiveWord: nil,
+                      types: HealthRecordConstants.enabledDepententRecordTypes.compactMap({$0.toStorageType()}),
+                      completion: completion)
     }
 }

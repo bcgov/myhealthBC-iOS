@@ -65,24 +65,6 @@ class DependentsHomeViewController: BaseDependentViewController {
         fetchDataWhenMainPatientIsStored()
     }
     
-   // private func fetchData() {
-   ///     service.fetchDependents { completed in
-            // If completed, then reload data/update screen UI - if not completed, show an error
-     //   }
-        // TODO: Allocate this appropriately once storage has been updated
-      //  dependents = []
-       // setState()
-       // setHealthRecordServiceAndFetchDependentRecords()
-   // }
-    
-   // private func setHealthRecordServiceAndFetchDependentRecords() {
-    //    guard dependents.count > 0 else { return }
-     //   for dependent in dependents {
-            // If this is the way we decide to do it, then should do some thread handling here
-       //     let dependentsRecordService = HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), currentDependant: dependent)
-        //    dependentsRecordService.fetchHealthRecords()
-       // }
-       
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchData(fromRemote: false)

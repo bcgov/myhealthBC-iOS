@@ -152,10 +152,15 @@ class AppTabBarController: UITabBarController {
                 self.showAlertForUserProfile()
                 return completion()
             case .TOSRejected:
-                // TODO: Show a dialog?
+                self.showTermOfServiceRejected()
                 return completion()
             }
         })
+    }
+    
+    func showTermOfServiceRejected() {
+        let message = "You must agree to the Health Gateway terms of service before using this app"
+        self.alert(title: "Terms of service", message: message)
     }
     
     func showAlertForUserUnder(ageInYears age: Int) {
