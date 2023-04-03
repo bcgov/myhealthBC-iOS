@@ -130,7 +130,7 @@ extension HealthPassViewController {
                
             }, onAddFederalPass: { [weak self] vaccineCard in
                 guard let self = self, let vaccineCard = vaccineCard else {return}
-                self.onAdd(federal: vaccineCard)
+                self.onAdd(vaccineCard: vaccineCard)
             })
             show(route: .QRRetrievalMethod, withNavigation: true, viewModel: vm)
         }
