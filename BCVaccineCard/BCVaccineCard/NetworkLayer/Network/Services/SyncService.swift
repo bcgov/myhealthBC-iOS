@@ -89,7 +89,7 @@ struct SyncService {
                 group.leave()
             }
             
-            if HealthRecordConstants.CommentsEnabled {
+            if HealthRecordConstants.commentsEnabled {
                 group.enter()
                 commentsService.fetchAndStore(for: patient) { comments in
                     Logger.log(string: "fetched \(comments.count) comments", type: .Network)

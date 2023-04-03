@@ -67,7 +67,7 @@ extension HealthRecordConstants.RecordType {
     func toRecordsFilterType() -> RecordsFilter.RecordType? {
         switch self {
         case .covidImmunizationRecord:
-            return .Immunizations
+            return nil
         case .covidTestResultRecord:
             return .Covid
         case .medication:
