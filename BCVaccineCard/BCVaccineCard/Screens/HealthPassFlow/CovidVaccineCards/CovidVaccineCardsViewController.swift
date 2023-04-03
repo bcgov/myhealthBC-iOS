@@ -366,13 +366,22 @@ extension CovidVaccineCardsViewController: FederalPassViewDelegate {
     func addFederalPass(model: AppVaccinePassportModel) {
         let fetchType = GatewayFormViewControllerFetchType.federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code)
         let vm = GatewayFormViewController.ViewModel(rememberDetails: RememberedGatewayDetails(), fetchType: fetchType) { [weak self] vaccineCard in
-            guard let `self` = self else {return}
-            
+            guard let `self` = self, let card = vaccineCard else {return}
+            self.showAddedFederalPass(vaccineCard: card)
         } onAddFederalPass: { [weak self] vaccineCard in
-            guard let `self` = self else {return}
+            guard let `self` = self, let card = vaccineCard else {return}
+            self.showAddedFederalPass(vaccineCard: card)
         }
         
         show(route: .GatewayForm, withNavigation: true, viewModel: vm)
+    }
+    
+    func showAddedFederalPass(vaccineCard: VaccineCard) {
+        guard let fedCode = vaccineCard.federalPass else {return}
+        self.navigationController?.popToViewController(self, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.showPDFDocument(pdfString: fedCode, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
+        }
     }
 
 }
