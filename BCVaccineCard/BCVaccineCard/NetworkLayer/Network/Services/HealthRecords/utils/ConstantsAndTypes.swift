@@ -25,11 +25,11 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE DEPENDENT RECORD TYPES
     static var enabledDepententRecordTypes: [RecordType] {
-        return [.covidImmunizationRecord, .immunization]
+        return [.covidTestResultRecord, .immunization]
     }
     
     // ENABLE AND DISABLE COMMENTS
-    static var CommentsEnabled: Bool {
+    static var commentsEnabled: Bool {
         return false
     }
 }
@@ -67,13 +67,13 @@ extension HealthRecordConstants.RecordType {
     func toRecordsFilterType() -> RecordsFilter.RecordType? {
         switch self {
         case .covidImmunizationRecord:
-            return .Covid
+            return .Immunizations
         case .covidTestResultRecord:
-            return .LabTests
+            return .Covid
         case .medication:
             return .Medication
         case .laboratoryOrder:
-            return nil
+            return .LabTests
         case .immunization:
             return .Immunizations
         case .healthVisit:
