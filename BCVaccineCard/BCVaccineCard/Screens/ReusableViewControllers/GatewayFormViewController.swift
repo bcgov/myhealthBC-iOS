@@ -591,7 +591,7 @@ extension GatewayFormViewController {
         alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
             guard let `self` = self else {return}
             DispatchQueue.main.async {
-                self.navigationController?.popToRootViewController(animated: true)
+                self.navigationController?.popBack(toControllerType: HealthPassViewController.self)
             }
         }, buttonTwoTitle: "Retry") {}
     }
