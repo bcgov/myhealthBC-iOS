@@ -511,7 +511,7 @@ extension StorageServiceTests {
     func sampleTestResult(patietName: String, reportId: String) -> GatewayTestResultResponse {
         let record = GatewayTestResultResponseRecord(patientDisplayName: patietName, lab: nil, reportId: reportId, collectionDateTime: "2022-01-01", resultDateTime: nil, testName: nil, testType: nil, testStatus: nil, testOutcome: nil, resultTitle: nil, resultDescription: nil, resultLink: nil)
         let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 1, records: [record])
-        return GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: 1, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
+        return GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: 1, pageIndex: nil, pageSize: nil, resultError: nil)
     }
     
     func medicationObject(prescriptionIdentifier: String? = nil, prescriptionStatus: String? = nil, dispensedDate: String? = nil, practitionerSurname: String? = nil, directions: String? = nil, dateEntered: String? = nil, pharmacyID: String? = nil, din: String? = nil, brandName: String? = nil, genericName: String? = nil, quantity: Double? = nil, maxDailyDosage: Int? = nil, drugDiscontinuedDate: String? = nil, form: String? = nil, manufacturer: String? = nil, strength: String? = nil, strengthUnit: String? = nil, isPin: Bool? = nil, pharmacyName: String? = nil, addressLine1: String? = nil, addressLine2: String? = nil, city: String? = nil, province: String? = nil, countryCode: String? = nil, phone: String? = nil, fax: String? = nil) -> BCVaccineCard.AuthenticatedMedicationStatementResponseObject.ResourcePayload {

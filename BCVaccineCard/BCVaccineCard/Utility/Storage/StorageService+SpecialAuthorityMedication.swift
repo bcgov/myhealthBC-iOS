@@ -28,11 +28,35 @@ protocol StorageSpecialAuthorityMedicationManager {
         authenticated: Bool
     ) -> SpecialAuthorityDrug?
     
+    func storeSpecialAuthorityMedications(
+        patient: Patient,
+        objects: [AuthenticatedSpecialAuthorityDrugsResponseModel.SpecialAuthorityDrug],
+        authenticated: Bool,
+        completion: @escaping ([SpecialAuthorityDrug])->Void
+    )
+    
 
     // MARK: Fetch
     func fetchSpecialAuthorityMedications()-> [SpecialAuthorityDrug]
 }
 extension StorageService: StorageSpecialAuthorityMedicationManager {
+    func storeSpecialAuthorityMedications(
+        patient: Patient,
+        objects: [AuthenticatedSpecialAuthorityDrugsResponseModel.SpecialAuthorityDrug],
+        authenticated: Bool,
+        completion: @escaping ([SpecialAuthorityDrug])->Void
+    ) {
+        var storedObjects: [SpecialAuthorityDrug] = []
+        
+        for object in objects {
+            if let storedObject = storeSpecialAuthorityMedication(patient: patient, object: object, authenticated: authenticated) {
+                storedObjects.append(storedObject)
+            }
+        }
+        
+        return completion(storedObjects)
+    }
+    
     func storeSpecialAuthorityMedication(patient: Patient, object: AuthenticatedSpecialAuthorityDrugsResponseModel.SpecialAuthorityDrug, authenticated: Bool) -> SpecialAuthorityDrug? {
         
         return storeSpecialAuthorityMedication(

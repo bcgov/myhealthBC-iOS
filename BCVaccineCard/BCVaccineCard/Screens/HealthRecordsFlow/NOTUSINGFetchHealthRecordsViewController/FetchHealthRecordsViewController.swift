@@ -70,16 +70,18 @@ class FetchHealthRecordsViewController: BaseViewController {
     }
     
     private func setup() {
-        checkIfIsRootVCInStack()
+//        checkIfIsRootVCInStack()
         navSetup()
 //        setupLabel()
         setupTableView()
         setupListeners()
     }
+    
+    // TODO: ROUTE REFACTOR - needed?
     // TODO: Make this safer?
-    private func checkIfIsRootVCInStack() {
-        self.showSettingsIcon = (((self.tabBarController as? TabBarController)?.viewControllers?[TabBarVCs.records.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController])?.first is FetchHealthRecordsViewController ? true : false
-    }
+//    private func checkIfIsRootVCInStack() {
+//        self.showSettingsIcon = (((self.tabBarController as? TabBarController)?.viewControllers?[TabBarVCs.records.rawValue] as? CustomNavigationController)?.viewControllers as? [BaseViewController])?.first is FetchHealthRecordsViewController ? true : false
+//    }
     
     private func adjustDataSource() {
         self.dataSource = [
@@ -193,49 +195,54 @@ extension FetchHealthRecordsViewController: UITableViewDelegate, UITableViewData
         
         showForm()
     }
+    
+    
+    // TODO: ROUTE REFACTOR - FORMS
+    private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {}
+    private func showTestForm(rememberDetails: RememberedGatewayDetails) {}
+    /*
     //FIXME: CONNOR: Adjust routing here to use router worker
     private func showVaccineForm(rememberDetails: RememberedGatewayDetails) {
+        // TODO: Add to ROUTER
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .vaccinationRecord)
         vc.completionHandler = { [weak self] details in
             guard let `self` = self else { return }
 //            self.handleRouting(id: details.id, recordType: .covidImmunizationRecord, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidImmunizationRecord)
-            DispatchQueue.main.async {
-                
-                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
-                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
-            }
+//            DispatchQueue.main.async {
+//                
+//                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
+//                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+//                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+//            }
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     //FIXME: CONNOR: Adjust routing here to use router worker
     private func showTestForm(rememberDetails: RememberedGatewayDetails) {
+        // TODO: Add to ROUTER
         let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .covid19TestResult)
         vc.completionHandler = { [weak self] details in
             guard let `self` = self else { return }
 //            self.handleRouting(id: details.id, recordType: .covidTestResult, details: details)
             let record = StorageService.shared.getHeathRecords().fetchDetailDataSourceWithID(id: details.id, recordType: .covidTestResult)
-            DispatchQueue.main.async {
-                
-                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
-                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
-            }
+//            DispatchQueue.main.async {
+//
+//                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: record)
+//                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
+//                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
+//                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+//            }
         }
         self.navigationController?.pushViewController(vc, animated: true)
     }
+    */
 }
 
 // MARK: BCSC Login
 extension FetchHealthRecordsViewController {
     func performBCSCLogin() {
-        self.showLogin(initialView: .Landing, sourceVC: .FetchHealthRecordsVC) { [weak self] authenticationStatus in
-            guard let `self` = self, authenticationStatus == .Completed else {return}
-            // TODO: Adjust nav stack here if necessary
-            self.adjustDataSource()
-        }
+        showLogin(initialView: .Landing)
     }
 }

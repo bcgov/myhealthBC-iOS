@@ -33,11 +33,13 @@ class LabOrderBannerTableViewCell: UITableViewCell, UITextViewDelegate {
         case .NoTests:
             titleLabel.text = "Results are pending"
             body = NSMutableAttributedString(string: "It can take between 1 and 7 days to complete. Find resources to learn about your lab test and what the results mean. Learn more", attributes: fontAttribute)
-            _ = body.setAsLink(textToFind: "Learn more", linkURL: "https://www.healthgateway.gov.bc.ca/faq")
+            _ = body.setAsLink(textToFind: "Learn more", linkURL: "https://www2.gov.bc.ca/gov/content?id=FE8BA7F9F1F0416CB2D24CF71C4BAF80")
+            textView.isUserInteractionEnabled = true
+            textView.isSelectable = true
         case .Cancelled:
             titleLabel.text = "Your test has been cancelled"
             body = NSMutableAttributedString(string: "Find resources to learn about your lab test and what the results mean", attributes: fontAttribute)
-            _ = body.setAsLink(textToFind: "your lab test and what the results mean", linkURL: "https://www.healthgateway.gov.bc.ca/faq")
+            _ = body.setAsLink(textToFind: "your lab test and what the results mean", linkURL: "https://www2.gov.bc.ca/gov/content?id=FE8BA7F9F1F0416CB2D24CF71C4BAF80")
             textView.isUserInteractionEnabled = true
             textView.isSelectable = true
             

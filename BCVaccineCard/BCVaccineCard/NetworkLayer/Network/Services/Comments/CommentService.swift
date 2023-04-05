@@ -14,11 +14,27 @@ struct CommentService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     
     fileprivate static var blockSync: Bool = false
     
-    private var endpoints: UrlAccessor {
+    var endpoints: UrlAccessor {
         return UrlAccessor()
+    }
+    
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([Comment])->Void) {
+        // TODO delete existing?
+        network.addLoader(message: .SyncingRecords)
+        fetch(for: patient) { response in
+            guard let response = response else {
+                network.removeLoader()
+                return completion([])
+            }
+            StorageService.shared.storeComments(in: response, completion: { comments in
+                network.removeLoader()
+                completion(comments)
+            })
+        }
     }
     
     public func newComment(message: String, commentID: String, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
@@ -85,7 +101,6 @@ struct CommentService {
         }
     }
     
-    
     private func findCommentsToSync() -> [Comment] {
         let comments = StorageService.shared.fetchComments()
         var unsynced = comments.filter({$0.id == nil})
@@ -100,6 +115,8 @@ struct CommentService {
         return unsynced
     }
     
+    // MARK: POST
+    
     private func post(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
         let type = CommentType.init(rawValue: comment.entryTypeCode ?? "") ?? .medication
         postComment(message: comment.text ?? "", commentID: comment.parentEntryID ?? "", date: comment.createdDateTime ?? Date(), hdid: comment.userProfileID ?? "", type: type, completion: completion)
@@ -112,15 +129,20 @@ struct CommentService {
     
     private func postComment(object: PostComment, completion: @escaping(PostCommentResponseResult?)->Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else {return completion(nil)}
-            
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
                 Constants.AuthenticationHeaderKeys.hdid: hdid
             ]
             
-            let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.authenticatedComments(hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
+            let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.comments(base: baseURL, hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
                 return completion(result?.resourcePayload)
             }
             
@@ -132,6 +154,7 @@ struct CommentService {
         Logger.log(string: "StorageEvent \(event.entity) - \(event.event)", type: .storage)
         NotificationCenter.default.post(name: .storageChangeEvent, object: event)
     }
+
 }
 
 extension CommentService {
@@ -159,7 +182,7 @@ extension CommentService {
 
 extension HealthRecord {
     fileprivate func submitComment(text: String, hdid: String, completion: @escaping (Comment?)->Void) {
-        let service = CommentService(network: AFNetwork(), authManager: AuthManager())
+        let service = CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         service.newComment(message: text, commentID: commentId, hdid: hdid, type: commentType, completion: completion)
     }
     
@@ -216,12 +239,12 @@ extension HealthRecordsDetailDataSource.Record {
         
     }
     
-    // TODO: Enable Comments here
+    // TODO: Enable Comments for specific record types here
     var commentsEnabled: Bool {
-        return false
-//        switch self.type {
-//            case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument : return true
-//            default: return false
-//        }
+        if !HealthRecordConstants.commentsEnabled { return false}
+        switch self.type {
+            case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument : return true
+            default: return false
+        }
     }
 }

@@ -10,10 +10,8 @@ import WebKit
 
 class TermsOfServiceViewController: BaseViewController {
     
-    class func constructTermsOfServiceViewController(authWorker: AuthenticatedHealthRecordsAPIWorker?, authCredentials: AuthenticationRequestObject) -> TermsOfServiceViewController {
+    class func construct() -> TermsOfServiceViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: TermsOfServiceViewController.self)) as? TermsOfServiceViewController {
-            vc.authWorker = authWorker
-            vc.authCredentials = authCredentials
             vc.modalPresentationStyle = .overFullScreen
             return vc
         }
@@ -27,9 +25,6 @@ class TermsOfServiceViewController: BaseViewController {
     @IBOutlet weak private var buttonContainerView: UIView!
     @IBOutlet weak private var cancelButton: AppStyleButton!
     @IBOutlet weak private var agreeButton: AppStyleButton!
-    
-    private var authWorker: AuthenticatedHealthRecordsAPIWorker?
-    private var authCredentials: AuthenticationRequestObject?
     
     private var tosPayload: TermsOfServiceResponse.ResourcePayload?
 
@@ -88,20 +83,17 @@ extension TermsOfServiceViewController {
 extension TermsOfServiceViewController {
     private func fetchTermsOfService() {
         termsWebView.navigationDelegate = self
-        self.view.startLoadingIndicator()
-        authWorker?.fetchTermsOfService(completion: { tos, error in
+        TOSService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchTOS { tos in
             var displayString: String
-            self.tosPayload = tos
-            if let terms = tos, let termsString = terms.content, terms.id != nil {
-                displayString = termsString
-            } else if let error = error?.resultMessage {
-                displayString = error
-            } else {
-                displayString = "Unknown error"
+            self.tosPayload = tos?.resourcePayload
+            guard let terms = tos?.resourcePayload, let termsString = terms.content, terms.id != nil else {
+                displayString = "We're sorry, there was an issue fetching terms of service."
+                return
             }
+            displayString = termsString
             self.termsWebView.loadHTMLString(displayString, baseURL: nil)
-            self.view.endLoadingIndicator()
-        })
+
+        }
     }
 }
 
@@ -118,7 +110,12 @@ extension TermsOfServiceViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         switch type {
         case .cancel: respondToTermsOfService(accepted: false)
-        case .agree: respondToTermsOfService(accepted: true)
+        case .agree:
+            guard NetworkConnection.shared.hasConnection else {
+                NetworkConnection.shared.showUnreachableToast()
+                return
+            }
+            respondToTermsOfService(accepted: true)
         default: break
         }
     }
@@ -131,54 +128,17 @@ extension TermsOfServiceViewController {
         case Error
         case DidntAgree
     }
+    
     private func respondToTermsOfService(accepted: Bool) {
-        guard let authCredentials = self.authCredentials, let termsOfServiceId = tosPayload?.id else { return }
+        guard let termsOfServiceId = tosPayload?.id else { return }
         guard accepted == true else {
-            signout(error: nil, reason: .DidntAgree)
+            self.dismiss(animated: true)
+            AppStates.shared.updatedTermsOfService(accepted: false)
             return
         }
-        self.view.startLoadingIndicator()
-        self.authWorker?.respondToTermsOfService(authCredentials, accepted: accepted, termsOfServiceId: termsOfServiceId, completion: { accepted, error in
-            guard let accepted = accepted else {
-                self.signout(error: error, reason: .Error)
-                return
-            }
-
-            NotificationManager.respondToTermsOfService(accepted: accepted, error: nil, errorTitle: nil)
-            self.view.endLoadingIndicator()
+        TOSService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).accept(termsOfServiceId: termsOfServiceId) { result in
             self.dismiss(animated: true)
-            
-        })
-    }
-    
-//    private func resetRecordsTab() {
-//        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-//        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-//        let currentTab = self.getCurrentTab
-//        let scenario = AppUserActionScenarios.TermsOfServiceRejected(values: ActionScenarioValues(currentTab: currentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: nil, authenticationStatus: nil))
-//        self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.0)
-//    }
-    
-    private func signout(error: ResultError?, reason: SignoutReason) {
-        let manager = AuthManager()
-        manager.signout(in: self) { success in
-            if !success {
-                AuthManager().clearData()
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.view.endLoadingIndicator()
-//                self.dismiss(animated: true) {
-//                    self.resetRecordsTab()
-//                }
-                self.dismiss(animated: true)
-                switch reason {
-                case .Error:
-                    NotificationManager.respondToTermsOfService(accepted: nil, error: error?.resultMessage ?? "Unknown error occured with terms of service", errorTitle: .error)
-                case .DidntAgree:
-                    let error = "You must agree to the Health Gateway terms of service before using this app"
-                    NotificationManager.respondToTermsOfService(accepted: nil, error: error, errorTitle: "Terms of service")
-                }
-            }
+            AppStates.shared.updatedTermsOfService(accepted: result?.resourcePayload?.acceptedTermsOfService == true)
         }
     }
 }

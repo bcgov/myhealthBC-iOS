@@ -89,7 +89,7 @@ extension UIViewController {
                 parent.showLocalAuth(onSuccess: onSuccess)
                 return
             }
-            if let parent = self.parent as? TabBarController {
+            if let parent = self.parent as? AppTabBarController {
                 parent.showLocalAuth(onSuccess: onSuccess)
                 return
             }
@@ -129,7 +129,7 @@ extension UIViewController {
             return parent.findTabBarController()
             
         }
-        if let parent = self.parent as? TabBarController {
+        if let parent = self.parent as? AppTabBarController {
             return parent.findTabBarController()
             
         }
@@ -177,7 +177,7 @@ extension UIViewController {
                           sortOrder: Int64? = nil,
                           patientAPI: AuthenticatedPatientDetailsResponseObject? = nil,
                           manuallyAdded: Bool,
-                          completion: @escaping(CoreDataReturnObject)->Void
+                          completion: @escaping(VaccineCard?)->Void
     ) {
         let birthdate =  Date.Formatter.yearMonthDay.date(from: model.birthdate) ?? Date()
         let name = patientAPI?.getFullName ?? model.name
@@ -187,18 +187,20 @@ extension UIViewController {
                                                                                 lastName: "",
                                                                                 gender: "",
                                                                                 birthday: birthdate,
+                                                                                physicalAddress: nil,
+                                                                                mailingAddress: nil,
                                                                                 hdid: nil,
                                                                                 authenticated: authenticated)
         else {
             Logger.log(string: "**Could not fetch or create patent to store vaccine card", type: .storage)
-            return completion(CoreDataReturnObject(id: model.id, patient: nil))
+            return completion(nil)
         }
         StorageService.shared.storeVaccineCard(vaccineQR: model.code, name: model.name, issueDate: Date(timeIntervalSince1970: model.issueDate), hash: model.hash, patient: patient, authenticated: authenticated, federalPass: model.fedCode, vaxDates: model.vaxDates, sortOrder: sortOrder, manuallyAdded: manuallyAdded, completion: { card in
-            completion(CoreDataReturnObject(id: card?.id, patient: patient))
+            return completion(card)
         })
     }
     
-    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, patientAPI: AuthenticatedPatientDetailsResponseObject? = nil, manuallyAdded: Bool, completion: @escaping(CoreDataReturnObject)->Void) {
+    func updateCardInLocalStorage(model: LocallyStoredVaccinePassportModel, authenticated: Bool = false, patientAPI: AuthenticatedPatientDetailsResponseObject? = nil, manuallyAdded: Bool, completion: @escaping(VaccineCard?)->Void) {
         StorageService.shared.updateVaccineCard(newData: model, authenticated: authenticated, patient: patientAPI, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
             if card != nil {
@@ -206,11 +208,11 @@ extension UIViewController {
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
-            completion(CoreDataReturnObject(id: card?.id, patient: card?.patient))
+            return completion(card)
         })
     }
     
-    func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, manuallyAdded: Bool, completion: @escaping(CoreDataReturnObject)->Void) {
+    func updateFedCodeForCardInLocalStorage(model: LocallyStoredVaccinePassportModel, manuallyAdded: Bool, completion: @escaping(VaccineCard?)->Void) {
         guard let card = StorageService.shared.fetchVaccineCard(code: model.code), let fedCode = model.fedCode else {return}
         StorageService.shared.updateVaccineCard(card: card, federalPass: fedCode, manuallyAdded: manuallyAdded, completion: {[weak self] card in
             guard let `self` = self else {return}
@@ -219,7 +221,7 @@ extension UIViewController {
             } else {
                 self.alert(title: .error, message: .updateCardFailed)
             }
-            completion(CoreDataReturnObject(id: card?.id, patient: card?.patient))
+            return completion(card)
         })
     }
     

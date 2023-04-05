@@ -24,7 +24,7 @@ enum LabTestType {
 // MARK: - Welcome
 struct AuthenticatedLaboratoryOrdersResponseObject: BaseGatewayResponse, Codable {
     let resourcePayload: ResourcePayload?
-    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var totalResultCount, pageIndex, pageSize: Int?
     var resultError: ResultError?
     
     // MARK: - ResourcePayload

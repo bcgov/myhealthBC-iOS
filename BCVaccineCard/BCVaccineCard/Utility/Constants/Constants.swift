@@ -10,6 +10,28 @@ import UIKit
 
 struct Constants {
     
+    struct Network {
+        
+#if PROD
+        static let MobileConfig = URL(string: "https://healthgateway.gov.bc.ca/mobileconfiguration")!
+#elseif TEST
+        static let MobileConfig = URL(string: "https://test.healthgateway.gov.bc.ca/mobileconfiguration")!
+#elseif DEV
+        static let MobileConfig = URL(string: "https://dev.healthgateway.gov.bc.ca/mobileconfiguration")!
+#endif
+        
+        struct NetworkRetryAttempts {
+            static let maxRetry = 5
+            static let retryIn: Int = 5
+        }
+        
+        struct APIHeaders {
+            static let authToken = "Authorization"
+            static let hdid = "hdid"
+            static let dependentHdid = "dependentHdid"
+        }
+    }
+    
     struct BCSC {
         static let downloadURL = "https://apps.apple.com/us/app/id1234298467"
         static let scheme = "ca.bc.gov.id.servicescard://"
@@ -66,6 +88,7 @@ struct Constants {
         static let authToken = "Authorization"
         static let hdid = "hdid"
         static let dependentHdid = "dependentHdid"
+        static let apiVersion = "api-version"
     }
     
     struct AuthenticatedMedicationStatementParameters {
@@ -107,10 +130,6 @@ struct Constants {
     }
     
     struct NetworkRetryAttempts {
-        static let publicVaccineStatusRetryMaxForFedPass = 3
-        static let publicRetryMaxForTestResults = 3
-        static let publicRetryMaxForMedicationStatement = 3
-        static let publicRetryMaxForLaboratoryOrders = 3
         static let maxRetry = 5
         static let retryIn: Int = 5
     }

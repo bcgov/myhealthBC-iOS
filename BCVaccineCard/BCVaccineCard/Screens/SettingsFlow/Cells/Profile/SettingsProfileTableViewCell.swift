@@ -36,9 +36,9 @@ class SettingsProfileTableViewCell: UITableViewCell, Theme {
         }
         nameLabel.text = displayName ?? StorageService.shared.fetchAuthenticatedPatient()?.name?.nameCase() ?? AuthManager().displayName?.nameCase()
         viewProfileLabel.isHidden = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        //let tap = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.contentView.gestureRecognizers?.removeAll()
-        self.contentView.addGestureRecognizer(tap)
+        //self.contentView.addGestureRecognizer(tap)
     }
     
     @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
@@ -50,8 +50,13 @@ class SettingsProfileTableViewCell: UITableViewCell, Theme {
     // MARK: Style
     fileprivate func style() {
         viewProfileLabel.text = .viewProfile
-        style(label: viewProfileLabel, style: .Regular, size: 13, colour: .Grey)
+        style(label: viewProfileLabel, style: .Regular, size: 13, colour: .Blue)
         style(label: nameLabel, style: .Bold, size: 17, colour: .Blue)
+    }
+    
+    func configureForProfileDetailsScreen(name: String) {
+        nameLabel.text = name
+        viewProfileLabel.isHidden = true
     }
     
 }

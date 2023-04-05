@@ -1,7 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '11.0'
 
-target 'Health Gateway Dev' do
+target 'HealthGatewayDev' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
@@ -11,8 +11,6 @@ target 'Health Gateway Dev' do
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
   pod 'SwiftyJSON', '~> 4.0'
-  pod 'Firebase/AppDistribution'
-  pod 'SwipeCellKit'
   pod 'SwiftQRCodeGenerator', '~> 1.0.3'
   pod 'PocketSVG', '~> 2.6'
   pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
@@ -21,6 +19,8 @@ target 'Health Gateway Dev' do
   pod 'AppAuth'
   pod 'JWTDecode', '~> 2.6'
   pod 'ReachabilitySwift'
+  pod 'SwiftyJSON', '~> 4.0'
+  pod 'SwipeCellKit'
   
   target 'BCVaccineCardTests' do
     inherit! :search_paths
@@ -33,7 +33,7 @@ target 'Health Gateway Dev' do
 
 end
 
-target 'Health Gateway' do
+target 'HealthGateway' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
@@ -43,7 +43,6 @@ target 'Health Gateway' do
   pod "AlamofireRSSParser"
   pod 'SnowplowTracker', '~> 2.0'
   pod 'SwiftyJSON', '~> 4.0'
-  pod 'SwipeCellKit'
   pod 'SwiftQRCodeGenerator', '~> 1.0.3'
   pod 'PocketSVG', '~> 2.6'
   pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
@@ -52,6 +51,8 @@ target 'Health Gateway' do
   pod 'AppAuth'
   pod 'JWTDecode', '~> 2.6'
   pod 'ReachabilitySwift'
+  pod 'SwiftyJSON', '~> 4.0'
+  pod 'SwipeCellKit'
   
 end
 

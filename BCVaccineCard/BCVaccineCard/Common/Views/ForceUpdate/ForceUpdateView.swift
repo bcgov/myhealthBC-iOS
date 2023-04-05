@@ -22,7 +22,7 @@ class ForceUpdateView: UIView, Theme {
     
     var delegate: ForceUpdateViewDelegate?
     
-    static func show(delegate: ForceUpdateViewDelegate, tabBarController: TabBarController) {
+    static func show(delegate: ForceUpdateViewDelegate, tabBarController: AppTabBarController) {
         if let existing = tabBarController.view.viewWithTag(tag) {
             existing.removeFromSuperview()
         }

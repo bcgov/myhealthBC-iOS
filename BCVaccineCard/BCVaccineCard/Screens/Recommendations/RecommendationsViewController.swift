@@ -17,7 +17,7 @@ class RecommendationsViewController: BaseViewController {
     }
     private var expandedIndecies: [Int] = []
     
-    class func constructRecommendationsViewController() -> RecommendationsViewController {
+    class func construct() -> RecommendationsViewController {
         if let vc = Storyboard.recommendations.instantiateViewController(withIdentifier: String(describing: RecommendationsViewController.self)) as? RecommendationsViewController {
             return vc
         }
@@ -28,18 +28,21 @@ class RecommendationsViewController: BaseViewController {
         super.viewDidLoad()
         setup()
         expandedIndecies = [0]
+//        guard let tableView = tableView else {return}
+//        tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.prefersLargeTitles = false
+        tableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        setupTextView()
-        guard let tableView = tableView else {return}
-        tableView.reloadData()
+//        setupTextView()
+//        guard let tableView = tableView else {return}
+//        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -55,7 +58,6 @@ class RecommendationsViewController: BaseViewController {
     
     private func setupTextView() {
         guard let textView = self.textView else {return}
-        view.layoutIfNeeded()
         textView.textColor = AppColours.textGray
         let attributedText = NSMutableAttributedString(string: "For more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ")
         _ = attributedText.setAsLink(textToFind: "immunizeBC", linkURL: "https://immunizebc.ca/")
@@ -67,7 +69,9 @@ class RecommendationsViewController: BaseViewController {
         textView.sizeToFit()
         textView.isScrollEnabled = false
         textView.isEditable = false
-        view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.3, delay: 0) {
+            self.view.layoutIfNeeded()
+        }
     }
 
 }
@@ -87,6 +91,7 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         // tableView.estimatedRowHeight = 100
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.showsVerticalScrollIndicator = false
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -9,7 +9,7 @@ import UIKit
 
 class BaseDependentViewController: BaseViewController {
 
-    let networkService = DependentService(network: AFNetwork(), authManager: AuthManager())
+    let networkService = DependentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
     
     func delete(dependent: Dependent, completion: @escaping(_ confirmed: Bool) -> Void) {
         guard NetworkConnection.shared.hasConnection else {

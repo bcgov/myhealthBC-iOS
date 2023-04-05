@@ -20,9 +20,9 @@ extension Notification.Name {
     static let launchedFromBackground = Notification.Name("launchedFromBackground")
     static let didEnterBackground = Notification.Name("didEnterBackground")
     static let shouldPerformLocalAuth = Notification.Name("shouldPerformLocalAuth")
+    static let performedAuth = Notification.Name("performedAuth")
     
-    static let backgroundAuthFetch = Notification.Name("backgroundAuthFetch")
-    static let authFetchComplete = Notification.Name("AuthFetchComplete")
+    static let authFetchComplete = Notification.Name("AuthFetchComplete") // <-
     
     static let settingsTableViewReload = Notification.Name("settingsTableViewReload")
     
@@ -30,6 +30,8 @@ extension Notification.Name {
     static let protectedWordProvided = Notification.Name("protectedWordProvided")
     static let protectedWordFailedPromptAgain = Notification.Name("protectedWordFailedPromptAgain")
     static let authStatusChanged = Notification.Name("authStatusChanged")
+    static let shouldSync = Notification.Name("shouldSync")
+    static let syncPerformed = Notification.Name("syncPerformed")
     static let patientAPIFetched = Notification.Name("patientAPIFetched")
     static let reloadVCDueToUnderage = Notification.Name("reloadVCDueToUnderage")
     static let resetHealthRecordsScreenOnLogout = Notification.Name("resetHealthRecordsScreenOnLogout")

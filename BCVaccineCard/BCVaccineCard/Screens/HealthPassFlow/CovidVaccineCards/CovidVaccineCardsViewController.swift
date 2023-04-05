@@ -12,10 +12,10 @@ import SwipeCellKit
 
 class CovidVaccineCardsViewController: BaseViewController {
     
-    class func constructCovidVaccineCardsViewController(recentlyAddedCardId: String?, fedPassStringToOpen: String?) -> CovidVaccineCardsViewController {
+    class func construct(viewModel: ViewModel) -> CovidVaccineCardsViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: CovidVaccineCardsViewController.self)) as? CovidVaccineCardsViewController {
-            vc.recentlyAddedCardId = recentlyAddedCardId
-            vc.fedPassStringToOpen = fedPassStringToOpen
+            vc.recentlyAddedCardId = viewModel.recentlyAddedCardId
+            vc.fedPassStringToOpen = viewModel.fedPassStringToOpen
             return vc
         }
         return CovidVaccineCardsViewController()
@@ -47,10 +47,6 @@ class CovidVaccineCardsViewController: BaseViewController {
         }
     }
     
-    override var getPassesFlowType: PassesFlowVCs? {
-        return .CovidVaccineCardsViewController(fedPassToOpen: self.fedPassStringToOpen, recentlyAddedCardId: self.recentlyAddedCardId)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -61,6 +57,11 @@ class CovidVaccineCardsViewController: BaseViewController {
         setNeedsStatusBarAppearanceUpdate()
         navSetup()
         self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.scrollToRecentlyAddedCardAndExpand()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -77,9 +78,9 @@ class CovidVaccineCardsViewController: BaseViewController {
         cardChangedObservableSetup()
         retrieveDataSource()
         setupTableView()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-            self.scrollToRecentlyAddedCardAndExpand()
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+//            self.scrollToRecentlyAddedCardAndExpand()
+//        }
         
         Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
             guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
@@ -293,7 +294,8 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         guard !dataSource.isEmpty || !inEditMode else { return .none }
         if dataSource[indexPath.row].authenticated ||
-            dataSource[indexPath.row].patient?.isDependent() == true
+            dataSource[indexPath.row].patient?.isDependent() == true ||
+            dataSource[indexPath.row].patient?.authenticated == true
         {
             return .none
         }
@@ -325,7 +327,7 @@ extension CovidVaccineCardsViewController: UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         if !dataSource.isEmpty {
-            if dataSource[indexPath.row].authenticated {
+            if dataSource[indexPath.row].authenticated || dataSource[indexPath.row].patient?.authenticated == true {
                 return nil
             }
             
@@ -357,7 +359,28 @@ extension CovidVaccineCardsViewController: FederalPassViewDelegate {
             self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .vaccineCardsScreen, owner: self, navDelegate: self.navDelegate)
+            addFederalPass(model: model)
+        }
+    }
+    
+    func addFederalPass(model: AppVaccinePassportModel) {
+        let fetchType = GatewayFormViewControllerFetchType.federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code)
+        let vm = GatewayFormViewController.ViewModel(rememberDetails: RememberedGatewayDetails(), fetchType: fetchType) { [weak self] vaccineCard in
+            guard let `self` = self, let card = vaccineCard else {return}
+            self.showAddedFederalPass(vaccineCard: card)
+        } onAddFederalPass: { [weak self] vaccineCard in
+            guard let `self` = self, let card = vaccineCard else {return}
+            self.showAddedFederalPass(vaccineCard: card)
+        }
+        
+        show(route: .GatewayForm, withNavigation: true, viewModel: vm)
+    }
+    
+    func showAddedFederalPass(vaccineCard: VaccineCard) {
+        guard let fedCode = vaccineCard.federalPass else {return}
+        self.navigationController?.popToViewController(self, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.showPDFDocument(pdfString: fedCode, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         }
     }
 
@@ -394,16 +417,8 @@ extension CovidVaccineCardsViewController {
                 }
             }
             DispatchQueue.main.async {
-                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                if cards.count == 0 || (cards.count == 1 && cards.first?.authenticated == true) {
-                    // This means that the user has removed all unauthenticated
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                } else {
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                    
+                if self.dataSource.count < 2 {
+                    self.navigationController?.popToRootViewController(animated: true)
                 }
             }
             

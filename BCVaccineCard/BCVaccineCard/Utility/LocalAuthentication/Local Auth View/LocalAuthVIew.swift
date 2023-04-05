@@ -111,6 +111,7 @@ class LocalAuthView: UIView, Theme {
     // MARK: States
     func setSuccess() {
         dismiss(animated: true)
+        NotificationCenter.default.post(name: .performedAuth, object: nil, userInfo: nil)
     }
 
     func setFail() {

@@ -31,19 +31,15 @@ enum GatewayFormViewControllerFetchType: Equatable {
     case bcVaccineCardAndFederalPass
     case federalPassOnly(dob: String, dov: String, code : String)
     case vaccinationRecord
-    case covid19TestResult
     
     enum RequestType: Equatable {
         case getVaccineCard
-        case getTestResults
     }
     
     var getRequestType: RequestType {
         switch self {
         case .bcVaccineCardAndFederalPass, .federalPassOnly, .vaccinationRecord:
             return .getVaccineCard
-        case .covid19TestResult:
-            return .getTestResults
         }
     }
     
@@ -52,7 +48,6 @@ enum GatewayFormViewControllerFetchType: Equatable {
         case .bcVaccineCardAndFederalPass: return .addAHealthPass
         case .federalPassOnly: return .getFederalProof
         case .vaccinationRecord: return .formRecordNavTitle
-        case .covid19TestResult: return .formTestNavTitle
         }
     }
     
@@ -116,18 +111,6 @@ enum GatewayFormViewControllerFetchType: Equatable {
                                                    linkedStrings: [
                     LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
                     LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
-        case .covid19TestResult:
-            return [
-                FormData(specificCell: .phnForm, configuration: FormData.Configuration(text: currentProgress?.phn, isTextField: true), isFieldVisible: true),
-                FormData(specificCell: .dobForm, configuration: FormData.Configuration(text: currentProgress?.dob, isTextField: true), isFieldVisible: true),
-                FormData(specificCell: .dotForm, configuration: FormData.Configuration(text: currentProgress?.dateOfTest, isTextField: true), isFieldVisible: true),
-                FormData(specificCell: .rememberCheckbox, configuration: FormData.Configuration(text: .rememberePHNandDOB, isTextField: false), isFieldVisible: true),
-                FormData(specificCell: .clickablePrivacyPolicy, configuration:
-                            FormData.Configuration(text: .privacyPolicyStatement(context: .privacyTestResultText),
-                                                   font: UIFont.bcSansRegularWithSize(size: 13),
-                                                   linkedStrings: [
-                    LinkedStrings(text: .privacyPolicyStatementEmail, link: .privacyPolicyStatementEmailLink),
-                    LinkedStrings(text: .privacyPolicyStatementPhoneNumber, link: .privacyPolicyStatementPhoneNumberLink)], isTextField: false), isFieldVisible: true)]
         }
     }
 }
@@ -149,13 +132,39 @@ struct GatewayInProgressDetails {
 
 class GatewayFormViewController: BaseViewController {
     
-    class func constructGatewayFormViewController(rememberDetails: RememberedGatewayDetails, fetchType: GatewayFormViewControllerFetchType, currentProgress: GatewayInProgressDetails? = nil) -> GatewayFormViewController {
+    struct ViewModel {
+        var rememberDetails: RememberedGatewayDetails
+        var fetchType: GatewayFormViewControllerFetchType
+        var currentProgress: GatewayInProgressDetails? = nil
+        var onAddCard: ((VaccineCard?) -> Void)?
+        var onAddFederalPass: ((VaccineCard?) -> Void)?
+        
+        var dataSource: [FormData] = []
+        
+        var navTitle: String {
+            return fetchType.getNavTitle
+        }
+        
+        init(rememberDetails: RememberedGatewayDetails,
+             fetchType: GatewayFormViewControllerFetchType,
+             currentProgress: GatewayInProgressDetails? = nil,
+             onAddCard: @escaping (VaccineCard?) -> Void,
+             onAddFederalPass: @escaping (VaccineCard?) -> Void
+        ) {
+            self.rememberDetails = rememberDetails
+            self.fetchType = fetchType
+            self.currentProgress = currentProgress
+            self.onAddCard = onAddCard
+            self.onAddFederalPass = onAddFederalPass
+            self.dataSource = fetchType.getDataSource(currentProgress: currentProgress)
+        }
+        
+        
+    }
+    
+    class func construct(viewModel: ViewModel) -> GatewayFormViewController {
         if let vc = Storyboard.reusable.instantiateViewController(withIdentifier: String(describing: GatewayFormViewController.self)) as? GatewayFormViewController {
-            vc.rememberDetails = rememberDetails
-            vc.fetchType = fetchType
-            vc.navTitle = fetchType.getNavTitle
-            vc.currentProgress = currentProgress
-            vc.dataSource = fetchType.getDataSource(currentProgress: currentProgress)
+            vc.viewModel = viewModel
             return vc
         }
         return GatewayFormViewController()
@@ -165,46 +174,26 @@ class GatewayFormViewController: BaseViewController {
     @IBOutlet weak var cancelButton: AppStyleButton!
     @IBOutlet weak var submitButton: AppStyleButton!
     
-    // Form setup
-    private var dataSource: [FormData] = []
-    private var fetchType: GatewayFormViewControllerFetchType!
-    private var navTitle: String!
+    private var viewModel: ViewModel?
+    private var dropDownView: DropDownView?
+    private var whiteSpaceFormattedPHN: String?
+    // For Request
+    // TODO: Will need to refactor this a bit when we get the endpoint for test results
+    private var storageModel: HGStorageModel?
+    
     private var submitButtonEnabled: Bool = false {
         didSet {
             submitButton.enabled = submitButtonEnabled
         }
     }
     
-    // For Remembering PHN and DOB
-    private var rememberDetails: RememberedGatewayDetails!
-    private var dropDownView: DropDownView?
-    private var whiteSpaceFormattedPHN: String?
     private var rememberedPHNSelected: Bool = false {
         didSet {
-            guard let indexPath = getIndexPathForSpecificCell(.rememberCheckbox, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
+            guard let ds = viewModel?.dataSource else {return}
+            guard let indexPath = getIndexPathForSpecificCell(.rememberCheckbox, inDS: ds, usingOnlyShownCells: true) else { return }
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
-    
-    // For Request
-    // TODO: Will need to refactor this a bit when we get the endpoint for test results
-    private var storageModel: HGStorageModel?
-    private var worker: HealthGatewayAPIWorker?
-    private var throttleAPIWorker: LoginThrottleAPIWorker?
-    
-    // Note: This is for
-    private var currentProgress: GatewayInProgressDetails?
-    
-    // Completion - first string is for the ID for core data, second string is optional for fed pass only, third string is optional for name, fourth string is optional for birthday
-    var completionHandler: ((GatewayFormCompletionHandlerDetails) -> Void)?
-    
-    override var getPassesFlowType: PassesFlowVCs? {
-        return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
-    }
-    
-//    override var getRecordFlowType: RecordsFlowVCs? {
-//        return .GatewayFormViewController(rememberDetails: self.rememberDetails, fetchType: self.fetchType, gatewayInProgressDetails: self.currentProgress)
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -222,8 +211,6 @@ class GatewayFormViewController: BaseViewController {
         super.viewWillDisappear(animated)
         // Note - sometimes tabBarController will be nil due to when it's released in memory
         self.tabBarController?.tabBar.isHidden = false
-        self.worker = nil
-        self.throttleAPIWorker = nil
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -237,7 +224,6 @@ class GatewayFormViewController: BaseViewController {
     private func setup() {
         setupButtons()
         setupTableView()
-        setupAPIWorker()
     }
     
     private func setupButtons() {
@@ -245,21 +231,16 @@ class GatewayFormViewController: BaseViewController {
         submitButton.configure(withStyle: .blue, buttonType: .submit, delegateOwner: self, enabled: false)
     }
     
-    private func setupAPIWorker() {
-        self.worker = HealthGatewayAPIWorker(delegateOwner: self)
-        self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
-    }
-    
     private func updateCurrentProgress(type: FormTextFieldType, text: String?) {
         switch type {
         case .personalHealthNumber:
-            self.currentProgress?.phn = text
+            viewModel?.currentProgress?.phn = text
         case .dateOfBirth:
-            self.currentProgress?.dob = text
+            viewModel?.currentProgress?.dob = text
         case .dateOfVaccination:
-            self.currentProgress?.dateOfVax = text
+            viewModel?.currentProgress?.dateOfVax = text
         case .dateOfTest:
-            self.currentProgress?.dateOfTest = text
+            viewModel?.currentProgress?.dateOfTest = text
         }
     }
 
@@ -268,7 +249,7 @@ class GatewayFormViewController: BaseViewController {
 // MARK: Navigation setup
 extension GatewayFormViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: self.navTitle,
+        self.navDelegate?.setNavigationBarWith(title: viewModel?.navTitle ?? "",
                                                leftNavButton: nil,
                                                rightNavButton: NavButton(image: UIImage(named: "help-icon"), action: #selector(self.helpIconButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.HealthGatewayScreen.navRightIconTitle, hint: AccessibilityLabels.HealthGatewayScreen.navRightIconHint)),
                                                navStyle: .small,
@@ -295,11 +276,14 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.filter { $0.isFieldVisible }.count
+        return viewModel?.dataSource.filter { $0.isFieldVisible }.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let shownDS = dataSource.filter { $0.isFieldVisible }
+        guard let viewModel = self.viewModel else {
+            return UITableViewCell()
+        }
+        let shownDS = viewModel.dataSource.filter { $0.isFieldVisible }
         let formData = shownDS[indexPath.row]
         let config = formData.configuration
         switch formData.specificCell.getCellType {
@@ -312,7 +296,7 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
             return UITableViewCell()
         case .form(type: let type):
             if let cell = tableView.dequeueReusableCell(withIdentifier: FormTableViewCell.getName, for: indexPath) as? FormTableViewCell {
-                cell.configure(formType: type, delegateOwner: self, rememberedDetails: self.rememberDetails, text: config.text)
+                cell.configure(formType: type, delegateOwner: self, rememberedDetails: viewModel.rememberDetails, text: config.text)
                 return cell
             }
             return UITableViewCell()
@@ -330,12 +314,6 @@ extension GatewayFormViewController: UITableViewDelegate, UITableViewDataSource 
             return UITableViewCell()
         }
     }
-    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if let cell = tableView.cellForRow(at: indexPath) as? FormTableViewCell {
-//            cell.formTextFieldView.openKeyboardAction()
-//        }
-//    }
 }
 
 // MARK: Remember PHN and DOB
@@ -345,11 +323,11 @@ extension GatewayFormViewController: CheckboxTableViewCellDelegate {
     }
     
     private func storePHNDetails() {
-        guard let model = self.storageModel else { return }
+        guard let viewModel = self.viewModel, let model = self.storageModel else { return }
         if model.phn == self.whiteSpaceFormattedPHN?.removeWhiteSpaceFormatting, self.whiteSpaceFormattedPHN != nil {
             let rememberProperties = GatewayStorageProperties(phn: self.whiteSpaceFormattedPHN!, dob: model.dob)
            // Store new remember details if necessary
-            guard rememberProperties.phn != self.rememberDetails.storageArray?.first?.phn else { return }
+            guard rememberProperties.phn != viewModel.rememberDetails.storageArray?.first?.phn else { return }
             // NOTE: This is where we can append data to existing storage for abilitly to store multiple pieces of data
             let rememberKeychainStorage = RememberedGatewayDetails(storageArray: [rememberProperties])
             Defaults.rememberGatewayDetails = rememberKeychainStorage
@@ -385,18 +363,21 @@ extension GatewayFormViewController {
 // MARK: Drop down
 extension GatewayFormViewController: DropDownViewDelegate {
     func didChooseStoragePHN(details: GatewayStorageProperties) {
-        if details.phn == self.rememberDetails.storageArray?.first?.phn {
+        guard var viewModel = self.viewModel else {
+            return
+        }
+        if details.phn == viewModel.rememberDetails.storageArray?.first?.phn {
             self.rememberedPHNSelected = true
             var indexPaths: [IndexPath] = []
-            guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
+            guard let firstIP = getIndexPathForSpecificCell(.phnForm, inDS: viewModel.dataSource, usingOnlyShownCells: true) else { return }
             indexPaths.append(firstIP)
-            dataSource[firstIP.row].configuration.text = details.phn
-            if fetchType.canGoToNextFormField {
-                guard let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: true) else {
+            self.viewModel?.dataSource[firstIP.row].configuration.text = details.phn
+            if viewModel.fetchType.canGoToNextFormField {
+                guard let secondIP = getIndexPathForSpecificCell(.dobForm, inDS: viewModel.dataSource, usingOnlyShownCells: true) else {
                     return
                 }
                 indexPaths.append(secondIP)
-                dataSource[secondIP.row].configuration.text = details.dob
+                self.viewModel?.dataSource[secondIP.row].configuration.text = details.dob
             }
             self.tableView.reloadRows(at: indexPaths, with: .automatic)
             submitButtonEnabled = shouldButtonBeEnabled()
@@ -407,6 +388,9 @@ extension GatewayFormViewController: DropDownViewDelegate {
     }
     
     private func handleDropDownView() {
+        guard let viewModel = self.viewModel else {
+            return
+        }
         if let dropDownView = self.dropDownView {
             // Dismiss drop down view
             dismissDropDownView(dropDownView: dropDownView)
@@ -416,16 +400,16 @@ extension GatewayFormViewController: DropDownViewDelegate {
             self.tableView.addSubview(dropDownView!)
             self.dropDownView?.translatesAutoresizingMaskIntoConstraints = false
             // TODO: Make this safer - don't like default value here
-            guard let indexPath = self.getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
+            guard let indexPath = self.getIndexPathForSpecificCell(.phnForm, inDS: viewModel.dataSource, usingOnlyShownCells: true) else { return }
             guard let relativeView = tableView.cellForRow(at: indexPath) else { return }
             let padding: CGFloat = 12.0
             let leadingConstraint = dropDownView!.leadingAnchor.constraint(equalTo: relativeView.leadingAnchor, constant: -padding)
             let trailingConstraint = dropDownView!.trailingAnchor.constraint(equalTo: relativeView.trailingAnchor, constant: padding)
-            let count: CGFloat = CGFloat(rememberDetails.storageArray?.count ?? 1)
+            let count: CGFloat = CGFloat(viewModel.rememberDetails.storageArray?.count ?? 1)
             let heightConstraint = dropDownView!.heightAnchor.constraint(equalToConstant: (count * Constants.UI.RememberPHNDropDownRowHeight.height) + padding)
             let topConstraint = dropDownView!.topAnchor.constraint(equalTo: relativeView.topAnchor, constant: 80)
             self.tableView.addConstraints([leadingConstraint, trailingConstraint, heightConstraint, topConstraint])
-            self.dropDownView?.configure(rememberGatewayDetails: self.rememberDetails, delegateOwner: self)
+            self.dropDownView?.configure(rememberGatewayDetails: viewModel.rememberDetails, delegateOwner: self)
         }
     }
     
@@ -439,23 +423,40 @@ extension GatewayFormViewController: DropDownViewDelegate {
 // MARK: Request formatting
 extension GatewayFormViewController {
     
-    private func prepareRequestForVaccineCard() {
-        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
-        guard let phn = dataSource[phnIndexPath.row].configuration.text else { return }
-        guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
-        guard let birthday = dataSource[dobIndexPath.row].configuration.text else { return }
-        guard let dovIndexPath = getIndexPathForSpecificCell(.dovForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
-        guard let vaxDate = dataSource[dovIndexPath.row].configuration.text else { return }
+    private func requestForVaccineCard() {
+        guard let viewModel = self.viewModel else {
+            return
+        }
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: viewModel.dataSource, usingOnlyShownCells: false) else { return }
+        guard let phn = viewModel.dataSource[phnIndexPath.row].configuration.text else { return }
+        guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: viewModel.dataSource, usingOnlyShownCells: false) else { return }
+        guard let birthday = viewModel.dataSource[dobIndexPath.row].configuration.text else { return }
+        guard let dovIndexPath = getIndexPathForSpecificCell(.dovForm, inDS: viewModel.dataSource, usingOnlyShownCells: false) else { return }
+        guard let vaxDate = viewModel.dataSource[dovIndexPath.row].configuration.text else { return }
         guard let model = formatGatewayDataForVaccineRequest(phn: phn, birthday: birthday, vax: vaxDate) else { return }
         self.whiteSpaceFormattedPHN = phn
         self.storageModel = HGStorageModel(phn: model.phn, dob: model.dateOfBirth)
-        BaseURLWorker.shared.setBaseURL {
-            self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-                if response == .Online {
-                    self.showLoader()
-                    self.worker?.getVaccineCard(model: model, executingVC: self)
+        
+        let service = VaccineCardService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+        service.fetch(phn: phn, dateOfBirth: birthday, dateOfVaccine: vaxDate) { [weak self] response in
+            guard let `self` = self else {return}
+            let qrResult = response?.transformResponseIntoQRCode()
+            guard let code = qrResult?.qrString else {
+                self.handleError(title: .error, error: ResultError(resultMessage: response?.resultError?.resultMessage))
+                return
+            }
+            BCVaccineValidator.shared.validate(code: code) { [weak self] result in
+                guard let `self` = self else { return }
+                guard let data = result.result else {
+                    self.handleError(title: .error, error: ResultError(resultMessage: .invalidQRCodeMessage))
+                    return
                 }
-            })
+                DispatchQueue.main.async { [weak self] in
+                    guard let `self` = self else {return}
+                    self.handleVaccineCard(scanResult: data, fedCode: response?.resourcePayload?.federalVaccineProof?.data)
+                }
+            }
+            
         }
     }
     
@@ -463,40 +464,24 @@ extension GatewayFormViewController {
         let formattedPHN = phn.removeWhiteSpaceFormatting
         return GatewayVaccineCardRequest(phn: formattedPHN, dateOfBirth: birthday, dateOfVaccine: vax)
     }
-    
-    private func prepareRequestForTestResult() {
-        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
-        guard let phn = dataSource[phnIndexPath.row].configuration.text else { return }
-        guard let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
-        guard let birthday = dataSource[dobIndexPath.row].configuration.text else { return }
-        guard let dotIndexPath = getIndexPathForSpecificCell(.dotForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return }
-        guard let testDate = dataSource[dotIndexPath.row].configuration.text else { return }
-        guard let model = formatGatewayDataForTestResultRequest(phn: phn, birthday: birthday, test: testDate) else { return }
-        self.whiteSpaceFormattedPHN = phn
-        self.storageModel = HGStorageModel(phn: model.phn, dob: model.dateOfBirth)
-        showLoader()
-        worker?.getTestResult(model: model, executingVC: self)
-    }
-    
-    private func formatGatewayDataForTestResultRequest(phn: String, birthday: String, test: String) -> GatewayTestResultRequest? {
-        let formattedPHN = phn.removeWhiteSpaceFormatting
-        return GatewayTestResultRequest(phn: formattedPHN, dateOfBirth: birthday, collectionDate: test)
-    }
 }
 
 // MARK: Update data source
 extension GatewayFormViewController {
     func updateDataSource(formField: FormTextFieldType, text: String?) {
+        guard let viewModel = self.viewModel else {
+            return
+        }
         let specificCell = FormData.getSpecificCellFromFormTextField(formField)
-        guard let indexPath = getIndexPathForSpecificCell(specificCell, inDS: self.dataSource, usingOnlyShownCells: true) else { return }
-        self.dataSource[indexPath.row].configuration.text = text
+        guard let indexPath = getIndexPathForSpecificCell(specificCell, inDS: viewModel.dataSource, usingOnlyShownCells: true) else { return }
+        self.viewModel?.dataSource[indexPath.row].configuration.text = text
         if formField == .personalHealthNumber {
             // Basically - if the user updates the text and it is not equal to the stored PHN, then remove the data
             // TODO: CONNOR: Need to update logic here - keep it simple. Only time remembered details are removed is if they are overwritten by a new phn
 //            if text != self.rememberDetails.storageArray?.first?.phn {
 //                self.rememberedPHNSelected = false
 //            } else
-            if text == self.rememberDetails.storageArray?.first?.phn {
+            if text == viewModel.rememberDetails.storageArray?.first?.phn {
                 self.rememberedPHNSelected = true
             }
         }
@@ -516,7 +501,7 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     }
     
     func goToNextFormTextField(formField: FormTextFieldType) {
-        if fetchType.canGoToNextFormField {
+        if viewModel?.fetchType.canGoToNextFormField == true {
             goToNextTextField(formField: formField)
         } else {
             self.view.endEditing(true)
@@ -546,15 +531,18 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
     }
     
     private func goToNextTextField(formField: FormTextFieldType) {
+        guard let viewModel = self.viewModel else {
+            return
+        }
         let specificCell = FormData.getSpecificCellFromFormTextField(formField)
-        let shownDS = dataSource.filter { $0.isFieldVisible }
-        guard var indexPath = getIndexPathForSpecificCell(specificCell, inDS: self.dataSource, usingOnlyShownCells: true), indexPath.row < (shownDS.count - 1) else { return }
+        let shownDS = viewModel.dataSource.filter { $0.isFieldVisible }
+        guard var indexPath = getIndexPathForSpecificCell(specificCell, inDS: viewModel.dataSource, usingOnlyShownCells: true), indexPath.row < (shownDS.count - 1) else { return }
         let newRow = indexPath.row + 1
         indexPath.row = newRow
         if shownDS[indexPath.row].specificCell.isTextField, let cell = self.tableView.cellForRow(at: indexPath) as? FormTableViewCell {
             // Go to this cell
             cell.formTextFieldView.openKeyboardAction()
-        } else if let firstIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: true) {
+        } else if let firstIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: viewModel.dataSource, usingOnlyShownCells: true) {
             // find first index of text field in data source (Note: This is hardcorded as PHN - if the order changes, then this will have to change too
             if let firstCell = self.tableView.cellForRow(at: firstIndexPath) as? FormTableViewCell {
                 firstCell.formTextFieldView.openKeyboardAction()
@@ -566,8 +554,11 @@ extension GatewayFormViewController: FormTextFieldViewDelegate {
 // MARK: Check for authenticated patient
 extension GatewayFormViewController {
     private func isPHNOfAuthenticatedPatient() -> (auth: Bool, patient: Patient?) {
-        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return (false, nil) }
-        guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return (false, nil) }
+        guard let viewModel = self.viewModel else {
+            return (false, nil)
+        }
+        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: viewModel.dataSource, usingOnlyShownCells: false) else { return (false, nil) }
+        guard let phn = viewModel.dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return (false, nil) }
         guard let patient = StorageService.shared.fetchPatient(phn: phn) else { return (false, nil) }
         return (hasAuthRecords(patient: patient), patient)
     }
@@ -599,14 +590,8 @@ extension GatewayFormViewController {
     private func showAlertToRedirectAuthenticatedUserToRecordsView(patient: Patient) {
         alert(title: "Warning", message: "Your records already exist in the app", buttonOneTitle: .ok, buttonOneCompletion: { [weak self] in
             guard let `self` = self else {return}
-            // TODO: Maybe we show the record that has been added here?
             DispatchQueue.main.async {
-
-                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: patient, addedRecord: nil)
-                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: nil, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                
-                self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+                self.navigationController?.popToRootViewController(animated: true)
             }
         }, buttonTwoTitle: "Retry") {}
     }
@@ -622,17 +607,18 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             if tuple.auth, let patient = tuple.patient {
                 showAlertToRedirectAuthenticatedUserToRecordsView(patient: patient)
             } else {
-                if fetchType.getRequestType == .getTestResults {
-                    prepareRequestForTestResult()
-                } else if fetchType.getRequestType == .getVaccineCard {
-                    prepareRequestForVaccineCard()
+                if viewModel?.fetchType.getRequestType == .getVaccineCard {
+                    requestForVaccineCard()
                 }
             }
         }
     }
     
     func shouldButtonBeEnabled() -> Bool {
-        let formData = dataSource.compactMap { $0.transform() }
+        guard let viewModel = self.viewModel else {
+            return false
+        }
+        let formData = viewModel.dataSource.compactMap { $0.transform() }
         let countArray: [Bool] = formData.map { textFieldData in
             guard let text = textFieldData.text else {
                 return false
@@ -640,45 +626,25 @@ extension GatewayFormViewController: AppStyleButtonDelegate {
             let error = textFieldData.type.setErrorValidationMessage(text: text)
             return error == nil
         }
-        return countArray.filter { $0 == true }.count == dataSource.filter({ $0.specificCell.isTextField }).count
+        return countArray.filter { $0 == true }.count == viewModel.dataSource.filter({ $0.specificCell.isTextField }).count
     }
 
 }
 
 // MARK: Health Gateway worker
-extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
+extension GatewayFormViewController {
     func handleVaccineCard(scanResult: ScanResultModel, fedCode: String?) {
+        guard let viewModel = self.viewModel else {
+            return
+        }
         var model = convertScanResultModelIntoLocalData(data: scanResult, source: .healthGateway)
         model.fedCode = fedCode
         // store prefered PHN if needed here
         self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
-        // TODO: Should probably put this endLoadingIndicator inside the handleCardInCoreData call
-        hideLoader()
-        handleCardInCoreData(localModel: model, replacing: fetchType.originalCode)
-    }
-    
-    func handleTestResult(result: GatewayTestResultResponse) {
-        // store prefered PHN if needed here
-        self.rememberedPHNSelected ? storePHNDetails() : removePHNDetailsIfNeccessary()
-        hideLoader()
-        if StorageService.shared.covidTestExists(from: result) {
-            alert(title: .duplicateTitle, message: .duplicateTestMessage)
-            return
-        }
-        if let coreDataReturnObject = handleTestResultInCoreData(gatewayResponse: result, authenticated: false), let id = coreDataReturnObject.id {
-            var birthday: String?
-            if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false) {
-                birthday = dataSource[dobIndexPath.row].configuration.text
-            }
-            let handlerDetails = GatewayFormCompletionHandlerDetails(id: id, fedPassId: nil, name: result.resourcePayload?.records.first?.patientDisplayName, dob: birthday, patient: coreDataReturnObject.patient)
-            completionHandler?(handlerDetails)
-        } else {
-            alert(title: .error, message: .healthGatewayError)
-        }
+        handleCardInCoreData(localModel: model, replacing: viewModel.fetchType.originalCode)
     }
     
     func handleError(title: String, error: ResultError) {
-        hideLoader()
         if error.resultMessage == "Unknown" {
             alert(title: title, message: .unknownErrorMessage)
         } else {
@@ -687,24 +653,18 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
         
     }
     
-    func showLoader() {
-        self.view.startLoadingIndicator(backgroundColor: .clear)
-    }
-    
-    func hideLoader() {
-        self.view.endLoadingIndicator()
-    }
-    
     func updateCardInLocalStorage(model: AppVaccinePassportModel) {
         self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
             guard let `self` = self else {return}
-            let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-            let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate, patient: coreDataReturnObject.patient)
-            self.completionHandler?(handlerDetails)
+            guard let viewModel = self.viewModel else {
+                return
+            }
+            viewModel.onAddCard?(coreDataReturnObject)
         })
     }
     
     func storeCardInLocalStorage(model: AppVaccinePassportModel, sortOrder: Int64? = nil) {
+     
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.storeVaccineCard(model: model.transform(),
                                   authenticated: false,
@@ -712,23 +672,22 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
                                   manuallyAdded: true,
                                   completion: { [weak self] coreDataReturnObject in
                 guard let `self` = self else {return}
-                let fedCode = self.fetchType.isFedPassOnly ? model.codableModel.fedCode : nil
-                let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate, patient: coreDataReturnObject.patient)
-                self.completionHandler?(handlerDetails)
+                guard let viewModel = self.viewModel else {
+                    return
+                }
+               viewModel.onAddCard?(coreDataReturnObject)
             })
         }
     }
     
     func updateFederalPassInLocalStorge(model: AppVaccinePassportModel) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            guard let fedCode = model.codableModel.fedCode else {
-                return
-            }
             self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                 guard let `self` = self else {return}
-                let fedCode = self.fetchType.isFedPassOnly ? fedCode : nil
-                let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: fedCode, name: model.codableModel.name, dob: model.codableModel.birthdate, patient: coreDataReturnObject.patient)
-                self.completionHandler?(handlerDetails)
+                guard let viewModel = self.viewModel else {
+                    return
+                }
+                viewModel.onAddFederalPass?(coreDataReturnObject)
             })
         }
     }
@@ -736,7 +695,10 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
     func handleCardInCoreData(localModel: LocallyStoredVaccinePassportModel, replacing code: String?) {
         let model = localModel.transform()
         let deletedCardSortOrder: Int64?
-        if fetchType.isFedPassOnly, let codeToReplace = code {
+        guard let viewModel = self.viewModel else {
+            return
+        }
+        if viewModel.fetchType.isFedPassOnly, let codeToReplace = code {
             deletedCardSortOrder = StorageService.shared.fetchVaccineCard(code: codeToReplace)?.sortOrder
             StorageService.shared.deleteVaccineCard(vaccineQR: codeToReplace, reSort: false, manuallyAdded: false)
         } else {
@@ -746,14 +708,15 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
             guard let `self` = self else {return}
             switch state {
             case .exists, .isOutdated:
-                let message: String = self.fetchType == .vaccinationRecord ? .duplicateMessageImsRecord : .duplicateMessage
+                let message: String = viewModel.fetchType == .vaccinationRecord ? .duplicateMessageImsRecord : .duplicateMessage
                 self.alert(title: .duplicateTitle, message: message) { [weak self] in
                     guard let `self` = self else {return}
                     DispatchQueue.main.async {
-                        self.navigationController?.popViewController(animated: true)
+                        let card = StorageService.shared.fetchVaccineCard(code: localModel.code)
+                        self.dismiss(then: {
+                            self.viewModel?.onAddCard?(card)
+                        })
                     }
-                    let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: nil, name: localModel.name, dob: localModel.birthdate, patient: nil)
-                    self.completionHandler?(handlerDetails)
                 }
             case .isNew:
                 self.storeCardInLocalStorage(model: model, sortOrder: deletedCardSortOrder)
@@ -764,52 +727,19 @@ extension GatewayFormViewController: HealthGatewayAPIWorkerDelegate {
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
                     DispatchQueue.main.async {
-                        self.navigationController?.popViewController(animated: true)
+                        let card = StorageService.shared.fetchVaccineCard(code: localModel.code)
+                        self.dismiss(then: {
+                            self.viewModel?.onAddCard?(card)
+                        })
                     }
-                    let handlerDetails = GatewayFormCompletionHandlerDetails(id: model.id ?? "", fedPassId: nil, name: localModel.name, dob: localModel.birthdate, patient: nil)
-                    self.completionHandler?(handlerDetails)
                 }
             case .UpdatedFederalPass:
                 self.updateFederalPassInLocalStorge(model: model)
             }
         }
     }
-    
-    func handleTestResultInCoreData(gatewayResponse: GatewayTestResultResponse, authenticated: Bool) -> CoreDataReturnObject? {
-        // Note, this first guard statement is to handle the case when health gateway is wonky - throws success with no error but has key nil values, so in this case we don't want to store a dummy patient value, as that's what was happening
-        guard let collectionDate = gatewayResponse.resourcePayload?.records.first?.collectionDateTime,
-              !collectionDate.trimWhiteSpacesAndNewLines.isEmpty, let reportID = gatewayResponse.resourcePayload?.records.first?.reportId,
-              !reportID.trimWhiteSpacesAndNewLines.isEmpty else { return nil }
-        guard let phnIndexPath = getIndexPathForSpecificCell(.phnForm, inDS: self.dataSource, usingOnlyShownCells: false) else { return nil }
-        guard let phn = dataSource[phnIndexPath.row].configuration.text?.removeWhiteSpaceFormatting else { return nil }
-        let bday: Date?
-        if let dobIndexPath = getIndexPathForSpecificCell(.dobForm, inDS: self.dataSource, usingOnlyShownCells: false),
-           let dob = dataSource[dobIndexPath.row].configuration.text,
-           let dateOfBirth = Date.Formatter.yearMonthDay.date(from: dob) {
-            bday = dateOfBirth
-        } else {
-            bday = nil
-        }
-        guard let patient = StorageService.shared.fetchOrCreatePatient(phn: phn,
-                                                                       name: gatewayResponse.resourcePayload?.records.first?.patientDisplayName,
-                                                                       firstName: "",
-                                                                       lastName: "",
-                                                                       gender: "",
-                                                                       birthday: bday,
-                                                                       hdid: nil,
-                                                                       authenticated: authenticated
-        ) else {return nil}
-        guard let object = StorageService.shared.storeCovidTestResults(patient: patient ,gateWayResponse: gatewayResponse, authenticated: authenticated, manuallyAdded: true, pdf: nil) else { return nil }
-        return CoreDataReturnObject(id: object.id, patient: patient)
-    }
-    
-    
 }
 
-struct CoreDataReturnObject {
-    let id: String?
-    let patient: Patient?
-}
 
 struct HGStorageModel {
     let phn: String

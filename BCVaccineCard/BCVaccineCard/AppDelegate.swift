@@ -16,9 +16,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static let sharedInstance = UIApplication.shared.delegate as? AppDelegate
     var currentAuthorizationFlow: OIDExternalUserAgentSession?
-    var window: UIWindow? 
+    var window: UIWindow?
+    
     var authManager: AuthManager?
     var localAuthManager: LocalAuthManager?
+    var networkService: Network?
+    var syncService: SyncService?
+    var configService: MobileConfigService?
+    
+    
+    var coreDataContext: NSManagedObjectContext?
     
     fileprivate var dataLoadCount: Int = 0 
     internal var dataLoadHideTimer: Timer? = nil
@@ -31,7 +38,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UpdateServiceStorage.setOrResetstoredAppVersion()
         MigrationService().removeExistingDBIfNeeded()
-        configure()
+        CoreDataProvider.shared.loadManagedContext { context in
+            if context == nil {
+                // Could not load storage
+                self.showDBLoadError()
+            } else {
+                self.coreDataContext = context
+                self.configure()
+            }
+        }
+        
         return true
     }
     
@@ -46,15 +62,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         BCVaccineValidator.shared.setup(mode: .Test, remoteRules: false)
 #endif
         AnalyticsService.shared.setup()
-        authManager = AuthManager()
+        
+        let networkService = AFNetwork()
+        let authManager = AuthManager()
+        let configService = MobileConfigService(network: networkService)
+        let syncService = SyncService(network: networkService, authManager: authManager, configService: configService)
+        SessionStorage.protectiveWordEnabled = authManager.protectiveWord != nil
+        self.networkService = networkService
+        self.authManager = authManager
+        self.configService = configService
+        self.syncService = syncService
+        
         clearKeychainIfNecessary(authManager: authManager)
         setupRootViewController()
-        authManager?.initTokenExpieryTimer()
+        authManager.initAuthExpieryTimer()
         listenToAppState()
         localAuthManager = LocalAuthManager()
         localAuthManager?.listenToAppStates()
         initNetworkListener()
         initKeyboardManager()
+        
+        AppStates.shared.listenToAuth { authenticated in
+            if authenticated {
+                authManager.initAuthExpieryTimer()
+            }
+        }
     }
     
     private func initKeyboardManager() {
@@ -80,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func syncCommentsIfNeeded() {
-        CommentService(network: AFNetwork(), authManager: AuthManager()).submitUnsyncedComments{}
+        CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).submitUnsyncedComments{}
     }
     
     private func clearKeychainIfNecessary(authManager: AuthManager?) {
@@ -113,8 +145,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.post(name: .didEnterBackground, object: nil)
     }
     
-    
-    
     // MARK: - Core Data stack
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "BCVaccineCard")
@@ -129,6 +159,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 EncryptedStorePassphraseKey : CoreDataEncryptionKeyManager.shared.key
             ]
             
+            // TODO: fix for 'NSKeyedUnarchiveFromData' should not be used
+            //https://github.com/project-imas/encrypted-core-data/compare/master...fitmecare:encrypted-core-data:master
             let description = try EncryptedStore.makeDescription(options: options, configuration: nil)
             container.persistentStoreDescriptions = [ description ]
         }
@@ -185,16 +217,32 @@ extension AppDelegate {
 
 // MARK: Root setup
 extension AppDelegate {
-    private func setupRootViewController() {
-        let unseen = Defaults.unseenOnBoardingScreens()
-        guard let first = unseen.first else {
-            let vc = TabBarController.constructTabBarController()
-            self.window?.rootViewController = vc
+    func setupRootViewController() {
+        guard let authManager = authManager,
+              let syncService = syncService,
+              let networkService = networkService,
+              let configService = configService
+            else {
+            showToast(message: "Fatal Error")
             return
         }
-        
-        let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
+        let vc = AppTabBarController.construct(authManager: authManager,
+                                               syncService: syncService,
+                                               networkService: networkService,
+                                               configService: configService)
         self.window?.rootViewController = vc
+//        let unseen = Defaults.unseenOnBoardingScreens()
+//        guard let first = unseen.first else {
+//            let vc = AppTabBarController.construct(authManager: authManager,
+//                                                   syncService: syncService,
+//                                                   networkService: networkService,
+//                                                   configService: configService)
+//            self.window?.rootViewController = vc
+//            return
+//        }
+//
+//        let vc = InitialOnboardingViewController.constructInitialOnboardingViewController(startScreenNumber: first, screensToShow: unseen)
+//        self.window?.rootViewController = vc
     }
 }
 
@@ -267,14 +315,13 @@ extension UIApplication {
 // MARK: Loading UI
 enum LoaderMessage: String {
     case SyncingRecords = "Syncing Records"
-    case FetchingRecords = "Fetching Records"
     case FetchingConfig = " "
     case empty = ""
 }
 
 extension LoaderMessage {
     func isNetworkDependent() -> Bool {
-        return self == .FetchingRecords || self == .SyncingRecords || self == .FetchingConfig
+        return self == .SyncingRecords || self == .FetchingConfig
     }
 }
 
@@ -306,14 +353,16 @@ extension AppDelegate {
     
     /// Do not call this function manually. use dataLoadCount
     fileprivate func showLoader(message: LoaderMessage) {
-        // If already shown, dont do anything
+        // If already shown, dont do anything - just update message
         if let existing = self.window?.viewWithTag(dataLoadTag), let textLabel = existing.viewWithTag(dataLoadTextTag) as? UILabel {
             if textLabel.text == message.rawValue {
                 return
-            } else {
+            } else if message.rawValue.count > textLabel.text?.count ?? 0 {
                 textLabel.text = message.rawValue
                 return
             }
+            
+            return
         }
         
         // if somehow you're here and its already shown... remove it

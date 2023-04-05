@@ -15,11 +15,35 @@ protocol StorageImmunizationRecommendationManager {
         authenticated: Bool
     ) -> ImmunizationRecommendation?
     
+    func storeRecommendations(
+        patient: Patient,
+        objects: [AuthenticatedImmunizationsResponseObject.ResourcePayload.Recommendation],
+        authenticated: Bool,
+        completion: @escaping ([ImmunizationRecommendation])->Void
+    )
 
     // MARK: Fetch
     func fetchRecommendations()-> [ImmunizationRecommendation]
 }
+
+
 extension StorageService: StorageImmunizationRecommendationManager {
+    
+    func storeRecommendations(
+        patient: Patient,
+        objects: [AuthenticatedImmunizationsResponseObject.ResourcePayload.Recommendation],
+        authenticated: Bool,
+        completion: @escaping ([ImmunizationRecommendation])->Void
+    ) {
+        var storeItems: [ImmunizationRecommendation] = []
+        for object in objects {
+            if let storeItem = storeRecommendation(patient: patient, object: object, authenticated: authenticated) {
+                storeItems.append(storeItem)
+            }
+        }
+        return completion(storeItems)
+    }
+    
     func storeRecommendation(
         patient: Patient,
         object: AuthenticatedImmunizationsResponseObject.ResourcePayload.Recommendation,

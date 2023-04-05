@@ -10,10 +10,18 @@ import UIKit
 
 class InitialOnboardingViewController: UIViewController {
     
-    class func constructInitialOnboardingViewController(startScreenNumber: OnboardingScreenType, screensToShow: [OnboardingScreenType]) -> InitialOnboardingViewController {
+    struct ViewModel {
+        let delegate: TabDelegate
+        let startScreenNumber: OnboardingScreenType
+        let screensToShow: [OnboardingScreenType]
+        let completion: (_ authenticated: Bool)->Void
+    }
+    
+    class func construct(viewModel: ViewModel) -> InitialOnboardingViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: InitialOnboardingViewController.self)) as? InitialOnboardingViewController {
-            vc.screensToShow = screensToShow
-            vc.screenNumber = startScreenNumber
+            vc.screensToShow = viewModel.screensToShow
+            vc.screenNumber = viewModel.startScreenNumber
+            vc.viewModel = viewModel
             return vc
         }
         return InitialOnboardingViewController()
@@ -26,7 +34,7 @@ class InitialOnboardingViewController: UIViewController {
     @IBOutlet weak private var bottomButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak private var skipButton: UIButton!
     
-    
+    private var viewModel: ViewModel?
     private var screensToShow: [OnboardingScreenType] = []
     private var screenNumber: OnboardingScreenType = .healthPasses
     private var newTextShown: Bool = false
@@ -260,7 +268,6 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
             
             showLocalAuth {[weak self] in
-                
                 self?.goToAuthentication()
             }
         }
@@ -270,15 +277,21 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         if AuthManager().isAuthenticated {
             showHomeScreen(authStatus: nil)
         } else {
-            AuthenticationViewController.displayFullScreen(createTabBarAndGoToHomeScreen: true, initialView: .Landing, sourceVC: .AfterOnboarding)
+            let delegate = self.viewModel?.delegate
             Defaults.hasSeenFirstLogin = true
+            dismiss(animated: true) {
+                delegate?.showLogin()
+            }
         }
-        
     }
     
     func showHomeScreen(authStatus: AuthenticationViewController.AuthenticationStatus?) {
-        let vc = TabBarController.constructTabBarController(status: authStatus)
-        AppDelegate.sharedInstance?.window?.rootViewController = vc
+        guard let callback = viewModel?.completion else {
+            return
+        }
+        self.dismiss(animated: true) {
+            callback(authStatus == .Completed)
+        }
     }
 }
 

@@ -52,14 +52,14 @@ enum HomeScreenCellType {
         }
     }
     
-    var getTabIndex: Int {
-        switch self {
-        case .Records: return TabBarVCs.records.rawValue
-        case .Proofs: return TabBarVCs.healthPass.rawValue
-        case .Resources: return TabBarVCs.resource.rawValue
-        case .Recommendations: return TabBarVCs.records.rawValue
-        }
-    }
+//    var getTabIndex: Int {
+//        switch self {
+//        case .Records: return TabBarVCs.records.rawValue
+//        case .Proofs: return TabBarVCs.healthPass.rawValue
+//        case .Resources: return TabBarVCs.resource.rawValue
+//        case .Recommendations: return TabBarVCs.records.rawValue
+//        }
+//    }
 
 }
 

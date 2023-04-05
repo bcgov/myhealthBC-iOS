@@ -7,15 +7,21 @@
 
 import Foundation
 
-protocol BaseGatewayResponse: KeyValueCoding {
+protocol BaseGatewayResponse: Codable {
     var totalResultCount: Int? { get set }
     var pageIndex: Int? { get set }
     var pageSize: Int? { get set }
-    var resultStatus: Int? { get set }
+//    var resultStatus: Int? { get set }
     var resultError: ResultError? { get set }
 }
 
 protocol BaseRetryableGatewayResponse {
     var loaded: Bool? { get set }
     var retryin: Int? { get set }
+}
+
+struct RetryableGatewayResponse: BaseRetryableGatewayResponse, Codable {
+    var loaded: Bool?
+    var retryin: Int?
+    
 }

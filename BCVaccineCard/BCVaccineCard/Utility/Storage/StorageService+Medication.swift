@@ -96,7 +96,9 @@ extension StorageService: StorageMedicationManager {
          This is in case the proccess is slow in the future and we want to handle it asynchronously.
          */
         
-        guard let perscriptionObjects = gatewayResponse.resourcePayload else {return}
+        guard let perscriptionObjects = gatewayResponse.resourcePayload else {
+            return completion([])
+        }
         var storedObjects: [Perscription] = []
         for object in perscriptionObjects {
             if let storedObject = storePrescription(patient: patient, object: object, initialProtectedMedFetch: initialProtectedMedFetch) {

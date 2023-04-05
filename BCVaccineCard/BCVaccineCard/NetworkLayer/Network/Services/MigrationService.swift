@@ -20,6 +20,10 @@ class MigrationService {
     /// if the app has been upldates since the last launch, deletes the sqlite databse file.
     func removeExistingDBIfNeeded() {
         if !UpdateServiceStorage.appWasUpdated {return}
+        removeDB()
+    }
+    
+    func removeDB() {
         let files = findSqliteFiles()
         for file in files where FileManager.default.fileExists(atPath: file.path) {
             do {

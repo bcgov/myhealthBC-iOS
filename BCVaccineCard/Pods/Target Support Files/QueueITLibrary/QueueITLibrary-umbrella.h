@@ -13,6 +13,7 @@
 #import "IOSUtils.h"
 #import "QueueCache.h"
 #import "QueueConsts.h"
+#import "QueueDisabledInfo.h"
 #import "QueueITEngine.h"
 #import "QueueITWKViewController.h"
 #import "QueuePassedInfo.h"

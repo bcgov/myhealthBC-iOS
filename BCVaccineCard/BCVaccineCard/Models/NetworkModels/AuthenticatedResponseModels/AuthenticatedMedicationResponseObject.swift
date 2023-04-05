@@ -9,7 +9,7 @@ import Foundation
 // MARK: - AuthenticatedMedicationStatementResponseObject
 struct AuthenticatedMedicationStatementResponseObject: BaseGatewayResponse, Codable {
     let resourcePayload: [ResourcePayload]?
-    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var totalResultCount, pageIndex, pageSize: Int?
     var resultError: ResultError?
     
     // MARK: - ResourcePayload
@@ -58,5 +58,16 @@ struct AuthenticatedMedicationStatementResponseObject: BaseGatewayResponse, Coda
             let strengthUnit: String?
             let isPin: Bool?
         }
+    }
+}
+
+extension AuthenticatedMedicationStatementResponseObject {
+    var protectiveWordRequired: Bool {
+        if let error = resultError,
+           let actionCode = error.actionCode,
+           actionCode.lowercased() == "PROTECTED".lowercased() {
+            return true
+        }
+        return false
     }
 }

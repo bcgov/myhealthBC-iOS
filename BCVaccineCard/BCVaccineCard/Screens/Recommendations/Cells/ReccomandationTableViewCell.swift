@@ -11,11 +11,13 @@ class ReccomandationTableViewCell: UITableViewCell {
 
     @IBOutlet weak var cardContainer: UIView!
     
+   
     @IBOutlet weak var statusIcon: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var expandIconImageView: UIImageView!
     @IBOutlet weak var iconImageView: UIStackView!
-    
+    @IBOutlet weak var iconSize: NSLayoutConstraint!
+    @IBOutlet weak var stackLeading: NSLayoutConstraint!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var statusValueLabel: UILabel!
     
@@ -39,7 +41,6 @@ class ReccomandationTableViewCell: UITableViewCell {
             detailStack.isHidden = true
             expandIconImageView.image = UIImage(named: "expand_arrow_down")
         }
-        print(object.immunizationDetail?.recommendation?.recommendedVaccinations, object.immunizationDetail?.name, object.immunizationDetail?.agents.first?.name)
         titleLabel.text = object.immunizationDetail?.recommendation?.recommendedVaccinations
         if let immunizationName =  object.immunizationDetail?.recommendation?.recommendedVaccinations {
             titleLabel.text = immunizationName
@@ -49,7 +50,9 @@ class ReccomandationTableViewCell: UITableViewCell {
         
         statusValueLabel.text = object.status
         dueDateValueLabel.text = object.agentDueDate?.forecastDueDate
+        
         styleStatus(text: object.status ?? "")
+        
         style()
         layoutIfNeeded()
     }
@@ -59,15 +62,23 @@ class ReccomandationTableViewCell: UITableViewCell {
         case "eligible":
             statusValueLabel.textColor = AppColours.green
             statusIcon.image = UIImage(named: "reccomandation-list-icon")
+            iconSize.constant = 21
+            stackLeading.constant = 20
         case "overdue":
             statusValueLabel.textColor = AppColours.appRed
             statusIcon.image = UIImage(named: "reccomandation-list-icon")
+            iconSize.constant = 21
+            stackLeading.constant = 20
         case "completed":
             statusValueLabel.textColor = AppColours.greyText
-            statusIcon.image = UIImage(named: "reccomandation-list-icon")
+            statusIcon.image = UIImage(named: "reccomandation-list-icon-completed")
+            iconSize.constant = 34
+            stackLeading.constant = 8
         default:
             statusValueLabel.textColor = AppColours.greyText
             statusIcon.image = UIImage(named: "reccomandation-list-icon")
+            iconSize.constant = 21
+            stackLeading.constant = 20
         }
     }
     

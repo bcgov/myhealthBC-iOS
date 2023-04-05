@@ -9,7 +9,7 @@ import UIKit
 
 class HealthRecordsViewController: BaseViewController {
     
-    class func constructHealthRecordsViewController() -> HealthRecordsViewController {
+    class func construct() -> HealthRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordsViewController.self)) as? HealthRecordsViewController {
             return vc
         }
@@ -18,10 +18,7 @@ class HealthRecordsViewController: BaseViewController {
     
     @IBOutlet weak private var homeRecordsView: HealthRecordsHomeView!
     
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .HealthRecordsViewController
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -44,7 +41,7 @@ class HealthRecordsViewController: BaseViewController {
     private func setup() {
         navSetup()
         setupView()
-        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
+//        self.getTabBarController?.scrapeDBForEdgeCaseRecords(authManager: AuthManager(), currentTab: .records)
     }
 
 }
@@ -76,14 +73,7 @@ extension HealthRecordsViewController: AppStyleButtonDelegate {
         }
     }
     
-    private func performBCSCLogin
-    () {
-        self.showLogin(initialView: .Landing, sourceVC: .HealthRecordsVC) { authenticationStatus in
-            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else { return }
-            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthRecordsVC, authenticationStatus: authenticationStatus))
-            self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
-        }
+    private func performBCSCLogin() {
+        showLogin(initialView: .Landing, showTabOnSuccess: .AuthenticatedRecords)
     }
 }

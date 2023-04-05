@@ -9,9 +9,14 @@ import UIKit
 
 class DependentInfoViewController: BaseDependentViewController {
     
-    class func construct(dependent: Dependent?) -> DependentInfoViewController {
+    // TODO: Move to new file
+    struct ViewModel {
+        let dependent: Dependent?
+    }
+    
+    class func construct(viewModel: ViewModel) -> DependentInfoViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: DependentInfoViewController.self)) as? DependentInfoViewController {
-            vc.dependent = dependent
+            vc.dependent = viewModel.dependent
             return vc
         }
         return DependentInfoViewController()

@@ -138,11 +138,17 @@ extension StorageService: StorageVaccineCardManager {
             cardSortOrder = Int64(fetchVaccineCards().count)
         }
         
+        var patientOwner = patient
+        if let phn = patient.phn, let refetchPatientInContext = fetchPatient(phn: phn, context: context) {
+            patientOwner = refetchPatientInContext
+        }
+        if patientOwner.managedObjectContext ==  nil { return completion(nil)}
+        
         let card = VaccineCard(context: context)
         card.authenticated = authenticated
         card.code = vaccineQR
         card.name = name
-        card.patient = patient
+        card.patient = patientOwner
         card.federalPass = federalPass
         card.vaxDates = vaxDates
         card.sortOrder = cardSortOrder

@@ -8,6 +8,7 @@
 import Foundation
 
 struct HealthRecordConstants {
+    // ENABLE AND DISABLE PRIMARY PATIENT RECORD TYPES
     static var enabledTypes: [RecordType] {
         return [
             .covidImmunizationRecord,
@@ -17,9 +18,19 @@ struct HealthRecordConstants {
             .immunization,
             .healthVisit,
             .specialAuthorityDrug,
-//            .hospitalVisit,
-//            .clinicalDocument
+            .hospitalVisit,
+            .clinicalDocument
         ]
+    }
+    
+    // ENABLE AND DISABLE DEPENDENT RECORD TYPES
+    static var enabledDepententRecordTypes: [RecordType] {
+        return [.covidTestResultRecord, .immunization]
+    }
+    
+    // ENABLE AND DISABLE COMMENTS
+    static var commentsEnabled: Bool {
+        return false
     }
 }
 
@@ -37,17 +48,32 @@ extension HealthRecordConstants {
     }
 }
 
+extension StorageService {
+    enum healthRecordType: CaseIterable {
+        case CovidTest
+        case VaccineCard
+        case Prescription
+        case LaboratoryOrder
+        case Immunization
+        case Recommendation
+        case HealthVisit
+        case SpecialAuthorityDrug
+        case HospitalVisit
+        case ClinicalDocument
+    }
+}
+
 extension HealthRecordConstants.RecordType {
     func toRecordsFilterType() -> RecordsFilter.RecordType? {
         switch self {
         case .covidImmunizationRecord:
-            return .Covid
+            return nil
         case .covidTestResultRecord:
-            return .LabTests
+            return .Covid
         case .medication:
             return .Medication
         case .laboratoryOrder:
-            return nil
+            return .LabTests
         case .immunization:
             return .Immunizations
         case .healthVisit:
@@ -60,12 +86,35 @@ extension HealthRecordConstants.RecordType {
             return .ClinicalDocuments
         }
     }
+    
+    func toStorageType() -> StorageService.healthRecordType? {
+        switch self {
+        case .covidImmunizationRecord:
+            return .Immunization
+        case .covidTestResultRecord:
+            return .CovidTest
+        case .medication:
+            return .Prescription
+        case .laboratoryOrder:
+            return .LaboratoryOrder
+        case .immunization:
+            return .Immunization
+        case .healthVisit:
+            return .HealthVisit
+        case .specialAuthorityDrug:
+            return .SpecialAuthorityDrug
+        case .hospitalVisit:
+            return .HospitalVisit
+        case .clinicalDocument:
+            return .ClinicalDocument
+        }
+    }
 }
 
 struct RecordsFilter {
     enum RecordType: String, CaseIterable {
         case HeathVisits = "Health Visits"
-        case LabTests = "Lab Tests"
+        case LabTests = "Lab Results"
         case Medication = "Medications"
         case ClinicalDocuments = "Clinical Docs"
         case Covid = "COVID-19 Tests"
@@ -84,12 +133,15 @@ struct RecordsFilter {
 }
 
 extension RecordsFilter.RecordType {
+    // Patient filters - set based on HealthRecordConstants.enabledTypes
     static var avaiableFilters: [RecordsFilter.RecordType] {
         let availableTypes = HealthRecordConstants.enabledTypes
         return availableTypes.compactMap({$0.toRecordsFilterType()})
     }
     
+    // Dependent filters - set based on HealthRecordConstants.enabledDepententRecordTypes
     static var dependentFilters: [RecordsFilter.RecordType] {
-        return [.Covid, .Immunizations]
+        let availableTypes = HealthRecordConstants.enabledDepententRecordTypes
+        return availableTypes.compactMap({$0.toRecordsFilterType()})
     }
 }

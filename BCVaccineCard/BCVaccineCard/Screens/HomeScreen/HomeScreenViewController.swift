@@ -15,7 +15,7 @@ class HomeScreenViewController: BaseViewController {
         case button(type: HomeScreenCellType)
     }
     
-    class func constructHomeScreenViewController() -> HomeScreenViewController {
+    class func construct() -> HomeScreenViewController {
         if let vc = Storyboard.home.instantiateViewController(withIdentifier: String(describing: HomeScreenViewController.self)) as? HomeScreenViewController {
             return vc
         }
@@ -26,7 +26,7 @@ class HomeScreenViewController: BaseViewController {
     
     private var authManager: AuthManager = AuthManager()
     
-    private let communicationSetvice: CommunicationSetvice = CommunicationSetvice(network: AFNetwork())
+    private let communicationSetvice: CommunicationSetvice = CommunicationSetvice(network: AFNetwork(), configService: MobileConfigService(network: AFNetwork()))
     private var communicationBanner: CommunicationBanner?
     private let connectionListener = NetworkConnection()
     
@@ -243,33 +243,21 @@ extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
 // MARK: Navigation logic for each type here
 extension HomeScreenViewController {
     private func goToTabForType(type: HomeScreenCellType) {
-        guard let tabBarController = self.tabBarController as? TabBarController else { return }
+        
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         switch type {
         case .Records:
-            if !authManager.isAuthenticated {
-                handleGetStartedScenario(tabBarController: tabBarController)
+            if authManager.isAuthenticated {
+                show(tab: .AuthenticatedRecords)
+            } else {
+                showLogin(initialView: .Landing, showTabOnSuccess: .AuthenticatedRecords)
             }
-            tabBarController.selectedIndex = type.getTabIndex
         case .Proofs:
-            tabBarController.selectedIndex = type.getTabIndex
+            show(tab: .Proofs)
         case .Resources:
-            let vc = ResourceViewController.constructResourceViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
+            show(route: .Resource, withNavigation: true)
         case .Recommendations:
-            let vc = RecommendationsViewController.constructRecommendationsViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
-            vc.setup()
-        }
-    }
-    
-    private func handleGetStartedScenario(tabBarController: TabBarController) {
-        self.showLogin(initialView: .Landing, sourceVC: .HomeScreen, presentingViewControllerReference: self) { authenticationStatus in
-            guard authenticationStatus != .Cancelled else { return }
-            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .records, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HomeScreen, authenticationStatus: authenticationStatus))
-            self.routerWorker?.routingAction(scenario: scenario, goToTab: .records, delayInSeconds: 0.5)
+            show(route: .Recommendations, withNavigation: true)
         }
     }
 }

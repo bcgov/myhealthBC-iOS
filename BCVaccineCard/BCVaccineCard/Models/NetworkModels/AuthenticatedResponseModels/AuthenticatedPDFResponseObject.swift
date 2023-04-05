@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Welcome
 struct AuthenticatedPDFResponseObject: BaseGatewayResponse, Codable {
     let resourcePayload: ResourcePayload?
-    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var totalResultCount, pageIndex, pageSize: Int?
     var resultError: ResultError?
     
     // MARK: - ResourcePayload

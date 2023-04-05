@@ -40,7 +40,7 @@ extension String {
     static var getStarted: String { return "GetStarted".localized }
     
     // Errors
-    
+    static var noInternetConnection: String { return "NoInternetConnection".localized }
     static var fetchRecordError: String { return "FetchRecordError".localized }
     static var noCameraAccessTitle: String { return "NoCameraAccessTitle".localized }
     static var noCameraAccessMessage: String { return "NoCameraAccessMessage".localized }
@@ -231,6 +231,7 @@ extension String {
     
     // MARK: Settings
     static var profileAndSettings: String { return "ProfileAndSettings".localized }
+    static var profile: String { return "Profile".localized }
     static var viewProfile: String { return "ViewProfile".localized }
     static var bcscLogin: String { return "BcscLogin".localized }
     static var accessRecords: String { return "AccessRecords".localized }

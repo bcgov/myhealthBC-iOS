@@ -49,15 +49,12 @@ extension StorageService: StorageImmunizationManager {
             detailsObject = nil
         }
         
-        // TODO: UNCOMMENT TO ENABLE FORECAST
         let immForecast: ImmunizationForecast?
         if let remoteForecast = object.forecast, let forecast = storeImmunizationForecast(object: remoteForecast) {
             immForecast = forecast
         } else {
             immForecast = nil
         }
-//        let immForecast: ImmunizationForecast? = nil
-        
         
         return storeImmunization(
             patient: patient,

@@ -19,6 +19,14 @@ extension AuthManager {
     }
 }
 
+extension AuthManager {
+    enum AutoLogoutReason {
+        case Underage
+        case FailedToValidate
+        case TOSRejected
+    }
+}
+
 enum AuthStatus {
     case Authenticated
     case AuthenticationExpired
@@ -37,6 +45,7 @@ class AuthManager {
     let defaultUserID = "default"
     private let keychain = Keychain(service: "ca.bc.gov.myhealth")
     private let configService = MobileConfigService(network: AFNetwork())
+    private var timer: Timer? = nil
     
     // MARK: Computed
     var authToken: String? {
@@ -133,16 +142,12 @@ class AuthManager {
             return nil
         }
     }
-    // Note: Below is a hacky solution where we have to use access token expiry
+    
     var isAuthenticated: Bool {
         guard authToken != nil else {
             return false
         }
-//        guard let refreshExpiery = refreshTokenExpiery else {
-//            return false
-//        }
         guard let accessExpiry = authTokenExpiery else { return false }
-//        return refreshExpiery > Date()
         return accessExpiry > Date()
     }
     
@@ -153,20 +158,9 @@ class AuthManager {
         return proWord.isEmpty ? nil : proWord
     }
     
-    var medicalFetchRequired: Bool {
-        guard let medFetch = keychain[Key.medicalFetchRequired.rawValue] else {
-            return false
-        }
-        if medFetch == "true" {
-            return true
-        }
-        return false
-    }
-    
     // MARK: Network
     func authenticate(in viewController: UIViewController, completion: @escaping(AuthenticationResult) -> Void) {
         
-        APIClientCache.reset()
         configService.fetchConfig(completion: { mobileConfig in
             guard let issuer = mobileConfig?.authentication?.endpoint,
                   let clientId = mobileConfig?.authentication?.clientID,
@@ -252,12 +246,12 @@ class AuthManager {
                         HTTPCookieStorage.shared.cookies?.forEach { cookie in
                             HTTPCookieStorage.shared.deleteCookie(cookie)
                         }
-                        self.removeAuthTokens()
-                        StorageService.shared.deleteHealthRecordsForAuthenticatedUser()
+                        self.removeProtectiveWord()
+                        SessionStorage.onSignOut()
                         StorageService.shared.deleteAuthenticatedPatient()
-                        self.removeAuthenticatedPatient()
-                        self.authStatusChanged(authenticated: false)
                         self.clearData()
+                        self.authStatusChanged(authenticated: false)
+                        
                         Defaults.loginProcessStatus = LoginProcessStatus(hasStartedLoginProcess: false, hasCompletedLoginProcess: false, hasFinishedFetchingRecords: false, loggedInUserAuthManagerDisplayName: nil)
                         return completion(true)
                     }
@@ -273,22 +267,8 @@ class AuthManager {
         self.store(string: protectiveWord, for: .protectiveWord)
     }
     
-    private func removeProtectiveWord() {
+    func removeProtectiveWord() {
         self.delete(key: .protectiveWord)
-    }
-    
-    func storeMedFetchRequired(bool: Bool) {
-        self.store(string: String(bool), for: .medicalFetchRequired)
-    }
-    
-    private func removeMedFetchRequired() {
-        self.delete(key: .medicalFetchRequired)
-    }
-    
-    // Note: This is called when user session expired and user logs in with new credentials
-    func clearMedFetchProtectiveWordDetails() {
-        removeProtectiveWord()
-        removeMedFetchRequired()
     }
     
     private func refetchAuthToken() {
@@ -340,7 +320,6 @@ class AuthManager {
     // MARK: STORAGE
     public func clearData() {
         removeAuthTokens()
-        APIClientCache.reset()
     }
     private func store(state: OIDAuthState) {
         guard state.isAuthorized else { return }
@@ -359,15 +338,13 @@ class AuthManager {
         if let idToken = state.lastTokenResponse?.idToken {
             store(string: idToken, for: .idToken)
         }
+        
     }
     
     private func store(tokenResponse: OIDTokenResponse) {
         if let authToken = tokenResponse.accessToken {
             let previousToken = self.authToken
             store(string: authToken, for: .authToken)
-            if previousToken != nil {
-                postRefetchNotification()
-            }
         }
         
         if let refreshToken = tokenResponse.refreshToken {
@@ -389,19 +366,18 @@ class AuthManager {
         delete(key: .authTokenExpiery)
         delete(key: .idToken)
         self.removeProtectiveWord()
-        self.removeMedFetchRequired()
     }
     
-    private func removeAuthenticatedPatient() {
-        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-        if let phn = patient.phn {
-            StorageService.shared.deletePatient(phn: phn)
-        } else if let dob = patient.birthday, let name = patient.name {
-            StorageService.shared.deletePatient(name: name, birthday: dob)
-        } else {
-            StorageService.shared.deleteAuthenticatedPatient()
-        }
-    }
+//    private func removeAuthenticatedPatient() {
+//        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+//        if let phn = patient.phn {
+//            StorageService.shared.deletePatient(phn: phn)
+//        } else if let dob = patient.birthday, let name = patient.name {
+//            StorageService.shared.deletePatient(name: name, birthday: dob)
+//        } else {
+//            StorageService.shared.deleteAuthenticatedPatient()
+//        }
+//    }
     
     private func store(string: String, for key: Key) {
         do {
@@ -444,26 +420,22 @@ class AuthManager {
 
 
 extension AuthManager {
-    // NOTE: This is a hacky solution where we are relying on the access token expiry and not using the refresh token. This is due to a keycloak issue that the HG team can't work around - so we just have a longer lasting access token. Once expired, user is considered logged out
-    func initTokenExpieryTimer() {
-//        if let refreshTokenExpiery = refreshTokenExpiery {
-//            let timer = Timer(fireAt: refreshTokenExpiery, interval: 0, target: self, selector: #selector(refreshTokenExpired), userInfo: nil, repeats: false)
-//            RunLoop.main.add(timer, forMode: .common)
-//        }
-        
-        if let authTokenExpiery = authTokenExpiery {
-            let timer = Timer(fireAt: authTokenExpiery, interval: 0, target: self, selector: #selector(authTokenExpired), userInfo: nil, repeats: false)
+    func initAuthExpieryTimer() {
+        if let authTokenExpiery = authTokenExpiery, isAuthenticated {
+            let timer = Timer(fireAt: authTokenExpiery, interval: 0, target: self, selector: #selector(authExpired), userInfo: nil, repeats: false)
+            self.timer?.invalidate()
+            self.timer = timer
             RunLoop.main.add(timer, forMode: .common)
         }
     }
     
-//    @objc func refreshTokenExpired() {
-//        NotificationCenter.default.post(name: .refreshTokenExpired, object: nil)
-//    }
-    @objc func authTokenExpired() {
-//        NotificationCenter.default.post(name: .authTokenExpired, object: nil)
-//        fetchAccessTokenWithRefeshToken()
-        NotificationCenter.default.post(name: .refreshTokenExpired, object: nil)
+    @objc func authExpired() {
+        guard !isAuthenticated else {return}
+        timer?.invalidate()
+        let info: [String: Bool] = [Constants.AuthStatusKey.key: false]
+        NotificationCenter.default.post(name: .authTokenExpired, object: nil)
+        NotificationCenter.default.post(name: .authStatusChanged, object: nil, userInfo: info)
+       
     }
     
     // Note - due to hack, we won't be using this function, currently
@@ -471,13 +443,4 @@ extension AuthManager {
         refetchAuthToken()
     }
     
-}
-
-// MARK: For refetch of authenticated data
-extension AuthManager {
-    private func postRefetchNotification() {
-//        guard let token = self.authToken else { return }
-//        guard let hdid = self.hdid else { return }
-//        NotificationCenter.default.post(name: .backgroundAuthFetch, object: nil, userInfo: ["authToken": token, "hdid": hdid])
-    }
 }

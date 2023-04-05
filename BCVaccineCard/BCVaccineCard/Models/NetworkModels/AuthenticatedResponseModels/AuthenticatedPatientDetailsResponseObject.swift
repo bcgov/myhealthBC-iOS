@@ -10,14 +10,40 @@ import Foundation
 // MARK: - AuthenticatedPatientDetailsResponseObject
 struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
     let resourcePayload: ResourcePayload?
-    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var totalResultCount, pageIndex, pageSize: Int?
     var resultError: ResultError?
     
     // MARK: - ResourcePayload
     struct ResourcePayload: Codable {
         let hdid, personalhealthnumber, firstname, lastname: String?
         let birthdate, gender: String?
-        // Birthday format: "1967-06-02T00:00:00"
+        let physicalAddress, postalAddress: Address?
+        let responseCode: String?
+    }
+    
+    struct Address: Codable {
+        let streetLines: [String]?
+        let city, state, postalCode, country: String?
+        var getAddressString: String? {
+            var street = ""
+            if let streetLines = streetLines, let first = streetLines.first, first.count > 0 {
+                street = first + ", "
+            }
+            var cit = ""
+            if let city = city, city.count > 0 {
+                cit = city + ", "
+            }
+            var stat = ""
+            if let state = state, state.count > 0 {
+                stat = state + " "
+            }
+            var postal = ""
+            if let postalCode = postalCode {
+                postal = postalCode
+            }
+            let addyString = street + cit.capitalized + stat.uppercased() + postal.uppercased()
+            return addyString.count > 0 ? addyString : nil
+        }
     }
     
     var getFullName: String {
@@ -52,7 +78,7 @@ struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
 
 struct AuthenticatedValidAgeCheck: Codable {
     let resourcePayload: Bool?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    let totalResultCount, pageIndex, pageSize: Int?
     let resultError: ResultError?
 }
 

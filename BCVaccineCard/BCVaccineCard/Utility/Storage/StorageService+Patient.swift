@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 protocol StoragePatientManager {
     
@@ -22,6 +23,8 @@ protocol StoragePatientManager {
                       gender: String?,
                       birthday: Date?,
                       phn: String?,
+                      physicalAddress: Address?,
+                      mailingAddress: Address?,
                       hdid: String?,
                       authenticated: Bool
     ) -> Patient?
@@ -40,6 +43,8 @@ protocol StoragePatientManager {
                        lastName: String?,
                        gender: String?,
                        birthday: Date,
+                       physicalAddress: Address?,
+                       mailingAddress: Address?,
                        hdid: String?,
                        authenticated: Bool
     ) -> Patient?
@@ -53,7 +58,7 @@ protocol StoragePatientManager {
     // MARK: Fetch
     /// Returns all stored patients
     /// - Returns: all stored patients
-    func fetchPatients() -> [Patient]
+    func fetchPatients(context: NSManagedObjectContext?) -> [Patient]
     
     /// Returns the patient with authenticated results
     /// - Returns: patient
@@ -69,7 +74,7 @@ protocol StoragePatientManager {
     
     /// Returns the patient with matching phn
     /// - Returns: patient
-    func fetchPatient(phn: String) -> Patient?
+    func fetchPatient(phn: String, context: NSManagedObjectContext?) -> Patient?
     
     /// Returns the patient with matching name and bitthday
     /// - Returns: patient
@@ -89,13 +94,17 @@ protocol StoragePatientManager {
                               lastName: String?,
                               gender: String?,
                               birthday: Date?,
+                              physicalAddress: Address?,
+                              mailingAddress: Address?,
                               hdid: String?,
                               authenticated: Bool
     ) -> Patient?
+    
+    // MARK: Creates an address to attach to a Patient
+    func createAndReturnAddress(addressDetails: AuthenticatedPatientDetailsResponseObject.Address?) -> Address?
 }
 
 extension StorageService: StoragePatientManager {
-    
     
     // MARK: Store
     /// returns existing patient
@@ -109,6 +118,8 @@ extension StorageService: StoragePatientManager {
         gender: String?,
         birthday: Date? = nil,
         phn: String? = nil,
+        physicalAddress: Address? = nil,
+        mailingAddress: Address? = nil,
         hdid: String? = nil,
         authenticated: Bool
     ) -> Patient? {
@@ -119,6 +130,8 @@ extension StorageService: StoragePatientManager {
             lastName: lastName,
             gender: gender,
             birthday: birthday,
+            physicalAddress: physicalAddress,
+            mailingAddress: mailingAddress,
             hdid: hdid,
             authenticated: authenticated)
     }
@@ -131,6 +144,8 @@ extension StorageService: StoragePatientManager {
         gender: String?,
         birthday: Date? = nil,
         phn: String? = nil,
+        physicalAddress: Address? = nil,
+        mailingAddress: Address? = nil,
         hdid: String? = nil,
         authenticated: Bool
     ) -> Patient? {
@@ -142,6 +157,8 @@ extension StorageService: StoragePatientManager {
         patient.lastName = lastName
         patient.gender = gender
         patient.phn = phn
+        patient.physicalAddress = physicalAddress
+        patient.postalAddress = mailingAddress
         patient.authenticated = authenticated
         patient.hdid = hdid
         patient.authManagerDisplayName = AuthManager().displayName
@@ -166,20 +183,22 @@ extension StorageService: StoragePatientManager {
         lastName: String?,
         gender: String?,
         birthday: Date,
+        physicalAddress: Address?,
+        mailingAddress: Address?,
         hdid: String?,
         authenticated: Bool
     ) -> Patient? {
         if let patient = fetchPatient(phn: phn) {
-            return update(phn: phn, name: name, birthday: birthday, hdid: hdid, authenticated: authenticated, for: patient)
+            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, hdid: hdid, authenticated: authenticated, for: patient)
             
         } else if let patient = fetchPatient(name: name, birthday: birthday) {
-            return update(phn: phn, name: name, birthday: birthday, hdid: hdid, authenticated: authenticated, for: patient)
+            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, hdid: hdid, authenticated: authenticated, for: patient)
         }
         return nil
     }
     
     /// Updates values that are not nil
-    fileprivate func update(phn: String?, name: String?, birthday: Date?, hdid: String?, authenticated: Bool, for patient: Patient) -> Patient? {
+    fileprivate func update(phn: String?, name: String?, birthday: Date?, physicalAddress: Address?, mailingAddress: Address?, hdid: String?, authenticated: Bool, for patient: Patient) -> Patient? {
         guard let context = managedContext else {return nil}
         if patient.name == name && patient.phn == phn && patient.birthday == birthday && patient.hdid == hdid && patient.authenticated == authenticated {return patient}
         do {
@@ -191,6 +210,12 @@ extension StorageService: StoragePatientManager {
             }
             if let healthNumber = phn {
                 patient.phn = healthNumber
+            }
+            if let physicalAddress = physicalAddress {
+                patient.physicalAddress = physicalAddress
+            }
+            if let mailingAddress = mailingAddress {
+                patient.postalAddress = mailingAddress
             }
             if let hdid = hdid {
                 patient.hdid = hdid
@@ -222,7 +247,10 @@ extension StorageService: StoragePatientManager {
     }
     
     func deleteAuthenticatedPatient() {
-        guard let patient = fetchAuthenticatedPatient() else { return }
+        guard let patient = fetchAuthenticatedPatient() else {
+            return
+        }
+        deleteHealthRecords(for: patient)
         delete(object: patient)
         notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
     }
@@ -237,10 +265,19 @@ extension StorageService: StoragePatientManager {
     
     /// returns all stored patients
     /// - Returns: all stored patients
-    public func fetchPatients() -> [Patient] {
-        guard let context = managedContext else {return []}
+    public func fetchPatients(context: NSManagedObjectContext? = nil) -> [Patient] {
+        let contextToUse: NSManagedObjectContext?
+        if let givenContext = context {
+            contextToUse = givenContext
+        } else if let currentContext = managedContext {
+            contextToUse = currentContext
+        } else {
+            contextToUse = nil
+            return []
+        }
+        guard let contextToUse = contextToUse else {return []}
         do {
-            return try context.fetch(Patient.fetchRequest())
+            return try contextToUse.fetch(Patient.fetchRequest())
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return []
@@ -275,8 +312,8 @@ extension StorageService: StoragePatientManager {
     /// fetch patient by phn
     /// - Parameter phn: patient phn
     /// - Returns: patient
-    public func fetchPatient(phn: String) -> Patient? {
-        let patients = fetchPatients()
+    public func fetchPatient(phn: String, context: NSManagedObjectContext? = nil) -> Patient? {
+        let patients = fetchPatients(context: context)
         return patients.filter({$0.phn == phn}).first
     }
     
@@ -305,6 +342,8 @@ extension StorageService: StoragePatientManager {
         lastName: String?,
         gender: String?,
         birthday: Date?,
+        physicalAddress: Address?,
+        mailingAddress: Address?,
         hdid: String? = nil,
         authenticated: Bool
     ) -> Patient? {
@@ -329,12 +368,14 @@ extension StorageService: StoragePatientManager {
                 lastName: lastName,
                 gender: gender,
                 birthday: birthday,
+                physicalAddress: physicalAddress,
+                mailingAddress: mailingAddress,
                 hdid: hdid,
                 authenticated: authenticated)
         }
         
         // otherwise update user data if needed and return
-        _ = update(phn: phn, name: name, birthday: birthday, hdid: hdid, authenticated: authenticated, for: patient)
+        _ = update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, hdid: hdid, authenticated: authenticated, for: patient)
         
         return patient
     }
@@ -347,6 +388,8 @@ extension StorageService: StoragePatientManager {
                                    lastName: String?,
                                    gender: String?,
                                    birthday: Date?,
+                                   physicalAddress: Address?,
+                                   mailingAddress: Address?,
                                    hdid: String?,
                                    authenticated: Bool) -> Patient? {
         if (phn != nil) || (birthday != nil && name != nil) {
@@ -357,11 +400,24 @@ extension StorageService: StoragePatientManager {
                 gender: gender,
                 birthday: birthday,
                 phn: phn,
+                physicalAddress: physicalAddress,
+                mailingAddress: mailingAddress,
                 hdid: hdid,
                 authenticated: authenticated)
         }
         
         return nil
+    }
+    
+    func createAndReturnAddress(addressDetails: AuthenticatedPatientDetailsResponseObject.Address?) -> Address? {
+        guard let context = managedContext else {return nil}
+        let address = Address(context: context)
+        address.streetLines = addressDetails?.streetLines
+        address.city = addressDetails?.city
+        address.state = addressDetails?.state
+        address.postalCode = addressDetails?.postalCode
+        address.country = addressDetails?.country
+        return address
     }
     
     /// Returns first name + first letter of last name (if exists)

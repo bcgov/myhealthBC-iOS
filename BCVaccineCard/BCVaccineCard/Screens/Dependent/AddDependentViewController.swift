@@ -42,9 +42,14 @@ struct AddDependentFormData {
 
 class AddDependentViewController: BaseDependentViewController, UITextFieldDelegate {
     
-    class func constructAddDependentViewController(patient: Patient?) -> AddDependentViewController {
+    // TODO: Move to new file
+    struct ViewModel {
+        let patient: Patient?
+    }
+    
+    class func construct(viewModel: ViewModel) -> AddDependentViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: AddDependentViewController.self)) as? AddDependentViewController {
-            vc.patient = patient
+            vc.patient = viewModel.patient
             return vc
         }
         return AddDependentViewController()
@@ -116,7 +121,7 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
                 self?.showInvalidInfoAlert()
                 return
             }
-            VaccineCardService(network: AFNetwork(), authManager: AuthManager()).fetchAndStore(for: storedDependent, completion: {_ in
+            VaccineCardService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: storedDependent, completion: {_ in
                 if let patientName = storedDependent.info?.name {
                     self?.showToast(message: "\(patientName) was added")
                 } else {
@@ -169,13 +174,6 @@ class AddDependentViewController: BaseDependentViewController, UITextFieldDelega
               buttonTwoTitle: .sendEmail,
               buttonTwoCompletion: {self.sendEmail()}
         )
-    }
-    
-    func sendEmail() {
-        let email = "HealthGateway@gov.bc.ca"
-        if let url = URL(string: "mailto:\(email)"), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
-        }
     }
     
     func style() {

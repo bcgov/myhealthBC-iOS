@@ -10,19 +10,25 @@ import UIKit
 
 class DependentsHomeViewController: BaseDependentViewController {
     
-    class func constructDependentsHomeViewController(patient: Patient?) -> DependentsHomeViewController {
+    // TODO: Move to new file
+    struct ViewModel {
+        let patient: Patient?
+    }
+    
+    class func construct(viewModel: ViewModel) -> DependentsHomeViewController {
         if let vc = Storyboard.dependents.instantiateViewController(withIdentifier: String(describing: DependentsHomeViewController.self)) as? DependentsHomeViewController {
-            vc.patient = patient
-            vc.fetchDataWhenMainPatientIsStored()
+            vc.patient = viewModel.patient
+            vc.viewModel = viewModel
             return vc
         }
         return DependentsHomeViewController()
     }
     
+    private var viewModel: ViewModel? = nil
     private var patient: Patient? = nil
     private let emptyLogoTag = 23412
     private let authManager = AuthManager()
-    private let storageService = StorageService()
+    private let storageService = StorageService.shared
     
     private var blockDependentSelection: Bool = false
     fileprivate var lastKnowContentOfsset: CGFloat = 0
@@ -54,28 +60,11 @@ class DependentsHomeViewController: BaseDependentViewController {
         navSetup()
         style()
         setupTableView()
-        fetchData(fromRemote: true)
+        fetchData(fromRemote: false)
         fetchDataWhenAuthenticated()
+        fetchDataWhenMainPatientIsStored()
     }
     
-   // private func fetchData() {
-   ///     service.fetchDependents { completed in
-            // If completed, then reload data/update screen UI - if not completed, show an error
-     //   }
-        // TODO: Allocate this appropriately once storage has been updated
-      //  dependents = []
-       // setState()
-       // setHealthRecordServiceAndFetchDependentRecords()
-   // }
-    
-   // private func setHealthRecordServiceAndFetchDependentRecords() {
-    //    guard dependents.count > 0 else { return }
-     //   for dependent in dependents {
-            // If this is the way we decide to do it, then should do some thread handling here
-       //     let dependentsRecordService = HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), currentDependant: dependent)
-        //    dependentsRecordService.fetchHealthRecords()
-       // }
-       
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchData(fromRemote: false)
@@ -83,15 +72,19 @@ class DependentsHomeViewController: BaseDependentViewController {
     
     // MARK: Actions
     @IBAction func addDependent(_ sender: Any) {
-        guard let patient = patient else {
+        guard let patient = viewModel?.patient else {
             return
         }
-        let addVC = AddDependentViewController.constructAddDependentViewController(patient: patient)
-        self.navigationController?.pushViewController(addVC, animated: true)
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This feature requires an internet connection")
+            return
+        }
+        let vm = AddDependentViewController.ViewModel(patient: patient)
+        show(route: .AddDependent, withNavigation: true, viewModel: vm)
     }
     
     @IBAction func manageDependents(_ sender: Any) {
-        guard let patient = patient else {
+        guard let patient = viewModel?.patient else {
             showToast(message: "Please try re-launching this application")
             return
         }
@@ -99,13 +92,13 @@ class DependentsHomeViewController: BaseDependentViewController {
             showToast(message: "This feature requires an internet connection")
             return
         }
-        let vc = ManageDependentsViewController.constructManageDependentsViewController(patient: patient)
-        self.navigationController?.pushViewController(vc, animated: true)
+        let vm = ManageDependentsViewController.ViewModel(patient: patient)
+        show(route: .ManageDependents, withNavigation: true, viewModel: vm)
     }
     
     @IBAction func LoginWithBCSC(_ sender: Any) {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        authenticate(initialView: .Landing, fromTab: .dependant)
+        authenticate(initialView: .Landing)
     }
     
     // MARK: Data
@@ -124,6 +117,11 @@ class DependentsHomeViewController: BaseDependentViewController {
         guard fromRemote else {return}
         
         networkService.fetchDependents(for: patient) { [weak self] storedDependents in
+            guard let storedDependents = storedDependents else {
+                self?.setState()
+                self?.tableView.reloadData()
+                return
+            }
             self?.dependents = storedDependents
             self?.setState()
             self?.tableView.reloadData()
@@ -135,7 +133,7 @@ class DependentsHomeViewController: BaseDependentViewController {
         AppStates.shared.listenToAuth { [weak self] authenticated in
             guard let `self` = self else {return}
             if self.patient != nil {
-                self.fetchData(fromRemote: true)
+                self.fetchData(fromRemote: false)
             }
             /*
              Else, fetchDataWhenMainPatientIsStored
@@ -149,19 +147,16 @@ class DependentsHomeViewController: BaseDependentViewController {
     private func fetchDataWhenMainPatientIsStored() {
         AppStates.shared.listenToStorage { [weak self] event in
             guard let `self` = self else {return}
-            
-            if  event.event == .Save,
-                event.entity == .Patient,
-                let storedPatient = event.object as? Patient {
-                
-                if storedPatient.authenticated {
+            if event.event == .Save {
+                if event.entity == .Dependent {
+                    self.fetchData(fromRemote: false)
+                } else if event.entity == .Patient,
+                          let storedPatient = event.object as? Patient,
+                          storedPatient.authenticated {
                     self.patient = storedPatient
-                    self.fetchData(fromRemote: true)
-                } else {
                     self.fetchData(fromRemote: false)
                 }
             }
-            
         }
     }
     
@@ -358,7 +353,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
             return UITableViewCell()
         }
         cell.configure(forRecordType: .loginToAccessDependents) { [weak self] _ in
-            self?.authenticate(initialView: .Auth, fromTab: .dependant)
+            self?.authenticate(initialView: .Auth)
         }
         
         return cell
@@ -397,19 +392,28 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
             showDetails(for: dependentPatient)
             blockDependentSelection = false
         } else {
-            HealthRecordsService(network: AFNetwork(), authManager: AuthManager()).fetchAndStoreHealthRecords(for: dependent) { [weak self] records in
-                SessionStorage.dependentRecordsFetched.append(dependentPatient)
-                self?.showDetails(for: dependentPatient)
-                self?.blockDependentSelection = false
-            }
+            selected(dependent: dependent, dependentPatient: dependentPatient)
+        }
+    }
+    
+    private func selected(dependent: Dependent, dependentPatient: Patient) {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: .noInternetConnection, style: .Warn)
+            return
+        }
+        
+        HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records, hadFails in
+            let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
+            self?.showToast(message: message)
+            SessionStorage.dependentRecordsFetched.append(dependentPatient)
+            self?.showDetails(for: dependentPatient)
+            self?.blockDependentSelection = false
         }
     }
     
     private func showDetails(for dependent: Patient) {
-        let records = StorageService.shared.getHealthRecords(forDependent: dependent)
-        let dependantDS = records.detailDataSource(patient: dependent)
-        let vc = UsersListOfRecordsViewController.constructUsersListOfRecordsViewController(patient: dependent, authenticated: true, navStyle: .singleUser, hasUpdatedUnauthPendingTest: true, dependantDS: dependantDS)
-        navigationController?.pushViewController(vc, animated: true)
+        let vm = UsersListOfRecordsViewController.ViewModel(patient: dependent, authenticated: dependent.authenticated)
+        show(route: .UsersListOfRecords, withNavigation: true, viewModel: vm)
     }
 }
 
@@ -470,8 +474,9 @@ extension DependentsHomeViewController: InaccessibleDependentDelegate {
 
 // MARK: Auth
 extension DependentsHomeViewController {
-    private func authenticate(initialView: AuthenticationViewController.InitialView, fromTab: TabBarVCs) {
-        self.showLogin(initialView: initialView, sourceVC: .Dependents, presentingViewControllerReference: self) { _ in
+    private func authenticate(initialView: AuthenticationViewController.InitialView) {
+        showLogin(initialView: initialView, showTabOnSuccess: .Dependents) { [weak self] status in
+            self?.setState()
         }
     }
 }

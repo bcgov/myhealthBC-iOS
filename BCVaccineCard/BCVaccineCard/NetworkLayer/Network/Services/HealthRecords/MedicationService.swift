@@ -13,22 +13,33 @@ struct MedicationService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     
     private var endpoints: UrlAccessor {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, protected: Bool, completion: @escaping ([Perscription])->Void) {
-        network.addLoader(message: .FetchingRecords)
+    public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([Perscription]?, _ protectiveWordRequired: Bool)->Void) {
+        network.addLoader(message: .SyncingRecords)
+        Logger.log(string: "Fetching Medication records for \(patient.name)", type: .Network)
         // TODO: Handle Protected Fetch
-        fetch(for: patient, protected: protected) { result in
+        fetch(for: patient, protectiveWord: protectiveWord) { result in
+            
+            if result?.protectiveWordRequired == true {
+                SessionStorage.protectiveWordEnabled = true
+            }
+            
+            if result == nil {
+                return completion(nil, false)
+            }
+            
             guard let response = result else {
                 network.removeLoader()
-                return completion([])
+                return completion([], result?.protectiveWordRequired == true)
             }
-            store(medication: response, for: patient, protected: protected, completion: { result in
+            store(medication: response, for: patient, protected: protectiveWord != nil, completion: { result in
                 network.removeLoader()
-                return completion(result)
+                return completion(result, response.protectiveWordRequired)
             })
         }
     }
@@ -39,6 +50,7 @@ struct MedicationService {
                        protected: Bool,
                        completion: @escaping ([Perscription])->Void
     ) {
+        Logger.log(string: "Storing Medication records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.prescriptionArray)
         StorageService.shared.storePrescriptions(in: response, patient: patient, initialProtectedMedFetch: protected, completion: completion)
     }
@@ -48,42 +60,44 @@ struct MedicationService {
 // MARK: Network requests
 extension MedicationService {
     
-    private func fetch(for patient: Patient, protected: Bool, completion: @escaping(_ response: MedicationResponse?) -> Void) {
-        // TODO: Handle Protected Fetch
+    private func fetch(for patient: Patient, protectiveWord: String?, completion: @escaping(_ response: MedicationResponse?) -> Void) {
         guard let token = authManager.authToken,
               let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
         
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
-            
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             let headers = [
-                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticatedMedicationStatementParameters.protectiveWord: (protectiveWord ?? "")
             ]
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
             // TODO: CONNOR: getAuthenticatedMedicationRequest or getAuthenticatedMedicationStatement?
-            let requestModel = NetworkRequest<HDIDParams, MedicationResponse>(url: endpoints.getAuthenticatedMedicationStatement(hdid: hdid),
+            let requestModel = NetworkRequest<HDIDParams, MedicationResponse>(url: endpoints.medicationStatement(base: baseURL, hdid: hdid),
                                                                               type: .Get,
                                                                               parameters: parameters,
                                                                               encoder: .urlEncoder,
                                                                               headers: headers)
             { result in
-                if (result?.resourcePayload) != nil {
-                    // return result
-                    return completion(result)
-                } else {
-                    return completion(nil)
-                }
+                Logger.log(string: "Network Medication Result received", type: .Network)
+                return completion(result)
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
+                    break
                 }
                 
             }
+            Logger.log(string: "Network Medication initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

@@ -11,7 +11,7 @@ import BCVaccineValidator
 // MARK: - GatewayVaccineCardResponse
 struct GatewayVaccineCardResponse: Codable {
     let resourcePayload: ResourcePayload?
-    let totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    let totalResultCount, pageIndex, pageSize: Int?
     let resultError: ResultError?
     
     // MARK: - ResourcePayload

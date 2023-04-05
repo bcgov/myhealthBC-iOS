@@ -9,7 +9,7 @@ import Foundation
 
 struct AuthenticatedTestResultsResponseModel: BaseGatewayResponse, Codable {
     let resourcePayload: ResourcePayload?
-    var totalResultCount, pageIndex, pageSize, resultStatus: Int?
+    var totalResultCount, pageIndex, pageSize: Int?
     var resultError: ResultError?
     
     // MARK: ResourcePayload
@@ -81,7 +81,7 @@ extension AuthenticatedTestResultsResponseModel {
             records.append(record)
         })
         let resourcePayload = GatewayTestResultResponse.ResourcePayload(loaded: true, retryin: 0, records: records, reportAvailable: model.reportAvailable, id: model.id)
-        let gatewayResponse = GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: nil, pageIndex: nil, pageSize: nil, resultStatus: nil, resultError: nil)
+        let gatewayResponse = GatewayTestResultResponse(resourcePayload: resourcePayload, totalResultCount: nil, pageIndex: nil, pageSize: nil, resultError: nil)
         return gatewayResponse
     }
 }

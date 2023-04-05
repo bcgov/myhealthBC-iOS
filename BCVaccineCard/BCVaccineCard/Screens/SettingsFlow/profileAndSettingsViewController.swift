@@ -13,10 +13,11 @@ class ProfileAndSettingsViewController: BaseViewController {
         case profile
         case securityAndData
         case privacyStatement
+        case feedback
         case logout
     }
     
-    class func constructProfileAndSettingsViewController() -> ProfileAndSettingsViewController {
+    class func construct() -> ProfileAndSettingsViewController {
         if let vc = Storyboard.main.instantiateViewController(withIdentifier: String(describing: ProfileAndSettingsViewController.self)) as? ProfileAndSettingsViewController {
             return vc
         }
@@ -25,20 +26,11 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     // MARK: Variables
     let authManager: AuthManager = AuthManager()
-    private var throttleAPIWorker: LoginThrottleAPIWorker?
     
     // MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
     
     private var displayName: String?
-    
-    override var getPassesFlowType: PassesFlowVCs? {
-        return .ProfileAndSettingsViewController
-    }
-    
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .ProfileAndSettingsViewController
-    }
     
     // MARK: Class funcs
     override func viewDidLoad() {
@@ -46,7 +38,6 @@ class ProfileAndSettingsViewController: BaseViewController {
         setupTableView()
         navSetup()
         setupListener()
-        self.throttleAPIWorker = LoginThrottleAPIWorker(delegateOwner: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,40 +53,30 @@ class ProfileAndSettingsViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
-        self.throttleAPIWorker = nil
     }
     
     // MARK: Routing
     func showProfile() {
-        alert(title: "Not implemented", message: "Can't view profile yet")
+        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+        let vm = ProfileDetailsViewController.ViewModel(patient: patient)
+        show(route: .Profile, withNavigation: true, viewModel: vm)
     }
     
     func showLogin() {
-        // Note: This nav bar hack is to prevent the user from navigating back to the root vc, which was causing issues as the routing functionality wasn't working in time, so the records weren't showing
-        self.navigationController?.navigationBar.isUserInteractionEnabled = false
-        showLogin(initialView: .Landing, sourceVC: .ProfileAndSettingsVC, completion: { authenticationStatus in
-            guard authenticationStatus != .Cancelled || authenticationStatus != .Failed else {
-                self.navigationController?.navigationBar.isUserInteractionEnabled = false
-                return
-            }
-            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-            let currentTab = self.getCurrentTab
-            let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: currentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .ProfileAndSettingsVC, authenticationStatus: authenticationStatus))
-            self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.navigationController?.navigationBar.isUserInteractionEnabled = true
-            }
-        })
+        showLogin(initialView: .Landing)
     }
     
     func showSecurityAndData() {
-        let vc = SecurityAndDataViewController.constructSecurityAndDataViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        show(route: .SecurityAndData, withNavigation: true)
     }
     
     func showPrivacyStatement() {
         openPrivacyPolicy()
+    }
+    
+    func showFeedback() {
+        let vc = FeedbackViewController.construct()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -170,7 +151,7 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
                 return profileCell(for: indexPath) {[weak self] in
                     guard let `self` = self else {return}
                     // Not using this right now
-//                    self.showProfile()
+                    self.showProfile()
                 }
             } else {
                 return loginCell(for: indexPath) {[weak self] in
@@ -191,6 +172,14 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
             return rowCell(for: indexPath, title: title, icon: icon) {[weak self] in
                 guard let `self` = self else {return}
                 self.showPrivacyStatement()
+            }
+        case .feedback:
+            let title: String = "Feedback"
+            let icon = UIImage(named: "feedback")
+            let isHidden = !authManager.isAuthenticated
+            return rowCell(for: indexPath, title: title, icon: icon, isHidden: isHidden) {[weak self] in
+                guard let `self` = self else {return}
+                self.showFeedback()
             }
         case .logout:
             let title: String = .logOut
@@ -219,11 +208,12 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
         return cell
     }
     
-    func rowCell(for indexPath: IndexPath, title: String, icon: UIImage?, labelColor: LabelColour = .Black, onTap: @escaping() -> Void) -> SettingsRowTableViewCell {
+    func rowCell(for indexPath: IndexPath, title: String, icon: UIImage?, labelColor: LabelColour = .Black, isHidden: Bool = false, onTap: @escaping() -> Void) -> SettingsRowTableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingsRowTableViewCell.getName, for: indexPath) as? SettingsRowTableViewCell else {
             return SettingsRowTableViewCell()
         }
         cell.setup(title: title, icon: icon, labelColor: labelColor, onTap: onTap)
+        cell.isHidden = isHidden
         return cell
     }
     
@@ -241,30 +231,23 @@ extension ProfileAndSettingsViewController: UITableViewDelegate, UITableViewData
     // MARK: Helpers
     private func deleteRecordsForAuthenticatedUserAndLogout() {
         LocalAuthManager.block = true
-        performLogout(completion: {success in
-            guard success else { return }
-//            NotificationCenter.default.post(name: .resetHealthRecordsScreenOnLogout, object: nil, userInfo: nil)
-            DispatchQueue.main.async {
-                let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                self.routerWorker?.routingAction(scenario: .Logout(values: values))
-                
-            }
-        })
+        performLogout(completion: {_ in })
     }
     
     private func performLogout(completion: @escaping(_ success: Bool)-> Void) {
-        self.throttleAPIWorker?.throttleHGMobileConfigEndpoint(completion: { response in
-            if response != .NoInternet {
-                self.authManager.signout(in: self, completion: { [weak self] success in
-                    guard let `self` = self else {return}
-                    // Regardless of the result of the async logout, clear tokens.
-                    // because user may be offline
-                    self.tableView.reloadData()
-                    completion(success)
-                })
-            }
-        })
+        guard NetworkConnection.shared.hasConnection else {
+            NetworkConnection.shared.showUnreachableToast()
+            return
+        }
+        MobileConfigService(network: AFNetwork()).fetchConfig { response in
+            guard let config = response, config.online else {return}
+            self.authManager.signout(in: self, completion: { [weak self] success in
+                guard let `self` = self else {return}
+                // Regardless of the result of the async logout, clear tokens.
+                // because user may be offline
+                self.tableView.reloadData()
+                completion(success)
+            })
+        }
     }
 }

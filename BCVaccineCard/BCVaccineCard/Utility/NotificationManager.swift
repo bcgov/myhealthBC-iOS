@@ -13,13 +13,6 @@ class NotificationManager {}
 
 // MARK: For clearing data due to unauth user for various reasons (under 12)
 extension NotificationManager {
-    static func postLoginDataClearedOnLoginRejection(sourceVC: LoginVCSource) {
-        let name = Notification.Name.reloadVCDueToUnderage
-        let key = Constants.SourceVCReloadKey.key
-        let info: [String: String] = [key: sourceVC.rawValue]
-        NotificationCenter.default.post(name: name, object: nil, userInfo: info)
-    }
-    
     static func listenToLoginDataClearedOnLoginRejection(observer: UIViewController, selector: Selector) {
         let name = Notification.Name.reloadVCDueToUnderage
         NotificationCenter.default.addObserver(observer, selector: selector, name: name, object: nil)

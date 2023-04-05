@@ -10,44 +10,39 @@ import SwipeCellKit
 
 class HealthPassViewController: BaseViewController {
     
-    class func constructHealthPassViewController(fedPassStringToOpen: String?) -> HealthPassViewController {
+    class func construct(viewModel: ViewModel) -> HealthPassViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: HealthPassViewController.self)) as? HealthPassViewController {
-            vc.fedPassStringToOpen = fedPassStringToOpen
+            vc.fedPassStringToOpen = viewModel.fedPassStringToOpen
+            vc.viewModel = viewModel
             return vc
         }
         return HealthPassViewController()
     }
     
     @IBOutlet weak private var tableView: UITableView!
-    lazy var authManager: AuthManager = AuthManager()
     
+    private var viewModel: ViewModel?
     private var dataSource: VaccineCard?
-    private var savedCardsCount: Int {
-        return StorageService.shared.fetchVaccineCards().count
-    }
     private var fedPassStringToOpen: String?
     
-    override var getPassesFlowType: PassesFlowVCs? {
-        return .HealthPassViewController(fedPassToOpen: self.fedPassStringToOpen)
+    private var savedCardsCount: Int {
+        return StorageService.shared.fetchVaccineCards().count
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        authManager = AuthManager()
-        refreshOnStorageChange()
         setFedPassObservable()
         setupListeners()
         showFedPassIfNeccessary()
+        setup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
+        tabBarController?.tabBar.isHidden = false
         navSetup()
-        setupTableView()
-        // This is being called here, due to the fact that a user can adjust the primary card, then return to the screen
         setup()
-        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -63,7 +58,10 @@ class HealthPassViewController: BaseViewController {
     }
     
     private func setup() {
-        retrieveDataSource()
+        DispatchQueue.main.async {
+            self.setupTableView()
+            self.fetchFromStorage()
+        }
     }
     
     private func showFedPassIfNeccessary() {
@@ -76,7 +74,16 @@ class HealthPassViewController: BaseViewController {
 // MARK: Listeners
 extension HealthPassViewController {
     private func setupListeners() {
-        NotificationManager.listenToLoginDataClearedOnLoginRejection(observer: self, selector: #selector(reloadFromForcedLogout))
+        AppStates.shared.listenToStorage { [weak self] event in
+            guard let `self` = self else {return}
+            guard event.entity == .VaccineCard else {return}
+            self.setup()
+        }
+        
+        AppStates.shared.listenToAuth { [weak self] authenticated in
+            guard let `self` = self else {return}
+            self.setup()
+        }
     }
     
     @objc private func reloadFromForcedLogout(_ notification: Notification) {
@@ -99,24 +106,53 @@ extension HealthPassViewController {
     }
     
     private func goToAddCardOptionScreen(showAuth: Bool) {
-        func showScreen() {
-            let vc = QRRetrievalMethodViewController.constructQRRetrievalMethodViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
         
-        if showAuth && !authManager.isAuthenticated {
-            showLogin(initialView: .Landing, sourceVC: .HealthPassVC) { authenticationStatus in
-                if authenticationStatus != .Completed {
-                    showScreen()
+        if showAuth && !AuthManager().isAuthenticated {
+            showLogin(initialView: .Landing, showTabOnSuccess: .Proofs) {[weak self] authenticationStatus in
+                if authenticationStatus == .Completed {
+                    self?.fetchFromStorage()
                 } else {
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .HealthPassVC, authenticationStatus: authenticationStatus))
-                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
+                    let vm = QRRetrievalMethodViewController.ViewModel { [weak self] vaccineCard in
+                        guard let `self` = self else {return}
+                        self.onAdd(vaccineCard: vaccineCard)
+                    } onAddFederalPass: { [weak self] vaccineCard in
+                        guard let `self` = self else {return}
+                        self.onAdd(vaccineCard: vaccineCard)
+                    }
+
+                    self?.show(route: .QRRetrievalMethod, withNavigation: true, viewModel: vm)
                 }
             }
         } else {
-            showScreen()
+            let vm = QRRetrievalMethodViewController.ViewModel(onAddCard: {[weak self] vaccineCard in
+                guard let self = self, let vaccineCard = vaccineCard else {return}
+                self.onAdd(vaccineCard: vaccineCard)
+               
+            }, onAddFederalPass: { [weak self] vaccineCard in
+                guard let self = self, let vaccineCard = vaccineCard else {return}
+                self.onAdd(vaccineCard: vaccineCard)
+            })
+            show(route: .QRRetrievalMethod, withNavigation: true, viewModel: vm)
+        }
+    }
+    
+    func onAdd(vaccineCard: VaccineCard?) {
+        guard let vaccineCard = vaccineCard else {return}
+        let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: nil)
+        self.navigationController?.popToRootViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if StorageService.shared.fetchVaccineCards().count > 1 {
+                self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
+            }
+        }
+    }
+    
+    func onAdd(federal vaccineCard: VaccineCard?) {
+        guard let vaccineCard = vaccineCard else {return}
+        let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: vaccineCard.federalPass)
+        self.navigationController?.popToRootViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
         }
     }
 }
@@ -124,22 +160,19 @@ extension HealthPassViewController {
 
 // MARK: DataSource Management
 extension HealthPassViewController {
-    private func retrieveDataSource() {
-        fetchFromStorage()
-    }
     
-    private func refreshOnStorageChange() {
-        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
-            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
-            switch event.entity {
-            case .VaccineCard, .Patient:
-                self.fetchFromStorage()
-            default:
-                break
-            }
-           
-        }
-    }
+//    private func refreshOnStorageChange() {
+//        Notification.Name.storageChangeEvent.onPost(object: nil, queue: .main) {[weak self] notification in
+//            guard let `self` = self, let event = notification.object as? StorageService.StorageEvent<Any> else {return}
+//            switch event.entity {
+//            case .VaccineCard, .Patient:
+//                self.fetchFromStorage()
+//            default:
+//                break
+//            }
+//           
+//        }
+//    }
 }
 
 // MARK: For fed pass observable
@@ -283,13 +316,6 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
                         StorageService.shared.deletePatient(name: name, birthday: birthday)
                     }
                 }
-                DispatchQueue.main.async {
-                    
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                }
             }
             self.dataSource = nil
             AnalyticsService.shared.track(action: .RemoveCard)
@@ -302,14 +328,32 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
 extension HealthPassViewController: FederalPassViewDelegate {
     func federalPassButtonTapped(model: AppVaccinePassportModel?) {
         if let pass = model?.codableModel.fedCode {
-//            self.openPDFView(pdfString: pass, vc: self, id: nil, type: .fedPass, completion: { [weak self] _ in
-//                guard let `self` = self else { return }
-//                self.tabBarController?.tabBar.isHidden = false
-//            })
             self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
-            self.goToHealthGateway(fetchType: .federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code), source: .healthPassHomeScreen, owner: self, navDelegate: self.navDelegate)
+            addFederalPass(model: model)
+        }
+    }
+    
+    func addFederalPass(model: AppVaccinePassportModel) {
+        let fetchType = GatewayFormViewControllerFetchType.federalPassOnly(dob: model.codableModel.birthdate, dov: model.codableModel.vaxDates.last ?? "2021-01-01", code: model.codableModel.code)
+        let vm = GatewayFormViewController.ViewModel(rememberDetails: RememberedGatewayDetails(), fetchType: fetchType) { [weak self] vaccineCard in
+            guard let `self` = self, let card = vaccineCard else {return}
+            self.showAddedFederalPass(vaccineCard: card)
+            
+        } onAddFederalPass: { [weak self] vaccineCard in
+            guard let `self` = self, let card = vaccineCard else {return}
+            self.showAddedFederalPass(vaccineCard: card)
+        }
+        
+        show(route: .GatewayForm, withNavigation: true, viewModel: vm)
+    }
+    
+    func showAddedFederalPass(vaccineCard: VaccineCard) {
+        guard let fedCode = vaccineCard.federalPass else {return}
+        self.navigationController?.popToRootViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.showPDFDocument(pdfString: fedCode, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         }
     }
     
@@ -333,8 +377,8 @@ extension HealthPassViewController: AddCardsTableViewCellDelegate {
 extension HealthPassViewController: AppStyleButtonDelegate {
     func buttonTapped(type: AppStyleButton.ButtonType) {
         if type == .viewAll {
-            let vc = CovidVaccineCardsViewController.constructCovidVaccineCardsViewController(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
-            self.navigationController?.pushViewController(vc, animated: true)
+            let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: nil, fedPassStringToOpen: nil)
+            show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
         }
         if type == .addAHealthPass {
             goToAddCardOptionScreen(showAuth: true)

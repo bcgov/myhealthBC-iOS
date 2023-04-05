@@ -13,34 +13,37 @@ import SwiftUI
 
 class QRRetrievalMethodViewController: BaseViewController {
     
-    class func constructQRRetrievalMethodViewController() -> QRRetrievalMethodViewController {
+    struct ViewModel {
+        var onAddCard: ((VaccineCard?) -> Void)
+        var onAddFederalPass: ((VaccineCard?) -> Void)
+    }
+    
+    class func construct(viewModel: ViewModel) -> QRRetrievalMethodViewController {
         if let vc = Storyboard.healthPass.instantiateViewController(withIdentifier: String(describing: QRRetrievalMethodViewController.self)) as? QRRetrievalMethodViewController {
-//            vc.backScreenString = backScreenString
+            vc.viewModel = viewModel
             return vc
         }
         return QRRetrievalMethodViewController()
     }
     
+    private var viewModel: ViewModel? = nil
+    
     enum CellType {
         case text(text: String), image(image: UIImage), method(type: TableViewButtonView.ButtonType, style: TableViewButtonView.ButtonStyle)
     }
-    
+
     @IBOutlet weak private var tableView: UITableView!
     private var dataSource: [CellType] = []
 //    private var backScreenString: String!
-    
+
     private var ImagePickerCallback: ((_ image: UIImage?)->(Void))? = nil
     private weak var imagePicker: UIImagePickerController? = nil
-    
-    override var getPassesFlowType: PassesFlowVCs? {
-        return .QRRetrievalMethodViewController
-    }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
@@ -49,12 +52,12 @@ class QRRetrievalMethodViewController: BaseViewController {
         navSetup()
         self.tableView.contentInsetAdjustmentBehavior = .never
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
     }
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
@@ -62,12 +65,12 @@ class QRRetrievalMethodViewController: BaseViewController {
             return UIStatusBarStyle.default
         }
     }
-    
+
     private func setup() {
         setupDataSource()
         setupTableView()
     }
-    
+
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -184,52 +187,22 @@ extension QRRetrievalMethodViewController: UITableViewDelegate, UITableViewDataS
 
 // MARK: Table View Button Methods
 extension QRRetrievalMethodViewController {
-    func authenticateBeforeDisplayingGatewayForm() {
-        if !AuthManager().isAuthenticated {
-            showLogin(initialView: .Landing, sourceVC: .QRRetrievalVC, completion: {[weak self] authenticationStatus in
-                guard let `self` = self else {return}
-                if authenticationStatus != .Completed {
-                    self.goToEnterGateway()
-                } else {
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let scenario = AppUserActionScenarios.LoginSpecialRouting(values: ActionScenarioValues(currentTab: .healthPass, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails, loginSourceVC: .QRRetrievalVC, authenticationStatus: authenticationStatus))
-                    self.routerWorker?.routingAction(scenario: scenario, delayInSeconds: 0.5)
-                }
-            })
-        } else {
-            goToEnterGateway()
-        }
-    }
-    //FIXME: CONNOR: - Ready To Test: Adjust this function - stack will be set from router worker
     func goToEnterGateway() {
-        // TODO: Should look at refactoring this a bit
         var rememberDetails = RememberedGatewayDetails(storageArray: nil)
         if let details = Defaults.rememberGatewayDetails {
             rememberDetails = details
         }
-        let vc = GatewayFormViewController.constructGatewayFormViewController(rememberDetails: rememberDetails, fetchType: .bcVaccineCardAndFederalPass)
-        vc.completionHandler = { [weak self] details in
-            guard let `self` = self else { return }
-            DispatchQueue.main.async {  [weak self] in
-                guard let `self` = self else { return }
-                self.view.accessibilityElementsHidden = true
-                self.tableView.accessibilityElementsHidden = true
-                self.view.isAccessibilityElement = false
-                self.tableView.isAccessibilityElement = false
-                AnalyticsService.shared.track(action: .AddQR, text: .Get)
-//                self.popBackToProperViewController(id: details.id)
-                DispatchQueue.main.async {
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: details.patient, addedRecord: nil)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: details.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
-                }
-                
-            }
-        }
-        self.tabBarController?.tabBar.isHidden = true
-        self.navigationController?.pushViewController(vc, animated: true)
+        
+        let vm = GatewayFormViewController.ViewModel(rememberDetails: rememberDetails,
+                                                     fetchType: .bcVaccineCardAndFederalPass,
+                                                     onAddCard: { vaccineCard in
+            AnalyticsService.shared.track(action: .AddQR, text: .Get)
+            self.viewModel?.onAddCard(vaccineCard)
+        },
+                                                     onAddFederalPass: { vaccineCard in
+            self.viewModel?.onAddFederalPass(vaccineCard)
+        })
+        show(route: .GatewayForm, withNavigation: true, viewModel: vm)
     }
     
     func goToCameraScan() {
@@ -279,38 +252,42 @@ extension QRRetrievalMethodViewController {
             case .exists, .isOutdated:
                 self.alert(title: .duplicateTitle, message: .duplicateMessage) { [weak self] in
                     guard let `self` = self else {return}
-                    self.navigationController?.popViewController(animated: true)
-                        // TODO: Create another scenario for going to a record that already exists
+                    DispatchQueue.main.async {
+                        let card = StorageService.shared.fetchVaccineCard(code: model.transform().code)
+                        self.dismiss(then: {
+                            self.viewModel?.onAddCard(card)
+                        })
+                    }
                 }
             case .isNew:
-                self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
-                    DispatchQueue.main.async {[weak self] in
+                self.storeVaccineCard(model: model.transform(), authenticated: false, manuallyAdded: true){ [weak self] coreDataReturnObject in
+                    DispatchQueue.main.async { [weak self] in
                         guard let self = self else {return}
                         self.showToast(message: .vaxAddedBannerAlert)
-                        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
-                        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-                        let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                        self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+                        self.dismiss(then: {
+                            self.viewModel?.onAddCard(coreDataReturnObject)
+                        })
                     }
-                })
+                }
             case .canUpdateExisting:
                 self.alert(title: .updatedCard, message: "\(String.updateCardFor) \(model.transform().name)", buttonOneTitle: "Yes", buttonOneCompletion: { [weak self] in
                     guard let `self` = self else {return}
                     self.updateCardInLocalStorage(model: model.transform(), manuallyAdded: true, completion: { [weak self] coreDataReturnObject in
                         guard let `self` = self else {return}
                         DispatchQueue.main.async {
-
-                            let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
-                            let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-                            let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                            self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+                            self.dismiss(then: {
+                                self.viewModel?.onAddCard(coreDataReturnObject)
+                            })
                         }
                     })
                 }, buttonTwoTitle: "No") { [weak self] in
                     guard let `self` = self else {return}
-
-                    // Note: May need to look into this and see if we require something else
-                    self.navigationController?.popViewController(animated: true)
+                    DispatchQueue.main.async {
+                        self.dismiss(then: {
+                            let card = StorageService.shared.fetchVaccineCard(code: model.transform().code)
+                            self.viewModel?.onAddCard(card)
+                        })
+                    }
                 }
             case .UpdatedFederalPass:
                 self.updateFedCodeForCardInLocalStorage(model: model.transform(), manuallyAdded: true) { [weak self] coreDataReturnObject in
@@ -318,10 +295,11 @@ extension QRRetrievalMethodViewController {
                     DispatchQueue.main.async {[weak self] in
                         guard let self = self else {return}
                         self.showToast(message: .vaxAddedBannerAlert)
-                        let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack, actioningPatient: coreDataReturnObject.patient, addedRecord: nil)
-                        let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack, recentlyAddedCardId: coreDataReturnObject.id, fedPassStringToOpen: nil, fedPassAddedFromHealthPassVC: nil)
-                        let values = ActionScenarioValues(currentTab: self.getCurrentTab, recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                        self.routerWorker?.routingAction(scenario: .ManualFetch(values: values))
+                        DispatchQueue.main.async {
+                            self.dismiss(then: {
+                                self.viewModel?.onAddCard(coreDataReturnObject)
+                            })
+                        }
                     }
                 }
                 

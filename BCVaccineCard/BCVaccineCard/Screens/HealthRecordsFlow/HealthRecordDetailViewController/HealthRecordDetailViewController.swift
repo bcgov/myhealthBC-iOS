@@ -8,12 +8,12 @@
 import UIKit
 
 class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDelegate {
-    class func constructHealthRecordDetailViewController(dataSource: HealthRecordsDetailDataSource, authenticatedRecord: Bool, userNumberHealthRecords: Int, patient: Patient?) -> HealthRecordDetailViewController {
+    class func construct(viewModel: ViewModel) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {
-            vc.dataSource = dataSource
-            vc.authenticatedRecord = authenticatedRecord
-            vc.userNumberHealthRecords = userNumberHealthRecords
-            vc.patient = patient
+            vc.dataSource = viewModel.dataSource
+            vc.authenticatedRecord = viewModel.authenticatedRecord
+            vc.userNumberHealthRecords = viewModel.userNumberHealthRecords
+            vc.patient = viewModel.patient
             return vc
         }
         return HealthRecordDetailViewController()
@@ -30,13 +30,8 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     private var pdfData: String?
     private var reportId: String?
     private var type: LabTestType?
-    private var pdfAPIWorker: PDFAPIWorker?
     
     let connectionListener = NetworkConnection()
-    
-    override var getRecordFlowType: RecordsFlowVCs? {
-        return .HealthRecordDetailViewController(patient: self.patient, dataSource: self.dataSource, userNumberHealthRecords: userNumberHealthRecords)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,7 +88,6 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.pdfAPIWorker = nil
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -118,8 +112,8 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     }
     
     func showComments(for record: HealthRecordsDetailDataSource.Record) {
-        let vc = CommentsViewController.constructCommentsViewController(model: record)
-        self.navigationController?.pushViewController(vc, animated: true)
+        let vm = CommentsViewController.ViewModel(record: record)
+        show(route: .Comments, withNavigation: true, viewModel: vm)
     }
 }
 
@@ -166,27 +160,20 @@ extension HealthRecordDetailViewController {
             switch self.dataSource.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
                 StorageService.shared.deleteVaccineCard(vaccineQR: model.code, manuallyAdded: manuallyAdded)
-                DispatchQueue.main.async {
-
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.healthPass], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                }
             case .covidTestResultRecord:
                 guard let recordId = self.dataSource.id else {return}
                 StorageService.shared.deleteCovidTestResult(id: recordId, sendDeleteEvent: true)
             case .medication, .laboratoryOrder:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .immunization(model: let model):
+            case .immunization:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .healthVisit(model: let model):
+            case .healthVisit:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .specialAuthorityDrug(model: let model):
+            case .specialAuthorityDrug:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .hospitalVisit(model: let model):
+            case .hospitalVisit:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
-            case .clinicalDocument(model: let model):
+            case .clinicalDocument:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
             if self.userNumberHealthRecords > 1 {
@@ -195,14 +182,9 @@ extension HealthRecordDetailViewController {
                 if let name = self.patient?.name, let birthday = self.patient?.birthday, self.patient?.authenticated == false {
                     StorageService.shared.deletePatient(name: name, birthday: birthday)
                 }
-                DispatchQueue.main.async {
-                    let recordFlowDetails = RecordsFlowDetails(currentStack: self.getCurrentStacks.recordsStack)
-                    let passesFlowDetails = PassesFlowDetails(currentStack: self.getCurrentStacks.passesStack)
-                    let values = ActionScenarioValues(currentTab: self.getCurrentTab, affectedTabs: [.records], recordFlowDetails: recordFlowDetails, passesFlowDetails: passesFlowDetails)
-                    self.routerWorker?.routingAction(scenario: .ManuallyDeletedAllOfAnUnauthPatientRecords(values: values))
-                }
             }
         } onCancel: {
+            
         }
     }
     
@@ -234,7 +216,7 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
         }
         // Fetch
         guard let patient = self.patient else {return}
-        PDFService(network: AFNetwork(), authManager: AuthManager()).fetchPDF(record: dataSource, patient: patient, completion: { [weak self] result in
+        PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDF(record: dataSource, patient: patient, completion: { [weak self] result in
             guard let `self` = self else {return}
             if let pdf = result {
                 self.pdfData = pdf

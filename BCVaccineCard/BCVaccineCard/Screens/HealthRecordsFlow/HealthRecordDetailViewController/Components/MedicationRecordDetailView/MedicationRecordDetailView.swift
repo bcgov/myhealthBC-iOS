@@ -114,13 +114,14 @@ extension MedicationRecordDetailView {
             }
             
             let dinText = (prescription.medication?.isPin ?? false) ? "PIN:" : "DIN:"
+            let quantity: String = prescription.medication?.quantity.removeZerosFromEnd() ?? ""
             let fields: [TextListModel] = [
                 TextListModel(
                     header: TextProperties(text: "Practitioner:", bolded: true),
                     subtext: TextProperties(text: prescription.practitionerSurname ?? "", bolded: false)),
                 TextListModel(
                     header: TextProperties(text: "Quantity:", bolded: true),
-                    subtext: TextProperties(text: String(prescription.medication?.quantity ?? 0), bolded: false)),
+                    subtext: TextProperties(text: quantity, bolded: false)),
                 TextListModel(
                     header: TextProperties(text: "Strength:", bolded: true),
                     subtext: TextProperties(text: (prescription.medication?.strength ?? "") + " " + (prescription.medication?.strengthUnit ?? ""), bolded: false)),
@@ -156,5 +157,15 @@ extension MedicationRecordDetailView {
         default:
             return []
         }
+    }
+}
+
+extension Double {
+    func removeZerosFromEnd() -> String {
+        let formatter = NumberFormatter()
+        let number = NSNumber(value: self)
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 16 //maximum digits in Double after dot (maximum precision)
+        return String(formatter.string(from: number) ?? "")
     }
 }

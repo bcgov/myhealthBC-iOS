@@ -13,6 +13,7 @@ struct ImmnunizationsService {
     
     let network: Network
     let authManager: AuthManager
+    let configService: MobileConfigService
     private let maxRetry = Constants.NetworkRetryAttempts.maxRetry
     private let retryIn = Constants.NetworkRetryAttempts.retryIn
     
@@ -20,12 +21,13 @@ struct ImmnunizationsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, completion: @escaping ([Immunization])->Void) {
-        network.addLoader(message: .FetchingRecords)
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([Immunization]?)->Void) {
+        Logger.log(string: "Fetching Immnunization records for \(patient.name)", type: .Network)
+        network.addLoader(message: .SyncingRecords)
         fetch(for: patient, currentAttempt: 0) { result in
             guard let response = result else {
                 network.removeLoader()
-                return completion([])
+                return completion(nil)
             }
             store(immunizations: response, for: patient, completion: { result in
                 network.removeLoader()
@@ -40,9 +42,21 @@ struct ImmnunizationsService {
                        completion: @escaping ([Immunization])->Void
     ) {
         guard let payload = response.resourcePayload else { return completion([]) }
+        Logger.log(string: "Storing Immnunization records for \(patient.name)", type: .Network)
         StorageService.shared.deleteAllRecords(in: patient.immunizationArray)
-        let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
-        return completion(stored)
+        StorageService.shared.deleteAllRecords(in: patient.recommandationsArray)
+        
+        if let recomandations = payload.recommendations {
+            StorageService.shared.storeRecommendations(patient: patient, objects: recomandations, authenticated: patient.authenticated, completion: { results in
+                Logger.log(string: "Stored Immnunization Reccomandation records for \(patient.name)", type: .Network)
+                let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
+                return completion(stored)
+            })
+        } else {
+            Logger.log(string: "Stored Immnunization records for \(patient.name)", type: .Network)
+            let stored = StorageService.shared.storeImmunizations(patient: patient, in: payload, authenticated: false)
+            return completion(stored)
+        }
     }
     
 }
@@ -64,8 +78,14 @@ extension ImmnunizationsService {
             return completion(nil)
         }
         
-        BaseURLWorker.shared.setBaseURL {
-            guard BaseURLWorker.shared.isOnline == true else { return completion(nil) }
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
@@ -73,13 +93,14 @@ extension ImmnunizationsService {
             
             let parameters: HDIDParams = HDIDParams(hdid: hdid)
             
-            let requestModel = NetworkRequest<HDIDParams, immunizationsResponse>(url: endpoints.getAuthenticatedImmunizations,
+            let requestModel = NetworkRequest<HDIDParams, immunizationsResponse>(url: endpoints.immunizations(base: baseURL),
                                                                                  type: .Get,
                                                                                  parameters: parameters,
                                                                                  encoder: .urlEncoder,
                                                                                  headers: headers)
             { result in
                 
+                Logger.log(string: "Network Immnunization Result received", type: .Network)
                 let shouldRetry = result?.resourcePayload?.loadState?.refreshInProgress
                 if  shouldRetry == true {
                     DispatchQueue.main.asyncAfter(deadline: .now() + Double(retryIn)) {
@@ -94,12 +115,12 @@ extension ImmnunizationsService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
                     break
                 }
                 
             }
             
+            Logger.log(string: "Network Immnunization initiated", type: .Network)
             network.request(with: requestModel)
         }
     }

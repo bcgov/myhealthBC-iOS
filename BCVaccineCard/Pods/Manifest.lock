@@ -12,66 +12,14 @@ PODS:
     - JOSESwift
   - EncryptedCoreData (3.1):
     - SQLCipher (~> 3.4.0)
-  - Firebase/AppDistribution (8.11.0):
-    - Firebase/CoreOnly
-    - FirebaseAppDistribution (~> 8.11.0-beta)
-  - Firebase/CoreOnly (8.11.0):
-    - FirebaseCore (= 8.11.0)
-  - FirebaseAppDistribution (8.11.0-beta):
-    - FirebaseCore (~> 8.0)
-    - FirebaseInstallations (~> 8.0)
-    - GoogleDataTransport (~> 9.1)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
-    - GoogleUtilities/UserDefaults (~> 7.7)
-  - FirebaseCore (8.11.0):
-    - FirebaseCoreDiagnostics (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.7)
-    - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (8.11.0):
-    - GoogleDataTransport (~> 9.1)
-    - GoogleUtilities/Environment (~> 7.7)
-    - GoogleUtilities/Logger (~> 7.7)
-    - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.11.0):
-    - FirebaseCore (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.7)
-    - GoogleUtilities/UserDefaults (~> 7.7)
-    - PromisesObjC (< 3.0, >= 1.2)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - GoogleDataTransport (9.1.2):
-    - GoogleUtilities/Environment (~> 7.2)
-    - nanopb (~> 2.30908.0)
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/AppDelegateSwizzler (7.7.0):
-    - GoogleUtilities/Environment
-    - GoogleUtilities/Logger
-    - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.7.0):
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.7.0):
-    - GoogleUtilities/Environment
-  - GoogleUtilities/Network (7.7.0):
-    - GoogleUtilities/Logger
-    - "GoogleUtilities/NSData+zlib"
-    - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.7.0)"
-  - GoogleUtilities/Reachability (7.7.0):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.7.0):
-    - GoogleUtilities/Logger
   - IQKeyboardManagerSwift (6.5.9)
   - JOSESwift (2.4.0)
   - JWTDecode (2.6.3)
   - KeychainAccess (4.2.2)
-  - nanopb (2.30908.0):
-    - nanopb/decode (= 2.30908.0)
-    - nanopb/encode (= 2.30908.0)
-  - nanopb/decode (2.30908.0)
-  - nanopb/encode (2.30908.0)
   - PocketSVG (2.7.2)
-  - PromisesObjC (2.0.0)
   - QueueITLibrary (3.0.9)
   - ReachabilitySwift (5.0.0)
   - SnowplowTracker (2.2.2):
@@ -90,7 +38,6 @@ DEPENDENCIES:
   - AppAuth
   - BCVaccineValidator (from `https://github.com/bcgov/iOSVaccineValidator`)
   - EncryptedCoreData (from `https://github.com/project-imas/encrypted-core-data.git`)
-  - Firebase/AppDistribution
   - IQKeyboardManagerSwift
   - JWTDecode (~> 2.6)
   - KeychainAccess
@@ -107,21 +54,12 @@ SPEC REPOS:
     - Alamofire
     - AlamofireRSSParser
     - AppAuth
-    - Firebase
-    - FirebaseAppDistribution
-    - FirebaseCore
-    - FirebaseCoreDiagnostics
-    - FirebaseInstallations
     - FMDB
-    - GoogleDataTransport
-    - GoogleUtilities
     - IQKeyboardManagerSwift
     - JOSESwift
     - JWTDecode
     - KeychainAccess
-    - nanopb
     - PocketSVG
-    - PromisesObjC
     - QueueITLibrary
     - ReachabilitySwift
     - SnowplowTracker
@@ -150,21 +88,12 @@ SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   BCVaccineValidator: 7a41c49aa40531f74d9fb5104a5b7b104527d6d4
   EncryptedCoreData: f6762fb05f88a52f36c5648659abc91b57f244b4
-  Firebase: 44dd9724c84df18b486639e874f31436eaa9a20c
-  FirebaseAppDistribution: 48e14ff829eb5bb6209649a806a7624fc3f143f8
-  FirebaseCore: 2f4f85b453cc8fea4bb2b37e370007d2bcafe3f0
-  FirebaseCoreDiagnostics: 64d9709d804a6c25bd77841371c1fcfd909d5601
-  FirebaseInstallations: 044eede8a049bce71c4541ee68d6e4364fcbe774
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
-  GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   IQKeyboardManagerSwift: 6e839c575c4aa1078d58a596e41244e77abe918f
   JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
   JWTDecode: 33e5e26e5ddbd21b2065820894c08fef0cad9509
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
-  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PocketSVG: c597e6916641fd2674d2f0cabca0d1869cb82880
-  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   QueueITLibrary: 840b877e4a4aad67b9b1941f31a56988bc03be71
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   SnowplowTracker: 2eee2d6606a60db98f7c4e1515499bb216b6c8ad
@@ -173,6 +102,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: acd9d0052f71d24e6cb030c8912becfa4d0748a9
+PODFILE CHECKSUM: 3e522cfc2cd82f69e90ba8651c55bedfc9994f95
 
 COCOAPODS: 1.11.3
