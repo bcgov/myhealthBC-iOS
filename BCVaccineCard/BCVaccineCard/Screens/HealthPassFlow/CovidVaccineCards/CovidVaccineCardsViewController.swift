@@ -418,7 +418,7 @@ extension CovidVaccineCardsViewController {
             }
             DispatchQueue.main.async {
                 if self.dataSource.count < 2 {
-                    self.navigationController?.popToRootViewController(animated: true)
+                    self.navigationController?.popViewController(animated: true)
                 }
             }
             

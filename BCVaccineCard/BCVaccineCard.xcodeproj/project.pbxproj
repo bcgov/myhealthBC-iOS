@@ -334,6 +334,12 @@
 		3E10300C29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E10300B29BA7AFB001E85EC /* AppTabBar.storyboard */; };
 		3E10300D29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E10300B29BA7AFB001E85EC /* AppTabBar.storyboard */; };
 		3E10300E29BA7AFB001E85EC /* AppTabBar.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E10300B29BA7AFB001E85EC /* AppTabBar.storyboard */; };
+		3E23ADD029DDD8A5001BC9CC /* ServicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E23ADCF29DDD8A5001BC9CC /* ServicesViewController.swift */; };
+		3E23ADD229DDD8B0001BC9CC /* Services.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E23ADD129DDD8B0001BC9CC /* Services.storyboard */; };
+		3E23ADD329DDE517001BC9CC /* ServicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E23ADCF29DDD8A5001BC9CC /* ServicesViewController.swift */; };
+		3E23ADD429DDE518001BC9CC /* ServicesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E23ADCF29DDD8A5001BC9CC /* ServicesViewController.swift */; };
+		3E23ADD529DDE51D001BC9CC /* Services.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E23ADD129DDD8B0001BC9CC /* Services.storyboard */; };
+		3E23ADD629DDE51D001BC9CC /* Services.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E23ADD129DDD8B0001BC9CC /* Services.storyboard */; };
 		3E31EA7E2913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */; };
 		3E31EA7F2913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */; };
 		3E31EA802913951D00E344E6 /* TabBarController + UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */; };
@@ -1440,6 +1446,8 @@
 		3E10300329BA7721001E85EC /* AppTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabBarController.swift; sourceTree = "<group>"; };
 		3E10300729BA77C6001E85EC /* AppTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabs.swift; sourceTree = "<group>"; };
 		3E10300B29BA7AFB001E85EC /* AppTabBar.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AppTabBar.storyboard; sourceTree = "<group>"; };
+		3E23ADCF29DDD8A5001BC9CC /* ServicesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewController.swift; sourceTree = "<group>"; };
+		3E23ADD129DDD8B0001BC9CC /* Services.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Services.storyboard; sourceTree = "<group>"; };
 		3E31EA7B2913951C00E344E6 /* TabBarController + UpdateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TabBarController + UpdateManager.swift"; sourceTree = "<group>"; };
 		3E31EA7C2913951C00E344E6 /* AppStoreDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStoreDataModel.swift; sourceTree = "<group>"; };
 		3E31EA7D2913951C00E344E6 /* UpdateService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
@@ -2340,6 +2348,14 @@
 			path = Feedback;
 			sourceTree = "<group>";
 		};
+		3E23ADCE29DDD884001BC9CC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3E23ADCF29DDD8A5001BC9CC /* ServicesViewController.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		3E31EA7A291394E900E344E6 /* UpdateService */ = {
 			isa = PBXGroup;
 			children = (
@@ -2906,6 +2922,7 @@
 				3E32322528B5FEB80067040C /* Recommendations.storyboard */,
 				3E78AEC328F8724900C66E28 /* Dependents.storyboard */,
 				3E6831452940D92600100402 /* Comments.storyboard */,
+				3E23ADD129DDD8B0001BC9CC /* Services.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -2966,6 +2983,7 @@
 		7944F6B226F12AB3006B9444 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				3E23ADCE29DDD884001BC9CC /* Services */,
 				3E6831382940D74D00100402 /* Comments */,
 				79B9D00B27E2786800987D9F /* HomeScreen */,
 				3E5E6EC128D3B76100724EDD /* Communication message */,
@@ -3768,6 +3786,7 @@
 				79218A9E275141800063004E /* GetARecordTableViewCell.xib in Resources */,
 				3E32322728B5FEB80067040C /* Recommendations.storyboard in Resources */,
 				29547E5B27A2EC7700562958 /* LocalAuthView.xib in Resources */,
+				3E23ADD529DDE51D001BC9CC /* Services.storyboard in Resources */,
 				79BDA070270CAC9E00FF30AB /* HealthPass.storyboard in Resources */,
 				7944F6D726F12C00006B9444 /* VaxQRZoomedInView.xib in Resources */,
 				79BDA072270CB71D00FF30AB /* Records.storyboard in Resources */,
@@ -3876,6 +3895,7 @@
 				79218AAC2751946A0063004E /* UserRecordListTableViewCell.xib in Resources */,
 				29788530279624E600FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				3E31EA9429141F5000E344E6 /* ForceUpdateView.xib in Resources */,
+				3E23ADD629DDE51D001BC9CC /* Services.storyboard in Resources */,
 				79BDA087270CEE6400FF30AB /* Booking.storyboard in Resources */,
 				791C27C22718315A001A6E12 /* AddCardsTableViewCell.xib in Resources */,
 				79218AE127557F7D0063004E /* StaticPositiveTestTableViewCell.xib in Resources */,
@@ -3987,6 +4007,7 @@
 				7980062A2852C66E006E390F /* GetARecordTableViewCell.xib in Resources */,
 				3E32322628B5FEB80067040C /* Recommendations.storyboard in Resources */,
 				7980062B2852C66E006E390F /* LocalAuthView.xib in Resources */,
+				3E23ADD229DDD8B0001BC9CC /* Services.storyboard in Resources */,
 				7980062C2852C66E006E390F /* HealthPass.storyboard in Resources */,
 				7980062D2852C66E006E390F /* VaxQRZoomedInView.xib in Resources */,
 				7980062E2852C66E006E390F /* Records.storyboard in Resources */,
@@ -4396,6 +4417,7 @@
 				3E78AECE28F9909500C66E28 /* AddDependentViewController.swift in Sources */,
 				3EDC0D0A2968928000603FED /* KVCAccessor.swift in Sources */,
 				3EDC0D1A2968932100603FED /* KVCReflectionMirror.swift in Sources */,
+				3E23ADD329DDE517001BC9CC /* ServicesViewController.swift in Sources */,
 				29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */,
 				79218AE42755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */,
 				7944F71926F3B59C006B9444 /* TextTableViewCell.swift in Sources */,
@@ -4746,6 +4768,7 @@
 				794BD64D2702EEC00084ADA8 /* NoCardsTableViewCell.swift in Sources */,
 				3EDC0D0B2968928000603FED /* KVCAccessor.swift in Sources */,
 				3EDC0D1B2968932100603FED /* KVCReflectionMirror.swift in Sources */,
+				3E23ADD429DDE518001BC9CC /* ServicesViewController.swift in Sources */,
 				79218AF0275672120063004E /* StorageService+HealthRecords.swift in Sources */,
 				3E5E6EBD28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
 				29F41298274CDEE1004927FF /* VisitedOnBoardingScreen.swift in Sources */,
@@ -5073,6 +5096,7 @@
 				798005BC2852C66E006E390F /* QRSelectionTableViewCell.swift in Sources */,
 				3E78AECD28F9909500C66E28 /* AddDependentViewController.swift in Sources */,
 				3EDC0D092968928000603FED /* KVCAccessor.swift in Sources */,
+				3E23ADD029DDD8A5001BC9CC /* ServicesViewController.swift in Sources */,
 				3EDC0D192968932100603FED /* KVCReflectionMirror.swift in Sources */,
 				798005BD2852C66E006E390F /* StorageService+HealthRecords.swift in Sources */,
 				29E19FE2286C044F00C235EF /* BaseHealthRecordDetailView.swift in Sources */,
@@ -5503,7 +5527,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bc.gov.myhealth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "MyHealth BC - 2023";
@@ -5531,7 +5555,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ca.bc.gov.myhealth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "MyHealth BC - 2023";
