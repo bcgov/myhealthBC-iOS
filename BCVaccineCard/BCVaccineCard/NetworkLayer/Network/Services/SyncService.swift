@@ -72,6 +72,12 @@ struct SyncService {
             let group = DispatchGroup()
             
             group.enter()
+            patientService.fetchAndStoreOrganDonorStatus(for: patient) { status in
+                Logger.log(string: "fetched donor status: \(status != nil)", type: .Network)
+                group.leave()
+            }
+            
+            group.enter()
             dependentService.fetchDependents(for: patient) { dependents in
                 if dependents == nil {
                     hadFailures = true

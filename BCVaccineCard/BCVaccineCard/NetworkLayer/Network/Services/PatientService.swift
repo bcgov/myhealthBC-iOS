@@ -8,6 +8,7 @@
 import Foundation
 
 typealias PatientDetailResponse = AuthenticatedPatientDetailsResponseObject
+typealias OrganDonorStatusResponse = AuthenticatedOrganDonorStatusResponseModel.Item
 
 struct PatientService {
     
@@ -30,7 +31,6 @@ struct PatientService {
             }
             let patientFirstName = response.resourcePayload?.firstname
             let patientFullName = response.getFullName
-            
             store(patientDetails: response, completion: { result in
                 network.removeLoader()
                 Logger.log(string: "Stored Patient Details", type: .Network)
@@ -39,6 +39,28 @@ struct PatientService {
                 return completion(result)
             })
         }
+    }
+    
+    public func fetchAndStoreOrganDonorStatus(for patient: Patient, completion: @escaping (OrganDonorStatus?)->Void) {
+        guard let hdid = patient.hdid else {
+            return completion(nil)
+        }
+        network.addLoader(message: .SyncingRecords)
+        fetchPatientData(type: .organDonorRegistrationStatus, hdid: hdid) { result in
+            guard let result = result, let data = result.items?.first else {
+                network.removeLoader()
+                return completion(nil)
+            }
+            store(donorStatus: data, for: patient) {storedData in
+                network.removeLoader()
+                return completion(storedData)
+            }
+        }
+    }
+    
+    private func store(donorStatus: OrganDonorStatusResponse,for patient: Patient, completion: @escaping (OrganDonorStatus?)->Void) {
+        let storedObject = StorageService.shared.store(organDonorStatus: donorStatus, for: patient)
+        return completion(storedObject)
     }
 
     private func store(patientDetails: PatientDetailResponse,
@@ -227,5 +249,56 @@ extension PatientService {
                 }, onError: nil)
             network.request(with: request)
         }
+    }
+    
+    func fetchPatientData(type: PatientDataType, hdid: String, completion: @escaping(AuthenticatedOrganDonorStatusResponseModel?)-> Void) {
+        guard let token = authManager.authToken,
+              NetworkConnection.shared.hasConnection
+        else { return completion(nil)}
+        
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+            ]
+            
+            let parameters: PatientDataParams = PatientDataParams(patientDataTypes: type.rawValue, apiVersion: "2")
+            
+            let requestModel = NetworkRequest<PatientDataParams, AuthenticatedOrganDonorStatusResponseModel>(url: endpoints.patientData(base: baseURL, hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            { result in
+                return completion(result)
+            } onError: { error in
+                switch error {
+                case .FailedAfterRetry:
+                    network.showToast(message: .fetchRecordError, style: .Warn)
+                }
+                
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
+}
+
+
+enum PatientDataType: String {
+    case organDonorRegistrationStatus = "OrganDonorRegistrationStatus"
+    case diagnosticImaging = "DiagnosticImaging"
+}
+
+struct PatientDataParams: Codable {
+    let patientDataTypes: String
+    let apiVersion: String
+    
+    enum CodingKeys: String, CodingKey {
+        case patientDataTypes
+        case apiVersion = "api-version"
     }
 }

@@ -57,7 +57,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7R2-A8-pK0">
-                                        <rect key="frame" x="16" y="255" width="222" height="95"/>
+                                        <rect key="frame" x="16" y="326" width="222" height="30"/>
                                         <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="Register or update your decision"/>
@@ -109,8 +109,8 @@
                                     <constraint firstItem="xcM-EP-uOa" firstAttribute="centerY" secondItem="YJf-iQ-sbL" secondAttribute="centerY" id="Qq4-VZ-Gh0"/>
                                     <constraint firstItem="7R2-A8-pK0" firstAttribute="leading" secondItem="Plp-3S-dq8" secondAttribute="leading" id="T3S-0v-8fo"/>
                                     <constraint firstItem="Kaz-np-Wd0" firstAttribute="top" secondItem="Plp-3S-dq8" secondAttribute="bottom" constant="16" id="Tcf-7O-qGJ"/>
-                                    <constraint firstItem="7R2-A8-pK0" firstAttribute="top" secondItem="YJf-iQ-sbL" secondAttribute="bottom" constant="20" id="Tub-Cm-YDS"/>
-                                    <constraint firstAttribute="bottom" secondItem="7R2-A8-pK0" secondAttribute="bottom" constant="36" id="VrL-zP-elS"/>
+                                    <constraint firstItem="7R2-A8-pK0" firstAttribute="top" relation="greaterThanOrEqual" secondItem="YJf-iQ-sbL" secondAttribute="bottom" constant="24" id="Tub-Cm-YDS"/>
+                                    <constraint firstAttribute="bottom" secondItem="7R2-A8-pK0" secondAttribute="bottom" constant="30" id="VrL-zP-elS"/>
                                     <constraint firstItem="FyK-jA-rji" firstAttribute="leading" secondItem="Kaz-np-Wd0" secondAttribute="trailing" constant="8" id="iwi-Nm-DPW"/>
                                     <constraint firstItem="Plp-3S-dq8" firstAttribute="leading" secondItem="9LS-XO-tBH" secondAttribute="leading" constant="16" id="jRN-a3-Idp"/>
                                     <constraint firstItem="fPw-MG-589" firstAttribute="centerY" secondItem="Plp-3S-dq8" secondAttribute="centerY" id="kyi-1T-wjQ"/>

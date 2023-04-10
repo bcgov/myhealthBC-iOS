@@ -42,11 +42,13 @@ extension ServicesViewController {
             AppStates.shared.listenToStorage {[weak self] event in
                 guard let `self` = self else {return}
                 // TODO: listen to the correct entity
-                if event.event == .Save,
-                   event.entity == .Patient,
-                   let handler = refreshNotifier
+                if event.event == .Save &&
+                    (event.entity == .Patient ||
+                    event.entity == .OrganDonorStatus )
                 {
-                    handler()
+                    if let handler = refreshNotifier {
+                        handler()
+                    }
                 }
             }
         }

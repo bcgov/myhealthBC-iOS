@@ -49,6 +49,26 @@ class OrganDonorServiceTableViewCell: UITableViewCell, Theme {
         style()
         self.patient = patient
         self.delegate = delegate
+        if let statusModel = patient?.organDonorStatus,
+           let statusString = statusModel.status,
+           statusString.lowercased() == "registered"
+        {
+            styleRegistered()
+        } else {
+            styleNotRegistered()
+        }
+    }
+    
+    func styleRegistered() {
+        notAvailableLabel.isHidden = true
+        statusValueLabel.text = "Registered"
+        descriptiveText.text = "You can update your registration on BC Transplant website"
+    }
+    
+    func styleNotRegistered() {
+        downloadButton.isHidden = true
+        statusValueLabel.text = "Not Registered"
+        descriptiveText.text = "We do not have a record of your decision about organ donation. If you filled out a paper registration form, we may not have processed it yet. You can also register your decision online now."
     }
     
     func style() {
