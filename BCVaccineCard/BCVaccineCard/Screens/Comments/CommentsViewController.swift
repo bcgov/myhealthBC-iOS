@@ -51,6 +51,8 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
         }
     }
     
+    private var indexPathBeingDeleted: IndexPath?
+    
     private var editedText: String?
     
     override func viewDidLoad() {
@@ -225,8 +227,8 @@ extension CommentsViewController: CommentViewTableViewCellDelegate {
         
         actionSheetController?.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             self.alert(title: "Delete Comment", message: "Are you sure you want to delete this comment?", buttonOneTitle: .yes, buttonOneCompletion: {
-                // TODO: Delete logic here
-                print("Delete comments here")
+                self.indexPathBeingDeleted = indexPath
+                deleteComment()
             }, buttonTwoTitle: .no) {
                 self.hideOptionsDropDown()
             }
@@ -346,10 +348,44 @@ extension CommentsViewController: AppStyleButtonDelegate {
             self.indexPathBeingEdited = nil
             self.editedText = nil
         case .update:
-            // TODO: PUT request here
-            guard let editedText = self.editedText else { return }
-            print("Update comment on backend here")
+            updateComment()
         default: return
+        }
+    }
+    
+    private func updateComment() {
+        guard let editedText = self.editedText else { return }
+        guard let record = model, let hdid = AuthManager().hdid else {return}
+        guard let index = indexPathBeingEdited else { return }
+        let oldComment = comments[index.row]
+        record.updateComment(text: editedText, hdid: hdid, oldComment: oldComment) { [weak self] result in
+            guard let self = self, let commentObject = result else {
+                return
+            }
+            self.comments.insert(commentObject, at: index.row)
+            if let oldCommentIndex = self.comments.firstIndex(of: oldComment) {
+                self.comments.remove(at: oldCommentIndex)
+            }
+            self.tableView.reloadData()
+            self.scrollToBottom()
+            self.resignFirstResponder()
+            
+        }
+    }
+    
+    private func deleteComment() {
+        guard let record = model, let hdid = AuthManager().hdid else {return}
+        guard let indexPath = indexPathBeingDeleted else { return }
+        let comment = comments[indexPath.row]
+        record.deleteComment(comment: comment) { [weak self] result in
+            guard let self = self, let commentObject = result else {
+                return
+            }
+            self.indexPathBeingDeleted = nil
+            self.comments.remove(at: indexPath.row)
+            self.tableView.reloadData()
+            self.scrollToBottom()
+            self.resignFirstResponder()
         }
     }
 }

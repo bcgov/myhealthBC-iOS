@@ -54,6 +54,41 @@ struct CommentService {
         
     }
     
+    public func updateComment(message: String, commentID: String, oldComment: Comment, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
+        if NetworkConnection.shared.hasConnection {
+            editComment(message: message, commentID: commentID, date: Date(), hdid: hdid, type: type) { result in
+                guard let result = result else {
+                    let comment = StorageService.shared.updateLocalComment(oldComment: oldComment, text: message, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
+                    return completion(comment)
+                }
+                let comment = StorageService.shared.updateSubmittedComment(oldComment: oldComment, object: result)
+                return completion(comment)
+            }
+        } else {
+            let comment = StorageService.shared.updateLocalComment(oldComment: oldComment, text: message, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
+            return completion(comment)
+        }
+        
+    }
+    
+    // TODO: Update this to use delete logic, currently using update logic
+    public func deleteComment(message: String, commentID: String, oldComment: Comment, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
+        if NetworkConnection.shared.hasConnection {
+            editComment(message: message, commentID: commentID, date: Date(), hdid: hdid, type: type) { result in
+                guard let result = result else {
+                    let comment = StorageService.shared.updateLocalComment(oldComment: oldComment, text: message, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
+                    return completion(comment)
+                }
+                let comment = StorageService.shared.updateSubmittedComment(oldComment: oldComment, object: result)
+                return completion(comment)
+            }
+        } else {
+            let comment = StorageService.shared.updateLocalComment(oldComment: oldComment, text: message, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
+            return completion(comment)
+        }
+        
+    }
+    // TODO: Will have to find a way to make this work with edited comments, to distinguish between post, put and delete for comments adjusted offline
     public func submitUnsyncedComments(completion: @escaping()->Void) {
         if CommentService.blockSync {return completion()}
         CommentService.blockSync = true
@@ -149,7 +184,7 @@ struct CommentService {
             network.request(with: requestModel)
         }
     }
-    
+    // TODO: Test out put and delete requests to make sure swagger docs aren't wrong, may need to verify
     // MARK: PUT
     
     private func edit(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
@@ -255,6 +290,16 @@ extension HealthRecord {
         service.newComment(message: text, commentID: commentId, hdid: hdid, type: commentType, completion: completion)
     }
     
+    fileprivate func updateComment(text: String, hdid: String, oldComment: Comment, completion: @escaping (Comment?)->Void) {
+        let service = CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+        service.updateComment(message: text, commentID: commentId, oldComment: oldComment, hdid: hdid, type: commentType, completion: completion)
+    }
+    
+    fileprivate func deleteComment(comment: Comment, completion: @escaping (Comment?)->Void) {
+        let service = CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+        service.delete(comment: comment, completion: completion)
+    }
+    
     fileprivate var commentType: CommentService.CommentType {
         switch self.type {
         case .CovidTest(_):
@@ -281,6 +326,14 @@ extension HealthRecord {
 extension HealthRecordsDetailDataSource.Record {
     func submitComment(text: String, hdid: String, completion: @escaping (Comment?)->Void) {
         toHealthRecord()?.submitComment(text: text, hdid: hdid, completion: completion)
+    }
+    
+    func updateComment(text: String, hdid: String, oldComment: Comment, completion: @escaping (Comment?)->Void) {
+        toHealthRecord()?.submitComment(text: text, hdid: hdid, completion: completion)
+    }
+    
+    func deleteComment(comment: Comment, completion: @escaping (Comment?)->Void) {
+        toHealthRecord()?.deleteComment(comment: comment, completion: completion)
     }
     
     func toHealthRecord() -> HealthRecord? {
