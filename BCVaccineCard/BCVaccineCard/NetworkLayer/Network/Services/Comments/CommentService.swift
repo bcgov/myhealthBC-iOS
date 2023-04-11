@@ -152,7 +152,6 @@ struct CommentService {
     
     // MARK: PUT
     
-    // TODO: Verify this on swagger
     private func edit(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
         let type = CommentType.init(rawValue: comment.entryTypeCode ?? "") ?? .medication
         editComment(message: comment.text ?? "", commentID: comment.parentEntryID ?? "", date: comment.createdDateTime ?? Date(), hdid: comment.userProfileID ?? "", type: type, completion: completion)
@@ -187,7 +186,38 @@ struct CommentService {
     }
     
     // MARK: Delete Comment
-    // TODO: Check swagger, then implement
+    private func delete(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
+        let type = CommentType.init(rawValue: comment.entryTypeCode ?? "") ?? .medication
+        deleteComment(message: comment.text ?? "", commentID: comment.parentEntryID ?? "", date: comment.createdDateTime ?? Date(), hdid: comment.userProfileID ?? "", type: type, completion: completion)
+    }
+    
+    private func deleteComment(message: String, commentID: String, date: Date, hdid: String, type: CommentType, completion: @escaping (PostCommentResponseResult?)->Void) {
+        let model = postCommentObject(message: message, commentID: commentID, date: date, hdid: hdid, type: type)
+        deleteComment(object: model, completion: completion)
+    }
+    
+    private func deleteComment(object: PostComment, completion: @escaping(PostCommentResponseResult?)->Void) {
+        guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.hdid: hdid
+            ]
+            
+            let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.comments(base: baseURL, hdid: hdid), type: .Delete, parameters: object, headers: headers) { result in
+                return completion(result?.resourcePayload)
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
     
     func notify(event: StorageService.StorageEvent<Any>) {
         Logger.log(string: "StorageEvent \(event.entity) - \(event.event)", type: .storage)
