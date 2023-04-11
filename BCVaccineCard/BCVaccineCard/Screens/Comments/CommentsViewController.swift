@@ -47,7 +47,7 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     
     private var indexPathBeingEdited: IndexPath? {
         didSet {
-            // TODO: Reload tableview here
+            self.tableView.reloadData()
         }
     }
     
@@ -156,16 +156,17 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
         if let editedIndexPath = indexPathBeingEdited {
             if indexPath == editedIndexPath {
                 guard let cell = editCommentCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
-//                cell.configure()
+                let comment = comments[editedIndexPath.row]
+                cell.configure(comment: comment, delegateOwner: self)
                 return cell
             } else {
                 guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-                cell.configure(comment: comments[indexPath.row], row: indexPath.row, delegateOwner: self, showOptionsButton: true, otherCellBeingEdited: true)
+                cell.configure(comment: comments[indexPath.row], indexPath: indexPath, delegateOwner: self, showOptionsButton: true, otherCellBeingEdited: true)
                 return cell
             }
         } else {
             guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(comment: comments[indexPath.row], row: indexPath.row, delegateOwner: self, showOptionsButton: true)
+            cell.configure(comment: comments[indexPath.row], indexPath: indexPath, delegateOwner: self, showOptionsButton: true)
             return cell
         }
     }
@@ -205,20 +206,19 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension CommentsViewController: CommentViewTableViewCellDelegate {
     // TODO: Add touch gesture to dismiss custom view when shown
-    func optionsTapped(row: Int) {
+    func optionsTapped(indexPath: IndexPath) {
         if let _ = actionSheetController {
             hideOptionsDropDown()
         } else {
-            showOptionsDropDown()
+            showOptionsDropDown(indexPath: indexPath)
         }
     }
 
-    private func showOptionsDropDown() {
+    private func showOptionsDropDown(indexPath: IndexPath) {
         actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         actionSheetController?.addAction(UIAlertAction(title: "Edit comment", style: .default, handler: { _ in
-            // TODO: Begin editing comments here
-            print("Begin editing comments here")
+            self.indexPathBeingEdited = indexPath
         }))
         
         actionSheetController?.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
@@ -332,6 +332,20 @@ extension CommentsViewController: UIScrollViewDelegate {
             hideTitle()
         } else {
             showTitle()
+        }
+    }
+}
+
+// MARK: Logic for editing comment
+extension CommentsViewController: AppStyleButtonDelegate {
+    func buttonTapped(type: AppStyleButton.ButtonType) {
+        switch type {
+        case .cancel:
+            self.indexPathBeingEdited = nil
+        case .update:
+            // TODO: PUT request here
+            print("Update comment on backend here")
+        default: return
         }
     }
 }

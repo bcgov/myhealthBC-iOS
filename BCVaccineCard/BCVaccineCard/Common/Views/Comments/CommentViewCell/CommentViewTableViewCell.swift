@@ -8,7 +8,7 @@
 import UIKit
 
 protocol CommentViewTableViewCellDelegate: AnyObject {
-    func optionsTapped(row: Int)
+    func optionsTapped(indexPath: IndexPath)
 }
 
 class CommentViewTableViewCell: UITableViewCell {
@@ -18,7 +18,7 @@ class CommentViewTableViewCell: UITableViewCell {
     @IBOutlet weak var dateTimeLabel: UILabel!
     @IBOutlet weak var optionsButton: UIButton!
     
-    private var row: Int?
+    private var indexPath: IndexPath?
     weak var delegate: CommentViewTableViewCellDelegate?
     
     override func awakeFromNib() {
@@ -26,9 +26,9 @@ class CommentViewTableViewCell: UITableViewCell {
         
     }
     
-    func configure(comment: Comment, row: Int? = nil, delegateOwner: UIViewController? = nil, showOptionsButton: Bool, otherCellBeingEdited: Bool? = nil) {
+    func configure(comment: Comment, indexPath: IndexPath? = nil, delegateOwner: UIViewController? = nil, showOptionsButton: Bool, otherCellBeingEdited: Bool? = nil) {
         commentText.text = comment.text
-        self.row = row
+        self.indexPath = indexPath
         self.delegate = delegateOwner as? CommentViewTableViewCellDelegate
         optionsButton.isEnabled = !(otherCellBeingEdited == true)
         optionsButton.isHidden = !showOptionsButton
@@ -57,8 +57,8 @@ class CommentViewTableViewCell: UITableViewCell {
     }
     
     @IBAction private func optionsButtonTapped(_ sender: UIButton) {
-        guard let row = self.row else { return }
-        self.delegate?.optionsTapped(row: row)
+        guard let indexPath = self.indexPath else { return }
+        self.delegate?.optionsTapped(indexPath: indexPath)
     }
     
 }
