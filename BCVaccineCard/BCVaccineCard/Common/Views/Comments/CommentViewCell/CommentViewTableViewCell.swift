@@ -50,8 +50,7 @@ class CommentViewTableViewCell: UITableViewCell {
         
         optionsButton.tintColor = AppColours.darkGreyText
         
-        self.alpha = otherCellBeingEdited == true ? 0.5 : 1.0
-        
+        self.container.alpha = otherCellBeingEdited == true ? 0.5 : 1.0
                 
         self.layoutIfNeeded()
     }
