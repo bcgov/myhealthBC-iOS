@@ -205,5 +205,204 @@ extension StorageService: StorageCommentManager {
             return []
         }
     }
+    
+    func updateSubmittedComment(oldComment: Comment, object: PostCommentResponseResult) -> Comment? {
+        guard let parentEntryId = object.parentEntryID else {return nil}
+        let applicableRecords = findRecordsForComment(id: parentEntryId)
+        guard let context = managedContext else {
+            return nil
+        }
+        let comment = Comment(context: context)
+        comment.id = object.id
+        comment.text = object.text
+        comment.userProfileID = object.userProfileID
+        comment.entryTypeCode = object.entryTypeCode
+        comment.parentEntryID = object.parentEntryID
+        comment.version = Int64(object.version ?? 0)
+        comment.createdDateTime = object.createdDateTime?.getGatewayDate()
+        comment.createdBy = object.createdBy
+        comment.updatedDateTime = object.updatedDateTime?.getGatewayDate()
+        comment.updatedBy = object.updatedBy
+        
+        
+        do {
+            try context.save()
+        } catch let error as NSError {
+            print(error)
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+        }
+        guard !applicableRecords.isEmpty else {
+            Logger.log(string: "Could not find record for comment with id \(String(describing: object.parentEntryID))", type: .storage)
+            return nil
+        }
+        return update(oldComment: oldComment, newComment: comment, for: applicableRecords, context: context)
+    }
+    
+    func updateLocalComment(oldComment: Comment, text: String, commentID: String, hdid: String, typeCode: String) -> Comment? {
+        let applicableRecords = findRecordsForComment(id: commentID)
+        guard let context = managedContext else {
+            return nil
+        }
+        let comment = Comment(context: context)
+        let now = Date()
+        comment.createdDateTime = now
+        comment.updatedDateTime = now
+        comment.text = text
+        comment.parentEntryID = commentID
+        comment.userProfileID = hdid
+        comment.entryTypeCode = typeCode
+        
+        do {
+            try context.save()
+        } catch let error as NSError {
+            print(error)
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+        }
+        guard !applicableRecords.isEmpty else {
+            Logger.log(string: "Could not find record for comment with id \(String(describing: commentID))", type: .storage)
+            return nil
+        }
+        return update(oldComment: oldComment, newComment: comment, for: applicableRecords, context: context)
+    }
+    
+    func deleteSubmittedComment(object: PostCommentResponseResult) -> Comment? {
+        guard let parentEntryId = object.parentEntryID else {return nil}
+        let applicableRecords = findRecordsForComment(id: parentEntryId)
+        guard let context = managedContext else {
+            return nil
+        }
+        let comment = Comment(context: context)
+        comment.id = object.id
+        comment.text = object.text
+        comment.userProfileID = object.userProfileID
+        comment.entryTypeCode = object.entryTypeCode
+        comment.parentEntryID = object.parentEntryID
+        comment.version = Int64(object.version ?? 0)
+        comment.createdDateTime = object.createdDateTime?.getGatewayDate()
+        comment.createdBy = object.createdBy
+        comment.updatedDateTime = object.updatedDateTime?.getGatewayDate()
+        comment.updatedBy = object.updatedBy
+        
+        
+        do {
+            try context.save()
+        } catch let error as NSError {
+            print(error)
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+        }
+        guard !applicableRecords.isEmpty else {
+            Logger.log(string: "Could not find record for comment with id \(String(describing: object.parentEntryID))", type: .storage)
+            return nil
+        }
+        return delete(comment: comment, for: applicableRecords, context: context)
+    }
+    
+    func deleteLocalComment(text: String, commentID: String, hdid: String, typeCode: String) -> Comment? {
+        let applicableRecords = findRecordsForComment(id: commentID)
+        guard let context = managedContext else {
+            return nil
+        }
+        let comment = Comment(context: context)
+        let now = Date()
+        comment.createdDateTime = now
+        comment.updatedDateTime = now
+        comment.text = text
+        comment.parentEntryID = commentID
+        comment.userProfileID = hdid
+        comment.entryTypeCode = typeCode
+        
+        do {
+            try context.save()
+        } catch let error as NSError {
+            print(error)
+            Logger.log(string: "Could not delete. \(error), \(error.userInfo)", type: .storage)
+        }
+        guard !applicableRecords.isEmpty else {
+            Logger.log(string: "Could not find record for comment with id \(String(describing: commentID))", type: .storage)
+            return nil
+        }
+        return delete(comment: comment, for: applicableRecords, context: context)
+    }
+    
+    fileprivate func update(oldComment: Comment, newComment: Comment, for records: [HealthRecord], context: NSManagedObjectContext) -> Comment? {
+        guard newComment.parentEntryID != nil && newComment.parentEntryID != "" else {
+            Logger.log(string: "Invalid comment", type: .storage)
+            return nil
+        }
+        for record in records {
+            switch record.type {
+            case .CovidTest(let covidTest):
+                covidTest.removeFromComments(oldComment)
+                covidTest.addToComments(newComment)
+            case .CovidImmunization(_):
+                break
+            case .Medication(let medication):
+                medication.removeFromComments(oldComment)
+                medication.addToComments(newComment)
+            case .LaboratoryOrder(let labOrder):
+                labOrder.removeFromComments(oldComment)
+                labOrder.addToComments(newComment)
+            case .Immunization(_):
+                break
+            case .HealthVisit(let healthVisit):
+                healthVisit.removeFromComments(oldComment)
+                healthVisit.addToComments(newComment)
+            case .SpecialAuthorityDrug(let saDrug):
+                saDrug.removeFromComments(oldComment)
+                saDrug.addToComments(newComment)
+            case .HospitalVisit(let hospitalVisit):
+                hospitalVisit.removeFromComments(oldComment)
+                hospitalVisit.addToComments(newComment)
+            case .ClinicalDocument(let clinicalDoc):
+                clinicalDoc.removeFromComments(oldComment)
+                clinicalDoc.addToComments(newComment)
+            }
+        }
+        do {
+            try context.save()
+            return newComment
+        } catch let error as NSError {
+            print(error)
+            Logger.log(string: "Could not update. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
+    
+    fileprivate func delete(comment: Comment, for records: [HealthRecord], context: NSManagedObjectContext) -> Comment? {
+        guard comment.parentEntryID != nil && comment.parentEntryID != "" else {
+            Logger.log(string: "Invalid comment", type: .storage)
+            return nil
+        }
+        for record in records {
+            switch record.type {
+            case .CovidTest(let covidTest):
+                covidTest.removeFromComments(comment)
+            case .CovidImmunization(_):
+                break
+            case .Medication(let medication):
+                medication.removeFromComments(comment)
+            case .LaboratoryOrder(let labOrder):
+                labOrder.removeFromComments(comment)
+            case .Immunization(_):
+                break
+            case .HealthVisit(let healthVisit):
+                healthVisit.removeFromComments(comment)
+            case .SpecialAuthorityDrug(let saDrug):
+                saDrug.removeFromComments(comment)
+            case .HospitalVisit(let hospitalVisit):
+                hospitalVisit.removeFromComments(comment)
+            case .ClinicalDocument(let clinicalDoc):
+                clinicalDoc.removeFromComments(comment)
+            }
+        }
+        do {
+            try context.save()
+            return comment
+        } catch let error as NSError {
+            print(error)
+            Logger.log(string: "Could not delete. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
 }
 
