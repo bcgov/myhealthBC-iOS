@@ -42,6 +42,15 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     @IBOutlet weak var fieldContainer: UIView!
     @IBOutlet weak var tableView: UITableView!
     
+//    private var optionsDropDownView: CommentsOptionsDropDownView?
+    private var actionSheetController: UIAlertController?
+    
+    private var indexPathBeingEdited: IndexPath? {
+        didSet {
+            // TODO: Reload tableview here
+        }
+    }
+    
     override func viewDidLoad() {
         self.title = "Comments"
         setup()
@@ -118,6 +127,7 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
             return
         }
         tableView.register(UINib.init(nibName: CommentViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommentViewTableViewCell.getName)
+        tableView.register(UINib.init(nibName: EditCommentTableViewCell.getName, bundle: .main), forCellReuseIdentifier: EditCommentTableViewCell.getName)
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -138,17 +148,102 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
         return tableView.dequeueReusableCell(withIdentifier: CommentViewTableViewCell.getName, for: indexPath) as? CommentViewTableViewCell
     }
     
+    func editCommentCell(indexPath: IndexPath, tableView: UITableView) -> EditCommentTableViewCell? {
+        return tableView.dequeueReusableCell(withIdentifier: EditCommentTableViewCell.getName, for: indexPath) as? EditCommentTableViewCell
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-        cell.configure(comment: comments[indexPath.row])
-        return cell
-
+        if let editedIndexPath = indexPathBeingEdited {
+            if indexPath == editedIndexPath {
+                guard let cell = editCommentCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
+//                cell.configure()
+                return cell
+            } else {
+                guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+                cell.configure(comment: comments[indexPath.row], row: indexPath.row, delegateOwner: self, showOptionsButton: true, otherCellBeingEdited: true)
+                return cell
+            }
+        } else {
+            guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+            cell.configure(comment: comments[indexPath.row], row: indexPath.row, delegateOwner: self, showOptionsButton: true)
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return comments.count
     }
     
+}
+
+// MARK: Show and hide options drop down menu
+
+//extension CommentsViewController: CommentViewTableViewCellDelegate {
+//    // TODO: Add touch gesture to dismiss custom view when shown
+//    func optionsTapped(row: Int) {
+//        if let _ = optionsDropDownView {
+//            hideOptionsDropDown()
+//        } else {
+//            showOptionsDropDown()
+//        }
+//    }
+//
+//    private func showOptionsDropDown() {
+//        // TODO: Update this to pin to the proper comment with constraints
+//        let frame = CGRect(x: 30, y: 10, width: 145, height: 106)
+//        optionsDropDownView = CommentsOptionsDropDownView(frame: frame)
+//    }
+//
+//    private func hideOptionsDropDown() {
+//        optionsDropDownView?.removeFromSuperview()
+//    }
+//
+//
+//}
+
+// MARK: Show and hide options drop down menu
+
+extension CommentsViewController: CommentViewTableViewCellDelegate {
+    // TODO: Add touch gesture to dismiss custom view when shown
+    func optionsTapped(row: Int) {
+        if let _ = actionSheetController {
+            hideOptionsDropDown()
+        } else {
+            showOptionsDropDown()
+        }
+    }
+
+    private func showOptionsDropDown() {
+        actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        actionSheetController?.addAction(UIAlertAction(title: "Edit comment", style: .default, handler: { _ in
+            // TODO: Begin editing comments here
+            print("Begin editing comments here")
+        }))
+        
+        actionSheetController?.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
+            self.alert(title: "Delete Comment", message: "Are you sure you want to delete this comment?", buttonOneTitle: .yes, buttonOneCompletion: {
+                // TODO: Delete logic here
+                print("Delete comments here")
+            }, buttonTwoTitle: .no) {
+                self.hideOptionsDropDown()
+            }
+        }))
+        
+        actionSheetController?.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { [self] _ in
+            self.hideOptionsDropDown()
+        }))
+        
+        guard let actionSheetController = actionSheetController else { return }
+        self.present(actionSheetController, animated: true)
+    }
+
+    private func hideOptionsDropDown() {
+        actionSheetController?.dismiss(animated: true)
+        actionSheetController = nil
+    }
+
+
 }
 
 extension CommentsViewController: UIScrollViewDelegate {
@@ -240,3 +335,19 @@ extension CommentsViewController: UIScrollViewDelegate {
         }
     }
 }
+
+//// MARK: Logic for handling edit and delete drop down
+//
+//extension CommentsViewController: CommentsOptionsDropDownViewDelegate {
+//
+//    func beginEditingComment() {
+//        // TODO: Adjust current UI to use
+//        <#code#>
+//    }
+//
+//    func deleteComment() {
+//        <#code#>
+//    }
+//
+//
+//}

@@ -61,7 +61,7 @@ class ClinicalDocumentRecordDetailView: BaseHealthRecordsDetailView, UITableView
             return cell
         case .Comments:
             guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(comment: comments[indexPath.row])
+            cell.configure(comment: comments[indexPath.row], showOptionsButton: false)
             return cell
         case .DownloadButton:
             guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }

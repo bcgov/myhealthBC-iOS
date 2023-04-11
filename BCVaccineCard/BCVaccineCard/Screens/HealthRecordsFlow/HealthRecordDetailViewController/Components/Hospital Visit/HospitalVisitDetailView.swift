@@ -57,7 +57,7 @@ class HospitalVisitRecordDetailView: BaseHealthRecordsDetailView, UITableViewDel
             return cell
         case .Comments:
             guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(comment: comments[indexPath.row])
+            cell.configure(comment: comments[indexPath.row], showOptionsButton: false)
             return cell
         }
     }

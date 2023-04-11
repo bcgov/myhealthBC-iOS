@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommentsOptionsDropDownView" customModule="HealthGateway" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="iN0-l3-epB" id="oh9-pm-f9X"/>
+                <outlet property="deleteCommentButton" destination="vZR-3T-9Re" id="Jaj-Bb-Vs2"/>
+                <outlet property="editCommentButton" destination="OCc-0e-Cl8" id="yER-bJ-Dpf"/>
+                <outlet property="separatorView" destination="BIq-gl-gpQ" id="icb-gO-vft"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="145" height="106"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCc-0e-Cl8">
+                    <rect key="frame" x="0.0" y="0.0" width="145" height="52.666666666666664"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" title="Edit comment"/>
+                    <connections>
+                        <action selector="editCommentButtonTapped:" destination="-1" eventType="touchUpInside" id="5pc-wv-bhI"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vZR-3T-9Re">
+                    <rect key="frame" x="0.0" y="53.666666666666657" width="145" height="52.333333333333343"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" title="Delete"/>
+                    <connections>
+                        <action selector="deleteCommentButtonTapped:" destination="-1" eventType="touchUpInside" id="wNb-VI-Xgv"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BIq-gl-gpQ">
+                    <rect key="frame" x="0.0" y="52.666666666666664" width="145" height="1"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="bsl-cB-wW3"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="BIq-gl-gpQ" firstAttribute="top" secondItem="OCc-0e-Cl8" secondAttribute="bottom" id="4Rp-EB-ZRi"/>
+                <constraint firstItem="vZR-3T-9Re" firstAttribute="top" secondItem="BIq-gl-gpQ" secondAttribute="bottom" id="DAE-bJ-wAS"/>
+                <constraint firstItem="OCc-0e-Cl8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="FWR-ag-VId"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="vZR-3T-9Re" secondAttribute="trailing" id="OVj-2V-gnK"/>
+                <constraint firstItem="BIq-gl-gpQ" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Qpl-7b-91W"/>
+                <constraint firstAttribute="trailing" secondItem="BIq-gl-gpQ" secondAttribute="trailing" id="Xqw-t7-iPq"/>
+                <constraint firstItem="vZR-3T-9Re" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Y4A-dT-4eH"/>
+                <constraint firstAttribute="trailing" secondItem="OCc-0e-Cl8" secondAttribute="trailing" id="fYz-Je-b0h"/>
+                <constraint firstItem="OCc-0e-Cl8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="hjv-74-t7x"/>
+                <constraint firstItem="BIq-gl-gpQ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="x1u-L3-MDT"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="vZR-3T-9Re" secondAttribute="bottom" id="xbW-aN-sZr"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="140" y="21"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
