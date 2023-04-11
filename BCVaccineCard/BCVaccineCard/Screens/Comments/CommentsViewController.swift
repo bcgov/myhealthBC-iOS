@@ -51,6 +51,8 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
         }
     }
     
+    private var editedText: String?
+    
     override func viewDidLoad() {
         self.title = "Comments"
         setup()
@@ -342,11 +344,20 @@ extension CommentsViewController: AppStyleButtonDelegate {
         switch type {
         case .cancel:
             self.indexPathBeingEdited = nil
+            self.editedText = nil
         case .update:
             // TODO: PUT request here
+            guard let editedText = self.editedText else { return }
             print("Update comment on backend here")
         default: return
         }
+    }
+}
+
+// MARK: Delegate For EditCommentTableViewCell
+extension CommentsViewController: EditCommentTableViewCellDelegate {
+    func newText(string: String) {
+        editedText = string
     }
 }
 
