@@ -35,9 +35,9 @@ struct PDFService {
             return completion(nil)
         }
         network.addLoader(message: .SyncingRecords)
-        fetchPDF(fileID: fileId, type: .OrganDonor, isCovid: false, patient: patient, completion: {response in
+        fetchPDFV2(fileID: fileId, type: .OrganDonor, isCovid: false, patient: patient, completion: {response in
             network.removeLoader()
-            return completion(response?.data)
+            return completion(response)
         })
     }
     
@@ -91,33 +91,52 @@ extension PDFService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            
-            
-            if type == .OrganDonor {
-                let parameters = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: "false", apiVersion: "2")
-                let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, PDFResponseV2>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
-                { result in
-                    if let docs = result?.content {
-                        // return result
-                        return completion(nil)
-                    } else {
-                        return completion(nil)
-                    }
+            let parameters: AuthenticatedPDFRequestObject = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: isCovid ? "true" : "false", apiVersion: "1")
+            let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, AuthenticatedPDFResponseObject>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            { result in
+                if let docs = result?.resourcePayload {
+                    // return result
+                    return completion(docs)
+                } else {
+                    return completion(nil)
                 }
-                network.request(with: requestModel)
-            } else {
-                let parameters: AuthenticatedPDFRequestObject = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: isCovid ? "true" : "false", apiVersion: "1")
-                let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, AuthenticatedPDFResponseObject>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
-                { result in
-                    if let docs = result?.resourcePayload {
-                        // return result
-                        return completion(docs)
-                    } else {
-                        return completion(nil)
-                    }
-                }
-                network.request(with: requestModel)
             }
+            network.request(with: requestModel)
+        }
+    }
+    
+    private func fetchPDFV2(fileID: String, type: FetchType, isCovid: Bool, patient: Patient, completion: @escaping(_ response: String?) -> Void) {
+        guard let token = authManager.authToken,
+              let hdid = patient.hdid,
+              NetworkConnection.shared.hasConnection
+        else { return completion(nil)}
+        
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            
+            let url = getURL(type: type, baseURL: baseURL, hdid: hdid, fileID: fileID)
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+            ]
+            
+            let parameters = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: "false", apiVersion: "2")
+            let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, PDFResponseV2>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            { result in
+                if let docs = result?.content {
+                    // return result
+                    docs.
+                    return completion(nil)
+                } else {
+                    return completion(nil)
+                }
+            }
+            network.request(with: requestModel)
         }
     }
 }

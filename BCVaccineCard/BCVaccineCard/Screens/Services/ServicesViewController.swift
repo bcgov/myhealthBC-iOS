@@ -97,10 +97,11 @@ extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate {
         
         service.fetchPDF(donotStatus: status, patient: patient) { [weak self] result in
             guard let `self` = self else {return}
-            guard let pdfStribg = result else {
+            guard let pdfString = result else {
+                self.showToast(message: "Encountered an error while fetching PDF", style: .Warn)
                 return
             }
-            showPDFDocument(pdfString: pdfStribg, navTitle: "Organ Donor Status", documentVCDelegate: self, navDelegate: nil)
+            showPDFDocument(pdfString: pdfString, navTitle: "Organ Donor Status", documentVCDelegate: self, navDelegate: nil)
         }
         
     }
