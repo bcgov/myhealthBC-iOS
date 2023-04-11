@@ -10,6 +10,7 @@ import UIKit
 protocol OrganDonorDelegate {
     func download(patient: Patient)
     func registerOrUpdate(patient: Patient)
+    func reload(patient: Patient)
 }
 
 class OrganDonorServiceTableViewCell: UITableViewCell, Theme {
@@ -26,7 +27,7 @@ class OrganDonorServiceTableViewCell: UITableViewCell, Theme {
     @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var decisionLabel: UILabel!
     @IBOutlet weak var registerOrUpdateButton: UIButton!
-    
+    @IBOutlet weak var reloadButton: UIButton!
     // MARK: Variables
     var delegate: OrganDonorDelegate?
     var patient: Patient?
@@ -39,6 +40,10 @@ class OrganDonorServiceTableViewCell: UITableViewCell, Theme {
         guard let patient = patient, let delegate = delegate else {return}
         delegate.download(patient: patient)
     }
+    @IBAction func reloadAction(_ sender: Any) {
+        guard let patient = patient, let delegate = delegate else {return}
+        delegate.reload(patient: patient)
+    }
     
     @IBAction func updateOrRegisterAction(_ sender: Any) {
         guard let patient = patient, let delegate = delegate else {return}
@@ -49,26 +54,27 @@ class OrganDonorServiceTableViewCell: UITableViewCell, Theme {
         style()
         self.patient = patient
         self.delegate = delegate
-        if let statusModel = patient?.organDonorStatus,
-           let statusString = statusModel.status,
-           statusString.lowercased() == "registered"
-        {
-            styleRegistered()
+        if let statusModel = patient?.organDonorStatus{
+            reloadButton.isHidden = true
+            if let statusString = statusModel.status,
+               statusString.lowercased() == "registered"
+            {
+                notAvailableLabel.isHidden = true
+                downloadButton.isHidden = false
+            } else {
+                notAvailableLabel.isHidden = false
+                downloadButton.isHidden = true
+            }
+            statusValueLabel.text = statusModel.status
+            descriptiveText.text = statusModel.statusMessage
         } else {
-            styleNotRegistered()
+            // No DATA - API FETCH ERROR
+            statusValueLabel.text = "UNKNOWN"
+            descriptiveText.text = "We could not load your registration status. Please try refreshing your data."
+            notAvailableLabel.isHidden = true
+            downloadButton.isHidden = true
+            reloadButton.isHidden = false
         }
-    }
-    
-    func styleRegistered() {
-        notAvailableLabel.isHidden = true
-        statusValueLabel.text = "Registered"
-        descriptiveText.text = "You can update your registration on BC Transplant website"
-    }
-    
-    func styleNotRegistered() {
-        downloadButton.isHidden = true
-        statusValueLabel.text = "Not Registered"
-        descriptiveText.text = "We do not have a record of your decision about organ donation. If you filled out a paper registration form, we may not have processed it yet. You can also register your decision online now."
     }
     
     func style() {
@@ -92,6 +98,18 @@ class OrganDonorServiceTableViewCell: UITableViewCell, Theme {
         descriptiveText.font = UIFont.systemFont(ofSize: 13)
         descriptiveText.textColor = AppColours.greyText
         style(button: downloadButton, style: .Hollow, title: "Download", image: UIImage(named: "download"))
+        style(button: reloadButton, style: .Hollow, title: "Reload", image: UIImage(named: "refresh"))
+        
+        let registerOrUpdateButtonAttributes: [NSAttributedString.Key: Any] = [
+              .font: UIFont.bcSansBoldWithSize(size: 14),
+              .foregroundColor: AppColours.appBlue,
+              .underlineStyle: NSUnderlineStyle.single.rawValue
+          ]
+        let registerOrUpdateButtonTitle = NSMutableAttributedString(
+                string: "Register or update your decision",
+                attributes: registerOrUpdateButtonAttributes
+             )
+        registerOrUpdateButton.setAttributedTitle(registerOrUpdateButtonTitle, for: .normal)
     }
     
 }

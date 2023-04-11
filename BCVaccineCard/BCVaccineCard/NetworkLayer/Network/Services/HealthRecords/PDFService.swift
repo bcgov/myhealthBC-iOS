@@ -30,6 +30,17 @@ struct PDFService {
         })
     }
     
+    public func fetchPDF(donotStatus: OrganDonorStatus, patient: Patient, completion: @escaping (String?)->Void) {
+        guard let fileId = donotStatus.fileId else {
+            return completion(nil)
+        }
+        network.addLoader(message: .SyncingRecords)
+        fetchPDF(fileID: fileId, type: .OrganDonor, isCovid: false, patient: patient, completion: {response in
+            network.removeLoader()
+            return completion(response?.data)
+        })
+    }
+    
     private func getID(record: HealthRecordsDetailDataSource) -> String? {
         switch record.type {
         case.clinicalDocument(let clinicalDoc):
@@ -51,6 +62,8 @@ struct PDFService {
             return endpoints.labTestPDF(base: baseURL, reportID: fileID)
         case .Covid19:
             return endpoints.labTestPDF(base: baseURL, reportID: fileID)
+        case .OrganDonor:
+            return endpoints.patientDataPDF(base: baseURL, hdid: hdid, fileID: fileID)
         }
     }
     
@@ -78,19 +91,33 @@ extension PDFService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: AuthenticatedPDFRequestObject = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: isCovid ? "true" : "false")
             
-            let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, AuthenticatedPDFResponseObject>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
-            { result in
-                if let docs = result?.resourcePayload {
-                    // return result
-                    return completion(docs)
-                } else {
-                    return completion(nil)
+            
+            if type == .OrganDonor {
+                let parameters = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: "false", apiVersion: "2")
+                let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, PDFResponseV2>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+                { result in
+                    if let docs = result?.content {
+                        // return result
+                        return completion(nil)
+                    } else {
+                        return completion(nil)
+                    }
                 }
+                network.request(with: requestModel)
+            } else {
+                let parameters: AuthenticatedPDFRequestObject = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: isCovid ? "true" : "false", apiVersion: "1")
+                let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, AuthenticatedPDFResponseObject>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+                { result in
+                    if let docs = result?.resourcePayload {
+                        // return result
+                        return completion(docs)
+                    } else {
+                        return completion(nil)
+                    }
+                }
+                network.request(with: requestModel)
             }
-            
-            network.request(with: requestModel)
         }
     }
 }
@@ -99,6 +126,7 @@ extension PDFService {
         case ClinialDocument
         case LabOrder
         case Covid19
+        case OrganDonor
     }
 }
 

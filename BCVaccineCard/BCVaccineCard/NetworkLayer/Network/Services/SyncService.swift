@@ -73,6 +73,9 @@ struct SyncService {
             
             group.enter()
             patientService.fetchAndStoreOrganDonorStatus(for: patient) { status in
+                if status == nil {
+                    hadFailures = true
+                }
                 Logger.log(string: "fetched donor status: \(status != nil)", type: .Network)
                 group.leave()
             }

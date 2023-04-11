@@ -28,10 +28,18 @@ extension ServicesViewController {
         
         private var refreshNotifier: (()->Void)?
         
-        private let authManager: AuthManager
+        let authManager: AuthManager
+        let network: Network
+        let configService: MobileConfigService
+        let pdfService: PDFService
+        let patientService: PatientService
         
-        init(authManager: AuthManager) {
+        init(authManager: AuthManager, network: Network, configService: MobileConfigService) {
+            self.network = network
+            self.configService = configService
             self.authManager = authManager
+            self.pdfService = PDFService(network: network, authManager: authManager, configService: configService)
+            self.patientService = PatientService(network: network, authManager: authManager, configService: configService)
             AppStates.shared.listenToAuth {[weak self] authenticated in
                 guard let `self` = self else {return}
                 if let handler = refreshNotifier {
@@ -41,10 +49,8 @@ extension ServicesViewController {
             
             AppStates.shared.listenToStorage {[weak self] event in
                 guard let `self` = self else {return}
-                // TODO: listen to the correct entity
-                if event.event == .Save &&
-                    (event.entity == .Patient ||
-                    event.entity == .OrganDonorStatus )
+                if event.event == .Save,
+                    event.entity == .OrganDonorStatus
                 {
                     if let handler = refreshNotifier {
                         handler()

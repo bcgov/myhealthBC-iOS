@@ -81,17 +81,51 @@ class ServicesViewController: BaseViewController {
 }
 
 extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate {
+    
     func authenticate(initialView: AuthenticationViewController.InitialView) {
         showLogin(initialView: initialView)
     }
     
     func download(patient: Patient) {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "No internet connection")
+            return
+        }
+        guard let service = viewModel?.pdfService, let status = patient.organDonorStatus else {
+            return
+        }
         
+        service.fetchPDF(donotStatus: status, patient: patient) { [weak self] result in
+            guard let `self` = self else {return}
+            guard let pdfStribg = result else {
+                return
+            }
+            showPDFDocument(pdfString: pdfStribg, navTitle: "Organ Donor Status", documentVCDelegate: self, navDelegate: nil)
+        }
+        
+    }
+    
+    func reload(patient: Patient) {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "No internet connection")
+            return
+        }
+        guard let service = viewModel?.patientService else {
+            return
+        }
+        service.fetchAndStoreOrganDonorStatus(for: patient) {[weak self] result in
+            let successful = result != nil
+            let message: String = successful ? "Status retrieved" : .fetchRecordError
+            self?.showToast(message: message, style: successful ? .Default : .Warn)
+            self?.setup()
+        }
     }
     
     func registerOrUpdate(patient: Patient) {
-        
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "No internet connection")
+            return
+        }
+        openURLInSafariVC(withURL: "http://www.transplant.bc.ca/Pages/Register-your-Decision.aspx")
     }
-    
-    
 }

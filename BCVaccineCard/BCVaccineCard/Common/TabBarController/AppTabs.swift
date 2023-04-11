@@ -69,7 +69,7 @@ enum AppTabs: Int, CaseIterable {
                               unselectedTabBarImage: UIImage(named: "records-tab-unselected")!,
                               baseViewController: UsersListOfRecordsViewController.construct(viewModel: vm))
         case .Services:
-            let vm = ServicesViewController.ViewModel(authManager: authManager)
+            let vm = ServicesViewController.ViewModel(authManager: authManager, network: networkService, configService: configService)
             return Properties(title: "Services",
                               selectedTabBarImage: UIImage(named: "services-tab-selected")!,
                               unselectedTabBarImage: UIImage(named: "services-tab-unselected")!,
