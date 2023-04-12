@@ -228,7 +228,7 @@ extension CommentsViewController: CommentViewTableViewCellDelegate {
         actionSheetController?.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             self.alert(title: "Delete Comment", message: "Are you sure you want to delete this comment?", buttonOneTitle: .yes, buttonOneCompletion: {
                 self.indexPathBeingDeleted = indexPath
-                deleteComment()
+                self.deleteComment()
             }, buttonTwoTitle: .no) {
                 self.hideOptionsDropDown()
             }
@@ -377,7 +377,7 @@ extension CommentsViewController: AppStyleButtonDelegate {
         guard let record = model, let hdid = AuthManager().hdid else {return}
         guard let indexPath = indexPathBeingDeleted else { return }
         let comment = comments[indexPath.row]
-        record.deleteComment(comment: comment) { [weak self] result in
+        record.deleteComment(comment: comment, hdid: hdid) { [weak self] result in
             guard let self = self, let commentObject = result else {
                 return
             }

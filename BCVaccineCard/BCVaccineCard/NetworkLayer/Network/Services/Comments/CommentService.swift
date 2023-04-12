@@ -72,18 +72,18 @@ struct CommentService {
     }
     
     // TODO: Update this to use delete logic, currently using update logic
-    public func deleteComment(message: String, commentID: String, oldComment: Comment, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
+    public func deleteComment(comment: Comment, commentID: String, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
         if NetworkConnection.shared.hasConnection {
-            editComment(message: message, commentID: commentID, date: Date(), hdid: hdid, type: type) { result in
+            deleteComment(commentToDelete: comment, commentID: commentID, hdid: hdid, type: type) { result in
                 guard let result = result else {
-                    let comment = StorageService.shared.updateLocalComment(oldComment: oldComment, text: message, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
+                    let comment = StorageService.shared.deleteLocalComment(comment: comment, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
                     return completion(comment)
                 }
-                let comment = StorageService.shared.updateSubmittedComment(oldComment: oldComment, object: result)
+                let comment = StorageService.shared.deleteSubmittedComment(object: result)
                 return completion(comment)
             }
         } else {
-            let comment = StorageService.shared.updateLocalComment(oldComment: oldComment, text: message, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
+            let comment = StorageService.shared.deleteLocalComment(comment: comment, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
             return completion(comment)
         }
         
@@ -223,11 +223,11 @@ struct CommentService {
     // MARK: Delete Comment
     private func delete(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
         let type = CommentType.init(rawValue: comment.entryTypeCode ?? "") ?? .medication
-        deleteComment(message: comment.text ?? "", commentID: comment.parentEntryID ?? "", date: comment.createdDateTime ?? Date(), hdid: comment.userProfileID ?? "", type: type, completion: completion)
+        deleteComment(commentToDelete: comment, commentID: comment.parentEntryID ?? "", hdid: comment.userProfileID ?? "", type: type, completion: completion)
     }
     
-    private func deleteComment(message: String, commentID: String, date: Date, hdid: String, type: CommentType, completion: @escaping (PostCommentResponseResult?)->Void) {
-        let model = postCommentObject(message: message, commentID: commentID, date: date, hdid: hdid, type: type)
+    private func deleteComment(commentToDelete: Comment, commentID: String, hdid: String, type: CommentType, completion: @escaping (PostCommentResponseResult?)->Void) {
+        let model = postCommentObject(message: commentToDelete.text ?? "", commentID: commentID, date: commentToDelete.createdDateTime ?? Date(), hdid: hdid, type: type)
         deleteComment(object: model, completion: completion)
     }
     
@@ -294,10 +294,10 @@ extension HealthRecord {
         let service = CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         service.updateComment(message: text, commentID: commentId, oldComment: oldComment, hdid: hdid, type: commentType, completion: completion)
     }
-    
-    fileprivate func deleteComment(comment: Comment, completion: @escaping (Comment?)->Void) {
+    // TODO: Fix this
+    fileprivate func deleteComment(comment: Comment, hdid: String, completion: @escaping (Comment?)->Void) {
         let service = CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
-        service.delete(comment: comment, completion: completion)
+        service.deleteComment(comment: comment, commentID: commentId, hdid: hdid, type: commentType, completion: completion)
     }
     
     fileprivate var commentType: CommentService.CommentType {
@@ -332,8 +332,8 @@ extension HealthRecordsDetailDataSource.Record {
         toHealthRecord()?.submitComment(text: text, hdid: hdid, completion: completion)
     }
     
-    func deleteComment(comment: Comment, completion: @escaping (Comment?)->Void) {
-        toHealthRecord()?.deleteComment(comment: comment, completion: completion)
+    func deleteComment(comment: Comment, hdid: String, completion: @escaping (Comment?)->Void) {
+        toHealthRecord()?.deleteComment(comment: comment, hdid: hdid, completion: completion)
     }
     
     func toHealthRecord() -> HealthRecord? {

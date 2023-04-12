@@ -297,19 +297,12 @@ extension StorageService: StorageCommentManager {
         return delete(comment: comment, for: applicableRecords, context: context)
     }
     
-    func deleteLocalComment(text: String, commentID: String, hdid: String, typeCode: String) -> Comment? {
+    // TODO: Investigate
+    func deleteLocalComment(comment: Comment, commentID: String, hdid: String, typeCode: String) -> Comment? {
         let applicableRecords = findRecordsForComment(id: commentID)
         guard let context = managedContext else {
             return nil
         }
-        let comment = Comment(context: context)
-        let now = Date()
-        comment.createdDateTime = now
-        comment.updatedDateTime = now
-        comment.text = text
-        comment.parentEntryID = commentID
-        comment.userProfileID = hdid
-        comment.entryTypeCode = typeCode
         
         do {
             try context.save()
