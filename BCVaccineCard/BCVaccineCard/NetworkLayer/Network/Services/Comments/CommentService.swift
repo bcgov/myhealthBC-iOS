@@ -184,7 +184,6 @@ struct CommentService {
             network.request(with: requestModel)
         }
     }
-    // TODO: Test out put and delete requests to make sure swagger docs aren't wrong, may need to verify
     // MARK: PUT
     
     private func edit(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
@@ -294,7 +293,7 @@ extension HealthRecord {
         let service = CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         service.updateComment(message: text, commentID: commentId, oldComment: oldComment, hdid: hdid, type: commentType, completion: completion)
     }
-    // TODO: Fix this
+    
     fileprivate func deleteComment(comment: Comment, hdid: String, completion: @escaping (Comment?)->Void) {
         let service = CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         service.deleteComment(comment: comment, commentID: commentId, hdid: hdid, type: commentType, completion: completion)
@@ -329,7 +328,7 @@ extension HealthRecordsDetailDataSource.Record {
     }
     
     func updateComment(text: String, hdid: String, oldComment: Comment, completion: @escaping (Comment?)->Void) {
-        toHealthRecord()?.submitComment(text: text, hdid: hdid, completion: completion)
+        toHealthRecord()?.updateComment(text: text, hdid: hdid, oldComment: oldComment, completion: completion)
     }
     
     func deleteComment(comment: Comment, hdid: String, completion: @escaping (Comment?)->Void) {

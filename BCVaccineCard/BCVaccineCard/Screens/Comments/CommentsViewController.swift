@@ -366,7 +366,7 @@ extension CommentsViewController: AppStyleButtonDelegate {
             if let oldCommentIndex = self.comments.firstIndex(of: oldComment) {
                 self.comments.remove(at: oldCommentIndex)
             }
-            self.tableView.reloadData()
+            self.indexPathBeingEdited = nil
             self.scrollToBottom()
             self.resignFirstResponder()
             
