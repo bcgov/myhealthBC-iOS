@@ -20,3 +20,39 @@ struct PostComment: Codable {
         case createdDateTime
     }
 }
+
+struct DeleteComment: Codable {
+    let id, text, parentEntryID, userProfileID: String
+    let entryTypeCode: String
+    let version: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case text
+        case parentEntryID = "parentEntryId"
+        case userProfileID = "userProfileId"
+        case entryTypeCode
+        case version
+    }
+}
+
+struct EditComment: Codable {
+    let id, text, parentEntryID, userProfileID: String
+    let entryTypeCode: String
+    let version: Int
+    let createdDateTime, createdBy, updatedDateTime, updatedBy: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case text
+        case parentEntryID = "parentEntryId"
+        case userProfileID = "userProfileId"
+        case entryTypeCode
+        case version
+        case createdDateTime
+        case createdBy
+        case updatedDateTime
+        case updatedBy
+    }
+}
+

@@ -56,7 +56,7 @@ struct CommentService {
     
     public func updateComment(message: String, commentID: String, oldComment: Comment, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
         if NetworkConnection.shared.hasConnection {
-            editComment(message: message, commentID: commentID, date: Date(), hdid: hdid, type: type) { result in
+            editComment(commentToEdit: oldComment, message: message, commentID: commentID, date: Date(), hdid: hdid, type: type) { result in
                 guard let result = result else {
                     let comment = StorageService.shared.updateLocalComment(oldComment: oldComment, text: message, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
                     return completion(comment)
@@ -74,7 +74,7 @@ struct CommentService {
     // TODO: Update this to use delete logic, currently using update logic
     public func deleteComment(comment: Comment, commentID: String, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
         if NetworkConnection.shared.hasConnection {
-            deleteComment(commentToDelete: comment, commentID: commentID, hdid: hdid, type: type) { result in
+            deleteComment(commentToDelete: comment, hdid: hdid, type: type) { result in
                 guard let result = result else {
                     let comment = StorageService.shared.deleteLocalComment(comment: comment, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
                     return completion(comment)
@@ -188,15 +188,15 @@ struct CommentService {
     
     private func edit(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
         let type = CommentType.init(rawValue: comment.entryTypeCode ?? "") ?? .medication
-        editComment(message: comment.text ?? "", commentID: comment.parentEntryID ?? "", date: comment.createdDateTime ?? Date(), hdid: comment.userProfileID ?? "", type: type, completion: completion)
+        editComment(commentToEdit: comment, message: comment.text ?? "", commentID: comment.parentEntryID ?? "", date: comment.createdDateTime ?? Date(), hdid: comment.userProfileID ?? "", type: type, completion: completion)
     }
     
-    private func editComment(message: String, commentID: String, date: Date, hdid: String, type: CommentType, completion: @escaping (PostCommentResponseResult?)->Void) {
-        let model = postCommentObject(message: message, commentID: commentID, date: date, hdid: hdid, type: type)
+    private func editComment(commentToEdit: Comment, message: String, commentID: String, date: Date, hdid: String, type: CommentType, completion: @escaping (PostCommentResponseResult?)->Void) {
+        let model = editCommentObject(id: commentToEdit.id ?? "", text: message, parentEntryID: commentToEdit.parentEntryID ?? "", userProfileID: commentToEdit.userProfileID ?? "", entryTypeCode: commentToEdit.entryTypeCode ?? "", version: Int(commentToEdit.version), createdDateTime: commentToEdit.createdDateTime?.commentServerDateTime ?? "", createdBy: commentToEdit.createdBy ?? "", updatedDateTime: date.commentServerDateTime, updatedBy: commentToEdit.updatedBy ?? "")
         editComment(object: model, completion: completion)
     }
     
-    private func editComment(object: PostComment, completion: @escaping(PostCommentResponseResult?)->Void) {
+    private func editComment(object: EditComment, completion: @escaping(PostCommentResponseResult?)->Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
         configService.fetchConfig { response in
             guard let config = response,
@@ -211,7 +211,7 @@ struct CommentService {
                 Constants.AuthenticationHeaderKeys.hdid: hdid
             ]
             
-            let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.comments(base: baseURL, hdid: hdid), type: .Put, parameters: object, headers: headers) { result in
+            let requestModel = NetworkRequest<EditComment, PostCommentResponse>(url: endpoints.comments(base: baseURL, hdid: hdid), type: .Put, parameters: object, headers: headers) { result in
                 return completion(result?.resourcePayload)
             }
             
@@ -222,15 +222,15 @@ struct CommentService {
     // MARK: Delete Comment
     private func delete(comment: Comment, completion: @escaping(PostCommentResponseResult?)->Void) {
         let type = CommentType.init(rawValue: comment.entryTypeCode ?? "") ?? .medication
-        deleteComment(commentToDelete: comment, commentID: comment.parentEntryID ?? "", hdid: comment.userProfileID ?? "", type: type, completion: completion)
+        deleteComment(commentToDelete: comment, hdid: comment.userProfileID ?? "", type: type, completion: completion)
     }
     
-    private func deleteComment(commentToDelete: Comment, commentID: String, hdid: String, type: CommentType, completion: @escaping (PostCommentResponseResult?)->Void) {
-        let model = postCommentObject(message: commentToDelete.text ?? "", commentID: commentID, date: commentToDelete.createdDateTime ?? Date(), hdid: hdid, type: type)
+    private func deleteComment(commentToDelete: Comment, hdid: String, type: CommentType, completion: @escaping (PostCommentResponseResult?)->Void) {
+        let model = deleteCommentObject(id: commentToDelete.id ?? "", text: commentToDelete.text ?? "", parentEntryID: commentToDelete.parentEntryID ?? "", userProfileID: commentToDelete.userProfileID ?? "", entryTypeCode: commentToDelete.entryTypeCode ?? "", version: Int(commentToDelete.version))
         deleteComment(object: model, completion: completion)
     }
     
-    private func deleteComment(object: PostComment, completion: @escaping(PostCommentResponseResult?)->Void) {
+    private func deleteComment(object: DeleteComment, completion: @escaping(PostCommentResponseResult?)->Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
         configService.fetchConfig { response in
             guard let config = response,
@@ -245,7 +245,7 @@ struct CommentService {
                 Constants.AuthenticationHeaderKeys.hdid: hdid
             ]
             
-            let requestModel = NetworkRequest<PostComment, PostCommentResponse>(url: endpoints.comments(base: baseURL, hdid: hdid), type: .Delete, parameters: object, headers: headers) { result in
+            let requestModel = NetworkRequest<DeleteComment, PostCommentResponse>(url: endpoints.comments(base: baseURL, hdid: hdid), type: .Delete, parameters: object, headers: headers) { result in
                 return completion(result?.resourcePayload)
             }
             
@@ -280,6 +280,14 @@ extension CommentService {
             entryTypeCode:  type.rawValue,
             createdDateTime: date.commentServerDateTime
         )
+    }
+    
+    fileprivate func editCommentObject(id: String, text: String, parentEntryID: String, userProfileID: String, entryTypeCode: String, version: Int, createdDateTime: String, createdBy: String, updatedDateTime: String, updatedBy: String) -> EditComment {
+        return EditComment(id: id, text: text, parentEntryID: parentEntryID, userProfileID: userProfileID, entryTypeCode: entryTypeCode, version: version, createdDateTime: createdDateTime, createdBy: createdBy, updatedDateTime: updatedDateTime, updatedBy: updatedBy)
+    }
+    
+    fileprivate func deleteCommentObject(id: String, text: String, parentEntryID: String, userProfileID: String, entryTypeCode: String, version: Int) -> DeleteComment {
+        return DeleteComment(id: id, text: text, parentEntryID: parentEntryID, userProfileID: userProfileID, entryTypeCode: entryTypeCode, version: version)
     }
 }
 
