@@ -386,6 +386,10 @@ extension CommentsViewController: AppStyleButtonDelegate {
             self.tableView.reloadData()
             self.scrollToBottom()
             self.resignFirstResponder()
+            
+            if self.comments.isEmpty {
+                self.navigationController?.popViewController(animated: true)
+            }
         }
     }
 }

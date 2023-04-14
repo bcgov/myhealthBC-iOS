@@ -79,7 +79,7 @@ struct CommentService {
                     let comment = StorageService.shared.deleteLocalComment(comment: comment, commentID: commentID, hdid: hdid, typeCode: type.rawValue)
                     return completion(comment)
                 }
-                let comment = StorageService.shared.deleteSubmittedComment(object: result)
+                let comment = StorageService.shared.deleteSubmittedComment(object: result, commentToDelete: comment)
                 return completion(comment)
             }
         } else {
@@ -148,7 +148,7 @@ struct CommentService {
             delete(comment: comment) { res in
                 if let result = res {
                     StorageService.shared.delete(object: comment)
-                    if let storedDeletedComment = StorageService.shared.deleteSubmittedComment(object: result) {
+                    if let storedDeletedComment = StorageService.shared.deleteSubmittedComment(object: result, commentToDelete: comment) {
                         self.notify(event: StorageService.StorageEvent(event: .Synced, entity: .Comments, object: storedDeletedComment))
                     }
                 }

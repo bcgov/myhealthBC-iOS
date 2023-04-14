@@ -267,23 +267,29 @@ extension StorageService: StorageCommentManager {
         return update(oldComment: oldComment, newComment: comment, for: applicableRecords, context: context)
     }
     
-    func deleteSubmittedComment(object: PostCommentResponseResult) -> Comment? {
+    func deleteSubmittedComment(object: PostCommentResponseResult, commentToDelete: Comment) -> Comment? {
         guard let parentEntryId = object.parentEntryID else {return nil}
         let applicableRecords = findRecordsForComment(id: parentEntryId)
         guard let context = managedContext else {
             return nil
         }
-        let comment = Comment(context: context)
-        comment.id = object.id
-        comment.text = object.text
-        comment.userProfileID = object.userProfileID
-        comment.entryTypeCode = object.entryTypeCode
-        comment.parentEntryID = object.parentEntryID
-        comment.version = Int64(object.version ?? 0)
-        comment.createdDateTime = object.createdDateTime?.getGatewayDate()
-        comment.createdBy = object.createdBy
-        comment.updatedDateTime = object.updatedDateTime?.getGatewayDate()
-        comment.updatedBy = object.updatedBy
+//        let comment = Comment(context: context)
+//        comment.id = object.id
+//        comment.text = object.text
+//        comment.userProfileID = object.userProfileID
+//        comment.entryTypeCode = object.entryTypeCode
+//        comment.parentEntryID = object.parentEntryID
+//        comment.version = Int64(object.version ?? 0)
+//        comment.createdDateTime = object.createdDateTime?.getGatewayDate()
+//        comment.createdBy = object.createdBy
+//        comment.updatedDateTime = object.updatedDateTime?.getGatewayDate()
+//        comment.updatedBy = object.updatedBy
+        
+        if commentToDelete.id == object.id && commentToDelete.text == object.text && commentToDelete.userProfileID == object.userProfileID && commentToDelete.parentEntryID == object.parentEntryID {
+            return delete(comment: commentToDelete, for: applicableRecords, context: context, isHardDelete: true)
+        } else {
+            return nil
+        }
         
         
 //        do {
@@ -296,7 +302,7 @@ extension StorageService: StorageCommentManager {
 //            Logger.log(string: "Could not find record for comment with id \(String(describing: object.parentEntryID))", type: .storage)
 //            return nil
 //        }
-        return delete(comment: comment, for: applicableRecords, context: context, isHardDelete: true)
+//        return delete(comment: comment, for: applicableRecords, context: context, isHardDelete: true)
     }
     
     func deleteLocalComment(comment: Comment, commentID: String, hdid: String, typeCode: String) -> Comment? {
