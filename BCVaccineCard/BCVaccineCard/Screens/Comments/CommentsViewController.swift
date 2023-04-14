@@ -72,7 +72,7 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
         commentTextField.setup()
         commentTextField.delegate = self
         
-        comments = model?.comments ?? []
+        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
         comments = comments.sorted(by: {$0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()})
         setupTableView()
         style()
@@ -88,7 +88,7 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
         guard let event = notification.object as? StorageService.StorageEvent<Any> else {return}
         guard event.event == .Synced,
               event.entity == .Comments else {return}
-        comments = model?.comments ?? []
+        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
         comments = comments.sorted(by: {$0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()})
         tableView.reloadData()
     }

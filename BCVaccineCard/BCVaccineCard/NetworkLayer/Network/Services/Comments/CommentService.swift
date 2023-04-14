@@ -71,7 +71,7 @@ struct CommentService {
         
     }
     
-    // TODO: Update this to use delete logic, currently using update logic
+    // TODO: Follow logic to see how deleting with no network connection will affect things...
     public func deleteComment(comment: Comment, commentID: String, hdid: String, type: CommentType, completion: @escaping (Comment?)->Void) {
         if NetworkConnection.shared.hasConnection {
             deleteComment(commentToDelete: comment, hdid: hdid, type: type) { result in

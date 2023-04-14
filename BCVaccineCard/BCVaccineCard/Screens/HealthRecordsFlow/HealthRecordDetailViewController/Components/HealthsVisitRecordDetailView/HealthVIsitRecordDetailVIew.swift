@@ -32,7 +32,7 @@ class HealthVisitRecordDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
         tableView?.delegate = self
         tableView?.register(UINib.init(nibName: HealthVisitRecordDetailTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HealthVisitRecordDetailTableViewCell.getName)
         fields = createFields()
-        comments = model?.comments ?? []
+        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
     }
     
     override func submittedComment(object: Comment) {

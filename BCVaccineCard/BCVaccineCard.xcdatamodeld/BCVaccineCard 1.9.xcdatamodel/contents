@@ -26,6 +26,7 @@
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="networkMethod" optional="YES" attributeType="String"/>
         <attribute name="parentEntryID" optional="YES" attributeType="String"/>
+        <attribute name="shouldHide" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="text" optional="YES" attributeType="String"/>
         <attribute name="updatedBy" optional="YES" attributeType="String"/>
         <attribute name="updatedDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>

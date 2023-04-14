@@ -313,6 +313,8 @@ extension StorageService: StorageCommentManager {
         
         let commentToDelete = comment
         commentToDelete.networkMethod = UnsynchedCommentMethod.delete.rawValue
+        commentToDelete.shouldHide = true
+        commentToDelete.id = nil
         
         do {
             try context.save()
@@ -400,15 +402,6 @@ extension StorageService: StorageCommentManager {
         }
         if isHardDelete {
             delete(object: comment)
-        } else {
-//            do {
-//                try context.save()
-//                return comment
-//            } catch let error as NSError {
-//                print(error)
-//                Logger.log(string: "Could not delete. \(error), \(error.userInfo)", type: .storage)
-//                return nil
-//            }
         }
         return comment
     }

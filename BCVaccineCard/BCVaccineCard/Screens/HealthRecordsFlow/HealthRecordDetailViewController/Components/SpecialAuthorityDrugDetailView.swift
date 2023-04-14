@@ -31,7 +31,7 @@ class SpecialAuthorityDrugDetailView: BaseHealthRecordsDetailView, UITableViewDe
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
-        comments = model?.comments ?? []
+        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
     }
     
     override func submittedComment(object: Comment) {
