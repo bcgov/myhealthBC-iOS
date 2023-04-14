@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum UnsynchedCommentMethod: String, Codable {
+    case post
+    case edit
+    case delete
+}
+
 struct PostComment: Codable {
     let text, parentEntryID, userProfileID: String
     let entryTypeCode: String

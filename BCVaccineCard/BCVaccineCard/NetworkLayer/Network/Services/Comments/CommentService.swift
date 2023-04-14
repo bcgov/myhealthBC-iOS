@@ -88,7 +88,7 @@ struct CommentService {
         }
         
     }
-    // TODO: Will have to find a way to make this work with edited comments, to distinguish between post, put and delete for comments adjusted offline
+    
     public func submitUnsyncedComments(completion: @escaping()->Void) {
         if CommentService.blockSync {return completion()}
         CommentService.blockSync = true
@@ -101,7 +101,30 @@ struct CommentService {
         incrementLoadCounter()
         let dispatchGroup = DispatchGroup()
         for comment in comments {
-            dispatchGroup.enter()
+            syncComment(comment: comment, dispatchGroup: dispatchGroup)
+//            dispatchGroup.enter()
+//            post(comment: comment) { res in
+//                if let result = res {
+//                    StorageService.shared.delete(object: comment)
+//                    if let storedComment = StorageService.shared.storeSubmittedComment(object: result) {
+//                        self.notify(event: StorageService.StorageEvent(event: .Synced, entity: .Comments, object: storedComment))
+//                    }
+//                }
+//                dispatchGroup.leave()
+//            }
+        }
+        dispatchGroup.notify(queue: .main) {
+            decrementLoadCounter()
+            CommentService.blockSync = false
+            return completion()
+        }
+    }
+    
+    private func syncComment(comment: Comment, dispatchGroup: DispatchGroup) {
+        guard let networkMethod = comment.networkMethod, let method = UnsynchedCommentMethod.init(rawValue: networkMethod) else { return }
+        dispatchGroup.enter()
+        switch method {
+        case .post:
             post(comment: comment) { res in
                 if let result = res {
                     StorageService.shared.delete(object: comment)
@@ -111,11 +134,26 @@ struct CommentService {
                 }
                 dispatchGroup.leave()
             }
-        }
-        dispatchGroup.notify(queue: .main) {
-            decrementLoadCounter()
-            CommentService.blockSync = false
-            return completion()
+        case .edit:
+            edit(comment: comment) { res in
+                if let result = res {
+                    StorageService.shared.delete(object: comment)
+                    if let storedEditedComment = StorageService.shared.updateSubmittedComment(oldComment: comment, object: result) {
+                        self.notify(event: StorageService.StorageEvent(event: .Synced, entity: .Comments, object: storedEditedComment))
+                    }
+                }
+                dispatchGroup.leave()
+            }
+        case .delete:
+            delete(comment: comment) { res in
+                if let result = res {
+                    StorageService.shared.delete(object: comment)
+                    if let storedDeletedComment = StorageService.shared.deleteSubmittedComment(object: result) {
+                        self.notify(event: StorageService.StorageEvent(event: .Synced, entity: .Comments, object: storedDeletedComment))
+                    }
+                }
+                dispatchGroup.leave()
+            }
         }
     }
     

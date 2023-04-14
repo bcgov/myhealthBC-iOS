@@ -1450,6 +1450,7 @@
 		2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentsOptionsDropDownView.xib; sourceTree = "<group>"; };
 		2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentTableViewCell.swift; sourceTree = "<group>"; };
 		2DF3180729E5372C0077EA87 /* EditCommentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditCommentTableViewCell.xib; sourceTree = "<group>"; };
+		2DF3180E29E8D3580077EA87 /* BCVaccineCard 1.9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.9.xcdatamodel"; sourceTree = "<group>"; };
 		3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccessibleDependentTableViewCell.swift; sourceTree = "<group>"; };
 		3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InaccessibleDependentTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC92911ADF100774278 /* StorageService + Dependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService + Dependent.swift"; sourceTree = "<group>"; };
@@ -5717,6 +5718,7 @@
 		7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2DF3180E29E8D3580077EA87 /* BCVaccineCard 1.9.xcdatamodel */,
 				2D5218C72988519E00E07382 /* BCVaccineCard 1.8.xcdatamodel */,
 				3EDC0C8A2967A18000603FED /* BCVaccineCard 1.7.xcdatamodel */,
 				3E6831072940D1B400100402 /* BCVaccineCard 1.6.xcdatamodel */,
@@ -5726,7 +5728,7 @@
 				3E91C78D28B517C6005AA34F /* BCVaccineCard 1.1.xcdatamodel */,
 				7944F68226F12614006B9444 /* BCVaccineCard.xcdatamodel */,
 			);
-			currentVersion = 2D5218C72988519E00E07382 /* BCVaccineCard 1.8.xcdatamodel */;
+			currentVersion = 2DF3180E29E8D3580077EA87 /* BCVaccineCard 1.9.xcdatamodel */;
 			name = BCVaccineCard.xcdatamodeld;
 			path = ../BCVaccineCard.xcdatamodeld;
 			sourceTree = "<group>";

@@ -80,6 +80,7 @@ extension StorageService: StorageCommentManager {
         comment.parentEntryID = commentID
         comment.userProfileID = hdid
         comment.entryTypeCode = typeCode
+        comment.networkMethod = UnsynchedCommentMethod.post.rawValue
         
         do {
             try context.save()
@@ -251,6 +252,7 @@ extension StorageService: StorageCommentManager {
         comment.parentEntryID = commentID
         comment.userProfileID = hdid
         comment.entryTypeCode = typeCode
+        comment.networkMethod = UnsynchedCommentMethod.edit.rawValue
         
         do {
             try context.save()
@@ -284,25 +286,27 @@ extension StorageService: StorageCommentManager {
         comment.updatedBy = object.updatedBy
         
         
-        do {
-            try context.save()
-        } catch let error as NSError {
-            print(error)
-            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-        }
-        guard !applicableRecords.isEmpty else {
-            Logger.log(string: "Could not find record for comment with id \(String(describing: object.parentEntryID))", type: .storage)
-            return nil
-        }
-        return delete(comment: comment, for: applicableRecords, context: context)
+//        do {
+//            try context.save()
+//        } catch let error as NSError {
+//            print(error)
+//            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+//        }
+//        guard !applicableRecords.isEmpty else {
+//            Logger.log(string: "Could not find record for comment with id \(String(describing: object.parentEntryID))", type: .storage)
+//            return nil
+//        }
+        return delete(comment: comment, for: applicableRecords, context: context, isHardDelete: true)
     }
     
-    // TODO: Investigate
     func deleteLocalComment(comment: Comment, commentID: String, hdid: String, typeCode: String) -> Comment? {
         let applicableRecords = findRecordsForComment(id: commentID)
         guard let context = managedContext else {
             return nil
         }
+        
+        let commentToDelete = comment
+        commentToDelete.networkMethod = UnsynchedCommentMethod.delete.rawValue
         
         do {
             try context.save()
@@ -314,7 +318,7 @@ extension StorageService: StorageCommentManager {
             Logger.log(string: "Could not find record for comment with id \(String(describing: commentID))", type: .storage)
             return nil
         }
-        return delete(comment: comment, for: applicableRecords, context: context)
+        return delete(comment: comment, for: applicableRecords, context: context, isHardDelete: false)
     }
     
     fileprivate func update(oldComment: Comment, newComment: Comment, for records: [HealthRecord], context: NSManagedObjectContext) -> Comment? {
@@ -361,7 +365,7 @@ extension StorageService: StorageCommentManager {
         }
     }
     
-    fileprivate func delete(comment: Comment, for records: [HealthRecord], context: NSManagedObjectContext) -> Comment? {
+    fileprivate func delete(comment: Comment, for records: [HealthRecord], context: NSManagedObjectContext, isHardDelete: Bool) -> Comment? {
         guard comment.parentEntryID != nil && comment.parentEntryID != "" else {
             Logger.log(string: "Invalid comment", type: .storage)
             return nil
@@ -388,14 +392,19 @@ extension StorageService: StorageCommentManager {
                 clinicalDoc.removeFromComments(comment)
             }
         }
-        do {
-            try context.save()
-            return comment
-        } catch let error as NSError {
-            print(error)
-            Logger.log(string: "Could not delete. \(error), \(error.userInfo)", type: .storage)
-            return nil
+        if isHardDelete {
+            delete(object: comment)
+        } else {
+//            do {
+//                try context.save()
+//                return comment
+//            } catch let error as NSError {
+//                print(error)
+//                Logger.log(string: "Could not delete. \(error), \(error.userInfo)", type: .storage)
+//                return nil
+//            }
         }
+        return comment
     }
 }
 
