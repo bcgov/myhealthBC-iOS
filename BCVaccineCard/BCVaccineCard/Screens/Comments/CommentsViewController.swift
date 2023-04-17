@@ -226,11 +226,11 @@ extension CommentsViewController: CommentViewTableViewCellDelegate {
         }))
         
         actionSheetController?.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
-            self.alert(title: "Delete Comment", message: "Are you sure you want to delete this comment?", buttonOneTitle: .yes, buttonOneCompletion: {
+            self.alert(title: "Delete Comment", message: "This action cannot be undone. Are you sure you want to delete the comment?", buttonOneTitle: .cancel, buttonOneCompletion: {
+                self.hideOptionsDropDown()
+            }, buttonTwoTitle: .delete) {
                 self.indexPathBeingDeleted = indexPath
                 self.deleteComment()
-            }, buttonTwoTitle: .no) {
-                self.hideOptionsDropDown()
             }
         }))
         
@@ -367,7 +367,7 @@ extension CommentsViewController: AppStyleButtonDelegate {
                 self.comments.remove(at: oldCommentIndex)
             }
             self.indexPathBeingEdited = nil
-            self.scrollToBottom()
+//            self.scrollToBottom()
             self.resignFirstResponder()
             
         }
@@ -384,7 +384,7 @@ extension CommentsViewController: AppStyleButtonDelegate {
             self.indexPathBeingDeleted = nil
             self.comments.remove(at: indexPath.row)
             self.tableView.reloadData()
-            self.scrollToBottom()
+//            self.scrollToBottom()
             self.resignFirstResponder()
             
             if self.comments.isEmpty {

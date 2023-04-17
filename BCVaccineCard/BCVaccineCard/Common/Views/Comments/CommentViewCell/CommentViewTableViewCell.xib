@@ -22,16 +22,16 @@
                         <rect key="frame" x="0.0" y="8" width="471" height="102"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="vuv-5R-aWL">
-                                <rect key="frame" x="5" y="8" width="441" height="86"/>
+                                <rect key="frame" x="10" y="8" width="432" height="86"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vnU-XG-1Ip">
-                                        <rect key="frame" x="0.0" y="0.0" width="441" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="432" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="43C-gd-g9Q">
-                                        <rect key="frame" x="0.0" y="54" width="441" height="32"/>
+                                        <rect key="frame" x="0.0" y="54" width="432" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="32" id="UbP-IC-wEt"/>
                                         </constraints>
@@ -56,9 +56,9 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="vuv-5R-aWL" firstAttribute="leading" secondItem="f5h-mY-rkG" secondAttribute="leading" constant="5" id="1C5-hZ-IZ6"/>
+                            <constraint firstItem="vuv-5R-aWL" firstAttribute="leading" secondItem="f5h-mY-rkG" secondAttribute="leading" constant="10" id="1C5-hZ-IZ6"/>
                             <constraint firstItem="vuv-5R-aWL" firstAttribute="top" secondItem="f5h-mY-rkG" secondAttribute="top" constant="8" id="TZ4-ac-hP5"/>
-                            <constraint firstItem="FOZ-g1-d5v" firstAttribute="leading" secondItem="vuv-5R-aWL" secondAttribute="trailing" constant="1" id="Xbd-Jl-hAN"/>
+                            <constraint firstItem="FOZ-g1-d5v" firstAttribute="leading" secondItem="vuv-5R-aWL" secondAttribute="trailing" constant="5" id="Xbd-Jl-hAN"/>
                             <constraint firstAttribute="bottom" secondItem="vuv-5R-aWL" secondAttribute="bottom" constant="8" id="eZQ-Xh-ZUB"/>
                             <constraint firstAttribute="trailing" secondItem="FOZ-g1-d5v" secondAttribute="trailing" constant="8" id="vTL-Xl-MC4"/>
                             <constraint firstItem="FOZ-g1-d5v" firstAttribute="top" secondItem="f5h-mY-rkG" secondAttribute="top" constant="16" id="wbJ-TU-aSA"/>

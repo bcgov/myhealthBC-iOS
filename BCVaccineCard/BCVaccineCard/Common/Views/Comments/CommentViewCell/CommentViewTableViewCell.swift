@@ -64,6 +64,11 @@ class CommentViewTableViewCell: UITableViewCell {
 
 extension Comment {
     var isPosting: Bool {
-        return self.id == nil || self.id == ""
+        // TODO: Test this out
+        if self.networkMethod == .edit {
+            return true
+        } else {
+            return self.id == nil || self.id == ""
+        }
     }
 }
