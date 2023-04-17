@@ -246,6 +246,7 @@ extension StorageService: StorageCommentManager {
         }
         let comment = Comment(context: context)
         let now = Date()
+        comment.id = oldComment.id
         comment.createdDateTime = now
         comment.updatedDateTime = now
         comment.text = text
@@ -314,7 +315,7 @@ extension StorageService: StorageCommentManager {
         let commentToDelete = comment
         commentToDelete.networkMethod = UnsynchedCommentMethod.delete.rawValue
         commentToDelete.shouldHide = true
-        commentToDelete.id = nil
+//        commentToDelete.id = nil
         
         do {
             try context.save()

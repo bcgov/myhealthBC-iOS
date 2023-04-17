@@ -176,8 +176,10 @@ struct CommentService {
     
     private func findCommentsToSync() -> [Comment] {
         let comments = StorageService.shared.fetchComments()
-        var unsynced = comments.filter({$0.id == nil})
-        let synced = comments.filter({$0.id != nil})
+//        var unsynced = comments.filter({$0.id == nil})
+//        let synced = comments.filter({$0.id != nil})
+        var unsynced = comments.filter { $0.networkMethod != nil }
+        let synced = comments.filter { $0.networkMethod == nil }
         
         // removed unsynced comments that may have been synced
         unsynced.removeAll { unSyncedElement in
@@ -185,6 +187,7 @@ struct CommentService {
         }
         
         // Now unsynced contains comments that need to be uploaded
+        print("CONNOR: Comments Count: ", comments.count, "Unsynced Count: ", unsynced.count)
         return unsynced
     }
     
