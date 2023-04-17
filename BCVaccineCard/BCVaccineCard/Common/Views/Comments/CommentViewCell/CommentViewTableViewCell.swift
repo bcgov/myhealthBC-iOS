@@ -31,7 +31,7 @@ class CommentViewTableViewCell: UITableViewCell {
         self.indexPath = indexPath
         self.delegate = delegateOwner as? CommentViewTableViewCellDelegate
         optionsButton.isEnabled = !(otherCellBeingEdited == true)
-        optionsButton.isHidden = !showOptionsButton
+        optionsButton.isHidden = (!showOptionsButton || comment.isPosting)
         if let createdDate = comment.createdDateTime, !comment.isPosting {
             dateTimeLabel.text = Date.Formatter.commentsDateTime.string(from: createdDate)
         } else if comment.isPosting {
@@ -65,7 +65,7 @@ class CommentViewTableViewCell: UITableViewCell {
 extension Comment {
     var isPosting: Bool {
         // TODO: Test this out
-        if self.networkMethod == .edit {
+        if self.networkMethod == UnsynchedCommentMethod.edit.rawValue {
             return true
         } else {
             return self.id == nil || self.id == ""

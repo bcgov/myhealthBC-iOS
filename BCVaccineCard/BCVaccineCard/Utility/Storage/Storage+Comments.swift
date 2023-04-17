@@ -247,12 +247,15 @@ extension StorageService: StorageCommentManager {
         let comment = Comment(context: context)
         let now = Date()
         comment.id = oldComment.id
-        comment.createdDateTime = now
+        comment.createdDateTime = oldComment.createdDateTime
+        comment.createdBy = oldComment.createdBy
         comment.updatedDateTime = now
+        comment.updatedBy = oldComment.updatedBy
         comment.text = text
         comment.parentEntryID = commentID
         comment.userProfileID = hdid
         comment.entryTypeCode = typeCode
+        comment.version = oldComment.version
         comment.networkMethod = UnsynchedCommentMethod.edit.rawValue
         
         do {
