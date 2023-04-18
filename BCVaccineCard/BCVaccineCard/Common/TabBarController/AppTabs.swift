@@ -14,7 +14,7 @@ protocol TabDelegate {
 }
 
 enum AppTabs: Int, CaseIterable {
-    case Home = 0, UnAuthenticatedRecords, AuthenticatedRecords, Proofs, Dependents
+    case Home = 0, UnAuthenticatedRecords, AuthenticatedRecords, Services, Proofs, Dependents
     
     var getIndexOfTab: Int {
         return self.rawValue
@@ -68,8 +68,13 @@ enum AppTabs: Int, CaseIterable {
                               selectedTabBarImage: UIImage(named: "records-tab-selected")!,
                               unselectedTabBarImage: UIImage(named: "records-tab-unselected")!,
                               baseViewController: UsersListOfRecordsViewController.construct(viewModel: vm))
+        case .Services:
+            let vm = ServicesViewController.ViewModel(authManager: authManager, network: networkService, configService: configService)
+            return Properties(title: "Services",
+                              selectedTabBarImage: UIImage(named: "services-tab-selected")!,
+                              unselectedTabBarImage: UIImage(named: "services-tab-unselected")!,
+                              baseViewController: ServicesViewController.construct(viewModel: vm))
         }
-        return nil
     }
     
 }

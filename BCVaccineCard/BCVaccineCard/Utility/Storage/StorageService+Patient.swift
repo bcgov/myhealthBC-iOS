@@ -107,6 +107,27 @@ protocol StoragePatientManager {
 extension StorageService: StoragePatientManager {
     
     // MARK: Store
+    func store(
+        organDonorStatus object: OrganDonorStatusResponse,
+        for patient: Patient
+    ) -> OrganDonorStatus? {
+        guard let context = managedContext,
+              let phn = patient.phn,
+              let patientRefetch = fetchPatient(phn: phn, context: context) else {return nil}
+        let model = OrganDonorStatus(context: context)
+        model.status = object.status
+        model.statusMessage = object.statusMessage
+        model.fileId = object.registrationFileID
+        model.patient = patientRefetch
+        do {
+            try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .OrganDonorStatus, object: patient))
+            return model
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
     /// returns existing patient
     /// or
     /// creates and returns a new one if it doesnt exist.

@@ -10,9 +10,9 @@ import UIKit
 
 enum HomeScreenCellType {
     case Records
-    case Proofs
-    case Resources
     case Recommendations
+    case Resources
+    case Proofs
     
     var getTitle: String {
         switch self {
@@ -51,15 +51,6 @@ enum HomeScreenCellType {
         case .Recommendations:  return UIImage(named: "resources-home-button")
         }
     }
-    
-//    var getTabIndex: Int {
-//        switch self {
-//        case .Records: return TabBarVCs.records.rawValue
-//        case .Proofs: return TabBarVCs.healthPass.rawValue
-//        case .Resources: return TabBarVCs.resource.rawValue
-//        case .Recommendations: return TabBarVCs.records.rawValue
-//        }
-//    }
 
 }
 

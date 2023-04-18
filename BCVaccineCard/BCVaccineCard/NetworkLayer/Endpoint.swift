@@ -148,6 +148,18 @@ struct UrlAccessor: EndpointsAccessor {
         return gatewayAPIService(base: url).appendingPathComponent("UserProfile")
     }
     
+    func patientDataBase(base url: URL) -> URL {
+        return patientServiceBaseURL(base: url).appendingPathComponent("PatientData")
+    }
+    
+    func patientData(base url: URL, hdid: String) -> URL {
+        return patientDataBase(base: url).appendingPathComponent(hdid)
+    }
+    
+    func patientDataPDF(base url: URL, hdid: String, fileID: String) -> URL {
+        return patientData(base: url, hdid: hdid).appendingPathComponent("file").appendingPathComponent(fileID)
+    }
+    
     func userProfile(base url: URL, hdid: String) -> URL {
         return userProfileBase(base: url).appendingPathComponent(hdid)
     }

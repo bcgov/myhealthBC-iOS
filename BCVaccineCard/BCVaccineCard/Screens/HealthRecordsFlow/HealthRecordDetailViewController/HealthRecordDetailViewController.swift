@@ -206,7 +206,7 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
     func showPDF() {
         // Cached
         if let pdf = self.pdfData {
-            self.showPDFDocument(pdfString: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+            self.showPDFDocument(pdf: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
             return
         }
         // No internet
@@ -220,7 +220,7 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
             guard let `self` = self else {return}
             if let pdf = result {
                 self.pdfData = pdf
-                self.showPDFDocument(pdfString: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                self.showPDFDocument(pdf: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
             } else {
                 self.showPDFUnavailableAlert()
             }
