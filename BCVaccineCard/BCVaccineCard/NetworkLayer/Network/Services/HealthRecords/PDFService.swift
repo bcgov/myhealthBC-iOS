@@ -30,15 +30,27 @@ struct PDFService {
         })
     }
     
-    public func fetchPDF(donotStatus: OrganDonorStatus, patient: Patient, completion: @escaping (String?)->Void) {
+    public func fetchPDF(donotStatus: OrganDonorStatus, patient: Patient, completion: @escaping (Data?)->Void) {
         guard let fileId = donotStatus.fileId else {
             return completion(nil)
         }
         network.addLoader(message: .SyncingRecords)
         fetchPDFV2(fileID: fileId, type: .OrganDonor, isCovid: false, patient: patient, completion: {response in
             network.removeLoader()
-            return completion(response)
+            guard let response = response,
+                  let content = response.content
+            else {
+                return completion(nil)
+            }
+            let uint = content.map({UInt8($0)})
+            let data = Data(uint)
+//            let stringDecoded = String(decoding: uint, as: UTF8.self)
+            return completion(data)
         })
+    }
+    
+    func toUint(signed: Int) -> UInt8 {
+        return UInt8(signed)
     }
     
     private func getID(record: HealthRecordsDetailDataSource) -> String? {
@@ -105,7 +117,7 @@ extension PDFService {
         }
     }
     
-    private func fetchPDFV2(fileID: String, type: FetchType, isCovid: Bool, patient: Patient, completion: @escaping(_ response: String?) -> Void) {
+    private func fetchPDFV2(fileID: String, type: FetchType, isCovid: Bool, patient: Patient, completion: @escaping(_ response: PDFResponseV2?) -> Void) {
         guard let token = authManager.authToken,
               let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
@@ -128,13 +140,7 @@ extension PDFService {
             let parameters = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: "false", apiVersion: "2")
             let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, PDFResponseV2>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
-                if let docs = result?.content {
-                    // return result
-                    docs.
-                    return completion(nil)
-                } else {
-                    return completion(nil)
-                }
+                return completion(result)
             }
             network.request(with: requestModel)
         }

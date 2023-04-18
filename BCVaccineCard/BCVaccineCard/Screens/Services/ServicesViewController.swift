@@ -80,7 +80,12 @@ class ServicesViewController: BaseViewController {
 
 }
 
-extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate {
+extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate, UIDocumentInteractionControllerDelegate {
+    
+    func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        guard let navController = self.navigationController else { return self }
+        return navController
+    }
     
     func authenticate(initialView: AuthenticationViewController.InitialView) {
         showLogin(initialView: initialView)
@@ -97,11 +102,11 @@ extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate {
         
         service.fetchPDF(donotStatus: status, patient: patient) { [weak self] result in
             guard let `self` = self else {return}
-            guard let pdfString = result else {
+            guard let pdfData = result else {
                 self.showToast(message: "Encountered an error while fetching PDF", style: .Warn)
                 return
             }
-            showPDFDocument(pdfString: pdfString, navTitle: "Organ Donor Status", documentVCDelegate: self, navDelegate: nil)
+            showPDFDocument(pdf: pdfData, navTitle: "Organ Donor Status", documentVCDelegate: self, navDelegate: self.navDelegate)
         }
         
     }

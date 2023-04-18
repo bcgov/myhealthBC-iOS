@@ -287,11 +287,26 @@ extension UIViewController {
 // MARK: Logic to open pdf natively
 extension UIViewController {
     
-    func showPDFDocument(pdfString: String, navTitle: String, documentVCDelegate: UIViewController, navDelegate: NavigationSetupProtocol?) {
-        guard let data = Data(base64URLEncoded: pdfString) else { return }
+    func showPDFDocument(pdf: String, navTitle: String, documentVCDelegate: UIViewController, navDelegate: NavigationSetupProtocol?) {
+        var dataCahce = Data(base64URLEncoded: pdf)
+        if dataCahce == nil {
+            dataCahce = pdf.data(using: .utf8)
+        }
+        guard let data = dataCahce else {return}
+        showPDFDocument(pdf: data, navTitle: navTitle, documentVCDelegate: documentVCDelegate, navDelegate: navDelegate)
+//        removePDFFromFileSystem()
+//        do {
+//            try savePdf(pdfData: data)
+//            loadPDFAndShare(documentVCDelegate: documentVCDelegate, name: navTitle, navDelegate: navDelegate)
+//        } catch {
+//            print("Couldn't load PDF view")
+//        }
+    }
+    
+    func showPDFDocument(pdf: Data, navTitle: String, documentVCDelegate: UIViewController, navDelegate: NavigationSetupProtocol?) {
         removePDFFromFileSystem()
         do {
-            try savePdf(pdfData: data)
+            try savePdf(pdfData: pdf)
             loadPDFAndShare(documentVCDelegate: documentVCDelegate, name: navTitle, navDelegate: navDelegate)
         } catch {
             print("Couldn't load PDF view")
