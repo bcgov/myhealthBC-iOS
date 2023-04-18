@@ -44,7 +44,6 @@ struct PDFService {
             }
             let uint = content.map({UInt8($0)})
             let data = Data(uint)
-//            let stringDecoded = String(decoding: uint, as: UTF8.self)
             return completion(data)
         })
     }

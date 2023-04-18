@@ -294,13 +294,6 @@ extension UIViewController {
         }
         guard let data = dataCahce else {return}
         showPDFDocument(pdf: data, navTitle: navTitle, documentVCDelegate: documentVCDelegate, navDelegate: navDelegate)
-//        removePDFFromFileSystem()
-//        do {
-//            try savePdf(pdfData: data)
-//            loadPDFAndShare(documentVCDelegate: documentVCDelegate, name: navTitle, navDelegate: navDelegate)
-//        } catch {
-//            print("Couldn't load PDF view")
-//        }
     }
     
     func showPDFDocument(pdf: Data, navTitle: String, documentVCDelegate: UIViewController, navDelegate: NavigationSetupProtocol?) {
