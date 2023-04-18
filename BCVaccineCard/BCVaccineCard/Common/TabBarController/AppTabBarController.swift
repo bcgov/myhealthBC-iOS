@@ -33,11 +33,11 @@ class AppTabBarController: UITabBarController {
     private var patient: Patient?
     
     private var authenticatedTabs: [AppTabs] {
-        return [.Home, .AuthenticatedRecords, .Proofs, .Dependents]
+        return [.Home, .AuthenticatedRecords, .Services, .Dependents]
     }
     
     private var unAuthenticatedTabs: [AppTabs] {
-        return [.Home, .UnAuthenticatedRecords, .Proofs, .Dependents]
+        return [.Home, .UnAuthenticatedRecords, .Services, .Dependents]
     }
     
     /// Currently available tabs
