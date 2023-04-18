@@ -101,6 +101,11 @@ extension StorageService {
         }
     }
     
+    func deleteComments(for patient: Patient) {
+        let comments = fetchComments()
+        deleteAllRecords(in: comments)
+    }
+    
     func deleteHealthRecords(for patient: Patient, types: [healthRecordType]? = nil) {
         var toDelete: [NSManagedObject] = []
         let typesTodelete: [healthRecordType] = types ?? healthRecordType.allCases
