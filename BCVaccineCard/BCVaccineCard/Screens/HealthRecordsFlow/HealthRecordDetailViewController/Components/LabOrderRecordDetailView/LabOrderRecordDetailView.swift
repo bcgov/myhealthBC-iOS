@@ -96,7 +96,7 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
-        comments = model?.comments ?? []
+        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
     }
     
     override func submittedComment(object: Comment) {
@@ -168,7 +168,7 @@ class LabOrderRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate
         // Last section is comments
         if indexPath.section == numberOrSections - 1 {
             guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(comment: comments[indexPath.row])
+            cell.configure(comment: comments[indexPath.row], showOptionsButton: false)
             return cell
         }
         

@@ -30,7 +30,7 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE COMMENTS
     static var commentsEnabled: Bool {
-        return false
+        return true
     }
 }
 

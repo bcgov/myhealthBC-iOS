@@ -309,6 +309,18 @@
 		2DF317F829CE5A5B0077EA87 /* PostFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317F729CE5A5B0077EA87 /* PostFeedback.swift */; };
 		2DF317F929CE5A5B0077EA87 /* PostFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317F729CE5A5B0077EA87 /* PostFeedback.swift */; };
 		2DF317FA29CE5A5B0077EA87 /* PostFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317F729CE5A5B0077EA87 /* PostFeedback.swift */; };
+		2DF317FD29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */; };
+		2DF317FE29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */; };
+		2DF317FF29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */; };
+		2DF3180129E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */; };
+		2DF3180229E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */; };
+		2DF3180329E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */; };
+		2DF3180829E5372C0077EA87 /* EditCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */; };
+		2DF3180929E5372C0077EA87 /* EditCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */; };
+		2DF3180A29E5372C0077EA87 /* EditCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */; };
+		2DF3180B29E5372C0077EA87 /* EditCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF3180729E5372C0077EA87 /* EditCommentTableViewCell.xib */; };
+		2DF3180C29E5372C0077EA87 /* EditCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF3180729E5372C0077EA87 /* EditCommentTableViewCell.xib */; };
+		2DF3180D29E5372C0077EA87 /* EditCommentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF3180729E5372C0077EA87 /* EditCommentTableViewCell.xib */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
 		3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
 		3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
@@ -1474,6 +1486,11 @@
 		2DF317EE29CD6F9D0077EA87 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		2DF317F329CE5A510077EA87 /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		2DF317F729CE5A5B0077EA87 /* PostFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFeedback.swift; sourceTree = "<group>"; };
+		2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsOptionsDropDownView.swift; sourceTree = "<group>"; };
+		2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentsOptionsDropDownView.xib; sourceTree = "<group>"; };
+		2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentTableViewCell.swift; sourceTree = "<group>"; };
+		2DF3180729E5372C0077EA87 /* EditCommentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditCommentTableViewCell.xib; sourceTree = "<group>"; };
+		2DF3180E29E8D3580077EA87 /* BCVaccineCard 1.9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.9.xcdatamodel"; sourceTree = "<group>"; };
 		3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccessibleDependentTableViewCell.swift; sourceTree = "<group>"; };
 		3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InaccessibleDependentTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC92911ADF100774278 /* StorageService + Dependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService + Dependent.swift"; sourceTree = "<group>"; };
@@ -2398,16 +2415,31 @@
 			path = Feedback;
 			sourceTree = "<group>";
 		};
-		3E23ADCE29DDD884001BC9CC /* Services */ = {
+		2DF317FB29E51E000077EA87 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				3E7DCBAA29E49CD0004BAF67 /* AuthExpired */,
-				3E7DCBA129E49B31004BAF67 /* UnAuthenticated */,
-				3E7DCB9629E4905B004BAF67 /* Services List */,
-				3E23ADCF29DDD8A5001BC9CC /* ServicesViewController.swift */,
-				3E7DCB8A29E48226004BAF67 /* ServicesViewModel.swift */,
+				2DF3180529E537050077EA87 /* EditCommentTableViewCell */,
+				2DF3180429E536DF0077EA87 /* CommentsOptionsDropDownView */,
 			);
-			path = Services;
+			path = Components;
+			sourceTree = "<group>";
+		};
+		2DF3180429E536DF0077EA87 /* CommentsOptionsDropDownView */ = {
+			isa = PBXGroup;
+			children = (
+				2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */,
+				2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */,
+			);
+			path = CommentsOptionsDropDownView;
+			sourceTree = "<group>";
+		};
+		2DF3180529E537050077EA87 /* EditCommentTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */,
+				2DF3180729E5372C0077EA87 /* EditCommentTableViewCell.xib */,
+			);
+			path = EditCommentTableViewCell;
 			sourceTree = "<group>";
 		};
 		3E31EA7A291394E900E344E6 /* UpdateService */ = {
@@ -2520,6 +2552,7 @@
 			isa = PBXGroup;
 			children = (
 				3E6831392940D77500100402 /* CommentsViewController.swift */,
+				2DF317FB29E51E000077EA87 /* Components */,
 			);
 			path = Comments;
 			sourceTree = "<group>";
@@ -3896,11 +3929,13 @@
 				3E87F4B22901B117002F0A0E /* DependentListItemTableViewCell.xib in Resources */,
 				3E048CC7291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				79A15B0827FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */,
+				2DF3180229E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */,
 				7928345F2730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */,
 				799050C0273C8344006CD726 /* GetRecordsView.xib in Resources */,
 				2922C0DE286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.xib in Resources */,
 				29719562288719D400CA824A /* ImmunizationForecastTableViewCell.xib in Resources */,
 				7928346D27311C9000EE2710 /* DropDownView.xib in Resources */,
+				2DF3180C29E5372C0077EA87 /* EditCommentTableViewCell.xib in Resources */,
 				7967E73426F3DC9A00EEF510 /* FormTableViewCell.xib in Resources */,
 				2922C0E7286E33F8000FF4F7 /* MessageBannerTableViewCell.xib in Resources */,
 				79BDA092270E9E2800FF30AB /* VaccineCardView.xib in Resources */,
@@ -4031,6 +4066,7 @@
 				3E5924C5297086C900936CF1 /* EmptyTableViewCell.xib in Resources */,
 				293B32C127D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
 				7928346E27311C9000EE2710 /* DropDownView.xib in Resources */,
+				2DF3180329E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */,
 				2922C0E8286E33F8000FF4F7 /* MessageBannerTableViewCell.xib in Resources */,
 				29547E5C27A2EC7700562958 /* LocalAuthView.xib in Resources */,
 				79A15B0927FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */,
@@ -4040,6 +4076,7 @@
 				79218AD027556AA50063004E /* StatusBannerView.xib in Resources */,
 				29719563288719D400CA824A /* ImmunizationForecastTableViewCell.xib in Resources */,
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
+				2DF3180D29E5372C0077EA87 /* EditCommentTableViewCell.xib in Resources */,
 				79218A9F275141800063004E /* GetARecordTableViewCell.xib in Resources */,
 				79B9D01527E2869D00987D9F /* HomeScreenTableViewCell.xib in Resources */,
 				2D5218C62984A38000E07382 /* ProfileDetailsTableViewCell.xib in Resources */,
@@ -4125,11 +4162,13 @@
 				3E3DA94028FE8133009C500F /* DependentListItemTableViewCell.xib in Resources */,
 				3E048CC6291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				798006312852C66E006E390F /* DataSecurityTipsTableViewCell.xib in Resources */,
+				2DF3180129E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */,
 				798006322852C66E006E390F /* InteractiveLabelTableViewCell.xib in Resources */,
 				798006332852C66E006E390F /* GetRecordsView.xib in Resources */,
 				2922C0DD286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.xib in Resources */,
 				29719561288719D400CA824A /* ImmunizationForecastTableViewCell.xib in Resources */,
 				798006342852C66E006E390F /* DropDownView.xib in Resources */,
+				2DF3180B29E5372C0077EA87 /* EditCommentTableViewCell.xib in Resources */,
 				798006352852C66E006E390F /* FormTableViewCell.xib in Resources */,
 				2922C0E6286E33F8000FF4F7 /* MessageBannerTableViewCell.xib in Resources */,
 				798006362852C66E006E390F /* VaccineCardView.xib in Resources */,
@@ -4328,6 +4367,7 @@
 				7967E73D26F536AF00EEF510 /* FormTextFieldView.swift in Sources */,
 				3E66F062290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */,
 				3E048CCB2911ADF100774278 /* StorageService + Dependent.swift in Sources */,
+				2DF3180929E5372C0077EA87 /* EditCommentTableViewCell.swift in Sources */,
 				3E78AECA28F8729900C66E28 /* DependentsHomeViewController.swift in Sources */,
 				3EDC0D0E296892D200603FED /* KVCEssential.swift in Sources */,
 				79218AF22756729D0063004E /* HealthRecordsFlowModels.swift in Sources */,
@@ -4386,6 +4426,8 @@
 				79218AAF275196040063004E /* HealthRecordsUserView.swift in Sources */,
 				795AA7732715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
 				3E62CFCD299BF3A5000FBB40 /* CommentService+Network.swift in Sources */,
+				2D5218D62988556100E07382 /* Patient+CoreDataProperties.swift in Sources */,
+				2DF317FE29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */,
 				3EDC0D1F296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
 				79B1A0FD28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
@@ -4687,6 +4729,7 @@
 				794BD6302702EEC00084ADA8 /* VaccinePassportModel.swift in Sources */,
 				3E66F063290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */,
 				3E048CCC2911ADF100774278 /* StorageService + Dependent.swift in Sources */,
+				2DF3180A29E5372C0077EA87 /* EditCommentTableViewCell.swift in Sources */,
 				3E78AECB28F8729900C66E28 /* DependentsHomeViewController.swift in Sources */,
 				3EDC0D0F296892D200603FED /* KVCEssential.swift in Sources */,
 				79218AF32756729D0063004E /* HealthRecordsFlowModels.swift in Sources */,
@@ -4745,6 +4788,7 @@
 				3EDC0D20296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
 				79B1A0FE28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				3E6831252940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift in Sources */,
+				2DF317FF29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */,
 				2922C15E287E1482000FF4F7 /* HealthVisitClinic+CoreDataClass.swift in Sources */,
 				2922C158287E1482000FF4F7 /* HealthVisitClinic+CoreDataProperties.swift in Sources */,
 				794BD6372702EEC00084ADA8 /* BaseViewController.swift in Sources */,
@@ -5023,6 +5067,7 @@
 				3E66F061290B45D200D90EF6 /* ImmunizationRecommendation+CoreDataClass.swift in Sources */,
 				3E048CCA2911ADF100774278 /* StorageService + Dependent.swift in Sources */,
 				3E78AEC928F8729900C66E28 /* DependentsHomeViewController.swift in Sources */,
+				2DF3180829E5372C0077EA87 /* EditCommentTableViewCell.swift in Sources */,
 				3EDC0D0D296892D200603FED /* KVCEssential.swift in Sources */,
 				798005362852C66E006E390F /* StorageService.swift in Sources */,
 				798005372852C66E006E390F /* FormTextFieldView.swift in Sources */,
@@ -5082,6 +5127,8 @@
 				7980055B2852C66E006E390F /* HealthRecordsUserView.swift in Sources */,
 				7980055C2852C66E006E390F /* NewsFeedTableViewCell.swift in Sources */,
 				3E62CFCC299BF3A5000FBB40 /* CommentService+Network.swift in Sources */,
+				2DF317FD29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */,
+				2D5218D52988556100E07382 /* Patient+CoreDataProperties.swift in Sources */,
 				3EDC0D1E296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
 				79B1A0FC28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				7980055D2852C66E006E390F /* HealthPassViewController.swift in Sources */,
@@ -5547,7 +5594,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.1;
+				MARKETING_VERSION = 1.8.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -5821,6 +5868,7 @@
 		7944F68126F12614006B9444 /* BCVaccineCard.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2DF3180E29E8D3580077EA87 /* BCVaccineCard 1.9.xcdatamodel */,
 				2D5218C72988519E00E07382 /* BCVaccineCard 1.8.xcdatamodel */,
 				3EDC0C8A2967A18000603FED /* BCVaccineCard 1.7.xcdatamodel */,
 				3E6831072940D1B400100402 /* BCVaccineCard 1.6.xcdatamodel */,
@@ -5830,7 +5878,7 @@
 				3E91C78D28B517C6005AA34F /* BCVaccineCard 1.1.xcdatamodel */,
 				7944F68226F12614006B9444 /* BCVaccineCard.xcdatamodel */,
 			);
-			currentVersion = 2D5218C72988519E00E07382 /* BCVaccineCard 1.8.xcdatamodel */;
+			currentVersion = 2DF3180E29E8D3580077EA87 /* BCVaccineCard 1.9.xcdatamodel */;
 			name = BCVaccineCard.xcdatamodeld;
 			path = ../BCVaccineCard.xcdatamodeld;
 			sourceTree = "<group>";
