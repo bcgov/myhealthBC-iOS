@@ -12,13 +12,38 @@
         <!--Services View Controller-->
         <scene sceneID="s0d-6b-0kx">
             <objects>
-                <viewController storyboardIdentifier="ServicesViewController" id="Y6W-OH-hqX" customClass="ServicesViewController" customModule="HealthGatewayTest" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ServicesViewController" id="Y6W-OH-hqX" customClass="ServicesViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can check and update your Organ Donor Registry information here. More health services will be added in future." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="etX-pq-Xoq">
+                                <rect key="frame" x="16" y="77" width="361" height="61"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xsc-ow-SZk">
+                                <rect key="frame" x="0.0" y="169" width="393" height="649"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="xsc-ow-SZk" secondAttribute="bottom" id="2cI-g2-oBn"/>
+                            <constraint firstItem="etX-pq-Xoq" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="18" id="94A-j4-MzC"/>
+                            <constraint firstItem="etX-pq-Xoq" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="LRk-9i-XJi"/>
+                            <constraint firstItem="etX-pq-Xoq" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="MLg-AG-LpR"/>
+                            <constraint firstItem="xsc-ow-SZk" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="bcA-fX-tr0"/>
+                            <constraint firstItem="xsc-ow-SZk" firstAttribute="top" secondItem="etX-pq-Xoq" secondAttribute="bottom" constant="31" id="caV-HN-qxz"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="xsc-ow-SZk" secondAttribute="trailing" id="jg8-kA-vF6"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="contentContainer" destination="xsc-ow-SZk" id="g5l-eW-DJc"/>
+                        <outlet property="descriptiveLabel" destination="etX-pq-Xoq" id="uV7-A3-Qss"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

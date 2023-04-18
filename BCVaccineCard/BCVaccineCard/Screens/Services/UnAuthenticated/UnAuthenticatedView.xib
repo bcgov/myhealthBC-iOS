@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="UnAuthenticatedView" customModule="HealthGateway" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VcA-MZ-hKc">
+                    <rect key="frame" x="24" y="549" width="327" height="54"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="54" id="rAt-Ku-kgO"/>
+                    </constraints>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="Log in with BC Services Card"/>
+                    <connections>
+                        <action selector="loginAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="zXu-71-L8d"/>
+                    </connections>
+                </button>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MkD-0O-3jd">
+                    <rect key="frame" x="117.66666666666669" y="75" width="140" height="170"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="140" id="TX8-T4-SIt"/>
+                        <constraint firstAttribute="height" constant="170" id="vL3-CN-niT"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The BC Services Card app is a secure way to prove who you are." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OFe-rg-dja">
+                    <rect key="frame" x="32" y="294" width="311" height="40.666666666666686"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="MkD-0O-3jd" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="65x-1Q-tgN"/>
+                <constraint firstItem="VcA-MZ-hKc" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="24" id="APk-CX-dHN"/>
+                <constraint firstItem="VcA-MZ-hKc" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="FPf-Nq-vqL"/>
+                <constraint firstAttribute="trailing" secondItem="OFe-rg-dja" secondAttribute="trailing" constant="32" id="Ify-3E-v2R"/>
+                <constraint firstItem="MkD-0O-3jd" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="jx7-97-Ut6"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="VcA-MZ-hKc" secondAttribute="bottom" constant="30" id="nZ1-Up-4cs"/>
+                <constraint firstItem="OFe-rg-dja" firstAttribute="top" secondItem="MkD-0O-3jd" secondAttribute="bottom" constant="49" id="oy0-SX-uef"/>
+                <constraint firstItem="OFe-rg-dja" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="32" id="s2T-CN-lWJ"/>
+            </constraints>
+            <connections>
+                <outlet property="descriptiveText" destination="OFe-rg-dja" id="TXf-vO-Lhc"/>
+                <outlet property="iconImageView" destination="MkD-0O-3jd" id="6US-GI-pGq"/>
+                <outlet property="loginButton" destination="VcA-MZ-hKc" id="oex-pD-GEc"/>
+            </connections>
+            <point key="canvasLocation" x="112" y="24"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
