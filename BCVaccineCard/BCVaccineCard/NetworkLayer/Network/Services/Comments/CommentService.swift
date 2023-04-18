@@ -101,17 +101,10 @@ struct CommentService {
         incrementLoadCounter()
         let dispatchGroup = DispatchGroup()
         for comment in comments {
-            syncComment(comment: comment, dispatchGroup: dispatchGroup)
-//            dispatchGroup.enter()
-//            post(comment: comment) { res in
-//                if let result = res {
-//                    StorageService.shared.delete(object: comment)
-//                    if let storedComment = StorageService.shared.storeSubmittedComment(object: result) {
-//                        self.notify(event: StorageService.StorageEvent(event: .Synced, entity: .Comments, object: storedComment))
-//                    }
-//                }
-//                dispatchGroup.leave()
-//            }
+            dispatchGroup.enter()
+            syncComment(comment: comment) {
+                dispatchGroup.leave()
+            }
         }
         dispatchGroup.notify(queue: .main) {
             decrementLoadCounter()
@@ -120,9 +113,8 @@ struct CommentService {
         }
     }
     
-    private func syncComment(comment: Comment, dispatchGroup: DispatchGroup) {
+    private func syncComment(comment: Comment, completion: @escaping()->Void) {
         guard let networkMethod = comment.networkMethod, let method = UnsynchedCommentMethod.init(rawValue: networkMethod) else { return }
-        dispatchGroup.enter()
         switch method {
         case .post:
             post(comment: comment) { res in
@@ -132,7 +124,7 @@ struct CommentService {
                         self.notify(event: StorageService.StorageEvent(event: .Synced, entity: .Comments, object: storedComment))
                     }
                 }
-                dispatchGroup.leave()
+                completion()
             }
         case .edit:
             edit(comment: comment) { res in
@@ -142,7 +134,7 @@ struct CommentService {
                         self.notify(event: StorageService.StorageEvent(event: .Synced, entity: .Comments, object: storedEditedComment))
                     }
                 }
-                dispatchGroup.leave()
+                completion()
             }
         case .delete:
             delete(comment: comment) { res in
@@ -152,7 +144,7 @@ struct CommentService {
                         self.notify(event: StorageService.StorageEvent(event: .Synced, entity: .Comments, object: storedDeletedComment))
                     }
                 }
-                dispatchGroup.leave()
+                completion()
             }
         }
     }

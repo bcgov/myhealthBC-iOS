@@ -106,7 +106,7 @@ extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate, UIDocume
                 self.showToast(message: "Encountered an error while fetching PDF", style: .Warn)
                 return
             }
-            showPDFDocument(pdf: pdfData, navTitle: "Organ Donor Status", documentVCDelegate: self, navDelegate: self.navDelegate)
+            self.showPDFDocument(pdf: pdfData, navTitle: "Organ Donor Status", documentVCDelegate: self, navDelegate: self.navDelegate)
         }
         
     }
