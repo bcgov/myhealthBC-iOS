@@ -20,7 +20,9 @@ extension Comment {
     @NSManaged public var createdDateTime: Date?
     @NSManaged public var entryTypeCode: String?
     @NSManaged public var id: String?
+    @NSManaged public var networkMethod: String?
     @NSManaged public var parentEntryID: String?
+    @NSManaged public var shouldHide: Bool
     @NSManaged public var text: String?
     @NSManaged public var updatedBy: String?
     @NSManaged public var updatedDateTime: Date?
