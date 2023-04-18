@@ -31,7 +31,7 @@ class SpecialAuthorityDrugDetailView: BaseHealthRecordsDetailView, UITableViewDe
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
-        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
+        comments = model?.comments ?? []
     }
     
     override func submittedComment(object: Comment) {
@@ -68,7 +68,7 @@ class SpecialAuthorityDrugDetailView: BaseHealthRecordsDetailView, UITableViewDe
             return cell
         case .Comments:
             guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(comment: comments[indexPath.row], showOptionsButton: false)
+            cell.configure(comment: comments[indexPath.row])
             return cell
         }
     }

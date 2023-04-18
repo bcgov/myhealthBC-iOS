@@ -21,7 +21,7 @@ class ClinicalDocumentRecordDetailView: BaseHealthRecordsDetailView, UITableView
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
-        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
+        comments = model?.comments ?? []
     }
     
     override func submittedComment(object: Comment) {
@@ -61,7 +61,7 @@ class ClinicalDocumentRecordDetailView: BaseHealthRecordsDetailView, UITableView
             return cell
         case .Comments:
             guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(comment: comments[indexPath.row], showOptionsButton: false)
+            cell.configure(comment: comments[indexPath.row])
             return cell
         case .DownloadButton:
             guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }

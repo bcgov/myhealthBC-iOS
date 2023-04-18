@@ -42,19 +42,6 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     @IBOutlet weak var fieldContainer: UIView!
     @IBOutlet weak var tableView: UITableView!
     
-//    private var optionsDropDownView: CommentsOptionsDropDownView?
-    private var actionSheetController: UIAlertController?
-    
-    private var indexPathBeingEdited: IndexPath? {
-        didSet {
-            self.tableView.reloadData()
-        }
-    }
-    
-    private var indexPathBeingDeleted: IndexPath?
-    
-    private var editedText: String?
-    
     override func viewDidLoad() {
         self.title = "Comments"
         setup()
@@ -72,7 +59,7 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
         commentTextField.setup()
         commentTextField.delegate = self
         
-        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
+        comments = model?.comments ?? []
         comments = comments.sorted(by: {$0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()})
         setupTableView()
         style()
@@ -88,7 +75,7 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
         guard let event = notification.object as? StorageService.StorageEvent<Any> else {return}
         guard event.event == .Synced,
               event.entity == .Comments else {return}
-        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
+        comments = model?.comments ?? []
         comments = comments.sorted(by: {$0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()})
         tableView.reloadData()
     }
@@ -131,7 +118,6 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
             return
         }
         tableView.register(UINib.init(nibName: CommentViewTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommentViewTableViewCell.getName)
-        tableView.register(UINib.init(nibName: EditCommentTableViewCell.getName, bundle: .main), forCellReuseIdentifier: EditCommentTableViewCell.getName)
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -152,102 +138,17 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
         return tableView.dequeueReusableCell(withIdentifier: CommentViewTableViewCell.getName, for: indexPath) as? CommentViewTableViewCell
     }
     
-    func editCommentCell(indexPath: IndexPath, tableView: UITableView) -> EditCommentTableViewCell? {
-        return tableView.dequeueReusableCell(withIdentifier: EditCommentTableViewCell.getName, for: indexPath) as? EditCommentTableViewCell
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let editedIndexPath = indexPathBeingEdited {
-            if indexPath == editedIndexPath {
-                guard let cell = editCommentCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
-                let comment = comments[editedIndexPath.row]
-                cell.configure(comment: comment, delegateOwner: self)
-                return cell
-            } else {
-                guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-                cell.configure(comment: comments[indexPath.row], indexPath: indexPath, delegateOwner: self, showOptionsButton: true, otherCellBeingEdited: true)
-                return cell
-            }
-        } else {
-            guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(comment: comments[indexPath.row], indexPath: indexPath, delegateOwner: self, showOptionsButton: true)
-            return cell
-        }
+        guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
+        cell.configure(comment: comments[indexPath.row])
+        return cell
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return comments.count
     }
     
-}
-
-// MARK: Show and hide options drop down menu
-
-//extension CommentsViewController: CommentViewTableViewCellDelegate {
-//    // TODO: Add touch gesture to dismiss custom view when shown
-//    func optionsTapped(row: Int) {
-//        if let _ = optionsDropDownView {
-//            hideOptionsDropDown()
-//        } else {
-//            showOptionsDropDown()
-//        }
-//    }
-//
-//    private func showOptionsDropDown() {
-//        // TODO: Update this to pin to the proper comment with constraints
-//        let frame = CGRect(x: 30, y: 10, width: 145, height: 106)
-//        optionsDropDownView = CommentsOptionsDropDownView(frame: frame)
-//    }
-//
-//    private func hideOptionsDropDown() {
-//        optionsDropDownView?.removeFromSuperview()
-//    }
-//
-//
-//}
-
-// MARK: Show and hide options drop down menu
-
-extension CommentsViewController: CommentViewTableViewCellDelegate {
-    // TODO: Add touch gesture to dismiss custom view when shown
-    func optionsTapped(indexPath: IndexPath) {
-        if let _ = actionSheetController {
-            hideOptionsDropDown()
-        } else {
-            showOptionsDropDown(indexPath: indexPath)
-        }
-    }
-
-    private func showOptionsDropDown(indexPath: IndexPath) {
-        actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        
-        actionSheetController?.addAction(UIAlertAction(title: "Edit comment", style: .default, handler: { _ in
-            self.indexPathBeingEdited = indexPath
-        }))
-        
-        actionSheetController?.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
-            self.alert(title: "Delete Comment", message: "This action cannot be undone. Are you sure you want to delete the comment?", buttonOneTitle: .cancel, buttonOneCompletion: {
-                self.hideOptionsDropDown()
-            }, buttonTwoTitle: .delete) {
-                self.indexPathBeingDeleted = indexPath
-                self.deleteComment()
-            }
-        }))
-        
-        actionSheetController?.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { [self] _ in
-            self.hideOptionsDropDown()
-        }))
-        
-        guard let actionSheetController = actionSheetController else { return }
-        self.present(actionSheetController, animated: true)
-    }
-
-    private func hideOptionsDropDown() {
-        actionSheetController?.dismiss(animated: true)
-        actionSheetController = nil
-    }
-
-
 }
 
 extension CommentsViewController: UIScrollViewDelegate {
@@ -339,80 +240,3 @@ extension CommentsViewController: UIScrollViewDelegate {
         }
     }
 }
-
-// MARK: Logic for editing comment
-extension CommentsViewController: AppStyleButtonDelegate {
-    func buttonTapped(type: AppStyleButton.ButtonType) {
-        switch type {
-        case .cancel:
-            self.indexPathBeingEdited = nil
-            self.editedText = nil
-        case .update:
-            updateComment()
-        default: return
-        }
-    }
-    
-    private func updateComment() {
-        guard let editedText = self.editedText else { return }
-        guard let record = model, let hdid = AuthManager().hdid else {return}
-        guard let index = indexPathBeingEdited else { return }
-        let oldComment = comments[index.row]
-        record.updateComment(text: editedText, hdid: hdid, oldComment: oldComment) { [weak self] result in
-            guard let self = self, let commentObject = result else {
-                return
-            }
-            self.comments.insert(commentObject, at: index.row)
-            if let oldCommentIndex = self.comments.firstIndex(of: oldComment) {
-                self.comments.remove(at: oldCommentIndex)
-            }
-            self.indexPathBeingEdited = nil
-//            self.scrollToBottom()
-            self.resignFirstResponder()
-            
-        }
-    }
-    
-    private func deleteComment() {
-        guard let record = model, let hdid = AuthManager().hdid else {return}
-        guard let indexPath = indexPathBeingDeleted else { return }
-        let comment = comments[indexPath.row]
-        record.deleteComment(comment: comment, hdid: hdid) { [weak self] result in
-            guard let self = self, let commentObject = result else {
-                return
-            }
-            self.indexPathBeingDeleted = nil
-            self.comments.remove(at: indexPath.row)
-            self.tableView.reloadData()
-//            self.scrollToBottom()
-            self.resignFirstResponder()
-            
-            if self.comments.isEmpty {
-                self.navigationController?.popViewController(animated: true)
-            }
-        }
-    }
-}
-
-// MARK: Delegate For EditCommentTableViewCell
-extension CommentsViewController: EditCommentTableViewCellDelegate {
-    func newText(string: String) {
-        editedText = string
-    }
-}
-
-//// MARK: Logic for handling edit and delete drop down
-//
-//extension CommentsViewController: CommentsOptionsDropDownViewDelegate {
-//
-//    func beginEditingComment() {
-//        // TODO: Adjust current UI to use
-//        <#code#>
-//    }
-//
-//    func deleteComment() {
-//        <#code#>
-//    }
-//
-//
-//}

@@ -41,7 +41,6 @@ class AppStyleButton: UIView {
         case viewPDF
         case downloadFullReport
         case sendMessage
-        case update
         
         var getTitle: String {
             switch self {
@@ -62,7 +61,6 @@ class AppStyleButton: UIView {
             case .viewPDF: return .viewPDF
             case .downloadFullReport: return "Download Full Report"
             case .sendMessage: return "Send Message"
-            case .update: return "Update"
             }
         }
     }
@@ -119,11 +117,10 @@ class AppStyleButton: UIView {
         self.delegate?.buttonTapped(type: self.buttonType)
     }
     
-    func configure(withStyle style: ButtonStyle, buttonType: ButtonType, delegateOwner: UIViewController, enabled: Bool, accessibilityValue: String? = nil, accessibilityHint: String? = nil, font: UIFont = UIFont.bcSansBoldWithSize(size: 18)) {
+    func configure(withStyle style: ButtonStyle, buttonType: ButtonType, delegateOwner: UIViewController, enabled: Bool, accessibilityValue: String? = nil, accessibilityHint: String? = nil) {
         roundedButton.backgroundColor = style.getColorScheme.backgroundColor
         roundedButton.setTitleColor(style.getColorScheme.titleColor, for: .normal)
         roundedButton.setTitle(buttonType.getTitle, for: .normal)
-        roundedButton.titleLabel?.font = font
         self.delegate = delegateOwner as? AppStyleButtonDelegate
         self.buttonType = buttonType
         self.enabled = enabled

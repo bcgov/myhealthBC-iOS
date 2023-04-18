@@ -251,7 +251,6 @@ extension StorageService: StoragePatientManager {
             return
         }
         deleteHealthRecords(for: patient)
-        deleteComments(for: patient)
         delete(object: patient)
         notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
     }
