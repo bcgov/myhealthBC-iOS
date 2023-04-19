@@ -20,7 +20,7 @@ struct MedicationService {
     }
     
     public func fetchAndStore(for patient: Patient, protectiveWord: String?, completion: @escaping ([Perscription]?, _ protectiveWordRequired: Bool)->Void) {
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .MedicationService_fetchAndStore)
         Logger.log(string: "Fetching Medication records for \(patient.name)", type: .Network)
         // TODO: Handle Protected Fetch
         fetch(for: patient, protectiveWord: protectiveWord) { result in
@@ -30,15 +30,16 @@ struct MedicationService {
             }
             
             if result == nil {
+                network.removeLoader(caller: .MedicationService_fetchAndStore)
                 return completion(nil, false)
             }
             
             guard let response = result else {
-                network.removeLoader()
+                network.removeLoader(caller: .MedicationService_fetchAndStore)
                 return completion([], result?.protectiveWordRequired == true)
             }
             store(medication: response, for: patient, protected: protectiveWord != nil, completion: { result in
-                network.removeLoader()
+                network.removeLoader(caller: .MedicationService_fetchAndStore)
                 return completion(result, response.protectiveWordRequired)
             })
         }

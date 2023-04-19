@@ -21,15 +21,15 @@ struct CovidTestsService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([CovidLabTestResult]?)->Void) {
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .CovidTestsService_fetchAndStore)
         Logger.log(string: "Fetching CovidTests records for \(patient.name)", type: .Network)
         fetch(for: patient) { result in
             guard let response = result else {
-                network.removeLoader()
+                network.removeLoader(caller: .CovidTestsService_fetchAndStore)
                 return completion(nil)
             }
             store(covidtests: response, for: patient, completion: { result in
-                network.removeLoader()
+                network.removeLoader(caller: .CovidTestsService_fetchAndStore)
                 return completion(result)
             })
         }

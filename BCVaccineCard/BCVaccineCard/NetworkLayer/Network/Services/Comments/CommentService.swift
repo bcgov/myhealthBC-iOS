@@ -24,14 +24,14 @@ struct CommentService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([Comment])->Void) {
         // TODO delete existing?
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .CommentService_fetchAndStore)
         fetch(for: patient) { response in
             guard let response = response else {
-                network.removeLoader()
+                network.removeLoader(caller: .CommentService_fetchAndStore)
                 return completion([])
             }
             StorageService.shared.storeComments(in: response, completion: { comments in
-                network.removeLoader()
+                network.removeLoader(caller: .CommentService_fetchAndStore)
                 completion(comments)
             })
         }
@@ -98,7 +98,7 @@ struct CommentService {
             CommentService.blockSync = false
             return completion()
         }
-        incrementLoadCounter()
+        network.addLoader(message: .SyncingRecords, caller: .CommentService_submitUnsyncedComments)
         let dispatchGroup = DispatchGroup()
         for comment in comments {
             dispatchGroup.enter()
@@ -107,7 +107,7 @@ struct CommentService {
             }
         }
         dispatchGroup.notify(queue: .main) {
-            decrementLoadCounter()
+            network.removeLoader(caller: .CommentService_submitUnsyncedComments)
             CommentService.blockSync = false
             return completion()
         }
@@ -145,23 +145,6 @@ struct CommentService {
                     }
                 }
                 completion()
-            }
-        }
-    }
-    
-    private func decrementLoadCounter() {
-        DispatchQueue.main.async {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.decrementLoader()
-            }
-        }
-        
-    }
-    
-    private func incrementLoadCounter() {
-        DispatchQueue.main.async {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.incrementLoader(message: .SyncingRecords)
             }
         }
     }

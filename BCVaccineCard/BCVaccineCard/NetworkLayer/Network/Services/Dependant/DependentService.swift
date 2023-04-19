@@ -20,21 +20,25 @@ struct DependentService {
     }
   
     public func fetchDependents(for patient: Patient, completion: @escaping([Dependent]?) -> Void) {
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .DependentService_fetchDependents)
         Logger.log(string: "fetching dependents", type: .Network)
         fetchDependentNetworkRequest { dependentResponse in
             guard let dependentResponse = dependentResponse, let payload = dependentResponse.resourcePayload else {
-                network.removeLoader()
+                network.removeLoader(caller: .DependentService_fetchDependents)
                 return completion(nil)
             }
-            network.removeLoader()
             StorageService.shared.deleteDependents(for: patient)
+            guard let dependents = dependentResponse.resourcePayload, !dependents.isEmpty else {
+                Logger.log(string: "No dependents", type: .Network)
+                network.removeLoader(caller: .DependentService_fetchDependents)
+                return completion([])
+            }
             Logger.log(string: "Storing dependents", type: .Network)
             StorageService.shared.store(dependents: payload, for: patient, completion: { result in
                 // Fetch vaccine cards for dependents - Always needed after fetching patients
                 Logger.log(string: "fetching dependents vaccine cards", type: .Network)
                 VaccineCardService(network: network, authManager: authManager, configService: configService).fetchAndStoreForDependents(of: patient, completion: { _ in
-                    network.removeLoader()
+                    network.removeLoader(caller: .DependentService_fetchDependents)
                     completion(result)
                 })
             })
@@ -74,9 +78,9 @@ struct DependentService {
     }
     
     public func addDependent(for patient: Patient, object: PostDependent, completion: @escaping(Dependent?) -> Void) {
-        network.addLoader(message: .empty)
+        network.addLoader(message: .empty, caller: .DependentService_addDependent)
         addDependentNetworkRequest(object: object) { dependentResponse in
-            network.removeLoader()
+            network.removeLoader(caller: .DependentService_addDependent)
             guard let dependentResponse = dependentResponse,
                   let payload = dependentResponse.resourcePayload
             else {

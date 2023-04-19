@@ -13,19 +13,46 @@ protocol Network {
 }
 
 
+enum LoaderCaller {
+    case PatientService_fetchAndStoreDetails
+    case PatientService_fetchAndStoreOrganDonorStatus
+    case PatientService_validateProfile
+    case CovidTestsService_fetchAndStore
+    case VaccineCardService_fetchAndStore_Patient
+    case VaccineCardService_fetchAndStore_Dependent
+    case VaccineCardService_fetchAndStore_DependentsOfPatient
+    case VaccineCardService_fetchAndStore_FormInfo
+    case ClinicalDocumentService_fetchAndStore
+    case DependentService_fetchDependents
+    case DependentService_addDependent
+    case FeedbackService_postFeedback
+    case HealthVisitsService_fetchAndStore
+    case MobileConfigService_fetchConfig
+    case MedicationService_fetchAndStore
+    case SpecialAuthorityDrugService_fetchAndStore
+    case HospitalVisitsService_fetchAndStore
+    case PDFService_fetchPDF
+    case PDFService_DonorStatus
+    case CommentService_submitUnsyncedComments
+    case CommentService_fetchAndStore
+    case LabOrderService_fetchAndStore
+    case ImmnunizationsService_fetchAndStore
+    case HealthRecordsService_fetchAndStore
+}
+
 extension Network {
-    func addLoader(message: LoaderMessage) {
+    func addLoader(message: LoaderMessage, caller: LoaderCaller) {
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.incrementLoader(message: message)
+                appDelegate.incrementLoader(message: message, caller: caller)
             }
         }
     }
     
-    func removeLoader() {
+    func removeLoader(caller: LoaderCaller) {
         DispatchQueue.main.async {
             if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.decrementLoader()
+                appDelegate.decrementLoader(caller: caller)
             }
         }
     }

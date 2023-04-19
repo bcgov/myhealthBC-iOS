@@ -47,17 +47,17 @@ extension StorageService: StorageCommentManager {
     func storeComment(remoteObject object: AuthenticatedCommentResponseObject.Comment, completion: @escaping(Comment?)->Void) {
         guard let id = object.parentEntryID else {
             Logger.log(string: "Can't store comment: No id", type: .storage)
-            return
+            return completion(nil)
         }
         
         guard let context = managedContext else {
-            return
+            return completion(nil)
         }
         
         let applicableRecords = findRecordsForComment(id: id)
         guard !applicableRecords.isEmpty else {
             Logger.log(string: "Could not find record for comment with id \(String(describing: id))", type: .storage)
-            return
+            return completion(nil)
         }
         
         let storageCommentObject = genCommentObject(in: object, context: context)

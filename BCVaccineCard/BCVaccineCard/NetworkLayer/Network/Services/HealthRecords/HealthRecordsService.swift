@@ -22,7 +22,7 @@ struct HealthRecordsService {
         let dispatchGroup = DispatchGroup()
         var records: [HealthRecord] = []
         
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .HealthRecordsService_fetchAndStore)
         Logger.log(string: "fetching patient records for \(patient.name)", type: .Network)
         let typesToFetch = types ?? StorageService.healthRecordType.allCases
         var hadFailures = false
@@ -146,7 +146,7 @@ struct HealthRecordsService {
         }
         dispatchGroup.notify(queue: .main) {
             Logger.log(string: "Fetched patient records for \(patient.name)", type: .Network)
-            network.removeLoader()
+            network.removeLoader(caller: .HealthRecordsService_fetchAndStore)
             return completion(records, hadFailures)
         }
     }

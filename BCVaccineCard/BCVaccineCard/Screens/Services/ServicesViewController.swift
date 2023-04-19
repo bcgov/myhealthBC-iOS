@@ -105,7 +105,7 @@ extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate, UIDocume
             return
         }
         
-        service.fetchPDF(donotStatus: status, patient: patient) { [weak self] result in
+        service.fetchPDF(donorStatus: status, patient: patient) { [weak self] result in
             guard let `self` = self else {return}
             guard let pdfData = result else {
                 self.showToast(message: "Encountered an error while fetching PDF", style: .Warn)

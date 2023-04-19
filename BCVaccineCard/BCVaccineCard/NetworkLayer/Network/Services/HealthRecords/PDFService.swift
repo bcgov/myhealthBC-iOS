@@ -23,20 +23,20 @@ struct PDFService {
         else {
             return completion(nil)
         }
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .PDFService_fetchPDF)
         fetchPDF(fileID: id, type: type, isCovid: type == .Covid19, patient: patient, completion: {response in
-            network.removeLoader()
+            network.removeLoader(caller: .PDFService_fetchPDF)
             return completion(response?.data)
         })
     }
     
-    public func fetchPDF(donotStatus: OrganDonorStatus, patient: Patient, completion: @escaping (Data?)->Void) {
-        guard let fileId = donotStatus.fileId else {
+    public func fetchPDF(donorStatus: OrganDonorStatus, patient: Patient, completion: @escaping (Data?)->Void) {
+        guard let fileId = donorStatus.fileId else {
             return completion(nil)
         }
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .PDFService_DonorStatus)
         fetchPDFV2(fileID: fileId, type: .OrganDonor, isCovid: false, patient: patient, completion: {response in
-            network.removeLoader()
+            network.removeLoader(caller: .PDFService_DonorStatus)
             guard let response = response,
                   let content = response.content
             else {

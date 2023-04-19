@@ -37,14 +37,14 @@ class MobileConfigService {
             Logger.log(string: "MobileConfigService Offline", type: .Network)
             return completion(MobileConfigStorage.offlineConfig)
         }
-        network.addLoader(message: .empty)
+        network.addLoader(message: .empty, caller: .MobileConfigService_fetchConfig)
         let request = NetworkRequest<DefaultParams, MobileConfigurationResponseObject>(
             url: Constants.Network.MobileConfig,
             type: .Get,
             parameters: nil,
             headers: nil,
             completion: { responseData in
-                self.network.removeLoader()
+                self.network.removeLoader(caller: .MobileConfigService_fetchConfig)
                 Logger.log(string: "MobileConfigService response received", type: .Network)
                 if let response = responseData {
                     MobileConfigStorage.store(config: response)

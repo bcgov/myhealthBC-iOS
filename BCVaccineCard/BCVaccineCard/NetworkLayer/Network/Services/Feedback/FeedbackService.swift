@@ -18,9 +18,9 @@ struct FeedbackService {
     }
     
     public func postFeedback(for patient: Patient, object: PostFeedback, completion: @escaping(Bool?) -> Void) {
-        network.addLoader(message: .empty)
+        network.addLoader(message: .empty, caller: .FeedbackService_postFeedback)
         postFeedbackNetworkRequest(object: object) { passed in
-            network.removeLoader()
+            network.removeLoader(caller: .FeedbackService_postFeedback)
             completion(passed)
         }
     }

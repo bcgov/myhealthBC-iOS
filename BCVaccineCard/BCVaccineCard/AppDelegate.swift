@@ -31,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal var dataLoadHideTimer: Timer? = nil
     internal var dataLoadTag = 9912341
     internal var dataLoadTextTag = 9912342
+    internal var loaderCallers: [LoaderCaller] = []
     
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
@@ -328,17 +329,19 @@ extension LoaderMessage {
 extension AppDelegate {
     // Triggered by dataLoadCount
 
-    func incrementLoader(message: LoaderMessage) {
+    func incrementLoader(message: LoaderMessage, caller: LoaderCaller) {
         if !NetworkConnection.shared.hasConnection && message.isNetworkDependent() {
             return
         }
         dataLoadCount += 1
         dataLoadHideTimer?.invalidate()
         showLoader(message: message)
-        Logger.log(string: "\n\n\n\n Loader + + + + + + + \n\(dataLoadCount)", type: .general)
+        
+        loaderCallers.append(caller)
+        Logger.log(string: "\n\nLoader + + + + + + + \nAdded:\n\(caller)\nTotal:\(dataLoadCount)\n\n", type: .general)
     }
     
-    func decrementLoader() {
+    func decrementLoader(caller: LoaderCaller) {
         dataLoadCount -= 1
         dataLoadHideTimer?.invalidate()
         if dataLoadCount < 1 {
@@ -348,7 +351,11 @@ extension AppDelegate {
         if dataLoadCount < 0 {
             dataLoadCount = 0
         }
-        Logger.log(string: "\n\n\n\n Loader - - - - - - - \n\(dataLoadCount)", type: .general)
+        if let idx = loaderCallers.firstIndex(of: caller) {
+            loaderCallers.remove(at: idx)
+        }
+        
+        Logger.log(string: "\n\nLoader - - - - - - - \nRemoved:\n\(caller)\nRemaining:\n\(dataLoadCount)\n\(loaderCallers)\n\n", type: .general)
     }
     
     /// Do not call this function manually. use dataLoadCount
