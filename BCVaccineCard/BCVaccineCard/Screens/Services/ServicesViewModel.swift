@@ -42,7 +42,7 @@ extension ServicesViewController {
             self.patientService = PatientService(network: network, authManager: authManager, configService: configService)
             AppStates.shared.listenToAuth {[weak self] authenticated in
                 guard let `self` = self else {return}
-                if let handler = refreshNotifier {
+                if let handler = self.refreshNotifier {
                     handler()
                 }
             }
@@ -52,7 +52,7 @@ extension ServicesViewController {
                 if event.event == .Save,
                     event.entity == .OrganDonorStatus
                 {
-                    if let handler = refreshNotifier {
+                    if let handler = self.refreshNotifier {
                         handler()
                     }
                 }
