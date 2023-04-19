@@ -359,7 +359,6 @@ enum LoaderCaller {
 
 extension AppDelegate {
     // Triggered by dataLoadCount
-
     func incrementLoader(message: LoaderMessage, caller: LoaderCaller) {
         if !NetworkConnection.shared.hasConnection && message.isNetworkDependent() {
             return
