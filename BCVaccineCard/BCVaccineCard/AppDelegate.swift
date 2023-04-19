@@ -326,6 +326,37 @@ extension LoaderMessage {
     }
 }
 
+
+/// These will help us debug loader issues - for example finding decrementLoader() that never gets called in a function
+/// Keep the naming unique for each function: Classname_functionName
+enum LoaderCaller {
+    case PatientService_fetchAndStoreDetails
+    case PatientService_fetchAndStoreOrganDonorStatus
+    case PatientService_validateProfile
+    case CovidTestsService_fetchAndStore
+    case VaccineCardService_fetchAndStore_Patient
+    case VaccineCardService_fetchAndStore_Dependent
+    case VaccineCardService_fetchAndStore_DependentsOfPatient
+    case VaccineCardService_fetchAndStore_FormInfo
+    case ClinicalDocumentService_fetchAndStore
+    case DependentService_fetchDependents
+    case DependentService_addDependent
+    case FeedbackService_postFeedback
+    case HealthVisitsService_fetchAndStore
+    case MobileConfigService_fetchConfig
+    case MedicationService_fetchAndStore
+    case SpecialAuthorityDrugService_fetchAndStore
+    case HospitalVisitsService_fetchAndStore
+    case PDFService_fetchPDF
+    case PDFService_DonorStatus
+    case CommentService_submitUnsyncedComments
+    case CommentService_fetchAndStore
+    case LabOrderService_fetchAndStore
+    case ImmnunizationsService_fetchAndStore
+    case HealthRecordsService_fetchAndStore
+}
+
+
 extension AppDelegate {
     // Triggered by dataLoadCount
 
