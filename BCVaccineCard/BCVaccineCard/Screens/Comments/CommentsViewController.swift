@@ -50,7 +50,7 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
             self.tableView.reloadData()
         }
     }
-    
+        
     private var indexPathBeingDeleted: IndexPath?
     
     private var editedText: String?
@@ -96,7 +96,6 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
     func style() {
         guard titleLabel != nil else {return}
         titleLabel.font = UIFont.bcSansRegularWithSize(size: 17)
-//        showTitle()
     }
     
     func textChanged(text: String?) {}
@@ -183,33 +182,7 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: Show and hide options drop down menu
 
-//extension CommentsViewController: CommentViewTableViewCellDelegate {
-//    // TODO: Add touch gesture to dismiss custom view when shown
-//    func optionsTapped(row: Int) {
-//        if let _ = optionsDropDownView {
-//            hideOptionsDropDown()
-//        } else {
-//            showOptionsDropDown()
-//        }
-//    }
-//
-//    private func showOptionsDropDown() {
-//        // TODO: Update this to pin to the proper comment with constraints
-//        let frame = CGRect(x: 30, y: 10, width: 145, height: 106)
-//        optionsDropDownView = CommentsOptionsDropDownView(frame: frame)
-//    }
-//
-//    private func hideOptionsDropDown() {
-//        optionsDropDownView?.removeFromSuperview()
-//    }
-//
-//
-//}
-
-// MARK: Show and hide options drop down menu
-
 extension CommentsViewController: CommentViewTableViewCellDelegate {
-    // TODO: Add touch gesture to dismiss custom view when shown
     func optionsTapped(indexPath: IndexPath) {
         if let _ = actionSheetController {
             hideOptionsDropDown()
@@ -239,12 +212,22 @@ extension CommentsViewController: CommentViewTableViewCellDelegate {
         }))
         
         guard let actionSheetController = actionSheetController else { return }
-        self.present(actionSheetController, animated: true)
+        self.present(actionSheetController, animated: true) {
+            actionSheetController.view.superview?.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissActionSheet))
+            guard let views = actionSheetController.view.superview?.subviews, views.count > 0 else { return }
+            views[0].addGestureRecognizer(tap)
+        }
     }
 
     private func hideOptionsDropDown() {
         actionSheetController?.dismiss(animated: true)
         actionSheetController = nil
+        
+    }
+    
+    @objc func dismissActionSheet() {
+        hideOptionsDropDown()
     }
 
 
@@ -367,7 +350,6 @@ extension CommentsViewController: AppStyleButtonDelegate {
                 self.comments.remove(at: oldCommentIndex)
             }
             self.indexPathBeingEdited = nil
-//            self.scrollToBottom()
             self.resignFirstResponder()
             
         }
@@ -384,7 +366,6 @@ extension CommentsViewController: AppStyleButtonDelegate {
             self.indexPathBeingDeleted = nil
             self.comments.remove(at: indexPath.row)
             self.tableView.reloadData()
-//            self.scrollToBottom()
             self.resignFirstResponder()
             
             if self.comments.isEmpty {
@@ -401,18 +382,3 @@ extension CommentsViewController: EditCommentTableViewCellDelegate {
     }
 }
 
-//// MARK: Logic for handling edit and delete drop down
-//
-//extension CommentsViewController: CommentsOptionsDropDownViewDelegate {
-//
-//    func beginEditingComment() {
-//        // TODO: Adjust current UI to use
-//        <#code#>
-//    }
-//
-//    func deleteComment() {
-//        <#code#>
-//    }
-//
-//
-//}
