@@ -50,9 +50,7 @@ class CommentsViewController: UIViewController, CommentTextFieldViewDelegate {
             self.tableView.reloadData()
         }
     }
-    
-    private var tap: UITapGestureRecognizer?
-    
+        
     private var indexPathBeingDeleted: IndexPath?
     
     private var editedText: String?
@@ -216,22 +214,13 @@ extension CommentsViewController: CommentViewTableViewCellDelegate {
         guard let actionSheetController = actionSheetController else { return }
         self.present(actionSheetController, animated: true) {
             actionSheetController.view.superview?.isUserInteractionEnabled = true
-            self.tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissActionSheet))
-            guard let tap = self.tap else { return }
+            let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissActionSheet))
             guard let views = actionSheetController.view.superview?.subviews, views.count > 0 else { return }
             views[0].addGestureRecognizer(tap)
         }
     }
 
     private func hideOptionsDropDown() {
-        if let tap = tap {
-            guard let views = actionSheetController?.view.superview?.subviews, views.count > 0 else {
-                self.tap = nil
-                return
-            }
-            views[0].removeGestureRecognizer(tap)
-            self.tap = nil
-        }
         actionSheetController?.dismiss(animated: true)
         actionSheetController = nil
         
