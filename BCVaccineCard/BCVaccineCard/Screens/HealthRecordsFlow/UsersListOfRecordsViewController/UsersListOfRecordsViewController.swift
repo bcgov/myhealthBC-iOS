@@ -26,6 +26,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var clearFiltersButton: UIButton!
     @IBOutlet weak private var filterStack: UIStackView!
     @IBOutlet weak private var filterContainer: UIView!
+    @IBOutlet weak private var recordsSearchBarView: RecordsSearchBarView!
     @IBOutlet weak private var tableView: UITableView!
     
     @IBOutlet weak private var parentContainerStackView: UIStackView!
@@ -155,6 +156,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setup() {
         setupTableView()
+        setupSearchBarView()
         updatePatientIfNecessary()
         navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
         showSelectedFilters()
@@ -252,6 +254,25 @@ extension UsersListOfRecordsViewController {
     @objc private func editButton() {
         tableView.isEditing = false
         inEditMode = true
+    }
+}
+
+// MARK: Search Bar
+extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
+    func setupSearchBarView() {
+        recordsSearchBarView.configure(delegateOwner: self)
+    }
+    
+    func searchButtonTapped(text: String) {
+        <#code#>
+    }
+    
+    func textDidChange(text: String?) {
+        <#code#>
+    }
+    
+    func filterButtonTapped() {
+        <#code#>
     }
 }
 
@@ -414,13 +435,9 @@ extension UsersListOfRecordsViewController {
         navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
         
         tableView.reloadData()
-        if patientRecords.isEmpty {
-            noRecordsFoundView.isHidden = false
-            tableView.isHidden = true
-        } else {
-            noRecordsFoundView.isHidden = true
-            tableView.isHidden = false
-        }
+        noRecordsFoundView.isHidden = !patientRecords.isEmpty
+        tableView.isHidden = patientRecords.isEmpty
+        recordsSearchBarView.isHidden = patientRecords.isEmpty
     }
     
     private func performBCSCLogin() {
