@@ -23,7 +23,7 @@ struct PDFService {
         else {
             return completion(nil)
         }
-        network.addLoader(message: .SyncingRecords, caller: .PDFService_fetchPDF)
+        network.addLoader(message: .empty, caller: .PDFService_fetchPDF)
         fetchPDF(fileID: id, type: type, isCovid: type == .Covid19, patient: patient, completion: {response in
             network.removeLoader(caller: .PDFService_fetchPDF)
             return completion(response?.data)
@@ -34,7 +34,7 @@ struct PDFService {
         guard let fileId = donorStatus.fileId else {
             return completion(nil)
         }
-        network.addLoader(message: .SyncingRecords, caller: .PDFService_DonorStatus)
+        network.addLoader(message: .empty, caller: .PDFService_DonorStatus)
         fetchPDFV2(fileID: fileId, type: .OrganDonor, isCovid: false, patient: patient, completion: {response in
             network.removeLoader(caller: .PDFService_DonorStatus)
             guard let response = response,
