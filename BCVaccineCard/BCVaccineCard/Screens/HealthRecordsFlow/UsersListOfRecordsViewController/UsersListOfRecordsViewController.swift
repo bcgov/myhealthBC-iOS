@@ -585,6 +585,8 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
             if protectiveWordRequird {
                 self.protectedWordFailedPromptAgain()
             } else if !records.isEmpty {
+                CommentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: patient) { _ in
+                }
                 AuthManager().storeProtectiveWord(protectiveWord: protectiveWord)
             }
         }
