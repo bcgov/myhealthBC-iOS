@@ -43,6 +43,9 @@ extension Network {
         switch error {
         case .FailedAfterRetry:
             showToast(message: .fetchRecordError, style: .Warn)
+        default:
+            return
+            /*
         case .code401:
             showToast(message: "401 - The client must authenticate itself to get the requested response.", style: .Warn)
         case .code403:
@@ -57,6 +60,7 @@ extension Network {
             showToast(message: "ERROR 500", style: .Warn)
         case .codeUnmapped:
             showToast(message: "Unknown network error", style: .Warn)
+             */
         }
     }
     
