@@ -15,6 +15,7 @@
                 <outlet property="contentView" destination="iN0-l3-epB" id="I0A-lQ-Czd"/>
                 <outlet property="filterButton" destination="TSh-P0-Rv6" id="aTY-2h-uYl"/>
                 <outlet property="searchBar" destination="bxi-RJ-ya5" id="eND-pQ-6wE"/>
+                <outlet property="searchBarSeparatorView" destination="ntD-11-IDY" id="aub-HJ-M49"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
