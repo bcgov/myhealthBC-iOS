@@ -186,7 +186,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         currentFilter = nil
         hideSelectedFilters()
         let patientRecords = fetchPatientRecords()
-        show(records: patientRecords)
+        show(records: patientRecords, searchText: searchText)
     }
 }
 
@@ -251,8 +251,15 @@ extension UsersListOfRecordsViewController {
         }
         dropDownView = NavBarDropDownView()
         dropDownView?.addView(delegateOwner: self, dataSource: dataSource, parentView: self.view)
-        // TODO: Add gesture recognizer here - left off here
+        dropDownViewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDropDown(_:)))
+        guard let tap = dropDownViewGestureRecognizer else { return }
+        self.recordsSearchBarView.isUserInteractionEnabled = false
+        self.view.addGestureRecognizer(tap)
         // Note: Create add/remove touch gesture recognizer for dismissing the view (need to make sure we add in remove tap gesture so that other touch events will work)
+    }
+    
+    @objc func dismissDropDown(_ sender: UITapGestureRecognizer? = nil) {
+        removeNavDropDownView()
     }
     
     @objc func showSettings() {
@@ -299,8 +306,12 @@ extension UsersListOfRecordsViewController: NavBarDropDownViewDelegate {
     }
     
     private func removeNavDropDownView() {
+        if let tap = dropDownViewGestureRecognizer {
+            self.view.removeGestureRecognizer(tap)
+        }
         dropDownViewGestureRecognizer = nil
         dropDownView?.removeView()
+        self.recordsSearchBarView.isUserInteractionEnabled = true
     }
     
     
@@ -314,14 +325,14 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
     
     func searchButtonTapped(text: String) {
         let patientRecords = fetchPatientRecords()
-        show(records: patientRecords, filter: currentFilter)
+        show(records: patientRecords, filter: currentFilter, searchText: searchText)
     }
     
     func textDidChange(text: String?) {
         searchText = text
         if searchText == nil || searchText?.trimWhiteSpacesAndNewLines.count == 0 {
             let patientRecords = fetchPatientRecords()
-            show(records: patientRecords, filter: currentFilter)
+            show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
     
@@ -346,7 +357,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     func selected(filter: RecordsFilter) {
         let patientRecords = fetchPatientRecords()
         currentFilter = filter
-        show(records: patientRecords, filter:filter)
+        show(records: patientRecords, filter:filter, searchText: searchText)
     }
     
     func showSelectedFilters() {
@@ -414,11 +425,11 @@ extension UsersListOfRecordsViewController {
             showAuthExpired()
         case .authenticated:
             guard self.dataSource.count == 0 else {
-                show(records: self.dataSource, filter: currentFilter)
+                show(records: self.dataSource, filter: currentFilter, searchText: searchText)
                 return
             }
             let patientRecords = fetchPatientRecords()
-            show(records: patientRecords, filter: currentFilter)
+            show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
     
@@ -433,7 +444,7 @@ extension UsersListOfRecordsViewController {
         tableView.reloadData()
     }
     
-    private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil) {
+    private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil, searchText: String?) {
         var patientRecords: [HealthRecordsDetailDataSource] = records
         if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
             patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
@@ -640,7 +651,7 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
     private func viewProtectedRecords(protectiveWord: String) {
         if protectiveWord.lowercased() == AuthManager().protectiveWord?.lowercased() {
             SessionStorage.protectiveWordEnteredThisSession = protectiveWord
-            show(records: fetchPatientRecords(), filter: currentFilter)
+            show(records: fetchPatientRecords(), filter: currentFilter, searchText: searchText)
         } else {
             alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
                 self.promoptProtectedWord()
@@ -669,6 +680,6 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
 extension UsersListOfRecordsViewController {
     @objc private func refreshOnStorageUpdate() {
         let patientRecords = fetchPatientRecords()
-        show(records: patientRecords, filter: currentFilter)
+        show(records: patientRecords, filter: currentFilter, searchText: searchText)
     }
 }
