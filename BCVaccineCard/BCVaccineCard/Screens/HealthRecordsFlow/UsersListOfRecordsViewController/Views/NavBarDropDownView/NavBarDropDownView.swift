@@ -24,7 +24,7 @@ enum NavBarDropDownViewOptions: String, Codable {
 }
 
 protocol NavBarDropDownViewDelegate: AnyObject {
-    func optionSelected()
+    func optionSelected(_ option: NavBarDropDownViewOptions)
 }
 
 class NavBarDropDownView: UIView {
@@ -59,7 +59,7 @@ class NavBarDropDownView: UIView {
     }
     
     private func setup() {
-        contentView.layer.cornerRadius = 3.0
+        contentView.layer.cornerRadius = 5.0
         contentView.clipsToBounds = true
         setupTableView()
     }
@@ -90,12 +90,15 @@ extension NavBarDropDownView: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: NavBarDropDownOptionTableViewCell.getName, for: indexPath) as? NavBarDropDownOptionTableViewCell else { return UITableViewCell() }
-//        cell.configure
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: NavBarDropDownOptionTableViewCell.getName, for: indexPath) as? NavBarDropDownOptionTableViewCell, dataSource.count > indexPath.row else { return UITableViewCell() }
+        let option = dataSource[indexPath.row]
+        cell.configure(option: option, dataSourceCount: dataSource.count, positionInDropDown: indexPath.row)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        <#code#>
+        guard dataSource.count > indexPath.row else { return }
+        let option = dataSource[indexPath.row]
+        delegate?.optionSelected(option)
     }
 }
