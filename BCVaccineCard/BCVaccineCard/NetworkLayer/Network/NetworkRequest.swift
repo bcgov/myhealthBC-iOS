@@ -10,7 +10,7 @@ import Foundation
 struct NetworkRequest<Parameters: Encodable, T: Decodable> {
     
     typealias Completion<T: Decodable> = ((_ Result: T?) -> Void)
-    typealias Error = ((_ type: ErrorType) -> Void)
+    typealias Error = ((_ type: NetworkErrorType) -> Void)
     
     // if can be re-tried, max number of attempts allowed
     var maxAttempts: Int = Constants.NetworkRetryAttempts.maxRetry
@@ -37,12 +37,15 @@ extension NetworkRequest {
     }
 }
 
-extension NetworkRequest {
-    enum ErrorType {
-        case FailedAfterRetry
-//        case NoData
-//        case UnexpectedResponse
-    }
+enum NetworkErrorType {
+    case FailedAfterRetry
+    case code401
+    case code403
+    case code404
+    case code503
+    case codeGeneric400
+    case codeGeneric500
+    case codeUnmapped
 }
 
 extension NetworkRequest {
@@ -53,9 +56,33 @@ extension NetworkRequest {
 }
 
 struct DefaultParams: Codable {
+    let apiVersion: String
     
+    enum CodingKeys: String, CodingKey {
+        case apiVersion = "api-version"
+    }
 }
 
 struct HDIDParams: Codable {
     let hdid: String
+    let apiVersion: String
+    
+    enum CodingKeys: String, CodingKey {
+        case hdid
+        case apiVersion = "api-version"
+    }
 }
+
+
+struct GatewayError: Codable {
+    let type: String?
+    let title: String?
+    let status: Int?
+    let traceID: String?
+
+    enum CodingKeys: String, CodingKey {
+        case type, title, status
+        case traceID = "traceId"
+    }
+}
+

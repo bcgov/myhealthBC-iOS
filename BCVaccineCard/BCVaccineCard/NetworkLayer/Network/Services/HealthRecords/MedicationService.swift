@@ -80,7 +80,7 @@ extension MedicationService {
                 Constants.AuthenticatedMedicationStatementParameters.protectiveWord: (protectiveWord ?? "")
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             // TODO: CONNOR: getAuthenticatedMedicationRequest or getAuthenticatedMedicationStatement?
             let requestModel = NetworkRequest<HDIDParams, MedicationResponse>(url: endpoints.medicationStatement(base: baseURL, hdid: hdid),
@@ -93,7 +93,7 @@ extension MedicationService {
                 return completion(result)
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
+                default:
                     break
                 }
                 

@@ -48,11 +48,13 @@ struct FeedbackService {
             let requestModel = NetworkRequest<PostFeedback, Int>(url: endpoints.feedback(base: baseURL, hdid: hdid), type: .Post, parameters: object, headers: headers) { statusCode in
                 guard let statusCode = statusCode else { return completion(false) }
                 let success = (200...299).contains(statusCode) ? true : false
-                completion(success)
+                return completion(success)
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    completion(false)
+                    return completion(false)
+                default:
+                    return completion(false)
                 }
             }
             

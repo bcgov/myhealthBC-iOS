@@ -71,7 +71,7 @@ extension HealthVisitsService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, AuthenticatedHealthVisitsResponseObject>(url: endpoints.healthVisits(base: baseURL, hdid: hdid),
                                                                                                      type: .Get,
@@ -89,6 +89,8 @@ extension HealthVisitsService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
+                    break
+                default:
                     break
                 }
                 

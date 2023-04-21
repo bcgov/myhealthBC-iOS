@@ -68,6 +68,7 @@ extension AFNetwork {
             }
         }
         
+        // Base GATEWAY reposnse (V1 API)
         guard value is BaseGatewayResponse,
               let gateWayResponse = value as? BaseGatewayResponse,
               let dict = gateWayResponse.toDictionary(),
@@ -76,6 +77,30 @@ extension AFNetwork {
               let loaded = resourcePayloadDict["loaded"]?.bool
         else {
             // Not a BaseGatewayResponse - return response
+            // Handle v2 Response
+            let statusCode = response.response?.statusCode
+            if let code = statusCode, let errorCallback = requestData.onError {
+                if (200...299).contains(code) {
+                    // Success
+                    return requestData.completion(value)
+                } else if code == 401 {
+                    errorCallback(.code401)
+                } else if code == 403 {
+                    errorCallback(.code403)
+                } else if code == 404 {
+                    errorCallback(.code404)
+                } else if code == 503 {
+                    errorCallback(.code503)
+                } else if (400...499).contains(code) {
+                    errorCallback(.codeGeneric400)
+                } else if (500...599).contains(code) {
+                    errorCallback(.codeGeneric500)
+                } else {
+                    errorCallback(.codeUnmapped)
+                }
+            }
+            // There was an error that was specified by errorCallback
+            // - or the caller doesnt care about errors and there was no error
             return requestData.completion(value)
         }
         let payLoadStruct = RetryableGatewayResponse(loaded: loaded, retryin: retryIn)
