@@ -88,8 +88,6 @@ extension HealthVisitsService {
                 }
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
-                    break
                 default:
                     break
                 }

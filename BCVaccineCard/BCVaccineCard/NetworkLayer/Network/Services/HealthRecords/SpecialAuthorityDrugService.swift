@@ -85,8 +85,6 @@ extension SpecialAuthorityDrugService {
                 }
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
-                    break
                 default:
                     break
                 }
