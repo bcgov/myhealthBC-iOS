@@ -78,11 +78,6 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="155.72519083969465" y="-192.25352112676057"/>
         </view>
-        <searchDisplayController id="LTP-6H-6wo">
-            <connections>
-                <outlet property="searchBar" destination="bxi-RJ-ya5" id="7lp-tE-dec"/>
-            </connections>
-        </searchDisplayController>
     </objects>
     <resources>
         <image name="filter" width="18" height="18.333333969116211"/>
