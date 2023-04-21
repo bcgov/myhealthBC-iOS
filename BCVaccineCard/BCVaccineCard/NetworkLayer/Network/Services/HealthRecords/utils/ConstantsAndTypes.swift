@@ -32,6 +32,11 @@ struct HealthRecordConstants {
     static var commentsEnabled: Bool {
         return true
     }
+    
+    // ENABLE AND DISABLE SEARCH RECORDS
+    static var searchRecordsEnabled: Bool {
+        return true
+    }
 }
 
 extension HealthRecordConstants {

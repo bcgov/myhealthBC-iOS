@@ -59,6 +59,8 @@ class UsersListOfRecordsViewController: BaseViewController {
         }
     }
     
+    private var searchText: String?
+    
     private var inEditMode = false {
         didSet {
             self.tableView.setEditing(inEditMode, animated: false)
@@ -264,15 +266,20 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
     }
     
     func searchButtonTapped(text: String) {
-        <#code#>
+        let patientRecords = fetchPatientRecords()
+        show(records: patientRecords, filter: currentFilter)
     }
     
     func textDidChange(text: String?) {
-        <#code#>
+        searchText = text
+        if searchText == nil || searchText?.trimWhiteSpacesAndNewLines.count == 0 {
+            let patientRecords = fetchPatientRecords()
+            show(records: patientRecords, filter: currentFilter)
+        }
     }
     
     func filterButtonTapped() {
-        <#code#>
+        showFilters()
     }
 }
 
@@ -381,6 +388,9 @@ extension UsersListOfRecordsViewController {
     
     private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil) {
         var patientRecords: [HealthRecordsDetailDataSource] = records
+        if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
+            patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
+        }
         if let filter = filter {
             patientRecords = patientRecords.filter({ item in
                 var showItem = true
@@ -437,7 +447,7 @@ extension UsersListOfRecordsViewController {
         tableView.reloadData()
         noRecordsFoundView.isHidden = !patientRecords.isEmpty
         tableView.isHidden = patientRecords.isEmpty
-        recordsSearchBarView.isHidden = patientRecords.isEmpty
+        recordsSearchBarView.isHidden = ((patientRecords.isEmpty || !HealthRecordConstants.commentsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0))
     }
     
     private func performBCSCLogin() {
