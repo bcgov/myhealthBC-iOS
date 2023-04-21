@@ -51,8 +51,6 @@ struct FeedbackService {
                 return completion(success)
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
-                    return completion(false)
                 default:
                     return completion(false)
                 }
