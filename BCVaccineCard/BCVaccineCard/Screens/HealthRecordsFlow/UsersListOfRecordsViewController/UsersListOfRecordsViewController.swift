@@ -243,18 +243,23 @@ extension UsersListOfRecordsViewController {
     }
     
     @objc func showDropDownOptions() {
+        guard dropDownView == nil else { return }
         var dataSource: [NavBarDropDownViewOptions] = [.refresh]
         if viewModel?.navStyle == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             dataSource.append(.settings)
         } else {
             dataSource.append(.profile)
         }
+        
         dropDownView = NavBarDropDownView()
         dropDownView?.addView(delegateOwner: self, dataSource: dataSource, parentView: self.view)
+        
         dropDownViewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDropDown(_:)))
-        guard let tap = dropDownViewGestureRecognizer else { return }
-        self.recordsSearchBarView.isUserInteractionEnabled = false
-        self.view.addGestureRecognizer(tap)
+        if let tap = dropDownViewGestureRecognizer {
+            self.recordsSearchBarView.isUserInteractionEnabled = false
+            self.parentContainerStackView.addGestureRecognizer(tap)
+        }
+        // FIXME: Gesture recognizer issue with tapping on the drop down view itself, only picking up gesture recognizer
         // Note: Create add/remove touch gesture recognizer for dismissing the view (need to make sure we add in remove tap gesture so that other touch events will work)
     }
     
@@ -307,10 +312,11 @@ extension UsersListOfRecordsViewController: NavBarDropDownViewDelegate {
     
     private func removeNavDropDownView() {
         if let tap = dropDownViewGestureRecognizer {
-            self.view.removeGestureRecognizer(tap)
+            self.parentContainerStackView.removeGestureRecognizer(tap)
         }
         dropDownViewGestureRecognizer = nil
         dropDownView?.removeView()
+        dropDownView = nil
         self.recordsSearchBarView.isUserInteractionEnabled = true
     }
     

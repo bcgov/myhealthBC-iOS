@@ -61,8 +61,13 @@ class NavBarDropDownView: UIView {
     }
     
     private func setup() {
-        contentView.layer.cornerRadius = 5.0
-        contentView.clipsToBounds = true
+        self.layer.cornerRadius = 5.0
+        self.layer.shadowColor = Constants.UI.Toast.shadowColor
+        self.layer.shadowOpacity = 1
+        self.layer.shadowOffset = CGSize(width: -1, height: 5)
+        self.layer.shadowRadius = 15
+        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        self.clipsToBounds = true
         setupTableView()
     }
     
