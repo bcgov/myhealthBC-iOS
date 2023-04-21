@@ -26,6 +26,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var clearFiltersButton: UIButton!
     @IBOutlet weak private var filterStack: UIStackView!
     @IBOutlet weak private var filterContainer: UIView!
+    @IBOutlet weak private var recordsSearchBarView: RecordsSearchBarView!
     @IBOutlet weak private var tableView: UITableView!
     
     @IBOutlet weak private var parentContainerStackView: UIStackView!
@@ -57,6 +58,8 @@ class UsersListOfRecordsViewController: BaseViewController {
             }
         }
     }
+    
+    private var searchText: String?
     
     private var inEditMode = false {
         didSet {
@@ -155,6 +158,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setup() {
         setupTableView()
+        setupSearchBarView()
         updatePatientIfNecessary()
         navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
         showSelectedFilters()
@@ -252,6 +256,30 @@ extension UsersListOfRecordsViewController {
     @objc private func editButton() {
         tableView.isEditing = false
         inEditMode = true
+    }
+}
+
+// MARK: Search Bar
+extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
+    func setupSearchBarView() {
+        recordsSearchBarView.configure(delegateOwner: self)
+    }
+    
+    func searchButtonTapped(text: String) {
+        let patientRecords = fetchPatientRecords()
+        show(records: patientRecords, filter: currentFilter)
+    }
+    
+    func textDidChange(text: String?) {
+        searchText = text
+        if searchText == nil || searchText?.trimWhiteSpacesAndNewLines.count == 0 {
+            let patientRecords = fetchPatientRecords()
+            show(records: patientRecords, filter: currentFilter)
+        }
+    }
+    
+    func filterButtonTapped() {
+        showFilters()
     }
 }
 
@@ -360,6 +388,9 @@ extension UsersListOfRecordsViewController {
     
     private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil) {
         var patientRecords: [HealthRecordsDetailDataSource] = records
+        if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
+            patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
+        }
         if let filter = filter {
             patientRecords = patientRecords.filter({ item in
                 var showItem = true
@@ -414,13 +445,9 @@ extension UsersListOfRecordsViewController {
         navSetup(style: viewModel?.navStyle ?? .singleUser, authenticated: viewModel?.authenticated ?? false)
         
         tableView.reloadData()
-        if patientRecords.isEmpty {
-            noRecordsFoundView.isHidden = false
-            tableView.isHidden = true
-        } else {
-            noRecordsFoundView.isHidden = true
-            tableView.isHidden = false
-        }
+        noRecordsFoundView.isHidden = !patientRecords.isEmpty
+        tableView.isHidden = patientRecords.isEmpty
+        recordsSearchBarView.isHidden = ((patientRecords.isEmpty || !HealthRecordConstants.commentsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0))
     }
     
     private func performBCSCLogin() {
