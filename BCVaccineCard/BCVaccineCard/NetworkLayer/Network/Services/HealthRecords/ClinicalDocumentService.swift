@@ -72,7 +72,7 @@ extension ClinicalDocumentService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, AuthenticatedClinicalDocumentResponseObject>(url: endpoints.clinicalDocuments(base: baseURL, hdid: hdid),
                                                                                                        type: .Get,
@@ -89,7 +89,7 @@ extension ClinicalDocumentService {
                 }
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
+                default:
                     break
                 }
                 

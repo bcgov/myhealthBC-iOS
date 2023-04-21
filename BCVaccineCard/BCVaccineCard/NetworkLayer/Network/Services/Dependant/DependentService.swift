@@ -68,6 +68,8 @@ struct DependentService {
                 switch error {
                 case .FailedAfterRetry:
                     network.showToast(message: .fetchRecordError, style: .Warn)
+                default:
+                    break
                 }
                 
             }
@@ -144,6 +146,8 @@ struct DependentService {
                 switch error {
                 case .FailedAfterRetry:
                     network.showToast(message: "Could not delete dependent, please try again later", style: .Warn)
+                default:
+                    break
                 }
                 
             }
@@ -176,6 +180,8 @@ struct DependentService {
                 switch error {
                 case .FailedAfterRetry:
                     network.showToast(message: "Could not add dependent, please try again later", style: .Warn)
+                default:
+                    break
                 }
                 
             }

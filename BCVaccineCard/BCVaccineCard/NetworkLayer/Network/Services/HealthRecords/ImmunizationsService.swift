@@ -91,7 +91,7 @@ extension ImmnunizationsService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, immunizationsResponse>(url: endpoints.immunizations(base: baseURL),
                                                                                  type: .Get,
@@ -114,7 +114,7 @@ extension ImmnunizationsService {
                 }
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
+                default:
                     break
                 }
                 

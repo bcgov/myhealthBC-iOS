@@ -29,7 +29,7 @@ struct PatientService {
                 network.removeLoader(caller: .PatientService_fetchAndStoreDetails)
                 return completion(nil)
             }
-            let patientFirstName = response.resourcePayload?.firstname
+            let patientFirstName = response.resourcePayload?.preferredName?.givenName
             let patientFullName = response.getFullName
             store(patientDetails: response, completion: { result in
                 network.removeLoader(caller: .PatientService_fetchAndStoreDetails)
@@ -69,16 +69,16 @@ struct PatientService {
         Logger.log(string: "Storing Patient Details", type: .Network)
         let phyiscalAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.physicalAddress)
         let mailingAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.postalAddress)
-        let patient = StorageService.shared.fetchOrCreatePatient(phn: patientDetails.resourcePayload?.personalhealthnumber,
-                                                   name: patientDetails.getFullName,
-                                                   firstName: patientDetails.resourcePayload?.firstname,
-                                                   lastName: patientDetails.resourcePayload?.lastname,
-                                                   gender: patientDetails.resourcePayload?.gender,
-                                                   birthday: patientDetails.getBdayDate,
-                                                   physicalAddress: phyiscalAddress,
-                                                   mailingAddress: mailingAddress,
-                                                   hdid: AuthManager().hdid,
-                                                   authenticated: true)
+        let patient = StorageService.shared.fetchOrCreatePatient(phn: patientDetails.resourcePayload?.personalHealthNumber,
+                                                                 name: patientDetails.getFullName,
+                                                                 firstName: patientDetails.resourcePayload?.preferredName?.givenName,
+                                                                 lastName: patientDetails.resourcePayload?.preferredName?.surname,
+                                                                 gender: patientDetails.resourcePayload?.gender,
+                                                                 birthday: patientDetails.getBdayDate,
+                                                                 physicalAddress: phyiscalAddress,
+                                                                 mailingAddress: mailingAddress,
+                                                                 hdid: AuthManager().hdid,
+                                                                 authenticated: true)
         return completion(patient)
         
     }
@@ -141,7 +141,7 @@ extension PatientService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, AuthenticatedValidAgeCheck>(url: endpoints.validateProfile(base: baseURL, hdid: hdid),
                                                                                 type: .Get,
@@ -157,11 +157,7 @@ extension PatientService {
                     return completion(nil)
                 }
             } onError: { error in
-                switch error {
-                case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
-                }
-                
+                network.showToast(error: error)
             }
             
             network.request(with: requestModel)
@@ -174,7 +170,6 @@ extension PatientService {
               let hdid = authManager.hdid,
               NetworkConnection.shared.hasConnection
         else { return completion(nil)}
-        
         configService.fetchConfig { response in
             guard let config = response,
                   config.online,
@@ -188,7 +183,7 @@ extension PatientService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "2")
             
             let requestModel = NetworkRequest<HDIDParams, PatientDetailResponse>(url: endpoints.patientDetails(base: baseURL, hdid: hdid),
                                                                                 type: .Get,
@@ -196,7 +191,6 @@ extension PatientService {
                                                                                 encoder: .urlEncoder,
                                                                                 headers: headers)
             { result in
-                
                 if (result?.resourcePayload) != nil {
                     // return result
                     return completion(result)
@@ -204,11 +198,7 @@ extension PatientService {
                     return completion(nil)
                 }
             } onError: { error in
-                switch error {
-                case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
-                }
-                
+                network.showToast(error: error)
             }
             
             network.request(with: requestModel)
@@ -234,14 +224,19 @@ extension PatientService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
             ]
             
+            let parameters: DefaultParams = DefaultParams(apiVersion: "1")
+            
             let request = NetworkRequest<DefaultParams, AuthenticatedUserProfileResponseObject>(
                 url: endpoints.userProfile(base: baseURL, hdid: hdid),
                 type: .Get,
-                parameters: nil,
+                parameters: parameters,
+                encoder: .urlEncoder,
                 headers: headers,
                 completion: { responseData in
                     return completion(responseData)
-                }, onError: nil)
+                }, onError: { error in
+                    network.showToast(error: error)
+                })
             network.request(with: request)
         }
     }
@@ -270,10 +265,7 @@ extension PatientService {
             { result in
                 return completion(result)
             } onError: { error in
-                switch error {
-                case .FailedAfterRetry:
-                    network.showToast(message: .fetchRecordError, style: .Warn)
-                }
+                network.showToast(error: error)
                 
             }
             

@@ -71,7 +71,7 @@ extension LabOrderService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, labOrdersResponse>(url: endpoints.laboratoryOrders(base: baseURL),
                                                                              type: .Get,
@@ -88,11 +88,11 @@ extension LabOrderService {
                 }
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
+                default:
                     break
                 }
-                
             }
+            
             Logger.log(string: "Network LabOrder initiated", type: .Network)
             network.request(with: requestModel)
         }

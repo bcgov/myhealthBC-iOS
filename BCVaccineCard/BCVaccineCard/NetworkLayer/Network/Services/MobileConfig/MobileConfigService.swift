@@ -9,6 +9,7 @@ import Foundation
 
 class MobileConfigService {
     let network: Network
+    let cacheTimeout: Double = 50
 
     private var callers: [((MobileConfigurationResponseObject?)->Void)] = []
     
@@ -19,7 +20,7 @@ class MobileConfigService {
     func fetchConfig(completion: @escaping (MobileConfigurationResponseObject?)->Void) {
         if let cache = MobileConfigStorage.cachedConfig {
             let timeDiff = Date().timeIntervalSince(cache.datetime)
-            if timeDiff <= 5 {
+            if timeDiff <= cacheTimeout {
                 Logger.log(string: "MobileConfigService returning cached", type: .Network)
                 return completion(cache.config)
             }

@@ -29,7 +29,7 @@ extension CommentService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, CommentsResponse>(url: endpoints.comments(base: baseURL, hdid: hdid),
                                                                             type: .Get,
@@ -42,6 +42,8 @@ extension CommentService {
                 switch error {
                 case .FailedAfterRetry:
                     network.showToast(message: .fetchRecordError, style: .Warn)
+                default:
+                    break
                 }
                 
             }

@@ -210,7 +210,7 @@
         <relationship name="hospitalVisits" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HospitalVisit" inverseName="patient" inverseEntity="HospitalVisit"/>
         <relationship name="immunizations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Immunization" inverseName="patient" inverseEntity="Immunization"/>
         <relationship name="laboratoryOrders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LaboratoryOrder" inverseName="patient" inverseEntity="LaboratoryOrder"/>
-        <relationship name="organDonorStatus" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OrganDonorStatus" inverseName="patient" inverseEntity="OrganDonorStatus"/>
+        <relationship name="organDonorStatus" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="OrganDonorStatus" inverseName="patient" inverseEntity="OrganDonorStatus"/>
         <relationship name="physicalAddress" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Address"/>
         <relationship name="postalAddress" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Address"/>
         <relationship name="prescriptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Perscription" inverseName="patient" inverseEntity="Perscription"/>

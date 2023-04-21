@@ -113,7 +113,9 @@ extension StorageService: StoragePatientManager {
     ) -> OrganDonorStatus? {
         guard let context = managedContext,
               let phn = patient.phn,
-              let patientRefetch = fetchPatient(phn: phn, context: context) else {return nil}
+              let patientRefetch = fetchPatient(phn: phn, context: context) else {
+            return nil
+        }
         let model = OrganDonorStatus(context: context)
         model.status = object.status
         model.statusMessage = object.statusMessage

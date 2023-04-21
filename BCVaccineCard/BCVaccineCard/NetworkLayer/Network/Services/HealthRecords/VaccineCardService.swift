@@ -140,7 +140,7 @@ extension VaccineCardService {
                 Constants.GatewayVaccineCardRequestParameters.dateOfVaccine: dateOfVaccine
             ]
             
-            let parameters: DefaultParams = DefaultParams()
+            let parameters: DefaultParams = DefaultParams(apiVersion: "1")
             
             let requestModel = NetworkRequest<DefaultParams, VaccineCardsResponse>(url: endpoints.vaccineCardPublic(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
@@ -150,6 +150,8 @@ extension VaccineCardService {
                 switch error {
                 case .FailedAfterRetry:
                     network.showToast(message: .fetchRecordError, style: .Warn)
+                default:
+                    break
                 }
                 
             }
@@ -177,7 +179,7 @@ extension VaccineCardService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, VaccineCardsResponse>(url: endpoints.vaccineCardAuthenticated(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             
@@ -193,6 +195,8 @@ extension VaccineCardService {
                 switch error {
                 case .FailedAfterRetry:
                     network.showToast(message: .fetchRecordError, style: .Warn)
+                default:
+                    break
                 }
                 
             }

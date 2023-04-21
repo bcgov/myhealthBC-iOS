@@ -8,22 +8,26 @@
 import Foundation
 
 // MARK: - AuthenticatedPatientDetailsResponseObject
-struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
+struct AuthenticatedPatientDetailsResponseObject: Codable {
     let resourcePayload: ResourcePayload?
-    var totalResultCount, pageIndex, pageSize: Int?
-    var resultError: ResultError?
     
     // MARK: - ResourcePayload
     struct ResourcePayload: Codable {
-        let hdid, personalhealthnumber, firstname, lastname: String?
+        let hdid, personalHealthNumber: String?
+        let commonName, legalName, preferredName: Name?
         let birthdate, gender: String?
         let physicalAddress, postalAddress: Address?
         let responseCode: String?
     }
     
+    struct Name: Codable {
+        let givenName, surname: String?
+    }
+    
     struct Address: Codable {
         let streetLines: [String]?
         let city, state, postalCode, country: String?
+        
         var getAddressString: String? {
             var street = ""
             if let streetLines = streetLines, let first = streetLines.first, first.count > 0 {
@@ -49,10 +53,10 @@ struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
     var getFullName: String {
         guard let payload = resourcePayload else { return "" }
         var name = ""
-        if let first = payload.firstname {
+        if let first = payload.preferredName?.givenName {
             name.append(first)
         }
-        if let last = payload.lastname {
+        if let last = payload.preferredName?.surname {
             if !name.isEmpty {
                 name.append(" ")
             }
