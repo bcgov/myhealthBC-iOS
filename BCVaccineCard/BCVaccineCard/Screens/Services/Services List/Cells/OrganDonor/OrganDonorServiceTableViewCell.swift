@@ -69,11 +69,11 @@ class OrganDonorServiceTableViewCell: UITableViewCell, Theme {
             descriptiveText.text = statusModel.statusMessage
         } else {
             // No DATA - API FETCH ERROR
-            statusValueLabel.text = "UNKNOWN"
-            descriptiveText.text = "We could not load your registration status. Please try refreshing your data."
+            statusValueLabel.text = "Error"
+            descriptiveText.text = ""
             notAvailableLabel.isHidden = true
             downloadButton.isHidden = true
-            reloadButton.isHidden = false
+            reloadButton.isHidden = true
         }
     }
     
