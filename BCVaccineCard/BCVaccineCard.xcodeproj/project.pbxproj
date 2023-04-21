@@ -297,6 +297,15 @@
 		2D5218D92988881B00E07382 /* UpdateAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */; };
 		2D5218DA2988881B00E07382 /* UpdateAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */; };
 		2D5218DB2988881B00E07382 /* UpdateAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */; };
+		2D6DF35029F27CD500F1150F /* NavBarDropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF34F29F27CD500F1150F /* NavBarDropDownView.xib */; };
+		2D6DF35129F27CD500F1150F /* NavBarDropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF34F29F27CD500F1150F /* NavBarDropDownView.xib */; };
+		2D6DF35229F27CD500F1150F /* NavBarDropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF34F29F27CD500F1150F /* NavBarDropDownView.xib */; };
+		2D6DF35629F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6DF35429F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift */; };
+		2D6DF35729F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6DF35429F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift */; };
+		2D6DF35829F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6DF35429F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift */; };
+		2D6DF35929F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */; };
+		2D6DF35A29F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */; };
+		2D6DF35B29F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */; };
 		2D9B399F2907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A02907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A12907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
@@ -315,12 +324,9 @@
 		2DF317F829CE5A5B0077EA87 /* PostFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317F729CE5A5B0077EA87 /* PostFeedback.swift */; };
 		2DF317F929CE5A5B0077EA87 /* PostFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317F729CE5A5B0077EA87 /* PostFeedback.swift */; };
 		2DF317FA29CE5A5B0077EA87 /* PostFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317F729CE5A5B0077EA87 /* PostFeedback.swift */; };
-		2DF317FD29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */; };
-		2DF317FE29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */; };
-		2DF317FF29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */; };
-		2DF3180129E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */; };
-		2DF3180229E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */; };
-		2DF3180329E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */; };
+		2DF317FD29E51E250077EA87 /* NavBarDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317FC29E51E250077EA87 /* NavBarDropDownView.swift */; };
+		2DF317FE29E51E250077EA87 /* NavBarDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317FC29E51E250077EA87 /* NavBarDropDownView.swift */; };
+		2DF317FF29E51E250077EA87 /* NavBarDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF317FC29E51E250077EA87 /* NavBarDropDownView.swift */; };
 		2DF3180829E5372C0077EA87 /* EditCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */; };
 		2DF3180929E5372C0077EA87 /* EditCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */; };
 		2DF3180A29E5372C0077EA87 /* EditCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */; };
@@ -1481,6 +1487,9 @@
 		2D5218C92988556100E07382 /* Address+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Address+CoreDataProperties.swift"; path = "../../../../Address+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2D5218D82988881B00E07382 /* UpdateAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAddressViewController.swift; sourceTree = "<group>"; };
 		2D60219828CBEB2D0096614F /* BCVaccineCard 1.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.2.xcdatamodel"; sourceTree = "<group>"; };
+		2D6DF34F29F27CD500F1150F /* NavBarDropDownView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavBarDropDownView.xib; sourceTree = "<group>"; };
+		2D6DF35429F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarDropDownOptionTableViewCell.swift; sourceTree = "<group>"; };
+		2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavBarDropDownOptionTableViewCell.xib; sourceTree = "<group>"; };
 		2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsService.swift; sourceTree = "<group>"; };
 		2DF2102328DD2B2700F5E01C /* ViewPDFTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPDFTableViewCell.swift; sourceTree = "<group>"; };
 		2DF2102428DD2B2700F5E01C /* ViewPDFTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewPDFTableViewCell.xib; sourceTree = "<group>"; };
@@ -1488,8 +1497,7 @@
 		2DF317EE29CD6F9D0077EA87 /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		2DF317F329CE5A510077EA87 /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		2DF317F729CE5A5B0077EA87 /* PostFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostFeedback.swift; sourceTree = "<group>"; };
-		2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsOptionsDropDownView.swift; sourceTree = "<group>"; };
-		2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentsOptionsDropDownView.xib; sourceTree = "<group>"; };
+		2DF317FC29E51E250077EA87 /* NavBarDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarDropDownView.swift; sourceTree = "<group>"; };
 		2DF3180629E5372C0077EA87 /* EditCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCommentTableViewCell.swift; sourceTree = "<group>"; };
 		2DF3180729E5372C0077EA87 /* EditCommentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EditCommentTableViewCell.xib; sourceTree = "<group>"; };
 		2DF3180E29E8D3580077EA87 /* BCVaccineCard 1.9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "BCVaccineCard 1.9.xcdatamodel"; sourceTree = "<group>"; };
@@ -2371,6 +2379,7 @@
 		2D4B118429F0651400D7C02C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2DF3180429E536DF0077EA87 /* NavBarDropDownView */,
 				2D4B118529F0652400D7C02C /* RecordsSearchBar */,
 			);
 			path = Views;
@@ -2392,6 +2401,15 @@
 				2D5218C02984A38000E07382 /* ProfileDetailsTableViewCell.xib */,
 			);
 			path = ProfileDetails;
+			sourceTree = "<group>";
+		};
+		2D6DF35329F27D0200F1150F /* NavBarDropDownOptionTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				2D6DF35429F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift */,
+				2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */,
+			);
+			path = NavBarDropDownOptionTableViewCell;
 			sourceTree = "<group>";
 		};
 		2D9B399D2907170300AE9FA1 /* HealthRecords */ = {
@@ -2444,18 +2462,18 @@
 			isa = PBXGroup;
 			children = (
 				2DF3180529E537050077EA87 /* EditCommentTableViewCell */,
-				2DF3180429E536DF0077EA87 /* CommentsOptionsDropDownView */,
 			);
 			path = Components;
 			sourceTree = "<group>";
 		};
-		2DF3180429E536DF0077EA87 /* CommentsOptionsDropDownView */ = {
+		2DF3180429E536DF0077EA87 /* NavBarDropDownView */ = {
 			isa = PBXGroup;
 			children = (
-				2DF317FC29E51E250077EA87 /* CommentsOptionsDropDownView.swift */,
-				2DF3180029E51E320077EA87 /* CommentsOptionsDropDownView.xib */,
+				2D6DF35329F27D0200F1150F /* NavBarDropDownOptionTableViewCell */,
+				2DF317FC29E51E250077EA87 /* NavBarDropDownView.swift */,
+				2D6DF34F29F27CD500F1150F /* NavBarDropDownView.xib */,
 			);
-			path = CommentsOptionsDropDownView;
+			path = NavBarDropDownView;
 			sourceTree = "<group>";
 		};
 		2DF3180529E537050077EA87 /* EditCommentTableViewCell */ = {
@@ -3937,6 +3955,7 @@
 				7967E75126F9145700EEF510 /* BCSans-Bold.otf in Resources */,
 				79BDA076270CB73800FF30AB /* Booking.storyboard in Resources */,
 				79218AC127555B350063004E /* ReusableHeaderAddView.xib in Resources */,
+				2D6DF35129F27CD500F1150F /* NavBarDropDownView.xib in Resources */,
 				79B9D01427E2869D00987D9F /* HomeScreenTableViewCell.xib in Resources */,
 				79218AD927557ED50063004E /* TextListViewTableViewCell.xib in Resources */,
 				794BD6772703A3DB0084ADA8 /* ImageTableViewCell.xib in Resources */,
@@ -3963,7 +3982,6 @@
 				3E87F4B22901B117002F0A0E /* DependentListItemTableViewCell.xib in Resources */,
 				3E048CC7291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				79A15B0827FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */,
-				2DF3180229E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */,
 				7928345F2730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */,
 				799050C0273C8344006CD726 /* GetRecordsView.xib in Resources */,
 				2922C0DE286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.xib in Resources */,
@@ -3981,6 +3999,7 @@
 				29B07E0A2732109E007ABB46 /* exportOptions.plist in Resources */,
 				3E5E6EBF28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
+				2D6DF35A29F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */,
 				79218ACF27556AA50063004E /* StatusBannerView.xib in Resources */,
 				2DF2102928DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
 				799050C7273C8567006CD726 /* UserRecordListView.xib in Resources */,
@@ -4046,6 +4065,7 @@
 				79590D982811E68A006EB59F /* CommentViewTableViewCell.xib in Resources */,
 				294BD3CB27AACFB600BD8D46 /* LocalAuthPrivacyView.xib in Resources */,
 				2922C0DF286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.xib in Resources */,
+				2D6DF35B29F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */,
 				294BD3D527B1D60B00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
 				79CF236C2825789600510489 /* HealthRecordsHomeView.xib in Resources */,
 				794BD65F2702EEC00084ADA8 /* SettingsTableViewCell.xib in Resources */,
@@ -4101,10 +4121,10 @@
 				3E5924C5297086C900936CF1 /* EmptyTableViewCell.xib in Resources */,
 				293B32C127D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
 				7928346E27311C9000EE2710 /* DropDownView.xib in Resources */,
-				2DF3180329E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */,
 				2922C0E8286E33F8000FF4F7 /* MessageBannerTableViewCell.xib in Resources */,
 				29547E5C27A2EC7700562958 /* LocalAuthView.xib in Resources */,
 				79A15B0927FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */,
+				2D6DF35229F27CD500F1150F /* NavBarDropDownView.xib in Resources */,
 				3E5E6EC028D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */,
 				795AA758271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
 				794BD6682702EEC00084ADA8 /* FormTableViewCell.xib in Resources */,
@@ -4172,6 +4192,7 @@
 				7980061C2852C66E006E390F /* BCSans-Bold.otf in Resources */,
 				7980061D2852C66E006E390F /* Booking.storyboard in Resources */,
 				7980061E2852C66E006E390F /* ReusableHeaderAddView.xib in Resources */,
+				2D6DF35029F27CD500F1150F /* NavBarDropDownView.xib in Resources */,
 				7980061F2852C66E006E390F /* HomeScreenTableViewCell.xib in Resources */,
 				798006202852C66E006E390F /* TextListViewTableViewCell.xib in Resources */,
 				798006212852C66E006E390F /* ImageTableViewCell.xib in Resources */,
@@ -4198,7 +4219,6 @@
 				3E3DA94028FE8133009C500F /* DependentListItemTableViewCell.xib in Resources */,
 				3E048CC6291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				798006312852C66E006E390F /* DataSecurityTipsTableViewCell.xib in Resources */,
-				2DF3180129E51E320077EA87 /* CommentsOptionsDropDownView.xib in Resources */,
 				798006322852C66E006E390F /* InteractiveLabelTableViewCell.xib in Resources */,
 				798006332852C66E006E390F /* GetRecordsView.xib in Resources */,
 				2922C0DD286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.xib in Resources */,
@@ -4216,6 +4236,7 @@
 				7980063B2852C66E006E390F /* exportOptions.plist in Resources */,
 				3E5E6EBE28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */,
 				7980063C2852C66E006E390F /* FormTextFieldView.xib in Resources */,
+				2D6DF35929F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */,
 				7980063D2852C66E006E390F /* StatusBannerView.xib in Resources */,
 				2DF2102828DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
 				7980063E2852C66E006E390F /* UserRecordListView.xib in Resources */,
@@ -4392,6 +4413,7 @@
 				3E81C4C829B2A60500C8F5C4 /* AuthenticationViewModel.swift in Sources */,
 				795AA7792715652C00E59FF1 /* ResourceTableViewCell.swift in Sources */,
 				7944F6BE26F12BD5006B9444 /* VaccinePassportModel.swift in Sources */,
+				2D6DF35729F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift in Sources */,
 				3E9D52672909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */,
 				2979679927C536E20019EE9B /* LaboratoryTest+CoreDataProperties.swift in Sources */,
 				3E473784291090DB00B5BBA0 /* LabOrderService.swift in Sources */,
@@ -4462,7 +4484,7 @@
 				79218AAF275196040063004E /* HealthRecordsUserView.swift in Sources */,
 				795AA7732715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
 				3E62CFCD299BF3A5000FBB40 /* CommentService+Network.swift in Sources */,
-				2DF317FE29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */,
+				2DF317FE29E51E250077EA87 /* NavBarDropDownView.swift in Sources */,
 				3EDC0D1F296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
 				79B1A0FD28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				79BDA096270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
@@ -4752,6 +4774,7 @@
 				3E81C4C929B2A60500C8F5C4 /* AuthenticationViewModel.swift in Sources */,
 				791C27BA27183149001A6E12 /* ButtonTableViewCell.swift in Sources */,
 				79932CAA2790F8DA007E8D92 /* QRMaker.swift in Sources */,
+				2D6DF35829F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift in Sources */,
 				3E9D52682909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */,
 				2979679A27C536E20019EE9B /* LaboratoryTest+CoreDataProperties.swift in Sources */,
 				2940A3512728399B00132D7D /* StorageService.swift in Sources */,
@@ -4822,7 +4845,7 @@
 				3EDC0D20296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
 				79B1A0FE28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				3E6831252940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift in Sources */,
-				2DF317FF29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */,
+				2DF317FF29E51E250077EA87 /* NavBarDropDownView.swift in Sources */,
 				2922C15E287E1482000FF4F7 /* HealthVisitClinic+CoreDataClass.swift in Sources */,
 				2922C158287E1482000FF4F7 /* HealthVisitClinic+CoreDataProperties.swift in Sources */,
 				794BD6372702EEC00084ADA8 /* BaseViewController.swift in Sources */,
@@ -5089,6 +5112,7 @@
 				2922C12E287E0FBD000FF4F7 /* StorageService+SpecialAuthorityMedication.swift in Sources */,
 				29E19FD3286C024200C235EF /* CovidTestResultRecordDetailView.swift in Sources */,
 				3E9D52662909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */,
+				2D6DF35629F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift in Sources */,
 				798005312852C66E006E390F /* ResourceTableViewCell.swift in Sources */,
 				798005322852C66E006E390F /* VaccinePassportModel.swift in Sources */,
 				3E473783291090DB00B5BBA0 /* LabOrderService.swift in Sources */,
@@ -5160,7 +5184,7 @@
 				7980055B2852C66E006E390F /* HealthRecordsUserView.swift in Sources */,
 				7980055C2852C66E006E390F /* NewsFeedTableViewCell.swift in Sources */,
 				3E62CFCC299BF3A5000FBB40 /* CommentService+Network.swift in Sources */,
-				2DF317FD29E51E250077EA87 /* CommentsOptionsDropDownView.swift in Sources */,
+				2DF317FD29E51E250077EA87 /* NavBarDropDownView.swift in Sources */,
 				3EDC0D1E296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
 				79B1A0FC28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				7980055D2852C66E006E390F /* HealthPassViewController.swift in Sources */,
