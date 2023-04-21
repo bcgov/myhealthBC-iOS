@@ -10,6 +10,7 @@ import UIKit
 enum NavBarDropDownViewOptions: String, Codable {
     case refresh
     case profile
+    case settings
     
     var getTitle: String {
         return self.rawValue.capitalized
@@ -19,6 +20,7 @@ enum NavBarDropDownViewOptions: String, Codable {
         switch self {
         case .refresh: return UIImage(named: "refresh")
         case .profile: return UIImage(named: "profile-icon")
+        case .settings: return UIImage(named: "nav-settings")
         }
     }
 }
@@ -64,12 +66,30 @@ class NavBarDropDownView: UIView {
         setupTableView()
     }
     
-    func configure(delegateOwner: UIViewController, dataSource: [NavBarDropDownViewOptions] = []) {
+    private func configure(delegateOwner: UIViewController, dataSource: [NavBarDropDownViewOptions]) {
         self.delegate = delegateOwner as? NavBarDropDownViewDelegate
-        if dataSource.count > 0 {
-            self.dataSource = dataSource
-            tableView.reloadData()
-        }
+        self.dataSource = dataSource
+        self.tableView.reloadData()
+    }
+    
+    func addView(delegateOwner: UIViewController, dataSource: [NavBarDropDownViewOptions], parentView: UIView) {
+        parentView.addSubview(self)
+        
+        let heightInt = (49 * dataSource.count) + (dataSource.count - 1)
+        let height = CGFloat(heightInt)
+        let width: CGFloat = 208
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint(item: self, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: width).isActive = true
+        NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: height).isActive = true
+        self.topAnchor.constraint(equalTo: parentView.safeAreaLayoutGuide.topAnchor).isActive = true
+        self.rightAnchor.constraint(equalTo: parentView.rightAnchor, constant: -20).isActive = true
+        
+        configure(delegateOwner: delegateOwner, dataSource: dataSource)
+    }
+    
+    func removeView() {
+        self.removeFromSuperview()
     }
     
 }
@@ -77,7 +97,6 @@ class NavBarDropDownView: UIView {
 // MARK: Table view logic
 extension NavBarDropDownView: UITableViewDelegate, UITableViewDataSource {
     private func setupTableView() {
-        dataSource = [.refresh, .profile]
         tableView.register(UINib.init(nibName: NavBarDropDownOptionTableViewCell.getName, bundle: .main), forCellReuseIdentifier: NavBarDropDownOptionTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 50

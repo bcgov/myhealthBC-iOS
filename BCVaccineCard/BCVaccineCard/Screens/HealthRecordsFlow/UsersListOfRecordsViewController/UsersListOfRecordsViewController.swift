@@ -39,6 +39,9 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     
+    private var dropDownView: NavBarDropDownView?
+    private var dropDownViewGestureRecognizer: UITapGestureRecognizer?
+    
     private var isDependent: Bool {
         return viewModel?.patient?.isDependent() ?? false
     }
@@ -117,7 +120,10 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     @objc private func refresh(_ sender: AnyObject) {
-        // TODO: Test out the dependent refresh logic here
+        refreshLogic()
+    }
+    
+    private func refreshLogic() {
         guard NetworkConnection.shared.hasConnection else {
             AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
             refreshControl.endRefreshing()
@@ -189,22 +195,26 @@ extension UsersListOfRecordsViewController {
     private func navSetup(style: NavStyle, authenticated: Bool, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
         
-        let filterButton = NavButton(title: nil,
-                                     image: UIImage(named: "filter"), action: #selector(self.showFilters),
-                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-        buttons.append(filterButton)
+//        let filterButton = NavButton(title: nil,
+//                                     image: UIImage(named: "filter"), action: #selector(self.showFilters),
+//                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+//        buttons.append(filterButton)
+        
+        let optionsButton = NavButton(title: nil, image: UIImage(named: "nav-options"), action: #selector(self.showDropDownOptions), accessibility: Accessibility(traits: .button, label: "", hint: ""))
+        buttons.append(optionsButton)
         
         if style == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             self.navigationItem.setHidesBackButton(true, animated: false)
-            let settingsButton = NavButton(title: nil,
-                                           image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
-                                           accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-            buttons.append(settingsButton)
+//            let settingsButton = NavButton(title: nil,
+//                                           image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
+//                                           accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+//            buttons.append(settingsButton)
+            
         } else {
             self.navigationItem.setHidesBackButton(false, animated: false)
             
-            let dependentSettingButton = NavButton(image: UIImage(named: "profile-icon"), action: #selector(self.dependentSetting), accessibility: Accessibility(traits: .button, label: "", hint: ""))
-            buttons.append(dependentSettingButton)
+//            let dependentSettingButton = NavButton(image: UIImage(named: "profile-icon"), action: #selector(self.dependentSetting), accessibility: Accessibility(traits: .button, label: "", hint: ""))
+//            buttons.append(dependentSettingButton)
         }
         
 //        let refreshButton = NavButton(title: nil,
@@ -232,6 +242,19 @@ extension UsersListOfRecordsViewController {
                                                backButtonHintString: nil)
     }
     
+    @objc func showDropDownOptions() {
+        var dataSource: [NavBarDropDownViewOptions] = [.refresh]
+        if viewModel?.navStyle == .singleUser && viewModel?.patient?.dependencyInfo == nil {
+            dataSource.append(.settings)
+        } else {
+            dataSource.append(.profile)
+        }
+        dropDownView = NavBarDropDownView()
+        dropDownView?.addView(delegateOwner: self, dataSource: dataSource, parentView: self.view)
+        // TODO: Add gesture recognizer here - left off here
+        // Note: Create add/remove touch gesture recognizer for dismissing the view (need to make sure we add in remove tap gesture so that other touch events will work)
+    }
+    
     @objc func showSettings() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         goToSettingsScreen()
@@ -257,6 +280,30 @@ extension UsersListOfRecordsViewController {
         tableView.isEditing = false
         inEditMode = true
     }
+}
+
+// MARK: Drop down view
+extension UsersListOfRecordsViewController: NavBarDropDownViewDelegate {
+    func optionSelected(_ option: NavBarDropDownViewOptions) {
+        switch option {
+        case .refresh:
+            refreshLogic()
+            
+        case .profile:
+            dependentSetting()
+            
+        case .settings:
+            showSettings()
+        }
+        removeNavDropDownView()
+    }
+    
+    private func removeNavDropDownView() {
+        dropDownViewGestureRecognizer = nil
+        dropDownView?.removeView()
+    }
+    
+    
 }
 
 // MARK: Search Bar

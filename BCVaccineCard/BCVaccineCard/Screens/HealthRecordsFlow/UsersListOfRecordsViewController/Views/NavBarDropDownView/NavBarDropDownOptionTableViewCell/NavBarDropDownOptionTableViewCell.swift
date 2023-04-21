@@ -9,7 +9,7 @@ import UIKit
 
 class NavBarDropDownOptionTableViewCell: UITableViewCell {
     
-    @IBOutlet private weak var greyBackgroundView: UIView!
+    @IBOutlet private weak var containerView: UIView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var iconImageView: UIImageView!
     @IBOutlet private weak var topConstraint: NSLayoutConstraint!
@@ -24,7 +24,8 @@ class NavBarDropDownOptionTableViewCell: UITableViewCell {
         titleLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         titleLabel.textColor = AppColours.appBlue
         iconImageView.tintColor = AppColours.appBlue
-        greyBackgroundView.backgroundColor = AppColours.borderGray
+        contentView.backgroundColor = AppColours.borderGray
+        containerView.backgroundColor = .white
     }
     
     func configure(option: NavBarDropDownViewOptions, dataSourceCount: Int, positionInDropDown: Int) {

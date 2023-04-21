@@ -57,7 +57,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="bottomConstraint" destination="wgw-lT-rDA" id="Kuj-IR-Yab"/>
-                <outlet property="greyBackgroundView" destination="phF-Wl-8Ja" id="NNw-nt-0rZ"/>
+                <outlet property="containerView" destination="phF-Wl-8Ja" id="NNw-nt-0rZ"/>
                 <outlet property="iconImageView" destination="1BL-kO-sAy" id="9LI-T1-n5P"/>
                 <outlet property="titleLabel" destination="O6W-ls-LKu" id="j4r-hu-IXV"/>
                 <outlet property="topConstraint" destination="sVO-HG-hI1" id="VIR-re-7cx"/>
