@@ -76,6 +76,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        setupRefreshControl()
+        self.tableView.keyboardDismissMode = .interactive
         setObservables()
         if let patient = viewModel?.patient,
            let patientName = patient.name,
@@ -331,6 +332,7 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
     
     func searchButtonTapped(text: String) {
         let patientRecords = fetchPatientRecords()
+        self.recordsSearchBarView.endEditing(true)
         show(records: patientRecords, filter: currentFilter, searchText: searchText)
     }
     
@@ -429,6 +431,7 @@ extension UsersListOfRecordsViewController {
         switch vm.state {
         case .AuthExpired:
             showAuthExpired()
+            recordsSearchBarView.isHidden = true
         case .authenticated:
             guard self.dataSource.count == 0 else {
                 show(records: self.dataSource, filter: currentFilter, searchText: searchText)
@@ -511,7 +514,7 @@ extension UsersListOfRecordsViewController {
         tableView.reloadData()
         noRecordsFoundView.isHidden = !patientRecords.isEmpty
         tableView.isHidden = patientRecords.isEmpty
-        recordsSearchBarView.isHidden = ((patientRecords.isEmpty || !HealthRecordConstants.commentsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0))
+        recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.commentsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)) && !(viewModel?.authenticated ?? false))
     }
     
     private func performBCSCLogin() {

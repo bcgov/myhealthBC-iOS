@@ -21,9 +21,9 @@ class NavBarDropDownOptionTableViewCell: UITableViewCell {
     }
 
     private func setup() {
-        titleLabel.font = UIFont.bcSansRegularWithSize(size: 15)
-        titleLabel.textColor = AppColours.appBlue
-        iconImageView.tintColor = AppColours.appBlue
+        titleLabel.font = UIFont.bcSansBoldWithSize(size: 15)
+        titleLabel.textColor = AppColours.blueLightText
+        iconImageView.tintColor = AppColours.blueLightText
         contentView.backgroundColor = AppColours.borderGray
         containerView.backgroundColor = .white
     }
