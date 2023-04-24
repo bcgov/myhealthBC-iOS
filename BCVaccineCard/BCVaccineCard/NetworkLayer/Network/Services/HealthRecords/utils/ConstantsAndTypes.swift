@@ -39,6 +39,17 @@ struct HealthRecordConstants {
     }
 }
 
+extension AppTabBarController {
+    // CHANGE TABS FOR AUTHENTICATED USER
+    var authenticatedTabs: [AppTabs] {
+        return [.Home, .AuthenticatedRecords, .Services, .Dependents]
+    }
+    // CHANGE TABS FOR UNAUTHENTICATED USER
+    var unAuthenticatedTabs: [AppTabs] {
+        return [.Home, .UnAuthenticatedRecords, .Services, .Dependents]
+    }
+}
+
 extension HealthRecordConstants {
     enum RecordType {
         case covidImmunizationRecord
