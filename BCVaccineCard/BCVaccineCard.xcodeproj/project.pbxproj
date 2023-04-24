@@ -2415,7 +2415,6 @@
 		2D9B399D2907170300AE9FA1 /* HealthRecords */ = {
 			isa = PBXGroup;
 			children = (
-				3EAF8188296DF0D400738553 /* utils */,
 				2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */,
 				3E60A4032979B80100BB20BE /* ImmunizationsService.swift */,
 				3E60A3FF2979B70D00BB20BE /* MedicationService.swift */,
@@ -2647,14 +2646,6 @@
 				3E81C4CC29B2A8B100C8F5C4 /* ProfileDetailViewModel.swift */,
 			);
 			path = ProfileDetail;
-			sourceTree = "<group>";
-		};
-		3EAF8188296DF0D400738553 /* utils */ = {
-			isa = PBXGroup;
-			children = (
-				3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */,
-			);
-			path = utils;
 			sourceTree = "<group>";
 		};
 		3EDA6F4D29EF1FDE00A5DC7B /* New Group */ = {
@@ -3055,6 +3046,7 @@
 				7944F6AD26F129DE006B9444 /* Storyboards */,
 				7944F6B226F12AB3006B9444 /* Screens */,
 				7944F67826F12613006B9444 /* AppDelegate.swift */,
+				3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */,
 				2965281628358F4800C411E1 /* AppDelegate+EXT.swift */,
 				5BA177D127A18CDD00D61F2A /* CoreDataStack.swift */,
 				7944F68426F1261B006B9444 /* Assets.xcassets */,
