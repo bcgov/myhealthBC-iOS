@@ -39,6 +39,9 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     
+    private var dropDownView: NavBarDropDownView?
+    private var dropDownViewGestureRecognizer: UITapGestureRecognizer?
+    
     private var isDependent: Bool {
         return viewModel?.patient?.isDependent() ?? false
     }
@@ -117,7 +120,10 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     @objc private func refresh(_ sender: AnyObject) {
-        // TODO: Test out the dependent refresh logic here
+        refreshLogic()
+    }
+    
+    private func refreshLogic() {
         guard NetworkConnection.shared.hasConnection else {
             AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
             refreshControl.endRefreshing()
@@ -180,7 +186,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         currentFilter = nil
         hideSelectedFilters()
         let patientRecords = fetchPatientRecords()
-        show(records: patientRecords)
+        show(records: patientRecords, searchText: searchText)
     }
 }
 
@@ -189,22 +195,26 @@ extension UsersListOfRecordsViewController {
     private func navSetup(style: NavStyle, authenticated: Bool, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
         
-        let filterButton = NavButton(title: nil,
-                                     image: UIImage(named: "filter"), action: #selector(self.showFilters),
-                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-        buttons.append(filterButton)
+//        let filterButton = NavButton(title: nil,
+//                                     image: UIImage(named: "filter"), action: #selector(self.showFilters),
+//                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+//        buttons.append(filterButton)
+        
+        let optionsButton = NavButton(title: nil, image: UIImage(named: "nav-options"), action: #selector(self.showDropDownOptions), accessibility: Accessibility(traits: .button, label: "", hint: ""))
+        buttons.append(optionsButton)
         
         if style == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             self.navigationItem.setHidesBackButton(true, animated: false)
-            let settingsButton = NavButton(title: nil,
-                                           image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
-                                           accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-            buttons.append(settingsButton)
+//            let settingsButton = NavButton(title: nil,
+//                                           image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
+//                                           accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
+//            buttons.append(settingsButton)
+            
         } else {
             self.navigationItem.setHidesBackButton(false, animated: false)
             
-            let dependentSettingButton = NavButton(image: UIImage(named: "profile-icon"), action: #selector(self.dependentSetting), accessibility: Accessibility(traits: .button, label: "", hint: ""))
-            buttons.append(dependentSettingButton)
+//            let dependentSettingButton = NavButton(image: UIImage(named: "profile-icon"), action: #selector(self.dependentSetting), accessibility: Accessibility(traits: .button, label: "", hint: ""))
+//            buttons.append(dependentSettingButton)
         }
         
 //        let refreshButton = NavButton(title: nil,
@@ -230,6 +240,31 @@ extension UsersListOfRecordsViewController {
                                                navTitleSmallAlignment: style == .singleUser && viewModel?.patient?.dependencyInfo == nil ? .Left : .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
+    }
+    
+    @objc func showDropDownOptions() {
+        guard dropDownView == nil else { return }
+        var dataSource: [NavBarDropDownViewOptions] = [.refresh]
+        if viewModel?.navStyle == .singleUser && viewModel?.patient?.dependencyInfo == nil {
+            dataSource.append(.settings)
+        } else {
+            dataSource.append(.profile)
+        }
+        
+        dropDownView = NavBarDropDownView()
+        dropDownView?.addView(delegateOwner: self, dataSource: dataSource, parentView: self.view)
+        
+        dropDownViewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissDropDown(_:)))
+        if let tap = dropDownViewGestureRecognizer {
+            self.recordsSearchBarView.isUserInteractionEnabled = false
+            self.parentContainerStackView.addGestureRecognizer(tap)
+        }
+        // FIXME: Gesture recognizer issue with tapping on the drop down view itself, only picking up gesture recognizer
+        // Note: Create add/remove touch gesture recognizer for dismissing the view (need to make sure we add in remove tap gesture so that other touch events will work)
+    }
+    
+    @objc func dismissDropDown(_ sender: UITapGestureRecognizer? = nil) {
+        removeNavDropDownView()
     }
     
     @objc func showSettings() {
@@ -259,6 +294,35 @@ extension UsersListOfRecordsViewController {
     }
 }
 
+// MARK: Drop down view
+extension UsersListOfRecordsViewController: NavBarDropDownViewDelegate {
+    func optionSelected(_ option: NavBarDropDownViewOptions) {
+        switch option {
+        case .refresh:
+            refreshLogic()
+            
+        case .profile:
+            dependentSetting()
+            
+        case .settings:
+            showSettings()
+        }
+        removeNavDropDownView()
+    }
+    
+    private func removeNavDropDownView() {
+        if let tap = dropDownViewGestureRecognizer {
+            self.parentContainerStackView.removeGestureRecognizer(tap)
+        }
+        dropDownViewGestureRecognizer = nil
+        dropDownView?.removeView()
+        dropDownView = nil
+        self.recordsSearchBarView.isUserInteractionEnabled = true
+    }
+    
+    
+}
+
 // MARK: Search Bar
 extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
     func setupSearchBarView() {
@@ -267,14 +331,14 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
     
     func searchButtonTapped(text: String) {
         let patientRecords = fetchPatientRecords()
-        show(records: patientRecords, filter: currentFilter)
+        show(records: patientRecords, filter: currentFilter, searchText: searchText)
     }
     
     func textDidChange(text: String?) {
         searchText = text
         if searchText == nil || searchText?.trimWhiteSpacesAndNewLines.count == 0 {
             let patientRecords = fetchPatientRecords()
-            show(records: patientRecords, filter: currentFilter)
+            show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
     
@@ -299,7 +363,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     func selected(filter: RecordsFilter) {
         let patientRecords = fetchPatientRecords()
         currentFilter = filter
-        show(records: patientRecords, filter:filter)
+        show(records: patientRecords, filter:filter, searchText: searchText)
     }
     
     func showSelectedFilters() {
@@ -367,11 +431,11 @@ extension UsersListOfRecordsViewController {
             showAuthExpired()
         case .authenticated:
             guard self.dataSource.count == 0 else {
-                show(records: self.dataSource, filter: currentFilter)
+                show(records: self.dataSource, filter: currentFilter, searchText: searchText)
                 return
             }
             let patientRecords = fetchPatientRecords()
-            show(records: patientRecords, filter: currentFilter)
+            show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
     
@@ -386,7 +450,7 @@ extension UsersListOfRecordsViewController {
         tableView.reloadData()
     }
     
-    private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil) {
+    private func show(records: [HealthRecordsDetailDataSource], filter: RecordsFilter? = nil, searchText: String?) {
         var patientRecords: [HealthRecordsDetailDataSource] = records
         if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
             patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
@@ -593,7 +657,7 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
     private func viewProtectedRecords(protectiveWord: String) {
         if protectiveWord.lowercased() == AuthManager().protectiveWord?.lowercased() {
             SessionStorage.protectiveWordEnteredThisSession = protectiveWord
-            show(records: fetchPatientRecords(), filter: currentFilter)
+            show(records: fetchPatientRecords(), filter: currentFilter, searchText: searchText)
         } else {
             alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
                 self.promoptProtectedWord()
@@ -622,6 +686,6 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
 extension UsersListOfRecordsViewController {
     @objc private func refreshOnStorageUpdate() {
         let patientRecords = fetchPatientRecords()
-        show(records: patientRecords, filter: currentFilter)
+        show(records: patientRecords, filter: currentFilter, searchText: searchText)
     }
 }
