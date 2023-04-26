@@ -70,7 +70,7 @@ class OrganDonorServiceTableViewCell: UITableViewCell, Theme {
         } else {
             // No DATA - API FETCH ERROR
             statusValueLabel.text = "Error"
-            descriptiveText.text = ""
+            descriptiveText.text = "Not Available"
             notAvailableLabel.isHidden = true
             downloadButton.isHidden = true
             reloadButton.isHidden = true
