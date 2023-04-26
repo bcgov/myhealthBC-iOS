@@ -24,10 +24,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iD8-K2-AC4">
-                    <rect key="frame" x="0.0" y="0.0" width="328" height="50"/>
+                    <rect key="frame" x="20" y="0.0" width="288" height="50"/>
                     <subviews>
                         <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="bxi-RJ-ya5">
-                            <rect key="frame" x="0.0" y="0.0" width="285" height="50"/>
+                            <rect key="frame" x="0.0" y="0.0" width="245" height="50"/>
                             <textInputTraits key="textInputTraits"/>
                             <scopeButtonTitles>
                                 <string>Title</string>
@@ -35,14 +35,14 @@
                             </scopeButtonTitles>
                         </searchBar>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ntD-11-IDY">
-                            <rect key="frame" x="285" y="8" width="1" height="34"/>
+                            <rect key="frame" x="245" y="8" width="1" height="34"/>
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="1" id="Ume-tI-UHS"/>
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TSh-P0-Rv6">
-                            <rect key="frame" x="296" y="15" width="20" height="20"/>
+                            <rect key="frame" x="256" y="15" width="20" height="20"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="20" id="anT-Wn-OCj"/>
                                 <constraint firstAttribute="width" constant="20" id="zJF-zJ-aZ9"/>
@@ -72,9 +72,9 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="iD8-K2-AC4" secondAttribute="bottom" id="3Hw-46-OqM"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="iD8-K2-AC4" secondAttribute="trailing" id="E6f-uT-T3b"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="iD8-K2-AC4" secondAttribute="trailing" constant="20" id="E6f-uT-T3b"/>
                 <constraint firstItem="iD8-K2-AC4" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="btj-rv-7JC"/>
-                <constraint firstItem="iD8-K2-AC4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="uNd-jb-ib2"/>
+                <constraint firstItem="iD8-K2-AC4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="uNd-jb-ib2"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="155.72519083969465" y="-192.25352112676057"/>

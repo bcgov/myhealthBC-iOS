@@ -22,16 +22,16 @@
                         <rect key="frame" x="0.0" y="8" width="471" height="102"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="vuv-5R-aWL">
-                                <rect key="frame" x="10" y="8" width="432" height="86"/>
+                                <rect key="frame" x="10" y="8" width="428" height="86"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vnU-XG-1Ip">
-                                        <rect key="frame" x="0.0" y="0.0" width="432" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="43C-gd-g9Q">
-                                        <rect key="frame" x="0.0" y="54" width="432" height="32"/>
+                                        <rect key="frame" x="0.0" y="54" width="428" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="32" id="UbP-IC-wEt"/>
                                         </constraints>
@@ -42,10 +42,10 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FOZ-g1-d5v">
-                                <rect key="frame" x="447" y="16" width="16" height="12"/>
+                                <rect key="frame" x="443" y="20" width="24" height="12"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="12" id="IOX-Ea-nHM"/>
-                                    <constraint firstAttribute="width" constant="16" id="XdN-JF-L0i"/>
+                                    <constraint firstAttribute="width" constant="24" id="XdN-JF-L0i"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="comments-options"/>
@@ -60,8 +60,8 @@
                             <constraint firstItem="vuv-5R-aWL" firstAttribute="top" secondItem="f5h-mY-rkG" secondAttribute="top" constant="8" id="TZ4-ac-hP5"/>
                             <constraint firstItem="FOZ-g1-d5v" firstAttribute="leading" secondItem="vuv-5R-aWL" secondAttribute="trailing" constant="5" id="Xbd-Jl-hAN"/>
                             <constraint firstAttribute="bottom" secondItem="vuv-5R-aWL" secondAttribute="bottom" constant="8" id="eZQ-Xh-ZUB"/>
-                            <constraint firstAttribute="trailing" secondItem="FOZ-g1-d5v" secondAttribute="trailing" constant="8" id="vTL-Xl-MC4"/>
-                            <constraint firstItem="FOZ-g1-d5v" firstAttribute="top" secondItem="f5h-mY-rkG" secondAttribute="top" constant="16" id="wbJ-TU-aSA"/>
+                            <constraint firstAttribute="trailing" secondItem="FOZ-g1-d5v" secondAttribute="trailing" constant="4" id="vTL-Xl-MC4"/>
+                            <constraint firstItem="FOZ-g1-d5v" firstAttribute="top" secondItem="f5h-mY-rkG" secondAttribute="top" constant="20" id="wbJ-TU-aSA"/>
                         </constraints>
                     </view>
                 </subviews>
