@@ -170,24 +170,27 @@ class DependentsHomeViewController: BaseDependentViewController {
         navSetup()
     }
     
-    private func createLogoImgView() -> UIImageView {
-        removeEmptyLogo()
-        let bounds = tableView != nil ? tableView.bounds : view.bounds
-        let imgView = UIImageView(frame: bounds)
-        imgView.tag = emptyLogoTag
-        view.addSubview(imgView)
-        let padding = self.view.bounds.width / 10
-        imgView.addEqualSizeContraints(to: tableView != nil ? tableView : view, paddingVertical: padding, paddingHorizontal: padding)
-        imgView.contentMode = .scaleAspectFit
-        return imgView
+    private func createLogoImgView(completion: @escaping(UIImageView?)->Void) {
+        removeEmptyLogo() { [weak self] in
+            guard let self = self else {return completion(nil)}
+            let bounds = self.tableView != nil ? self.tableView.bounds : view.bounds
+            let imgView = UIImageView(frame: bounds)
+            imgView.tag = emptyLogoTag
+            self.view.addSubview(imgView)
+            let padding = self.view.bounds.width / 5
+            imgView.addEqualSizeContraints(to: self.tableView != nil ? self.tableView : view, paddingVertical: padding, paddingHorizontal: padding)
+            imgView.contentMode = .scaleAspectFit
+            return completion(imgView)
+        }
     }
     
-    private func removeEmptyLogo() {
+    private func removeEmptyLogo(completion: @escaping()->Void) {
         DispatchQueue.main.async {
             guard let imgView = self.view.viewWithTag(self.emptyLogoTag) else {
-                return
+                return completion()
             }
             imgView.removeFromSuperview()
+            return completion()
         }
     }
     func style(button: UIButton, filled: Bool) {
@@ -226,8 +229,11 @@ class DependentsHomeViewController: BaseDependentViewController {
     }
     
     func styleWithoutDependents() {
-        let imageView = createLogoImgView()
-        imageView.image = UIImage(named: "dependent-logo")
+        createLogoImgView() { imageView in
+            guard let imageView = imageView else {return}
+            imageView.image = UIImage(named: "dependent-logo")
+        }
+        
         manageDependentsButton.isHidden = true
         loginWIthBCSCButton.isHidden = true
         addDependentButton.isHidden = false
@@ -235,7 +241,7 @@ class DependentsHomeViewController: BaseDependentViewController {
     }
     
     func styleAuthenticationExpired() {
-        removeEmptyLogo()
+        removeEmptyLogo() {}
         addDependentButton.isHidden = true
         manageDependentsButton.isHidden = true
         loginWIthBCSCButton.isHidden = true
@@ -246,8 +252,11 @@ class DependentsHomeViewController: BaseDependentViewController {
     }
     
     func styleUnauthenticated() {
-        let imageView = createLogoImgView()
-        imageView.image = UIImage(named: "dependent-logged-out")
+        createLogoImgView() { imageView in
+            guard let imageView = imageView else {return}
+            imageView.image = UIImage(named: "dependent-logged-out")
+        }
+        
         addDependentButton.isHidden = true
         manageDependentsButton.isHidden = true
         loginWIthBCSCButton.isHidden = false
@@ -255,7 +264,7 @@ class DependentsHomeViewController: BaseDependentViewController {
     }
     
     private func styleWithDependents() {
-        removeEmptyLogo()
+        removeEmptyLogo() {}
         addDependentButton.isHidden = false
         manageDependentsButton.isHidden = false
         loginWIthBCSCButton.isHidden = true

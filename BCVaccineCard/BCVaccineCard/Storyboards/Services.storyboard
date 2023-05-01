@@ -33,6 +33,7 @@
                         <constraints>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="xsc-ow-SZk" secondAttribute="bottom" id="2cI-g2-oBn"/>
                             <constraint firstItem="etX-pq-Xoq" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="18" id="94A-j4-MzC"/>
+                            <constraint firstItem="xsc-ow-SZk" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" priority="750" constant="110" id="Kap-Ij-gpe"/>
                             <constraint firstItem="etX-pq-Xoq" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="LRk-9i-XJi"/>
                             <constraint firstItem="etX-pq-Xoq" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="MLg-AG-LpR"/>
                             <constraint firstItem="xsc-ow-SZk" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="bcA-fX-tr0"/>
@@ -41,6 +42,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="containerToDescriptiveLabel" destination="caV-HN-qxz" id="KqT-Zq-Jyy"/>
+                        <outlet property="containerToTopParent" destination="Kap-Ij-gpe" id="RzC-Oa-bk7"/>
                         <outlet property="contentContainer" destination="xsc-ow-SZk" id="g5l-eW-DJc"/>
                         <outlet property="descriptiveLabel" destination="etX-pq-Xoq" id="uV7-A3-Qss"/>
                     </connections>

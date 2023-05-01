@@ -17,6 +17,8 @@ class ServicesViewController: BaseViewController {
         return ServicesViewController()
     }
 
+    @IBOutlet weak var containerToDescriptiveLabel: NSLayoutConstraint!
+    @IBOutlet weak var containerToTopParent: NSLayoutConstraint!
     @IBOutlet weak var descriptiveLabel: UILabel!
     @IBOutlet weak var contentContainer: UIView!
     
@@ -25,16 +27,16 @@ class ServicesViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        if let vm = viewModel {
-            vm.listenToChanges { [weak self] in
-                self?.setup()
-            }
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        if let vm = viewModel {
+            vm.listenToChanges { [weak self] in
+                self?.setup()
+            }
+        }
     }
     
     // MARK: Setup
@@ -44,7 +46,6 @@ class ServicesViewController: BaseViewController {
             showUnAuthenticated()
             return
         }
-        
         switch state {
         case .Authenticated:
             showList()
@@ -71,16 +72,39 @@ class ServicesViewController: BaseViewController {
         }
         let list: ServicesList = ServicesList.fromNib()
         list.setup(in: contentContainer, for: patient, organDonorDelegate: self)
+        if let containerToDescriptiveLabel = containerToDescriptiveLabel {
+            containerToDescriptiveLabel.isActive = true
+        }
+        if let containerToTopParent = containerToTopParent {
+            containerToTopParent.isActive = false
+        }
+        view.layoutIfNeeded()
     }
     
     func showUnAuthenticated() {
         let authView: UnAuthenticatedView = UnAuthenticatedView.fromNib()
         authView.setup(in: contentContainer, type: .Services, delegate: self)
+        if let containerToDescriptiveLabel = containerToDescriptiveLabel {
+            containerToDescriptiveLabel.isActive = true
+        }
+        if let containerToTopParent = containerToTopParent {
+            containerToTopParent.isActive = false
+        }
+        view.layoutIfNeeded()
     }
     
     func showAuthExpired() {
         let expView: AuthExpiredView = AuthExpiredView.fromNib()
         expView.setup(in: contentContainer, type: .Services, delegate: self)
+        if let containerToTopParent = containerToTopParent {
+            containerToTopParent.isActive = true
+            containerToTopParent.constant = 16
+        }
+        if let containerToDescriptiveLabel = containerToDescriptiveLabel {
+            containerToDescriptiveLabel.isActive = false
+        }
+        
+        view.layoutIfNeeded()
     }
 
 }
@@ -108,7 +132,7 @@ extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate, UIDocume
         service.fetchPDF(donorStatus: status, patient: patient) { [weak self] result in
             guard let `self` = self else {return}
             guard let pdfData = result else {
-                self.showToast(message: "Encountered an error while fetching PDF", style: .Warn)
+                self.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
                 return
             }
             self.showPDFDocument(pdf: pdfData, navTitle: "Organ Donor Status", documentVCDelegate: self, navDelegate: self.navDelegate)
