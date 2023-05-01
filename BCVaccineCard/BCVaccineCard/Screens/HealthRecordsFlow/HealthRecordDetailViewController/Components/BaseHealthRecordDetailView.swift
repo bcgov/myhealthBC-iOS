@@ -55,7 +55,7 @@ class BaseHealthRecordsDetailView: UIView {
               event.entity == .Comments else {return}
         guard let object = event.object as? Comment,
               let model = self.model else {return}
-        if model.toHealthRecord()?.commentId == object.parentEntryID {
+        if model.commentID == object.parentEntryID {
             submittedComment(object: object)
         }
     }
