@@ -75,7 +75,7 @@ class UsersListOfRecordsViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        setupRefreshControl()
+        setupRefreshControl()
         self.tableView.keyboardDismissMode = .interactive
         setObservables()
         if let patient = viewModel?.patient,
@@ -244,7 +244,10 @@ extension UsersListOfRecordsViewController {
     }
     
     @objc func showDropDownOptions() {
-        guard dropDownView == nil else { return }
+        guard dropDownView == nil else {
+            dismissDropDown()
+            return
+        }
         var dataSource: [NavBarDropDownViewOptions] = [.refresh]
         if viewModel?.navStyle == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             dataSource.append(.settings)
@@ -514,7 +517,7 @@ extension UsersListOfRecordsViewController {
         tableView.reloadData()
         noRecordsFoundView.isHidden = !patientRecords.isEmpty
         tableView.isHidden = patientRecords.isEmpty
-        recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.commentsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)) && !(viewModel?.authenticated ?? false))
+        recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
     }
     
     private func performBCSCLogin() {
