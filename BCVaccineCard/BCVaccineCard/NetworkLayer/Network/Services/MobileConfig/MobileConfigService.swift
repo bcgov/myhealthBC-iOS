@@ -9,6 +9,7 @@ import Foundation
 
 class MobileConfigService {
     let network: Network
+    let cacheTimeout: Double = 50
 
     private var callers: [((MobileConfigurationResponseObject?)->Void)] = []
     
@@ -19,7 +20,7 @@ class MobileConfigService {
     func fetchConfig(completion: @escaping (MobileConfigurationResponseObject?)->Void) {
         if let cache = MobileConfigStorage.cachedConfig {
             let timeDiff = Date().timeIntervalSince(cache.datetime)
-            if timeDiff <= 5 {
+            if timeDiff <= cacheTimeout {
                 Logger.log(string: "MobileConfigService returning cached", type: .Network)
                 return completion(cache.config)
             }
@@ -37,14 +38,14 @@ class MobileConfigService {
             Logger.log(string: "MobileConfigService Offline", type: .Network)
             return completion(MobileConfigStorage.offlineConfig)
         }
-        network.addLoader(message: .empty)
+        network.addLoader(message: .empty, caller: .MobileConfigService_fetchConfig)
         let request = NetworkRequest<DefaultParams, MobileConfigurationResponseObject>(
             url: Constants.Network.MobileConfig,
             type: .Get,
             parameters: nil,
             headers: nil,
             completion: { responseData in
-                self.network.removeLoader()
+                self.network.removeLoader(caller: .MobileConfigService_fetchConfig)
                 Logger.log(string: "MobileConfigService response received", type: .Network)
                 if let response = responseData {
                     MobileConfigStorage.store(config: response)

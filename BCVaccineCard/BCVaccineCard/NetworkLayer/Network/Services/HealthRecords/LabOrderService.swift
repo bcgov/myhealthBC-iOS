@@ -21,14 +21,14 @@ struct LabOrderService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([LaboratoryOrder]?)->Void) {
         Logger.log(string: "Fetching LabOrder records for \(patient.name)", type: .Network)
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .LabOrderService_fetchAndStore)
         fetch(for: patient) { result in
             guard let response = result else {
-                network.removeLoader()
+                network.removeLoader(caller: .LabOrderService_fetchAndStore)
                 return completion(nil)
             }
             store(labOrders: response, for: patient, completion: { result in
-                network.removeLoader()
+                network.removeLoader(caller: .LabOrderService_fetchAndStore)
                 return completion(result)
             })
         }
@@ -71,7 +71,7 @@ extension LabOrderService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, labOrdersResponse>(url: endpoints.laboratoryOrders(base: baseURL),
                                                                              type: .Get,
@@ -88,11 +88,11 @@ extension LabOrderService {
                 }
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
+                default:
                     break
                 }
-                
             }
+            
             Logger.log(string: "Network LabOrder initiated", type: .Network)
             network.request(with: requestModel)
         }

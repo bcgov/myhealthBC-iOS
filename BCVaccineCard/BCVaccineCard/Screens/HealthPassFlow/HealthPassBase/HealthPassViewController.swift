@@ -66,7 +66,7 @@ class HealthPassViewController: BaseViewController {
     
     private func showFedPassIfNeccessary() {
         guard let fedPassStringToOpen = fedPassStringToOpen else { return }
-        self.showPDFDocument(pdfString: fedPassStringToOpen, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
+        self.showPDFDocument(pdf: fedPassStringToOpen, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
     }
     
 }
@@ -139,7 +139,7 @@ extension HealthPassViewController {
     func onAdd(vaccineCard: VaccineCard?) {
         guard let vaccineCard = vaccineCard else {return}
         let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: nil)
-        self.navigationController?.popToRootViewController(animated: true)
+        self.navigationController?.popToViewController(self, animated: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if StorageService.shared.fetchVaccineCards().count > 1 {
                 self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
@@ -150,7 +150,7 @@ extension HealthPassViewController {
     func onAdd(federal vaccineCard: VaccineCard?) {
         guard let vaccineCard = vaccineCard else {return}
         let vm = CovidVaccineCardsViewController.ViewModel(recentlyAddedCardId: vaccineCard.id, fedPassStringToOpen: vaccineCard.federalPass)
-        self.navigationController?.popToRootViewController(animated: true)
+        self.navigationController?.popToViewController(self, animated: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.show(route: .CovidVaccineCards, withNavigation: true, viewModel: vm)
         }
@@ -328,7 +328,7 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
 extension HealthPassViewController: FederalPassViewDelegate {
     func federalPassButtonTapped(model: AppVaccinePassportModel?) {
         if let pass = model?.codableModel.fedCode {
-            self.showPDFDocument(pdfString: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
+            self.showPDFDocument(pdf: pass, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         } else {
             guard let model = model else { return }
             addFederalPass(model: model)
@@ -351,9 +351,9 @@ extension HealthPassViewController: FederalPassViewDelegate {
     
     func showAddedFederalPass(vaccineCard: VaccineCard) {
         guard let fedCode = vaccineCard.federalPass else {return}
-        self.navigationController?.popToRootViewController(animated: true)
+        self.navigationController?.popToViewController(self, animated: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.showPDFDocument(pdfString: fedCode, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
+            self.showPDFDocument(pdf: fedCode, navTitle: .canadianCOVID19ProofOfVaccination, documentVCDelegate: self, navDelegate: self.navDelegate)
         }
     }
     

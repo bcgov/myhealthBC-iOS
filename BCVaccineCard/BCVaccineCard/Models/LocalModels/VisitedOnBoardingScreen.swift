@@ -30,6 +30,7 @@ enum OnboardingScreenType: Int, CaseIterable {
     case dependents
     case healthPasses
     case healthResources
+    case services
 }
 
 enum OnboardingScreenTypeID: String {
@@ -37,6 +38,7 @@ enum OnboardingScreenTypeID: String {
     case healthRecords = "healthRecords"
     case healthResources = "healthResources"
     case dependents = "dependents"
+    case services = "services"
 }
 
 extension OnboardingScreenType {
@@ -50,6 +52,8 @@ extension OnboardingScreenType {
             return .healthResources
         case .dependents:
             return .dependents
+        case .services:
+            return .services
         }
     }
 }
@@ -65,6 +69,8 @@ extension OnboardingScreenTypeID {
             return .healthResources
         case .dependents:
             return .dependents
+        case .services:
+            return .services
         }
     }
 }
@@ -80,6 +86,8 @@ extension OnboardingScreenType {
             return UIImage(named: "bubble-resources")
         case .dependents:
             return UIImage(named: "bubble-dependents")
+        case .services:
+            return UIImage(named: "bubble-services")
         }
     }
     // Note: Offset is:
@@ -94,6 +102,8 @@ extension OnboardingScreenType {
             return (width: 132, height: 99, xOffset: -60, yOffset: 48)
         case .dependents:
             return (width: 132, height: 99, xOffset: 64, yOffset: -10)
+        case .services:
+            return (width: 133, height: 99, xOffset: 64, yOffset: 48)
         }
     }
     
@@ -107,6 +117,8 @@ extension OnboardingScreenType {
             return .healthResources.sentenceCase()
         case .dependents:
             return .dependentRecord.sentenceCase()
+        case .services:
+            return "Services"
         }
     }
     
@@ -120,6 +132,8 @@ extension OnboardingScreenType {
             return .initialOnboardingHealthResourcesDescription
         case .dependents:
             return .initialOnboardingDependentRecordDescription
+        case .services:
+            return "You can check and update your Organ Donor Registry information here. More health services will be added in future."
         }
     }
 }

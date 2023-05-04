@@ -18,9 +18,9 @@ struct FeedbackService {
     }
     
     public func postFeedback(for patient: Patient, object: PostFeedback, completion: @escaping(Bool?) -> Void) {
-        network.addLoader(message: .empty)
+        network.addLoader(message: .empty, caller: .FeedbackService_postFeedback)
         postFeedbackNetworkRequest(object: object) { passed in
-            network.removeLoader()
+            network.removeLoader(caller: .FeedbackService_postFeedback)
             completion(passed)
         }
     }
@@ -48,11 +48,11 @@ struct FeedbackService {
             let requestModel = NetworkRequest<PostFeedback, Int>(url: endpoints.feedback(base: baseURL, hdid: hdid), type: .Post, parameters: object, headers: headers) { statusCode in
                 guard let statusCode = statusCode else { return completion(false) }
                 let success = (200...299).contains(statusCode) ? true : false
-                completion(success)
+                return completion(success)
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
-                    completion(false)
+                default:
+                    return completion(false)
                 }
             }
             

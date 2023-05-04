@@ -23,11 +23,33 @@ struct PDFService {
         else {
             return completion(nil)
         }
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .empty, caller: .PDFService_fetchPDF)
         fetchPDF(fileID: id, type: type, isCovid: type == .Covid19, patient: patient, completion: {response in
-            network.removeLoader()
+            network.removeLoader(caller: .PDFService_fetchPDF)
             return completion(response?.data)
         })
+    }
+    
+    public func fetchPDF(donorStatus: OrganDonorStatus, patient: Patient, completion: @escaping (Data?)->Void) {
+        guard let fileId = donorStatus.fileId else {
+            return completion(nil)
+        }
+        network.addLoader(message: .empty, caller: .PDFService_DonorStatus)
+        fetchPDFV2(fileID: fileId, type: .OrganDonor, isCovid: false, patient: patient, completion: {response in
+            network.removeLoader(caller: .PDFService_DonorStatus)
+            guard let response = response,
+                  let content = response.content
+            else {
+                return completion(nil)
+            }
+            let uint = content.map({UInt8($0)})
+            let data = Data(uint)
+            return completion(data)
+        })
+    }
+    
+    func toUint(signed: Int) -> UInt8 {
+        return UInt8(signed)
     }
     
     private func getID(record: HealthRecordsDetailDataSource) -> String? {
@@ -51,6 +73,8 @@ struct PDFService {
             return endpoints.labTestPDF(base: baseURL, reportID: fileID)
         case .Covid19:
             return endpoints.labTestPDF(base: baseURL, reportID: fileID)
+        case .OrganDonor:
+            return endpoints.patientDataPDF(base: baseURL, hdid: hdid, fileID: fileID)
         }
     }
     
@@ -78,8 +102,7 @@ extension PDFService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: AuthenticatedPDFRequestObject = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: isCovid ? "true" : "false")
-            
+            let parameters: AuthenticatedPDFRequestObject = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: isCovid ? "true" : "false", apiVersion: "1")
             let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, AuthenticatedPDFResponseObject>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
                 if let docs = result?.resourcePayload {
@@ -89,7 +112,35 @@ extension PDFService {
                     return completion(nil)
                 }
             }
+            network.request(with: requestModel)
+        }
+    }
+    
+    private func fetchPDFV2(fileID: String, type: FetchType, isCovid: Bool, patient: Patient, completion: @escaping(_ response: PDFResponseV2?) -> Void) {
+        guard let token = authManager.authToken,
+              let hdid = patient.hdid,
+              NetworkConnection.shared.hasConnection
+        else { return completion(nil)}
+        
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
             
+            let url = getURL(type: type, baseURL: baseURL, hdid: hdid, fileID: fileID)
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+            ]
+            
+            let parameters = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: "false", apiVersion: "2")
+            let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, PDFResponseV2>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            { result in
+                return completion(result)
+            }
             network.request(with: requestModel)
         }
     }
@@ -99,6 +150,7 @@ extension PDFService {
         case ClinialDocument
         case LabOrder
         case Covid19
+        case OrganDonor
     }
 }
 

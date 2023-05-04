@@ -32,14 +32,6 @@ class AppTabBarController: UITabBarController {
     private var networkListener: NetworkConnection?
     private var patient: Patient?
     
-    private var authenticatedTabs: [AppTabs] {
-        return [.Home, .AuthenticatedRecords, .Proofs, .Dependents]
-    }
-    
-    private var unAuthenticatedTabs: [AppTabs] {
-        return [.Home, .UnAuthenticatedRecords, .Proofs, .Dependents]
-    }
-    
     /// Currently available tabs
     var currentTabs: [AppTabs] = []
     

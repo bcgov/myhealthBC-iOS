@@ -20,7 +20,7 @@ class MedicationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelega
         tableView?.dataSource = self
         tableView?.delegate = self
         fields = createFields()
-        comments = model?.comments ?? []
+        comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
     }
     
     override func submittedComment(object: Comment) {
@@ -57,7 +57,7 @@ class MedicationRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelega
             return cell
         case .Comments:
             guard let cell = commentCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
-            cell.configure(comment: comments[indexPath.row])
+            cell.configure(comment: comments[indexPath.row], showOptionsButton: false)
             return cell
         }
     }

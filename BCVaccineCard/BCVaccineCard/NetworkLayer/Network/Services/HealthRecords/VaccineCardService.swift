@@ -22,15 +22,15 @@ struct VaccineCardService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping (VaccineCard?)->Void) {
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .VaccineCardService_fetchAndStore_Patient)
         Logger.log(string: "Fetching VaccineCard records for \(patient.name)", type: .Network)
         fetch(for: patient) { result in
             guard let response = result else {
-                network.removeLoader()
+                network.removeLoader(caller: .VaccineCardService_fetchAndStore_Patient)
                 return completion(nil)
             }
             store(VaccineCards: response, for: patient, completion: { result in
-                network.removeLoader()
+                network.removeLoader(caller: .VaccineCardService_fetchAndStore_Patient)
                 return completion(result)
             })
         }
@@ -38,9 +38,9 @@ struct VaccineCardService {
     
     public func fetchAndStore(for dependent: Dependent, completion: @escaping (VaccineCard?)->Void) {
         guard let patient = dependent.info else {return}
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .VaccineCardService_fetchAndStore_Dependent)
         fetchAndStore(for: patient) { vaccineCard in
-            network.removeLoader()
+            network.removeLoader(caller: .VaccineCardService_fetchAndStore_Dependent)
             return completion(vaccineCard)
         }
     }
@@ -51,7 +51,7 @@ struct VaccineCardService {
         
         let dispatchGroup = DispatchGroup()
         var records: [VaccineCard] = []
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .VaccineCardService_fetchAndStore_DependentsOfPatient)
         StorageService.shared.deleteDependentVaccineCards(forPatient: patient)
         
         dependents.forEach { dependent in
@@ -66,15 +66,16 @@ struct VaccineCardService {
         
         dispatchGroup.notify(queue: .main) {
             // Return completion
-            network.removeLoader()
+            network.removeLoader(caller: .VaccineCardService_fetchAndStore_DependentsOfPatient)
             return completion(records)
         }
     }
     
     func fetchAndStore(phn: String, dateOfBirth: String, dateOfVaccine: String, completion: @escaping (VaccineCard?)->Void) {
-        network.addLoader(message: .empty)
+        network.addLoader(message: .empty, caller: .VaccineCardService_fetchAndStore_FormInfo)
         fetch(phn: phn.removeWhiteSpaceFormatting, dateOfBirth: dateOfBirth, dateOfVaccine: dateOfVaccine) { response in
             guard let response = response, let payload = response.resourcePayload else {
+                network.removeLoader(caller: .VaccineCardService_fetchAndStore_FormInfo)
                 return completion(nil)
             }
             
@@ -90,11 +91,12 @@ struct VaccineCardService {
                                                                      mailingAddress: nil,
                                                                      authenticated: false)
             else {
+                network.removeLoader(caller: .VaccineCardService_fetchAndStore_FormInfo)
                 return completion(nil)
             }
             
             store(vaccineCard: response, for: patient, completion: { result in
-                network.removeLoader()
+                network.removeLoader(caller: .VaccineCardService_fetchAndStore_FormInfo)
                 return completion(result)
             })
         }
@@ -138,7 +140,7 @@ extension VaccineCardService {
                 Constants.GatewayVaccineCardRequestParameters.dateOfVaccine: dateOfVaccine
             ]
             
-            let parameters: DefaultParams = DefaultParams()
+            let parameters: DefaultParams = DefaultParams(apiVersion: "1")
             
             let requestModel = NetworkRequest<DefaultParams, VaccineCardsResponse>(url: endpoints.vaccineCardPublic(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
@@ -148,6 +150,8 @@ extension VaccineCardService {
                 switch error {
                 case .FailedAfterRetry:
                     network.showToast(message: .fetchRecordError, style: .Warn)
+                default:
+                    break
                 }
                 
             }
@@ -175,7 +179,7 @@ extension VaccineCardService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, VaccineCardsResponse>(url: endpoints.vaccineCardAuthenticated(base: baseURL), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             
@@ -191,6 +195,8 @@ extension VaccineCardService {
                 switch error {
                 case .FailedAfterRetry:
                     network.showToast(message: .fetchRecordError, style: .Warn)
+                default:
+                    break
                 }
                 
             }

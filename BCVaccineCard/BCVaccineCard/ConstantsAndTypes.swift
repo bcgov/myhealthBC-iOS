@@ -32,6 +32,22 @@ struct HealthRecordConstants {
     static var commentsEnabled: Bool {
         return false
     }
+    
+    // ENABLE AND DISABLE SEARCH RECORDS
+    static var searchRecordsEnabled: Bool {
+        return true
+    }
+}
+
+extension AppTabBarController {
+    // CHANGE TABS FOR AUTHENTICATED USER
+    var authenticatedTabs: [AppTabs] {
+        return [.Home, .AuthenticatedRecords, .Services, .Dependents]
+    }
+    // CHANGE TABS FOR UNAUTHENTICATED USER
+    var unAuthenticatedTabs: [AppTabs] {
+        return [.Home, .UnAuthenticatedRecords, .Services, .Dependents]
+    }
 }
 
 extension HealthRecordConstants {

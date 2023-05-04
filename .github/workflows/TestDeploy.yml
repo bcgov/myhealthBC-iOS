@@ -2,7 +2,7 @@ name: Build and deploy to Firebase
 on:
   push:
     branches:
-      - dev
+      - dev-old
 jobs:
   deploy:
     name: Creating TEST ipa

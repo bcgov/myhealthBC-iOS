@@ -21,7 +21,18 @@ struct AuthenticatedPDFResponseObject: BaseGatewayResponse, Codable {
     }
 }
 
+struct PDFResponseV2: Codable {
+    let content: [Int]?
+    let contentType: String?
+}
+
 struct AuthenticatedPDFRequestObject: Codable {
     let hdid: String
     let isCovid19: String
+    let apiVersion: String
+    
+    enum CodingKeys: String, CodingKey {
+        case hdid, isCovid19
+        case apiVersion = "api-version"
+    }
 }

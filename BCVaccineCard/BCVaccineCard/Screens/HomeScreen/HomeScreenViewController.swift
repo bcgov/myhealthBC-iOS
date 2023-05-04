@@ -66,7 +66,7 @@ class HomeScreenViewController: BaseViewController {
     }
     
     private func genDataSource() -> [DataSource] {
-        var data: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Proofs), .button(type: .Resources)]
+        var data: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Resources), .button(type: .Proofs)]
         if authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty {
             data.append(.button(type: .Recommendations))
         }
@@ -253,7 +253,8 @@ extension HomeScreenViewController {
                 showLogin(initialView: .Landing, showTabOnSuccess: .AuthenticatedRecords)
             }
         case .Proofs:
-            show(tab: .Proofs)
+            let vm = HealthPassViewController.ViewModel(fedPassStringToOpen: nil)
+            show(route: .HealthPass, withNavigation: true, viewModel: vm)
         case .Resources:
             show(route: .Resource, withNavigation: true)
         case .Recommendations:

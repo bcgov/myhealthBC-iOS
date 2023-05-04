@@ -8,22 +8,21 @@
 import Foundation
 
 // MARK: - AuthenticatedPatientDetailsResponseObject
-struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
-    let resourcePayload: ResourcePayload?
-    var totalResultCount, pageIndex, pageSize: Int?
-    var resultError: ResultError?
+struct AuthenticatedPatientDetailsResponseObject: Codable {
+    let hdid, personalHealthNumber: String?
+    let commonName, legalName, preferredName: Name?
+    let birthdate, gender: String?
+    let physicalAddress, postalAddress: Address?
+    let responseCode: String?
     
-    // MARK: - ResourcePayload
-    struct ResourcePayload: Codable {
-        let hdid, personalhealthnumber, firstname, lastname: String?
-        let birthdate, gender: String?
-        let physicalAddress, postalAddress: Address?
-        let responseCode: String?
+    struct Name: Codable {
+        let givenName, surname: String?
     }
     
     struct Address: Codable {
         let streetLines: [String]?
         let city, state, postalCode, country: String?
+        
         var getAddressString: String? {
             var street = ""
             if let streetLines = streetLines, let first = streetLines.first, first.count > 0 {
@@ -47,12 +46,11 @@ struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
     }
     
     var getFullName: String {
-        guard let payload = resourcePayload else { return "" }
         var name = ""
-        if let first = payload.firstname {
+        if let first = preferredName?.givenName {
             name.append(first)
         }
-        if let last = payload.lastname {
+        if let last = preferredName?.surname {
             if !name.isEmpty {
                 name.append(" ")
             }
@@ -62,7 +60,7 @@ struct AuthenticatedPatientDetailsResponseObject: BaseGatewayResponse, Codable {
     }
     
     var getBdayDate: Date? {
-        guard let birthdate = resourcePayload?.birthdate else { return nil }
+        guard let birthdate = birthdate else { return nil }
         return Date.Formatter.gatewayDateAndTime.date(from: birthdate)
     }
     

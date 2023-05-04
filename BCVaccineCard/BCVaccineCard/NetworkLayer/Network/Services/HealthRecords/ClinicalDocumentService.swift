@@ -22,15 +22,15 @@ struct ClinicalDocumentService {
     public func fetchAndStore(for patient: Patient, completion: @escaping ([ClinicalDocument]?)->Void) {
         if !HealthRecordConstants.enabledTypes.contains(.clinicalDocument) {return completion([])}
         Logger.log(string: "Fetching ClinicalDocument records for \(patient.name)", type: .Network)
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .ClinicalDocumentService_fetchAndStore)
         fetch(for: patient) { result in
             guard let response = result else {
-                network.removeLoader()
+                network.removeLoader(caller: .ClinicalDocumentService_fetchAndStore)
                 return completion(nil)
             }
             
             store(HopotalVisits: response, for: patient, completion: { result in
-                network.removeLoader()
+                network.removeLoader(caller: .ClinicalDocumentService_fetchAndStore)
                 return completion(result)
             })
         }
@@ -72,7 +72,7 @@ extension ClinicalDocumentService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, AuthenticatedClinicalDocumentResponseObject>(url: endpoints.clinicalDocuments(base: baseURL, hdid: hdid),
                                                                                                        type: .Get,
@@ -89,7 +89,7 @@ extension ClinicalDocumentService {
                 }
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
+                default:
                     break
                 }
                 

@@ -23,14 +23,14 @@ struct ImmnunizationsService {
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([Immunization]?)->Void) {
         Logger.log(string: "Fetching Immnunization records for \(patient.name)", type: .Network)
-        network.addLoader(message: .SyncingRecords)
+        network.addLoader(message: .SyncingRecords, caller: .ImmnunizationsService_fetchAndStore)
         fetch(for: patient, currentAttempt: 0) { result in
             guard let response = result else {
-                network.removeLoader()
+                network.removeLoader(caller: .ImmnunizationsService_fetchAndStore)
                 return completion(nil)
             }
             store(immunizations: response, for: patient, completion: { result in
-                network.removeLoader()
+                network.removeLoader(caller: .ImmnunizationsService_fetchAndStore)
                 return completion(result)
             })
         }
@@ -91,7 +91,7 @@ extension ImmnunizationsService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
             ]
             
-            let parameters: HDIDParams = HDIDParams(hdid: hdid)
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
             
             let requestModel = NetworkRequest<HDIDParams, immunizationsResponse>(url: endpoints.immunizations(base: baseURL),
                                                                                  type: .Get,
@@ -114,7 +114,7 @@ extension ImmnunizationsService {
                 }
             } onError: { error in
                 switch error {
-                case .FailedAfterRetry:
+                default:
                     break
                 }
                 
