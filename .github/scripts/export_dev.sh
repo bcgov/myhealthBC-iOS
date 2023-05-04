@@ -2,4 +2,8 @@
 
 set -eo pipefail
 
-xcodebuild clean -exportArchive -archivePath $PWD/build/BCVaccineCard.xcarchive -exportPath $PWD/build -allowProvisioningUpdates -exportOptionsPlist BCVaccineCard/exportOptions-adhoc.plist xcpretty
+xcodebuild -archivePath $PWD/build/BCVaccineCard.xcarchive \
+           -exportOptionsPlist BCVaccineCard/exportOptions.plist \
+           -exportPath $PWD/build \
+           -allowProvisioningUpdates \
+           -exportArchive | xcpretty

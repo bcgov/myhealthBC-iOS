@@ -1,11 +1,11 @@
-name: Build and deploy to Firebase
+name: Build and deploy to TestFlight
 on:
   push:
     branches:
       - dev
 jobs:
   deploy:
-    name: Creating DEV ipa
+    name: Deploying to TestFlight
     runs-on: macOS-latest
     timeout-minutes: 60
     env:
@@ -22,8 +22,8 @@ jobs:
         
       - name: Setup provisioning profile
         env:
-          FW_KEYS: ${{ secrets.FW_KEYS }}
-        run: ./.github/secrets/decrypt_adhoc.sh
+          IOS_KEYS: ${{ secrets.IOS_KEYS }}
+        run: ./.github/secrets/decrypt_dev.sh
         
       - name: Archive project
         env:
@@ -33,22 +33,17 @@ jobs:
       - name: Export .ipa
         run: ./.github/scripts/export_dev.sh
         
-#     - name: Upload .ipa to firebase
-#       if: success()
-#       env:
-#         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-#         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID}}
-#       run: ./.github/scripts/publish_firebase.sh
+      - name: Upload to testflight
+        if: success()
+        env:
+          APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
+          APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
+        run: ./.github/scripts/publish_testflight_dev.sh
         
-      - name: Upload .ipa
-        uses: actions/upload-artifact@v1
-        with:
-          name: Health\ Gateway\ Dev.ipa
-          path: build/Apps/HealthGatewayDev.ipa
-
       - name: Notify Slack - Success
         uses: act10ns/slack@v1
         with:
           status: Completed
           channel: 'bc-vaccine-card'
-          message: New iOS DEV build is available at https://github.com/bcgov/myhealthBC-iOS/actions/runs/${{ github.run_id }}
+          message: New iOS build submitted to test-flight.
+        
