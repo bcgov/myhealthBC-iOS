@@ -8,11 +8,9 @@ on:
       - dev
 jobs:
   deploy:
-    name: Deploying to TestFlight
+    name: Deploying to DEV TestFlight
     runs-on: macOS-latest
     timeout-minutes: 60
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEB_HOOK }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v1
@@ -45,11 +43,3 @@ jobs:
           APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
           APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
         run: ./.github/scripts/publish_testflight_dev.sh
-        
-      - name: Notify Slack - Success
-        uses: act10ns/slack@v1
-        with:
-          status: Completed
-          channel: 'bc-vaccine-card'
-          message: New iOS build submitted to test-flight.
-        

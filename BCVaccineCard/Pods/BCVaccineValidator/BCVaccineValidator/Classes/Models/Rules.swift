@@ -27,6 +27,7 @@ struct RuleSet: Codable {
 struct VaccinationRule: Codable {
     let cvxCode: String
     let type, ru: Int
+    let minDays: ValueWrapper?
 }
 
 enum VaccinationType: Int {

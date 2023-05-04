@@ -40,5 +40,6 @@ public enum CodeValidationResultStatus {
 public enum ImmunizationStatus: String {
     case Fully = "fully"
     case Partially = "partially"
+    case Exempt = "exempt"
     case None = "none"
 }

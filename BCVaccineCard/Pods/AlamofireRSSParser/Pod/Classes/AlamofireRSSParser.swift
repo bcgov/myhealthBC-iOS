@@ -15,6 +15,17 @@ extension DataRequest {
                              completionHandler: @escaping (AFDataResponse<RSSFeed>) -> Void) -> Self {
         response(queue: queue, responseSerializer: RSSResponseSerializer(), completionHandler: completionHandler)
     }
+    
+    @available(iOS 13, *)
+    public func serializingRSS(automaticallyCancelling shouldAutomaticallyCancel: Bool = false,
+                                dataPreprocessor: DataPreprocessor = DataResponseSerializer.defaultDataPreprocessor,
+                                emptyResponseCodes: Set<Int> = DataResponseSerializer.defaultEmptyResponseCodes,
+                                emptyRequestMethods: Set<HTTPMethod> = DataResponseSerializer.defaultEmptyRequestMethods) -> DataTask<RSSFeed> {
+        serializingResponse(using: RSSResponseSerializer(dataPreprocessor: dataPreprocessor,
+                                                          emptyResponseCodes: emptyResponseCodes,
+                                                          emptyRequestMethods: emptyRequestMethods),
+                            automaticallyCancelling: shouldAutomaticallyCancel)
+    }
 }
 
 public final class RSSResponseSerializer: ResponseSerializer {
@@ -22,7 +33,7 @@ public final class RSSResponseSerializer: ResponseSerializer {
     public let emptyResponseCodes: Set<Int>
     public let emptyRequestMethods: Set<HTTPMethod>
 
-    public init(dataPreprocessor: DataPreprocessor = JSONResponseSerializer.defaultDataPreprocessor, emptyResponseCodes: Set<Int> = JSONResponseSerializer.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = JSONResponseSerializer.defaultEmptyRequestMethods) {
+    public init(dataPreprocessor: DataPreprocessor = DataResponseSerializer.defaultDataPreprocessor, emptyResponseCodes: Set<Int> = DataResponseSerializer.defaultEmptyResponseCodes, emptyRequestMethods: Set<HTTPMethod> = DataResponseSerializer.defaultEmptyRequestMethods) {
         self.dataPreprocessor = dataPreprocessor
         self.emptyResponseCodes = emptyResponseCodes
         self.emptyRequestMethods = emptyRequestMethods

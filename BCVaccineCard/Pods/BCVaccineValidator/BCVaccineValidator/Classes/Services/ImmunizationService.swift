@@ -1,5 +1,5 @@
 import Foundation
-fileprivate extension String {
+internal extension String {
     func vaxDate() -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = .current
@@ -15,7 +15,7 @@ class ImmunizationService {
     ///   - payload: SMART QR card payload
     ///   - completion: Fully || Partially || None. if nil, no rules could be found for issuer.
     public func immunizationStatus(payload: DecodedQRPayload, completion: @escaping(_ status: ImmunizationStatus?) -> Void) {
-        if BCVaccineValidator.enableRemoteRules {
+        if BCVaccineValidator.shared.config.enableRemoteFetch {
             RulesManager.shared.getRulesFor(iss: payload.iss) { [weak self] result in
                 guard let `self` = self, let rules = result else { return completion(nil)}
                 completion(self.getImmunizationStatus(for: payload, using: rules))
@@ -41,27 +41,42 @@ class ImmunizationService {
     }
     
     private func getImmunizationStatus(for payload: DecodedQRPayload, using rulesSet: RuleSet) -> ImmunizationStatus? {
-        let payloadVaxes = payload.vaxes()
+        guard !payload.isExempt() else { return .Exempt }
+        let payloadVaxes = payload.vaxes().sorted(by: {
+            let date1: Date = $0.occurrenceDateTime?.vaxDate() ?? .distantFuture
+            let date2: Date = $1.occurrenceDateTime?.vaxDate() ?? .distantFuture
+            return date1 < date2
+        })
         
         var mrnType = 0
         var nrvvType = 0
         var winacType = 0
-        
+        var minDays: Int? = nil
+        var processedDoseDate: Date? = nil
         var lastDoseDate: Date? = nil
         
-        for vaccination in payloadVaxes where vaccination.occurrenceDateTime != nil && vaccination.occurrenceDateTime?.vaxDate() != nil {
-            
-            if let lastDose = lastDoseDate, let vaxDate = vaccination.occurrenceDateTime?.vaxDate() {
+        for vaccination in payloadVaxes where vaccination.occurrenceDateTime != nil &&
+            vaccination.occurrenceDateTime?.vaxDate() != nil {
+            let occurrenceDate = vaccination.occurrenceDateTime?.vaxDate()
+            if let lastDose = lastDoseDate, let vaxDate = occurrenceDate {
                 if lastDose < vaxDate {
-                    lastDoseDate = vaccination.occurrenceDateTime?.vaxDate()
+                    lastDoseDate = occurrenceDate
                 }
             } else {
-                lastDoseDate = vaccination.occurrenceDateTime?.vaxDate()
+                lastDoseDate = occurrenceDate
             }
             
             let rule = rulesSet.vaccinationRules.filter({$0.cvxCode == vaccination.vaccineCode?.coding[0].code}).first
-            if rule == nil {continue}
+            if rule == nil { continue }
             let vaxRule = rule!
+            
+            guard doesMeetRequiredTimeBetweenDoses(currentDoseDate: occurrenceDate,
+                                                   lastDoseDate: processedDoseDate,
+                                                   minDays: minDays) else {
+                minDays = vaxRule.minDays?.intValue
+                processedDoseDate = occurrenceDate
+                continue
+            }
             
             let vaxRuleType: VaccinationType = VaccinationType(rawValue: vaxRule.type) ?? .NotSet
             switch vaxRuleType {
@@ -101,6 +116,7 @@ class ImmunizationService {
                 }
                 break
             }
+            
             if rulesSet.mixTypesAllowed && (mrnType + nrvvType + winacType >= rulesSet.mixTypesRuRequired) {
                 let intervalHasPassed = intervalPassed(lastDoseDate: lastDoseDate!, dayRequired: rulesSet.daysSinceLastInterval, intervalRequired: rulesSet.intervalRequired)
                 if intervalHasPassed {
@@ -109,12 +125,22 @@ class ImmunizationService {
                     return .Partially
                 }
             }
+            minDays = vaxRule.minDays?.intValue
+            processedDoseDate = occurrenceDate
         }
-        
+
         if mrnType > 0 || winacType > 0 || nrvvType > 0 {
             return .Partially
         }
         return .None
+    }
+    
+    private func doesMeetRequiredTimeBetweenDoses(currentDoseDate: Date?, lastDoseDate: Date?, minDays: Int?) -> Bool {
+        guard let lastDoseDate = lastDoseDate, let currentDoseDate = currentDoseDate, let minDays = minDays else {
+           return true
+        }
+        let days = currentDoseDate.interval(ofComponent: .day, fromDate: lastDoseDate)
+        return days >= minDays
     }
     
     func intervalPassed(lastDoseDate: Date, dayRequired: Int, intervalRequired: Bool) -> Bool {

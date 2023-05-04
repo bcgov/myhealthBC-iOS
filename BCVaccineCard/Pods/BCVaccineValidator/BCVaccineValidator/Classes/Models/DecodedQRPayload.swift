@@ -49,11 +49,14 @@ public struct Resource: Codable {
     let name: [Name]?
     let birthDate, status: String?
     let vaccineCode: VaccineCode?
+    var code: VaccineCode?
     let patient: Patient?
     let occurrenceDateTime: String?
     let performer: [Performer]?
     let lotNumber: String?
     let meta: Meta?
+    let onsetDateTime: String?
+    let abatementDateTime: String?
 }
 
 // MARK: - Meta
@@ -135,5 +138,29 @@ public extension DecodedQRPayload {
     func vaxes() -> [Resource] {
         return self.vc.credentialSubject.fhirBundle.entry
             .compactMap({$0.resource}).filter({$0.resourceType.lowercased() == "Immunization".lowercased()})
+    }
+    
+    func isExempt() -> Bool {
+        let exemptionCodingSystems = BCVaccineValidator.shared.config.exemptionCodingSystems.map {
+            $0.lowercased()
+        }
+        let conditionalEntries = self.vc.credentialSubject.fhirBundle.entry.filter {
+            $0.resource.resourceType == "Condition"
+        }
+        
+        let entriesWithExemptionCodingSystem = conditionalEntries.filter { item in
+            item.resource.code?.coding.contains(where: {
+                guard let system = $0.system?.lowercased() else { return false }
+                return exemptionCodingSystems.contains(where: system.contains)
+            }) ?? false
+        }
+        let currentDate = Date()
+        var onsetDate = currentDate
+        var abatementDate = currentDate
+        return entriesWithExemptionCodingSystem.contains { entry in
+            onsetDate = entry.resource.onsetDateTime?.vaxDate() ?? currentDate
+            abatementDate = entry.resource.abatementDateTime?.vaxDate() ?? currentDate
+            return currentDate >= onsetDate && currentDate <= abatementDate
+        }
     }
 }

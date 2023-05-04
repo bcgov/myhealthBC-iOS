@@ -57,7 +57,7 @@ class RulesManager: DirectoryManager {
     }
     
     func updateRules() {
-        if isUpdating || !BCVaccineValidator.enableRemoteRules {return}
+        if isUpdating || !BCVaccineValidator.shared.config.enableRemoteFetch { return }
         isUpdating = true
 #if DEBUG
         print("Updating rules")
@@ -69,7 +69,7 @@ class RulesManager: DirectoryManager {
                 return
             }
             self.store(rules: rules)
-            self.updatedRules(rules: rules, exipersInMinutes: Constants.DataExpiery.detaultRulesTimeout)
+            self.updatedRules(rules: rules, exipersInMinutes: BCVaccineValidator.shared.config.rulesCacheExpiryInMinutes)
             self.isUpdating = false
         }
     }
@@ -103,9 +103,9 @@ class RulesManager: DirectoryManager {
     
     private func seedRules() -> VaccinationRules? {
         // Get Path
-        guard let bundledFilePath = BCVaccineValidator.resourceBundle.url(forResource: Constants.Directories.rules.fileName, withExtension: "") else {
+        guard let bundledFilePath = BCVaccineValidator.shared.config.resourceBundle.url(forResource: BCVaccineValidator.shared.config.rulesFileNameWithExtension, withExtension: "") else {
 #if DEBUG
-            print("\n\n**\n\nRules file is not bundled\n\(Constants.Directories.rules.fileName)")
+            print("\n\n**\n\nRules file is not bundled\n\(BCVaccineValidator.shared.config.rulesFileNameWithExtension)")
 #endif
             return nil
         }
@@ -128,7 +128,7 @@ class RulesManager: DirectoryManager {
         for ruleTarget in rulesTargets where !ruleTarget.contains(Constants.JWKSPublic.wellKnownJWKS_URLExtension) {
             displatchGroup.enter()
             var bundledFileURL: URL? = nil
-            if let bundledFilePath = BCVaccineValidator.resourceBundle.url(forResource: ruleTarget.filePathSafeName(), withExtension: "") {
+            if let bundledFilePath = BCVaccineValidator.shared.config.resourceBundle.url(forResource: ruleTarget.filePathSafeName(), withExtension: "") {
                 bundledFileURL = bundledFilePath
             } else {
 #if DEBUG
@@ -183,8 +183,8 @@ class RulesManager: DirectoryManager {
     
     private func fetchLocalRules() -> VaccinationRules? {
         let documentsDirectory = documentDirectory().appendingPathComponent(Constants.Directories.rules.directoryName)
-        guard directoryExists(path: documentsDirectory) else {return nil}
-        let filePath = documentsDirectory.appendingPathComponent(Constants.Directories.rules.fileName)
+        guard directoryExists(path: documentsDirectory) else { return nil }
+        let filePath = documentsDirectory.appendingPathComponent(BCVaccineValidator.shared.config.rulesFileNameWithExtension)
         
         do {
             let data = try Data(contentsOf: filePath)
@@ -214,7 +214,7 @@ class RulesManager: DirectoryManager {
     private func pathForRulesFile() -> URL {
         let documentsDirectory = documentDirectory().appendingPathComponent(Constants.Directories.rules.directoryName)
         createDirectoryIfDoesntExist(path: documentsDirectory)
-        let dirPath = documentsDirectory.appendingPathComponent(Constants.Directories.rules.fileName)
+        let dirPath = documentsDirectory.appendingPathComponent(BCVaccineValidator.shared.config.rulesFileNameWithExtension)
         return dirPath
     }
     

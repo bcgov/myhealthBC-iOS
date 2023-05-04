@@ -20,11 +20,6 @@
   },
   "swift_versions": "5.0",
   "source_files": "BCVaccineValidator/Classes/**/*",
-  "resource_bundles": {
-    "BCVaccineValidator": [
-      "BCVaccineValidator/Assets/*"
-    ]
-  },
   "dependencies": {
     "Alamofire": [
 

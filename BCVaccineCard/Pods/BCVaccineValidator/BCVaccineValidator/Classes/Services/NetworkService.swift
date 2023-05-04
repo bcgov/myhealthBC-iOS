@@ -12,7 +12,7 @@ class NetworkService {
     
     func getIssuers(url: String, completion: @escaping (Issuers?) -> Void) {
         guard ReachabilityService.shared.isReachable else {
-            BCVaccineValidator.shouldUpdateWhenOnline = true
+            BCVaccineValidator.shared.config.shouldUpdateWhenOnline = true
             return completion(nil)
         }
         AF.request(url, requestModifier: { $0.timeoutInterval = Constants.networkTimeout })
@@ -33,10 +33,10 @@ class NetworkService {
     
     func getRules(completion: @escaping (VaccinationRules?) -> Void) {
         guard ReachabilityService.shared.isReachable else {
-            BCVaccineValidator.shouldUpdateWhenOnline = true
+            BCVaccineValidator.shared.config.shouldUpdateWhenOnline = true
             return completion(nil)
         }
-        AF.request(Constants.JWKSPublic.rulesURL, requestModifier: { $0.timeoutInterval = Constants.networkTimeout })
+        AF.request(BCVaccineValidator.shared.config.rulesUrl, requestModifier: { $0.timeoutInterval = Constants.networkTimeout })
             .validate(statusCode: 200..<300)
             .validate(contentType: ["application/json"])
             .responseDecodable(of: VaccinationRules.self) { response in
@@ -54,7 +54,7 @@ class NetworkService {
     
     func getJWKS(forIssuer issuer: String, completion: @escaping (PublicKeys?) -> Void) {
         guard ReachabilityService.shared.isReachable else {
-            BCVaccineValidator.shouldUpdateWhenOnline = true
+            BCVaccineValidator.shared.config.shouldUpdateWhenOnline = true
             return completion(nil)
         }
         AF.request(issuer.addWellKnownJWKS_URLExtension(), requestModifier: { $0.timeoutInterval = Constants.networkTimeout })

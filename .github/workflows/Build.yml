@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   deploy:
-    name: Build
+    name: Building project
     runs-on: macOS-latest
     timeout-minutes: 25
     
