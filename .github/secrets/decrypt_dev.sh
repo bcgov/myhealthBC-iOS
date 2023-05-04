@@ -7,7 +7,7 @@ gpg --quiet --batch --yes --decrypt --passphrase="$IOS_KEYS" --output ./.github/
 
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
-cp ./.github/secrets/prov.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/healthgateway.mobileprovision
+cp ./.github/secrets/healthgateway.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/healthgateway.mobileprovision
 
 security create-keychain -p "$IOS_KEYS" health.keychain
 security unlock-keychain -p "$IOS_KEYS" health.keychain
