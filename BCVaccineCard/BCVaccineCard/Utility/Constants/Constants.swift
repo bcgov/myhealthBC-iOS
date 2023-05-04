@@ -52,6 +52,8 @@ struct Constants {
 //            return 1
         case .dependents:
             return 1
+        case .services:
+            return 3
         }
     }
     
