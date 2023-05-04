@@ -19,7 +19,7 @@ jobs:
         run: brew install gnupg
         
       - name: Select Xcode version
-        run: sudo xcode-select -s '/Applications/Xcode_13.4.1.app/Contents/Developer'
+        run: sudo xcode-select -s "/Applications/Xcode_13.4.1.app"
         
       - name: install xcpretty
         run: gem install xcpretty
