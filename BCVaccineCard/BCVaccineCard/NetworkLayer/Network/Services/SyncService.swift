@@ -30,6 +30,7 @@ struct SyncService {
            storedHDID != authManager.hdid
         {
             authManager.removeProtectiveWord()
+            SessionStorage.onSignOut()
         }
         
         SessionStorage.syncPerformedThisSession = true

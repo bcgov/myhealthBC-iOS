@@ -29,7 +29,7 @@ struct PatientService {
                 network.removeLoader(caller: .PatientService_fetchAndStoreDetails)
                 return completion(nil)
             }
-            let patientFirstName = response.resourcePayload?.preferredName?.givenName
+            let patientFirstName = response.preferredName?.givenName
             let patientFullName = response.getFullName
             store(patientDetails: response, completion: { result in
                 network.removeLoader(caller: .PatientService_fetchAndStoreDetails)
@@ -67,13 +67,13 @@ struct PatientService {
                        completion: @escaping (Patient?)->Void
     ) {
         Logger.log(string: "Storing Patient Details", type: .Network)
-        let phyiscalAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.physicalAddress)
-        let mailingAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.resourcePayload?.postalAddress)
-        let patient = StorageService.shared.fetchOrCreatePatient(phn: patientDetails.resourcePayload?.personalHealthNumber,
+        let phyiscalAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.physicalAddress)
+        let mailingAddress = StorageService.shared.createAndReturnAddress(addressDetails: patientDetails.postalAddress)
+        let patient = StorageService.shared.fetchOrCreatePatient(phn: patientDetails.personalHealthNumber,
                                                                  name: patientDetails.getFullName,
-                                                                 firstName: patientDetails.resourcePayload?.preferredName?.givenName,
-                                                                 lastName: patientDetails.resourcePayload?.preferredName?.surname,
-                                                                 gender: patientDetails.resourcePayload?.gender,
+                                                                 firstName: patientDetails.preferredName?.givenName,
+                                                                 lastName: patientDetails.preferredName?.surname,
+                                                                 gender: patientDetails.gender,
                                                                  birthday: patientDetails.getBdayDate,
                                                                  physicalAddress: phyiscalAddress,
                                                                  mailingAddress: mailingAddress,
@@ -191,12 +191,7 @@ extension PatientService {
                                                                                 encoder: .urlEncoder,
                                                                                 headers: headers)
             { result in
-                if (result?.resourcePayload) != nil {
-                    // return result
-                    return completion(result)
-                } else {
-                    return completion(nil)
-                }
+                return completion(result)
             } onError: { error in
                 network.showToast(error: error)
             }

@@ -34,7 +34,7 @@ enum AuthStatus {
 }
 
 class AuthManager {
-    private enum Key: String {
+    enum Key: String {
         case authTokenExpiery
         case authToken
         case refreshToken
@@ -246,7 +246,7 @@ class AuthManager {
                         HTTPCookieStorage.shared.cookies?.forEach { cookie in
                             HTTPCookieStorage.shared.deleteCookie(cookie)
                         }
-                        self.removeProtectiveWord()
+                        self.removeProtectiveWord()     
                         SessionStorage.onSignOut()
                         StorageService.shared.deleteAuthenticatedPatient()
                         self.clearData()
@@ -388,7 +388,7 @@ class AuthManager {
         }
     }
     
-    private func delete(key: Key) {
+    public func delete(key: Key) {
         do {
             try keychain.remove(key.rawValue)
         }

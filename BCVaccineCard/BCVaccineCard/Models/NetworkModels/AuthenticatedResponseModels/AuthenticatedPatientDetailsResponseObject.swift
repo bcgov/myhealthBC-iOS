@@ -9,16 +9,11 @@ import Foundation
 
 // MARK: - AuthenticatedPatientDetailsResponseObject
 struct AuthenticatedPatientDetailsResponseObject: Codable {
-    let resourcePayload: ResourcePayload?
-    
-    // MARK: - ResourcePayload
-    struct ResourcePayload: Codable {
-        let hdid, personalHealthNumber: String?
-        let commonName, legalName, preferredName: Name?
-        let birthdate, gender: String?
-        let physicalAddress, postalAddress: Address?
-        let responseCode: String?
-    }
+    let hdid, personalHealthNumber: String?
+    let commonName, legalName, preferredName: Name?
+    let birthdate, gender: String?
+    let physicalAddress, postalAddress: Address?
+    let responseCode: String?
     
     struct Name: Codable {
         let givenName, surname: String?
@@ -51,12 +46,11 @@ struct AuthenticatedPatientDetailsResponseObject: Codable {
     }
     
     var getFullName: String {
-        guard let payload = resourcePayload else { return "" }
         var name = ""
-        if let first = payload.preferredName?.givenName {
+        if let first = preferredName?.givenName {
             name.append(first)
         }
-        if let last = payload.preferredName?.surname {
+        if let last = preferredName?.surname {
             if !name.isEmpty {
                 name.append(" ")
             }
@@ -66,7 +60,7 @@ struct AuthenticatedPatientDetailsResponseObject: Codable {
     }
     
     var getBdayDate: Date? {
-        guard let birthdate = resourcePayload?.birthdate else { return nil }
+        guard let birthdate = birthdate else { return nil }
         return Date.Formatter.gatewayDateAndTime.date(from: birthdate)
     }
     

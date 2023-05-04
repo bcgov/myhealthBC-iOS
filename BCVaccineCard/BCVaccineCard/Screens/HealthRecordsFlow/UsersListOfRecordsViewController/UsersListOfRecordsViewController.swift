@@ -117,6 +117,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private func setupRefreshControl() {
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        tableView.isScrollEnabled = true
+        tableView.alwaysBounceVertical = true
         tableView.addSubview(refreshControl)
     }
     
@@ -506,7 +508,7 @@ extension UsersListOfRecordsViewController {
             tableView.reloadData()
         }
         
-        if SessionStorage.protectiveWordRequired {
+        if viewModel?.protectiveWordRequired == true {
             dataSource = patientRecords.filter({!$0.containsProtectedWord})
         } else {
             dataSource = patientRecords
