@@ -2,7 +2,7 @@ name: Build and deploy to TestFlight
 on:
   push:
     branches:
-      - dev
+      - main
 jobs:
   deploy:
     name: Deploying to TestFlight
@@ -17,6 +17,9 @@ jobs:
       - name: Install gpg
         run: brew install gnupg
         
+      - name: Select Xcode version
+        run: sudo xcode-select -s "/Applications/Xcode_13.4.1.app"
+        
       - name: install xcpretty
         run: gem install xcpretty
         
@@ -24,6 +27,9 @@ jobs:
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_dev.sh
+        
+      - name: pods
+        run: pod install
         
       - name: Archive project
         env:

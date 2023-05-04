@@ -29,6 +29,9 @@ jobs:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_prod.sh
         
+      - name: pods
+        run: pod install
+        
       - name: Archive project
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
