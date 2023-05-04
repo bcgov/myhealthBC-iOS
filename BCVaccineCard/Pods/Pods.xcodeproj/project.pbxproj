@@ -389,7 +389,7 @@
 		ABE2E3D9B2274AFD59B007A14C4C25E9 /* SPPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FEE1F2BFB983FBA640CECD0196B8E63B /* SPPageView.m */; };
 		AD01060C8D0427A83796DA370460A019 /* OIDAuthState.m in Sources */ = {isa = PBXBuildFile; fileRef = F549449370B389E995C233F4E132E346 /* OIDAuthState.m */; };
 		ADC06D8EDA961E7CD9058F2BF03020C5 /* DecodedQRPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5BEB2BBFB4499B6CAFB58975AF2C5C /* DecodedQRPayload.swift */; };
-		AE0B9C7338F840C3A51FD47962CF0470 /* BCVaccineValidator.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator.bundle */; };
+		AE0B9C7338F840C3A51FD47962CF0470 /* BCVaccineValidator-BCVaccineValidator in Resources */ = {isa = PBXBuildFile; fileRef = EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator-BCVaccineValidator */; };
 		AE13D3FA75FDFB448DD60361E8EDD711 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 577914F614B7AB6AA6E95A3FE9310064 /* Foundation.framework */; };
 		AE24F9A796F4343B5901D9914989943A /* SPTrackerError.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B001A27085735484422338AF06AAAA3 /* SPTrackerError.m */; };
 		AE6AFEC8007A57DE9E5FA7A78276D8D4 /* ImmunizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB89EEB9D882B7F2297F4F800CBB746A /* ImmunizationService.swift */; };
@@ -1116,7 +1116,7 @@
 		292DFA0D2307FE5AEDF2E7CD6A9DB78F /* Pods-HealthGateway.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-HealthGateway.release.xcconfig"; sourceTree = "<group>"; };
 		292E95B114F36AD54232EBE75372C544 /* Pods-HealthGateway-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-HealthGateway-dummy.m"; sourceTree = "<group>"; };
 		297061EB36DD5A3EC0754FE03CF9B077 /* SPDevicePlatform.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPDevicePlatform.h; path = Snowplow/Internal/Subject/SPDevicePlatform.h; sourceTree = "<group>"; };
-		2A23A890820FC798658FA96A94ED073F /* pvc.service.yukon.ca~issuer */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "pvc.service.yukon.ca~issuer"; path = "BCVaccineValidator/Assets/pvc.service.yukon.ca~issuer"; sourceTree = "<group>"; };
+		2A23A890820FC798658FA96A94ED073F /* pvc.service.yukon.ca~issuer */ = {isa = PBXFileReference; includeInIndex = 1; name = "pvc.service.yukon.ca~issuer"; path = "BCVaccineValidator/Assets/pvc.service.yukon.ca~issuer"; sourceTree = "<group>"; };
 		2A8515C200FB2D511D7015810DD50B6A /* URLEncodedFormEncoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = URLEncodedFormEncoder.swift; path = Source/URLEncodedFormEncoder.swift; sourceTree = "<group>"; };
 		2AE63FBE30AC0813E6A3B29CBC342B6C /* ContentEncryption.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ContentEncryption.swift; path = JOSESwift/Sources/ContentEncryption.swift; sourceTree = "<group>"; };
 		2AF101EF1BA0C01548CC7FAA141E80B0 /* BCVaccineValidator-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BCVaccineValidator-prefix.pch"; sourceTree = "<group>"; };
@@ -1134,10 +1134,10 @@
 		31B5B427BF77F25D41CC264EA883700A /* OIDRegistrationResponse.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDRegistrationResponse.h; path = Source/AppAuthCore/OIDRegistrationResponse.h; sourceTree = "<group>"; };
 		31C29C6AE5BEE7727FF2F5161C47590A /* KeychainAccess-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "KeychainAccess-dummy.m"; sourceTree = "<group>"; };
 		32386922FDE91354E649D2C6FA6B6862 /* NotificationExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NotificationExtension.swift; path = BCVaccineValidator/Classes/Helpers/NotificationExtension.swift; sourceTree = "<group>"; };
-		32DA5C754919AA3564E125E51C1661AC /* smarthealthcard.phsa.ca~v1~issuer */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "smarthealthcard.phsa.ca~v1~issuer"; path = "BCVaccineValidator/Assets/smarthealthcard.phsa.ca~v1~issuer"; sourceTree = "<group>"; };
+		32DA5C754919AA3564E125E51C1661AC /* smarthealthcard.phsa.ca~v1~issuer */ = {isa = PBXFileReference; includeInIndex = 1; name = "smarthealthcard.phsa.ca~v1~issuer"; path = "BCVaccineValidator/Assets/smarthealthcard.phsa.ca~v1~issuer"; sourceTree = "<group>"; };
 		32E794707C9F2DB3FB5FA412C23222D2 /* SPBackground.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPBackground.m; path = Snowplow/Internal/Events/SPBackground.m; sourceTree = "<group>"; };
 		32FEBD59DC912311D9B4A32D03C05573 /* SVGLayer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SVGLayer.m; path = Sources/SVGLayer.m; sourceTree = "<group>"; };
-		334C04C6EAAFE636CD89115394B147CB /* issuers.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = issuers.json; path = BCVaccineValidator/Assets/issuers.json; sourceTree = "<group>"; };
+		334C04C6EAAFE636CD89115394B147CB /* issuers.json */ = {isa = PBXFileReference; includeInIndex = 1; name = issuers.json; path = BCVaccineValidator/Assets/issuers.json; sourceTree = "<group>"; };
 		340B86A740ACAEBAB4E1983BAB91370B /* JOSESwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "JOSESwift-dummy.m"; sourceTree = "<group>"; };
 		345B9337B92FA2FCDF53EF4F3FCA6750 /* SnowplowTracker */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SnowplowTracker; path = SnowplowTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		354A8E02CFD4FB285A8C6D19CDAA4DE0 /* EncryptedCoreData.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = EncryptedCoreData.debug.xcconfig; sourceTree = "<group>"; };
@@ -1191,9 +1191,9 @@
 		4775FCB03070DBD044E23DA5281B7133 /* FMDatabaseAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabaseAdditions.m; path = src/fmdb/FMDatabaseAdditions.m; sourceTree = "<group>"; };
 		47E2CEC99687478469189E6BCE08B654 /* SPSubjectController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPSubjectController.h; path = Snowplow/Internal/Subject/SPSubjectController.h; sourceTree = "<group>"; };
 		485EC262684C280D79B128FDAE177B93 /* OIDAuthState+IOS.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "OIDAuthState+IOS.m"; path = "Source/AppAuth/iOS/OIDAuthState+IOS.m"; sourceTree = "<group>"; };
-		49F11E2B7A6124E022F88CE9E403AAA6 /* phsasmarthealthcard-dev.azurewebsites.net~v1~issuer */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "phsasmarthealthcard-dev.azurewebsites.net~v1~issuer"; path = "BCVaccineValidator/Assets/phsasmarthealthcard-dev.azurewebsites.net~v1~issuer"; sourceTree = "<group>"; };
+		49F11E2B7A6124E022F88CE9E403AAA6 /* phsasmarthealthcard-dev.azurewebsites.net~v1~issuer */ = {isa = PBXFileReference; includeInIndex = 1; name = "phsasmarthealthcard-dev.azurewebsites.net~v1~issuer"; path = "BCVaccineValidator/Assets/phsasmarthealthcard-dev.azurewebsites.net~v1~issuer"; sourceTree = "<group>"; };
 		4AFB4C5461AB5E66C4C57F80B440CBF2 /* SPSQLiteEventStore.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPSQLiteEventStore.h; path = Snowplow/Internal/Storage/SPSQLiteEventStore.h; sourceTree = "<group>"; };
-		4B1E8C792FD4B0BA4881FF66CA70A7F6 /* bcvaxcardgen.freshworks.club */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = bcvaxcardgen.freshworks.club; path = BCVaccineValidator/Assets/bcvaxcardgen.freshworks.club; sourceTree = "<group>"; };
+		4B1E8C792FD4B0BA4881FF66CA70A7F6 /* bcvaxcardgen.freshworks.club */ = {isa = PBXFileReference; includeInIndex = 1; name = bcvaxcardgen.freshworks.club; path = BCVaccineValidator/Assets/bcvaxcardgen.freshworks.club; sourceTree = "<group>"; };
 		4C303343BEAC3AB2A8835F91285E2F02 /* SPConfiguration.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPConfiguration.h; path = Snowplow/Internal/Configurations/SPConfiguration.h; sourceTree = "<group>"; };
 		4D9869640AE821B459AEC7607D18E91A /* SPNetworkController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPNetworkController.h; path = Snowplow/Internal/NetworkConnection/SPNetworkController.h; sourceTree = "<group>"; };
 		4DB0617798BE1C2DCFA3C8CDDD74B07F /* FMResultSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMResultSet.h; path = src/fmdb/FMResultSet.h; sourceTree = "<group>"; };
@@ -1289,7 +1289,7 @@
 		7230123A4854B995C012D739A04F8A6E /* Pods-HealthGatewayDev-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-HealthGatewayDev-frameworks.sh"; sourceTree = "<group>"; };
 		72CDE734D920646F01A44E7D6E050656 /* OIDScopes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDScopes.h; path = Source/AppAuthCore/OIDScopes.h; sourceTree = "<group>"; };
 		72D71DB27580A3CC5F47F4F92DB84768 /* SwipeAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeAnimator.swift; path = Source/SwipeAnimator.swift; sourceTree = "<group>"; };
-		72F33A8159B3A0B7868647C125C0D59B /* sqlite3.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
+		72F33A8159B3A0B7868647C125C0D59B /* sqlite3.c */ = {isa = PBXFileReference; includeInIndex = 1; path = sqlite3.c; sourceTree = "<group>"; };
 		72FC9F2998449E20AD9EDDD18816D8A4 /* Reachability.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = QueueITLib/Reachability.h; sourceTree = "<group>"; };
 		733B9147829B1CBC42C91F1CB77704F4 /* SnowplowTracker-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SnowplowTracker-dummy.m"; sourceTree = "<group>"; };
 		739174678DCEE6E29499B8844F140708 /* SPRequestCallback.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPRequestCallback.h; path = Snowplow/Internal/Emitter/SPRequestCallback.h; sourceTree = "<group>"; };
@@ -1316,14 +1316,14 @@
 		7968405D8911FF0E12F78BB3ED232C73 /* MultipartUpload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MultipartUpload.swift; path = Source/MultipartUpload.swift; sourceTree = "<group>"; };
 		7988B28F39071686DAD08717E881C332 /* SPServiceProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPServiceProvider.h; path = Snowplow/Internal/Tracker/SPServiceProvider.h; sourceTree = "<group>"; };
 		79FC7A829F3F781221B05AE6B3AF70BB /* SVGEngine.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVGEngine.h; path = Sources/include/SVGEngine.h; sourceTree = "<group>"; };
-		7A88E09663E019E54AE104993973DD09 /* SVGEngine.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SVGEngine.mm; path = Sources/SVGEngine.mm; sourceTree = "<group>"; };
+		7A88E09663E019E54AE104993973DD09 /* SVGEngine.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SVGEngine.mm; path = Sources/SVGEngine.mm; sourceTree = "<group>"; };
 		7A8D4AC02B51FD03224739D06AEE207B /* JWTDecode */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = JWTDecode; path = JWTDecode.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B0C8007A2916E164789494FD454FC1D /* OIDExternalUserAgentRequest.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDExternalUserAgentRequest.h; path = Source/AppAuthCore/OIDExternalUserAgentRequest.h; sourceTree = "<group>"; };
 		7BA6952CCDD3A8F88E4422857DF402A0 /* Pods-HealthGateway-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-HealthGateway-frameworks.sh"; sourceTree = "<group>"; };
 		7C78E7039B9F3C1E8F8240CBD366CF30 /* AppAuth-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AppAuth-dummy.m"; sourceTree = "<group>"; };
 		7C8F4EE86B7C4653C4CDE59FF40C34A1 /* SPNetworkControllerImpl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPNetworkControllerImpl.h; path = Snowplow/Internal/NetworkConnection/SPNetworkControllerImpl.h; sourceTree = "<group>"; };
 		7E0B50D07660CD0CD141A0B114921CC4 /* VerificationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VerificationService.swift; path = BCVaccineValidator/Classes/Services/VerificationService.swift; sourceTree = "<group>"; };
-		7E2D8BE58BFB04B1D28BCB48D4474B73 /* rules-test.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = "rules-test.json"; path = "BCVaccineValidator/Assets/rules-test.json"; sourceTree = "<group>"; };
+		7E2D8BE58BFB04B1D28BCB48D4474B73 /* rules-test.json */ = {isa = PBXFileReference; includeInIndex = 1; name = "rules-test.json"; path = "BCVaccineValidator/Assets/rules-test.json"; sourceTree = "<group>"; };
 		7E4C78E9CA1FD14BDD84EEBBCAAB751B /* SPSQLiteEventStore.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPSQLiteEventStore.m; path = Snowplow/Internal/Storage/SPSQLiteEventStore.m; sourceTree = "<group>"; };
 		7EBD0BA21BA9D490971ABA42973B2881 /* AlamofireExtended.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AlamofireExtended.swift; path = Source/AlamofireExtended.swift; sourceTree = "<group>"; };
 		7F5FC41B315F2D56CE074144A7E1CC6D /* BCVaccineValidator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BCVaccineValidator.release.xcconfig; sourceTree = "<group>"; };
@@ -1379,7 +1379,7 @@
 		8FF8A978373525445C644F26FD6C38B5 /* SwipeTableViewCell+Display.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "SwipeTableViewCell+Display.swift"; path = "Source/SwipeTableViewCell+Display.swift"; sourceTree = "<group>"; };
 		9092BACE790AE125912399614F32C273 /* OIDServiceDiscovery.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDServiceDiscovery.h; path = Source/AppAuthCore/OIDServiceDiscovery.h; sourceTree = "<group>"; };
 		912C81E2635D7E24CBF587E5078A1E75 /* JWKExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JWKExtensions.swift; path = JOSESwift/Sources/JWKExtensions.swift; sourceTree = "<group>"; };
-		917B6AD38B74A63DBC73E8FED382162F /* rules-dev.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = "rules-dev.json"; path = "BCVaccineValidator/Assets/rules-dev.json"; sourceTree = "<group>"; };
+		917B6AD38B74A63DBC73E8FED382162F /* rules-dev.json */ = {isa = PBXFileReference; includeInIndex = 1; name = "rules-dev.json"; path = "BCVaccineValidator/Assets/rules-dev.json"; sourceTree = "<group>"; };
 		91A244DA37398806196C719D08A2AFDF /* IQUIViewController+Additions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "IQUIViewController+Additions.swift"; path = "IQKeyboardManagerSwift/Categories/IQUIViewController+Additions.swift"; sourceTree = "<group>"; };
 		920DBF2777C748B729BA75B537EBC6BE /* JWE.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JWE.swift; path = JOSESwift/Sources/JWE.swift; sourceTree = "<group>"; };
 		926C2F45D50163422C6CE166E5F935D6 /* ECVerifier.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ECVerifier.swift; path = JOSESwift/Sources/ECVerifier.swift; sourceTree = "<group>"; };
@@ -1387,14 +1387,14 @@
 		92BF33F46C687A646343D30B010FBE11 /* ReachabilitySwift-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ReachabilitySwift-dummy.m"; sourceTree = "<group>"; };
 		92E2976CE73E2D996F11553B732C81C2 /* AppAuth.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = AppAuth.modulemap; sourceTree = "<group>"; };
 		934957A99DC95D24117DDC2558B56EAB /* SPDefaultNetworkConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPDefaultNetworkConnection.h; path = Snowplow/Internal/NetworkConnection/SPDefaultNetworkConnection.h; sourceTree = "<group>"; };
-		934F928771DCF6BEF364EEED2E83AFD7 /* rules.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = rules.json; path = BCVaccineValidator/Assets/rules.json; sourceTree = "<group>"; };
+		934F928771DCF6BEF364EEED2E83AFD7 /* rules.json */ = {isa = PBXFileReference; includeInIndex = 1; name = rules.json; path = BCVaccineValidator/Assets/rules.json; sourceTree = "<group>"; };
 		936AD3242F14B5EEA250F78D2F1A07FC /* JWTDecode.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = JWTDecode.modulemap; sourceTree = "<group>"; };
 		937BE75A143FDAAEB9E66207FE62E3C9 /* Reachability.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = QueueITLib/Reachability.m; sourceTree = "<group>"; };
 		938566AEA8AA3B5800CDA7C0FE9CFCA7 /* OIDFieldMapping.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = OIDFieldMapping.m; path = Source/AppAuthCore/OIDFieldMapping.m; sourceTree = "<group>"; };
 		93B69813038F9AC494F2474E7753943D /* SwiftQRCodeGenerator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftQRCodeGenerator.debug.xcconfig; sourceTree = "<group>"; };
 		93CB0EE723ACB0B8A3A8336AD86C3AA2 /* SPGDPRConfiguration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPGDPRConfiguration.m; path = Snowplow/Internal/Configurations/SPGDPRConfiguration.m; sourceTree = "<group>"; };
 		941C3008AB49B5A9D265B6E8A16B8483 /* SPEmitterEvent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPEmitterEvent.m; path = Snowplow/Internal/Emitter/SPEmitterEvent.m; sourceTree = "<group>"; };
-		949FA2260571A3678AA2E8593B0AE033 /* SVGBezierPath.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SVGBezierPath.mm; path = Sources/SVGBezierPath.mm; sourceTree = "<group>"; };
+		949FA2260571A3678AA2E8593B0AE033 /* SVGBezierPath.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SVGBezierPath.mm; path = Sources/SVGBezierPath.mm; sourceTree = "<group>"; };
 		950557D67B543F55BE65489953FF9CE4 /* SPMemoryEventStore.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPMemoryEventStore.m; path = Snowplow/Internal/Storage/SPMemoryEventStore.m; sourceTree = "<group>"; };
 		953D71569C7888BF46033AAC2088F170 /* SPConsentDocument.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPConsentDocument.h; path = Snowplow/Internal/Events/SPConsentDocument.h; sourceTree = "<group>"; };
 		95D062B413A7053D488A497F63640CE6 /* SwipeAccessibilityCustomAction.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeAccessibilityCustomAction.swift; path = Source/SwipeAccessibilityCustomAction.swift; sourceTree = "<group>"; };
@@ -1417,14 +1417,14 @@
 		9C57986C0394E4B4E6CDDE34E2AC490D /* OIDFieldMapping.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDFieldMapping.h; path = Source/AppAuthCore/OIDFieldMapping.h; sourceTree = "<group>"; };
 		9C65B00B5430D47ABAD35F65EA3DEE97 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		9CCB544C849AC240E21864505A25F026 /* SPRequestResult.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPRequestResult.h; path = Snowplow/Internal/Emitter/SPRequestResult.h; sourceTree = "<group>"; };
-		9CDF53C677FD6D036B67CD02986A2A58 /* pvc.service.yukon.ca~test~issuer */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "pvc.service.yukon.ca~test~issuer"; path = "BCVaccineValidator/Assets/pvc.service.yukon.ca~test~issuer"; sourceTree = "<group>"; };
+		9CDF53C677FD6D036B67CD02986A2A58 /* pvc.service.yukon.ca~test~issuer */ = {isa = PBXFileReference; includeInIndex = 1; name = "pvc.service.yukon.ca~test~issuer"; path = "BCVaccineValidator/Assets/pvc.service.yukon.ca~test~issuer"; sourceTree = "<group>"; };
 		9D0EF01F787388A7710EDC9D62704771 /* FMDatabaseQueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseQueue.h; path = src/fmdb/FMDatabaseQueue.h; sourceTree = "<group>"; };
 		9D443E759FE97A6C0CA5A3B5E4142EBA /* SwipeCellKit */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwipeCellKit; path = SwipeCellKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D5630EFFD3ECCEC7C80595D0D7AE41A /* KeyManagementMode.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeyManagementMode.swift; path = JOSESwift/Sources/KeyManagementMode.swift; sourceTree = "<group>"; };
 		9D623BA3E68A93071FE8900DD5ECDBA9 /* JOSESwift.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = JOSESwift.h; path = JOSESwift/Support/JOSESwift.h; sourceTree = "<group>"; };
 		9D6D72E15ED9F087E215809A7BA47DAA /* DataSymmetricKey.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DataSymmetricKey.swift; path = JOSESwift/Sources/CryptoImplementation/DataSymmetricKey.swift; sourceTree = "<group>"; };
 		9D85717CA8BCC6AAA062A98EFA5AA21F /* SNOWError.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SNOWError.h; path = Snowplow/Internal/Events/SNOWError.h; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9DA138DEBAB8DE38E7B455FBF3292590 /* SPConfigurationProvider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPConfigurationProvider.m; path = Snowplow/Internal/RemoteConfiguration/SPConfigurationProvider.m; sourceTree = "<group>"; };
 		9DAAC3F022BE69D765233F6CB60A0976 /* Compressor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Compressor.swift; path = BCVaccineValidator/Classes/Helpers/Compressor.swift; sourceTree = "<group>"; };
 		9E2E64335EF9757A6FBB11E335D48144 /* OIDEndSessionResponse.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDEndSessionResponse.h; path = Source/AppAuthCore/OIDEndSessionResponse.h; sourceTree = "<group>"; };
@@ -1473,7 +1473,7 @@
 		ADA381FF4A253757DFCF3DE7616D8B5C /* SQLCipher-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "SQLCipher-Info.plist"; sourceTree = "<group>"; };
 		ADBCD18A978D851366561F3B0F24D52A /* OIDExternalUserAgentIOS.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OIDExternalUserAgentIOS.h; path = Source/AppAuth/iOS/OIDExternalUserAgentIOS.h; sourceTree = "<group>"; };
 		ADD5B27E2908CB27388C11DBDD95C853 /* SPPayload.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPPayload.m; path = Snowplow/Internal/Payload/SPPayload.m; sourceTree = "<group>"; };
-		ADD67FBAB8A998B69CAA488B0D38E5A8 /* smarthealthcard.phsa.ca~v1~trusted~.well-known~issuers.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = "smarthealthcard.phsa.ca~v1~trusted~.well-known~issuers.json"; path = "BCVaccineValidator/Assets/smarthealthcard.phsa.ca~v1~trusted~.well-known~issuers.json"; sourceTree = "<group>"; };
+		ADD67FBAB8A998B69CAA488B0D38E5A8 /* smarthealthcard.phsa.ca~v1~trusted~.well-known~issuers.json */ = {isa = PBXFileReference; includeInIndex = 1; name = "smarthealthcard.phsa.ca~v1~trusted~.well-known~issuers.json"; path = "BCVaccineValidator/Assets/smarthealthcard.phsa.ca~v1~trusted~.well-known~issuers.json"; sourceTree = "<group>"; };
 		B0A9CB66260D366039E3F81B0B07ED7B /* ReachabilitySwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ReachabilitySwift.debug.xcconfig; sourceTree = "<group>"; };
 		B0B4C9D0C42DAFE3DB14B2E2104E4DC0 /* Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = Source/Extensions.swift; sourceTree = "<group>"; };
 		B0BE5F41215B70DEE63EEB7ADE85523B /* QueueITLibrary.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = QueueITLibrary.debug.xcconfig; sourceTree = "<group>"; };
@@ -1499,7 +1499,7 @@
 		B74B7513D2E4D223A71B2A55C9FAEE73 /* DispatchQueue+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "DispatchQueue+Alamofire.swift"; path = "Source/DispatchQueue+Alamofire.swift"; sourceTree = "<group>"; };
 		B7A3D6AD64DBC01169D29D0164070CA8 /* DateExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DateExtension.swift; path = BCVaccineValidator/Classes/Helpers/DateExtension.swift; sourceTree = "<group>"; };
 		B8518AE675EDC5DA00AE93EB1146EF6E /* FMDatabase.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMDatabase.m; path = src/fmdb/FMDatabase.m; sourceTree = "<group>"; };
-		B934650438D23B575573798084615387 /* phsasmarthealthcard-dev.azurewebsites.net~v1~trusted~.well-known~issuers.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = "phsasmarthealthcard-dev.azurewebsites.net~v1~trusted~.well-known~issuers.json"; path = "BCVaccineValidator/Assets/phsasmarthealthcard-dev.azurewebsites.net~v1~trusted~.well-known~issuers.json"; sourceTree = "<group>"; };
+		B934650438D23B575573798084615387 /* phsasmarthealthcard-dev.azurewebsites.net~v1~trusted~.well-known~issuers.json */ = {isa = PBXFileReference; includeInIndex = 1; name = "phsasmarthealthcard-dev.azurewebsites.net~v1~trusted~.well-known~issuers.json"; path = "BCVaccineValidator/Assets/phsasmarthealthcard-dev.azurewebsites.net~v1~trusted~.well-known~issuers.json"; sourceTree = "<group>"; };
 		B98E2ECBD18AABA3FF56E039A2F60FD9 /* HMAC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = HMAC.swift; path = JOSESwift/Sources/CryptoImplementation/HMAC.swift; sourceTree = "<group>"; };
 		BA1C786FD79BB7C875302A3ABA218BE1 /* KeychainAccess-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "KeychainAccess-umbrella.h"; sourceTree = "<group>"; };
 		BA6C2ACB233E8CBF4E1B1F45A693C9EE /* SPScreenView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPScreenView.m; path = Snowplow/Internal/Events/SPScreenView.m; sourceTree = "<group>"; };
@@ -1509,7 +1509,7 @@
 		BB5A7B142B6103B8EAE67164CF80F03F /* SwipeActionButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeActionButton.swift; path = Source/SwipeActionButton.swift; sourceTree = "<group>"; };
 		BB89EEB9D882B7F2297F4F800CBB746A /* ImmunizationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImmunizationService.swift; path = BCVaccineValidator/Classes/Services/ImmunizationService.swift; sourceTree = "<group>"; };
 		BBF60F303EA3B9F7516F14D9E18E2037 /* AppAuth.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AppAuth.release.xcconfig; sourceTree = "<group>"; };
-		BC0E3339D5F824AC71D28AAE7111A5B4 /* issuers-test.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; name = "issuers-test.json"; path = "BCVaccineValidator/Assets/issuers-test.json"; sourceTree = "<group>"; };
+		BC0E3339D5F824AC71D28AAE7111A5B4 /* issuers-test.json */ = {isa = PBXFileReference; includeInIndex = 1; name = "issuers-test.json"; path = "BCVaccineValidator/Assets/issuers-test.json"; sourceTree = "<group>"; };
 		BC5C8E9C37D47C4D50A35361AE868D39 /* Pods-HealthGateway-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-HealthGateway-acknowledgements.plist"; sourceTree = "<group>"; };
 		BC76453C97782D75BDABF3EDA932AD36 /* SPEmitterEvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPEmitterEvent.h; path = Snowplow/Internal/Emitter/SPEmitterEvent.h; sourceTree = "<group>"; };
 		BC9CA809CB0C3E3FC5488DF9313196B6 /* ValidatorConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ValidatorConfig.swift; path = BCVaccineValidator/Classes/ValidatorConfig.swift; sourceTree = "<group>"; };
@@ -1615,7 +1615,7 @@
 		E989B8E999AAEEEE8982E3CDA30A4B77 /* SPSchemaRuleset.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPSchemaRuleset.m; path = Snowplow/Internal/GlobalContexts/SPSchemaRuleset.m; sourceTree = "<group>"; };
 		E9C5857073777CC5E3273301E0801DB1 /* SPNetworkConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPNetworkConnection.h; path = Snowplow/Internal/NetworkConnection/SPNetworkConnection.h; sourceTree = "<group>"; };
 		EA1470F05333798AE23406D14578202B /* IQToolbar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IQToolbar.swift; path = IQKeyboardManagerSwift/IQToolbar/IQToolbar.swift; sourceTree = "<group>"; };
-		EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BCVaccineValidator.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator-BCVaccineValidator */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "BCVaccineValidator-BCVaccineValidator"; path = BCVaccineValidator.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA66786CCEEA3EB6B3823E4FD21E8A98 /* AlamofireRSSParser-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AlamofireRSSParser-dummy.m"; sourceTree = "<group>"; };
 		EA87FE417A8617369ADA38176821FA11 /* IQKeyboardManagerSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "IQKeyboardManagerSwift-umbrella.h"; sourceTree = "<group>"; };
 		EA9141BB6C2EFDF7B084DB2CFB7D48ED /* SPTiming.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPTiming.m; path = Snowplow/Internal/Events/SPTiming.m; sourceTree = "<group>"; };
@@ -1965,6 +1965,7 @@
 				D6B8B95201E535112688F5BC32EBB1C1 /* SwipeTransitionLayout.swift */,
 				2292723CCEC1386AAD0E87E0A84F0ECD /* Support Files */,
 			);
+			name = SwipeCellKit;
 			path = SwipeCellKit;
 			sourceTree = "<group>";
 		};
@@ -1982,6 +1983,7 @@
 				8BE80DC8CE2CBA5C8CAD2DF61156CF6D /* SwiftyJSON.swift */,
 				70566884C116E235D008CC8E960327D3 /* Support Files */,
 			);
+			name = SwiftyJSON;
 			path = SwiftyJSON;
 			sourceTree = "<group>";
 		};
@@ -2054,7 +2056,7 @@
 				97B9526BADB8C4C741DD53EA8F1150E5 /* AlamofireRSSParser */,
 				3FD1B4C1246D643E9476438C28048FA8 /* AppAuth */,
 				2B5894AEFF5152D2AD6A5DBF473B13C6 /* BCVaccineValidator */,
-				EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator.bundle */,
+				EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator-BCVaccineValidator */,
 				52844477CEE03CF70C82C12E881E0916 /* EncryptedCoreData */,
 				A3A80BA70CFB7F75C5391BEBBBA8C9DA /* FMDB */,
 				A8E950A16D00F649C54FFB30F81D7842 /* IQKeyboardManagerSwift */,
@@ -2099,6 +2101,7 @@
 				B280AED6791541D8A0CD4F28EC3E1384 /* common */,
 				8ED2CA28155E57A6AABF9C8340C8218D /* Support Files */,
 			);
+			name = SQLCipher;
 			path = SQLCipher;
 			sourceTree = "<group>";
 		};
@@ -2166,6 +2169,7 @@
 				F4E97AB943DDFA6E4ABAFC81D4998081 /* Validation.swift */,
 				C4A4784B59F733084C7524649A79C85D /* Support Files */,
 			);
+			name = Alamofire;
 			path = Alamofire;
 			sourceTree = "<group>";
 		};
@@ -2176,6 +2180,7 @@
 				ABFCF7F576372A489EB74578B5C0BF39 /* ExternalUserAgent */,
 				1A19DB0DD20C5C7BB36A836F1F306745 /* Support Files */,
 			);
+			name = AppAuth;
 			path = AppAuth;
 			sourceTree = "<group>";
 		};
@@ -2318,6 +2323,7 @@
 				72195CAE70DC9DD422447A5D7EA63855 /* Verifier.swift */,
 				B487F98F1F6FCD6845339143B3F708C9 /* Support Files */,
 			);
+			name = JOSESwift;
 			path = JOSESwift;
 			sourceTree = "<group>";
 		};
@@ -2334,6 +2340,7 @@
 				255F453BE3FECA9405E338983DEBB60E /* QRSegment.swift */,
 				6FDDFE58368917126E6AE851E970070A /* Support Files */,
 			);
+			name = SwiftQRCodeGenerator;
 			path = SwiftQRCodeGenerator;
 			sourceTree = "<group>";
 		};
@@ -2358,6 +2365,7 @@
 				6E804C8412F64F196D91303EE4672D00 /* Keychain.swift */,
 				72C34DCF028EE317E7520A4D5E68963A /* Support Files */,
 			);
+			name = KeychainAccess;
 			path = KeychainAccess;
 			sourceTree = "<group>";
 		};
@@ -2447,6 +2455,7 @@
 				91A244DA37398806196C719D08A2AFDF /* IQUIViewController+Additions.swift */,
 				BC2050819D6DB81270AAA30F8DA4D316 /* Support Files */,
 			);
+			name = IQKeyboardManagerSwift;
 			path = IQKeyboardManagerSwift;
 			sourceTree = "<group>";
 		};
@@ -2481,6 +2490,7 @@
 				12EAA55F1B2C3A995719F9969276C21B /* Reachability.swift */,
 				35519FDE2D7F5335B9E55CE16D195A31 /* Support Files */,
 			);
+			name = ReachabilitySwift;
 			path = ReachabilitySwift;
 			sourceTree = "<group>";
 		};
@@ -2526,6 +2536,7 @@
 				84BC38F271509061C5985B2D7AFEC768 /* RSSItem.swift */,
 				CA54DE902274AB6C48297F14051E9750 /* Support Files */,
 			);
+			name = AlamofireRSSParser;
 			path = AlamofireRSSParser;
 			sourceTree = "<group>";
 		};
@@ -2596,6 +2607,7 @@
 				937BE75A143FDAAEB9E66207FE62E3C9 /* Reachability.m */,
 				1F2F5282FA1E68EE6CE4CB45813F12CB /* Support Files */,
 			);
+			name = QueueITLibrary;
 			path = QueueITLibrary;
 			sourceTree = "<group>";
 		};
@@ -2626,6 +2638,7 @@
 				1F1693A9DD676F09D22ED8BC05E621A5 /* ValidatorJWT.swift */,
 				8CAC4952A3AE8929F6D6617823508DA2 /* Support Files */,
 			);
+			name = JWTDecode;
 			path = JWTDecode;
 			sourceTree = "<group>";
 		};
@@ -2829,6 +2842,7 @@
 				3F155CF47C71A5DE2375A3B583985896 /* UIViewController+SPScreenView_SWIZZLE.m */,
 				816F63C2D480CE696FD9FBBE1CA7A81D /* Support Files */,
 			);
+			name = SnowplowTracker;
 			path = SnowplowTracker;
 			sourceTree = "<group>";
 		};
@@ -2893,6 +2907,7 @@
 				F4BC7B96070F10F14FD398F519EB215E /* Resources */,
 				27CEE90F0F07EFB1FD87F6BEF30121BF /* Support Files */,
 			);
+			name = BCVaccineValidator;
 			path = BCVaccineValidator;
 			sourceTree = "<group>";
 		};
@@ -2902,6 +2917,7 @@
 				D7A26917B2866D403BF57BA3BF143A1B /* standard */,
 				AC27C084D0833921CE8CA8146C1E6033 /* Support Files */,
 			);
+			name = FMDB;
 			path = FMDB;
 			sourceTree = "<group>";
 		};
@@ -2929,6 +2945,7 @@
 				5B83E28B689271AF0C173790FE439840 /* EncryptedStore.m */,
 				44A75DDF162B57C36A92FC562727DF2E /* Support Files */,
 			);
+			name = EncryptedCoreData;
 			path = EncryptedCoreData;
 			sourceTree = "<group>";
 		};
@@ -2967,6 +2984,7 @@
 				0FCC149925675B004520FC560E21D369 /* Resources */,
 				C28578F5D5EAACAEAFF3BD19A27C18C6 /* Support Files */,
 			);
+			name = PocketSVG;
 			path = PocketSVG;
 			sourceTree = "<group>";
 		};
@@ -3483,7 +3501,7 @@
 			);
 			name = "BCVaccineValidator-BCVaccineValidator";
 			productName = BCVaccineValidator;
-			productReference = EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator.bundle */;
+			productReference = EA2679D10A6EBBC1F9509B5DA90E5897 /* BCVaccineValidator-BCVaccineValidator */;
 			productType = "com.apple.product-type.bundle";
 		};
 		42F6EA4EBF9A61B5E1C05BE009E10B9B /* EncryptedCoreData */ = {
@@ -3991,7 +4009,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE0B9C7338F840C3A51FD47962CF0470 /* BCVaccineValidator.bundle in Resources */,
+				AE0B9C7338F840C3A51FD47962CF0470 /* BCVaccineValidator-BCVaccineValidator in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5180,7 +5198,6 @@
 			baseConfigurationReference = 7F5FC41B315F2D56CE074144A7E1CC6D /* BCVaccineValidator.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BCVaccineValidator";
-				DEVELOPMENT_TEAM = TCH45SXZ69;
 				IBSC_MODULE = BCVaccineValidator;
 				INFOPLIST_FILE = "Target Support Files/BCVaccineValidator/ResourceBundle-BCVaccineValidator-BCVaccineValidator-Info.plist";
 				ONLY_ACTIVE_ARCH = NO;
@@ -6242,7 +6259,6 @@
 			baseConfigurationReference = 22505461E0A5A3B21001657485F8572C /* BCVaccineValidator.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/BCVaccineValidator";
-				DEVELOPMENT_TEAM = TCH45SXZ69;
 				IBSC_MODULE = BCVaccineValidator;
 				INFOPLIST_FILE = "Target Support Files/BCVaccineValidator/ResourceBundle-BCVaccineValidator-BCVaccineValidator-Info.plist";
 				ONLY_ACTIVE_ARCH = NO;

@@ -1,5 +1,8 @@
 name: Build and deploy to TestFlight
 on:
+  pull_request:
+    branches:
+      - dev
   push:
     branches:
       - main
@@ -28,9 +31,6 @@ jobs:
         env:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
         run: ./.github/secrets/decrypt_prod.sh
-        
-      - name: pods
-        run: cd BCVaccineCard && pod install
         
       - name: Archive project
         env:
