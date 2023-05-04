@@ -5,7 +5,7 @@ on:
       - dev
   push:
     branches:
-      - main
+      - dev
 jobs:
   deploy:
     name: Deploying to TestFlight
