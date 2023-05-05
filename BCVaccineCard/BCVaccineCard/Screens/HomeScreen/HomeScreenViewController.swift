@@ -68,7 +68,7 @@ class HomeScreenViewController: BaseViewController {
     private func genDataSource() -> [DataSource] {
         var data: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Resources), .button(type: .Proofs)]
         if authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty {
-            data.append(.button(type: .Recommendations))
+            data.insert(.button(type: .Recommendations), at: 2)
         }
         if let banner = communicationBanner {
             data.insert(.banner(data: banner), at: 1)
