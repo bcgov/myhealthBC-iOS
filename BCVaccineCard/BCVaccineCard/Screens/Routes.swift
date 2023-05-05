@@ -131,6 +131,7 @@ extension UIViewController {
         case QRRetrievalMethod
         case GatewayForm
         case UsersListOfRecords
+        case FilterRecordsView
         case HealthRecordDetail
         case Resource
         case NewsFeed
@@ -181,6 +182,11 @@ extension UIViewController {
                 return nil
             }
             return UsersListOfRecordsViewController.construct(viewModel: vm)
+        case .FilterRecordsView:
+            guard let vm = viewModel as? FilterRecordsViewController.ViewModel else {
+                return nil
+            }
+            return FilterRecordsViewController.construct(viewModel: vm)
         case .HealthRecordDetail:
             guard let vm = viewModel as? HealthRecordDetailViewController.ViewModel else {
                 return nil

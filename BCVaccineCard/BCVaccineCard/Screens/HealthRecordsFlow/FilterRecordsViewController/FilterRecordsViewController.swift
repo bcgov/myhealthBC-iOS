@@ -9,19 +9,21 @@ import UIKit
 
 class FilterRecordsViewController: BaseViewController {
     
-    class func construct(currentFilter: RecordsFilter?, availableFilters: [RecordsFilter.RecordType], delegateOwner: UIViewController) -> FilterRecordsViewController {
+    class func construct(viewModel: ViewModel) -> FilterRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: FilterRecordsViewController.self)) as? FilterRecordsViewController {
-            vc.currentFilter = currentFilter
-            vc.availableFilters = availableFilters
-            vc.delegate = delegateOwner as? FilterRecordsViewDelegate
+            vc.vm = viewModel
+//            vc.currentFilter = currentFilter
+//            vc.availableFilters = availableFilters
+            vc.delegate = viewModel.delegateOwner as? FilterRecordsViewDelegate
             return vc
         }
         return FilterRecordsViewController()
     }
     
-    private var currentFilter: RecordsFilter?
-    private var availableFilters: [RecordsFilter.RecordType]?
-    
+    private var vm: ViewModel?
+//    private var currentFilter: RecordsFilter?
+//    private var availableFilters: [RecordsFilter.RecordType]?
+//    
     weak var delegate: FilterRecordsViewDelegate?
 
     override func viewDidLoad() {
@@ -32,8 +34,8 @@ class FilterRecordsViewController: BaseViewController {
     
     private func setup() {
         let fv: FilterRecordsView = UIView.fromNib()
-        let availFilters = availableFilters ?? RecordsFilter.RecordType.avaiableFilters
-        fv.showModally(on: self.view, availableFilters: availFilters, filter: currentFilter)
+        let availFilters = vm?.availableFilters ?? RecordsFilter.RecordType.avaiableFilters
+        fv.showModally(on: self.view, availableFilters: availFilters, filter: vm?.currentFilter)
         fv.delegate = self
     }
     

@@ -365,9 +365,8 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
 //                       availableFilters: isDependent ? dependentFilters : allFilters,
 //                       filter: currentFilter)
 //        fv.delegate = self
-        
-        let vc = FilterRecordsViewController.construct(currentFilter: currentFilter, availableFilters: isDependent ? dependentFilters : allFilters, delegateOwner: self)
-        self.navigationController?.pushViewController(vc, animated: true)
+        let vm = FilterRecordsViewController.ViewModel(currentFilter: currentFilter, availableFilters: isDependent ? dependentFilters : allFilters, delegateOwner: self)        
+        show(route: .FilterRecordsView, withNavigation: true, viewModel: vm)
     }
     
     func selected(filter: RecordsFilter) {
