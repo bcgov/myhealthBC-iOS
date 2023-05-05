@@ -173,12 +173,12 @@ class DependentsHomeViewController: BaseDependentViewController {
     private func createLogoImgView(completion: @escaping(UIImageView?)->Void) {
         removeEmptyLogo() { [weak self] in
             guard let self = self else {return completion(nil)}
-            let bounds = self.tableView != nil ? self.tableView.bounds : view.bounds
+            let bounds = self.tableView != nil ? self.tableView.bounds : self.view.bounds
             let imgView = UIImageView(frame: bounds)
-            imgView.tag = emptyLogoTag
+            imgView.tag = self.emptyLogoTag
             self.view.addSubview(imgView)
             let padding = self.view.bounds.width / 5
-            imgView.addEqualSizeContraints(to: self.tableView != nil ? self.tableView : view, paddingVertical: padding, paddingHorizontal: padding)
+            imgView.addEqualSizeContraints(to: self.tableView != nil ? self.tableView : self.view, paddingVertical: padding, paddingHorizontal: padding)
             imgView.contentMode = .scaleAspectFit
             return completion(imgView)
         }

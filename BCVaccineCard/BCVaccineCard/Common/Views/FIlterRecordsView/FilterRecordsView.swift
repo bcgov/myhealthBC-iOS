@@ -7,8 +7,9 @@
 
 import UIKit
 
-protocol FilterRecordsViewDelegate {
+protocol FilterRecordsViewDelegate: AnyObject {
     func selected(filter: RecordsFilter)
+    func dismiss()
 }
 
 class UserFilters {
@@ -132,6 +133,7 @@ class FilterRecordsView: UIView, Theme {
     }
     
     func dismiss() {
+        self.delegate?.dismiss()
         if let backDrop = backDrop {
             backDrop.removeFromSuperview()
         }
@@ -182,7 +184,7 @@ class FilterRecordsView: UIView, Theme {
     
     // MARK: Style
     func style() {
-        self.alpha = 0
+//        self.alpha = 0
         if availableFilters.count == 2 {
             filterChipsSectionHeight.constant = 54
         }
@@ -228,10 +230,10 @@ class FilterRecordsView: UIView, Theme {
         
         self.layer.cornerRadius = 5
         self.layoutIfNeeded()
-        UIView.animate(withDuration: 0.1) {[weak self] in
-            self?.alpha = 1
-            self?.layoutIfNeeded()
-        }
+//        UIView.animate(withDuration: 0.1) {[weak self] in
+//            self?.alpha = 1
+//            self?.layoutIfNeeded()
+//        }
         showBackDrop()
         
         let restFromDateGesture = UITapGestureRecognizer(target: self, action:  #selector(self.resetFromDate))
@@ -256,11 +258,11 @@ class FilterRecordsView: UIView, Theme {
         backdropView.addEqualSizeContraints(to: parent)
         backdropView.backgroundColor = AppColours.backgroundGray.withAlphaComponent(0.2)
         backdropView.layoutIfNeeded()
-        UIView.animate(withDuration: 0.2) {
+//        UIView.animate(withDuration: 0.2) {
             backdropView.backgroundColor = AppColours.backgroundGray.withAlphaComponent(0.8)
             backdropView.alpha = 1
             backdropView.layoutIfNeeded()
-        }
+//        }
     }
     
     private func styleSectionHeading(label: UILabel) {
