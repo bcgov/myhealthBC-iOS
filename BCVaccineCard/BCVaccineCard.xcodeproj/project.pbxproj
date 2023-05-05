@@ -279,6 +279,9 @@
 		2D4B118B29F0655A00D7C02C /* RecordsSearchBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */; };
 		2D4B118C29F0655A00D7C02C /* RecordsSearchBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */; };
 		2D4B118D29F0655A00D7C02C /* RecordsSearchBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */; };
+		2D4EED5E2A03609900BD944F /* FilterRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */; };
+		2D4EED5F2A03609900BD944F /* FilterRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */; };
+		2D4EED602A03609900BD944F /* FilterRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */; };
 		2D5218BB29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */; };
 		2D5218BC29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */; };
 		2D5218BD29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */; };
@@ -1479,6 +1482,7 @@
 		2D120D4228FF25A600EB8EBF /* PostDependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDependent.swift; sourceTree = "<group>"; };
 		2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsSearchBarView.swift; sourceTree = "<group>"; };
 		2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecordsSearchBarView.xib; sourceTree = "<group>"; };
+		2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRecordsViewController.swift; sourceTree = "<group>"; };
 		2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsViewController.swift; sourceTree = "<group>"; };
 		2D5218BF2984A38000E07382 /* ProfileDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsTableViewCell.swift; sourceTree = "<group>"; };
 		2D5218C02984A38000E07382 /* ProfileDetailsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileDetailsTableViewCell.xib; sourceTree = "<group>"; };
@@ -2392,6 +2396,14 @@
 				2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */,
 			);
 			path = RecordsSearchBar;
+			sourceTree = "<group>";
+		};
+		2D4EED5C2A03607700BD944F /* FilterRecordsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */,
+			);
+			path = FilterRecordsViewController;
 			sourceTree = "<group>";
 		};
 		2D5218BE2984A36600E07382 /* ProfileDetails */ = {
@@ -3563,6 +3575,7 @@
 				799050B1273C4D1F006CD726 /* HealthRecordsBase */,
 				79218AE22755E1240063004E /* NOTUSINGFetchHealthRecordsViewController */,
 				79218AE62755E2410063004E /* UsersListOfRecordsViewController */,
+				2D4EED5C2A03607700BD944F /* FilterRecordsViewController */,
 				79218AEA2755E2940063004E /* HealthRecordDetailViewController */,
 			);
 			path = HealthRecordsFlow;
@@ -4437,6 +4450,7 @@
 				797DE3C227D8002C00ED2775 /* AuthenticatedPDFResponseObject.swift in Sources */,
 				3E6831212940D41200100402 /* CovidLabTestResult+CoreDataProperties.swift in Sources */,
 				293B32AF27D25C4E0064BAAA /* CommentView.swift in Sources */,
+				2D4EED5F2A03609900BD944F /* FilterRecordsViewController.swift in Sources */,
 				7944F68326F12614006B9444 /* BCVaccineCard.xcdatamodeld in Sources */,
 				3E91C7B828B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
 				3E3DA94529005AA2009C500F /* (null) in Sources */,
@@ -4798,6 +4812,7 @@
 				293B32B027D25C4E0064BAAA /* CommentView.swift in Sources */,
 				79218AAA2751946A0063004E /* UserRecordListTableViewCell.swift in Sources */,
 				3E91C7B928B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
+				2D4EED602A03609900BD944F /* FilterRecordsViewController.swift in Sources */,
 				3E3DA94629005AA2009C500F /* (null) in Sources */,
 				79BDA097270EA44D00FF30AB /* HealthPassViewController.swift in Sources */,
 				3E31EA8F29141F3500E344E6 /* ForceUpdateView.swift in Sources */,
@@ -5136,6 +5151,7 @@
 				3E6831202940D41200100402 /* CovidLabTestResult+CoreDataProperties.swift in Sources */,
 				798005402852C66E006E390F /* Endpoint.swift in Sources */,
 				798005412852C66E006E390F /* AuthenticatedPDFResponseObject.swift in Sources */,
+				2D4EED5E2A03609900BD944F /* FilterRecordsViewController.swift in Sources */,
 				3E91C7B728B51B0B005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift in Sources */,
 				3E3DA94429005AA2009C500F /* (null) in Sources */,
 				29E19FD5286C024B00C235EF /* LabOrderRecordDetailView.swift in Sources */,

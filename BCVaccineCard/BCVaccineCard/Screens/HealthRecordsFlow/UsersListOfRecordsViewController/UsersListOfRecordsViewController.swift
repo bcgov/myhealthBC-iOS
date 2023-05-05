@@ -356,19 +356,26 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
 extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     
     @objc func showFilters() {
-        let fv: FilterRecordsView = UIView.fromNib()
+//        let fv: FilterRecordsView = UIView.fromNib()
         let allFilters = RecordsFilter.RecordType.avaiableFilters
         let dependentFilters: [RecordsFilter.RecordType] = RecordsFilter.RecordType.dependentFilters
-        fv.showModally(on: view.findTopMostVC()?.view ?? view,
-                       availableFilters: isDependent ? dependentFilters : allFilters,
-                       filter: currentFilter)
-        fv.delegate = self
+//        fv.showModally(on: view.findTopMostVC()?.view ?? view,
+//                       availableFilters: isDependent ? dependentFilters : allFilters,
+//                       filter: currentFilter)
+//        fv.delegate = self
+        
+        let vc = FilterRecordsViewController.construct(currentFilter: currentFilter, availableFilters: isDependent ? dependentFilters : allFilters, delegateOwner: self)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func selected(filter: RecordsFilter) {
         let patientRecords = fetchPatientRecords()
         currentFilter = filter
         show(records: patientRecords, filter:filter, searchText: searchText)
+    }
+    
+    func dismiss() {
+        // ignore - should find a better way to do this
     }
     
     func showSelectedFilters() {
