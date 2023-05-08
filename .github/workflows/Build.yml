@@ -2,8 +2,7 @@ name: Build Project
 on:
   pull_request:
     branches:
-      - dev
-      - main
+      - dev-old
 jobs:
   deploy:
     name: Building project
