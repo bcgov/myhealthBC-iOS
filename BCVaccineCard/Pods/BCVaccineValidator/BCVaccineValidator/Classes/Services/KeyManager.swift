@@ -117,7 +117,7 @@ class KeyManager: DirectoryManager {
     
     private func seed(issuer: String, completion: @escaping () -> Void) {
         // Get Path
-        if let bundledFilePath = BCVaccineValidator.shared.config.resourceBundle.url(forResource: issuer.filePathSafeName(), withExtension: "") {
+        if let bundledFilePath = BCVaccineValidator.resourceBundle.url(forResource: issuer.filePathSafeName(), withExtension: "") {
             do {
                 // Get data at path
                 let data = try Data(contentsOf: bundledFilePath)

@@ -1,21 +1,47 @@
 import Foundation
 
 public class BCVaccineValidator {
+    public enum Config {
+        case Prod
+        case Test
+        case Dev
+    }
+    static var mode: Config = .Prod
+    static var enableRemoteRules = true
+    public static var shouldUpdateWhenOnline = false
     public static let shared = BCVaccineValidator()
     
-    public var config: ValidatorConfig = .default
+    static let resourceBundle: Bundle = {
+        let myBundle = Bundle(for: BCVaccineValidator.self)
 
-    public func initialize() {
+        guard let resourceBundleURL = myBundle.url(
+            forResource: "BCVaccineValidator", withExtension: "bundle")
+            else { fatalError("MySDK.bundle not found!") }
+
+        guard let resourceBundle = Bundle(url: resourceBundleURL)
+            else { fatalError("Cannot access MySDK.bundle!") }
+
+        return resourceBundle
+    }()
+    
+    func initData() {
 #if DEBUG
-        print("Initializing BCVaccineValidator using config: \(config)")
-        print("Enable Remote rules: \(config.enableRemoteFetch)")
+        print("Initialized BCVaccineValidator in \(BCVaccineValidator.mode)")
+        print("Enable Remote rules: \(BCVaccineValidator.enableRemoteRules)")
 #endif
         loadData { [weak self] in
-            guard let self = self, self.config.enableRemoteFetch else { return }
+            guard let `self` = self, BCVaccineValidator.enableRemoteRules else {return}
             self.setupReachabilityListener()
             self.setupUpdateListener()
         }
 #if DEBUG
+        print("\n\nBundled Files: \n")
+        if let files = try? FileManager.default.contentsOfDirectory(atPath: BCVaccineValidator.resourceBundle.bundlePath){
+            for file in files {
+                
+                print(file)
+            }
+        }
         print("\n\n")
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentsDirectory = paths[0]
@@ -24,7 +50,7 @@ public class BCVaccineValidator {
 #endif
     }
     
-    private func loadData(completion: @escaping() -> Void) {
+    private func loadData(completion: @escaping()->Void) {
         let displatchGroup = DispatchGroup()
         displatchGroup.enter()
         IssuerManager.shared.getIssuers { issuers in
@@ -39,6 +65,41 @@ public class BCVaccineValidator {
             return completion()
         }
     }
+    
+    public func setup(mode: Config,
+                      remoteRules: Bool? = true,
+                      prodIssuers: String? = nil,
+                      devIssuers: String? = nil,
+                      testIssuers: String? = nil,
+                      prodRules: String? = nil,
+                      devRules: String? = nil,
+                      testRuls: String? = nil
+                      
+    ) {
+        if let prodIssuers = prodIssuers {
+            Constants.JWKSPublic.prodIssuers = prodIssuers
+        }
+        if let  devIssuers = devIssuers {
+            Constants.JWKSPublic.devIssuers = devIssuers
+        }
+        if let  testIssuers = testIssuers {
+            Constants.JWKSPublic.testIssuers = testIssuers
+        }
+        if let prodRules = prodRules {
+            Constants.JWKSPublic.prodRules = prodRules
+        }
+        if let devRules = devRules {
+            Constants.JWKSPublic.devRules = devRules
+        }
+        if let testRuls = testRuls {
+            Constants.JWKSPublic.testRuls = testRuls
+        }
+        BCVaccineValidator.enableRemoteRules = remoteRules ?? true
+        BCVaccineValidator.mode = mode
+        initData()
+    }
+    
+    
     
     private func setupUpdateListener() {
         // When issuers list is updated, re-download keys for issuers
@@ -56,9 +117,8 @@ public class BCVaccineValidator {
     /// and if a network call had failed and set shouldUpdateWhenOnline to true,
     /// re-fetch issuers.
     private func setupReachabilityListener() {
-        Notification.Name.isReachable.onPost(object: nil, queue: .main) { [weak self] _ in
-            guard let self = self else { return }
-            if self.config.shouldUpdateWhenOnline {
+        Notification.Name.isReachable.onPost(object: nil, queue: .main) { _ in
+            if BCVaccineValidator.shouldUpdateWhenOnline {
                 IssuerManager.shared.updateIssuers()
                 RulesManager.shared.updateRules()
             }

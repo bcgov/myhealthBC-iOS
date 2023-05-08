@@ -40,19 +40,19 @@ class IssuerManager: DirectoryManager {
     }
     
     func updateIssuers() {
-        if isUpdating || !BCVaccineValidator.shared.config.enableRemoteFetch { return }
+        if isUpdating || !BCVaccineValidator.enableRemoteRules {return}
         isUpdating = true
 #if DEBUG
         print("Updating issuers")
 #endif
         let networkService = NetworkService()
-        networkService.getIssuers(url: BCVaccineValidator.shared.config.issuersUrl) { result in
+        networkService.getIssuers(url: Constants.JWKSPublic.issuersListUrl) { result in
             guard let issuers = result else {
                 self.isUpdating = false
                 return
             }
             self.store(issuers: issuers)
-            self.updatedIssuers(issuers: issuers, exipersInMinutes: BCVaccineValidator.shared.config.issuersCacheExpiryInMinutes)
+            self.updatedIssuers(issuers: issuers, exipersInMinutes: Constants.DataExpiery.defaultIssuersTimeout)
             self.isUpdating = false
         }
     }
@@ -84,10 +84,10 @@ class IssuerManager: DirectoryManager {
     
     private func seedIssuers() -> Issuers? {
         // Get Path
-        guard let bundledFilePath = BCVaccineValidator.shared.config.resourceBundle.url(forResource: BCVaccineValidator.shared.config.issuersFileNameWithExtension, withExtension: "") else {
-            #if DEBUG
+        guard let bundledFilePath = BCVaccineValidator.resourceBundle.url(forResource: Constants.Directories.issuers.fileName, withExtension: "") else {
+#if DEBUG
             print("\n\n**\n\nIssuers file is not bundled")
-            #endif
+#endif
             return nil
         }
         do {
@@ -105,8 +105,8 @@ class IssuerManager: DirectoryManager {
     
     private func fetchLocalIssuers() -> Issuers? {
         let documentsDirectory = documentDirectory().appendingPathComponent(Constants.Directories.issuers.directoryName)
-        guard directoryExists(path: documentsDirectory) else { return nil }
-        let issuersFilePath = documentsDirectory.appendingPathComponent(BCVaccineValidator.shared.config.issuersFileNameWithExtension)
+        guard directoryExists(path: documentsDirectory) else {return nil}
+        let issuersFilePath = documentsDirectory.appendingPathComponent(Constants.Directories.issuers.fileName)
         
         do {
             let data = try Data(contentsOf: issuersFilePath)
@@ -121,7 +121,7 @@ class IssuerManager: DirectoryManager {
     private func pathForIssuersFile() -> URL {
         let documentsDirectory = documentDirectory().appendingPathComponent(Constants.Directories.issuers.directoryName)
         createDirectoryIfDoesntExist(path: documentsDirectory)
-        let dirPath = documentsDirectory.appendingPathComponent(BCVaccineValidator.shared.config.issuersFileNameWithExtension)
+        let dirPath = documentsDirectory.appendingPathComponent(Constants.Directories.issuers.fileName)
         return dirPath
     }
 }
