@@ -7,8 +7,9 @@
 
 import UIKit
 
-protocol FilterRecordsViewDelegate {
+protocol FilterRecordsViewDelegate: AnyObject {
     func selected(filter: RecordsFilter)
+    func dismiss()
 }
 
 class UserFilters {
@@ -44,10 +45,10 @@ class FilterRecordsView: UIView, Theme {
         case toDate
     }
     
-    @IBOutlet weak var navContainer: UIView!
-    @IBOutlet weak var navTitle: UILabel!
-    @IBOutlet weak var closeButton: UIButton!
-    @IBOutlet weak var navDivider: UIView!
+//    @IBOutlet weak var navContainer: UIView!
+//    @IBOutlet weak var navTitle: UILabel!
+//    @IBOutlet weak var closeButton: UIButton!
+//    @IBOutlet weak var navDivider: UIView!
     
     @IBOutlet weak var chooseFilterTypeLabel: UILabel!
     @IBOutlet weak var filterChipsContainer: UIView!
@@ -109,10 +110,10 @@ class FilterRecordsView: UIView, Theme {
     
     private func positionView(on view: UIView) {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0).isActive = true
-        self.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0).isActive = true
-        self.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16).isActive = true
-        self.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor, constant: 16).isActive = true
+        self.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        self.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        self.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        self.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         self.layoutIfNeeded()
     }
     
@@ -132,6 +133,7 @@ class FilterRecordsView: UIView, Theme {
     }
     
     func dismiss() {
+        self.delegate?.dismiss()
         if let backDrop = backDrop {
             backDrop.removeFromSuperview()
         }
@@ -139,9 +141,9 @@ class FilterRecordsView: UIView, Theme {
     }
     
     // MARK: Outlet Actions
-    @IBAction func closeAction(_ sender: Any) {
-        dismiss()
-    }
+//    @IBAction func closeAction(_ sender: Any) {
+//        dismiss()
+//    }
     
     @IBAction func continueAction(_ sender: Any) {
         if showErrorMessagesIfNeeded() {
@@ -182,22 +184,22 @@ class FilterRecordsView: UIView, Theme {
     
     // MARK: Style
     func style() {
-        self.alpha = 0
+//        self.alpha = 0
         if availableFilters.count == 2 {
             filterChipsSectionHeight.constant = 54
         }
         // TODO: Remove this check
 //        datePicker.maximumDate = Date()
-        navContainer.backgroundColor = .clear
+//        navContainer.backgroundColor = .clear
         filterChipsContainer.backgroundColor = .clear
         
-        navDivider.backgroundColor = AppColours.divider
+//        navDivider.backgroundColor = AppColours.divider
         filterTypeDivider.backgroundColor = AppColours.divider
-        dateDivider.backgroundColor = AppColours.divider
+        dateDivider.backgroundColor = UIColor.clear
         
         
-        navTitle.font = UIFont.bcSansBoldWithSize(size: 17)
-        navTitle.textColor = AppColours.appBlue
+//        navTitle.font = UIFont.bcSansBoldWithSize(size: 17)
+//        navTitle.textColor = AppColours.appBlue
         
         styleSectionHeading(label: chooseFilterTypeLabel)
         styleSectionHeading(label: chooseDateRangeLabel)
@@ -207,7 +209,7 @@ class FilterRecordsView: UIView, Theme {
         
         style(button: clearButton, style: .Hollow, title: "Clear all", image: nil)
         style(button: continueButton, style: .Fill, title: "Apply", image: nil)
-        closeButton.setTitle("", for: .normal)
+//        closeButton.setTitle("", for: .normal)
         
         errorLabelTo.font = UIFont.bcSansRegularWithSize(size: 13)
         errorLabelTo.textColor = AppColours.appRed
@@ -228,10 +230,10 @@ class FilterRecordsView: UIView, Theme {
         
         self.layer.cornerRadius = 5
         self.layoutIfNeeded()
-        UIView.animate(withDuration: 0.1) {[weak self] in
-            self?.alpha = 1
-            self?.layoutIfNeeded()
-        }
+//        UIView.animate(withDuration: 0.1) {[weak self] in
+//            self?.alpha = 1
+//            self?.layoutIfNeeded()
+//        }
         showBackDrop()
         
         let restFromDateGesture = UITapGestureRecognizer(target: self, action:  #selector(self.resetFromDate))
@@ -256,15 +258,15 @@ class FilterRecordsView: UIView, Theme {
         backdropView.addEqualSizeContraints(to: parent)
         backdropView.backgroundColor = AppColours.backgroundGray.withAlphaComponent(0.2)
         backdropView.layoutIfNeeded()
-        UIView.animate(withDuration: 0.2) {
+//        UIView.animate(withDuration: 0.2) {
             backdropView.backgroundColor = AppColours.backgroundGray.withAlphaComponent(0.8)
             backdropView.alpha = 1
             backdropView.layoutIfNeeded()
-        }
+//        }
     }
     
     private func styleSectionHeading(label: UILabel) {
-        label.textColor = AppColours.appBlue
+        label.textColor = AppColours.textBlack
         label.font = UIFont.bcSansBoldWithSize(size: 17)
     }
     

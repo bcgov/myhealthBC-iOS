@@ -39,7 +39,6 @@ static NSString * const JAVASCRIPT_GET_BODY_CLASSES = @"document.getElementsByTa
 
 - (void)close:(void (^ __nullable)(void))onComplete {
     [self.host dismissViewControllerAnimated:YES completion:^{
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if(onComplete!=nil){
             onComplete();
         }
@@ -85,56 +84,72 @@ static NSString * const JAVASCRIPT_GET_BODY_CLASSES = @"document.getElementsByTa
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.spinner = [[UIActivityIndicatorView alloc]initWithFrame:self.view.bounds];
+    [self.spinner setColor:[UIColor grayColor]];
     
     WKPreferences* preferences = [[WKPreferences alloc]init];
     preferences.javaScriptEnabled = YES;
     WKWebViewConfiguration* config = [[WKWebViewConfiguration alloc]init];
     config.preferences = preferences;
-    WKWebView* view = [[WKWebView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) configuration:config];
-    view.navigationDelegate = self;
-    self.webView = view;
-    [self.webView setAutoresizingMask: UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    WKWebView* webview = [[WKWebView alloc]initWithFrame:self.view.bounds configuration:config];
+    webview.navigationDelegate = self;
+    [webview setAutoresizingMask: UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth];
+    // Make webview transparent
+    webview.opaque = NO;
+    webview.backgroundColor = [UIColor clearColor];
+    self.webView = webview;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    self.spinner = [[UIActivityIndicatorView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
-    [self.spinner setColor:[UIColor grayColor]];
+    [super viewWillAppear:animated];
+}
+
+-(void)viewWillLayoutSubviews{
+    [super viewWillLayoutSubviews];
     [self.spinner startAnimating];
+    self.webView.frame = self.view.bounds;
+    self.spinner.frame = self.view.bounds;
     
     [self.view addSubview:self.webView];
     [self.webView addSubview:self.spinner];
     
-    NSURL *urlAddress = [NSURL URLWithString:self.queueUrl];
-    NSURLRequest *request = [NSURLRequest requestWithURL:urlAddress];
-    [self.webView loadRequest:request];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.queueUrl]]];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self.webView removeFromSuperview];
+    self.webView = nil;
 }
 
 #pragma mark - WKNavigationDelegate
 
 - (void)webView:(WKWebView*)webView decidePolicyForNavigationAction:(nonnull WKNavigationAction *)navigationAction decisionHandler:(nonnull void (^)(WKNavigationActionPolicy))decisionHandler{
-    
     if (!self.isQueuePassed) {
         NSURLRequest* request = navigationAction.request;
         NSString* urlString = [[request URL] absoluteString];
         NSString* targetUrlString = self.eventTargetUrl;
-        NSLog(@"request Url: %@", urlString);
-        NSLog(@"target Url: %@", targetUrlString);
         if (urlString != nil) {
             NSURL* url = [NSURL URLWithString:urlString];
             NSURL* targetUrl = [NSURL URLWithString:targetUrlString];
             if(urlString != nil && ![urlString isEqualToString:@"about:blank"]) {
                 BOOL isQueueUrl = [self.queueUrl containsString:url.host];
                 BOOL isNotFrame = [[[request URL] absoluteString] isEqualToString:[[request mainDocumentURL] absoluteString]];
-                
+
                 if([self handleSpecialUrls:url decisionHandler:decisionHandler]){
                     return;
                 }
-                
+
                 if([self isBlockedUrl: url]){
                     decisionHandler(WKNavigationActionPolicyCancel);
                     return;
                 }
-                
+
                 if (isNotFrame) {
                     if (isQueueUrl) {
                         [self.engine updateQueuePageUrl:urlString];
@@ -145,7 +160,6 @@ static NSString * const JAVASCRIPT_GET_BODY_CLASSES = @"document.getElementsByTa
                         NSString* queueitToken = [self extractQueueToken:url.absoluteString];
                         [self.engine raiseQueuePassed:queueitToken];
                         [self.host dismissViewControllerAnimated:YES completion:^{
-                            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
                         }];
                         decisionHandler(WKNavigationActionPolicyCancel);
                         return;
@@ -154,22 +168,23 @@ static NSString * const JAVASCRIPT_GET_BODY_CLASSES = @"document.getElementsByTa
                 if (navigationAction.navigationType == WKNavigationTypeLinkActivated && !isQueueUrl) {
                     if (@available(iOS 10, *)){
                         [[UIApplication sharedApplication] openURL:[request URL] options:@{} completionHandler:^(BOOL success){
-                            if (success){
-                                NSLog(@"Opened %@",urlString);
-                            }
+
                         }];
                     }
                     else {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
                         [[UIApplication sharedApplication] openURL:[request URL]];
+#pragma GCC diagnostic pop
                     }
-                    
+
                     decisionHandler(WKNavigationActionPolicyCancel);
                     return;
                 }
             }
         }
     }
-    
+
     decisionHandler(WKNavigationActionPolicyAllow);
 }
 
@@ -186,18 +201,15 @@ static NSString * const JAVASCRIPT_GET_BODY_CLASSES = @"document.getElementsByTa
 }
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    
     [self.spinner stopAnimating];
     if (![self.webView isLoading])
     {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     }
-    
+
     // Check if user exitted through the default exit link and notify the engine
     [self.webView evaluateJavaScript:JAVASCRIPT_GET_BODY_CLASSES completionHandler:^(id result, NSError* error){
         if (error != nil) {
