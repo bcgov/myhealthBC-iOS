@@ -282,6 +282,9 @@
 		2D4EED5E2A03609900BD944F /* FilterRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */; };
 		2D4EED5F2A03609900BD944F /* FilterRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */; };
 		2D4EED602A03609900BD944F /* FilterRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */; };
+		2D4EED622A05679A00BD944F /* FilterRecordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED612A05679A00BD944F /* FilterRecordsViewModel.swift */; };
+		2D4EED632A05679A00BD944F /* FilterRecordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED612A05679A00BD944F /* FilterRecordsViewModel.swift */; };
+		2D4EED642A05679A00BD944F /* FilterRecordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED612A05679A00BD944F /* FilterRecordsViewModel.swift */; };
 		2D5218BB29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */; };
 		2D5218BC29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */; };
 		2D5218BD29849FC100E07382 /* ProfileDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */; };
@@ -1483,6 +1486,7 @@
 		2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsSearchBarView.swift; sourceTree = "<group>"; };
 		2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecordsSearchBarView.xib; sourceTree = "<group>"; };
 		2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRecordsViewController.swift; sourceTree = "<group>"; };
+		2D4EED612A05679A00BD944F /* FilterRecordsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRecordsViewModel.swift; sourceTree = "<group>"; };
 		2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsViewController.swift; sourceTree = "<group>"; };
 		2D5218BF2984A38000E07382 /* ProfileDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsTableViewCell.swift; sourceTree = "<group>"; };
 		2D5218C02984A38000E07382 /* ProfileDetailsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileDetailsTableViewCell.xib; sourceTree = "<group>"; };
@@ -2402,6 +2406,7 @@
 			isa = PBXGroup;
 			children = (
 				2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */,
+				2D4EED612A05679A00BD944F /* FilterRecordsViewModel.swift */,
 			);
 			path = FilterRecordsViewController;
 			sourceTree = "<group>";
@@ -4573,6 +4578,7 @@
 				79218AF527569CEA0063004E /* VaccineTable.swift in Sources */,
 				29A5B6DE27B55B6C006A9BA7 /* Medication+CoreDataClass.swift in Sources */,
 				3E6831542940DC1600100402 /* CommentTextFieldView.swift in Sources */,
+				2D4EED632A05679A00BD944F /* FilterRecordsViewModel.swift in Sources */,
 				79BDA07E270CB8F300FF30AB /* String+Localizable.swift in Sources */,
 				3E62CFC9299BEF79000FBB40 /* SyncService.swift in Sources */,
 				79218ACD27556AA50063004E /* StatusBannerView.swift in Sources */,
@@ -4935,6 +4941,7 @@
 				3E6831552940DC1600100402 /* CommentTextFieldView.swift in Sources */,
 				3E62CFCA299BEF79000FBB40 /* SyncService.swift in Sources */,
 				79218ACE27556AA50063004E /* StatusBannerView.swift in Sources */,
+				2D4EED642A05679A00BD944F /* FilterRecordsViewModel.swift in Sources */,
 				794BD6442702EEC00084ADA8 /* Defaults.swift in Sources */,
 				2D5218D12988556100E07382 /* Address+CoreDataProperties.swift in Sources */,
 				3E31EA862913951D00E344E6 /* UpdateService.swift in Sources */,
@@ -5274,6 +5281,7 @@
 				29E19FF8286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.swift in Sources */,
 				798005912852C66E006E390F /* VaccineCard+CoreDataProperties.swift in Sources */,
 				798005922852C66E006E390F /* VaccineTable.swift in Sources */,
+				2D4EED622A05679A00BD944F /* FilterRecordsViewModel.swift in Sources */,
 				798005932852C66E006E390F /* Medication+CoreDataClass.swift in Sources */,
 				3E6831532940DC1600100402 /* CommentTextFieldView.swift in Sources */,
 				3E62CFC8299BEF79000FBB40 /* SyncService.swift in Sources */,
