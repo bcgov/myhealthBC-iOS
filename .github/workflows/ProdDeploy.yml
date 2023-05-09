@@ -1,5 +1,8 @@
 name: Build and deploy to TestFlight
 on:
+  pull_request:
+    branches:
+      - dev
   push:
     branches:
       - main
@@ -17,7 +20,7 @@ jobs:
         run: brew install gnupg
         
       - name: Select Xcode version
-        run: sudo xcode-select -s "/Applications/Xcode_13.4.1.app"
+        run: sudo xcode-select -s "/Applications/Xcode_14.1.app"
         
       - name: install xcpretty
         run: gem install xcpretty
@@ -41,4 +44,5 @@ jobs:
           APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
           APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
         run: ./.github/scripts/publish_testflight.sh
+        
         
