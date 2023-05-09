@@ -1,13 +1,14 @@
 PODS:
-  - Alamofire (5.5.0)
-  - AlamofireRSSParser (2.4.0):
-    - Alamofire (~> 5.0)
-  - AppAuth (1.4.0):
-    - AppAuth/Core (= 1.4.0)
-    - AppAuth/ExternalUserAgent (= 1.4.0)
-  - AppAuth/Core (1.4.0)
-  - AppAuth/ExternalUserAgent (1.4.0)
-  - BCVaccineValidator (1.0.12):
+  - Alamofire (5.6.4)
+  - AlamofireRSSParser (4.0.0):
+    - Alamofire (~> 5.5)
+  - AppAuth (1.6.1):
+    - AppAuth/Core (= 1.6.1)
+    - AppAuth/ExternalUserAgent (= 1.6.1)
+  - AppAuth/Core (1.6.1)
+  - AppAuth/ExternalUserAgent (1.6.1):
+    - AppAuth/Core
+  - BCVaccineValidator (2.1.1):
     - Alamofire
     - JOSESwift
   - EncryptedCoreData (3.1):
@@ -15,12 +16,12 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - IQKeyboardManagerSwift (6.5.9)
+  - IQKeyboardManagerSwift (6.5.11)
   - JOSESwift (2.4.0)
   - JWTDecode (2.6.3)
   - KeychainAccess (4.2.2)
   - PocketSVG (2.7.2)
-  - QueueITLibrary (3.0.9)
+  - QueueITLibrary (3.0.14)
   - ReachabilitySwift (5.0.0)
   - SnowplowTracker (2.2.2):
     - FMDB (~> 2.7)
@@ -36,7 +37,7 @@ PODS:
 DEPENDENCIES:
   - AlamofireRSSParser
   - AppAuth
-  - BCVaccineValidator (from `https://github.com/bcgov/iOSVaccineValidator`)
+  - BCVaccineValidator (from `https://github.com/bcgov/iOSVaccineValidator`, branch `legacy`)
   - EncryptedCoreData (from `https://github.com/project-imas/encrypted-core-data.git`)
   - IQKeyboardManagerSwift
   - JWTDecode (~> 2.6)
@@ -70,31 +71,32 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   BCVaccineValidator:
+    :branch: legacy
     :git: https://github.com/bcgov/iOSVaccineValidator
   EncryptedCoreData:
     :git: https://github.com/project-imas/encrypted-core-data.git
 
 CHECKOUT OPTIONS:
   BCVaccineValidator:
-    :commit: b68e55c75180dd2a0f3c2ca78b5e77c7b29b8137
+    :commit: 56401566ac6bbf0a2242ba195255b955288552b3
     :git: https://github.com/bcgov/iOSVaccineValidator
   EncryptedCoreData:
     :commit: b97ffaf2f19dad4d1558bc9b0668cc2e09d17347
     :git: https://github.com/project-imas/encrypted-core-data.git
 
 SPEC CHECKSUMS:
-  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
-  AlamofireRSSParser: dab86644d4d220b313767c33ef09e7acf11f641a
-  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  BCVaccineValidator: 7a41c49aa40531f74d9fb5104a5b7b104527d6d4
+  Alamofire: 4e95d97098eacb88856099c4fc79b526a299e48c
+  AlamofireRSSParser: c8aeb615ac194d45e6648c121bbb442d16aaa4dc
+  AppAuth: e48b432bb4ba88b10cb2bcc50d7f3af21e78b9c2
+  BCVaccineValidator: 407f52cdd66feb79bf1a63de38bd5d7d62cd069f
   EncryptedCoreData: f6762fb05f88a52f36c5648659abc91b57f244b4
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  IQKeyboardManagerSwift: 6e839c575c4aa1078d58a596e41244e77abe918f
+  IQKeyboardManagerSwift: c7955c0bdbf7b2eb29bb7daaa44e3d90f55a9a85
   JOSESwift: 7ff178bb9173ff42c6e990929a9f2fa702a34f69
   JWTDecode: 33e5e26e5ddbd21b2065820894c08fef0cad9509
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
   PocketSVG: c597e6916641fd2674d2f0cabca0d1869cb82880
-  QueueITLibrary: 840b877e4a4aad67b9b1941f31a56988bc03be71
+  QueueITLibrary: cf3498f07bb711690f1bd4d28e4050034cc1d278
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   SnowplowTracker: 2eee2d6606a60db98f7c4e1515499bb216b6c8ad
   SQLCipher: f9fcf29b2e59ced7defc2a2bdd0ebe79b40d4990
@@ -102,6 +104,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 3e522cfc2cd82f69e90ba8651c55bedfc9994f95
+PODFILE CHECKSUM: c9abdbe33796d8562a08afc60ad2e6c415e887a8
 
 COCOAPODS: 1.11.3
