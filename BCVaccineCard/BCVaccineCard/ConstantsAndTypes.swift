@@ -37,6 +37,11 @@ struct HealthRecordConstants {
     static var searchRecordsEnabled: Bool {
         return true
     }
+    
+    // ENABLE AND DISABLE PROFILE DETAILS SCREEN
+    static var profileDetailsEnabled: Bool {
+        return true
+    }
 }
 
 extension AppTabBarController {

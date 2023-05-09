@@ -16,6 +16,7 @@ class ProfileDetailsViewController: BaseViewController {
         case phn
         case physicalAddress
         case mailingAddress
+        case communicationPreferences
         
         var getProfileDetailsScreenType: ProfileDetailsTableViewCell.ViewType? {
             switch self {
@@ -25,6 +26,7 @@ class ProfileDetailsViewController: BaseViewController {
             case .phn: return .phn
             case .physicalAddress: return .physicalAddress
             case .mailingAddress: return .mailingAddress
+            case .communicationPreferences: return nil
             }
         }
         
@@ -47,6 +49,15 @@ class ProfileDetailsViewController: BaseViewController {
                 cell.separatorInset = UIEdgeInsets.zero
                 cell.layoutMargins = UIEdgeInsets.zero
                 cell.configure(data: data, type: type, delegateOwner: delegateOwner)
+                return cell
+            case .communicationPreferences:
+                guard let patient = StorageService.shared.fetchAuthenticatedPatient(), let cell = tableView.dequeueReusableCell(withIdentifier: CommunicationPreferencesTableViewCell.getName, for: indexPath) as? CommunicationPreferencesTableViewCell else {
+                    return CommunicationPreferencesTableViewCell()
+                }
+                cell.preservesSuperviewLayoutMargins = false
+                cell.separatorInset = UIEdgeInsets.zero
+                cell.layoutMargins = UIEdgeInsets.zero
+                cell.configure(patient: patient)
                 return cell
             }
         }
@@ -82,14 +93,20 @@ class ProfileDetailsViewController: BaseViewController {
     
     // MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
+    
+    var profileService: PatientService?
 
     
     // MARK: Class funcs
     override func viewDidLoad() {
         super.viewDidLoad()
+        profileService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         initializeDataSource()
         navSetup()
         setupTableView()
+        if AppDelegate.sharedInstance?.cachedCommunicationPreferences == nil {
+            self.fetchPatientCommunicationDetails()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -105,6 +122,7 @@ class ProfileDetailsViewController: BaseViewController {
         dataSource.append(DataSource(type: .phn, text: phn))
         dataSource.append(DataSource(type: .physicalAddress, text: physicalAddress))
         dataSource.append(DataSource(type: .mailingAddress, text: mailingAddress))
+        dataSource.append(DataSource(type: .communicationPreferences, text: nil))
     }
 }
 
@@ -126,6 +144,7 @@ extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSour
     private func setupTableView() {
         tableView.register(UINib.init(nibName: SettingsProfileTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsProfileTableViewCell.getName)
         tableView.register(UINib.init(nibName: ProfileDetailsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ProfileDetailsTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CommunicationPreferencesTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommunicationPreferencesTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.delegate = self
         tableView.dataSource = self
@@ -163,11 +182,9 @@ extension ProfileDetailsViewController: UpdateAddressViewControllerDelegate {
 // MARK: Fetch Patient Details after address has been updated
 extension ProfileDetailsViewController {
     private func fetchPatientDetails() {
-        let profileService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
-        profileService.fetchAndStoreDetails { patient in
-            // TODO:
-            //            self.physicalAddress =
-            //            self.mailingAddress =
+        profileService?.fetchAndStoreDetails { patient in
+            self.physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.physicalAddress?.streetLines, city: patient?.physicalAddress?.city, state: patient?.physicalAddress?.state, postalCode: patient?.physicalAddress?.postalCode, country: patient?.physicalAddress?.country).getAddressString
+            self.mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.postalAddress?.streetLines, city: patient?.postalAddress?.city, state: patient?.postalAddress?.state, postalCode: patient?.postalAddress?.postalCode, country: patient?.postalAddress?.country).getAddressString
             self.dataSource = []
             self.initializeDataSource()
             self.tableView.reloadData()
@@ -175,7 +192,8 @@ extension ProfileDetailsViewController {
         }
     }
 }
-    
+
+
     
 //    private func initializePatientDetails(authCredentials: AuthenticationRequestObject,
 //                                          result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>) {
@@ -209,3 +227,61 @@ extension ProfileDetailsViewController {
 //        self.tableView.endLoadingIndicator()
 //    }
 
+// MARK: Fetch email and phone details for patient, then cache the values
+extension ProfileDetailsViewController {
+    private func fetchPatientCommunicationDetails() {
+        self.tableView.startLoadingIndicator()
+        profileService?.fetchProfile(completion: { result in
+            self.tableView.endLoadingIndicator()
+            self.updatePatientDetails(result: result)
+        })
+    }
+    
+    
+    private func updatePatientDetails(result: AuthenticatedUserProfileResponseObject?) {
+        if let result = result {
+            self.updatePatient(result: result)
+        } else {
+            self.alert(title: "Error", message: "Sorry, there was an error fetching your communication preferences. Please try again later")
+        }
+    }
+    
+    private func updatePatient(result: AuthenticatedUserProfileResponseObject) {
+        guard let existingPatient = StorageService.shared.fetchAuthenticatedPatient(), let phn = existingPatient.phn, let name = existingPatient.name, let birthday = existingPatient.birthday else {
+            self.tableView.endLoadingIndicator()
+            self.alert(title: "Error", message: "Sorry, there was an error fetching your communication preferences. Please try again later")
+            return
+        }
+        let email = result.resourcePayload?.email
+        let emailVerified = result.resourcePayload?.isEmailVerified ?? false
+        let phone = result.resourcePayload?.smsNumber
+        let phoneVerified = result.resourcePayload?.isSMSNumberVerified ?? false
+        let patient = StorageService.shared.updatePatient(phn: phn,
+                                                          name: name,
+                                                          firstName: existingPatient.firstName,
+                                                          lastName: existingPatient.lastName,
+                                                          gender: existingPatient.gender,
+                                                          birthday: birthday,
+                                                          physicalAddress: existingPatient.physicalAddress,
+                                                          mailingAddress: existingPatient.postalAddress,
+                                                          email: email,
+                                                          phone: phone,
+                                                          emailVerified: emailVerified,
+                                                          phoneVerified: phoneVerified,
+                                                          hdid: AuthManager().hdid,
+                                                          authenticated: true)
+        AppDelegate.sharedInstance?.cachedCommunicationPreferences = CommunicationPreferences(email: email, emailVerified: emailVerified, phone: phone, phoneVerified: phoneVerified)
+        
+        self.dataSource = []
+        initializeDataSource()
+        self.tableView.reloadData()
+        self.tableView.endLoadingIndicator()
+    }
+}
+
+struct CommunicationPreferences {
+    let email: String?
+    let emailVerified: Bool
+    let phone: String?
+    let phoneVerified: Bool
+}

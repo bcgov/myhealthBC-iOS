@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal var dataLoadTextTag = 9912342
     internal var loaderCallers: [LoaderCaller] = []
     
+    var cachedCommunicationPreferences: CommunicationPreferences?
+    
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
     

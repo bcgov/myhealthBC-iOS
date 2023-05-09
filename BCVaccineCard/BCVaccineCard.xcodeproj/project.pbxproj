@@ -279,6 +279,12 @@
 		2D4B118B29F0655A00D7C02C /* RecordsSearchBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */; };
 		2D4B118C29F0655A00D7C02C /* RecordsSearchBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */; };
 		2D4B118D29F0655A00D7C02C /* RecordsSearchBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */; };
+		2D4EA25E2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D4EA25C2A0A967900A154AF /* CommunicationPreferencesTableViewCell.xib */; };
+		2D4EA25F2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D4EA25C2A0A967900A154AF /* CommunicationPreferencesTableViewCell.xib */; };
+		2D4EA2602A0A967A00A154AF /* CommunicationPreferencesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D4EA25C2A0A967900A154AF /* CommunicationPreferencesTableViewCell.xib */; };
+		2D4EA2612A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EA25D2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift */; };
+		2D4EA2622A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EA25D2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift */; };
+		2D4EA2632A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EA25D2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift */; };
 		2D4EED5E2A03609900BD944F /* FilterRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */; };
 		2D4EED5F2A03609900BD944F /* FilterRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */; };
 		2D4EED602A03609900BD944F /* FilterRecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */; };
@@ -1485,6 +1491,8 @@
 		2D120D4228FF25A600EB8EBF /* PostDependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDependent.swift; sourceTree = "<group>"; };
 		2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsSearchBarView.swift; sourceTree = "<group>"; };
 		2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecordsSearchBarView.xib; sourceTree = "<group>"; };
+		2D4EA25C2A0A967900A154AF /* CommunicationPreferencesTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommunicationPreferencesTableViewCell.xib; sourceTree = "<group>"; };
+		2D4EA25D2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunicationPreferencesTableViewCell.swift; sourceTree = "<group>"; };
 		2D4EED5D2A03609900BD944F /* FilterRecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRecordsViewController.swift; sourceTree = "<group>"; };
 		2D4EED612A05679A00BD944F /* FilterRecordsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterRecordsViewModel.swift; sourceTree = "<group>"; };
 		2D5218BA29849FC100E07382 /* ProfileDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailsViewController.swift; sourceTree = "<group>"; };
@@ -2185,6 +2193,7 @@
 		2978851B2795F14100FF912D /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				2D4EA25B2A0A963F00A154AF /* CommunicationPreferencesCell */,
 				297885272796211D00FF912D /* Header */,
 				2978851C2795F14800FF912D /* Profile */,
 				297885222795F37000FF912D /* login */,
@@ -2400,6 +2409,15 @@
 				2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */,
 			);
 			path = RecordsSearchBar;
+			sourceTree = "<group>";
+		};
+		2D4EA25B2A0A963F00A154AF /* CommunicationPreferencesCell */ = {
+			isa = PBXGroup;
+			children = (
+				2D4EA25D2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift */,
+				2D4EA25C2A0A967900A154AF /* CommunicationPreferencesTableViewCell.xib */,
+			);
+			path = CommunicationPreferencesCell;
 			sourceTree = "<group>";
 		};
 		2D4EED5C2A03607700BD944F /* FilterRecordsViewController */ = {
@@ -3933,6 +3951,7 @@
 				7967E75026F9145700EEF510 /* BCSans-Regular.otf in Resources */,
 				2922C0D5286E17DC000FF4F7 /* LabOrderBannerTableViewCell.xib in Resources */,
 				2922C0AD286C73F8000FF4F7 /* HealthRecordDetailFieldTableViewCell.xib in Resources */,
+				2D4EA25F2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.xib in Resources */,
 				2978852B279624D800FF912D /* SettingsSectionHeaderView.xib in Resources */,
 				2978851A2795F13D00FF912D /* SettingsProfileTableViewCell.xib in Resources */,
 				79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */,
@@ -4101,6 +4120,7 @@
 				29788530279624E600FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				3EDA6F5F29EF203100A5DC7B /* ServicesList.xib in Resources */,
 				3E31EA9429141F5000E344E6 /* ForceUpdateView.xib in Resources */,
+				2D4EA2602A0A967A00A154AF /* CommunicationPreferencesTableViewCell.xib in Resources */,
 				3E23ADD629DDE51D001BC9CC /* Services.storyboard in Resources */,
 				2D4B118D29F0655A00D7C02C /* RecordsSearchBarView.xib in Resources */,
 				79BDA087270CEE6400FF30AB /* Booking.storyboard in Resources */,
@@ -4170,6 +4190,7 @@
 				798006032852C66E006E390F /* BCSans-Regular.otf in Resources */,
 				2922C0D4286E17DC000FF4F7 /* LabOrderBannerTableViewCell.xib in Resources */,
 				29E19FF9286C715C00C235EF /* HealthRecordDetailFieldTableViewCell.xib in Resources */,
+				2D4EA25E2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.xib in Resources */,
 				798006042852C66E006E390F /* SettingsSectionHeaderView.xib in Resources */,
 				798006052852C66E006E390F /* SettingsProfileTableViewCell.xib in Resources */,
 				798006062852C66E006E390F /* TableViewButtonView.xib in Resources */,
@@ -4659,6 +4680,7 @@
 				2922C0EC286E37B3000FF4F7 /* BaseHeaderTableViewCell.swift in Sources */,
 				7928344E272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
 				29245D432755877A00F48642 /* Encodable+EXT.swift in Sources */,
+				2D4EA2622A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift in Sources */,
 				795AA75C27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
 				297885292796213800FF912D /* SettingsSectionHeaderView.swift in Sources */,
 				79218AA127518A5E0063004E /* CovidTestResultModel.swift in Sources */,
@@ -5022,6 +5044,7 @@
 				29A4DF5C27DEFCCC00D5E901 /* ChipsView.swift in Sources */,
 				79BDA083270CEE4700FF30AB /* Strings.swift in Sources */,
 				794BD64E2702EEC00084ADA8 /* QRSelectionTableViewCell.swift in Sources */,
+				2D4EA2632A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift in Sources */,
 				791D092D27BF5EC000AD7C89 /* AuthenticatedLaboratoryOrdersResponseObject.swift in Sources */,
 				7928344F272A87FA00EE2710 /* TableViewButtonView.swift in Sources */,
 				29245D442755877A00F48642 /* Encodable+EXT.swift in Sources */,
@@ -5362,6 +5385,7 @@
 				3EDC0CB02967D12D00603FED /* AuthenticatedClinicalDocumentResponseObject.swift in Sources */,
 				2922C0EB286E37B3000FF4F7 /* BaseHeaderTableViewCell.swift in Sources */,
 				798005C22852C66E006E390F /* Logger.swift in Sources */,
+				2D4EA2612A0A967A00A154AF /* CommunicationPreferencesTableViewCell.swift in Sources */,
 				798005C32852C66E006E390F /* AuthenticatedLaboratoryOrdersResponseObject.swift in Sources */,
 				798005C42852C66E006E390F /* TableViewButtonView.swift in Sources */,
 				798005C52852C66E006E390F /* Encodable+EXT.swift in Sources */,
@@ -5634,7 +5658,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.3;
+				MARKETING_VERSION = 1.8.4;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -5664,7 +5688,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.3;
+				MARKETING_VERSION = 1.8.4;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
