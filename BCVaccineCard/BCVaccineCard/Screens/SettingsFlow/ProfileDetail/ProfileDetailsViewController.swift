@@ -166,13 +166,16 @@ extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSour
 // MARK: Address help button delegate
 extension ProfileDetailsViewController: ProfileDetailsTableViewCellDelegate {
     func addressHelpButtonTapped() {
-        let urlString = "https://www.addresschange.gov.bc.ca/"
-        let vc = UpdateAddressViewController.constructUpdateAddressViewController(delegateOwner: self, urlString: urlString)
-        self.navigationController?.pushViewController(vc, animated: true)
+//        let urlString = "https://www.addresschange.gov.bc.ca/"
+//        let vc = UpdateAddressViewController.constructUpdateAddressViewController(delegateOwner: self, urlString: urlString)
+//        self.navigationController?.pushViewController(vc, animated: true)
+        if let url = URL(string: "https://www.addresschange.gov.bc.ca/"), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
     }
 }
 
-// MARK: For address change callback
+// MARK: For address change callback - Not using currently
 extension ProfileDetailsViewController: UpdateAddressViewControllerDelegate {
     func webViewClosed() {
         self.fetchPatientDetails()
