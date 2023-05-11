@@ -15,13 +15,20 @@ class VerificationService {
     func verify(jwkSigned: String, iss: String, kid: String, completion: @escaping (_ verified: Bool)-> Void) {
         // Fetch the stored jwks.json for the issuer
         fetchKeys(for: iss) { keys in
-            guard let key = keys.filter({$0.kid == kid}).first else {
+            if let key = keys.filter({$0.kid == kid}).first {
+                return completion(self.verify(jwkSigned: jwkSigned, key: ECPublicKey(crv: ECCurveType.P256, x: key.x, y: key.y)))
+            } else {
                 // if kid is not found, we should re-fetch this issuer's keys
-                KeyManager.shared.downloadKeys(forIssuer: iss, completion: {_ in })
-                // TODO: Notify user?
-                return completion(false)
+                KeyManager.shared.downloadKeys(forIssuer: iss, completion: {_ in
+                    self.fetchKeys(for: iss) { keys in
+                        if let key = keys.filter({$0.kid == kid}).first {
+                            return completion(self.verify(jwkSigned: jwkSigned, key: ECPublicKey(crv: ECCurveType.P256, x: key.x, y: key.y)))
+                        } else {
+                            return completion(false)
+                        }
+                    }
+                })
             }
-            return completion(self.verify(jwkSigned: jwkSigned, key: ECPublicKey(crv: ECCurveType.P256, x: key.x, y: key.y)))
         }
     }
     
