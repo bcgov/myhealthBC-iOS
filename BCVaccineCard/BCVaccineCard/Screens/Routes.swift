@@ -91,7 +91,7 @@ extension UIViewController {
     private func showAuthFailed() {
 //        let vc = AuthenticationFailedViewController.construct()
 //        present(vc, animated: true)
-        showToast(message: "Encountered a problem during login")
+        showToast(message: "Encountered a problem during login", style: .Warn)
     }
     
     func showProtectedWordDialog(delegate: ProtectiveWordPromptDelegate, purpose: ProtectiveWordPurpose) {
