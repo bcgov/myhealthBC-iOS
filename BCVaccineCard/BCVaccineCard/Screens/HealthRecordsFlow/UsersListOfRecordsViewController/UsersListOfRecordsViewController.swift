@@ -202,13 +202,15 @@ extension UsersListOfRecordsViewController {
 //                                     image: UIImage(named: "filter"), action: #selector(self.showFilters),
 //                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
 //        buttons.append(filterButton)
+        
+        
+        let optionsButton = NavButton(title: nil, image: UIImage(named: "nav-options"), action: #selector(self.showDropDownOptions), accessibility: Accessibility(traits: .button, label: "", hint: ""))
+        buttons.append(optionsButton)
+        
         let refreshButton = NavButton(title: nil,
                                       image: UIImage(named: "refresh"), action: #selector(self.refresh(_:)),
                                      accessibility: Accessibility(traits: .button, label: "", hint: ""))
         buttons.append(refreshButton)
-        
-        let optionsButton = NavButton(title: nil, image: UIImage(named: "nav-options"), action: #selector(self.showDropDownOptions), accessibility: Accessibility(traits: .button, label: "", hint: ""))
-        buttons.append(optionsButton)
         
         if style == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             self.navigationItem.setHidesBackButton(true, animated: false)
