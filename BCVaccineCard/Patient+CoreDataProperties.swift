@@ -1,8 +1,8 @@
 //
 //  Patient+CoreDataProperties.swift
-//  
+//  BCVaccineCard
 //
-//  Created by Amir Shayegh on 2023-04-10.
+//  Created by Connor Ogilvie on 2023-05-23.
 //
 //
 
@@ -19,32 +19,32 @@ extension Patient {
     @NSManaged public var authenticated: Bool
     @NSManaged public var authManagerDisplayName: String?
     @NSManaged public var birthday: Date?
+    @NSManaged public var email: String?
+    @NSManaged public var emailVerified: Bool
     @NSManaged public var firstName: String?
     @NSManaged public var gender: String?
     @NSManaged public var hdid: String?
     @NSManaged public var lastName: String?
     @NSManaged public var name: String?
     @NSManaged public var phn: String?
-    @NSManaged public var email: String?
     @NSManaged public var phone: String?
-    @NSManaged public var emailVerified: Bool
     @NSManaged public var phoneVerified: Bool
     @NSManaged public var clinicalDocuments: NSSet?
     @NSManaged public var covidTestResults: NSSet?
     @NSManaged public var dependencyInfo: Dependent?
     @NSManaged public var dependents: NSSet?
+    @NSManaged public var diagnosticImaging: NSSet?
     @NSManaged public var healthVisits: NSSet?
     @NSManaged public var hospitalVisits: NSSet?
     @NSManaged public var immunizations: NSSet?
     @NSManaged public var laboratoryOrders: NSSet?
+    @NSManaged public var organDonorStatus: OrganDonorStatus?
     @NSManaged public var physicalAddress: Address?
     @NSManaged public var postalAddress: Address?
     @NSManaged public var prescriptions: NSSet?
     @NSManaged public var recommendations: NSSet?
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
-    @NSManaged public var organDonorStatus: OrganDonorStatus?
-    @NSManaged public var diagnosticImaging: NSSet?
 
 }
 
@@ -62,23 +62,6 @@ extension Patient {
 
     @objc(removeClinicalDocuments:)
     @NSManaged public func removeFromClinicalDocuments(_ values: NSSet)
-
-}
-
-// MARK: Generated accessors for diagnosticImaging
-extension Patient {
-
-    @objc(addDiagnosticImagingObject:)
-    @NSManaged public func addToDiagnosticImaging(_ value: DiagnosticImaging)
-
-    @objc(removeDiagnosticImagingObject:)
-    @NSManaged public func removeFromDiagnosticImaging(_ value: DiagnosticImaging)
-
-    @objc(addDiagnosticImaging:)
-    @NSManaged public func addToDiagnosticImaging(_ values: NSSet)
-
-    @objc(removeDiagnosticImaging:)
-    @NSManaged public func removeFromDiagnosticImaging(_ values: NSSet)
 
 }
 
@@ -113,6 +96,23 @@ extension Patient {
 
     @objc(removeDependents:)
     @NSManaged public func removeFromDependents(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for diagnosticImaging
+extension Patient {
+
+    @objc(addDiagnosticImagingObject:)
+    @NSManaged public func addToDiagnosticImaging(_ value: DiagnosticImaging)
+
+    @objc(removeDiagnosticImagingObject:)
+    @NSManaged public func removeFromDiagnosticImaging(_ value: DiagnosticImaging)
+
+    @objc(addDiagnosticImaging:)
+    @NSManaged public func addToDiagnosticImaging(_ values: NSSet)
+
+    @objc(removeDiagnosticImaging:)
+    @NSManaged public func removeFromDiagnosticImaging(_ values: NSSet)
 
 }
 

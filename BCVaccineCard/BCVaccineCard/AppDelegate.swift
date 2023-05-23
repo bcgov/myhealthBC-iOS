@@ -352,6 +352,7 @@ enum LoaderCaller {
     case HospitalVisitsService_fetchAndStore
     case PDFService_fetchPDF
     case PDFService_DonorStatus
+    case PDFService_DiagnosticImaging
     case CommentService_submitUnsyncedComments
     case CommentService_fetchAndStore
     case LabOrderService_fetchAndStore

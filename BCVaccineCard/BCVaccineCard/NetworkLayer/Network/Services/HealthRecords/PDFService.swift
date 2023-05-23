@@ -48,6 +48,24 @@ struct PDFService {
         })
     }
     
+    public func fetchPDFDiagnostic(diagnosticImaging: DiagnosticImaging, patient: Patient, completion: @escaping (Data?)->Void) {
+        guard let fileID = diagnosticImaging.fileID else {
+            return completion(nil)
+        }
+        network.addLoader(message: .empty, caller: .PDFService_DiagnosticImaging)
+        fetchPDFV2(fileID: fileID, type: .DiagnosticImaging, isCovid: false, patient: patient, completion: {response in
+            network.removeLoader(caller: .PDFService_DiagnosticImaging)
+            guard let response = response,
+                  let content = response.content
+            else {
+                return completion(nil)
+            }
+            let uint = content.map({UInt8($0)})
+            let data = Data(uint)
+            return completion(data)
+        })
+    }
+    
     func toUint(signed: Int) -> UInt8 {
         return UInt8(signed)
     }
@@ -60,6 +78,8 @@ struct PDFService {
             return labOrder.labPdfId
         case .covidTestResultRecord(model: let covidTestOrder):
             return covidTestOrder.orderId
+        case .diagnosticImaging(model: let diagnosticImaging):
+            return diagnosticImaging.fileID
         default:
             return nil
         }
@@ -74,6 +94,8 @@ struct PDFService {
         case .Covid19:
             return endpoints.labTestPDF(base: baseURL, reportID: fileID)
         case .OrganDonor:
+            return endpoints.patientDataPDF(base: baseURL, hdid: hdid, fileID: fileID)
+        case .DiagnosticImaging:
             return endpoints.patientDataPDF(base: baseURL, hdid: hdid, fileID: fileID)
         }
     }
@@ -151,6 +173,7 @@ extension PDFService {
         case LabOrder
         case Covid19
         case OrganDonor
+        case DiagnosticImaging
     }
 }
 
@@ -163,6 +186,8 @@ extension HealthRecordsDetailDataSource {
             return .LabOrder
         case .covidTestResultRecord:
             return .Covid19
+        case .diagnosticImaging:
+            return .DiagnosticImaging
         default:
             return nil
         }

@@ -11,6 +11,7 @@ class DiagnosticImagingDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
     
     enum Section: Int, CaseIterable {
         case DownloadButton
+        case SectionDescription
         case Fields
         case Comments
     }
@@ -43,6 +44,8 @@ class DiagnosticImagingDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
         guard let section = Section(rawValue: section) else {return 0}
         switch section {
         case .DownloadButton:
+            return showAndHideDownloadButton()
+        case .SectionDescription:
             return 1
         case .Fields:
             return fields.count
@@ -55,6 +58,10 @@ class DiagnosticImagingDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let section = Section(rawValue: indexPath.section) else {return UITableViewCell()}
         switch section {
+        case .SectionDescription:
+            guard let cell = sectionDescriptionCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
+            cell.setup(title: "", subtitle: "If you have questions, contact the doctor or care provider who ordered your imaging.")
+            return cell
         case .Fields:
             guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
             cell.setup(with: fields[indexPath.row])
@@ -95,6 +102,15 @@ class DiagnosticImagingDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
 }
 
 extension DiagnosticImagingDetailView {
+    private func showAndHideDownloadButton() -> Int {
+        guard let model = model else { return 0 }
+        switch model.type {
+        case .diagnosticImaging(model: let model):
+            return model.fileID != nil ? 1 : 0
+        default: return 0
+        }
+    }
+    
     private func createFields() -> [TextListModel] {
         guard let model = model else {return []}
         switch model.type {

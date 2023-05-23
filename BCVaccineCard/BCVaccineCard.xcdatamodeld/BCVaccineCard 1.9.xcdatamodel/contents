@@ -224,7 +224,7 @@
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
         <relationship name="dependencyInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Dependent" inverseName="info" inverseEntity="Dependent"/>
         <relationship name="dependents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Dependent" inverseName="guardian" inverseEntity="Dependent"/>
-        <relationship name="diagnosticImaging" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DiagnosticImaging" inverseName="patient" inverseEntity="DiagnosticImaging"/>
+        <relationship name="diagnosticImaging" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DiagnosticImaging" inverseName="patient" inverseEntity="DiagnosticImaging"/>
         <relationship name="healthVisits" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HealthVisit" inverseName="patient" inverseEntity="HealthVisit"/>
         <relationship name="hospitalVisits" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HospitalVisit" inverseName="patient" inverseEntity="HospitalVisit"/>
         <relationship name="immunizations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Immunization" inverseName="patient" inverseEntity="Immunization"/>
