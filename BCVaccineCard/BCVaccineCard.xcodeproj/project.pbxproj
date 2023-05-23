@@ -282,6 +282,9 @@
 		2D2B48F52A1D335300E04254 /* Address+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B48F12A1D335300E04254 /* Address+CoreDataProperties.swift */; };
 		2D2B48F62A1D335300E04254 /* Address+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B48F12A1D335300E04254 /* Address+CoreDataProperties.swift */; };
 		2D2B48F72A1D335300E04254 /* Address+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B48F12A1D335300E04254 /* Address+CoreDataProperties.swift */; };
+		2D2B490A2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */; };
+		2D2B490B2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */; };
+		2D2B490C2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */; };
 		2D4B118729F0654D00D7C02C /* RecordsSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */; };
 		2D4B118829F0654D00D7C02C /* RecordsSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */; };
 		2D4B118929F0654D00D7C02C /* RecordsSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */; };
@@ -1495,6 +1498,7 @@
 		2D2B48EC2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedDiagnosticImagingResponseModel.swift; sourceTree = "<group>"; };
 		2D2B48F02A1D335300E04254 /* Address+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Address+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		2D2B48F12A1D335300E04254 /* Address+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Address+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticImagingDetailView.swift; sourceTree = "<group>"; };
 		2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsSearchBarView.swift; sourceTree = "<group>"; };
 		2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecordsSearchBarView.xib; sourceTree = "<group>"; };
 		2D4EA25C2A0A967900A154AF /* CommunicationPreferencesTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommunicationPreferencesTableViewCell.xib; sourceTree = "<group>"; };
@@ -1926,6 +1930,7 @@
 				29E19FCC286C01C500C235EF /* MedicationRecordDetailView */,
 				3EDC0D21296CBE9900603FED /* Clinical Document */,
 				3EDC0D1C296C93B500603FED /* Hospital Visit */,
+				2D2B49082A1D4F4600E04254 /* DiagnosticImagingDetailView */,
 				291D43E12762E203005F5B94 /* HealthRecordCollectionViewCell.swift */,
 				29E19FE1286C044F00C235EF /* BaseHealthRecordDetailView.swift */,
 			);
@@ -2395,6 +2400,14 @@
 				3E048CC92911ADF100774278 /* StorageService + Dependent.swift */,
 			);
 			path = Dependant;
+			sourceTree = "<group>";
+		};
+		2D2B49082A1D4F4600E04254 /* DiagnosticImagingDetailView */ = {
+			isa = PBXGroup;
+			children = (
+				2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */,
+			);
+			path = DiagnosticImagingDetailView;
 			sourceTree = "<group>";
 		};
 		2D4B118429F0651400D7C02C /* Views */ = {
@@ -4637,6 +4650,7 @@
 				3E81C4DB29B2AB9100C8F5C4 /* CovidVaccineCardsViewModel.swift in Sources */,
 				2932DCE1275AA10D00532BC4 /* StorageService+Patient.swift in Sources */,
 				3EDA6F6E29EF204700A5DC7B /* ServicesViewModel.swift in Sources */,
+				2D2B490B2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */,
 				3EDEBB6129356A6700C8386C /* MobileConfigService.swift in Sources */,
 				3EDC0CFE2967DCA100603FED /* ClinicalDocument+CoreDataProperties.swift in Sources */,
 				794BD61C270235430084ADA8 /* AccessibilityLabels.swift in Sources */,
@@ -5002,6 +5016,7 @@
 				794BD6472702EEC00084ADA8 /* QRRetrievalMethodViewController.swift in Sources */,
 				29547E5827A2EC5200562958 /* LocalAuthVIew.swift in Sources */,
 				3EDA6F6F29EF204700A5DC7B /* ServicesViewModel.swift in Sources */,
+				2D2B490C2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */,
 				3EDEBB6229356A6700C8386C /* MobileConfigService.swift in Sources */,
 				3EDC0CFF2967DCA100603FED /* ClinicalDocument+CoreDataProperties.swift in Sources */,
 				29A5B6D927B55B65006A9BA7 /* Pharmacy+CoreDataProperties.swift in Sources */,
@@ -5344,6 +5359,7 @@
 				3E81C4DA29B2AB9100C8F5C4 /* CovidVaccineCardsViewModel.swift in Sources */,
 				3E62CFC0299BDFF1000FBB40 /* SpecialAuthorityDrugService.swift in Sources */,
 				3EDA6F6D29EF204700A5DC7B /* ServicesViewModel.swift in Sources */,
+				2D2B490A2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */,
 				798005A82852C66E006E390F /* GatewayVaccineCardResponse.swift in Sources */,
 				798005A92852C66E006E390F /* StorageService+Patient.swift in Sources */,
 				3EDC0CFD2967DCA100603FED /* ClinicalDocument+CoreDataProperties.swift in Sources */,

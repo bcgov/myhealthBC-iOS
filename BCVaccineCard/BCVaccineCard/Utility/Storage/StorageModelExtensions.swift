@@ -89,6 +89,13 @@ extension Patient {
         }
     }
     
+    public var diagnosticImagingArray: [DiagnosticImaging] {
+        let set = diagnosticImaging as? Set<DiagnosticImaging> ?? []
+        return set.sorted {
+            $0.examDate ?? Date() > $1.examDate ?? Date()
+        }
+    }
+    
     public func getComparableName() -> String? {
         guard let name = self.name else {
             return nil

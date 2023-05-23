@@ -69,7 +69,7 @@
     </entity>
     <entity name="DiagnosticImaging" representedClassName="DiagnosticImaging" syncable="YES" codeGenerationType="class">
         <attribute name="bodyPart" optional="YES" attributeType="String"/>
-        <attribute name="examDate" optional="YES" attributeType="String"/>
+        <attribute name="examDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="examStatus" optional="YES" attributeType="String"/>
         <attribute name="fileID" optional="YES" attributeType="String"/>
         <attribute name="healthAuthority" optional="YES" attributeType="String"/>

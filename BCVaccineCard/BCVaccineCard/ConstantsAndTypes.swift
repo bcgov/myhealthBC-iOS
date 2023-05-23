@@ -19,7 +19,8 @@ struct HealthRecordConstants {
             .healthVisit,
             .specialAuthorityDrug,
             .hospitalVisit,
-            .clinicalDocument
+            .clinicalDocument,
+            .diagnosticImaging
         ]
     }
     
@@ -66,6 +67,7 @@ extension HealthRecordConstants {
         case specialAuthorityDrug
         case hospitalVisit
         case clinicalDocument
+        case diagnosticImaging
     }
 }
 
@@ -81,6 +83,7 @@ extension StorageService {
         case SpecialAuthorityDrug
         case HospitalVisit
         case ClinicalDocument
+        case DiagnosticImaging
     }
 }
 
@@ -105,6 +108,8 @@ extension HealthRecordConstants.RecordType {
             return .HospitalVisits
         case .clinicalDocument:
             return .ClinicalDocuments
+        case .diagnosticImaging:
+            return .DiagnosticImaging
         }
     }
     
@@ -128,6 +133,8 @@ extension HealthRecordConstants.RecordType {
             return .HospitalVisit
         case .clinicalDocument:
             return .ClinicalDocument
+        case .diagnosticImaging:
+            return .DiagnosticImaging
         }
     }
 }
@@ -142,6 +149,7 @@ struct RecordsFilter {
         case Immunizations = "Immunizations"
         case SpecialAuthorityDrugs = "Special Authority"
         case HospitalVisits = "Hospital Visits"
+        case DiagnosticImaging = "Imaging reports"
     }
     
     var fromDate: Date?

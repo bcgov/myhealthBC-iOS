@@ -142,6 +142,9 @@ struct HealthRecordsService {
                     records.append(contentsOf: uwreapped)
                     dispatchGroup.leave()
                 }
+            case .DiagnosticImaging:
+                // Note: Shouldn't get here, as diagnostic imaging comes from patient service
+                break
             }
         }
         dispatchGroup.notify(queue: .main) {

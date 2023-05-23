@@ -286,6 +286,7 @@ extension CommentService {
         case covid = "Lab"
         case hospitalVisit = "Hos"
         case clinicalDocument = "CDO"
+        case diagnosticImaging = "DI" // TODO: Confirm this, total guess as of now
     }
     
     fileprivate func postCommentObject(message: String, commentID: String, date: Date, hdid: String, type: CommentType) -> PostComment {
@@ -343,6 +344,8 @@ extension HealthRecord {
             return .hospitalVisit
         case .ClinicalDocument(_):
             return .clinicalDocument
+        case .DiagnosticImaging(_):
+            return .diagnosticImaging
         }
     }
 }
@@ -380,6 +383,8 @@ extension HealthRecordsDetailDataSource.Record {
             return HealthRecord(type: .HospitalVisit(model))
         case .clinicalDocument(model: let model):
             return HealthRecord(type: .ClinicalDocument(model))
+        case .diagnosticImaging(model: let model):
+            return HealthRecord(type: .DiagnosticImaging(model))
         }
         
     }

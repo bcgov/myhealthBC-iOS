@@ -163,7 +163,7 @@ extension StorageService: StoragePatientManager {
         model.healthAuthority = object.healthAuthority
         model.examStatus = object.examStatus
         model.fileID = object.fileID
-        model.examDate = object.examDate
+        model.examDate = object.examDate?.getGatewayDate()
         model.itemType = object.itemType
         model.id = object.id
         model.type = object.type
@@ -175,6 +175,16 @@ extension StorageService: StoragePatientManager {
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
             return nil
+        }
+    }
+    
+    func fetchDiagnosticImaging() -> [DiagnosticImaging] {
+        guard let context = managedContext else {return []}
+        do {
+            return try context.fetch(DiagnosticImaging.fetchRequest())
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return []
         }
     }
     /// returns existing patient

@@ -98,6 +98,9 @@ extension StorageService {
         case .ClinicalDocument(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .ClinicalDocument, object: object))
+        case .DiagnosticImaging(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .DiagnosticImaging, object: object))
         }
     }
     
@@ -151,6 +154,10 @@ extension StorageService {
                 let objects = patient.clinicalDocumentsArray
                 toDelete.append(contentsOf: objects)
                 notify(event: StorageEvent(event: .Delete, entity: .ClinicalDocument, object: objects))
+            case .DiagnosticImaging:
+                let objects = patient.diagnosticImagingArray
+                toDelete.append(contentsOf: objects)
+                notify(event: StorageEvent(event: .Delete, entity: .DiagnosticImaging, object: objects))
             }
         }
         
@@ -191,6 +198,9 @@ extension StorageService {
             case .ClinicalDocument:
                 let clinicalDocuments = fetchClinicalDocuments()
                 deleteAllRecords(in: clinicalDocuments)
+            case .DiagnosticImaging:
+                let diagnosticImaging = fetchDiagnosticImaging()
+                deleteAllRecords(in: diagnosticImaging)
             }
         }
     }
@@ -238,6 +248,10 @@ extension StorageService {
             case .ClinicalDocument:
                 if let clinicalDocuments = dependent.info?.clinicalDocumentsArray {
                     deleteAllRecords(in: clinicalDocuments)
+                }
+            case .DiagnosticImaging:
+                if let diagnosticImaging = dependent.info?.diagnosticImagingArray {
+                    deleteAllRecords(in: diagnosticImaging)
                 }
             }
         }
