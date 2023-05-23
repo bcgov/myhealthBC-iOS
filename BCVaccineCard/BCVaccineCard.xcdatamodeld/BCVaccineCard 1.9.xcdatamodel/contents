@@ -67,7 +67,7 @@
         <relationship name="guardian" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="dependents" inverseEntity="Patient"/>
         <relationship name="info" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Patient" inverseName="dependencyInfo" inverseEntity="Patient"/>
     </entity>
-    <entity name="DiagnosticImaging" representedClassName="DiagnosticImaging" syncable="YES" codeGenerationType="class">
+    <entity name="DiagnosticImaging" representedClassName="DiagnosticImaging" syncable="YES">
         <attribute name="bodyPart" optional="YES" attributeType="String"/>
         <attribute name="examDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="examStatus" optional="YES" attributeType="String"/>

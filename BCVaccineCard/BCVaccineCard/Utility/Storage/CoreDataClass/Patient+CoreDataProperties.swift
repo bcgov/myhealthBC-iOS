@@ -65,6 +65,23 @@ extension Patient {
 
 }
 
+// MARK: Generated accessors for diagnosticImaging
+extension Patient {
+
+    @objc(addDiagnosticImagingObject:)
+    @NSManaged public func addToDiagnosticImaging(_ value: DiagnosticImaging)
+
+    @objc(removeDiagnosticImagingObject:)
+    @NSManaged public func removeFromDiagnosticImaging(_ value: DiagnosticImaging)
+
+    @objc(addDiagnosticImaging:)
+    @NSManaged public func addToDiagnosticImaging(_ values: NSSet)
+
+    @objc(removeDiagnosticImaging:)
+    @NSManaged public func removeFromDiagnosticImaging(_ values: NSSet)
+
+}
+
 // MARK: Generated accessors for covidTestResults
 extension Patient {
 
