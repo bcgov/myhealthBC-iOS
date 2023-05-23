@@ -19,8 +19,9 @@ extension StorageService {
         let specialAuthority = patient.specialAuthorityDrugsArray.map({HealthRecord(type: .SpecialAuthorityDrug($0))})
         let hospitalVisits = patient.hospitalVisitsArray.map({HealthRecord(type: .HospitalVisit($0))})
         let clinicalDocs = patient.clinicalDocumentsArray.map({HealthRecord(type: .ClinicalDocument($0))})
+        let diagnosticImaging = patient.diagnosticImagingArray.map({HealthRecord(type: .DiagnosticImaging($0))})
         
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging
     }
     
     func getHeathRecords() -> [HealthRecord] {
@@ -34,8 +35,9 @@ extension StorageService {
         let specialAuthority = fetchSpecialAuthorityMedications().map({HealthRecord(type: .SpecialAuthorityDrug($0))})
         let hospitalVisits = fetchHospitalVisits().map({HealthRecord(type: .HospitalVisit($0))})
         let clinicalDocs = fetchClinicalDocuments().map({HealthRecord(type: .ClinicalDocument($0))})
+        let diagnosticImaging = fetchDiagnosticImaging().map({HealthRecord(type: .DiagnosticImaging($0))})
         
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging
     }
     
     func getRecords(forDependent dependent: Patient) -> [HealthRecord] {

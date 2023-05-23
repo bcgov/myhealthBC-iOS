@@ -144,7 +144,7 @@ struct HealthRecordsService {
                 }
             case .DiagnosticImaging:
                 // Note: Shouldn't get here, as diagnostic imaging comes from patient service
-                break
+                dispatchGroup.leave()
             }
         }
         dispatchGroup.notify(queue: .main) {
