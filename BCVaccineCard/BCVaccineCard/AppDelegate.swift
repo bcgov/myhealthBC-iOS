@@ -334,6 +334,7 @@ extension LoaderMessage {
 enum LoaderCaller {
     case PatientService_fetchAndStoreDetails
     case PatientService_fetchAndStoreOrganDonorStatus
+    case PatientService_fetchAndStoreDiagnosticImaging
     case PatientService_validateProfile
     case CovidTestsService_fetchAndStore
     case VaccineCardService_fetchAndStore_Patient

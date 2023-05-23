@@ -82,6 +82,15 @@ struct SyncService {
             }
             
             group.enter()
+            patientService.fetchAndStoreDiagnosticImaging(for: patient) { imaging in
+                if imaging == nil {
+                    hadFailures = true
+                }
+                Logger.log(string: "fetched diagnostic imaging: \(imaging?.count)", type: .Network)
+                group.leave()
+            }
+            
+            group.enter()
             dependentService.fetchDependents(for: patient) { dependents in
                 if dependents == nil {
                     hadFailures = true

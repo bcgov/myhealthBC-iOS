@@ -9,6 +9,7 @@ import Foundation
 
 typealias PatientDetailResponse = AuthenticatedPatientDetailsResponseObject
 typealias OrganDonorStatusResponse = AuthenticatedOrganDonorStatusResponseModel.Item
+typealias DiagnosticImagingResponse = AuthenticatedDiagnosticImagingResponseModel.Item
 
 struct PatientService {
     
@@ -41,6 +42,7 @@ struct PatientService {
         }
     }
     
+    // MARK: Organ Donor Status
     public func fetchAndStoreOrganDonorStatus(for patient: Patient, completion: @escaping (OrganDonorStatus?)->Void) {
         guard let hdid = patient.hdid else {
             return completion(nil)
@@ -60,6 +62,30 @@ struct PatientService {
     
     private func store(donorStatus: OrganDonorStatusResponse,for patient: Patient, completion: @escaping (OrganDonorStatus?)->Void) {
         let storedObject = StorageService.shared.store(organDonorStatus: donorStatus, for: patient)
+        return completion(storedObject)
+    }
+    
+    // MARK: Diagnostic Imaging
+    public func fetchAndStoreDiagnosticImaging(for patient: Patient, completion: @escaping ([DiagnosticImaging]?)->Void) {
+        guard let hdid = patient.hdid else {
+            return completion(nil)
+        }
+        network.addLoader(message: .SyncingRecords, caller: .PatientService_fetchAndStoreDiagnosticImaging)
+        fetchPatientDataDiagnostic(type: .diagnosticImaging, hdid: hdid) { result in
+            // TODO: Look into error handling logic here, might be a flaw, need to test out
+            guard let result = result, let data = result.items, data.count > 0 else {
+                network.removeLoader(caller: .PatientService_fetchAndStoreDiagnosticImaging)
+                return completion(nil)
+            }
+            store(diagnosticImagingArray: data, for: patient) {storedData in
+                network.removeLoader(caller: .PatientService_fetchAndStoreDiagnosticImaging)
+                return completion(storedData)
+            }
+        }
+    }
+    
+    private func store(diagnosticImagingArray: [DiagnosticImagingResponse],for patient: Patient, completion: @escaping ([DiagnosticImaging]?)->Void) {
+        let storedObject = StorageService.shared.store(diagnosticImagingArray: diagnosticImagingArray, for: patient)
         return completion(storedObject)
     }
 
@@ -257,6 +283,39 @@ extension PatientService {
             let parameters: PatientDataParams = PatientDataParams(patientDataTypes: type.rawValue, apiVersion: "2")
             
             let requestModel = NetworkRequest<PatientDataParams, AuthenticatedOrganDonorStatusResponseModel>(url: endpoints.patientData(base: baseURL, hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
+            { result in
+                return completion(result)
+            } onError: { error in
+                network.showToast(error: error)
+                
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
+    
+    // TODO: Make this reusable with function above - for now, keeping it separate due to completion handler
+    private func fetchPatientDataDiagnostic(type: PatientDataType, hdid: String, completion: @escaping(AuthenticatedDiagnosticImagingResponseModel?)-> Void) {
+        guard let token = authManager.authToken,
+              NetworkConnection.shared.hasConnection
+        else { return completion(nil)}
+        
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+            ]
+            
+            let parameters: PatientDataParams = PatientDataParams(patientDataTypes: type.rawValue, apiVersion: "2")
+            
+            let requestModel = NetworkRequest<PatientDataParams, AuthenticatedDiagnosticImagingResponseModel>(url: endpoints.patientData(base: baseURL, hdid: hdid), type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
                 return completion(result)
             } onError: { error in

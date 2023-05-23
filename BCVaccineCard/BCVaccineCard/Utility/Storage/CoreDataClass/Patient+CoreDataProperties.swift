@@ -44,6 +44,7 @@ extension Patient {
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
     @NSManaged public var organDonorStatus: OrganDonorStatus?
+    @NSManaged public var diagnosticImaging: DiagnosticImaging?
 
 }
 

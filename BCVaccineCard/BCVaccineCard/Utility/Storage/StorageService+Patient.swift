@@ -134,6 +134,49 @@ extension StorageService: StoragePatientManager {
             return nil
         }
     }
+    
+    func store(
+        diagnosticImagingArray objectArray: [DiagnosticImagingResponse],
+        for patient: Patient
+    ) -> [DiagnosticImaging]? {
+        guard let context = managedContext,
+              let phn = patient.phn,
+              let patientRefetch = fetchPatient(phn: phn, context: context) else {
+            return nil
+        }
+        var storedObjects: [DiagnosticImaging] = []
+        for object in objectArray {
+            if let storedDiagnosticImage = store(diagnosticImaging: object, for: patientRefetch, context: context) {
+                storedObjects.append(storedDiagnosticImage)
+            }
+        }
+        return storedObjects
+    }
+    
+    private func store(diagnosticImaging object: DiagnosticImagingResponse, for patient: Patient, context: NSManagedObjectContext) -> DiagnosticImaging? {
+        
+        let model = DiagnosticImaging(context: context)
+        model.procedureDescription = object.procedureDescription
+        model.bodyPart = object.bodyPart
+        model.modality = object.modality
+        model.organization = object.organization
+        model.healthAuthority = object.healthAuthority
+        model.examStatus = object.examStatus
+        model.fileID = object.fileID
+        model.examDate = object.examDate
+        model.itemType = object.itemType
+        model.id = object.id
+        model.type = object.type
+        model.patient = patient
+        do {
+            try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .DiagnosticImaging, object: patient))
+            return model
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
     /// returns existing patient
     /// or
     /// creates and returns a new one if it doesnt exist.
