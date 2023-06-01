@@ -60,6 +60,7 @@ struct SyncService {
         let dependentService = DependentService(network: network, authManager: authManager, configService: configService)
         let recordsService = HealthRecordsService(network: network, authManager: authManager, configService: configService)
         let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
+        let notificationService = NotificationService(network: network, authManager: authManager, configService: configService)
         if showToast {
             network.showToast(message: "Retrieving records")
         }
@@ -114,6 +115,12 @@ struct SyncService {
                     group.leave()
                 }
                 Logger.log(string: "fetched \(records.count) records", type: .Network)
+            }
+            
+            group.enter()
+            notificationService.fetchAndStore(for: patient) { notifications in
+                Logger.log(string: "fetched \(notifications.count) notification", type: .Network)
+                group.leave()
             }
             
             group.notify(queue: .main) {

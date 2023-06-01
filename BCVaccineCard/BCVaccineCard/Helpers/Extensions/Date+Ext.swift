@@ -107,6 +107,13 @@ extension Date {
             return formatter
         }()
         
+        static let notificationDisplayDate: DateFormatter = {
+            let formatter = DateFormatter()
+            //            2012-Apr-14, 4:35 PM
+            formatter.dateFormat = "yyyy-MMM-dd, hh:mm a"
+            return formatter
+        }()
+        
         static let forecastDueDate: DateFormatter = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MMM-dd"
@@ -256,6 +263,7 @@ extension Date {
     var commentsDateTime: String { return Formatter.commentsDateTime.string(from: self) }
     var commentServerDateTime: String { return Formatter.commentServerDateTime.string(from: self) }
     var forecastDueDate: String { return Formatter.forecastDueDate.string(from: self) }
+    var notificationDisplayDate: String { return Formatter.notificationDisplayDate.string(from: self) }
     //MARK: - Date Strings
     var shortDateString: String { return Formatter.shortDate.string(from: self) }
     var mediumDateString: String { return Formatter.mediumDate.string(from: self) }

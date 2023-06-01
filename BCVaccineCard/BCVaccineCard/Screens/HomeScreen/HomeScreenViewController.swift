@@ -92,9 +92,27 @@ extension HomeScreenViewController {
     
     private func navSetup(firstName: String? = nil) {
         var title: String = navTitle(firstName: firstName)
+        var rightbuttons: [NavButton] = []
+        let settingsButton = NavButton(image: UIImage(named: "nav-settings"),
+                                       action: #selector(self.settingsButton),
+                                       accessibility: Accessibility(traits: .button,
+                                                                    label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle,
+                                                                    hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
+        rightbuttons.append(settingsButton)
+        if AuthManager().isAuthenticated {
+            let notificationsButton = NavButton(image: UIImage(named: "notifications"),
+                                           action: #selector(self.notificationsButton),
+                                           accessibility: Accessibility(traits: .button,
+                                                                        label: "Notificatioms",
+                                                                        hint: "Open Notifications"))
+            rightbuttons.append(notificationsButton)
+        }
+        
+
+        
         self.navDelegate?.setNavigationBarWith(title: title,
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
+                                               rightNavButtons: rightbuttons,
                                                navStyle: .large,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
