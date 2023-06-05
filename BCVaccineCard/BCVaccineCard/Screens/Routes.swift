@@ -142,6 +142,7 @@ extension UIViewController {
         case Comments
         case SecurityAndData
         case TermsOfService
+        case Notifications
     }
     
     fileprivate func createController(route: Route, viewModel: Any? = nil) -> UIViewController? {
@@ -230,6 +231,8 @@ extension UIViewController {
             return GatewayFormViewController.construct(viewModel: vm)
         case .TermsOfService:
             return TermsOfServiceViewController.construct()
+        case .Notifications:
+            return NotificationsViewController.construct()
         }
     }
 }

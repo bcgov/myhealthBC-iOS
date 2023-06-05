@@ -1,8 +1,8 @@
 //
 //  Patient+CoreDataProperties.swift
-//  BCVaccineCard
+//  
 //
-//  Created by Connor Ogilvie on 2023-05-23.
+//  Created by Amir Shayegh on 2023-05-31.
 //
 //
 
@@ -45,6 +45,7 @@ extension Patient {
     @NSManaged public var recommendations: NSSet?
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
+    @NSManaged public var notifications: NSSet?
 
 }
 
@@ -249,5 +250,22 @@ extension Patient {
 
     @objc(removeVaccineCard:)
     @NSManaged public func removeFromVaccineCard(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for notifications
+extension Patient {
+
+    @objc(addNotificationsObject:)
+    @NSManaged public func addToNotifications(_ value: GatewayNotification)
+
+    @objc(removeNotificationsObject:)
+    @NSManaged public func removeFromNotifications(_ value: GatewayNotification)
+
+    @objc(addNotifications:)
+    @NSManaged public func addToNotifications(_ values: NSSet)
+
+    @objc(removeNotifications:)
+    @NSManaged public func removeFromNotifications(_ values: NSSet)
 
 }

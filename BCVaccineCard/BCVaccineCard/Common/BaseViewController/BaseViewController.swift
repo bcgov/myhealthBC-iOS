@@ -143,6 +143,11 @@ extension BaseViewController {
         goToSettingsScreen()
     }
     
+    @objc func notificationsButton() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        show(route: .Notifications, withNavigation: true)
+    }
+    
     private func goToSettingsScreen() {
         show(route: .Settings, withNavigation: true)
     }

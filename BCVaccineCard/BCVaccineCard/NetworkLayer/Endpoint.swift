@@ -29,6 +29,7 @@ protocol EndpointsAccessor {
     func listOfDependents(base url: URL, hdid: String) -> URL
     func deleteDependent(base url: URL, dependentHdid: String, guardian: String) -> URL
     func feedback(base url: URL, hdid: String) -> URL
+    func notifcations(base url: URL, hdid: String) -> URL
 }
 
 struct UrlAccessor: EndpointsAccessor {
@@ -176,6 +177,20 @@ struct UrlAccessor: EndpointsAccessor {
         patientServiceBaseURL(base: url)
             .appendingPathComponent("Patient")
             .appendingPathComponent(hdid)
+    }
+    
+    // Notifications
+    func notifcations(base url: URL, hdid: String) -> URL {
+        return gatewayAPIService(base: url)
+            .appendingPathComponent("Notification")
+            .appendingPathComponent(hdid)
+    }
+    
+    func deleteNotifcations(base url: URL, hdid: String, notificationID: String) -> URL {
+        return gatewayAPIService(base: url)
+            .appendingPathComponent("Notification")
+            .appendingPathComponent(hdid)
+            .appendingPathComponent(notificationID)
     }
     
 }
