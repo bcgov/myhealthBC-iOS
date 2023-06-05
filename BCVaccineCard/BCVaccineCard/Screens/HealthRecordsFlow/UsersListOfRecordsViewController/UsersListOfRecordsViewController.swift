@@ -203,8 +203,14 @@ extension UsersListOfRecordsViewController {
 //                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
 //        buttons.append(filterButton)
         
+        
         let optionsButton = NavButton(title: nil, image: UIImage(named: "nav-options"), action: #selector(self.showDropDownOptions), accessibility: Accessibility(traits: .button, label: "", hint: ""))
         buttons.append(optionsButton)
+        
+        let refreshButton = NavButton(title: nil,
+                                      image: UIImage(named: "refresh"), action: #selector(self.refresh(_:)),
+                                     accessibility: Accessibility(traits: .button, label: "", hint: ""))
+        buttons.append(refreshButton)
         
         if style == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             self.navigationItem.setHidesBackButton(true, animated: false)
@@ -219,11 +225,6 @@ extension UsersListOfRecordsViewController {
 //            let dependentSettingButton = NavButton(image: UIImage(named: "profile-icon"), action: #selector(self.dependentSetting), accessibility: Accessibility(traits: .button, label: "", hint: ""))
 //            buttons.append(dependentSettingButton)
         }
-        
-//        let refreshButton = NavButton(title: nil,
-//                                      image: UIImage(named: "refresh"), action: #selector(self.refresh(_:)),
-//                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-//        buttons.append(refreshButton)
         
         var name = viewModel?.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
         if name.count >= 20 {
@@ -250,7 +251,7 @@ extension UsersListOfRecordsViewController {
             dismissDropDown()
             return
         }
-        var dataSource: [NavBarDropDownViewOptions] = [.refresh]
+        var dataSource: [NavBarDropDownViewOptions] = []
         if viewModel?.navStyle == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             dataSource.append(.settings)
         } else {

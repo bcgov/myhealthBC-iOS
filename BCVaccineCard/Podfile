@@ -13,7 +13,7 @@ target 'HealthGatewayDev' do
   pod 'SwiftyJSON', '~> 4.0'
   pod 'SwiftQRCodeGenerator', '~> 1.0.3'
   pod 'PocketSVG', '~> 2.6'
-  pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
+  pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator', :branch => 'legacyy'
   pod 'EncryptedCoreData', :git => 'https://github.com/project-imas/encrypted-core-data.git'
   pod 'KeychainAccess'
   pod 'AppAuth'
@@ -45,7 +45,7 @@ target 'HealthGateway' do
   pod 'SwiftyJSON', '~> 4.0'
   pod 'SwiftQRCodeGenerator', '~> 1.0.3'
   pod 'PocketSVG', '~> 2.6'
-  pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator'
+  pod 'BCVaccineValidator', :git => 'https://github.com/bcgov/iOSVaccineValidator', :branch => 'legacyy'
   pod 'EncryptedCoreData', :git => 'https://github.com/project-imas/encrypted-core-data.git'
   pod 'KeychainAccess'
   pod 'AppAuth'
@@ -61,6 +61,12 @@ post_install do |installer|
       target.build_configurations.each do |config|
         config.build_settings["ONLY_ACTIVE_ARCH"] = "NO"
         config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+        config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64" 
+        if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+          target.build_configurations.each do |config|
+              config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+          end
+        end
       end
     end
 end

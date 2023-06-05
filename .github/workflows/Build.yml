@@ -2,25 +2,16 @@ name: Build Project
 on:
   pull_request:
     branches:
-      - dev
-      - main
+      - dev-old
 jobs:
   deploy:
-    name: Build
+    name: Building project
     runs-on: macOS-latest
     timeout-minutes: 25
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEB_HOOK_PR }}
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        
-      - name: Notify Slack - Start
-        uses: act10ns/slack@v1
-        with:
-          status: In Progress
-          channel: 'bc-vaccine-card-ios'
-          message: There is a new PR! Building...
         
       - name: Install gpg
         run: brew install gnupg
@@ -30,6 +21,9 @@ jobs:
           IOS_KEYS: ${{ secrets.IOS_KEYS }}
           FIREBASE_PROVISIONING: ${{ secrets.FIREBASE_PROVISIONING }}
         run: ./.github/secrets/decrypt_prod.sh
+        
+      - name: Select Xcode version
+        run: sudo xcode-select -s "/Applications/Xcode_13.4.1.app"
         
       - name: Build Dev target
         env:
@@ -45,10 +39,3 @@ jobs:
         env:
           PR_NUMBER: $(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
         run: ./.github/scripts/build_prod.sh
-        
-      - name: Notify Slack - Success
-        uses: act10ns/slack@v1
-        with:
-          status: Completed
-          channel: 'bc-vaccine-card-ios'
-          message: PR did build successfully
