@@ -494,6 +494,8 @@ extension UsersListOfRecordsViewController {
                         showItem = filter.recordTypes.contains(.HospitalVisits)
                     case .clinicalDocument:
                         showItem = filter.recordTypes.contains(.ClinicalDocuments)
+                    case .diagnosticImaging:
+                        showItem = filter.recordTypes.contains(.DiagnosticImaging)
                     }
                 }
                 // Filter by date

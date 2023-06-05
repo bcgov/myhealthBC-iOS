@@ -17,6 +17,7 @@ class AppStates {
     private var onLocalAuth: [(()->Void)] = []
     private var onShouldSync: [(()->Void)] = []
     private var onSyncPerformed: [(()->Void)] = []
+    private var onNotificationsChange: [(()->Void)] = []
     
     func listen() {
         NotificationCenter.default.addObserver(self, selector: #selector(shouldSync), name: .shouldSync, object: nil)
@@ -40,6 +41,10 @@ class AppStates {
         onTermsOfServiceAgreementChange.forEach({$0(accepted)})
     }
     
+    func updatedNotifications() {
+        onNotificationsChange.forEach({$0()})
+    }
+    
     @objc private func shouldSync(_ notification: Notification) {
         onShouldSync.forEach({$0()})
     }
@@ -61,6 +66,10 @@ class AppStates {
     
     @objc private func patientAPIFetched(_ notification: Notification) {
         onPatientFetch.forEach({$0()})
+    }
+    
+    func listenToNotificationChange(onChange: @escaping()->Void) {
+        onNotificationsChange.append(onChange)
     }
     
     func listenToSyncRequest(onRequest: @escaping()->Void) {

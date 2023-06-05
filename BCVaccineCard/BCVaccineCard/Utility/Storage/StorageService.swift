@@ -36,6 +36,7 @@ extension StorageService {
         case SpecialAuthorityMedication
         case Dependent
         case OrganDonorStatus
+        case DiagnosticImaging
     }
     
     struct StorageEvent<T> {

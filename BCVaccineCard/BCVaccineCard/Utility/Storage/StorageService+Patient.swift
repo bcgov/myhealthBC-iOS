@@ -45,6 +45,10 @@ protocol StoragePatientManager {
                        birthday: Date,
                        physicalAddress: Address?,
                        mailingAddress: Address?,
+                       email: String?,
+                       phone: String?,
+                       emailVerified: Bool,
+                       phoneVerified: Bool,
                        hdid: String?,
                        authenticated: Bool
     ) -> Patient?
@@ -130,6 +134,59 @@ extension StorageService: StoragePatientManager {
             return nil
         }
     }
+    
+    func store(
+        diagnosticImagingArray objectArray: [DiagnosticImagingResponse],
+        for patient: Patient
+    ) -> [DiagnosticImaging]? {
+        guard let context = managedContext,
+              let phn = patient.phn,
+              let patientRefetch = fetchPatient(phn: phn, context: context) else {
+            return nil
+        }
+        var storedObjects: [DiagnosticImaging] = []
+        for object in objectArray {
+            if let storedDiagnosticImage = store(diagnosticImaging: object, for: patientRefetch, context: context) {
+                storedObjects.append(storedDiagnosticImage)
+            }
+        }
+        return storedObjects
+    }
+    
+    private func store(diagnosticImaging object: DiagnosticImagingResponse, for patient: Patient, context: NSManagedObjectContext) -> DiagnosticImaging? {
+        
+        let model = DiagnosticImaging(context: context)
+        model.procedureDescription = object.procedureDescription
+        model.bodyPart = object.bodyPart
+        model.modality = object.modality
+        model.organization = object.organization
+        model.healthAuthority = object.healthAuthority
+        model.examStatus = object.examStatus
+        model.fileID = object.fileID
+        model.examDate = object.examDate?.getGatewayDate()
+        model.itemType = object.itemType
+        model.id = object.id
+        model.type = object.type
+        model.patient = patient
+        do {
+            try context.save()
+            notify(event: StorageEvent(event: .Save, entity: .DiagnosticImaging, object: patient))
+            return model
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
+    
+    func fetchDiagnosticImaging() -> [DiagnosticImaging] {
+        guard let context = managedContext else {return []}
+        do {
+            return try context.fetch(DiagnosticImaging.fetchRequest())
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return []
+        }
+    }
     /// returns existing patient
     /// or
     /// creates and returns a new one if it doesnt exist.
@@ -208,22 +265,27 @@ extension StorageService: StoragePatientManager {
         birthday: Date,
         physicalAddress: Address?,
         mailingAddress: Address?,
+        email: String?,
+        phone: String?,
+        emailVerified: Bool,
+        phoneVerified: Bool,
         hdid: String?,
         authenticated: Bool
     ) -> Patient? {
         if let patient = fetchPatient(phn: phn) {
-            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, hdid: hdid, authenticated: authenticated, for: patient)
+            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, email: email, phone: phone, emailVerified: emailVerified, phoneVerified: phoneVerified, hdid: hdid, authenticated: authenticated, for: patient)
             
         } else if let patient = fetchPatient(name: name, birthday: birthday) {
-            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, hdid: hdid, authenticated: authenticated, for: patient)
+            return update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, email: email, phone: phone, emailVerified: emailVerified, phoneVerified: phoneVerified, hdid: hdid, authenticated: authenticated, for: patient)
         }
         return nil
     }
     
     /// Updates values that are not nil
-    fileprivate func update(phn: String?, name: String?, birthday: Date?, physicalAddress: Address?, mailingAddress: Address?, hdid: String?, authenticated: Bool, for patient: Patient) -> Patient? {
+    fileprivate func update(phn: String?, name: String?, birthday: Date?, physicalAddress: Address?, mailingAddress: Address?, email: String?,
+                            phone: String?, emailVerified: Bool, phoneVerified: Bool, hdid: String?, authenticated: Bool, for patient: Patient) -> Patient? {
         guard let context = managedContext else {return nil}
-        if patient.name == name && patient.phn == phn && patient.birthday == birthday && patient.hdid == hdid && patient.authenticated == authenticated {return patient}
+        if patient.name == name && patient.phn == phn && patient.birthday == birthday && patient.email == email && patient.phone == phone && patient.emailVerified == emailVerified && patient.phoneVerified == phoneVerified && patient.hdid == hdid && patient.authenticated == authenticated {return patient}
         do {
             if let patientName = name {
                 patient.name = patientName
@@ -240,6 +302,18 @@ extension StorageService: StoragePatientManager {
             if let mailingAddress = mailingAddress {
                 patient.postalAddress = mailingAddress
             }
+//            if let email = email {
+                patient.email = email
+//            }
+            if emailVerified != patient.emailVerified {
+                patient.emailVerified = emailVerified
+            }
+            if phoneVerified != patient.phoneVerified {
+                patient.phoneVerified = phoneVerified
+            }
+//            if let phone = phone {
+                patient.phone = phone
+//            }
             if let hdid = hdid {
                 patient.hdid = hdid
             }
@@ -399,7 +473,7 @@ extension StorageService: StoragePatientManager {
         }
         
         // otherwise update user data if needed and return
-        _ = update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, hdid: hdid, authenticated: authenticated, for: patient)
+        _ = update(phn: phn, name: name, birthday: birthday, physicalAddress: physicalAddress, mailingAddress: mailingAddress, email: patient.email, phone: patient.phone, emailVerified: patient.emailVerified, phoneVerified: patient.phoneVerified, hdid: hdid, authenticated: authenticated, for: patient)
         
         return patient
     }
