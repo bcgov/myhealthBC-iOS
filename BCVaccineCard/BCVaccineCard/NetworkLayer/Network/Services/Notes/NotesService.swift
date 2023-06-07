@@ -41,7 +41,7 @@ struct NotesService {
             postLocalNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime) { note in
                 guard let note = note, let hdid = authManager.hdid else { return completion(nil) }
                 let id = UUID().uuidString
-                let storedNote = StorageService.shared.storeLocalNote(object: note, id: id, hdid: hdid, completion: completion)
+                StorageService.shared.storeLocalNote(object: note, id: id, hdid: hdid, completion: completion)
             }
         } else {
             if NetworkConnection.shared.hasConnection {
@@ -51,7 +51,7 @@ struct NotesService {
                         // TODO: Error handling here
                         return completion(nil)
                     }
-                    let note = StorageService.shared.storeNote(remoteObject: result, completion: completion)
+                    StorageService.shared.storeNote(remoteObject: result, completion: completion)
                 }
             } else {
                 print("Error")
@@ -110,12 +110,12 @@ struct NotesService {
     // MARK: POST
     
     private func postLocalNote(title: String, text: String, journalDate: String, createdDateTime: String, completion: @escaping (PostNote?)->Void) {
-        let model = PostNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime)
+        let model = PostNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime, addedToTimeline: false)
         completion(model)
     }
     
     private func postNote(title: String, text: String, journalDate: String, createdDateTime: String, completion: @escaping (NoteResponse?)->Void) {
-        let model = PostNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime)
+        let model = PostNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime, addedToTimeline: true)
         postNoteNetwork(object: model, completion: completion)
     }
     

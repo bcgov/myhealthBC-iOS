@@ -81,7 +81,7 @@ extension StorageService: StorageNoteManager {
         note.createdBy = hdid
         note.updatedDateTime = object.createdDateTime.getGatewayDate()
         note.updatedBy = hdid
-        note.addedToTimeline = false
+        note.addedToTimeline = object.addedToTimeline
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .Notes, object: note))

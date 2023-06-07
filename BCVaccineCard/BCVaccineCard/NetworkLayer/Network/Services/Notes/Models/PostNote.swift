@@ -12,4 +12,5 @@ struct PostNote: Codable {
     let text: String
     let journalDate: String // "2023-06-07" - yyyy-mm-dd
     let createdDateTime: String // Gateway Timezone
+    var addedToTimeline: Bool
 }
