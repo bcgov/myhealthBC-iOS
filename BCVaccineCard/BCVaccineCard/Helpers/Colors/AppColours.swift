@@ -26,6 +26,7 @@ class AppColours {
     static let divider = UIColor(red: 0.22, green: 0.349, blue: 0.541, alpha: 0.3)
     static let lightBlueText = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
     static let darkGreyText = UIColor(red: 0.192, green: 0.192, blue: 0.196, alpha: 1)
+    static let notesPlaceholderGrey = UIColor(red: 109/255, green: 117/255, blue: 125/255, alpha: 1)
     
     struct CovidTest {
         static let pendingText = appBlue

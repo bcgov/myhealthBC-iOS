@@ -411,12 +411,6 @@
 		2DF665A62A3136EC0009D8F0 /* SelectFolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665A22A3136EC0009D8F0 /* SelectFolderTableViewCell.xib */; };
 		2DF665A72A3136EC0009D8F0 /* SelectFolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665A22A3136EC0009D8F0 /* SelectFolderTableViewCell.xib */; };
 		2DF665A82A3136EC0009D8F0 /* SelectFolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665A22A3136EC0009D8F0 /* SelectFolderTableViewCell.xib */; };
-		2DF665AB2A3136FF0009D8F0 /* EnterTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665A92A3136FF0009D8F0 /* EnterTitleTableViewCell.swift */; };
-		2DF665AC2A3136FF0009D8F0 /* EnterTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665A92A3136FF0009D8F0 /* EnterTitleTableViewCell.swift */; };
-		2DF665AD2A3136FF0009D8F0 /* EnterTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665A92A3136FF0009D8F0 /* EnterTitleTableViewCell.swift */; };
-		2DF665AE2A3136FF0009D8F0 /* EnterTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665AA2A3136FF0009D8F0 /* EnterTitleTableViewCell.xib */; };
-		2DF665AF2A3136FF0009D8F0 /* EnterTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665AA2A3136FF0009D8F0 /* EnterTitleTableViewCell.xib */; };
-		2DF665B02A3136FF0009D8F0 /* EnterTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665AA2A3136FF0009D8F0 /* EnterTitleTableViewCell.xib */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
 		3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
 		3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
@@ -1638,8 +1632,6 @@
 		2DF6659A2A3136DC0009D8F0 /* AddToTimelineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddToTimelineTableViewCell.xib; sourceTree = "<group>"; };
 		2DF665A12A3136EC0009D8F0 /* SelectFolderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFolderTableViewCell.swift; sourceTree = "<group>"; };
 		2DF665A22A3136EC0009D8F0 /* SelectFolderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectFolderTableViewCell.xib; sourceTree = "<group>"; };
-		2DF665A92A3136FF0009D8F0 /* EnterTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterTitleTableViewCell.swift; sourceTree = "<group>"; };
-		2DF665AA2A3136FF0009D8F0 /* EnterTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EnterTitleTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccessibleDependentTableViewCell.swift; sourceTree = "<group>"; };
 		3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InaccessibleDependentTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC92911ADF100774278 /* StorageService + Dependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService + Dependent.swift"; sourceTree = "<group>"; };
@@ -2736,18 +2728,8 @@
 				2DF665902A3134E50009D8F0 /* EnterTextTableViewCell */,
 				2DF6658F2A3134D70009D8F0 /* AddToTimelineTableViewCell */,
 				2DF6658E2A3134CC0009D8F0 /* SelectFolderTableViewCell */,
-				2DF6658D2A3134BD0009D8F0 /* EnterTitleTableViewCell */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		2DF6658D2A3134BD0009D8F0 /* EnterTitleTableViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				2DF665A92A3136FF0009D8F0 /* EnterTitleTableViewCell.swift */,
-				2DF665AA2A3136FF0009D8F0 /* EnterTitleTableViewCell.xib */,
-			);
-			path = EnterTitleTableViewCell;
 			sourceTree = "<group>";
 		};
 		2DF6658E2A3134CC0009D8F0 /* SelectFolderTableViewCell */ = {
@@ -4267,7 +4249,6 @@
 				294BD3D327B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
 				3E5A68E0298C57C400E94A01 /* DBLoadFatalError.xib in Resources */,
 				3E6831472940D92600100402 /* Comments.storyboard in Resources */,
-				2DF665AF2A3136FF0009D8F0 /* EnterTitleTableViewCell.xib in Resources */,
 				297885262795F38500FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				791C27BB27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
 				7967E75326F9145700EEF510 /* BCSans-Italic.otf in Resources */,
@@ -4464,7 +4445,6 @@
 				3E5E6EC028D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */,
 				795AA758271518AB00E59FF1 /* InitialOnboardingView.xib in Resources */,
 				794BD6682702EEC00084ADA8 /* FormTableViewCell.xib in Resources */,
-				2DF665B02A3136FF0009D8F0 /* EnterTitleTableViewCell.xib in Resources */,
 				79218AD027556AA50063004E /* StatusBannerView.xib in Resources */,
 				29719563288719D400CA824A /* ImmunizationForecastTableViewCell.xib in Resources */,
 				794BD6692702EEC00084ADA8 /* FormTextFieldView.xib in Resources */,
@@ -4520,7 +4500,6 @@
 				798006132852C66E006E390F /* HiddenRecordsTableViewCell.xib in Resources */,
 				3E585505298C56E5006778AD /* DBLoadFatalError.xib in Resources */,
 				3E6831462940D92600100402 /* Comments.storyboard in Resources */,
-				2DF665AE2A3136FF0009D8F0 /* EnterTitleTableViewCell.xib in Resources */,
 				798006142852C66E006E390F /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				798006152852C66E006E390F /* ButtonTableViewCell.xib in Resources */,
 				798006162852C66E006E390F /* BCSans-Italic.otf in Resources */,
@@ -4980,7 +4959,6 @@
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
 				3E5E6E9C28D239BE00724EDD /* CommunicationService.swift in Sources */,
 				2971956828871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
-				2DF665AC2A3136FF0009D8F0 /* EnterTitleTableViewCell.swift in Sources */,
 				2DF6656D2A304BEB0009D8F0 /* Note+CoreDataProperties.swift in Sources */,
 				3EDC0CE12967D63E00603FED /* StorageService+ClinicalDocuments.swift in Sources */,
 				3E81C4D729B2AAB800C8F5C4 /* HealthPassViewModel.swift in Sources */,
@@ -5370,7 +5348,6 @@
 				7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */,
 				3E5E6EB428D2747800724EDD /* CommunicationResponse.swift in Sources */,
 				3EDC0CE22967D63E00603FED /* StorageService+ClinicalDocuments.swift in Sources */,
-				2DF665AD2A3136FF0009D8F0 /* EnterTitleTableViewCell.swift in Sources */,
 				2DF6656E2A304BEB0009D8F0 /* Note+CoreDataProperties.swift in Sources */,
 				3E81C4D829B2AAB800C8F5C4 /* HealthPassViewModel.swift in Sources */,
 				795AA75D27155EDF00E59FF1 /* NewsFeedViewController.swift in Sources */,
@@ -5737,7 +5714,6 @@
 				798005B52852C66E006E390F /* NotificationName+Ext.swift in Sources */,
 				798005B62852C66E006E390F /* ZoomedInPopUpVC.swift in Sources */,
 				3E5E6E9B28D239BE00724EDD /* CommunicationService.swift in Sources */,
-				2DF665AB2A3136FF0009D8F0 /* EnterTitleTableViewCell.swift in Sources */,
 				2DF6656C2A304BEB0009D8F0 /* Note+CoreDataProperties.swift in Sources */,
 				2971956728871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
 				3E81C4D629B2AAB800C8F5C4 /* HealthPassViewModel.swift in Sources */,
