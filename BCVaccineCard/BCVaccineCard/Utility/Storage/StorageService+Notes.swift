@@ -11,6 +11,7 @@ import CoreData
 protocol StorageNoteManager {
     func storeNotes(in object: AuthenticatedNotesResponseModel, completion: @escaping([Note])->Void)
     func storeNote(remoteObject: NoteResponse, completion: @escaping(Note?)->Void)
+    func storeLocalNote(object: PostNote, id: String, hdid: String, completion: @escaping(Note?)->Void)
     
     func fetchNotes() -> [Note]
 }
@@ -55,6 +56,32 @@ extension StorageService: StorageNoteManager {
         note.createdBy = object.createdBy
         note.updatedDateTime = object.updatedDateTime?.getGatewayDate()
         note.updatedBy = object.updatedBy
+        note.addedToTimeline = true
+        do {
+            try context.save()
+            self.notify(event: StorageEvent(event: .Save, entity: .Notes, object: note))
+            return completion(note)
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return completion(nil)
+        }
+    }
+    
+    func storeLocalNote(object: PostNote, id: String, hdid: String, completion: @escaping (Note?) -> Void) {
+        guard let context = managedContext else {
+            return completion(nil)
+        }
+        let note = Note(context: context)
+        note.id = id
+        note.hdid = hdid
+        note.title = object.title
+        note.text = object.text
+        note.journalDate = object.journalDate.getGatewayDate()
+        note.createdDateTime = object.createdDateTime.getGatewayDate()
+        note.createdBy = hdid
+        note.updatedDateTime = object.createdDateTime.getGatewayDate()
+        note.updatedBy = hdid
+        note.addedToTimeline = false
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .Notes, object: note))

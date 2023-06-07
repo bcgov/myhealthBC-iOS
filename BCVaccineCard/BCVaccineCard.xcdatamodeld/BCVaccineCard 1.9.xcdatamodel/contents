@@ -210,6 +210,7 @@
         <relationship name="prescription" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Perscription" inverseName="medication" inverseEntity="Perscription"/>
     </entity>
     <entity name="Note" representedClassName="Note" syncable="YES">
+        <attribute name="addedToTimeline" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="createdBy" optional="YES" attributeType="String"/>
         <attribute name="createdDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="hdid" optional="YES" attributeType="String"/>

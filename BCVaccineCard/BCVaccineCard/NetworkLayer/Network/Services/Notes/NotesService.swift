@@ -35,21 +35,29 @@ struct NotesService {
             }
         }
     }
-    
-    public func newNote(title: String, text: String, journalDate: String, completion: @escaping (Note?)->Void) {
-        if NetworkConnection.shared.hasConnection {
-            postNote(title: title, text: text, journalDate: journalDate) { result in
-                guard let result = result else {
-                    print("Error")
-                    // TODO: Error handling here
-                    return completion(nil)
-                }
-                let note = StorageService.shared.storeNote(remoteObject: result, completion: completion)
+    // TODO: Enable/disable addToTimeline logic on screen
+    public func newNote(title: String, text: String, journalDate: String, createdDateTime: String, addToTimeline: Bool, completion: @escaping (Note?)->Void) {
+        if addToTimeline == false {
+            postLocalNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime) { note in
+                guard let note = note, let hdid = authManager.hdid else { return completion(nil) }
+                let id = UUID().uuidString
+                let storedNote = StorageService.shared.storeLocalNote(object: note, id: id, hdid: hdid, completion: completion)
             }
         } else {
-            print("Error")
-            // Error handling should be done already due to lack of network connection
-            return completion(nil)
+            if NetworkConnection.shared.hasConnection {
+                postNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime) { result in
+                    guard let result = result else {
+                        print("Error")
+                        // TODO: Error handling here
+                        return completion(nil)
+                    }
+                    let note = StorageService.shared.storeNote(remoteObject: result, completion: completion)
+                }
+            } else {
+                print("Error")
+                // Error handling should be done already due to lack of network connection
+                return completion(nil)
+            }
         }
         
     }
@@ -101,8 +109,13 @@ struct NotesService {
     
     // MARK: POST
     
-    private func postNote(title: String, text: String, journalDate: String, completion: @escaping (NoteResponse?)->Void) {
-        let model = PostNote(title: title, text: text, journalDate: journalDate)
+    private func postLocalNote(title: String, text: String, journalDate: String, createdDateTime: String, completion: @escaping (PostNote?)->Void) {
+        let model = PostNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime)
+        completion(model)
+    }
+    
+    private func postNote(title: String, text: String, journalDate: String, createdDateTime: String, completion: @escaping (NoteResponse?)->Void) {
+        let model = PostNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime)
         postNoteNetwork(object: model, completion: completion)
     }
     
