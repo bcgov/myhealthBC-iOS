@@ -384,6 +384,9 @@
 		2DF665792A3068160009D8F0 /* SegmentedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665782A3068160009D8F0 /* SegmentedView.xib */; };
 		2DF6657A2A3068160009D8F0 /* SegmentedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665782A3068160009D8F0 /* SegmentedView.xib */; };
 		2DF6657B2A3068160009D8F0 /* SegmentedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665782A3068160009D8F0 /* SegmentedView.xib */; };
+		2DF6657D2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */; };
+		2DF6657E2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */; };
+		2DF6657F2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
 		3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
 		3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
@@ -1596,6 +1599,7 @@
 		2DF6656F2A304ECE0009D8F0 /* StorageService+Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Notes.swift"; sourceTree = "<group>"; };
 		2DF665742A3067FE0009D8F0 /* SegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedView.swift; sourceTree = "<group>"; };
 		2DF665782A3068160009D8F0 /* SegmentedView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentedView.xib; sourceTree = "<group>"; };
+		2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmentedControl+EXT.swift"; sourceTree = "<group>"; };
 		3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccessibleDependentTableViewCell.swift; sourceTree = "<group>"; };
 		3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InaccessibleDependentTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC92911ADF100774278 /* StorageService + Dependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService + Dependent.swift"; sourceTree = "<group>"; };
@@ -3399,6 +3403,7 @@
 				795E68252703DBA100948502 /* UIAccessibility+EXT.swift */,
 				795AA78427162AA900E59FF1 /* NotificationName+Ext.swift */,
 				29245D422755877A00F48642 /* Encodable+EXT.swift */,
+				2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -4886,6 +4891,7 @@
 				2DF665612A3041450009D8F0 /* PostNoteResponse.swift in Sources */,
 				3E6F938E2A27B98800EB82C5 /* Patient+CoreDataClass copy.swift in Sources */,
 				3EDC0C84296785DB00603FED /* BaseGatewayResponse.swift in Sources */,
+				2DF6657E2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */,
 				3E68313B2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA628D23BB200724EDD /* AFNetwork.swift in Sources */,
 				79B1A0F62874CEBE009B3EFB /* CovidImmunizationRecord+CoreDataClass.swift in Sources */,
@@ -5269,6 +5275,7 @@
 				2DF665622A3041450009D8F0 /* PostNoteResponse.swift in Sources */,
 				3E6F938F2A27B98800EB82C5 /* Patient+CoreDataClass copy.swift in Sources */,
 				3EDC0C85296785DB00603FED /* BaseGatewayResponse.swift in Sources */,
+				2DF6657F2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */,
 				3E68313C2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA728D23BB200724EDD /* AFNetwork.swift in Sources */,
 				293B32BF27D262F70064BAAA /* CommentsViewTableViewCell.swift in Sources */,
@@ -5629,6 +5636,7 @@
 				2DF665602A3041450009D8F0 /* PostNoteResponse.swift in Sources */,
 				3E6F938D2A27B98800EB82C5 /* Patient+CoreDataClass copy.swift in Sources */,
 				3E91C7AE28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */,
+				2DF6657D2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */,
 				3EDC0C83296785DB00603FED /* BaseGatewayResponse.swift in Sources */,
 				3E68313A2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA528D23BB200724EDD /* AFNetwork.swift in Sources */,

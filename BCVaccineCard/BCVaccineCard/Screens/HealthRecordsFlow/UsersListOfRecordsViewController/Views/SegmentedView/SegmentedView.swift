@@ -27,6 +27,7 @@ class SegmentedView: UIView {
     
     @IBOutlet private weak var contentView: UIView!
     @IBOutlet private weak var segmentedControl: UISegmentedControl!
+    @IBOutlet private weak var bottomViewSeparator: UIView!
     
     weak var delegate: SegmentedViewDelegate?
     
@@ -55,7 +56,9 @@ class SegmentedView: UIView {
     }
     
     private func baseSetup() {
-        // TODO: UI Setup here - for now, just do a basic 2 segment setup
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: AppColours.textGray, NSAttributedString.Key.font: UIFont.bcSansRegularWithSize(size: 15)], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: AppColours.appBlue, NSAttributedString.Key.font: UIFont.bcSansBoldWithSize(size: 15)], for: .selected)
+        bottomViewSeparator.backgroundColor = AppColours.borderGray
     }
     
     func configure(delegateOwner: UIViewController, dataSource: [SegmentType]) {
@@ -69,9 +72,16 @@ class SegmentedView: UIView {
         for (index, segment) in dataSource.enumerated() {
             segmentedControl.insertSegment(withTitle: segment.getTitle, at: index, animated: false)
         }
-        
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addUnderlineForSelectedSegment()
+    }
+    
+    @IBAction private func segmentedControlDidChange(_ sender: UISegmentedControl) {
+        segmentedControl.changeUnderlinePosition()
+        guard dataSource.count > sender.selectedSegmentIndex else { return }
+        let type = dataSource[sender.selectedSegmentIndex]
+        delegate?.segmentSelected(type: type)
     }
     
 }
 
-// TODO: https://stackoverflow.com/questions/42755590/how-to-display-only-bottom-border-for-selected-item-in-uisegmentedcontrol

@@ -20,10 +20,10 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     // TODO: Make sure this is added inside parentContainerStackView
-    // TODO: Update to the proper view type once created, and rename
-    @IBOutlet weak private var listOfRecordsControlView: UIView!
+    @IBOutlet weak private var listOfRecordsSegmentedView: SegmentedView!
     
     @IBOutlet weak private var noRecordsFoundView: UIView!
+    @IBOutlet weak private var noRecordsFoundImageView: UIImageView!
     @IBOutlet weak private var noRecordsFoundTitle: UILabel!
     @IBOutlet weak private var noRecordsFoundSubTitle: UILabel!
     
@@ -33,8 +33,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var recordsSearchBarView: RecordsSearchBarView!
     @IBOutlet weak private var tableView: UITableView!
     
-    // TODO: Update this view with the proper view type after it is created
-    @IBOutlet weak private var notesContainerView: UIView!
+    @IBOutlet weak private var createNoteButton: UIButton!
+
     
     @IBOutlet weak private var parentContainerStackView: UIStackView!
     
@@ -82,6 +82,7 @@ class UsersListOfRecordsViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSegmentedControl()
         setupRefreshControl()
         self.tableView.keyboardDismissMode = .interactive
         setObservables()
@@ -127,6 +128,10 @@ class UsersListOfRecordsViewController: BaseViewController {
         tableView.isScrollEnabled = true
         tableView.alwaysBounceVertical = true
         tableView.addSubview(refreshControl)
+    }
+    
+    private func setupSegmentedControl() {
+        listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
     }
     
     @objc private func refresh(_ sender: AnyObject) {
@@ -183,6 +188,7 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
+        createNoteButton.isHidden = true
         fetchDataSource()
     }
     
@@ -197,6 +203,28 @@ class UsersListOfRecordsViewController: BaseViewController {
         hideSelectedFilters()
         let patientRecords = fetchPatientRecords()
         show(records: patientRecords, searchText: searchText)
+    }
+    
+    @IBAction private func createNoteButtonTapped(_ sender: UIButton) {
+        //TODO: Implement new screen here
+        self.alert(title: "Coming soon", message: "")
+    }
+}
+
+// MARK: Segmented Control Delegate
+extension UsersListOfRecordsViewController: SegmentedViewDelegate {
+    func segmentSelected(type: SegmentType) {
+        switch type {
+        case .Timeline:
+            var patientRecords = fetchPatientRecords()
+            if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
+                patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
+            }
+            showTimelineViews(patientRecordsEmpty: patientRecords.isEmpty, searchText: searchText)
+        case .Notes:
+            // TODO: Will need to have some sort of check here, basically just fetch records and filter for notes - for now, just show empty state
+            showNotesViews(notesRecordsEmpty: true)
+        }
     }
 }
 
@@ -451,7 +479,9 @@ extension UsersListOfRecordsViewController {
         case .AuthExpired:
             showAuthExpired()
             recordsSearchBarView.isHidden = true
+            listOfRecordsSegmentedView.isHidden = true
         case .authenticated:
+            listOfRecordsSegmentedView.isHidden = false
             guard self.dataSource.count == 0 else {
                 show(records: self.dataSource, filter: currentFilter, searchText: searchText)
                 return
@@ -538,19 +568,30 @@ extension UsersListOfRecordsViewController {
         recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
     }
     
+    private func configureNoRecordsFoundView(for segment: SegmentType) {
+        let isTimeline = segment == .Timeline
+        noRecordsFoundImageView.image = isTimeline ? UIImage(named: "no-records-found") : UIImage(named: "no-notes")
+        noRecordsFoundTitle.text = isTimeline ? "No records found" : "No Note Yet?"
+        noRecordsFoundSubTitle.text = isTimeline ? "Clear all filters and start over" : "Start adding a note by tapping\n the 'Note' button below"
+    }
+    
     // MARK: Use these functions to switch between the view types, health records and notes
     private func showTimelineViews(patientRecordsEmpty: Bool, searchText: String?) {
+        configureNoRecordsFoundView(for: .Timeline)
         noRecordsFoundView.isHidden = !patientRecordsEmpty
         tableView.isHidden = patientRecordsEmpty
         recordsSearchBarView.isHidden = (((patientRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
-        notesContainerView.isHidden = true
+        createNoteButton.isHidden = true
     }
     
-    private func showNotesViews() {
-        noRecordsFoundView.isHidden = true
+    private func showNotesViews(notesRecordsEmpty: Bool) {
+        configureNoRecordsFoundView(for: .Notes)
+        noRecordsFoundView.isHidden = !notesRecordsEmpty
         tableView.isHidden = true
+        recordsSearchBarView.endEditing(true)
         recordsSearchBarView.isHidden = true
-        notesContainerView.isHidden = false
+        createNoteButton.isHidden = false
+        // TODO: Configure whatever notes view we decide on here
     }
     
     private func performBCSCLogin() {
