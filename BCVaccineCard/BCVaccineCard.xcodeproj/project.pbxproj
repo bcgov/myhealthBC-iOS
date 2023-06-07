@@ -378,6 +378,12 @@
 		2DF665702A304ECE0009D8F0 /* StorageService+Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6656F2A304ECE0009D8F0 /* StorageService+Notes.swift */; };
 		2DF665712A304ECE0009D8F0 /* StorageService+Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6656F2A304ECE0009D8F0 /* StorageService+Notes.swift */; };
 		2DF665722A304ECE0009D8F0 /* StorageService+Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6656F2A304ECE0009D8F0 /* StorageService+Notes.swift */; };
+		2DF665752A3067FE0009D8F0 /* SegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665742A3067FE0009D8F0 /* SegmentedView.swift */; };
+		2DF665762A3067FE0009D8F0 /* SegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665742A3067FE0009D8F0 /* SegmentedView.swift */; };
+		2DF665772A3067FE0009D8F0 /* SegmentedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665742A3067FE0009D8F0 /* SegmentedView.swift */; };
+		2DF665792A3068160009D8F0 /* SegmentedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665782A3068160009D8F0 /* SegmentedView.xib */; };
+		2DF6657A2A3068160009D8F0 /* SegmentedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665782A3068160009D8F0 /* SegmentedView.xib */; };
+		2DF6657B2A3068160009D8F0 /* SegmentedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665782A3068160009D8F0 /* SegmentedView.xib */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
 		3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
 		3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
@@ -1588,6 +1594,8 @@
 		2DF665672A304BEB0009D8F0 /* Note+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataClass.swift"; path = "BCVaccineCard/Utility/Storage/CoreDataClass/Note+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		2DF665682A304BEB0009D8F0 /* Note+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataProperties.swift"; path = "BCVaccineCard/Utility/Storage/CoreDataClass/Note+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		2DF6656F2A304ECE0009D8F0 /* StorageService+Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService+Notes.swift"; sourceTree = "<group>"; };
+		2DF665742A3067FE0009D8F0 /* SegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedView.swift; sourceTree = "<group>"; };
+		2DF665782A3068160009D8F0 /* SegmentedView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentedView.xib; sourceTree = "<group>"; };
 		3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccessibleDependentTableViewCell.swift; sourceTree = "<group>"; };
 		3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InaccessibleDependentTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC92911ADF100774278 /* StorageService + Dependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService + Dependent.swift"; sourceTree = "<group>"; };
@@ -2493,6 +2501,7 @@
 		2D4B118429F0651400D7C02C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2DF665732A3067E90009D8F0 /* SegmentedView */,
 				2DF3180429E536DF0077EA87 /* NavBarDropDownView */,
 				2D4B118529F0652400D7C02C /* RecordsSearchBar */,
 			);
@@ -2632,6 +2641,15 @@
 				2DF6655F2A3041450009D8F0 /* PostNoteResponse.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		2DF665732A3067E90009D8F0 /* SegmentedView */ = {
+			isa = PBXGroup;
+			children = (
+				2DF665742A3067FE0009D8F0 /* SegmentedView.swift */,
+				2DF665782A3068160009D8F0 /* SegmentedView.xib */,
+			);
+			path = SegmentedView;
 			sourceTree = "<group>";
 		};
 		3E31EA7A291394E900E344E6 /* UpdateService */ = {
@@ -4090,6 +4108,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DF6657A2A3068160009D8F0 /* SegmentedView.xib in Resources */,
 				7944F68826F1261B006B9444 /* LaunchScreen.storyboard in Resources */,
 				7944F6D426F12C00006B9444 /* AppStyleButton.xib in Resources */,
 				29921C8D27739612005025D2 /* AuthenticationView.xib in Resources */,
@@ -4236,6 +4255,7 @@
 				297F6DB5280F16540023E89C /* AuthenticationView.xib in Resources */,
 				3E048CC8291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				3E5A68E1298C57C500E94A01 /* DBLoadFatalError.xib in Resources */,
+				2DF6657B2A3068160009D8F0 /* SegmentedView.xib in Resources */,
 				297F6DB6280F16A70023E89C /* AuthenticationInfoView.xib in Resources */,
 				2DF2102A28DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
 				2922C0D6286E17DC000FF4F7 /* LabOrderBannerTableViewCell.xib in Resources */,
@@ -4333,6 +4353,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DF665792A3068160009D8F0 /* SegmentedView.xib in Resources */,
 				798005FD2852C66E006E390F /* LaunchScreen.storyboard in Resources */,
 				798005FE2852C66E006E390F /* AppStyleButton.xib in Resources */,
 				798005FF2852C66E006E390F /* AuthenticationView.xib in Resources */,
@@ -4932,6 +4953,7 @@
 				798CA1C427ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
 				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29A5B6D627B55B65006A9BA7 /* Pharmacy+CoreDataClass.swift in Sources */,
+				2DF665762A3067FE0009D8F0 /* SegmentedView.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				29719551288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
 				297D3BB227D9479D00B059CA /* TableSectionHeader.swift in Sources */,
@@ -5314,6 +5336,7 @@
 				7928346B27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				798CA1C527ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
 				79932CAF2790FA94007E8D92 /* Theme.swift in Sources */,
+				2DF665772A3067FE0009D8F0 /* SegmentedView.swift in Sources */,
 				796653EF27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29719552288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
 				79218ABF27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
@@ -5673,6 +5696,7 @@
 				798005F12852C66E006E390F /* HomeScreenViewController.swift in Sources */,
 				798005F22852C66E006E390F /* TermsOfServiceViewController.swift in Sources */,
 				798005F32852C66E006E390F /* AuthenticatedMedicationResponseObject.swift in Sources */,
+				2DF665752A3067FE0009D8F0 /* SegmentedView.swift in Sources */,
 				798005F42852C66E006E390F /* Pharmacy+CoreDataClass.swift in Sources */,
 				29719550288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
 				798005F52852C66E006E390F /* DropDownView.swift in Sources */,
