@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - AuthenticatedNotesResponseModel
 struct AuthenticatedNotesResponseModel: BaseGatewayResponse, Codable {
-    var resourcePayload: [Note]
+    var resourcePayload: [NoteResponse]
     var totalResultCount, pageIndex, pageSize: Int?
     var resultError: ResultError?
 }

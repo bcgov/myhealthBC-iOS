@@ -8,7 +8,7 @@
 import Foundation
 
 struct PostNote: Codable {
-    let text: String
     let title: String
+    let text: String
     let journalDate: String // "2023-06-07" - yyyy-mm-dd
 }

@@ -359,6 +359,7 @@ enum LoaderCaller {
     case ImmnunizationsService_fetchAndStore
     case HealthRecordsService_fetchAndStore
     case NotificationService_fetchAndStore
+    case Notes_fetchAndStore
 }
 
 

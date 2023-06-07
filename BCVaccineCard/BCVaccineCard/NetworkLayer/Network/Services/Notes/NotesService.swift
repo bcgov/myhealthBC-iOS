@@ -6,5 +6,133 @@
 //
 
 import Foundation
+import UIKit
+import Alamofire
 
-// TODO: Copy formatting of CommentService, (create fetch and post network calls - will also have to create core data model)
+
+struct NotesService {
+    
+    let network: Network
+    let authManager: AuthManager
+    let configService: MobileConfigService
+    
+    fileprivate static var blockSync: Bool = false
+    
+    var endpoints: UrlAccessor {
+        return UrlAccessor()
+    }
+    
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([Note])->Void) {
+        network.addLoader(message: .SyncingRecords, caller: .Notes_fetchAndStore)
+        fetch(for: patient) { response in
+            guard let response = response else {
+                network.removeLoader(caller: .Notes_fetchAndStore)
+                return completion([])
+            }
+            StorageService.shared.storeNotes(in: response) { notes in
+                network.removeLoader(caller: .Notes_fetchAndStore)
+                completion(notes)
+            }
+        }
+    }
+    
+    public func newNote(title: String, text: String, journalDate: String, completion: @escaping (Note?)->Void) {
+        if NetworkConnection.shared.hasConnection {
+            postNote(title: title, text: text, journalDate: journalDate) { result in
+                guard let result = result else {
+                    print("Error")
+                    // TODO: Error handling here
+                    return completion(nil)
+                }
+                let note = StorageService.shared.storeNote(remoteObject: result, completion: completion)
+            }
+        } else {
+            print("Error")
+            // Error handling should be done already due to lack of network connection
+            return completion(nil)
+        }
+        
+    }
+    
+    // MARK: Fetch
+    
+    private func fetch(for patient: Patient, completion: @escaping(_ response: AuthenticatedNotesResponseModel?) -> Void) {
+        
+        guard let token = authManager.authToken,
+              let hdid = patient.hdid,
+              NetworkConnection.shared.hasConnection
+        else { return completion(nil)}
+        
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)"
+            ]
+            
+            let parameters: HDIDParams = HDIDParams(hdid: hdid, apiVersion: "1")
+            
+            let requestModel = NetworkRequest<HDIDParams, AuthenticatedNotesResponseModel>(url: endpoints.notes(base: baseURL,
+                                                                                                                hdid: hdid),
+                                                                                           type: .Get,
+                                                                                           parameters: parameters,
+                                                                                           encoder: .urlEncoder,
+                                                                                           headers: headers)
+            { result in
+                return completion(result)
+            } onError: { error in
+                switch error {
+                case .FailedAfterRetry:
+                    network.showToast(message: .fetchRecordError, style: .Warn)
+                default:
+                    break
+                }
+                
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
+    
+    // MARK: POST
+    
+    private func postNote(title: String, text: String, journalDate: String, completion: @escaping (NoteResponse?)->Void) {
+        let model = PostNote(title: title, text: text, journalDate: journalDate)
+        postNoteNetwork(object: model, completion: completion)
+    }
+    
+    private func postNoteNetwork(object: PostNote, completion: @escaping(NoteResponse?)->Void) {
+        guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.hdid: hdid
+            ]
+            
+            let requestModel = NetworkRequest<PostNote, PostNoteResponse>(url: endpoints.notes(base: baseURL, hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
+                return completion(result?.resourcePayload)
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
+    
+    func notify(event: StorageService.StorageEvent<Any>) {
+        Logger.log(string: "StorageEvent \(event.entity) - \(event.event)", type: .storage)
+        NotificationCenter.default.post(name: .storageChangeEvent, object: event)
+    }
+
+}
+
