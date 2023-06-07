@@ -19,6 +19,10 @@ class UsersListOfRecordsViewController: BaseViewController {
         return UsersListOfRecordsViewController()
     }
     
+    // TODO: Make sure this is added inside parentContainerStackView
+    // TODO: Update to the proper view type once created, and rename
+    @IBOutlet weak private var listOfRecordsControlView: UIView!
+    
     @IBOutlet weak private var noRecordsFoundView: UIView!
     @IBOutlet weak private var noRecordsFoundTitle: UILabel!
     @IBOutlet weak private var noRecordsFoundSubTitle: UILabel!
@@ -28,6 +32,9 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var filterContainer: UIView!
     @IBOutlet weak private var recordsSearchBarView: RecordsSearchBarView!
     @IBOutlet weak private var tableView: UITableView!
+    
+    // TODO: Update this view with the proper view type after it is created
+    @IBOutlet weak private var notesContainerView: UIView!
     
     @IBOutlet weak private var parentContainerStackView: UIStackView!
     
@@ -529,6 +536,21 @@ extension UsersListOfRecordsViewController {
         noRecordsFoundView.isHidden = !patientRecords.isEmpty
         tableView.isHidden = patientRecords.isEmpty
         recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
+    }
+    
+    // MARK: Use these functions to switch between the view types, health records and notes
+    private func showTimelineViews(patientRecordsEmpty: Bool, searchText: String?) {
+        noRecordsFoundView.isHidden = !patientRecordsEmpty
+        tableView.isHidden = patientRecordsEmpty
+        recordsSearchBarView.isHidden = (((patientRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
+        notesContainerView.isHidden = true
+    }
+    
+    private func showNotesViews() {
+        noRecordsFoundView.isHidden = true
+        tableView.isHidden = true
+        recordsSearchBarView.isHidden = true
+        notesContainerView.isHidden = false
     }
     
     private func performBCSCLogin() {
