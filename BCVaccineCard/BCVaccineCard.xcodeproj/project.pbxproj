@@ -405,12 +405,6 @@
 		2DF6659E2A3136DC0009D8F0 /* AddToTimelineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF6659A2A3136DC0009D8F0 /* AddToTimelineTableViewCell.xib */; };
 		2DF6659F2A3136DC0009D8F0 /* AddToTimelineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF6659A2A3136DC0009D8F0 /* AddToTimelineTableViewCell.xib */; };
 		2DF665A02A3136DC0009D8F0 /* AddToTimelineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF6659A2A3136DC0009D8F0 /* AddToTimelineTableViewCell.xib */; };
-		2DF665A32A3136EC0009D8F0 /* SelectFolderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665A12A3136EC0009D8F0 /* SelectFolderTableViewCell.swift */; };
-		2DF665A42A3136EC0009D8F0 /* SelectFolderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665A12A3136EC0009D8F0 /* SelectFolderTableViewCell.swift */; };
-		2DF665A52A3136EC0009D8F0 /* SelectFolderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665A12A3136EC0009D8F0 /* SelectFolderTableViewCell.swift */; };
-		2DF665A62A3136EC0009D8F0 /* SelectFolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665A22A3136EC0009D8F0 /* SelectFolderTableViewCell.xib */; };
-		2DF665A72A3136EC0009D8F0 /* SelectFolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665A22A3136EC0009D8F0 /* SelectFolderTableViewCell.xib */; };
-		2DF665A82A3136EC0009D8F0 /* SelectFolderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF665A22A3136EC0009D8F0 /* SelectFolderTableViewCell.xib */; };
 		3C515D29EB969510F0A66F68 /* Pods_BCVaccineCardTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84FB4A941CA21F830C292B4F /* Pods_BCVaccineCardTests.framework */; };
 		3E048CC3291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
 		3E048CC4291183E900774278 /* InaccessibleDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */; };
@@ -1630,8 +1624,6 @@
 		2DF665922A3136CA0009D8F0 /* EnterTextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EnterTextTableViewCell.xib; sourceTree = "<group>"; };
 		2DF665992A3136DC0009D8F0 /* AddToTimelineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToTimelineTableViewCell.swift; sourceTree = "<group>"; };
 		2DF6659A2A3136DC0009D8F0 /* AddToTimelineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddToTimelineTableViewCell.xib; sourceTree = "<group>"; };
-		2DF665A12A3136EC0009D8F0 /* SelectFolderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFolderTableViewCell.swift; sourceTree = "<group>"; };
-		2DF665A22A3136EC0009D8F0 /* SelectFolderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectFolderTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC1291183E900774278 /* InaccessibleDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InaccessibleDependentTableViewCell.swift; sourceTree = "<group>"; };
 		3E048CC2291183E900774278 /* InaccessibleDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InaccessibleDependentTableViewCell.xib; sourceTree = "<group>"; };
 		3E048CC92911ADF100774278 /* StorageService + Dependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StorageService + Dependent.swift"; sourceTree = "<group>"; };
@@ -2727,18 +2719,8 @@
 			children = (
 				2DF665902A3134E50009D8F0 /* EnterTextTableViewCell */,
 				2DF6658F2A3134D70009D8F0 /* AddToTimelineTableViewCell */,
-				2DF6658E2A3134CC0009D8F0 /* SelectFolderTableViewCell */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		2DF6658E2A3134CC0009D8F0 /* SelectFolderTableViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				2DF665A12A3136EC0009D8F0 /* SelectFolderTableViewCell.swift */,
-				2DF665A22A3136EC0009D8F0 /* SelectFolderTableViewCell.xib */,
-			);
-			path = SelectFolderTableViewCell;
 			sourceTree = "<group>";
 		};
 		2DF6658F2A3134D70009D8F0 /* AddToTimelineTableViewCell */ = {
@@ -4230,7 +4212,6 @@
 				2D4EA25F2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.xib in Resources */,
 				2978852B279624D800FF912D /* SettingsSectionHeaderView.xib in Resources */,
 				2978851A2795F13D00FF912D /* SettingsProfileTableViewCell.xib in Resources */,
-				2DF665A72A3136EC0009D8F0 /* SelectFolderTableViewCell.xib in Resources */,
 				79283451272A880900EE2710 /* TableViewButtonView.xib in Resources */,
 				792834662731016600EE2710 /* CheckboxTableViewCell.xib in Resources */,
 				29A4DF4E27DA678900D5E901 /* ChipsView.xib in Resources */,
@@ -4353,7 +4334,6 @@
 				794BD65B2702EEC00084ADA8 /* LaunchScreen.storyboard in Resources */,
 				2971956C28871B1A00CA824A /* SectionDescriptionTableViewCell.xib in Resources */,
 				791C27BC27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
-				2DF665A82A3136EC0009D8F0 /* SelectFolderTableViewCell.xib in Resources */,
 				795AA77C2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */,
 				29719548288212F600CA824A /* HealthVisitRecordDetailTableViewCell.xib in Resources */,
 				79283452272A880900EE2710 /* TableViewButtonView.xib in Resources */,
@@ -4481,7 +4461,6 @@
 				2D4EA25E2A0A967A00A154AF /* CommunicationPreferencesTableViewCell.xib in Resources */,
 				798006042852C66E006E390F /* SettingsSectionHeaderView.xib in Resources */,
 				798006052852C66E006E390F /* SettingsProfileTableViewCell.xib in Resources */,
-				2DF665A62A3136EC0009D8F0 /* SelectFolderTableViewCell.xib in Resources */,
 				798006062852C66E006E390F /* TableViewButtonView.xib in Resources */,
 				798006072852C66E006E390F /* CheckboxTableViewCell.xib in Resources */,
 				798006082852C66E006E390F /* ChipsView.xib in Resources */,
@@ -4927,7 +4906,6 @@
 				795AA77F2715FC9B00E59FF1 /* ParseXMLData.swift in Sources */,
 				3E473780291090BC00B5BBA0 /* CovidTestsService.swift in Sources */,
 				2922C0DB286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.swift in Sources */,
-				2DF665A42A3136EC0009D8F0 /* SelectFolderTableViewCell.swift in Sources */,
 				29547E5727A2EC5200562958 /* LocalAuthVIew.swift in Sources */,
 				3E81C4D329B2A99F00C8F5C4 /* UsersListOfRecordsViewModel.swift in Sources */,
 				293B32CC27D814EB0064BAAA /* CommentViewTableViewCell.swift in Sources */,
@@ -5316,7 +5294,6 @@
 				3E473781291090BC00B5BBA0 /* CovidTestsService.swift in Sources */,
 				797BB95E2764084300CD1645 /* StorageService+Patient.swift in Sources */,
 				2922C0DC286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.swift in Sources */,
-				2DF665A52A3136EC0009D8F0 /* SelectFolderTableViewCell.swift in Sources */,
 				29788535279624F000FF912D /* ProfileAndSettingsViewController.swift in Sources */,
 				3E81C4D429B2A99F00C8F5C4 /* UsersListOfRecordsViewModel.swift in Sources */,
 				791C27CA27192D7C001A6E12 /* String+Localizable.swift in Sources */,
@@ -5682,7 +5659,6 @@
 				798005A12852C66E006E390F /* FormTableViewCell.swift in Sources */,
 				798005A22852C66E006E390F /* ButtonTableViewCell.swift in Sources */,
 				3E47377F291090BC00B5BBA0 /* CovidTestsService.swift in Sources */,
-				2DF665A32A3136EC0009D8F0 /* SelectFolderTableViewCell.swift in Sources */,
 				2922C0DA286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.swift in Sources */,
 				3E81C4D229B2A99F00C8F5C4 /* UsersListOfRecordsViewModel.swift in Sources */,
 				798005A52852C66E006E390F /* ParseXMLData.swift in Sources */,

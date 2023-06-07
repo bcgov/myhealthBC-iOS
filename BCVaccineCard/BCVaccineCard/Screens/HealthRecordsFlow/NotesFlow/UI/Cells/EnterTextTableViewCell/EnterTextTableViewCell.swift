@@ -62,7 +62,7 @@ class EnterTextTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         // TODO: Check this here for editing functionality
         print("CONNOR CALLED HERE")
-//        self.becomeFirstResponder()
+        self.becomeFirstResponder()
     }
     
     private func setup() {
@@ -145,7 +145,7 @@ extension EnterTextTableViewCell: UITextViewDelegate {
                     return true
                 }
             }
-//        self.layoutIfNeeded() // Note: uncomment this if there are UI issues, I suspect there will be
+            self.layoutIfNeeded() // Note: uncomment this if there are UI issues, I suspect there will be
             // ...otherwise return false since the updates have already
             // been made
             return false
