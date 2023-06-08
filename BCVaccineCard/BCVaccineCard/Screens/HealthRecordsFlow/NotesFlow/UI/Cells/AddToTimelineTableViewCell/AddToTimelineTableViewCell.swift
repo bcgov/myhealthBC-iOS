@@ -54,6 +54,7 @@ class AddToTimelineTableViewCell: UITableViewCell {
         folderTitleLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         folderTitleLabel.textColor = AppColours.textGray
         folderTitleLabel.text = "Folder"
+        separatorView.backgroundColor = AppColours.borderGray
         selectFolderButton.layer.cornerRadius = 4.0
         selectFolderButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 13)
         selectFolderButton.titleLabel?.textColor = AppColours.textBlack
@@ -64,6 +65,17 @@ class AddToTimelineTableViewCell: UITableViewCell {
         datePickerTextField.textColor = AppColours.blueLightText
         datePickerTextField.borderStyle = .none
         datePickerTextField.backgroundColor = .white
+        bottomSeparatorView.backgroundColor = AppColours.borderGray
+        switchFormatting(isOn: false)
+    }
+    
+    private func switchFormatting(isOn: Bool) {
+        // TODO: Update this accordingly
+        // Will likely have to dynamically update
+        addToTimelineSwitch.onTintColor = AppColours.appBlue
+        addToTimelineSwitch.tintColor = .white
+        addToTimelineSwitch.layer.borderColor = AppColours.appBlue.cgColor
+        addToTimelineSwitch.thumbTintColor = AppColours.appRed
     }
     
     func configure(for note: PostNote?, state: AddToTimelineTableViewCellState, delegateOwner: UIViewController) {
