@@ -10,8 +10,8 @@ import UIKit
 class AppColours {
     
     static let appBlue = UIColor(red: 0/255, green: 51/255, blue: 102/255, alpha: 1.0)
-    static let appBlueLight = UIColor(red: 0.851, green: 0.918, blue: 0.969, alpha: 1)
-    static let blueLightText = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1) //26, 90,150
+    static let appBlueLight = UIColor(red: 217/255, green: 234/255, blue: 247/255, alpha: 1)
+    static let blueLightText = UIColor(red: 26/255, green: 90/255, blue: 150/255, alpha: 1)
     static let green = UIColor(red: 72/255, green: 131/255, blue: 72/255, alpha: 1.0)
     static let partiallyVaxedBlue = UIColor(red: 45/255, green: 89/255, blue: 145/255, alpha: 1.0)
     static let backgroundGray = UIColor(red: 242/255, green: 242/255, blue: 242/255, alpha: 1.0)
@@ -27,6 +27,7 @@ class AppColours {
     static let lightBlueText = UIColor(red: 0.102, green: 0.353, blue: 0.588, alpha: 1)
     static let darkGreyText = UIColor(red: 0.192, green: 0.192, blue: 0.196, alpha: 1)
     static let notesPlaceholderGrey = UIColor(red: 109/255, green: 117/255, blue: 125/255, alpha: 1)
+    static let disabledGray = UIColor(red: 233/255, green: 236/255, blue: 239/255, alpha: 1.0)
     
     struct CovidTest {
         static let pendingText = appBlue
