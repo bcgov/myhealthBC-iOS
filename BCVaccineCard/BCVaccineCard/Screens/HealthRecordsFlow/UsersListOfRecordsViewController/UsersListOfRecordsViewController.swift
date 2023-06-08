@@ -206,8 +206,9 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     @IBAction private func createNoteButtonTapped(_ sender: UIButton) {
-        //TODO: Implement new screen here
-        self.alert(title: "Coming soon", message: "")
+        //TODO: Add to show route with proper ViewModel
+        let vc = NoteViewController.construct(for: .AddNote, with: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -705,6 +706,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                                                             authenticatedRecord: ds.isAuthenticated,
                                                             userNumberHealthRecords: dataSource.count,
                                                             patient: viewModel?.patient)
+        // TODO: Add logic here to show a different VC for when a note is tapped
         show(route: .HealthRecordDetail, withNavigation: true, viewModel: vm)
     }
     

@@ -387,12 +387,9 @@
 		2DF6657D2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */; };
 		2DF6657E2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */; };
 		2DF6657F2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */; };
-		2DF665842A3111C60009D8F0 /* CreateNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665832A3111C60009D8F0 /* CreateNoteViewController.swift */; };
-		2DF665852A3111C60009D8F0 /* CreateNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665832A3111C60009D8F0 /* CreateNoteViewController.swift */; };
-		2DF665862A3111C60009D8F0 /* CreateNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665832A3111C60009D8F0 /* CreateNoteViewController.swift */; };
-		2DF665882A3111D80009D8F0 /* ViewDetailedNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665872A3111D80009D8F0 /* ViewDetailedNoteViewController.swift */; };
-		2DF665892A3111D80009D8F0 /* ViewDetailedNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665872A3111D80009D8F0 /* ViewDetailedNoteViewController.swift */; };
-		2DF6658A2A3111D80009D8F0 /* ViewDetailedNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665872A3111D80009D8F0 /* ViewDetailedNoteViewController.swift */; };
+		2DF665842A3111C60009D8F0 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665832A3111C60009D8F0 /* NoteViewController.swift */; };
+		2DF665852A3111C60009D8F0 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665832A3111C60009D8F0 /* NoteViewController.swift */; };
+		2DF665862A3111C60009D8F0 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665832A3111C60009D8F0 /* NoteViewController.swift */; };
 		2DF665932A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665912A3136CA0009D8F0 /* EnterTextTableViewCell.swift */; };
 		2DF665942A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665912A3136CA0009D8F0 /* EnterTextTableViewCell.swift */; };
 		2DF665952A3136CA0009D8F0 /* EnterTextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF665912A3136CA0009D8F0 /* EnterTextTableViewCell.swift */; };
@@ -1618,8 +1615,7 @@
 		2DF665742A3067FE0009D8F0 /* SegmentedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedView.swift; sourceTree = "<group>"; };
 		2DF665782A3068160009D8F0 /* SegmentedView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentedView.xib; sourceTree = "<group>"; };
 		2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISegmentedControl+EXT.swift"; sourceTree = "<group>"; };
-		2DF665832A3111C60009D8F0 /* CreateNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNoteViewController.swift; sourceTree = "<group>"; };
-		2DF665872A3111D80009D8F0 /* ViewDetailedNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewDetailedNoteViewController.swift; sourceTree = "<group>"; };
+		2DF665832A3111C60009D8F0 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		2DF665912A3136CA0009D8F0 /* EnterTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterTextTableViewCell.swift; sourceTree = "<group>"; };
 		2DF665922A3136CA0009D8F0 /* EnterTextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EnterTextTableViewCell.xib; sourceTree = "<group>"; };
 		2DF665992A3136DC0009D8F0 /* AddToTimelineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToTimelineTableViewCell.swift; sourceTree = "<group>"; };
@@ -2680,30 +2676,21 @@
 			path = SegmentedView;
 			sourceTree = "<group>";
 		};
-		2DF665802A3111820009D8F0 /* CreateNoteViewController */ = {
+		2DF665802A3111820009D8F0 /* NoteViewController */ = {
 			isa = PBXGroup;
 			children = (
-				2DF665832A3111C60009D8F0 /* CreateNoteViewController.swift */,
+				2DF665832A3111C60009D8F0 /* NoteViewController.swift */,
 			);
-			path = CreateNoteViewController;
+			path = NoteViewController;
 			sourceTree = "<group>";
 		};
 		2DF665812A3111980009D8F0 /* NotesFlow */ = {
 			isa = PBXGroup;
 			children = (
 				2DF6658B2A31349E0009D8F0 /* UI */,
-				2DF665802A3111820009D8F0 /* CreateNoteViewController */,
-				2DF665822A3111AB0009D8F0 /* ViewDetailedNoteViewController */,
+				2DF665802A3111820009D8F0 /* NoteViewController */,
 			);
 			path = NotesFlow;
-			sourceTree = "<group>";
-		};
-		2DF665822A3111AB0009D8F0 /* ViewDetailedNoteViewController */ = {
-			isa = PBXGroup;
-			children = (
-				2DF665872A3111D80009D8F0 /* ViewDetailedNoteViewController.swift */,
-			);
-			path = ViewDetailedNoteViewController;
 			sourceTree = "<group>";
 		};
 		2DF6658B2A31349E0009D8F0 /* UI */ = {
@@ -4870,7 +4857,6 @@
 				2D120D4028FF17FB00EB8EBF /* DependentService.swift in Sources */,
 				792834642731016600EE2710 /* CheckboxTableViewCell.swift in Sources */,
 				3E91C7B528B51B0B005AA34F /* ImmunizationDetails+CoreDataProperties.swift in Sources */,
-				2DF665892A3111D80009D8F0 /* ViewDetailedNoteViewController.swift in Sources */,
 				2DF665532A303FBB0009D8F0 /* AuthenticatedNotesResponseModel.swift in Sources */,
 				7944F6C126F12BF2006B9444 /* Defaults.swift in Sources */,
 				2922C0AB286C73E9000FF4F7 /* HealthRecordDetailFieldTableViewCell.swift in Sources */,
@@ -5012,7 +4998,7 @@
 				79B1A0F02874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
 				296519A5272995680002B778 /* AuthManager.swift in Sources */,
 				2978851F2795F16E00FF912D /* SettingsRowTableViewCell.swift in Sources */,
-				2DF665852A3111C60009D8F0 /* CreateNoteViewController.swift in Sources */,
+				2DF665852A3111C60009D8F0 /* NoteViewController.swift in Sources */,
 				3E60A4012979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79218AD727557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
 				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
@@ -5258,7 +5244,6 @@
 				79218AF627569CEA0063004E /* VaccineTable.swift in Sources */,
 				2922C172287EB9CC000FF4F7 /* SpecialAuthorityDrugDetailView.swift in Sources */,
 				794BD6422702EEC00084ADA8 /* QRScannerView.swift in Sources */,
-				2DF6658A2A3111D80009D8F0 /* ViewDetailedNoteViewController.swift in Sources */,
 				2DF665542A303FBB0009D8F0 /* AuthenticatedNotesResponseModel.swift in Sources */,
 				296528182836A13700C411E1 /* AppDelegate+EXT.swift in Sources */,
 				2922C0AC286C73EA000FF4F7 /* HealthRecordDetailFieldTableViewCell.swift in Sources */,
@@ -5400,7 +5385,7 @@
 				795AA78627162AAB00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				79B1A0F12874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
 				296519A6272995680002B778 /* AuthManager.swift in Sources */,
-				2DF665862A3111C60009D8F0 /* CreateNoteViewController.swift in Sources */,
+				2DF665862A3111C60009D8F0 /* NoteViewController.swift in Sources */,
 				3E60A4022979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79218AD827557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
 				799E0AFD27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */,
@@ -5623,7 +5608,6 @@
 				7980058B2852C66E006E390F /* NotificationManager.swift in Sources */,
 				2D120D3F28FF17FB00EB8EBF /* DependentService.swift in Sources */,
 				7980058D2852C66E006E390F /* AuthenticationView.swift in Sources */,
-				2DF665882A3111D80009D8F0 /* ViewDetailedNoteViewController.swift in Sources */,
 				2DF665522A303FBB0009D8F0 /* AuthenticatedNotesResponseModel.swift in Sources */,
 				3E91C7B428B51B0B005AA34F /* ImmunizationDetails+CoreDataProperties.swift in Sources */,
 				7980058E2852C66E006E390F /* CheckboxTableViewCell.swift in Sources */,
@@ -5765,7 +5749,7 @@
 				798005DD2852C66E006E390F /* AnalyticsAppID.swift in Sources */,
 				798005DE2852C66E006E390F /* UIAccessibility+EXT.swift in Sources */,
 				798005DF2852C66E006E390F /* AuthenticatedTestResultsResponseModel.swift in Sources */,
-				2DF665842A3111C60009D8F0 /* CreateNoteViewController.swift in Sources */,
+				2DF665842A3111C60009D8F0 /* NoteViewController.swift in Sources */,
 				798005E02852C66E006E390F /* ProtectiveWordPromptViewController.swift in Sources */,
 				3E60A4002979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79B1A0EF2874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,

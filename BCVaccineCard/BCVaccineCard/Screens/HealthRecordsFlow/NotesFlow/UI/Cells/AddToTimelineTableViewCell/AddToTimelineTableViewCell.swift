@@ -7,12 +7,6 @@
 
 import UIKit
 
-enum AddToTimelineTableViewCellState {
-    case AddNote
-    case ViewNote
-    case EditNote
-}
-
 protocol AddToTimelineTableViewCellDelegate: AnyObject {
     func selectFolderButtonTapped() // TODO: Update this when we include this feature
     func datePickerChanged(date: String)
@@ -78,7 +72,7 @@ class AddToTimelineTableViewCell: UITableViewCell {
         addToTimelineSwitch.thumbTintColor = AppColours.appRed
     }
     
-    func configure(for note: PostNote?, state: AddToTimelineTableViewCellState, delegateOwner: UIViewController) {
+    func configure(for note: PostNote?, state: NoteVCCellState, delegateOwner: UIViewController) {
         formatForState(state: state)
         formatDate(for: note)
         let on = note?.addedToTimeline ?? false
@@ -89,7 +83,7 @@ class AddToTimelineTableViewCell: UITableViewCell {
         }
     }
     
-    private func formatForState(state: AddToTimelineTableViewCellState) {
+    private func formatForState(state: NoteVCCellState) {
         createdStackView.isHidden = state == .AddNote
         datePickerTextField.isUserInteractionEnabled = !(state == .ViewNote)
         selectFolderButton.isUserInteractionEnabled = !(state == .ViewNote)

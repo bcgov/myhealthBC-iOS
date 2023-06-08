@@ -328,6 +328,36 @@
             </objects>
             <point key="canvasLocation" x="3711" y="81"/>
         </scene>
+        <!--Note View Controller-->
+        <scene sceneID="TWz-xi-ANh">
+            <objects>
+                <viewController storyboardIdentifier="NoteViewController" id="ykR-U6-Ryd" customClass="NoteViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="NY8-CI-qZ0">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xvE-OJ-Ict">
+                                <rect key="frame" x="24" y="56" width="366" height="806"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="fC9-yu-QLv"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="fC9-yu-QLv" firstAttribute="trailing" secondItem="xvE-OJ-Ict" secondAttribute="trailing" constant="24" id="Aox-bF-OmF"/>
+                            <constraint firstItem="xvE-OJ-Ict" firstAttribute="top" secondItem="fC9-yu-QLv" secondAttribute="top" constant="8" id="CPF-eD-sbO"/>
+                            <constraint firstItem="fC9-yu-QLv" firstAttribute="bottom" secondItem="xvE-OJ-Ict" secondAttribute="bottom" id="e5n-Zr-Fia"/>
+                            <constraint firstItem="xvE-OJ-Ict" firstAttribute="leading" secondItem="fC9-yu-QLv" secondAttribute="leading" constant="24" id="qWl-fV-Yqz"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="xvE-OJ-Ict" id="3x1-XR-JTF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cfS-co-c11" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4619" y="80"/>
+        </scene>
     </scenes>
     <resources>
         <image name="close-icon-template" width="29" height="29"/>

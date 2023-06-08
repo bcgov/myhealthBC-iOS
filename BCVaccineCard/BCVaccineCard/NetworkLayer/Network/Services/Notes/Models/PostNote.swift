@@ -8,9 +8,9 @@
 import Foundation
 
 struct PostNote: Codable {
-    let title: String
-    let text: String
-    let journalDate: String // "2023-06-07" - yyyy-mm-dd
+    var title: String
+    var text: String
+    var journalDate: String // "2023-06-07" - yyyy-mm-dd
     let createdDateTime: String // Gateway Timezone
     var addedToTimeline: Bool
 }
