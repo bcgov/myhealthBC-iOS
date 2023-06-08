@@ -13,6 +13,13 @@ enum AddToTimelineTableViewCellState {
     case EditNote
 }
 
+protocol AddToTimelineTableViewCellDelegate: AnyObject {
+    func selectFolderButtonTapped() // TODO: Update this when we include this feature
+    func datePickerChanged(date: String)
+    func addToTimelineInfoButtonTapped()
+    func addToTimelineSwitchValueChanged(isOn: Bool)
+}
+
 class AddToTimelineTableViewCell: UITableViewCell {
     
     @IBOutlet private weak var createdIconImageView: UIImageView!
@@ -27,9 +34,11 @@ class AddToTimelineTableViewCell: UITableViewCell {
     
     @IBOutlet private weak var addToMyTimelineLabel: UILabel!
     @IBOutlet private weak var addToMyTimelineInfoButton: UIButton!
-    @IBOutlet private weak var datePickerButton: UIButton!
+    @IBOutlet private weak var datePickerTextField: UITextField!
     @IBOutlet private weak var addToTimelineSwitch: UISwitch!
     @IBOutlet private weak var bottomSeparatorView: UIView!
+    
+    private weak var delegate: AddToTimelineTableViewCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -51,21 +60,29 @@ class AddToTimelineTableViewCell: UITableViewCell {
         addToMyTimelineLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         addToMyTimelineLabel.textColor = AppColours.textGray
         addToMyTimelineLabel.text = "Add to my Timeline"
-        datePickerButton.titleLabel?.font = UIFont.bcSansRegularWithSize(size: 15)
-        datePickerButton.titleLabel?.textColor = AppColours.blueLightText
+        datePickerTextField.font = UIFont.bcSansRegularWithSize(size: 15)
+        datePickerTextField.textColor = AppColours.blueLightText
+        datePickerTextField.borderStyle = .none
+        datePickerTextField.backgroundColor = .white
     }
     
-    func configure(for note: PostNote?, state: AddToTimelineTableViewCellState) {
-        // TODO: Add in user interaction formatting based on screen state
+    func configure(for note: PostNote?, state: AddToTimelineTableViewCellState, delegateOwner: UIViewController) {
         formatForState(state: state)
         formatDate(for: note)
         let on = note?.addedToTimeline ?? false
         addToTimelineSwitch.setOn(on, animated: false)
+        self.delegate = delegateOwner as? AddToTimelineTableViewCellDelegate
+        if state != .ViewNote {
+            addDatePicker()
+        }
     }
     
     private func formatForState(state: AddToTimelineTableViewCellState) {
         createdStackView.isHidden = state == .AddNote
-        // TODO: Will adjust the folder background colour if note is attached to a folder or not, once we build that feature
+        datePickerTextField.isUserInteractionEnabled = !(state == .ViewNote)
+        selectFolderButton.isUserInteractionEnabled = !(state == .ViewNote)
+        addToTimelineSwitch.isUserInteractionEnabled = !(state == .ViewNote)
+        // FIXME: Will adjust the folder background colour if note is attached to a folder or not, once we build that feature
         let hasFolder = false
         selectFolderButton.backgroundColor = state == .AddNote ? AppColours.disabledGray : (hasFolder ? AppColours.appBlueLight : .white)
         let titleText = state == .AddNote ? "Select" : (hasFolder ? "Title Of Folder here" : "None")
@@ -74,27 +91,70 @@ class AddToTimelineTableViewCell: UITableViewCell {
     
     private func formatDate(for note: PostNote?) {
         guard let date = note?.journalDate else {
-            datePickerButton.setTitle("Today", for: .normal)
+            datePickerTextField.text = "Today"
             return
         }
-        // TODO: Get the date here, will be in yyyy-mm-dd time format
         if date == Date().yearMonthDayString {
-            datePickerButton.setTitle("Today", for: .normal)
+            datePickerTextField.text = "Today"
         } else {
-            datePickerButton.setTitle(date, for: .normal)
+            datePickerTextField.text = date
         }
+    }
+    
+    private func addDatePicker() {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        // bar button 'done'
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+        toolbar.setItems([doneButton], animated: true)
+        
+        datePickerTextField.inputAccessoryView = toolbar
+        
+        let datePicker = UIDatePicker()
+        
+        if Device.HasNotch {
+            let containerView = UIView(frame: CGRect(x: 0, y: 0, width: window?.bounds.width ?? 300, height: 250))
+            containerView.addSubview(datePicker)
+            datePicker.addEqualSizeContraints(to: containerView, paddingBottom: 32)
+            
+            datePickerTextField.inputView = containerView
+        } else {
+            datePickerTextField.inputView = datePicker
+        }
+        
+        // date picker mode
+        datePicker.datePickerMode = .date
+        if #available(iOS 13.4, *) {
+            datePicker.preferredDatePickerStyle = .wheels
+        }
+        datePicker.addTarget(self, action: #selector(datePickerChanged(datePicker:)), for: .valueChanged)
+    }
+    
+    @objc func doneButtonTapped() {
+        self.resignFirstResponder()
+    }
+    
+    @objc func datePickerChanged(datePicker: UIDatePicker) {
+        adjustTextFieldWithDatePickerSpin(datePicker: datePicker)
+    }
+
+    private func adjustTextFieldWithDatePickerSpin(datePicker: UIDatePicker) {
+        let text = Date.Formatter.yearMonthDay.string(from: datePicker.date)
+        self.datePickerTextField.text = text
+        self.delegate?.datePickerChanged(date: text)
     }
     
     @IBAction private func selectFolderButtonTapped(_ sender: UIButton) {
-        
+        delegate?.selectFolderButtonTapped()
     }
     
     @IBAction private func addToMyTimelineInfoButtonTapped(_ sender: UIButton) {
-        
+        delegate?.addToTimelineInfoButtonTapped()
     }
     
     @IBAction private func addToTimelineSwitchValueChanged(_ sender: UISwitch) {
-        
+        delegate?.addToTimelineSwitchValueChanged(isOn: sender.isOn)
     }
     
 }
