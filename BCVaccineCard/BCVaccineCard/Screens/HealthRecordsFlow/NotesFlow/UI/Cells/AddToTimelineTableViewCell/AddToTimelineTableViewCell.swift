@@ -70,6 +70,7 @@ class AddToTimelineTableViewCell: UITableViewCell {
         addToTimelineSwitch.layer.cornerRadius = 15.5
         addToTimelineSwitch.layer.borderColor = AppColours.appBlue.cgColor
         addToTimelineSwitch.onTintColor = AppColours.appBlue
+        // Doing now
         // FIXME: Somehow fix UISwitch off tint to white - setting layer.backCol, backCol, tintCol to white does nothing
     }
     
