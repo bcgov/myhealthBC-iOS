@@ -9,15 +9,15 @@ import Foundation
 import CoreData
 
 protocol StorageNoteManager {
-    func storeNotes(in object: AuthenticatedNotesResponseModel, completion: @escaping([Note]?)->Void)
-    func storeNote(remoteObject: NoteResponse, completion: @escaping(Note?)->Void)
-    func storeLocalNote(object: PostNote, id: String, hdid: String, completion: @escaping(Note?)->Void)
+    func storeNotes(in object: AuthenticatedNotesResponseModel, for patient: Patient, completion: @escaping([Note]?)->Void)
+    func storeNote(remoteObject: NoteResponse, patient: Patient, completion: @escaping(Note?)->Void)
+    func storeLocalNote(object: PostNote, id: String, hdid: String, patient: Patient, completion: @escaping(Note?)->Void)
     
     func fetchNotes() -> [Note]
 }
 
 extension StorageService: StorageNoteManager {
-    func storeNotes(in object: AuthenticatedNotesResponseModel, completion: @escaping ([Note]?) -> Void) {
+    func storeNotes(in object: AuthenticatedNotesResponseModel, for patient: Patient, completion: @escaping ([Note]?) -> Void) {
         let notes: [NoteResponse] = object.resourcePayload
        
         guard !notes.isEmpty else {
@@ -28,7 +28,7 @@ extension StorageService: StorageNoteManager {
         let group = DispatchGroup()
         for note in notes {
             group.enter()
-            storeNote(remoteObject: note, completion: { result in
+            storeNote(remoteObject: note, patient: patient, completion: { result in
                 if let stored = result {
                     storedNotes.append(stored)
                 }
@@ -41,7 +41,7 @@ extension StorageService: StorageNoteManager {
         }
     }
     
-    func storeNote(remoteObject object: NoteResponse, completion: @escaping(Note?)->Void) {
+    func storeNote(remoteObject object: NoteResponse, patient: Patient, completion: @escaping(Note?)->Void) {
         guard let context = managedContext else {
             return completion(nil)
         }
@@ -56,6 +56,7 @@ extension StorageService: StorageNoteManager {
         note.createdBy = object.createdBy
         note.updatedDateTime = object.updatedDateTime?.getGatewayDate()
         note.updatedBy = object.updatedBy
+        note.patient = patient
         note.addedToTimeline = true
         do {
             try context.save()
@@ -67,7 +68,7 @@ extension StorageService: StorageNoteManager {
         }
     }
     
-    func storeLocalNote(object: PostNote, id: String, hdid: String, completion: @escaping (Note?) -> Void) {
+    func storeLocalNote(object: PostNote, id: String, hdid: String, patient: Patient, completion: @escaping (Note?) -> Void) {
         guard let context = managedContext else {
             return completion(nil)
         }
@@ -82,6 +83,7 @@ extension StorageService: StorageNoteManager {
         note.updatedDateTime = object.createdDateTime.getGatewayDate()
         note.updatedBy = hdid
         note.addedToTimeline = object.addedToTimeline
+        note.patient = patient
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .Notes, object: note))

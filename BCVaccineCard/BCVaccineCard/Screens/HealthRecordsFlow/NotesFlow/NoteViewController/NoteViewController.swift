@@ -146,7 +146,8 @@ extension NoteViewController {
             alert(title: "Error", message: errorText)
         } else {
             guard let note = note else { return }
-            service?.newNote(title: note.title, text: note.text, journalDate: note.journalDate, createdDateTime: note.createdDateTime, addToTimeline: note.addedToTimeline, completion: { note in
+            guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+            service?.newNote(title: note.title, text: note.text, journalDate: note.journalDate, createdDateTime: note.createdDateTime, addToTimeline: note.addedToTimeline, patient: patient, completion: { note in
                 if let note = note {
                     self.alert(title: "Success", message: "You successfully created your note") {
                         self.navigationController?.popViewController(animated: true)
@@ -203,7 +204,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
         switch cell {
         case .TitleCell:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EnterTextTableViewCell.getName) as? EnterTextTableViewCell else { return UITableViewCell() }
-            cell.configure(type: .Title, note: self.note, delegateOwner: self)
+            cell.configure(type: .Title, note: self.note, state: self.state, delegateOwner: self)
             return cell
         case .TimelineCell:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: AddToTimelineTableViewCell.getName) as? AddToTimelineTableViewCell else { return UITableViewCell() }
@@ -211,7 +212,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         case .TextCell:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EnterTextTableViewCell.getName) as? EnterTextTableViewCell else { return UITableViewCell() }
-            cell.configure(type: .Text, note: self.note, delegateOwner: self)
+            cell.configure(type: .Text, note: self.note, state: self.state, delegateOwner: self)
             return cell
         }
     }

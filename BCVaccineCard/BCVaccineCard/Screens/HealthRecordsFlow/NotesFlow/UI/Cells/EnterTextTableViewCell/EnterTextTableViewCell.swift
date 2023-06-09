@@ -71,19 +71,22 @@ class EnterTextTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         // TODO: Check this here for editing functionality
         print("CONNOR CALLED HERE")
-        self.textView.becomeFirstResponder()
+//        self.textView.becomeFirstResponder()
     }
     
     private func setup() {
         textView.delegate = self
         createCustomKeyboard()
         placeholderLabel.isUserInteractionEnabled = false
+        textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     
-    func configure(type: NotesTextViewType, note: PostNote?, delegateOwner: UIViewController) {
+    func configure(type: NotesTextViewType, note: PostNote?, state: NoteVCCellState, delegateOwner: UIViewController) {
         self.type = type
         setupUI(type: type, note: note)
+        textView.isUserInteractionEnabled = state != .ViewNote
         self.delegate = delegateOwner as? EnterTextTableViewCellDelegate
+        self.textView.resignFirstResponder()
     }
     
     private func setupUI(type: NotesTextViewType, note: PostNote?) {
@@ -150,7 +153,8 @@ extension EnterTextTableViewCell: UITextViewDelegate {
                 currentLines = currentLines.filter{ $0 != "" }
                 //increase the counter counting how many items inside the array
 //                counter = currentLines.count
-                self.delegate?.resizeTableView()
+                // FIXME: Need to sort this out
+//                self.delegate?.resizeTableView()
             }
         }
         previousRect = currentRect

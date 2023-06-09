@@ -54,7 +54,6 @@ class AddToTimelineTableViewCell: UITableViewCell {
         selectFolderButton.layer.cornerRadius = 4.0
         selectFolderButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 13)
         selectFolderButton.setTitleColor(AppColours.textBlack, for: .normal)
-        selectFolderButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8)
         addToMyTimelineLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         addToMyTimelineLabel.textColor = AppColours.textGray
         addToMyTimelineLabel.text = "Add to my Timeline"
@@ -88,13 +87,21 @@ class AddToTimelineTableViewCell: UITableViewCell {
             addDatePicker()
         }
         switchVariableFormatting(isOn: note?.addedToTimeline ?? false)
+        formatDateInViewMode(for: note, state: state)
+        // TODO: Adjust once we have a folder structure
+        let doesntHaveFolder = true
+        if state == .ViewNote && doesntHaveFolder {
+            // Ignore for now
+        } else {
+            selectFolderButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8)
+        }
     }
     
     private func formatForState(state: NoteVCCellState) {
         createdStackView.isHidden = state == .AddNote
-        datePickerTextField.isUserInteractionEnabled = !(state == .ViewNote)
-        selectFolderButton.isUserInteractionEnabled = !(state == .ViewNote)
-        addToTimelineSwitch.isUserInteractionEnabled = !(state == .ViewNote)
+        datePickerTextField.isUserInteractionEnabled = state != .ViewNote
+        selectFolderButton.isUserInteractionEnabled = state != .ViewNote
+        addToTimelineSwitch.isUserInteractionEnabled = state != .ViewNote
         // FIXME: Will adjust the folder background colour if note is attached to a folder or not, once we build that feature
         let hasFolder = false
         selectFolderButton.backgroundColor = state == .AddNote ? AppColours.disabledGray : (hasFolder ? AppColours.appBlueLight : .white)
@@ -112,6 +119,16 @@ class AddToTimelineTableViewCell: UITableViewCell {
         } else {
             datePickerTextField.text = date
         }
+    }
+    
+    private func formatDateInViewMode(for note: PostNote?, state: NoteVCCellState) {
+        guard state == .ViewNote else { return }
+        guard let date = note?.journalDate else {
+            createdDateValueLabel.text = "Unknown"
+            return
+        }
+        createdDateValueLabel.text = Date.Formatter.yearMonthDay.date(from: date)?.yearMonthStringDayString ?? date
+        
     }
     
     private func addDatePicker() {

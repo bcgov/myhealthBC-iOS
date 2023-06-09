@@ -29,19 +29,19 @@ struct NotesService {
                 network.removeLoader(caller: .Notes_fetchAndStore)
                 return completion(nil)
             }
-            StorageService.shared.storeNotes(in: response) { notes in
+            StorageService.shared.storeNotes(in: response, for: patient) { notes in
                 network.removeLoader(caller: .Notes_fetchAndStore)
                 completion(notes)
             }
         }
     }
     // TODO: Enable/disable addToTimeline logic on screen
-    public func newNote(title: String, text: String, journalDate: String, createdDateTime: String, addToTimeline: Bool, completion: @escaping (Note?)->Void) {
+    public func newNote(title: String, text: String, journalDate: String, createdDateTime: String, addToTimeline: Bool, patient: Patient, completion: @escaping (Note?)->Void) {
         if addToTimeline == false {
             postLocalNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime) { note in
                 guard let note = note, let hdid = authManager.hdid else { return completion(nil) }
                 let id = UUID().uuidString
-                StorageService.shared.storeLocalNote(object: note, id: id, hdid: hdid, completion: completion)
+                StorageService.shared.storeLocalNote(object: note, id: id, hdid: hdid, patient: patient, completion: completion)
             }
         } else {
             if NetworkConnection.shared.hasConnection {
@@ -51,7 +51,7 @@ struct NotesService {
                         // TODO: Error handling here
                         return completion(nil)
                     }
-                    StorageService.shared.storeNote(remoteObject: result, completion: completion)
+                    StorageService.shared.storeNote(remoteObject: result, patient: patient, completion: completion)
                 }
             } else {
                 print("Error")

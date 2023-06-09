@@ -97,7 +97,7 @@ extension Patient {
     }
     
     public var notesArray: [Note] {
-        let set = diagnosticImaging as? Set<Note> ?? []
+        let set = notes as? Set<Note> ?? []
         return set.sorted {
             $0.journalDate ?? Date() > $1.journalDate ?? Date()
         }
