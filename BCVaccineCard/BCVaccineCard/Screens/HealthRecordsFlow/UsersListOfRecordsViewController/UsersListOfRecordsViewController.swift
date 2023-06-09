@@ -541,6 +541,8 @@ extension UsersListOfRecordsViewController {
                         showItem = filter.recordTypes.contains(.ClinicalDocuments)
                     case .diagnosticImaging:
                         showItem = filter.recordTypes.contains(.DiagnosticImaging)
+                    case .note:
+                        showItem = filter.recordTypes.contains(.Notes)
                     }
                 }
                 // Filter by date
@@ -713,8 +715,15 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                                                             authenticatedRecord: ds.isAuthenticated,
                                                             userNumberHealthRecords: dataSource.count,
                                                             patient: viewModel?.patient)
-        // TODO: Add logic here to show a different VC for when a note is tapped
-        show(route: .HealthRecordDetail, withNavigation: true, viewModel: vm)
+        switch ds.type {
+        case .note(model: let model):
+            let note = PostNote(title: model.title ?? "", text: model.text ?? "", journalDate: model.journalDate?.yearMonthDayString ?? Date().yearMonthDayString, createdDateTime: model.createdDateTime?.gatewayDateAndTimeWithMSAndTimeZone ?? Date().gatewayDateAndTimeWithMSAndTimeZone, addedToTimeline: model.addedToTimeline)
+            let vc = NoteViewController.construct(for: .ViewNote, with: note)
+            self.navigationController?.pushViewController(vc, animated: true)
+        default:
+            show(route: .HealthRecordDetail, withNavigation: true, viewModel: vm)
+        }
+        
     }
     
 }

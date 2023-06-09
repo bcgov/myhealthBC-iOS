@@ -20,6 +20,7 @@ struct HealthRecordsDetailDataSource {
             case hospitalVisit(model: HospitalVisit)
             case clinicalDocument(model: ClinicalDocument)
             case diagnosticImaging(model: DiagnosticImaging)
+            case note(model: Note)
         }
         let id: String
         let name: String
@@ -51,13 +52,15 @@ struct HealthRecordsDetailDataSource {
                 return model.commentsArray
             case .diagnosticImaging:
                 return []
+            case .note(model: let model):
+                return []
             }
         }
         
         var includesSeparatorUI: Bool {
             switch self.type {
             case .covidImmunizationRecord, .covidTestResultRecord, .laboratoryOrder, .immunization: return true
-            case .medication, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging: return false
+            case .medication, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging, .note: return false
             }
         }
     }
@@ -73,6 +76,7 @@ struct HealthRecordsDetailDataSource {
         case hospitalVisit(model: HospitalVisit)
         case clinicalDocument(model:ClinicalDocument)
         case diagnosticImaging(model: DiagnosticImaging)
+        case note(model: Note)
     }
     
     let id: String?
@@ -114,6 +118,8 @@ struct HealthRecordsDetailDataSource {
             return records.first
         case .diagnosticImaging(model: let model):
             return records.first
+        case .note:
+            return records.first
         }
     }
     
@@ -140,6 +146,8 @@ struct HealthRecordsDetailDataSource {
         case .diagnosticImaging(model: let model):
             // Pretty sure we can't get diagnostic reports without being authenticated
             return true
+        case .note(model: let model):
+            return true
         }
     }
     
@@ -154,7 +162,8 @@ struct HealthRecordsDetailDataSource {
                 .immunization,
                 .hospitalVisit,
                 .clinicalDocument,
-                .diagnosticImaging:
+                .diagnosticImaging,
+                .note:
             return false
         case .medication:
             return true
@@ -257,7 +266,15 @@ struct HealthRecordsDetailDataSource {
             
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
+        case .note(model: let model):
+            id = model.id
+            title = model.title ?? "-"
+            detailNavTitle = ""
+            name = model.patient?.name ?? "-"
+            image = UIImage(named: "blue-bg-notes-icon")
             
+            deleteAlertTitle = "N/A"
+            deleteAlertMessage = "Should not see this"
         }
     }
 }
@@ -299,6 +316,9 @@ extension HealthRecordsDetailDataSource {
             return result
         case .diagnosticImaging(model: let model):
             result.append(genRecord(diagnosticImaging: model))
+            return result
+        case . note(model: let model):
+            result.append(genRecord(note: model))
             return result
         }
     }
@@ -399,5 +419,12 @@ extension HealthRecordsDetailDataSource {
         let dateString = diagnosticImaging.examDate?.monthDayYearString
         // TODO: confirm data
         return Record(id: diagnosticImaging.id ?? UUID().uuidString, name: diagnosticImaging.modality ?? "", type: .diagnosticImaging(model: diagnosticImaging), status: diagnosticImaging.examStatus, date: dateString, listStatus: diagnosticImaging.examStatus ?? "", commentID: diagnosticImaging.id)
+    }
+    
+    // MARK: Note
+    private static func genRecord(note: Note) -> Record {
+        let dateString = note.journalDate?.yearMonthStringDayString
+        // TODO: confirm data
+        return Record(id: note.id ?? UUID().uuidString, name: note.title ?? "", type: .note(model: note), status: "No Status", date: dateString, listStatus: "No List Status", commentID: note.id)
     }
 }

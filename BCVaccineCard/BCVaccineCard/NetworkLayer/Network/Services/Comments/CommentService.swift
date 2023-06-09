@@ -287,6 +287,7 @@ extension CommentService {
         case hospitalVisit = "Hos"
         case clinicalDocument = "CDO"
         case diagnosticImaging = "DI" // TODO: Confirm this, total guess as of now
+        case note = "NO" // Not needed, just need to satisfy switch
     }
     
     fileprivate func postCommentObject(message: String, commentID: String, date: Date, hdid: String, type: CommentType) -> PostComment {
@@ -346,6 +347,8 @@ extension HealthRecord {
             return .clinicalDocument
         case .DiagnosticImaging(_):
             return .diagnosticImaging
+        case .Note(_):
+            return .note
         }
     }
 }
@@ -385,6 +388,8 @@ extension HealthRecordsDetailDataSource.Record {
             return HealthRecord(type: .ClinicalDocument(model))
         case .diagnosticImaging(model: let model):
             return HealthRecord(type: .DiagnosticImaging(model))
+        case .note(model: let model):
+            return HealthRecord(type: .Note(model))
         }
         
     }

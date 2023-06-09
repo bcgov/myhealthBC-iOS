@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 protocol StorageNoteManager {
-    func storeNotes(in object: AuthenticatedNotesResponseModel, completion: @escaping([Note])->Void)
+    func storeNotes(in object: AuthenticatedNotesResponseModel, completion: @escaping([Note]?)->Void)
     func storeNote(remoteObject: NoteResponse, completion: @escaping(Note?)->Void)
     func storeLocalNote(object: PostNote, id: String, hdid: String, completion: @escaping(Note?)->Void)
     
@@ -17,12 +17,12 @@ protocol StorageNoteManager {
 }
 
 extension StorageService: StorageNoteManager {
-    func storeNotes(in object: AuthenticatedNotesResponseModel, completion: @escaping ([Note]) -> Void) {
+    func storeNotes(in object: AuthenticatedNotesResponseModel, completion: @escaping ([Note]?) -> Void) {
         let notes: [NoteResponse] = object.resourcePayload
        
         guard !notes.isEmpty else {
             Logger.log(string: "No Notes", type: .storage)
-            return completion([])
+            return completion(nil)
         }
         var storedNotes: [Note] = []
         let group = DispatchGroup()

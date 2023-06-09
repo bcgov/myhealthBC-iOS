@@ -46,6 +46,8 @@ class NoteViewController: BaseViewController {
     private var note: PostNote?
     private var state: NoteVCCellState!
     private var dataSource: [TableViewStructure] = []
+    
+    private var service: NotesService?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +72,11 @@ class NoteViewController: BaseViewController {
         navSetup()
         setupTableView()
         initializeNewNoteIfNecessary()
+        initializeNetworkService()
+    }
+    
+    private func initializeNetworkService() {
+        service = NotesService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
     }
     
     private func screenStateChanged() {
@@ -139,11 +146,15 @@ extension NoteViewController {
             alert(title: "Error", message: errorText)
         } else {
             guard let note = note else { return }
-            if note.addedToTimeline {
-                // network request here
-            } else {
-                // only store locally here
-            }
+            service?.newNote(title: note.title, text: note.text, journalDate: note.journalDate, createdDateTime: note.createdDateTime, addToTimeline: note.addedToTimeline, completion: { note in
+                if let note = note {
+                    self.alert(title: "Success", message: "You successfully created your note") {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                } else {
+                    self.alert(title: "Error", message: "There was an error creating your note, please try again.")
+                }
+            })
         }
         
     }

@@ -22,12 +22,12 @@ struct NotesService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, completion: @escaping ([Note])->Void) {
+    public func fetchAndStore(for patient: Patient, completion: @escaping ([Note]?)->Void) {
         network.addLoader(message: .SyncingRecords, caller: .Notes_fetchAndStore)
         fetch(for: patient) { response in
             guard let response = response else {
                 network.removeLoader(caller: .Notes_fetchAndStore)
-                return completion([])
+                return completion(nil)
             }
             StorageService.shared.storeNotes(in: response) { notes in
                 network.removeLoader(caller: .Notes_fetchAndStore)

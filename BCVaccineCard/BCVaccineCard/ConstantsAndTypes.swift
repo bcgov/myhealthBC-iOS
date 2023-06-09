@@ -20,7 +20,8 @@ struct HealthRecordConstants {
             .specialAuthorityDrug,
             .hospitalVisit,
             .clinicalDocument,
-            .diagnosticImaging
+            .diagnosticImaging,
+            .notes
         ]
     }
     
@@ -68,11 +69,12 @@ extension HealthRecordConstants {
         case hospitalVisit
         case clinicalDocument
         case diagnosticImaging
+        case notes
     }
 }
 
 extension StorageService {
-    enum healthRecordType: CaseIterable {
+    enum HealthRecordType: CaseIterable {
         case CovidTest
         case VaccineCard
         case Prescription
@@ -84,6 +86,7 @@ extension StorageService {
         case HospitalVisit
         case ClinicalDocument
         case DiagnosticImaging
+        case Notes
     }
 }
 
@@ -110,10 +113,12 @@ extension HealthRecordConstants.RecordType {
             return .ClinicalDocuments
         case .diagnosticImaging:
             return .DiagnosticImaging
+        case .notes:
+            return .Notes
         }
     }
     
-    func toStorageType() -> StorageService.healthRecordType? {
+    func toStorageType() -> StorageService.HealthRecordType? {
         switch self {
         case .covidImmunizationRecord:
             return .Immunization
@@ -135,6 +140,8 @@ extension HealthRecordConstants.RecordType {
             return .ClinicalDocument
         case .diagnosticImaging:
             return .DiagnosticImaging
+        case .notes:
+            return .Notes
         }
     }
 }
@@ -150,6 +157,7 @@ struct RecordsFilter {
         case SpecialAuthorityDrugs = "Special Authority"
         case HospitalVisits = "Hospital Visits"
         case DiagnosticImaging = "Imaging reports"
+        case Notes = "Notes"
     }
     
     var fromDate: Date?

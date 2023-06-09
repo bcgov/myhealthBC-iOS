@@ -27,6 +27,7 @@ struct HealthRecord {
         case HospitalVisit(HospitalVisit)
         case ClinicalDocument(ClinicalDocument)
         case DiagnosticImaging(DiagnosticImaging)
+        case Note(Note)
     }
     
     public let type: Record
@@ -83,6 +84,10 @@ struct HealthRecord {
             patient = object.patient!
             patientName = patient.name ?? ""
             birthDate = patient.birthday
+        case .Note(let object):
+            patient = object.patient!
+            patientName = patient.name ?? ""
+            birthDate = patient.birthday
         }
     }
 }
@@ -109,6 +114,8 @@ extension HealthRecord {
         case .ClinicalDocument(let object):
             return object.id ?? ""
         case .DiagnosticImaging(let object):
+            return object.id ?? ""
+        case .Note(let object):
             return object.id ?? ""
         }
     }
@@ -154,6 +161,8 @@ extension HealthRecord {
             return HealthRecordsDetailDataSource(type: .clinicalDocument(model: object))
         case .DiagnosticImaging(let object):
             return HealthRecordsDetailDataSource(type: .diagnosticImaging(model: object))
+        case .Note(let object):
+            return HealthRecordsDetailDataSource(type: .note(model: object))
         }
     }
     
@@ -178,6 +187,8 @@ extension HealthRecord {
         case .ClinicalDocument(let object):
             return object.authenticated
         case . DiagnosticImaging(let object):
+            return true
+        case .Note(let object):
             return true
         }
     }
@@ -232,6 +243,8 @@ extension Array where Element == HealthRecord {
                 firstDate = model.serviceDate
             case .diagnosticImaging(model: let model):
                 firstDate = model.examDate
+            case .note(model: let model):
+                firstDate = model.journalDate
             }
             switch second.type {
             case .covidImmunizationRecord(model: let model, immunizations: _):
@@ -254,6 +267,8 @@ extension Array where Element == HealthRecord {
                 secondDate = model.serviceDate
             case .diagnosticImaging(model: let model):
                 secondDate = model.examDate
+            case .note(model: let model):
+                secondDate = model.journalDate
             }
             return firstDate ?? Date() > secondDate ?? Date()
         })
@@ -309,6 +324,11 @@ extension Array where Element == HealthRecord {
                 return false
             case .DiagnosticImaging(let object):
                 if recordType == .diagnosticImaging {
+                    return object.id == id
+                }
+                return false
+            case .Note(let object):
+                if recordType == .note {
                     return object.id == id
                 }
                 return false
