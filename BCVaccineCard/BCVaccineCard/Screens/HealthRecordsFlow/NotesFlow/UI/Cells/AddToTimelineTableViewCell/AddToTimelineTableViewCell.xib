@@ -49,7 +49,7 @@
                         </subviews>
                     </stackView>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="DKf-h1-PyL">
-                        <rect key="frame" x="0.0" y="32" width="52" height="13"/>
+                        <rect key="frame" x="0.0" y="35" width="52" height="13"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="folder-icon" translatesAutoresizingMaskIntoConstraints="NO" id="I3m-QQ-wuj">
                                 <rect key="frame" x="0.0" y="0.0" width="13" height="13"/>
@@ -67,7 +67,7 @@
                         </subviews>
                     </stackView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dHq-38-lFF">
-                        <rect key="frame" x="82" y="27.666666666666671" width="44" height="22"/>
+                        <rect key="frame" x="82" y="30.666666666666671" width="44" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="qc2-YS-7r7"/>
                         </constraints>
@@ -78,14 +78,14 @@
                         </connections>
                     </button>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="14B-iN-0O5">
-                        <rect key="frame" x="0.0" y="69.666666666666671" width="320" height="1"/>
+                        <rect key="frame" x="0.0" y="72.666666666666671" width="320" height="1"/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="1" id="WF0-Hd-4t9"/>
                         </constraints>
                     </view>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="2HP-Ek-saN">
-                        <rect key="frame" x="0.0" y="82.666666666666671" width="64.333333333333329" height="20"/>
+                        <rect key="frame" x="0.0" y="85.666666666666671" width="64.333333333333329" height="20"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ilO-M1-IhL">
                                 <rect key="frame" x="0.0" y="0.0" width="37.333333333333336" height="20"/>
@@ -107,8 +107,8 @@
                             </button>
                         </subviews>
                     </stackView>
-                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="J2d-As-cNs">
-                        <rect key="frame" x="269" y="77" width="51" height="31"/>
+                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" preferredStyle="sliding" translatesAutoresizingMaskIntoConstraints="NO" id="J2d-As-cNs">
+                        <rect key="frame" x="269" y="80" width="51" height="31"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="onTintColor" name="AccentColor"/>
@@ -118,7 +118,7 @@
                         </connections>
                     </switch>
                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SUO-85-xYz">
-                        <rect key="frame" x="0.0" y="109.66666666666667" width="32" height="36.333333333333329"/>
+                        <rect key="frame" x="0.0" y="112.66666666666667" width="32" height="33.333333333333329"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <textInputTraits key="textInputTraits"/>
                     </textField>
@@ -151,7 +151,7 @@
                     <constraint firstItem="Dko-O5-w4u" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="4" id="mlR-Vf-ksW"/>
                     <constraint firstItem="SUO-85-xYz" firstAttribute="leading" secondItem="2HP-Ek-saN" secondAttribute="leading" id="tae-4X-d1A"/>
                     <constraint firstItem="DKf-h1-PyL" firstAttribute="leading" secondItem="Dko-O5-w4u" secondAttribute="leading" id="wma-oM-6BL"/>
-                    <constraint firstItem="DKf-h1-PyL" firstAttribute="top" secondItem="Dko-O5-w4u" secondAttribute="bottom" constant="15" id="yLl-GQ-jLz"/>
+                    <constraint firstItem="DKf-h1-PyL" firstAttribute="top" secondItem="Dko-O5-w4u" secondAttribute="bottom" constant="18" id="yLl-GQ-jLz"/>
                     <constraint firstItem="Dko-O5-w4u" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="zcS-CC-Mza"/>
                 </constraints>
             </tableViewCellContentView>
