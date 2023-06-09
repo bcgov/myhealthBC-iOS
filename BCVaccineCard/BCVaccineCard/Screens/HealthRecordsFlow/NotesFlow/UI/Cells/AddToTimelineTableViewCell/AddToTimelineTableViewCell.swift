@@ -33,6 +33,8 @@ class AddToTimelineTableViewCell: UITableViewCell {
     @IBOutlet private weak var bottomSeparatorView: UIView!
     
     private weak var delegate: AddToTimelineTableViewCellDelegate?
+    
+    private var datePicker: UIDatePicker?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -51,7 +53,8 @@ class AddToTimelineTableViewCell: UITableViewCell {
         separatorView.backgroundColor = AppColours.borderGray
         selectFolderButton.layer.cornerRadius = 4.0
         selectFolderButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 13)
-        selectFolderButton.titleLabel?.textColor = AppColours.textBlack
+        selectFolderButton.setTitleColor(AppColours.textBlack, for: .normal)
+        selectFolderButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8)
         addToMyTimelineLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         addToMyTimelineLabel.textColor = AppColours.textGray
         addToMyTimelineLabel.text = "Add to my Timeline"
@@ -60,16 +63,19 @@ class AddToTimelineTableViewCell: UITableViewCell {
         datePickerTextField.borderStyle = .none
         datePickerTextField.backgroundColor = .white
         bottomSeparatorView.backgroundColor = AppColours.borderGray
-        switchFormatting(isOn: false)
+        switchBaseFormatting()
     }
     
-    private func switchFormatting(isOn: Bool) {
-        // TODO: Update this accordingly
-        // Will likely have to dynamically update
-        addToTimelineSwitch.onTintColor = AppColours.appBlue
-        addToTimelineSwitch.tintColor = .white
+    private func switchBaseFormatting() {
+        addToTimelineSwitch.layer.borderWidth = 1.0
+        addToTimelineSwitch.layer.cornerRadius = 15.5
         addToTimelineSwitch.layer.borderColor = AppColours.appBlue.cgColor
-        addToTimelineSwitch.thumbTintColor = AppColours.appRed
+        addToTimelineSwitch.onTintColor = AppColours.appBlue
+        // FIXME: Somehow fix UISwitch off tint to white - setting layer.backCol, backCol, tintCol to white does nothing
+    }
+    
+    private func switchVariableFormatting(isOn: Bool) {
+        addToTimelineSwitch.thumbTintColor = isOn ? .white : AppColours.appBlue
     }
     
     func configure(for note: PostNote?, state: NoteVCCellState, delegateOwner: UIViewController) {
@@ -81,6 +87,7 @@ class AddToTimelineTableViewCell: UITableViewCell {
         if state != .ViewNote {
             addDatePicker()
         }
+        switchVariableFormatting(isOn: note?.addedToTimeline ?? false)
     }
     
     private func formatForState(state: NoteVCCellState) {
@@ -111,13 +118,14 @@ class AddToTimelineTableViewCell: UITableViewCell {
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
         
+        datePicker = UIDatePicker()
         // bar button 'done'
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
         toolbar.setItems([doneButton], animated: true)
         
         datePickerTextField.inputAccessoryView = toolbar
         
-        let datePicker = UIDatePicker()
+        guard let datePicker = datePicker else { return }
         
         if Device.HasNotch {
             let containerView = UIView(frame: CGRect(x: 0, y: 0, width: window?.bounds.width ?? 300, height: 250))
@@ -138,7 +146,11 @@ class AddToTimelineTableViewCell: UITableViewCell {
     }
     
     @objc func doneButtonTapped() {
-        self.resignFirstResponder()
+        if let datePicker = datePicker {
+            adjustTextFieldWithDatePickerSpin(datePicker: datePicker)
+        }
+        self.datePickerTextField.resignFirstResponder()
+        self.datePicker = nil
     }
     
     @objc func datePickerChanged(datePicker: UIDatePicker) {
@@ -146,9 +158,13 @@ class AddToTimelineTableViewCell: UITableViewCell {
     }
 
     private func adjustTextFieldWithDatePickerSpin(datePicker: UIDatePicker) {
-        let text = Date.Formatter.yearMonthDay.string(from: datePicker.date)
+        var text = Date.Formatter.yearMonthDay.string(from: datePicker.date)
+        let date = text
+        if text == Date().yearMonthDayString {
+            text = "Today"
+        }
         self.datePickerTextField.text = text
-        self.delegate?.datePickerChanged(date: text)
+        self.delegate?.datePickerChanged(date: date)
     }
     
     @IBAction private func selectFolderButtonTapped(_ sender: UIButton) {
@@ -161,6 +177,7 @@ class AddToTimelineTableViewCell: UITableViewCell {
     
     @IBAction private func addToTimelineSwitchValueChanged(_ sender: UISwitch) {
         delegate?.addToTimelineSwitchValueChanged(isOn: sender.isOn)
+        switchVariableFormatting(isOn: sender.isOn)
     }
     
 }

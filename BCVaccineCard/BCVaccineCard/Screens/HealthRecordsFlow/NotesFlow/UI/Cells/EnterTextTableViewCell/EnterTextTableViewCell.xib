@@ -25,16 +25,27 @@
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" enablesReturnKeyAutomatically="YES"/>
                     </textView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="amw-KP-RMV">
+                        <rect key="frame" x="0.0" y="11.999999999999998" width="315" height="20.333333333333329"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="gcM-pF-BAb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="3GL-is-dWD"/>
+                    <constraint firstAttribute="trailing" secondItem="amw-KP-RMV" secondAttribute="trailing" constant="5" id="ERU-LF-m1e"/>
                     <constraint firstAttribute="bottom" secondItem="gcM-pF-BAb" secondAttribute="bottom" id="M2R-Cf-cAc"/>
+                    <constraint firstItem="amw-KP-RMV" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="aMY-xD-BCt"/>
                     <constraint firstAttribute="trailing" secondItem="gcM-pF-BAb" secondAttribute="trailing" id="cik-dG-72S"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="amw-KP-RMV" secondAttribute="bottom" constant="8" id="dmD-VA-sMS"/>
+                    <constraint firstItem="amw-KP-RMV" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="qdA-e5-tBa"/>
                     <constraint firstItem="gcM-pF-BAb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="xU6-cM-TbO"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="placeholderLabel" destination="amw-KP-RMV" id="XH7-XL-aif"/>
                 <outlet property="textView" destination="gcM-pF-BAb" id="zM5-5c-BkV"/>
             </connections>
             <point key="canvasLocation" x="104" y="21"/>

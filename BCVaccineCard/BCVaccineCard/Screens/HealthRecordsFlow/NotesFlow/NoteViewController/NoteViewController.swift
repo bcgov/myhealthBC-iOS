@@ -69,6 +69,20 @@ class NoteViewController: BaseViewController {
     private func setup() {
         navSetup()
         setupTableView()
+        initializeNewNoteIfNecessary()
+    }
+    
+    private func screenStateChanged() {
+        navSetup()
+        tableView.reloadData()
+    }
+    
+    private func initializeNewNoteIfNecessary() {
+        if note == nil {
+            let defaultDate = Date().yearMonthDayString
+            let createdAt = Date().gatewayDateAndTimeWithMSAndTimeZone
+            note = PostNote(title: "", text: "", journalDate: defaultDate, createdDateTime: createdAt, addedToTimeline: false)
+        }
     }
     
     private func setupTableView() {
@@ -102,9 +116,9 @@ extension NoteViewController {
             let navButton = NavButton(title: "Create", image: nil, action: #selector(self.createButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
             rightNavButtons = [navButton]
         case .ViewNote:
-            // TODO: Fix UIImmages
-            let editNavButton = NavButton(image: UIImage(named: "edit-icon"), action: #selector(self.editButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
-            let deleteNavButton = NavButton(image: UIImage(named: "edit-icon"), action: #selector(self.deleteButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
+            let editNavButton = NavButton(image: UIImage(named: "edit-note"), action: #selector(self.editButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
+            let deleteNavButton = NavButton(image: UIImage(named: "delete-note"), action: #selector(self.deleteButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
+            rightNavButtons = [editNavButton, deleteNavButton]
         case .EditNote:
             let navButton = NavButton(title: "Save", image: nil, action: #selector(self.saveButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
             rightNavButtons = [navButton]
@@ -112,7 +126,7 @@ extension NoteViewController {
         self.navDelegate?.setNavigationBarWith(title: state.getNavTitle,
                                                leftNavButton: nil,
                                                rightNavButtons: rightNavButtons,
-                                               navStyle: .large,
+                                               navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
@@ -121,19 +135,42 @@ extension NoteViewController {
     }
     
     @objc private func createButtonTapped() {
-        // TODO: Create logic here
+        if let errorText = validateNote(note: self.note) {
+            alert(title: "Error", message: errorText)
+        } else {
+            guard let note = note else { return }
+            if note.addedToTimeline {
+                // network request here
+            } else {
+                // only store locally here
+            }
+        }
+        
     }
     
     @objc private func saveButtonTapped() {
         // TODO: Update logic here
+        alert(title: "Coming Soon", message: "Save an edited note coming soon") {
+            self.state = .ViewNote
+            self.screenStateChanged()
+        }
     }
     
     @objc private func editButtonTapped() {
         // TODO: Edit logic here
+        alert(title: "Coming Soon", message: "Edit a note coming soon")
+        self.state = .EditNote
+        screenStateChanged()
     }
     
     @objc private func deleteButtonTapped() {
         // TODO: Delete logic here
+        self.alert(title: "Delete Note", message: "This action cannot be undone. Are you sure you want to delete this note?", buttonOneTitle: .delete, buttonOneCompletion: {
+            self.alert(title: "Coming Soon", message: "Delete a note coming soon")
+            // TODO: Delete note then after success, pop back to previous VC
+        }, buttonTwoTitle: .cancel) {
+            // Do Nothing
+        }
     }
 }
 
@@ -155,7 +192,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
         switch cell {
         case .TitleCell:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EnterTextTableViewCell.getName) as? EnterTextTableViewCell else { return UITableViewCell() }
-            cell.configure(type: .Title, note: self.note)
+            cell.configure(type: .Title, note: self.note, delegateOwner: self)
             return cell
         case .TimelineCell:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: AddToTimelineTableViewCell.getName) as? AddToTimelineTableViewCell else { return UITableViewCell() }
@@ -163,7 +200,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         case .TextCell:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EnterTextTableViewCell.getName) as? EnterTextTableViewCell else { return UITableViewCell() }
-            cell.configure(type: .Text, note: self.note)
+            cell.configure(type: .Text, note: self.note, delegateOwner: self)
             return cell
         }
     }
@@ -171,7 +208,7 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 // MARK: Delegates
-extension NoteViewController: AddToTimelineTableViewCellDelegate {
+extension NoteViewController: AddToTimelineTableViewCellDelegate, EnterTextTableViewCellDelegate {
     func selectFolderButtonTapped() {
         alert(title: "Coming soon", message: "Feature coming soon")
     }
@@ -188,5 +225,33 @@ extension NoteViewController: AddToTimelineTableViewCellDelegate {
         self.note?.addedToTimeline = isOn
     }
     
+    func resizeTableView() {
+        self.tableView.reloadData()
+    }
     
+    func noteValueChanged(type: NotesTextViewType, text: String) {
+        switch type {
+        case .Title:
+            self.note?.title = text
+        case .Text:
+            self.note?.text = text
+        }
+    }
+    
+}
+
+// MARK: Validation
+extension NoteViewController {
+    private func validateNote(note: PostNote?) -> String? {
+        guard let note = note else {
+            return "You must complete your note before creating"
+        }
+        var errorText: String?
+        if note.title.trimWhiteSpacesAndNewLines.count == 0 {
+            errorText = "You must enter a title for your note"
+        } else if note.text.trimWhiteSpacesAndNewLines.count == 0 {
+            errorText = "You must enter some text for your note"
+        }
+        return errorText
+    }
 }

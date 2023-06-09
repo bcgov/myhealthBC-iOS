@@ -44,6 +44,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     private let refreshControl = UIRefreshControl()
     
+    private var currentSegment: SegmentType = .Timeline
+    
     private var dataSource: [HealthRecordsDetailDataSource] = []
     
     private var dropDownView: NavBarDropDownView?
@@ -190,6 +192,10 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundView.isHidden = true
         createNoteButton.isHidden = true
         fetchDataSource()
+        if currentSegment == .Notes {
+            // TODO: Update once we have folder structure built
+            showNotesViews(notesRecordsEmpty: true)
+        }
     }
     
     private func updatePatientIfNecessary() {
@@ -215,6 +221,7 @@ class UsersListOfRecordsViewController: BaseViewController {
 // MARK: Segmented Control Delegate
 extension UsersListOfRecordsViewController: SegmentedViewDelegate {
     func segmentSelected(type: SegmentType) {
+        currentSegment = type
         switch type {
         case .Timeline:
             var patientRecords = fetchPatientRecords()

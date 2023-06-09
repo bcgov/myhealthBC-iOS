@@ -47,11 +47,20 @@ enum NotesTextViewType {
     }
 }
 
+protocol EnterTextTableViewCellDelegate: AnyObject {
+    func resizeTableView()
+    func noteValueChanged(type: NotesTextViewType, text: String)
+}
+
 class EnterTextTableViewCell: UITableViewCell {
     
     @IBOutlet private weak var textView: UITextView!
+    @IBOutlet private weak var placeholderLabel: UILabel!
     
     private var type: NotesTextViewType?
+    private weak var delegate: EnterTextTableViewCellDelegate?
+    
+    private var previousRect: CGRect?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -62,92 +71,106 @@ class EnterTextTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         // TODO: Check this here for editing functionality
         print("CONNOR CALLED HERE")
-        self.becomeFirstResponder()
+        self.textView.becomeFirstResponder()
     }
     
     private func setup() {
         textView.delegate = self
+        createCustomKeyboard()
+        placeholderLabel.isUserInteractionEnabled = false
     }
     
-    func configure(type: NotesTextViewType, note: PostNote?) {
+    func configure(type: NotesTextViewType, note: PostNote?, delegateOwner: UIViewController) {
         self.type = type
         setupUI(type: type, note: note)
+        self.delegate = delegateOwner as? EnterTextTableViewCellDelegate
     }
     
     private func setupUI(type: NotesTextViewType, note: PostNote?) {
         textView.font = type.getFont
+        textView.textColor = type.getForegroundColor
+        placeholderLabel.font = type.getFont
+        placeholderLabel.text = type.getPlaceholderText
+        placeholderLabel.textColor = type.getPlaceholderColor
         guard let note = note else {
-            textView.textColor = type.getPlaceholderColor
-            textView.text = type.getPlaceholderText
+            placeholderLabel.isHidden = false
             return
         }
         switch type {
         case .Title:
-            textView.text = note.title.trimWhiteSpacesAndNewLines.count == 0 ? note.title : type.getPlaceholderText
-            textView.textColor = note.title.trimWhiteSpacesAndNewLines.count == 0 ? type.getForegroundColor : type.getPlaceholderColor
+            let noteHasTitle = note.title.trimWhiteSpacesAndNewLines.count > 0
+            placeholderLabel.isHidden = noteHasTitle
+            textView.text = noteHasTitle ? note.title : nil
         case .Text:
-            textView.text = note.text.trimWhiteSpacesAndNewLines.count == 0 ? note.text : type.getPlaceholderText
-            textView.textColor = note.text.trimWhiteSpacesAndNewLines.count == 0 ? type.getForegroundColor : type.getPlaceholderColor
+            let noteHasText = note.text.trimWhiteSpacesAndNewLines.count > 0
+            placeholderLabel.isHidden = noteHasText
+            textView.text = noteHasText ? note.text : nil
         }
     }
     
     private func createCustomKeyboard() {
         let bar = UIToolbar()
-        let dismissKeyboard = UIBarButtonItem(image: UIImage(named: "down-arrow"), style: .done, target: self, action: #selector(dismissKeyboard))
-        // NOTE: Will be using this when we add ability to add other media
-//        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        bar.items = [dismissKeyboard]
         bar.sizeToFit()
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let dismissKeyboard = UIBarButtonItem(image: UIImage(named: "down-arrow"), style: .plain, target: self, action: #selector(dismissKeyboard))
+        // NOTE: Will be using more buttons when we add ability to add other media
+        bar.items = [spacer, dismissKeyboard]
+        bar.tintColor = AppColours.appBlue
         textView.inputAccessoryView = bar
     }
     
     @objc private func dismissKeyboard() {
-        self.resignFirstResponder()
+        self.textView.resignFirstResponder()
     }
     
 }
 
 extension EnterTextTableViewCell: UITextViewDelegate {
     
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        // Combine the textView text and the replacement text to
-            // create the updated text string
-            let currentText:String = textView.text
-            let updatedText = (currentText as NSString).replacingCharacters(in: range, with: text)
-
-            // If updated text view will be empty, add the placeholder
-            // and set the cursor to the beginning of the text view
-            if updatedText.isEmpty {
-
-                textView.text = self.type?.getPlaceholderText
-                textView.textColor = self.type?.getPlaceholderColor
-
-                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-            }
-
-            // Else if the text view's placeholder is showing and the
-            // length of the replacement string is greater than 0, set
-            // the text color to black then set its text to the
-            // replacement string
-        else if textView.text == self.type?.getPlaceholderText && !text.isEmpty {
-            textView.textColor = self.type?.getForegroundColor
-                textView.text = text
-            }
-
-            // For every other case, the text should change with the usual
-            // behavior...
-            else {
-                let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-                let numberOfChars = newText.count
-                if numberOfChars > type?.getCharacterLimit ?? 500 {
-                    return false
-                } else {
-                    return true
-                }
-            }
-            self.layoutIfNeeded() // Note: uncomment this if there are UI issues, I suspect there will be
-            // ...otherwise return false since the updates have already
-            // been made
-            return false
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        placeholderLabel.isHidden = true
+        return true
     }
+    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        if textView.text.trimWhiteSpacesAndNewLines.count == 0 {
+            placeholderLabel.isHidden = false
+        }
+        return true
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let pos = textView.endOfDocument
+        let currentRect = textView.caretRect(for: pos)
+        if previousRect != CGRect.zero {
+            if currentRect.origin.y > previousRect?.origin.y ?? 0 {
+                // Array of Strings
+                var currentLines = textView.text.components(separatedBy: "\n")
+                // Remove Blank Strings
+                currentLines = currentLines.filter{ $0 != "" }
+                //increase the counter counting how many items inside the array
+//                counter = currentLines.count
+                self.delegate?.resizeTableView()
+            }
+        }
+        previousRect = currentRect
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        // get the current text, or use an empty string if that failed
+        let currentText = textView.text ?? ""
+
+        // attempt to read the range they are trying to change, or exit if we can't
+        guard let stringRange = Range(range, in: currentText) else { return false }
+
+        // add their new text to the existing text
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        
+        // Format other UI
+        let noteText = updatedText.count <= type?.getCharacterLimit ?? 500 ? updatedText : currentText
+        self.delegate?.noteValueChanged(type: self.type ?? .Title, text: noteText)
+//        // make sure the result is under 500 characters
+        return updatedText.count <= type?.getCharacterLimit ?? 500
+    }
+
 }
