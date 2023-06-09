@@ -97,13 +97,15 @@ class UserRecordListView: UIView {
             statusToInclude = record.mainRecord?.listStatus
         case .diagnosticImaging:
             statusToInclude = record.mainRecord?.listStatus
+        case .note:
+            statusToInclude = record.mainRecord?.listStatus
         }
         
         switch record.type {
         case .hospitalVisit, .clinicalDocument:
             // records that dont show date
             recordTypeSubtitleLabel.text = statusToInclude
-        case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization, .diagnosticImaging:
+        case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization, .diagnosticImaging, .note:
             // records that show date
             let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
             recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"

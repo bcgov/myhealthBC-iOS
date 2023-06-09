@@ -425,6 +425,6 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(note: Note) -> Record {
         let dateString = note.journalDate?.yearMonthStringDayString
         // TODO: confirm data
-        return Record(id: note.id ?? UUID().uuidString, name: note.title ?? "", type: .note(model: note), status: "No Status", date: dateString, listStatus: "No List Status", commentID: note.id)
+        return Record(id: note.id ?? UUID().uuidString, name: note.title ?? "", type: .note(model: note), status: "", date: dateString, listStatus: "", commentID: note.id)
     }
 }
