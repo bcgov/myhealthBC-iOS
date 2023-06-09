@@ -87,8 +87,7 @@ class NoteViewController: BaseViewController {
     private func initializeNewNoteIfNecessary() {
         if note == nil {
             let defaultDate = Date().yearMonthDayString
-            let createdAt = Date().gatewayDateAndTimeWithMSAndTimeZone
-            note = PostNote(title: "", text: "", journalDate: defaultDate, createdDateTime: createdAt, addedToTimeline: false)
+            note = PostNote(title: "", text: "", journalDate: defaultDate, addedToTimeline: false)
         }
     }
     
@@ -147,7 +146,7 @@ extension NoteViewController {
         } else {
             guard let note = note else { return }
             guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-            service?.newNote(title: note.title, text: note.text, journalDate: note.journalDate, createdDateTime: note.createdDateTime, addToTimeline: note.addedToTimeline, patient: patient, completion: { note in
+            service?.newNote(title: note.title, text: note.text, journalDate: note.journalDate, addToTimeline: note.addedToTimeline, patient: patient, completion: { note in
                 if let note = note {
                     self.alert(title: "Success", message: "You successfully created your note") {
                         self.navigationController?.popViewController(animated: true)

@@ -36,16 +36,16 @@ struct NotesService {
         }
     }
     // TODO: Enable/disable addToTimeline logic on screen
-    public func newNote(title: String, text: String, journalDate: String, createdDateTime: String, addToTimeline: Bool, patient: Patient, completion: @escaping (Note?)->Void) {
+    public func newNote(title: String, text: String, journalDate: String, addToTimeline: Bool, patient: Patient, completion: @escaping (Note?)->Void) {
         if addToTimeline == false {
-            postLocalNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime) { note in
+            postLocalNote(title: title, text: text, journalDate: journalDate) { note in
                 guard let note = note, let hdid = authManager.hdid else { return completion(nil) }
                 let id = UUID().uuidString
                 StorageService.shared.storeLocalNote(object: note, id: id, hdid: hdid, patient: patient, completion: completion)
             }
         } else {
             if NetworkConnection.shared.hasConnection {
-                postNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime) { result in
+                postNote(title: title, text: text, journalDate: journalDate) { result in
                     guard let result = result else {
                         print("Error")
                         // TODO: Error handling here
@@ -109,13 +109,13 @@ struct NotesService {
     
     // MARK: POST
     
-    private func postLocalNote(title: String, text: String, journalDate: String, createdDateTime: String, completion: @escaping (PostNote?)->Void) {
-        let model = PostNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime, addedToTimeline: false)
+    private func postLocalNote(title: String, text: String, journalDate: String, completion: @escaping (PostNote?)->Void) {
+        let model = PostNote(title: title, text: text, journalDate: journalDate, addedToTimeline: false)
         completion(model)
     }
     
-    private func postNote(title: String, text: String, journalDate: String, createdDateTime: String, completion: @escaping (NoteResponse?)->Void) {
-        let model = PostNote(title: title, text: text, journalDate: journalDate, createdDateTime: createdDateTime, addedToTimeline: true)
+    private func postNote(title: String, text: String, journalDate: String, completion: @escaping (NoteResponse?)->Void) {
+        let model = PostNote(title: title, text: text, journalDate: journalDate, addedToTimeline: true)
         postNoteNetwork(object: model, completion: completion)
     }
     

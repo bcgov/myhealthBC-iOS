@@ -78,9 +78,9 @@ extension StorageService: StorageNoteManager {
         note.title = object.title
         note.text = object.text
         note.journalDate = object.journalDate.getGatewayDate()
-        note.createdDateTime = object.createdDateTime.getGatewayDate()
+        note.createdDateTime = Date()
         note.createdBy = hdid
-        note.updatedDateTime = object.createdDateTime.getGatewayDate()
+        note.updatedDateTime = Date()
         note.updatedBy = hdid
         note.addedToTimeline = object.addedToTimeline
         note.patient = patient

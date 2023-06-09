@@ -717,7 +717,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                                                             patient: viewModel?.patient)
         switch ds.type {
         case .note(model: let model):
-            let note = PostNote(title: model.title ?? "", text: model.text ?? "", journalDate: model.journalDate?.yearMonthDayString ?? Date().yearMonthDayString, createdDateTime: model.createdDateTime?.gatewayDateAndTimeWithMSAndTimeZone ?? Date().gatewayDateAndTimeWithMSAndTimeZone, addedToTimeline: model.addedToTimeline)
+            let note = PostNote(title: model.title ?? "", text: model.text ?? "", journalDate: model.journalDate?.yearMonthDayString ?? Date().yearMonthDayString, addedToTimeline: model.addedToTimeline)
             let vc = NoteViewController.construct(for: .ViewNote, with: note)
             self.navigationController?.pushViewController(vc, animated: true)
         default:
@@ -787,5 +787,9 @@ extension UsersListOfRecordsViewController {
     @objc private func refreshOnStorageUpdate() {
         let patientRecords = fetchPatientRecords()
         show(records: patientRecords, filter: currentFilter, searchText: searchText)
+        if currentSegment == .Notes {
+            // TODO: Update once we have folder structure built
+            showNotesViews(notesRecordsEmpty: true)
+        }
     }
 }
