@@ -23,7 +23,7 @@ class RecordsSearchBarView: UIView {
     
     weak var delegate: RecordsSearchBarViewDelegate?
     
-    var hideFilterSection: Bool {
+    var hideFilterSection: Bool = false {
         didSet {
             searchBarSeparatorView.isHidden = hideFilterSection
             filterButton.isHidden = hideFilterSection
