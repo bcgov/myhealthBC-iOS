@@ -36,27 +36,29 @@ struct NotesService {
         }
     }
     // TODO: Enable/disable addToTimeline logic on screen
-    public func newNote(title: String, text: String, journalDate: String, addToTimeline: Bool, patient: Patient, completion: @escaping (Note?)->Void) {
+    public func newNote(title: String, text: String, journalDate: String, addToTimeline: Bool, patient: Patient, completion: @escaping (Note?, Bool)->Void) {
         if addToTimeline == false {
             postLocalNote(title: title, text: text, journalDate: journalDate) { note in
-                guard let note = note, let hdid = authManager.hdid else { return completion(nil) }
+                guard let note = note, let hdid = authManager.hdid else { return completion(nil, true) }
                 let id = UUID().uuidString
-                StorageService.shared.storeLocalNote(object: note, id: id, hdid: hdid, patient: patient, completion: completion)
+                let storedNote = StorageService.shared.storeLocalNote(object: note, id: id, hdid: hdid, patient: patient)
+                completion(storedNote, true)
             }
         } else {
             if NetworkConnection.shared.hasConnection {
-                postNote(title: title, text: text, journalDate: journalDate) { result in
+                postNote(title: title, text: text, journalDate: journalDate) { result, showErrorIfNeeded in
                     guard let result = result else {
                         print("Error")
-                        // TODO: Error handling here
-                        return completion(nil)
+                        return completion(nil, showErrorIfNeeded)
                     }
-                    StorageService.shared.storeNote(remoteObject: result, patient: patient, completion: completion)
+                    let storedNote = StorageService.shared.storeNote(remoteObject: result, patient: patient)
+                    completion(storedNote, showErrorIfNeeded)
                 }
             } else {
                 print("Error")
                 // Error handling should be done already due to lack of network connection
-                return completion(nil)
+                network.showToast(message: .noInternetConnection, style: .Warn)
+                return completion(nil, false)
             }
         }
         
@@ -114,12 +116,12 @@ struct NotesService {
         completion(model)
     }
     
-    private func postNote(title: String, text: String, journalDate: String, completion: @escaping (NoteResponse?)->Void) {
+    private func postNote(title: String, text: String, journalDate: String, completion: @escaping (NoteResponse?, Bool)->Void) {
         let model = PostNote(title: title, text: text, journalDate: journalDate, addedToTimeline: true)
         postNoteNetwork(object: model, completion: completion)
     }
     
-    private func postNoteNetwork(object: PostNote, completion: @escaping(NoteResponse?)->Void) {
+    private func postNoteNetwork(object: PostNote, completion: @escaping(NoteResponse?, Bool)->Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
         configService.fetchConfig { response in
             guard let config = response,
@@ -127,7 +129,8 @@ struct NotesService {
                   let baseURLString = config.baseURL,
                   let baseURL = URL(string: baseURLString)
             else {
-                return completion(nil)
+                // Note: This is getting called elsewhere, so shouldn't have to do network.showToast here
+                return completion(nil, false)
             }
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
@@ -135,7 +138,7 @@ struct NotesService {
             ]
             
             let requestModel = NetworkRequest<PostNote, PostNoteResponse>(url: endpoints.notes(base: baseURL, hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
-                return completion(result?.resourcePayload)
+                return completion(result?.resourcePayload, true)
             }
             
             network.request(with: requestModel)

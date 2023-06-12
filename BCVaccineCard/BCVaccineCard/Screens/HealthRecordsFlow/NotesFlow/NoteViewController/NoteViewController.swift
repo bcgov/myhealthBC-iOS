@@ -146,12 +146,12 @@ extension NoteViewController {
         } else {
             guard let note = note else { return }
             guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-            service?.newNote(title: note.title, text: note.text, journalDate: note.journalDate, addToTimeline: note.addedToTimeline, patient: patient, completion: { note in
+            service?.newNote(title: note.title, text: note.text, journalDate: note.journalDate, addToTimeline: note.addedToTimeline, patient: patient, completion: { note, showErrorIfNecessary in
                 if let note = note {
                     self.alert(title: "Success", message: "You successfully created your note") {
                         self.navigationController?.popViewController(animated: true)
                     }
-                } else {
+                } else if showErrorIfNecessary {
                     self.alert(title: "Error", message: "There was an error creating your note, please try again.")
                 }
             })

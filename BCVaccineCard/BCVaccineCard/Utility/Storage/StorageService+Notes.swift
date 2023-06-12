@@ -10,8 +10,8 @@ import CoreData
 
 protocol StorageNoteManager {
     func storeNotes(in object: AuthenticatedNotesResponseModel, for patient: Patient, completion: @escaping([Note]?)->Void)
-    func storeNote(remoteObject: NoteResponse, patient: Patient, completion: @escaping(Note?)->Void)
-    func storeLocalNote(object: PostNote, id: String, hdid: String, patient: Patient, completion: @escaping(Note?)->Void)
+    func storeNote(remoteObject: NoteResponse, patient: Patient) -> Note?
+    func storeLocalNote(object: PostNote, id: String, hdid: String, patient: Patient) -> Note?
     
     func fetchNotes() -> [Note]
 }
@@ -28,12 +28,10 @@ extension StorageService: StorageNoteManager {
         let group = DispatchGroup()
         for note in notes {
             group.enter()
-            storeNote(remoteObject: note, patient: patient, completion: { result in
-                if let stored = result {
-                    storedNotes.append(stored)
-                }
-                group.leave()
-            })
+            if let stored = storeNote(remoteObject: note, patient: patient) {
+                storedNotes.append(stored)
+            }
+            group.leave()
         }
         group.notify(queue: .main) {
             self.notify(event: StorageEvent(event: .Save, entity: .Notes, object: storedNotes))
@@ -41,9 +39,9 @@ extension StorageService: StorageNoteManager {
         }
     }
     
-    func storeNote(remoteObject object: NoteResponse, patient: Patient, completion: @escaping(Note?)->Void) {
+    func storeNote(remoteObject object: NoteResponse, patient: Patient) -> Note? {
         guard let context = managedContext else {
-            return completion(nil)
+            return nil
         }
         let note = Note(context: context)
         note.id = object.id
@@ -61,16 +59,16 @@ extension StorageService: StorageNoteManager {
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .Notes, object: note))
-            return completion(note)
+            return note
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-            return completion(nil)
+            return nil
         }
     }
     
-    func storeLocalNote(object: PostNote, id: String, hdid: String, patient: Patient, completion: @escaping (Note?) -> Void) {
+    func storeLocalNote(object: PostNote, id: String, hdid: String, patient: Patient) -> Note? {
         guard let context = managedContext else {
-            return completion(nil)
+            return nil
         }
         let note = Note(context: context)
         note.id = id
@@ -87,10 +85,10 @@ extension StorageService: StorageNoteManager {
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .Notes, object: note))
-            return completion(note)
+            return note
         } catch let error as NSError {
             Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-            return completion(nil)
+            return nil
         }
     }
     

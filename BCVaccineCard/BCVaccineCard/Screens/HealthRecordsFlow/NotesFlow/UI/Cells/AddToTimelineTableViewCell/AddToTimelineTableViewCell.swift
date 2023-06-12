@@ -101,11 +101,13 @@ class AddToTimelineTableViewCell: UITableViewCell {
         }
     }
     
+    
     private func formatForState(state: NoteVCCellState) {
         createdStackView.isHidden = state == .AddNote
         datePickerTextField.isUserInteractionEnabled = state != .ViewNote
         selectFolderButton.isUserInteractionEnabled = state != .ViewNote
         addToTimelineSwitch.isUserInteractionEnabled = state != .ViewNote
+        // Hide add to timeline section in view note.... tbc
         // FIXME: Will adjust the folder background colour if note is attached to a folder or not, once we build that feature
         let hasFolder = false
         selectFolderButton.backgroundColor = state == .AddNote ? AppColours.disabledGray : (hasFolder ? AppColours.appBlueLight : .white)
