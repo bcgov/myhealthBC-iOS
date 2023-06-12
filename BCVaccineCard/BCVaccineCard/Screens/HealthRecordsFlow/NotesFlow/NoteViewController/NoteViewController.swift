@@ -260,9 +260,11 @@ extension NoteViewController {
         var errorText: String?
         if note.title.trimWhiteSpacesAndNewLines.count == 0 {
             errorText = "You must enter a title for your note"
-        } else if note.text.trimWhiteSpacesAndNewLines.count == 0 {
-            errorText = "You must enter some text for your note"
         }
+        // TODO: Confirm this still works
+//        else if note.text.trimWhiteSpacesAndNewLines.count == 0 {
+//            errorText = "You must enter some text for your note"
+//        }
         return errorText
     }
 }
