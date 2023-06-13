@@ -18,6 +18,9 @@ protocol StorageNoteManager {
 
 extension StorageService: StorageNoteManager {
     func storeNotes(in object: AuthenticatedNotesResponseModel, for patient: Patient, completion: @escaping ([Note]?) -> Void) {
+        if let notesToDelete = notesArray(for: patient)?.filter({ $0.addedToTimeline == true }) {
+            deleteAllRecords(in: notesToDelete)
+        }
         let notes: [NoteResponse] = object.resourcePayload
        
         guard !notes.isEmpty else {
@@ -54,7 +57,6 @@ extension StorageService: StorageNoteManager {
         note.createdBy = object.createdBy
         note.updatedDateTime = object.updatedDateTime?.getGatewayDate()
         note.updatedBy = object.updatedBy
-        note.patient = patient
         note.addedToTimeline = true
         do {
             try context.save()
@@ -81,7 +83,6 @@ extension StorageService: StorageNoteManager {
         note.updatedDateTime = Date()
         note.updatedBy = hdid
         note.addedToTimeline = object.addedToTimeline
-        note.patient = patient
         do {
             try context.save()
             self.notify(event: StorageEvent(event: .Save, entity: .Notes, object: note))

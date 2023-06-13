@@ -35,7 +35,7 @@ struct NotesService {
             }
         }
     }
-    // TODO: Enable/disable addToTimeline logic on screen
+    
     public func newNote(title: String, text: String, journalDate: String, addToTimeline: Bool, patient: Patient, completion: @escaping (Note?, Bool)->Void) {
         if addToTimeline == false {
             postLocalNote(title: title, text: text, journalDate: journalDate) { note in

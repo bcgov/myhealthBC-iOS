@@ -270,7 +270,7 @@ struct HealthRecordsDetailDataSource {
             id = model.id
             title = model.title ?? "-"
             detailNavTitle = ""
-            name = model.patient?.name ?? "-"
+            name = model.createdBy ?? "-" // NOTE: This is HDID
             image = UIImage(named: "blue-bg-notes-icon")
             
             deleteAlertTitle = "N/A"

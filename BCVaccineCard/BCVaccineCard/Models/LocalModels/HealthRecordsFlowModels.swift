@@ -85,7 +85,7 @@ struct HealthRecord {
             patientName = patient.name ?? ""
             birthDate = patient.birthday
         case .Note(let object):
-            patient = object.patient!
+            patient = StorageService.shared.fetchPatient(hdid: object.hdid ?? "") ?? StorageService.shared.fetchAuthenticatedPatient()!
             patientName = patient.name ?? ""
             birthDate = patient.birthday
         }

@@ -96,12 +96,12 @@ extension Patient {
         }
     }
     
-    public var notesArray: [Note] {
-        let set = notes as? Set<Note> ?? []
-        return set.sorted {
-            $0.journalDate ?? Date() > $1.journalDate ?? Date()
-        }
-    }
+//    public var notesArray: [Note] {
+//        let set = notes as? Set<Note> ?? []
+//        return set.sorted {
+//            $0.journalDate ?? Date() > $1.journalDate ?? Date()
+//        }
+//    }
     
     public func getComparableName() -> String? {
         guard let name = self.name else {

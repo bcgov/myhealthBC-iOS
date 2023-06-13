@@ -196,6 +196,9 @@ class UsersListOfRecordsViewController: BaseViewController {
             // TODO: Update once we have folder structure built
             let patientRecords = fetchPatientRecords(for: .Notes)
             showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: self.searchText)
+            if !patientRecords.isEmpty {
+                show(records: patientRecords, searchText: searchText)
+            }
         }
     }
     
@@ -230,9 +233,11 @@ extension UsersListOfRecordsViewController: SegmentedViewDelegate {
         switch type {
         case .Timeline:
             showTimelineViews(patientRecordsEmpty: patientRecords.isEmpty, searchText: searchText)
+            show(records: patientRecords, filter: currentFilter, searchText: searchText)
         case .Notes:
             // TODO: Will need to have some sort of check here, basically just fetch records and filter for notes - for now, just show empty state
             showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: searchText)
+            show(records: patientRecords, searchText: searchText)
         }
     }
 }
@@ -808,8 +813,8 @@ extension UsersListOfRecordsViewController {
         let patientRecords = fetchPatientRecords(for: currentSegment)
         show(records: patientRecords, filter: currentFilter, searchText: searchText)
         if currentSegment == .Notes {
-            // TODO: Update once we have folder structure built
             showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: self.searchText)
+            show(records: patientRecords, filter: nil, searchText: searchText)
         }
     }
 }

@@ -27,6 +27,6 @@ extension Note {
     @NSManaged public var updatedDateTime: Date?
     @NSManaged public var updatedBy: String?
     @NSManaged public var addedToTimeline: Bool
-    @NSManaged public var patient: Patient?
+//    @NSManaged public var patient: Patient?
 
 }

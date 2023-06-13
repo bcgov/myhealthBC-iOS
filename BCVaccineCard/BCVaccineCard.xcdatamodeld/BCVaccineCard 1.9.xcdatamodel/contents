@@ -221,7 +221,6 @@
         <attribute name="updatedBy" optional="YES" attributeType="String"/>
         <attribute name="updatedDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="version" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="notes" inverseEntity="Patient"/>
     </entity>
     <entity name="OrganDonorStatus" representedClassName="OrganDonorStatus" syncable="YES" codeGenerationType="class">
         <attribute name="fileId" optional="YES" attributeType="String"/>
@@ -252,7 +251,6 @@
         <relationship name="hospitalVisits" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="HospitalVisit" inverseName="patient" inverseEntity="HospitalVisit"/>
         <relationship name="immunizations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Immunization" inverseName="patient" inverseEntity="Immunization"/>
         <relationship name="laboratoryOrders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LaboratoryOrder" inverseName="patient" inverseEntity="LaboratoryOrder"/>
-        <relationship name="notes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Note" inverseName="patient" inverseEntity="Note"/>
         <relationship name="notifications" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GatewayNotification" inverseName="patient" inverseEntity="GatewayNotification"/>
         <relationship name="organDonorStatus" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="OrganDonorStatus" inverseName="patient" inverseEntity="OrganDonorStatus"/>
         <relationship name="physicalAddress" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Address"/>
