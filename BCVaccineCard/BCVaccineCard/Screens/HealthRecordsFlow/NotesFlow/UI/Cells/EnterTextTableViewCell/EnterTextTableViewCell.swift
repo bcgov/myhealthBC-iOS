@@ -45,11 +45,19 @@ enum NotesTextViewType {
         case .Text: return AppColours.textBlack
         }
     }
+    
+    var getTableViewStructureType: NoteViewController.TableViewStructure {
+        switch self {
+        case .Title: return .TitleCell
+        case .Text: return .TextCell
+        }
+    }
 }
 
 protocol EnterTextTableViewCellDelegate: AnyObject {
-    func resizeTableView()
+    func resizeTableView(type: NotesTextViewType?)
     func noteValueChanged(type: NotesTextViewType, text: String)
+    func didBeginEditing(type: NotesTextViewType?)
 }
 
 class EnterTextTableViewCell: UITableViewCell {
@@ -59,9 +67,7 @@ class EnterTextTableViewCell: UITableViewCell {
     
     private var type: NotesTextViewType?
     private weak var delegate: EnterTextTableViewCellDelegate?
-    
-    private var previousRect: CGRect?
-    
+        
     override func awakeFromNib() {
         super.awakeFromNib()
         setup()
@@ -69,9 +75,6 @@ class EnterTextTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        // TODO: Check this here for editing functionality
-        print("CONNOR CALLED HERE")
-//        self.textView.becomeFirstResponder()
     }
     
     private func setup() {
@@ -132,6 +135,7 @@ extension EnterTextTableViewCell: UITextViewDelegate {
     
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         placeholderLabel.isHidden = true
+        self.delegate?.didBeginEditing(type: self.type)
         return true
     }
     
@@ -143,22 +147,7 @@ extension EnterTextTableViewCell: UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-//        let pos = textView.endOfDocument
-//        let currentRect = textView.caretRect(for: pos)
-//        if previousRect != CGRect.zero {
-//            if currentRect.origin.y > previousRect?.origin.y ?? 0 {
-//                // Array of Strings
-//                var currentLines = textView.text.components(separatedBy: "\n")
-//                // Remove Blank Strings
-//                currentLines = currentLines.filter{ $0 != "" }
-//                //increase the counter counting how many items inside the array
-////                counter = currentLines.count
-//                // FIXME: Need to sort this out
-////                self.delegate?.resizeTableView()
-//            }
-//        }
-//        previousRect = currentRect
-        self.delegate?.resizeTableView()
+        self.delegate?.resizeTableView(type: self.type)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

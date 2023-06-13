@@ -188,6 +188,10 @@ extension NoteViewController {
 // MARK: Table View setup
 extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataSource.count
     }
@@ -236,9 +240,15 @@ extension NoteViewController: AddToTimelineTableViewCellDelegate, EnterTextTable
         self.note?.addedToTimeline = isOn
     }
     
-    func resizeTableView() {
+    func resizeTableView(type: NotesTextViewType?) {
+//        IQKeyboardManager.shared.reloadLayoutIfNeeded()
         self.tableView.beginUpdates()
         self.tableView.endUpdates()
+//        guard let type = type else { return }
+//        if let indexRow = dataSource.firstIndex(of: type.getTableViewStructureType) {
+//            let indexPath = IndexPath(row: indexRow, section: 0)
+//            self.tableView.scrollToRow(at: indexPath, at: .none, animated: true)
+//        }
     }
     
     func noteValueChanged(type: NotesTextViewType, text: String) {
@@ -248,6 +258,15 @@ extension NoteViewController: AddToTimelineTableViewCellDelegate, EnterTextTable
         case .Text:
             self.note?.text = text
         }
+    }
+    
+    func didBeginEditing(type: NotesTextViewType?) {
+        // Not working right now
+        guard let type = type else { return }
+//        if let indexRow = dataSource.firstIndex(of: type.getTableViewStructureType) {
+//            let indexPath = IndexPath(row: indexRow, section: 0)
+//            self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+//        }
     }
     
 }
