@@ -237,7 +237,8 @@ extension NoteViewController: AddToTimelineTableViewCellDelegate, EnterTextTable
     }
     
     func resizeTableView() {
-        self.tableView.reloadData()
+        self.tableView.beginUpdates()
+        self.tableView.endUpdates()
     }
     
     func noteValueChanged(type: NotesTextViewType, text: String) {

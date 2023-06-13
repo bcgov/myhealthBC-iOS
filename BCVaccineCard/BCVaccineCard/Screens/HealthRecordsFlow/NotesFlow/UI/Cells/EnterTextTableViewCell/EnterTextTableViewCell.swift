@@ -143,21 +143,22 @@ extension EnterTextTableViewCell: UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        let pos = textView.endOfDocument
-        let currentRect = textView.caretRect(for: pos)
-        if previousRect != CGRect.zero {
-            if currentRect.origin.y > previousRect?.origin.y ?? 0 {
-                // Array of Strings
-                var currentLines = textView.text.components(separatedBy: "\n")
-                // Remove Blank Strings
-                currentLines = currentLines.filter{ $0 != "" }
-                //increase the counter counting how many items inside the array
-//                counter = currentLines.count
-                // FIXME: Need to sort this out
-//                self.delegate?.resizeTableView()
-            }
-        }
-        previousRect = currentRect
+//        let pos = textView.endOfDocument
+//        let currentRect = textView.caretRect(for: pos)
+//        if previousRect != CGRect.zero {
+//            if currentRect.origin.y > previousRect?.origin.y ?? 0 {
+//                // Array of Strings
+//                var currentLines = textView.text.components(separatedBy: "\n")
+//                // Remove Blank Strings
+//                currentLines = currentLines.filter{ $0 != "" }
+//                //increase the counter counting how many items inside the array
+////                counter = currentLines.count
+//                // FIXME: Need to sort this out
+////                self.delegate?.resizeTableView()
+//            }
+//        }
+//        previousRect = currentRect
+        self.delegate?.resizeTableView()
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
