@@ -202,6 +202,7 @@
                 <outlet property="createdTitleLabel" destination="a9E-Yf-WUG" id="mUu-IO-oCD"/>
                 <outlet property="datePickerTextField" destination="SUO-85-xYz" id="J99-f9-yIy"/>
                 <outlet property="folderIconImageView" destination="I3m-QQ-wuj" id="efo-ju-OTt"/>
+                <outlet property="folderStackView" destination="L8E-f5-zCi" id="K8o-zA-Twg"/>
                 <outlet property="folderTitleLabel" destination="3Rx-OD-Wuk" id="tja-3H-nJB"/>
                 <outlet property="selectFolderButton" destination="dHq-38-lFF" id="0k1-LK-lLL"/>
                 <outlet property="separatorView" destination="14B-iN-0O5" id="Tno-i0-vrA"/>

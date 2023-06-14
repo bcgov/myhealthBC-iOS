@@ -98,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
         IQKeyboardManager.shared.layoutIfNeededOnUpdate = true
-        IQKeyboardManager.shared.disabledDistanceHandlingClasses = [HealthRecordDetailViewController.self]
+        IQKeyboardManager.shared.disabledDistanceHandlingClasses = [HealthRecordDetailViewController.self, NoteViewController.self]
     }
     
     private func initNetworkListener() {

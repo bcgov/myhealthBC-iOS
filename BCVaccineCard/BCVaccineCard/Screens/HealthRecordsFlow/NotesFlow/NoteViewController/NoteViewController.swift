@@ -61,6 +61,11 @@ class NoteViewController: BaseViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) {
             return UIStatusBarStyle.darkContent
@@ -74,6 +79,8 @@ class NoteViewController: BaseViewController {
         setupTableView()
         initializeNewNoteIfNecessary()
         initializeNetworkService()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     private func initializeNetworkService() {
@@ -122,6 +129,21 @@ class NoteViewController: BaseViewController {
         }
     }
 
+}
+
+// MARK: Keyboard
+extension NoteViewController {
+    @objc func keyboardWillShow(notification: Notification) {
+        if let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height {
+            print("Notification: Keyboard will show")
+            tableView.setBottomInset(to: keyboardHeight)
+        }
+    }
+
+    @objc func keyboardWillHide(notification: Notification) {
+        print("Notification: Keyboard will hide")
+        tableView.setBottomInset(to: 0.0)
+    }
 }
 
 // MARK: Navigation setup
@@ -255,15 +277,14 @@ extension NoteViewController: AddToTimelineTableViewCellDelegate, EnterTextTable
         self.note?.addedToTimeline = isOn
     }
     
-    func resizeTableView(type: NotesTextViewType?) {
-//        IQKeyboardManager.shared.reloadLayoutIfNeeded()
+    func resizeTableView(type: NotesTextViewType?, shouldScrollDown: Bool) {
         self.tableView.beginUpdates()
         self.tableView.endUpdates()
-//        guard let type = type else { return }
-//        if let indexRow = dataSource.firstIndex(of: type.getTableViewStructureType) {
-//            let indexPath = IndexPath(row: indexRow, section: 0)
-//            self.tableView.scrollToRow(at: indexPath, at: .none, animated: true)
-//        }
+        guard let type = type else { return }
+        if let indexRow = dataSource.firstIndex(of: type.getTableViewStructureType), shouldScrollDown == true {
+            let indexPath = IndexPath(row: indexRow, section: 0)
+            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        }
     }
     
     func noteValueChanged(type: NotesTextViewType, text: String) {
@@ -276,12 +297,9 @@ extension NoteViewController: AddToTimelineTableViewCellDelegate, EnterTextTable
     }
     
     func didBeginEditing(type: NotesTextViewType?) {
-        // Not working right now
+        // Not using right now - will delete after notes feature is finished if we don't end up using
         guard let type = type else { return }
-//        if let indexRow = dataSource.firstIndex(of: type.getTableViewStructureType) {
-//            let indexPath = IndexPath(row: indexRow, section: 0)
-//            self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-//        }
+
     }
     
 }
@@ -301,5 +319,17 @@ extension NoteViewController {
 //            errorText = "You must enter some text for your note"
 //        }
         return errorText
+    }
+}
+
+// MARK: TableView Keyboard ext
+// TODO: Put in extension file if it works
+extension UITableView {
+
+    func setBottomInset(to value: CGFloat) {
+        let edgeInset = UIEdgeInsets(top: 0, left: 0, bottom: value, right: 0)
+
+        self.contentInset = edgeInset
+        self.scrollIndicatorInsets = edgeInset
     }
 }

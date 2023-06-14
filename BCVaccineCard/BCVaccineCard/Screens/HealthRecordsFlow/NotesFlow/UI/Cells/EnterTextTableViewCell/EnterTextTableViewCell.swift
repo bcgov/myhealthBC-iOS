@@ -55,7 +55,7 @@ enum NotesTextViewType {
 }
 
 protocol EnterTextTableViewCellDelegate: AnyObject {
-    func resizeTableView(type: NotesTextViewType?)
+    func resizeTableView(type: NotesTextViewType?, shouldScrollDown: Bool)
     func noteValueChanged(type: NotesTextViewType, text: String)
     func didBeginEditing(type: NotesTextViewType?)
 }
@@ -81,9 +81,8 @@ class EnterTextTableViewCell: UITableViewCell {
         textView.delegate = self
         createCustomKeyboard()
         placeholderLabel.isUserInteractionEnabled = false
-        textView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
+        textView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         textView.textContainer.lineFragmentPadding = 0
-        textView.textContainerInset = .zero
     }
     
     func configure(type: NotesTextViewType, note: PostNote?, state: NoteVCCellState, delegateOwner: UIViewController) {
@@ -149,7 +148,12 @@ extension EnterTextTableViewCell: UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        self.delegate?.resizeTableView(type: self.type)
+        var shouldScrollDown = false
+        if let selectedRange = textView.selectedTextRange {
+            let cursorPosition = textView.offset(from: textView.beginningOfDocument, to: selectedRange.start)
+            shouldScrollDown = cursorPosition == textView.text.count
+        }
+        self.delegate?.resizeTableView(type: self.type, shouldScrollDown: shouldScrollDown)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

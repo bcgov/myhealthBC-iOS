@@ -25,6 +25,7 @@ class AddToTimelineTableViewCell: UITableViewCell {
     @IBOutlet private weak var folderTitleLabel: UILabel!
     @IBOutlet private weak var selectFolderButton: UIButton!
     @IBOutlet private weak var separatorView: UIView!
+    @IBOutlet private weak var folderStackView: UIStackView!
     
     @IBOutlet private weak var addToTimelineSectionStackView: UIStackView!
     @IBOutlet private weak var addToMyTimelineLabel: UILabel!
@@ -64,6 +65,8 @@ class AddToTimelineTableViewCell: UITableViewCell {
         datePickerTextField.backgroundColor = .white
         bottomSeparatorView.backgroundColor = AppColours.borderGray
         switchBaseFormatting()
+        // NOTE: Uncomment this when we want to use the folder structure
+        folderStackView.isHidden = true
     }
     
     private func switchBaseFormatting() {
@@ -116,14 +119,6 @@ class AddToTimelineTableViewCell: UITableViewCell {
         selectFolderButton.backgroundColor = state == .AddNote ? AppColours.disabledGray : (hasFolder ? AppColours.appBlueLight : .white)
         let titleText = state == .AddNote ? "Select" : (hasFolder ? "Title Of Folder here" : "None")
         selectFolderButton.setTitle(titleText, for: .normal)
-        
-        // Hide/Show toggle section (should have put it all into a container view
-        
-//        addToMyTimelineLabel.isHidden = state == .ViewNote
-//        addToMyTimelineInfoButton.isHidden = state == .ViewNote
-//        datePickerTextField.isHidden = state == .ViewNote
-//        addToTimelineSwitch.isHidden = state == .ViewNote
-//        bottomSeparatorView.isHidden = state == .ViewNote
     }
     
     private func formatDate(for note: PostNote?) {
@@ -153,6 +148,8 @@ class AddToTimelineTableViewCell: UITableViewCell {
         toolbar.sizeToFit()
         
         datePicker = UIDatePicker()
+        // Note, if we want to restrict the date to nothing in the future, uncomment below
+//        datePicker?.maximumDate = Date()
         // bar button 'done'
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
         toolbar.setItems([doneButton], animated: true)
