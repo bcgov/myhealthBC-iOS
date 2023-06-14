@@ -81,7 +81,9 @@ class EnterTextTableViewCell: UITableViewCell {
         textView.delegate = self
         createCustomKeyboard()
         placeholderLabel.isUserInteractionEnabled = false
-        textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        textView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
+        textView.textContainer.lineFragmentPadding = 0
+        textView.textContainerInset = .zero
     }
     
     func configure(type: NotesTextViewType, note: PostNote?, state: NoteVCCellState, delegateOwner: UIViewController) {

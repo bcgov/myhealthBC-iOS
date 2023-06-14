@@ -26,6 +26,7 @@ class AddToTimelineTableViewCell: UITableViewCell {
     @IBOutlet private weak var selectFolderButton: UIButton!
     @IBOutlet private weak var separatorView: UIView!
     
+    @IBOutlet private weak var addToTimelineSectionStackView: UIStackView!
     @IBOutlet private weak var addToMyTimelineLabel: UILabel!
     @IBOutlet private weak var addToMyTimelineInfoButton: UIButton!
     @IBOutlet private weak var datePickerTextField: UITextField!
@@ -99,20 +100,30 @@ class AddToTimelineTableViewCell: UITableViewCell {
         } else {
             selectFolderButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 8, bottom: 5, right: 8)
         }
+        self.layoutIfNeeded()
     }
     
     
     private func formatForState(state: NoteVCCellState) {
         createdStackView.isHidden = state == .AddNote
-        datePickerTextField.isUserInteractionEnabled = state != .ViewNote
+        addToTimelineSectionStackView.isHidden = state == .ViewNote
+//        datePickerTextField.isUserInteractionEnabled = state != .ViewNote
         selectFolderButton.isUserInteractionEnabled = state != .ViewNote
-        addToTimelineSwitch.isUserInteractionEnabled = state != .ViewNote
+//        addToTimelineSwitch.isUserInteractionEnabled = state != .ViewNote
         // Hide add to timeline section in view note.... tbc
         // FIXME: Will adjust the folder background colour if note is attached to a folder or not, once we build that feature
         let hasFolder = false
         selectFolderButton.backgroundColor = state == .AddNote ? AppColours.disabledGray : (hasFolder ? AppColours.appBlueLight : .white)
         let titleText = state == .AddNote ? "Select" : (hasFolder ? "Title Of Folder here" : "None")
         selectFolderButton.setTitle(titleText, for: .normal)
+        
+        // Hide/Show toggle section (should have put it all into a container view
+        
+//        addToMyTimelineLabel.isHidden = state == .ViewNote
+//        addToMyTimelineInfoButton.isHidden = state == .ViewNote
+//        datePickerTextField.isHidden = state == .ViewNote
+//        addToTimelineSwitch.isHidden = state == .ViewNote
+//        bottomSeparatorView.isHidden = state == .ViewNote
     }
     
     private func formatDate(for note: PostNote?) {

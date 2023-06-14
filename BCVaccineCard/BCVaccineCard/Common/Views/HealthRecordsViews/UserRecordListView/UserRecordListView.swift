@@ -107,7 +107,12 @@ class UserRecordListView: UIView {
             recordTypeSubtitleLabel.text = statusToInclude
         case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization, .diagnosticImaging, .note:
             // records that show date
-            let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
+            var text: String
+            if let statusToInclude = statusToInclude, statusToInclude.trimWhiteSpacesAndNewLines.count > 0 {
+                text = "\(statusToInclude) • "
+            } else {
+                text = ""
+            }
             recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"
         }
         setupAccessibility()

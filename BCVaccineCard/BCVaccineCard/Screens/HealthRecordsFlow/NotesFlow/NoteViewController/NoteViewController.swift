@@ -30,6 +30,7 @@ class NoteViewController: BaseViewController {
         case TitleCell
         case TimelineCell
         case TextCell
+        case PlainTextCell
     }
     
     class func construct(for state: NoteVCCellState, with note: PostNote?) -> NoteViewController {
@@ -79,8 +80,10 @@ class NoteViewController: BaseViewController {
         service = NotesService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
     }
     
-    private func screenStateChanged() {
+    private func screenStateChanged(state: NoteVCCellState) {
+        self.state = state
         navSetup()
+        setupDataSource(for: state)
         tableView.reloadData()
     }
     
@@ -92,21 +95,31 @@ class NoteViewController: BaseViewController {
     }
     
     private func setupTableView() {
-        setupDataSource()
+        setupDataSource(for: self.state)
         tableView.register(UINib.init(nibName: EnterTextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: EnterTextTableViewCell.getName)
         tableView.register(UINib.init(nibName: AddToTimelineTableViewCell.getName, bundle: .main), forCellReuseIdentifier: AddToTimelineTableViewCell.getName)
+        tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 100
+        tableView.estimatedRowHeight = 180
         tableView.delegate = self
         tableView.dataSource = self
     }
     
-    private func setupDataSource() {
-        dataSource = [
-            .TitleCell,
-            .TimelineCell,
-            .TextCell
-        ]
+    private func setupDataSource(for state: NoteVCCellState) {
+        if state == .ViewNote {
+            dataSource = [
+                .TitleCell,
+                .TimelineCell,
+                .PlainTextCell,
+                .TextCell
+            ]
+        } else {
+            dataSource = [
+                .TitleCell,
+                .TimelineCell,
+                .TextCell
+            ]
+        }
     }
 
 }
@@ -162,16 +175,14 @@ extension NoteViewController {
     @objc private func saveButtonTapped() {
         // TODO: Update logic here
         alert(title: "Coming Soon", message: "Save an edited note coming soon") {
-            self.state = .ViewNote
-            self.screenStateChanged()
+            self.screenStateChanged(state: .ViewNote)
         }
     }
     
     @objc private func editButtonTapped() {
         // TODO: Edit logic here
         alert(title: "Coming Soon", message: "Edit a note coming soon")
-        self.state = .EditNote
-        screenStateChanged()
+        screenStateChanged(state: .EditNote)
     }
     
     @objc private func deleteButtonTapped() {
@@ -206,16 +217,20 @@ extension NoteViewController: UITableViewDelegate, UITableViewDataSource {
     private func createTableViewCell(for cell: TableViewStructure, tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         switch cell {
         case .TitleCell:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: EnterTextTableViewCell.getName) as? EnterTextTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EnterTextTableViewCell.getName, for: indexPath) as? EnterTextTableViewCell else { return UITableViewCell() }
             cell.configure(type: .Title, note: self.note, state: self.state, delegateOwner: self)
             return cell
         case .TimelineCell:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: AddToTimelineTableViewCell.getName) as? AddToTimelineTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: AddToTimelineTableViewCell.getName, for: indexPath) as? AddToTimelineTableViewCell else { return UITableViewCell() }
             cell.configure(for: self.note, state: self.state, delegateOwner: self)
             return cell
         case .TextCell:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: EnterTextTableViewCell.getName) as? EnterTextTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EnterTextTableViewCell.getName, for: indexPath) as? EnterTextTableViewCell else { return UITableViewCell() }
             cell.configure(type: .Text, note: self.note, state: self.state, delegateOwner: self)
+            return cell
+        case .PlainTextCell:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell else { return UITableViewCell() }
+            cell.configure(forType: .plainText, text: "Details", withFont: UIFont.bcSansBoldWithSize(size: 17), labelSpacingAdjustment: 0.0)
             return cell
         }
     }
