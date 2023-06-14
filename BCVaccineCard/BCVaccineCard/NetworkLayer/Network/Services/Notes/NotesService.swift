@@ -129,7 +129,9 @@ struct NotesService {
                   let baseURLString = config.baseURL,
                   let baseURL = URL(string: baseURLString)
             else {
-                // Note: This is getting called elsewhere, so shouldn't have to do network.showToast here
+                // Note: Showing here, because in the instance where it is cached (user hits it a second time), this will get called again, but in the actual config error handling, we won't show maintenance message
+                // Duplication won't happen, because in show toast function, we check to see if it is already being displayed to the user
+                AppDelegate.sharedInstance?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
                 return completion(nil, false)
             }
             let headers = [
