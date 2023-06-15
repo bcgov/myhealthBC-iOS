@@ -13,8 +13,8 @@ enum NotesTextViewType {
     
     var getCharacterLimit: Int {
         switch self {
-        case .Title: return 50
-        case .Text: return 500
+        case .Title: return 151
+        case .Text: return 1343
         }
     }
     
