@@ -16,6 +16,7 @@ class NotificationTableViewCell: UITableViewCell {
     var delegate: NotificationTableViewCellDelegate?
     var notification: GatewayNotification?
     
+    @IBOutlet weak var detailsLabelHeight: NSLayoutConstraint!
     @IBOutlet weak var messageContainer: UIView!
     @IBOutlet weak var detailsLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
@@ -53,15 +54,18 @@ class NotificationTableViewCell: UITableViewCell {
             switch type {
             case .externalLink:
                 detailsLabel.alpha = 1
+                detailsLabelHeight.constant = 24
                 let text = NSAttributedString(string: "More information", attributes:
                     [.underlineStyle: NSUnderlineStyle.single.rawValue])
                 detailsLabel.attributedText = text
             case .internalLink:
                 detailsLabel.alpha = 1
+                detailsLabelHeight.constant = 24
                 let text = NSAttributedString(string: "View details", attributes:
                     [.underlineStyle: NSUnderlineStyle.single.rawValue])
                 detailsLabel.attributedText = text
             case .none:
+                detailsLabelHeight.constant = 0
                 detailsLabel.alpha = 0
             }
         }

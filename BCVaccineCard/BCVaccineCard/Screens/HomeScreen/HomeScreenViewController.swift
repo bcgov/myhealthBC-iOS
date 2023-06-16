@@ -118,6 +118,15 @@ extension HomeScreenViewController {
                                                targetVC: self,
                                                backButtonHintString: nil)
     }
+    
+    @objc func notificationsButton() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else {
+            return
+        }
+        let vm = NotificationsViewController.ViewModel(patient: patient, network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+        show(route: .Notifications, withNavigation: true, viewModel: vm)
+    }
 }
 
 // MARK: Observable logic for authentication status change

@@ -3,7 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,16 +22,16 @@
                         <rect key="frame" x="16" y="16" width="358" height="154"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDd-nC-v3p">
-                                <rect key="frame" x="0.0" y="0.0" width="358" height="24.333333333333332"/>
+                                <rect key="frame" x="0.0" y="0.0" width="358" height="20.333333333333332"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WOr-MG-eKg">
-                                <rect key="frame" x="0.0" y="40.333333333333336" width="358" height="113.66666666666666"/>
+                                <rect key="frame" x="0.0" y="36.333333333333336" width="358" height="117.66666666666666"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xc7-rQ-Sog">
-                                        <rect key="frame" x="326" y="7.9999999999999929" width="24" height="24"/>
+                                        <rect key="frame" x="326" y="8" width="24" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="24" id="jA6-Lx-mRL"/>
                                             <constraint firstAttribute="height" constant="24" id="ktw-7G-yAp"/>
@@ -43,13 +43,13 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TQS-VJ-AKm">
-                                        <rect key="frame" x="8" y="7.9999999999999964" width="310" height="57.666666666666657"/>
+                                        <rect key="frame" x="8" y="7.9999999999999964" width="310" height="61.666666666666657"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jn2-a7-KsP">
-                                        <rect key="frame" x="8" y="81.666666666666657" width="334" height="24"/>
+                                        <rect key="frame" x="8" y="85.666666666666657" width="334" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="24" id="ndd-Rn-mgG"/>
                                         </constraints>
@@ -84,6 +84,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="detailsLabel" destination="jn2-a7-KsP" id="UkS-8h-5oC"/>
+                <outlet property="detailsLabelHeight" destination="ndd-Rn-mgG" id="Z7f-CI-4m6"/>
                 <outlet property="dismissButton" destination="Xc7-rQ-Sog" id="AgG-dd-wE4"/>
                 <outlet property="messageContainer" destination="WOr-MG-eKg" id="FEJ-cs-WLj"/>
                 <outlet property="messageLabel" destination="TQS-VJ-AKm" id="9Mj-Vq-kY5"/>

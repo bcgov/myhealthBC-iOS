@@ -119,7 +119,7 @@ struct SyncService {
             }
             
             group.enter()
-            notificationService.fetchAndStore(for: patient) { notifications in
+            notificationService.fetchAndStore(for: patient, loadingStyle: .SyncingRecords) { notifications in
                 Logger.log(string: "fetched \(notifications.count) notification", type: .Network)
                 group.leave()
             }
