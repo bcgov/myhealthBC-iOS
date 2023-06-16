@@ -20,8 +20,12 @@ extension StorageService {
         let hospitalVisits = patient.hospitalVisitsArray.map({HealthRecord(type: .HospitalVisit($0))})
         let clinicalDocs = patient.clinicalDocumentsArray.map({HealthRecord(type: .ClinicalDocument($0))})
         let diagnosticImaging = patient.diagnosticImagingArray.map({HealthRecord(type: .DiagnosticImaging($0))})
+        var notesRecords: [HealthRecord] = []
+        if let notes = notesArray(for: patient) {
+            notesRecords = notes.map({HealthRecord(type: .Note($0))})
+        }
         
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + notesRecords
     }
     
     func getHeathRecords() -> [HealthRecord] {
@@ -36,8 +40,9 @@ extension StorageService {
         let hospitalVisits = fetchHospitalVisits().map({HealthRecord(type: .HospitalVisit($0))})
         let clinicalDocs = fetchClinicalDocuments().map({HealthRecord(type: .ClinicalDocument($0))})
         let diagnosticImaging = fetchDiagnosticImaging().map({HealthRecord(type: .DiagnosticImaging($0))})
+        let notes = fetchNotes().map({HealthRecord(type: .Note($0))})
         
-        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging
+        return tests + medications + labOrders + immunizations + healthVisits + specialAuthority + hospitalVisits + clinicalDocs + diagnosticImaging + notes
     }
     
     func getRecords(forDependent dependent: Patient) -> [HealthRecord] {
@@ -45,8 +50,12 @@ extension StorageService {
         let medications = dependent.prescriptionArray.map { HealthRecord(type: .Medication($0)) }
         let labOrders = dependent.labOrdersArray.map { HealthRecord(type: .LaboratoryOrder($0)) }
         let immunizations = dependent.immunizationArray.map { HealthRecord(type: .Immunization($0)) }
+        var notesRecords: [HealthRecord] = []
+        if let notes = notesArray(for: dependent) {
+            notesRecords = notes.map({HealthRecord(type: .Note($0))})
+        }
         
-        return tests + medications + labOrders + immunizations
+        return tests + medications + labOrders + immunizations + notesRecords
     }
     
     func deleteHealthRecordsForDependent(dependent: Patient) {
@@ -58,6 +67,9 @@ extension StorageService {
         deleteAllRecords(in: labOrders)
         let immunizations = dependent.immunizationArray
         deleteAllRecords(in: immunizations)
+        if let notesToDelete = notesArray(for: dependent)?.filter({ $0.addedToTimeline == true }) {
+            deleteAllRecords(in: notesToDelete)
+        }
     }
     
     func deleteDependentVaccineCards(forPatient patient: Patient) {
@@ -103,6 +115,9 @@ extension StorageService {
         case .DiagnosticImaging(let object):
             delete(object: object)
             notify(event: StorageEvent(event: .Delete, entity: .DiagnosticImaging, object: object))
+        case .Note(let object):
+            delete(object: object)
+            notify(event: StorageEvent(event: .Delete, entity: .Notes, object: object))
         }
     }
     
@@ -111,9 +126,9 @@ extension StorageService {
         deleteAllRecords(in: comments)
     }
     
-    func deleteHealthRecords(for patient: Patient, types: [healthRecordType]? = nil) {
+    func deleteHealthRecords(for patient: Patient, types: [HealthRecordType]? = nil) {
         var toDelete: [NSManagedObject] = []
-        let typesTodelete: [healthRecordType] = types ?? healthRecordType.allCases
+        let typesTodelete: [HealthRecordType] = types ?? HealthRecordType.allCases
         for type in typesTodelete {
             switch type {
             case .CovidTest:
@@ -160,6 +175,11 @@ extension StorageService {
                 let objects = patient.diagnosticImagingArray
                 toDelete.append(contentsOf: objects)
                 notify(event: StorageEvent(event: .Delete, entity: .DiagnosticImaging, object: objects))
+            case .Notes:
+                if let objects = notesArray(for: patient)?.filter({ $0.addedToTimeline == true }) {
+                    toDelete.append(contentsOf: objects)
+                    notify(event: StorageEvent(event: .Delete, entity: .Notes, object: objects))
+                }
             }
         }
         
@@ -167,7 +187,7 @@ extension StorageService {
     }
     
     func deleteAllHealthRecords() {
-        let typesTodelete = healthRecordType.allCases
+        let typesTodelete = HealthRecordType.allCases
         for type in typesTodelete {
             switch type {
             case .CovidTest:
@@ -203,12 +223,15 @@ extension StorageService {
             case .DiagnosticImaging:
                 let diagnosticImaging = fetchDiagnosticImaging()
                 deleteAllRecords(in: diagnosticImaging)
+            case .Notes:
+                let notes = fetchNotes().filter { $0.addedToTimeline == true }
+                deleteAllRecords(in: notes)
             }
         }
     }
     
     func deleteHealthRecordsForDependent(dependent: Dependent) {
-        let typesTodelete = healthRecordType.allCases
+        let typesTodelete = HealthRecordType.allCases
         for type in typesTodelete {
             switch type {
             case .CovidTest:
@@ -255,7 +278,23 @@ extension StorageService {
                 if let diagnosticImaging = dependent.info?.diagnosticImagingArray {
                     deleteAllRecords(in: diagnosticImaging)
                 }
+            case .Notes:
+                if let notes = notesArray(for: dependent.info)?.filter({ $0.addedToTimeline == true }) {
+                    deleteAllRecords(in: notes)
+                }
             }
+        }
+    }
+}
+
+// MARK: Notes array, being that there is no longer a patient relationship
+extension StorageService {
+    
+    public func notesArray(for patient: Patient?) -> [Note]? {
+        guard let patient = patient else { return nil }
+        let notes = fetchNotes().filter { $0.createdBy ?? "none" == patient.hdid ?? "no hdid" }
+        return notes.sorted {
+            $0.journalDate ?? Date() > $1.journalDate ?? Date()
         }
     }
 }

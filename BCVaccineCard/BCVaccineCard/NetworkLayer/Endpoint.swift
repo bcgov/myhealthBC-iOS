@@ -30,6 +30,7 @@ protocol EndpointsAccessor {
     func deleteDependent(base url: URL, dependentHdid: String, guardian: String) -> URL
     func feedback(base url: URL, hdid: String) -> URL
     func notifcations(base url: URL, hdid: String) -> URL
+    func notes(base url: URL, hdid: String) -> URL
 }
 
 struct UrlAccessor: EndpointsAccessor {
@@ -126,6 +127,11 @@ struct UrlAccessor: EndpointsAccessor {
         userProfile(base: url, hdid: hdid).appendingPathComponent("Comment")
     }
     
+    // MARK: Notes
+    func notes(base url: URL, hdid: String) -> URL {
+        noteBase(base: url).appendingPathComponent(hdid)
+    }
+    
     // MARK: Dependents
     func listOfDependents(base url: URL, hdid: String) -> URL {
         userProfile(base: url, hdid: hdid).appendingPathComponent("Dependent")
@@ -147,6 +153,10 @@ struct UrlAccessor: EndpointsAccessor {
     // MARK: User
     func userProfileBase(base url: URL) -> URL {
         return gatewayAPIService(base: url).appendingPathComponent("UserProfile")
+    }
+    
+    func noteBase(base url: URL) -> URL {
+        return gatewayAPIService(base: url).appendingPathComponent("Note")
     }
     
     func patientDataBase(base url: URL) -> URL {

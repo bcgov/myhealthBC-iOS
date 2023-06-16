@@ -45,6 +45,7 @@ struct SyncService {
             let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
             commentsService.submitUnsyncedComments {
                 // Remove authenticated patient records
+                // TODO: Figure out how to keep local notes here....
                 StorageService.shared.deleteAuthenticatedPatient()
                 // Fetch
                 fetchData(protectiveWord: authManager.protectiveWord, showToast: showToast, completion: { result in
