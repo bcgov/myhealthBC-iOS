@@ -178,6 +178,8 @@ extension HealthRecordDetailViewController {
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             case .diagnosticImaging:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
+            case .note:
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)

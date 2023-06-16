@@ -84,6 +84,10 @@ protocol StoragePatientManager {
     /// - Returns: patient
     func fetchPatient(name: String, birthday: Date) -> Patient?
     
+    /// Returns the patient with matching HDID
+    /// - Returns: patient
+    func fetchPatient(hdid: String) -> Patient?
+    
     //MARK: Helpers
     /// Find stored patient or create a new one with given data
     /// - Parameters:
@@ -424,6 +428,12 @@ extension StorageService: StoragePatientManager {
         let patients = fetchPatients()
        
         return patients.filter({$0.getComparableName() == StorageService.getComparableName(from: name) && $0.birthday == birthday}).first
+    }
+    
+    public func fetchPatient(hdid: String) -> Patient? {
+        let patients = fetchPatients()
+        
+        return patients.filter { $0.hdid ?? "none" == hdid }.first
     }
     
     // MARK: Helpers

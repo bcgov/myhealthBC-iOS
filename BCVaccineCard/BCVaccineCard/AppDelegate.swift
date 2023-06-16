@@ -97,7 +97,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enableAutoToolbar = false
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
-        IQKeyboardManager.shared.disabledDistanceHandlingClasses = [HealthRecordDetailViewController.self]
+        IQKeyboardManager.shared.layoutIfNeededOnUpdate = true
+        IQKeyboardManager.shared.disabledDistanceHandlingClasses = [HealthRecordDetailViewController.self, NoteViewController.self]
     }
     
     private func initNetworkListener() {
@@ -361,6 +362,7 @@ enum LoaderCaller {
     case NotificationService_fetchAndStore
     case NotificationService_dismiss
     case NotificationService_dismissAll
+    case Notes_fetchAndStore
 }
 
 
