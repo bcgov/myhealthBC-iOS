@@ -17,14 +17,16 @@ struct NotificationService {
         return UrlAccessor()
     }
     
-    func fetchAndStore(for patient: Patient, completion: @escaping ([GatewayNotification])->Void) {
-        network.addLoader(message: .SyncingRecords, caller: .NotificationService_fetchAndStore)
+    func fetchAndStore(for patient: Patient, loadingStyle: LoaderMessage, completion: @escaping ([GatewayNotification])->Void) {
+        network.addLoader(message: loadingStyle, caller: .NotificationService_fetchAndStore)
         fetch(for: patient) { resposne in
             guard let resposne = resposne else {
+                SessionStorage.notificationFethFilure = true
                 network.removeLoader(caller: .NotificationService_fetchAndStore)
                 return
                 completion([])
             }
+            SessionStorage.notificationFethFilure = false
             StorageService.shared.deleteNotifications()
             StorageService.shared.store(notifications: resposne, for: patient) { storedObjects in
                 network.removeLoader(caller: .NotificationService_fetchAndStore)
@@ -33,12 +35,35 @@ struct NotificationService {
         }
     }
     
-    func dimissAll(completion: @escaping ()->Void) {
-        
+    func dimissAll(for patient: Patient, completion: @escaping ()->Void) {
+        network.addLoader(message: .empty, caller: .NotificationService_dismissAll)
+        deleteAll() { success in
+            network.removeLoader(caller: .NotificationService_dismissAll)
+            if success {
+                fetchAndStore(for: patient, loadingStyle: .empty, completion: {_ in
+                    return completion()
+                })
+            } else {
+                return completion()
+            }
+        }
     }
     
-    func dimiss(id: String, completion: @escaping ()->Void) {
-        
+    func dimiss(notification: GatewayNotification, completion: @escaping ()->Void) {
+        guard let patient = notification.patient else {
+            return completion()
+        }
+        network.addLoader(message: .empty, caller: .NotificationService_dismiss)
+        delete(notification: notification) { success in
+            network.removeLoader(caller: .NotificationService_dismiss)
+            if success {
+                fetchAndStore(for: patient, loadingStyle: .empty, completion: {_ in 
+                    return completion()
+                })
+            } else {
+                return completion()
+            }
+        }
     }
 }
 
@@ -86,7 +111,7 @@ extension NotificationService {
         }
     }
     
-    private func deleteComment(object: DeleteComment, completion: @escaping(PostCommentResponseResult?)->Void) {
+    private func deleteAll(completion: @escaping(Bool)->Void) {
         guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
         configService.fetchConfig { response in
             guard let config = response,
@@ -94,15 +119,47 @@ extension NotificationService {
                   let baseURLString = config.baseURL,
                   let baseURL = URL(string: baseURLString)
             else {
-                return completion(nil)
+                return completion(false)
             }
             let headers = [
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
                 Constants.AuthenticationHeaderKeys.hdid: hdid
             ]
+            let url = endpoints.notifcations(base: baseURL, hdid: hdid)
             
-            let requestModel = NetworkRequest<DeleteComment, PostCommentResponse>(url: endpoints.comments(base: baseURL, hdid: hdid), type: .Delete, parameters: object, headers: headers) { result in
-                return completion(result?.resourcePayload)
+            let parameters: DefaultParams = DefaultParams(apiVersion: "1")
+            
+            let requestModel = NetworkRequest<DefaultParams, Int>(url: url, type: .Delete, parameters: parameters, headers: headers) { result in
+                print(result)
+                return completion(result == 200)
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
+    
+    private func delete(notification: GatewayNotification, completion: @escaping(Bool)->Void) {
+        guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString),
+                  let notificationId = notification.id
+            else {
+                return completion(false)
+            }
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.hdid: hdid
+            ]
+            let url = endpoints.deleteNotifcations(base: baseURL, hdid: hdid, notificationID: notificationId)
+            
+            let parameters: DefaultParams = DefaultParams(apiVersion: "1")
+            
+            let requestModel = NetworkRequest<DefaultParams, Int>(url: url, type: .Delete, parameters: parameters, headers: headers) { result in
+                print(result)
+                return completion(result == 200)
             }
             
             network.request(with: requestModel)

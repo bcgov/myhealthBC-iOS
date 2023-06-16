@@ -233,7 +233,10 @@ extension UIViewController {
         case .TermsOfService:
             return TermsOfServiceViewController.construct()
         case .Notifications:
-            return NotificationsViewController.construct()
+            guard let vm = viewModel as? NotificationsViewController.ViewModel else {
+                return nil
+            }
+            return NotificationsViewController.construct(viewModel: vm)
         }
     }
 }

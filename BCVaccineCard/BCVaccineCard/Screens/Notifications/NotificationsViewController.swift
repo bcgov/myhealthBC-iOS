@@ -7,10 +7,21 @@
 
 import UIKit
 
+
 class NotificationsViewController: BaseViewController {
+    struct ViewModel {
+        let patient: Patient
+        let network: Network
+        let authManager: AuthManager
+        let configService: MobileConfigService
+        var service: NotificationService {
+            return NotificationService(network: network, authManager: authManager, configService: configService)
+        }
+    }
     
-    class func construct() -> NotificationsViewController {
+    class func construct(viewModel: ViewModel) -> NotificationsViewController {
         if let vc = Storyboard.notifications.instantiateViewController(withIdentifier: String(describing: NotificationsViewController.self)) as? NotificationsViewController {
+            vc.viewModel = viewModel
             return vc
         }
         return NotificationsViewController()
@@ -18,8 +29,10 @@ class NotificationsViewController: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     private let unavailableTag = 21939012
+    private let refetchButtonTag = 3401939012
     private let networkManager = AFNetwork()
     private var notifications: [GatewayNotification] = []
+    private var viewModel: ViewModel? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,26 +47,48 @@ class NotificationsViewController: BaseViewController {
         fetchData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     func fetchData() {
-        self.notifications = StorageService.shared.fetchNotifications()
+        self.notifications = StorageService.shared.fetchNotifications().filter({ notification in
+            guard let scheduledDate = notification.scheduledDate, scheduledDate <= Date() else {
+                return false
+            }
+            return true
+        }).sorted(by: {
+            $0.scheduledDate ?? Date() > $1.scheduledDate ?? Date()
+        })
         
-        if notifications.isEmpty {
+        if notifications.isEmpty || SessionStorage.notificationFethFilure {
             showUnavailable()
             tableView.reloadData()
         } else {
             setupTableView()
             removeUnavailable()
+            tableView.reloadData()
         }
+        navSetup()
     }
     
     func removeUnavailable() {
         tableView.viewWithTag(unavailableTag)?.removeFromSuperview()
+        tableView.viewWithTag(refetchButtonTag)?.removeFromSuperview()
     }
+    
     func showUnavailable() {
         removeUnavailable()
+        let imageName = SessionStorage.notificationFethFilure ? "NotificationsFailed" : "NotificationsNotAvailable"
         let imageView = UIImageView(frame: tableView.bounds)
         tableView.addSubview(imageView)
-        imageView.image = UIImage(named: "NotificationsNotAvailable")
+        imageView.image = UIImage(named: imageName)
         imageView.contentMode = .scaleAspectFit
         imageView.tag = unavailableTag
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -61,9 +96,43 @@ class NotificationsViewController: BaseViewController {
         imageView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 32).isActive = true
         imageView.centerYAnchor.constraint(equalTo: tableView.centerYAnchor).isActive = true
         imageView.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+        
+        if SessionStorage.notificationFethFilure {
+            let button = UIButton(frame: .zero)
+            button.tag = refetchButtonTag
+            tableView.addSubview(button)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -54).isActive = true
+            button.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 32).isActive = true
+            button.centerXAnchor.constraint(equalTo: tableView.centerXAnchor).isActive = true
+            button.heightAnchor.constraint(equalToConstant: 54).isActive = true
+            style(button: button, style: .Fill, title: "Try Again", image: nil)
+            button.addTarget(self, action: #selector(self.refetchNotifications), for: .primaryActionTriggered)
+            
+        }
+        
+    }
+    
+    @objc func refetchNotifications() {
+        guard let viewModel = self.viewModel else {return}
+        viewModel.service.fetchAndStore(for: viewModel.patient, loadingStyle: .empty, completion: {[weak self] _ in
+            self?.fetchData()
+        })
     }
     
     @objc func clearNotifications() {
+        guard let patient = viewModel?.patient else {return}
+        alertConfirmation(title: "Clear all notifications",
+                          message: "Are you sure you want to delete all notifications? You won't be able to access them again after this.",
+                          confirmTitle: "Yes",
+                          confirmStyle: .default,
+                          onConfirm: {
+            self.viewModel?.service.dimissAll(for: patient) {[weak self] in
+                self?.fetchData()
+            }
+        }, onCancel: {
+            return
+        })
     }
 }
 
@@ -100,7 +169,7 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
         guard let id = notification.id else {return}
         let service = NotificationService(network: networkManager, authManager: AuthManager(), configService: MobileConfigService(network: networkManager))
         
-        service.dimiss(id: id, completion: {[weak self] in
+        service.dimiss(notification: notification, completion: {[weak self] in
             self?.fetchData()
         })
     }
@@ -112,8 +181,10 @@ extension NotificationsViewController {
     private func navSetup() {
         var buttons: [NavButton] = []
         
-        let deleteButton = NavButton(title: nil, image: UIImage(named: "Remove"), action: #selector(self.clearNotifications), accessibility: Accessibility(traits: .button, label: "", hint: ""))
-        buttons.append(deleteButton)
+        if !notifications.isEmpty {
+            let deleteButton = NavButton(title: nil, image: UIImage(named: "Remove"), action: #selector(self.clearNotifications), accessibility: Accessibility(traits: .button, label: "", hint: ""))
+            buttons.append(deleteButton)
+        }
         
         
         self.navDelegate?.setNavigationBarWith(title: "Notifications",

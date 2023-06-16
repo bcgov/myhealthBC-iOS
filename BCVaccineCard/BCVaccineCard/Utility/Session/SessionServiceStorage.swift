@@ -13,6 +13,9 @@ class SessionStorage {
     static var protectiveWordEnteredThisSession: String?
     static var protectiveWordEnabled = false
     
+    // MARK: Notification fetch error
+    static var notificationFethFilure = false
+    
     static var protectiveWordRequired: Bool {
         guard protectiveWordEnabled else {
             return false
