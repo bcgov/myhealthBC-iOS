@@ -27,10 +27,12 @@ class DependentDelegateCountTableViewCell: UITableViewCell {
         detailsLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         detailsLabel.textColor = AppColours.textGray
         detailsLabel.text = "This shows you how many people other than you have added your dependent to their Health Gateway account. For privacy, we can’t tell you their names. If this number isn’t what you expect, contact us at healthgateway@gov.bc.ca"
+        self.layoutIfNeeded()
     }
     
     func configure(delegateCount: Int) {
         valueLabel.text = "\(delegateCount)"
+        self.layoutIfNeeded()
     }
     
 }
