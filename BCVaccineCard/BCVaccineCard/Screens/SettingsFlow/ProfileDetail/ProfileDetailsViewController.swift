@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileDetailsViewController: BaseViewController {
+class ProfileDetailsViewController: BaseDependentViewController {
     
     enum TableRow {
         case headerView
@@ -18,7 +18,7 @@ class ProfileDetailsViewController: BaseViewController {
         case mailingAddress
         case communicationPreferences
         case dateOfBirth
-        case dependentDelegateCount
+        case dependentDelegateCount(count: Int)
         case removeDependentButton
         
         var getProfileDetailsScreenType: ProfileDetailsTableViewCell.ViewType? {
@@ -65,9 +65,13 @@ class ProfileDetailsViewController: BaseViewController {
                 cell.layoutMargins = UIEdgeInsets.zero
                 cell.configure(patient: patient)
                 return cell
-            case .dependentDelegateCount:
-                // TODO: Add dependent delegate count here
-                return UITableViewCell()
+            case .dependentDelegateCount(let count):
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: DependentDelegateCountTableViewCell.getName, for: indexPath) as? DependentDelegateCountTableViewCell else { return DependentDelegateCountTableViewCell() }
+                cell.preservesSuperviewLayoutMargins = false
+                cell.separatorInset = UIEdgeInsets.zero
+                cell.layoutMargins = UIEdgeInsets.zero
+                cell.configure(delegateCount: count)
+                return cell
             case .removeDependentButton:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: RemoveDependentTableViewCell.getName, for: indexPath) as? RemoveDependentTableViewCell else { return RemoveDependentTableViewCell() }
                 cell.preservesSuperviewLayoutMargins = false
@@ -129,12 +133,14 @@ class ProfileDetailsViewController: BaseViewController {
         navSetup()
         setupTableView()
         guard let type = self.type else { return }
-//        switch type {
-//
-//        }
-        if AppDelegate.sharedInstance?.cachedCommunicationPreferences == nil && self.type == .PatientProfile {
-            self.fetchPatientCommunicationDetails()
+        switch type {
+        case .PatientProfile:
+            if AppDelegate.sharedInstance?.cachedCommunicationPreferences == nil {
+                self.fetchPatientCommunicationDetails()
+            }
+        default: return
         }
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -155,7 +161,8 @@ class ProfileDetailsViewController: BaseViewController {
             dataSource.append(DataSource(type: .communicationPreferences, text: nil))
         case .DependentProfile:
             dataSource.append(DataSource(type: .dateOfBirth, text: dob))
-            dataSource.append(DataSource(type: .dependentDelegateCount, text: nil))
+            let count = Int(self.dependent?.totalDelegateCount ?? 0)
+            dataSource.append(DataSource(type: .dependentDelegateCount(count: count), text: nil))
             dataSource.append(DataSource(type: .removeDependentButton, text: nil))
 
         }
@@ -181,6 +188,8 @@ extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSour
         tableView.register(UINib.init(nibName: SettingsProfileTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsProfileTableViewCell.getName)
         tableView.register(UINib.init(nibName: ProfileDetailsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ProfileDetailsTableViewCell.getName)
         tableView.register(UINib.init(nibName: CommunicationPreferencesTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommunicationPreferencesTableViewCell.getName)
+        tableView.register(UINib.init(nibName: DependentDelegateCountTableViewCell.getName, bundle: .main), forCellReuseIdentifier: DependentDelegateCountTableViewCell.getName)
+        tableView.register(UINib.init(nibName: RemoveDependentTableViewCell.getName, bundle: .main), forCellReuseIdentifier: RemoveDependentTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.delegate = self
         tableView.dataSource = self
@@ -202,13 +211,15 @@ extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSour
 extension ProfileDetailsViewController: RemoveDependentTableViewCellDelegate {
     func removeDependentButtonTapped() {
         guard let dependent = self.dependent else {return}
-        delete(dependent: dependent) { [weak self] confirmed in
+        self.delete(dependent: dependent) { [weak self] confirmed in
             guard confirmed else {return}
             self?.popBack(toControllerType: DependentsHomeViewController.self)
         }
     }
 
 }
+
+
 
 // MARK: Address help button delegate
 extension ProfileDetailsViewController: ProfileDetailsTableViewCellDelegate {

@@ -31,18 +31,24 @@ extension ProfileDetailsViewController {
             switch type {
             case .PatientProfile(patient: let patient):
                 self.patient = patient
+                self.dependent = nil
                 firstName = patient.firstName
                 lastName = patient.lastName
                 phn = patient.phn
                 physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient.physicalAddress?.streetLines, city: patient.physicalAddress?.city, state: patient.physicalAddress?.state, postalCode: patient.physicalAddress?.postalCode, country: patient.physicalAddress?.country).getAddressString
                 mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient.postalAddress?.streetLines, city: patient.postalAddress?.city, state: patient.postalAddress?.state, postalCode: patient.postalAddress?.postalCode, country: patient.postalAddress?.country).getAddressString
+                dob = nil
+                delegateCount = nil
             case .DependentProfile(dependent: let dependent):
                 self.dependent = dependent
+                self.patient = nil
                 firstName = dependent.info?.firstName
                 lastName = dependent.info?.lastName
                 phn = dependent.info?.phn
                 dob = dependent.info?.birthday?.yearMonthStringDayString
                 delegateCount = Int(dependent.totalDelegateCount)
+                physicalAddress = nil
+                mailingAddress = nil
             }
         }
     }
