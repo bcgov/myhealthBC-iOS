@@ -116,7 +116,7 @@ struct DependentService {
         }
         
         guard
-            let remoteObject = currentDependent.toRemote(),
+            let remoteObject = currentDependent.toRemote(totalDelegateCount: Int(currentDependent.totalDelegateCount), expiryDate: currentDependent.expiryDate),
             let dependentInfo = currentDependent.info,
             let dependentHdid = dependentInfo.hdid
         else {

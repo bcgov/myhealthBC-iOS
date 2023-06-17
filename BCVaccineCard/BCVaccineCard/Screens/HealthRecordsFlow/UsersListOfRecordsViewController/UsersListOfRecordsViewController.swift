@@ -336,8 +336,9 @@ extension UsersListOfRecordsViewController {
         guard let dependent = viewModel?.patient?.dependencyInfo else {
             return
         }
-        let vm = DependentInfoViewController.ViewModel(dependent: dependent)
-        show(route: .DependentInfo, withNavigation: true, viewModel: vm)
+        showDependentProfile(dependent: dependent)
+//        let vm = DependentInfoViewController.ViewModel(dependent: dependent)
+//        show(route: .DependentInfo, withNavigation: true, viewModel: vm)
     }
     
     @objc private func doneButton() {
@@ -347,6 +348,14 @@ extension UsersListOfRecordsViewController {
     @objc private func editButton() {
         tableView.isEditing = false
         inEditMode = true
+    }
+}
+
+// MARK: Show Dependent Info
+extension UsersListOfRecordsViewController {
+    func showDependentProfile(dependent: Dependent) {
+        let vm = ProfileDetailsViewController.ViewModel(type: .DependentProfile(dependent: dependent))
+        show(route: .Profile, withNavigation: true, viewModel: vm)
     }
 }
 

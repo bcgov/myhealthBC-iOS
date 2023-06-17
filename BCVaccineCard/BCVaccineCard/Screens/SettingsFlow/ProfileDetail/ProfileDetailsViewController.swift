@@ -17,6 +17,9 @@ class ProfileDetailsViewController: BaseViewController {
         case physicalAddress
         case mailingAddress
         case communicationPreferences
+        case dateOfBirth
+        case dependentDelegateCount
+        case removeDependentButton
         
         var getProfileDetailsScreenType: ProfileDetailsTableViewCell.ViewType? {
             switch self {
@@ -27,6 +30,9 @@ class ProfileDetailsViewController: BaseViewController {
             case .physicalAddress: return .physicalAddress
             case .mailingAddress: return .mailingAddress
             case .communicationPreferences: return nil
+            case .dateOfBirth: return .dob
+            case .dependentDelegateCount: return nil
+            case .removeDependentButton: return nil
             }
         }
         
@@ -41,7 +47,7 @@ class ProfileDetailsViewController: BaseViewController {
                 cell.layoutMargins = UIEdgeInsets.zero
                 cell.configureForProfileDetailsScreen(name: name)
                 return cell
-            case .firstName, .lastName, .phn, .physicalAddress, .mailingAddress:
+            case .firstName, .lastName, .phn, .physicalAddress, .mailingAddress, .dateOfBirth:
                 guard let type = self.getProfileDetailsScreenType, let cell = tableView.dequeueReusableCell(withIdentifier: ProfileDetailsTableViewCell.getName, for: indexPath) as? ProfileDetailsTableViewCell else {
                     return ProfileDetailsTableViewCell()
                 }
@@ -59,6 +65,16 @@ class ProfileDetailsViewController: BaseViewController {
                 cell.layoutMargins = UIEdgeInsets.zero
                 cell.configure(patient: patient)
                 return cell
+            case .dependentDelegateCount:
+                // TODO: Add dependent delegate count here
+                return UITableViewCell()
+            case .removeDependentButton:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: RemoveDependentTableViewCell.getName, for: indexPath) as? RemoveDependentTableViewCell else { return RemoveDependentTableViewCell() }
+                cell.preservesSuperviewLayoutMargins = false
+                cell.separatorInset = UIEdgeInsets.zero
+                cell.layoutMargins = UIEdgeInsets.zero
+                cell.configure(delegateOwner: delegateOwner)
+                return cell
             }
         }
     }
@@ -70,7 +86,11 @@ class ProfileDetailsViewController: BaseViewController {
             vc.phn = viewModel.phn
             vc.physicalAddress = viewModel.physicalAddress
             vc.mailingAddress = viewModel.mailingAddress
+            vc.dob = viewModel.dob
+            vc.delegateCount = viewModel.delegateCount
             vc.patient = viewModel.patient
+            vc.dependent = viewModel.dependent
+            vc.type = viewModel.type
             return vc
         }
         return ProfileDetailsViewController()
@@ -83,11 +103,15 @@ class ProfileDetailsViewController: BaseViewController {
     
     // MARK: Variables
     private var patient: Patient?
+    private var dependent: Dependent?
     private var firstName: String?
     private var lastName: String?
     private var phn: String?
     private var physicalAddress: String?
     private var mailingAddress: String?
+    private var dob: String?
+    private var delegateCount: Int?
+    private var type: ViewModel.ScreenType!
     
     private var dataSource: [DataSource] = []
     
@@ -101,10 +125,14 @@ class ProfileDetailsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         profileService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
-        initializeDataSource()
+        initializeDataSource(for: self.type)
         navSetup()
         setupTableView()
-        if AppDelegate.sharedInstance?.cachedCommunicationPreferences == nil {
+        guard let type = self.type else { return }
+//        switch type {
+//
+//        }
+        if AppDelegate.sharedInstance?.cachedCommunicationPreferences == nil && self.type == .PatientProfile {
             self.fetchPatientCommunicationDetails()
         }
     }
@@ -114,15 +142,23 @@ class ProfileDetailsViewController: BaseViewController {
 //        self.apiClient = nil
     }
     
-    private func initializeDataSource() {
+    private func initializeDataSource(for type: ViewModel.ScreenType) {
         let headerName = (firstName ?? "FirstName") + " " + (lastName ?? "LastName") //Note: Not formatting as per designs yet - consistency question
         dataSource.append(DataSource(type: .headerView, text: headerName))
         dataSource.append(DataSource(type: .firstName, text: firstName))
         dataSource.append(DataSource(type: .lastName, text: lastName))
         dataSource.append(DataSource(type: .phn, text: phn))
-        dataSource.append(DataSource(type: .physicalAddress, text: physicalAddress))
-        dataSource.append(DataSource(type: .mailingAddress, text: mailingAddress))
-        dataSource.append(DataSource(type: .communicationPreferences, text: nil))
+        switch type {
+        case .PatientProfile:
+            dataSource.append(DataSource(type: .physicalAddress, text: physicalAddress))
+            dataSource.append(DataSource(type: .mailingAddress, text: mailingAddress))
+            dataSource.append(DataSource(type: .communicationPreferences, text: nil))
+        case .DependentProfile:
+            dataSource.append(DataSource(type: .dateOfBirth, text: dob))
+            dataSource.append(DataSource(type: .dependentDelegateCount, text: nil))
+            dataSource.append(DataSource(type: .removeDependentButton, text: nil))
+
+        }
     }
 }
 
@@ -162,6 +198,17 @@ extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSour
     }
 }
 
+// MARK: Remove dependent logic here
+extension ProfileDetailsViewController: RemoveDependentTableViewCellDelegate {
+    func removeDependentButtonTapped() {
+        guard let dependent = self.dependent else {return}
+        delete(dependent: dependent) { [weak self] confirmed in
+            guard confirmed else {return}
+            self?.popBack(toControllerType: DependentsHomeViewController.self)
+        }
+    }
+
+}
 
 // MARK: Address help button delegate
 extension ProfileDetailsViewController: ProfileDetailsTableViewCellDelegate {
@@ -189,7 +236,7 @@ extension ProfileDetailsViewController {
             self.physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.physicalAddress?.streetLines, city: patient?.physicalAddress?.city, state: patient?.physicalAddress?.state, postalCode: patient?.physicalAddress?.postalCode, country: patient?.physicalAddress?.country).getAddressString
             self.mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.postalAddress?.streetLines, city: patient?.postalAddress?.city, state: patient?.postalAddress?.state, postalCode: patient?.postalAddress?.postalCode, country: patient?.postalAddress?.country).getAddressString
             self.dataSource = []
-            self.initializeDataSource()
+            self.initializeDataSource(for: self.type)
             self.tableView.reloadData()
             self.tableView.endLoadingIndicator()
         }
@@ -276,7 +323,7 @@ extension ProfileDetailsViewController {
         AppDelegate.sharedInstance?.cachedCommunicationPreferences = CommunicationPreferences(email: email, emailVerified: emailVerified, phone: phone, phoneVerified: phoneVerified)
         
         self.dataSource = []
-        initializeDataSource()
+        initializeDataSource(for: self.type)
         self.tableView.reloadData()
         self.tableView.endLoadingIndicator()
     }
