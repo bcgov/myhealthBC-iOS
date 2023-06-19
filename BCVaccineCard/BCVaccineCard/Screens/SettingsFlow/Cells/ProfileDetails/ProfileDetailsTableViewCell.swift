@@ -19,6 +19,7 @@ class ProfileDetailsTableViewCell: UITableViewCell {
         case phn
         case physicalAddress
         case mailingAddress
+        case dob
         
         var getCellHeaderTitle: String {
             switch self {
@@ -32,12 +33,14 @@ class ProfileDetailsTableViewCell: UITableViewCell {
                 return "Physical Address"
             case .mailingAddress:
                 return "Mailing Address"
+            case .dob:
+                return "Date of birth (DoB)"
             }
         }
         
         var isAddressCell: Bool {
             switch self {
-            case .firstName, .lastName, .phn:
+            case .firstName, .lastName, .phn, .dob:
                 return false
             case .physicalAddress, .mailingAddress:
                 return true

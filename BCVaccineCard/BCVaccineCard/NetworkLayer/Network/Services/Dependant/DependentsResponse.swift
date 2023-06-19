@@ -35,21 +35,21 @@ struct AddDependentResponse: Codable {
 // MARK: - RemoteDependent
 struct RemoteDependent: Codable {
     let dependentInformation: DependentInformation?
-    let ownerID, delegateID: String?
-    let reasonCode, version: Int?
+    let ownerID, delegateID, expiryDate: String?
+    let totalDelegateCount, reasonCode, version: Int?
 
     enum CodingKeys: String, CodingKey {
         case dependentInformation
         case ownerID = "ownerId"
         case delegateID = "delegateId"
-        case reasonCode, version
+        case expiryDate, totalDelegateCount, reasonCode, version
     }
 }
 
 
 extension Dependent {
-    func toRemote() -> RemoteDependent? {
+    func toRemote(totalDelegateCount: Int, expiryDate: Date?) -> RemoteDependent? {
         guard let patient = info else {return nil}
-        return RemoteDependent(dependentInformation: DependentInformation(hdid: patient.hdid, firstname: patient.firstName, lastname: patient.lastName, phn: patient.phn, dateOfBirth: patient.birthday?.postServerDateTime, gender: patient.gender), ownerID: ownerID, delegateID: delegateID, reasonCode: Int(reasonCode), version: Int(version))
+        return RemoteDependent(dependentInformation: DependentInformation(hdid: patient.hdid, firstname: patient.firstName, lastname: patient.lastName, phn: patient.phn, dateOfBirth: patient.birthday?.postServerDateTime, gender: patient.gender), ownerID: ownerID, delegateID: delegateID, expiryDate: expiryDate?.yearMonthDayString, totalDelegateCount: totalDelegateCount, reasonCode: Int(reasonCode), version: Int(version))
     }
 }

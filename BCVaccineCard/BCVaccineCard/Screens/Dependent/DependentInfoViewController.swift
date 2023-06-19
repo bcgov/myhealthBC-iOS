@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+// NOTE FOR AMIR: Not using this VC anymore - moved UI and Delete logic to ProfileDetailsViewController in order to reuse UI in a table view
 class DependentInfoViewController: BaseDependentViewController {
     
     // TODO: Move to new file

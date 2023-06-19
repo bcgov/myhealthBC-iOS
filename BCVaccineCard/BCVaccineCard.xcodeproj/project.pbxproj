@@ -285,6 +285,18 @@
 		2D2B490A2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */; };
 		2D2B490B2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */; };
 		2D2B490C2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */; };
+		2D38FBDF2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D38FBDD2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift */; };
+		2D38FBE02A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D38FBDD2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift */; };
+		2D38FBE12A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D38FBDD2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift */; };
+		2D38FBE22A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D38FBDE2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib */; };
+		2D38FBE32A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D38FBDE2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib */; };
+		2D38FBE42A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D38FBDE2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib */; };
+		2D38FBE72A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D38FBE52A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift */; };
+		2D38FBE82A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D38FBE52A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift */; };
+		2D38FBE92A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D38FBE52A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift */; };
+		2D38FBEA2A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D38FBE62A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib */; };
+		2D38FBEB2A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D38FBE62A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib */; };
+		2D38FBEC2A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D38FBE62A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib */; };
 		2D4B118729F0654D00D7C02C /* RecordsSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */; };
 		2D4B118829F0654D00D7C02C /* RecordsSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */; };
 		2D4B118929F0654D00D7C02C /* RecordsSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */; };
@@ -1577,6 +1589,10 @@
 		2D2B48F02A1D335300E04254 /* Address+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Address+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		2D2B48F12A1D335300E04254 /* Address+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Address+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticImagingDetailView.swift; sourceTree = "<group>"; };
+		2D38FBDD2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentDelegateCountTableViewCell.swift; sourceTree = "<group>"; };
+		2D38FBDE2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DependentDelegateCountTableViewCell.xib; sourceTree = "<group>"; };
+		2D38FBE52A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveDependentTableViewCell.swift; sourceTree = "<group>"; };
+		2D38FBE62A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RemoveDependentTableViewCell.xib; sourceTree = "<group>"; };
 		2D4B118629F0654D00D7C02C /* RecordsSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsSearchBarView.swift; sourceTree = "<group>"; };
 		2D4B118A29F0655A00D7C02C /* RecordsSearchBarView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecordsSearchBarView.xib; sourceTree = "<group>"; };
 		2D4EA25C2A0A967900A154AF /* CommunicationPreferencesTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommunicationPreferencesTableViewCell.xib; sourceTree = "<group>"; };
@@ -2314,6 +2330,8 @@
 		2978851B2795F14100FF912D /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				2D38FBDC2A3D616200DB0ED7 /* DependentDelegateCountCell */,
+				2D38FBDB2A3D615800DB0ED7 /* RemoveDependentCell */,
 				2D4EA25B2A0A963F00A154AF /* CommunicationPreferencesCell */,
 				297885272796211D00FF912D /* Header */,
 				2978851C2795F14800FF912D /* Profile */,
@@ -2520,6 +2538,24 @@
 				2D2B49092A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift */,
 			);
 			path = DiagnosticImagingDetailView;
+			sourceTree = "<group>";
+		};
+		2D38FBDB2A3D615800DB0ED7 /* RemoveDependentCell */ = {
+			isa = PBXGroup;
+			children = (
+				2D38FBE52A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift */,
+				2D38FBE62A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib */,
+			);
+			path = RemoveDependentCell;
+			sourceTree = "<group>";
+		};
+		2D38FBDC2A3D616200DB0ED7 /* DependentDelegateCountCell */ = {
+			isa = PBXGroup;
+			children = (
+				2D38FBDD2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift */,
+				2D38FBDE2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib */,
+			);
+			path = DependentDelegateCountCell;
 			sourceTree = "<group>";
 		};
 		2D4B118429F0651400D7C02C /* Views */ = {
@@ -4272,8 +4308,10 @@
 				293B32C027D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
 				79CF236B2825789600510489 /* HealthRecordsHomeView.xib in Resources */,
 				297D3BB427D947A900B059CA /* TableSectionHeader.xib in Resources */,
+				2D38FBE32A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib in Resources */,
 				3E6F93712A27A85400EB82C5 /* Notifications.storyboard in Resources */,
 				29921C942773A5F8005025D2 /* AuthenticationInfoView.xib in Resources */,
+				2D38FBEB2A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib in Resources */,
 				29B07E0A2732109E007ABB46 /* exportOptions.plist in Resources */,
 				3E5E6EBF28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */,
 				7967E73F26F536BE00EEF510 /* FormTextFieldView.xib in Resources */,
@@ -4352,6 +4390,7 @@
 				79218ABB27519E790063004E /* HealthRecordsUserCollectionViewCell.xib in Resources */,
 				2922C0AE286C73F9000FF4F7 /* HealthRecordDetailFieldTableViewCell.xib in Resources */,
 				3EDA6F5629EF201A00A5DC7B /* AuthExpiredView.xib in Resources */,
+				2D38FBEC2A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib in Resources */,
 				794BD6602702EEC00084ADA8 /* BCSans-Italic.otf in Resources */,
 				794BD6612702EEC00084ADA8 /* VaccineCardTableViewCell.xib in Resources */,
 				3E7306E728B5F122007FED05 /* ReccomandationTableViewCell.xib in Resources */,
@@ -4403,6 +4442,7 @@
 				792834602730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */,
 				29A4DF5B27DEFCCC00D5E901 /* ChipCollectionViewCell.xib in Resources */,
 				3E5924C5297086C900936CF1 /* EmptyTableViewCell.xib in Resources */,
+				2D38FBE42A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib in Resources */,
 				293B32C127D262F70064BAAA /* CommentsViewTableViewCell.xib in Resources */,
 				7928346E27311C9000EE2710 /* DropDownView.xib in Resources */,
 				2922C0E8286E33F8000FF4F7 /* MessageBannerTableViewCell.xib in Resources */,
@@ -4521,8 +4561,10 @@
 				798006372852C66E006E390F /* CommentsViewTableViewCell.xib in Resources */,
 				798006382852C66E006E390F /* HealthRecordsHomeView.xib in Resources */,
 				798006392852C66E006E390F /* TableSectionHeader.xib in Resources */,
+				2D38FBE22A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.xib in Resources */,
 				3E6F93702A27A85400EB82C5 /* Notifications.storyboard in Resources */,
 				7980063A2852C66E006E390F /* AuthenticationInfoView.xib in Resources */,
+				2D38FBEA2A3D61B100DB0ED7 /* RemoveDependentTableViewCell.xib in Resources */,
 				7980063B2852C66E006E390F /* exportOptions.plist in Resources */,
 				3E5E6EBE28D278BD00724EDD /* CommunicationBannerTableViewCell.xib in Resources */,
 				7980063C2852C66E006E390F /* FormTextFieldView.xib in Resources */,
@@ -4705,6 +4747,7 @@
 				7944F6BE26F12BD5006B9444 /* VaccinePassportModel.swift in Sources */,
 				2D6DF35729F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift in Sources */,
 				3E9D52672909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */,
+				2D38FBE82A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift in Sources */,
 				2979679927C536E20019EE9B /* LaboratoryTest+CoreDataProperties.swift in Sources */,
 				3E473784291090DB00B5BBA0 /* LabOrderService.swift in Sources */,
 				294BD3C727AACFA800BD8D46 /* LocalAuthPrivacyView.swift in Sources */,
@@ -4972,6 +5015,7 @@
 				2DF665612A3041450009D8F0 /* PostNoteResponse.swift in Sources */,
 				3E6F938E2A27B98800EB82C5 /* Patient+CoreDataClass copy.swift in Sources */,
 				3EDC0C84296785DB00603FED /* BaseGatewayResponse.swift in Sources */,
+				2D38FBE02A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift in Sources */,
 				2DF6657E2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */,
 				3E68313B2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA628D23BB200724EDD /* AFNetwork.swift in Sources */,
@@ -5092,6 +5136,7 @@
 				79932CAA2790F8DA007E8D92 /* QRMaker.swift in Sources */,
 				2D6DF35829F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift in Sources */,
 				3E9D52682909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */,
+				2D38FBE92A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift in Sources */,
 				2979679A27C536E20019EE9B /* LaboratoryTest+CoreDataProperties.swift in Sources */,
 				2940A3512728399B00132D7D /* StorageService.swift in Sources */,
 				3E473785291090DB00B5BBA0 /* LabOrderService.swift in Sources */,
@@ -5359,6 +5404,7 @@
 				2DF665622A3041450009D8F0 /* PostNoteResponse.swift in Sources */,
 				3E6F938F2A27B98800EB82C5 /* Patient+CoreDataClass copy.swift in Sources */,
 				3EDC0C85296785DB00603FED /* BaseGatewayResponse.swift in Sources */,
+				2D38FBE12A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift in Sources */,
 				2DF6657F2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */,
 				3E68313C2940D77600100402 /* CommentsViewController.swift in Sources */,
 				3E5E6EA728D23BB200724EDD /* AFNetwork.swift in Sources */,
@@ -5456,6 +5502,7 @@
 				3E9D52662909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */,
 				2D6DF35629F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift in Sources */,
 				798005312852C66E006E390F /* ResourceTableViewCell.swift in Sources */,
+				2D38FBE72A3D61B100DB0ED7 /* RemoveDependentTableViewCell.swift in Sources */,
 				798005322852C66E006E390F /* VaccinePassportModel.swift in Sources */,
 				3E473783291090DB00B5BBA0 /* LabOrderService.swift in Sources */,
 				798005332852C66E006E390F /* LaboratoryTest+CoreDataProperties.swift in Sources */,
@@ -5723,6 +5770,7 @@
 				2DF665602A3041450009D8F0 /* PostNoteResponse.swift in Sources */,
 				3E6F938D2A27B98800EB82C5 /* Patient+CoreDataClass copy.swift in Sources */,
 				3E91C7AE28B51B0B005AA34F /* ImmunizationDetails+CoreDataClass.swift in Sources */,
+				2D38FBDF2A3D618900DB0ED7 /* DependentDelegateCountTableViewCell.swift in Sources */,
 				2DF6657D2A30EC240009D8F0 /* UISegmentedControl+EXT.swift in Sources */,
 				3EDC0C83296785DB00603FED /* BaseGatewayResponse.swift in Sources */,
 				3E68313A2940D77600100402 /* CommentsViewController.swift in Sources */,
@@ -5977,22 +6025,19 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.7;
+				MARKETING_VERSION = 1.8.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = HealthGateway;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -6013,22 +6058,19 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TCH45SXZ69;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TCH45SXZ69;
 				INFOPLIST_FILE = BCVaccineCard/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8.7;
+				MARKETING_VERSION = 1.8.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.freshworks.BCVaccineCard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = HealthGateway;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
