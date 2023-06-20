@@ -270,7 +270,7 @@ extension NoteViewController: AddToTimelineTableViewCellDelegate, EnterTextTable
     }
     
     func addToTimelineInfoButtonTapped() {
-        alert(title: "Info", message: "Info button tapped")
+        alert(title: "Info", message: "Toggling this on will add the notes to your timeline and make it available on any device you log into with this profile. If this toggle is not enabled - The notes created will be stored in this device alone")
     }
     
     func addToTimelineSwitchValueChanged(isOn: Bool) {
