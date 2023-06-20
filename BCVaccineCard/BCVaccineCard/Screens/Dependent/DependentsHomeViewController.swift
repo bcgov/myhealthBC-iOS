@@ -421,7 +421,7 @@ extension DependentsHomeViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     private func showDetails(for dependent: Patient) {
-        let vm = UsersListOfRecordsViewController.ViewModel(patient: dependent, authenticated: dependent.authenticated)
+        let vm = UsersListOfRecordsViewController.ViewModel(patient: dependent, authenticated: dependent.authenticated, userType: .Dependent)
         show(route: .UsersListOfRecords, withNavigation: true, viewModel: vm)
     }
 }
