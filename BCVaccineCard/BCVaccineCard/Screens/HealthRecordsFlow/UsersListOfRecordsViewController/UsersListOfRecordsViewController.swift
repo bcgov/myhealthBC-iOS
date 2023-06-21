@@ -52,7 +52,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var dropDownViewGestureRecognizer: UITapGestureRecognizer?
     
     private var isDependent: Bool {
-        return viewModel?.patient?.isDependent() ?? false
+        return viewModel?.userType == .Dependent
     }
     
     private var currentFilter: RecordsFilter? = nil {
@@ -135,7 +135,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private func setupSegmentedControl() {
         listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
         // Hide if dependent VC
-        if viewModel?.userType == .Dependent {
+        if viewModel?.userType == .Dependent || !HealthRecordConstants.commentsEnabled {
             listOfRecordsSegmentedView.isHidden = true
         }
     }
@@ -508,7 +508,11 @@ extension UsersListOfRecordsViewController {
             recordsSearchBarView.isHidden = true
             listOfRecordsSegmentedView.isHidden = true
         case .authenticated:
-            listOfRecordsSegmentedView.isHidden = viewModel?.userType == .Dependent
+            if !HealthRecordConstants.commentsEnabled {
+                listOfRecordsSegmentedView.isHidden = true
+            } else {
+                listOfRecordsSegmentedView.isHidden = viewModel?.userType == .Dependent
+            }
             guard self.dataSource.count == 0 else {
                 show(records: self.dataSource, filter: currentFilter, searchText: searchText)
                 return
