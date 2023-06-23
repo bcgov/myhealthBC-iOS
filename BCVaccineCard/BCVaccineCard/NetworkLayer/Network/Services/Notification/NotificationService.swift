@@ -73,7 +73,7 @@ extension NotificationService {
         guard let token = authManager.authToken,
               let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
-        else { return completion(nil)}
+        else {return completion(nil)}
         
         configService.fetchConfig { response in
             guard let config = response,
@@ -81,6 +81,7 @@ extension NotificationService {
                   let baseURLString = config.baseURL,
                   let baseURL = URL(string: baseURLString)
             else {
+                network.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
                 return completion(nil)
             }
             let headers = [
@@ -118,6 +119,7 @@ extension NotificationService {
                   let baseURLString = config.baseURL,
                   let baseURL = URL(string: baseURLString)
             else {
+                network.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
                 return completion(false)
             }
             let headers = [
@@ -146,6 +148,7 @@ extension NotificationService {
                   let baseURL = URL(string: baseURLString),
                   let notificationId = notification.id
             else {
+                network.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
                 return completion(false)
             }
             let headers = [
