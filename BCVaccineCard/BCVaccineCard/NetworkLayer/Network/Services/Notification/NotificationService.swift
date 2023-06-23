@@ -23,8 +23,7 @@ struct NotificationService {
             guard let resposne = resposne else {
                 SessionStorage.notificationFethFilure = true
                 network.removeLoader(caller: .NotificationService_fetchAndStore)
-                return
-                completion([])
+                return completion([])
             }
             SessionStorage.notificationFethFilure = false
             StorageService.shared.deleteNotifications()
@@ -179,5 +178,12 @@ extension GatewayNotification {
             return nil
         }
         return ActionType(rawValue: type)
+    }
+    
+    var category: NotificationCategory? {
+        guard let category = categoryName else {
+            return nil
+        }
+        return NotificationCategory(rawValue: category)
     }
 }

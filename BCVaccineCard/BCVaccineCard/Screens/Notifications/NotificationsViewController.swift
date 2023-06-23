@@ -162,9 +162,47 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         return cell
     }
     
+//    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        cell.layoutIfNeeded()
+//    }
+    
+//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        tableView.beginUpdates()
+//        tableView.endUpdates()
+//    }
+    
 }
 
 extension NotificationsViewController: NotificationTableViewCellDelegate {
+    func showDetail(notification: GatewayNotification) {
+        print(notification)
+        guard let actionType = notification.actionTypeEnum else {
+            return
+        }
+        switch actionType {
+        case .externalLink:
+            guard let link = notification.actionURL else {return}
+            showExternalURL(url: link)
+        case .internalLink:
+            guard let category = notification.category else {
+                print("\n\n**CATEGORY NOT FOUND LOCALLY - NEEDS TO BE ADDED\n\n")
+                return
+            }
+            showLocalRoute(category: category)
+        case .none:
+            return
+        }
+    }
+    
+    func showExternalURL(url: String) {
+        openURLInSafariVC(withURL: url)
+    }
+    
+    func showLocalRoute(category: NotificationCategory) {
+        SessionStorage.notificationCategoryFilter = category
+        show(tab: .AuthenticatedRecords)
+    }
+    
     func remove(notification: GatewayNotification) {
         guard let id = notification.id else {return}
         let service = NotificationService(network: networkManager, authManager: AuthManager(), configService: MobileConfigService(network: networkManager))

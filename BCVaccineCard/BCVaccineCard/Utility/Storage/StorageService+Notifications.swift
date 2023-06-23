@@ -68,7 +68,7 @@ extension StorageService: NotificationStorage {
         let model = GatewayNotification(context: context)
         model.patient = patient
         model.id = notification.id
-        model.categoryName = notification.id
+        model.categoryName = notification.categoryName
         model.displayText = notification.displayText
         model.actionURL = notification.actionURL
         model.actionType = notification.actionType?.rawValue

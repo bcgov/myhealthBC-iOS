@@ -118,11 +118,11 @@ struct SyncService {
                 Logger.log(string: "fetched \(records.count) records", type: .Network)
             }
             
-            group.enter()
-            notificationService.fetchAndStore(for: patient, loadingStyle: .SyncingRecords) { notifications in
-                Logger.log(string: "fetched \(notifications.count) notification", type: .Network)
-                group.leave()
-            }
+//            group.enter()
+//            notificationService.fetchAndStore(for: patient, loadingStyle: .SyncingRecords) { notifications in
+//                Logger.log(string: "fetched \(notifications.count) notification", type: .Network)
+//                group.leave()
+//            }
             
             group.notify(queue: .main) {
                 let message: String = !hadFailures ? "Records retrieved" : .fetchRecordError

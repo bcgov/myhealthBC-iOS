@@ -169,6 +169,46 @@ struct RecordsFilter {
     }
 }
 
+enum NotificationCategory: String {
+    case ClinicalDocuments = "ClinicalDocument"
+    case Immunizations = "Immunization"
+    case SpecialAuthorityDrugs = "SpecialAuthority"
+    case LabTests = "Laboratory"
+    case Notes = "MyNote"
+    case Covid = "COVID19Laboratory"
+    case HeathVisits = "HealthVisit"
+    case Medication = "Medications"
+    case HospitalVisits = "HospitalVisit"
+    case DiagnosticImaging = "DiagnosticImaging"
+}
+
+extension NotificationCategory {
+    func toLocalFilter() -> RecordsFilter.RecordType {
+        switch self {
+        case .ClinicalDocuments:
+            return RecordsFilter.RecordType.ClinicalDocuments
+        case .Immunizations:
+            return RecordsFilter.RecordType.Immunizations
+        case .SpecialAuthorityDrugs:
+            return RecordsFilter.RecordType.SpecialAuthorityDrugs
+        case .LabTests:
+            return RecordsFilter.RecordType.LabTests
+        case .Notes:
+            return RecordsFilter.RecordType.Notes
+        case .Covid:
+            return RecordsFilter.RecordType.Covid
+        case .HeathVisits:
+            return RecordsFilter.RecordType.HeathVisits
+        case .Medication:
+            return RecordsFilter.RecordType.Medication
+        case .HospitalVisits:
+            return RecordsFilter.RecordType.HospitalVisits
+        case .DiagnosticImaging:
+            return RecordsFilter.RecordType.DiagnosticImaging
+        }
+    }
+}
+
 extension RecordsFilter.RecordType {
     // Patient filters - set based on HealthRecordConstants.enabledTypes
     static var avaiableFilters: [RecordsFilter.RecordType] {

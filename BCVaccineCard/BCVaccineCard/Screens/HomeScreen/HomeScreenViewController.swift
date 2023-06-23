@@ -121,11 +121,19 @@ extension HomeScreenViewController {
     
     @objc func notificationsButton() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else {
+        let network = AFNetwork()
+        let authManager = AuthManager()
+        let configService = MobileConfigService(network: network)
+        let service = NotificationService(network: network, authManager: authManager, configService: configService)
+        guard let patient = StorageService.shared.fetchAuthenticatedPatient()
+        else {
             return
         }
-        let vm = NotificationsViewController.ViewModel(patient: patient, network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
-        show(route: .Notifications, withNavigation: true, viewModel: vm)
+        
+        service.fetchAndStore(for: patient, loadingStyle: .empty) { results in
+            let vm = NotificationsViewController.ViewModel(patient: patient, network: network, authManager: authManager, configService: configService)
+            self.show(route: .Notifications, withNavigation: true, viewModel: vm)
+        }
     }
 }
 
