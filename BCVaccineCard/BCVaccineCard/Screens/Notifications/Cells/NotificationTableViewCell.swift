@@ -63,20 +63,17 @@ class NotificationTableViewCell: UITableViewCell {
         if let type = notification.actionTypeEnum {
             switch type {
             case .externalLink:
-                detailsLabel.alpha = 1
-                detailsLabelHeight.constant = 24
+                detailsLabel.isHidden = false
                 let text = NSAttributedString(string: "More information", attributes:
                                                 [.underlineStyle: NSUnderlineStyle.single.rawValue])
                 detailsLabel.attributedText = text
             case .internalLink:
-                detailsLabel.alpha = 1
-                detailsLabelHeight.constant = 24
+                detailsLabel.isHidden = false
                 let text = NSAttributedString(string: "View details", attributes:
                                                 [.underlineStyle: NSUnderlineStyle.single.rawValue])
                 detailsLabel.attributedText = text
             case .none:
-                detailsLabelHeight.constant = 0
-                detailsLabel.alpha = 0
+                detailsLabel.isHidden = true
             }
         }
     }

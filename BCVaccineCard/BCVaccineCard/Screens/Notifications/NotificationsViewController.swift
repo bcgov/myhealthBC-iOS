@@ -195,6 +195,10 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
     }
     
     func showExternalURL(url: String) {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This action requires an internet connection")
+            return
+        }
         openURLInSafariVC(withURL: url)
     }
     
@@ -205,6 +209,10 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
     
     func remove(notification: GatewayNotification) {
         guard let id = notification.id else {return}
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This action requires an internet connection")
+            return
+        }
         let service = NotificationService(network: networkManager, authManager: AuthManager(), configService: MobileConfigService(network: networkManager))
         
         service.dimiss(notification: notification, completion: {[weak self] in
