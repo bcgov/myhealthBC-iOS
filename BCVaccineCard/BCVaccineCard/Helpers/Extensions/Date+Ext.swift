@@ -377,6 +377,8 @@ extension String {
             formatted = commentDate
         } else if let noteJournalDate = Date.Formatter.yearMonthDay.date(from: self) {
             formatted = noteJournalDate
+        } else if let withMS = Date.Formatter.gatewayDateAndTimeWithMS.date(from: self) {
+            formatted = withMS
         } else {
             formatted = nil
         }

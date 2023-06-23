@@ -122,6 +122,10 @@ class NotificationsViewController: BaseViewController {
     
     @objc func clearNotifications() {
         guard let patient = viewModel?.patient else {return}
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This action requires an internet connection")
+            return
+        }
         alertConfirmation(title: "Clear all notifications",
                           message: "Are you sure you want to delete all notifications? You won't be able to access them again after this.",
                           confirmTitle: "Yes",
