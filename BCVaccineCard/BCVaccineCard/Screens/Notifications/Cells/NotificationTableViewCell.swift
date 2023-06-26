@@ -9,10 +9,11 @@ import UIKit
 
 protocol NotificationTableViewCellDelegate {
     func remove(notification: GatewayNotification)
+    func showDetail(notification: GatewayNotification)
 }
 
 class NotificationTableViewCell: UITableViewCell {
-
+    
     var delegate: NotificationTableViewCellDelegate?
     var notification: GatewayNotification?
     
@@ -36,6 +37,15 @@ class NotificationTableViewCell: UITableViewCell {
         delegate.remove(notification: notification)
     }
     
+    @objc func showDetailsAction() {
+        guard let notification = self.notification,
+              let delegate = self.delegate
+        else {
+            return
+        }
+        delegate.showDetail(notification: notification)
+    }
+    
     func setup(notification: GatewayNotification, delegate: NotificationTableViewCellDelegate) {
         self.notification = notification
         self.delegate = delegate
@@ -53,20 +63,17 @@ class NotificationTableViewCell: UITableViewCell {
         if let type = notification.actionTypeEnum {
             switch type {
             case .externalLink:
-                detailsLabel.alpha = 1
-                detailsLabelHeight.constant = 24
+                detailsLabel.isHidden = false
                 let text = NSAttributedString(string: "More information", attributes:
-                    [.underlineStyle: NSUnderlineStyle.single.rawValue])
+                                                [.underlineStyle: NSUnderlineStyle.single.rawValue])
                 detailsLabel.attributedText = text
             case .internalLink:
-                detailsLabel.alpha = 1
-                detailsLabelHeight.constant = 24
+                detailsLabel.isHidden = false
                 let text = NSAttributedString(string: "View details", attributes:
-                    [.underlineStyle: NSUnderlineStyle.single.rawValue])
+                                                [.underlineStyle: NSUnderlineStyle.single.rawValue])
                 detailsLabel.attributedText = text
             case .none:
-                detailsLabelHeight.constant = 0
-                detailsLabel.alpha = 0
+                detailsLabel.isHidden = true
             }
         }
     }
@@ -80,5 +87,8 @@ class NotificationTableViewCell: UITableViewCell {
         detailsLabel.font = UIFont.bcSansRegularWithSize(size: 15)
         messageContainer.layer.cornerRadius = 3
         messageContainer.backgroundColor = UIColor(red: 0.969, green: 0.969, blue: 0.969, alpha: 1)
+        let getstureRecognizer = UITapGestureRecognizer(target: self, action: #selector(showDetailsAction))
+        detailsLabel.isUserInteractionEnabled = true
+        detailsLabel.addGestureRecognizer(getstureRecognizer)
     }
 }

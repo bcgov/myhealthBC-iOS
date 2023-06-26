@@ -12,10 +12,6 @@ class SessionStorage {
     // MARK: Protective word
     static var protectiveWordEnteredThisSession: String?
     static var protectiveWordEnabled = false
-    
-    // MARK: Notification fetch error
-    static var notificationFethFilure = false
-    
     static var protectiveWordRequired: Bool {
         guard protectiveWordEnabled else {
             return false
@@ -50,4 +46,8 @@ class SessionStorage {
         protectiveWordEnteredThisSession = nil
         protectiveWordEnabled = false
     }
+    
+    // MARK: Notification
+    static var notificationFethFilure = false
+    static var notificationCategoryFilter: NotificationCategory? = nil
 }

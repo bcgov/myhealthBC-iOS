@@ -111,6 +111,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        applyNotificationFilterIfNeeded()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -123,6 +124,17 @@ class UsersListOfRecordsViewController: BaseViewController {
         } else {
             return UIStatusBarStyle.default
         }
+    }
+    
+    private func applyNotificationFilterIfNeeded() {
+        guard let category = SessionStorage.notificationCategoryFilter
+        else {
+            return
+        }
+        let filterType = category.toLocalFilter()
+        
+        SessionStorage.notificationCategoryFilter = nil
+        self.selected(filter: RecordsFilter(recordTypes: [filterType]))
     }
     
     private func setupRefreshControl() {
