@@ -115,6 +115,10 @@ class NotificationsViewController: BaseViewController {
     
     @objc func refetchNotifications() {
         guard let viewModel = self.viewModel else {return}
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "No internet connection")
+            return
+        }
         viewModel.service.fetchAndStore(for: viewModel.patient, loadingStyle: .empty, completion: {[weak self] _ in
             self?.fetchData()
         })
@@ -122,11 +126,19 @@ class NotificationsViewController: BaseViewController {
     
     @objc func clearNotifications() {
         guard let patient = viewModel?.patient else {return}
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "No internet connection")
+            return
+        }
         alertConfirmation(title: "Clear all notifications",
                           message: "Are you sure you want to delete all notifications? You won't be able to access them again after this.",
                           confirmTitle: "Yes",
                           confirmStyle: .default,
                           onConfirm: {
+            guard NetworkConnection.shared.hasConnection else {
+                self.showToast(message: "No internet connection")
+                return
+            }
             self.viewModel?.service.dimissAll(for: patient) {[weak self] in
                 self?.fetchData()
             }
@@ -162,11 +174,57 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         return cell
     }
     
+//    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        cell.layoutIfNeeded()
+//    }
+    
+//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        tableView.beginUpdates()
+//        tableView.endUpdates()
+//    }
+    
 }
 
 extension NotificationsViewController: NotificationTableViewCellDelegate {
+    func showDetail(notification: GatewayNotification) {
+        print(notification)
+        guard let actionType = notification.actionTypeEnum else {
+            return
+        }
+        switch actionType {
+        case .externalLink:
+            guard let link = notification.actionURL else {return}
+            showExternalURL(url: link)
+        case .internalLink:
+            guard let category = notification.category else {
+                print("\n\n**CATEGORY NOT FOUND LOCALLY - NEEDS TO BE ADDED\n\n")
+                return
+            }
+            showLocalRoute(category: category)
+        case .none:
+            return
+        }
+    }
+    
+    func showExternalURL(url: String) {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This action requires an internet connection")
+            return
+        }
+        openURLInSafariVC(withURL: url)
+    }
+    
+    func showLocalRoute(category: NotificationCategory) {
+        SessionStorage.notificationCategoryFilter = category
+        show(tab: .AuthenticatedRecords)
+    }
+    
     func remove(notification: GatewayNotification) {
         guard let id = notification.id else {return}
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "No internet connection")
+            return
+        }
         let service = NotificationService(network: networkManager, authManager: AuthManager(), configService: MobileConfigService(network: networkManager))
         
         service.dimiss(notification: notification, completion: {[weak self] in
