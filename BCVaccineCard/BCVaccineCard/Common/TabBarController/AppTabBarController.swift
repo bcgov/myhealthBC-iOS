@@ -63,6 +63,26 @@ class AppTabBarController: UITabBarController {
         }
     }
     
+    override var selectedIndex: Int {
+        didSet {
+            guard let selectedVC = viewControllers?[selectedIndex] else { return }
+            selectedViewController?.tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+        }
+    }
+    
+    override var selectedViewController: UIViewController? {
+        didSet {
+            guard let vcs = viewControllers else { return }
+            for vc in vcs {
+                if vc == selectedViewController {
+                    vc.tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+                } else {
+                    vc.tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
+                }
+            }
+        }
+    }
+    
     // MARK: Events
     private func setupListeners() {
         // When authentication status changes, we can set the records tab to the appropriate VC
@@ -184,6 +204,7 @@ class AppTabBarController: UITabBarController {
     // MARK: Setup
     private func setup(selectedIndex: Int) {
         tabBar.tintColor = AppColours.appBlue
+        tabBar.unselectedItemTintColor = AppColours.textGray
         tabBar.barTintColor = .white
         tabBar.isHidden = false
         setTabs()
@@ -249,7 +270,8 @@ class AppTabBarController: UITabBarController {
         }
         
         let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
-        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+//        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
         let viewController = properties.baseViewController
         viewController.tabBarItem = tabBarItem
         viewController.title = properties.title

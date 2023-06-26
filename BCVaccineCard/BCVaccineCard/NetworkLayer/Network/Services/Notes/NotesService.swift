@@ -23,6 +23,7 @@ struct NotesService {
     }
     
     public func fetchAndStore(for patient: Patient, completion: @escaping ([Note]?)->Void) {
+        if !HealthRecordConstants.enabledTypes.contains(.notes) {return completion([])}
         network.addLoader(message: .SyncingRecords, caller: .Notes_fetchAndStore)
         fetch(for: patient) { response in
             guard let response = response else {
