@@ -115,6 +115,10 @@ class NotificationsViewController: BaseViewController {
     
     @objc func refetchNotifications() {
         guard let viewModel = self.viewModel else {return}
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "No internet connection")
+            return
+        }
         viewModel.service.fetchAndStore(for: viewModel.patient, loadingStyle: .empty, completion: {[weak self] _ in
             self?.fetchData()
         })
@@ -123,7 +127,7 @@ class NotificationsViewController: BaseViewController {
     @objc func clearNotifications() {
         guard let patient = viewModel?.patient else {return}
         guard NetworkConnection.shared.hasConnection else {
-            showToast(message: "This action requires an internet connection")
+            showToast(message: "No internet connection")
             return
         }
         alertConfirmation(title: "Clear all notifications",
@@ -131,6 +135,10 @@ class NotificationsViewController: BaseViewController {
                           confirmTitle: "Yes",
                           confirmStyle: .default,
                           onConfirm: {
+            guard NetworkConnection.shared.hasConnection else {
+                self.showToast(message: "No internet connection")
+                return
+            }
             self.viewModel?.service.dimissAll(for: patient) {[weak self] in
                 self?.fetchData()
             }
@@ -214,7 +222,7 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
     func remove(notification: GatewayNotification) {
         guard let id = notification.id else {return}
         guard NetworkConnection.shared.hasConnection else {
-            showToast(message: "This action requires an internet connection")
+            showToast(message: "No internet connection")
             return
         }
         let service = NotificationService(network: networkManager, authManager: AuthManager(), configService: MobileConfigService(network: networkManager))

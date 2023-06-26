@@ -129,6 +129,10 @@ extension HomeScreenViewController {
         else {
             return
         }
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "No internet connection")
+            return
+        }
         
         service.fetchAndStore(for: patient, loadingStyle: .empty) { results in
             let vm = NotificationsViewController.ViewModel(patient: patient, network: network, authManager: authManager, configService: configService)
