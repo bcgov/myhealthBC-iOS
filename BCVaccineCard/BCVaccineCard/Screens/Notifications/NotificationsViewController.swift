@@ -69,6 +69,7 @@ class NotificationsViewController: BaseViewController {
         
         if notifications.isEmpty || SessionStorage.notificationFethFilure {
             showUnavailable()
+            notifications = []
             tableView.reloadData()
         } else {
             setupTableView()
@@ -139,7 +140,10 @@ class NotificationsViewController: BaseViewController {
                 self.showToast(message: "No internet connection")
                 return
             }
-            self.viewModel?.service.dimissAll(for: patient) {[weak self] in
+            self.viewModel?.service.dimissAll(for: patient) {[weak self] success in
+                if !success {
+                    self?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                }
                 self?.fetchData()
             }
         }, onCancel: {
@@ -227,8 +231,12 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
         }
         let service = NotificationService(network: networkManager, authManager: AuthManager(), configService: MobileConfigService(network: networkManager))
         
-        service.dimiss(notification: notification, completion: {[weak self] in
+        service.dimiss(notification: notification, completion: {[weak self] success in
+            if !success {
+                self?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+            }
             self?.fetchData()
+            
         })
     }
 }
