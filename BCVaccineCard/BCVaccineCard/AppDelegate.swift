@@ -462,3 +462,16 @@ extension AppDelegate {
         self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
     }
 }
+
+extension AppDelegate {
+    func showExternalURL(url: String) {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This action requires an internet connection")
+            return
+        }
+        guard let vc = window?.rootViewController?.presentedViewController else {
+            return
+        }
+        vc.openURLInSafariVC(withURL: url)
+    }
+}

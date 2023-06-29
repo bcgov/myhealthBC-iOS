@@ -142,7 +142,7 @@ class NotificationsViewController: BaseViewController {
             }
             self.viewModel?.service.dimissAll(for: patient) {[weak self] success in
                 if !success {
-                    self?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                    self?.alert(title: "Error", message: "There was an error dismissing notifications")
                 }
                 self?.fetchData()
             }
@@ -233,7 +233,7 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
         
         service.dimiss(notification: notification, completion: {[weak self] success in
             if !success {
-                self?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                self?.alert(title: "Error", message: "There was an error dismissing this notification")
             }
             self?.fetchData()
             

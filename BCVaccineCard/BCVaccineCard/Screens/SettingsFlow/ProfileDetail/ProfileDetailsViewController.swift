@@ -228,7 +228,8 @@ extension ProfileDetailsViewController: ProfileDetailsTableViewCellDelegate {
 //        let vc = UpdateAddressViewController.constructUpdateAddressViewController(delegateOwner: self, urlString: urlString)
 //        self.navigationController?.pushViewController(vc, animated: true)
         if let url = URL(string: "https://www.addresschange.gov.bc.ca/"), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
+//            UIApplication.shared.open(url)
+            AppDelegate.sharedInstance?.showExternalURL(url: url.absoluteString)
         }
     }
 }

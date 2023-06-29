@@ -26,7 +26,8 @@ class MessageBannerTableViewCell: BaseHeaderTableViewCell, UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        UIApplication.shared.open(URL)
+//        UIApplication.shared.open(URL)
+        AppDelegate.sharedInstance?.showExternalURL(url: URL.absoluteString)
         return false
     }
 }
