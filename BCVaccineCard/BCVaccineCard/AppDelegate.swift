@@ -469,9 +469,11 @@ extension AppDelegate {
             showToast(message: "This action requires an internet connection")
             return
         }
-        guard let vc = window?.rootViewController?.presentedViewController else {
-            return
+        guard let root = window?.rootViewController else {return}
+        if let predentedVC = root.presentedViewController {
+            predentedVC.openURLInSafariVC(withURL: url)
+        } else {
+            root.openURLInSafariVC(withURL: url)
         }
-        vc.openURLInSafariVC(withURL: url)
     }
 }
