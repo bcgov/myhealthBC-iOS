@@ -471,7 +471,10 @@ extension AppDelegate {
             return
         }
         guard let root = window?.rootViewController else {return}
-        if let presentedVC = root.presentedViewController, (presentedVC is SFSafariViewController) == false {
+        if let presentedVC = root.presentedViewController {
+            guard (presentedVC is SFSafariViewController) == false else {
+                return
+            }
             presentedVC.openURLInSafariVC(withURL: url)
         } else {
             root.openURLInSafariVC(withURL: url)
