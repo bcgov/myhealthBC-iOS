@@ -10,6 +10,7 @@ import BCVaccineValidator
 import EncryptedCoreData
 import IQKeyboardManagerSwift
 import AppAuth
+import SafariServices
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -470,8 +471,8 @@ extension AppDelegate {
             return
         }
         guard let root = window?.rootViewController else {return}
-        if let predentedVC = root.presentedViewController {
-            predentedVC.openURLInSafariVC(withURL: url)
+        if let presentedVC = root.presentedViewController, (presentedVC is SFSafariViewController) == false {
+            presentedVC.openURLInSafariVC(withURL: url)
         } else {
             root.openURLInSafariVC(withURL: url)
         }
