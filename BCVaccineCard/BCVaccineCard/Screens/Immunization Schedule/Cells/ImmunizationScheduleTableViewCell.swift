@@ -13,6 +13,7 @@ protocol ImmunizationScheduleTableViewCellDelegate {
 
 class ImmunizationScheduleTableViewCell: UITableViewCell, Theme {
     
+    @IBOutlet weak var container: UIView!
     @IBOutlet weak var openButton: UIButton!
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var iconImageView: UIImageView!
@@ -47,15 +48,15 @@ class ImmunizationScheduleTableViewCell: UITableViewCell, Theme {
     }
     
     func style() {
-        layer.masksToBounds = true
-        contentView.layer.cornerRadius = 4
+        container.layer.masksToBounds = true
+        container.layer.cornerRadius = 4
         label.font = UIFont.bcSansBoldWithSize(size: 15)
-        contentView.layer.backgroundColor = UIColor.white.cgColor
-        contentView.layer.shadowColor = UIColor.gray.cgColor
-        contentView.layer.shadowOffset = CGSize(width: 2.0, height: 4.0)
-        contentView.layer.shadowRadius = 2.0
-        contentView.layer.shadowOpacity = 1.0
-        contentView.layer.masksToBounds = false
+        container.layer.backgroundColor = UIColor.white.cgColor
+        container.layer.shadowColor = UIColor.gray.cgColor
+        container.layer.shadowOffset = CGSize(width: 1.0, height: 2.0)
+        container.layer.shadowRadius = 4.0
+        container.layer.shadowOpacity = 0.3
+        container.layer.masksToBounds = false
     }
     
     @objc func onTap(sender : UITapGestureRecognizer) {
