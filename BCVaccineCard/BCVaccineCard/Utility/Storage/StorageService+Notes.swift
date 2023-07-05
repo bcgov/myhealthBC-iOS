@@ -25,7 +25,7 @@ extension StorageService: StorageNoteManager {
        
         guard !notes.isEmpty else {
             Logger.log(string: "No Notes", type: .storage)
-            return completion(nil)
+            return completion([])
         }
         var storedNotes: [Note] = []
         let group = DispatchGroup()
