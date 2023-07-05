@@ -24,14 +24,14 @@
                             <constraint firstAttribute="height" constant="48" id="Tvl-WQ-X24"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sYY-WD-g97">
-                        <rect key="frame" x="73" y="21.666666666666671" width="273" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sYY-WD-g97">
+                        <rect key="frame" x="73" y="22" width="281" height="20.333333333333329"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KL7-2L-vJG">
-                        <rect key="frame" x="354" y="8" width="48" height="48"/>
+                        <rect key="frame" x="362" y="8" width="48" height="48"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="48" id="dO4-rz-hkc"/>
                             <constraint firstAttribute="height" constant="48" id="hk5-fi-Cjy"/>
@@ -49,7 +49,7 @@
                     <constraint firstItem="KL7-2L-vJG" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="g0M-p7-NPu"/>
                     <constraint firstItem="HxV-xz-K33" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="hqF-JF-1CE"/>
                     <constraint firstItem="HxV-xz-K33" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="m0B-FW-YLD"/>
-                    <constraint firstAttribute="trailing" secondItem="KL7-2L-vJG" secondAttribute="trailing" constant="16" id="o4L-eI-Zij"/>
+                    <constraint firstAttribute="trailing" secondItem="KL7-2L-vJG" secondAttribute="trailing" constant="8" id="o4L-eI-Zij"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

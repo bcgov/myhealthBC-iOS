@@ -15,11 +15,24 @@ class ImmunizationScheduleViewController: UIViewController {
         return ImmunizationScheduleViewController()
     }
     
+    @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        style()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    func style() {
+        navigationItem.title = "Immunization Schedules"
+        navigationItem.largeTitleDisplayMode = .never
+        descriptionLabel.font = UIFont.bcSansRegularWithSize(size: 13)
+        descriptionLabel.textColor = UIColor(red: 0.38, green: 0.38, blue: 0.38, alpha: 1)
     }
 
 }
@@ -46,17 +59,26 @@ extension ImmunizationScheduleViewController: UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let type = ScheduleType.init(rawValue: indexPath.row) else {return UITableViewCell()}
         let cell = getCell(indexPath: indexPath)
+        cell.setup(type: type, delegate: self)
         return cell
     }
 }
 
-extension ImmunizationScheduleViewController {
+extension ImmunizationScheduleViewController: ImmunizationScheduleTableViewCellDelegate {
+
     enum ScheduleType: Int, CaseIterable {
         case Infant = 0
         case SchoolAge
         case Adults
     }
+    
+    func tapped(type: ScheduleType) {
+        openURLInSafariVC(withURL: type.url())
+    }
+    
+    
 }
 
 extension ImmunizationScheduleViewController.ScheduleType {

@@ -282,7 +282,9 @@ extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
 // MARK: Navigation logic for each type here
 extension HomeScreenViewController {
     private func goToTabForType(type: HomeScreenCellType) {
+        show(route: .ImmunizationSchedule, withNavigation: true)
         
+        return
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         switch type {
         case .Records:

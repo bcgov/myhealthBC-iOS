@@ -11,7 +11,7 @@ protocol ImmunizationScheduleTableViewCellDelegate {
     func tapped(type: ImmunizationScheduleViewController.ScheduleType)
 }
 
-class ImmunizationScheduleTableViewCell: UITableViewCell {
+class ImmunizationScheduleTableViewCell: UITableViewCell, Theme {
     
     @IBOutlet weak var openButton: UIButton!
     @IBOutlet weak var label: UILabel!
@@ -29,6 +29,8 @@ class ImmunizationScheduleTableViewCell: UITableViewCell {
     {
         self.delegate = delegate
         self.type = type
+        fillData()
+        style()
     }
     
     func fillData() {
@@ -40,7 +42,20 @@ class ImmunizationScheduleTableViewCell: UITableViewCell {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
         self.isUserInteractionEnabled = true
         self.addGestureRecognizer(tapGesture)
-        openButton.addGestureRecognizer(tapGesture)
+        let btnGesture = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        openButton.addGestureRecognizer(btnGesture)
+    }
+    
+    func style() {
+        layer.masksToBounds = true
+        contentView.layer.cornerRadius = 4
+        label.font = UIFont.bcSansBoldWithSize(size: 15)
+        contentView.layer.backgroundColor = UIColor.white.cgColor
+        contentView.layer.shadowColor = UIColor.gray.cgColor
+        contentView.layer.shadowOffset = CGSize(width: 2.0, height: 4.0)
+        contentView.layer.shadowRadius = 2.0
+        contentView.layer.shadowOpacity = 1.0
+        contentView.layer.masksToBounds = false
     }
     
     @objc func onTap(sender : UITapGestureRecognizer) {
