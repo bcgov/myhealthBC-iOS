@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "keyboard_arrow_up.png",
+      "filename" : "primaryUserRec.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "keyboard_arrow_up@2x.png",
+      "filename" : "primaryUserRec@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "keyboard_arrow_up@3x.png",
+      "filename" : "primaryUserRec@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -632,6 +632,18 @@
 		3E6F93952A27C18900EB82C5 /* GatewayNotification+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6F93912A27C18900EB82C5 /* GatewayNotification+CoreDataProperties copy.swift */; };
 		3E6F93962A27C18900EB82C5 /* GatewayNotification+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6F93912A27C18900EB82C5 /* GatewayNotification+CoreDataProperties copy.swift */; };
 		3E6F93972A27C18900EB82C5 /* GatewayNotification+CoreDataProperties copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E6F93912A27C18900EB82C5 /* GatewayNotification+CoreDataProperties copy.swift */; };
+		3E72057F2A574FED000887DE /* PatientRecommendationStack.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E72057E2A574FED000887DE /* PatientRecommendationStack.xib */; };
+		3E7205802A574FED000887DE /* PatientRecommendationStack.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E72057E2A574FED000887DE /* PatientRecommendationStack.xib */; };
+		3E7205812A574FED000887DE /* PatientRecommendationStack.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E72057E2A574FED000887DE /* PatientRecommendationStack.xib */; };
+		3E7205832A574FFA000887DE /* PatientRecommendationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7205822A574FFA000887DE /* PatientRecommendationStack.swift */; };
+		3E7205842A574FFA000887DE /* PatientRecommendationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7205822A574FFA000887DE /* PatientRecommendationStack.swift */; };
+		3E7205852A574FFA000887DE /* PatientRecommendationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7205822A574FFA000887DE /* PatientRecommendationStack.swift */; };
+		3E7205882A57574A000887DE /* PatientRecommendationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7205862A57574A000887DE /* PatientRecommendationsTableViewCell.swift */; };
+		3E7205892A57574A000887DE /* PatientRecommendationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7205862A57574A000887DE /* PatientRecommendationsTableViewCell.swift */; };
+		3E72058A2A57574A000887DE /* PatientRecommendationsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7205862A57574A000887DE /* PatientRecommendationsTableViewCell.swift */; };
+		3E72058B2A57574A000887DE /* PatientRecommendationsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E7205872A57574A000887DE /* PatientRecommendationsTableViewCell.xib */; };
+		3E72058C2A57574A000887DE /* PatientRecommendationsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E7205872A57574A000887DE /* PatientRecommendationsTableViewCell.xib */; };
+		3E72058D2A57574A000887DE /* PatientRecommendationsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E7205872A57574A000887DE /* PatientRecommendationsTableViewCell.xib */; };
 		3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
 		3E7306E028B5EE63007FED05 /* RecommendationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */; };
@@ -650,6 +662,12 @@
 		3E78AECD28F9909500C66E28 /* AddDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AECC28F9909500C66E28 /* AddDependentViewController.swift */; };
 		3E78AECE28F9909500C66E28 /* AddDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AECC28F9909500C66E28 /* AddDependentViewController.swift */; };
 		3E78AECF28F9909500C66E28 /* AddDependentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E78AECC28F9909500C66E28 /* AddDependentViewController.swift */; };
+		3E7947762A5726D500B1B692 /* PatientRecomandationsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7947752A5726D500B1B692 /* PatientRecomandationsHeaderView.swift */; };
+		3E7947772A5726D500B1B692 /* PatientRecomandationsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7947752A5726D500B1B692 /* PatientRecomandationsHeaderView.swift */; };
+		3E7947782A5726D500B1B692 /* PatientRecomandationsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7947752A5726D500B1B692 /* PatientRecomandationsHeaderView.swift */; };
+		3E79477A2A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E7947792A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib */; };
+		3E79477B2A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E7947792A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib */; };
+		3E79477C2A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E7947792A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib */; };
 		3E81C4C529B2A05700C8F5C4 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E81C4C429B2A05700C8F5C4 /* Routes.swift */; };
 		3E81C4C729B2A60500C8F5C4 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E81C4C629B2A60500C8F5C4 /* AuthenticationViewModel.swift */; };
 		3E81C4C829B2A60500C8F5C4 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E81C4C629B2A60500C8F5C4 /* AuthenticationViewModel.swift */; };
@@ -1710,6 +1728,10 @@
 		3E6F93892A27B98800EB82C5 /* Patient+CoreDataClass copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Patient+CoreDataClass copy.swift"; sourceTree = "<group>"; };
 		3E6F93902A27C18900EB82C5 /* GatewayNotification+CoreDataClass copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GatewayNotification+CoreDataClass copy.swift"; sourceTree = "<group>"; };
 		3E6F93912A27C18900EB82C5 /* GatewayNotification+CoreDataProperties copy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GatewayNotification+CoreDataProperties copy.swift"; sourceTree = "<group>"; };
+		3E72057E2A574FED000887DE /* PatientRecommendationStack.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PatientRecommendationStack.xib; sourceTree = "<group>"; };
+		3E7205822A574FFA000887DE /* PatientRecommendationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientRecommendationStack.swift; sourceTree = "<group>"; };
+		3E7205862A57574A000887DE /* PatientRecommendationsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientRecommendationsTableViewCell.swift; sourceTree = "<group>"; };
+		3E7205872A57574A000887DE /* PatientRecommendationsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PatientRecommendationsTableViewCell.xib; sourceTree = "<group>"; };
 		3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationsViewController.swift; sourceTree = "<group>"; };
 		3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReccomandationTableViewCell.swift; sourceTree = "<group>"; };
 		3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReccomandationTableViewCell.xib; sourceTree = "<group>"; };
@@ -1717,6 +1739,8 @@
 		3E78AEC328F8724900C66E28 /* Dependents.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Dependents.storyboard; sourceTree = "<group>"; };
 		3E78AEC828F8729900C66E28 /* DependentsHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentsHomeViewController.swift; sourceTree = "<group>"; };
 		3E78AECC28F9909500C66E28 /* AddDependentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDependentViewController.swift; sourceTree = "<group>"; };
+		3E7947752A5726D500B1B692 /* PatientRecomandationsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientRecomandationsHeaderView.swift; sourceTree = "<group>"; };
+		3E7947792A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PatientRecomandationsHeaderView.xib; sourceTree = "<group>"; };
 		3E7DCB8A29E48226004BAF67 /* ServicesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesViewModel.swift; sourceTree = "<group>"; };
 		3E7DCB8E29E4902A004BAF67 /* ServicesList.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ServicesList.xib; sourceTree = "<group>"; };
 		3E7DCB9229E4903E004BAF67 /* ServicesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesList.swift; sourceTree = "<group>"; };
@@ -2907,9 +2931,20 @@
 			path = Notification;
 			sourceTree = "<group>";
 		};
+		3E72057D2A574FC5000887DE /* PatientRecommendationStack */ = {
+			isa = PBXGroup;
+			children = (
+				3E72057E2A574FED000887DE /* PatientRecommendationStack.xib */,
+				3E7205822A574FFA000887DE /* PatientRecommendationStack.swift */,
+			);
+			path = PatientRecommendationStack;
+			sourceTree = "<group>";
+		};
 		3E7306DC28B5EDD7007FED05 /* Recommendations */ = {
 			isa = PBXGroup;
 			children = (
+				3E72057D2A574FC5000887DE /* PatientRecommendationStack */,
+				3E79477D2A5726F000B1B692 /* Header */,
 				3E7306E128B5EF1D007FED05 /* Cells */,
 				3E7306DD28B5EDFC007FED05 /* RecommendationsViewController.swift */,
 			);
@@ -2921,6 +2956,8 @@
 			children = (
 				3E7306E228B5EF32007FED05 /* ReccomandationTableViewCell.swift */,
 				3E7306E328B5EF32007FED05 /* ReccomandationTableViewCell.xib */,
+				3E7205862A57574A000887DE /* PatientRecommendationsTableViewCell.swift */,
+				3E7205872A57574A000887DE /* PatientRecommendationsTableViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2936,6 +2973,15 @@
 				3EBC991729110ACE00D67A90 /* BaseDependentViewController.swift */,
 			);
 			path = Dependent;
+			sourceTree = "<group>";
+		};
+		3E79477D2A5726F000B1B692 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				3E7947752A5726D500B1B692 /* PatientRecomandationsHeaderView.swift */,
+				3E7947792A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib */,
+			);
+			path = Header;
 			sourceTree = "<group>";
 		};
 		3E81C4D029B2A8B500C8F5C4 /* ProfileDetail */ = {
@@ -3401,11 +3447,11 @@
 				795AA76327155F6300E59FF1 /* NewsFeed.storyboard */,
 				298190C32773B4090062F55E /* Authentication.storyboard */,
 				799E0AFE27D13F43009C68FE /* Reusable.storyboard */,
-				3E32322528B5FEB80067040C /* Recommendations.storyboard */,
 				3E78AEC328F8724900C66E28 /* Dependents.storyboard */,
 				3E6831452940D92600100402 /* Comments.storyboard */,
 				3E23ADD129DDD8B0001BC9CC /* Services.storyboard */,
 				3E6F936F2A27A85400EB82C5 /* Notifications.storyboard */,
+				3E32322528B5FEB80067040C /* Recommendations.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -4252,6 +4298,7 @@
 				293B32C627D27A880064BAAA /* CommentsTableViewCell.xib in Resources */,
 				294BD3D327B1C4DB00BD8D46 /* HiddenRecordsTableViewCell.xib in Resources */,
 				3E5A68E0298C57C400E94A01 /* DBLoadFatalError.xib in Resources */,
+				3E7205802A574FED000887DE /* PatientRecommendationStack.xib in Resources */,
 				3E6831472940D92600100402 /* Comments.storyboard in Resources */,
 				297885262795F38500FF912D /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				791C27BB27183149001A6E12 /* ButtonTableViewCell.xib in Resources */,
@@ -4260,6 +4307,7 @@
 				7944F70026F3141A006B9444 /* VaccineCardTableViewCell.xib in Resources */,
 				298190C42773B4090062F55E /* Authentication.storyboard in Resources */,
 				795AA77B2715652C00E59FF1 /* ResourceTableViewCell.xib in Resources */,
+				3E79477B2A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib in Resources */,
 				3EDA6F5E29EF203100A5DC7B /* ServicesList.xib in Resources */,
 				7944F70526F31451006B9444 /* NoCardsTableViewCell.xib in Resources */,
 				7967E75126F9145700EEF510 /* BCSans-Bold.otf in Resources */,
@@ -4324,6 +4372,7 @@
 				3EDA6F5529EF201A00A5DC7B /* AuthExpiredView.xib in Resources */,
 				795AA76727155F7100E59FF1 /* Resource.storyboard in Resources */,
 				3EDA6F7729EF205D00A5DC7B /* UnAuthenticatedView.xib in Resources */,
+				3E72058C2A57574A000887DE /* PatientRecommendationsTableViewCell.xib in Resources */,
 				2922C0CC286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */,
 				293B32B927D2628A0064BAAA /* CommentsListView.xib in Resources */,
 				3E78AEC528F8724900C66E28 /* Dependents.storyboard in Resources */,
@@ -4377,7 +4426,9 @@
 				297F6DB6280F16A70023E89C /* AuthenticationInfoView.xib in Resources */,
 				2DF2102A28DD2B2700F5E01C /* ViewPDFTableViewCell.xib in Resources */,
 				2922C0D6286E17DC000FF4F7 /* LabOrderBannerTableViewCell.xib in Resources */,
+				3E7205812A574FED000887DE /* PatientRecommendationStack.xib in Resources */,
 				794BD65E2702EEC00084ADA8 /* TextTableViewCell.xib in Resources */,
+				3E79477C2A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib in Resources */,
 				3E78AEC628F8724900C66E28 /* Dependents.storyboard in Resources */,
 				79590D982811E68A006EB59F /* CommentViewTableViewCell.xib in Resources */,
 				294BD3CB27AACFB600BD8D46 /* LocalAuthPrivacyView.xib in Resources */,
@@ -4464,6 +4515,7 @@
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
 				293B32BA27D2628A0064BAAA /* CommentsListView.xib in Resources */,
 				3E87F4B12901B117002F0A0E /* DependentListItemTableViewCell.xib in Resources */,
+				3E72058D2A57574A000887DE /* PatientRecommendationsTableViewCell.xib in Resources */,
 				799050C1273C8344006CD726 /* GetRecordsView.xib in Resources */,
 				794BD66B2702EEC00084ADA8 /* Main.storyboard in Resources */,
 				79218AB3275196150063004E /* HealthRecordsUserView.xib in Resources */,
@@ -4505,6 +4557,7 @@
 				798006122852C66E006E390F /* CommentsTableViewCell.xib in Resources */,
 				798006132852C66E006E390F /* HiddenRecordsTableViewCell.xib in Resources */,
 				3E585505298C56E5006778AD /* DBLoadFatalError.xib in Resources */,
+				3E72057F2A574FED000887DE /* PatientRecommendationStack.xib in Resources */,
 				3E6831462940D92600100402 /* Comments.storyboard in Resources */,
 				798006142852C66E006E390F /* SettingsAuthenticateTableViewCell.xib in Resources */,
 				798006152852C66E006E390F /* ButtonTableViewCell.xib in Resources */,
@@ -4513,6 +4566,7 @@
 				798006182852C66E006E390F /* VaccineCardTableViewCell.xib in Resources */,
 				798006192852C66E006E390F /* Authentication.storyboard in Resources */,
 				7980061A2852C66E006E390F /* ResourceTableViewCell.xib in Resources */,
+				3E79477A2A5726DD00B1B692 /* PatientRecomandationsHeaderView.xib in Resources */,
 				3EDA6F5D29EF203100A5DC7B /* ServicesList.xib in Resources */,
 				7980061B2852C66E006E390F /* NoCardsTableViewCell.xib in Resources */,
 				7980061C2852C66E006E390F /* BCSans-Bold.otf in Resources */,
@@ -4577,6 +4631,7 @@
 				3EDA6F5429EF201A00A5DC7B /* AuthExpiredView.xib in Resources */,
 				798006402852C66E006E390F /* Resource.storyboard in Resources */,
 				3EDA6F7629EF205D00A5DC7B /* UnAuthenticatedView.xib in Resources */,
+				3E72058B2A57574A000887DE /* PatientRecommendationsTableViewCell.xib in Resources */,
 				2922C0CB286DFDC0000FF4F7 /* CovidImmunizationBannerTableViewCell.xib in Resources */,
 				798006412852C66E006E390F /* CommentsListView.xib in Resources */,
 				3E78AEC428F8724900C66E28 /* Dependents.storyboard in Resources */,
@@ -4880,6 +4935,7 @@
 				2912313E26F93FEB00CF5F3B /* QRScannerView.swift in Sources */,
 				3E62CFD5299C524A000FBB40 /* TOSService.swift in Sources */,
 				297967A427C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */,
+				3E7205892A57574A000887DE /* PatientRecommendationsTableViewCell.swift in Sources */,
 				799050C4273C8558006CD726 /* UserRecordListView.swift in Sources */,
 				3E7306DF28B5EE63007FED05 /* RecommendationsViewController.swift in Sources */,
 				2DF2102628DD2B2700F5E01C /* ViewPDFTableViewCell.swift in Sources */,
@@ -5060,6 +5116,7 @@
 				3EDC0C8829679D9000603FED /* StorageService+HospitalVists.swift in Sources */,
 				2971954A288212F600CA824A /* HealthVIsitRecordDetailVIew.swift in Sources */,
 				29A4DF4927DA675000D5E901 /* FilterRecordsView.swift in Sources */,
+				3E7947772A5726D500B1B692 /* PatientRecomandationsHeaderView.swift in Sources */,
 				79CF23682825787900510489 /* HealthRecordsHomeView.swift in Sources */,
 				29E8954026FA2D050000D7E1 /* UIImage+EXT.swift in Sources */,
 				3E3DA94128FE8135009C500F /* DependentListItemTableViewCell.swift in Sources */,
@@ -5086,6 +5143,7 @@
 				796653EE27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29A5B6D627B55B65006A9BA7 /* Pharmacy+CoreDataClass.swift in Sources */,
 				2DF665762A3067FE0009D8F0 /* SegmentedView.swift in Sources */,
+				3E7205842A574FFA000887DE /* PatientRecommendationStack.swift in Sources */,
 				7928346A27311C6A00EE2710 /* DropDownView.swift in Sources */,
 				29719551288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
 				297D3BB227D9479D00B059CA /* TableSectionHeader.swift in Sources */,
@@ -5269,6 +5327,7 @@
 				2DF2102728DD2B2700F5E01C /* ViewPDFTableViewCell.swift in Sources */,
 				297967A527C5371C0019EE9B /* StorageService+LabOrder.swift in Sources */,
 				79A2582F2731FF940067DD50 /* LargerTouchAreaButton.swift in Sources */,
+				3E72058A2A57574A000887DE /* PatientRecommendationsTableViewCell.swift in Sources */,
 				29719545288212F600CA824A /* HealthVisitRecordDetailTableViewCell.swift in Sources */,
 				29719560288719D400CA824A /* ImmunizationForecastTableViewCell.swift in Sources */,
 				3EDC0CFC2967DCA100603FED /* ClinicalDocument+CoreDataClass.swift in Sources */,
@@ -5449,6 +5508,7 @@
 				3EDC0C8929679D9000603FED /* StorageService+HospitalVists.swift in Sources */,
 				2971954B288212F600CA824A /* HealthVIsitRecordDetailVIew.swift in Sources */,
 				798CA1CB27EE4B0A0096188C /* LoginProcessStatus.swift in Sources */,
+				3E7947782A5726D500B1B692 /* PatientRecomandationsHeaderView.swift in Sources */,
 				29788532279624EA00FF912D /* SettingsRowTableViewCell.swift in Sources */,
 				791C27C02718315A001A6E12 /* AddCardsTableViewCell.swift in Sources */,
 				3E3DA94228FE8136009C500F /* DependentListItemTableViewCell.swift in Sources */,
@@ -5475,6 +5535,7 @@
 				798CA1C527ECDF030096188C /* TermsOfServiceViewController.swift in Sources */,
 				79932CAF2790FA94007E8D92 /* Theme.swift in Sources */,
 				2DF665772A3067FE0009D8F0 /* SegmentedView.swift in Sources */,
+				3E7205852A574FFA000887DE /* PatientRecommendationStack.swift in Sources */,
 				796653EF27AE324C004D103E /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				29719552288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
 				79218ABF27555B230063004E /* ReusableHeaderAddView.swift in Sources */,
@@ -5635,6 +5696,7 @@
 				798005832852C66E006E390F /* Storage+Comments.swift in Sources */,
 				3E31EA812913951D00E344E6 /* AppStoreDataModel.swift in Sources */,
 				3E62CFD4299C524A000FBB40 /* TOSService.swift in Sources */,
+				3E7205882A57574A000887DE /* PatientRecommendationsTableViewCell.swift in Sources */,
 				798005852852C66E006E390F /* QRScannerView.swift in Sources */,
 				798005862852C66E006E390F /* StorageService+LabOrder.swift in Sources */,
 				3E7306DE28B5EDFC007FED05 /* RecommendationsViewController.swift in Sources */,
@@ -5815,6 +5877,7 @@
 				3EFFE8A3292D3A7C00CEABF2 /* MigrationService.swift in Sources */,
 				3EDC0C8729679D9000603FED /* StorageService+HospitalVists.swift in Sources */,
 				29719549288212F600CA824A /* HealthVIsitRecordDetailVIew.swift in Sources */,
+				3E7947762A5726D500B1B692 /* PatientRecomandationsHeaderView.swift in Sources */,
 				2922C0E3286E33F8000FF4F7 /* MessageBannerTableViewCell.swift in Sources */,
 				798005E52852C66E006E390F /* AuthenticatedCommentResponseObject.swift in Sources */,
 				798005E62852C66E006E390F /* String+EXT.swift in Sources */,
@@ -5841,6 +5904,7 @@
 				798005F22852C66E006E390F /* TermsOfServiceViewController.swift in Sources */,
 				798005F32852C66E006E390F /* AuthenticatedMedicationResponseObject.swift in Sources */,
 				2DF665752A3067FE0009D8F0 /* SegmentedView.swift in Sources */,
+				3E7205832A574FFA000887DE /* PatientRecommendationStack.swift in Sources */,
 				798005F42852C66E006E390F /* Pharmacy+CoreDataClass.swift in Sources */,
 				29719550288700F600CA824A /* ImmunizationForecast+CoreDataClass.swift in Sources */,
 				798005F52852C66E006E390F /* DropDownView.swift in Sources */,
