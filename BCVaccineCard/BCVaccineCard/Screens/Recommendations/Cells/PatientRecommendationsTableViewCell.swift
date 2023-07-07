@@ -22,6 +22,7 @@ class PatientRecommendationsTableViewCell: UITableViewCell {
             stackView.addArrangedSubview(recommendationView)
             recommendationView.configure(immunizationName: recommendation.recommendedVaccinations, dueDate: recommendation.agentDueDate, descrtiptionText: recommendation.status)
         }
+        stackView.axis = .vertical
         backgroundColor = .orange.withAlphaComponent(0.3)
     }
     
