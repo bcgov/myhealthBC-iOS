@@ -66,7 +66,7 @@ class RecommendationsViewController: BaseViewController {
     private func setupTextView() {
         guard let textView = self.textView else {return}
         textView.textColor = AppColours.textGray
-        let attributedText = NSMutableAttributedString(string: "For more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ")
+        let attributedText = NSMutableAttributedString(string: "Recommended immunization are suggestion for your health journey. This page will containt all of future immunization for you and your dependents. To add dependents to application, click on Dependent in the menu bar at the bottom.\n\nFor more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ")
         _ = attributedText.setAsLink(textToFind: "immunizeBC", linkURL: "https://immunizebc.ca/")
         textView.attributedText = attributedText
         textView.isUserInteractionEnabled = true
