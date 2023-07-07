@@ -148,6 +148,7 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         } else {
             expandedPatients.append(patient)
         }
+        tableView.reloadData()
     }
     
     
