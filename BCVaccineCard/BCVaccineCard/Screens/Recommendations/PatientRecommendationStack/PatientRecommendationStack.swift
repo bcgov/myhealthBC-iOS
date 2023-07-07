@@ -27,6 +27,7 @@ class PatientRecommendationStack: UIView {
         if descrtiptionText == nil {
             descriptionLabel.isHidden = true
         }
+        style()
     }
     
     func style() {
@@ -37,5 +38,6 @@ class PatientRecommendationStack: UIView {
         immunizationNameLabel.font = UIFont.bcSansBoldWithSize(size: 15)
         dueDateLabel.font = UIFont.bcSansRegularWithSize(size: 10)
         descriptionLabel.font = UIFont.bcSansRegularWithSize(size: 10)
+        backgroundColor = .clear
     }
 }

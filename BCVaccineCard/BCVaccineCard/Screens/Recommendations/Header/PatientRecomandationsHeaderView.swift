@@ -26,14 +26,20 @@ class PatientRecomandationsHeaderView: UIView {
         self.delegate = delegate
         style()
         
+        let numberOfRecs = patient.recommandationsArray.count
         nameLabel.text = patient.name
-        numerOfRecommendations.text = "\(patient.recommandationsArray.count)"
-        arrowImageView.image = patient.isDependent() ? UIImage(named: "dependentRec") : UIImage(named: "primaryUserRec")
+        numerOfRecommendations.text = "\(numberOfRecs)"
+        userLogoImageView.image = patient.isDependent() ? UIImage(named: "dependentRec") : UIImage(named: "primaryUserRec")
         arrowImageView.image = expanded ? UIImage(named: "expand_arrow_up") : UIImage(named: "expand_arrow_down")
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleExpand))
-        self.isUserInteractionEnabled = true
-        self.addGestureRecognizer(tapGesture)
+        if numberOfRecs > 0 {
+            arrowImageView.alpha = 1
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleExpand))
+            self.isUserInteractionEnabled = true
+            self.addGestureRecognizer(tapGesture)
+        } else {
+            arrowImageView.alpha = 0
+        }
     }
     
     @objc func toggleExpand(sender : UITapGestureRecognizer) {

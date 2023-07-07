@@ -15,15 +15,20 @@ class PatientRecommendationsTableViewCell: UITableViewCell {
         self.patient = patient
         let stackView = UIStackView(frame: self.frame)
         contentView.addSubview(stackView)
-        stackView.addEqualSizeContraints(to: self.contentView)
+        stackView.addEqualSizeContraints(to: self.contentView, paddingVertical: 14, paddingHorizontal: 17)
         
         for recommendation in patient.recommandationsArray {
-            let recommendationView: PatientRecommendationStack = PatientRecommendationStack.fromNib()
-            stackView.addArrangedSubview(recommendationView)
-            recommendationView.configure(immunizationName: recommendation.recommendedVaccinations, dueDate: recommendation.agentDueDate, descrtiptionText: recommendation.status)
+            if let name = recommendation.immunizationDetail?.recommendation?.recommendedVaccinations,
+               !name.removeWhiteSpaceFormatting.isEmpty {
+                let recommendationView: PatientRecommendationStack = PatientRecommendationStack.fromNib()
+                stackView.addArrangedSubview(recommendationView)
+                recommendationView.configure(immunizationName: name, dueDate: recommendation.agentDueDate, descrtiptionText: recommendation.status)
+            }
         }
+        stackView.backgroundColor = .clear
         stackView.axis = .vertical
-        backgroundColor = .orange.withAlphaComponent(0.3)
+        stackView.spacing = 20
+        backgroundColor = .clear
     }
     
 }
