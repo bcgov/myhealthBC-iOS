@@ -9,6 +9,7 @@ import UIKit
 
 class RecommendationsViewController: BaseViewController {
 
+    @IBOutlet weak var textViewHeight: NSLayoutConstraint!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var tableView: UITableView!
     
@@ -72,13 +73,14 @@ class RecommendationsViewController: BaseViewController {
         textView.isUserInteractionEnabled = true
         textView.delegate = self
         textView.font = UIFont.bcSansRegularWithSize(size: 13)
-        textView.translatesAutoresizingMaskIntoConstraints = true
-        textView.sizeToFit()
+//        textView.translatesAutoresizingMaskIntoConstraints = true
+//        textView.sizeToFit()
         textView.isScrollEnabled = false
         textView.isEditable = false
-        UIView.animate(withDuration: 0.3, delay: 0) {
-            self.view.layoutIfNeeded()
-        }
+        let sizeThatFitsTextView = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat(MAXFLOAT)))
+        let heightOfText = sizeThatFitsTextView.height
+        textViewHeight.constant = heightOfText
+        self.view.layoutIfNeeded()
     }
 
 }
@@ -101,6 +103,7 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
+        tableView.backgroundColor = .clear
     }
     
     
