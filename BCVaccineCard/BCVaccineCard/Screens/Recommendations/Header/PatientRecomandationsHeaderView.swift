@@ -25,12 +25,18 @@ class PatientRecomandationsHeaderView: UIView {
     func configure(patient: Patient, expanded: Bool, delegate: PatientRecomandationsHeaderViewDelegate) {
         self.patient = patient
         self.delegate = delegate
-        style()
+        
         
         let numberOfRecs = patient.recommandationsArray.count
         nameLabel.text = patient.name
+        style(enabled: numberOfRecs != 0)
         numerOfRecommendations.text = "\(numberOfRecs)"
-        userLogoImageView.image = patient.isDependent() ? UIImage(named: "dependentRec") : UIImage(named: "primaryUserRec")
+        if patient.isDependent() {
+            userLogoImageView.image = numberOfRecs == 0 ? UIImage(named: "dependentRecDisabled") : UIImage(named: "dependentRec")
+        } else {
+            userLogoImageView.image =  numberOfRecs == 0 ? UIImage(named: "primaryUserRecDisabled") : UIImage(named: "primaryUserRec")
+        }
+        
         arrowImageView.image = expanded ? UIImage(named: "expand_arrow_up") : UIImage(named: "expand_arrow_down")
         
         if numberOfRecs > 0 {
@@ -48,11 +54,11 @@ class PatientRecomandationsHeaderView: UIView {
         delegate.toggle(patient: patient)
     }
     
-    func style() {
+    func style(enabled: Bool) {
         nameLabel.font = UIFont.bcSansBoldWithSize(size: 15)
         numerOfRecommendations.font = UIFont.bcSansBoldWithSize(size: 15)
-        nameLabel.textColor = UIColor(red: 0.192, green: 0.192, blue: 0.196, alpha: 1)
-        numerOfRecommendations.textColor = AppColours.appBlue
+        nameLabel.textColor = enabled ? AppColours.darkGreyText : AppColours.textGray
+        numerOfRecommendations.textColor = enabled ? AppColours.appBlue : AppColours.textGray
         contentContainer.layer.cornerRadius = 4
         backgroundColor = .white
         contentContainer.backgroundColor = .clear
