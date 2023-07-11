@@ -13,6 +13,7 @@ protocol PatientRecomandationsHeaderViewDelegate {
 
 class PatientRecomandationsHeaderView: UIView {
     
+    @IBOutlet weak var contentContainer: UIView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var numerOfRecommendations: UILabel!
     @IBOutlet weak var arrowImageView: UIImageView!
@@ -50,9 +51,16 @@ class PatientRecomandationsHeaderView: UIView {
     func style() {
         nameLabel.font = UIFont.bcSansBoldWithSize(size: 15)
         numerOfRecommendations.font = UIFont.bcSansBoldWithSize(size: 15)
-        nameLabel.textColor = .white
-        numerOfRecommendations.textColor = .white
-        backgroundColor = UIColor(red: 0.1, green: 0.35, blue: 0.59, alpha: 1)
-        layer.cornerRadius = 4
+        nameLabel.textColor = UIColor(red: 0.192, green: 0.192, blue: 0.196, alpha: 1)
+        numerOfRecommendations.textColor = AppColours.appBlue
+        contentContainer.layer.cornerRadius = 4
+        backgroundColor = .white
+        contentContainer.backgroundColor = .clear
+        contentContainer.layer.backgroundColor = UIColor.white.cgColor
+        contentContainer.layer.shadowColor = UIColor.gray.cgColor
+        contentContainer.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        contentContainer.layer.shadowRadius = 4.0
+        contentContainer.layer.shadowOpacity = 0.2
+        contentContainer.layer.masksToBounds = false
     }
 }

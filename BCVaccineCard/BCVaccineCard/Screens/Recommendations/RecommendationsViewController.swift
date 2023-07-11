@@ -62,6 +62,7 @@ class RecommendationsViewController: BaseViewController {
         navSetup()
         setupTableView()
         setupTextView()
+        view.backgroundColor = UIColor(red: 0.99, green: 0.99, blue: 0.99, alpha: 1.00)
     }
     
     private func setupTextView() {
@@ -73,8 +74,6 @@ class RecommendationsViewController: BaseViewController {
         textView.isUserInteractionEnabled = true
         textView.delegate = self
         textView.font = UIFont.bcSansRegularWithSize(size: 13)
-//        textView.translatesAutoresizingMaskIntoConstraints = true
-//        textView.sizeToFit()
         textView.isScrollEnabled = false
         textView.isEditable = false
         let sizeThatFitsTextView = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat(MAXFLOAT)))

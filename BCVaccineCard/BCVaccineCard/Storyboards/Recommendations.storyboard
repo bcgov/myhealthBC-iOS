@@ -48,7 +48,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="rRg-xk-LGo">
-                                <rect key="frame" x="16" y="264" width="382" height="564"/>
+                                <rect key="frame" x="16" y="264" width="382" height="598"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -61,7 +61,7 @@
                             <constraint firstItem="rRg-xk-LGo" firstAttribute="leading" secondItem="cs7-fj-L8U" secondAttribute="leading" constant="16" id="bue-nL-Id7"/>
                             <constraint firstItem="Yq9-x6-7dF" firstAttribute="leading" secondItem="cs7-fj-L8U" secondAttribute="leading" constant="16" id="iDy-wB-gBh"/>
                             <constraint firstItem="cs7-fj-L8U" firstAttribute="trailing" secondItem="rRg-xk-LGo" secondAttribute="trailing" constant="16" id="xM6-z5-EV6"/>
-                            <constraint firstItem="cs7-fj-L8U" firstAttribute="bottom" secondItem="rRg-xk-LGo" secondAttribute="bottom" constant="34" id="xXX-n9-Kob"/>
+                            <constraint firstItem="cs7-fj-L8U" firstAttribute="bottom" secondItem="rRg-xk-LGo" secondAttribute="bottom" id="xXX-n9-Kob"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="kgP-GZ-nV9"/>

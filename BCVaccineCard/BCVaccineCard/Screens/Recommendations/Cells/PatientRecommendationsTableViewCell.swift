@@ -14,9 +14,13 @@ class PatientRecommendationsTableViewCell: UITableViewCell {
     func configure(patient: Patient) {
         self.patient = patient
         let stackView = UIStackView(frame: self.frame)
+        let container = UIView(frame: self.frame)
         contentView.subviews.forEach({$0.removeFromSuperview()})
-        contentView.addSubview(stackView)
-        stackView.addEqualSizeContraints(to: self.contentView, paddingVertical: 14, paddingHorizontal: 17)
+        contentView.addSubview(container)
+//        contentView.addSubview(stackView)
+        container.addSubview(stackView)
+        container.addEqualSizeContraints(to: self.contentView, top: 0, bottom: 4, left: 4, right: 4)
+        stackView.addEqualSizeContraints(to: container, paddingVertical: 14, paddingHorizontal: 17)
         
         for recommendation in patient.recommandationsArray {
             if let name = recommendation.immunizationDetail?.recommendation?.recommendedVaccinations,
@@ -29,14 +33,16 @@ class PatientRecommendationsTableViewCell: UITableViewCell {
         stackView.backgroundColor = .clear
         stackView.axis = .vertical
         stackView.spacing = 20
+        container.backgroundColor = .white
         backgroundColor = .clear
         contentView.backgroundColor = .clear
-        contentView.layer.backgroundColor = UIColor.white.cgColor
-        contentView.layer.shadowColor = UIColor.gray.cgColor
-        contentView.layer.shadowOffset = CGSize(width: 1.0, height: 2.0)
-        contentView.layer.shadowRadius = 4.0
-        contentView.layer.shadowOpacity = 0.3
-        contentView.layer.masksToBounds = false
+        container.layer.backgroundColor = UIColor.white.cgColor
+        container.layer.shadowColor = UIColor.gray.cgColor
+        container.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        container.layer.shadowRadius = 4.0
+        container.layer.shadowOpacity = 0.2
+        container.layer.masksToBounds = false
+        layoutIfNeeded()
     }
     
 }

@@ -9,6 +9,7 @@ import UIKit
 
 class PatientRecommendationStack: UIView {
 
+    @IBOutlet weak var contentStack: UIStackView!
     @IBOutlet weak var iconImageView: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var dueDateLabel: UILabel!
@@ -27,6 +28,9 @@ class PatientRecommendationStack: UIView {
         if descrtiptionText == nil {
             descriptionLabel.isHidden = true
         }
+        let textTag: TextTag = TextTag.fromNib()
+        contentStack.insertArrangedSubview(textTag, at: 0)
+        textTag.configure(text: "Eligible: \(String(describing: dueDate))")
         style()
     }
     
@@ -39,5 +43,6 @@ class PatientRecommendationStack: UIView {
         dueDateLabel.font = UIFont.bcSansRegularWithSize(size: 10)
         descriptionLabel.font = UIFont.bcSansRegularWithSize(size: 10)
         backgroundColor = .clear
+        
     }
 }
