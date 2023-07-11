@@ -150,7 +150,14 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         } else {
             expandedPatients.append(patient)
         }
-        tableView.reloadData()
+        guard let index = patients.firstIndex(of: patient) else {
+            tableView.reloadData()
+            return
+        }
+        tableView.beginUpdates()
+        tableView.reloadSections([index], with: .fade)
+        tableView.endUpdates()
+//
     }
     
     

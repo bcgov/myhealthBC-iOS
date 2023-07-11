@@ -15,7 +15,11 @@ class PatientRecommendationStack: UIView {
     @IBOutlet weak var dueDateLabel: UILabel!
     @IBOutlet weak var immunizationNameLabel: UILabel!
     
-    func configure(immunizationName: String?, dueDate: Date?, descrtiptionText: String? = nil, icon: UIImage? = UIImage(named: "reccomandation-list-icon")) {
+    func configure(immunizationName: String?,
+                   dueDate: Date?,
+                   descrtiptionText: String? = nil,
+                   eligibleDate: Date?,
+                   icon: UIImage? = UIImage(named: "reccomandation-list-icon")) {
         immunizationNameLabel.text = immunizationName
         iconImageView.image = icon
         if let dueDate = dueDate {
@@ -24,13 +28,17 @@ class PatientRecommendationStack: UIView {
             dueDateLabel.isHidden = true
         }
         
+        if let eligibleDate = eligibleDate {
+            let textTag: TextTag = TextTag.fromNib()
+            contentStack.insertArrangedSubview(textTag, at: 0)
+            textTag.configure(text: "Eligible: \(eligibleDate.forecastDueDate)")
+        }
+        
         descriptionLabel.text = descrtiptionText
         if descrtiptionText == nil {
             descriptionLabel.isHidden = true
         }
-        let textTag: TextTag = TextTag.fromNib()
-        contentStack.insertArrangedSubview(textTag, at: 0)
-        textTag.configure(text: "Eligible: \(String(describing: dueDate))")
+        
         style()
     }
     
