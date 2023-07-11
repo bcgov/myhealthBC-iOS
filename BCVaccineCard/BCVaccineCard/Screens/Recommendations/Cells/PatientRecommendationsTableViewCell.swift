@@ -22,7 +22,7 @@ class PatientRecommendationsTableViewCell: UITableViewCell {
         container.addEqualSizeContraints(to: self.contentView, top: 0, bottom: 4, left: 4, right: 4)
         stackView.addEqualSizeContraints(to: container, paddingVertical: 14, paddingHorizontal: 17)
         
-        for recommendation in patient.recommandationsArray {
+        for recommendation in patient.recommandationsArray.sorted(by: {$0.agentDueDate ?? Date() > $1.agentDueDate ?? Date()}) {
             if let name = recommendation.immunizationDetail?.recommendation?.recommendedVaccinations,
                !name.removeWhiteSpaceFormatting.isEmpty {
 
