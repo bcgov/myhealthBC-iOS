@@ -31,7 +31,7 @@ class PatientRecommendationStack: UIView {
         if let eligibleDate = eligibleDate {
             let textTag: TextTag = TextTag.fromNib()
             contentStack.insertArrangedSubview(textTag, at: 0)
-            textTag.configure(text: "Eligible: \(eligibleDate.forecastDueDate)")
+            textTag.configure(text: "Eligible: \(eligibleDate.forecastDueDate)", fontSize: 13)
         }
         
         descriptionLabel.text = descrtiptionText
@@ -48,9 +48,10 @@ class PatientRecommendationStack: UIView {
         descriptionLabel.textColor = AppColours.greyText
         
         immunizationNameLabel.font = UIFont.bcSansBoldWithSize(size: 15)
-        dueDateLabel.font = UIFont.bcSansRegularWithSize(size: 10)
-        descriptionLabel.font = UIFont.bcSansRegularWithSize(size: 10)
+        dueDateLabel.font = UIFont.bcSansRegularWithSize(size: 13)
+        descriptionLabel.font = UIFont.bcSansRegularWithSize(size: 13)
         backgroundColor = .clear
+        contentStack.spacing = 8
         
     }
 }

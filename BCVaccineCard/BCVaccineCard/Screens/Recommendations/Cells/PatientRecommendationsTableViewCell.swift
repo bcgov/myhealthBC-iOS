@@ -17,12 +17,12 @@ class PatientRecommendationsTableViewCell: UITableViewCell {
         let container = UIView(frame: self.frame)
         contentView.subviews.forEach({$0.removeFromSuperview()})
         contentView.addSubview(container)
-//        contentView.addSubview(stackView)
         container.addSubview(stackView)
         container.addEqualSizeContraints(to: self.contentView, top: 0, bottom: 4, left: 4, right: 4)
         stackView.addEqualSizeContraints(to: container, paddingVertical: 14, paddingHorizontal: 17)
         
-        for recommendation in patient.recommandationsArray.sorted(by: {$0.agentDueDate ?? Date() > $1.agentDueDate ?? Date()}) {
+        let recs = patient.recommandationsArray.sorted(by: {$0.agentDueDate ?? Date() > $1.agentDueDate ?? Date()})
+        for recommendation in recs {
             if let name = recommendation.immunizationDetail?.recommendation?.recommendedVaccinations,
                !name.removeWhiteSpaceFormatting.isEmpty {
 
@@ -34,6 +34,7 @@ class PatientRecommendationsTableViewCell: UITableViewCell {
         stackView.backgroundColor = .clear
         stackView.axis = .vertical
         stackView.spacing = 20
+        stackView.distribution = .equalSpacing
         container.backgroundColor = .white
         backgroundColor = .clear
         contentView.backgroundColor = .clear

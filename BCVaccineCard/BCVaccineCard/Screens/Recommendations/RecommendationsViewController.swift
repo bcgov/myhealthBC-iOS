@@ -36,8 +36,6 @@ class RecommendationsViewController: BaseViewController {
         super.viewDidLoad()
         setup()
         expandedPatients = []
-//        guard let tableView = tableView else {return}
-//        tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,8 +95,7 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         guard let tableView = tableView else {return}
         tableView.register(UINib.init(nibName: PatientRecommendationsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: PatientRecommendationsTableViewCell.getName)
         
-        tableView.rowHeight = UITableView.automaticDimension
-        // tableView.estimatedRowHeight = 100
+//        tableView.rowHeight = UITableView.automaticDimension
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
@@ -128,9 +125,6 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = getCell(indexPath: indexPath)
         cell.configure(patient: patients[indexPath.row])
-//        if recommendations.indices.contains(indexPath.row) {
-//            cell.configure(object: recommendations[indexPath.row], expanded: expandedIndecies.contains(indexPath.row))
-//        }
         cell.selectionStyle = .none
         return cell
     }
@@ -150,30 +144,16 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         } else {
             expandedPatients.append(patient)
         }
-        guard let index = patients.firstIndex(of: patient) else {
-            tableView.reloadData()
-            return
-        }
-        tableView.beginUpdates()
-        tableView.reloadSections([index], with: .fade)
-        tableView.endUpdates()
+//        guard let index = patients.firstIndex(of: patient) else {
+//            tableView.reloadData()
+//            return
+//        }
+//        tableView.beginUpdates()
+        tableView.reloadData()
+//        tableView.reloadSections([index], with: .fade)
+//        tableView.endUpdates()
 //
     }
-    
-    
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if expandedIndecies.contains(indexPath.row) {
-//            expandedIndecies.removeAll(where: {$0 == indexPath.row})
-//            tableView.beginUpdates()
-//            tableView.reloadRows(at: [indexPath], with: .automatic)
-//            tableView.endUpdates()
-//        } else {
-//            expandedIndecies.append(indexPath.row)
-//            tableView.beginUpdates()
-//            tableView.reloadRows(at: [indexPath], with: .automatic)
-//            tableView.endUpdates()
-//        }
-//    }
 }
 // MARK: Navigation setup
 extension RecommendationsViewController {
