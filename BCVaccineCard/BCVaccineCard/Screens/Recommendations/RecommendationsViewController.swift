@@ -66,14 +66,20 @@ class RecommendationsViewController: BaseViewController {
     private func setupTextView() {
         guard let textView = self.textView else {return}
         textView.textColor = AppColours.textGray
-        let attributedText = NSMutableAttributedString(string: "Recommended immunization are suggestion for your health journey. This page will containt all of future immunization for you and your dependents. To add dependents to application, click on Dependent in the menu bar at the bottom.\n\nFor more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ")
+        let fontAttribute = [NSAttributedString.Key.font: UIFont.bcSansRegularWithSize(size: 13)]
+        let attributedText = NSMutableAttributedString(string: "Recommended immunization are suggestion for your health journey. This page will containt all of future immunization for you and your dependents. To add dependents to application, click on Dependent in the menu bar at the bottom.\n\nFor more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ", attributes: fontAttribute)
         _ = attributedText.setAsLink(textToFind: "immunizeBC", linkURL: "https://immunizebc.ca/")
         textView.attributedText = attributedText
         textView.isUserInteractionEnabled = true
         textView.delegate = self
-        textView.font = UIFont.bcSansRegularWithSize(size: 13)
         textView.isScrollEnabled = false
         textView.isEditable = false
+        textView.isSelectable = true
+        textView.dataDetectorTypes.insert(.link)
+        textView.linkTextAttributes = [
+            .foregroundColor: UIColor.blue,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
         let sizeThatFitsTextView = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat(MAXFLOAT)))
         let heightOfText = sizeThatFitsTextView.height
         textViewHeight.constant = heightOfText
@@ -83,7 +89,6 @@ class RecommendationsViewController: BaseViewController {
 }
 extension RecommendationsViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-//        UIApplication.shared.open(URL)
         AppDelegate.sharedInstance?.showExternalURL(url: URL.absoluteString)
         return false
     }
@@ -95,7 +100,6 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         guard let tableView = tableView else {return}
         tableView.register(UINib.init(nibName: PatientRecommendationsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: PatientRecommendationsTableViewCell.getName)
         
-//        tableView.rowHeight = UITableView.automaticDimension
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
@@ -144,15 +148,7 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         } else {
             expandedPatients.append(patient)
         }
-//        guard let index = patients.firstIndex(of: patient) else {
-//            tableView.reloadData()
-//            return
-//        }
-//        tableView.beginUpdates()
         tableView.reloadData()
-//        tableView.reloadSections([index], with: .fade)
-//        tableView.endUpdates()
-//
     }
 }
 // MARK: Navigation setup
@@ -160,7 +156,7 @@ extension RecommendationsViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: "Recommended immunizations",
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
+                                               rightNavButton: nil,
                                                navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
