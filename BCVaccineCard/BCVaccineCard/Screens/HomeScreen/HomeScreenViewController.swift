@@ -75,11 +75,11 @@ class HomeScreenViewController: BaseViewController {
     }
     
     private func genDataSource() -> [DataSource] {
-        // TODO: Adjust data here to clarify which type of recommendation, immz schedule, or recommended immunizations
+        let showRecommendedImz = authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty
         var data: [DataSource] = [
             .quickAccess(types: [
                 .Records,
-                .Recommendations,
+                .Recommendations(showRecommendedImz: showRecommendedImz),
                 .Resources,
                 .Proofs
             ])
@@ -217,21 +217,37 @@ extension HomeScreenViewController {
 extension HomeScreenViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
     
     private func setupCollectionView() {
-        collectionView.register(UINib.init(nibName: HomeScreenCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: HomeScreenCollectionViewCell.getName)
+        collectionView.register(UINib.init(nibName: HomeScreenRecordCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: HomeScreenRecordCollectionViewCell.getName)
         collectionView.register(UINib.init(nibName: CommunicationBannerCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: CommunicationBannerCollectionViewCell.getName)
-        // TODO: Create/Modify Login with BC Service Card UI/Login expired, then register it here
+        collectionView.register(UINib.init(nibName: HomeScreenAuthCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: HomeScreenAuthCollectionViewCell.getName)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize =  cellSize() // Prob need to remove this
+//        layout.itemSize =  cellSize() // Prob need to remove this
         collectionView.collectionViewLayout = layout
         collectionView.delegate = self
         collectionView.dataSource = self
     }
     
     // TODO: Adjust this
-    func cellSize() -> CGSize {
+    func cellSize(for sectionType: DataSource) -> CGSize {
         let cView = collectionView.frame
-        return CGSize(width: cView.width, height: cView.height)
+        switch sectionType {
+        case .banner:
+            return CGSize(width: cView.width, height: 52)
+        case .loginStatus(status: let status):
+            let height: CGFloat = status == .UnAuthenticated ? 169 : 139
+            return CGSize(width: cView.width, height: height)
+        case .quickAccess:
+            let width = (cView.width / 2) - 10
+            let height = width * (113/153)
+            return CGSize(width: width, height: height)
+        }
+    }
+    
+    func getDataSourceType(dataSource: [DataSource], section: Int) -> DataSource? {
+        guard section < dataSource.count else { return nil }
+        let ds = dataSource[section]
+        return ds
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -239,8 +255,11 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        // TODO: Adjust based on section
-        return cellSize()
+        guard let ds = getDataSourceType(dataSource: self.dataSource, section: indexPath.section) else {
+            // TODO: Come up with better default size
+            return CGSize(width: 100, height: 100)
+        }
+        return cellSize(for: ds)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -252,12 +271,28 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // TODO: Setup
-        return UICollectionViewCell()
+        let dataSection = dataSource[indexPath.section]
+        switch dataSection {
+        case .banner(data: let data):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CommunicationBannerCollectionViewCell.getName, for: indexPath) as? CommunicationBannerCollectionViewCell else { return UICollectionViewCell() }
+            cell.configure(data: communicationBanner, delegate: self)
+            return cell
+        case .loginStatus(status: let status):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeScreenAuthCollectionViewCell.getName, for: indexPath) as? HomeScreenAuthCollectionViewCell else { return UICollectionViewCell() }
+            let type: HomeScreenAuthCollectionViewCell.ContentType = authManager.authStaus == .AuthenticationExpired ? .LoginExpired : .Unauthenticated
+            cell.configure(type: type, delegateOwner: self)
+            return cell
+        case .quickAccess(types: let types):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeScreenRecordCollectionViewCell.getName, for: indexPath) as? HomeScreenRecordCollectionViewCell else { return UICollectionViewCell() }
+            let type = types[indexPath.row]
+            cell.configure(forType: type)
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // As of now, no action here - but will include routing here
+        // TODO: Setup
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -315,7 +350,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
 //}
 
 // MARK: Communications Banner
-extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
+extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegate {
     func fetchCommunicationBanner() {
         communicationSetvice.fetchMessage {[weak self] result in
             guard let `self` = self else {
@@ -369,6 +404,13 @@ extension HomeScreenViewController: CommunicationBannerTableViewCellDelegate {
         navigationController?.pushViewController(learnMoreVC, animated: true)
     }
     
+}
+
+// MARK: Login delegate
+extension HomeScreenViewController: HomeScreenAuthCollectionViewCellDelegate {
+    func loginTapped() {
+        // TODO: Login logic here - see other files
+    }
 }
 
 // MARK: Navigation logic for each type here

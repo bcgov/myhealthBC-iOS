@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeScreenAuthCollectionViewCell" id="gTV-IL-0wX" customClass="HomeScreenAuthCollectionViewCell" customModule="HealthGateway" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="326" height="169"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="326" height="169"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mUU-gV-rKw">
+                        <rect key="frame" x="0.0" y="0.0" width="326" height="169"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home-login-background" translatesAutoresizingMaskIntoConstraints="NO" id="kUd-da-vwn">
+                                <rect key="frame" x="206" y="23" width="120" height="146"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="146" id="cha-5h-Qa9"/>
+                                    <constraint firstAttribute="width" constant="120" id="qPM-Ft-e8e"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Your session has timed out" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xr5-wk-AUF">
+                                <rect key="frame" x="16" y="16" width="294" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in again to access all dependents’ records." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y8L-cE-Agf">
+                                <rect key="frame" x="16" y="45" width="294" height="47"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GQP-lQ-IrR">
+                                <rect key="frame" x="16" y="108" width="110" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="3JI-9K-AnO"/>
+                                </constraints>
+                                <inset key="contentEdgeInsets" minX="32" minY="0.0" maxX="32" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="loginAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="9fk-0P-89v"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="xr5-wk-AUF" firstAttribute="top" secondItem="mUU-gV-rKw" secondAttribute="top" constant="16" id="Cax-oZ-trk"/>
+                            <constraint firstAttribute="bottom" secondItem="GQP-lQ-IrR" secondAttribute="bottom" constant="16" id="Fgf-k7-sIP"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="GQP-lQ-IrR" secondAttribute="trailing" constant="16" id="Gfe-3G-gXK"/>
+                            <constraint firstAttribute="bottom" secondItem="kUd-da-vwn" secondAttribute="bottom" id="GlQ-Xr-aE4"/>
+                            <constraint firstItem="GQP-lQ-IrR" firstAttribute="leading" secondItem="y8L-cE-Agf" secondAttribute="leading" id="Ick-fK-Htb"/>
+                            <constraint firstItem="y8L-cE-Agf" firstAttribute="trailing" secondItem="xr5-wk-AUF" secondAttribute="trailing" id="JxK-Gz-P3f"/>
+                            <constraint firstAttribute="trailing" secondItem="xr5-wk-AUF" secondAttribute="trailing" constant="16" id="bdj-dR-6sJ"/>
+                            <constraint firstItem="xr5-wk-AUF" firstAttribute="leading" secondItem="mUU-gV-rKw" secondAttribute="leading" constant="16" id="hpw-K8-MFS"/>
+                            <constraint firstItem="y8L-cE-Agf" firstAttribute="leading" secondItem="xr5-wk-AUF" secondAttribute="leading" id="kWm-Cm-8KU"/>
+                            <constraint firstItem="y8L-cE-Agf" firstAttribute="top" secondItem="xr5-wk-AUF" secondAttribute="bottom" constant="8" id="o97-AM-N9i"/>
+                            <constraint firstItem="GQP-lQ-IrR" firstAttribute="top" secondItem="y8L-cE-Agf" secondAttribute="bottom" constant="16" id="yGb-E7-vo2"/>
+                            <constraint firstAttribute="trailing" secondItem="kUd-da-vwn" secondAttribute="trailing" id="z7c-0X-W90"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="mUU-gV-rKw" secondAttribute="bottom" id="9gK-9i-hSN"/>
+                <constraint firstItem="mUU-gV-rKw" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Q19-Dg-6dB"/>
+                <constraint firstAttribute="trailing" secondItem="mUU-gV-rKw" secondAttribute="trailing" id="efq-ze-lJe"/>
+                <constraint firstItem="mUU-gV-rKw" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="jUl-PH-4Pm"/>
+            </constraints>
+            <connections>
+                <outlet property="bgImageView" destination="kUd-da-vwn" id="ZF1-t2-KVR"/>
+                <outlet property="loginButton" destination="GQP-lQ-IrR" id="Kn1-sy-RUn"/>
+                <outlet property="rectContainer" destination="mUU-gV-rKw" id="Je9-yW-aaC"/>
+                <outlet property="subtitleLabel" destination="y8L-cE-Agf" id="WNF-9M-BGF"/>
+                <outlet property="titleLabel" destination="xr5-wk-AUF" id="sKg-am-CNn"/>
+            </connections>
+            <point key="canvasLocation" x="100.76335877862596" y="20.070422535211268"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="home-login-background" width="120" height="136"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
