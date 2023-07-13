@@ -28,12 +28,12 @@ class QuickAccessCollectionReusableView: UICollectionReusableView {
         quickAccessLabel.textColor = AppColours.appBlue
         quickAccessLabel.text = "Quick access"
         manageButton.titleLabel?.font = UIFont.bcSansBoldWithSize(size: 13)
-        manageButton.setTitleColor(AppColours.appBlueLight, for: .normal)
+        manageButton.setTitleColor(AppColours.blueLightText, for: .normal)
         let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: AppColours.appBlueLight,
+            .foregroundColor: AppColours.blueLightText,
             .font: UIFont.bcSansBoldWithSize(size: 13),
-            .underlineStyle: NSUnderlineStyle.single,
-            .underlineColor: AppColours.appBlueLight
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
+            .underlineColor: AppColours.blueLightText
         ]
         let attrStr = NSAttributedString(string: "Manage", attributes: attributes)
         manageButton.setAttributedTitle(attrStr, for: .normal)
