@@ -14,11 +14,20 @@ class HomeScreenViewController: BaseViewController {
         case loginStatus(status: AuthStatus)
         case quickAccess(types: [HomeScreenCellType]) // Note: Will have to modify this slightly once we are hitting the API
         
-        var getSectionTitle: String? {
+        var isQuickAccessSection: Bool {
             switch self {
-            case .banner, .loginStatus: return nil
-            case .quickAccess: return "Quick access"
+            case .banner, .loginStatus: return false
+            case .quickAccess: return true
             }
+        }
+    }
+    
+    enum BannerHeight: Int {
+        case expanded = 150
+        case collapsed = 75
+        
+        var getCGFloat: CGFloat {
+            return CGFloat(self.rawValue)
         }
     }
     
@@ -32,8 +41,10 @@ class HomeScreenViewController: BaseViewController {
 //    @IBOutlet weak private var tableView: UITableView!
     @IBOutlet weak private var collectionView: UICollectionView!
     
-    private var authManager: AuthManager = AuthManager()
+    private var bannerHeight: BannerHeight = .expanded
     
+    private var authManager: AuthManager = AuthManager()
+        
     private let communicationSetvice: CommunicationSetvice = CommunicationSetvice(network: AFNetwork(), configService: MobileConfigService(network: AFNetwork()))
     private var communicationBanner: CommunicationBanner?
     private let connectionListener = NetworkConnection()
@@ -220,6 +231,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
         collectionView.register(UINib.init(nibName: HomeScreenRecordCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: HomeScreenRecordCollectionViewCell.getName)
         collectionView.register(UINib.init(nibName: CommunicationBannerCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: CommunicationBannerCollectionViewCell.getName)
         collectionView.register(UINib.init(nibName: HomeScreenAuthCollectionViewCell.getName, bundle: .main), forCellWithReuseIdentifier: HomeScreenAuthCollectionViewCell.getName)
+        collectionView.register(UINib.init(nibName: QuickAccessCollectionReusableView.getName, bundle: .main), forSupplementaryViewOfKind: "UICollectionElementKindSectionHeader", withReuseIdentifier: QuickAccessCollectionReusableView.getName)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
 //        layout.itemSize =  cellSize() // Prob need to remove this
@@ -228,18 +240,17 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
         collectionView.dataSource = self
     }
     
-    // TODO: Adjust this
     func cellSize(for sectionType: DataSource) -> CGSize {
         let cView = collectionView.frame
         switch sectionType {
         case .banner:
-            return CGSize(width: cView.width, height: 52)
+            return CGSize(width: cView.width, height: bannerHeight.getCGFloat)
         case .loginStatus(status: let status):
             let height: CGFloat = status == .UnAuthenticated ? 169 : 139
             return CGSize(width: cView.width, height: height)
         case .quickAccess:
-            let width = (cView.width / 2) - 10
-            let height = width * (113/153)
+            let width = (cView.width / 2)
+            let height = width * (125/153)
             return CGSize(width: width, height: height)
         }
     }
@@ -290,17 +301,53 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let ds = getDataSourceType(dataSource: self.dataSource, section: indexPath.section), ds.isQuickAccessSection else {
+            assert(false, "Unexpected data source error")
+        }
+        switch kind {
+        case "UICollectionElementKindSectionHeader":
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: QuickAccessCollectionReusableView.getName, for: indexPath) as? QuickAccessCollectionReusableView else { return UICollectionReusableView() }
+            headerView.configure(status: self.authManager.authStaus, delegateOwner: self)
+            return headerView
+
+        default:
+            assert(false, "Unexpected element kind")
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard let ds = getDataSourceType(dataSource: self.dataSource, section: section), ds.isQuickAccessSection else {
+            return CGSize(width: 0, height: 0)
+        }
+        return CGSize(width: collectionView.frame.width, height: 50)
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // As of now, no action here - but will include routing here
-        // TODO: Setup
+        guard let ds = getDataSourceType(dataSource: dataSource, section: indexPath.section) else { return }
+        switch ds {
+        case .banner(data: let data): break
+        case .loginStatus(status: let status): break
+        case .quickAccess(types: let types):
+            let type = types[indexPath.row]
+            goToTabForType(type: type)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+}
+
+// MARK: Header logic
+extension HomeScreenViewController: QuickAccessCollectionReusableViewDelegate {
+    func manageButtonTapped() {
+        alert(title: "Coming soon", message: "Will be implemented in the next build")
     }
 }
 
@@ -375,11 +422,14 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
     
     func onExpand(banner: CommunicationBanner?) {
 //        tableView.reloadData()
+        // TODO: Amir - we may have to look into this and do it more dynamically based on content
+        bannerHeight = .expanded
         collectionView.reloadData()
     }
     
     func onClose(banner: CommunicationBanner?) {
 //        tableView.performBatchUpdates(nil)
+        bannerHeight = .collapsed
         collectionView.performBatchUpdates(nil)
     }
     
@@ -409,7 +459,7 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
 // MARK: Login delegate
 extension HomeScreenViewController: HomeScreenAuthCollectionViewCellDelegate {
     func loginTapped() {
-        // TODO: Login logic here - see other files
+        showLogin(initialView: .Landing, showTabOnSuccess: .AuthenticatedRecords)
     }
 }
 
@@ -423,6 +473,7 @@ extension HomeScreenViewController {
             if authManager.isAuthenticated {
                 show(tab: .AuthenticatedRecords)
             } else {
+                // TODO: Not sure what we should show here, ask claire
                 showLogin(initialView: .Landing, showTabOnSuccess: .AuthenticatedRecords)
             }
         case .Proofs:

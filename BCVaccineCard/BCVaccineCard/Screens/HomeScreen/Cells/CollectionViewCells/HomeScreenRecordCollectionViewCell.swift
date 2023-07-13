@@ -15,11 +15,11 @@ enum HomeScreenCellType {
     
     var getTitle: String {
         switch self {
-        case .Records: return "Health records"
-        case .Proofs: return "Proof of vaccination"
-        case .Resources: return "Resources"
+        case .Records: return "Health\nRecords"
+        case .Proofs: return "Proof of\nVaccination"
+        case .Resources: return "Health\nResources"
         case .Recommendations(let showRecommendedImz):
-            let string = showRecommendedImz ? "Recommended\nimmunizations" : "Immunization\nschedules"
+            let string = showRecommendedImz ? "Recommended\nImmunizations" : "Immunization\nSchedules"
             return string
         }
     }
@@ -86,8 +86,8 @@ class HomeScreenRecordCollectionViewCell: UICollectionViewCell {
         roundedView.layer.cornerRadius = 3
         roundedView.layer.masksToBounds = true
         
-        titleLabel.font = UIFont.bcSansBoldWithSize(size: 17)
-        titleLabel.textColor = AppColours.textBlack
+        titleLabel.font = UIFont.bcSansRegularWithSize(size: 13)
+        titleLabel.textColor = AppColours.appBlue
 //        descriptionLabel.font = UIFont.bcSansRegularWithSize(size: 13)
 //        descriptionLabel.textColor = AppColours.textBlack
     }
