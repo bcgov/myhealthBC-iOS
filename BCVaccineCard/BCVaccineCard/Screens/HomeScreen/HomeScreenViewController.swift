@@ -303,7 +303,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let ds = getDataSourceType(dataSource: self.dataSource, section: indexPath.section), ds.isQuickAccessSection else {
-            assert(false, "Unexpected data source error")
+            return UICollectionReusableView()
         }
         switch kind {
         case "UICollectionElementKindSectionHeader":
@@ -312,7 +312,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
             return headerView
 
         default:
-            assert(false, "Unexpected element kind")
+            return UICollectionReusableView()
         }
     }
 
