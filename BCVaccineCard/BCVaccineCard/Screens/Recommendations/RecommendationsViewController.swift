@@ -106,7 +106,6 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
         tableView.backgroundColor = .clear
     }
     
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return patients.count
     }

@@ -25,7 +25,6 @@ class PatientRecommendationsTableViewCell: UITableViewCell {
         for recommendation in recs {
             if let name = recommendation.immunizationDetail?.recommendation?.recommendedVaccinations,
                !name.removeWhiteSpaceFormatting.isEmpty {
-
                 let recommendationView: PatientRecommendationStack = PatientRecommendationStack.fromNib()
                 stackView.addArrangedSubview(recommendationView)
                 recommendationView.configure(immunizationName: name, dueDate: recommendation.agentDueDate, descrtiptionText: recommendation.status, eligibleDate: recommendation.agentEligibleDate)

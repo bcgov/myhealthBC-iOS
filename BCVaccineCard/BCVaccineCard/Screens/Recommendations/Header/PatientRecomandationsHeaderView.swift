@@ -27,7 +27,8 @@ class PatientRecomandationsHeaderView: UIView {
         self.delegate = delegate
         
         
-        let numberOfRecs = patient.recommandationsArray.compactMap({$0.immunizationDetail?.recommendation?.recommendedVaccinations}).filter({!$0.isEmpty}).count
+        let numberOfRecs = patient.recommandationsArray.compactMap({$0.immunizationDetail?.recommendation?.recommendedVaccinations}).filter({!$0.removeWhiteSpaceFormatting.isEmpty}).count
+
         nameLabel.text = patient.name
         style(enabled: numberOfRecs != 0)
         numerOfRecommendations.text = "\(numberOfRecs)"
