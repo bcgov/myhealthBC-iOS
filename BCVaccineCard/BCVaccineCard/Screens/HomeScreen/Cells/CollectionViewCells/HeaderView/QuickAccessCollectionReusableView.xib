@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="QuickAccessCollectionReusableView" id="U6b-Vx-4bR" customClass="QuickAccessCollectionReusableView" customModule="HealthGateway" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zh4-AK-mey">
+                    <rect key="frame" x="0.0" y="12" width="42" height="26"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p8B-gT-aae">
+                    <rect key="frame" x="274" y="5" width="46" height="40"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" title="Button"/>
+                    <connections>
+                        <action selector="manageButtonTapped:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="8Hf-gc-sZI"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="VXr-Tz-HHm"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="p8B-gT-aae" secondAttribute="bottom" constant="5" id="1Kn-xP-LIx"/>
+                <constraint firstItem="zh4-AK-mey" firstAttribute="centerY" secondItem="U6b-Vx-4bR" secondAttribute="centerY" id="Cjp-w1-bg1"/>
+                <constraint firstItem="p8B-gT-aae" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" constant="5" id="Ksk-VI-Yne"/>
+                <constraint firstAttribute="bottom" secondItem="zh4-AK-mey" secondAttribute="bottom" constant="12" id="LyA-Qh-MFN"/>
+                <constraint firstItem="p8B-gT-aae" firstAttribute="centerY" secondItem="U6b-Vx-4bR" secondAttribute="centerY" id="h1p-Qm-ln2"/>
+                <constraint firstItem="p8B-gT-aae" firstAttribute="trailing" secondItem="VXr-Tz-HHm" secondAttribute="trailing" id="q1g-rN-rC4"/>
+                <constraint firstItem="p8B-gT-aae" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zh4-AK-mey" secondAttribute="trailing" constant="5" id="qPc-0f-maM"/>
+                <constraint firstItem="zh4-AK-mey" firstAttribute="top" secondItem="U6b-Vx-4bR" secondAttribute="top" constant="12" id="sSw-Uv-iqT"/>
+                <constraint firstItem="zh4-AK-mey" firstAttribute="leading" secondItem="VXr-Tz-HHm" secondAttribute="leading" id="wkB-CU-QbB"/>
+            </constraints>
+            <connections>
+                <outlet property="manageButton" destination="p8B-gT-aae" id="b1t-VH-TLM"/>
+                <outlet property="quickAccessLabel" destination="zh4-AK-mey" id="Xtb-jJ-mqf"/>
+            </connections>
+            <point key="canvasLocation" x="101" y="21"/>
+        </collectionReusableView>
+    </objects>
+</document>
