@@ -82,7 +82,8 @@ class InteractiveLinkLabel: UILabel {
         if let value = attributeValue {
             // determin URL type here (phone number or email)
             if let url = value as? URL, UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
+//                UIApplication.shared.open(url)
+                AppDelegate.sharedInstance?.showExternalURL(url: url.absoluteString)
             }
         }
         
