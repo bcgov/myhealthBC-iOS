@@ -419,8 +419,7 @@ extension HomeScreenViewController {
             if authManager.isAuthenticated {
                 show(tab: .AuthenticatedRecords)
             } else {
-                // TODO: Not sure what we should show here, ask claire
-                showLogin(initialView: .Landing)
+                showLogin(initialView: .Landing, showTabOnSuccess: .AuthenticatedRecords)
             }
         case .Proofs:
             let vm = HealthPassViewController.ViewModel(fedPassStringToOpen: nil)
