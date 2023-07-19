@@ -38,7 +38,6 @@ class HomeScreenViewController: BaseViewController {
         return HomeScreenViewController()
     }
     
-//    @IBOutlet weak private var tableView: UITableView!
     @IBOutlet weak private var collectionView: UICollectionView!
     
     private var bannerHeight: BannerHeight = .expanded
@@ -73,7 +72,6 @@ class HomeScreenViewController: BaseViewController {
     
     private func setup() {
         addObservablesForChangeInAuthenticationStatus()
-//        setupTableView()
         setupCollectionView()
         navSetup()
         
@@ -86,15 +84,26 @@ class HomeScreenViewController: BaseViewController {
     }
     
     private func genDataSource() -> [DataSource] {
-        let showRecommendedImz = authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty
         var data: [DataSource] = [
             .quickAccess(types: [
                 .Records,
-                .Recommendations(showRecommendedImz: showRecommendedImz),
                 .Resources,
                 .Proofs
             ])
         ]
+        let quickAccess = data[0]
+        switch quickAccess {
+        case .quickAccess(types: let types):
+            var newTypes = types
+            if !authManager.isAuthenticated {
+                newTypes.insert(.Recommendations(showRecommendedImz: false), at: 1)
+            } else if authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty {
+                newTypes.insert(.Recommendations(showRecommendedImz: true), at: 1)
+            }
+            data[0] = .quickAccess(types: newTypes)
+        default: break
+        }
+        
         if let banner = communicationBanner {
             data.insert(.banner(data: banner), at: 0)
         }
@@ -102,15 +111,6 @@ class HomeScreenViewController: BaseViewController {
             let index = data.count - 1
             data.insert(.loginStatus(status: authManager.authStaus), at: index)
         }
-        
-//        var data: [DataSource] = [.text(text: "What do you want to focus on today?"), .button(type: .Records), .button(type: .Resources), .button(type: .Proofs)]
-//        if authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty {
-//            data.insert(.button(type: .Recommendations), at: 2)
-//        }
-//        if let banner = communicationBanner {
-//            data.insert(.banner(data: banner), at: 1)
-//        }
-//        return data
         return data
     }
 
@@ -124,7 +124,7 @@ extension HomeScreenViewController {
             let sentenceCaseName = name.nameCase()
             return "Hi \(sentenceCaseName),"
         } else {
-            return "Hello"
+            return "Home"
         }
     }
     
@@ -193,7 +193,6 @@ extension HomeScreenViewController {
         switch event.entity {
         case .Recommendation:
             collectionView.reloadData()
-//            tableView.reloadData()
         default:
             break
         }
@@ -202,7 +201,6 @@ extension HomeScreenViewController {
     @objc private func reloadFromForcedLogout(_ notification: Notification) {
         navSetup()
         self.collectionView.reloadData()
-//            self.tableView.reloadData()
     }
     
     // Note: Not using authenticated value right now, may just remove it. Leaving in for now in case some requirements change or if there are any edge cases not considered
@@ -212,7 +210,6 @@ extension HomeScreenViewController {
         guard let authenticated = userInfo[Constants.AuthStatusKey.key] else { return }
         self.navSetup()
         self.collectionView.reloadData()
-//            self.tableView.reloadData()
     }
     
     @objc private func patientAPIFetched(_ notification: Notification) {
@@ -220,7 +217,6 @@ extension HomeScreenViewController {
         guard let firstName = userInfo["firstName"] else { return }
         self.navSetup(firstName: firstName)
         self.collectionView.reloadData()
-//            self.tableView.reloadData()
     }
 }
 
@@ -234,7 +230,6 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
         collectionView.register(UINib.init(nibName: QuickAccessCollectionReusableView.getName, bundle: .main), forSupplementaryViewOfKind: "UICollectionElementKindSectionHeader", withReuseIdentifier: QuickAccessCollectionReusableView.getName)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-//        layout.itemSize =  cellSize() // Prob need to remove this
         collectionView.collectionViewLayout = layout
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -351,51 +346,6 @@ extension HomeScreenViewController: QuickAccessCollectionReusableViewDelegate {
     }
 }
 
-// MARK: Table View Setup
-//extension HomeScreenViewController: UITableViewDelegate, UITableViewDataSource {
-//
-//    private func setupTableView() {
-//        tableView.register(UINib.init(nibName: TextTableViewCell.getName, bundle: .main), forCellReuseIdentifier: TextTableViewCell.getName)
-//        tableView.register(UINib.init(nibName: HomeScreenTableViewCell.getName, bundle: .main), forCellReuseIdentifier: HomeScreenTableViewCell.getName)
-//        tableView.register(UINib.init(nibName: CommunicationBannerTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommunicationBannerTableViewCell.getName)
-//        tableView.rowHeight = UITableView.automaticDimension
-////        tableView.estimatedRowHeight = 231
-//        tableView.delegate = self
-//        tableView.dataSource = self
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return dataSource.count
-//    }
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let data = dataSource[indexPath.row]
-//        switch data {
-//        case .text(text: let text):
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: TextTableViewCell.getName, for: indexPath) as? TextTableViewCell else { return UITableViewCell() }
-//            cell.configure(forType: .plainText, text: text, withFont: UIFont.bcSansBoldWithSize(size: 20), labelSpacingAdjustment: 30, textColor: AppColours.appBlue)
-//            return cell
-//        case .button(type: let type):
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeScreenTableViewCell.getName, for: indexPath) as? HomeScreenTableViewCell else { return UITableViewCell() }
-//            cell.configure(forType: type, auth: authManager.isAuthenticated)
-//            return cell
-//        case .banner(data: let data):
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: CommunicationBannerTableViewCell.getName, for: indexPath) as? CommunicationBannerTableViewCell else { return UITableViewCell() }
-//            cell.configure(data: communicationBanner, delegate: self)
-//            cell.selectionStyle = .none
-//            return cell
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let data = dataSource[indexPath.row]
-//        switch data {
-//        case .button(type: let type):
-//            goToTabForType(type: type)
-//        default: break
-//        }
-//    }
-//}
-
 // MARK: Communications Banner
 extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegate {
     func fetchCommunicationBanner() {
@@ -410,25 +360,21 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
                 self.communicationBanner = nil
             }
            
-//            self.tableView.reloadData()
             self.collectionView.reloadData()
         }
     }
     
     func shouldUpdateUI() {
-//        tableView.performBatchUpdates(nil)
         collectionView.performBatchUpdates(nil)
     }
     
     func onExpand(banner: CommunicationBanner?) {
-//        tableView.reloadData()
         // TODO: Amir - we may have to look into this and do it more dynamically based on content
         bannerHeight = .expanded
         collectionView.reloadData()
     }
     
     func onClose(banner: CommunicationBanner?) {
-//        tableView.performBatchUpdates(nil)
         bannerHeight = .collapsed
         collectionView.performBatchUpdates(nil)
     }
@@ -440,7 +386,6 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
 
         communicationSetvice.dismiss(message: banner)
         communicationBanner = nil
-//        tableView.reloadData()
         collectionView.reloadData()
         fetchCommunicationBanner()
     }
@@ -459,7 +404,7 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
 // MARK: Login delegate
 extension HomeScreenViewController: HomeScreenAuthCollectionViewCellDelegate {
     func loginTapped() {
-        showLogin(initialView: .Landing, showTabOnSuccess: .AuthenticatedRecords)
+        showLogin(initialView: .Landing)
     }
 }
 
@@ -474,7 +419,7 @@ extension HomeScreenViewController {
                 show(tab: .AuthenticatedRecords)
             } else {
                 // TODO: Not sure what we should show here, ask claire
-                showLogin(initialView: .Landing, showTabOnSuccess: .AuthenticatedRecords)
+                showLogin(initialView: .Landing)
             }
         case .Proofs:
             let vm = HealthPassViewController.ViewModel(fedPassStringToOpen: nil)
