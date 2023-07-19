@@ -28,11 +28,11 @@ class PatientRecommendationStack: UIView {
             dueDateLabel.isHidden = true
         }
         
-        if let eligibleDate = eligibleDate {
-            let textTag: TextTag = TextTag.fromNib()
-            contentStack.insertArrangedSubview(textTag, at: 0)
-            textTag.configure(text: "Eligible: \(eligibleDate.forecastDueDate)", fontSize: 13)
-        }
+//        if let eligibleDate = eligibleDate {
+//            let textTag: TextTag = TextTag.fromNib()
+//            contentStack.insertArrangedSubview(textTag, at: 0)
+//            textTag.configure(text: "Eligible: \(eligibleDate.forecastDueDate)", fontSize: 13)
+//        }
         
         descriptionLabel.text = descrtiptionText
         if descrtiptionText == nil {

@@ -127,7 +127,7 @@ extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = getCell(indexPath: indexPath)
-        cell.configure(patient: patients[indexPath.row])
+        cell.configure(patient: patients[indexPath.section])
         cell.selectionStyle = .none
         return cell
     }
