@@ -428,7 +428,7 @@ extension HomeScreenViewController {
         case .Recommendations:
             show(route: .Recommendations, withNavigation: true)
         case .ImmunizationSchedule:
-            show(route: , withNavigation: <#T##Bool#>)
+            show(route: .ImmunizationSchedule, withNavigation: true)
         }
     }
 }
