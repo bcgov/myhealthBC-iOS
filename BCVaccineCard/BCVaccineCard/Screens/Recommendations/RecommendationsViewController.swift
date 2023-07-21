@@ -9,13 +9,21 @@ import UIKit
 
 class RecommendationsViewController: BaseViewController {
 
+    @IBOutlet weak var textViewHeight: NSLayoutConstraint!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var tableView: UITableView!
     
-    private var recommendations: [ImmunizationRecommendation] {
-        return StorageService.shared.fetchRecommendations().sorted(by: {$0.agentDueDate ?? Date() > $1.agentDueDate  ?? Date()})
+    private var patients: [Patient] {
+        var results: [Patient] = []
+        guard let primary = StorageService.shared.fetchAuthenticatedPatient() else {
+            return []
+        }
+        results.append(primary)
+        results.append(contentsOf: primary.dependentsArray.compactMap{$0.info})
+        
+        return results
     }
-    private var expandedIndecies: [Int] = []
+    private var expandedPatients: [Patient] = []
     
     class func construct() -> RecommendationsViewController {
         if let vc = Storyboard.recommendations.instantiateViewController(withIdentifier: String(describing: RecommendationsViewController.self)) as? RecommendationsViewController {
@@ -27,9 +35,7 @@ class RecommendationsViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        expandedIndecies = [0]
-//        guard let tableView = tableView else {return}
-//        tableView.reloadData()
+        expandedPatients = []
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,79 +60,94 @@ class RecommendationsViewController: BaseViewController {
         navSetup()
         setupTableView()
         setupTextView()
+        view.backgroundColor = UIColor(red: 0.99, green: 0.99, blue: 0.99, alpha: 1.00)
     }
     
     private func setupTextView() {
         guard let textView = self.textView else {return}
         textView.textColor = AppColours.textGray
-        let attributedText = NSMutableAttributedString(string: "For more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ")
+        let fontAttribute = [NSAttributedString.Key.font: UIFont.bcSansRegularWithSize(size: 13)]
+        let attributedText = NSMutableAttributedString(string: "Recommended immunization are suggestion for your health journey. This page will containt all of future immunization for you and your dependents. To add dependents to application, click on Dependent in the menu bar at the bottom.\n\nFor more information on vaccines recommendation and eligibility, please visit immunizeBC or speak to your health care provider. ", attributes: fontAttribute)
         _ = attributedText.setAsLink(textToFind: "immunizeBC", linkURL: "https://immunizebc.ca/")
         textView.attributedText = attributedText
         textView.isUserInteractionEnabled = true
         textView.delegate = self
-        textView.font = UIFont.bcSansRegularWithSize(size: 13)
-        textView.translatesAutoresizingMaskIntoConstraints = true
-        textView.sizeToFit()
         textView.isScrollEnabled = false
         textView.isEditable = false
-        UIView.animate(withDuration: 0.3, delay: 0) {
-            self.view.layoutIfNeeded()
-        }
+        textView.isSelectable = true
+        textView.dataDetectorTypes.insert(.link)
+        textView.linkTextAttributes = [
+            .foregroundColor: UIColor.blue,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        let sizeThatFitsTextView = textView.sizeThatFits(CGSize(width: textView.frame.size.width, height: CGFloat(MAXFLOAT)))
+        let heightOfText = sizeThatFitsTextView.height
+        textViewHeight.constant = heightOfText
+        self.view.layoutIfNeeded()
     }
 
 }
 extension RecommendationsViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-//        UIApplication.shared.open(URL)
         AppDelegate.sharedInstance?.showExternalURL(url: URL.absoluteString)
         return false
     }
 }
 
-extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSource {
+extension RecommendationsViewController: UITableViewDelegate, UITableViewDataSource, PatientRecomandationsHeaderViewDelegate {
+   
     private func setupTableView() {
         guard let tableView = tableView else {return}
-        tableView.register(UINib.init(nibName: ReccomandationTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ReccomandationTableViewCell.getName)
+        tableView.register(UINib.init(nibName: PatientRecommendationsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: PatientRecommendationsTableViewCell.getName)
         
-        tableView.rowHeight = UITableView.automaticDimension
-        // tableView.estimatedRowHeight = 100
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
+        tableView.backgroundColor = .clear
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return patients.count
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return recommendations.count
+        let patient = patients[section]
+        if expandedPatients.contains(where: {$0 == patient}) {
+            return 1
+        } else {
+            return 0
+        }
     }
     
-    func getCell(indexPath: IndexPath) -> ReccomandationTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: ReccomandationTableViewCell.getName, for: indexPath) as? ReccomandationTableViewCell else {
-            return ReccomandationTableViewCell()
+    func getCell(indexPath: IndexPath) -> PatientRecommendationsTableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PatientRecommendationsTableViewCell.getName, for: indexPath) as? PatientRecommendationsTableViewCell else {
+            return PatientRecommendationsTableViewCell()
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = getCell(indexPath: indexPath)
-        if recommendations.indices.contains(indexPath.row) {
-            cell.configure(object: recommendations[indexPath.row], expanded: expandedIndecies.contains(indexPath.row))
-        }
+        cell.configure(patient: patients[indexPath.section])
         cell.selectionStyle = .none
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if expandedIndecies.contains(indexPath.row) {
-            expandedIndecies.removeAll(where: {$0 == indexPath.row})
-            tableView.beginUpdates()
-            tableView.reloadRows(at: [indexPath], with: .automatic)
-            tableView.endUpdates()
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let patient = patients[section]
+        let isExpanded = expandedPatients.contains(where: {$0 == patient})
+        let view: PatientRecomandationsHeaderView = PatientRecomandationsHeaderView.fromNib()
+        view.configure(patient: patient, expanded: isExpanded, delegate: self)
+        return view
+    }
+    
+    func toggle(patient: Patient) {
+        let isExpanded = expandedPatients.contains(where: {$0 == patient})
+        if isExpanded {
+            expandedPatients.removeAll(where: {$0 == patient})
         } else {
-            expandedIndecies.append(indexPath.row)
-            tableView.beginUpdates()
-            tableView.reloadRows(at: [indexPath], with: .automatic)
-            tableView.endUpdates()
+            expandedPatients.append(patient)
         }
+        tableView.reloadData()
     }
 }
 // MARK: Navigation setup
@@ -134,7 +155,7 @@ extension RecommendationsViewController {
     private func navSetup() {
         self.navDelegate?.setNavigationBarWith(title: "Recommended immunizations",
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
+                                               rightNavButton: nil,
                                                navStyle: .small,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,

@@ -9,7 +9,8 @@ import UIKit
 
 enum HomeScreenCellType {
     case Records
-    case Recommendations(showRecommendedImz: Bool)
+    case ImmunizationSchedule
+    case Recommendations
     case Resources
     case Proofs
     
@@ -18,9 +19,8 @@ enum HomeScreenCellType {
         case .Records: return "Health\nRecords"
         case .Proofs: return "Proof of\nVaccination"
         case .Resources: return "Health\nResources"
-        case .Recommendations(let showRecommendedImz):
-            let string = showRecommendedImz ? "Recommended\nImmunizations" : "Immunization\nSchedules"
-            return string
+        case .ImmunizationSchedule: return "Immunization\nSchedules"
+        case .Recommendations: return "Recommended\nImmunizations"
         }
     }
     
@@ -29,9 +29,8 @@ enum HomeScreenCellType {
         case .Records: return UIImage(named: "records-home-icon")
         case .Proofs: return UIImage(named: "proofs-home-icon")
         case .Resources: return UIImage(named: "resources-home-icon")
-        case .Recommendations(let showRecommendedImz):
-            let icon = showRecommendedImz ? UIImage(named: "recommended-immunizations-icon") : UIImage(named: "immunization-schedules-icon")
-            return icon
+        case .ImmunizationSchedule: return UIImage(named: "immunization-schedules-icon")
+        case .Recommendations: return UIImage(named: "recommended-immunizations-icon")
         }
     }
     // May become irrelevant
@@ -41,6 +40,8 @@ enum HomeScreenCellType {
         case .Proofs: return "Save proof of vaccination documents for you and your family"
         case .Resources: return "Find trusted health information and resources"
         case .Recommendations: return "Find out which vaccinations are recommended for you"
+        case .ImmunizationSchedule:
+            return "Find out which vaccinations are recommended for you"
         }
     }
     // May become irrelevant
@@ -52,6 +53,7 @@ enum HomeScreenCellType {
         case .Proofs: return UIImage(named: "proofs-home-button")
         case .Resources: return UIImage(named: "resources-home-button")
         case .Recommendations:  return UIImage(named: "resources-home-button")
+        case .ImmunizationSchedule: return UIImage(named: "resources-home-button")
         }
     }
 
