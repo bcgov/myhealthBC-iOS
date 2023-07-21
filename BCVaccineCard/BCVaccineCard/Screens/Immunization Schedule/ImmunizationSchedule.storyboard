@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Immunization Schedule View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController storyboardIdentifier="ImmunizationScheduleViewController" id="Y6W-OH-hqX" customClass="ImmunizationScheduleViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="yPE-mV-ADv">
+                                <rect key="frame" x="0.0" y="160" width="393" height="658"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TGb-Ug-0bN">
+                                <rect key="frame" x="16" y="75" width="361" height="61"/>
+                                <string key="text">Click on the tabs below to expand and view individual immunization schedules for different age groups and individuals at high risk.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="TGb-Ug-0bN" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="0Es-v0-QFJ"/>
+                            <constraint firstItem="TGb-Ug-0bN" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="16" id="JIb-T3-zo2"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="yPE-mV-ADv" secondAttribute="bottom" id="KaA-VO-RZw"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="yPE-mV-ADv" secondAttribute="trailing" id="WvD-Bg-EQm"/>
+                            <constraint firstItem="TGb-Ug-0bN" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" constant="16" id="jVG-Ou-MrF"/>
+                            <constraint firstItem="yPE-mV-ADv" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="k8F-pS-VLD"/>
+                            <constraint firstItem="yPE-mV-ADv" firstAttribute="top" secondItem="TGb-Ug-0bN" secondAttribute="bottom" constant="24" id="oyu-XT-MHC"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="descriptionLabel" destination="TGb-Ug-0bN" id="80T-TG-Tpm"/>
+                        <outlet property="tableView" destination="yPE-mV-ADv" id="Vrl-lI-Jv6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="43.511450381679388" y="3.5211267605633805"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

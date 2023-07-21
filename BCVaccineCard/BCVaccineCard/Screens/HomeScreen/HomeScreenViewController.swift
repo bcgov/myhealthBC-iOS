@@ -411,7 +411,6 @@ extension HomeScreenViewController: HomeScreenAuthCollectionViewCellDelegate {
 // MARK: Navigation logic for each type here
 extension HomeScreenViewController {
     private func goToTabForType(type: HomeScreenCellType) {
-        
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         switch type {
         case .Records:

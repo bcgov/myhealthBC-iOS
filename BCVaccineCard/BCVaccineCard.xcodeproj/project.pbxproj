@@ -736,6 +736,18 @@
 		3E91C7C328B51B0B005AA34F /* Immunization+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E91C7AD28B51B0B005AA34F /* Immunization+CoreDataClass.swift */; };
 		3E91C7C428B51B0B005AA34F /* Immunization+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E91C7AD28B51B0B005AA34F /* Immunization+CoreDataClass.swift */; };
 		3E91C7C528B51B0B005AA34F /* Immunization+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E91C7AD28B51B0B005AA34F /* Immunization+CoreDataClass.swift */; };
+		3E97A28E2A49F98F004F3DD7 /* ImmunizationScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E97A28D2A49F98F004F3DD7 /* ImmunizationScheduleViewController.swift */; };
+		3E97A28F2A49F992004F3DD7 /* ImmunizationScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E97A28D2A49F98F004F3DD7 /* ImmunizationScheduleViewController.swift */; };
+		3E97A2902A49F993004F3DD7 /* ImmunizationScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E97A28D2A49F98F004F3DD7 /* ImmunizationScheduleViewController.swift */; };
+		3E97A2922A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E97A2912A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard */; };
+		3E97A2932A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E97A2912A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard */; };
+		3E97A2942A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E97A2912A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard */; };
+		3E97A2982A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E97A2962A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift */; };
+		3E97A2992A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E97A2962A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift */; };
+		3E97A29A2A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E97A2962A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift */; };
+		3E97A29B2A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E97A2972A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib */; };
+		3E97A29C2A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E97A2972A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib */; };
+		3E97A29D2A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3E97A2972A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib */; };
 		3E9D52662909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */; };
 		3E9D52672909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */; };
 		3E9D52682909E0F9007E7F44 /* ManageDependentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */; };
@@ -1803,6 +1815,10 @@
 		3E91C7A928B51B0A005AA34F /* ImmunizationTargetDisease+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationTargetDisease+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		3E91C7AA28B51B0A005AA34F /* ImmunizationTargetDisease+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ImmunizationTargetDisease+CoreDataClass.swift"; sourceTree = "<group>"; };
 		3E91C7AD28B51B0B005AA34F /* Immunization+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Immunization+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3E97A28D2A49F98F004F3DD7 /* ImmunizationScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImmunizationScheduleViewController.swift; sourceTree = "<group>"; };
+		3E97A2912A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ImmunizationSchedule.storyboard; sourceTree = "<group>"; };
+		3E97A2962A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImmunizationScheduleTableViewCell.swift; sourceTree = "<group>"; };
+		3E97A2972A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImmunizationScheduleTableViewCell.xib; sourceTree = "<group>"; };
 		3E9D52652909E0F8007E7F44 /* ManageDependentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageDependentsViewController.swift; sourceTree = "<group>"; };
 		3EAF8184296DF0CE00738553 /* ConstantsAndTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsAndTypes.swift; sourceTree = "<group>"; };
 		3EB308B829E4B54000FC0FFB /* AuthenticatedOrganDonorStatusResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedOrganDonorStatusResponseModel.swift; sourceTree = "<group>"; };
@@ -3067,7 +3083,26 @@
 			path = ProfileDetail;
 			sourceTree = "<group>";
 		};
-		3EDA6F4D29EF1FDE00A5DC7B /* New Group */ = {
+		3E97A28C2A49F96A004F3DD7 /* Immunization Schedule */ = {
+			isa = PBXGroup;
+			children = (
+				3E97A2952A49FCAF004F3DD7 /* Cells */,
+				3E97A2912A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard */,
+				3E97A28D2A49F98F004F3DD7 /* ImmunizationScheduleViewController.swift */,
+			);
+			path = "Immunization Schedule";
+			sourceTree = "<group>";
+		};
+		3E97A2952A49FCAF004F3DD7 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				3E97A2962A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift */,
+				3E97A2972A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		3EDA6F4D29EF1FDE00A5DC7B /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				3EDA6F7029EF205100A5DC7B /* UnAuthenticated */,
@@ -3076,7 +3111,7 @@
 				3EDA6F5729EF202700A5DC7B /* Services List */,
 				3EDA6F4E29EF200C00A5DC7B /* AuthExpired */,
 			);
-			path = "New Group";
+			path = Services;
 			sourceTree = "<group>";
 		};
 		3EDA6F4E29EF200C00A5DC7B /* AuthExpired */ = {
@@ -3595,7 +3630,7 @@
 		7944F6B226F12AB3006B9444 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				3EDA6F4D29EF1FDE00A5DC7B /* New Group */,
+				3EDA6F4D29EF1FDE00A5DC7B /* Services */,
 				3E6F936A2A27A82200EB82C5 /* Notifications */,
 				3E6831382940D74D00100402 /* Comments */,
 				79B9D00B27E2786800987D9F /* HomeScreen */,
@@ -3610,6 +3645,7 @@
 				795AA75A27155E0F00E59FF1 /* ResourceFlow */,
 				795AA75927155E0300E59FF1 /* NewsFeedFlow */,
 				3E78AEC728F8725300C66E28 /* Dependent */,
+				3E97A28C2A49F96A004F3DD7 /* Immunization Schedule */,
 				3E81C4C429B2A05700C8F5C4 /* Routes.swift */,
 			);
 			path = Screens;
@@ -4352,6 +4388,7 @@
 			files = (
 				2DF6657A2A3068160009D8F0 /* SegmentedView.xib in Resources */,
 				7944F68826F1261B006B9444 /* LaunchScreen.storyboard in Resources */,
+				3E97A29C2A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib in Resources */,
 				7944F6D426F12C00006B9444 /* AppStyleButton.xib in Resources */,
 				29921C8D27739612005025D2 /* AuthenticationView.xib in Resources */,
 				29A4DF5327DA685100D5E901 /* ChipCollectionViewCell.xib in Resources */,
@@ -4427,6 +4464,7 @@
 				3E87F4B22901B117002F0A0E /* DependentListItemTableViewCell.xib in Resources */,
 				3E048CC7291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				79A15B0827FE9F5600F8330D /* DataSecurityTipsTableViewCell.xib in Resources */,
+				3E97A2932A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard in Resources */,
 				7928345F2730E63A00EE2710 /* InteractiveLabelTableViewCell.xib in Resources */,
 				799050C0273C8344006CD726 /* GetRecordsView.xib in Resources */,
 				2922C0DE286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.xib in Resources */,
@@ -4536,6 +4574,7 @@
 				79218ADA27557ED50063004E /* TextListViewTableViewCell.xib in Resources */,
 				795AA7762715650900E59FF1 /* NewsFeedTableViewCell.xib in Resources */,
 				79590D992811E9F7006EB59F /* TableSectionHeader.xib in Resources */,
+				3E97A29D2A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib in Resources */,
 				79218AC227555B350063004E /* ReusableHeaderAddView.xib in Resources */,
 				7918A8CB27482E1900D19D1C /* TextListView.xib in Resources */,
 				3E6831482940D92600100402 /* Comments.storyboard in Resources */,
@@ -4602,6 +4641,7 @@
 				2DD8C0CF2A5EA47000CC9DA3 /* HomeScreenAuthCollectionViewCell.xib in Resources */,
 				79B9D01527E2869D00987D9F /* HomeScreenTableViewCell.xib in Resources */,
 				2D5218C62984A38000E07382 /* ProfileDetailsTableViewCell.xib in Resources */,
+				3E97A2942A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard in Resources */,
 				2978852F279624E100FF912D /* SettingsProfileTableViewCell.xib in Resources */,
 				795AA76527155F6300E59FF1 /* NewsFeed.storyboard in Resources */,
 				794BD66A2702EEC00084ADA8 /* BCSans-BoldItalic.otf in Resources */,
@@ -4621,6 +4661,7 @@
 			files = (
 				2DF665792A3068160009D8F0 /* SegmentedView.xib in Resources */,
 				798005FD2852C66E006E390F /* LaunchScreen.storyboard in Resources */,
+				3E97A29B2A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.xib in Resources */,
 				798005FE2852C66E006E390F /* AppStyleButton.xib in Resources */,
 				798005FF2852C66E006E390F /* AuthenticationView.xib in Resources */,
 				798006002852C66E006E390F /* ChipCollectionViewCell.xib in Resources */,
@@ -4696,6 +4737,7 @@
 				3E3DA94028FE8133009C500F /* DependentListItemTableViewCell.xib in Resources */,
 				3E048CC6291183E900774278 /* InaccessibleDependentTableViewCell.xib in Resources */,
 				798006312852C66E006E390F /* DataSecurityTipsTableViewCell.xib in Resources */,
+				3E97A2922A49FB1C004F3DD7 /* ImmunizationSchedule.storyboard in Resources */,
 				798006322852C66E006E390F /* InteractiveLabelTableViewCell.xib in Resources */,
 				798006332852C66E006E390F /* GetRecordsView.xib in Resources */,
 				2922C0DD286E30DC000FF4F7 /* CovidTestResultBannerTableViewCell.xib in Resources */,
@@ -5099,6 +5141,7 @@
 				2DD8C0BB2A4DDC8100CC9DA3 /* CommunicationBannerCollectionViewCell.swift in Sources */,
 				2932DCE1275AA10D00532BC4 /* StorageService+Patient.swift in Sources */,
 				3EDA6F6E29EF204700A5DC7B /* ServicesViewModel.swift in Sources */,
+				3E97A28F2A49F992004F3DD7 /* ImmunizationScheduleViewController.swift in Sources */,
 				2D2B490B2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */,
 				3EDEBB6129356A6700C8386C /* MobileConfigService.swift in Sources */,
 				2DD5F0FF2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift in Sources */,
@@ -5201,6 +5244,7 @@
 				296519A5272995680002B778 /* AuthManager.swift in Sources */,
 				2978851F2795F16E00FF912D /* SettingsRowTableViewCell.swift in Sources */,
 				2DF665852A3111C60009D8F0 /* NoteViewController.swift in Sources */,
+				3E97A2992A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift in Sources */,
 				3E60A4012979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79218AD727557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
 				795AA750271514D600E59FF1 /* InitialOnboardingViewController.swift in Sources */,
@@ -5496,6 +5540,7 @@
 				2DD8C0BC2A4DDC8100CC9DA3 /* CommunicationBannerCollectionViewCell.swift in Sources */,
 				29547E5827A2EC5200562958 /* LocalAuthVIew.swift in Sources */,
 				3EDA6F6F29EF204700A5DC7B /* ServicesViewModel.swift in Sources */,
+				3E97A2902A49F993004F3DD7 /* ImmunizationScheduleViewController.swift in Sources */,
 				2D2B490C2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */,
 				3EDEBB6229356A6700C8386C /* MobileConfigService.swift in Sources */,
 				2DD5F1002A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift in Sources */,
@@ -5598,6 +5643,7 @@
 				79B1A0F12874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
 				296519A6272995680002B778 /* AuthManager.swift in Sources */,
 				2DF665862A3111C60009D8F0 /* NoteViewController.swift in Sources */,
+				3E97A29A2A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift in Sources */,
 				3E60A4022979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79218AD827557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
 				799E0AFD27D13DC9009C68FE /* ProtectiveWordPromptViewController.swift in Sources */,
@@ -5870,6 +5916,7 @@
 				2DD8C0BA2A4DDC8100CC9DA3 /* CommunicationBannerCollectionViewCell.swift in Sources */,
 				3E62CFC0299BDFF1000FBB40 /* SpecialAuthorityDrugService.swift in Sources */,
 				3EDA6F6D29EF204700A5DC7B /* ServicesViewModel.swift in Sources */,
+				3E97A28E2A49F98F004F3DD7 /* ImmunizationScheduleViewController.swift in Sources */,
 				2D2B490A2A1D4F6C00E04254 /* DiagnosticImagingDetailView.swift in Sources */,
 				798005A82852C66E006E390F /* GatewayVaccineCardResponse.swift in Sources */,
 				2DD5F0FE2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift in Sources */,
@@ -5972,6 +6019,7 @@
 				798005DE2852C66E006E390F /* UIAccessibility+EXT.swift in Sources */,
 				798005DF2852C66E006E390F /* AuthenticatedTestResultsResponseModel.swift in Sources */,
 				2DF665842A3111C60009D8F0 /* NoteViewController.swift in Sources */,
+				3E97A2982A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift in Sources */,
 				798005E02852C66E006E390F /* ProtectiveWordPromptViewController.swift in Sources */,
 				3E60A4002979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79B1A0EF2874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
