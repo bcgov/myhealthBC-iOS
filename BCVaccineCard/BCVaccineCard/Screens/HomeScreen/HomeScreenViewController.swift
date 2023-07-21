@@ -88,6 +88,7 @@ class HomeScreenViewController: BaseViewController {
             .quickAccess(types: [
                 .Records,
                 .Resources,
+                .ImmunizationSchedule,
                 .Proofs
             ])
         ]
@@ -95,10 +96,8 @@ class HomeScreenViewController: BaseViewController {
         switch quickAccess {
         case .quickAccess(types: let types):
             var newTypes = types
-            if !authManager.isAuthenticated {
-                newTypes.insert(.Recommendations(showRecommendedImz: false), at: 1)
-            } else if authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty {
-                newTypes.insert(.Recommendations(showRecommendedImz: true), at: 1)
+            if authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty {
+                newTypes.insert(.Recommendations, at: 1)
             }
             data[0] = .quickAccess(types: newTypes)
         default: break
@@ -429,6 +428,8 @@ extension HomeScreenViewController {
             show(route: .Resource, withNavigation: true)
         case .Recommendations:
             show(route: .Recommendations, withNavigation: true)
+        case .ImmunizationSchedule:
+            show(route: , withNavigation: <#T##Bool#>)
         }
     }
 }
