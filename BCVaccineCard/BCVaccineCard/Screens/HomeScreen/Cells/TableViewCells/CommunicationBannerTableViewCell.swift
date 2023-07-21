@@ -132,6 +132,7 @@ extension CommunicationBannerTableViewCell: UITextViewDelegate {
     }
 }
 
+// TODO: Move these to proper extension files, as these files will become obsolete soon
 extension String {
     /// Creates attributed string from HTML string
     var htmlToAttributedString: NSAttributedString? {
