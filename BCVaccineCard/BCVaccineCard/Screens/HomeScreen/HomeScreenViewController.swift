@@ -88,7 +88,6 @@ class HomeScreenViewController: BaseViewController {
             .quickAccess(types: [
                 .Records,
                 .Resources,
-                .ImmunizationSchedule,
                 .Proofs
             ])
         ]
@@ -98,6 +97,8 @@ class HomeScreenViewController: BaseViewController {
             var newTypes = types
             if authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty {
                 newTypes.insert(.Recommendations, at: 1)
+            } else if !authManager.isAuthenticated {
+                newTypes.insert(.ImmunizationSchedule, at: 1)
             }
             data[0] = .quickAccess(types: newTypes)
         default: break
