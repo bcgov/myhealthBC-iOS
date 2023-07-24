@@ -39,7 +39,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oob-6T-9Qe">
-                            <rect key="frame" x="68" y="31.666666666666664" width="41.333333333333343" height="35.999999999999993"/>
+                            <rect key="frame" x="78" y="31.666666666666664" width="41.333333333333343" height="35.999999999999993"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="2N7-uF-A6a"/>
                             </constraints>
@@ -59,7 +59,7 @@
                         <constraint firstItem="gul-Fk-jLf" firstAttribute="centerY" secondItem="GPP-4N-wFy" secondAttribute="centerY" id="MxI-4s-zsr"/>
                         <constraint firstItem="W6k-Ce-Rm1" firstAttribute="centerY" secondItem="GPP-4N-wFy" secondAttribute="centerY" id="dET-Gj-nTh"/>
                         <constraint firstItem="gul-Fk-jLf" firstAttribute="leading" secondItem="W6k-Ce-Rm1" secondAttribute="trailing" constant="8" id="ePe-Fs-jez"/>
-                        <constraint firstItem="Oob-6T-9Qe" firstAttribute="leading" secondItem="RJX-Hb-sxD" secondAttribute="trailing" constant="8" id="fu4-Lb-wgS"/>
+                        <constraint firstItem="Oob-6T-9Qe" firstAttribute="leading" secondItem="RJX-Hb-sxD" secondAttribute="trailing" constant="18" id="fu4-Lb-wgS"/>
                         <constraint firstItem="RJX-Hb-sxD" firstAttribute="leading" secondItem="GPP-4N-wFy" secondAttribute="leading" constant="12" id="qaS-ds-x6k"/>
                     </constraints>
                 </view>

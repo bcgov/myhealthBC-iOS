@@ -34,7 +34,7 @@ struct CommunicationSetvice {
         if let cached = CommunicationSetviceCache.banner {
             return completion(cached)
         }
-        configService.fetchConfig { response in
+        configService.fetchConfig(showToastOnError: false) { response in
             guard let config = response,
                   config.online,
                   let baseURLString = config.baseURL,
