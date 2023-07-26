@@ -191,6 +191,33 @@ extension StorageService: StoragePatientManager {
             return []
         }
     }
+    
+    func store(
+        quickLinksPreferences object: QuickLinksPreferencesResponse,
+        for patient: Patient
+    ) -> [QuickLinkPreferences]? {
+        guard let context = managedContext,
+              let array = object.value?.convertQuickLinksStringToObject() else {
+            return nil
+        }
+        var storedObjects: [QuickLinkPreferences] = []
+        for (index, value) in array.enumerated() {
+            let model = QuickLinkPreferences(context: context)
+            model.quickLink = value.name.rawValue
+            model.order = Int64(index)
+            model.patient = patient
+            do {
+                try context.save()
+                notify(event: StorageEvent(event: .Save, entity: .QuickLinkPreference, object: patient))
+                storedObjects.append(model)
+            } catch let error as NSError {
+                Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            }
+        }
+        guard storedObjects.count > 0 else { return nil }
+        return storedObjects
+    }
+    
     /// returns existing patient
     /// or
     /// creates and returns a new one if it doesnt exist.

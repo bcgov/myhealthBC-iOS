@@ -10,6 +10,7 @@ import Foundation
 typealias PatientDetailResponse = AuthenticatedPatientDetailsResponseObject
 typealias OrganDonorStatusResponse = AuthenticatedOrganDonorStatusResponseModel.Item
 typealias DiagnosticImagingResponse = AuthenticatedDiagnosticImagingResponseModel.Item
+typealias QuickLinksPreferencesResponse = AuthenticatedUserProfileResponseObject.QuickLinks
 
 struct PatientService {
     
@@ -40,6 +41,11 @@ struct PatientService {
                 return completion(result)
             })
         }
+    }
+    
+    // MARK: Quick Links Preferences
+    public func fetchAndStoreQuickLinksPreferences(for patient: Patient, completion: @escaping ([QuickLinksPreference]?)-> Void) {
+        // TODO: Complete this function...
     }
     
     // MARK: Organ Donor Status
