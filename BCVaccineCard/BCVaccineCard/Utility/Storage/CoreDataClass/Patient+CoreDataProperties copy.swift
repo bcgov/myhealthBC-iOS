@@ -46,6 +46,7 @@ extension Patient {
     @NSManaged public var specialAuthorityDrugs: NSSet?
     @NSManaged public var vaccineCard: NSSet?
     @NSManaged public var notifications: NSSet?
+    @NSManaged public var quickLinkPreferences: NSSet?
 //    @NSManaged public var notes: NSSet?
 
 }
@@ -285,5 +286,22 @@ extension Patient {
 
     @objc(removeNotifications:)
     @NSManaged public func removeFromNotifications(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for quickLinkPreferences
+extension Patient {
+
+    @objc(addQuickLinkPreferencesObject:)
+    @NSManaged public func addToQuickLinkPreferences(_ value: QuickLinkPreferences)
+
+    @objc(removeQuickLinkPreferencesObject:)
+    @NSManaged public func removeFromQuickLinkPreferences(_ value: QuickLinkPreferences)
+
+    @objc(addQuickLinkPreferences:)
+    @NSManaged public func addToQuickLinkPreferences(_ values: NSSet)
+
+    @objc(removeQuickLinkPreferences:)
+    @NSManaged public func removeFromQuickLinkPreferences(_ values: NSSet)
 
 }

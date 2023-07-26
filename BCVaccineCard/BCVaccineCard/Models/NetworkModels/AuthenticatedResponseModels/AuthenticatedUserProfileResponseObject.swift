@@ -23,6 +23,7 @@ extension AuthenticatedUserProfileResponseObject {
         let lastLoginDateTime, encryptionKey: String?
         let verifications: [Verification]?
         let isEmailVerified, isSMSNumberVerified: Bool
+        let preferences: Preferences?
         
         enum CodingKeys: String, CodingKey {
             case createdBy, createdDateTime, updatedBy, updatedDateTime, version
@@ -33,6 +34,7 @@ extension AuthenticatedUserProfileResponseObject {
             case identityManagementID = "identityManagementId"
             case lastLoginDateTime, encryptionKey, verifications
             case isEmailVerified, isSMSNumberVerified
+            case preferences
         }
     }
     
@@ -77,6 +79,27 @@ extension AuthenticatedUserProfileResponseObject {
         let sentDateTime, lastRetryDateTime: String
         let attempts, smtpStatusCode, emailStatusCode: Int
     }
+    
+    // MARK: - Preferences
+    struct Preferences: Codable {
+        let tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks: QuickLinks
+        
+        enum CodingKeys: String, CodingKey {
+            case tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks
+        }
+    }
+
+    // MARK: - QuickLinks
+    struct QuickLinks: Codable {
+        let hdID, preference, value: String?
+        let version: Int?
+        let createdDateTime, createdBy, updatedDateTime, updatedBy: String?
+
+        enum CodingKeys: String, CodingKey {
+            case hdID = "hdId"
+            case preference, value, version, createdDateTime, createdBy, updatedDateTime, updatedBy
+        }
+    }
 }
 
 struct AuthenticatedUserProfileRequestObject: Codable {
@@ -93,3 +116,40 @@ struct AuthenticatedUserProfileRequestObject: Codable {
         }
     }
 }
+
+struct QuickLinksPreference: Codable {
+    struct Filter: Codable {
+        let modules: [String]
+    }
+    enum Name: String, Codable {
+        case MyNotes = "My Notes"
+        case Immunization = "Immunization"
+        case Medications = "Medications"
+        case LabResults = "Lab Results"
+        case SpecialAuthority = "Special authority"
+        case HealthVisit = "Health visit"
+        case ClinicalDocuments = "Clinical documents"
+        case OrganDonor = "Organ donor"
+        
+        enum Section: Codable {
+            case HealthRecord
+            case Service
+        }
+        
+        var getSection: Section {
+            switch self {
+            case .MyNotes, .Immunization, .Medications, .LabResults, .SpecialAuthority, .HealthVisit, .ClinicalDocuments: return .HealthRecord
+            case .OrganDonor: return .Service
+            }
+        }
+    }
+
+    enum Section: Codable {
+        case HealthRecord
+        case Service
+    }
+    
+    let name: Name
+    let filter: Filter    
+}
+

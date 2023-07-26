@@ -336,6 +336,12 @@
 		2D6DF35929F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */; };
 		2D6DF35A29F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */; };
 		2D6DF35B29F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */; };
+		2D81887B2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */; };
+		2D81887C2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */; };
+		2D81887D2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */; };
+		2D81887F2A71226A00894756 /* ManageHomeScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887E2A71226A00894756 /* ManageHomeScreenViewModel.swift */; };
+		2D8188802A71226A00894756 /* ManageHomeScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887E2A71226A00894756 /* ManageHomeScreenViewModel.swift */; };
+		2D8188812A71226A00894756 /* ManageHomeScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81887E2A71226A00894756 /* ManageHomeScreenViewModel.swift */; };
 		2D9B399F2907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A02907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
 		2D9B39A12907171D00AE9FA1 /* HealthRecordsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */; };
@@ -1668,6 +1674,8 @@
 		2D6DF34F29F27CD500F1150F /* NavBarDropDownView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavBarDropDownView.xib; sourceTree = "<group>"; };
 		2D6DF35429F27D2500F1150F /* NavBarDropDownOptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarDropDownOptionTableViewCell.swift; sourceTree = "<group>"; };
 		2D6DF35529F27D2500F1150F /* NavBarDropDownOptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NavBarDropDownOptionTableViewCell.xib; sourceTree = "<group>"; };
+		2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageHomeScreenViewController.swift; sourceTree = "<group>"; };
+		2D81887E2A71226A00894756 /* ManageHomeScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageHomeScreenViewModel.swift; sourceTree = "<group>"; };
 		2D9B399E2907171D00AE9FA1 /* HealthRecordsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordsService.swift; sourceTree = "<group>"; };
 		2DD5F0FC2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiagnosticImaging+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		2DD5F0FD2A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DiagnosticImaging+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
@@ -2693,6 +2701,15 @@
 			path = NavBarDropDownOptionTableViewCell;
 			sourceTree = "<group>";
 		};
+		2D8188792A710F0E00894756 /* ManageHomeScreen */ = {
+			isa = PBXGroup;
+			children = (
+				2D81887A2A710F2A00894756 /* ManageHomeScreenViewController.swift */,
+				2D81887E2A71226A00894756 /* ManageHomeScreenViewModel.swift */,
+			);
+			path = ManageHomeScreen;
+			sourceTree = "<group>";
+		};
 		2D9B399D2907170300AE9FA1 /* HealthRecords */ = {
 			isa = PBXGroup;
 			children = (
@@ -3634,6 +3651,7 @@
 				3E6F936A2A27A82200EB82C5 /* Notifications */,
 				3E6831382940D74D00100402 /* Comments */,
 				79B9D00B27E2786800987D9F /* HomeScreen */,
+				2D8188792A710F0E00894756 /* ManageHomeScreen */,
 				3E5E6EC128D3B76100724EDD /* Communication message */,
 				3E7306DC28B5EDD7007FED05 /* Recommendations */,
 				298190C52773B4170062F55E /* Authentication */,
@@ -5180,6 +5198,7 @@
 				3E6F936D2A27A84C00EB82C5 /* NotificationsViewController.swift in Sources */,
 				3EDC0D0A2968928000603FED /* KVCAccessor.swift in Sources */,
 				3EDC0D1A2968932100603FED /* KVCReflectionMirror.swift in Sources */,
+				2D81887C2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */,
 				29F41297274CDEDA004927FF /* VisitedOnBoardingScreen.swift in Sources */,
 				3E6F937E2A27B06500EB82C5 /* StorageService+Notifications.swift in Sources */,
 				79218AE42755E14E0063004E /* FetchHealthRecordsViewController.swift in Sources */,
@@ -5244,6 +5263,7 @@
 				296519A5272995680002B778 /* AuthManager.swift in Sources */,
 				2978851F2795F16E00FF912D /* SettingsRowTableViewCell.swift in Sources */,
 				2DF665852A3111C60009D8F0 /* NoteViewController.swift in Sources */,
+				2D8188802A71226A00894756 /* ManageHomeScreenViewModel.swift in Sources */,
 				3E97A2992A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift in Sources */,
 				3E60A4012979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79218AD727557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
@@ -5579,6 +5599,7 @@
 				3E6F936E2A27A84C00EB82C5 /* NotificationsViewController.swift in Sources */,
 				3EDC0D0B2968928000603FED /* KVCAccessor.swift in Sources */,
 				3EDC0D1B2968932100603FED /* KVCReflectionMirror.swift in Sources */,
+				2D81887D2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */,
 				79218AF0275672120063004E /* StorageService+HealthRecords.swift in Sources */,
 				3E6F937F2A27B06500EB82C5 /* StorageService+Notifications.swift in Sources */,
 				3E5E6EBD28D278BD00724EDD /* CommunicationBannerTableViewCell.swift in Sources */,
@@ -5643,6 +5664,7 @@
 				79B1A0F12874CEBE009B3EFB /* ImmunizationAgent+CoreDataClass.swift in Sources */,
 				296519A6272995680002B778 /* AuthManager.swift in Sources */,
 				2DF665862A3111C60009D8F0 /* NoteViewController.swift in Sources */,
+				2D8188812A71226A00894756 /* ManageHomeScreenViewModel.swift in Sources */,
 				3E97A29A2A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift in Sources */,
 				3E60A4022979B70E00BB20BE /* MedicationService.swift in Sources */,
 				79218AD827557ED50063004E /* TextListViewTableViewCell.swift in Sources */,
@@ -5955,6 +5977,7 @@
 				3E6F936C2A27A84C00EB82C5 /* NotificationsViewController.swift in Sources */,
 				3E78AECD28F9909500C66E28 /* AddDependentViewController.swift in Sources */,
 				3EDC0D092968928000603FED /* KVCAccessor.swift in Sources */,
+				2D81887B2A710F2A00894756 /* ManageHomeScreenViewController.swift in Sources */,
 				3EDC0D192968932100603FED /* KVCReflectionMirror.swift in Sources */,
 				3E6F937D2A27B06500EB82C5 /* StorageService+Notifications.swift in Sources */,
 				798005BD2852C66E006E390F /* StorageService+HealthRecords.swift in Sources */,
@@ -6019,6 +6042,7 @@
 				798005DE2852C66E006E390F /* UIAccessibility+EXT.swift in Sources */,
 				798005DF2852C66E006E390F /* AuthenticatedTestResultsResponseModel.swift in Sources */,
 				2DF665842A3111C60009D8F0 /* NoteViewController.swift in Sources */,
+				2D81887F2A71226A00894756 /* ManageHomeScreenViewModel.swift in Sources */,
 				3E97A2982A49FCC8004F3DD7 /* ImmunizationScheduleTableViewCell.swift in Sources */,
 				798005E02852C66E006E390F /* ProtectiveWordPromptViewController.swift in Sources */,
 				3E60A4002979B70E00BB20BE /* MedicationService.swift in Sources */,
