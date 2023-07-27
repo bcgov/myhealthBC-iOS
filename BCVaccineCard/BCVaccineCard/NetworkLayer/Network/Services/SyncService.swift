@@ -45,6 +45,7 @@ struct SyncService {
             let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
             commentsService.submitUnsyncedComments {
                 // Remove authenticated patient records
+                // TODO: Figure out how to keep local notes here....
                 StorageService.shared.deleteAuthenticatedPatient()
                 // Fetch
                 fetchData(protectiveWord: authManager.protectiveWord, showToast: showToast, completion: { result in
@@ -60,6 +61,7 @@ struct SyncService {
         let dependentService = DependentService(network: network, authManager: authManager, configService: configService)
         let recordsService = HealthRecordsService(network: network, authManager: authManager, configService: configService)
         let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
+        let notificationService = NotificationService(network: network, authManager: authManager, configService: configService)
         if showToast {
             network.showToast(message: "Retrieving records")
         }
@@ -78,6 +80,15 @@ struct SyncService {
                     hadFailures = true
                 }
                 Logger.log(string: "fetched donor status: \(status != nil)", type: .Network)
+                group.leave()
+            }
+            
+            group.enter()
+            patientService.fetchAndStoreDiagnosticImaging(for: patient) { imaging in
+                if imaging == nil {
+                    hadFailures = true
+                }
+                Logger.log(string: "fetched diagnostic imaging: \(imaging?.count)", type: .Network)
                 group.leave()
             }
             
@@ -106,6 +117,12 @@ struct SyncService {
                 }
                 Logger.log(string: "fetched \(records.count) records", type: .Network)
             }
+            
+//            group.enter()
+//            notificationService.fetchAndStore(for: patient, loadingStyle: .SyncingRecords) { notifications in
+//                Logger.log(string: "fetched \(notifications.count) notification", type: .Network)
+//                group.leave()
+//            }
             
             group.notify(queue: .main) {
                 let message: String = !hadFailures ? "Records retrieved" : .fetchRecordError

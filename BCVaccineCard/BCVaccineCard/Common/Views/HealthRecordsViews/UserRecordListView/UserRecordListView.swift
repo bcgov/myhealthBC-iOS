@@ -95,15 +95,24 @@ class UserRecordListView: UIView {
             statusToInclude = record.mainRecord?.listStatus
         case .clinicalDocument:
             statusToInclude = record.mainRecord?.listStatus
+        case .diagnosticImaging:
+            statusToInclude = record.mainRecord?.listStatus
+        case .note:
+            statusToInclude = record.mainRecord?.listStatus
         }
         
         switch record.type {
         case .hospitalVisit, .clinicalDocument:
             // records that dont show date
             recordTypeSubtitleLabel.text = statusToInclude
-        case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization:
+        case .covidImmunizationRecord, .covidTestResultRecord, .medication, .healthVisit, .specialAuthorityDrug, .laboratoryOrder, .immunization, .diagnosticImaging, .note:
             // records that show date
-            let text = statusToInclude != nil ? "\(statusToInclude!) • " : ""
+            var text: String
+            if let statusToInclude = statusToInclude, statusToInclude.trimWhiteSpacesAndNewLines.count > 0 {
+                text = "\(statusToInclude) • "
+            } else {
+                text = ""
+            }
             recordTypeSubtitleLabel.text = "\(text)\(record.mainRecord?.date ?? "")"
         }
         setupAccessibility()

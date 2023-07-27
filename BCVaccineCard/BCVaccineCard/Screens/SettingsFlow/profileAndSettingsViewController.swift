@@ -58,7 +58,7 @@ class ProfileAndSettingsViewController: BaseViewController {
     // MARK: Routing
     func showProfile() {
         guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-        let vm = ProfileDetailsViewController.ViewModel(patient: patient)
+        let vm = ProfileDetailsViewController.ViewModel(type: .PatientProfile(patient: patient))
         show(route: .Profile, withNavigation: true, viewModel: vm)
     }
     

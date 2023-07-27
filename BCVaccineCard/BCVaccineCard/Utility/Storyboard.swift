@@ -21,4 +21,5 @@ enum Storyboard {
     static var dependents: UIStoryboard { return UIStoryboard(name: "Dependents", bundle: nil) }
     static var comments: UIStoryboard { return UIStoryboard(name: "Comments", bundle: nil) }
     static var services: UIStoryboard { return UIStoryboard(name: "Services", bundle: nil) }
+    static var notifications: UIStoryboard { return UIStoryboard(name: "Notifications", bundle: nil) }
 }

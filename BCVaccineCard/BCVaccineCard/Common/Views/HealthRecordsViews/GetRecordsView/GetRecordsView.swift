@@ -19,6 +19,8 @@ class GetRecordsView: UIView {
         case SpecialAuthority
         case hospitalVisit
         case clinicalDocument
+        case diagnosticImaging
+        case note
         
         var getTitle: String {
             switch self {
@@ -37,6 +39,10 @@ class GetRecordsView: UIView {
             case .hospitalVisit:
                 return ""
             case .clinicalDocument:
+                return ""
+            case .diagnosticImaging:
+                return ""
+            case .note:
                 return ""
             }
         }
@@ -59,6 +65,10 @@ class GetRecordsView: UIView {
                 return ""
             case .clinicalDocument:
                 return ""
+            case .diagnosticImaging:
+                return ""
+            case .note:
+                return ""
             }
         }
         
@@ -78,6 +88,10 @@ class GetRecordsView: UIView {
             case .hospitalVisit:
                 return nil
             case .clinicalDocument:
+                return nil
+            case .diagnosticImaging:
+                return nil
+            case .note:
                 return nil
             }
         }

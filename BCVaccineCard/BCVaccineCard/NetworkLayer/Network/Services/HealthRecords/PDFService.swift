@@ -35,7 +35,7 @@ struct PDFService {
             return completion(nil)
         }
         network.addLoader(message: .empty, caller: .PDFService_DonorStatus)
-        fetchPDFV2(fileID: fileId, type: .OrganDonor, isCovid: false, patient: patient, completion: {response in
+        fetchPDFV2(fileID: fileId, type: .OrganDonor, isCovid: false, patient: patient, completion: {response, _ in
             network.removeLoader(caller: .PDFService_DonorStatus)
             guard let response = response,
                   let content = response.content
@@ -45,6 +45,24 @@ struct PDFService {
             let uint = content.map({UInt8($0)})
             let data = Data(uint)
             return completion(data)
+        })
+    }
+    
+    public func fetchPDFDiagnostic(diagnosticImaging: DiagnosticImaging, patient: Patient, completion: @escaping (Data?, Bool?)->Void) {
+        guard let fileID = diagnosticImaging.fileID else {
+            return completion(nil, nil)
+        }
+        network.addLoader(message: .empty, caller: .PDFService_DiagnosticImaging)
+        fetchPDFV2(fileID: fileID, type: .DiagnosticImaging, isCovid: false, patient: patient, completion: {response, online in
+            network.removeLoader(caller: .PDFService_DiagnosticImaging)
+            guard let response = response,
+                  let content = response.content
+            else {
+                return completion(nil, online)
+            }
+            let uint = content.map({UInt8($0)})
+            let data = Data(uint)
+            return completion(data, online)
         })
     }
     
@@ -60,6 +78,8 @@ struct PDFService {
             return labOrder.labPdfId
         case .covidTestResultRecord(model: let covidTestOrder):
             return covidTestOrder.orderId
+        case .diagnosticImaging(model: let diagnosticImaging):
+            return diagnosticImaging.fileID
         default:
             return nil
         }
@@ -74,6 +94,8 @@ struct PDFService {
         case .Covid19:
             return endpoints.labTestPDF(base: baseURL, reportID: fileID)
         case .OrganDonor:
+            return endpoints.patientDataPDF(base: baseURL, hdid: hdid, fileID: fileID)
+        case .DiagnosticImaging:
             return endpoints.patientDataPDF(base: baseURL, hdid: hdid, fileID: fileID)
         }
     }
@@ -116,11 +138,14 @@ extension PDFService {
         }
     }
     
-    private func fetchPDFV2(fileID: String, type: FetchType, isCovid: Bool, patient: Patient, completion: @escaping(_ response: PDFResponseV2?) -> Void) {
+    private func fetchPDFV2(fileID: String, type: FetchType, isCovid: Bool, patient: Patient, completion: @escaping(_ response: PDFResponseV2?, _ online: Bool?) -> Void) {
         guard let token = authManager.authToken,
               let hdid = patient.hdid,
               NetworkConnection.shared.hasConnection
-        else { return completion(nil)}
+        else {
+            let online = NetworkConnection.shared.hasConnection ? nil : false
+            return completion(nil, online)
+        }
         
         configService.fetchConfig { response in
             guard let config = response,
@@ -128,7 +153,7 @@ extension PDFService {
                   let baseURLString = config.baseURL,
                   let baseURL = URL(string: baseURLString)
             else {
-                return completion(nil)
+                return completion(nil, false)
             }
             
             let url = getURL(type: type, baseURL: baseURL, hdid: hdid, fileID: fileID)
@@ -139,7 +164,7 @@ extension PDFService {
             let parameters = AuthenticatedPDFRequestObject(hdid: hdid, isCovid19: "false", apiVersion: "2")
             let requestModel = NetworkRequest<AuthenticatedPDFRequestObject, PDFResponseV2>(url: url, type: .Get, parameters: parameters, encoder: .urlEncoder, headers: headers)
             { result in
-                return completion(result)
+                return completion(result, true)
             }
             network.request(with: requestModel)
         }
@@ -151,6 +176,7 @@ extension PDFService {
         case LabOrder
         case Covid19
         case OrganDonor
+        case DiagnosticImaging
     }
 }
 
@@ -163,6 +189,8 @@ extension HealthRecordsDetailDataSource {
             return .LabOrder
         case .covidTestResultRecord:
             return .Covid19
+        case .diagnosticImaging:
+            return .DiagnosticImaging
         default:
             return nil
         }

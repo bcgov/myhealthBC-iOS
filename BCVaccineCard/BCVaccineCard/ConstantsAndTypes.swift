@@ -19,7 +19,8 @@ struct HealthRecordConstants {
             .healthVisit,
             .specialAuthorityDrug,
             .hospitalVisit,
-            .clinicalDocument
+            .clinicalDocument,
+            .diagnosticImaging,
         ]
     }
     
@@ -36,6 +37,15 @@ struct HealthRecordConstants {
     // ENABLE AND DISABLE SEARCH RECORDS
     static var searchRecordsEnabled: Bool {
         return true
+    }
+    
+    // ENABLE AND DISABLE PROFILE DETAILS SCREEN
+    static var profileDetailsEnabled: Bool {
+        return true
+    }
+    
+    static var notesEnabled: Bool {
+        return false
     }
 }
 
@@ -61,11 +71,13 @@ extension HealthRecordConstants {
         case specialAuthorityDrug
         case hospitalVisit
         case clinicalDocument
+        case diagnosticImaging
+        case notes
     }
 }
 
 extension StorageService {
-    enum healthRecordType: CaseIterable {
+    enum HealthRecordType: CaseIterable {
         case CovidTest
         case VaccineCard
         case Prescription
@@ -76,6 +88,8 @@ extension StorageService {
         case SpecialAuthorityDrug
         case HospitalVisit
         case ClinicalDocument
+        case DiagnosticImaging
+        case Notes
     }
 }
 
@@ -100,10 +114,14 @@ extension HealthRecordConstants.RecordType {
             return .HospitalVisits
         case .clinicalDocument:
             return .ClinicalDocuments
+        case .diagnosticImaging:
+            return .DiagnosticImaging
+        case .notes:
+            return .Notes
         }
     }
     
-    func toStorageType() -> StorageService.healthRecordType? {
+    func toStorageType() -> StorageService.HealthRecordType? {
         switch self {
         case .covidImmunizationRecord:
             return .Immunization
@@ -123,6 +141,10 @@ extension HealthRecordConstants.RecordType {
             return .HospitalVisit
         case .clinicalDocument:
             return .ClinicalDocument
+        case .diagnosticImaging:
+            return .DiagnosticImaging
+        case .notes:
+            return .Notes
         }
     }
 }
@@ -137,6 +159,8 @@ struct RecordsFilter {
         case Immunizations = "Immunizations"
         case SpecialAuthorityDrugs = "Special Authority"
         case HospitalVisits = "Hospital Visits"
+        case DiagnosticImaging = "Imaging reports"
+        case Notes = "Notes"
     }
     
     var fromDate: Date?
@@ -145,6 +169,46 @@ struct RecordsFilter {
     
     var exists: Bool {
         return fromDate != nil || toDate != nil || !recordTypes.isEmpty
+    }
+}
+
+enum NotificationCategory: String {
+    case ClinicalDocuments = "ClinicalDocument"
+    case Immunizations = "Immunization"
+    case SpecialAuthorityDrugs = "SpecialAuthority"
+    case LabTests = "Laboratory"
+    case Notes = "MyNote"
+    case Covid = "COVID19Laboratory"
+    case HeathVisits = "HealthVisit"
+    case Medication = "Medications"
+    case HospitalVisits = "HospitalVisit"
+    case DiagnosticImaging = "DiagnosticImaging"
+}
+
+extension NotificationCategory {
+    func toLocalFilter() -> RecordsFilter.RecordType {
+        switch self {
+        case .ClinicalDocuments:
+            return RecordsFilter.RecordType.ClinicalDocuments
+        case .Immunizations:
+            return RecordsFilter.RecordType.Immunizations
+        case .SpecialAuthorityDrugs:
+            return RecordsFilter.RecordType.SpecialAuthorityDrugs
+        case .LabTests:
+            return RecordsFilter.RecordType.LabTests
+        case .Notes:
+            return RecordsFilter.RecordType.Notes
+        case .Covid:
+            return RecordsFilter.RecordType.Covid
+        case .HeathVisits:
+            return RecordsFilter.RecordType.HeathVisits
+        case .Medication:
+            return RecordsFilter.RecordType.Medication
+        case .HospitalVisits:
+            return RecordsFilter.RecordType.HospitalVisits
+        case .DiagnosticImaging:
+            return RecordsFilter.RecordType.DiagnosticImaging
+        }
     }
 }
 

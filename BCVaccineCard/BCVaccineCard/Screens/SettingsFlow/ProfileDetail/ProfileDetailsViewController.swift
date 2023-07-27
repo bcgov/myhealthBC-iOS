@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ProfileDetailsViewController: BaseViewController {
+class ProfileDetailsViewController: BaseDependentViewController {
     
     enum TableRow {
         case headerView
@@ -16,6 +16,10 @@ class ProfileDetailsViewController: BaseViewController {
         case phn
         case physicalAddress
         case mailingAddress
+        case communicationPreferences
+        case dateOfBirth
+        case dependentDelegateCount(count: Int)
+        case removeDependentButton
         
         var getProfileDetailsScreenType: ProfileDetailsTableViewCell.ViewType? {
             switch self {
@@ -25,6 +29,10 @@ class ProfileDetailsViewController: BaseViewController {
             case .phn: return .phn
             case .physicalAddress: return .physicalAddress
             case .mailingAddress: return .mailingAddress
+            case .communicationPreferences: return nil
+            case .dateOfBirth: return .dob
+            case .dependentDelegateCount: return nil
+            case .removeDependentButton: return nil
             }
         }
         
@@ -39,7 +47,7 @@ class ProfileDetailsViewController: BaseViewController {
                 cell.layoutMargins = UIEdgeInsets.zero
                 cell.configureForProfileDetailsScreen(name: name)
                 return cell
-            case .firstName, .lastName, .phn, .physicalAddress, .mailingAddress:
+            case .firstName, .lastName, .phn, .physicalAddress, .mailingAddress, .dateOfBirth:
                 guard let type = self.getProfileDetailsScreenType, let cell = tableView.dequeueReusableCell(withIdentifier: ProfileDetailsTableViewCell.getName, for: indexPath) as? ProfileDetailsTableViewCell else {
                     return ProfileDetailsTableViewCell()
                 }
@@ -47,6 +55,29 @@ class ProfileDetailsViewController: BaseViewController {
                 cell.separatorInset = UIEdgeInsets.zero
                 cell.layoutMargins = UIEdgeInsets.zero
                 cell.configure(data: data, type: type, delegateOwner: delegateOwner)
+                return cell
+            case .communicationPreferences:
+                guard let patient = StorageService.shared.fetchAuthenticatedPatient(), let cell = tableView.dequeueReusableCell(withIdentifier: CommunicationPreferencesTableViewCell.getName, for: indexPath) as? CommunicationPreferencesTableViewCell else {
+                    return CommunicationPreferencesTableViewCell()
+                }
+                cell.preservesSuperviewLayoutMargins = false
+                cell.separatorInset = UIEdgeInsets.zero
+                cell.layoutMargins = UIEdgeInsets.zero
+                cell.configure(patient: patient)
+                return cell
+            case .dependentDelegateCount(let count):
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: DependentDelegateCountTableViewCell.getName, for: indexPath) as? DependentDelegateCountTableViewCell else { return DependentDelegateCountTableViewCell() }
+                cell.preservesSuperviewLayoutMargins = false
+                cell.separatorInset = UIEdgeInsets.zero
+                cell.layoutMargins = UIEdgeInsets.zero
+                cell.configure(delegateCount: count)
+                return cell
+            case .removeDependentButton:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: RemoveDependentTableViewCell.getName, for: indexPath) as? RemoveDependentTableViewCell else { return RemoveDependentTableViewCell() }
+                cell.preservesSuperviewLayoutMargins = false
+                cell.separatorInset = UIEdgeInsets.zero
+                cell.layoutMargins = UIEdgeInsets.zero
+                cell.configure(delegateOwner: delegateOwner)
                 return cell
             }
         }
@@ -59,7 +90,11 @@ class ProfileDetailsViewController: BaseViewController {
             vc.phn = viewModel.phn
             vc.physicalAddress = viewModel.physicalAddress
             vc.mailingAddress = viewModel.mailingAddress
+            vc.dob = viewModel.dob
+            vc.delegateCount = viewModel.delegateCount
             vc.patient = viewModel.patient
+            vc.dependent = viewModel.dependent
+            vc.type = viewModel.type
             return vc
         }
         return ProfileDetailsViewController()
@@ -72,24 +107,40 @@ class ProfileDetailsViewController: BaseViewController {
     
     // MARK: Variables
     private var patient: Patient?
+    private var dependent: Dependent?
     private var firstName: String?
     private var lastName: String?
     private var phn: String?
     private var physicalAddress: String?
     private var mailingAddress: String?
+    private var dob: String?
+    private var delegateCount: Int?
+    private var type: ViewModel.ScreenType!
     
     private var dataSource: [DataSource] = []
     
     // MARK: Outlets
     @IBOutlet weak var tableView: UITableView!
+    
+    var profileService: PatientService?
 
     
     // MARK: Class funcs
     override func viewDidLoad() {
         super.viewDidLoad()
-        initializeDataSource()
+        profileService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+        initializeDataSource(for: self.type)
         navSetup()
         setupTableView()
+        guard let type = self.type else { return }
+        switch type {
+        case .PatientProfile:
+            if AppDelegate.sharedInstance?.cachedCommunicationPreferences == nil {
+                self.fetchPatientCommunicationDetails()
+            }
+        default: return
+        }
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -97,14 +148,24 @@ class ProfileDetailsViewController: BaseViewController {
 //        self.apiClient = nil
     }
     
-    private func initializeDataSource() {
+    private func initializeDataSource(for type: ViewModel.ScreenType) {
         let headerName = (firstName ?? "FirstName") + " " + (lastName ?? "LastName") //Note: Not formatting as per designs yet - consistency question
         dataSource.append(DataSource(type: .headerView, text: headerName))
         dataSource.append(DataSource(type: .firstName, text: firstName))
         dataSource.append(DataSource(type: .lastName, text: lastName))
         dataSource.append(DataSource(type: .phn, text: phn))
-        dataSource.append(DataSource(type: .physicalAddress, text: physicalAddress))
-        dataSource.append(DataSource(type: .mailingAddress, text: mailingAddress))
+        switch type {
+        case .PatientProfile:
+            dataSource.append(DataSource(type: .physicalAddress, text: physicalAddress))
+            dataSource.append(DataSource(type: .mailingAddress, text: mailingAddress))
+            dataSource.append(DataSource(type: .communicationPreferences, text: nil))
+        case .DependentProfile:
+            dataSource.append(DataSource(type: .dateOfBirth, text: dob))
+            let count = Int(self.dependent?.totalDelegateCount ?? 0)
+            dataSource.append(DataSource(type: .dependentDelegateCount(count: count), text: nil))
+            dataSource.append(DataSource(type: .removeDependentButton, text: nil))
+
+        }
     }
 }
 
@@ -126,6 +187,9 @@ extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSour
     private func setupTableView() {
         tableView.register(UINib.init(nibName: SettingsProfileTableViewCell.getName, bundle: .main), forCellReuseIdentifier: SettingsProfileTableViewCell.getName)
         tableView.register(UINib.init(nibName: ProfileDetailsTableViewCell.getName, bundle: .main), forCellReuseIdentifier: ProfileDetailsTableViewCell.getName)
+        tableView.register(UINib.init(nibName: CommunicationPreferencesTableViewCell.getName, bundle: .main), forCellReuseIdentifier: CommunicationPreferencesTableViewCell.getName)
+        tableView.register(UINib.init(nibName: DependentDelegateCountTableViewCell.getName, bundle: .main), forCellReuseIdentifier: DependentDelegateCountTableViewCell.getName)
+        tableView.register(UINib.init(nibName: RemoveDependentTableViewCell.getName, bundle: .main), forCellReuseIdentifier: RemoveDependentTableViewCell.getName)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.delegate = self
         tableView.dataSource = self
@@ -143,17 +207,33 @@ extension ProfileDetailsViewController: UITableViewDelegate, UITableViewDataSour
     }
 }
 
+// MARK: Remove dependent logic here
+extension ProfileDetailsViewController: RemoveDependentTableViewCellDelegate {
+    func removeDependentButtonTapped() {
+        guard let dependent = self.dependent else {return}
+        self.delete(dependent: dependent) { [weak self] confirmed in
+            guard confirmed else {return}
+            self?.popBack(toControllerType: DependentsHomeViewController.self)
+        }
+    }
+
+}
+
+
 
 // MARK: Address help button delegate
 extension ProfileDetailsViewController: ProfileDetailsTableViewCellDelegate {
     func addressHelpButtonTapped() {
-        let urlString = "https://www.addresschange.gov.bc.ca/"
-        let vc = UpdateAddressViewController.constructUpdateAddressViewController(delegateOwner: self, urlString: urlString)
-        self.navigationController?.pushViewController(vc, animated: true)
+//        let urlString = "https://www.addresschange.gov.bc.ca/"
+//        let vc = UpdateAddressViewController.constructUpdateAddressViewController(delegateOwner: self, urlString: urlString)
+//        self.navigationController?.pushViewController(vc, animated: true)
+        if let url = URL(string: "https://www.addresschange.gov.bc.ca/"), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
     }
 }
 
-// MARK: For address change callback
+// MARK: For address change callback - Not using currently
 extension ProfileDetailsViewController: UpdateAddressViewControllerDelegate {
     func webViewClosed() {
         self.fetchPatientDetails()
@@ -163,19 +243,18 @@ extension ProfileDetailsViewController: UpdateAddressViewControllerDelegate {
 // MARK: Fetch Patient Details after address has been updated
 extension ProfileDetailsViewController {
     private func fetchPatientDetails() {
-        let profileService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
-        profileService.fetchAndStoreDetails { patient in
-            // TODO:
-            //            self.physicalAddress =
-            //            self.mailingAddress =
+        profileService?.fetchAndStoreDetails { patient in
+            self.physicalAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.physicalAddress?.streetLines, city: patient?.physicalAddress?.city, state: patient?.physicalAddress?.state, postalCode: patient?.physicalAddress?.postalCode, country: patient?.physicalAddress?.country).getAddressString
+            self.mailingAddress = AuthenticatedPatientDetailsResponseObject.Address(streetLines: patient?.postalAddress?.streetLines, city: patient?.postalAddress?.city, state: patient?.postalAddress?.state, postalCode: patient?.postalAddress?.postalCode, country: patient?.postalAddress?.country).getAddressString
             self.dataSource = []
-            self.initializeDataSource()
+            self.initializeDataSource(for: self.type)
             self.tableView.reloadData()
             self.tableView.endLoadingIndicator()
         }
     }
 }
-    
+
+
     
 //    private func initializePatientDetails(authCredentials: AuthenticationRequestObject,
 //                                          result: Result<AuthenticatedPatientDetailsResponseObject, ResultError>) {
@@ -209,3 +288,61 @@ extension ProfileDetailsViewController {
 //        self.tableView.endLoadingIndicator()
 //    }
 
+// MARK: Fetch email and phone details for patient, then cache the values
+extension ProfileDetailsViewController {
+    private func fetchPatientCommunicationDetails() {
+        self.tableView.startLoadingIndicator()
+        profileService?.fetchProfile(completion: { result in
+            self.tableView.endLoadingIndicator()
+            self.updatePatientDetails(result: result)
+        })
+    }
+    
+    
+    private func updatePatientDetails(result: AuthenticatedUserProfileResponseObject?) {
+        if let result = result {
+            self.updatePatient(result: result)
+        } else {
+            self.alert(title: "Error", message: "Sorry, there was an error fetching your communication preferences. Please try again later")
+        }
+    }
+    
+    private func updatePatient(result: AuthenticatedUserProfileResponseObject) {
+        guard let existingPatient = StorageService.shared.fetchAuthenticatedPatient(), let phn = existingPatient.phn, let name = existingPatient.name, let birthday = existingPatient.birthday else {
+            self.tableView.endLoadingIndicator()
+            self.alert(title: "Error", message: "Sorry, there was an error fetching your communication preferences. Please try again later")
+            return
+        }
+        let email = result.resourcePayload?.email
+        let emailVerified = result.resourcePayload?.isEmailVerified ?? false
+        let phone = result.resourcePayload?.smsNumber
+        let phoneVerified = result.resourcePayload?.isSMSNumberVerified ?? false
+        let patient = StorageService.shared.updatePatient(phn: phn,
+                                                          name: name,
+                                                          firstName: existingPatient.firstName,
+                                                          lastName: existingPatient.lastName,
+                                                          gender: existingPatient.gender,
+                                                          birthday: birthday,
+                                                          physicalAddress: existingPatient.physicalAddress,
+                                                          mailingAddress: existingPatient.postalAddress,
+                                                          email: email,
+                                                          phone: phone,
+                                                          emailVerified: emailVerified,
+                                                          phoneVerified: phoneVerified,
+                                                          hdid: AuthManager().hdid,
+                                                          authenticated: true)
+        AppDelegate.sharedInstance?.cachedCommunicationPreferences = CommunicationPreferences(email: email, emailVerified: emailVerified, phone: phone, phoneVerified: phoneVerified)
+        
+        self.dataSource = []
+        initializeDataSource(for: self.type)
+        self.tableView.reloadData()
+        self.tableView.endLoadingIndicator()
+    }
+}
+
+struct CommunicationPreferences {
+    let email: String?
+    let emailVerified: Bool
+    let phone: String?
+    let phoneVerified: Bool
+}

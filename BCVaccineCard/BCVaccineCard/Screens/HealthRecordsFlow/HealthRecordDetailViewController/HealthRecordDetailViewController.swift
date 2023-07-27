@@ -27,7 +27,8 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     private var authenticatedRecord: Bool!
     private var userNumberHealthRecords: Int!
     private var patient: Patient?
-    private var pdfData: String?
+    private var pdfDataString: String?
+    private var pdfData: Data?
     private var reportId: String?
     private var type: LabTestType?
     
@@ -175,6 +176,10 @@ extension HealthRecordDetailViewController {
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             case .clinicalDocument:
                 Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
+            case .diagnosticImaging:
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
+            case .note:
+                Logger.log(string: "Not able to delete these records currently, as they are auth-only records", type: .general)
             }
             if self.userNumberHealthRecords > 1 {
                 self.navigationController?.popViewController(animated: true)
@@ -205,8 +210,13 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
     
     func showPDF() {
         // Cached
-        if let pdf = self.pdfData {
+        if let pdf = self.pdfDataString {
             self.showPDFDocument(pdf: pdf, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+            return
+        }
+        
+        if let pdfDat = self.pdfData {
+            self.showPDFDocument(pdf: pdfDat, navTitle: dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
             return
         }
         // No internet
@@ -216,15 +226,30 @@ extension HealthRecordDetailViewController: AppStyleButtonDelegate {
         }
         // Fetch
         guard let patient = self.patient else {return}
-        PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDF(record: dataSource, patient: patient, completion: { [weak self] result in
-            guard let `self` = self else {return}
-            if let pdf = result {
-                self.pdfData = pdf
-                self.showPDFDocument(pdf: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
-            } else {
-                self.showPDFUnavailableAlert()
-            }
-        })
+        switch dataSource.type {
+        case .diagnosticImaging(model: let model):
+            PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDFDiagnostic(diagnosticImaging: model, patient: patient, completion: { [weak self] result, online in
+                guard let `self` = self else {return}
+                if let pdf = result {
+                    self.pdfData = pdf
+                    self.showPDFDocument(pdf: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                } else if online == false {
+                    // Show nothing, as there will be a toast
+                } else {
+                    self.showPDFUnavailableAlert()
+                }
+            })
+        default:
+            PDFService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchPDF(record: dataSource, patient: patient, completion: { [weak self] result in
+                guard let `self` = self else {return}
+                if let pdf = result {
+                    self.pdfDataString = pdf
+                    self.showPDFDocument(pdf: pdf, navTitle: self.dataSource.title, documentVCDelegate: self, navDelegate: self.navDelegate)
+                } else {
+                    self.showPDFUnavailableAlert()
+                }
+            })
+        }
     }
 }
 

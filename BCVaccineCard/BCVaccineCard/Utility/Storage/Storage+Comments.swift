@@ -152,6 +152,11 @@ extension StorageService: StorageCommentManager {
                 hospitalVisit.addToComments(comment)
             case .ClinicalDocument(let clinicalDoc):
                 clinicalDoc.addToComments(comment)
+            case .DiagnosticImaging(let diagnosticImaging):
+                // TODO: Update this to add comments to diagnostic imaging
+                break
+            case .Note(let note):
+                break
             }
         }
         do {
@@ -365,6 +370,11 @@ extension StorageService: StorageCommentManager {
             case .ClinicalDocument(let clinicalDoc):
                 clinicalDoc.removeFromComments(oldComment)
                 clinicalDoc.addToComments(newComment)
+            case .DiagnosticImaging(let diagnostiImaging):
+                // TODO: Update this to add diagnostic imaging to comments
+                break
+            case .Note(let note):
+                break
             }
         }
         do {
@@ -402,6 +412,11 @@ extension StorageService: StorageCommentManager {
                 hospitalVisit.removeFromComments(comment)
             case .ClinicalDocument(let clinicalDoc):
                 clinicalDoc.removeFromComments(comment)
+            case .DiagnosticImaging(let diagnosticImaging):
+                // TODO: Change this to enable comments for diagnostic imaging
+                break
+            case .Note(let note):
+                break
             }
         }
         if isHardDelete {

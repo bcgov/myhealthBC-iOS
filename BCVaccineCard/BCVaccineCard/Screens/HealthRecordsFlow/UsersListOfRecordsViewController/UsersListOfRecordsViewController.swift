@@ -19,7 +19,11 @@ class UsersListOfRecordsViewController: BaseViewController {
         return UsersListOfRecordsViewController()
     }
     
+    // TODO: Make sure this is added inside parentContainerStackView
+    @IBOutlet weak private var listOfRecordsSegmentedView: SegmentedView!
+    
     @IBOutlet weak private var noRecordsFoundView: UIView!
+    @IBOutlet weak private var noRecordsFoundImageView: UIImageView!
     @IBOutlet weak private var noRecordsFoundTitle: UILabel!
     @IBOutlet weak private var noRecordsFoundSubTitle: UILabel!
     
@@ -29,6 +33,9 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBOutlet weak private var recordsSearchBarView: RecordsSearchBarView!
     @IBOutlet weak private var tableView: UITableView!
     
+    @IBOutlet weak private var createNoteButton: UIButton!
+
+    
     @IBOutlet weak private var parentContainerStackView: UIStackView!
     
     private var refreshDebounceTimer: Timer? = nil
@@ -36,6 +43,8 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var viewModel: ViewModel?
     
     private let refreshControl = UIRefreshControl()
+    
+    private var currentSegment: SegmentType = .Timeline
     
     private var dataSource: [HealthRecordsDetailDataSource] = []
     
@@ -75,6 +84,7 @@ class UsersListOfRecordsViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupSegmentedControl()
         setupRefreshControl()
         self.tableView.keyboardDismissMode = .interactive
         setObservables()
@@ -101,6 +111,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        applyNotificationFilterIfNeeded()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -115,11 +126,31 @@ class UsersListOfRecordsViewController: BaseViewController {
         }
     }
     
+    private func applyNotificationFilterIfNeeded() {
+        guard let category = SessionStorage.notificationCategoryFilter
+        else {
+            return
+        }
+        let filterType = category.toLocalFilter()
+        
+        SessionStorage.notificationCategoryFilter = nil
+        self.selected(filter: RecordsFilter(recordTypes: [filterType]))
+    }
+    
     private func setupRefreshControl() {
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
         tableView.isScrollEnabled = true
         tableView.alwaysBounceVertical = true
         tableView.addSubview(refreshControl)
+    }
+    
+    private func setupSegmentedControl() {
+        if HealthRecordConstants.notesEnabled, viewModel?.userType != .Dependent {
+            listOfRecordsSegmentedView.isHidden = false
+            listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
+        } else {
+            listOfRecordsSegmentedView.isHidden = true
+        }
     }
     
     @objc private func refresh(_ sender: AnyObject) {
@@ -176,7 +207,16 @@ class UsersListOfRecordsViewController: BaseViewController {
         noRecordsFoundTitle.textColor = AppColours.appBlue
         noRecordsFoundSubTitle.textColor = AppColours.textGray
         noRecordsFoundView.isHidden = true
+        createNoteButton.isHidden = true
         fetchDataSource()
+        if currentSegment == .Notes {
+            // TODO: Update once we have folder structure built
+            let patientRecords = fetchPatientRecords(for: .Notes)
+            showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: self.searchText)
+            if !patientRecords.isEmpty {
+                show(records: patientRecords, searchText: searchText)
+            }
+        }
     }
     
     private func updatePatientIfNecessary() {
@@ -188,8 +228,34 @@ class UsersListOfRecordsViewController: BaseViewController {
     @IBAction func removeFilters(_ sender: Any) {
         currentFilter = nil
         hideSelectedFilters()
-        let patientRecords = fetchPatientRecords()
+        let patientRecords = fetchPatientRecords(for: currentSegment)
         show(records: patientRecords, searchText: searchText)
+    }
+    
+    @IBAction private func createNoteButtonTapped(_ sender: UIButton) {
+        //TODO: Add to show route with proper ViewModel
+        let vc = NoteViewController.construct(for: .AddNote, with: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: Segmented Control Delegate
+extension UsersListOfRecordsViewController: SegmentedViewDelegate {
+    func segmentSelected(type: SegmentType) {
+        currentSegment = type
+        var patientRecords = fetchPatientRecords(for: currentSegment)
+        if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
+            patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
+        }
+        switch type {
+        case .Timeline:
+            showTimelineViews(patientRecordsEmpty: patientRecords.isEmpty, searchText: searchText)
+            show(records: patientRecords, filter: currentFilter, searchText: searchText)
+        case .Notes:
+            // TODO: Will need to have some sort of check here, basically just fetch records and filter for notes - for now, just show empty state
+            showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: searchText)
+            show(records: patientRecords, searchText: searchText)
+        }
     }
 }
 
@@ -287,8 +353,9 @@ extension UsersListOfRecordsViewController {
         guard let dependent = viewModel?.patient?.dependencyInfo else {
             return
         }
-        let vm = DependentInfoViewController.ViewModel(dependent: dependent)
-        show(route: .DependentInfo, withNavigation: true, viewModel: vm)
+        showDependentProfile(dependent: dependent)
+//        let vm = DependentInfoViewController.ViewModel(dependent: dependent)
+//        show(route: .DependentInfo, withNavigation: true, viewModel: vm)
     }
     
     @objc private func doneButton() {
@@ -298,6 +365,14 @@ extension UsersListOfRecordsViewController {
     @objc private func editButton() {
         tableView.isEditing = false
         inEditMode = true
+    }
+}
+
+// MARK: Show Dependent Info
+extension UsersListOfRecordsViewController {
+    func showDependentProfile(dependent: Dependent) {
+        let vm = ProfileDetailsViewController.ViewModel(type: .DependentProfile(dependent: dependent))
+        show(route: .Profile, withNavigation: true, viewModel: vm)
     }
 }
 
@@ -337,7 +412,7 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
     }
     
     func searchButtonTapped(text: String) {
-        let patientRecords = fetchPatientRecords()
+        let patientRecords = fetchPatientRecords(for: currentSegment)
         self.recordsSearchBarView.endEditing(true)
         show(records: patientRecords, filter: currentFilter, searchText: searchText)
     }
@@ -345,7 +420,7 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
     func textDidChange(text: String?) {
         searchText = text
         if searchText == nil || searchText?.trimWhiteSpacesAndNewLines.count == 0 {
-            let patientRecords = fetchPatientRecords()
+            let patientRecords = fetchPatientRecords(for: currentSegment)
             show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
@@ -371,7 +446,7 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     }
     
     func selected(filter: RecordsFilter) {
-        let patientRecords = fetchPatientRecords()
+        let patientRecords = fetchPatientRecords(for: currentSegment)
         currentFilter = filter
         show(records: patientRecords, filter:filter, searchText: searchText)
     }
@@ -444,20 +519,38 @@ extension UsersListOfRecordsViewController {
         case .AuthExpired:
             showAuthExpired()
             recordsSearchBarView.isHidden = true
+            listOfRecordsSegmentedView.isHidden = true
         case .authenticated:
+            setupSegmentedControl()
             guard self.dataSource.count == 0 else {
                 show(records: self.dataSource, filter: currentFilter, searchText: searchText)
                 return
             }
-            let patientRecords = fetchPatientRecords()
+            let patientRecords = fetchPatientRecords(for: currentSegment)
             show(records: patientRecords, filter: currentFilter, searchText: searchText)
         }
     }
     
-    private func fetchPatientRecords() -> [HealthRecordsDetailDataSource] {
+    private func fetchPatientRecords(for segment: SegmentType) -> [HealthRecordsDetailDataSource] {
         guard let patient = viewModel?.patient else {return []}
         let records = StorageService.shared.getRecords(for: patient)
-        let patientRecords = records.detailDataSource(patient: patient)
+        var patientRecords = records.detailDataSource(patient: patient)
+        if segment == .Timeline {
+            patientRecords = patientRecords.filter({ dataSource in
+                switch dataSource.type {
+                case .note(model: let model):
+                    return model.addedToTimeline == true
+                default: return true
+                }
+            })
+        } else if segment == .Notes {
+            patientRecords = patientRecords.filter({ dataSource in
+                switch dataSource.type {
+                case .note: return true
+                default: return false
+                }
+            })
+        }
         return patientRecords
     }
     
@@ -494,6 +587,10 @@ extension UsersListOfRecordsViewController {
                         showItem = filter.recordTypes.contains(.HospitalVisits)
                     case .clinicalDocument:
                         showItem = filter.recordTypes.contains(.ClinicalDocuments)
+                    case .diagnosticImaging:
+                        showItem = filter.recordTypes.contains(.DiagnosticImaging)
+                    case .note:
+                        showItem = filter.recordTypes.contains(.Notes)
                     }
                 }
                 // Filter by date
@@ -527,6 +624,35 @@ extension UsersListOfRecordsViewController {
         noRecordsFoundView.isHidden = !patientRecords.isEmpty
         tableView.isHidden = patientRecords.isEmpty
         recordsSearchBarView.isHidden = (((patientRecords.isEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
+    }
+    
+    private func configureNoRecordsFoundView(for segment: SegmentType) {
+        let isTimeline = segment == .Timeline
+        noRecordsFoundImageView.image = isTimeline ? UIImage(named: "no-records-found") : UIImage(named: "no-notes")
+        noRecordsFoundTitle.text = isTimeline ? "No records found" : "No Note Yet?"
+        noRecordsFoundSubTitle.text = isTimeline ? "Clear all filters and start over" : "Start adding a note by tapping\n the 'Note' button below"
+    }
+    
+    // MARK: Use these functions to switch between the view types, health records and notes
+    private func showTimelineViews(patientRecordsEmpty: Bool, searchText: String?) {
+        configureNoRecordsFoundView(for: .Timeline)
+        noRecordsFoundView.isHidden = !patientRecordsEmpty
+        tableView.isHidden = patientRecordsEmpty
+        recordsSearchBarView.hideFilterSection = false
+        recordsSearchBarView.isHidden = (((patientRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
+        createNoteButton.isHidden = true
+    }
+    
+    private func showNotesViews(notesRecordsEmpty: Bool, searchText: String?) {
+        configureNoRecordsFoundView(for: .Notes)
+        noRecordsFoundView.isHidden = notesRecordsEmpty
+        tableView.isHidden = !notesRecordsEmpty
+        recordsSearchBarView.endEditing(true)
+        recordsSearchBarView.isHidden = (((notesRecordsEmpty || !HealthRecordConstants.searchRecordsEnabled) && !(searchText?.trimWhiteSpacesAndNewLines.count ?? 0 > 0)))
+        if !notesRecordsEmpty {
+            recordsSearchBarView.hideFilterSection = true
+        }
+        createNoteButton.isHidden = false
     }
     
     private func performBCSCLogin() {
@@ -640,7 +766,15 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
                                                             authenticatedRecord: ds.isAuthenticated,
                                                             userNumberHealthRecords: dataSource.count,
                                                             patient: viewModel?.patient)
-        show(route: .HealthRecordDetail, withNavigation: true, viewModel: vm)
+        switch ds.type {
+        case .note(model: let model):
+            let note = PostNote(title: model.title ?? "", text: model.text ?? "", journalDate: model.journalDate?.yearMonthDayString ?? Date().yearMonthDayString, addedToTimeline: model.addedToTimeline)
+            let vc = NoteViewController.construct(for: .ViewNote, with: note)
+            self.navigationController?.pushViewController(vc, animated: true)
+        default:
+            show(route: .HealthRecordDetail, withNavigation: true, viewModel: vm)
+        }
+        
     }
     
 }
@@ -672,7 +806,7 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
     private func viewProtectedRecords(protectiveWord: String) {
         if protectiveWord.lowercased() == AuthManager().protectiveWord?.lowercased() {
             SessionStorage.protectiveWordEnteredThisSession = protectiveWord
-            show(records: fetchPatientRecords(), filter: currentFilter, searchText: searchText)
+            show(records: fetchPatientRecords(for: currentSegment), filter: currentFilter, searchText: searchText)
         } else {
             alert(title: .error, message: .protectedWordAlertError, buttonOneTitle: .yes, buttonOneCompletion: {
                 self.promoptProtectedWord()
@@ -702,7 +836,11 @@ extension UsersListOfRecordsViewController: ProtectiveWordPromptDelegate {
 // MARK: Sync completed, reload data
 extension UsersListOfRecordsViewController {
     @objc private func refreshOnStorageUpdate() {
-        let patientRecords = fetchPatientRecords()
+        let patientRecords = fetchPatientRecords(for: currentSegment)
         show(records: patientRecords, filter: currentFilter, searchText: searchText)
+        if currentSegment == .Notes {
+            showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: self.searchText)
+            show(records: patientRecords, filter: nil, searchText: searchText)
+        }
     }
 }

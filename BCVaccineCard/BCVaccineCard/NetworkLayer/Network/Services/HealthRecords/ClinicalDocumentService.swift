@@ -37,6 +37,7 @@ struct ClinicalDocumentService {
     }
     
     // MARK: Store
+    // TODO: Amir - clean up property name, should be 'clinicalDocuments' and not 'HopotalVisits', just for clarity sake
     private func store(HopotalVisits response: [ClinicalDocumentResponse],
                        for patient: Patient,
                        completion: @escaping ([ClinicalDocument])->Void

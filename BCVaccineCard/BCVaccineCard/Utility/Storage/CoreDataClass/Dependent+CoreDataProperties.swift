@@ -21,6 +21,8 @@ extension Dependent {
     @NSManaged public var version: Int64
     @NSManaged public var reasonCode: Int64
     @NSManaged public var sortOrder: Int64
+    @NSManaged public var totalDelegateCount: Int64
+    @NSManaged public var expiryDate: Date?
     @NSManaged public var guardian: Patient?
     @NSManaged public var info: Patient?
 

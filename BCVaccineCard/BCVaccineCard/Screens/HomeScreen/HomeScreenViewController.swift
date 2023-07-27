@@ -92,13 +92,52 @@ extension HomeScreenViewController {
     
     private func navSetup(firstName: String? = nil) {
         var title: String = navTitle(firstName: firstName)
+        var rightbuttons: [NavButton] = []
+        let settingsButton = NavButton(image: UIImage(named: "nav-settings"),
+                                       action: #selector(self.settingsButton),
+                                       accessibility: Accessibility(traits: .button,
+                                                                    label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle,
+                                                                    hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
+        rightbuttons.append(settingsButton)
+        if AuthManager().isAuthenticated {
+            let notificationsButton = NavButton(image: UIImage(named: "notifications"),
+                                           action: #selector(self.notificationsButton),
+                                           accessibility: Accessibility(traits: .button,
+                                                                        label: "Notificatioms",
+                                                                        hint: "Open Notifications"))
+            rightbuttons.append(notificationsButton)
+        }
+        
+
+        
         self.navDelegate?.setNavigationBarWith(title: title,
                                                leftNavButton: nil,
-                                               rightNavButton: NavButton(image: UIImage(named: "nav-settings"), action: #selector(self.settingsButton), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint)),
+                                               rightNavButtons: rightbuttons,
                                                navStyle: .large,
                                                navTitleSmallAlignment: .Center,
                                                targetVC: self,
                                                backButtonHintString: nil)
+    }
+    
+    @objc func notificationsButton() {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        let network = AFNetwork()
+        let authManager = AuthManager()
+        let configService = MobileConfigService(network: network)
+        let service = NotificationService(network: network, authManager: authManager, configService: configService)
+        guard let patient = StorageService.shared.fetchAuthenticatedPatient()
+        else {
+            return
+        }
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "No internet connection")
+            return
+        }
+        
+        service.fetchAndStore(for: patient, loadingStyle: .empty) { results in
+            let vm = NotificationsViewController.ViewModel(patient: patient, network: network, authManager: authManager, configService: configService)
+            self.show(route: .Notifications, withNavigation: true, viewModel: vm)
+        }
     }
 }
 

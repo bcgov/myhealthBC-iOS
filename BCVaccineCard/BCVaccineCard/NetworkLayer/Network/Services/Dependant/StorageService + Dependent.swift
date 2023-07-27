@@ -15,7 +15,9 @@ extension StorageService {
             
             if let info = dependent.dependentInformation,
                let versionInt = dependent.version,
-               let reasonCodeInt = dependent.reasonCode
+               let reasonCodeInt = dependent.reasonCode,
+               let totalDelegateCount = dependent.totalDelegateCount,
+               let expiryDate = dependent.expiryDate
             {
                 let firstName = info.firstname ?? ""
                 let lastName = info.lastname ?? ""
@@ -33,6 +35,8 @@ extension StorageService {
                                                             delegateID: dependent.delegateID,
                                                             version: Int64(versionInt),
                                                             reasonCode: Int64(reasonCodeInt),
+                                                            totalDelegateCount: Int64(totalDelegateCount),
+                                                            expiryDate: expiryDate.getGatewayDate(),
                                                             info: storedPatient)
                     {
                         storedDependends.append(storedDependent)
@@ -49,6 +53,8 @@ extension StorageService {
         delegateID: String?,
         version: Int64,
         reasonCode: Int64,
+        totalDelegateCount: Int64,
+        expiryDate: Date?,
         info: Patient
     ) -> Dependent? {
         guard let context = managedContext else {return nil}
@@ -57,6 +63,8 @@ extension StorageService {
         dependent.delegateID = delegateID
         dependent.version = version
         dependent.reasonCode = reasonCode
+        dependent.totalDelegateCount = totalDelegateCount
+        dependent.expiryDate = expiryDate
         dependent.info = info
         do {
             try context.save()

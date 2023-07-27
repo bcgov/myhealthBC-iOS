@@ -17,14 +17,14 @@ struct HealthRecordsService {
         return UrlAccessor()
     }
     
-    public func fetchAndStore(for patient: Patient, protectiveWord: String?, types: [StorageService.healthRecordType]? = StorageService.healthRecordType.allCases, completion: @escaping ([HealthRecord],_ hadFailures: Bool)->Void) {
+    public func fetchAndStore(for patient: Patient, protectiveWord: String?, types: [StorageService.HealthRecordType]? = StorageService.HealthRecordType.allCases, completion: @escaping ([HealthRecord],_ hadFailures: Bool)->Void) {
         
         let dispatchGroup = DispatchGroup()
         var records: [HealthRecord] = []
         
         network.addLoader(message: .SyncingRecords, caller: .HealthRecordsService_fetchAndStore)
         Logger.log(string: "fetching patient records for \(patient.name)", type: .Network)
-        let typesToFetch = types ?? StorageService.healthRecordType.allCases
+        let typesToFetch = types ?? StorageService.HealthRecordType.allCases
         var hadFailures = false
         for recordType in typesToFetch {
             dispatchGroup.enter()
@@ -140,6 +140,22 @@ struct HealthRecordsService {
                     }
                     let uwreapped = result.map({HealthRecord(type: .ClinicalDocument($0))})
                     records.append(contentsOf: uwreapped)
+                    dispatchGroup.leave()
+                }
+            case .DiagnosticImaging:
+                // Note: Shouldn't get here, as diagnostic imaging comes from patient service
+                dispatchGroup.leave()
+                
+            case .Notes:
+                let notesService = NotesService(network: network, authManager: authManager, configService: configService)
+                notesService.fetchAndStore(for: patient) { result in
+                    guard let result = result else {
+                        hadFailures = true
+                        dispatchGroup.leave()
+                        return
+                    }
+                    let unwrapped = result.map { HealthRecord(type: .Note($0)) }
+                    records.append(contentsOf: unwrapped)
                     dispatchGroup.leave()
                 }
             }

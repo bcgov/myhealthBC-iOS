@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal var dataLoadTextTag = 9912342
     internal var loaderCallers: [LoaderCaller] = []
     
+    var cachedCommunicationPreferences: CommunicationPreferences?
+    
     // Note - this is used to smooth the transition when adding a health record and showing the detail screen
     private var loadingViewHack: UIView?
     
@@ -95,7 +97,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         IQKeyboardManager.shared.enableAutoToolbar = false
         IQKeyboardManager.shared.shouldResignOnTouchOutside = true
         IQKeyboardManager.shared.shouldShowToolbarPlaceholder = false
-        IQKeyboardManager.shared.disabledDistanceHandlingClasses = [HealthRecordDetailViewController.self]
+        IQKeyboardManager.shared.layoutIfNeededOnUpdate = true
+        IQKeyboardManager.shared.disabledDistanceHandlingClasses = [HealthRecordDetailViewController.self, NoteViewController.self]
     }
     
     private func initNetworkListener() {
@@ -332,6 +335,7 @@ extension LoaderMessage {
 enum LoaderCaller {
     case PatientService_fetchAndStoreDetails
     case PatientService_fetchAndStoreOrganDonorStatus
+    case PatientService_fetchAndStoreDiagnosticImaging
     case PatientService_validateProfile
     case CovidTestsService_fetchAndStore
     case VaccineCardService_fetchAndStore_Patient
@@ -349,11 +353,16 @@ enum LoaderCaller {
     case HospitalVisitsService_fetchAndStore
     case PDFService_fetchPDF
     case PDFService_DonorStatus
+    case PDFService_DiagnosticImaging
     case CommentService_submitUnsyncedComments
     case CommentService_fetchAndStore
     case LabOrderService_fetchAndStore
     case ImmnunizationsService_fetchAndStore
     case HealthRecordsService_fetchAndStore
+    case NotificationService_fetchAndStore
+    case NotificationService_dismiss
+    case NotificationService_dismissAll
+    case Notes_fetchAndStore
 }
 
 

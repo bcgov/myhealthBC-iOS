@@ -10,12 +10,18 @@ import Foundation
 
 extension UsersListOfRecordsViewController {
     
+    enum UserType {
+        case PrimaryPatient
+        case Dependent
+    }
+    
     struct ViewModel {
         var patient: Patient?
         let authenticated: Bool
         let navStyle: NavStyle = .singleUser
         let hasUpdatedUnauthPendingTest = true
         let dataSource: [HealthRecordsDetailDataSource] = []
+        let userType: UserType
         
         var state: State {
             if AuthManager().isAuthenticated {
