@@ -291,7 +291,7 @@
         <relationship name="prescription" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Perscription" inverseName="pharmacy" inverseEntity="Perscription"/>
     </entity>
     <entity name="QuickLinkPreferences" representedClassName="QuickLinkPreferences" syncable="YES" codeGenerationType="class">
-        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="homeOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="quickLink" optional="YES" attributeType="String"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="quickLinkPreferences" inverseEntity="Patient"/>
     </entity>

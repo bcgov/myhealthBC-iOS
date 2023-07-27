@@ -187,7 +187,7 @@ extension StorageService: StoragePatientManager {
         do {
             return try context.fetch(DiagnosticImaging.fetchRequest())
         } catch let error as NSError {
-            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            Logger.log(string: "Could not fetch. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }
@@ -203,8 +203,8 @@ extension StorageService: StoragePatientManager {
         var storedObjects: [QuickLinkPreferences] = []
         for (index, value) in array.enumerated() {
             let model = QuickLinkPreferences(context: context)
-            model.quickLink = value.name.rawValue
-            model.order = Int64(index)
+            model.quickLink = value.name
+            model.homeOrder = Int64(index)
             model.patient = patient
             do {
                 try context.save()
@@ -216,6 +216,16 @@ extension StorageService: StoragePatientManager {
         }
         guard storedObjects.count > 0 else { return nil }
         return storedObjects
+    }
+    
+    func fetchQuickLinksPreferences() -> [QuickLinkPreferences] {
+        guard let context = managedContext else {return []}
+        do {
+            return try context.fetch(QuickLinkPreferences.fetchRequest())
+        } catch let error as NSError {
+            Logger.log(string: "Could not fetch. \(error), \(error.userInfo)", type: .storage)
+            return []
+        }
     }
     
     /// returns existing patient

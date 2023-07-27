@@ -322,6 +322,7 @@ enum LoaderMessage: String {
     case SyncingRecords = "Syncing Records"
     case FetchingConfig = " "
     case empty = ""
+    case SyncingPreferences = "Syncing Preferences"
 }
 
 extension LoaderMessage {
@@ -364,6 +365,7 @@ enum LoaderCaller {
     case NotificationService_dismiss
     case NotificationService_dismissAll
     case Notes_fetchAndStore
+    case QuickLinks_fetchAndStore
 }
 
 

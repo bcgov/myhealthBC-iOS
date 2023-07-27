@@ -84,6 +84,13 @@ struct SyncService {
             }
             
             group.enter()
+            patientService.fetchAndStoreQuickLinksPreferences(for: patient) { preferences in
+                print(preferences)
+                Logger.log(string: "fetched quick links preferences", type: .Network)
+                group.leave()
+            }
+            
+            group.enter()
             patientService.fetchAndStoreDiagnosticImaging(for: patient) { imaging in
                 if imaging == nil {
                     hadFailures = true

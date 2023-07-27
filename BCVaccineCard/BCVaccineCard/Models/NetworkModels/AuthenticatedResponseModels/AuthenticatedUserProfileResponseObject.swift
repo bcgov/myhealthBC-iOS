@@ -100,6 +100,11 @@ extension AuthenticatedUserProfileResponseObject {
             case preference, value, version, createdDateTime, createdBy, updatedDateTime, updatedBy
         }
     }
+    
+    // MARK: Mapped Quicklinks Names
+    struct QuickLinksStrings: Codable {
+        let name: String
+    }
 }
 
 struct AuthenticatedUserProfileRequestObject: Codable {
@@ -115,41 +120,5 @@ struct AuthenticatedUserProfileRequestObject: Codable {
             case termsOfServiceId
         }
     }
-}
-
-struct QuickLinksPreference: Codable {
-    struct Filter: Codable {
-        let modules: [String]
-    }
-    enum Name: String, Codable {
-        case MyNotes = "My Notes"
-        case Immunization = "Immunization"
-        case Medications = "Medications"
-        case LabResults = "Lab Results"
-        case SpecialAuthority = "Special authority"
-        case HealthVisit = "Health visit"
-        case ClinicalDocuments = "Clinical documents"
-        case OrganDonor = "Organ donor"
-        
-        enum Section: Codable {
-            case HealthRecord
-            case Service
-        }
-        
-        var getSection: Section {
-            switch self {
-            case .MyNotes, .Immunization, .Medications, .LabResults, .SpecialAuthority, .HealthVisit, .ClinicalDocuments: return .HealthRecord
-            case .OrganDonor: return .Service
-            }
-        }
-    }
-
-    enum Section: Codable {
-        case HealthRecord
-        case Service
-    }
-    
-    let name: Name
-    let filter: Filter    
 }
 

@@ -6,7 +6,8 @@
 //
 
 import UIKit
-
+// TODO: Update this for remote quick links possibility
+// Add "QuickLink" type with an associated value (type, which is a "QuickLinkName" type, part of the ManageHomeScreenViewController
 enum HomeScreenCellType {
     case Records
     case ImmunizationSchedule
@@ -66,7 +67,7 @@ class HomeScreenRecordCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak private var iconImageView: UIImageView!
     @IBOutlet weak private var titleLabel: UILabel!
 //    @IBOutlet weak private var descriptionLabel: UILabel!
-    @IBOutlet weak private var buttonImageView: UIImageView!
+    @IBOutlet weak private var buttonImageView: UIImageView! //TODO: May have to make this a button
 //    @IBOutlet weak private var titleHeight: NSLayoutConstraint!
 
     override func awakeFromNib() {

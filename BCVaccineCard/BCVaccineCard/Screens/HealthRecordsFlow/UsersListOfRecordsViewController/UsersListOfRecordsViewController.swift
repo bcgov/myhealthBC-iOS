@@ -147,7 +147,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private func setupSegmentedControl() {
         listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
         // Hide if dependent VC
-        if viewModel?.userType == .Dependent || !HealthRecordConstants.commentsEnabled {
+        if viewModel?.userType == .Dependent || !HealthRecordConstants.notesEnabled {
             listOfRecordsSegmentedView.isHidden = true
         }
     }
@@ -520,7 +520,7 @@ extension UsersListOfRecordsViewController {
             recordsSearchBarView.isHidden = true
             listOfRecordsSegmentedView.isHidden = true
         case .authenticated:
-            if !HealthRecordConstants.commentsEnabled {
+            if !HealthRecordConstants.notesEnabled {
                 listOfRecordsSegmentedView.isHidden = true
             } else {
                 listOfRecordsSegmentedView.isHidden = viewModel?.userType == .Dependent

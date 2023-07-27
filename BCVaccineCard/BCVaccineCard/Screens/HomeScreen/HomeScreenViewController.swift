@@ -81,8 +81,16 @@ class HomeScreenViewController: BaseViewController {
                 self.fetchCommunicationBanner()
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(syncPerformed), name: .syncPerformed, object: nil)
     }
     
+    @objc private func syncPerformed(_ notification: Notification) {
+        // TODO: Fetch locally stored preferences here and adjust screen state
+        // Here, set quick links, then reload data source
+    }
+    
+    // TODO: Adjust this function to handle quick links preferences
     private func genDataSource() -> [DataSource] {
         var data: [DataSource] = [
             .quickAccess(types: [

@@ -44,8 +44,35 @@ struct PatientService {
     }
     
     // MARK: Quick Links Preferences
-    public func fetchAndStoreQuickLinksPreferences(for patient: Patient, completion: @escaping ([QuickLinksPreference]?)-> Void) {
-        // TODO: Complete this function...
+    // Note: Not using a loader when called during background fetch
+    // This should be called during records sync only - so loader will not be called
+    public func fetchAndStoreQuickLinksPreferences(for patient: Patient, useLoader: Bool = false, completion: @escaping ([QuickLinkPreferences]?)-> Void) {
+        guard let hdid = patient.hdid else {
+            return completion(nil)
+        }
+        if useLoader {
+            network.addLoader(message: .SyncingPreferences, caller: .QuickLinks_fetchAndStore)
+        }
+        fetchProfile { result in
+            guard let response = result else {
+                if useLoader {
+                    network.removeLoader(caller: .QuickLinks_fetchAndStore)
+                }
+                return completion(nil)
+            }
+            guard let quicklinks = response.resourcePayload?.preferences?.quickLinks else {
+                if useLoader {
+                    network.removeLoader(caller: .QuickLinks_fetchAndStore)
+                }
+                return completion(nil)
+            }
+            let storedLinks = StorageService.shared.store(quickLinksPreferences: quicklinks, for: patient)
+            if useLoader {
+                network.removeLoader(caller: .QuickLinks_fetchAndStore)
+            }
+            completion(storedLinks)
+        }
+       
     }
     
     // MARK: Organ Donor Status
