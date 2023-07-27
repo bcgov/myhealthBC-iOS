@@ -133,7 +133,13 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
     
     private func setupSegmentedControl() {
-        listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
+        if HealthRecordConstants.notesEnabled {
+            listOfRecordsSegmentedView.isHidden = false
+            listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
+        } else {
+            listOfRecordsSegmentedView.isHidden = true
+        }
+        
     }
     
     @objc private func refresh(_ sender: AnyObject) {
@@ -495,7 +501,7 @@ extension UsersListOfRecordsViewController {
             recordsSearchBarView.isHidden = true
             listOfRecordsSegmentedView.isHidden = true
         case .authenticated:
-            listOfRecordsSegmentedView.isHidden = false
+            setupSegmentedControl()
             guard self.dataSource.count == 0 else {
                 show(records: self.dataSource, filter: currentFilter, searchText: searchText)
                 return
