@@ -19,8 +19,7 @@ struct HealthRecordConstants {
             .healthVisit,
             .specialAuthorityDrug,
             .hospitalVisit,
-            .clinicalDocument,
-            .diagnosticImaging,
+            .clinicalDocument
         ]
     }
     
@@ -45,6 +44,14 @@ struct HealthRecordConstants {
     }
     
     static var notesEnabled: Bool {
+        return false
+    }
+    
+    static var diagnosticImagingEnabled: Bool {
+        return false
+    }
+    
+    static var guardianAuditEnabled: Bool {
         return false
     }
 }
