@@ -216,6 +216,9 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
     
     func showLocalRoute(category: NotificationCategory) {
         SessionStorage.notificationCategoryFilter = category
+        if !HealthRecordConstants.notesEnabled && category == .Notes {
+            SessionStorage.notificationCategoryFilter = nil
+        }
         show(tab: .AuthenticatedRecords)
     }
     
