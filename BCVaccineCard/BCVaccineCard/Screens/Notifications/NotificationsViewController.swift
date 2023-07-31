@@ -198,6 +198,7 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
         case .internalLink:
             guard let category = notification.category else {
                 print("\n\n**CATEGORY NOT FOUND LOCALLY - NEEDS TO BE ADDED\n\n")
+                showLocalRoute(category: nil)
                 return
             }
             showLocalRoute(category: category)
@@ -214,7 +215,11 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
         openURLInSafariVC(withURL: url)
     }
     
-    func showLocalRoute(category: NotificationCategory) {
+    func showLocalRoute(category: NotificationCategory?) {
+        guard let category = category else {
+            show(tab: .AuthenticatedRecords)
+            return
+        }
         let filterType = category.toLocalFilter()
         if RecordsFilter.RecordType.avaiableFilters.contains(filterType) {
             SessionStorage.notificationCategoryFilter = category
