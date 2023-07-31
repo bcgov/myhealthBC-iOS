@@ -438,6 +438,13 @@ extension HomeScreenViewController {
             show(route: .Recommendations, withNavigation: true)
         case .ImmunizationSchedule:
             show(route: .ImmunizationSchedule, withNavigation: true)
+        case .QuickLink(type: let type):
+            switch type {
+            case .OrganDonor:
+                show(tab: .Services)
+            default:
+                show(tab: .AuthenticatedRecords, appliedFilter: type.getFilterType)
+            }
         }
     }
 }

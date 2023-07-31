@@ -94,6 +94,8 @@ class UsersListOfRecordsViewController: BaseViewController {
         {
             currentFilter = existingFilter
         }
+        // When a user access this VC via quicklink and a filter is needed
+        NotificationCenter.default.addObserver(self, selector: #selector(applyQuickLinkFilter), name: .applyQuickLinkFilter, object: nil)
         // When authentication is expired, reset filters
         Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
             guard let `self` = self else {return}
@@ -124,6 +126,21 @@ class UsersListOfRecordsViewController: BaseViewController {
         } else {
             return UIStatusBarStyle.default
         }
+    }
+    
+    // TODO: Need to test this out
+    @objc private func applyQuickLinkFilter(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: RecordsFilter] else { return }
+        guard let filter = userInfo["filter"] else { return }
+        currentSegment = filter.recordTypes.contains(.Notes) ? .Notes : .Timeline
+        let patientRecords = fetchPatientRecords(for: currentSegment)
+        currentFilter = filter
+        if filter.recordTypes.contains(.Notes) {
+            showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: nil)
+        } else {
+            show(records: patientRecords, filter:filter, searchText: nil)
+        }
+        
     }
     
     private func applyNotificationFilterIfNeeded() {

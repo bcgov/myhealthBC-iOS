@@ -14,6 +14,7 @@ enum HomeScreenCellType {
     case Recommendations
     case Resources
     case Proofs
+    case QuickLink(type: ManageHomeScreenViewController.QuickLinksNames)
     
     var getTitle: String {
         switch self {
@@ -22,6 +23,8 @@ enum HomeScreenCellType {
         case .Resources: return "Health\nResources"
         case .ImmunizationSchedule: return "Immunization\nSchedules"
         case .Recommendations: return "Recommended\nImmunizations"
+        case .QuickLink(type: let type):
+            return type.getHomeScreenDisplayableName
         }
     }
     
@@ -32,6 +35,12 @@ enum HomeScreenCellType {
         case .Resources: return UIImage(named: "resources-home-icon")
         case .ImmunizationSchedule: return UIImage(named: "immunization-schedules-icon")
         case .Recommendations: return UIImage(named: "recommended-immunizations-icon")
+        case .QuickLink(type: let type):
+            if let name = type.getHomeScreenIconStringName, let image = UIImage(named: name) {
+                return image
+            } else {
+                return nil
+            }
         }
     }
     // May become irrelevant
@@ -43,6 +52,8 @@ enum HomeScreenCellType {
         case .Recommendations: return "Find out which vaccinations are recommended for you"
         case .ImmunizationSchedule:
             return "Find out which vaccinations are recommended for you"
+        case .QuickLink(type: let type):
+            return ""
         }
     }
     // May become irrelevant
@@ -55,6 +66,8 @@ enum HomeScreenCellType {
         case .Resources: return UIImage(named: "resources-home-button")
         case .Recommendations:  return UIImage(named: "resources-home-button")
         case .ImmunizationSchedule: return UIImage(named: "resources-home-button")
+        case .QuickLink(type: let type):
+            return nil
         }
     }
 

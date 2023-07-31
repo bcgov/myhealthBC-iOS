@@ -51,6 +51,63 @@ extension ManageHomeScreenViewController {
             case Service
         }
         
+        var getHomeScreenDisplayableName: String {
+            switch self {
+            case .MyNotes: return "My\nNotes"
+            case .Immunizations: return rawValue
+            case .Medications: return rawValue
+            case .LabResults: return "Lab\nResults"
+            case .COVID19Tests: return "COVID-19\nTests"
+            case .SpecialAuthority: return "Special\nAuthority"
+            case .HospitalVisits: return "Hospital\nVisits"
+            case .ClinicalDocuments: return "Clinical\nDocuments"
+            case .ImagingReports: return "Imaging\nReports"
+            case .OrganDonor: return "Organ\nDonor"
+            }
+        }
+        // TODO: Get the icon used on the list of health records for the record type
+        var getHomeScreenIconStringName: String? {
+            switch self {
+            case .MyNotes: return "blue-bg-notes-icon"
+            case .Immunizations: return "blue-bg-vaccine-record-icon"
+            case .Medications: return "blue-bg-medication-record-icon"
+            case .LabResults: return "blue-bg-laboratory-record-icon"
+            case .COVID19Tests: return "blue-bg-test-result-icon"
+            case .SpecialAuthority: return "blue-bg-special-authority-icon"
+            case .HospitalVisits: return "blue-bg-health-visit-icon"
+            case .ClinicalDocuments: return "blue-bg-clinical-documents-icon"
+            case .ImagingReports: return "blue-bg-diagnostic-imaging-icon"
+            case .OrganDonor: return "ogran-donor-logo" // Note: Should probably fix the spelling error here"
+            }
+        }
+        
+        var getFilterType: RecordsFilter? {
+            var currentFilter: RecordsFilter? = RecordsFilter()
+            switch self {
+            case .MyNotes:
+                currentFilter?.recordTypes = [.Notes]
+            case .Immunizations:
+                currentFilter?.recordTypes = [.Immunizations]
+            case .Medications:
+                currentFilter?.recordTypes = [.Medication]
+            case .LabResults:
+                currentFilter?.recordTypes = [.LabTests]
+            case .COVID19Tests:
+                currentFilter?.recordTypes = [.Covid]
+            case .SpecialAuthority:
+                currentFilter?.recordTypes = [.SpecialAuthorityDrugs]
+            case .HospitalVisits:
+                currentFilter?.recordTypes = [.HeathVisits]
+            case .ClinicalDocuments:
+                currentFilter?.recordTypes = [.ClinicalDocuments]
+            case .ImagingReports:
+                currentFilter?.recordTypes = [.DiagnosticImaging]
+            case .OrganDonor:
+                currentFilter = nil
+            }
+            return currentFilter
+        }
+        
         var getSection: Section {
             switch self {
             case .MyNotes, .Immunizations, .Medications, .LabResults, .COVID19Tests, .SpecialAuthority, .HospitalVisits, .ClinicalDocuments, .ImagingReports: return .HealthRecord

@@ -248,13 +248,20 @@ extension UIViewController {
 // MARK: General Routing
 extension UIViewController {
     
-    func show(tab: AppTabs) {
+    func show(tab: AppTabs, appliedFilter: RecordsFilter? = nil) {
         // TODO: Adjust if tabs need to be switched from VC whose parent is nav controller
         guard let tabBar = self.tabBarController as? AppTabBarController else {
             return
         }
         
         tabBar.switchTo(tab: tab)
+        if let appliedFilter = appliedFilter {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                let userInfo: [String: RecordsFilter] = ["filter": appliedFilter]
+                NotificationCenter.default.post(name: .applyQuickLinkFilter, object: nil, userInfo: userInfo as [AnyHashable : Any])
+            }
+            
+        }
     }
     
     func show(route: Route, withNavigation: Bool, viewModel: Any? = nil) {
