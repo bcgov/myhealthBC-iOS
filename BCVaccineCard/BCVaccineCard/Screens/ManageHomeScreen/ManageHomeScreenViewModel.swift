@@ -53,6 +53,7 @@ extension ManageHomeScreenViewController {
         case COVID19Tests = "COVID-19 Tests"
         case SpecialAuthority = "Special Authority"
         case HospitalVisits = "Hospital Visits"
+        case HealthVisits = "Health Visits"
         case ClinicalDocuments = "Clinical Documents"
         case ImagingReports = "Imaging Reports"
         case OrganDonor = "Organ Donor"
@@ -71,6 +72,7 @@ extension ManageHomeScreenViewController {
             case .COVID19Tests: return "COVID-19\nTests"
             case .SpecialAuthority: return "Special\nAuthority"
             case .HospitalVisits: return "Hospital\nVisits"
+            case .HealthVisits: return "Health\nVisits"
             case .ClinicalDocuments: return "Clinical\nDocuments"
             case .ImagingReports: return "Imaging\nReports"
             case .OrganDonor: return "Organ\nDonor"
@@ -85,7 +87,8 @@ extension ManageHomeScreenViewController {
             case .LabResults: return "blue-bg-laboratory-record-icon"
             case .COVID19Tests: return "blue-bg-test-result-icon"
             case .SpecialAuthority: return "blue-bg-special-authority-icon"
-            case .HospitalVisits: return "blue-bg-health-visit-icon"
+            case .HospitalVisits: return "blue-bg-hospital-visits-icon"
+            case .HealthVisits: return "blue-bg-health-visit-icon"
             case .ClinicalDocuments: return "blue-bg-clinical-documents-icon"
             case .ImagingReports: return "blue-bg-diagnostic-imaging-icon"
             case .OrganDonor: return "ogran-donor-logo" // Note: Should probably fix the spelling error here"
@@ -108,6 +111,8 @@ extension ManageHomeScreenViewController {
             case .SpecialAuthority:
                 currentFilter?.recordTypes = [.SpecialAuthorityDrugs]
             case .HospitalVisits:
+                currentFilter?.recordTypes = [.HospitalVisits]
+            case .HealthVisits:
                 currentFilter?.recordTypes = [.HeathVisits]
             case .ClinicalDocuments:
                 currentFilter?.recordTypes = [.ClinicalDocuments]
@@ -121,7 +126,7 @@ extension ManageHomeScreenViewController {
         
         var getSection: Section {
             switch self {
-            case .MyNotes, .Immunizations, .Medications, .LabResults, .COVID19Tests, .SpecialAuthority, .HospitalVisits, .ClinicalDocuments, .ImagingReports: return .HealthRecord
+            case .MyNotes, .Immunizations, .Medications, .LabResults, .COVID19Tests, .SpecialAuthority, .HospitalVisits, .HealthVisits, .ClinicalDocuments, .ImagingReports: return .HealthRecord
             case .OrganDonor: return .Service
             }
         }
@@ -135,6 +140,7 @@ extension ManageHomeScreenViewController {
             case .COVID19Tests: return .Laboratory
             case .SpecialAuthority: return .MedicationRequest
             case .HospitalVisits: return .HospitalVisit
+            case .HealthVisits: return .Encounter
             case .ClinicalDocuments: return .ClinicalDocument
             case .ImagingReports: return .DiagnosticImaging
             case .OrganDonor: return nil

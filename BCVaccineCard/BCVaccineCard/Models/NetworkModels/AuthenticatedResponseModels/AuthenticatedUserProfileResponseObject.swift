@@ -82,10 +82,10 @@ extension AuthenticatedUserProfileResponseObject {
     
     // MARK: - Preferences
     struct Preferences: Codable {
-        let tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks: QuickLinks
+        let tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks, hideOrganDonorQuickLink: QuickLinks?
         
         enum CodingKeys: String, CodingKey {
-            case tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks
+            case tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks, hideOrganDonorQuickLink
         }
     }
 
@@ -104,6 +104,11 @@ extension AuthenticatedUserProfileResponseObject {
     // MARK: Mapped Quicklinks Names
     struct QuickLinksStrings: Codable {
         let name: String
+        let filter: Module
+        
+        struct Module: Codable {
+            let modules: [String]
+        }
     }
 }
 
@@ -136,9 +141,14 @@ struct QuickLinksModelForPreferences: Codable {
 
 struct UserProfilePreferencePUTRequestModel: Codable {
     let hdid: String
-    let preference: String = "quickLinks"
+    let preference: String
     let value: String
     let version: Int
+    
+    enum PreferenceType: String, Codable {
+        case NormalQuickLinks = "quickLinks"
+        case OrganDonor = "hideOrganDonorQuickLink"
+    }
 }
 
 struct UserProfilePreferencePUTResponseModel: Codable {

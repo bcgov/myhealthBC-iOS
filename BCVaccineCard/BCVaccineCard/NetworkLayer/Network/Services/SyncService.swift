@@ -85,7 +85,7 @@ struct SyncService {
             
             group.enter()
             patientService.fetchAndStoreQuickLinksPreferences(for: patient) { preferences in
-                print(preferences)
+                print("CONNOR PREF: ", preferences)
                 Logger.log(string: "fetched quick links preferences", type: .Network)
                 group.leave()
             }

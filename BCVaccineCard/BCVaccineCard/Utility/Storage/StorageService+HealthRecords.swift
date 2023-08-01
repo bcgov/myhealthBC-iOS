@@ -126,6 +126,11 @@ extension StorageService {
         deleteAllRecords(in: comments)
     }
     
+    func deleteQuickLinksPreferences(for patient: Patient) {
+        let preferences = fetchQuickLinksPreferences()
+        deleteAllRecords(in: preferences)
+    }
+    
     func deleteHealthRecords(for patient: Patient, types: [HealthRecordType]? = nil) {
         var toDelete: [NSManagedObject] = []
         let typesTodelete: [HealthRecordType] = types ?? HealthRecordType.allCases

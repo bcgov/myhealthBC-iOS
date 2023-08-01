@@ -66,7 +66,8 @@ struct PatientService {
                 }
                 return completion(nil)
             }
-            let storedLinks = StorageService.shared.store(quickLinksPreferences: quicklinks, for: patient)
+            let enabled = !(response.resourcePayload?.preferences?.hideOrganDonorQuickLink?.value == "true")
+            let storedLinks = StorageService.shared.store(quickLinksPreferences: quicklinks, isOrganDonorQuickLinkEnabled: enabled, organDonorVersion: response.resourcePayload?.preferences?.hideOrganDonorQuickLink?.version, for: patient)
             if useLoader {
                 network.removeLoader(caller: .QuickLinks_fetchAndStore)
             }
@@ -76,7 +77,7 @@ struct PatientService {
     }
     
 //    public func update quick links preferences
-    public func updateQuickLinkPreferences(preferenceString: String, version: Int, completion: @escaping (UserProfilePreferencePUTResponseModel?)->Void) {
+    public func updateQuickLinkPreferences(preferenceString: String, preferenceType: UserProfilePreferencePUTRequestModel.PreferenceType, version: Int, completion: @escaping (UserProfilePreferencePUTResponseModel?)->Void) {
         guard let token = authManager.authToken,
               let hdid = authManager.hdid,
               NetworkConnection.shared.hasConnection
@@ -95,7 +96,7 @@ struct PatientService {
                 Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
                 Constants.AuthenticationHeaderKeys.hdid: hdid
             ]
-            let parameters = UserProfilePreferencePUTRequestModel(hdid: hdid, value: preferenceString, version: version)
+            let parameters = UserProfilePreferencePUTRequestModel(hdid: hdid, preference: preferenceType.rawValue, value: preferenceString, version: version)
             let requestModel = NetworkRequest<UserProfilePreferencePUTRequestModel, UserProfilePreferencePUTResponseModel>(url: endpoints.preference(base: baseURL, hdid: hdid),
                                                                                 type: .Put,
                                                                                 parameters: parameters,

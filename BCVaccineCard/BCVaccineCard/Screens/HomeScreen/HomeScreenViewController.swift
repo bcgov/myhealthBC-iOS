@@ -114,9 +114,11 @@ class HomeScreenViewController: BaseViewController {
             } else if !authManager.isAuthenticated {
                 newTypes.insert(.ImmunizationSchedule, at: 1)
             }
-            let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
-            let quickLinks = convertQuickLinkIntoDataSource(coreDataModel: quickLinkPreferences)
-            newTypes.append(contentsOf: quickLinks)
+            if authManager.isAuthenticated {
+                let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
+                let quickLinks = convertQuickLinkIntoDataSource(coreDataModel: quickLinkPreferences)
+                newTypes.append(contentsOf: quickLinks)
+            }
             data[0] = .quickAccess(types: newTypes)
         default: break
         }
@@ -485,21 +487,39 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
         actionSheetController?.addAction(UIAlertAction(title: "Remove", style: .default, handler: { _ in
             
             let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
-            let version = Int(quickLinkPreferences.first?.version ?? 0)
+            var version: Int
+            if let index = quickLinkPreferences.map({ $0.quickLink }).firstIndex(of: name) {
+                version = Int(quickLinkPreferences[index].version)
+            } else {
+                version = Int(quickLinkPreferences.first?.version ?? 0)
+            }
             var quickLinks = self.convertQuickLinkIntoQuickLinksNames(coreDataModel: quickLinkPreferences)
+//            var organDonorWasInQuickLinks = false
             if let index = quickLinks.firstIndex(of: quickLinkToRemove) {
+//                if quickLinkToRemove == .OrganDonor {
+//                    organDonorWasInQuickLinks = true
+//                }
                 quickLinks.remove(at: index)
             }
-            guard let preferenceString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: quickLinks) else {
+            var preferenceString: String?
+            if quickLinkToRemove == .OrganDonor {
+                preferenceString = "true"
+            } else {
+                preferenceString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: quickLinks)
+            }
+            guard let preferenceString = preferenceString else {
                 self.showGeneralAlertFailure()
                 return
             }
-            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, version: version, completion: { result in
+            let type: UserProfilePreferencePUTRequestModel.PreferenceType = quickLinkToRemove == .OrganDonor ? .OrganDonor : .NormalQuickLinks
+            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, preferenceType: type, version: version, completion: { result in
                 if let result = result {
-                    guard let patient = StorageService.shared.fetchAuthenticatedPatient(), let payload = result.resourcePayload else { return }
-                    let storedLinks = StorageService.shared.store(quickLinksPreferences: payload, for: patient)
-                    self.collectionView.reloadData()
-                    self.dismissActionSheet()
+                    guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+                    self.patientService?.fetchAndStoreQuickLinksPreferences(for: patient, useLoader: true, completion: { preferences in
+                        print(preferences)
+                        self.collectionView.reloadData()
+                        self.dismissActionSheet()
+                    })
                 } else {
                     self.showGeneralAlertFailure()
                 }
