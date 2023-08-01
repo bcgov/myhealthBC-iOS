@@ -33,7 +33,7 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE DEPENDENT RECORD TYPES
     static var enabledDepententRecordTypes: [RecordType] {
-        return [.covidTestResultRecord, .immunization]
+        return [.covidTestResultRecord, .immunization, .medication]
     }
     
     // ENABLE AND DISABLE COMMENTS
