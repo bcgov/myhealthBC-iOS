@@ -273,6 +273,9 @@
 		2D120D4328FF25A600EB8EBF /* PostDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D4228FF25A600EB8EBF /* PostDependent.swift */; };
 		2D120D4428FF25A600EB8EBF /* PostDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D4228FF25A600EB8EBF /* PostDependent.swift */; };
 		2D120D4528FF25A600EB8EBF /* PostDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D4228FF25A600EB8EBF /* PostDependent.swift */; };
+		2D1C8CF62A79C71B005204B7 /* UIAlertController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1C8CF52A79C71B005204B7 /* UIAlertController+EXT.swift */; };
+		2D1C8CF72A79C71B005204B7 /* UIAlertController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1C8CF52A79C71B005204B7 /* UIAlertController+EXT.swift */; };
+		2D1C8CF82A79C71B005204B7 /* UIAlertController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1C8CF52A79C71B005204B7 /* UIAlertController+EXT.swift */; };
 		2D2B48ED2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B48EC2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift */; };
 		2D2B48EE2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B48EC2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift */; };
 		2D2B48EF2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D2B48EC2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift */; };
@@ -1651,6 +1654,7 @@
 		2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentsResponse.swift; sourceTree = "<group>"; };
 		2D120D3E28FF17FB00EB8EBF /* DependentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentService.swift; sourceTree = "<group>"; };
 		2D120D4228FF25A600EB8EBF /* PostDependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDependent.swift; sourceTree = "<group>"; };
+		2D1C8CF52A79C71B005204B7 /* UIAlertController+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+EXT.swift"; sourceTree = "<group>"; };
 		2D2B48EC2A1D30B500E04254 /* AuthenticatedDiagnosticImagingResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticatedDiagnosticImagingResponseModel.swift; sourceTree = "<group>"; };
 		2D2B48F02A1D335300E04254 /* Address+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Address+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		2D2B48F12A1D335300E04254 /* Address+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Address+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
@@ -3695,6 +3699,7 @@
 				795AA78427162AA900E59FF1 /* NotificationName+Ext.swift */,
 				29245D422755877A00F48642 /* Encodable+EXT.swift */,
 				2DF6657C2A30EC240009D8F0 /* UISegmentedControl+EXT.swift */,
+				2D1C8CF52A79C71B005204B7 /* UIAlertController+EXT.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -5032,6 +5037,7 @@
 				79218AD2275576640063004E /* TextListModel.swift in Sources */,
 				2912314326F9433600CF5F3B /* UIConstants.swift in Sources */,
 				79218AAF275196040063004E /* HealthRecordsUserView.swift in Sources */,
+				2D1C8CF72A79C71B005204B7 /* UIAlertController+EXT.swift in Sources */,
 				2DD5F1022A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataProperties.swift in Sources */,
 				795AA7732715650900E59FF1 /* NewsFeedTableViewCell.swift in Sources */,
 				3E62CFCD299BF3A5000FBB40 /* CommentService+Network.swift in Sources */,
@@ -5433,6 +5439,7 @@
 				79A15B0A2808B27600F8330D /* CommentViewTableViewCell.swift in Sources */,
 				3E62CFCE299BF3A5000FBB40 /* CommentService+Network.swift in Sources */,
 				3EDC0D20296C93D200603FED /* HospitalVisitDetailView.swift in Sources */,
+				2D1C8CF82A79C71B005204B7 /* UIAlertController+EXT.swift in Sources */,
 				2DD5F1032A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataProperties.swift in Sources */,
 				79B1A0FE28754C19009B3EFB /* AuthenticatedHealthVisitsResponseObject.swift in Sources */,
 				3E6831252940D41200100402 /* LaboratoryOrder+CoreDataProperties.swift in Sources */,
@@ -5811,6 +5818,7 @@
 				798005572852C66E006E390F /* NetworkConnection.swift in Sources */,
 				798005592852C66E006E390F /* TextListModel.swift in Sources */,
 				7980055A2852C66E006E390F /* UIConstants.swift in Sources */,
+				2D1C8CF62A79C71B005204B7 /* UIAlertController+EXT.swift in Sources */,
 				2DD5F1012A1D71BF00DA7C67 /* DiagnosticImaging+CoreDataProperties.swift in Sources */,
 				7980055B2852C66E006E390F /* HealthRecordsUserView.swift in Sources */,
 				7980055C2852C66E006E390F /* NewsFeedTableViewCell.swift in Sources */,
