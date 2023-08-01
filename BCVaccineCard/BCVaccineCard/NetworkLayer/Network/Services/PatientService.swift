@@ -75,6 +75,8 @@ struct PatientService {
        
     }
     
+    
+    
     // MARK: Organ Donor Status
     public func fetchAndStoreOrganDonorStatus(for patient: Patient, completion: @escaping (OrganDonorStatus?)->Void) {
         guard let hdid = patient.hdid else {

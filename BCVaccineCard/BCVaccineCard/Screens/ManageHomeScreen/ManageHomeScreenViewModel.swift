@@ -14,7 +14,7 @@ extension ManageHomeScreenViewController {
         func createDataSource() {
             let coreDataQuickLinks = StorageService.shared.fetchQuickLinksPreferences()
             let convertedQuickLinks = convertCoreDataQuickLinks(coreDataModel: coreDataQuickLinks)
-            
+            // TODO: Finish this
         }
         
         private func convertCoreDataQuickLinks(coreDataModel: [QuickLinkPreferences]) -> [QuickLinksNames] {
@@ -25,6 +25,18 @@ extension ManageHomeScreenViewController {
                 }
             }
             return links
+        }
+        
+        func constructJsonStringForAPIPreferences(coreDataModel: [QuickLinkPreferences]) -> String? {
+            let quickLinks = convertCoreDataQuickLinks(coreDataModel: coreDataModel)
+            var quickLinksModel: [QuickLinksModelForPreferences] = []
+            for link in quickLinks {
+                let module = link.getAPIFilterType?.rawValue ?? ""
+                let filter = QuickLinksModelForPreferences.Filter(modules: [module])
+                let preference = QuickLinksModelForPreferences(name: link.rawValue, filter: filter)
+                quickLinksModel.append(preference)
+            }
+            return quickLinksModel.toJsonString()
         }
     }
     
@@ -114,39 +126,51 @@ extension ManageHomeScreenViewController {
             case .OrganDonor: return .Service
             }
         }
-    }
-    
-}
-
-
-
-
-
-
-//        let filter: Filter?
-
-//        enum FilterTypes: String, Codable {
-//            case Immunization = "Immunization"
-//            case Medication = "Medication"
-//            case AllLaboratory = "AllLaboratory"
-//            case Laboratory = "Laboratory"
-//            case Encounter = "Encounter"
-//            case Note = "Note"
-//            case MedicationRequest = "MedicationRequest"
-//            case ClinicalDocument = "ClinicalDocument"
-//            case HospitalVisit = "HospitalVisit"
-//            case DiagnosticImaging = "DiagnosticImaging"
-//        }
+        
+        var getAPIFilterType: APIFilterTypes? {
+            switch self {
+            case .MyNotes: return .Note
+            case .Immunizations: return .Immunization
+            case .Medications: return .Medication
+            case .LabResults: return .AllLaboratory
+            case .COVID19Tests: return .Laboratory
+            case .SpecialAuthority: return .MedicationRequest
+            case .HospitalVisits: return .HospitalVisit
+            case .ClinicalDocuments: return .ClinicalDocument
+            case .ImagingReports: return .DiagnosticImaging
+            case .OrganDonor: return nil
+            }
+        }
+        
+        enum APIFilterTypes: String, Codable {
+            case Immunization = "Immunization"
+            case Medication = "Medication"
+            case AllLaboratory = "AllLaboratory"
+            case Laboratory = "Laboratory"
+            case Encounter = "Encounter"
+            case Note = "Note"
+            case MedicationRequest = "MedicationRequest"
+            case ClinicalDocument = "ClinicalDocument"
+            case HospitalVisit = "HospitalVisit"
+            case DiagnosticImaging = "DiagnosticImaging"
+        }
 //        struct Filter: Codable {
 //            let modules: [String]
 //
-//            var getModules: [FilterTypes] {
-//                var mod: [FilterTypes] = []
+//            var getModules: [APIFilterTypes] {
+//                var mod: [APIFilterTypes] = []
 //                for module in modules {
-//                    if let filterType = FilterTypes(rawValue: module) {
+//                    if let filterType = APIFilterTypes(rawValue: module) {
 //                        mod.append(filterType)
 //                    }
 //                }
 //                return mod
 //            }
 //        }
+        
+    }
+    
+}
+
+
+        

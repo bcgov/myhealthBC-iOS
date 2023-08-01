@@ -122,3 +122,12 @@ struct AuthenticatedUserProfileRequestObject: Codable {
     }
 }
 
+struct QuickLinksModelForPreferences: Codable {
+    struct Filter: Codable {
+        let modules: [String]
+    }
+    
+    let name: String
+    let filter: Filter
+}
+

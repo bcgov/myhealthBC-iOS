@@ -108,6 +108,9 @@ class HomeScreenViewController: BaseViewController {
             } else if !authManager.isAuthenticated {
                 newTypes.insert(.ImmunizationSchedule, at: 1)
             }
+            let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
+            let quickLinks = convertQuickLinkIntoDataSource(coreDataModel: quickLinkPreferences)
+            newTypes.append(contentsOf: quickLinks)
             data[0] = .quickAccess(types: newTypes)
         default: break
         }
@@ -120,6 +123,17 @@ class HomeScreenViewController: BaseViewController {
             data.insert(.loginStatus(status: authManager.authStaus), at: index)
         }
         return data
+    }
+    
+    private func convertQuickLinkIntoDataSource(coreDataModel: [QuickLinkPreferences]) -> [HomeScreenCellType] {
+        var links: [HomeScreenCellType] = []
+        for model in coreDataModel {
+            if let name = model.quickLink, let type = ManageHomeScreenViewController.QuickLinksNames(rawValue: name) {
+                let link = HomeScreenCellType.QuickLink(type: type)
+                links.append(link)
+            }
+        }
+        return links
     }
 
     
@@ -414,8 +428,9 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
 extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
     func moreOptions(indexPath: IndexPath?) {
         // TODO: Show options from bottom (native), and if user selects remove, we remove quick link at this given index path (using API call)
-            // 1: Create alert from bottom
-            // 2: On remove option, hit API for delete preference/quick link
+            // 1: Create delete API request
+            // 2: Create alert from bottom
+            // 3: On remove option, hit API for delete preference/quick link
                 // On Success: Remove from Local storage (need to create delete logic) and refresh screen (just re-load collection view, as data source is a computed property)
                 // On Failure: Show alert to user that delete was unsuccessful and to try again later
     }
