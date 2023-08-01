@@ -27,8 +27,7 @@ extension ManageHomeScreenViewController {
             return links
         }
         
-        func constructJsonStringForAPIPreferences(coreDataModel: [QuickLinkPreferences]) -> String? {
-            let quickLinks = convertCoreDataQuickLinks(coreDataModel: coreDataModel)
+        static func constructJsonStringForAPIPreferences(quickLinks: [QuickLinksNames]) -> String? {
             var quickLinksModel: [QuickLinksModelForPreferences] = []
             for link in quickLinks {
                 let module = link.getAPIFilterType?.rawValue ?? ""

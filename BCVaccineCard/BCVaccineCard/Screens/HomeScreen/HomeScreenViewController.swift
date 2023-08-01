@@ -48,6 +48,11 @@ class HomeScreenViewController: BaseViewController {
     private var communicationBanner: CommunicationBanner?
     private let connectionListener = NetworkConnection()
     
+    private var actionSheetController: UIAlertController?
+    
+    // TODO: Put into ViewModel once created
+    private var patientService: PatientService?
+    
     private var dataSource: [DataSource] {
         genDataSource()
     }
@@ -71,6 +76,7 @@ class HomeScreenViewController: BaseViewController {
     }
     
     private func setup() {
+        patientService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         addObservablesForChangeInAuthenticationStatus()
         setupCollectionView()
         navSetup()
@@ -131,6 +137,16 @@ class HomeScreenViewController: BaseViewController {
             if let name = model.quickLink, let type = ManageHomeScreenViewController.QuickLinksNames(rawValue: name) {
                 let link = HomeScreenCellType.QuickLink(type: type)
                 links.append(link)
+            }
+        }
+        return links
+    }
+    
+    private func convertQuickLinkIntoQuickLinksNames(coreDataModel: [QuickLinkPreferences]) -> [ManageHomeScreenViewController.QuickLinksNames] {
+        var links: [ManageHomeScreenViewController.QuickLinksNames] = []
+        for model in coreDataModel {
+            if let name = model.quickLink, let type = ManageHomeScreenViewController.QuickLinksNames(rawValue: name) {
+                links.append(type)
             }
         }
         return links
@@ -427,12 +443,90 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
 // MARK: Quick Links
 extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
     func moreOptions(indexPath: IndexPath?) {
-        // TODO: Show options from bottom (native), and if user selects remove, we remove quick link at this given index path (using API call)
-            // 1: Create delete API request
+            // 1: Create PUT API request
             // 2: Create alert from bottom
             // 3: On remove option, hit API for delete preference/quick link
-                // On Success: Remove from Local storage (need to create delete logic) and refresh screen (just re-load collection view, as data source is a computed property)
+                // reduce data source to array of QuickLinksNames which we will convert to json string
+                // On Success: Store again to core data (we will delete existing and store fresh) and then refresh screen (just re-load collection view, as data source is a computed property)
                 // On Failure: Show alert to user that delete was unsuccessful and to try again later
+        guard let indexPath = indexPath else {
+            showGeneralAlertFailure()
+            return
+        }
+        showMoreOptions(indexPath: indexPath)
+    }
+    
+    private func showGeneralAlertFailure() {
+        alert(title: "Error", message: "Unable to remove link at this time, please try again later")
+    }
+    
+    private func getQuickLink(indexPath: IndexPath) -> ManageHomeScreenViewController.QuickLinksNames? {
+        let ds = dataSource[indexPath.section]
+        switch ds {
+        case .quickAccess(types: let types):
+            let type = types[indexPath.row]
+            switch type {
+            case .QuickLink(type: let type):
+                return type
+            default: return nil
+            }
+        default: return nil
+        }
+    }
+    
+    private func showMoreOptions(indexPath: IndexPath) {
+        guard let quickLinkToRemove = getQuickLink(indexPath: indexPath) else {
+            showGeneralAlertFailure()
+            return
+        }
+        let name = quickLinkToRemove.rawValue
+        actionSheetController = UIAlertController(title: "Remove \(name)", message: "Remove the section from homepage", preferredStyle: .actionSheet)
+        
+        actionSheetController?.addAction(UIAlertAction(title: "Remove", style: .default, handler: { _ in
+            
+            let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
+            var quickLinks = self.convertQuickLinkIntoQuickLinksNames(coreDataModel: quickLinkPreferences)
+            if let index = quickLinks.firstIndex(of: quickLinkToRemove) {
+                quickLinks.remove(at: index)
+            }
+            guard let preferenceString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: quickLinks) else {
+                self.showGeneralAlertFailure()
+                return
+            }
+            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, completion: { result in
+                if let result = result {
+                    guard let patient = StorageService.shared.fetchAuthenticatedPatient(), let payload = result.resourcePayload else { return }
+                    let storedLinks = StorageService.shared.store(quickLinksPreferences: payload, for: patient)
+                    self.collectionView.reloadData()
+                    self.dismissActionSheet()
+                } else {
+                    self.showGeneralAlertFailure()
+                }
+            })
+    
+        }))
+        
+        actionSheetController?.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { [self] _ in
+            self.dismissActionSheet()
+        }))
+        
+        guard let actionSheetController = actionSheetController else { return }
+        self.present(actionSheetController, animated: true) {
+            actionSheetController.view.superview?.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissActionSheetTouchOutside))
+            guard let views = actionSheetController.view.superview?.subviews, views.count > 0 else { return }
+            views[0].addGestureRecognizer(tap)
+        }
+    }
+
+    private func dismissActionSheet() {
+        actionSheetController?.dismiss(animated: true)
+        actionSheetController = nil
+        
+    }
+    
+    @objc func dismissActionSheetTouchOutside() {
+        dismissActionSheet()
     }
 }
 

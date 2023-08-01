@@ -200,6 +200,7 @@ extension StorageService: StoragePatientManager {
               let array = object.value?.convertQuickLinksStringToObject() else {
             return nil
         }
+        deleteQuickLinkPreferences()
         var storedObjects: [QuickLinkPreferences] = []
         for (index, value) in array.enumerated() {
             let model = QuickLinkPreferences(context: context)
@@ -228,12 +229,14 @@ extension StorageService: StoragePatientManager {
         }
     }
     
-    func deleteQuickLinkPreference(preference: ManageHomeScreenViewController.QuickLinksNames) {
+    private func deleteQuickLinkPreferences() {
         guard let patient = fetchAuthenticatedPatient() else { return }
         var preferences = fetchQuickLinksPreferences()
-        guard let pref = preferences.filter({$0.quickLink == preference.rawValue}).first else {return}
-        delete(object: pref)
-        notify(event: StorageEvent(event: .Delete, entity: .QuickLinkPreference, object: patient))
+        for preference in preferences {
+            delete(object: preference)
+            notify(event: StorageEvent(event: .Delete, entity: .QuickLinkPreference, object: preference))
+        }
+        
     }
     
     /// returns existing patient

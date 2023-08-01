@@ -75,7 +75,47 @@ struct PatientService {
        
     }
     
-    
+//    public func update quick links preferences
+    public func updateQuickLinkPreferences(preferenceString: String, completion: @escaping (UserProfilePreferencePUTResponseModel?)->Void) {
+        guard let token = authManager.authToken,
+              let hdid = authManager.hdid,
+              NetworkConnection.shared.hasConnection
+        else { return completion(nil)}
+        
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.hdid: hdid
+            ]
+            let parameters = UserProfilePreferencePUTRequestModel(hdid: hdid, value: preferenceString)
+            let requestModel = NetworkRequest<UserProfilePreferencePUTRequestModel, UserProfilePreferencePUTResponseModel>(url: endpoints.preference(base: baseURL, hdid: hdid),
+                                                                                type: .Put,
+                                                                                parameters: parameters,
+                                                                                encoder: .urlEncoder,
+                                                                                headers: headers)
+            { result in
+                
+                if (result?.resourcePayload) != nil {
+                    // return result
+                    return completion(result)
+                } else {
+                    return completion(nil)
+                }
+            } onError: { error in
+                network.showToast(error: error)
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
     
     // MARK: Organ Donor Status
     public func fetchAndStoreOrganDonorStatus(for patient: Patient, completion: @escaping (OrganDonorStatus?)->Void) {

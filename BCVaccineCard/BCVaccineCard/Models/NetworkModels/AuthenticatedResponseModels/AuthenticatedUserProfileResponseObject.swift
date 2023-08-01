@@ -122,6 +122,9 @@ struct AuthenticatedUserProfileRequestObject: Codable {
     }
 }
 
+
+// MARK: QUICK LINKS PUT SECTION
+
 struct QuickLinksModelForPreferences: Codable {
     struct Filter: Codable {
         let modules: [String]
@@ -129,5 +132,16 @@ struct QuickLinksModelForPreferences: Codable {
     
     let name: String
     let filter: Filter
+}
+
+struct UserProfilePreferencePUTRequestModel: Codable {
+    let hdid: String
+    let preference: String = "quickLinks"
+    let value: String
+}
+
+struct UserProfilePreferencePUTResponseModel: Codable {
+    let resourcePayload: AuthenticatedUserProfileResponseObject.QuickLinks?
+
 }
 
