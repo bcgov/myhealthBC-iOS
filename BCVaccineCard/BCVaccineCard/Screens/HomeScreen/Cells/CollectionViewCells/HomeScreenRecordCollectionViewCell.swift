@@ -70,7 +70,18 @@ enum HomeScreenCellType {
             return nil
         }
     }
+    
+    var hasRightCornerButton: Bool {
+        switch self {
+        case .QuickLink(type: let type): return true
+        default: return false
+        }
+    }
 
+}
+
+protocol HomeScreenRecordCollectionViewCellDelegate: AnyObject {
+    func moreOptions(indexPath: IndexPath?)
 }
 
 class HomeScreenRecordCollectionViewCell: UICollectionViewCell {
@@ -80,8 +91,12 @@ class HomeScreenRecordCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak private var iconImageView: UIImageView!
     @IBOutlet weak private var titleLabel: UILabel!
 //    @IBOutlet weak private var descriptionLabel: UILabel!
-    @IBOutlet weak private var buttonImageView: UIImageView! //TODO: May have to make this a button
+    @IBOutlet weak private var buttonImageView: UIImageView!
+    @IBOutlet weak private var rightCornerButton: UIButton!
 //    @IBOutlet weak private var titleHeight: NSLayoutConstraint!
+    
+    weak private var delegate: HomeScreenRecordCollectionViewCellDelegate?
+    private var indexPath: IndexPath?
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -108,12 +123,19 @@ class HomeScreenRecordCollectionViewCell: UICollectionViewCell {
 //        descriptionLabel.textColor = AppColours.textBlack
     }
     
-    func configure(forType type: HomeScreenCellType) {
+    func configure(forType type: HomeScreenCellType, delegateOwner: UIViewController, indexPath: IndexPath) {
+        self.indexPath = indexPath
         iconImageView.image = type.getIcon
         titleLabel.text = type.getTitle
+        rightCornerButton.isHidden = !type.hasRightCornerButton
+        self.delegate = delegateOwner as? HomeScreenRecordCollectionViewCellDelegate
 //        descriptionLabel.text = type.getDescriptionText
 //        buttonImageView.image = type.getButtonImage(auth: auth)
 //        titleHeight.constant = type.getTitle.heightForView(font: UIFont.bcSansBoldWithSize(size: 17), width: titleLabel.bounds.width)
+    }
+    
+    @IBAction private func rightCornerButtonTapped(_ sender: UIButton) {
+        delegate?.moreOptions(indexPath: self.indexPath)
     }
 
 }

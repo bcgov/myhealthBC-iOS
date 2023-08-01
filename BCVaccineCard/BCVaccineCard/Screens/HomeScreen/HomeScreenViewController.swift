@@ -299,7 +299,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
         case .quickAccess(types: let types):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeScreenRecordCollectionViewCell.getName, for: indexPath) as? HomeScreenRecordCollectionViewCell else { return UICollectionViewCell() }
             let type = types[indexPath.row]
-            cell.configure(forType: type)
+            cell.configure(forType: type, delegateOwner: self, indexPath: indexPath)
             return cell
         }
     }
@@ -408,6 +408,17 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
         navigationController?.pushViewController(learnMoreVC, animated: true)
     }
     
+}
+
+// MARK: Quick Links
+extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
+    func moreOptions(indexPath: IndexPath?) {
+        // TODO: Show options from bottom (native), and if user selects remove, we remove quick link at this given index path (using API call)
+            // 1: Create alert from bottom
+            // 2: On remove option, hit API for delete preference/quick link
+                // On Success: Remove from Local storage (need to create delete logic) and refresh screen (just re-load collection view, as data source is a computed property)
+                // On Failure: Show alert to user that delete was unsuccessful and to try again later
+    }
 }
 
 // MARK: Login delegate

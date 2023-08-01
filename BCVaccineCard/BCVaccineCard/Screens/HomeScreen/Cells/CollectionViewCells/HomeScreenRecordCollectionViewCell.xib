@@ -49,6 +49,18 @@
                                             <constraint firstAttribute="width" constant="24" id="sbs-mN-b1Q"/>
                                         </constraints>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5vb-la-xg5">
+                                        <rect key="frame" x="140" y="16" width="28" height="28"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="5vb-la-xg5" secondAttribute="height" multiplier="1:1" id="Ved-FH-ReT"/>
+                                            <constraint firstAttribute="height" constant="28" id="cmP-he-Xbx"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="close-icon-blue"/>
+                                        <connections>
+                                            <action selector="rightCornerButtonTapped:" destination="gTV-IL-0wX" eventType="touchUpInside" id="ihR-yl-eRO"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
@@ -56,8 +68,10 @@
                                     <constraint firstItem="zdx-eJ-51R" firstAttribute="top" secondItem="Yl8-wZ-vLY" secondAttribute="top" constant="16" id="39O-s5-jHI"/>
                                     <constraint firstAttribute="trailing" secondItem="Uys-CW-JmQ" secondAttribute="trailing" constant="16" id="3vT-fR-Sxm"/>
                                     <constraint firstItem="Uys-CW-JmQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zdx-eJ-51R" secondAttribute="trailing" id="Cyi-k4-HV4"/>
+                                    <constraint firstItem="5vb-la-xg5" firstAttribute="top" secondItem="QnH-Hm-3Hb" secondAttribute="top" id="Ng1-9d-ztI"/>
                                     <constraint firstAttribute="bottom" secondItem="zdx-eJ-51R" secondAttribute="bottom" constant="16" id="W1B-td-evG"/>
                                     <constraint firstItem="zdx-eJ-51R" firstAttribute="leading" secondItem="Yl8-wZ-vLY" secondAttribute="leading" constant="16" id="YS4-wb-auz"/>
+                                    <constraint firstItem="5vb-la-xg5" firstAttribute="trailing" secondItem="Uys-CW-JmQ" secondAttribute="trailing" id="ZjF-At-IqZ"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -81,6 +95,7 @@
             <connections>
                 <outlet property="buttonImageView" destination="Uys-CW-JmQ" id="Od0-AB-DH8"/>
                 <outlet property="iconImageView" destination="QnH-Hm-3Hb" id="u72-rj-aCS"/>
+                <outlet property="rightCornerButton" destination="5vb-la-xg5" id="NBx-N2-wf4"/>
                 <outlet property="roundedView" destination="Yl8-wZ-vLY" id="GOt-6k-DsD"/>
                 <outlet property="shadowView" destination="L0L-iU-d6E" id="vWv-LX-Aet"/>
                 <outlet property="titleLabel" destination="LbQ-Sn-LGw" id="AtS-xz-B2u"/>
@@ -89,6 +104,7 @@
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="close-icon-blue" width="24" height="24"/>
         <image name="home-arrow" width="24" height="24"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
