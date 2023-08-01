@@ -255,8 +255,9 @@ extension UIViewController {
         }
         
         tabBar.switchTo(tab: tab)
+        // NOTE: May have to find a better way of doing this than using a 0.5 second delay - works for now
         if let appliedFilter = appliedFilter {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 let userInfo: [String: RecordsFilter] = ["filter": appliedFilter]
                 NotificationCenter.default.post(name: .applyQuickLinkFilter, object: nil, userInfo: userInfo as [AnyHashable : Any])
             }

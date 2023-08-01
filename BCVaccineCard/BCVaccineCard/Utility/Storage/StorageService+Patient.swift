@@ -201,11 +201,13 @@ extension StorageService: StoragePatientManager {
             return nil
         }
         deleteQuickLinkPreferences()
+        let version = object.version ?? 0
         var storedObjects: [QuickLinkPreferences] = []
         for (index, value) in array.enumerated() {
             let model = QuickLinkPreferences(context: context)
             model.quickLink = value.name
             model.homeOrder = Int64(index)
+            model.version = Int64(version)
             model.patient = patient
             do {
                 try context.save()

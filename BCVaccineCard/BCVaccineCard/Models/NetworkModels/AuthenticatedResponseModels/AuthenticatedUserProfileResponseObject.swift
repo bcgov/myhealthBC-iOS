@@ -138,6 +138,7 @@ struct UserProfilePreferencePUTRequestModel: Codable {
     let hdid: String
     let preference: String = "quickLinks"
     let value: String
+    let version: Int
 }
 
 struct UserProfilePreferencePUTResponseModel: Codable {

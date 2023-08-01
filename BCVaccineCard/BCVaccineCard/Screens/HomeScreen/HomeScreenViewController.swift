@@ -96,7 +96,7 @@ class HomeScreenViewController: BaseViewController {
         // Here, set quick links, then reload data source
     }
     
-    // TODO: Adjust this function to handle quick links preferences
+    // TODO: Adjust this so that it doesn't get called so many times, pretty excessive right now
     private func genDataSource() -> [DataSource] {
         var data: [DataSource] = [
             .quickAccess(types: [
@@ -485,6 +485,7 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
         actionSheetController?.addAction(UIAlertAction(title: "Remove", style: .default, handler: { _ in
             
             let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
+            let version = Int(quickLinkPreferences.first?.version ?? 0)
             var quickLinks = self.convertQuickLinkIntoQuickLinksNames(coreDataModel: quickLinkPreferences)
             if let index = quickLinks.firstIndex(of: quickLinkToRemove) {
                 quickLinks.remove(at: index)
@@ -493,7 +494,7 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
                 self.showGeneralAlertFailure()
                 return
             }
-            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, completion: { result in
+            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, version: version, completion: { result in
                 if let result = result {
                     guard let patient = StorageService.shared.fetchAuthenticatedPatient(), let payload = result.resourcePayload else { return }
                     let storedLinks = StorageService.shared.store(quickLinksPreferences: payload, for: patient)

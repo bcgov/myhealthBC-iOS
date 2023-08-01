@@ -293,6 +293,7 @@
     <entity name="QuickLinkPreferences" representedClassName="QuickLinkPreferences" syncable="YES" codeGenerationType="class">
         <attribute name="homeOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="quickLink" optional="YES" attributeType="String"/>
+        <attribute name="version" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="quickLinkPreferences" inverseEntity="Patient"/>
     </entity>
     <entity name="SpecialAuthorityDrug" representedClassName="SpecialAuthorityDrug" syncable="YES">

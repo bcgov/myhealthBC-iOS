@@ -136,10 +136,13 @@ class UsersListOfRecordsViewController: BaseViewController {
         let patientRecords = fetchPatientRecords(for: currentSegment)
         currentFilter = filter
         if filter.recordTypes.contains(.Notes) {
+            listOfRecordsSegmentedView.setSegmentedControl(forType: .Notes)
             showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: nil)
         } else {
-            show(records: patientRecords, filter:filter, searchText: nil)
+            listOfRecordsSegmentedView.setSegmentedControl(forType: .Timeline)
+            showTimelineViews(patientRecordsEmpty: patientRecords.isEmpty, searchText: nil)
         }
+        show(records: patientRecords, filter:filter, searchText: nil)
         
     }
     
