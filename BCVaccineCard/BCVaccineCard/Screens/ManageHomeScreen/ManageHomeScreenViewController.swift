@@ -100,6 +100,11 @@ extension ManageHomeScreenViewController: UITableViewDelegate, UITableViewDataSo
         return viewModel?.dataSource[section].getSectionTitle
     }
     
+    // TODO: Implement this
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        <#code#>
+//    }
+    
 //    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
 //        if let title = viewModel?.dataSource[section].getSectionTitle {
 //            let header = view as? UITableViewHeaderFooterView
