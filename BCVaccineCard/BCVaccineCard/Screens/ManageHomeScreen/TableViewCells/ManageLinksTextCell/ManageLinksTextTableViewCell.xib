@@ -10,14 +10,31 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ManageLinksTextTableViewCell" id="KGk-i7-Jjw" customClass="ManageLinksTextTableViewCell" customModule="HealthGateway" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ManageLinksTextTableViewCell" id="KGk-i7-Jjw" customClass="ManageLinksTextTableViewCell" customModule="HealthGateway" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vgE-jE-HX4">
+                        <rect key="frame" x="8" y="8" width="304" height="28"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="vgE-jE-HX4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="LyF-Fk-qKG"/>
+                    <constraint firstItem="vgE-jE-HX4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="P88-H0-Z3y"/>
+                    <constraint firstAttribute="bottom" secondItem="vgE-jE-HX4" secondAttribute="bottom" constant="8" id="awI-SC-dJG"/>
+                    <constraint firstAttribute="trailing" secondItem="vgE-jE-HX4" secondAttribute="trailing" constant="8" id="qt9-bH-4XT"/>
+                </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="manageTextLabel" destination="vgE-jE-HX4" id="Fa8-wS-dgO"/>
+            </connections>
             <point key="canvasLocation" x="101" y="21"/>
         </tableViewCell>
     </objects>

@@ -145,6 +145,7 @@ extension UIViewController {
         case TermsOfService
         case Notifications
         case ImmunizationSchedule
+        case ManageHomeScreen
     }
     
     fileprivate func createController(route: Route, viewModel: Any? = nil) -> UIViewController? {
@@ -240,6 +241,11 @@ extension UIViewController {
             return NotificationsViewController.construct(viewModel: vm)
         case .ImmunizationSchedule:
             return ImmunizationScheduleViewController.construct()
+        case .ManageHomeScreen:
+            guard let vm = viewModel as? ManageHomeScreenViewController.ViewModel else {
+                return nil
+            }
+            return ManageHomeScreenViewController.construct(viewModel: vm)
         }
     }
 }

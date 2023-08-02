@@ -382,8 +382,9 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
 // MARK: Header logic
 extension HomeScreenViewController: QuickAccessCollectionReusableViewDelegate {
     func manageButtonTapped() {
-        // working on soon
-        alert(title: "Coming soon", message: "Will be implemented in the next build")
+        var vm = ManageHomeScreenViewController.ViewModel()
+        vm.createDataSource()
+        show(route: .ManageHomeScreen, withNavigation: true, viewModel: vm)
     }
 }
 

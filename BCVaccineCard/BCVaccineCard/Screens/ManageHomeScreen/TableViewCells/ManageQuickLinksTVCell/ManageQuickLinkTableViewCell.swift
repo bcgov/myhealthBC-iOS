@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ManageQuickLinkTableViewCellDelegate: AnyObject {
-    func checkboxTapped(enabled: Bool)
+    func checkboxTapped(enabled: Bool, indexPath: IndexPath)
 }
 
 class ManageQuickLinkTableViewCell: UITableViewCell {
@@ -20,6 +20,7 @@ class ManageQuickLinkTableViewCell: UITableViewCell {
     
     private weak var delegate: ManageQuickLinkTableViewCellDelegate?
     private var enabled = false
+    private var indexPath = IndexPath()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,11 +28,22 @@ class ManageQuickLinkTableViewCell: UITableViewCell {
     }
 
     private func setup() {
-        // TODO: UI setup here
+        shadowView.backgroundColor = UIColor.clear
+        shadowView.layer.shadowColor = UIColor.black.cgColor
+        shadowView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        shadowView.layer.shadowOpacity = 0.25
+        shadowView.layer.shadowRadius = 6.0
+        
+        roundedView.layer.cornerRadius = 3
+        roundedView.layer.masksToBounds = true
+        
+        quickLinkLabel.textColor = AppColours.textBlack
+        quickLinkLabel.font = UIFont.bcSansBoldWithSize(size: 15)
     }
     
-    func configure(quickLink: ManageHomeScreenViewController.QuickLinksNames, enabled: Bool, delegateOwner: UIViewController) {
+    func configure(quickLink: ManageHomeScreenViewController.QuickLinksNames, enabled: Bool, delegateOwner: UIViewController, indexPath: IndexPath) {
         self.enabled = enabled
+        self.indexPath = indexPath
         quickLinkLabel.text = quickLink.getManageScreenDisplayableName
         setCheckboxButton(enabled: enabled)
         self.delegate = delegateOwner as? ManageQuickLinkTableViewCellDelegate
@@ -45,7 +57,7 @@ class ManageQuickLinkTableViewCell: UITableViewCell {
     @IBAction private func checkboxButtonAction(_ sender: UIButton) {
         enabled = !enabled
         setCheckboxButton(enabled: enabled)
-        delegate?.checkboxTapped(enabled: enabled)
+        delegate?.checkboxTapped(enabled: enabled, indexPath: self.indexPath)
     }
     
 }

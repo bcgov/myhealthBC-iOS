@@ -17,11 +17,8 @@ class ManageLinksTextTableViewCell: UITableViewCell {
     }
 
     private func setup() {
-        
+        manageTextLabel.textColor = AppColours.appBlue
+        manageTextLabel.font = UIFont.bcSansRegularWithSize(size: 15)
+        manageTextLabel.text = "Set a folder to display on your home page for quick and easy access."
     }
-    
-    func configure() {
-        
-    }
-    
 }

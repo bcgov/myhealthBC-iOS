@@ -9,12 +9,33 @@ import Foundation
 
 extension ManageHomeScreenViewController {
     struct ViewModel {
-        let dataSource: DataSource
+        var dataSource: [DataSource]
+        var patientService: PatientService
         
-        func createDataSource() {
+        init() {
+            self.dataSource = []
+            self.patientService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+        }
+        
+        mutating func createDataSource() {
             let coreDataQuickLinks = StorageService.shared.fetchQuickLinksPreferences()
             let convertedQuickLinks = convertCoreDataQuickLinks(coreDataModel: coreDataQuickLinks)
-            // TODO: Finish this
+            var ds: [DataSource] = []
+            ds.append(DataSource.introText)
+            
+            let recordsOrder: [QuickLinksNames] = [
+                .MyNotes, .Immunizations, .Medications, .LabResults, .COVID19Tests, .SpecialAuthority, .HospitalVisits, .HealthVisits, .ClinicalDocuments, .ImagingReports
+            ]
+            let healthRecords = constructLinksTypeDS(includedQuickLinks: convertedQuickLinks, order: recordsOrder)
+            ds.append(DataSource.healthRecord(types: healthRecords))
+            
+            let serviceOrder: [QuickLinksNames] = [
+                .OrganDonor
+            ]
+            let serviceRecords = constructLinksTypeDS(includedQuickLinks: convertedQuickLinks, order: serviceOrder)
+            ds.append(DataSource.service(types: serviceRecords))
+            
+            self.dataSource = ds
         }
         
         private func convertCoreDataQuickLinks(coreDataModel: [QuickLinkPreferences]) -> [QuickLinksNames] {
@@ -25,6 +46,14 @@ extension ManageHomeScreenViewController {
                 }
             }
             return links
+        }
+        
+        private func constructLinksTypeDS(includedQuickLinks: [QuickLinksNames], order: [QuickLinksNames]) -> [DSType] {
+            let ds: [DSType] = order.map { name in
+                let enabled = includedQuickLinks.contains(name)
+                return DSType(type: name, enabled: enabled)
+            }
+            return ds
         }
         
         static func constructJsonStringForAPIPreferences(quickLinks: [QuickLinksNames]) -> String? {
@@ -40,9 +69,37 @@ extension ManageHomeScreenViewController {
     }
     
     enum DataSource {
-        case introText(text: String)
-        case healthRecord(types: [QuickLinksNames])
-        case service(types: [QuickLinksNames])
+        case introText
+        case healthRecord(types: [DSType])
+        case service(types: [DSType])
+        
+        var getSectionTitle: String? {
+            switch self {
+            case .introText: return nil
+            case .healthRecord: return QuickLinksNames.Section.HealthRecord.rawValue
+            case .service: return QuickLinksNames.Section.Service.rawValue
+            }
+        }
+        
+        func constructNewTypesOnEnabled(enabled: Bool, indexPath: IndexPath) -> [DSType]? {
+            switch self {
+            case .introText: return nil
+            case .healthRecord(types: let types), .service(types: let types):
+                var newTypes = types
+                newTypes[indexPath.row].enabled = enabled
+                return newTypes
+//            case .service(types: let types):
+//                var newTypes = types
+//                newTypes[indexPath.row].enabled = enabled
+//                return newTypes
+            }
+        }
+    }
+    
+    struct DSType {
+        let type: QuickLinksNames
+        var enabled: Bool
+        
     }
     
     enum QuickLinksNames: String, Codable {
@@ -58,9 +115,9 @@ extension ManageHomeScreenViewController {
         case ImagingReports = "Imaging Reports"
         case OrganDonor = "Organ Donor"
         
-        enum Section: Codable {
-            case HealthRecord
-            case Service
+        enum Section: String, Codable {
+            case HealthRecord = "Health Record"
+            case Service = "Service"
         }
         
         var getHomeScreenDisplayableName: String {
@@ -94,6 +151,7 @@ extension ManageHomeScreenViewController {
             case .OrganDonor: return "Organ Donor"
             }
         }
+
         // TODO: Get the icon used on the list of health records for the record type
         var getHomeScreenIconStringName: String? {
             switch self {
