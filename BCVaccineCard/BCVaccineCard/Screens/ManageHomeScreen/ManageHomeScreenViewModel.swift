@@ -78,6 +78,22 @@ extension ManageHomeScreenViewController {
             case .OrganDonor: return "Organ\nDonor"
             }
         }
+        
+        var getManageScreenDisplayableName: String {
+            switch self {
+            case .MyNotes: return "My Notes"
+            case .Immunizations: return "Immunization"
+            case .Medications: return "Medications"
+            case .LabResults: return "Lab Results"
+            case .COVID19Tests: return "COVID-19 Tests"
+            case .SpecialAuthority: return "Special Authority"
+            case .HospitalVisits: return "Hospital Visits"
+            case .HealthVisits: return "Health Visits"
+            case .ClinicalDocuments: return "Clinical Documents"
+            case .ImagingReports: return "Imaging Reports"
+            case .OrganDonor: return "Organ Donor"
+            }
+        }
         // TODO: Get the icon used on the list of health records for the record type
         var getHomeScreenIconStringName: String? {
             switch self {

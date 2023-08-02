@@ -8,16 +8,20 @@
 import UIKit
 
 class ManageLinksTextTableViewCell: UITableViewCell {
+    
+    @IBOutlet private weak var manageTextLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        setup()
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    private func setup() {
+        
+    }
+    
+    func configure() {
+        
     }
     
 }
