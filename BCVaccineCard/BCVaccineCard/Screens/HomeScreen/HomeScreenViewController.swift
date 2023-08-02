@@ -484,7 +484,8 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
         }
         let name = quickLinkToRemove.rawValue
         actionSheetController = UIAlertController(title: "Remove \(name)", message: "Remove the section from homepage", preferredStyle: .actionSheet)
-        actionSheetController?.setTitleAttr(font: UIFont.bcSansBoldWithSize(size: 13), color: AppColours.textBlack)
+        actionSheetController?.setTitleAttr(font: UIFont.bcSansBoldWithSize(size: 15), color: AppColours.textBlack)
+        actionSheetController?.setMessage(font: UIFont.bcSansRegularWithSize(size: 12), color: AppColours.textGray)
         
         actionSheetController?.addAction(UIAlertAction(title: "Remove", style: .default, handler: { _ in
             
