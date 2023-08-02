@@ -513,7 +513,7 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
                 return
             }
             let type: UserProfilePreferencePUTRequestModel.PreferenceType = quickLinkToRemove == .OrganDonor ? .OrganDonor : .NormalQuickLinks
-            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, preferenceType: type, version: version, completion: { result in
+            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, preferenceType: type, version: version, completion: { result, showAlert in
                 if let result = result {
                     guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
                     self.patientService?.fetchAndStoreQuickLinksPreferences(for: patient, useLoader: true, completion: { preferences in
@@ -521,7 +521,7 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
                         self.collectionView.reloadData()
                         self.dismissActionSheet()
                     })
-                } else {
+                } else if showAlert {
                     self.showGeneralAlertFailure()
                 }
             })

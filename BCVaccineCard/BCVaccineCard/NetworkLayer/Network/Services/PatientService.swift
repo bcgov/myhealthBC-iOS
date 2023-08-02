@@ -77,11 +77,14 @@ struct PatientService {
     }
     
 //    public func update quick links preferences
-    public func updateQuickLinkPreferences(preferenceString: String, preferenceType: UserProfilePreferencePUTRequestModel.PreferenceType, version: Int, completion: @escaping (UserProfilePreferencePUTResponseModel?)->Void) {
+    public func updateQuickLinkPreferences(preferenceString: String, preferenceType: UserProfilePreferencePUTRequestModel.PreferenceType, version: Int, completion: @escaping (UserProfilePreferencePUTResponseModel?, Bool)->Void) {
         guard let token = authManager.authToken,
-              let hdid = authManager.hdid,
-              NetworkConnection.shared.hasConnection
-        else { return completion(nil)}
+              let hdid = authManager.hdid else { return completion(nil, true) }
+        guard NetworkConnection.shared.hasConnection
+        else {
+            network.showToast(message: .noInternetConnection, style: .Warn)
+            return completion(nil, false)
+        }
         
         configService.fetchConfig { response in
             guard let config = response,
@@ -89,7 +92,8 @@ struct PatientService {
                   let baseURLString = config.baseURL,
                   let baseURL = URL(string: baseURLString)
             else {
-                return completion(nil)
+                network.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                return completion(nil, false)
             }
             
             let headers = [
@@ -106,9 +110,9 @@ struct PatientService {
                 
                 if (result?.resourcePayload) != nil {
                     // return result
-                    return completion(result)
+                    return completion(result, true)
                 } else {
-                    return completion(nil)
+                    return completion(nil, true)
                 }
             } onError: { error in
                 network.showToast(error: error)
