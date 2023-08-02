@@ -96,23 +96,29 @@ extension ManageHomeScreenViewController: UITableViewDelegate, UITableViewDataSo
         }
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return viewModel?.dataSource[section].getSectionTitle
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard viewModel?.dataSource[section].getSectionTitle != nil else {
+            return 0
+        }
+        return 32
     }
     
-    // TODO: Implement this
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        <#code#>
-//    }
-    
-//    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-//        if let title = viewModel?.dataSource[section].getSectionTitle {
-//            let header = view as? UITableViewHeaderFooterView
-//            header?.textLabel?.textColor = AppColours.appBlue
-//            header?.textLabel?.font = UIFont.bcSansBoldWithSize(size: 15)
-//            header?.textLabel?.text = title
-//        }
-//    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let title = viewModel?.dataSource[section].getSectionTitle else { return nil }
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 32))
+        view.backgroundColor = .white
+        let titleLabel = UILabel(frame: CGRect(x: 8, y: 8, width: tableView.frame.width - 8, height: 24))
+        titleLabel.font = UIFont.bcSansBoldWithSize(size: 15)
+        titleLabel.textColor = AppColours.appBlue
+        titleLabel.text = title
+        titleLabel.backgroundColor = .white
+        view.addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 8).isActive = true
+        NSLayoutConstraint(item: titleLabel, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: -8).isActive = true
+        
+        return view
+    }
 }
 
 extension ManageHomeScreenViewController: ManageQuickLinkTableViewCellDelegate {
