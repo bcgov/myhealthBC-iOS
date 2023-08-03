@@ -26,9 +26,11 @@ extension Patient {
     @NSManaged public var hdid: String?
     @NSManaged public var lastName: String?
     @NSManaged public var name: String?
+    @NSManaged public var organDonorLinkVersion: Int64
     @NSManaged public var phn: String?
     @NSManaged public var phone: String?
     @NSManaged public var phoneVerified: Bool
+    @NSManaged public var quickLinkVersion: Int64
     @NSManaged public var clinicalDocuments: NSSet?
     @NSManaged public var covidTestResults: NSSet?
     @NSManaged public var dependencyInfo: Dependent?

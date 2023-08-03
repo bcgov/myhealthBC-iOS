@@ -11,6 +11,8 @@ extension ManageHomeScreenViewController {
     struct ViewModel {
         var dataSource: [DataSource]
         var patientService: PatientService
+        var originalHealthRecordString: String?
+        var organDonorLinkEnabledInitially: Bool = false
         
         init() {
             self.dataSource = []
@@ -20,6 +22,9 @@ extension ManageHomeScreenViewController {
         mutating func createDataSource() {
             let coreDataQuickLinks = StorageService.shared.fetchQuickLinksPreferences()
             let convertedQuickLinks = convertCoreDataQuickLinks(coreDataModel: coreDataQuickLinks)
+            let healthLinks = getHealthRecordQuickLinksOnly(quickLinks: convertedQuickLinks)
+            self.originalHealthRecordString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: healthLinks)
+            self.organDonorLinkEnabledInitially = checkForOrganDonorLink(quickLinks: convertedQuickLinks)
             var ds: [DataSource] = []
             ds.append(DataSource.introText)
             
@@ -48,6 +53,28 @@ extension ManageHomeScreenViewController {
             return links
         }
         
+        func getHealthRecordQuickLinksOnly(quickLinks: [QuickLinksNames]) -> [QuickLinksNames] {
+            var healthLinks = quickLinks
+            for (index, links) in quickLinks.enumerated() {
+                if links == .OrganDonor {
+                    healthLinks.remove(at: index)
+                    break
+                }
+            }
+            return healthLinks
+        }
+        
+        func checkForOrganDonorLink(quickLinks: [QuickLinksNames]) -> Bool {
+            var val = false
+            for link in quickLinks {
+                if link == .OrganDonor {
+                    val = true
+                    break
+                }
+            }
+            return val
+        }
+        
         private func constructLinksTypeDS(includedQuickLinks: [QuickLinksNames], order: [QuickLinksNames]) -> [DSType] {
             let ds: [DSType] = order.map { name in
                 let enabled = includedQuickLinks.contains(name)
@@ -65,6 +92,38 @@ extension ManageHomeScreenViewController {
                 quickLinksModel.append(preference)
             }
             return quickLinksModel.toJsonString()
+        }
+        
+        func constructAPIQuickLinksModelFromDataSource() -> [QuickLinksNames] {
+            var quickLinks: [QuickLinksNames] = []
+            for data in dataSource {
+                if let types = getTypes(ds: data) {
+                    if let names = mapEnabledTypesToQuickNames(types: types) {
+                        quickLinks.append(contentsOf: names)
+                    }
+                }
+            }
+            return quickLinks
+        }
+        
+        private func getTypes(ds: DataSource) -> [DSType]? {
+            switch ds {
+            case .introText: return nil
+            case .healthRecord(types: let types): return types
+            case .service(types: let types): return types
+            }
+        }
+        
+        private func mapEnabledTypesToQuickNames(types: [DSType]) -> [QuickLinksNames]? {
+            var quickNames: [QuickLinksNames] = []
+            guard types.count > 0 else { return nil }
+            for type in types {
+                if type.enabled {
+                    let quick = type.type
+                    quickNames.append(quick)
+                }
+            }
+            return quickNames
         }
     }
     
@@ -88,10 +147,6 @@ extension ManageHomeScreenViewController {
                 var newTypes = types
                 newTypes[indexPath.row].enabled = enabled
                 return newTypes
-//            case .service(types: let types):
-//                var newTypes = types
-//                newTypes[indexPath.row].enabled = enabled
-//                return newTypes
             }
         }
     }

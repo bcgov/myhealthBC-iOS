@@ -67,7 +67,7 @@ struct PatientService {
                 return completion(nil)
             }
             let enabled = !(response.resourcePayload?.preferences?.hideOrganDonorQuickLink?.value == "true")
-            let storedLinks = StorageService.shared.store(quickLinksPreferences: quicklinks, isOrganDonorQuickLinkEnabled: enabled, organDonorVersion: response.resourcePayload?.preferences?.hideOrganDonorQuickLink?.version, for: patient)
+            let storedLinks = StorageService.shared.store(quickLinksPreferences: quicklinks, isOrganDonorQuickLinkEnabled: enabled, quickLinkVersion: response.resourcePayload?.preferences?.quickLinks?.version, organDonorVersion: response.resourcePayload?.preferences?.hideOrganDonorQuickLink?.version, for: patient)
             if useLoader {
                 network.removeLoader(caller: .QuickLinks_fetchAndStore)
             }

@@ -143,7 +143,197 @@ extension ManageHomeScreenViewController: ManageQuickLinkTableViewCellDelegate {
 
 // MARK: Save logic
 extension ManageHomeScreenViewController {
+    
+    enum ResultOptions {
+        case justNormal(success: Bool)
+        case justOrgan(success: Bool)
+        case bothAttempted(normalSuccess: Bool, organSuccess: Bool)
+        case neitherAttempted
+        
+        struct Message {
+            let title: String
+            let message: String
+        }
+        
+        var finalMessageToShow: Message {
+            switch self {
+            case .justNormal(let success), .justOrgan(let success):
+                return success ? Message(title: "Success", message: "Your home screen preferences were updated successfully") : Message(title: "Error", message: "There was an issue updating your preferences, please try again later.")
+            case .bothAttempted(let normalSuccess, let organSuccess):
+                if normalSuccess && organSuccess {
+                    return Message(title: "Success", message: "Your home screen preferences were updated successfully")
+                } else if (!normalSuccess || !organSuccess) && !(normalSuccess && organSuccess) {
+                    return Message(title: "Partial Success", message: "There was an issue updating some of your preferences")
+                } else {
+                    return Message(title: "Error", message: "There was an issue updating your preferences, please try again later.")
+                }
+            case .neitherAttempted:
+                return Message(title: "", message: "")
+            }
+        }
+        
+        var shouldRefetchPreferences: Bool {
+            switch self {
+            case .justNormal(success: let success), .justOrgan(success: let success): return success
+            case .bothAttempted(let normalSuccess, let organSuccess):
+                return !(!normalSuccess && !organSuccess)
+            case .neitherAttempted: return false
+            }
+        }
+        
+        var alertAvailable: Bool {
+            switch self {
+            case .neitherAttempted: return false
+            default: return true
+            }
+        }
+    }
+
+    
+    private func dismissWithGeneralError() {
+        self.alert(title: "Error", message: "Unable to update quick links") {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    private func dismissWithAlert(message: ResultOptions) {
+        guard message.alertAvailable else {
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
+        let details = message.finalMessageToShow
+        self.alert(title: details.title, message: details.message) {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    private func generateResultOption(normalStatus: Bool?, organStatus: Bool?) -> ResultOptions {
+        var resultOption: ResultOptions
+        if organStatus == nil, let normalStatus = normalStatus {
+            resultOption = .justNormal(success: normalStatus)
+        } else if normalStatus == nil, let organStatus = organStatus {
+            resultOption = .justOrgan(success: organStatus)
+        } else if let normalStatus = normalStatus, let organStatus = organStatus {
+            resultOption = .bothAttempted(normalSuccess: normalStatus, organSuccess: organStatus)
+        } else if normalStatus == nil && organStatus == nil {
+            resultOption = .neitherAttempted
+        } else {
+            resultOption = .neitherAttempted
+        }
+        return resultOption
+    }
+    
     private func savePreferences() {
+        // TODO: Optimize top section
+        
+        let normalVersion = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: false)
+        let organVersion = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: true)
+        var updateOrgan: Bool
+        var organValue: String = ""
+        var updateHealthRecordsLinks: Bool
+        
+
+        guard let quickLinks = viewModel?.constructAPIQuickLinksModelFromDataSource() else {
+            dismissWithGeneralError()
+            return
+        }
+        // Check if we need to hit health records links endpoint
+        let newRecordsLinks = viewModel?.getHealthRecordQuickLinksOnly(quickLinks: quickLinks) ?? []
+        let newRecordsString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: newRecordsLinks)
+        updateHealthRecordsLinks = newRecordsString != viewModel?.originalHealthRecordString && viewModel?.originalHealthRecordString != nil
+        
+        // Check if we need to hit organ donor endpoint
+        let containsOrgan = viewModel?.checkForOrganDonorLink(quickLinks: quickLinks) ?? false
+        updateOrgan = containsOrgan != viewModel?.organDonorLinkEnabledInitially
+        if updateOrgan {
+            // This is the value we pass up to hide organ donor quick link... yeah, I know
+            organValue = containsOrgan ? "false" : "true"
+        }
+        
+        guard let preferenceString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: quickLinks) else {
+            dismissWithGeneralError()
+            return
+        }
+        
+        var normalStatus: Bool?
+        var organStatus: Bool?
+        // TODO: Clean this up - just not putting in the effort until we know if the API will get updated from current poor structure
+        
+        if updateHealthRecordsLinks {
+            self.viewModel?.patientService.updateQuickLinkPreferences(preferenceString: preferenceString, preferenceType: .NormalQuickLinks, version: normalVersion, completion: { result, showAlert in
+                if let result = result {
+                    // Track here
+                    normalStatus = true
+                } else if showAlert {
+                    // Track here
+                    normalStatus = false
+                }
+                if updateOrgan {
+                    self.viewModel?.patientService.updateQuickLinkPreferences(preferenceString: organValue, preferenceType: .OrganDonor, version: organVersion, completion: { organResult, organShowAlert in
+                        if let organResult = organResult {
+                            // Track here
+                            organStatus = true
+                        } else if organShowAlert {
+                            // Track here
+                            organStatus = false
+                        }
+                        let status = self.generateResultOption(normalStatus: normalStatus, organStatus: organStatus)
+                        if status.shouldRefetchPreferences {
+                            guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+                            self.viewModel?.patientService.fetchAndStoreQuickLinksPreferences(for: patient, useLoader: true, completion: { preferences in
+                                print(preferences)
+                                NotificationCenter.default.post(name: .refetchQuickLinksFromCoreData, object: nil, userInfo: nil)
+                                self.dismissWithAlert(message: status)
+                            })
+                        } else {
+                            self.dismissWithAlert(message: status)
+                        }
+                    })
+                } else {
+                    let status = self.generateResultOption(normalStatus: normalStatus, organStatus: organStatus)
+                    if status.shouldRefetchPreferences {
+                        guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+                        self.viewModel?.patientService.fetchAndStoreQuickLinksPreferences(for: patient, useLoader: true, completion: { preferences in
+                            print(preferences)
+                            NotificationCenter.default.post(name: .refetchQuickLinksFromCoreData, object: nil, userInfo: nil)
+                            self.dismissWithAlert(message: status)
+                        })
+                    } else {
+                        self.dismissWithAlert(message: status)
+                    }
+                }
+                // Check condition here to refetch or not
+                
+            })
+        } else if updateOrgan {
+            self.viewModel?.patientService.updateQuickLinkPreferences(preferenceString: organValue, preferenceType: .OrganDonor, version: organVersion, completion: { organResult, organShowAlert in
+                if let organResult = organResult {
+                    // Track here
+                    organStatus = true
+                } else if organShowAlert {
+                    // Track here
+                    organStatus = false
+                }
+                let status = self.generateResultOption(normalStatus: normalStatus, organStatus: organStatus)
+                if status.shouldRefetchPreferences {
+                    guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+                    self.viewModel?.patientService.fetchAndStoreQuickLinksPreferences(for: patient, useLoader: true, completion: { preferences in
+                        print(preferences)
+                        NotificationCenter.default.post(name: .refetchQuickLinksFromCoreData, object: nil, userInfo: nil)
+                        self.dismissWithAlert(message: status)
+                    })
+                } else {
+                    self.dismissWithAlert(message: status)
+                }
+            })
+        } else {
+            self.dismissWithAlert(message: .neitherAttempted)
+        }
+        
+        
+        
+        
+        
         // TODO: Convert data source into preferences string - note, will need to check if organ donor status changes, as the request for that is different
         // 1: Convert into preferences string
         // 2: Call API with new put request

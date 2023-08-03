@@ -195,6 +195,7 @@ extension StorageService: StoragePatientManager {
     func store(
         quickLinksPreferences object: QuickLinksPreferencesResponse,
         isOrganDonorQuickLinkEnabled enabled: Bool,
+        quickLinkVersion: Int?,
         organDonorVersion: Int?,
         for patient: Patient) -> [QuickLinkPreferences]? {
             guard let context = managedContext,
@@ -202,35 +203,37 @@ extension StorageService: StoragePatientManager {
                 return nil
             }
             deleteQuickLinkPreferences()
-            var addOrganDonorLink = true
-            let version = object.version ?? 0
+//            var addOrganDonorLink = false
+            let organVersion = Int64(organDonorVersion ?? 0)
+            let linkVersion = Int64(quickLinkVersion ?? 0)
+            update(organDonorLinkVersion: organVersion, quickLinkVersion: linkVersion, for: patient)
             var storedObjects: [QuickLinkPreferences] = []
             for (index, value) in array.enumerated() {
-                let model = QuickLinkPreferences(context: context)
-                model.quickLink = value.name
-                // Hack due to encoding/decoding number issue - wasn't able to associate the JSON value with our enum value
-                if value.filter.modules.first == ManageHomeScreenViewController.QuickLinksNames.APIFilterTypes.Laboratory.rawValue {
-                    model.quickLink = ManageHomeScreenViewController.QuickLinksNames.COVID19Tests.rawValue
+                if value.name != ManageHomeScreenViewController.QuickLinksNames.OrganDonor.rawValue {
+                    let model = QuickLinkPreferences(context: context)
+                    model.quickLink = value.name
+                    // Hack due to encoding/decoding number issue - wasn't able to associate the JSON value with our enum value
+                    if value.filter.modules.first == ManageHomeScreenViewController.QuickLinksNames.APIFilterTypes.Laboratory.rawValue {
+                        model.quickLink = ManageHomeScreenViewController.QuickLinksNames.COVID19Tests.rawValue
+                    }
+                    model.homeOrder = Int64(index)
+                    model.patient = patient
+                    do {
+                        try context.save()
+                        notify(event: StorageEvent(event: .Save, entity: .QuickLinkPreference, object: patient))
+                        storedObjects.append(model)
+                    } catch let error as NSError {
+                        Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+                    }
+                } else {
+//                    addOrganDonorLink = true
                 }
-                model.homeOrder = Int64(index)
-                model.version = Int64(version)
-                model.patient = patient
-                if value.name == ManageHomeScreenViewController.QuickLinksNames.OrganDonor.rawValue {
-                    addOrganDonorLink = false
-                }
-                do {
-                    try context.save()
-                    notify(event: StorageEvent(event: .Save, entity: .QuickLinkPreference, object: patient))
-                    storedObjects.append(model)
-                } catch let error as NSError {
-                    Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-                }
+                
             }
-            if enabled && addOrganDonorLink {
+            if enabled /*|| addOrganDonorLink*/ {
                 let model = QuickLinkPreferences(context: context)
                 model.quickLink = ManageHomeScreenViewController.QuickLinksNames.OrganDonor.rawValue
                 model.homeOrder = Int64(100) // Just make it in last for now
-                model.version = Int64(organDonorVersion ?? 0)
                 model.patient = patient
                 do {
                     try context.save()
@@ -254,9 +257,18 @@ extension StorageService: StoragePatientManager {
         }
     }
     
+    func fetchQuickLinksVersion(forOrganDonor value: Bool) -> Int {
+        let patient = fetchAuthenticatedPatient()
+        if value {
+            return Int(patient?.organDonorLinkVersion ?? 0)
+        } else {
+            return Int(patient?.quickLinkVersion ?? 0)
+        }
+    }
+    
+    
     private func deleteQuickLinkPreferences() {
-        guard let patient = fetchAuthenticatedPatient() else { return }
-        var preferences = fetchQuickLinksPreferences()
+        let preferences = fetchQuickLinksPreferences()
         for preference in preferences {
             delete(object: preference)
             notify(event: StorageEvent(event: .Delete, entity: .QuickLinkPreference, object: preference))
@@ -397,6 +409,7 @@ extension StorageService: StoragePatientManager {
             if authenticated != patient.authenticated {
                 patient.authenticated = authenticated
             }
+            
             // Unsure if we need to set patient.authManagerDisplayName = AuthManager().displayName here
             try context.save()
             notify(event: StorageEvent(event: .Update, entity: .Patient, object: patient))
@@ -406,6 +419,23 @@ extension StorageService: StoragePatientManager {
             return nil
         }
     }
+    
+    // MARK: Sets the versions for quick links on patient object
+    fileprivate func update(organDonorLinkVersion: Int64, quickLinkVersion: Int64, for patient: Patient) -> Patient? {
+        guard let context = managedContext else {return nil}
+        do {
+            patient.organDonorLinkVersion = organDonorLinkVersion
+            patient.quickLinkVersion = quickLinkVersion
+
+            try context.save()
+            notify(event: StorageEvent(event: .Update, entity: .Patient, object: patient))
+            return patient
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
+    
     
     // MARK: Delete
     func deletePatient(phn: String) {

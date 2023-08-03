@@ -88,12 +88,11 @@ class HomeScreenViewController: BaseViewController {
             }
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(syncPerformed), name: .syncPerformed, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: .refetchQuickLinksFromCoreData, object: nil)
     }
     
-    @objc private func syncPerformed(_ notification: Notification) {
-        // TODO: Fetch locally stored preferences here and adjust screen state
-        // Here, set quick links, then reload data source
+    @objc private func reloadCollectionView(_ notification: Notification) {
+        self.collectionView.reloadData()
     }
     
     // TODO: Adjust this so that it doesn't get called so many times, pretty excessive right now
@@ -491,10 +490,10 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
             
             let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
             var version: Int
-            if let index = quickLinkPreferences.map({ $0.quickLink }).firstIndex(of: name) {
-                version = Int(quickLinkPreferences[index].version)
+            if name == ManageHomeScreenViewController.QuickLinksNames.OrganDonor.rawValue {
+                version = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: true)
             } else {
-                version = Int(quickLinkPreferences.first?.version ?? 0)
+                version = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: false)
             }
             var quickLinks = self.convertQuickLinkIntoQuickLinksNames(coreDataModel: quickLinkPreferences)
 //            var organDonorWasInQuickLinks = false

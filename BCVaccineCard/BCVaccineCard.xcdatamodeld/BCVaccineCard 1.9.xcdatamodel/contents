@@ -241,9 +241,11 @@
         <attribute name="hdid" optional="YES" attributeType="String"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
+        <attribute name="organDonorLinkVersion" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <attribute name="phone" optional="YES" attributeType="String"/>
         <attribute name="phoneVerified" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="quickLinkVersion" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="clinicalDocuments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ClinicalDocument" inverseName="patient" inverseEntity="ClinicalDocument"/>
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
         <relationship name="dependencyInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Dependent" inverseName="info" inverseEntity="Dependent"/>
@@ -293,7 +295,6 @@
     <entity name="QuickLinkPreferences" representedClassName="QuickLinkPreferences" syncable="YES" codeGenerationType="class">
         <attribute name="homeOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="quickLink" optional="YES" attributeType="String"/>
-        <attribute name="version" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="quickLinkPreferences" inverseEntity="Patient"/>
     </entity>
     <entity name="SpecialAuthorityDrug" representedClassName="SpecialAuthorityDrug" syncable="YES">
