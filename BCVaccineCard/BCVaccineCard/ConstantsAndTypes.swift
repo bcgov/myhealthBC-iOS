@@ -10,7 +10,7 @@ import Foundation
 struct HealthRecordConstants {
     // ENABLE AND DISABLE PRIMARY PATIENT RECORD TYPES
     static var enabledTypes: [RecordType] {
-        return [
+        var types: [RecordType] = [
             .covidImmunizationRecord,
             .covidTestResultRecord,
             .medication,
@@ -21,11 +21,17 @@ struct HealthRecordConstants {
             .hospitalVisit,
             .clinicalDocument
         ]
+        if !HealthRecordConstants.notesEnabled {
+            if let index = types.firstIndex(of: .notes) {
+                types.remove(at: index)
+            }
+        }
+        return types
     }
     
     // ENABLE AND DISABLE DEPENDENT RECORD TYPES
     static var enabledDepententRecordTypes: [RecordType] {
-        return [.covidTestResultRecord, .immunization]
+        return [.covidTestResultRecord, .immunization, .medication]
     }
     
     // ENABLE AND DISABLE COMMENTS
@@ -53,6 +59,11 @@ struct HealthRecordConstants {
     
     static var guardianAuditEnabled: Bool {
         return false
+    }
+    
+    // ENABLE AND DISABLE NOTES
+    static var notesEnabled: Bool {
+        return true
     }
 }
 

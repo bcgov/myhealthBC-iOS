@@ -69,6 +69,7 @@ class NotificationsViewController: BaseViewController {
         
         if notifications.isEmpty || SessionStorage.notificationFethFilure {
             showUnavailable()
+            notifications = []
             tableView.reloadData()
         } else {
             setupTableView()
@@ -139,7 +140,10 @@ class NotificationsViewController: BaseViewController {
                 self.showToast(message: "No internet connection")
                 return
             }
-            self.viewModel?.service.dimissAll(for: patient) {[weak self] in
+            self.viewModel?.service.dimissAll(for: patient) {[weak self] success in
+                if !success {
+                    self?.alert(title: "Error", message: "There was an error dismissing notifications")
+                }
                 self?.fetchData()
             }
         }, onCancel: {
@@ -237,8 +241,12 @@ extension NotificationsViewController: NotificationTableViewCellDelegate {
         }
         let service = NotificationService(network: networkManager, authManager: AuthManager(), configService: MobileConfigService(network: networkManager))
         
-        service.dimiss(notification: notification, completion: {[weak self] in
+        service.dimiss(notification: notification, completion: {[weak self] success in
+            if !success {
+                self?.alert(title: "Error", message: "There was an error dismissing this notification")
+            }
             self?.fetchData()
+            
         })
     }
 }

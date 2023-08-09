@@ -8,51 +8,51 @@
 
 import UIKit
 
-enum HomeScreenCellType {
-    case Records
-    case Recommendations
-    case Resources
-    case Proofs
-    
-    var getTitle: String {
-        switch self {
-        case .Records: return "Health records"
-        case .Proofs: return "Proof of vaccination"
-        case .Resources: return "Resources"
-        case .Recommendations: return "Recommended\nimmunizations"
-        }
-    }
-    
-    var getIcon: UIImage? {
-        switch self {
-        case .Records: return UIImage(named: "records-home-icon")
-        case .Proofs: return UIImage(named: "proofs-home-icon")
-        case .Resources: return UIImage(named: "resources-home-icon")
-        case .Recommendations: return UIImage(named: "Immunization-recommendation-home")
-        }
-    }
-    
-    var getDescriptionText: String {
-        switch self {
-        case .Records: return "Access your lab test results, medication history, immunization records, health visits and more"
-        case .Proofs: return "Save proof of vaccination documents for you and your family"
-        case .Resources: return "Find trusted health information and resources"
-        case .Recommendations: return "Find out which vaccinations are recommended for you"
-        }
-    }
-    
-    func getButtonImage(auth: Bool) -> UIImage? {
-        switch self {
-        case .Records:
-            let image = auth ? UIImage(named: "records-home-button-auth") : UIImage(named: "records-home-button-unauth")
-            return image
-        case .Proofs: return UIImage(named: "proofs-home-button")
-        case .Resources: return UIImage(named: "resources-home-button")
-        case .Recommendations:  return UIImage(named: "resources-home-button")
-        }
-    }
-
-}
+//enum HomeScreenCellType {
+//    case Records
+//    case Recommendations
+//    case Resources
+//    case Proofs
+//    
+//    var getTitle: String {
+//        switch self {
+//        case .Records: return "Health records"
+//        case .Proofs: return "Proof of vaccination"
+//        case .Resources: return "Resources"
+//        case .Recommendations: return "Recommended\nimmunizations"
+//        }
+//    }
+//    
+//    var getIcon: UIImage? {
+//        switch self {
+//        case .Records: return UIImage(named: "records-home-icon")
+//        case .Proofs: return UIImage(named: "proofs-home-icon")
+//        case .Resources: return UIImage(named: "resources-home-icon")
+//        case .Recommendations: return UIImage(named: "Immunization-recommendation-home")
+//        }
+//    }
+//    
+//    var getDescriptionText: String {
+//        switch self {
+//        case .Records: return "Access your lab test results, medication history, immunization records, health visits and more"
+//        case .Proofs: return "Save proof of vaccination documents for you and your family"
+//        case .Resources: return "Find trusted health information and resources"
+//        case .Recommendations: return "Find out which vaccinations are recommended for you"
+//        }
+//    }
+//    
+//    func getButtonImage(auth: Bool) -> UIImage? {
+//        switch self {
+//        case .Records:
+//            let image = auth ? UIImage(named: "records-home-button-auth") : UIImage(named: "records-home-button-unauth")
+//            return image
+//        case .Proofs: return UIImage(named: "proofs-home-button")
+//        case .Resources: return UIImage(named: "resources-home-button")
+//        case .Recommendations:  return UIImage(named: "resources-home-button")
+//        }
+//    }
+//
+//}
 
 class HomeScreenTableViewCell: UITableViewCell {
     

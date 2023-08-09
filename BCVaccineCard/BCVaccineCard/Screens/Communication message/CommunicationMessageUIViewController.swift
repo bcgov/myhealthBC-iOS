@@ -131,7 +131,8 @@ class CommunicationMessageUIViewController: UIViewController {
 extension CommunicationMessageUIViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         if UIApplication.shared.canOpenURL(URL) {
-            UIApplication.shared.open(URL)
+//            UIApplication.shared.open(URL)
+            AppDelegate.sharedInstance?.showExternalURL(url: URL.absoluteString)
         }
         return false
     }

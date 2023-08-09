@@ -10,6 +10,7 @@ import BCVaccineValidator
 import EncryptedCoreData
 import IQKeyboardManagerSwift
 import AppAuth
+import SafariServices
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -460,5 +461,23 @@ extension AppDelegate {
     // Triggered by dataLoadCount
     @objc fileprivate func hideLoader() {
         self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
+    }
+}
+
+extension AppDelegate {
+    func showExternalURL(url: String) {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This action requires an internet connection")
+            return
+        }
+        guard let root = window?.rootViewController else {return}
+        if let presentedVC = root.presentedViewController {
+            guard (presentedVC is SFSafariViewController) == false else {
+                return
+            }
+            presentedVC.openURLInSafariVC(withURL: url)
+        } else {
+            root.openURLInSafariVC(withURL: url)
+        }
     }
 }

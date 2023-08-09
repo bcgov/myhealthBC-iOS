@@ -52,7 +52,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     private var dropDownViewGestureRecognizer: UITapGestureRecognizer?
     
     private var isDependent: Bool {
-        return viewModel?.patient?.isDependent() ?? false
+        return viewModel?.userType == .Dependent
     }
     
     private var currentFilter: RecordsFilter? = nil {

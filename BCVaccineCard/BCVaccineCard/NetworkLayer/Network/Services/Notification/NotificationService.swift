@@ -34,33 +34,33 @@ struct NotificationService {
         }
     }
     
-    func dimissAll(for patient: Patient, completion: @escaping ()->Void) {
+    func dimissAll(for patient: Patient, completion: @escaping (Bool)->Void) {
         network.addLoader(message: .empty, caller: .NotificationService_dismissAll)
         deleteAll() { success in
             network.removeLoader(caller: .NotificationService_dismissAll)
             if success {
                 fetchAndStore(for: patient, loadingStyle: .empty, completion: {_ in
-                    return completion()
+                    return completion(true)
                 })
             } else {
-                return completion()
+                return completion(false)
             }
         }
     }
     
-    func dimiss(notification: GatewayNotification, completion: @escaping ()->Void) {
+    func dimiss(notification: GatewayNotification, completion: @escaping (Bool)->Void) {
         guard let patient = notification.patient else {
-            return completion()
+            return completion(false)
         }
         network.addLoader(message: .empty, caller: .NotificationService_dismiss)
         delete(notification: notification) { success in
             network.removeLoader(caller: .NotificationService_dismiss)
             if success {
                 fetchAndStore(for: patient, loadingStyle: .empty, completion: {_ in 
-                    return completion()
+                    return completion(true)
                 })
             } else {
-                return completion()
+                return completion(false)
             }
         }
     }
