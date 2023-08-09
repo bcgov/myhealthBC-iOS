@@ -60,11 +60,6 @@ struct HealthRecordConstants {
     static var guardianAuditEnabled: Bool {
         return false
     }
-    
-    // ENABLE AND DISABLE NOTES
-    static var notesEnabled: Bool {
-        return true
-    }
 }
 
 extension AppTabBarController {
@@ -200,7 +195,7 @@ enum NotificationCategory: String {
     case HeathVisits = "HealthVisit"
     case Medication = "Medications"
     case HospitalVisits = "HospitalVisit"
-    case DiagnosticImaging = "DiagnosticImaging"
+    case DiagnosticImaging = "DiExam"
 }
 
 extension NotificationCategory {
