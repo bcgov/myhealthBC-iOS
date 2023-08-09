@@ -19,9 +19,7 @@ struct HealthRecordConstants {
             .healthVisit,
             .specialAuthorityDrug,
             .hospitalVisit,
-            .clinicalDocument,
-            .diagnosticImaging,
-            .notes
+            .clinicalDocument
         ]
         if !HealthRecordConstants.notesEnabled {
             if let index = types.firstIndex(of: .notes) {
@@ -48,7 +46,19 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE PROFILE DETAILS SCREEN
     static var profileDetailsEnabled: Bool {
-        return true
+        return false
+    }
+    
+    static var notesEnabled: Bool {
+        return false
+    }
+    
+    static var diagnosticImagingEnabled: Bool {
+        return false
+    }
+    
+    static var guardianAuditEnabled: Bool {
+        return false
     }
     
     // ENABLE AND DISABLE NOTES

@@ -147,16 +147,20 @@ struct HealthRecordsService {
                 dispatchGroup.leave()
                 
             case .Notes:
-                let notesService = NotesService(network: network, authManager: authManager, configService: configService)
-                notesService.fetchAndStore(for: patient) { result in
-                    guard let result = result else {
-                        hadFailures = true
-                        dispatchGroup.leave()
-                        return
-                    }
-                    let unwrapped = result.map { HealthRecord(type: .Note($0)) }
-                    records.append(contentsOf: unwrapped)
+                if !HealthRecordConstants.notesEnabled {
                     dispatchGroup.leave()
+                } else {
+                    let notesService = NotesService(network: network, authManager: authManager, configService: configService)
+                    notesService.fetchAndStore(for: patient) { result in
+                        guard let result = result else {
+                            hadFailures = true
+                            
+                            return
+                        }
+                        let unwrapped = result.map { HealthRecord(type: .Note($0)) }
+                        records.append(contentsOf: unwrapped)
+                        dispatchGroup.leave()
+                    }
                 }
             }
         }
