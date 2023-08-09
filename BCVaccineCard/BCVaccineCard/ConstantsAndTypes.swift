@@ -19,7 +19,8 @@ struct HealthRecordConstants {
             .healthVisit,
             .specialAuthorityDrug,
             .hospitalVisit,
-            .clinicalDocument
+            .clinicalDocument,
+            .diagnosticImaging
         ]
         if !HealthRecordConstants.notesEnabled {
             if let index = types.firstIndex(of: .notes) {
