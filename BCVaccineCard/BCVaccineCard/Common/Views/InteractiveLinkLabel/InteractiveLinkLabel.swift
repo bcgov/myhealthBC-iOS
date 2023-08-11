@@ -9,6 +9,8 @@ import UIKit
 
 class InteractiveLinkLabel: UILabel {
     
+    var canCopy: Bool = false
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -30,14 +32,13 @@ class InteractiveLinkLabel: UILabel {
     }
     
     // MARK: - UIResponderStandardEditActions
-    
     override func copy(_ sender: Any?) {
         UIPasteboard.general.string = text
     }
     
     // MARK: - Long-press Handler
-    
     @objc func handleLongPress(_ recognizer: UIGestureRecognizer) {
+        guard canCopy else {return}
         if recognizer.state == .began,
            let recognizerView = recognizer.view,
            let recognizerSuperview = recognizerView.superview {
@@ -129,7 +130,11 @@ class InteractiveLinkLabel: UILabel {
         
     }
     
-    func attributedText(withString string: String, linkedStrings: [LinkedStrings], textColor: UIColor, font: UIFont) -> NSAttributedString {
+    func attributedText(withString string: String,
+                        linkedStrings: [LinkedStrings],
+                        textColor: UIColor,
+                        font: UIFont
+    ) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(string: string, attributes: [NSAttributedString.Key.foregroundColor: textColor, NSAttributedString.Key.font: font])
         for linkedString in linkedStrings {
             let range = (string as NSString).range(of: linkedString.text)
@@ -138,6 +143,7 @@ class InteractiveLinkLabel: UILabel {
                 attributedString.addAttributes(linkAttribute, range: range)
             }
         }
+        
         return attributedString
     }
 }

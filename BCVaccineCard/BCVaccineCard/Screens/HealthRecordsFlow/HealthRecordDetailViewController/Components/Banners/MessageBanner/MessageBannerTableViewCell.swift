@@ -22,6 +22,8 @@ class MessageBannerTableViewCell: BaseHeaderTableViewCell, UITextViewDelegate {
         backgroundColor = bgColor
         textView.textColor = messageColor
         textView.backgroundColor = .clear
+        textView.isEditable = false
+        textView.isSelectable = true
         layoutIfNeeded()
     }
     
