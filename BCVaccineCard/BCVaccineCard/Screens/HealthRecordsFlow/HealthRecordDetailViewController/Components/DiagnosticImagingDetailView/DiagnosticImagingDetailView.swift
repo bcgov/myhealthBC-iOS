@@ -118,22 +118,22 @@ extension DiagnosticImagingDetailView {
            
             
             let fields: [TextListModel] = [
-                TextListModel(
-                    header: TextProperties(text: "Body Part:", bolded: true),
-                    subtext: TextProperties(text: model.bodyPart ?? "", bolded: false)
-                ),
-                TextListModel(
-                    header: TextProperties(text: "Description:", bolded: true),
-                    subtext: TextProperties(text: model.procedureDescription ?? "", bolded: false)
-                ),
+//                TextListModel(
+//                    header: TextProperties(text: "Body Part:", bolded: true),
+//                    subtext: TextProperties(text: model.bodyPart ?? "", bolded: false)
+//                ),
+//                TextListModel(
+//                    header: TextProperties(text: "Description:", bolded: true),
+//                    subtext: TextProperties(text: model.procedureDescription ?? "", bolded: false)
+//                ),
                 TextListModel(
                     header: TextProperties(text: "Health Authority:", bolded: true),
                     subtext: TextProperties(text: model.healthAuthority ?? "", bolded: false)
                 ),
-                TextListModel(
-                    header: TextProperties(text: "Facility:", bolded: true),
-                    subtext: TextProperties(text: model.organization ?? "", bolded: false)
-                )
+//                TextListModel(
+//                    header: TextProperties(text: "Facility:", bolded: true),
+//                    subtext: TextProperties(text: model.organization ?? "", bolded: false)
+//                )
             ]
             return fields
         default:

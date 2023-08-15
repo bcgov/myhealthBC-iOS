@@ -37,7 +37,7 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE COMMENTS
     static var commentsEnabled: Bool {
-        return false
+        return true
     }
     
     // ENABLE AND DISABLE SEARCH RECORDS
@@ -55,7 +55,7 @@ struct HealthRecordConstants {
     }
     
     static var diagnosticImagingEnabled: Bool {
-        return false
+        return true
     }
     
     static var guardianAuditEnabled: Bool {
