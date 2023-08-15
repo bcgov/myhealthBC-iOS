@@ -66,10 +66,8 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
         
         if hideTab {
             self.parent?.tabBarController?.tabBar.isHidden = true
-            print("HIDEEE")
         } else {
             self.parent?.tabBarController?.tabBar.isHidden = false
-            print("SHOOW")
         }
     }
     
