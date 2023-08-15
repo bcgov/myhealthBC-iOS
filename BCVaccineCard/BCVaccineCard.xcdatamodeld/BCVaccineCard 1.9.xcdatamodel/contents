@@ -241,11 +241,9 @@
         <attribute name="hdid" optional="YES" attributeType="String"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
-        <attribute name="organDonorLinkVersion" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="phn" optional="YES" attributeType="String"/>
         <attribute name="phone" optional="YES" attributeType="String"/>
         <attribute name="phoneVerified" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="quickLinkVersion" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="clinicalDocuments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ClinicalDocument" inverseName="patient" inverseEntity="ClinicalDocument"/>
         <relationship name="covidTestResults" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CovidLabTestResult" inverseName="patient" inverseEntity="CovidLabTestResult"/>
         <relationship name="dependencyInfo" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Dependent" inverseName="info" inverseEntity="Dependent"/>
@@ -260,7 +258,6 @@
         <relationship name="physicalAddress" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Address"/>
         <relationship name="postalAddress" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Address"/>
         <relationship name="prescriptions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Perscription" inverseName="patient" inverseEntity="Perscription"/>
-        <relationship name="quickLinkPreferences" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="QuickLinkPreferences" inverseName="patient" inverseEntity="QuickLinkPreferences"/>
         <relationship name="recommendations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ImmunizationRecommendation" inverseName="patient" inverseEntity="ImmunizationRecommendation"/>
         <relationship name="specialAuthorityDrugs" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SpecialAuthorityDrug" inverseName="patient" inverseEntity="SpecialAuthorityDrug"/>
         <relationship name="vaccineCard" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="VaccineCard" inverseName="patient" inverseEntity="VaccineCard"/>
@@ -291,11 +288,6 @@
         <attribute name="postalCode" optional="YES" attributeType="String"/>
         <attribute name="province" optional="YES" attributeType="String"/>
         <relationship name="prescription" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Perscription" inverseName="pharmacy" inverseEntity="Perscription"/>
-    </entity>
-    <entity name="QuickLinkPreferences" representedClassName="QuickLinkPreferences" syncable="YES" codeGenerationType="class">
-        <attribute name="homeOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="quickLink" optional="YES" attributeType="String"/>
-        <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="quickLinkPreferences" inverseEntity="Patient"/>
     </entity>
     <entity name="SpecialAuthorityDrug" representedClassName="SpecialAuthorityDrug" syncable="YES">
         <attribute name="authenticated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>

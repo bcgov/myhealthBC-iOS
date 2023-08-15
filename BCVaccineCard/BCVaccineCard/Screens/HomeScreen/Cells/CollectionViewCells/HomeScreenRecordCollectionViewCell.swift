@@ -14,7 +14,7 @@ enum HomeScreenCellType {
     case Recommendations
     case Resources
     case Proofs
-    case QuickLink(type: ManageHomeScreenViewController.QuickLinksNames)
+    case QuickLink(type: QuickLinksPreferences.QuickLinksNames)
     
     var getTitle: String {
         switch self {

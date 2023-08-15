@@ -23,7 +23,7 @@ extension AuthenticatedUserProfileResponseObject {
         let lastLoginDateTime, encryptionKey: String?
         let verifications: [Verification]?
         let isEmailVerified, isSMSNumberVerified: Bool
-        let preferences: Preferences?
+//        let preferences: Preferences?
         
         enum CodingKeys: String, CodingKey {
             case createdBy, createdDateTime, updatedBy, updatedDateTime, version
@@ -34,7 +34,7 @@ extension AuthenticatedUserProfileResponseObject {
             case identityManagementID = "identityManagementId"
             case lastLoginDateTime, encryptionKey, verifications
             case isEmailVerified, isSMSNumberVerified
-            case preferences
+//            case preferences
         }
     }
     
@@ -81,35 +81,35 @@ extension AuthenticatedUserProfileResponseObject {
     }
     
     // MARK: - Preferences
-    struct Preferences: Codable {
-        let tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks, hideOrganDonorQuickLink: QuickLinks?
-        
-        enum CodingKeys: String, CodingKey {
-            case tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks, hideOrganDonorQuickLink
-        }
-    }
+//    struct Preferences: Codable {
+//        let tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks, hideOrganDonorQuickLink: QuickLinks?
+//
+//        enum CodingKeys: String, CodingKey {
+//            case tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks, hideOrganDonorQuickLink
+//        }
+//    }
 
     // MARK: - QuickLinks
-    struct QuickLinks: Codable {
-        let hdID, preference, value: String?
-        let version: Int?
-        let createdDateTime, createdBy, updatedDateTime, updatedBy: String?
-
-        enum CodingKeys: String, CodingKey {
-            case hdID = "hdId"
-            case preference, value, version, createdDateTime, createdBy, updatedDateTime, updatedBy
-        }
-    }
+//    struct QuickLinks: Codable {
+//        let hdID, preference, value: String?
+//        let version: Int?
+//        let createdDateTime, createdBy, updatedDateTime, updatedBy: String?
+//
+//        enum CodingKeys: String, CodingKey {
+//            case hdID = "hdId"
+//            case preference, value, version, createdDateTime, createdBy, updatedDateTime, updatedBy
+//        }
+//    }
     
     // MARK: Mapped Quicklinks Names
-    struct QuickLinksStrings: Codable {
-        let name: String
-        let filter: Module
-        
-        struct Module: Codable {
-            let modules: [String]
-        }
-    }
+//    struct QuickLinksStrings: Codable {
+//        let name: String
+//        let filter: Module
+//
+//        struct Module: Codable {
+//            let modules: [String]
+//        }
+//    }
 }
 
 struct AuthenticatedUserProfileRequestObject: Codable {
@@ -130,29 +130,29 @@ struct AuthenticatedUserProfileRequestObject: Codable {
 
 // MARK: QUICK LINKS PUT SECTION
 
-struct QuickLinksModelForPreferences: Codable {
-    struct Filter: Codable {
-        let modules: [String]
-    }
-    
-    let name: String
-    let filter: Filter
-}
-
-struct UserProfilePreferencePUTRequestModel: Codable {
-    let hdid: String
-    let preference: String
-    let value: String
-    let version: Int
-    
-    enum PreferenceType: String, Codable {
-        case NormalQuickLinks = "quickLinks"
-        case OrganDonor = "hideOrganDonorQuickLink"
-    }
-}
-
-struct UserProfilePreferencePUTResponseModel: Codable {
-    let resourcePayload: AuthenticatedUserProfileResponseObject.QuickLinks?
-
-}
+//struct QuickLinksModelForPreferences: Codable {
+//    struct Filter: Codable {
+//        let modules: [String]
+//    }
+//
+//    let name: String
+//    let filter: Filter
+//}
+//
+//struct UserProfilePreferencePUTRequestModel: Codable {
+//    let hdid: String
+//    let preference: String
+//    let value: String
+//    let version: Int
+//
+//    enum PreferenceType: String, Codable {
+//        case NormalQuickLinks = "quickLinks"
+//        case OrganDonor = "hideOrganDonorQuickLink"
+//    }
+//}
+//
+//struct UserProfilePreferencePUTResponseModel: Codable {
+//    let resourcePayload: AuthenticatedUserProfileResponseObject.QuickLinks?
+//
+//}
 

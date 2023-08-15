@@ -10,7 +10,7 @@ import Foundation
 typealias PatientDetailResponse = AuthenticatedPatientDetailsResponseObject
 typealias OrganDonorStatusResponse = AuthenticatedOrganDonorStatusResponseModel.Item
 typealias DiagnosticImagingResponse = AuthenticatedDiagnosticImagingResponseModel.Item
-typealias QuickLinksPreferencesResponse = AuthenticatedUserProfileResponseObject.QuickLinks
+//typealias QuickLinksPreferencesResponse = AuthenticatedUserProfileResponseObject.QuickLinks
 
 struct PatientService {
     
@@ -46,81 +46,81 @@ struct PatientService {
     // MARK: Quick Links Preferences
     // Note: Not using a loader when called during background fetch
     // This should be called during records sync only - so loader will not be called
-    public func fetchAndStoreQuickLinksPreferences(for patient: Patient, useLoader: Bool = false, completion: @escaping ([QuickLinkPreferences]?)-> Void) {
-        guard let hdid = patient.hdid else {
-            return completion(nil)
-        }
-        if useLoader {
-            network.addLoader(message: .SyncingPreferences, caller: .QuickLinks_fetchAndStore)
-        }
-        fetchProfile { result in
-            guard let response = result else {
-                if useLoader {
-                    network.removeLoader(caller: .QuickLinks_fetchAndStore)
-                }
-                return completion(nil)
-            }
-            guard let quicklinks = response.resourcePayload?.preferences?.quickLinks else {
-                if useLoader {
-                    network.removeLoader(caller: .QuickLinks_fetchAndStore)
-                }
-                return completion(nil)
-            }
-            let enabled = !(response.resourcePayload?.preferences?.hideOrganDonorQuickLink?.value == "true")
-            let storedLinks = StorageService.shared.store(quickLinksPreferences: quicklinks, isOrganDonorQuickLinkEnabled: enabled, quickLinkVersion: response.resourcePayload?.preferences?.quickLinks?.version, organDonorVersion: response.resourcePayload?.preferences?.hideOrganDonorQuickLink?.version, for: patient)
-            if useLoader {
-                network.removeLoader(caller: .QuickLinks_fetchAndStore)
-            }
-            completion(storedLinks)
-        }
-       
-    }
+//    public func fetchAndStoreQuickLinksPreferences(for patient: Patient, useLoader: Bool = false, completion: @escaping ([QuickLinkPreferences]?)-> Void) {
+//        guard let hdid = patient.hdid else {
+//            return completion(nil)
+//        }
+//        if useLoader {
+//            network.addLoader(message: .SyncingPreferences, caller: .QuickLinks_fetchAndStore)
+//        }
+//        fetchProfile { result in
+//            guard let response = result else {
+//                if useLoader {
+//                    network.removeLoader(caller: .QuickLinks_fetchAndStore)
+//                }
+//                return completion(nil)
+//            }
+//            guard let quicklinks = response.resourcePayload?.preferences?.quickLinks else {
+//                if useLoader {
+//                    network.removeLoader(caller: .QuickLinks_fetchAndStore)
+//                }
+//                return completion(nil)
+//            }
+//            let enabled = !(response.resourcePayload?.preferences?.hideOrganDonorQuickLink?.value == "true")
+//            let storedLinks = StorageService.shared.store(quickLinksPreferences: quicklinks, isOrganDonorQuickLinkEnabled: enabled, quickLinkVersion: response.resourcePayload?.preferences?.quickLinks?.version, organDonorVersion: response.resourcePayload?.preferences?.hideOrganDonorQuickLink?.version, for: patient)
+//            if useLoader {
+//                network.removeLoader(caller: .QuickLinks_fetchAndStore)
+//            }
+//            completion(storedLinks)
+//        }
+//
+//    }
     
 //    public func update quick links preferences
-    public func updateQuickLinkPreferences(preferenceString: String, preferenceType: UserProfilePreferencePUTRequestModel.PreferenceType, version: Int, completion: @escaping (UserProfilePreferencePUTResponseModel?, Bool)->Void) {
-        guard let token = authManager.authToken,
-              let hdid = authManager.hdid else { return completion(nil, true) }
-        guard NetworkConnection.shared.hasConnection
-        else {
-            network.showToast(message: .noInternetConnection, style: .Warn)
-            return completion(nil, false)
-        }
-        
-        configService.fetchConfig { response in
-            guard let config = response,
-                  config.online,
-                  let baseURLString = config.baseURL,
-                  let baseURL = URL(string: baseURLString)
-            else {
-                network.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
-                return completion(nil, false)
-            }
-            
-            let headers = [
-                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
-                Constants.AuthenticationHeaderKeys.hdid: hdid
-            ]
-            let parameters = UserProfilePreferencePUTRequestModel(hdid: hdid, preference: preferenceType.rawValue, value: preferenceString, version: version)
-            let requestModel = NetworkRequest<UserProfilePreferencePUTRequestModel, UserProfilePreferencePUTResponseModel>(url: endpoints.preference(base: baseURL, hdid: hdid),
-                                                                                type: .Put,
-                                                                                parameters: parameters,
-                                                                                encoder: .json,
-                                                                                headers: headers)
-            { result in
-                
-                if (result?.resourcePayload) != nil {
-                    // return result
-                    return completion(result, true)
-                } else {
-                    return completion(nil, true)
-                }
-            } onError: { error in
-                network.showToast(error: error)
-            }
-            
-            network.request(with: requestModel)
-        }
-    }
+//    public func updateQuickLinkPreferences(preferenceString: String, preferenceType: UserProfilePreferencePUTRequestModel.PreferenceType, version: Int, completion: @escaping (UserProfilePreferencePUTResponseModel?, Bool)->Void) {
+//        guard let token = authManager.authToken,
+//              let hdid = authManager.hdid else { return completion(nil, true) }
+//        guard NetworkConnection.shared.hasConnection
+//        else {
+//            network.showToast(message: .noInternetConnection, style: .Warn)
+//            return completion(nil, false)
+//        }
+//
+//        configService.fetchConfig { response in
+//            guard let config = response,
+//                  config.online,
+//                  let baseURLString = config.baseURL,
+//                  let baseURL = URL(string: baseURLString)
+//            else {
+//                network.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+//                return completion(nil, false)
+//            }
+//
+//            let headers = [
+//                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+//                Constants.AuthenticationHeaderKeys.hdid: hdid
+//            ]
+//            let parameters = UserProfilePreferencePUTRequestModel(hdid: hdid, preference: preferenceType.rawValue, value: preferenceString, version: version)
+//            let requestModel = NetworkRequest<UserProfilePreferencePUTRequestModel, UserProfilePreferencePUTResponseModel>(url: endpoints.preference(base: baseURL, hdid: hdid),
+//                                                                                type: .Put,
+//                                                                                parameters: parameters,
+//                                                                                encoder: .json,
+//                                                                                headers: headers)
+//            { result in
+//
+//                if (result?.resourcePayload) != nil {
+//                    // return result
+//                    return completion(result, true)
+//                } else {
+//                    return completion(nil, true)
+//                }
+//            } onError: { error in
+//                network.showToast(error: error)
+//            }
+//
+//            network.request(with: requestModel)
+//        }
+//    }
     
     // MARK: Organ Donor Status
     public func fetchAndStoreOrganDonorStatus(for patient: Patient, completion: @escaping (OrganDonorStatus?)->Void) {

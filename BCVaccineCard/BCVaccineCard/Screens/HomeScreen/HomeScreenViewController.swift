@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeScreenViewController: BaseViewController {
-    
+    // TODO: Modify HomeScreenCell type to use same enum that we have everywhere
     enum DataSource {
         case banner(data: CommunicationBanner)
         case loginStatus(status: AuthStatus)
@@ -50,9 +50,6 @@ class HomeScreenViewController: BaseViewController {
     
     private var actionSheetController: UIAlertController?
     
-    // TODO: Put into ViewModel once created
-    private var patientService: PatientService?
-    
     private var dataSource: [DataSource] {
         genDataSource()
     }
@@ -76,7 +73,6 @@ class HomeScreenViewController: BaseViewController {
     }
     
     private func setup() {
-        patientService = PatientService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
         addObservablesForChangeInAuthenticationStatus()
         setupCollectionView()
         navSetup()
@@ -114,9 +110,8 @@ class HomeScreenViewController: BaseViewController {
                 newTypes.insert(.ImmunizationSchedule, at: 1)
             }
             if authManager.isAuthenticated {
-                let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
-                let quickLinks = convertQuickLinkIntoDataSource(coreDataModel: quickLinkPreferences)
-                newTypes.append(contentsOf: quickLinks)
+                let quickLinkPreferences = reduceQuickLinksPreferencesAndSort()
+                newTypes.append(contentsOf: quickLinkPreferences)
             }
             data[0] = .quickAccess(types: newTypes)
         default: break
@@ -132,26 +127,31 @@ class HomeScreenViewController: BaseViewController {
         return data
     }
     
-    private func convertQuickLinkIntoDataSource(coreDataModel: [QuickLinkPreferences]) -> [HomeScreenCellType] {
+    private func reduceQuickLinksPreferencesAndSort() -> [HomeScreenCellType] {
+        let phn = StorageService.shared.fetchAuthenticatedPatient()?.phn ?? ""
+        let quickLinksPreferences = Defaults.getStoresPreferencesFor(phn: phn)
+        let sortedQuickLinks = quickLinksPreferences.filter { $0.enabled == true }.sorted { $0.addedDate ?? Date() < $1.addedDate ?? Date() }
+        return convertQuickLinkIntoDataSource(quickLinks: sortedQuickLinks)
+    }
+    
+    private func convertQuickLinkIntoDataSource(quickLinks: [QuickLinksPreferences]) -> [HomeScreenCellType] {
         var links: [HomeScreenCellType] = []
-        for model in coreDataModel {
-            if let name = model.quickLink, let type = ManageHomeScreenViewController.QuickLinksNames(rawValue: name) {
-                let link = HomeScreenCellType.QuickLink(type: type)
-                links.append(link)
-            }
+        for model in quickLinks {
+            let link = HomeScreenCellType.QuickLink(type: model.type)
+            links.append(link)
         }
         return links
     }
     
-    private func convertQuickLinkIntoQuickLinksNames(coreDataModel: [QuickLinkPreferences]) -> [ManageHomeScreenViewController.QuickLinksNames] {
-        var links: [ManageHomeScreenViewController.QuickLinksNames] = []
-        for model in coreDataModel {
-            if let name = model.quickLink, let type = ManageHomeScreenViewController.QuickLinksNames(rawValue: name) {
-                links.append(type)
-            }
-        }
-        return links
-    }
+//    private func convertQuickLinkIntoQuickLinksNames(coreDataModel: [QuickLinkPreferences]) -> [ManageHomeScreenViewController.QuickLinksNames] {
+//        var links: [ManageHomeScreenViewController.QuickLinksNames] = []
+//        for model in coreDataModel {
+//            if let name = model.quickLink, let type = ManageHomeScreenViewController.QuickLinksNames(rawValue: name) {
+//                links.append(type)
+//            }
+//        }
+//        return links
+//    }
 
     
 }
@@ -382,7 +382,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
 extension HomeScreenViewController: QuickAccessCollectionReusableViewDelegate {
     func manageButtonTapped() {
         var vm = ManageHomeScreenViewController.ViewModel()
-        vm.createDataSource()
+        vm.createDataSourceForManageScreen()
         show(route: .ManageHomeScreen, withNavigation: true, viewModel: vm)
     }
 }
@@ -462,7 +462,7 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
         alert(title: "Error", message: "Unable to remove link at this time, please try again later")
     }
     
-    private func getQuickLink(indexPath: IndexPath) -> ManageHomeScreenViewController.QuickLinksNames? {
+    private func getQuickLink(indexPath: IndexPath) -> QuickLinksPreferences.QuickLinksNames? {
         let ds = dataSource[indexPath.section]
         switch ds {
         case .quickAccess(types: let types):
@@ -473,6 +473,18 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
             default: return nil
             }
         default: return nil
+        }
+    }
+    // Look into adding completion block here
+    private func modifyLocallyStoredPreferences(remove name: String) {
+        let phn = StorageService.shared.fetchAuthenticatedPatient()?.phn ?? ""
+        var storedPrefences = Defaults.getStoresPreferencesFor(phn: phn)
+        if storedPrefences.isEmpty {
+            storedPrefences = QuickLinksPreferences.constructEmptyPreferences()
+        }
+        if let index = storedPrefences.firstIndex(where: { $0.type.rawValue == name }) {
+            storedPrefences[index].enabled = false
+            Defaults.updateStoredPreferences(phn: phn, newPreferences: storedPrefences)
         }
     }
     
@@ -488,44 +500,48 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
         
         actionSheetController?.addAction(UIAlertAction(title: "Remove", style: .default, handler: { _ in
             
-            let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
-            var version: Int
-            if name == ManageHomeScreenViewController.QuickLinksNames.OrganDonor.rawValue {
-                version = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: true)
-            } else {
-                version = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: false)
-            }
-            var quickLinks = self.convertQuickLinkIntoQuickLinksNames(coreDataModel: quickLinkPreferences)
-//            var organDonorWasInQuickLinks = false
-            if let index = quickLinks.firstIndex(of: quickLinkToRemove) {
-//                if quickLinkToRemove == .OrganDonor {
-//                    organDonorWasInQuickLinks = true
+//            let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
+//            var version: Int
+//            if name == ManageHomeScreenViewController.QuickLinksNames.OrganDonor.rawValue {
+//                version = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: true)
+//            } else {
+//                version = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: false)
+//            }
+//            var quickLinks = self.convertQuickLinkIntoQuickLinksNames(coreDataModel: quickLinkPreferences)
+////            var organDonorWasInQuickLinks = false
+//            if let index = quickLinks.firstIndex(of: quickLinkToRemove) {
+////                if quickLinkToRemove == .OrganDonor {
+////                    organDonorWasInQuickLinks = true
+////                }
+//                quickLinks.remove(at: index)
+//            }
+//            var preferenceString: String?
+//            if quickLinkToRemove == .OrganDonor {
+//                preferenceString = "true"
+//            } else {
+//                preferenceString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: quickLinks)
+//            }
+//            guard let preferenceString = preferenceString else {
+//                self.showGeneralAlertFailure()
+//                return
+//            }
+//            let type: UserProfilePreferencePUTRequestModel.PreferenceType = quickLinkToRemove == .OrganDonor ? .OrganDonor : .NormalQuickLinks
+//            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, preferenceType: type, version: version, completion: { result, showAlert in
+//                if let result = result {
+//                    guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+//                    self.patientService?.fetchAndStoreQuickLinksPreferences(for: patient, useLoader: true, completion: { preferences in
+//                        print(preferences)
+//                        self.collectionView.reloadData()
+//                        self.dismissActionSheet()
+//                    })
+//                } else if showAlert {
+//                    self.showGeneralAlertFailure()
 //                }
-                quickLinks.remove(at: index)
-            }
-            var preferenceString: String?
-            if quickLinkToRemove == .OrganDonor {
-                preferenceString = "true"
-            } else {
-                preferenceString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: quickLinks)
-            }
-            guard let preferenceString = preferenceString else {
-                self.showGeneralAlertFailure()
-                return
-            }
-            let type: UserProfilePreferencePUTRequestModel.PreferenceType = quickLinkToRemove == .OrganDonor ? .OrganDonor : .NormalQuickLinks
-            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, preferenceType: type, version: version, completion: { result, showAlert in
-                if let result = result {
-                    guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-                    self.patientService?.fetchAndStoreQuickLinksPreferences(for: patient, useLoader: true, completion: { preferences in
-                        print(preferences)
-                        self.collectionView.reloadData()
-                        self.dismissActionSheet()
-                    })
-                } else if showAlert {
-                    self.showGeneralAlertFailure()
-                }
-            })
+//            })
+            
+            self.modifyLocallyStoredPreferences(remove: name)
+            self.collectionView.reloadData()
+            self.dismissActionSheet()
     
         }))
         

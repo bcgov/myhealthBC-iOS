@@ -273,6 +273,9 @@
 		2D120D4328FF25A600EB8EBF /* PostDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D4228FF25A600EB8EBF /* PostDependent.swift */; };
 		2D120D4428FF25A600EB8EBF /* PostDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D4228FF25A600EB8EBF /* PostDependent.swift */; };
 		2D120D4528FF25A600EB8EBF /* PostDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D120D4228FF25A600EB8EBF /* PostDependent.swift */; };
+		2D185B1C2A8B60B3000E64DD /* QuickLinksPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D185B1B2A8B60B3000E64DD /* QuickLinksPreferences.swift */; };
+		2D185B1D2A8B60B3000E64DD /* QuickLinksPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D185B1B2A8B60B3000E64DD /* QuickLinksPreferences.swift */; };
+		2D185B1E2A8B60B3000E64DD /* QuickLinksPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D185B1B2A8B60B3000E64DD /* QuickLinksPreferences.swift */; };
 		2D1C8CF62A79C71B005204B7 /* UIAlertController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1C8CF52A79C71B005204B7 /* UIAlertController+EXT.swift */; };
 		2D1C8CF72A79C71B005204B7 /* UIAlertController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1C8CF52A79C71B005204B7 /* UIAlertController+EXT.swift */; };
 		2D1C8CF82A79C71B005204B7 /* UIAlertController+EXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1C8CF52A79C71B005204B7 /* UIAlertController+EXT.swift */; };
@@ -1666,6 +1669,7 @@
 		2D120D3A28FF165D00EB8EBF /* DependentsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentsResponse.swift; sourceTree = "<group>"; };
 		2D120D3E28FF17FB00EB8EBF /* DependentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependentService.swift; sourceTree = "<group>"; };
 		2D120D4228FF25A600EB8EBF /* PostDependent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDependent.swift; sourceTree = "<group>"; };
+		2D185B1B2A8B60B3000E64DD /* QuickLinksPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLinksPreferences.swift; sourceTree = "<group>"; };
 		2D1C8CF52A79C71B005204B7 /* UIAlertController+EXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+EXT.swift"; sourceTree = "<group>"; };
 		2D1C8D042A79F697005204B7 /* ManageLinksTextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageLinksTextTableViewCell.swift; sourceTree = "<group>"; };
 		2D1C8D052A79F697005204B7 /* ManageLinksTextTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ManageLinksTextTableViewCell.xib; sourceTree = "<group>"; };
@@ -3980,6 +3984,7 @@
 				79218AF72756A0B20063004E /* HealthRecordsDetailDateSource.swift */,
 				796653DC279876C9004D103E /* AuthenticationRequestObjects.swift */,
 				798CA1C927EE4B0A0096188C /* LoginProcessStatus.swift */,
+				2D185B1B2A8B60B3000E64DD /* QuickLinksPreferences.swift */,
 			);
 			path = LocalModels;
 			sourceTree = "<group>";
@@ -5238,6 +5243,7 @@
 				795AA76D271563C600E59FF1 /* ResourceDataSource.swift in Sources */,
 				29921C922773A5F0005025D2 /* AuthenticationInfoView.swift in Sources */,
 				7918A8C727482E0C00D19D1C /* TextListView.swift in Sources */,
+				2D185B1D2A8B60B3000E64DD /* QuickLinksPreferences.swift in Sources */,
 				795AA78527162AAA00E59FF1 /* NotificationName+Ext.swift in Sources */,
 				7944F6E826F12C4E006B9444 /* ZoomedInPopUpVC.swift in Sources */,
 				3E5E6E9C28D239BE00724EDD /* CommunicationService.swift in Sources */,
@@ -5642,6 +5648,7 @@
 				79FDE424273335D000DAD988 /* FederalPassView.swift in Sources */,
 				3E5E6E9D28D239BE00724EDD /* CommunicationService.swift in Sources */,
 				795AA76B271560F100E59FF1 /* NewsFeedResponse.swift in Sources */,
+				2D185B1E2A8B60B3000E64DD /* QuickLinksPreferences.swift in Sources */,
 				2971956928871B1A00CA824A /* SectionDescriptionTableViewCell.swift in Sources */,
 				7918A8C827482E0C00D19D1C /* TextListView.swift in Sources */,
 				3E5E6EB428D2747800724EDD /* CommunicationResponse.swift in Sources */,
@@ -6023,6 +6030,7 @@
 				798005B12852C66E006E390F /* TestResult+CoreDataClass.swift in Sources */,
 				798005B22852C66E006E390F /* ResourceDataSource.swift in Sources */,
 				798005B32852C66E006E390F /* AuthenticationInfoView.swift in Sources */,
+				2D185B1C2A8B60B3000E64DD /* QuickLinksPreferences.swift in Sources */,
 				798005B42852C66E006E390F /* TextListView.swift in Sources */,
 				798005B52852C66E006E390F /* NotificationName+Ext.swift in Sources */,
 				798005B62852C66E006E390F /* ZoomedInPopUpVC.swift in Sources */,

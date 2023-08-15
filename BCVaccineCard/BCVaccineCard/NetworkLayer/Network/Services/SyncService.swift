@@ -83,12 +83,12 @@ struct SyncService {
                 group.leave()
             }
             
-            group.enter()
-            patientService.fetchAndStoreQuickLinksPreferences(for: patient) { preferences in
-                print("CONNOR PREF: ", preferences)
-                Logger.log(string: "fetched quick links preferences", type: .Network)
-                group.leave()
-            }
+//            group.enter()
+//            patientService.fetchAndStoreQuickLinksPreferences(for: patient) { preferences in
+//                print("CONNOR PREF: ", preferences)
+//                Logger.log(string: "fetched quick links preferences", type: .Network)
+//                group.leave()
+//            }
             
             group.enter()
             patientService.fetchAndStoreDiagnosticImaging(for: patient) { imaging in
