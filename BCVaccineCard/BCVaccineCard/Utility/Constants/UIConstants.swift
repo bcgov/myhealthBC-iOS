@@ -10,6 +10,9 @@ import UIKit
 
 extension Constants {
     struct UI {
+        struct TabBar {
+            static let viewControllersWithTabBar: [UIViewController.Type] = [HomeScreenViewController.self, HealthRecordsViewController.self, DependentsHomeViewController.self, ServicesViewController.self, UsersListOfRecordsViewController.self]
+        }
         struct Theme {
             static let primaryColor = UIColor(hexString: "#003366")
             static let secondaryColor = UIColor(hexString: "#eea73b")
