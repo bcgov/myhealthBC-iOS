@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImmunizationScheduleViewController: UIViewController {
+class ImmunizationScheduleViewController: BaseViewController {
     class func construct() -> ImmunizationScheduleViewController {
         if let vc = Storyboard.immunizationSchedule.instantiateViewController(withIdentifier: String(describing: ImmunizationScheduleViewController.self)) as? ImmunizationScheduleViewController {
             return vc

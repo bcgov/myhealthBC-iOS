@@ -21,7 +21,7 @@ protocol NavigationSetupProtocol: AnyObject {
 }
 
 class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
-   
+    
     weak var navDelegate: NavigationSetupProtocol?
     var tabDelegate: TabDelegate?
     
@@ -49,6 +49,28 @@ class BaseViewController: UIViewController, NavigationSetupProtocol, Theme {
         navigationSetup()
         performLocalAuthIfNeeded()
         listenToLocalAuthNotification()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        showOrHideTabBar()
+    }
+    
+    func showOrHideTabBar() {
+        var hideTab = true
+        for vcType in Constants.UI.TabBar.viewControllersWithTabBar {
+            if self.isKind(of: vcType) {
+                hideTab = false
+            }
+        }
+        
+        if hideTab {
+            self.parent?.tabBarController?.tabBar.isHidden = true
+            print("HIDEEE")
+        } else {
+            self.parent?.tabBarController?.tabBar.isHidden = false
+            print("SHOOW")
+        }
     }
     
     func listenToLocalAuthNotification() {

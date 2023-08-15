@@ -31,7 +31,6 @@ class ServicesViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
         if let vm = viewModel {
             vm.listenToChanges { [weak self] in
                 self?.setup()
