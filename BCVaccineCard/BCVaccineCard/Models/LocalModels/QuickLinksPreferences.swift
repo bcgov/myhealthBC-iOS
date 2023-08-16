@@ -9,7 +9,7 @@ import Foundation
 
 
 struct QuickLinksPreferences: Codable {
-    let type: QuickLinksNames
+    let name: QuickLinksNames
     var enabled: Bool
     var addedDate: Date?
     
@@ -120,17 +120,17 @@ struct QuickLinksPreferences: Codable {
     // NOTE: For now, we have to manually set this, until we refine and come up with a better way (case iterable, use int raw values, then have a get function to get the string name)
     static func constructEmptyPreferences() -> [QuickLinksPreferences] {
         return [
-            QuickLinksPreferences(type: .MyNotes, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .Immunizations, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .Medications, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .LabResults, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .COVID19Tests, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .SpecialAuthority, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .HospitalVisits, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .HealthVisits, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .ClinicalDocuments, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .ImagingReports, enabled: false, addedDate: nil),
-            QuickLinksPreferences(type: .OrganDonor, enabled: false, addedDate: nil)
+            QuickLinksPreferences(name: .MyNotes, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .Immunizations, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .Medications, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .LabResults, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .COVID19Tests, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .SpecialAuthority, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .HospitalVisits, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .HealthVisits, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .ClinicalDocuments, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .ImagingReports, enabled: false, addedDate: nil),
+            QuickLinksPreferences(name: .OrganDonor, enabled: false, addedDate: nil)
         ]
     }
     

@@ -6,15 +6,14 @@
 //
 
 import UIKit
-// TODO: Update this for remote quick links possibility
-// Add "QuickLink" type with an associated value (type, which is a "QuickLinkName" type, part of the ManageHomeScreenViewController
+
 enum HomeScreenCellType {
     case Records
     case ImmunizationSchedule
     case Recommendations
     case Resources
     case Proofs
-    case QuickLink(type: QuickLinksPreferences.QuickLinksNames)
+    case QuickLink(type: QuickLinksPreferences)
     
     var getTitle: String {
         switch self {
@@ -24,7 +23,7 @@ enum HomeScreenCellType {
         case .ImmunizationSchedule: return "Immunization\nSchedules"
         case .Recommendations: return "Recommended\nImmunizations"
         case .QuickLink(type: let type):
-            return type.getHomeScreenDisplayableName
+            return type.name.getHomeScreenDisplayableName
         }
     }
     
@@ -36,7 +35,7 @@ enum HomeScreenCellType {
         case .ImmunizationSchedule: return UIImage(named: "immunization-schedules-icon")
         case .Recommendations: return UIImage(named: "recommended-immunizations-icon")
         case .QuickLink(type: let type):
-            if let name = type.getHomeScreenIconStringName, let image = UIImage(named: name) {
+            if let name = type.name.getHomeScreenIconStringName, let image = UIImage(named: name) {
                 return image
             } else {
                 return nil

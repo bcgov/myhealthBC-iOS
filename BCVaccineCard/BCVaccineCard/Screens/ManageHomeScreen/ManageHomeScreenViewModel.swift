@@ -20,11 +20,7 @@ extension ManageHomeScreenViewController {
         }
         
         mutating func createDataSourceForManageScreen() {
-//            let coreDataQuickLinks = StorageService.shared.fetchQuickLinksPreferences()
-//            let convertedQuickLinks = convertCoreDataQuickLinks(coreDataModel: coreDataQuickLinks)
-//            let healthLinks = getHealthRecordQuickLinksOnly(quickLinks: convertedQuickLinks)
-//            self.originalHealthRecordString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: healthLinks)
-//            self.organDonorLinkEnabledInitially = checkForOrganDonorLink(quickLinks: convertedQuickLinks)
+
             var storedQuickLinks: [QuickLinksPreferences]
             guard let phn = StorageService.shared.fetchAuthenticatedPatient()?.phn else {
                 storedQuickLinks = QuickLinksPreferences.constructEmptyPreferences()
@@ -53,7 +49,7 @@ extension ManageHomeScreenViewController {
             self.dataSource = ds
         }
         
-        func convertDataSourceToPreferencesAndSave(for phn: String) {
+        func convertDataSourceToPreferencesAndSave(for phn: String, completion: @escaping() -> Void) {
             var updatedPreferences: [QuickLinksPreferences] = []
             for type in self.dataSource {
                 switch type {
@@ -64,97 +60,25 @@ extension ManageHomeScreenViewController {
                 }
             }
             Defaults.updateStoredPreferences(phn: phn, newPreferences: updatedPreferences)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                completion()
+            }
         }
-        
-//        private func convertCoreDataQuickLinks(coreDataModel: [QuickLinkPreferences]) -> [QuickLinksNames] {
-//            var links: [QuickLinksNames] = []
-//            for model in coreDataModel {
-//                if let name = model.quickLink, let link = QuickLinksNames(rawValue: name) {
-//                    links.append(link)
-//                }
-//            }
-//            return links
-//        }
-        
-//        func getHealthRecordQuickLinksOnly(quickLinks: [QuickLinksNames]) -> [QuickLinksNames] {
-//            var healthLinks = quickLinks
-//            for (index, links) in quickLinks.enumerated() {
-//                if links == .OrganDonor {
-//                    healthLinks.remove(at: index)
-//                    break
-//                }
-//            }
-//            return healthLinks
-//        }
-        
-//        func checkForOrganDonorLink(quickLinks: [QuickLinksNames]) -> Bool {
-//            var val = false
-//            for link in quickLinks {
-//                if link == .OrganDonor {
-//                    val = true
-//                    break
-//                }
-//            }
-//            return val
-//        }
         
         private func constructSectionTypes(storedPreferences: [QuickLinksPreferences],
                                            for type: QuickLinksPreferences.QuickLinksNames.Section,
                                            order: [QuickLinksPreferences.QuickLinksNames]) -> [QuickLinksPreferences] {
-            let adjustedPreferences = storedPreferences.filter { $0.type.getSection == type }
+            let adjustedPreferences = storedPreferences.filter { $0.name.getSection == type }
             let ds: [QuickLinksPreferences] = order.map { name in
-                if let index = adjustedPreferences.firstIndex(where: { $0.type == name }) {
+                if let index = adjustedPreferences.firstIndex(where: { $0.name == name }) {
                     return adjustedPreferences[index]
                 } else {
                     // Should never get here, but we should find a better way to satisfy this constraint
-                    return QuickLinksPreferences(type: .MyNotes, enabled: false)
+                    return QuickLinksPreferences(name: .MyNotes, enabled: false)
                 }
             }
             return ds
         }
-        
-//        static func constructJsonStringForAPIPreferences(quickLinks: [QuickLinksPreferences.QuickLinksNames]) -> String? {
-//            var quickLinksModel: [QuickLinksModelForPreferences] = []
-//            for link in quickLinks {
-//                let module = link.getAPIFilterType?.rawValue ?? ""
-//                let filter = QuickLinksModelForPreferences.Filter(modules: [module])
-//                let preference = QuickLinksModelForPreferences(name: link.rawValue, filter: filter)
-//                quickLinksModel.append(preference)
-//            }
-//            return quickLinksModel.toJsonString()
-//        }
-        
-//        func constructAPIQuickLinksModelFromDataSource() -> [QuickLinksPreferences.QuickLinksNames] {
-//            var quickLinks: [QuickLinksNames] = []
-//            for data in dataSource {
-//                if let types = getTypes(ds: data) {
-//                    if let names = mapEnabledTypesToQuickNames(types: types) {
-//                        quickLinks.append(contentsOf: names)
-//                    }
-//                }
-//            }
-//            return quickLinks
-//        }
-        
-//        private func getTypes(ds: DataSource) -> [QuickLinksPreferences]? {
-//            switch ds {
-//            case .introText: return nil
-//            case .healthRecord(types: let types): return types
-//            case .service(types: let types): return types
-//            }
-//        }
-        
-//        private func mapEnabledTypesToQuickNames(types: [QuickLinksPreferences]) -> [QuickLinksPreferences.QuickLinksNames]? {
-//            var quickNames: [QuickLinksPreferences.QuickLinksNames] = []
-//            guard types.count > 0 else { return nil }
-//            for type in types {
-//                if type.enabled {
-//                    let quick = type.type
-//                    quickNames.append(quick)
-//                }
-//            }
-//            return quickNames
-//        }
     }
     
     enum DataSource {
@@ -176,6 +100,7 @@ extension ManageHomeScreenViewController {
             case .healthRecord(types: let types), .service(types: let types):
                 var newTypes = types
                 newTypes[indexPath.row].enabled = enabled
+                newTypes[indexPath.row].addedDate = Date()
                 return newTypes
             }
         }

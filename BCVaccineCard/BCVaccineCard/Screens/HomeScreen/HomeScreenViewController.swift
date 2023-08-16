@@ -137,22 +137,11 @@ class HomeScreenViewController: BaseViewController {
     private func convertQuickLinkIntoDataSource(quickLinks: [QuickLinksPreferences]) -> [HomeScreenCellType] {
         var links: [HomeScreenCellType] = []
         for model in quickLinks {
-            let link = HomeScreenCellType.QuickLink(type: model.type)
+            let link = HomeScreenCellType.QuickLink(type: model)
             links.append(link)
         }
         return links
     }
-    
-//    private func convertQuickLinkIntoQuickLinksNames(coreDataModel: [QuickLinkPreferences]) -> [ManageHomeScreenViewController.QuickLinksNames] {
-//        var links: [ManageHomeScreenViewController.QuickLinksNames] = []
-//        for model in coreDataModel {
-//            if let name = model.quickLink, let type = ManageHomeScreenViewController.QuickLinksNames(rawValue: name) {
-//                links.append(type)
-//            }
-//        }
-//        return links
-//    }
-
     
 }
 
@@ -445,12 +434,6 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
 // MARK: Quick Links
 extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
     func moreOptions(indexPath: IndexPath?) {
-            // 1: Create PUT API request
-            // 2: Create alert from bottom
-            // 3: On remove option, hit API for delete preference/quick link
-                // reduce data source to array of QuickLinksNames which we will convert to json string
-                // On Success: Store again to core data (we will delete existing and store fresh) and then refresh screen (just re-load collection view, as data source is a computed property)
-                // On Failure: Show alert to user that delete was unsuccessful and to try again later
         guard let indexPath = indexPath else {
             showGeneralAlertFailure()
             return
@@ -462,7 +445,7 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
         alert(title: "Error", message: "Unable to remove link at this time, please try again later")
     }
     
-    private func getQuickLink(indexPath: IndexPath) -> QuickLinksPreferences.QuickLinksNames? {
+    private func getQuickLink(indexPath: IndexPath) -> QuickLinksPreferences? {
         let ds = dataSource[indexPath.section]
         switch ds {
         case .quickAccess(types: let types):
@@ -476,15 +459,19 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
         }
     }
     // Look into adding completion block here
-    private func modifyLocallyStoredPreferences(remove name: String) {
+    private func modifyLocallyStoredPreferences(remove link: QuickLinksPreferences, completion: @escaping() -> Void) {
         let phn = StorageService.shared.fetchAuthenticatedPatient()?.phn ?? ""
         var storedPrefences = Defaults.getStoresPreferencesFor(phn: phn)
         if storedPrefences.isEmpty {
             storedPrefences = QuickLinksPreferences.constructEmptyPreferences()
         }
-        if let index = storedPrefences.firstIndex(where: { $0.type.rawValue == name }) {
+        if let index = storedPrefences.firstIndex(where: { $0.name == link.name }) {
             storedPrefences[index].enabled = false
+            storedPrefences[index].addedDate = nil
             Defaults.updateStoredPreferences(phn: phn, newPreferences: storedPrefences)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            completion()
         }
     }
     
@@ -493,56 +480,17 @@ extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
             showGeneralAlertFailure()
             return
         }
-        let name = quickLinkToRemove.rawValue
-        actionSheetController = UIAlertController(title: "Remove \(name)", message: "Remove the section from homepage", preferredStyle: .actionSheet)
+        actionSheetController = UIAlertController(title: "Remove \(quickLinkToRemove.name.rawValue)", message: "Remove the section from homepage", preferredStyle: .actionSheet)
         actionSheetController?.setTitleAttr(font: UIFont.bcSansBoldWithSize(size: 15), color: AppColours.textBlack)
         actionSheetController?.setMessage(font: UIFont.bcSansRegularWithSize(size: 12), color: AppColours.textGray)
         
         actionSheetController?.addAction(UIAlertAction(title: "Remove", style: .default, handler: { _ in
-            
-//            let quickLinkPreferences = StorageService.shared.fetchQuickLinksPreferences()
-//            var version: Int
-//            if name == ManageHomeScreenViewController.QuickLinksNames.OrganDonor.rawValue {
-//                version = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: true)
-//            } else {
-//                version = StorageService.shared.fetchQuickLinksVersion(forOrganDonor: false)
-//            }
-//            var quickLinks = self.convertQuickLinkIntoQuickLinksNames(coreDataModel: quickLinkPreferences)
-////            var organDonorWasInQuickLinks = false
-//            if let index = quickLinks.firstIndex(of: quickLinkToRemove) {
-////                if quickLinkToRemove == .OrganDonor {
-////                    organDonorWasInQuickLinks = true
-////                }
-//                quickLinks.remove(at: index)
-//            }
-//            var preferenceString: String?
-//            if quickLinkToRemove == .OrganDonor {
-//                preferenceString = "true"
-//            } else {
-//                preferenceString = ManageHomeScreenViewController.ViewModel.constructJsonStringForAPIPreferences(quickLinks: quickLinks)
-//            }
-//            guard let preferenceString = preferenceString else {
-//                self.showGeneralAlertFailure()
-//                return
-//            }
-//            let type: UserProfilePreferencePUTRequestModel.PreferenceType = quickLinkToRemove == .OrganDonor ? .OrganDonor : .NormalQuickLinks
-//            self.patientService?.updateQuickLinkPreferences(preferenceString: preferenceString, preferenceType: type, version: version, completion: { result, showAlert in
-//                if let result = result {
-//                    guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
-//                    self.patientService?.fetchAndStoreQuickLinksPreferences(for: patient, useLoader: true, completion: { preferences in
-//                        print(preferences)
-//                        self.collectionView.reloadData()
-//                        self.dismissActionSheet()
-//                    })
-//                } else if showAlert {
-//                    self.showGeneralAlertFailure()
-//                }
-//            })
-            
-            self.modifyLocallyStoredPreferences(remove: name)
-            self.collectionView.reloadData()
-            self.dismissActionSheet()
-    
+            self.view.startLoadingIndicator()
+            self.modifyLocallyStoredPreferences(remove: quickLinkToRemove) {
+                self.view.endLoadingIndicator()
+                self.collectionView.reloadData()
+                self.dismissActionSheet()
+            }
         }))
         
         actionSheetController?.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { [self] _ in
@@ -598,11 +546,11 @@ extension HomeScreenViewController {
         case .ImmunizationSchedule:
             show(route: .ImmunizationSchedule, withNavigation: true)
         case .QuickLink(type: let type):
-            switch type {
+            switch type.name {
             case .OrganDonor:
                 show(tab: .Services)
             default:
-                show(tab: .AuthenticatedRecords, appliedFilter: type.getFilterType)
+                show(tab: .AuthenticatedRecords, appliedFilter: type.name.getFilterType)
             }
         }
     }

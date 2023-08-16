@@ -192,90 +192,6 @@ extension StorageService: StoragePatientManager {
         }
     }
     
-//    func store(
-//        quickLinksPreferences object: QuickLinksPreferencesResponse,
-//        isOrganDonorQuickLinkEnabled enabled: Bool,
-//        quickLinkVersion: Int?,
-//        organDonorVersion: Int?,
-//        for patient: Patient) -> [QuickLinkPreferences]? {
-//            guard let context = managedContext,
-//                  let array = object.value?.convertQuickLinksStringToObject() else {
-//                return nil
-//            }
-//            deleteQuickLinkPreferences()
-////            var addOrganDonorLink = false
-//            let organVersion = Int64(organDonorVersion ?? 0)
-//            let linkVersion = Int64(quickLinkVersion ?? 0)
-//            update(organDonorLinkVersion: organVersion, quickLinkVersion: linkVersion, for: patient)
-//            var storedObjects: [QuickLinkPreferences] = []
-//            for (index, value) in array.enumerated() {
-//                if value.name != ManageHomeScreenViewController.QuickLinksNames.OrganDonor.rawValue {
-//                    let model = QuickLinkPreferences(context: context)
-//                    model.quickLink = value.name
-//                    // Hack due to encoding/decoding number issue - wasn't able to associate the JSON value with our enum value
-//                    if value.filter.modules.first == ManageHomeScreenViewController.QuickLinksNames.APIFilterTypes.Laboratory.rawValue {
-//                        model.quickLink = ManageHomeScreenViewController.QuickLinksNames.COVID19Tests.rawValue
-//                    }
-//                    model.homeOrder = Int64(index)
-//                    model.patient = patient
-//                    do {
-//                        try context.save()
-//                        notify(event: StorageEvent(event: .Save, entity: .QuickLinkPreference, object: patient))
-//                        storedObjects.append(model)
-//                    } catch let error as NSError {
-//                        Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-//                    }
-//                } else {
-////                    addOrganDonorLink = true
-//                }
-//                
-//            }
-//            if enabled /*|| addOrganDonorLink*/ {
-//                let model = QuickLinkPreferences(context: context)
-//                model.quickLink = ManageHomeScreenViewController.QuickLinksNames.OrganDonor.rawValue
-//                model.homeOrder = Int64(100) // Just make it in last for now
-//                model.patient = patient
-//                do {
-//                    try context.save()
-//                    notify(event: StorageEvent(event: .Save, entity: .QuickLinkPreference, object: patient))
-//                    storedObjects.append(model)
-//                } catch let error as NSError {
-//                    Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-//                }
-//            }
-//            guard storedObjects.count > 0 else { return nil }
-//            return storedObjects
-//        }
-//    
-//    func fetchQuickLinksPreferences() -> [QuickLinkPreferences] {
-//        guard let context = managedContext else {return []}
-//        do {
-//            return try context.fetch(QuickLinkPreferences.fetchRequest())
-//        } catch let error as NSError {
-//            Logger.log(string: "Could not fetch. \(error), \(error.userInfo)", type: .storage)
-//            return []
-//        }
-//    }
-//    
-//    func fetchQuickLinksVersion(forOrganDonor value: Bool) -> Int {
-//        let patient = fetchAuthenticatedPatient()
-//        if value {
-//            return Int(patient?.organDonorLinkVersion ?? 0)
-//        } else {
-//            return Int(patient?.quickLinkVersion ?? 0)
-//        }
-//    }
-//    
-//    
-//    private func deleteQuickLinkPreferences() {
-//        let preferences = fetchQuickLinksPreferences()
-//        for preference in preferences {
-//            delete(object: preference)
-//            notify(event: StorageEvent(event: .Delete, entity: .QuickLinkPreference, object: preference))
-//        }
-//        
-//    }
-    
     /// returns existing patient
     /// or
     /// creates and returns a new one if it doesnt exist.
@@ -420,22 +336,6 @@ extension StorageService: StoragePatientManager {
         }
     }
     
-    // MARK: Sets the versions for quick links on patient object
-//    fileprivate func update(organDonorLinkVersion: Int64, quickLinkVersion: Int64, for patient: Patient) -> Patient? {
-//        guard let context = managedContext else {return nil}
-//        do {
-//            patient.organDonorLinkVersion = organDonorLinkVersion
-//            patient.quickLinkVersion = quickLinkVersion
-//
-//            try context.save()
-//            notify(event: StorageEvent(event: .Update, entity: .Patient, object: patient))
-//            return patient
-//        } catch let error as NSError {
-//            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
-//            return nil
-//        }
-//    }
-    
     
     // MARK: Delete
     func deletePatient(phn: String) {
@@ -456,7 +356,6 @@ extension StorageService: StoragePatientManager {
         }
         deleteHealthRecords(for: patient)
         deleteComments(for: patient)
-        deleteQuickLinksPreferences(for: patient)
         delete(object: patient)
         notify(event: StorageEvent(event: .Delete, entity: .Patient, object: patient))
     }

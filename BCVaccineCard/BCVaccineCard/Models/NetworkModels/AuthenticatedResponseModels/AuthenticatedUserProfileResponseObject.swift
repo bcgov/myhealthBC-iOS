@@ -100,16 +100,6 @@ extension AuthenticatedUserProfileResponseObject {
 //            case preference, value, version, createdDateTime, createdBy, updatedDateTime, updatedBy
 //        }
 //    }
-    
-    // MARK: Mapped Quicklinks Names
-//    struct QuickLinksStrings: Codable {
-//        let name: String
-//        let filter: Module
-//
-//        struct Module: Codable {
-//            let modules: [String]
-//        }
-//    }
 }
 
 struct AuthenticatedUserProfileRequestObject: Codable {
@@ -126,33 +116,4 @@ struct AuthenticatedUserProfileRequestObject: Codable {
         }
     }
 }
-
-
-// MARK: QUICK LINKS PUT SECTION
-
-//struct QuickLinksModelForPreferences: Codable {
-//    struct Filter: Codable {
-//        let modules: [String]
-//    }
-//
-//    let name: String
-//    let filter: Filter
-//}
-//
-//struct UserProfilePreferencePUTRequestModel: Codable {
-//    let hdid: String
-//    let preference: String
-//    let value: String
-//    let version: Int
-//
-//    enum PreferenceType: String, Codable {
-//        case NormalQuickLinks = "quickLinks"
-//        case OrganDonor = "hideOrganDonorQuickLink"
-//    }
-//}
-//
-//struct UserProfilePreferencePUTResponseModel: Codable {
-//    let resourcePayload: AuthenticatedUserProfileResponseObject.QuickLinks?
-//
-//}
 

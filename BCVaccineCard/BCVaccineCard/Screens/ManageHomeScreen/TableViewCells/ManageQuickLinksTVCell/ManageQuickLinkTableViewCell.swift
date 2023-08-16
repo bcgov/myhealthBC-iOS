@@ -41,11 +41,11 @@ class ManageQuickLinkTableViewCell: UITableViewCell {
         quickLinkLabel.font = UIFont.bcSansBoldWithSize(size: 15)
     }
     
-    func configure(quickLink: ManageHomeScreenViewController.QuickLinksNames, enabled: Bool, delegateOwner: UIViewController, indexPath: IndexPath) {
-        self.enabled = enabled
+    func configure(quickLink: QuickLinksPreferences, delegateOwner: UIViewController, indexPath: IndexPath) {
+        self.enabled = quickLink.enabled
         self.indexPath = indexPath
-        quickLinkLabel.text = quickLink.getManageScreenDisplayableName
-        setCheckboxButton(enabled: enabled)
+        quickLinkLabel.text = quickLink.name.getManageScreenDisplayableName
+        setCheckboxButton(enabled: self.enabled)
         self.delegate = delegateOwner as? ManageQuickLinkTableViewCellDelegate
     }
     
