@@ -19,6 +19,7 @@ extension AuthenticatedUserProfileResponseObject {
         let version: Int?
         let acceptedTermsOfService: Bool?
         let hdID, termsOfServiceID: String?
+        let hasTermsOfServiceUpdated: Bool?
         let email, smsNumber, closedDateTime, identityManagementID: String?
         let lastLoginDateTime, encryptionKey: String?
         let verifications: [Verification]?
@@ -31,6 +32,7 @@ extension AuthenticatedUserProfileResponseObject {
             case termsOfServiceID = "termsOfServiceId"
             case email, smsNumber, closedDateTime
             case identityManagementID = "identityManagementId"
+            case hasTermsOfServiceUpdated
             case lastLoginDateTime, encryptionKey, verifications
             case isEmailVerified, isSMSNumberVerified
         }

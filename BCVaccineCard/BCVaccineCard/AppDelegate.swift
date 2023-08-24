@@ -346,6 +346,7 @@ enum LoaderCaller {
     case ClinicalDocumentService_fetchAndStore
     case DependentService_fetchDependents
     case DependentService_addDependent
+    case DependentService_fetchRecommendations
     case FeedbackService_postFeedback
     case HealthVisitsService_fetchAndStore
     case MobileConfigService_fetchConfig

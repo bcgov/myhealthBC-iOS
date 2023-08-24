@@ -95,7 +95,9 @@ class HomeScreenViewController: BaseViewController {
         switch quickAccess {
         case .quickAccess(types: let types):
             var newTypes = types
-            if authManager.isAuthenticated && !StorageService.shared.fetchRecommendations().isEmpty {
+            if authManager.isAuthenticated {
+                // No longer hiding this
+                // && !StorageService.shared.fetchRecommendations().isEmpty
                 newTypes.insert(.Recommendations, at: 1)
             } else if !authManager.isAuthenticated {
                 newTypes.insert(.ImmunizationSchedule, at: 1)
