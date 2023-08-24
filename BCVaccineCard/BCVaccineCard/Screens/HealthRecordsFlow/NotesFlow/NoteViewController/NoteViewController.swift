@@ -159,7 +159,7 @@ extension NoteViewController {
         case .ViewNote:
             let editNavButton = NavButton(image: UIImage(named: "edit-note"), action: #selector(self.editButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
             let deleteNavButton = NavButton(image: UIImage(named: "delete-note"), action: #selector(self.deleteButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
-            rightNavButtons = [editNavButton, deleteNavButton]
+            rightNavButtons = [deleteNavButton, editNavButton]
         case .EditNote:
             let navButton = NavButton(title: "Save", image: nil, action: #selector(self.saveButtonTapped), accessibility: Accessibility(traits: .button, label: AccessibilityLabels.MyHealthPassesScreen.navRightIconTitle, hint: AccessibilityLabels.MyHealthPassesScreen.navRightIconHint))
             rightNavButtons = [navButton]

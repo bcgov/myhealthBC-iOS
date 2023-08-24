@@ -14,3 +14,30 @@ struct PostNote: Codable {
 //    let createdDateTime: String // Gateway Timezone
     var addedToTimeline: Bool
 }
+
+struct UpdateNote: Codable {
+    let id: String
+    let hdid: String
+    let title: String
+    let text: String
+    let journalDate: String // "2023-06-07" - yyyy-mm-dd
+    let version: Int
+    let createdDateTime: String // Gateway Timezone
+    let createdBy: String
+    let updatedDateTime: String // Gateway Timezone
+    let updatedBy: String
+    
+    init(note: Note) {
+        let defaultHDID = AuthManager().hdid ?? ""
+        id = note.id ?? UUID().uuidString
+        hdid = note.hdid ?? defaultHDID
+        title = note.title ?? ""
+        text = note.text ?? ""
+        journalDate = note.journalDate?.yearMonthDayString ?? Date().yearMonthDayString
+        version = Int(note.version)
+        createdDateTime = note.createdDateTime?.gatewayDateAndTimeWithMSAndTimeZone ?? Date().gatewayDateAndTimeWithMSAndTimeZone
+        createdBy = note.hdid ?? defaultHDID
+        updatedDateTime = note.updatedDateTime?.gatewayDateAndTimeWithMSAndTimeZone ?? Date().gatewayDateAndTimeWithMSAndTimeZone
+        updatedBy = note.updatedBy ?? defaultHDID
+    }
+}

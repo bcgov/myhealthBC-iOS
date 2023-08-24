@@ -103,4 +103,12 @@ extension StorageService: StorageNoteManager {
         }
 
     }
+    
+    func updateNote(originalNote: Note, newNote: NoteResponse) {
+        
+    }
+    
+    func deleteNote(note: Note) {
+        
+    }
 }
