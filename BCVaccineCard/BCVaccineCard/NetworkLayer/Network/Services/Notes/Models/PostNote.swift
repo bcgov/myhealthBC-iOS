@@ -27,13 +27,25 @@ struct UpdateNote: Codable {
     let updatedDateTime: String // Gateway Timezone
     let updatedBy: String
     
-    init(note: Note) {
+    init(note: Note, updatedTitle: String?, updatedText: String?, updatedJournalDate: String?) {
         let defaultHDID = AuthManager().hdid ?? ""
         id = note.id ?? UUID().uuidString
         hdid = note.hdid ?? defaultHDID
-        title = note.title ?? ""
-        text = note.text ?? ""
-        journalDate = note.journalDate?.yearMonthDayString ?? Date().yearMonthDayString
+        if let updatedTitle = updatedTitle {
+            title = updatedTitle
+        } else {
+            title = note.title ?? ""
+        }
+        if let updatedText = updatedText {
+            text = updatedText
+        } else {
+            text = note.text ?? ""
+        }
+        if let updatedJournalDate = updatedJournalDate {
+            journalDate = updatedJournalDate
+        } else {
+            journalDate = note.journalDate?.yearMonthDayString ?? Date().yearMonthDayString
+        }
         version = Int(note.version)
         createdDateTime = note.createdDateTime?.gatewayDateAndTimeWithMSAndTimeZone ?? Date().gatewayDateAndTimeWithMSAndTimeZone
         createdBy = note.hdid ?? defaultHDID
