@@ -129,7 +129,7 @@ extension StorageService: StorageNoteManager {
         }
     }
     
-    private func fetchNote(id: String) -> Note? {
+    public func fetchNote(id: String) -> Note? {
         let notes = fetchNotes()
        
         return notes.filter { $0.id == id }.first

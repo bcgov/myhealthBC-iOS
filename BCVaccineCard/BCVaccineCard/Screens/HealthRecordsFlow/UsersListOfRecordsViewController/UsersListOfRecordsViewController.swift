@@ -253,7 +253,7 @@ class UsersListOfRecordsViewController: BaseViewController {
     
     @IBAction private func createNoteButtonTapped(_ sender: UIButton) {
         //TODO: Add to show route with proper ViewModel
-        let vc = NoteViewController.construct(for: .AddNote, with: nil, id: nil)
+        let vc = NoteViewController.construct(for: .AddNote, with: nil, existingNote: nil)
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -792,7 +792,7 @@ extension UsersListOfRecordsViewController: UITableViewDelegate, UITableViewData
         switch ds.type {
         case .note(model: let model):
             let note = PostNote(title: model.title ?? "", text: model.text ?? "", journalDate: model.journalDate?.yearMonthDayString ?? Date().yearMonthDayString, addedToTimeline: model.addedToTimeline)
-            let vc = NoteViewController.construct(for: .ViewNote, with: note, id: model.id)
+            let vc = NoteViewController.construct(for: .ViewNote, with: note, existingNote: model)
             self.navigationController?.pushViewController(vc, animated: true)
         default:
             show(route: .HealthRecordDetail, withNavigation: true, viewModel: vm)

@@ -33,11 +33,11 @@ class NoteViewController: BaseViewController {
         case PlainTextCell
     }
     
-    class func construct(for state: NoteVCCellState, with note: PostNote?, id: String?) -> NoteViewController {
+    class func construct(for state: NoteVCCellState, with note: PostNote?, existingNote: Note?) -> NoteViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: NoteViewController.self)) as? NoteViewController {
             vc.state = state
             vc.note = note
-            vc.existingNoteId = id
+            vc.existingNote = existingNote
             return vc
         }
         return NoteViewController()
@@ -47,7 +47,7 @@ class NoteViewController: BaseViewController {
     
     private var note: PostNote?
     private var state: NoteVCCellState!
-    private var existingNoteId: String?
+    private var existingNote: Note?
     private var dataSource: [TableViewStructure] = []
     
     private var service: NotesService?
@@ -197,27 +197,60 @@ extension NoteViewController {
     }
     
     @objc private func saveButtonTapped() {
-        // TODO: Update logic here
-        alert(title: "Coming Soon", message: "Save an edited note coming soon") {
-            self.screenStateChanged(state: .ViewNote)
+        if checkIfNoteShouldBeUpdated() {
+            if let errorText = validateNote(note: self.note) {
+                alert(title: "Error", message: errorText)
+            } else {
+                guard let patient = StorageService.shared.fetchAuthenticatedPatient() else { return }
+                let title: String? = self.note?.title != self.existingNote?.title ? self.note?.title : nil
+                let text: String? = self.note?.text != self.existingNote?.text ? self.note?.text : nil
+                let journalDate: String? = self.note?.journalDate != self.existingNote?.journalDate?.yearMonthDayString ? self.note?.journalDate : nil
+                guard let noteToUpdate = self.existingNote else {
+                    alert(title: "Error", message: "There was an error updating your note, please try again later.")
+                    return
+                }
+                service?.updateNote(title: title, text: text, journalDate: journalDate, noteToUpdate: noteToUpdate, patient: patient, completion: { note, showErrorIfNeccesary in
+                    if let note = note {
+                        self.alert(title: "Success", message: "You successfully updated your note") {
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    } else if showErrorIfNeccesary {
+                        self.alert(title: "Error", message: "There was an error updating your note, please try again.")
+                    }
+                })
+            }
+        } else {
+            alert(title: "No Updates", message: "This note was not edited, nothing to save.")
         }
+        self.screenStateChanged(state: .ViewNote)
     }
     
     @objc private func editButtonTapped() {
-        // TODO: Edit logic here
-        alert(title: "Coming Soon", message: "Edit a note coming soon")
+        // TODO: Test this out some more
         screenStateChanged(state: .EditNote)
     }
     
     @objc private func deleteButtonTapped() {
-        // TODO: Delete logic here
+        // TODO: Test this out some more
         self.alert(title: "Delete Note", message: "This action cannot be undone. Are you sure you want to delete this note?", buttonOneTitle: .delete, buttonOneCompletion: {
-            self.alert(title: "Coming Soon", message: "Delete a note coming soon")
-            // TODO: Delete note then after success, pop back to previous VC
+            guard let noteToDelete = self.existingNote, let patient = StorageService.shared.fetchAuthenticatedPatient() else {
+                self.alert(title: "Error", message: "There was an error deleting your note, please try again later.")
+                return
+            }
+            self.service?.deleteNote(noteToDelete: noteToDelete, patient: patient, completion: { note, showErrorIfNeccesary in
+                if let note = note {
+                    self.alert(title: "Success", message: "You successfully deleted your note") {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                } else if showErrorIfNeccesary {
+                    self.alert(title: "Error", message: "There was an error deleting your note, please try again.")
+                }
+            })
         }, buttonTwoTitle: .cancel) {
             // Do Nothing
         }
     }
+    
 }
 
 // MARK: Table View setup
@@ -302,6 +335,10 @@ extension NoteViewController: AddToTimelineTableViewCellDelegate, EnterTextTable
         // Not using right now - will delete after notes feature is finished if we don't end up using
         guard let type = type else { return }
 
+    }
+    
+    private func checkIfNoteShouldBeUpdated() -> Bool {
+        return (self.note?.title != self.existingNote?.title || self.note?.text != self.existingNote?.text || self.note?.journalDate != self.existingNote?.journalDate?.yearMonthDayString)
     }
     
 }
