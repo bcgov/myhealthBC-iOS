@@ -33,10 +33,11 @@ class NoteViewController: BaseViewController {
         case PlainTextCell
     }
     
-    class func construct(for state: NoteVCCellState, with note: PostNote?) -> NoteViewController {
+    class func construct(for state: NoteVCCellState, with note: PostNote?, id: String?) -> NoteViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: NoteViewController.self)) as? NoteViewController {
             vc.state = state
             vc.note = note
+            vc.existingNoteId = id
             return vc
         }
         return NoteViewController()
@@ -46,6 +47,7 @@ class NoteViewController: BaseViewController {
     
     private var note: PostNote?
     private var state: NoteVCCellState!
+    private var existingNoteId: String?
     private var dataSource: [TableViewStructure] = []
     
     private var service: NotesService?
