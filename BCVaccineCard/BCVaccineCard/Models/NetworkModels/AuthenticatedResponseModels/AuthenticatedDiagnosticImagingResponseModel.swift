@@ -16,9 +16,10 @@ struct AuthenticatedDiagnosticImagingResponseModel: Codable {
         let procedureDescription, bodyPart, modality, organization: String?
         let healthAuthority, examStatus, fileID, examDate: String?
         let itemType, id, type: String?
+        let isUpdated: Bool?
 
         enum CodingKeys: String, CodingKey {
-            case procedureDescription, bodyPart, modality, organization, healthAuthority, examStatus
+            case procedureDescription, bodyPart, modality, organization, healthAuthority, examStatus, isUpdated
             case fileID = "fileId"
             case examDate
             case itemType = "type"

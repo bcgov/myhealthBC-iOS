@@ -171,6 +171,7 @@ extension StorageService: StoragePatientManager {
         model.itemType = object.itemType
         model.id = object.id
         model.type = object.type
+        model.isObjectUpdated = object.isUpdated ?? false
         model.patient = patient
         do {
             try context.save()

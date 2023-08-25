@@ -76,6 +76,7 @@
         <attribute name="fileID" optional="YES" attributeType="String"/>
         <attribute name="healthAuthority" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="isObjectUpdated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="itemType" optional="YES" attributeType="String"/>
         <attribute name="modality" optional="YES" attributeType="String"/>
         <attribute name="organization" optional="YES" attributeType="String"/>
