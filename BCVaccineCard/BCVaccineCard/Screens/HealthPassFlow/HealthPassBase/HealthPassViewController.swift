@@ -40,7 +40,6 @@ class HealthPassViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
-        tabBarController?.tabBar.isHidden = false
         navSetup()
         setup()
     }
@@ -276,7 +275,6 @@ extension HealthPassViewController: UITableViewDelegate, UITableViewDataSource, 
             guard let `self` = self, let image = img else {return}
             let vc = ZoomedInPopUpVC.constructZoomedInPopUpVC(withQRImage: image, parentVC: self.navigationController, delegateOwner: self)
             self.present(vc, animated: true, completion: nil)
-            self.tabBarController?.tabBar.isHidden = true
             self.tableView.isUserInteractionEnabled = true
         }
     }
@@ -389,7 +387,6 @@ extension HealthPassViewController: AppStyleButtonDelegate {
 // MARK: Zoomed in pop up QR delegate
 extension HealthPassViewController: ZoomedInPopUpVCDelegate {
     func closeButtonTapped() {
-        self.tabBarController?.tabBar.isHidden = false
     }
 }
 

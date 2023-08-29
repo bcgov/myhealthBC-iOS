@@ -20,8 +20,7 @@ struct HealthRecordConstants {
             .specialAuthorityDrug,
             .hospitalVisit,
             .clinicalDocument,
-            .diagnosticImaging,
-            .notes
+            .diagnosticImaging
         ]
         if !HealthRecordConstants.notesEnabled {
             if let index = types.firstIndex(of: .notes) {
@@ -33,12 +32,12 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE DEPENDENT RECORD TYPES
     static var enabledDepententRecordTypes: [RecordType] {
-        return [.covidTestResultRecord, .immunization]
+        return [.covidTestResultRecord, .immunization, .medication]
     }
     
     // ENABLE AND DISABLE COMMENTS
     static var commentsEnabled: Bool {
-        return false
+        return true
     }
     
     // ENABLE AND DISABLE SEARCH RECORDS
@@ -48,12 +47,19 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE PROFILE DETAILS SCREEN
     static var profileDetailsEnabled: Bool {
+        return false
+    }
+    
+    static var notesEnabled: Bool {
+        return false
+    }
+    
+    static var diagnosticImagingEnabled: Bool {
         return true
     }
     
-    // ENABLE AND DISABLE NOTES
-    static var notesEnabled: Bool {
-        return true
+    static var guardianAuditEnabled: Bool {
+        return false
     }
 }
 
@@ -190,7 +196,7 @@ enum NotificationCategory: String {
     case HeathVisits = "HealthVisit"
     case Medication = "Medications"
     case HospitalVisits = "HospitalVisit"
-    case DiagnosticImaging = "DiagnosticImaging"
+    case DiagnosticImaging = "DiExam"
 }
 
 extension NotificationCategory {

@@ -42,7 +42,6 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -52,7 +51,6 @@ class ProfileAndSettingsViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
     }
     
     // MARK: Routing

@@ -286,7 +286,7 @@ extension LaboratoryOrder {
     public var commentsArray: [Comment] {
         let set = comments as? Set<Comment> ?? []
         return set.sorted {
-            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+            $0.createdDateTime ?? Date() > $1.createdDateTime ?? Date()
         }
     }
 }
@@ -296,7 +296,7 @@ extension SpecialAuthorityDrug {
     public var commentsArray: [Comment] {
         let set = comments as? Set<Comment> ?? []
         return set.sorted {
-            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+            $0.createdDateTime ?? Date() > $1.createdDateTime ?? Date()
         }
     }
 }
@@ -306,7 +306,7 @@ extension HealthVisit {
     public var commentsArray: [Comment] {
         let set = comments as? Set<Comment> ?? []
         return set.sorted {
-            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+            $0.createdDateTime ?? Date() > $1.createdDateTime ?? Date()
         }
     }
 }
@@ -316,7 +316,7 @@ extension CovidLabTestResult {
     public var commentsArray: [Comment] {
         let set = comments as? Set<Comment> ?? []
         return set.sorted {
-            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+            $0.createdDateTime ?? Date() > $1.createdDateTime ?? Date()
         }
     }
 }
@@ -326,7 +326,7 @@ extension Perscription {
     public var commentsArray: [Comment] {
         let set = comments as? Set<Comment> ?? []
         return set.sorted {
-            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+            $0.createdDateTime ?? Date() > $1.createdDateTime ?? Date()
         }
     }
 }
@@ -336,7 +336,7 @@ extension HospitalVisit {
     public var commentsArray: [Comment] {
         let set = comments as? Set<Comment> ?? []
         return set.sorted {
-            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+            $0.createdDateTime ?? Date() > $1.createdDateTime ?? Date()
         }
     }
 }
@@ -346,7 +346,7 @@ extension ClinicalDocument {
     public var commentsArray: [Comment] {
         let set = comments as? Set<Comment> ?? []
         return set.sorted {
-            $0.createdDateTime ?? Date() < $1.createdDateTime ?? Date()
+            $0.createdDateTime ?? Date() > $1.createdDateTime ?? Date()
         }
     }
 }

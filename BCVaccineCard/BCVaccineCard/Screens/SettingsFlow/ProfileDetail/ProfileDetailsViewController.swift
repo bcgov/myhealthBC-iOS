@@ -162,7 +162,9 @@ class ProfileDetailsViewController: BaseDependentViewController {
         case .DependentProfile:
             dataSource.append(DataSource(type: .dateOfBirth, text: dob))
             let count = Int(self.dependent?.totalDelegateCount ?? 0)
-            dataSource.append(DataSource(type: .dependentDelegateCount(count: count), text: nil))
+            if HealthRecordConstants.guardianAuditEnabled {
+                dataSource.append(DataSource(type: .dependentDelegateCount(count: count), text: nil))
+            }
             dataSource.append(DataSource(type: .removeDependentButton, text: nil))
 
         }
