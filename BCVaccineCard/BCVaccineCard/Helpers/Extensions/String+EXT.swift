@@ -156,3 +156,21 @@ extension Array where Element == String {
         return max
     }
 }
+
+// MARK: Converting quick links string
+//extension String {
+//    // TODO: Maybe make this more reusable using generics
+//    func convertQuickLinksStringToObject() -> [AuthenticatedUserProfileResponseObject.QuickLinksStrings]? {
+//        let jsonData = Data(self.utf8)
+//        
+//        let decoder = JSONDecoder()
+//
+//        do {
+//            let quickLinks = try decoder.decode([AuthenticatedUserProfileResponseObject.QuickLinksStrings].self, from: jsonData)
+//            return quickLinks
+//        } catch {
+//            print(error.localizedDescription)
+//            return nil
+//        }
+//    }
+//}

@@ -258,9 +258,14 @@ struct HealthRecordsDetailDataSource {
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
         case .diagnosticImaging(model: let model):
+            var newTitle = "-"
+            if model.isObjectUpdated == true {
+                let str = model.modality ?? "-"
+                newTitle = str + " - recently updated"
+            }
             id = model.id
-            title = model.modality ?? "-"
-            detailNavTitle = model.modality ?? "-"
+            title = newTitle
+            detailNavTitle = newTitle
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-diagnostic-imaging-icon")
             

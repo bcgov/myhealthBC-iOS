@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeScreenViewController: BaseViewController {
-    
+    // TODO: Modify HomeScreenCell type to use same enum that we have everywhere
     enum DataSource {
         case banner(data: CommunicationBanner)
         case loginStatus(status: AuthStatus)
@@ -48,6 +48,8 @@ class HomeScreenViewController: BaseViewController {
     private var communicationBanner: CommunicationBanner?
     private let connectionListener = NetworkConnection()
     
+    private var actionSheetController: UIAlertController?
+    
     private var dataSource: [DataSource] {
         genDataSource()
     }
@@ -81,8 +83,15 @@ class HomeScreenViewController: BaseViewController {
                 self.fetchCommunicationBanner()
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: .refetchQuickLinksFromCoreData, object: nil)
     }
     
+    @objc private func reloadCollectionView(_ notification: Notification) {
+        self.collectionView.reloadData()
+    }
+    
+    // TODO: Adjust this so that it doesn't get called so many times, pretty excessive right now
     private func genDataSource() -> [DataSource] {
         var data: [DataSource] = [
             .quickAccess(types: [
@@ -100,6 +109,10 @@ class HomeScreenViewController: BaseViewController {
             } else if !authManager.isAuthenticated {
                 newTypes.insert(.ImmunizationSchedule, at: 1)
             }
+            if authManager.isAuthenticated {
+                let quickLinkPreferences = reduceQuickLinksPreferencesAndSort()
+                newTypes.append(contentsOf: quickLinkPreferences)
+            }
             data[0] = .quickAccess(types: newTypes)
         default: break
         }
@@ -113,7 +126,22 @@ class HomeScreenViewController: BaseViewController {
         }
         return data
     }
-
+    
+    private func reduceQuickLinksPreferencesAndSort() -> [HomeScreenCellType] {
+        let phn = StorageService.shared.fetchAuthenticatedPatient()?.phn ?? ""
+        let quickLinksPreferences = Defaults.getStoresPreferencesFor(phn: phn)
+        let sortedQuickLinks = quickLinksPreferences.filter { $0.enabled == true }.sorted { $0.addedDate ?? Date() < $1.addedDate ?? Date() }
+        return convertQuickLinkIntoDataSource(quickLinks: sortedQuickLinks)
+    }
+    
+    private func convertQuickLinkIntoDataSource(quickLinks: [QuickLinksPreferences]) -> [HomeScreenCellType] {
+        var links: [HomeScreenCellType] = []
+        for model in quickLinks {
+            let link = HomeScreenCellType.QuickLink(type: model)
+            links.append(link)
+        }
+        return links
+    }
     
 }
 
@@ -291,7 +319,7 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
         case .quickAccess(types: let types):
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeScreenRecordCollectionViewCell.getName, for: indexPath) as? HomeScreenRecordCollectionViewCell else { return UICollectionViewCell() }
             let type = types[indexPath.row]
-            cell.configure(forType: type)
+            cell.configure(forType: type, delegateOwner: self, indexPath: indexPath)
             return cell
         }
     }
@@ -342,8 +370,9 @@ extension HomeScreenViewController: UICollectionViewDataSource, UICollectionView
 // MARK: Header logic
 extension HomeScreenViewController: QuickAccessCollectionReusableViewDelegate {
     func manageButtonTapped() {
-        // working on soon
-        alert(title: "Coming soon", message: "Will be implemented in the next build")
+        var vm = ManageHomeScreenViewController.ViewModel()
+        vm.createDataSourceForManageScreen()
+        show(route: .ManageHomeScreen, withNavigation: true, viewModel: vm)
     }
 }
 
@@ -402,6 +431,92 @@ extension HomeScreenViewController: CommunicationBannerCollectionViewCellDelegat
     
 }
 
+// MARK: Quick Links
+extension HomeScreenViewController: HomeScreenRecordCollectionViewCellDelegate {
+    func moreOptions(indexPath: IndexPath?) {
+        guard let indexPath = indexPath else {
+            showGeneralAlertFailure()
+            return
+        }
+        showMoreOptions(indexPath: indexPath)
+    }
+    
+    private func showGeneralAlertFailure() {
+        alert(title: "Error", message: "Unable to remove link at this time, please try again later")
+    }
+    
+    private func getQuickLink(indexPath: IndexPath) -> QuickLinksPreferences? {
+        let ds = dataSource[indexPath.section]
+        switch ds {
+        case .quickAccess(types: let types):
+            let type = types[indexPath.row]
+            switch type {
+            case .QuickLink(type: let type):
+                return type
+            default: return nil
+            }
+        default: return nil
+        }
+    }
+    // Look into adding completion block here
+    private func modifyLocallyStoredPreferences(remove link: QuickLinksPreferences, completion: @escaping() -> Void) {
+        let phn = StorageService.shared.fetchAuthenticatedPatient()?.phn ?? ""
+        var storedPrefences = Defaults.getStoresPreferencesFor(phn: phn)
+        if storedPrefences.isEmpty {
+            storedPrefences = QuickLinksPreferences.constructEmptyPreferences()
+        }
+        if let index = storedPrefences.firstIndex(where: { $0.name == link.name }) {
+            storedPrefences[index].enabled = false
+            storedPrefences[index].addedDate = nil
+            Defaults.updateStoredPreferences(phn: phn, newPreferences: storedPrefences)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            completion()
+        }
+    }
+    
+    private func showMoreOptions(indexPath: IndexPath) {
+        guard let quickLinkToRemove = getQuickLink(indexPath: indexPath) else {
+            showGeneralAlertFailure()
+            return
+        }
+        actionSheetController = UIAlertController(title: "Remove \(quickLinkToRemove.name.rawValue)", message: "Remove the section from homepage", preferredStyle: .actionSheet)
+        actionSheetController?.setTitleAttr(font: UIFont.bcSansBoldWithSize(size: 15), color: AppColours.textBlack)
+        actionSheetController?.setMessage(font: UIFont.bcSansRegularWithSize(size: 12), color: AppColours.textGray)
+        
+        actionSheetController?.addAction(UIAlertAction(title: "Remove", style: .default, handler: { _ in
+            self.view.startLoadingIndicator()
+            self.modifyLocallyStoredPreferences(remove: quickLinkToRemove) {
+                self.view.endLoadingIndicator()
+                self.collectionView.reloadData()
+                self.dismissActionSheet()
+            }
+        }))
+        
+        actionSheetController?.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { [self] _ in
+            self.dismissActionSheet()
+        }))
+        
+        guard let actionSheetController = actionSheetController else { return }
+        self.present(actionSheetController, animated: true) {
+            actionSheetController.view.superview?.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissActionSheetTouchOutside))
+            guard let views = actionSheetController.view.superview?.subviews, views.count > 0 else { return }
+            views[0].addGestureRecognizer(tap)
+        }
+    }
+
+    private func dismissActionSheet() {
+        actionSheetController?.dismiss(animated: true)
+        actionSheetController = nil
+        
+    }
+    
+    @objc func dismissActionSheetTouchOutside() {
+        dismissActionSheet()
+    }
+}
+
 // MARK: Login delegate
 extension HomeScreenViewController: HomeScreenAuthCollectionViewCellDelegate {
     func loginTapped() {
@@ -430,6 +545,13 @@ extension HomeScreenViewController {
             show(route: .Recommendations, withNavigation: true)
         case .ImmunizationSchedule:
             show(route: .ImmunizationSchedule, withNavigation: true)
+        case .QuickLink(type: let type):
+            switch type.name {
+            case .OrganDonor:
+                show(tab: .Services)
+            default:
+                show(tab: .AuthenticatedRecords, appliedFilter: type.name.getFilterType)
+            }
         }
     }
 }

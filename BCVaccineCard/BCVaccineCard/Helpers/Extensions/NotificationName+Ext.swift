@@ -41,4 +41,6 @@ extension Notification.Name {
     
     static let queueItUIManuallyClosed = Notification.Name("queueItUIManuallyClosed")
     static let patientStored = Notification.Name("patientStored")
+    static let applyQuickLinkFilter = Notification.Name("applyQuickLinkFilter")
+    static let refetchQuickLinksFromCoreData = Notification.Name("refetchQuickLinksFromCoreData")
 }

@@ -145,6 +145,7 @@ extension UIViewController {
         case TermsOfService
         case Notifications
         case ImmunizationSchedule
+        case ManageHomeScreen
     }
     
     fileprivate func createController(route: Route, viewModel: Any? = nil) -> UIViewController? {
@@ -240,6 +241,11 @@ extension UIViewController {
             return NotificationsViewController.construct(viewModel: vm)
         case .ImmunizationSchedule:
             return ImmunizationScheduleViewController.construct()
+        case .ManageHomeScreen:
+            guard let vm = viewModel as? ManageHomeScreenViewController.ViewModel else {
+                return nil
+            }
+            return ManageHomeScreenViewController.construct(viewModel: vm)
         }
     }
 }
@@ -248,13 +254,21 @@ extension UIViewController {
 // MARK: General Routing
 extension UIViewController {
     
-    func show(tab: AppTabs) {
+    func show(tab: AppTabs, appliedFilter: RecordsFilter? = nil) {
         // TODO: Adjust if tabs need to be switched from VC whose parent is nav controller
         guard let tabBar = self.tabBarController as? AppTabBarController else {
             return
         }
         
         tabBar.switchTo(tab: tab)
+        // NOTE: May have to find a better way of doing this than using a 0.5 second delay - works for now
+        if let appliedFilter = appliedFilter {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                let userInfo: [String: RecordsFilter] = ["filter": appliedFilter]
+                NotificationCenter.default.post(name: .applyQuickLinkFilter, object: nil, userInfo: userInfo as [AnyHashable : Any])
+            }
+            
+        }
     }
     
     func show(route: Route, withNavigation: Bool, viewModel: Any? = nil) {

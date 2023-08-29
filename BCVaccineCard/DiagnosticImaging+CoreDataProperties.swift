@@ -27,6 +27,7 @@ extension DiagnosticImaging {
     @NSManaged public var organization: String?
     @NSManaged public var procedureDescription: String?
     @NSManaged public var type: String?
+    @NSManaged public var isObjectUpdated: Bool
     @NSManaged public var patient: Patient?
 
 }
