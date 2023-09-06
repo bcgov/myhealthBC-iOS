@@ -7,7 +7,6 @@
 
 import Foundation
 
-// NOTE: For now, we really only need the hdId and acceptedTermsOfService fields - so that's all we're going to decode
 struct AuthenticatedUserProfileResponseObject: Codable {
     let resourcePayload: ResourcePayload?
 }
