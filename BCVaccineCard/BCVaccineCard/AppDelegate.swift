@@ -10,6 +10,7 @@ import BCVaccineValidator
 import EncryptedCoreData
 import IQKeyboardManagerSwift
 import AppAuth
+import SafariServices
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -321,6 +322,7 @@ enum LoaderMessage: String {
     case SyncingRecords = "Syncing Records"
     case FetchingConfig = " "
     case empty = ""
+    case SyncingPreferences = "Syncing Preferences"
 }
 
 extension LoaderMessage {
@@ -345,6 +347,7 @@ enum LoaderCaller {
     case ClinicalDocumentService_fetchAndStore
     case DependentService_fetchDependents
     case DependentService_addDependent
+    case DependentService_fetchRecommendations
     case FeedbackService_postFeedback
     case HealthVisitsService_fetchAndStore
     case MobileConfigService_fetchConfig
@@ -363,6 +366,7 @@ enum LoaderCaller {
     case NotificationService_dismiss
     case NotificationService_dismissAll
     case Notes_fetchAndStore
+    case QuickLinks_fetchAndStore
 }
 
 
@@ -460,5 +464,23 @@ extension AppDelegate {
     // Triggered by dataLoadCount
     @objc fileprivate func hideLoader() {
         self.window?.viewWithTag(self.dataLoadTag)?.removeFromSuperview()
+    }
+}
+
+extension AppDelegate {
+    func showExternalURL(url: String) {
+        guard NetworkConnection.shared.hasConnection else {
+            showToast(message: "This action requires an internet connection")
+            return
+        }
+        guard let root = window?.rootViewController else {return}
+        if let presentedVC = root.presentedViewController {
+            guard (presentedVC is SFSafariViewController) == false else {
+                return
+            }
+            presentedVC.openURLInSafariVC(withURL: url)
+        } else {
+            root.openURLInSafariVC(withURL: url)
+        }
     }
 }

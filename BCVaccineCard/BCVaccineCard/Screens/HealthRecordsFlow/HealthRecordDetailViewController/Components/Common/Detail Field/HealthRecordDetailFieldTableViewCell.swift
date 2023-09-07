@@ -41,6 +41,7 @@ class HealthRecordDetailFieldTableViewCell: UITableViewCell {
             return
         }
         valueLabel.isHidden = false
+        valueLabel.canCopy = true
         valueLabel.attributedText =
         valueLabel.attributedText(
             withString: subtext.text,
@@ -56,6 +57,7 @@ class HealthRecordDetailFieldTableViewCell: UITableViewCell {
             thirdLine.isHidden = true
             return
         }
+        thirdLine.canCopy = true
         thirdLine.attributedText =
         thirdLine.attributedText(
             withString: subtext.text,

@@ -191,7 +191,7 @@ struct HealthRecordsDetailDataSource {
             title = .covid19TestResultTitle
             detailNavTitle = .covid19TestResultTitle
             name = model.resultArray.first?.patientDisplayName ?? "-"
-            image = UIImage(named: "blue-bg-test-result-icon")
+            image = UIImage(named: "blue-bg-laboratory-record-icon")
             deleteAlertTitle = .deleteTestResult
             deleteAlertMessage = .deleteTestResultMessage
         case .medication(model: let model):
@@ -207,7 +207,7 @@ struct HealthRecordsDetailDataSource {
             title = model.commonName ?? "-"
             detailNavTitle = "Lab test"
             name = model.patient?.name ?? "-"
-            image = UIImage(named: "blue-bg-laboratory-record-icon")
+            image = UIImage(named: "blue-bg-test-result-icon")
             deleteAlertTitle = "N/A" // Can't delete an authenticated lab result
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
             
@@ -258,9 +258,14 @@ struct HealthRecordsDetailDataSource {
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
         case .diagnosticImaging(model: let model):
+            var newTitle = "-"
+            if model.isObjectUpdated == true {
+                let str = model.modality ?? "-"
+                newTitle = str + " - recently updated"
+            }
             id = model.id
-            title = model.modality ?? "-"
-            detailNavTitle = model.modality ?? "-"
+            title = newTitle
+            detailNavTitle = newTitle
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-diagnostic-imaging-icon")
             

@@ -202,15 +202,11 @@ class GatewayFormViewController: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Putting this here in case user goes to help screen
-        self.tabBarController?.tabBar.isHidden = true
         navSetup()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // Note - sometimes tabBarController will be nil due to when it's released in memory
-        self.tabBarController?.tabBar.isHidden = false
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

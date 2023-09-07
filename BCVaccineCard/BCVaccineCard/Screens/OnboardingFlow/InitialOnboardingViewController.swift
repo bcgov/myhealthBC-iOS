@@ -67,7 +67,12 @@ class InitialOnboardingViewController: UIViewController {
     @IBAction private func skipButtonTapped(_ sender: UIButton) {
         Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
         showLocalAuth {[weak self] in
-            self?.goToAuthentication()
+            if UXConstants.showLoginDuringOnBoarding {
+                self?.goToAuthentication()
+            } else {
+                self?.showHomeScreen(authStatus: nil)
+            }
+            
         }
     }
     
@@ -267,9 +272,15 @@ extension InitialOnboardingViewController: AppStyleButtonDelegate {
         if type == .getStarted || type == .ok {
             Defaults.storeInitialOnboardingScreensSeen(types: screensToShow)
             
+            
             showLocalAuth {[weak self] in
-                self?.goToAuthentication()
+                if UXConstants.showLoginDuringOnBoarding {
+                    self?.goToAuthentication()
+                } else {
+                    self?.showHomeScreen(authStatus: nil)
+                }
             }
+            
         }
     }
     

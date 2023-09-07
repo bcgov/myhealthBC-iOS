@@ -97,6 +97,19 @@ extension UIView {
         }
     }
     
+    public func addEqualSizeContraints(to toView: UIView, top: CGFloat? = 0, bottom: CGFloat? = 0, left: CGFloat? = 0, right: CGFloat? = 0, safe: Bool? = false) {
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: left ?? 0).isActive = true
+        self.trailingAnchor.constraint(equalTo: toView.trailingAnchor, constant: 0 - (right ?? 0)).isActive = true
+        if let safe = safe, safe {
+            self.bottomAnchor.constraint(equalTo: toView.safeBottomAnchor, constant: 0 - (bottom ?? 0)).isActive = true
+            self.topAnchor.constraint(equalTo: toView.safeTopAnchor, constant: top ?? 0).isActive = true
+        } else {
+            self.bottomAnchor.constraint(equalTo: toView.bottomAnchor, constant: 0 - (bottom ?? 0)).isActive = true
+            self.topAnchor.constraint(equalTo: toView.topAnchor, constant: top ?? 0).isActive = true
+        }
+    }
+    
     public func addEqualSizeContraints(to toView: UIView, paddingVertical: CGFloat, paddingHorizontal: CGFloat, safe: Bool? = false) {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.leadingAnchor.constraint(equalTo: toView.leadingAnchor, constant: paddingHorizontal).isActive = true

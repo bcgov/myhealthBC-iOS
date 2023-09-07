@@ -21,6 +21,7 @@ struct NetworkRequest<Parameters: Encodable, T: Decodable> {
     let type: RequestType
     
     let parameters: Parameters?
+    var stringBody: String? = nil
     var encoder: EncoderType = .json
     let headers: [String: String]?
     let completion: Completion<T>

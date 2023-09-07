@@ -57,7 +57,27 @@ class AppTabBarController: UITabBarController {
             self.showOnBoardingIfNeeded() { authenticatedDuringOnBoarding in
                 self.setup(selectedIndex: 0)
                 if authenticatedDuringOnBoarding {
-                    self.performSync(showDialog: true)
+                    self.performSync()
+                }
+            }
+        }
+    }
+    
+    override var selectedIndex: Int {
+        didSet {
+            guard let selectedVC = viewControllers?[selectedIndex] else { return }
+            selectedViewController?.tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+        }
+    }
+    
+    override var selectedViewController: UIViewController? {
+        didSet {
+            guard let vcs = viewControllers else { return }
+            for vc in vcs {
+                if vc == selectedViewController {
+                    vc.tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+                } else {
+                    vc.tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
                 }
             }
         }
@@ -68,7 +88,7 @@ class AppTabBarController: UITabBarController {
         // When authentication status changes, we can set the records tab to the appropriate VC
         // and fetch records - after validation
         AppStates.shared.listenToAuth { authenticated in
-            self.performSync(showDialog: true)
+            self.performSync()
         }
         
         // Listen to Terms of service acceptance
@@ -76,14 +96,14 @@ class AppTabBarController: UITabBarController {
             if !accepted {
                 self.logout(reason: .TOSRejected, completion: {})
             } else {
-                self.performSync(showDialog: true)
+                self.performSync()
             }
         }
         
         // Local auth happens on records tab only.
         // When its done, we should fetch records if user is authenticated.
         AppStates.shared.listenLocalAuth {
-            self.performSync(showDialog: false, showToast: false)
+            self.performSync(showToast: false)
         }
         
         // When patient profile is stored, reload tabs
@@ -95,7 +115,7 @@ class AppTabBarController: UITabBarController {
         
         // Sync when requested manually
         AppStates.shared.listenToSyncRequest {
-            self.performSync(showDialog: false)
+            self.performSync()
         }
     }
     
@@ -113,7 +133,7 @@ class AppTabBarController: UITabBarController {
                 self.logout(reason: .Underage, completion: {
                     return completion(false)
                 })
-            case .TOSNotAccepted:
+            case .TOSNotAccepted, .TOSUpdated:
                 if let presented = self.presentedViewController {
                     self.presentedViewController?.dismiss(animated: true) {
                         self.show(route: .TermsOfService, withNavigation: false)
@@ -184,13 +204,14 @@ class AppTabBarController: UITabBarController {
     // MARK: Setup
     private func setup(selectedIndex: Int) {
         tabBar.tintColor = AppColours.appBlue
+        tabBar.unselectedItemTintColor = AppColours.textGray
         tabBar.barTintColor = .white
         tabBar.isHidden = false
         setTabs()
     }
     
     // MARK: Sync
-    func performSync(showDialog: Bool, showToast: Bool = true) {
+    func performSync(showDialog: Bool? = false, showToast: Bool = true) {
         setTabs()
         guard authManager?.isAuthenticated == true, NetworkConnection.shared.hasConnection == true else {
             return
@@ -200,7 +221,7 @@ class AppTabBarController: UITabBarController {
                 self.setTabs()
                 return
             }
-            if showDialog {
+            if let showDialog = showDialog, showDialog {
                 self.showSuccessfulLoginAlert()
             }
             self.syncService?.performSync(showToast: showToast) {[weak self] patient in
@@ -249,7 +270,8 @@ class AppTabBarController: UITabBarController {
         }
         
         let tabBarItem = UITabBarItem(title: properties.title, image: properties.unselectedTabBarImage, selectedImage: properties.selectedTabBarImage)
-        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+//        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansBoldWithSize(size: 10)], for: .normal)
+        tabBarItem.setTitleTextAttributes([.font: UIFont.bcSansRegularWithSize(size: 10)], for: .normal)
         let viewController = properties.baseViewController
         viewController.tabBarItem = tabBarItem
         viewController.title = properties.title
@@ -260,7 +282,7 @@ class AppTabBarController: UITabBarController {
     func whenConnected() {
         showForceUpateIfNeeded(completion: {_ in})
         if !SessionStorage.syncPerformedThisSession, SessionStorage.lastLocalAuth != nil {
-            performSync(showDialog: false)
+            performSync()
         }
     }
     

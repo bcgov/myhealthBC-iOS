@@ -7,7 +7,6 @@
 
 import Foundation
 
-// NOTE: For now, we really only need the hdId and acceptedTermsOfService fields - so that's all we're going to decode
 struct AuthenticatedUserProfileResponseObject: Codable {
     let resourcePayload: ResourcePayload?
 }
@@ -19,10 +18,12 @@ extension AuthenticatedUserProfileResponseObject {
         let version: Int?
         let acceptedTermsOfService: Bool?
         let hdID, termsOfServiceID: String?
+        let hasTermsOfServiceUpdated: Bool?
         let email, smsNumber, closedDateTime, identityManagementID: String?
         let lastLoginDateTime, encryptionKey: String?
         let verifications: [Verification]?
         let isEmailVerified, isSMSNumberVerified: Bool
+//        let preferences: Preferences?
         
         enum CodingKeys: String, CodingKey {
             case createdBy, createdDateTime, updatedBy, updatedDateTime, version
@@ -31,8 +32,10 @@ extension AuthenticatedUserProfileResponseObject {
             case termsOfServiceID = "termsOfServiceId"
             case email, smsNumber, closedDateTime
             case identityManagementID = "identityManagementId"
+            case hasTermsOfServiceUpdated
             case lastLoginDateTime, encryptionKey, verifications
             case isEmailVerified, isSMSNumberVerified
+//            case preferences
         }
     }
     
@@ -77,6 +80,27 @@ extension AuthenticatedUserProfileResponseObject {
         let sentDateTime, lastRetryDateTime: String
         let attempts, smtpStatusCode, emailStatusCode: Int
     }
+    
+    // MARK: - Preferences
+//    struct Preferences: Codable {
+//        let tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks, hideOrganDonorQuickLink: QuickLinks?
+//
+//        enum CodingKeys: String, CodingKey {
+//            case tutorialMenuNote, tutorialMenuExport, tutorialAddDependent, tutorialAddQuickLink, tutorialTimelineFilter, quickLinks, hideOrganDonorQuickLink
+//        }
+//    }
+
+    // MARK: - QuickLinks
+//    struct QuickLinks: Codable {
+//        let hdID, preference, value: String?
+//        let version: Int?
+//        let createdDateTime, createdBy, updatedDateTime, updatedBy: String?
+//
+//        enum CodingKeys: String, CodingKey {
+//            case hdID = "hdId"
+//            case preference, value, version, createdDateTime, createdBy, updatedDateTime, updatedBy
+//        }
+//    }
 }
 
 struct AuthenticatedUserProfileRequestObject: Codable {
@@ -93,3 +117,4 @@ struct AuthenticatedUserProfileRequestObject: Codable {
         }
     }
 }
+

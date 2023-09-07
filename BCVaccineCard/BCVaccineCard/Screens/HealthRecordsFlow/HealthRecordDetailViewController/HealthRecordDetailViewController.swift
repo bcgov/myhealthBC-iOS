@@ -79,7 +79,6 @@ class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDe
     override func viewWillAppear(_ animated: Bool) {
         setNeedsStatusBarAppearanceUpdate()
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -83,7 +83,7 @@ extension TermsOfServiceViewController {
 extension TermsOfServiceViewController {
     private func fetchTermsOfService() {
         termsWebView.navigationDelegate = self
-        TOSService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchTOS { tos in
+        TOSService(network: CustomNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchTOS { tos in
             var displayString: String
             self.tosPayload = tos?.resourcePayload
             guard let terms = tos?.resourcePayload, let termsString = terms.content, terms.id != nil else {
@@ -91,8 +91,9 @@ extension TermsOfServiceViewController {
                 return
             }
             displayString = termsString
-            self.termsWebView.loadHTMLString(displayString, baseURL: nil)
-
+            DispatchQueue.main.async {
+                self.termsWebView.loadHTMLString(displayString, baseURL: nil)
+            }
         }
     }
 }
@@ -136,7 +137,7 @@ extension TermsOfServiceViewController {
             AppStates.shared.updatedTermsOfService(accepted: false)
             return
         }
-        TOSService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).accept(termsOfServiceId: termsOfServiceId) { result in
+        TOSService(network: CustomNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).accept(termsOfServiceId: termsOfServiceId) { result in
             self.dismiss(animated: true)
             AppStates.shared.updatedTermsOfService(accepted: result?.resourcePayload?.acceptedTermsOfService == true)
         }

@@ -17,7 +17,7 @@ class MobileConfigService {
         self.network = network
     }
     
-    func fetchConfig(completion: @escaping (MobileConfigurationResponseObject?)->Void) {
+    func fetchConfig(showToastOnError: Bool? = true, completion: @escaping (MobileConfigurationResponseObject?)->Void) {
         if let cache = MobileConfigStorage.cachedConfig {
             let timeDiff = Date().timeIntervalSince(cache.datetime)
             if timeDiff <= cacheTimeout {
@@ -49,7 +49,7 @@ class MobileConfigService {
                 Logger.log(string: "MobileConfigService response received", type: .Network)
                 if let response = responseData {
                     MobileConfigStorage.store(config: response)
-                    if response.online == false {
+                    if response.online == false, showToastOnError == true {
                         AppDelegate.sharedInstance?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
                     }
                 }

@@ -52,7 +52,6 @@ class FetchHealthRecordsViewController: BaseViewController {
         super.viewWillAppear(animated)
         setNeedsStatusBarAppearanceUpdate()
         self.adjustDataSource()
-        self.tabBarController?.tabBar.isHidden = false
 
     }
     

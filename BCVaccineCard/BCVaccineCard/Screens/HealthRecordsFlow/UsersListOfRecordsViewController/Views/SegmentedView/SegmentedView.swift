@@ -17,6 +17,13 @@ enum SegmentType {
         case .Notes: return "Notes"
         }
     }
+    
+    var getIndex: Int {
+        switch self {
+        case .Timeline: return 0
+        case .Notes: return 1
+        }
+    }
 }
 
 protocol SegmentedViewDelegate: AnyObject {
@@ -65,6 +72,11 @@ class SegmentedView: UIView {
         self.delegate = delegateOwner as? SegmentedViewDelegate
         self.dataSource = dataSource
         configureSegment(dataSource: dataSource)
+    }
+    
+    func setSegmentedControl(forType type: SegmentType) {
+        segmentedControl.selectedSegmentIndex = type.getIndex
+        segmentedControl.changeUnderlinePosition()
     }
     
     private func configureSegment(dataSource: [SegmentType]) {

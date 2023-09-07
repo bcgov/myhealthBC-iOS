@@ -7,10 +7,16 @@
 
 import Foundation
 
+struct UXConstants {
+    static var showLoginDuringOnBoarding: Bool {
+        return false
+    }
+}
+
 struct HealthRecordConstants {
     // ENABLE AND DISABLE PRIMARY PATIENT RECORD TYPES
     static var enabledTypes: [RecordType] {
-        return [
+        var types: [RecordType] = [
             .covidImmunizationRecord,
             .covidTestResultRecord,
             .medication,
@@ -19,18 +25,25 @@ struct HealthRecordConstants {
             .healthVisit,
             .specialAuthorityDrug,
             .hospitalVisit,
-            .clinicalDocument
+            .clinicalDocument,
+            .diagnosticImaging
         ]
+        if !HealthRecordConstants.notesEnabled {
+            if let index = types.firstIndex(of: .notes) {
+                types.remove(at: index)
+            }
+        }
+        return types
     }
     
     // ENABLE AND DISABLE DEPENDENT RECORD TYPES
     static var enabledDepententRecordTypes: [RecordType] {
-        return [.covidTestResultRecord, .immunization]
+        return [.covidTestResultRecord, .immunization, .medication]
     }
     
     // ENABLE AND DISABLE COMMENTS
     static var commentsEnabled: Bool {
-        return false
+        return true
     }
     
     // ENABLE AND DISABLE SEARCH RECORDS
@@ -48,7 +61,7 @@ struct HealthRecordConstants {
     }
     
     static var diagnosticImagingEnabled: Bool {
-        return false
+        return true
     }
     
     static var guardianAuditEnabled: Bool {
@@ -189,7 +202,7 @@ enum NotificationCategory: String {
     case HeathVisits = "HealthVisit"
     case Medication = "Medications"
     case HospitalVisits = "HospitalVisit"
-    case DiagnosticImaging = "DiagnosticImaging"
+    case DiagnosticImaging = "DiExam"
 }
 
 extension NotificationCategory {

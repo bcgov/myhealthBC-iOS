@@ -10,6 +10,7 @@ import Foundation
 typealias PatientDetailResponse = AuthenticatedPatientDetailsResponseObject
 typealias OrganDonorStatusResponse = AuthenticatedOrganDonorStatusResponseModel.Item
 typealias DiagnosticImagingResponse = AuthenticatedDiagnosticImagingResponseModel.Item
+//typealias QuickLinksPreferencesResponse = AuthenticatedUserProfileResponseObject.QuickLinks
 
 struct PatientService {
     
@@ -126,10 +127,11 @@ struct PatientService {
                 guard let profile = profile else {
                     return completion(.CouldNotValidate)
                 }
-                if profile.resourcePayload?.acceptedTermsOfService == true
-                    // TODO: CHECK TERMS UPDATED
+                if profile.resourcePayload?.acceptedTermsOfService == true && profile.resourcePayload?.hasTermsOfServiceUpdated == false
                 {
                     return completion(.Valid)
+                } else if profile.resourcePayload?.hasTermsOfServiceUpdated == true {
+                    return completion(.TOSUpdated)
                 } else {
                     return completion(.TOSNotAccepted)
                 }
@@ -141,6 +143,7 @@ struct PatientService {
         case UnderAge
         case TOSNotAccepted
         case CouldNotValidate
+        case TOSUpdated
         case Valid
     }
 }

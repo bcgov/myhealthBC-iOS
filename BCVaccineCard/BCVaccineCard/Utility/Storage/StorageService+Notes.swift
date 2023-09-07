@@ -25,7 +25,7 @@ extension StorageService: StorageNoteManager {
        
         guard !notes.isEmpty else {
             Logger.log(string: "No Notes", type: .storage)
-            return completion(nil)
+            return completion([])
         }
         var storedNotes: [Note] = []
         let group = DispatchGroup()
@@ -102,5 +102,42 @@ extension StorageService: StorageNoteManager {
             return []
         }
 
+    }
+    
+    public func updateNote(originalNoteID id: String, newNote: NoteResponse, for patient: Patient) -> Note? {
+        guard let noteToUpdate = fetchNote(id: id) else {
+            return storeNote(remoteObject: newNote, patient: patient)
+        }
+        guard let context = managedContext else {return nil}
+        var note = noteToUpdate
+        do {
+            note.id = newNote.id
+            note.hdid = newNote.hdID
+            note.title = newNote.title
+            note.text = newNote.text
+            note.journalDate = newNote.journalDate?.getGatewayDate()
+            note.createdDateTime = newNote.createdDateTime?.getGatewayDate()
+            note.createdBy = newNote.createdBy
+            note.updatedDateTime = newNote.updatedDateTime?.getGatewayDate()
+            note.updatedBy = newNote.updatedBy
+            try context.save()
+            self.notify(event: StorageEvent(event: .Update, entity: .Notes, object: note))
+            return note
+        } catch let error as NSError {
+            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            return nil
+        }
+    }
+    
+    public func fetchNote(id: String) -> Note? {
+        let notes = fetchNotes()
+       
+        return notes.filter { $0.id == id }.first
+    }
+    
+    public func deleteNote(note: Note, for patient: Patient) {
+        guard let id = note.id, let object = fetchNote(id: id) else {return}
+        delete(object: object)
+        notify(event: StorageEvent(event: .Delete, entity: .Notes, object: object))
     }
 }
