@@ -47,6 +47,36 @@
             </objects>
             <point key="canvasLocation" x="3452.1739130434785" y="-1707.5892857142856"/>
         </scene>
+        <!--Manage Home Screen View Controller-->
+        <scene sceneID="mLt-M6-RHh">
+            <objects>
+                <viewController storyboardIdentifier="ManageHomeScreenViewController" id="z3Z-KI-wvb" customClass="ManageHomeScreenViewController" customModule="HealthGateway" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9kv-ew-7Gg">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="TSK-rj-9rF">
+                                <rect key="frame" x="24" y="56" width="366" height="806"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Grb-cu-bzU"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="TSK-rj-9rF" firstAttribute="top" secondItem="Grb-cu-bzU" secondAttribute="top" constant="8" id="452-Ks-tOV"/>
+                            <constraint firstItem="Grb-cu-bzU" firstAttribute="trailing" secondItem="TSK-rj-9rF" secondAttribute="trailing" constant="24" id="5o2-Ar-hc4"/>
+                            <constraint firstItem="TSK-rj-9rF" firstAttribute="leading" secondItem="Grb-cu-bzU" secondAttribute="leading" constant="24" id="EJC-MO-NDx"/>
+                            <constraint firstItem="Grb-cu-bzU" firstAttribute="bottom" secondItem="TSK-rj-9rF" secondAttribute="bottom" id="Kqh-90-fxv"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="TSK-rj-9rF" id="w3B-5z-xd6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MJg-I9-pQh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4290" y="-1708"/>
+        </scene>
         <!--Custom Navigation Controller-->
         <scene sceneID="gxa-le-Vdy">
             <objects>

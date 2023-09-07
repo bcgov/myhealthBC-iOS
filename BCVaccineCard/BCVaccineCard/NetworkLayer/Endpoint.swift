@@ -31,6 +31,7 @@ protocol EndpointsAccessor {
     func feedback(base url: URL, hdid: String) -> URL
     func notifcations(base url: URL, hdid: String) -> URL
     func notes(base url: URL, hdid: String) -> URL
+    func preference(base url: URL, hdid: String) -> URL
 }
 
 struct UrlAccessor: EndpointsAccessor {
@@ -205,6 +206,13 @@ struct UrlAccessor: EndpointsAccessor {
             .appendingPathComponent("Notification")
             .appendingPathComponent(hdid)
             .appendingPathComponent(notificationID)
+    }
+    
+    // Preferences
+    func preference(base url: URL, hdid: String) -> URL {
+        return userProfileBase(base: url)
+            .appendingPathComponent(hdid)
+            .appendingPathComponent("preference")
     }
     
 }

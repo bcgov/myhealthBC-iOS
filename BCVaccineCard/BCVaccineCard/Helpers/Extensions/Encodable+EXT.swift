@@ -19,7 +19,9 @@ extension Encodable {
         return nil
     }
     
-    
+    func toJsonString() -> String? {
+        return self.toString()
+    }
     /// DO NOT USE THIS FOR SECURITY
     /// this function is inteded for generating unique ids
     func md5Hash() -> String? {

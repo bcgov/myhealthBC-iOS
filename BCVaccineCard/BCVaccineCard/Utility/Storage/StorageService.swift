@@ -38,6 +38,7 @@ extension StorageService {
         case OrganDonorStatus
         case DiagnosticImaging
         case Notes
+        case QuickLinkPreference
     }
     
     struct StorageEvent<T> {

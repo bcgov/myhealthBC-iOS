@@ -10,6 +10,7 @@ import Foundation
 typealias PatientDetailResponse = AuthenticatedPatientDetailsResponseObject
 typealias OrganDonorStatusResponse = AuthenticatedOrganDonorStatusResponseModel.Item
 typealias DiagnosticImagingResponse = AuthenticatedDiagnosticImagingResponseModel.Item
+//typealias QuickLinksPreferencesResponse = AuthenticatedUserProfileResponseObject.QuickLinks
 
 struct PatientService {
     

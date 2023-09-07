@@ -171,6 +171,7 @@ extension StorageService: StoragePatientManager {
         model.itemType = object.itemType
         model.id = object.id
         model.type = object.type
+        model.isObjectUpdated = object.isUpdated ?? false
         model.patient = patient
         do {
             try context.save()
@@ -187,10 +188,11 @@ extension StorageService: StoragePatientManager {
         do {
             return try context.fetch(DiagnosticImaging.fetchRequest())
         } catch let error as NSError {
-            Logger.log(string: "Could not save. \(error), \(error.userInfo)", type: .storage)
+            Logger.log(string: "Could not fetch. \(error), \(error.userInfo)", type: .storage)
             return []
         }
     }
+    
     /// returns existing patient
     /// or
     /// creates and returns a new one if it doesnt exist.
@@ -324,6 +326,7 @@ extension StorageService: StoragePatientManager {
             if authenticated != patient.authenticated {
                 patient.authenticated = authenticated
             }
+            
             // Unsure if we need to set patient.authManagerDisplayName = AuthManager().displayName here
             try context.save()
             notify(event: StorageEvent(event: .Update, entity: .Patient, object: patient))
@@ -333,6 +336,7 @@ extension StorageService: StoragePatientManager {
             return nil
         }
     }
+    
     
     // MARK: Delete
     func deletePatient(phn: String) {
