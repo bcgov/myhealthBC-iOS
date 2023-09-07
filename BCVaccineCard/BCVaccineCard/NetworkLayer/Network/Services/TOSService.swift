@@ -54,13 +54,20 @@ struct TOSService {
         let patientService = PatientService(network: network, authManager: authManager, configService: configService)
         
         patientService.fetchProfile { profile in
+            print(profile)
             if let profile = profile,
                 profile.resourcePayload?.acceptedTermsOfService == true && profile.resourcePayload?.hasTermsOfServiceUpdated == true
             {
                 requestType = .Put
             }
+            requestType = .Put
+            print(requestType)
             return accept(termsOfServiceId: termsOfServiceId, requestType: requestType, completion: completion)
         }
+    }
+    
+    private func acceptInitial() {
+        
     }
     
     private func accept(termsOfServiceId: String,
@@ -80,14 +87,25 @@ struct TOSService {
                 return completion(nil)
             }
             
-            let headers = [
-                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
-                Constants.AuthenticationHeaderKeys.hdid: hdid
-            ]
-            
             let parameters = AuthenticatedUserProfileRequestObject(profile: AuthenticatedUserProfileRequestObject.ResourcePayload(hdid: hdid, termsOfServiceId: termsOfServiceId))
             
-            let requestModel = NetworkRequest<AuthenticatedUserProfileRequestObject, AuthenticatedUserProfileResponseObject>(url: endpoints.userProfile(base: baseURL, hdid: hdid), type: requestType == .Post ? .Post : .Put, parameters: parameters, headers: headers) { result in
+            let stringBody: String? = requestType == .Put ? termsOfServiceId : nil
+            let finalUrl: URL = requestType == .Put ? endpoints.acceptTermsOfService(base: baseURL, hdid: hdid) : endpoints.userProfile(base: baseURL, hdid: hdid)
+            
+            let headers: [String: String]
+            
+            if requestType == .Put {
+                headers = [
+                    Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                ]
+            } else {
+                headers = [
+                    Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                    Constants.AuthenticationHeaderKeys.hdid: hdid
+                ]
+            }
+            
+            let requestModel = NetworkRequest<AuthenticatedUserProfileRequestObject, AuthenticatedUserProfileResponseObject>(url: finalUrl, type: requestType == .Post ? .Post : .Put, parameters: parameters, stringBody: stringBody, headers: headers) { result in
                 return completion(result)
             }
             

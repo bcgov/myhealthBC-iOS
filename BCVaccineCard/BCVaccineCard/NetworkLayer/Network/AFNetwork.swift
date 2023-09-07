@@ -9,6 +9,36 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+struct BodyStringEncoding: ParameterEncoding {
+    
+    private let body: String
+    
+    init(body: String) { self.body = body }
+    
+    func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+        guard var urlRequest = urlRequest.urlRequest else { throw Errors.emptyURLRequest }
+        guard let data = body.data(using: .utf8) else { throw Errors.encodingProblem }
+        urlRequest.httpBody = data
+        return urlRequest
+    }
+}
+
+extension BodyStringEncoding {
+    enum Errors: Error {
+        case emptyURLRequest
+        case encodingProblem
+    }
+}
+
+extension BodyStringEncoding.Errors: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .emptyURLRequest: return "Empty url request"
+        case .encodingProblem: return "Encoding problem"
+        }
+    }
+}
+
 extension NetworkRequest.RequestType {
     var AFMethod: HTTPMethod {
         switch self {
@@ -32,8 +62,23 @@ extension NetworkRequest {
         } else {
             afHeaders = nil
         }
-        let alamoEncoder: ParameterEncoder = encoder == .json ? .json : .urlEncodedForm
-        return AF.request(url, method: type.AFMethod, parameters: parameters, encoder: alamoEncoder, headers: afHeaders)
+        if let stringBody = stringBody {
+//            let encoder: ParameterEncoder = .urlEncodedForm(encoder: URLEncodedFormEncoder(dataEncoding: .base64), destination: .httpBody)
+//            let param = Data(stringBody.utf8).base64EncodedString()
+//            return AF.request(url, method: type.AFMethod, parameters: param, encoder: .urlEncodedForm, headers: afHeaders)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = type.AFMethod.rawValue
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = stringBody.data(using: .utf8)
+            if let unwrappedHeaders = afHeaders {
+                request.headers = unwrappedHeaders
+            }
+            return AF.request(request)
+        } else {
+            let alamoEncoder: ParameterEncoder = encoder == .json ? .json : .urlEncodedForm
+            return AF.request(url, method: type.AFMethod, parameters: parameters, encoder: alamoEncoder, headers: afHeaders)
+        }
     }
 }
 
@@ -46,6 +91,7 @@ class AFNetwork: Network {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .secondsSince1970 // Decode UNIX timestamps
             let AFRequest = requestData.AFRequest
+            print(AFRequest)
             AFRequest.responseDecodable(of: T.self, decoder: decoder, completionHandler: {response in
                 return self.returnOrRetryIfneeded(with: requestData, response: response)
             })

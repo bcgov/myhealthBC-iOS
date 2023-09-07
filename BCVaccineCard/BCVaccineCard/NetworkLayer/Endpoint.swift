@@ -183,6 +183,10 @@ struct UrlAccessor: EndpointsAccessor {
         return userProfileBase(base: url).appendingPathComponent("termsofservice")
     }
     
+    func acceptTermsOfService(base url: URL, hdid: String) -> URL {
+        return userProfileBase(base: url).appendingPathComponent(hdid).appendingPathComponent("acceptedterms")
+    }
+    
     func patientDetails(base url: URL, hdid: String) -> URL {
         patientServiceBaseURL(base: url)
             .appendingPathComponent("Patient")
