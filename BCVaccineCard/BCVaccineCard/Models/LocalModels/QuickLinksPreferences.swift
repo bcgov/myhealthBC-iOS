@@ -33,33 +33,33 @@ struct QuickLinksPreferences: Codable {
         
         var getHomeScreenDisplayableName: String {
             switch self {
-            case .MyNotes: return "My\nNotes"
-            case .Immunizations: return rawValue
-            case .Medications: return rawValue
-            case .LabResults: return "Lab\nResults"
-            case .COVID19Tests: return "COVID-19\nTests"
-            case .SpecialAuthority: return "Special\nAuthority"
-            case .HospitalVisits: return "Hospital\nVisits"
-            case .HealthVisits: return "Health\nVisits"
-            case .ClinicalDocuments: return "Clinical\nDocuments"
-            case .ImagingReports: return "Imaging\nReports"
-            case .OrganDonor: return "Organ\nDonor"
+            case .MyNotes: return .myNotesHome
+            case .Immunizations: return .immunizationsHome
+            case .Medications: return .medicationsHome
+            case .LabResults: return .labResultsHome
+            case .COVID19Tests: return .covid19TestsHome
+            case .SpecialAuthority: return .specialAuthorityHome
+            case .HospitalVisits: return .hospitalVisitsHome
+            case .HealthVisits: return .healthVisitsHome
+            case .ClinicalDocuments: return .clinicalDocumentsHome
+            case .ImagingReports: return .imagingReportsHome
+            case .OrganDonor: return .organDonorHome
             }
         }
         
         var getManageScreenDisplayableName: String {
             switch self {
-            case .MyNotes: return "My Notes"
-            case .Immunizations: return "Immunization"
-            case .Medications: return "Medications"
-            case .LabResults: return "Lab Results"
-            case .COVID19Tests: return "COVID-19 Tests"
-            case .SpecialAuthority: return "Special Authority"
-            case .HospitalVisits: return "Hospital Visits"
-            case .HealthVisits: return "Health Visits"
-            case .ClinicalDocuments: return "Clinical Documents"
-            case .ImagingReports: return "Imaging Reports"
-            case .OrganDonor: return "Organ Donor"
+            case .MyNotes: return .myNotesManage
+            case .Immunizations: return .immunizationsManage
+            case .Medications: return .medicationsManage
+            case .LabResults: return .labResultsManage
+            case .COVID19Tests: return .covid19TestsManage
+            case .SpecialAuthority: return .specialAuthorityManage
+            case .HospitalVisits: return .hospitalVisitsManage
+            case .HealthVisits: return .healthVisitsManage
+            case .ClinicalDocuments: return .clinicalDocumentsManage
+            case .ImagingReports: return .imagingReportsManage
+            case .OrganDonor: return .organDonorManage
             }
         }
 

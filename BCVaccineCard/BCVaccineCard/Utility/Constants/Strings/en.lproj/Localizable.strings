@@ -292,3 +292,33 @@
 "SelectTo" = "Select To";
 "ActionAvailable" = "Action Available: ";
 "FetchRecordError" = "Not all records were fetched successfully";
+"Services" = "Services";
+"InitialOnboardingServices" = "You can check and update your Organ Donor Registry information here. More health services will be added in future.";
+"RecentlyUpdated" = "recently updates";
+"Tests" = "tests";
+
+"MyNotesHome" = "My\nNotes";
+"ImmunizationsHome" = "Immunizations";
+"MedicationsHome" = "Medications";
+"LabResultsHome" = "Lab\nResults";
+"COVID19TestsHome" = "COVID-19\nTests";
+"SpecialAuthorityHome" = "Special\nAuthority";
+"HospitalVisitsHome" = "Hospital\nVisits";
+"HealthVisitsHome" = "Health\nVisits";
+"ClinicalDocumentsHome" = "Clinical\nDocuments";
+"ImagingReportsHome" = "Imaging\nReports";
+"OrganDonorHome" = "Organ\nDonor";
+
+"MyNotesManage" = "My Notes";
+"ImmunizationsManage" = "Immunization";
+"MedicationsManage" = "Medications";
+"LabResultsManage" = "Lab Results";
+"COVID19TestsManage" = "COVID-19 Tests";
+"SpecialAuthorityManage" = "Special Authority";
+"HospitalVisitsManage" = "Hospital Visits";
+"HealthVisitsManage" = "Health Visits";
+"ClinicalDocumentsManage" = "Clinical Documents";
+"ImagingReportsManage" = "Imaging Reports";
+"OrganDonorManage" = "Organ Donor";
+
+
