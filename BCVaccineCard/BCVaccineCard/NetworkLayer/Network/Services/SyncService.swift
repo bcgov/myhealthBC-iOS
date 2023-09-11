@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Amir Shayegh on 2023-02-14.
-//
+// TODO: Put toast messages in strings file
 
 import Foundation
 
