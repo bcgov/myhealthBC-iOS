@@ -321,4 +321,24 @@
 "ImagingReportsManage" = "Imaging Reports";
 "OrganDonorManage" = "Organ Donor";
 
+"RetrievingRecords" = "Retrieving records";
+"NoPatientDetails" = "Could not fetch patient details";
+"FetchedDonorStatus" = "fetched donor status:";
+"FetchedDiagnosticImaging:" = "fetched diagnostic imaging:";
+"Fetched" = "fetched";
+"Comments" = "comments";
+"RecordsRetrieved" = "Records retrieved";
 
+"MaintenanceMessage" = "Maintenance is underway. Please try later.";
+"NewUpdateTitle" = "New update is available";
+"NewUpdateDescription" = "A new version of the Health Gateway mobile application is available on the app store.";
+"UpdateNow" = "Update Now";
+"Later" = "Later";
+"CouldNotDeleteDependent" = "Could not delete dependent, please try again later";
+"CouldNotAddDependent" = "Could not add dependent, please try again later";
+"TermsOfServiceMessage" = "You must agree to the Health Gateway terms of service before using this app";
+
+"AgeRestriction" = "Age Restriction";
+"LoginError" = "Login Error";
+"AgeRestrictionMessage" = "You must be %@ year's of age or older to use Health Gateway.";
+"LoginErrorMessage" = "We're sorry, there was an error logging in. Please try again later.";

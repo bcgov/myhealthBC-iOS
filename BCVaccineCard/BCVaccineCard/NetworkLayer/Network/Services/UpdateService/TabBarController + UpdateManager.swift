@@ -15,10 +15,10 @@ extension AppTabBarController: SKStoreProductViewControllerDelegate, ForceUpdate
         UpdateService(network: AFNetwork()).isUpdateAvailableInStore { [weak self] updateAvailable in
             guard let `self` = self, updateAvailable, !UpdateServiceStorage.updateDilogShownThisSession else {return}
             UpdateServiceStorage.updateDilogShownThisSession = true
-            self.alert(title: "New update is available", message: "A new version of the Health Gateway mobile application is available on the app store.", buttonOneTitle: "Update Now", buttonOneCompletion: { [weak self] in
+            self.alert(title: .newUpdateTitle, message: .newUpdateDescription, buttonOneTitle: .updateNow, buttonOneCompletion: { [weak self] in
                 guard let `self` = self else {return}
                 self.openStoreAppStore()
-            }, buttonTwoTitle: "Later") {
+            }, buttonTwoTitle: .later) {
                 return
             }
         }

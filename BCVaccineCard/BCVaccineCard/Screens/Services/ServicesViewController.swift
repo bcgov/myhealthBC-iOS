@@ -131,7 +131,7 @@ extension ServicesViewController: OrganDonorDelegate, AuthViewDelegate, UIDocume
         service.fetchPDF(donorStatus: status, patient: patient) { [weak self] result in
             guard let `self` = self else {return}
             guard let pdfData = result else {
-                self.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                self.showToast(message: .maintenanceMessage, style: .Warn)
                 return
             }
             self.showPDFDocument(pdf: pdfData, navTitle: "Organ Donor Status", documentVCDelegate: self, navDelegate: self.navDelegate)

@@ -145,7 +145,7 @@ struct DependentService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: "Could not delete dependent, please try again later", style: .Warn)
+                    network.showToast(message: .couldNotDeleteDependent, style: .Warn)
                 default:
                     break
                 }
@@ -179,7 +179,7 @@ struct DependentService {
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
-                    network.showToast(message: "Could not add dependent, please try again later", style: .Warn)
+                    network.showToast(message: .couldNotAddDependent, style: .Warn)
                 default:
                     break
                 }

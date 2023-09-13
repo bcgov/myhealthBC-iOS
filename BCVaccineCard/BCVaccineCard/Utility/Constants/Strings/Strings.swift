@@ -382,4 +382,29 @@ extension String {
     static var imagingReportsManage: String { return "ImagingReportsManage".localized }
     static var organDonorManage: String { return "OrganDonorManage".localized }
     
+    static var retrievingRecords: String { return "RetrievingRecords".localized }
+    static var noPatientDetails: String { return "NoPatientDetails".localized }
+    static var fetchedDonorStatus: String { return "FetchedDonorStatus".localized }
+    static var fetchedDiagnosticImaging: String { return "FetchedDiagnosticImaging".localized }
+    static var fetched: String { return "Fetched".localized }
+    static var comments: String { return "Comments".localized }
+    static var recordsRetrieved: String { return "RecordsRetrieved".localized }
+    static var maintenanceMessage: String { return "MaintenanceMessage".localized }
+    
+    static var newUpdateTitle: String { return "NewUpdateTitle".localized }
+    static var newUpdateDescription: String { return "NewUpdateDescription".localized }
+    static var updateNow: String { return "UpdateNow".localized }
+    static var later: String { return "Later".localized }
+    static var couldNotDeleteDependent: String { return "CouldNotDeleteDependent".localized }
+    static var couldNotAddDependent: String { return "CouldNotAddDependent".localized }
+    static var termsOfServiceMessage: String { return "TermsOfServiceMessage".localized }
+    
+    static var ageRestriction: String { return "AgeRestriction".localized }
+    static var loginError: String { return "LoginError".localized }
+    static var loginErrorMessage: String { return "LoginErrorMessage".localized }
+    static func ageRestrictionMessage(age: String) -> String {
+        return String(format: "AgeRestrictionMessage".localized, age)
+    }
+    
 }
+
