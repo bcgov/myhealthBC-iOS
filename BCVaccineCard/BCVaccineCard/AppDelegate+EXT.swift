@@ -59,6 +59,7 @@ extension AppDelegate {
         let ToastHeight = Constants.UI.Toast.defaultHeight > minHeight ? Constants.UI.Toast.defaultHeight : minHeight
         let bottomConstraintClosed =  bottomPadding + ToastHeight
         let bottomConstraintOpen = 0 - bottomPadding
+        
         // Position container
         container.translatesAutoresizingMaskIntoConstraints = false
         let bottomConstraint = container.bottomAnchor.constraint(equalTo: window.bottomAnchor, constant: bottomConstraintClosed)
