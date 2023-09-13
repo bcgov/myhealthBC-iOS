@@ -4,7 +4,7 @@
 //
 //  Created by Amir Shayegh on 2023-01-09.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class ClinicalDocumentRecordDetailView: BaseHealthRecordsDetailView, UITableViewDelegate, UITableViewDataSource {

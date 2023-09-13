@@ -104,7 +104,7 @@ class DependentInfoViewController: BaseDependentViewController {
 }
 extension DependentInfoViewController {
     private func navSetup() {
-        self.navDelegate?.setNavigationBarWith(title: "Profile",
+        self.navDelegate?.setNavigationBarWith(title: .profile,
                                                leftNavButton: nil,
                                                rightNavButton: nil,
                                                navStyle: .small,

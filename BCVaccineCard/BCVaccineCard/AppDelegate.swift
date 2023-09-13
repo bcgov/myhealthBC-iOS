@@ -11,7 +11,7 @@ import EncryptedCoreData
 import IQKeyboardManagerSwift
 import AppAuth
 import SafariServices
-
+// FIXME: NEED TO LOCALIZE - TOAST AT BOTTOM OF THIS FILE, NO INTERNET
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     

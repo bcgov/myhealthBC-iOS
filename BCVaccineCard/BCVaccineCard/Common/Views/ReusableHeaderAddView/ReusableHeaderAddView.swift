@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2021-11-29.
 // Note: This is for the view with text beside it, along with an add icon
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 protocol AddCardsTableViewCellDelegate: AnyObject {

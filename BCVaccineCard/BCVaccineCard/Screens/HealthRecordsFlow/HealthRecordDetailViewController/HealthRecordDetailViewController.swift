@@ -6,7 +6,7 @@
 // TODO: This view controller will be a table view with "Delete" in the navigation bar, and will be customizable depending on what the record is, etc. Will likely use an enum here for imm record, or test result
 
 import UIKit
-
+// FIXME: NEED TO LOCALIZE 
 class HealthRecordDetailViewController: BaseViewController, HealthRecordDetailDelegate {
     class func construct(viewModel: ViewModel) -> HealthRecordDetailViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: HealthRecordDetailViewController.self)) as? HealthRecordDetailViewController {

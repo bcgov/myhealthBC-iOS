@@ -4,7 +4,7 @@
 //
 //  Created by Amir on 2022-07-14.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class HealthVisitRecordDetailTableViewCell: UITableViewCell, UITextViewDelegate {

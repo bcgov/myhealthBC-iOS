@@ -4,7 +4,7 @@
 //
 //  Created by Amir on 2022-03-10.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 protocol FilterRecordsViewDelegate: AnyObject {
