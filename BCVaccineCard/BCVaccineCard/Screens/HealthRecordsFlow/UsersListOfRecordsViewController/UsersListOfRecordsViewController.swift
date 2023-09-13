@@ -9,8 +9,6 @@ import UIKit
 // FIXME: NEED TO LOCALIZE 
 class UsersListOfRecordsViewController: BaseViewController {
     
-    // patient.dependencyInfo != nil == dependent
-    // TODO: Replace params with Patient after storage refactor
     class func construct(viewModel: ViewModel) -> UsersListOfRecordsViewController {
         if let vc = Storyboard.records.instantiateViewController(withIdentifier: String(describing: UsersListOfRecordsViewController.self)) as? UsersListOfRecordsViewController {
             vc.viewModel = viewModel
@@ -19,7 +17,6 @@ class UsersListOfRecordsViewController: BaseViewController {
         return UsersListOfRecordsViewController()
     }
     
-    // TODO: Make sure this is added inside parentContainerStackView
     @IBOutlet weak private var listOfRecordsSegmentedView: SegmentedView!
     
     @IBOutlet weak private var noRecordsFoundView: UIView!
@@ -94,14 +91,6 @@ class UsersListOfRecordsViewController: BaseViewController {
         {
             currentFilter = existingFilter
         }
-        // When a user access this VC via quicklink and a filter is needed
-        NotificationCenter.default.addObserver(self, selector: #selector(applyQuickLinkFilter), name: .applyQuickLinkFilter, object: nil)
-        // When authentication is expired, reset filters
-        Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
-            guard let `self` = self else {return}
-            self.currentFilter = nil
-            self.hideSelectedFilters()
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,94 +113,6 @@ class UsersListOfRecordsViewController: BaseViewController {
             return UIStatusBarStyle.darkContent
         } else {
             return UIStatusBarStyle.default
-        }
-    }
-    
-    // TODO: Need to test this out
-    @objc private func applyQuickLinkFilter(_ notification: Notification) {
-        guard let userInfo = notification.userInfo as? [String: RecordsFilter] else { return }
-        guard let filter = userInfo["filter"] else { return }
-        currentSegment = filter.recordTypes.contains(.Notes) ? .Notes : .Timeline
-        let patientRecords = fetchPatientRecords(for: currentSegment)
-        currentFilter = filter
-        if filter.recordTypes.contains(.Notes) {
-            listOfRecordsSegmentedView.setSegmentedControl(forType: .Notes)
-            showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: nil)
-        } else {
-            listOfRecordsSegmentedView.setSegmentedControl(forType: .Timeline)
-            showTimelineViews(patientRecordsEmpty: patientRecords.isEmpty, searchText: nil)
-        }
-        show(records: patientRecords, filter:filter, searchText: nil)
-        
-    }
-    
-    private func applyNotificationFilterIfNeeded() {
-        guard let category = SessionStorage.notificationCategoryFilter
-        else {
-            return
-        }
-        let filterType = category.toLocalFilter()
-        
-        SessionStorage.notificationCategoryFilter = nil
-        self.selected(filter: RecordsFilter(recordTypes: [filterType]))
-    }
-    
-    private func setupRefreshControl() {
-        refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
-        tableView.isScrollEnabled = true
-        tableView.alwaysBounceVertical = true
-        tableView.addSubview(refreshControl)
-    }
-    
-    private func setupSegmentedControl() {
-        if HealthRecordConstants.notesEnabled, viewModel?.userType != .Dependent {
-            listOfRecordsSegmentedView.isHidden = false
-            listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
-        } else {
-            listOfRecordsSegmentedView.isHidden = true
-        }
-    }
-    
-    @objc private func refresh(_ sender: AnyObject) {
-        refreshLogic()
-    }
-    
-    private func refreshLogic() {
-        guard NetworkConnection.shared.hasConnection else {
-            AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
-            refreshControl.endRefreshing()
-            return
-        }
-        if isDependent {
-            guard let patient = viewModel?.patient else { return }
-            guard let dependent = patient.dependencyInfo else { return }
-            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records, hadFails in
-                let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
-                self?.showToast(message: message)
-                SessionStorage.dependentRecordsFetched.append(patient)
-                self?.refreshControl.endRefreshing()
-            }
-        } else {
-            AppStates.shared.requestSync()
-        }
-    }
-    
-    private func setObservables() {
-        AppStates.shared.listenToAuth { [weak self] authenticated in
-            guard let `self` = self else {return}
-            self.setup()
-        }
-        
-        AppStates.shared.listenToStorage { [weak self] event in
-            guard let `self` = self else {return}
-            guard event.event == .Save else {return}
-            self.refreshDebounceTimer?.invalidate()
-            self.refreshDebounceTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.refreshOnStorageUpdate), userInfo: nil, repeats: false)
-        }
-        
-        AppStates.shared.listenToSyncCompletion { [weak self] in
-            guard let `self` = self else {return}
-            self.setup()
         }
     }
     
@@ -258,36 +159,76 @@ class UsersListOfRecordsViewController: BaseViewController {
     }
 }
 
-// MARK: Segmented Control Delegate
-extension UsersListOfRecordsViewController: SegmentedViewDelegate {
-    func segmentSelected(type: SegmentType) {
-        currentSegment = type
-        var patientRecords = fetchPatientRecords(for: currentSegment)
-        if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
-            patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
+// MARK: Observables
+extension UsersListOfRecordsViewController {
+    private func setObservables() {
+        AppStates.shared.listenToAuth { [weak self] authenticated in
+            guard let `self` = self else {return}
+            self.setup()
         }
-        switch type {
-        case .Timeline:
-            showTimelineViews(patientRecordsEmpty: patientRecords.isEmpty, searchText: searchText)
-            show(records: patientRecords, filter: currentFilter, searchText: searchText)
-        case .Notes:
-            // TODO: Will need to have some sort of check here, basically just fetch records and filter for notes - for now, just show empty state
-            showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: searchText)
-            show(records: patientRecords, searchText: searchText)
+        
+        AppStates.shared.listenToStorage { [weak self] event in
+            guard let `self` = self else {return}
+            guard event.event == .Save else {return}
+            self.refreshDebounceTimer?.invalidate()
+            self.refreshDebounceTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.refreshOnStorageUpdate), userInfo: nil, repeats: false)
+        }
+        
+        AppStates.shared.listenToSyncCompletion { [weak self] in
+            guard let `self` = self else {return}
+            self.setup()
+        }
+        
+        // When a user access this VC via quicklink and a filter is needed
+        NotificationCenter.default.addObserver(self, selector: #selector(applyQuickLinkFilter), name: .applyQuickLinkFilter, object: nil)
+        // When authentication is expired, reset filters
+        Notification.Name.refreshTokenExpired.onPost(object: nil, queue: .main) {[weak self] _ in
+            guard let `self` = self else {return}
+            self.currentFilter = nil
+            self.hideSelectedFilters()
         }
     }
+}
+
+// MARK: Refresh Logic
+extension UsersListOfRecordsViewController {
+    private func refreshLogic() {
+        guard NetworkConnection.shared.hasConnection else {
+            AppDelegate.sharedInstance?.showToast(message: "No internet connection", style: .Warn)
+            refreshControl.endRefreshing()
+            return
+        }
+        if isDependent {
+            guard let patient = viewModel?.patient else { return }
+            guard let dependent = patient.dependencyInfo else { return }
+            HealthRecordsService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork())).fetchAndStore(for: dependent) { [weak self] records, hadFails in
+                let message: String = !hadFails ? "Records retrieved" : "Not all records were fetched successfully"
+                self?.showToast(message: message)
+                SessionStorage.dependentRecordsFetched.append(patient)
+                self?.refreshControl.endRefreshing()
+            }
+        } else {
+            AppStates.shared.requestSync()
+        }
+    }
+    
+    @objc private func refresh(_ sender: AnyObject) {
+        refreshLogic()
+    }
+    
+    private func setupRefreshControl() {
+        refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+        tableView.isScrollEnabled = true
+        tableView.alwaysBounceVertical = true
+        tableView.addSubview(refreshControl)
+    }
+    
 }
 
 // MARK: Navigation setup
 extension UsersListOfRecordsViewController {
     private func navSetup(style: NavStyle, authenticated: Bool, defaultFirstNameIfFailure: String? = nil, defaultFullNameIfFailure: String? = nil) {
         var buttons: [NavButton] = []
-        
-//        let filterButton = NavButton(title: nil,
-//                                     image: UIImage(named: "filter"), action: #selector(self.showFilters),
-//                                     accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-//        buttons.append(filterButton)
-        
         
         let optionsButton = NavButton(title: nil, image: UIImage(named: "nav-options"), action: #selector(self.showDropDownOptions), accessibility: Accessibility(traits: .button, label: "", hint: ""))
         buttons.append(optionsButton)
@@ -299,16 +240,9 @@ extension UsersListOfRecordsViewController {
         
         if style == .singleUser && viewModel?.patient?.dependencyInfo == nil {
             self.navigationItem.setHidesBackButton(true, animated: false)
-//            let settingsButton = NavButton(title: nil,
-//                                           image: UIImage(named: "nav-settings"), action: #selector(self.showSettings),
-//                                           accessibility: Accessibility(traits: .button, label: "", hint: "")) // TODO:
-//            buttons.append(settingsButton)
             
         } else {
             self.navigationItem.setHidesBackButton(false, animated: false)
-            
-//            let dependentSettingButton = NavButton(image: UIImage(named: "profile-icon"), action: #selector(self.dependentSetting), accessibility: Accessibility(traits: .button, label: "", hint: ""))
-//            buttons.append(dependentSettingButton)
         }
         
         var name = viewModel?.patient?.name?.nameCase() ?? defaultFullNameIfFailure?.nameCase() ?? ""
@@ -351,8 +285,6 @@ extension UsersListOfRecordsViewController {
             self.recordsSearchBarView.isUserInteractionEnabled = false
             self.parentContainerStackView.addGestureRecognizer(tap)
         }
-        // FIXME: Gesture recognizer issue with tapping on the drop down view itself, only picking up gesture recognizer
-        // Note: Create add/remove touch gesture recognizer for dismissing the view (need to make sure we add in remove tap gesture so that other touch events will work)
     }
     
     @objc func dismissDropDown(_ sender: UITapGestureRecognizer? = nil) {
@@ -373,8 +305,6 @@ extension UsersListOfRecordsViewController {
             return
         }
         showDependentProfile(dependent: dependent)
-//        let vm = DependentInfoViewController.ViewModel(dependent: dependent)
-//        show(route: .DependentInfo, withNavigation: true, viewModel: vm)
     }
     
     @objc private func doneButton() {
@@ -386,6 +316,37 @@ extension UsersListOfRecordsViewController {
         inEditMode = true
     }
 }
+
+// MARK: Segmented Control Delegate
+extension UsersListOfRecordsViewController: SegmentedViewDelegate {
+    
+    private func setupSegmentedControl() {
+        if HealthRecordConstants.notesEnabled, viewModel?.userType != .Dependent {
+            listOfRecordsSegmentedView.isHidden = false
+            listOfRecordsSegmentedView.configure(delegateOwner: self, dataSource: [.Timeline, .Notes])
+        } else {
+            listOfRecordsSegmentedView.isHidden = true
+        }
+    }
+    
+    func segmentSelected(type: SegmentType) {
+        currentSegment = type
+        var patientRecords = fetchPatientRecords(for: currentSegment)
+        if let searchText = searchText, searchText.trimWhiteSpacesAndNewLines.count > 0 {
+            patientRecords = patientRecords.filter({ $0.title.lowercased().range(of: searchText.lowercased()) != nil })
+        }
+        switch type {
+        case .Timeline:
+            showTimelineViews(patientRecordsEmpty: patientRecords.isEmpty, searchText: searchText)
+            show(records: patientRecords, filter: currentFilter, searchText: searchText)
+        case .Notes:
+            // TODO: Will need to have some sort of check here, basically just fetch records and filter for notes - for now, just show empty state
+            showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: searchText)
+            show(records: patientRecords, searchText: searchText)
+        }
+    }
+}
+
 
 // MARK: Show Dependent Info
 extension UsersListOfRecordsViewController {
@@ -453,13 +414,9 @@ extension UsersListOfRecordsViewController: RecordsSearchBarViewDelegate {
 extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
     
     @objc func showFilters() {
-//        let fv: FilterRecordsView = UIView.fromNib()
         let allFilters = RecordsFilter.RecordType.avaiableFilters
         let dependentFilters: [RecordsFilter.RecordType] = RecordsFilter.RecordType.dependentFilters
-//        fv.showModally(on: view.findTopMostVC()?.view ?? view,
-//                       availableFilters: isDependent ? dependentFilters : allFilters,
-//                       filter: currentFilter)
-//        fv.delegate = self
+
         let vm = FilterRecordsViewController.ViewModel(currentFilter: currentFilter, availableFilters: isDependent ? dependentFilters : allFilters, delegateOwner: self)        
         show(route: .FilterRecordsView, withNavigation: true, viewModel: vm)
     }
@@ -524,6 +481,34 @@ extension UsersListOfRecordsViewController: FilterRecordsViewDelegate {
             sub.removeFromSuperview()
         }
         filterStack.isHidden = true
+    }
+    
+    @objc private func applyQuickLinkFilter(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: RecordsFilter] else { return }
+        guard let filter = userInfo["filter"] else { return }
+        currentSegment = filter.recordTypes.contains(.Notes) ? .Notes : .Timeline
+        let patientRecords = fetchPatientRecords(for: currentSegment)
+        currentFilter = filter
+        if filter.recordTypes.contains(.Notes) {
+            listOfRecordsSegmentedView.setSegmentedControl(forType: .Notes)
+            showNotesViews(notesRecordsEmpty: patientRecords.isEmpty, searchText: nil)
+        } else {
+            listOfRecordsSegmentedView.setSegmentedControl(forType: .Timeline)
+            showTimelineViews(patientRecordsEmpty: patientRecords.isEmpty, searchText: nil)
+        }
+        show(records: patientRecords, filter:filter, searchText: nil)
+        
+    }
+    
+    private func applyNotificationFilterIfNeeded() {
+        guard let category = SessionStorage.notificationCategoryFilter
+        else {
+            return
+        }
+        let filterType = category.toLocalFilter()
+        
+        SessionStorage.notificationCategoryFilter = nil
+        self.selected(filter: RecordsFilter(recordTypes: [filterType]))
     }
 }
 
