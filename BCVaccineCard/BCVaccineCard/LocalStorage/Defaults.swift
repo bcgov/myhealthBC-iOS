@@ -14,6 +14,7 @@ struct Defaults {
         case hasAppLaunchedBefore
         case loginProcessStatus
         case hasSeenFirstLogin
+        case quickLinksPreferences
     }
     
     // Temporary measure until I can get keychain working properly
@@ -83,5 +84,38 @@ struct Defaults {
             return
         }
     }
+    
+    static func getStoresPreferencesFor(phn: String) -> [QuickLinksPreferences] {
+        guard let data = UserDefaults.standard.value(forKey: self.Key.quickLinksPreferences.rawValue) as? Data else {
+            return []
+        }
+        do {
+            let decoded = try PropertyListDecoder().decode(LocalDictionaryQuickLinksPreferences.self, from: data)
+            guard let preferences = decoded.storedPreferences[phn] else {
+                return []
+            }
+            return preferences
+        } catch {
+            Logger.log(string: error.localizedDescription, type: .general)
+            return []
+        }
+    }
+    
+    static func updateStoredPreferences(phn: String, newPreferences: [QuickLinksPreferences]) {
+        guard let data = UserDefaults.standard.value(forKey: self.Key.quickLinksPreferences.rawValue) as? Data else {
+            let localPreferences = LocalDictionaryQuickLinksPreferences(storedPreferences: [phn: newPreferences])
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(localPreferences), forKey: self.Key.quickLinksPreferences.rawValue)
+            return
+        }
+        do {
+            var decoded = try PropertyListDecoder().decode(LocalDictionaryQuickLinksPreferences.self, from: data)
+            decoded.storedPreferences[phn] = newPreferences
+            UserDefaults.standard.set(try? PropertyListEncoder().encode(decoded), forKey: self.Key.quickLinksPreferences.rawValue)
+        } catch {
+            Logger.log(string: error.localizedDescription, type: .general)
+            return
+        }
+    }
+    
     
 }

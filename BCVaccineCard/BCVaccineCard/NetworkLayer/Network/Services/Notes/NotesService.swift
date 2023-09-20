@@ -152,6 +152,119 @@ struct NotesService {
         Logger.log(string: "StorageEvent \(event.entity) - \(event.event)", type: .storage)
         NotificationCenter.default.post(name: .storageChangeEvent, object: event)
     }
+    
+    // MARK: PUT
+    
+    private func putNote(note: Note, title: String?, text: String?, journalDate: String?, completion: @escaping (NoteResponse?, Bool)->Void) {
+        let model = UpdateNote(note: note, updatedTitle: title, updatedText: text, updatedJournalDate: journalDate)
+        putNoteNetwork(object: model, completion: completion)
+    }
+    
+    private func putNoteNetwork(object: UpdateNote, completion: @escaping(NoteResponse?, Bool)->Void) {
+        guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                // Note: Showing here, because in the instance where it is cached (user hits it a second time), this will get called again, but in the actual config error handling, we won't show maintenance message
+                // Duplication won't happen, because in show toast function, we check to see if it is already being displayed to the user
+                network.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                return completion(nil, false)
+            }
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.hdid: hdid
+            ]
+            
+            let requestModel = NetworkRequest<UpdateNote, PostNoteResponse>(url: endpoints.notes(base: baseURL, hdid: hdid), type: .Put, parameters: object, headers: headers) { result in
+                return completion(result?.resourcePayload, true)
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
+    
+    public func updateNote(title: String?, text: String?, journalDate: String?, addToTimeline: Bool = true, noteToUpdate: Note, patient: Patient, completion: @escaping (Note?, Bool)->Void) {
+        if addToTimeline == false {
+            // Not implementing right now
+        } else {
+            if NetworkConnection.shared.hasConnection {
+                putNote(note: noteToUpdate, title: title, text: text, journalDate: journalDate) { result, showErrorIfNeeded in
+                    guard let result = result, let id = noteToUpdate.id else {
+                        print("Error")
+                        return completion(nil, showErrorIfNeeded)
+                    }
+                    let updatedNote = StorageService.shared.updateNote(originalNoteID: id, newNote: result, for: patient)
+                    completion(updatedNote, showErrorIfNeeded)
+                }
+            } else {
+                print("Error")
+                // Error handling should be done already due to lack of network connection
+                network.showToast(message: .noInternetConnection, style: .Warn)
+                return completion(nil, false)
+            }
+        }
+        
+    }
+    
+    
+    // MARK: DELETE
+    
+    private func delNote(note: Note, completion: @escaping (NoteResponse?, Bool)->Void) {
+        let model = UpdateNote(note: note, updatedTitle: nil, updatedText: nil, updatedJournalDate: nil)
+        delNoteNetwork(object: model, completion: completion)
+    }
+    
+    private func delNoteNetwork(object: UpdateNote, completion: @escaping(NoteResponse?, Bool)->Void) {
+        guard let token = authManager.authToken, let hdid = authManager.hdid else {return}
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                // Note: Showing here, because in the instance where it is cached (user hits it a second time), this will get called again, but in the actual config error handling, we won't show maintenance message
+                // Duplication won't happen, because in show toast function, we check to see if it is already being displayed to the user
+                network.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                return completion(nil, false)
+            }
+            let headers = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.hdid: hdid
+            ]
+            
+            let requestModel = NetworkRequest<UpdateNote, PostNoteResponse>(url: endpoints.notes(base: baseURL, hdid: hdid), type: .Delete, parameters: object, headers: headers) { result in
+                return completion(result?.resourcePayload, true)
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
+    
+    public func deleteNote(noteToDelete: Note, addToTimeline: Bool = true, patient: Patient, completion: @escaping (Note?, Bool)->Void) {
+        if addToTimeline == false {
+            // Not Doing right now
+        } else {
+            if NetworkConnection.shared.hasConnection {
+                delNote(note: noteToDelete) { result, showErrorIfNeeded in
+                    guard let result = result else {
+                        print("Error")
+                        return completion(nil, showErrorIfNeeded)
+                    }
+                    StorageService.shared.deleteNote(note: noteToDelete, for: patient)
+                    completion(noteToDelete, showErrorIfNeeded)
+                }
+            } else {
+                print("Error")
+                // Error handling should be done already due to lack of network connection
+                network.showToast(message: .noInternetConnection, style: .Warn)
+                return completion(nil, false)
+            }
+        }
+        
+    }
 
 }
 
