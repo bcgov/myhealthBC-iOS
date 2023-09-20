@@ -22,6 +22,9 @@ class PatientRecommendationStack: UIView {
                    icon: UIImage? = UIImage(named: "reccomandation-list-icon")) {
         immunizationNameLabel.text = immunizationName
         iconImageView.image = icon
+        //Hiding icon for now - TODO: Enable here
+        iconImageView.isHidden = true
+        
         if let dueDate = dueDate {
             dueDateLabel.text = "Due: \(dueDate.forecastDueDate)"
         } else {

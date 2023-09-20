@@ -7,6 +7,12 @@
 
 import Foundation
 
+struct UXConstants {
+    static var showLoginDuringOnBoarding: Bool {
+        return false
+    }
+}
+
 struct HealthRecordConstants {
     // ENABLE AND DISABLE PRIMARY PATIENT RECORD TYPES
     static var enabledTypes: [RecordType] {

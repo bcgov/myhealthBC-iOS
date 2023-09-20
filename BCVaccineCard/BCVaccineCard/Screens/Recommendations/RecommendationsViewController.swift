@@ -36,6 +36,7 @@ class RecommendationsViewController: BaseViewController {
         super.viewDidLoad()
         setup()
         expandedPatients = []
+        fetchDependentRecommendations()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -82,7 +83,17 @@ class RecommendationsViewController: BaseViewController {
         textViewHeight.constant = heightOfText
         self.view.layoutIfNeeded()
     }
-
+    
+    private func fetchDependentRecommendations() {
+        guard let primaryPatient = StorageService.shared.fetchAuthenticatedPatient() else {
+            return
+        }
+        let dependentService = DependentService(network: AFNetwork(), authManager: AuthManager(), configService: MobileConfigService(network: AFNetwork()))
+        
+        dependentService.fetchRecommendationsForDependentsOf(patient: primaryPatient, completion: {[weak self] in
+            self?.tableView.reloadData()
+        })
+    }
 }
 extension RecommendationsViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
