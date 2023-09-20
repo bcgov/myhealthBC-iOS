@@ -53,7 +53,7 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE PROFILE DETAILS SCREEN
     static var profileDetailsEnabled: Bool {
-        return false
+        return true
     }
     
     static var notesEnabled: Bool {
