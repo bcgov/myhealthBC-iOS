@@ -52,8 +52,11 @@ struct PDFService {
         guard let fileID = diagnosticImaging.fileID else {
             return completion(nil, nil)
         }
+        if fileID.isEmpty {
+            print("NO FILE ID!!!!")
+        }
         network.addLoader(message: .empty, caller: .PDFService_DiagnosticImaging)
-        fetchPDFV2(fileID: fileID, type: .DiagnosticImaging, isCovid: false, patient: patient, completion: {response, online in
+        fetchPDFV2(fileID: (!fileID.isEmpty ? fileID : diagnosticImaging.id) ?? "", type: .DiagnosticImaging, isCovid: false, patient: patient, completion: {response, online in
             network.removeLoader(caller: .PDFService_DiagnosticImaging)
             guard let response = response,
                   let content = response.content
@@ -166,6 +169,7 @@ extension PDFService {
             { result in
                 return completion(result, true)
             }
+            
             network.request(with: requestModel)
         }
     }
