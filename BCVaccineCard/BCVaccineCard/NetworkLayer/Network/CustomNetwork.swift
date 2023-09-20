@@ -38,7 +38,6 @@ struct CustomNetwork: Network {
                 httpBody = ("\"" + stringBody + "\"").data(using: .utf8)
             }
         }
-        
         if let requestHeaders = requestData.headers {
             for (key, value) in requestHeaders {
                 request.addValue(value, forHTTPHeaderField: key)
