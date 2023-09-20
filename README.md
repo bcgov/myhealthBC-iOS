@@ -1,6 +1,6 @@
 #  My Health BC
 
-<a  href="https://apps.apple.com/ca/app/health-gateway/id1590009068?itscg=30200&amp;itsct=apps_box_appicon"  style="width: 170px;  height: 170px;  border-radius: 22%;  overflow: hidden;  display: inline-block;  vertical-align: middle;"><img  src="https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/8f/61/76/8f61769e-5276-1599-7056-fac3a6d22bdf/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/540x540bb.jpg"  alt="Health Gateway"  style="width: 170px;  height: 170px;  border-radius: 22%;  overflow: hidden;  display: inline-block;  vertical-align: middle;"></a>
+<a  href="https://apps.apple.com/ca/app/health-gateway/id1590009068?itscg=30200&amp;itsct=apps_box_appicon"  style="width: 170px;  height: 170px;  border-radius: 22%;  overflow: hidden;  display: inline-block;  vertical-align: middle;"><img  src="https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/8f/61/76/8f61769e-5276-1599-7056-fac3a6d22bdf/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/540x540bb.jpg"  alt="Health Gateway"  style="width: 170px;  height: 170px;  border-radius: 13px;  overflow: hidden;  display: inline-block;  vertical-align: middle;"></a>
 
   
 
