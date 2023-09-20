@@ -26,14 +26,16 @@ struct CustomNetwork: Network {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "accept")
         
-        if requestData.type != .Get {
+        if let requestParameters = requestData.parameters?.toDictionary() {
+            parameters = requestParameters
+            let httpBodyJSON = try? JSONSerialization.data(withJSONObject: parameters, options: [])
+            httpBody = httpBodyJSON
+        }
+        
+        if requestData.type != .Get, let stringBody = requestData.stringBody {
             if let stringBody = requestData.stringBody {
                 request.addValue("charset=UTF-8", forHTTPHeaderField: "Content-Type")
                 httpBody = ("\"" + stringBody + "\"").data(using: .utf8)
-            } else if let requestParameters = requestData.parameters?.toDictionary() {
-                parameters = requestParameters
-                let httpBodyJSON = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-                httpBody = httpBodyJSON
             }
         }
         if let requestHeaders = requestData.headers {
