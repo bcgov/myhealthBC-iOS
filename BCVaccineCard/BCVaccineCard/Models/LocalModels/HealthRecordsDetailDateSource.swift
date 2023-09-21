@@ -418,8 +418,8 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(diagnosticImaging: DiagnosticImaging) -> Record {
         let dateString = diagnosticImaging.examDate?.monthDayYearString
         // TODO: confirm data
-        var status = diagnosticImaging.examStatus ?? ""
-        if diagnosticImaging.isObjectUpdated && status.lowercased() == "final" {
+        var status = ""
+        if diagnosticImaging.isObjectUpdated == true {
             status = "Updated"
         }
         return Record(id: diagnosticImaging.id ?? UUID().uuidString, name: diagnosticImaging.modality ?? "", type: .diagnosticImaging(model: diagnosticImaging), status: status, date: dateString, listStatus: status, commentID: diagnosticImaging.id)
