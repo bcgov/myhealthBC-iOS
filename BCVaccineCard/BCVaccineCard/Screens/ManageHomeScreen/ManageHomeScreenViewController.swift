@@ -63,6 +63,7 @@ extension ManageHomeScreenViewController: UITableViewDelegate, UITableViewDataSo
         tableView.delegate = self
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
+        tableView.showsVerticalScrollIndicator = false
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

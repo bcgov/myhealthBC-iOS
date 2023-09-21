@@ -33,10 +33,24 @@ extension ManageHomeScreenViewController {
             var ds: [DataSource] = []
             ds.append(DataSource.introText)
             
+            var recordsOrder: [QuickLinksPreferences.QuickLinksNames] = []
             
-            let recordsOrder: [QuickLinksPreferences.QuickLinksNames] = [
-                .MyNotes, .Immunizations, .Medications, .LabResults, .COVID19Tests, .SpecialAuthority, .HospitalVisits, .HealthVisits, .ClinicalDocuments, .ImagingReports
-            ]
+            if HealthRecordConstants.notesEnabled {
+                recordsOrder.append(.MyNotes)
+            }
+            
+            recordsOrder.append(contentsOf: [
+                .Immunizations,
+                .Medications,
+                .LabResults,
+                .COVID19Tests,
+                .SpecialAuthority,
+                .HospitalVisits,
+                .HealthVisits,
+                .ClinicalDocuments,
+                .ImagingReports
+            ])
+            
             let healthRecords = constructSectionTypes(storedPreferences: storedQuickLinks, for: .HealthRecord, order: recordsOrder)
             ds.append(DataSource.healthRecord(types: healthRecords))
             
