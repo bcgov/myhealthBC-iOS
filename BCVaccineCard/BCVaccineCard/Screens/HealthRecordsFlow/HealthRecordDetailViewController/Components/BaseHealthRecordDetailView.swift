@@ -208,7 +208,7 @@ class BaseHealthRecordsDetailView: UIView {
         
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
                 let keyboardRectangle = keyboardFrame.cgRectValue
-                keyboardHeight = keyboardRectangle.height
+                keyboardHeight = keyboardRectangle.height + 30
         }
         
 

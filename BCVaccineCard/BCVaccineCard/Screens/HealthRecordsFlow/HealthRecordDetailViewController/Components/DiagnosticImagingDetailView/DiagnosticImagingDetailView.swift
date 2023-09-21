@@ -106,7 +106,11 @@ extension DiagnosticImagingDetailView {
         guard let model = model else { return 0 }
         switch model.type {
         case .diagnosticImaging(model: let model):
-            return model.fileID != nil ? 1 : 0
+            if let fileID = model.fileID, !fileID.isEmpty {
+                return 1
+            } else  {
+                return 0
+            }
         default: return 0
         }
     }
