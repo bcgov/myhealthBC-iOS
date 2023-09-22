@@ -14,11 +14,6 @@ struct TOSService {
     
     fileprivate static var blockSync: Bool = false
     
-    private enum RequestType {
-        case Put
-        case Post
-    }
-    
     var endpoints: UrlAccessor {
         return UrlAccessor()
     }
@@ -50,26 +45,85 @@ struct TOSService {
     func accept(termsOfServiceId: String,
                 completion: @escaping(AuthenticatedUserProfileResponseObject?)->Void
     ) {
-        var requestType: RequestType = .Post
         let patientService = PatientService(network: network, authManager: authManager, configService: configService)
-        
+        network.addLoader(message: .empty, caller: .TOSService_Accept)
         patientService.fetchProfile { profile in
-            print(profile)
+            network.removeLoader(caller: .TOSService_Accept)
             if let profile = profile,
                 profile.resourcePayload?.acceptedTermsOfService == true && profile.resourcePayload?.hasTermsOfServiceUpdated == true
             {
-                requestType = .Put
+                return  acceptUpdatedTOS(termsOfServiceId: termsOfServiceId, completion: completion)
+            } else {
+                return acceptInitialTOS(termsOfServiceId: termsOfServiceId, completion: completion)
             }
-            requestType = .Put
-            print(requestType)
-            return accept(termsOfServiceId: termsOfServiceId, requestType: requestType, completion: completion)
         }
     }
     
-    private func acceptInitial() {
+    // Post
+    private func acceptInitialTOS(termsOfServiceId: String, completion: @escaping(AuthenticatedUserProfileResponseObject?)->Void) {
+        guard let token = authManager.authToken, let hdid = authManager.hdid else {
+            return completion(nil)
+        }
         
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            
+            let parameters = AuthenticatedUserProfileRequestObject(profile: AuthenticatedUserProfileRequestObject.ResourcePayload(hdid: hdid, termsOfServiceId: termsOfServiceId))
+            
+            let finalUrl: URL = endpoints.userProfile(base: baseURL, hdid: hdid)
+            
+            let headers: [String: String] = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+                Constants.AuthenticationHeaderKeys.hdid: hdid
+            ]
+            
+            let requestModel = NetworkRequest<AuthenticatedUserProfileRequestObject, AuthenticatedUserProfileResponseObject>(url: finalUrl, type: .Post, parameters: parameters, headers: headers) { result in
+                return completion(result)
+            }
+            
+            network.request(with: requestModel)
+        }
+    }
+        // PUT
+    private func acceptUpdatedTOS(termsOfServiceId: String, completion: @escaping(AuthenticatedUserProfileResponseObject?)->Void) {
+        guard let token = authManager.authToken, let hdid = authManager.hdid else {
+            return completion(nil)
+        }
+        
+        configService.fetchConfig { response in
+            guard let config = response,
+                  config.online,
+                  let baseURLString = config.baseURL,
+                  let baseURL = URL(string: baseURLString)
+            else {
+                return completion(nil)
+            }
+            
+            let parameters = AuthenticatedUserProfileRequestObject(profile: AuthenticatedUserProfileRequestObject.ResourcePayload(hdid: hdid, termsOfServiceId: termsOfServiceId))
+            
+            let stringBody: String = termsOfServiceId
+            let finalUrl: URL = endpoints.acceptTermsOfService(base: baseURL, hdid: hdid)
+            
+            let headers: [String: String] = [
+                Constants.AuthenticationHeaderKeys.authToken: "Bearer \(token)",
+            ]
+            
+            
+            let requestModel = NetworkRequest<AuthenticatedUserProfileRequestObject, AuthenticatedUserProfileResponseObject>(url: finalUrl, type: .Put, parameters: parameters, stringBody: stringBody, headers: headers) { result in
+                return completion(result)
+            }
+            
+            CustomNetwork().request(with: requestModel)
+        }
     }
     
+    /*
     private func accept(termsOfServiceId: String,
                         requestType: RequestType,
                 completion: @escaping(AuthenticatedUserProfileResponseObject?)->Void
@@ -112,4 +166,5 @@ struct TOSService {
             network.request(with: requestModel)
         }
     }
+     */
 }
