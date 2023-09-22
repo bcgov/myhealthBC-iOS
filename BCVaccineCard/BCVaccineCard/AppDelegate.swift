@@ -367,6 +367,7 @@ enum LoaderCaller {
     case NotificationService_dismissAll
     case Notes_fetchAndStore
     case QuickLinks_fetchAndStore
+    case TOSService_Accept
 }
 
 
