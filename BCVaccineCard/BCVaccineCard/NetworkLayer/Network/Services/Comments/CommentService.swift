@@ -393,13 +393,4 @@ extension HealthRecordsDetailDataSource.Record {
         }
         
     }
-    
-    // TODO: Enable Comments for specific record types here
-    var commentsEnabled: Bool {
-        if !HealthRecordConstants.commentsEnabled { return false}
-        switch self.type {
-            case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument : return true
-            default: return false
-        }
-    }
 }
