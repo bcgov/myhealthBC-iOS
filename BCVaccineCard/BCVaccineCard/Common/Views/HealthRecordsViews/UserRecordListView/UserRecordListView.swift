@@ -6,7 +6,7 @@
 
 // NOTE: This is for an individual's
 import UIKit
-
+// FIXME: NEED TO LOCALIZE 
 class UserRecordListView: UIView {
     
     @IBOutlet weak private var contentView: UIView!

@@ -3,7 +3,7 @@
 //  BCVaccineCard
 //
 //  Created by Amir Shayegh on 2023-02-14.
-//
+// TODO: Put toast messages in strings file
 
 import Foundation
 
@@ -63,12 +63,12 @@ struct SyncService {
         let commentsService = CommentService(network: network, authManager: authManager, configService: configService)
         let notificationService = NotificationService(network: network, authManager: authManager, configService: configService)
         if showToast {
-            network.showToast(message: "Retrieving records")
+            network.showToast(message: .retrievingRecords)
         }
         patientService.fetchAndStoreDetails { patient in
             guard let patient = patient else {
                 // Could not fetch patient details
-                Logger.log(string: "Could not fetch patient details", type: .Network)
+                Logger.log(string: .noPatientDetails, type: .Network)
                 return completion(nil)
             }
             var hadFailures = false
@@ -79,7 +79,7 @@ struct SyncService {
                 if status == nil {
                     hadFailures = true
                 }
-                Logger.log(string: "fetched donor status: \(status != nil)", type: .Network)
+                Logger.log(string: "\(String.fetchedDonorStatus) \(status != nil)", type: .Network)
                 group.leave()
             }
             
@@ -89,7 +89,7 @@ struct SyncService {
                     if imaging == nil {
                         hadFailures = true
                     }
-                    Logger.log(string: "fetched diagnostic imaging: \(imaging?.count)", type: .Network)
+                    Logger.log(string: "\(String.fetchedDiagnosticImaging) \(imaging?.count)", type: .Network)
                     group.leave()
                 }
             }
@@ -99,7 +99,7 @@ struct SyncService {
                 if dependents == nil {
                     hadFailures = true
                 }
-                Logger.log(string: "fetched \(dependents?.count ?? 0) dependents", type: .Network)
+                Logger.log(string: "\(String.fetched) \(dependents?.count ?? 0) \(String.dependents.lowercased())", type: .Network)
                 group.leave()
             }
             
@@ -111,13 +111,13 @@ struct SyncService {
                 
                 if HealthRecordConstants.commentsEnabled {
                     commentsService.fetchAndStore(for: patient) { comments in
-                        Logger.log(string: "fetched \(comments.count) comments", type: .Network)
+                        Logger.log(string: "\(String.fetched) \(comments.count) \(String.comments.lowercased())", type: .Network)
                         group.leave()
                     }
                 } else {
                     group.leave()
                 }
-                Logger.log(string: "fetched \(records.count) records", type: .Network)
+                Logger.log(string: "\(String.fetched) \(records.count) \(String.records.lowercased())", type: .Network)
             }
             
 //            group.enter()
@@ -127,7 +127,7 @@ struct SyncService {
 //            }
             
             group.notify(queue: .main) {
-                let message: String = !hadFailures ? "Records retrieved" : .fetchRecordError
+                let message: String = !hadFailures ? .recordsRetrieved : .fetchRecordError
                 
                 if showToast {
                     network.showToast(message: message)

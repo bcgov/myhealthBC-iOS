@@ -4,7 +4,7 @@
 //
 //  Created by Mohamed Fawzy on 26/01/2022.
 //
-
+// FIXME: NEED TO LOCALIZE - LOW PRIORITY, NEVER SEEN THIS EVENT BUT WE SHOULD STILL LOCALIZE IT
 import Foundation
 import CoreData
 import EncryptedCoreData

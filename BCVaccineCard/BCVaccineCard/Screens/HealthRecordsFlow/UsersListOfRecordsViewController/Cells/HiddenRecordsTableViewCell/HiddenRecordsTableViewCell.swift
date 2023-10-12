@@ -4,7 +4,7 @@
 //
 //  Created by Amir on 2022-02-07.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 enum HiddenRecordType: Equatable {

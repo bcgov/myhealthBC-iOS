@@ -4,7 +4,7 @@
 //
 //  Created by Amir on 2022-06-30.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class CovidTestResultBannerTableViewCell: BaseHeaderTableViewCell {

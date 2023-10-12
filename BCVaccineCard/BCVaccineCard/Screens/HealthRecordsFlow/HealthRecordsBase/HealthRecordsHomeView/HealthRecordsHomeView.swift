@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2022-05-06.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class HealthRecordsHomeView: UIView {

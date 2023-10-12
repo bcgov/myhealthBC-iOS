@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2021-09-27.
 //
-
+// FIXME: NEED TO LOCALIZE - LOW PRIORITY
 import Foundation
 
 struct AccessibilityLabels {

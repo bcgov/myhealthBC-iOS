@@ -3,7 +3,7 @@
 //  ClientVaxPass-POC
 //
 //  Created by Connor Ogilvie on 2021-09-09.
-
+// FIXME: NEED TO LOCALIZE - NOT SURE IF WE'RE STILL USING THIS, BUT SMALL SECTION TO LOCALIZE
 import UIKit
 import BCVaccineValidator
 

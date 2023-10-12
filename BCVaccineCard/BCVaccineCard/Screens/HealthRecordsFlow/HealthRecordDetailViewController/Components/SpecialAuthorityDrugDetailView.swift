@@ -4,7 +4,7 @@
 //
 //  Created by Amir on 2022-07-12.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 extension HealthRecordsDetailDataSource.Record {

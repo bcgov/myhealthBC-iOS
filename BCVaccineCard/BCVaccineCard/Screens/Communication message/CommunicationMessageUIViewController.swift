@@ -65,7 +65,7 @@ class CommunicationMessageUIViewController: UIViewController {
         styleTimeStamp(label: timeStampLabel)
         styleMessage(textView: textView)
         
-        title = "New updates"
+        title = .newUpdateTitle.capitalized
         navigationController?.navigationBar.prefersLargeTitles = false
         view.layoutIfNeeded()
     }
