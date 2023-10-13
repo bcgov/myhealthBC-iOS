@@ -65,6 +65,7 @@ struct SyncService {
         if showToast {
             network.showToast(message: .retrievingRecords)
         }
+        AppDelegate.sharedInstance?.cachedCommunicationPreferences = nil
         patientService.fetchAndStoreDetails { patient in
             guard let patient = patient else {
                 // Could not fetch patient details

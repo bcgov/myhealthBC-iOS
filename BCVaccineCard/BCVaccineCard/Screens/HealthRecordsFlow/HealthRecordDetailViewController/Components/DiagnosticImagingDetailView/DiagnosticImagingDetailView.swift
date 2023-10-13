@@ -11,8 +11,8 @@ class DiagnosticImagingDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
     
     enum Section: Int, CaseIterable {
         case DownloadButton
-        case SectionDescription
         case Fields
+        case Info
         case Comments
     }
     
@@ -21,6 +21,7 @@ class DiagnosticImagingDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
     override func setup() {
         tableView?.dataSource = self
         tableView?.delegate = self
+        tableView?.register(UINib.init(nibName: DiagnosticImagingInfoTableViewCell.getName, bundle: .main), forCellReuseIdentifier: DiagnosticImagingInfoTableViewCell.getName)
         fields = createFields()
         comments = model?.comments.filter({ $0.shouldHide != true }) ?? []
     }
@@ -45,23 +46,18 @@ class DiagnosticImagingDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
         switch section {
         case .DownloadButton:
             return showAndHideDownloadButton()
-        case .SectionDescription:
-            return 1
         case .Fields:
             return fields.count
+        case .Info:
+            return 1
         case .Comments:
             return comments.count
-        
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let section = Section(rawValue: indexPath.section) else {return UITableViewCell()}
         switch section {
-        case .SectionDescription:
-            guard let cell = sectionDescriptionCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
-            cell.setup(title: "", subtitle: "If you have questions, contact the doctor or care provider who ordered your imaging.")
-            return cell
         case .Fields:
             guard let cell = textCell(indexPath: indexPath, tableView: tableView) else {return UITableViewCell()}
             cell.setup(with: fields[indexPath.row])
@@ -73,6 +69,12 @@ class DiagnosticImagingDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
         case .DownloadButton:
             guard let cell = viewPDFButtonCell(indexPath: indexPath, tableView: tableView) else { return UITableViewCell() }
             cell.configure(delegateOwner: HealthRecordDetailViewController.currentInstance, style: .downloadFullReport)
+            return cell
+        case .Info:
+            guard let cell = infoCell(indexPath: indexPath, tableView: tableView) else {
+                return UITableViewCell()
+            }
+            cell.setup(delegate: self)
             return cell
         }
     }
@@ -99,6 +101,25 @@ class DiagnosticImagingDetailView: BaseHealthRecordsDetailView, UITableViewDeleg
         return "Comments".heightForView(font: TableSectionHeader.font, width: bounds.width) + 10
     }
     
+    public func infoCell(indexPath: IndexPath, tableView: UITableView) -> DiagnosticImagingInfoTableViewCell? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: DiagnosticImagingInfoTableViewCell.getName, for: indexPath) as? DiagnosticImagingInfoTableViewCell
+        cell?.selectionStyle = .none
+        return cell
+    }
+    
+}
+
+extension DiagnosticImagingDetailView: DiagnosticImagingInfoTableViewCellDelegate {
+    func openLink(type: DiagnosticImagingInfoTableViewCell.Link) {
+        switch type {
+        case .HealthLinkBC:
+            AppDelegate.sharedInstance?.showExternalURL(url: "https://www.healthlinkbc.ca/tests-treatments-medications/medical-tests")
+        case .BCRadiologicalSociety:
+            AppDelegate.sharedInstance?.showExternalURL(url: "https://bcradiology.ca/patient-resources/")
+        }
+    }
+    
+    
 }
 
 extension DiagnosticImagingDetailView {
@@ -106,7 +127,11 @@ extension DiagnosticImagingDetailView {
         guard let model = model else { return 0 }
         switch model.type {
         case .diagnosticImaging(model: let model):
-            return model.fileID != nil ? 1 : 0
+            if let fileID = model.fileID, !fileID.isEmpty {
+                return 1
+            } else  {
+                return 0
+            }
         default: return 0
         }
     }
@@ -122,13 +147,17 @@ extension DiagnosticImagingDetailView {
 //                    header: TextProperties(text: "Body Part:", bolded: true),
 //                    subtext: TextProperties(text: model.bodyPart ?? "", bolded: false)
 //                ),
-//                TextListModel(
-//                    header: TextProperties(text: "Description:", bolded: true),
-//                    subtext: TextProperties(text: model.procedureDescription ?? "", bolded: false)
-//                ),
+                TextListModel(
+                    header: TextProperties(text: "Procedure Description:", bolded: true),
+                    subtext: TextProperties(text: model.procedureDescription ?? "", bolded: false)
+                ),
                 TextListModel(
                     header: TextProperties(text: "Health Authority:", bolded: true),
                     subtext: TextProperties(text: model.healthAuthority ?? "", bolded: false)
+                ),
+                TextListModel(
+                    header: TextProperties(text: "Status:", bolded: true),
+                    subtext: TextProperties(text: model.examStatus ?? "", bolded: false)
                 ),
 //                TextListModel(
 //                    header: TextProperties(text: "Facility:", bolded: true),

@@ -133,7 +133,7 @@ class AppTabBarController: UITabBarController {
                 self.logout(reason: .Underage, completion: {
                     return completion(false)
                 })
-            case .TOSNotAccepted:
+            case .TOSNotAccepted, .TOSUpdated:
                 if let presented = self.presentedViewController {
                     self.presentedViewController?.dismiss(animated: true) {
                         self.show(route: .TermsOfService, withNavigation: false)

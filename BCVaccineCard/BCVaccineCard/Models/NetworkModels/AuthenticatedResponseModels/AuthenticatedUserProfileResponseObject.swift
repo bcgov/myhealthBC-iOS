@@ -7,7 +7,6 @@
 
 import Foundation
 
-// NOTE: For now, we really only need the hdId and acceptedTermsOfService fields - so that's all we're going to decode
 struct AuthenticatedUserProfileResponseObject: Codable {
     let resourcePayload: ResourcePayload?
 }
@@ -19,6 +18,7 @@ extension AuthenticatedUserProfileResponseObject {
         let version: Int?
         let acceptedTermsOfService: Bool?
         let hdID, termsOfServiceID: String?
+        let hasTermsOfServiceUpdated: Bool?
         let email, smsNumber, closedDateTime, identityManagementID: String?
         let lastLoginDateTime, encryptionKey: String?
         let verifications: [Verification]?
@@ -32,6 +32,7 @@ extension AuthenticatedUserProfileResponseObject {
             case termsOfServiceID = "termsOfServiceId"
             case email, smsNumber, closedDateTime
             case identityManagementID = "identityManagementId"
+            case hasTermsOfServiceUpdated
             case lastLoginDateTime, encryptionKey, verifications
             case isEmailVerified, isSMSNumberVerified
 //            case preferences

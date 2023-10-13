@@ -258,14 +258,9 @@ struct HealthRecordsDetailDataSource {
             deleteAlertTitle = "N/A" // Can't delete an authenticated Immunization
             deleteAlertMessage = "Should not see this" // Showing for testing purposes
         case .diagnosticImaging(model: let model):
-            var newTitle = "-"
-            if model.isObjectUpdated == true {
-                let str = model.modality ?? "-"
-                newTitle = str + " - \(String.recentlyUpdated)"
-            }
             id = model.id
-            title = newTitle
-            detailNavTitle = newTitle
+            title = model.modality ?? "-"
+            detailNavTitle = model.modality ?? "_"
             name = model.patient?.name ?? "-"
             image = UIImage(named: "blue-bg-diagnostic-imaging-icon")
             
@@ -423,7 +418,11 @@ extension HealthRecordsDetailDataSource {
     private static func genRecord(diagnosticImaging: DiagnosticImaging) -> Record {
         let dateString = diagnosticImaging.examDate?.monthDayYearString
         // TODO: confirm data
-        return Record(id: diagnosticImaging.id ?? UUID().uuidString, name: diagnosticImaging.modality ?? "", type: .diagnosticImaging(model: diagnosticImaging), status: diagnosticImaging.examStatus, date: dateString, listStatus: diagnosticImaging.examStatus ?? "", commentID: diagnosticImaging.id)
+        var status = ""
+        if diagnosticImaging.isObjectUpdated == true {
+            status = "Updated"
+        }
+        return Record(id: diagnosticImaging.id ?? UUID().uuidString, name: diagnosticImaging.modality ?? "", type: .diagnosticImaging(model: diagnosticImaging), status: status, date: dateString, listStatus: status, commentID: diagnosticImaging.id)
     }
     
     // MARK: Note

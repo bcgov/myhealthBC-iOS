@@ -91,8 +91,9 @@ extension TermsOfServiceViewController {
                 return
             }
             displayString = termsString
-            self.termsWebView.loadHTMLString(displayString, baseURL: nil)
-
+            DispatchQueue.main.async {
+                self.termsWebView.loadHTMLString(displayString, baseURL: nil)
+            }
         }
     }
 }

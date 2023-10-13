@@ -7,6 +7,12 @@
 
 import Foundation
 
+struct UXConstants {
+    static var showLoginDuringOnBoarding: Bool {
+        return false
+    }
+}
+
 struct HealthRecordConstants {
     // ENABLE AND DISABLE PRIMARY PATIENT RECORD TYPES
     static var enabledTypes: [RecordType] {
@@ -32,7 +38,7 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE DEPENDENT RECORD TYPES
     static var enabledDepententRecordTypes: [RecordType] {
-        return [.covidTestResultRecord, .immunization, .medication]
+        return [.covidTestResultRecord, .immunization]
     }
     
     // ENABLE AND DISABLE COMMENTS
@@ -47,7 +53,7 @@ struct HealthRecordConstants {
     
     // ENABLE AND DISABLE PROFILE DETAILS SCREEN
     static var profileDetailsEnabled: Bool {
-        return false
+        return true
     }
     
     static var notesEnabled: Bool {
@@ -60,6 +66,18 @@ struct HealthRecordConstants {
     
     static var guardianAuditEnabled: Bool {
         return false
+    }
+}
+
+extension HealthRecordsDetailDataSource.Record {
+    
+    // TODO: Enable Comments for specific record types here
+    var commentsEnabled: Bool {
+        if !HealthRecordConstants.commentsEnabled { return false}
+        switch self.type {
+        case .medication, .covidTestResultRecord, .laboratoryOrder, .specialAuthorityDrug, .healthVisit, .hospitalVisit, .clinicalDocument, .diagnosticImaging : return true
+            default: return false
+        }
     }
 }
 

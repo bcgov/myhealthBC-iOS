@@ -191,4 +191,29 @@ struct DependentService {
     }
 
     
+    public func fetchRecommendationsForDependentsOf(patient: Patient, completion: @escaping()->Void) {
+        let dependents = patient.dependentsArray.compactMap({$0.info})
+        let dispatchGroup = DispatchGroup()
+        network.addLoader(message: .empty, caller: .DependentService_fetchRecommendations)
+        for dependent in dependents {
+            dispatchGroup.enter()
+            fetchRecommendations(for: dependent) {
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            network.removeLoader(caller: .DependentService_fetchRecommendations)
+            Logger.log(string: "Fetched Recommendations for dependents \(patient.name)", type: .Network)
+            return completion()
+        }
+    }
+    
+    
+    private func fetchRecommendations(for patient: Patient, completion: @escaping() -> Void) {
+        let immunizationsService = ImmnunizationsService(network: network, authManager: authManager, configService: configService)
+        immunizationsService.fetchAndStore(for: patient) { result in
+            return completion()
+        }
+    }
 }
