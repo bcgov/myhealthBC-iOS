@@ -4,7 +4,7 @@
 //
 //  Created by Amir on 2021-12-22.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class AuthenticationView: UIView, Theme {

@@ -90,6 +90,7 @@ extension String {
     static var initialOnboardingHealthResourcesDescription: String { return "InitialOnboardingHealthResourcesDescription".localized }
     static var initialOnboardingDependentRecordDescription: String { return "InitialOnboardingDependentRecordDescription".localized }
     static var initialOnboardingNewsFeedDescription: String { return "InitialOnboardingNewsFeedDescription".localized }
+    static var initialOnboardingServices: String { return "InitialOnboardingServices".localized }
     static var new: String { return "NEW".localized }
     
     // Gateway screen
@@ -352,5 +353,58 @@ extension String {
     static var unselected: String { return "Unselected".localized }
     static var selectTo: String { return "SelectTo".localized }
     static var actionAvailable: String { return "ActionAvailable".localized }
+    
+    static var services: String { return "Services".localized }
+    static var recentlyUpdated: String { return "RecentlyUpdated".localized }
+    static var tests: String { return "Tests".localized }
+    
+    static var myNotesHome: String { return "MyNotesHome".localized }
+    static var immunizationsHome: String { return "ImmunizationsHome".localized }
+    static var medicationsHome: String { return "MedicationsHome".localized }
+    static var labResultsHome: String { return "LabResultsHome".localized }
+    static var covid19TestsHome: String { return "COVID19TestsHome".localized }
+    static var specialAuthorityHome: String { return "SpecialAuthorityHome".localized }
+    static var hospitalVisitsHome: String { return "HospitalVisitsHome".localized }
+    static var healthVisitsHome: String { return "HealthVisitsHome".localized }
+    static var clinicalDocumentsHome: String { return "ClinicalDocumentsHome".localized }
+    static var imagingReportsHome: String { return "ImagingReportsHome".localized }
+    static var organDonorHome: String { return "OrganDonorHome".localized }
+    
+    static var myNotesManage: String { return "MyNotesManage".localized }
+    static var immunizationsManage: String { return "ImmunizationsManage".localized }
+    static var medicationsManage: String { return "MedicationsManage".localized }
+    static var labResultsManage: String { return "LabResultsManage".localized }
+    static var covid19TestsManage: String { return "COVID19TestsManage".localized }
+    static var specialAuthorityManage: String { return "SpecialAuthorityManage".localized }
+    static var hospitalVisitsManage: String { return "HospitalVisitsManage".localized }
+    static var healthVisitsManage: String { return "HealthVisitsManage".localized }
+    static var clinicalDocumentsManage: String { return "ClinicalDocumentsManage".localized }
+    static var imagingReportsManage: String { return "ImagingReportsManage".localized }
+    static var organDonorManage: String { return "OrganDonorManage".localized }
+    
+    static var retrievingRecords: String { return "RetrievingRecords".localized }
+    static var noPatientDetails: String { return "NoPatientDetails".localized }
+    static var fetchedDonorStatus: String { return "FetchedDonorStatus".localized }
+    static var fetchedDiagnosticImaging: String { return "FetchedDiagnosticImaging".localized }
+    static var fetched: String { return "Fetched".localized }
+    static var comments: String { return "Comments".localized }
+    static var recordsRetrieved: String { return "RecordsRetrieved".localized }
+    static var maintenanceMessage: String { return "MaintenanceMessage".localized }
+    
+    static var newUpdateTitle: String { return "NewUpdateTitle".localized }
+    static var newUpdateDescription: String { return "NewUpdateDescription".localized }
+    static var updateNow: String { return "UpdateNow".localized }
+    static var later: String { return "Later".localized }
+    static var couldNotDeleteDependent: String { return "CouldNotDeleteDependent".localized }
+    static var couldNotAddDependent: String { return "CouldNotAddDependent".localized }
+    static var termsOfServiceMessage: String { return "TermsOfServiceMessage".localized }
+    
+    static var ageRestriction: String { return "AgeRestriction".localized }
+    static var loginError: String { return "LoginError".localized }
+    static var loginErrorMessage: String { return "LoginErrorMessage".localized }
+    static func ageRestrictionMessage(age: String) -> String {
+        return String(format: "AgeRestrictionMessage".localized, age)
+    }
+    
 }
 

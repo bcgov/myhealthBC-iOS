@@ -118,7 +118,7 @@ extension OnboardingScreenType {
         case .dependents:
             return .dependentRecord.sentenceCase()
         case .services:
-            return "Services"
+            return .services
         }
     }
     
@@ -133,7 +133,7 @@ extension OnboardingScreenType {
         case .dependents:
             return .initialOnboardingDependentRecordDescription
         case .services:
-            return "You can check and update your Organ Donor Registry information here. More health services will be added in future."
+            return .initialOnboardingServices
         }
     }
 }

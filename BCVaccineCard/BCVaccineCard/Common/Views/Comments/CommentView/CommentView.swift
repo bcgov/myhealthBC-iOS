@@ -6,6 +6,7 @@
 //
 
 import UIKit
+// FIXME: NEED TO LOCALIZE 
 
 class CommentView: UIView {
     

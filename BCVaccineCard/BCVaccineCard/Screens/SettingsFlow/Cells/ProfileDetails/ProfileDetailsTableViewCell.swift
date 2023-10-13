@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2023-01-27.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 protocol ProfileDetailsTableViewCellDelegate: AnyObject {

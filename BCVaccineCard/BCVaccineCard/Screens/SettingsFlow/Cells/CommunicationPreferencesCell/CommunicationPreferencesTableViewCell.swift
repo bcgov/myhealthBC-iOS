@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2023-02-24.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class CommunicationPreferencesTableViewCell: UITableViewCell {

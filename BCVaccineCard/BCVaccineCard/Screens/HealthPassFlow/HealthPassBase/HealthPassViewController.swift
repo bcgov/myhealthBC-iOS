@@ -7,7 +7,7 @@
 
 import UIKit
 import SwipeCellKit
-
+// FIXME: NEED TO LOCALIZE - 'Unlink' text
 class HealthPassViewController: BaseViewController {
     
     class func construct(viewModel: ViewModel) -> HealthPassViewController {

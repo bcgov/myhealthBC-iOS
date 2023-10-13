@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2021-10-11.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 class ResourceViewController: BaseViewController {

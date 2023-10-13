@@ -4,7 +4,7 @@
 //
 //  Created by Connor Ogilvie on 2023-03-23.
 //
-
+// FIXME: NEED TO LOCALIZE 
 import UIKit
 
 // TODO: Tinker with the UI

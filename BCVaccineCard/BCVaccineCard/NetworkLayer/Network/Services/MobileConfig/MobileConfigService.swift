@@ -50,7 +50,7 @@ class MobileConfigService {
                 if let response = responseData {
                     MobileConfigStorage.store(config: response)
                     if response.online == false, showToastOnError == true {
-                        AppDelegate.sharedInstance?.showToast(message: "Maintenance is underway. Please try later.", style: .Warn)
+                        AppDelegate.sharedInstance?.showToast(message: .maintenanceMessage, style: .Warn)
                     }
                 }
                 while !self.callers.isEmpty {
