@@ -18,6 +18,7 @@ class MobileConfigService {
     }
     
     func fetchConfig(completion: @escaping (MobileConfigurationResponseObject?)->Void) {
+        return completion(MobileConfigurationResponseObject(online: false, baseURL: nil, authentication: nil, version: nil))
         if let cache = MobileConfigStorage.cachedConfig {
             let timeDiff = Date().timeIntervalSince(cache.datetime)
             if timeDiff <= cacheTimeout {

@@ -112,8 +112,22 @@ struct PatientService {
     // MARK: Validate
     func validateProfile(completion: @escaping (ProfileValidationResult)->Void) {
         network.addLoader(message: .SyncingRecords, caller: .PatientService_validateProfile)
-        validate { response in
+        validate { response, error  in
             network.removeLoader(caller: .PatientService_validateProfile)
+            if error != .none {
+                switch error {
+                case .offlineAPI:
+                    return validateOfflineProfile(completion: completion)
+                case .offlineDevice:
+                    return validateOfflineProfile(completion: completion)
+                case .invalidAuthToken:
+                    return completion(.CouldNotValidate)
+                case .invalidResponse:
+                    return completion(.CouldNotValidate)
+                case .none:
+                    break
+                }
+            }
             guard let response = response else {
                 return completion(.CouldNotValidate)
             }
@@ -137,6 +151,11 @@ struct PatientService {
         }
     }
     
+    func validateOfflineProfile(completion: @escaping (ProfileValidationResult)->Void) {
+        network.showToast(message: "Maintenance is underway.", style: .Warn)
+        return completion(.Valid)
+    }
+    
     enum ProfileValidationResult {
         case UnderAge
         case TOSNotAccepted
@@ -148,11 +167,11 @@ struct PatientService {
 // MARK: Network requests
 extension PatientService {
     
-    private func validate(completion: @escaping(_ response: AuthenticatedValidAgeCheck?)->Void) {
+    private func validate(completion: @escaping(_ response: AuthenticatedValidAgeCheck?,_ error: NetworkError)->Void) {
         guard let token = authManager.authToken,
               let hdid = authManager.hdid,
               NetworkConnection.shared.hasConnection
-        else { return completion(nil)}
+        else { return completion(nil, .offlineDevice)}
         
         configService.fetchConfig { response in
             guard let config = response,
@@ -160,7 +179,7 @@ extension PatientService {
                   let baseURLString = config.baseURL,
                   let baseURL = URL(string: baseURLString)
             else {
-                return completion(nil)
+                return completion(nil, .offlineAPI)
             }
             
             let headers = [
@@ -178,9 +197,9 @@ extension PatientService {
                 
                 if (result?.resourcePayload) != nil {
                     // return result
-                    return completion(result)
+                    return completion(result, .none)
                 } else {
-                    return completion(nil)
+                    return completion(nil, .invalidResponse)
                 }
             } onError: { error in
                 network.showToast(error: error)

@@ -232,3 +232,11 @@ extension RecordsFilter.RecordType {
         return availableTypes.compactMap({$0.toRecordsFilterType()})
     }
 }
+
+enum NetworkError {
+    case offlineAPI
+    case offlineDevice
+    case invalidAuthToken
+    case invalidResponse
+    case none
+}

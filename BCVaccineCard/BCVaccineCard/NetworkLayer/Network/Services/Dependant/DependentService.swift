@@ -79,19 +79,19 @@ struct DependentService {
 
     }
     
-    public func addDependent(for patient: Patient, object: PostDependent, completion: @escaping(Dependent?) -> Void) {
+    public func addDependent(for patient: Patient, object: PostDependent, completion: @escaping(Dependent?, _ error: NetworkError) -> Void) {
         network.addLoader(message: .empty, caller: .DependentService_addDependent)
-        addDependentNetworkRequest(object: object) { dependentResponse in
+        addDependentNetworkRequest(object: object) { dependentResponse, error in
             network.removeLoader(caller: .DependentService_addDependent)
             guard let dependentResponse = dependentResponse,
                   let payload = dependentResponse.resourcePayload
             else {
-                return completion(nil)
+                return completion(nil, error)
             }
             
             StorageService.shared.store(dependents: [payload], for: patient, completion: { result in
-                guard !result.isEmpty else {return completion(nil)}
-                completion(result.first)
+                guard !result.isEmpty else {return completion(nil, error)}
+                completion(result.first, error)
             })
         }
     }
@@ -157,16 +157,16 @@ struct DependentService {
 
     }
     
-    private func addDependentNetworkRequest(object: PostDependent, completion: @escaping(_ dependentResponse: AddDependentResponse?) -> Void) {
-        guard let token = authManager.authToken, let hdid = authManager.hdid else {return completion(nil)}
-        guard NetworkConnection.shared.hasConnection else {return completion(nil)}
+    private func addDependentNetworkRequest(object: PostDependent, completion: @escaping(_ dependentResponse: AddDependentResponse?, _ error: NetworkError) -> Void) {
+        guard let token = authManager.authToken, let hdid = authManager.hdid else {return completion(nil, .invalidAuthToken)}
+        guard NetworkConnection.shared.hasConnection else {return completion(nil, .offlineDevice)}
         configService.fetchConfig { response in
             guard let config = response,
                   config.online,
                   let baseURLString = config.baseURL,
                   let baseURL = URL(string: baseURLString)
             else {
-                return completion(nil)
+                return completion(nil, .offlineAPI)
             }
             
             let headers = [
@@ -175,7 +175,7 @@ struct DependentService {
             ]
             
             let requestModel = NetworkRequest<PostDependent, AddDependentResponse>(url: endpoints.listOfDependents(base: baseURL, hdid: hdid), type: .Post, parameters: object, headers: headers) { result in
-                completion(result)
+                completion(result, .none)
             } onError: { error in
                 switch error {
                 case .FailedAfterRetry:
