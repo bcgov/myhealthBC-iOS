@@ -370,8 +370,8 @@ extension StorageService: StorageCommentManager {
                 clinicalDoc.removeFromComments(oldComment)
                 clinicalDoc.addToComments(newComment)
             case .DiagnosticImaging(let diagnostiImaging):
-                // TODO: Update this to add diagnostic imaging to comments
-                break
+                diagnostiImaging.removeFromComments(oldComment)
+                diagnostiImaging.addToComments(newComment)
             case .Note(let note):
                 break
             }
@@ -412,8 +412,7 @@ extension StorageService: StorageCommentManager {
             case .ClinicalDocument(let clinicalDoc):
                 clinicalDoc.removeFromComments(comment)
             case .DiagnosticImaging(let diagnosticImaging):
-                // TODO: Change this to enable comments for diagnostic imaging
-                break
+                diagnosticImaging.removeFromComments(comment)
             case .Note(let note):
                 break
             }
