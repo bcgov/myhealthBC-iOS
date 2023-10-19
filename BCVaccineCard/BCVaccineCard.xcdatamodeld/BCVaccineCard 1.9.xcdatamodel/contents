@@ -34,6 +34,7 @@
         <attribute name="version" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="clinicalDocument" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ClinicalDocument" inverseName="comments" inverseEntity="ClinicalDocument"/>
         <relationship name="covidLabTestResult" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CovidLabTestResult" inverseName="comments" inverseEntity="CovidLabTestResult"/>
+        <relationship name="diagnosticImaging" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DiagnosticImaging" inverseName="comments" inverseEntity="DiagnosticImaging"/>
         <relationship name="healthVIsit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HealthVisit" inverseName="comments" inverseEntity="HealthVisit"/>
         <relationship name="hospitalVisit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HospitalVisit" inverseName="comments" inverseEntity="HospitalVisit"/>
         <relationship name="laboratoryOrder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LaboratoryOrder" inverseName="comments" inverseEntity="LaboratoryOrder"/>
@@ -82,6 +83,7 @@
         <attribute name="organization" optional="YES" attributeType="String"/>
         <attribute name="procedureDescription" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="diagnosticImaging" inverseEntity="Comment"/>
         <relationship name="patient" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Patient" inverseName="diagnosticImaging" inverseEntity="Patient"/>
     </entity>
     <entity name="GatewayNotification" representedClassName="GatewayNotification" syncable="YES">

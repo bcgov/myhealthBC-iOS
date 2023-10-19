@@ -153,8 +153,7 @@ extension StorageService: StorageCommentManager {
             case .ClinicalDocument(let clinicalDoc):
                 clinicalDoc.addToComments(comment)
             case .DiagnosticImaging(let diagnosticImaging):
-                // TODO: Update this to add comments to diagnostic imaging
-                break
+                diagnosticImaging.addToComments(comment)
             case .Note(let note):
                 break
             }
