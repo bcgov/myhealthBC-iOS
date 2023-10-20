@@ -12,7 +12,7 @@ protocol CommunicationBannerCollectionViewCellDelegate {
     func onClose(banner: CommunicationBanner?)
     func onDismiss(banner: CommunicationBanner?)
     func onLearnMore(banner: CommunicationBanner?)
-    func shouldUpdateUI()
+    func shouldUpdateUI(estimatedTextViewLines lines: Int, isExpanded: Bool)
 }
 
 class CommunicationBannerCollectionViewCell: UICollectionViewCell {
@@ -32,6 +32,7 @@ class CommunicationBannerCollectionViewCell: UICollectionViewCell {
 
     private var delegate: CommunicationBannerCollectionViewCellDelegate?
     private var data: CommunicationBanner?
+    private var lineBreakCount = 30
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -92,7 +93,7 @@ class CommunicationBannerCollectionViewCell: UICollectionViewCell {
         } else {
             learnMoreButton.isHidden = true
         }
-
+        
         textView.attributedText = textAttributed
         textView.delegate = self
         style()
@@ -123,7 +124,8 @@ class CommunicationBannerCollectionViewCell: UICollectionViewCell {
         learnMoreButton.setImage(UIImage(named: "learn-more"), for: .normal)
         dismissButton.setImage(UIImage(named: "dismiss-communication"), for: .normal)
         layoutIfNeeded()
-        delegate?.shouldUpdateUI()
+        let lines = Int(ceil(Double(textView.text.count) / Double(lineBreakCount)))
+        delegate?.shouldUpdateUI(estimatedTextViewLines: lines, isExpanded: isExpanded)
     }
 }
 
